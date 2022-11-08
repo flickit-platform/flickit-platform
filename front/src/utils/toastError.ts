@@ -43,7 +43,11 @@ const toastError = (err: ICustomError, options?: IToastErrorOptions) => {
     )
       return;
   }
-  if (err.status == 401 || err.type == ECustomErrorType.INVALID_TOKEN) {
+  if (
+    err.status == 401 ||
+    err.type == ECustomErrorType.INVALID_TOKEN ||
+    err.type == ECustomErrorType.CANCELED
+  ) {
     return;
   }
   toast.error(err?.data?.message || err?.data?.detail || err.message);
