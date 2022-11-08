@@ -1,0 +1,107 @@
+version: '3.9'
+
+services:
+  checkupassessmenttoolkit:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+      - ./data/web:/vol/web
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db
+      - DB_NAME=checkupassessment
+      - DB_USER=postgres
+      - DB_PASS=123456
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - DOMAIN=${DOMAIN}
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    depends_on:
+      - db
+
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=checkupassessment
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:alpine
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A checkupassessmenttoolkit worker -l info
+    volumes:
+      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db
+      - DB_NAME=checkupassessment
+      - DB_USER=postgres
+      - DB_PASS=123456
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - DOMAIN=${DOMAIN}
+    depends_on:
+      - db
+      - redis
+      - checkupassessmenttoolkit
+
+  flower:
+    build: .
+    command: celery -A checkupassessmenttoolkit flower
+    volumes:
+      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+    depends_on:
+      - checkupassessmenttoolkit
+      - redis
+      - celery
+    environment:
+      - DEBUG=1
+      - CELERY_BROKER=redis://redis:6379/1
+      - CELERY_BACKEND=redis://redis:6379/1
+      - SECRET_KEY=devsecretkey
+      - DB_HOST=db
+      - DB_NAME=checkupassessment
+      - DB_USER=postgres
+      - DB_PASS=123456
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DOMAIN=${DOMAIN}
+    ports:
+      - 5555:5555
+
+  frontend:
+    restart: always
+    command : npm start
+    container_name: front
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - BASE_URL=http://checkupassessmenttoolkit:8000
+    stdin_open: true
+    depends_on:
+      - checkupassessmenttoolkit  
+
+volumes:
+  postgres-data:
