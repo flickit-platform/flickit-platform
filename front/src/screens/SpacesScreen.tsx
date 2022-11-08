@@ -1,5 +1,5 @@
 import React from "react";
-import { SpaceContainer } from "../containers/spaces/SpaceContainer";
+import SpaceContainer from "../components/spaces/SpaceContainer";
 
 const SpacesScreen = () => {
   return <SpaceContainer />;

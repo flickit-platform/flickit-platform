@@ -139,5 +139,6 @@
   "checkNetworkConnection": "Please check your network connection.",
   "statusIs": "Status is",
   "evaluatedAs": "evaluated as",
-  "overallStatusOf": "Overall status of {{title}}"
+  "overallStatusOf": "Overall status of {{title}}",
+  "notEvaluated": "NOT EVALUATED"
 }

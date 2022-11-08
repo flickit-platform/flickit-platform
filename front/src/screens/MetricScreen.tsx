@@ -1,5 +1,5 @@
 import React from "react";
-import { MetricContainer } from "../containers/metrics/MetricContainer";
+import { MetricContainer } from "../components/metrics/MetricContainer";
 
 const MetricScreen = () => {
   return <MetricContainer />;

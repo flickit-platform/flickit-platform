@@ -1,5 +1,6 @@
-import { AxiosPromise } from "axios";
+import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { ToastOptions } from "react-toastify";
+import { string } from "yup";
 
 export enum ECustomErrorType {
   "DEFAULT" = "DEFAULT",
@@ -7,6 +8,7 @@ export enum ECustomErrorType {
   "NETWORK_CONNECTION" = "NETWORK_CONNECTION",
   "INVALID_TOKEN" = "INVALID_TOKEN",
   "NOT_FOUND" = "NOT_FOUND",
+  "CANCELED" = "CANCELED",
 }
 
 export enum ESystemStatus {
@@ -17,31 +19,53 @@ export enum ESystemStatus {
   "WEAK" = "WEAK",
 }
 
-export type TAnswerTemplate = { caption: string; value: number }[];
+export type TId = string | number;
+
+export interface IDefaultModel<T extends any = any> {
+  count: number;
+  next: null;
+  previous: null;
+  results: T[];
+}
+
+export interface IAnswerTemplate {
+  caption: string;
+  value: number;
+  id: TId;
+}
+
+export type TAnswerTemplates = IAnswerTemplate[];
 export interface IMetricInfo {
-  id: any;
+  id: TId;
   index: number;
   answer: null | TAnswer;
   title: string;
   metricResultId?: string | number;
-  answer_templates: TAnswerTemplate;
+  answer_templates: TAnswerTemplates;
 }
 export type TMetricsInfo = {
   total_number_of_metrics: number;
-  resultId: string | null;
+  resultId: TId | undefined;
   metrics?: IMetricInfo[];
 };
 
 export type TAnswer = {
-  id: string | number;
+  id: TId;
   value: string | number;
   caption: string;
 };
 
-export type TStatus = "WEAK" | "RISKY" | "NORMAL" | "GOOD" | "OPTIMIZED";
+export type TStatus =
+  | "WEAK"
+  | "RISKY"
+  | "NORMAL"
+  | "GOOD"
+  | "OPTIMIZED"
+  | "Not Calculated"
+  | null;
 
 export interface IUserInfo {
-  id: number | string;
+  id: TId;
   username: string;
   email: string;
   first_name: string;
@@ -50,12 +74,12 @@ export interface IUserInfo {
 }
 
 export interface ISpaceInfo {
-  id: number | string;
+  id: TId;
   code: string;
   title: string;
   owner: {
     first_name: string;
-    id: string | number;
+    id: TId;
     last_name: string;
     username: string;
   };
@@ -64,3 +88,196 @@ export interface ISpaceInfo {
 export type TToastConfig = ToastOptions & {
   message: string | JSX.Element;
 };
+
+export interface ISubjectInfo {
+  description: string;
+  id: TId;
+  image: string | null;
+  progress: number;
+  status: TStatus;
+  title: string;
+  total_answered_metric_number: number;
+  total_metric_number: number;
+}
+
+export interface IImage {
+  id: TId;
+  image: string;
+}
+
+export type TImages = IImage[];
+
+export interface IAssessmentProfileModel {
+  code: string;
+  description: string;
+  id: TId;
+  title: string;
+  images: TImages;
+  metric_categories: ICategoryModel[];
+  assessment_subjects: Omit<
+    ISubjectInfo,
+    | "total_answered_metric_number"
+    | "total_metric_number"
+    | "progress"
+    | "status"
+  >;
+}
+
+export interface IAssessmentResult {
+  assessment_project: string;
+  id: TId;
+}
+export interface IAssessmentResultModel
+  extends IDefaultModel<IAssessmentResult> {}
+
+export type TAssessmentResultsModel = string[];
+
+export interface IColorModel {
+  color_code: string;
+  id: TId;
+  title: string;
+}
+
+export interface IOwnerModel {
+  id: TId;
+  username: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface ISpaceModel {
+  code: string;
+  id: TId;
+  owner: IOwnerModel;
+  title: string;
+  last_modification_date?: string;
+  members_number?: number;
+}
+
+export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
+export interface IAssessmentReport {
+  assessment_profile: Omit<
+    IAssessmentProfileModel,
+    "metric_categories" | "images" | "assessment_subjects"
+  >;
+  assessment_results: string[];
+  color: IColorModel;
+  last_modification_date: string;
+  space: ISpaceModel;
+  title: string;
+}
+
+export interface IAssessmentReportModel {
+  subjects_info: ISubjectInfo[];
+  status: TStatus;
+  most_significant_strength_atts: string[];
+  most_significant_weaknessness_atts: string[];
+  assessment_project: IAssessmentReport;
+}
+
+export interface ICategoryModel {
+  code: string;
+  id: TId;
+  title: string;
+}
+
+export interface IMetric {
+  id: TId;
+  index: number;
+  title: string;
+  answer_templates: TAnswerTemplates;
+}
+
+export interface IMetricsModel extends IDefaultModel<IMetric> {}
+
+export interface IMetricImpact {
+  id: TId;
+  level: number;
+  quality_attribute: number;
+}
+
+export type TMetricImpacts = IMetricImpact[];
+
+export interface IQualityAttribute {
+  code: string;
+  description: string;
+  id: TId;
+  images: TImages;
+  title: string;
+}
+
+export interface IMetricResult {
+  id: TId;
+  index: number;
+  title: string;
+  metric_impacts: TMetricImpacts;
+  quality_attributes: IQualityAttribute[];
+}
+
+export interface IMetricsResult extends IAssessmentResult {
+  answer: TAnswer;
+  metric: IMetricResult;
+}
+
+export interface IMetricsResultsModel extends IDefaultModel<IMetricsResult> {}
+
+export interface IAssessment {
+  id: TId;
+  last_modification_date: string;
+  status: TStatus;
+  title: string;
+  code: string;
+  color: IColorModel;
+  assessment_results: string[];
+  assessment_profile: IAssessmentProfileModel;
+}
+
+export interface IAssessmentModel extends IDefaultModel<IAssessment> {
+  requested_space: string | null;
+}
+
+export interface IMember {
+  id: TId;
+  space: TId;
+  user: Omit<IUserInfo, "current_space" | "email">;
+}
+
+export interface IMemberModel extends IDefaultModel<IMember> {}
+
+export interface ISubjectReport {
+  id: TId;
+  maturity_level_value: number;
+  status: TStatus;
+  quality_attribute: IQualityAttribute;
+}
+
+export interface IMetricCategoryInfo {
+  answered_metric: number;
+  id: TId;
+  metric_number: number;
+  progress: number;
+  title: string;
+}
+export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
+  assessment_profile_description: string;
+  assessment_project_color_code: string;
+  assessment_project_id: string;
+  assessment_project_space_id: TId;
+  assessment_project_space_title: string;
+  assessment_project_title: string;
+  maturity_level_value: number;
+  progress: number;
+  status: TStatus;
+  title: string;
+  total_answered_metric: number;
+  total_metric_number: number;
+  metric_categories_info: IMetricCategoryInfo[];
+  most_significant_strength_atts: IQualityAttribute[];
+  most_significant_weaknessness_atts: IQualityAttribute[];
+  no_insight_yet_message?: string;
+}
+
+export type TQueryFunction<T extends any = any, A extends any = any> = (
+  args?: A,
+  config?: AxiosRequestConfig<any> | undefined
+) => Promise<T>;

@@ -35,7 +35,7 @@ export const MetricContext = React.createContext<IMetricContext>({
   metricsInfo: {
     total_number_of_metrics: 0,
     metrics: undefined,
-    resultId: null,
+    resultId: undefined,
   },
   submitOnAnswerSelection: false,
   isSubmitting: false,
