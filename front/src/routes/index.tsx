@@ -1,10 +1,13 @@
 import React from "react";
 import { Route, Routes as RrdRoutes } from "react-router-dom";
-import { PageNotFound } from "../components/errors/PageNotFound";
-import { GettingThingsReadyLoading } from "../components";
-import ProtectedRoutes from "./ProtectedRoutes";
-import Layout from "./Layout";
+import PrivateRoutes from "./PrivateRoutes";
+import Layout from "../layouts/Layout";
 import Redirect from "./Redirect";
+import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
+import PageNotFoundError from "../components/shared/errors/PageNotFoundError";
+import AuthRoutes from "./AuthRoutes";
+import AuthLayout from "../layouts/AuthLayout";
+import AppLayout from "../layouts/AppLayout";
 
 const SignInScreen = React.lazy(() => import("../screens/SignInScreen"));
 const SignUpScreen = React.lazy(() => import("../screens/SignUpScreen"));
@@ -36,45 +39,54 @@ const Routes = () => {
   return (
     <React.Suspense fallback={<GettingThingsReadyLoading />}>
       <RrdRoutes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Redirect />} />
+        <Route path="/" element={<Redirect />} />
+        <Route
+          element={
+            <AuthLayout>
+              <AuthRoutes />
+            </AuthLayout>
+          }
+        >
           <Route path="/sign-in" element={<SignInScreen />} />
           <Route path="/sign-up" element={<SignUpScreen />} />
           <Route
             path="/account/active/:uid/:token"
             element={<ActivationSuccessfulScreen />}
           />
+        </Route>
 
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="/spaces" element={<SpacesScreen />} />
-            <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
-            <Route
-              path="/:spaceId/assessments"
-              element={<AssessmentsScreen />}
-            />
-            <Route
-              path="/:spaceId/assessments/:assessmentId"
-              element={<AssessmentReportScreen />}
-            />
-            <Route
-              path="/:spaceId/assessments/:assessmentId/:subjectId"
-              element={<SubjectReportScreen />}
-            />
-            <Route
-              path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId/review"
-              element={<MetricsReviewScreen />}
-            />
-            <Route
-              path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId"
-              element={<MetricsScreen />}
-            >
-              <Route path="" element={<MetricScreen />} />
-              <Route path=":metricIndex" element={<MetricScreen />} />
-            </Route>
+        <Route
+          element={
+            <AppLayout>
+              <PrivateRoutes />
+            </AppLayout>
+          }
+        >
+          <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/spaces" element={<SpacesScreen />} />
+          <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
+          <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
+          <Route
+            path="/:spaceId/assessments/:assessmentId"
+            element={<AssessmentReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/:subjectId"
+            element={<SubjectReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId/review"
+            element={<MetricsReviewScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId"
+            element={<MetricsScreen />}
+          >
+            <Route path="" element={<MetricScreen />} />
+            <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
         </Route>
-        <Route path="*" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFoundError />} />
       </RrdRoutes>
     </React.Suspense>
   );

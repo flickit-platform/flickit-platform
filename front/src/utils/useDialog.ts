@@ -16,4 +16,6 @@ const useDialog = () => {
   return { open, onClose, openDialog, context };
 };
 
+export type TDialogProps = ReturnType<typeof useDialog>;
+
 export default useDialog;
