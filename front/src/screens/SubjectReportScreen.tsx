@@ -1,5 +1,5 @@
 import React from "react";
-import SubjectContainer from "../containers/subject-report/SubjectContainer";
+import SubjectContainer from "../components/subject-report/SubjectContainer";
 
 const SubjectReportScreen = () => {
   return <SubjectContainer />;

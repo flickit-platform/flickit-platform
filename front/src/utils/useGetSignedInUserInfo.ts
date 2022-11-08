@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,66 +7,67 @@ import { useServiceContext } from "../providers/ServiceProvider";
 import { ECustomErrorType } from "../types";
 import { ICustomError } from "./CustomError";
 
-const useGetSignedInUserInfo = () => {
+const useGetSignedInUserInfo = (
+  props: { runOnMount: boolean } = { runOnMount: true }
+) => {
+  const { runOnMount } = props;
   const { service } = useServiceContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const { dispatch, isAuthenticatedUser } = useAuthContext();
-  const hasRunOnAuth = useRef(false);
+  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } =
+    useAuthContext();
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const abortController = useRef(new AbortController());
 
-  const getUser = () => {
+  const getUser = async (token?: string) => {
     setError(false);
-    setLoading(true);
-    service
-      .getSignedInUser()
-      .then(({ data }: any) => {
-        setLoading(false);
+    dispatch(authActions.setUserInfoLoading(true));
+    try {
+      const { data } = await service.getSignedInUser(undefined, {
+        signal: abortController.current.signal,
+        //@ts-expect-error
+        headers: token
+          ? {
+              ...axios.defaults.headers,
+              Authorization: `JWT ${token}`,
+            }
+          : axios.defaults.headers,
+      });
+      dispatch(authActions.setUserInfoLoading(false));
+      dispatch(authActions.setUserInfo(data));
+      if (!isAuthenticatedUser) {
+        dispatch(authActions.signIn());
+      }
+      return true;
+    } catch (e) {
+      const err = e as ICustomError;
+      dispatch(authActions.setUserInfoLoading(false));
 
-        dispatch(authActions.setUserInfo(data));
-        const isAuthenticatedUser = localStorage.getItem("isAuthenticatedUser");
-        if (isAuthenticatedUser && JSON.parse(isAuthenticatedUser)) {
-          if (!data.current_space) {
-            navigate("/spaces");
-          } else {
-            navigate(
-              location.pathname.startsWith("/sign-in") ||
-                location.pathname === "" ||
-                location.pathname === "/"
-                ? `/${data.current_space.id}/assessments`
-                : location.pathname
-            );
-          }
+      dispatch(authActions.setUserInfo());
+      if (err?.type === ECustomErrorType.UNAUTHORIZED) {
+        if (location.pathname == "/sign-up") {
+          navigate("/sign-up");
         } else {
-          localStorage.setItem("isAuthenticatedUser", JSON.stringify(false));
           navigate("/sign-in");
         }
-      })
-      .catch((e) => {
-        setLoading(false);
-        if ((e as ICustomError)?.type === ECustomErrorType.UNAUTHORIZED) {
-          if (location.pathname == "/sign-up") {
-            navigate("/sign-up");
-          } else {
-            navigate("/sign-in");
-          }
-        } else if (e?.action && e?.action !== "signOut") {
-          setError(true);
-        }
-      });
+      } else if (err?.action && err?.action !== "signOut") {
+        setError(true);
+      }
+      return false;
+    }
   };
 
   useEffect(() => {
-    if (!hasRunOnAuth.current && isAuthenticatedUser) {
+    if (runOnMount) {
       getUser();
-      hasRunOnAuth.current = true;
-    } else if (hasRunOnAuth.current && !isAuthenticatedUser) {
-      hasRunOnAuth.current = false;
     }
-  }, [isAuthenticatedUser]);
 
-  return { error, loading };
+    return () => {
+      // abortController.current?.abort();
+    };
+  }, []);
+
+  return { error, loading: loadingUserInfo, userInfo, getUser };
 };
 
 export default useGetSignedInUserInfo;

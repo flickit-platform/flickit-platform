@@ -6,12 +6,10 @@ interface IAppProviderProps {
 }
 
 export interface IAppContext {
-  isAuthenticatedApp: boolean;
   dispatch: React.Dispatch<any>;
 }
 
 export const AppContext = React.createContext<IAppContext>({
-  isAuthenticatedApp: false,
   dispatch: () => {},
 });
 
@@ -21,7 +19,6 @@ const AppDispatchContext = React.createContext<any>({
 
 export const AppProvider: FC<IAppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, {
-    isAuthenticatedApp: false,
     dispatch: () => {},
   });
 

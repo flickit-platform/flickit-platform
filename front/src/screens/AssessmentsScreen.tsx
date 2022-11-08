@@ -1,5 +1,5 @@
 import React from "react";
-import AssessmentContainer from "../containers/assessments/AssessmentContainer";
+import AssessmentContainer from "../components/assessments/AssessmentContainer";
 
 const AssessmentsScreen = () => {
   return <AssessmentContainer />;

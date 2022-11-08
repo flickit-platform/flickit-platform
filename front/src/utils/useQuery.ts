@@ -1,21 +1,26 @@
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { ICustomError } from "./CustomError";
 import dataExist from "./dataExist";
 import defToastError, { IToastErrorOptions } from "./toastError";
 
-interface IUseQueryProps<T> {
+interface IUseQueryProps<T, A> {
   initialData?: any;
   runOnMount?: boolean;
   toastError?:
     | boolean
     | ((err: ICustomError, options?: IToastErrorOptions) => void);
   toastErrorOptions?: IToastErrorOptions;
-  service: (...arg: any) => Promise<AxiosResponse<any, any>>;
+  service: (
+    args?: A,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => Promise<AxiosResponse<T, any>>;
 }
 
-export const useQuery = <T extends any = any>(props: IUseQueryProps<T>) => {
+export const useQuery = <T extends any = any, A extends any = any>(
+  props: IUseQueryProps<T, A>
+) => {
   const {
     initialData,
     service,
@@ -23,25 +28,35 @@ export const useQuery = <T extends any = any>(props: IUseQueryProps<T>) => {
     toastError = false,
     toastErrorOptions,
   } = props;
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(() => (runOnMount ? true : false));
   const [error, setError] = useState(false);
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined
   );
+  const controller = useRef(new AbortController());
 
   useEffect(() => {
     if (runOnMount) {
       query();
     }
+    return () => {
+      controller.current.abort();
+    };
   }, []);
 
-  const query = async (...arg: any) => {
+  const query = async (
+    args?: A | undefined,
+    config: AxiosRequestConfig<any> | undefined = {}
+  ) => {
     setLoading(true);
     setErrorObject(undefined);
 
     try {
-      const { data } = await service(...arg);
+      const { data } = await service(args, {
+        signal: controller.current.signal,
+        ...config,
+      });
       if (data) {
         setData(data);
         setError(false);
@@ -68,7 +83,15 @@ export const useQuery = <T extends any = any>(props: IUseQueryProps<T>) => {
 
   const loaded = !loading && !error && dataExist(data);
 
-  return { data, loading, loaded, error, errorObject, query };
+  return {
+    data,
+    loading,
+    loaded,
+    error,
+    errorObject,
+    query,
+    abortController: controller.current,
+  };
 };
 
 export type TQueryData = ReturnType<typeof useQuery>;

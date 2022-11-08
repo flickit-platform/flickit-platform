@@ -1,5 +1,6 @@
 import { keyframes, SxProps, Theme } from "@mui/material";
 import { TStatus } from "../types";
+import hasStatus from "../utils/hasStatus";
 
 const style = (style: SxProps<Theme>): SxProps<Theme> => style;
 
@@ -60,7 +61,7 @@ const auth = {
   authLayout: style({
     background: (theme) =>
       `radial-gradient(${theme.palette.background.secondary},${theme.palette.background.secondaryDark})`,
-    height: "100vh",
+    minHeight: "100vh",
     ...commonStyles.centerCH,
   }),
 };
@@ -71,12 +72,23 @@ export const styles = {
   cards,
 };
 
-export const statusColorMap: Record<TStatus, string> = {
+export const statusColorMap: Record<NonNullable<TStatus>, string> = {
   WEAK: "#bb0000",
   RISKY: "#e9730d",
   NORMAL: "#e5da10",
   GOOD: "#45a53a",
   OPTIMIZED: "#107e3e",
+  "Not Calculated": "#b7b7b7",
+};
+
+export const getColorOfStatus = (
+  status: TStatus,
+  fallBackColor: string = "#b7b7b7"
+) => {
+  if (hasStatus(status)) {
+    return statusColorMap[status as NonNullable<TStatus>];
+  }
+  return fallBackColor;
 };
 
 const pomp = keyframes`
