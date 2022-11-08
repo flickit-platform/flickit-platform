@@ -9,15 +9,20 @@ const useConnectSelectField = (url: any) => {
   const { service } = useServiceContext();
 
   useEffect(() => {
-    fetchOptions();
+    const controller = new AbortController();
+    fetchOptions(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
-  const fetchOptions = async () => {
+  const fetchOptions = async (signal: AbortSignal) => {
     setLoading(true);
     try {
       const {
         data: { results },
-      } = await service.fetchOptions(url);
+      } = await service.fetchOptions({ url }, { signal });
 
       if (results) {
         setOptions(results);

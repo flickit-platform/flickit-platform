@@ -1,6 +1,6 @@
 import React from "react";
-import { MetricsContainer } from "../containers/metrics/MetricsContainer";
-import { MetricsReview } from "../containers/metrics/MetricsReview";
+import MetricsContainer from "../components/metrics/MetricsContainer";
+import MetricsReview from "../components/metrics/MetricsReview";
 import { MetricProvider } from "../providers/MetricProvider";
 
 const MetricsReviewContainer = () => {
