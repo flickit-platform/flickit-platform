@@ -1,0 +1,20 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+
+# Python
+checkupassessmenttoolkit/__pycache__/
+checkupassessmenttoolkit/*/__pycache__/
+checkupassessmenttoolkit/*/*/__pycache__/
+checkupassessmenttoolkit/*/*/*/__pycache__/
+checkupassessmenttoolkit/local_settings.py
+local_settings.py
+.env/
+.venv/
+venv/
+
+# Local PostgreSQL data
+data/
