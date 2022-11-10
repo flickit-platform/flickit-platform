@@ -1,14 +1,16 @@
-from rest_framework.response import Response
 import requests
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from djoser.email import ActivationEmail
-from rest_framework import status
 from django.db import transaction
+
 from .models import UserAccess
 from .tasks import async_send
 from .serializers import AddSpaceAccessToUserSerializer, SpaceListSerializer, SpaceSerializer, UserAccessSerializer, UserSerializer
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+
 
 class UserActivationView(APIView):
     permission_classes = [AllowAny]

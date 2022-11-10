@@ -1,7 +1,10 @@
+from django.urls import path
+from rest_framework_nested import routers
 from . import views
 from assessment.report import reportviews
 from assessment.report.subjectreportviews import SubjectReportViewSet
-from rest_framework_nested import routers
+from .questionary.questionaryviews import QuestionaryView
+
 
 
 router = routers.DefaultRouter()
@@ -16,3 +19,7 @@ metric_value_router = routers.NestedDefaultRouter(router, 'results', lookup='ass
 metric_value_router.register('metricvalues', views.MetricValueViewSet, basename='result-metric-values')
 
 urlpatterns = router.urls + metric_value_router.urls
+
+urlpatterns += [
+    path("questionaries/<str:assessment_project_id>", QuestionaryView.as_view())
+]
