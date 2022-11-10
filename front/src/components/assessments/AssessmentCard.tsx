@@ -15,10 +15,13 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { IAssessment } from "../../types";
+import { IAssessment, TId, TQueryFunction } from "../../types";
+import { TDialogProps } from "../../utils/useDialog";
 
 interface IAssessmentCardProps {
   item: IAssessment;
+  dialogProps: TDialogProps;
+  deleteAssessment: TQueryFunction<any, TId>;
 }
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
@@ -85,7 +88,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   );
 };
 
-const Actions = (props: any) => {
+const Actions = (props: {
+  deleteAssessment: TQueryFunction<any, TId>;
+  item: IAssessment;
+  dialogProps: TDialogProps;
+  abortController: React.MutableRefObject<AbortController>;
+}) => {
   const { deleteAssessment, item, dialogProps, abortController } = props;
   const [editLoading, setEditLoading] = React.useState(false);
   const { service } = useServiceContext();
