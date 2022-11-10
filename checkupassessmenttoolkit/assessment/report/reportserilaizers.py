@@ -1,14 +1,18 @@
 from statistics import mean
 from rest_framework import serializers
+import more_itertools
 
 from assessmentbaseinfo.serializers import AssessmentProfileSimpleSerilizer
+from assessmentbaseinfo.models import *
 
-from ..models import AssessmentProject, AssessmentResult
 from assessment.serializers import ColorSerilizer
 from assessmentcore.serializers import SpaceSerializer
-from assessmentbaseinfo.models import *
+
+
+from ..models import AssessmentProject, AssessmentResult
 from ..common import *
-import more_itertools
+from ..assessmentcommon import *
+
 
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()
@@ -20,7 +24,7 @@ class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
 
                 
 class AssessmentReportSerilizer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField(method_name='calculate_total_maturity_level')
+    status = serializers.SerializerMethodField(method_name='calculate_total_status')
     assessment_project = AssessmentProjectReportSerilizer()
     subjects_info = serializers.SerializerMethodField(method_name='calculate_subjects_info')
     most_significant_strength_atts = serializers.SerializerMethodField()
@@ -34,7 +38,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
             subject_info = self.extract_base_info(subject)
             self.calculate_progress_param(result, subject, subject_info)
 
-            if subject_info['total_answered_metric_number'] <= 5:
+            if subject_info['total_answered_metric_number'] <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
                 subject_info.add("status", "Not Calculated")
             else:
                 self.calculate_subject_status(quality_attribute_values, subject, subject_info)
@@ -60,19 +64,9 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
         return subject_info
 
     def calculate_progress_param(self, result, subject, subject_info):
-        total_metric_number = 0
-        total_answered_metric_number = 0
-        for category in subject.metric_categories.all():
-            metrics = category.metric_set.all()
-            total_metric_number += len(metrics)
-            answered_metric = 0
-            for metric in metrics:
-                metric_values = metric.metric_values
-                for value in metric_values.filter(assessment_result_id=result.id):
-                    if value.metric_id == metric.id:
-                        if value.answer is not None:
-                            answered_metric += 1
-            total_answered_metric_number += answered_metric 
+        total_metric_number = calculate_total_metric_number_by_subject(subject)
+        total_answered_metric_number = calculate_answered_metric_by_subject(result, subject)
+        
         if total_metric_number != 0:
             subject_info.add("progress", ((total_answered_metric_number / total_metric_number) * 100))
         else:
@@ -80,17 +74,6 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
         subject_info.add("total_metric_number", total_metric_number)
         subject_info.add("total_answered_metric_number", total_answered_metric_number) 
 
-        
-    def sort_att_values(self, result):
-        quality_attribute_values = result.quality_attribute_values.order_by('-maturity_level_value').all()
-
-        print(quality_attribute_values)
-        # print([o['quality_attribute'] for o in quality_attribute_values if o['maturity_level_value'] > 2][:2])
-        att_dict = Dictionary()
-        for quality_attribute_value in quality_attribute_values:
-            att_dict.add(quality_attribute_value.quality_attribute.title, quality_attribute_value.maturity_level_value)
-        # print(att_dict)
-        return att_dict
 
     def get_most_significant_strength_atts(self, result: AssessmentResult):
         quality_attributes = []
@@ -112,7 +95,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
         else:
             return []
     
-    def calculate_total_maturity_level(self, result: AssessmentResult):
+    def calculate_total_status(self, result: AssessmentResult):
         if result.quality_attribute_values.all():
             assessment = AssessmentProject.objects.get(id = result.assessment_project_id)
             return assessment.status
