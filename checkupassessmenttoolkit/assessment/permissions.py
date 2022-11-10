@@ -15,7 +15,10 @@ class IsSpaceMember(BasePermission):
             return self.has_permision_for_assessment_result(assessment_project, current_user_space_list)
 
         if view.kwargs.get('assessment_project_id') is not None:
-            assessment_project = AssessmentProject.objects.get(id = view.kwargs.get('assessment_project_id'))
+            try:
+                assessment_project = AssessmentProject.objects.get(id = view.kwargs.get('assessment_project_id'))
+            except AssessmentProject.DoesNotExist:
+                return False
             return self.has_permision_for_assessment_result(assessment_project, current_user_space_list)
 
         if request.query_params.get('assessment_result_pk') is not None:

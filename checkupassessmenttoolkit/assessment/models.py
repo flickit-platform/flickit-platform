@@ -42,6 +42,9 @@ class AssessmentProject(models.Model):
         super(AssessmentProject, self).save(*args, **kwargs)
         if not AssessmentResult.objects.filter(assessment_project_id = self.id).exists():
             AssessmentResult.objects.create(assessment_project_id = self.id)
+        
+    def get_assessment_result(self):
+        return self.assessment_results.first()
 
 class AssessmentResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4)
