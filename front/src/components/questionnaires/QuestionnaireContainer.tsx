@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Divider, Skeleton, Typography } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
-import QANumberIndicator from "../../components/shared/QANumberIndicator";
+import QANumberIndicator from "../shared/QANumberIndicator";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
-import { CategoryList } from "./CategoryList";
+import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import { styles } from "../../config/styles";
 
-const CategoryContainer = (props: any) => {
+const QuestionnaireContainer = (props: any) => {
   const {
     overallProgress,
     isCompleted,
@@ -20,7 +20,7 @@ const CategoryContainer = (props: any) => {
     total_metric_number,
     total_answered_metric,
     loading,
-  } = useCategory(props);
+  } = useQuestionnaire(props);
 
   return (
     <Box
@@ -58,7 +58,7 @@ const CategoryContainer = (props: any) => {
             ) : isCompleted ? (
               <Trans i18nKey={"ToChangeYourInsightTryEditingCategories"} />
             ) : (
-              <Trans i18nKey="pickupCategory" />
+              <Trans i18nKey="pickupQuestionnaire" />
             )}
           </Typography>
         </Box>
@@ -102,7 +102,7 @@ const CategoryContainer = (props: any) => {
                 <Trans i18nKey="categories" />
               </Typography>
             </Box>
-            <CategoryList subjectQueryData={subjectQueryData} />
+            <QuestionnaireList subjectQueryData={subjectQueryData} />
           </Box>
         </Box>
       </Collapse>
@@ -136,7 +136,7 @@ const CategoryContainer = (props: any) => {
   );
 };
 
-const useCategory = (props: any) => {
+const useQuestionnaire = (props: any) => {
   const { subjectQueryData = {} } = props;
   const { data = {}, loading = true, loaded } = subjectQueryData;
   const { total_metric_number, total_answered_metric } = data;
@@ -175,4 +175,4 @@ const useCategory = (props: any) => {
   };
 };
 
-export { CategoryContainer };
+export { QuestionnaireContainer };
