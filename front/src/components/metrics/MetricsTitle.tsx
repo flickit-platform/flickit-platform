@@ -12,9 +12,12 @@ import {
 import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedInRounded";
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
-import { ICategoryModel } from "../../types";
+import { IQuestionnaireModel } from "../../types";
 
-const MetricsTitle = (props: { data: ICategoryModel; isReview?: boolean }) => {
+const MetricsTitle = (props: {
+  data: IQuestionnaireModel;
+  isReview?: boolean;
+}) => {
   const { data, isReview } = props;
   const { title } = data || {};
   const {
@@ -24,7 +27,7 @@ const MetricsTitle = (props: { data: ICategoryModel; isReview?: boolean }) => {
   } = useMetricContext();
   const { metricIndex } = useParams();
   const isComplete = metricIndex === "completed";
-  const canFinishCategory = !isComplete && !isReview;
+  const canFinishQuestionnaire = !isComplete && !isReview;
 
   return (
     <Box sx={{ pt: 1, pb: 0 }}>
@@ -46,10 +49,10 @@ const MetricsTitle = (props: { data: ICategoryModel; isReview?: boolean }) => {
                 sx={{ mr: 1 }}
                 startIcon={<CategoryRoundedIcon />}
               >
-                <Trans i18nKey="selectAnotherCategory" />
+                <Trans i18nKey="selectAnotherQuestionnaire" />
               </Button>
             )}
-            {canFinishCategory && (
+            {canFinishQuestionnaire && (
               <Button
                 disabled={isSubmitting}
                 component={Link}
@@ -99,7 +102,7 @@ const MetricsTitle = (props: { data: ICategoryModel; isReview?: boolean }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Trans i18nKey="categoryFinished" />
+                  <Trans i18nKey="questionnaireFinished" />
                 </Typography>
               ) : (
                 <Typography

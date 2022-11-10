@@ -75,11 +75,11 @@ const Routes = () => {
             element={<SubjectReportScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId/review"
+            path="/:spaceId/assessments/:assessmentId/:subjectId/:questionnaireId/review"
             element={<MetricsReviewScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:assessmentId/:subjectId/:categoryId"
+            path="/:spaceId/assessments/:assessmentId/:subjectId/:questionnaireId"
             element={<MetricsScreen />}
           >
             <Route path="" element={<MetricScreen />} />

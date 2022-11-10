@@ -14,7 +14,7 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { CategoryContainer } from "../categories/CategoryContainer";
+import { QuestionnaireContainer } from "../questionnaires/QuestionnaireContainer";
 import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
 
@@ -41,7 +41,7 @@ const SubjectContainer = () => {
             <a ref={linkRef} href={hash} style={{ display: "none" }} />
             <Box id="categories"></Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
-            <CategoryContainer
+            <QuestionnaireContainer
               subjectQueryData={{ ...subjectQueryData, loading }}
             />
             <Box id="insight"></Box>
