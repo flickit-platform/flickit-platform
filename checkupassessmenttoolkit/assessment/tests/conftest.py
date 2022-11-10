@@ -1,12 +1,14 @@
-from assessmentcore.models import User
+import pytest
+from model_bakery import baker
 from rest_framework.test import APIClient
+from assessmentcore.models import User, Space, UserAccess
 from assessment.models import AssessmentProfile
 from assessmentbaseinfo.models import AssessmentSubject, MetricCategory
 from assessmentbaseinfo.models import Metric, MetricImpact, QualityAttribute
 from assessmentbaseinfo.models import AnswerTemplate
-from model_bakery import baker
+
 from assessment.common import *
-import pytest
+
 
 
 @pytest.fixture
@@ -17,7 +19,10 @@ def api_client():
 @pytest.fixture
 def authenticate(api_client):
     def do_authenticate(is_staff=False):
-        return api_client.force_authenticate(user=User(is_staff=is_staff))
+        space1 = baker.make(Space)
+        user1 = baker.make(User, current_space = space1, username = 'test')
+        user_access11 = baker.make(UserAccess, space = space1, user = user1)
+        return api_client.force_authenticate(user1)
     return do_authenticate
 
 @pytest.fixture

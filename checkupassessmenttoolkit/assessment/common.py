@@ -1,3 +1,4 @@
+
 STATUS_CHOICES = [
     ('WEAK', 'WEAK'),
     ('RISKY', 'RISKY'),
@@ -5,20 +6,6 @@ STATUS_CHOICES = [
     ('GOOD', 'GOOD'),
     ('OPTIMIZED', 'OPTIMIZED')
 ]
-
-
-def calculate_staus(value):
-    match value:
-        case 1:
-            return "WEAK"
-        case 2:
-            return "RISKY"
-        case 3:
-            return "NORMAL"
-        case 4:
-            return "GOOD"
-        case 5:
-            return "OPTIMIZED"
 
 def normlize_Value(value):
     match value:

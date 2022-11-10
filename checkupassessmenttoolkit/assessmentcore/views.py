@@ -35,13 +35,8 @@ class ChangeCurrentSpaceViewSet(APIView):
         else:
             return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
         
-
-
-
 class CustomActivationEmail(ActivationEmail):
-
     template_name = "email/activation.html"
-
     def send(self, to):
         print('sending email with celery')
         context = self.get_context_data()
@@ -62,19 +57,6 @@ class SpaceViewSet(ModelViewSet):
         current_user = self.request.user
         if current_user.spaces is not None:
             return current_user.spaces.all()
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     current_user = self.request.user
-    #     sapce_list = current_user.spaces.all()
-    #     if any(space.id == instance.id for space in sapce_list):
-    #         serializer = self.get_serializer(instance)
-    #         return Response(serializer.data)  
-    #     else:
-    #         return Response({'message': 'You can\'t visit the space with the given id'}, status=status.HTTP_403_FORBIDDEN)  
-
-         
-
 
 class UserAccessViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
@@ -105,8 +87,6 @@ class UserAccessViewSet(ModelViewSet):
         if instance.space.id == instance.user.current_space_id:
             instance.user.current_space_id = None
             instance.user.save()
-            # User.objects.update(id = instance.user.id , current_space_id = None)
-
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
