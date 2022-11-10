@@ -4,9 +4,9 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import Title from "../../components/shared/Title";
-import QANumberIndicator from "../../components/shared/QANumberIndicator";
-import CategoryProgress from "../../components/shared/progress/CategoryProgress";
+import Title from "../shared/Title";
+import QANumberIndicator from "../shared/QANumberIndicator";
+import QuestionnaireProgress from "../../components/shared/progress/QuestionnaireProgress";
 import { Link } from "react-router-dom";
 import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
@@ -15,7 +15,7 @@ import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRound
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
 
-interface ICategoryCardProps {
+interface IQuestionnaireCardProps {
   data: {
     last_updated: string;
     metric_number: number;
@@ -27,7 +27,7 @@ interface ICategoryCardProps {
   };
 }
 
-const CategoryCard = (props: ICategoryCardProps) => {
+const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const { data } = props;
   const {
     id,
@@ -84,13 +84,13 @@ const CategoryCard = (props: ICategoryCardProps) => {
           </Box>
         </Box>
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
-          <CategoryProgress
+          <QuestionnaireProgress
             position="relative"
             left="-12px"
             progress={progress}
             q={number_of_questions}
             a={number_of_answers}
-            isCategory={true}
+            isQuestionnaire={true}
             isSmallScreen={isSmallScreen}
           />
         </Box>
@@ -176,4 +176,4 @@ const ActionButton = (props: {
   );
 };
 
-export { CategoryCard };
+export { QuestionnaireCard };

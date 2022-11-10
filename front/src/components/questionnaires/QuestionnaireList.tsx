@@ -1,10 +1,10 @@
 import React from "react";
-import { CategoryCard } from "./CategoryCard";
+import { QuestionnaireCard } from "./QuestionnaireCard";
 import QueryData from "../shared/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 
-export const CategoryList = (props: any) => {
+export const QuestionnaireList = (props: any) => {
   const { subjectQueryData = {} } = props;
 
   return (
@@ -41,7 +41,7 @@ export const CategoryList = (props: any) => {
             {metric_categories_info.map((data: any) => {
               return (
                 <Grid item xl={4} md={6} sm={12} xs={12} key={data.id}>
-                  <CategoryCard data={data} />
+                  <QuestionnaireCard data={data} />
                 </Grid>
               );
             })}

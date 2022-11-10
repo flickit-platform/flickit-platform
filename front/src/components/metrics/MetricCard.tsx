@@ -129,7 +129,7 @@ const AnswerTemplate = (props: {
   const { total_number_of_metrics, resultId } = metricsInfo;
   const { service } = useServiceContext();
   const dispatch = useMetricDispatch();
-  const { categoryId = "" } = useParams();
+  const { questionnaireId = "" } = useParams();
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastMetric = metricIndex == total_number_of_metrics;
@@ -153,7 +153,7 @@ const AnswerTemplate = (props: {
       const res = await service.submitAnswer(
         {
           resultId,
-          categoryId,
+          questionnaireId,
           data: {
             metric_id: metricInfo?.id,
             answer: value?.id || null,

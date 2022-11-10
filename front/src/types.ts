@@ -113,7 +113,7 @@ export interface IAssessmentProfileModel {
   id: TId;
   title: string;
   images: TImages;
-  metric_categories: ICategoryModel[];
+  metric_categories: IQuestionnaireModel[];
   assessment_subjects: Omit<
     ISubjectInfo,
     | "total_answered_metric_number"
@@ -175,7 +175,7 @@ export interface IAssessmentReportModel {
   assessment_project: IAssessmentReport;
 }
 
-export interface ICategoryModel {
+export interface IQuestionnaireModel {
   code: string;
   id: TId;
   title: string;
@@ -251,7 +251,7 @@ export interface ISubjectReport {
   quality_attribute: IQualityAttribute;
 }
 
-export interface IMetricCategoryInfo {
+export interface IMetricQuestionnaireInfo {
   answered_metric: number;
   id: TId;
   metric_number: number;
@@ -271,7 +271,7 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   title: string;
   total_answered_metric: number;
   total_metric_number: number;
-  metric_categories_info: IMetricCategoryInfo[];
+  metric_categories_info: IMetricQuestionnaireInfo[];
   most_significant_strength_atts: IQualityAttribute[];
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
