@@ -230,6 +230,7 @@ export interface IAssessment {
   color: IColorModel;
   assessment_results: string[];
   assessment_profile: IAssessmentProfileModel;
+  progress?: number;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
