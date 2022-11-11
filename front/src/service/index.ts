@@ -216,14 +216,11 @@ export const createService = (
         },
       });
     },
-    fetchCategories(
-      { subjectId }: { subjectId: string | undefined },
+    fetchQuestionnaires(
+      args: any,
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(
-        `/baseinfo/subjects/${subjectId}/metriccategories/`,
-        config
-      );
+      return axios.get(`/baseinfo/metriccategories/`, config);
     },
     fetchQuestionnaire(
       { questionnaireId }: { questionnaireId: string | undefined },

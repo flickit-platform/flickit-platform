@@ -1,26 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Divider, Skeleton, Typography } from "@mui/material";
-import Collapse from "@mui/material/Collapse";
+import React from "react";
+import Divider from "@mui/material/Divider";
+import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import QANumberIndicator from "../shared/QANumberIndicator";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import { styles } from "../../config/styles";
+import { useQuery } from "../../utils/useQuery";
+import { useServiceContext } from "../../providers/ServiceProvider";
+import { IQuestionnairesModel } from "../../types";
 
-const QuestionnaireContainer = (props: any) => {
+const QuestionnaireContainer = () => {
   const {
-    overallProgress,
+    progress,
     isCompleted,
-    isExpanded,
-    setIsExpanded,
-    subjectQueryData,
+    questionnaireQueryData,
     total_metric_number,
     total_answered_metric,
     loading,
-  } = useQuestionnaire(props);
+  } = useQuestionnaire();
 
   return (
     <Box
@@ -28,7 +28,7 @@ const QuestionnaireContainer = (props: any) => {
       sx={{
         ...styles.centerCV,
         backgroundColor: "#2e7d72",
-        background: `linear-gradient(135deg, #2e7d72 ${overallProgress}%, #01221e ${overallProgress}%)`,
+        background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
         px: { xs: 3, md: 4 },
       }}
       py={4}
@@ -43,7 +43,7 @@ const QuestionnaireContainer = (props: any) => {
             {loading || isCompleted === undefined ? (
               <Skeleton width="220px" />
             ) : isCompleted ? (
-              <Trans i18nKey={"YouHaveFinishedAllCategories"} />
+              <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
             ) : (
               <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
             )}
@@ -56,7 +56,7 @@ const QuestionnaireContainer = (props: any) => {
             {loading || isCompleted === undefined ? (
               <Skeleton width="164px" />
             ) : isCompleted ? (
-              <Trans i18nKey={"ToChangeYourInsightTryEditingCategories"} />
+              <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
             ) : (
               <Trans i18nKey="pickupQuestionnaire" />
             )}
@@ -87,88 +87,47 @@ const QuestionnaireContainer = (props: any) => {
           )}
         </Box>
       </Box>
-      <Collapse in={isExpanded}>
-        <Box>
-          <Divider sx={{ borderColor: "white", opacity: 0.4, mt: 2, mb: 2 }} />
-          <Box pb={2}>
-            <Box sx={{ ...styles.centerV }}>
-              <CategoryRoundedIcon sx={{ mr: 1 }} />
-              <Typography
-                variant="h5"
-                color="white"
-                fontFamily="RobotoMedium"
-                letterSpacing={".05rem"}
-              >
-                <Trans i18nKey="categories" />
-              </Typography>
-            </Box>
-            <QuestionnaireList subjectQueryData={subjectQueryData} />
+      <Box>
+        <Divider sx={{ borderColor: "white", opacity: 0.4, mt: 2, mb: 2 }} />
+        <Box pb={2}>
+          <Box sx={{ ...styles.centerV }}>
+            <CategoryRoundedIcon sx={{ mr: 1 }} />
+            <Typography
+              variant="h5"
+              color="white"
+              fontFamily="RobotoMedium"
+              letterSpacing={".05rem"}
+            >
+              <Trans i18nKey="Questionnaires" />
+            </Typography>
           </Box>
+          <QuestionnaireList questionnaireQueryData={questionnaireQueryData} />
         </Box>
-      </Collapse>
-      <Button
-        variant="contained"
-        sx={{
-          position: "relative",
-          top: "30px",
-          alignSelf: "center",
-          borderRadius: 3,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          pl: 2,
-          pr: 2,
-        }}
-        onClick={() => {
-          setIsExpanded(!isExpanded);
-        }}
-        size="small"
-        startIcon={
-          isExpanded ? <ExpandLessRoundedIcon /> : <ExpandMoreRoundedIcon />
-        }
-      >
-        {isExpanded ? (
-          <Trans i18nKey={"closeCategories"} />
-        ) : (
-          <Trans i18nKey={"seeCategories"} />
-        )}
-      </Button>
+      </Box>
     </Box>
   );
 };
 
-const useQuestionnaire = (props: any) => {
-  const { subjectQueryData = {} } = props;
-  const { data = {}, loading = true, loaded } = subjectQueryData;
-  const { total_metric_number, total_answered_metric } = data;
-  const [isExpanded, setIsExpanded] = useState(false);
-  const isCompleted = loaded
-    ? total_answered_metric === 0
-      ? false
-      : total_metric_number === total_answered_metric
-    : undefined;
+const useQuestionnaire = () => {
+  const { service } = useServiceContext();
 
-  useEffect(() => {
-    const isCompleted =
-      total_answered_metric === 0
-        ? false
-        : total_metric_number === total_answered_metric;
+  const questionnaireQueryData = useQuery<IQuestionnairesModel>({
+    service: (args, config) => service.fetchQuestionnaires(args, config),
+  });
 
-    if (loaded) {
-      setIsExpanded(isCompleted ? false : true);
-    }
-  }, [loading]);
+  const { data, loading = true, loaded } = questionnaireQueryData;
+  const {
+    total_metric_number = 0,
+    total_answered_metric = 0,
+    progress = 0,
+  } = data || {};
 
-  const overallProgress =
-    total_metric_number === 0
-      ? 0
-      : (total_answered_metric / total_metric_number) * 100;
+  const isCompleted = progress === 100;
 
   return {
-    overallProgress,
+    progress,
     isCompleted,
-    isExpanded,
-    setIsExpanded,
-    subjectQueryData,
+    questionnaireQueryData,
     total_metric_number,
     total_answered_metric,
     loading,

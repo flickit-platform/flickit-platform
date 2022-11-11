@@ -14,20 +14,12 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { QuestionnaireContainer } from "../questionnaires/QuestionnaireContainer";
 import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
 
 const SubjectContainer = () => {
-  const {
-    noStatus,
-    loading,
-    loaded,
-    hasError,
-    subjectQueryData,
-    linkRef,
-    hash,
-  } = useSubject();
+  const { noStatus, loading, loaded, hasError, subjectQueryData } =
+    useSubject();
 
   return (
     <QueryData
@@ -38,13 +30,7 @@ const SubjectContainer = () => {
       render={() => {
         return (
           <Box>
-            <a ref={linkRef} href={hash} style={{ display: "none" }} />
-            <Box id="categories"></Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
-            <QuestionnaireContainer
-              subjectQueryData={{ ...subjectQueryData, loading }}
-            />
-            <Box id="insight"></Box>
             {loading ? (
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
@@ -53,7 +39,7 @@ const SubjectContainer = () => {
               <NoInsightYetMessage {...subjectQueryData} />
             ) : (
               <Box sx={{ px: 0.5 }}>
-                <Box mt={12}>
+                <Box mt={5}>
                   <SubjectOverallInsight
                     {...subjectQueryData}
                     loading={loading}
@@ -94,8 +80,6 @@ const SubjectContainer = () => {
 const useSubject = () => {
   const { service } = useServiceContext();
   const { subjectId = "", assessmentId = "" } = useParams();
-  const linkRef = useRef<any>(null);
-  const { hash, state } = useLocation();
   const resultsQueryData = useQuery<IAssessmentResultModel>({
     service: (args, config) => service.fetchResults(args, config),
   });
@@ -116,14 +100,8 @@ const useSubject = () => {
   }, [resultsQueryData.loading]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (subjectQueryData.loaded && hash) {
-        linkRef.current.click();
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }, 350);
-  }, [subjectQueryData.loaded]);
+    window.scrollTo(0, 0);
+  }, []);
 
   const hasError = subjectQueryData.error || resultsQueryData.error;
 
@@ -138,8 +116,6 @@ const useSubject = () => {
     loaded,
     hasError,
     subjectQueryData,
-    linkRef,
-    hash,
   };
 };
 
@@ -157,22 +133,22 @@ const SubjectTitle = (props: {
 
   return (
     <Title
-      size="large"
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
       backLink="./.."
+      id="insight"
+      inPageLink="#insight"
       sup={
-        <Typography variant="subLarge">
+        <>
           {assessment_profile_description || (
             <Trans i18nKey="technicalDueDiligence" />
           )}{" "}
           {assessment_project_title}
-        </Typography>
+        </>
       }
     >
       <Box sx={{ ...styles.centerV }}>
         <QueryStatsRoundedIcon
-          fontSize="large"
           sx={{
             mr: 1,
             color: assessment_project_color_code,
@@ -216,13 +192,13 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
             <Typography variant="h5" fontFamily={"RobotoLight"} sx={{ mt: 2 }}>
-              <Trans i18nKey="completeSomeOfCategories" />
+              <Trans i18nKey="completeSomeOfQuestionnaires" />
             </Typography>
           </>
         )}
 
-        <Link href="#categories" sx={{ mt: 3, color: "white" }}>
-          <Trans i18nKey="listOfCategories" />
+        <Link href="#Questionnaires" sx={{ mt: 3, color: "white" }}>
+          <Trans i18nKey="listOfQuestionnaires" />
         </Link>
       </Paper>
     </Box>
