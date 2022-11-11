@@ -34,6 +34,9 @@ const MetricsReviewScreen = React.lazy(
   () => import("../screens/MetricsReviewScreen")
 );
 const MetricScreen = React.lazy(() => import("../screens/MetricScreen"));
+const QuestionnairesScreen = React.lazy(
+  () => import("../screens/QuestionnairesScreen")
+);
 
 const Routes = () => {
   return (
@@ -69,6 +72,10 @@ const Routes = () => {
           <Route
             path="/:spaceId/assessments/:assessmentId"
             element={<AssessmentReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/questionnaires"
+            element={<QuestionnairesScreen />}
           />
           <Route
             path="/:spaceId/assessments/:assessmentId/:subjectId"
