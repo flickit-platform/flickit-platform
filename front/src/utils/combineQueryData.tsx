@@ -1,5 +1,5 @@
+import { TQueryData } from "../types";
 import { ICustomError } from "./CustomError";
-import { TQueryData } from "./useQuery";
 
 type TCombinedQueryData = {
   data: any[];
