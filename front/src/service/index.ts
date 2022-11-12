@@ -216,20 +216,21 @@ export const createService = (
         },
       });
     },
-    fetchCategories(
-      { subjectId }: { subjectId: string | undefined },
+    fetchQuestionnaires(
+      args: { subjectId?: TId | null },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const params = args?.subjectId ? { subjectId: args?.subjectId } : {};
+      return axios.get(`/baseinfo/metriccategories/`, { ...config, params });
+    },
+    fetchQuestionnaire(
+      { questionnaireId }: { questionnaireId: string | undefined },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/baseinfo/subjects/${subjectId}/metriccategories/`,
+        `/baseinfo/metriccategories/${questionnaireId}/`,
         config
       );
-    },
-    fetchCategory(
-      { categoryId }: { categoryId: string | undefined },
-      config: AxiosRequestConfig<any> | undefined
-    ) {
-      return axios.get(`/baseinfo/metriccategories/${categoryId}/`, config);
     },
     fetchOptions(
       { url }: { url: string },
@@ -255,9 +256,9 @@ export const createService = (
     submitAnswer(
       {
         resultId,
-        categoryId,
+        questionnaireId,
         data,
-      }: { resultId: TId | undefined; categoryId: string; data: any },
+      }: { resultId: TId | undefined; questionnaireId: string; data: any },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.post(
@@ -265,26 +266,35 @@ export const createService = (
         data,
         {
           ...config,
-          params: { metric_category_pk: categoryId, ...(config.params || {}) },
+          params: {
+            metric_category_pk: questionnaireId,
+            ...(config.params || {}),
+          },
         }
       );
     },
     fetchMetrics(
-      { categoryId }: { categoryId: string | undefined },
+      { questionnaireId }: { questionnaireId: string | undefined },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/baseinfo/metriccategories/${categoryId}/metrics/`,
+        `/baseinfo/metriccategories/${questionnaireId}/metrics/`,
         config
       );
     },
-    fetchCategoryResult(
-      { resultId, categoryId }: { resultId: string; categoryId: string },
+    fetchQuestionnaireResult(
+      {
+        resultId,
+        questionnaireId,
+      }: { resultId: string; questionnaireId: string },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.get(`/assessment/results/${resultId}/metricvalues/`, {
         ...config,
-        params: { metric_category_pk: categoryId, ...(config.params || {}) },
+        params: {
+          metric_category_pk: questionnaireId,
+          ...(config.params || {}),
+        },
       });
     },
   };

@@ -14,7 +14,7 @@ import MetricsTitle from "./MetricsTitle";
 import QueryBatchData from "../shared/QueryBatchData";
 import {
   IAssessmentResultModel,
-  ICategoryModel,
+  IQuestionnaireModel,
   IMetricsModel,
   IMetricsResultsModel,
   TId,
@@ -64,7 +64,7 @@ export const MetricsContainerC = (
     metricsQueryData,
     metricsResultQueryData,
     resultsQueryData,
-    categoryQueryData,
+    questionnaireQueryData,
   } = useMetrics();
 
   return (
@@ -72,22 +72,22 @@ export const MetricsContainerC = (
       | IMetricsModel
       | IMetricsResultsModel
       | IAssessmentResultModel
-      | ICategoryModel
+      | IQuestionnaireModel
     >
       queryBatchData={[
         metricsQueryData,
         metricsResultQueryData,
         resultsQueryData,
-        categoryQueryData,
+        questionnaireQueryData,
       ]}
-      loaded={categoryQueryData.loaded}
+      loaded={questionnaireQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfMetrics />}
-      render={([_, __, ___, categoryData]) => {
+      render={([_, __, ___, questionnaireData]) => {
         return (
           <>
             <Box py={1}>
               <MetricsTitle
-                data={categoryData as ICategoryModel}
+                data={questionnaireData as IQuestionnaireModel}
                 isReview={isReview}
               />
             </Box>
@@ -135,20 +135,22 @@ const useMetrics = () => {
   const { service } = useServiceContext();
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const dispatch = useMetricDispatch();
-  const { metricIndex, categoryId, assessmentId } = useParams();
-  const categoryQueryData = useQuery<ICategoryModel>({
-    service: (args, config) => service.fetchCategory({ categoryId }, config),
+  const { metricIndex, questionnaireId, assessmentId } = useParams();
+  const questionnaireQueryData = useQuery<IQuestionnaireModel>({
+    service: (args, config) =>
+      service.fetchQuestionnaire({ questionnaireId }, config),
   });
   const metricsQueryData = useQuery<IMetricsModel>({
-    service: (args, config) => service.fetchMetrics({ categoryId }, config),
+    service: (args, config) =>
+      service.fetchMetrics({ questionnaireId }, config),
   });
   const resultsQueryData = useQuery<IAssessmentResultModel>({
     service: (args, config) => service.fetchResults(args, config),
   });
   const metricsResultQueryData = useQuery<IMetricsResultsModel>({
     runOnMount: false,
-    service: (args: { resultId: any; categoryId: any }, config) =>
-      service.fetchCategoryResult(args, config),
+    service: (args: { resultId: any; questionnaireId: any }, config) =>
+      service.fetchQuestionnaireResult(args, config),
   });
 
   useEffect(() => {
@@ -158,7 +160,7 @@ const useMetrics = () => {
       );
       const { id: resultId } = result || {};
       setResultId(resultId);
-      resultId && metricsResultQueryData.query({ resultId, categoryId });
+      resultId && metricsResultQueryData.query({ resultId, questionnaireId });
     }
   }, [resultsQueryData.loading]);
 
@@ -184,7 +186,7 @@ const useMetrics = () => {
     metricsQueryData,
     metricsResultQueryData,
     resultsQueryData,
-    categoryQueryData,
+    questionnaireQueryData,
   };
 };
 
