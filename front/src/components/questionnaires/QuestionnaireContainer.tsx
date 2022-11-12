@@ -13,6 +13,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
 const QuestionnaireContainer = () => {
   const {
@@ -23,11 +24,12 @@ const QuestionnaireContainer = () => {
     total_answered_metric,
     loading,
   } = useQuestionnaire();
+  const { state } = useLocation();
 
   return (
     <Box>
       <Title
-        backLink="./../.."
+        backLink={state?.pathname || -1}
         sup={
           <>
             <Trans i18nKey="assessment" />
@@ -61,9 +63,13 @@ const QuestionnaireContainer = () => {
 
 const useQuestionnaire = () => {
   const { service } = useServiceContext();
+  const [searchParams] = useSearchParams();
+
+  const subjectIdParam = searchParams.get("subjectId");
 
   const questionnaireQueryData = useQuery<IQuestionnairesModel>({
-    service: (args, config) => service.fetchQuestionnaires(args, config),
+    service: (args = { subjectId: subjectIdParam }, config) =>
+      service.fetchQuestionnaires(args, config),
   });
 
   const { data, loading = true, loaded } = questionnaireQueryData;
