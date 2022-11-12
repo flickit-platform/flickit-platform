@@ -3,7 +3,7 @@ import { Gauge } from "../../components/shared/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "../../utils/useMenu";
 import { useServiceContext } from "../../providers/ServiceProvider";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
@@ -33,9 +33,10 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { progress = 0 } = item;
+  const { progress = 30 } = item;
   const hasStat = hasStatus(item.status);
   const isComplete = progress === 100;
+  const location = useLocation();
 
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
@@ -118,6 +119,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 e.stopPropagation();
               }}
               component={Link}
+              state={location}
               to={`${item.id}/questionnaires`}
               sx={{
                 backgroundColor: "#2e7d72",
