@@ -42,7 +42,9 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
         category_report_info = self.extract_category_info(response, metric_categories)
         response.data['total_metric_number'] = category_report_info.total_metric_number
         response.data['total_answered_metric'] = category_report_info.total_answered_metric
-        self.calculate_progress(response, category_report_info)
+        self.calculate_subject_progress(response, category_report_info)
+
+        self.calculate_total_progress(response, result)
         
         if category_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
             response.data['status'] = 'Not Calculated'
@@ -90,11 +92,22 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def extract_most_significant_strength_atts(self, quality_attribute_values):
         return [o['quality_attribute'] for o in quality_attribute_values if o['maturity_level_value'] > 2][:2]
 
-    def calculate_progress(self, response, category_report_info):
+    def calculate_subject_progress(self, response, category_report_info):
         if category_report_info.total_metric_number != 0:
             response.data['progress'] = int((response.data['total_answered_metric'] / response.data['total_metric_number']) * 100)
         else:
             response.data['progress'] = 0
+
+    def calculate_total_progress(self, response, result: AssessmentResult):
+        total_progress = Dictionary()
+        total_answered_metric_number = calculate_answered_metric_by_result(result)
+        total_metric_number = calculate_total_metric_number_by_result(result)
+
+        total_progress.add("total_answered_metric_number", total_answered_metric_number)
+        total_progress.add("total_metric_number", total_metric_number)
+        total_progress.add("progress", total_answered_metric_number/total_metric_number )
+
+        response.data['total_progress'] = total_progress
 
     def extract_category_info(self, response, metric_categories):
         category_report_info = CategoryReportInfo(metric_categories)
