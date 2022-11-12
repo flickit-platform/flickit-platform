@@ -16,6 +16,7 @@ import QANumberIndicator from "../shared/QANumberIndicator";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { styles } from "../../config/styles";
+import { useSearchParams } from "react-router-dom";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: TQueryData<IQuestionnairesModel>;
@@ -102,6 +103,28 @@ const FilterBySubject = (props: {
     ],
     fetchQuestionnaires,
   } = props;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const subjectIdParam = searchParams.get("subjectId");
+  const [activeFilterSubjectId, setActiveFilterSubjectId] =
+    useState(subjectIdParam);
+
+  const handleClick = (subjectId: TId) => {
+    if (activeFilterSubjectId == subjectId) {
+      fetchQuestionnaires({ subjectId: null });
+      setSearchParams((searchParams) => {
+        searchParams.delete("subjectId");
+        return searchParams;
+      });
+      setActiveFilterSubjectId(null);
+    } else {
+      fetchQuestionnaires({ subjectId });
+      setSearchParams((searchParams) => {
+        searchParams.set("subjectId", subjectId.toString());
+        return searchParams;
+      });
+      setActiveFilterSubjectId(subjectId.toString());
+    }
+  };
 
   return (
     <Box height="100%" sx={{ ...styles.centerV, pl: 1 }}>
@@ -109,7 +132,8 @@ const FilterBySubject = (props: {
         return (
           <FilterButton
             subject={subject}
-            fetchQuestionnaires={fetchQuestionnaires}
+            handleClick={handleClick}
+            active={activeFilterSubjectId == subject?.id}
           />
         );
       })}
@@ -119,21 +143,11 @@ const FilterBySubject = (props: {
 
 const FilterButton = (props: {
   subject: ISubjectInfo;
-  fetchQuestionnaires: TQueryFunction;
+  handleClick: (subjectId: TId) => void;
+  active: boolean;
 }) => {
-  const { subject, fetchQuestionnaires } = props;
+  const { subject, handleClick, active } = props;
   const { title, id } = subject;
-  const [active, setActive] = useState(false);
-
-  const handleClick = () => {
-    if (active) {
-      fetchQuestionnaires(id);
-      setActive(false);
-    } else {
-      fetchQuestionnaires({ subjectId: id });
-      setActive(true);
-    }
-  };
 
   return (
     <Button
@@ -145,7 +159,7 @@ const FilterButton = (props: {
           backgroundColor: active ? "#ffffff66" : "#ffffff11",
         },
       }}
-      onClick={handleClick}
+      onClick={() => handleClick(id)}
     >
       {title}
     </Button>
