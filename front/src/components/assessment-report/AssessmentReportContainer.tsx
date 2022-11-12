@@ -11,6 +11,7 @@ import { AssessmentMostSignificantAttributes } from "./AssessmentMostSignificant
 import LoadingSkeletonOfAssessmentReport from "../shared/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
 import { IAssessmentReportModel } from "../../types";
+import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 
 const AssessmentReportContainer = () => {
   const { service } = useServiceContext();
@@ -40,6 +41,9 @@ const AssessmentReportContainer = () => {
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
             <AssessmentReportTitle data={data} colorCode={colorCode} />
+            <Box mt={3}>
+              <QuestionnairesNotCompleteAlert />
+            </Box>
             <Grid container spacing={3} columns={14} mt={1}>
               <Grid item lg={8} md={14} sm={14} xs={14}>
                 <AssessmentOverallStatus

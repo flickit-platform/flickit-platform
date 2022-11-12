@@ -141,5 +141,8 @@
   "statusIs": "Status is",
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
-  "notEvaluated": "NOT EVALUATED"
+  "notEvaluated": "NOT EVALUATED",
+  "thisReportIsNotAccurate": "This report is not accurate.",
+  "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires, to get an accurate report.",
+  "pleaseCompleteAllQuestionnaires": "Please complete all questionnaires, to get an accurate report."
 }
