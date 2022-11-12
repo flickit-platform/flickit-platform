@@ -17,7 +17,13 @@ function App() {
     </Box>
   ) : (
     <ErrorBoundary>
-      {loading ? <GettingThingsReadyLoading /> : <Routes />}
+      {loading ? (
+        <Box width="100%" sx={{ minHeight: "100vh", ...styles.centerVH }}>
+          <GettingThingsReadyLoading color="gray" />
+        </Box>
+      ) : (
+        <Routes />
+      )}
     </ErrorBoundary>
   );
 }

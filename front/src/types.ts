@@ -1,6 +1,7 @@
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { ToastOptions } from "react-toastify";
 import { string } from "yup";
+import { ICustomError } from "./utils/CustomError";
 
 export enum ECustomErrorType {
   "DEFAULT" = "DEFAULT",
@@ -113,7 +114,7 @@ export interface IAssessmentProfileModel {
   id: TId;
   title: string;
   images: TImages;
-  metric_categories: ICategoryModel[];
+  metric_categories: IQuestionnaireModel[];
   assessment_subjects: Omit<
     ISubjectInfo,
     | "total_answered_metric_number"
@@ -175,7 +176,7 @@ export interface IAssessmentReportModel {
   assessment_project: IAssessmentReport;
 }
 
-export interface ICategoryModel {
+export interface IQuestionnaireModel {
   code: string;
   id: TId;
   title: string;
@@ -230,6 +231,7 @@ export interface IAssessment {
   color: IColorModel;
   assessment_results: string[];
   assessment_profile: IAssessmentProfileModel;
+  progress?: number;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
@@ -251,13 +253,21 @@ export interface ISubjectReport {
   quality_attribute: IQualityAttribute;
 }
 
-export interface IMetricCategoryInfo {
+export interface IQuestionnaire {
   answered_metric: number;
   id: TId;
   metric_number: number;
   progress: number;
   title: string;
+  last_updated?: string;
 }
+
+export interface IQuestionnairesModel extends IDefaultModel<IQuestionnaire> {
+  total_metric_number: number;
+  total_answered_metric: number;
+  progress: number;
+}
+
 export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   assessment_profile_description: string;
   assessment_project_color_code: string;
@@ -271,7 +281,7 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   title: string;
   total_answered_metric: number;
   total_metric_number: number;
-  metric_categories_info: IMetricCategoryInfo[];
+  metric_categories_info: IQuestionnaire[];
   most_significant_strength_atts: IQualityAttribute[];
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
@@ -281,3 +291,16 @@ export type TQueryFunction<T extends any = any, A extends any = any> = (
   args?: A,
   config?: AxiosRequestConfig<any> | undefined
 ) => Promise<T>;
+
+export type TQueryData<T extends any = any, A extends any = any> = {
+  data: T;
+  loading: boolean;
+  loaded: boolean;
+  error: boolean;
+  errorObject: ICustomError | undefined;
+  query: (
+    args?: A | undefined,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => Promise<T>;
+  abortController: AbortController;
+};

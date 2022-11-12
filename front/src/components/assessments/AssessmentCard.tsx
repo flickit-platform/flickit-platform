@@ -3,7 +3,7 @@ import { Gauge } from "../../components/shared/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "../../utils/useMenu";
 import { useServiceContext } from "../../providers/ServiceProvider";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
@@ -15,16 +15,28 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { IAssessment } from "../../types";
+import { IAssessment, TId, TQueryFunction } from "../../types";
+import { TDialogProps } from "../../utils/useDialog";
+import Button from "@mui/material/Button";
+import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
+import QueryStatsRounded from "@mui/icons-material/QueryStatsRounded";
+import hasStatus from "../../utils/hasStatus";
+import { toast } from "react-toastify";
+import { t } from "i18next";
 
 interface IAssessmentCardProps {
   item: IAssessment;
+  dialogProps: TDialogProps;
+  deleteAssessment: TQueryFunction<any, TId>;
 }
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
-  const [elevation, setElevation] = React.useState(4);
   const { item } = props;
   const abortController = useRef(new AbortController());
+  const { progress = 30 } = item;
+  const hasStat = hasStatus(item.status);
+  const isComplete = progress === 100;
+  const location = useLocation();
 
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
@@ -39,16 +51,17 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           minHeight: "320px",
           height: "100%",
           justifyContent: "space-between",
+          ":hover": {
+            boxShadow: 9,
+          },
         }}
-        elevation={elevation}
-        onMouseEnter={() => setElevation(8)}
-        onMouseLeave={() => setElevation(4)}
+        elevation={4}
       >
         <Actions {...props} abortController={abortController} />
         <Grid
           container
           component={Link}
-          to={`${item.id}`}
+          to={isComplete ? `${item.id}` : `${item.id}/questionnaires`}
           sx={{ textDecoration: "none", height: "100%" }}
         >
           <Grid item xs={12}>
@@ -76,8 +89,45 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} display="flex" justifyContent={"center"}>
+          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={2}>
             <Gauge systemStatus={item.status} maxWidth="275px" mt="auto" />
+          </Grid>
+          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={4}>
+            <Button
+              startIcon={<QueryStatsRounded />}
+              fullWidth
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+                if (!hasStat) {
+                  e.preventDefault();
+                  toast.warn(t("inOrderToViewSomeInsight") as string);
+                }
+              }}
+              component={Link}
+              to={hasStat ? `${item.id}` : ""}
+              variant={isComplete ? "contained" : undefined}
+            >
+              <Trans i18nKey="insights" />
+            </Button>
+          </Grid>
+          <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
+            <Button
+              startIcon={<QuizRoundedIcon />}
+              variant={"contained"}
+              fullWidth
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+              }}
+              component={Link}
+              state={location}
+              to={`${item.id}/questionnaires`}
+              sx={{
+                backgroundColor: "#2e7d72",
+                background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+              }}
+            >
+              <Trans i18nKey="questionnaire" />
+            </Button>
           </Grid>
         </Grid>
       </Paper>
@@ -85,7 +135,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   );
 };
 
-const Actions = (props: any) => {
+const Actions = (props: {
+  deleteAssessment: TQueryFunction<any, TId>;
+  item: IAssessment;
+  dialogProps: TDialogProps;
+  abortController: React.MutableRefObject<AbortController>;
+}) => {
   const { deleteAssessment, item, dialogProps, abortController } = props;
   const [editLoading, setEditLoading] = React.useState(false);
   const { service } = useServiceContext();
