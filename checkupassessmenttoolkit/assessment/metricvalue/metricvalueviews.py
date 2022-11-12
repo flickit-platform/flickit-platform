@@ -1,8 +1,3 @@
-from django.http import HttpResponse
-import requests
-import json
-import pickle
-from django.core import serializers as core_serializers
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
@@ -12,8 +7,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from assessment.models import MetricValue
 from assessmentbaseinfo.models import MetricCategory
-from assessmentbaseinfo.views import MetricViewSet
-from assessmentbaseinfo.serializers import MetricSerilizer
 from assessment.serializers import *
 from .serializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
 from ..permissions import IsSpaceMember

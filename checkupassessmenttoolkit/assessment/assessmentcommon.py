@@ -18,7 +18,7 @@ def calculate_staus(value):
             return "OPTIMIZED"
 
 
-def extract_total_metric_number(result: AssessmentResult, category: MetricCategory):
+def extract_total_answered_metric_number(result: AssessmentResult, category: MetricCategory):
     metrics = category.metric_set.all()
     answered_metric = 0
     total_answered_metric_number = 0
@@ -34,21 +34,8 @@ def extract_total_metric_number(result: AssessmentResult, category: MetricCatego
 def calculate_answered_metric_by_subject(result: AssessmentResult, subject: AssessmentSubject):
     total_answered_metric_number = 0
     for category in subject.metric_categories.all():
-        total_answered_metric_number += extract_total_metric_number(result, category) 
+        total_answered_metric_number += extract_total_answered_metric_number(result, category) 
     return total_answered_metric_number
-
-def calculate_answered_metric_by_result(result:AssessmentResult):
-    total_answered_metric_number = 0
-    for category in MetricCategory.objects.all():
-        total_answered_metric_number += extract_total_metric_number(result, category) 
-    return total_answered_metric_number
-
-def calculate_total_metric_number():
-    total_metric_number = 0
-    for category in MetricCategory.objects.all():
-        metrics = category.metric_set.all()
-        total_metric_number += len(metrics)
-    return total_metric_number
 
 def calculate_total_metric_number_by_subject(subject: AssessmentSubject):
     total_metric_number = 0
@@ -56,6 +43,20 @@ def calculate_total_metric_number_by_subject(subject: AssessmentSubject):
         metrics = category.metric_set.all()
         total_metric_number += len(metrics)
     return total_metric_number
+
+def calculate_answered_metric_by_result(result:AssessmentResult):
+    total_answered_metric_number = 0
+    for category in MetricCategory.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+        total_answered_metric_number += extract_total_answered_metric_number(result, category) 
+    return total_answered_metric_number
+
+def calculate_total_metric_number_by_result(result:AssessmentResult):
+    total_metric_number = 0
+    for category in MetricCategory.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+        metrics = category.metric_set.all()
+        total_metric_number += len(metrics)
+    return total_metric_number
+
 
 def update_assessment_status(result:AssessmentResult):
     total_answered_metric_number = calculate_answered_metric_by_result(result) 
