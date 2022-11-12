@@ -1,16 +1,18 @@
-import React from "react";
-import Divider from "@mui/material/Divider";
-import Skeleton from "@mui/material/Skeleton";
-import Typography from "@mui/material/Typography";
+import React, { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
-import QANumberIndicator from "../shared/QANumberIndicator";
+import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
-import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import { styles } from "../../config/styles";
 import { useQuery } from "../../utils/useQuery";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { IQuestionnairesModel } from "../../types";
+import Title from "../shared/Title";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
 
 const QuestionnaireContainer = () => {
   const {
@@ -23,86 +25,35 @@ const QuestionnaireContainer = () => {
   } = useQuestionnaire();
 
   return (
-    <Box
-      flexWrap={"wrap"}
-      sx={{
-        ...styles.centerCV,
-        backgroundColor: "#2e7d72",
-        background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
-        px: { xs: 3, md: 4 },
-      }}
-      py={4}
-      borderRadius={2}
-      my={2}
-      color="white"
-      position={"relative"}
-    >
-      <Box display={"flex"} justifyContent="space-between">
-        <Box pb={1} pt={1} pr={4}>
-          <Typography variant="h4" fontFamily="RobotoMedium">
-            {loading || isCompleted === undefined ? (
-              <Skeleton width="220px" />
-            ) : isCompleted ? (
-              <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
-            ) : (
-              <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
-            )}
-          </Typography>
-          <Typography
-            variant="h6"
-            fontFamily="RobotoMedium"
-            letterSpacing={".05rem"}
-          >
-            {loading || isCompleted === undefined ? (
-              <Skeleton width="164px" />
-            ) : isCompleted ? (
-              <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
-            ) : (
-              <Trans i18nKey="pickupQuestionnaire" />
-            )}
-          </Typography>
-        </Box>
-        <Box
-          minWidth="130px"
-          display="flex"
-          justifyContent={"flex-end"}
-          sx={{
-            position: {
-              xs: "absolute",
-              md: "static",
-              top: "6px",
-              right: "12px",
-            },
-          }}
-        >
-          {loading ? (
-            <Skeleton width="60px" height="40px" />
-          ) : (
-            <QANumberIndicator
-              color="white"
-              q={total_metric_number}
-              a={total_answered_metric}
-              variant="h6"
-            />
-          )}
-        </Box>
-      </Box>
-      <Box>
-        <Divider sx={{ borderColor: "white", opacity: 0.4, mt: 2, mb: 2 }} />
-        <Box pb={2}>
-          <Box sx={{ ...styles.centerV }}>
-            <CategoryRoundedIcon sx={{ mr: 1 }} />
-            <Typography
-              variant="h5"
-              color="white"
-              fontFamily="RobotoMedium"
-              letterSpacing={".05rem"}
-            >
-              <Trans i18nKey="Questionnaires" />
-            </Typography>
-          </Box>
-          <QuestionnaireList questionnaireQueryData={questionnaireQueryData} />
-        </Box>
+    <Box>
+      <Title
+        backLink="./../.."
+        sup={
+          <>
+            <Trans i18nKey="assessment" />
+          </>
+        }
+      >
+        <QuizRoundedIcon sx={{ mr: 1 }} />
+        <Trans i18nKey="Questionnaires" />
+      </Title>
+
+      <NotCompletedAlert isCompleted={isCompleted} />
+      <Box
+        flexWrap={"wrap"}
+        sx={{
+          ...styles.centerCV,
+          backgroundColor: "#2e7d72",
+          background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+          px: { xs: 1, sm: 2, md: 3, lg: 4 },
+          py: { xs: 5, sm: 3 },
+        }}
+        borderRadius={2}
+        my={2}
+        color="white"
+        position={"relative"}
+      >
+        <QuestionnaireList questionnaireQueryData={questionnaireQueryData} />
       </Box>
     </Box>
   );
@@ -132,6 +83,45 @@ const useQuestionnaire = () => {
     total_answered_metric,
     loading,
   };
+};
+
+const NotCompletedAlert = (props: { isCompleted: boolean }) => {
+  const { isCompleted } = props;
+  const [open, setOpen] = useState(!isCompleted);
+
+  return (
+    <Collapse in={open}>
+      <Box mt={2}>
+        <Alert
+          severity="info"
+          action={
+            <IconButton
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          <AlertTitle>
+            {isCompleted ? (
+              <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
+            ) : (
+              <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
+            )}
+          </AlertTitle>
+          {isCompleted ? (
+            <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
+          ) : (
+            <Trans i18nKey="pickupQuestionnaire" />
+          )}
+        </Alert>
+      </Box>
+    </Collapse>
+  );
 };
 
 export { QuestionnaireContainer };
