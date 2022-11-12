@@ -29,7 +29,18 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     subjects_info = serializers.SerializerMethodField(method_name='calculate_subjects_info')
     most_significant_strength_atts = serializers.SerializerMethodField()
     most_significant_weaknessness_atts = serializers.SerializerMethodField()
+    total_progress = serializers.SerializerMethodField()
 
+    def get_total_progress(self, result: AssessmentResult):
+        total_progress = Dictionary()
+        total_answered_metric_number = calculate_answered_metric_by_result(result)
+        total_metric_number = calculate_total_metric_number_by_result(result)
+
+        total_progress.add("total_answered_metric_number", total_answered_metric_number)
+        total_progress.add("total_metric_number", total_metric_number)
+        total_progress.add("progress", total_answered_metric_number/total_metric_number )
+        return total_progress
+        
     def calculate_subjects_info(self, result: AssessmentResult):
         subjects_info = []
         subjects = result.assessment_project.assessment_profile.assessment_subjects.all()
@@ -104,4 +115,4 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = AssessmentResult
-        fields = ['assessment_project', 'status', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts']    
+        fields = ['assessment_project', 'status', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts', 'total_progress']    

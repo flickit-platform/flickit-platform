@@ -29,6 +29,7 @@ class CategoryReportInfo():
         category_info['title'] = category.title
         category_info['id'] = category.id
         category_info['answered_metric'] = answered_metric
+        category_info['subject'] = category.assessment_subjects.values('id', 'title')
         return category_info
 
     def __calculate_metric_number(self, assessment_result_pk, metrics):
