@@ -2,11 +2,10 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import Title from "../../components/shared/Title";
-import QANumberIndicator from "../../components/shared/QANumberIndicator";
-import CategoryProgress from "../../components/shared/progress/CategoryProgress";
+import Title from "../shared/Title";
+import QANumberIndicator from "../shared/QANumberIndicator";
+import QuestionnaireProgress from "../shared/progress/CategoryProgress";
 import { Link } from "react-router-dom";
 import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
@@ -14,32 +13,27 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
+import { IQuestionnaire, ISubjectInfo, TId } from "../../types";
+import Chip from "@mui/material/Chip";
 
-interface ICategoryCardProps {
-  data: {
-    last_updated: string;
-    metric_number: number;
-    answered_metric: number;
-    title: string;
-    remainingTime: number;
-    progress: number;
-    id: string;
-  };
+interface IQuestionnaireCardProps {
+  data: IQuestionnaire;
 }
 
-const CategoryCard = (props: ICategoryCardProps) => {
+const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const { data } = props;
   const {
     id,
     last_updated,
     answered_metric: number_of_answers,
     metric_number: number_of_questions,
-    remainingTime,
     progress = 0,
     title,
-  } = data;
+  } = data || {};
 
   const isSmallScreen = useScreenResize("sm");
+
+  const subjects = [{ title: "Operation", id: 2 }];
 
   return (
     <Paper sx={{ height: "100%", mt: 3 }}>
@@ -84,23 +78,29 @@ const CategoryCard = (props: ICategoryCardProps) => {
           </Box>
         </Box>
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
-          <CategoryProgress
+          <QuestionnaireProgress
             position="relative"
             left="-12px"
             progress={progress}
             q={number_of_questions}
             a={number_of_answers}
-            isCategory={true}
+            isQuestionnaire={true}
             isSmallScreen={isSmallScreen}
           />
         </Box>
         <Box sx={{ ...styles.centerV }} justifyContent={"space-between"}>
           <Box>
-            {remainingTime && (
-              <Typography variant="subMedium">
-                {remainingTime} <Trans i18nKey="minRemaining" />
-              </Typography>
-            )}
+            {subjects.map((subject) => {
+              const { title, id } = subject;
+              return (
+                <Chip
+                  label={title}
+                  size="small"
+                  sx={{ mr: 0.3, mb: 0.1 }}
+                  key={id}
+                />
+              );
+            })}
           </Box>
           <ActionButtons
             id={id}
@@ -114,7 +114,7 @@ const CategoryCard = (props: ICategoryCardProps) => {
 };
 
 const ActionButtons = (props: {
-  id: string;
+  id: TId;
   progress: number;
   number_of_answers: number;
 }) => {
@@ -133,7 +133,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/review`}
           text="review"
-          state={{ name: "categories" }}
+          state={{ name: "Questionnaires" }}
           icon={<RemoveRedEyeRoundedIcon fontSize="small" />}
         />
       )}
@@ -176,4 +176,4 @@ const ActionButton = (props: {
   );
 };
 
-export { CategoryCard };
+export { QuestionnaireCard };
