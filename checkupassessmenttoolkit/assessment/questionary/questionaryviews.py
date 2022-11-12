@@ -17,6 +17,7 @@ class QuestionaryView(APIView):
         category_report_info = self.__extract_category_info(assessment_project.get_assessment_result().id, metric_categories)
         content = {}
         content['questionaries_info'] = category_report_info.metric_categories_info
+        content['assessment_title'] = assessment_project.title
         return Response(content)
 
     def __extract_category_info(self, result_id, metric_categories):

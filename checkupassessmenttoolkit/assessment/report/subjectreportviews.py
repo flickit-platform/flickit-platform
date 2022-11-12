@@ -99,7 +99,7 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def extract_category_info(self, response, metric_categories):
         category_report_info = CategoryReportInfo(metric_categories)
         category_report_info.calculate_category_info(self.request.query_params.get('assessment_result_pk'))
-        response.data['metric_categories_info'] = category_report_info.metric_categories_info
+        # response.data['metric_categories_info'] = category_report_info.metric_categories_info
         return category_report_info
 
     def get_serializer_class(self):
