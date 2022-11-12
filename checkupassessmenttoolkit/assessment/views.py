@@ -1,10 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import SearchFilter
 from rest_framework.mixins import *
 from rest_framework.permissions import IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
 
-from assessment.models import AssessmentProject, AssessmentResult, MetricValue
+from assessment.models import AssessmentProject, AssessmentResult
 from assessment.serializers import *
 from assessmentcore.models import Space
 
@@ -53,23 +51,3 @@ class ColorViewSet(ModelViewSet):
     serializer_class = ColorSerilizer
     
 
-class MetricValueViewSet(ModelViewSet):
-    filter_backends = [DjangoFilterBackend,SearchFilter]
-    search_field = ['metric__metric_category']
-    permission_classes = [IsAuthenticated, IsSpaceMember]
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return AddMetricValueSerializer
-        elif self.request.method == 'PATCH':
-            return UpdateMetricValueSerializer
-        return MetricValueSerializer
-    
-    def get_queryset(self):
-        query_set = MetricValue.objects.filter(assessment_result_id = self.kwargs['assessment_result_pk']).select_related('metric')
-        if('metric_category_pk' in self.request.query_params):
-            return query_set.filter(metric__metric_category_id = self.request.query_params.get('metric_category_pk'))
-        return query_set
-
-    def get_serializer_context(self):
-        return {'assessment_result_id': self.kwargs['assessment_result_pk']}
