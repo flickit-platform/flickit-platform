@@ -13,7 +13,8 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
-import { IQuestionnaire, TId } from "../../types";
+import { IQuestionnaire, ISubjectInfo, TId } from "../../types";
+import Chip from "@mui/material/Chip";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnaire;
@@ -31,6 +32,8 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   } = data || {};
 
   const isSmallScreen = useScreenResize("sm");
+
+  const subjects = [{ title: "Operation", id: 2 }];
 
   return (
     <Paper sx={{ height: "100%", mt: 3 }}>
@@ -87,11 +90,17 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
         </Box>
         <Box sx={{ ...styles.centerV }} justifyContent={"space-between"}>
           <Box>
-            {/* {remainingTime && (
-              <Typography variant="subMedium">
-                {remainingTime} <Trans i18nKey="minRemaining" />
-              </Typography>
-            )} */}
+            {subjects.map((subject) => {
+              const { title, id } = subject;
+              return (
+                <Chip
+                  label={title}
+                  size="small"
+                  sx={{ mr: 0.3, mb: 0.1 }}
+                  key={id}
+                />
+              );
+            })}
           </Box>
           <ActionButtons
             id={id}
