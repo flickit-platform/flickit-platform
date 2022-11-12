@@ -16,6 +16,7 @@ import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
 import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
+import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 
 const SubjectContainer = () => {
   const { noStatus, loading, loaded, hasError, subjectQueryData } =
@@ -31,6 +32,12 @@ const SubjectContainer = () => {
         return (
           <Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
+            <Box mt={3}>
+              <QuestionnairesNotCompleteAlert
+                subjectName="software"
+                subjectId={2}
+              />
+            </Box>
             {loading ? (
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
@@ -39,7 +46,7 @@ const SubjectContainer = () => {
               <NoInsightYetMessage {...subjectQueryData} />
             ) : (
               <Box sx={{ px: 0.5 }}>
-                <Box mt={5}>
+                <Box mt={3}>
                   <SubjectOverallInsight
                     {...subjectQueryData}
                     loading={loading}
