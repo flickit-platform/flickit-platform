@@ -20,7 +20,7 @@ const QuestionnairesNotCompleteAlert = (
     <Alert
       severity="warning"
       variant="filled"
-      sx={{ backgroundColor: "#622301", color: "white" }}
+      sx={{ backgroundColor: "#622301", color: "white", borderRadius: 2 }}
       action={
         <Button
           color="inherit"
@@ -34,7 +34,7 @@ const QuestionnairesNotCompleteAlert = (
           state={location}
           to={
             subjectId
-              ? `./../questionnaires?subjectId=${subjectId}`
+              ? `./../questionnaires?subject_pk=${subjectId}`
               : "questionnaires"
           }
         >

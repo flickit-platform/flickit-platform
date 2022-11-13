@@ -25,7 +25,7 @@
   "start": "Start",
   "toAssessSystemNeedToAnswerQuestions": "In order to assess this system, you need to fill some questionnaires.",
   "inOrderToViewSomeInsight": "In order to view some insight, please first fill some questionnaires.",
-  "pickupQuestionnaire": "Please pickup a questionnaire",
+  "pickupQuestionnaire": "Please pick a questionnaire.",
   "Questionnaires": "Questionnaires",
   "closeQuestionnaires": "close questionnaires",
   "seeQuestionnaires": "See questionnaires",
@@ -142,7 +142,7 @@
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
   "notEvaluated": "NOT EVALUATED",
-  "thisReportIsNotAccurate": "This report is not accurate.",
-  "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires, to get an accurate report.",
-  "pleaseCompleteAllQuestionnaires": "Please complete all questionnaires, to get an accurate report."
+  "thisReportIsNotAccurate": "The report is not accurate enough.",
+  "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires to make it more accurate.",
+  "pleaseCompleteAllQuestionnaires": "Please complete more questionnaires to get a better accuracy."
 }
