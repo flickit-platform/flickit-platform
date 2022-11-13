@@ -8,8 +8,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 USE_MODELTRANSLATION = False
 
-DJVERSION_VERSION='0.1.0'
-DJVERSION_UPDATED='11/3/2022'
+# DJVERSION_VERSION='0.1.0'
+# DJVERSION_UPDATED='11/3/2022'
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -129,7 +129,7 @@ INSTALLED_APPS = [
     'assessmentcore',
     'assessmentbaseinfo',
     'assessment',
-    'djversion',
+    # 'djversion',
 ]
 
 MIDDLEWARE = (
