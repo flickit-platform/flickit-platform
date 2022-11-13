@@ -23,7 +23,7 @@ import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotC
 import Button from "@mui/material/Button";
 
 const SubjectContainer = () => {
-  const { noStatus, loading, loaded, hasError, subjectQueryData } =
+  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
     useSubject();
 
   return (
@@ -33,7 +33,7 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={(data) => {
-        const { total_progress } = data;
+        const { total_progress, title } = data;
         const isComplete = total_progress.progress === 100;
 
         return (
@@ -42,8 +42,8 @@ const SubjectContainer = () => {
             {!isComplete && loaded && !noStatus && (
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
-                  subjectName="software"
-                  subjectId={2}
+                  subjectName={title}
+                  subjectId={subjectId}
                 />
               </Box>
             )}
@@ -131,6 +131,7 @@ const useSubject = () => {
     loading,
     loaded,
     hasError,
+    subjectId,
     subjectQueryData,
   };
 };
@@ -217,7 +218,7 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
           sx={{ mt: 3 }}
           variant="contained"
           component={Link}
-          to={`./../questionnaires?subjectId=${subjectId}`}
+          to={`./../questionnaires?subject_pk=${subjectId}`}
         >
           {title} <Trans i18nKey="questionnaires" />
         </Button>

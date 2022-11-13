@@ -34,7 +34,7 @@ const QuestionnairesNotCompleteAlert = (
           state={location}
           to={
             subjectId
-              ? `./../questionnaires?subjectId=${subjectId}`
+              ? `./../questionnaires?subject_pk=${subjectId}`
               : "questionnaires"
           }
         >
