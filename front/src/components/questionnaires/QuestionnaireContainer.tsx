@@ -25,7 +25,7 @@ const QuestionnaireContainer = () => {
   return (
     <Box>
       <Title
-        backLink={state?.pathname || -1}
+        backLink={-1}
         sup={
           <Box display="flex" alignItems={"center"}>
             {totalProgressQueryData.loading ? (
