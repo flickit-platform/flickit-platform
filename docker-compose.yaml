@@ -12,7 +12,7 @@ services:
       - 8000:8000
     volumes:
       - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
-      - ./data/web:/vol/web
+      - static-data:/admin/vol/web
     environment:
       - SECRET_KEY=devsecretkey
       - DEBUG=1
@@ -105,3 +105,4 @@ services:
 
 volumes:
   postgres-data:
+  static-data:

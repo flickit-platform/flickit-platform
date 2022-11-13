@@ -18,7 +18,7 @@ urlpatterns = i18n_patterns(
     path('baseinfo/', include('assessmentbaseinfo.urls')),
     path('assessment/', include('assessment.urls')),
     path('authinfo/', include('assessmentcore.urls')),
-    re_path(r"^version/", include("djversion.urls")),
+    # re_path(r"^version/", include("djversion.urls")),
 )
 
 if settings.USE_MODELTRANSLATION:
