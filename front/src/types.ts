@@ -169,10 +169,15 @@ export interface IAssessmentReport {
   title: string;
 }
 
-interface ITotalProgress {
+export interface ITotalProgress {
   progress: number;
   total_answered_metric_number: number;
   total_metric_number: number;
+}
+
+export interface ITotalProgressModel {
+  total_progress: ITotalProgress;
+  assessment_project_title: string;
 }
 export interface IAssessmentReportModel {
   subjects_info: ISubjectInfo[];
@@ -280,6 +285,7 @@ export interface IQuestionnairesInfo {
 }
 export interface IQuestionnairesModel {
   assessment_title: string;
+  subjects: { id: TId; title: string }[];
   questionaries_info: IQuestionnairesInfo[];
 }
 
