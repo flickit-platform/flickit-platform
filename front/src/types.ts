@@ -10,6 +10,7 @@ export enum ECustomErrorType {
   "INVALID_TOKEN" = "INVALID_TOKEN",
   "NOT_FOUND" = "NOT_FOUND",
   "CANCELED" = "CANCELED",
+  "ACCESS_DENIED" = "ACCESS_DENIED",
 }
 
 export enum ESystemStatus {
@@ -168,12 +169,18 @@ export interface IAssessmentReport {
   title: string;
 }
 
+interface ITotalProgress {
+  progress: number;
+  total_answered_metric_number: number;
+  total_metric_number: number;
+}
 export interface IAssessmentReportModel {
   subjects_info: ISubjectInfo[];
   status: TStatus;
   most_significant_strength_atts: string[];
   most_significant_weaknessness_atts: string[];
   assessment_project: IAssessmentReport;
+  total_progress: ITotalProgress;
 }
 
 export interface IQuestionnaireModel {
@@ -231,7 +238,7 @@ export interface IAssessment {
   color: IColorModel;
   assessment_results: string[];
   assessment_profile: IAssessmentProfileModel;
-  progress?: number;
+  total_progress?: ITotalProgress;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
@@ -262,10 +269,18 @@ export interface IQuestionnaire {
   last_updated?: string;
 }
 
-export interface IQuestionnairesModel extends IDefaultModel<IQuestionnaire> {
-  total_metric_number: number;
-  total_answered_metric: number;
+export interface IQuestionnairesInfo {
+  answered_metric: number;
+  id: TId;
+  metric_number: number;
   progress: number;
+  last_updated?: string;
+  title: string;
+  subject: { id: TId; title: string }[];
+}
+export interface IQuestionnairesModel {
+  assessment_title: string;
+  questionaries_info: IQuestionnairesInfo[];
 }
 
 export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
@@ -285,6 +300,7 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   most_significant_strength_atts: IQualityAttribute[];
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
+  total_progress: ITotalProgress;
 }
 
 export type TQueryFunction<T extends any = any, A extends any = any> = (

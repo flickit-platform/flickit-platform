@@ -33,7 +33,8 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { progress = 30 } = item;
+  const { total_progress } = item;
+  const { progress = 0 } = total_progress || {};
   const hasStat = hasStatus(item.status);
   const isComplete = progress === 100;
   const location = useLocation();

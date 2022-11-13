@@ -48,6 +48,7 @@ const errorToErrorTypeMap: Record<string, ECustomErrorType> = {
   token_not_valid: ECustomErrorType.INVALID_TOKEN,
   "401": ECustomErrorType.UNAUTHORIZED,
   "404": ECustomErrorType.NOT_FOUND,
+  "403": ECustomErrorType.ACCESS_DENIED,
   ERR_CANCELED: ECustomErrorType.CANCELED,
 };
 

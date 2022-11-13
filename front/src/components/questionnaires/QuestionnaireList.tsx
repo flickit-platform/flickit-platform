@@ -52,7 +52,7 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
               const { total_metric_number = 0, total_answered_metric = 0 } =
-                data;
+                data as any;
               return (
                 <QANumberIndicator
                   color="white"
@@ -70,12 +70,13 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
         <Box pb={2}>
           <QueryData
             {...(questionnaireQueryData || {})}
+            isDataEmpty={(data) => data.questionaries_info?.length === 0}
             renderLoading={() => <LoadingSkeletonOfQuestionnaires />}
             render={(data) => {
-              const { results = [] } = data;
+              const { questionaries_info = [] } = data;
               return (
                 <Grid container spacing={2}>
-                  {results.map((data) => {
+                  {questionaries_info.map((data) => {
                     return (
                       <Grid item xl={4} md={6} sm={12} xs={12} key={data.id}>
                         <QuestionnaireCard data={data} />

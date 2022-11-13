@@ -31,7 +31,7 @@ export const createService = (
     const Error = createCustomErrorFromResponseError(err);
 
     if (status) {
-      if ((status === 401 || status === 403) && !prevRequest.sent) {
+      if (status === 401 && !prevRequest.sent) {
         if (isRefreshTokenReq) {
           signOut();
           Error.action = "signOut";
@@ -217,11 +217,15 @@ export const createService = (
       });
     },
     fetchQuestionnaires(
-      args: { subjectId?: TId | null },
+      args: { subjectId?: TId | null; assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const params = args?.subjectId ? { subjectId: args?.subjectId } : {};
-      return axios.get(`/baseinfo/metriccategories/`, { ...config, params });
+      const { subjectId, assessmentId } = args || {};
+      const params = subjectId ? { subjectId } : {};
+      return axios.get(`/assessment/questionaries/${assessmentId}/`, {
+        ...config,
+        params,
+      });
     },
     fetchQuestionnaire(
       { questionnaireId }: { questionnaireId: string | undefined },
