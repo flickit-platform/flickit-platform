@@ -286,6 +286,18 @@ export const createService = (
         config
       );
     },
+    fetchMetricsResult(
+      {
+        questionnaireId,
+        assessmentId,
+      }: { questionnaireId: TId; assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/assessment/result/${assessmentId}/${questionnaireId}/`,
+        config
+      );
+    },
     fetchTotalProgress(
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
