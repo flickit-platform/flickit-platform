@@ -4,7 +4,7 @@ from . import views
 from assessment.report import reportviews
 from assessment.report.subjectreportviews import SubjectReportViewSet
 from .questionary.questionaryviews import QuestionaryView
-from .metricvalue.metricvalueviews import MetricValueViewSet, MetricValueListView
+from .metricvalue.metricvalueviews import MetricValueViewSet, MetricValueListView, TotalProgressView
 
 
 
@@ -22,6 +22,7 @@ metric_value_router.register('metricvalues', MetricValueViewSet, basename='resul
 urlpatterns = router.urls + metric_value_router.urls
 
 urlpatterns += [
-    path("questionaries/<str:assessment_project_id>", QuestionaryView.as_view()),
-    path("result/<str:assessment_project_id>/<str:metric_category_id>", MetricValueListView.as_view()),
+    path("questionaries/<str:assessment_project_id>/", QuestionaryView.as_view()),
+    path("result/<str:assessment_project_id>/<str:metric_category_id>/", MetricValueListView.as_view()),
+    path("progress/<str:assessment_project_id>/", TotalProgressView.as_view()),
 ]
