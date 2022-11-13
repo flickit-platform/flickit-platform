@@ -99,15 +99,7 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
             response.data['progress'] = 0
 
     def calculate_total_progress(self, response, result: AssessmentResult):
-        total_progress = Dictionary()
-        total_answered_metric_number = calculate_answered_metric_by_result(result)
-        total_metric_number = calculate_total_metric_number_by_result(result)
-
-        total_progress.add("total_answered_metric_number", total_answered_metric_number)
-        total_progress.add("total_metric_number", total_metric_number)
-        total_progress.add("progress", total_answered_metric_number/total_metric_number )
-
-        response.data['total_progress'] = total_progress
+        response.data['total_progress'] = extract_total_progress(result)
 
     def extract_category_info(self, response, metric_categories):
         category_report_info = CategoryReportInfo(metric_categories)
