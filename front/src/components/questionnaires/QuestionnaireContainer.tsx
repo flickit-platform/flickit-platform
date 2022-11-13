@@ -14,6 +14,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { usePreviousProps } from "@mui/utils";
 
 const QuestionnaireContainer = () => {
   const {
@@ -64,12 +65,12 @@ const QuestionnaireContainer = () => {
 const useQuestionnaire = () => {
   const { service } = useServiceContext();
   const [searchParams] = useSearchParams();
-
+  const { assessmentId } = useParams();
   const subjectIdParam = searchParams.get("subjectId");
 
   const questionnaireQueryData = useQuery<IQuestionnairesModel>({
     service: (args = { subjectId: subjectIdParam }, config) =>
-      service.fetchQuestionnaires(args, config),
+      service.fetchQuestionnaires({ assessmentId, ...(args || {}) }, config),
   });
 
   const { data, loading = true, loaded } = questionnaireQueryData;
@@ -77,7 +78,7 @@ const useQuestionnaire = () => {
     total_metric_number = 0,
     total_answered_metric = 0,
     progress = 0,
-  } = data || {};
+  } = (data as any) || {};
 
   const isCompleted = progress === 100;
 
