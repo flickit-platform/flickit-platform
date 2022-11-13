@@ -10,6 +10,7 @@ from assessmentbaseinfo.models import MetricCategory
 from assessment.serializers import *
 from .serializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
 from ..permissions import IsSpaceMember
+from ..assessmentcommon import *
 
 
 
@@ -34,7 +35,13 @@ class MetricValueViewSet(ModelViewSet):
     def get_serializer_context(self):
         return {'assessment_result_id': self.kwargs['assessment_result_pk']}
 
-
+class TotalProgressView(APIView):
+    permission_classes = [IsAuthenticated, IsSpaceMember]
+    def get (self, request, assessment_project_id):
+        assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
+        content = {}
+        content['total_progress'] = extract_total_progress(assessment_project.get_assessment_result())
+        return Response(content)
 
 class MetricValueListView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
@@ -48,7 +55,7 @@ class MetricValueListView(APIView):
 
         return Response(content)
 
-    # TODO: Find a better way for serilizing > pickle
+    # TODO: Find a better way for serilizing -> pickle
     def extract_metrics(self, category, metric_values):
         metrics = []
         metric_query_set = category.metric_set.all().order_by('index')
@@ -66,7 +73,7 @@ class MetricValueListView(APIView):
                 answer_templates.append(answer_template)
                 metric.add('answer_templates', answer_templates)
             for value in metric_values:
-                if value.metric.id == item.id:
+                if value.answer is not None and value.metric.id == item.id:
                     answer = Dictionary()
                     answer.add('id', value.answer.id)
                     answer.add('caption', value.answer.caption)

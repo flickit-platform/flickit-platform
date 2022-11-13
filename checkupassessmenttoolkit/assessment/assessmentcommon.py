@@ -1,7 +1,7 @@
 from statistics import mean
 from assessmentbaseinfo.models import MetricCategory, AssessmentSubject
 from .models import AssessmentProject, AssessmentResult
-
+from .common import *
 ANSWERED_QUESTION_NUMBER_BOUNDARY = 5
 
 def calculate_staus(value):
@@ -68,3 +68,13 @@ def update_assessment_status(result:AssessmentResult):
     assessment = AssessmentProject.objects.get(id = result.assessment_project.id)           
     assessment.status = status
     assessment.save()
+
+def extract_total_progress(result):
+    total_progress = Dictionary()
+    total_answered_metric_number = calculate_answered_metric_by_result(result)
+    total_metric_number = calculate_total_metric_number_by_result(result)
+
+    total_progress.add("total_answered_metric_number", total_answered_metric_number)
+    total_progress.add("total_metric_number", total_metric_number)
+    total_progress.add("progress", total_answered_metric_number/total_metric_number )
+    return total_progress
