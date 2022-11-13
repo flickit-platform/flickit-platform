@@ -13,7 +13,11 @@ class QuestionaryView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
     def get (self, request, assessment_project_id):
         assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
-        metric_categories = assessment_project.assessment_profile.metric_categories.all()
+        subject_id = request.query_params.get("subject_pk", None)
+        if subject_id:
+            metric_categories = assessment_project.assessment_profile.metric_categories.filter(assessment_subjects__id=subject_id)
+        else:
+            metric_categories = assessment_project.assessment_profile.metric_categories.all()
         category_report_info = self.__extract_category_info(assessment_project.get_assessment_result().id, metric_categories)
         content = {}
         content['questionaries_info'] = category_report_info.metric_categories_info
