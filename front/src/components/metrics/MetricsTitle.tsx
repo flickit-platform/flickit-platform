@@ -64,7 +64,7 @@ const MetricsTitle = (props: {
             )}
           </Box>
         }
-        backLink={isReview ? -1 : "./.."}
+        backLink={-1}
         sup={
           <Typography variant="subLarge">
             <Trans i18nKey="assessment" />
