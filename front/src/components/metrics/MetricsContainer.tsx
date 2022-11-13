@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useNavigate, useParams } from "react-router-dom";
-import QueryData from "../shared/QueryData";
 import {
   EAssessmentStatus,
   metricActions,
@@ -12,13 +11,7 @@ import { useQuery } from "../../utils/useQuery";
 import LoadingSkeletonOfMetrics from "../shared/loadings/LoadingSkeletonOfMetrics";
 import MetricsTitle from "./MetricsTitle";
 import QueryBatchData from "../shared/QueryBatchData";
-import {
-  IAssessmentResultModel,
-  IQuestionnaireModel,
-  IMetricsModel,
-  IMetricsResultsModel,
-  TId,
-} from "../../types";
+import { IQuestionnaireModel, IMetricsModel, TId } from "../../types";
 
 const MetricsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) => {
   const { metricIndex } = useParams();
@@ -60,29 +53,14 @@ export const MetricsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
   const { children, isReview = false } = props;
-  const {
-    metricsQueryData,
-    metricsResultQueryData,
-    resultsQueryData,
-    questionnaireQueryData,
-  } = useMetrics();
+  const { metricsResultQueryData, questionnaireQueryData } = useMetrics();
 
   return (
-    <QueryBatchData<
-      | IMetricsModel
-      | IMetricsResultsModel
-      | IAssessmentResultModel
-      | IQuestionnaireModel
-    >
-      queryBatchData={[
-        metricsQueryData,
-        metricsResultQueryData,
-        resultsQueryData,
-        questionnaireQueryData,
-      ]}
+    <QueryBatchData<IMetricsModel | IQuestionnaireModel>
+      queryBatchData={[metricsResultQueryData, questionnaireQueryData]}
       loaded={questionnaireQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfMetrics />}
-      render={([_, __, ___, questionnaireData]) => {
+      render={([_, questionnaireData]) => {
         return (
           <>
             <Box py={1}>
@@ -101,91 +79,37 @@ export const MetricsContainerC = (
   );
 };
 
-const sortByIndex = (data: any[]) => {
-  if (!data || data?.length === 0) {
-    return data;
-  }
-  const newData = data.sort((a: any, b: any) => {
-    return a.index - b.index;
-  });
-  return newData;
-};
-
-const createMetricsData = (metrics: any[] = [], results: any[] = []) => {
-  const data: any[] = [];
-  metrics.forEach((metric) => {
-    const res = results.find((res) => {
-      if (metric.id == res.metric?.id) {
-        return true;
-      }
-      return false;
-    });
-    const { answer, id: metricResultId } = res || {};
-    if (answer) {
-      data.push({ ...metric, answer, metricResultId });
-    } else {
-      data.push(metric);
-    }
-  });
-
-  return sortByIndex(data);
-};
-
 const useMetrics = () => {
   const { service } = useServiceContext();
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const dispatch = useMetricDispatch();
-  const { metricIndex, questionnaireId, assessmentId } = useParams();
+  const { metricIndex, questionnaireId = "", assessmentId = "" } = useParams();
   const questionnaireQueryData = useQuery<IQuestionnaireModel>({
     service: (args, config) =>
       service.fetchQuestionnaire({ questionnaireId }, config),
   });
-  const metricsQueryData = useQuery<IMetricsModel>({
+  const metricsResultQueryData = useQuery<IMetricsModel>({
     service: (args, config) =>
-      service.fetchMetrics({ questionnaireId }, config),
-  });
-  const resultsQueryData = useQuery<IAssessmentResultModel>({
-    service: (args, config) => service.fetchResults(args, config),
-  });
-  const metricsResultQueryData = useQuery<IMetricsResultsModel>({
-    runOnMount: false,
-    service: (args: { resultId: any; questionnaireId: any }, config) =>
-      service.fetchQuestionnaireResult(args, config),
+      service.fetchMetricsResult({ questionnaireId, assessmentId }, config),
   });
 
   useEffect(() => {
-    if (resultsQueryData.loaded) {
-      const result = resultsQueryData.data.results.find(
-        (item: any) => item?.assessment_project == assessmentId
-      );
-      const { id: resultId } = result || {};
-      setResultId(resultId);
-      resultId && metricsResultQueryData.query({ resultId, questionnaireId });
-    }
-  }, [resultsQueryData.loading]);
-
-  useEffect(() => {
-    if (metricsQueryData.loaded && metricsResultQueryData.loaded) {
-      const { count, results = [] } = metricsQueryData.data;
-      const data = createMetricsData(
-        results,
-        metricsResultQueryData.data?.results
-      );
+    if (metricsResultQueryData.loaded) {
+      const { metrics = [], assessment_result_id } =
+        metricsResultQueryData.data;
 
       dispatch(
         metricActions.setMetricsInfo({
-          total_number_of_metrics: count,
-          resultId,
-          metrics: data,
+          total_number_of_metrics: metrics.length,
+          resultId: assessment_result_id,
+          metrics,
         })
       );
     }
-  }, [metricsQueryData.loading, metricsResultQueryData.loading]);
+  }, [metricsResultQueryData.loading]);
 
   return {
-    metricsQueryData,
     metricsResultQueryData,
-    resultsQueryData,
     questionnaireQueryData,
   };
 };
