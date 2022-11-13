@@ -11,7 +11,7 @@ import {
 } from "../../providers/MetricProvider";
 import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedInRounded";
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
-import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
+import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { IQuestionnaireModel } from "../../types";
 
 const MetricsTitle = (props: {
@@ -47,7 +47,7 @@ const MetricsTitle = (props: {
                 component={Link}
                 to={isReview ? "./../.." : "./.."}
                 sx={{ mr: 1 }}
-                startIcon={<CategoryRoundedIcon />}
+                startIcon={<QuizRoundedIcon />}
               >
                 <Trans i18nKey="selectAnotherQuestionnaire" />
               </Button>

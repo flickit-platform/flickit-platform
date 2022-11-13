@@ -199,9 +199,13 @@ export interface IMetric {
   index: number;
   title: string;
   answer_templates: TAnswerTemplates;
+  answer: TAnswer;
 }
 
-export interface IMetricsModel extends IDefaultModel<IMetric> {}
+export interface IMetricsModel {
+  metrics: IMetric[];
+  assessment_result_id: string;
+}
 
 export interface IMetricImpact {
   id: TId;
