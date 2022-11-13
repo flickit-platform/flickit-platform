@@ -33,7 +33,8 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { progress = 30 } = item;
+  const { total_progress } = item;
+  const { progress = 0 } = total_progress || {};
   const hasStat = hasStatus(item.status);
   const isComplete = progress === 100;
   const location = useLocation();
@@ -126,7 +127,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
               }}
             >
-              <Trans i18nKey="questionnaire" />
+              <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
         </Grid>

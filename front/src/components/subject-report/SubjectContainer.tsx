@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { Hidden, Link, Paper, Skeleton, Typography } from "@mui/material";
+import Hidden from "@mui/material/Hidden";
+import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "../../components/shared/loadings/GettingThingsReadyLoading";
 import QueryData from "../../components/shared/QueryData";
 import Title from "../../components/shared/Title";
@@ -17,9 +20,10 @@ import SubjectOverallInsight from "./SubjectOverallInsight";
 import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
+import Button from "@mui/material/Button";
 
 const SubjectContainer = () => {
-  const { noStatus, loading, loaded, hasError, subjectQueryData } =
+  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
     useSubject();
 
   return (
@@ -28,16 +32,21 @@ const SubjectContainer = () => {
       error={hasError}
       loading={loading}
       loaded={loaded}
-      render={() => {
+      render={(data) => {
+        const { total_progress, title } = data;
+        const isComplete = total_progress.progress === 100;
+
         return (
           <Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
-            <Box mt={3}>
-              <QuestionnairesNotCompleteAlert
-                subjectName="software"
-                subjectId={2}
-              />
-            </Box>
+            {!isComplete && loaded && !noStatus && (
+              <Box mt={2} mb={1}>
+                <QuestionnairesNotCompleteAlert
+                  subjectName={title}
+                  subjectId={subjectId}
+                />
+              </Box>
+            )}
             {loading ? (
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
@@ -122,6 +131,7 @@ const useSubject = () => {
     loading,
     loaded,
     hasError,
+    subjectId,
     subjectQueryData,
   };
 };
@@ -174,10 +184,11 @@ const SubjectTitle = (props: {
 
 const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
   const { data } = props;
-  const { no_insight_yet_message } = data || {};
+  const { no_insight_yet_message, title } = data || {};
+  const { subjectId } = useParams();
 
   return (
-    <Box>
+    <Box mt={2}>
       <Paper
         sx={{
           ...styles.centerCVH,
@@ -203,10 +214,14 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
             </Typography>
           </>
         )}
-
-        <Link href="#Questionnaires" sx={{ mt: 3, color: "white" }}>
-          <Trans i18nKey="listOfQuestionnaires" />
-        </Link>
+        <Button
+          sx={{ mt: 3 }}
+          variant="contained"
+          component={Link}
+          to={`./../questionnaires?subject_pk=${subjectId}`}
+        >
+          {title} <Trans i18nKey="questionnaires" />
+        </Button>
       </Paper>
     </Box>
   );

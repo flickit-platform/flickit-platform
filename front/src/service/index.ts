@@ -31,7 +31,7 @@ export const createService = (
     const Error = createCustomErrorFromResponseError(err);
 
     if (status) {
-      if ((status === 401 || status === 403) && !prevRequest.sent) {
+      if (status === 401 && !prevRequest.sent) {
         if (isRefreshTokenReq) {
           signOut();
           Error.action = "signOut";
@@ -217,11 +217,15 @@ export const createService = (
       });
     },
     fetchQuestionnaires(
-      args: { subjectId?: TId | null },
+      args: { subject_pk?: TId | null; assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const params = args?.subjectId ? { subjectId: args?.subjectId } : {};
-      return axios.get(`/baseinfo/metriccategories/`, { ...config, params });
+      const { subject_pk, assessmentId } = args || {};
+      const params = subject_pk ? { subject_pk: subject_pk } : {};
+      return axios.get(`/assessment/questionaries/${assessmentId}/`, {
+        ...config,
+        params,
+      });
     },
     fetchQuestionnaire(
       { questionnaireId }: { questionnaireId: string | undefined },
@@ -281,6 +285,24 @@ export const createService = (
         `/baseinfo/metriccategories/${questionnaireId}/metrics/`,
         config
       );
+    },
+    fetchMetricsResult(
+      {
+        questionnaireId,
+        assessmentId,
+      }: { questionnaireId: TId; assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/assessment/result/${assessmentId}/${questionnaireId}/`,
+        config
+      );
+    },
+    fetchTotalProgress(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/progress/${assessmentId}/`, config);
     },
     fetchQuestionnaireResult(
       {
