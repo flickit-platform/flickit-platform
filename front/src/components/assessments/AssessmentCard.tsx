@@ -127,7 +127,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
               }}
             >
-              <Trans i18nKey="questionnaire" />
+              <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
         </Grid>

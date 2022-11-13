@@ -217,11 +217,11 @@ export const createService = (
       });
     },
     fetchQuestionnaires(
-      args: { subjectId?: TId | null; assessmentId: TId },
+      args: { subject_pk?: TId | null; assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { subjectId, assessmentId } = args || {};
-      const params = subjectId ? { subjectId } : {};
+      const { subject_pk, assessmentId } = args || {};
+      const params = subject_pk ? { subject_pk: subject_pk } : {};
       return axios.get(`/assessment/questionaries/${assessmentId}/`, {
         ...config,
         params,
@@ -285,6 +285,12 @@ export const createService = (
         `/baseinfo/metriccategories/${questionnaireId}/metrics/`,
         config
       );
+    },
+    fetchTotalProgress(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/progress/${assessmentId}/`, config);
     },
     fetchQuestionnaireResult(
       {

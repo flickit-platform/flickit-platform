@@ -6,6 +6,8 @@ import Skeleton from "@mui/material/Skeleton";
 import {
   IQuestionnairesModel,
   ISubjectInfo,
+  ITotalProgress,
+  ITotalProgressModel,
   TId,
   TQueryData,
   TQueryFunction,
@@ -17,22 +19,50 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { styles } from "../../config/styles";
 import { useSearchParams } from "react-router-dom";
+import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: TQueryData<IQuestionnairesModel>;
+  totalProgressQueryData: TQueryData<ITotalProgressModel>;
 }
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {
-  const { questionnaireQueryData } = props;
+  const { questionnaireQueryData, totalProgressQueryData } = props;
   const { query: fetchQuestionnaires } = questionnaireQueryData;
 
   return (
     <>
       <Box display={"flex"} justifyContent="space-between">
-        <FilterBySubject
-          fetchQuestionnaires={fetchQuestionnaires}
-          subjects={undefined}
+        <QueryData
+          {...(questionnaireQueryData || {})}
+          errorComponent={<></>}
+          renderLoading={() => {
+            return (
+              <Box height="100%" sx={{ ...styles.centerV, pl: 1 }}>
+                {[1, 2, 3].map((item) => {
+                  return (
+                    <LoadingSkeleton
+                      height="36px"
+                      width="70px"
+                      key={item}
+                      sx={{ ml: 1 }}
+                    />
+                  );
+                })}
+              </Box>
+            );
+          }}
+          render={(data) => {
+            const { subjects = [] } = data;
+            return (
+              <FilterBySubject
+                fetchQuestionnaires={fetchQuestionnaires}
+                subjects={subjects}
+              />
+            );
+          }}
         />
+
         <Box
           minWidth="130px"
           display="flex"
@@ -47,17 +77,20 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
           }}
         >
           <QueryData
-            {...(questionnaireQueryData || {})}
+            {...(totalProgressQueryData || {})}
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const { total_metric_number = 0, total_answered_metric = 0 } =
-                data as any;
+              const { total_progress } = data || {};
+              const {
+                total_metric_number = 0,
+                total_answered_metric_number = 0,
+              } = total_progress;
               return (
                 <QANumberIndicator
                   color="white"
                   q={total_metric_number}
-                  a={total_answered_metric}
+                  a={total_answered_metric_number}
                   variant="h6"
                 />
               );
@@ -94,35 +127,35 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
 };
 
 const FilterBySubject = (props: {
-  subjects?: ISubjectInfo[];
+  subjects: { id: TId; title: string }[];
   fetchQuestionnaires: TQueryFunction;
 }) => {
-  const {
-    subjects = [
-      { id: 3, title: "Team" },
-      { id: 2, title: "Operation" },
-    ],
-    fetchQuestionnaires,
-  } = props;
+  const { subjects, fetchQuestionnaires } = props;
   const [searchParams, setSearchParams] = useSearchParams();
-  const subjectIdParam = searchParams.get("subjectId");
+  const subjectIdParam = searchParams.get("subject_pk");
   const [activeFilterSubjectId, setActiveFilterSubjectId] =
     useState(subjectIdParam);
 
   const handleClick = (subjectId: TId) => {
     if (activeFilterSubjectId == subjectId) {
-      fetchQuestionnaires({ subjectId: null });
-      setSearchParams((searchParams) => {
-        searchParams.delete("subjectId");
-        return searchParams;
-      });
+      fetchQuestionnaires({ subject_pk: null });
+      setSearchParams(
+        (searchParams) => {
+          searchParams.delete("subject_pk");
+          return searchParams;
+        },
+        { replace: true }
+      );
       setActiveFilterSubjectId(null);
     } else {
-      fetchQuestionnaires({ subjectId });
-      setSearchParams((searchParams) => {
-        searchParams.set("subjectId", subjectId.toString());
-        return searchParams;
-      });
+      fetchQuestionnaires({ subject_pk: subjectId });
+      setSearchParams(
+        (searchParams) => {
+          searchParams.set("subject_pk", subjectId.toString());
+          return searchParams;
+        },
+        { replace: true }
+      );
       setActiveFilterSubjectId(subjectId.toString());
     }
   };
@@ -132,6 +165,7 @@ const FilterBySubject = (props: {
       {subjects.map((subject: any) => {
         return (
           <FilterButton
+            key={subject.id}
             subject={subject}
             handleClick={handleClick}
             active={activeFilterSubjectId == subject?.id}
@@ -143,7 +177,7 @@ const FilterBySubject = (props: {
 };
 
 const FilterButton = (props: {
-  subject: ISubjectInfo;
+  subject: { id: TId; title: string };
   handleClick: (subjectId: TId) => void;
   active: boolean;
 }) => {
