@@ -13,11 +13,11 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
-import { IQuestionnaire, ISubjectInfo, TId } from "../../types";
+import { IQuestionnairesInfo, ISubjectInfo, TId } from "../../types";
 import Chip from "@mui/material/Chip";
 
 interface IQuestionnaireCardProps {
-  data: IQuestionnaire;
+  data: IQuestionnairesInfo;
 }
 
 const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
@@ -28,12 +28,11 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
     answered_metric: number_of_answers,
     metric_number: number_of_questions,
     progress = 0,
+    subject: subjects,
     title,
   } = data || {};
 
   const isSmallScreen = useScreenResize("sm");
-
-  const subjects = [{ title: "Operation", id: 2 }];
 
   return (
     <Paper sx={{ height: "100%", mt: 3 }}>
@@ -88,7 +87,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             isSmallScreen={isSmallScreen}
           />
         </Box>
-        <Box sx={{ ...styles.centerV }} justifyContent={"space-between"}>
+        <Box display="flex" alignItems="end" justifyContent={"space-between"}>
           <Box>
             {subjects.map((subject) => {
               const { title, id } = subject;
@@ -121,7 +120,7 @@ const ActionButtons = (props: {
   const { id, progress, number_of_answers } = props;
 
   return (
-    <Box>
+    <Box display="flex">
       {progress === 100 && (
         <ActionButton
           to={`${id}/1`}
