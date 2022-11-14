@@ -33,8 +33,9 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={(data) => {
-        const { total_progress, title } = data;
-        const isComplete = total_progress.progress === 100;
+        const { progress, title, total_answered_metric, total_metric_number } =
+          data;
+        const isComplete = progress === 100;
 
         return (
           <Box>
@@ -44,6 +45,9 @@ const SubjectContainer = () => {
                 <QuestionnairesNotCompleteAlert
                   subjectName={title}
                   subjectId={subjectId}
+                  q={total_metric_number}
+                  a={total_answered_metric}
+                  progress={progress}
                 />
               </Box>
             )}

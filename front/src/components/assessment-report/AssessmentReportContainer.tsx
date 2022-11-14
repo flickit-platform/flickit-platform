@@ -45,7 +45,11 @@ const AssessmentReportContainer = () => {
             <AssessmentReportTitle data={data} colorCode={colorCode} />
             {!isComplete && (
               <Box mt={3}>
-                <QuestionnairesNotCompleteAlert />
+                <QuestionnairesNotCompleteAlert
+                  progress={total_progress.progress}
+                  q={total_progress.total_metric_number}
+                  a={total_progress.total_answered_metric_number}
+                />
               </Box>
             )}
             <Grid container spacing={3} columns={14} mt={1}>
