@@ -41,6 +41,7 @@ class TotalProgressView(APIView):
         assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
         content = {}
         content['total_progress'] = extract_total_progress(assessment_project.get_assessment_result())
+        content['assessment_project_title'] = assessment_project.title
         return Response(content)
 
 class MetricValueListView(APIView):
@@ -52,6 +53,7 @@ class MetricValueListView(APIView):
         metric_values = assessment.get_assessment_result().metric_values.all()
         metrics = self.extract_metrics(category, metric_values)
         content['metrics'] = metrics
+        content['assessment_result_id'] = assessment.get_assessment_result().id
 
         return Response(content)
 
