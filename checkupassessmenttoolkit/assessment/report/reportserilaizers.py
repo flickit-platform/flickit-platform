@@ -32,7 +32,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     total_progress = serializers.SerializerMethodField()
 
     def get_total_progress(self, result: AssessmentResult):
-        return self.extract_total_progress(result)
+        return extract_total_progress(result)
         
     def calculate_subjects_info(self, result: AssessmentResult):
         subjects_info = []

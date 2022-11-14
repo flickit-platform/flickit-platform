@@ -76,5 +76,5 @@ def extract_total_progress(result):
 
     total_progress.add("total_answered_metric_number", total_answered_metric_number)
     total_progress.add("total_metric_number", total_metric_number)
-    total_progress.add("progress", total_answered_metric_number/total_metric_number )
+    total_progress.add("progress", (total_answered_metric_number/total_metric_number) * 100)
     return total_progress
