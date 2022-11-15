@@ -20,31 +20,36 @@ import IconButton from "@mui/material/IconButton";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 const QuestionnaireContainer = () => {
   const { pageQueryData, questionnaireQueryData } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
-  const loaded = useRef(false);
-
-  useEffect(() => {
-    if (questionnaireQueryData.loaded) {
-      loaded.current = true;
-    }
-  }, [questionnaireQueryData.loading]);
+  const { spaceId } = useParams();
 
   return (
     <Box>
       <Title
         backLink={-1}
         sup={
-          <Box display="flex" alignItems={"center"}>
-            {pageQueryData.loading ? (
-              <Skeleton width="80px" height="22px" sx={{ mr: 1 }} />
-            ) : (
-              pageQueryData.data.assessment_title
-            )}{" "}
-            <Trans i18nKey="assessment" />
-          </Box>
+          <SupTitleBreadcrumb
+            routes={[
+              {
+                title: "spaces",
+                to: "/spaces/",
+                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              },
+              {
+                title: pageQueryData.data?.assessment_title,
+                to: `/${spaceId}/assessments`,
+                icon: (
+                  <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+                ),
+              },
+            ]}
+          />
         }
       >
         <QuizRoundedIcon sx={{ mr: 1 }} />

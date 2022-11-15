@@ -41,7 +41,7 @@ export const MetricThumb = (props: any) => {
           disabled={isSubmitting}
           onClick={(e: any) => {
             e.stopPropagation();
-            navigate(link);
+            navigate(link, { replace: true });
             onClose();
           }}
         >

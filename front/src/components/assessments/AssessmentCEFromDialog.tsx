@@ -9,7 +9,7 @@ import { styles } from "../../config/styles";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import setServerFieldErrors from "../../utils/setServerFieldError";
 import useConnectSelectField from "../../utils/useConnectSelectField";
-import AddchartRoundedIcon from "@mui/icons-material/AddchartRounded";
+import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
 import { useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
@@ -83,7 +83,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <AddchartRoundedIcon sx={{ mr: 1 }} />
+          <NoteAddRoundedIcon sx={{ mr: 1 }} />
           {type === "update" ? (
             <Trans i18nKey="updateAssessment" />
           ) : (
