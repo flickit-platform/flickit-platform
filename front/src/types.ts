@@ -287,9 +287,8 @@ export interface IQuestionnairesInfo {
   title: string;
   subject: { id: TId; title: string }[];
 }
-export interface IQuestionnairesModel {
+export interface IQuestionnairesModel extends ITotalProgress {
   assessment_title: string;
-  subjects: { id: TId; title: string }[];
   questionaries_info: IQuestionnairesInfo[];
 }
 
@@ -330,3 +329,8 @@ export type TQueryData<T extends any = any, A extends any = any> = {
   ) => Promise<T>;
   abortController: AbortController;
 };
+
+export interface IQuestionnairesPageDataModel {
+  assessment_title: string;
+  subjects: { id: TId; title: string }[];
+}
