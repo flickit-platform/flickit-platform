@@ -14,13 +14,6 @@ class MetricCategoryBySubjectSerilizer(serializers.ModelSerializer):
         model = MetricCategory
         fields = ['id', 'code', 'title', 'total_question']
     total_question = serializers.SerializerMethodField()
-    # answered_question = serializers.SerializerMethodField()
-
-    # def get_answered_question(self, category:MetricCategory):
-    #     metrics = MetricCategory.objects.get(pk = category.id).metric_set.all()
-    #     answered_question = 0
-    #     for metric in metrics:
-            
 
     def get_total_question(self, category:MetricCategory):
         metrics = MetricCategory.objects.get(pk = category.id).metric_set.all()
@@ -47,8 +40,6 @@ class QualityAttributeSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'description', 'images']
 
 
-
-
 class AssessmentProfileSerilizer(serializers.ModelSerializer):
     images = ProfileImageSerializer(many=True)
     metric_categories = MetricCategorySerilizer(many=True)
@@ -73,6 +64,12 @@ class AnswerTemplateSerializer(serializers.ModelSerializer):
         model = AnswerTemplate
         fields = ['id', 'caption', 'value']
 
+class SimpleMetricSerializers(serializers.ModelSerializer):
+    quality_attributes = QualityAttributeSerilizer(many=True)
+    metric_impacts = MetricImpactSerilizer(many=True)
+    class Meta:
+        model = Metric
+        fields = ['id', 'title', 'index', 'quality_attributes', 'metric_impacts']
 
 class MetricSerilizer(serializers.ModelSerializer):
     answer_templates = AnswerTemplateSerializer(many=True)

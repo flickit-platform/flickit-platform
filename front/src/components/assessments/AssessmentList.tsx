@@ -1,12 +1,13 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
 import AssessmentCard from "./AssessmentCard";
-import { IAssessment } from "../../types";
+import { IAssessment, TId, TQueryFunction } from "../../types";
 import { TDialogProps } from "../../utils/useDialog";
 
 interface IAssessmentListProps {
   data: IAssessment[];
   dialogProps: TDialogProps;
+  deleteAssessment: TQueryFunction<any, TId>;
 }
 
 const AssessmentsList = (props: IAssessmentListProps) => {

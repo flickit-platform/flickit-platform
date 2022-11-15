@@ -31,7 +31,7 @@ export const createService = (
     const Error = createCustomErrorFromResponseError(err);
 
     if (status) {
-      if ((status === 401 || status === 403) && !prevRequest.sent) {
+      if (status === 401 && !prevRequest.sent) {
         if (isRefreshTokenReq) {
           signOut();
           Error.action = "signOut";
@@ -216,20 +216,25 @@ export const createService = (
         },
       });
     },
-    fetchCategories(
-      { subjectId }: { subjectId: string | undefined },
+    fetchQuestionnaires(
+      args: { subject_pk?: TId | null; assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { subject_pk, assessmentId } = args || {};
+      const params = subject_pk ? { subject_pk: subject_pk } : {};
+      return axios.get(`/assessment/questionaries/${assessmentId}/`, {
+        ...config,
+        params,
+      });
+    },
+    fetchQuestionnaire(
+      { questionnaireId }: { questionnaireId: string | undefined },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/baseinfo/subjects/${subjectId}/metriccategories/`,
+        `/baseinfo/metriccategories/${questionnaireId}/`,
         config
       );
-    },
-    fetchCategory(
-      { categoryId }: { categoryId: string | undefined },
-      config: AxiosRequestConfig<any> | undefined
-    ) {
-      return axios.get(`/baseinfo/metriccategories/${categoryId}/`, config);
     },
     fetchOptions(
       { url }: { url: string },
@@ -255,9 +260,9 @@ export const createService = (
     submitAnswer(
       {
         resultId,
-        categoryId,
+        questionnaireId,
         data,
-      }: { resultId: TId | undefined; categoryId: string; data: any },
+      }: { resultId: TId | undefined; questionnaireId: string; data: any },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.post(
@@ -265,26 +270,53 @@ export const createService = (
         data,
         {
           ...config,
-          params: { metric_category_pk: categoryId, ...(config.params || {}) },
+          params: {
+            metric_category_pk: questionnaireId,
+            ...(config.params || {}),
+          },
         }
       );
     },
     fetchMetrics(
-      { categoryId }: { categoryId: string | undefined },
+      { questionnaireId }: { questionnaireId: string | undefined },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/baseinfo/metriccategories/${categoryId}/metrics/`,
+        `/baseinfo/metriccategories/${questionnaireId}/metrics/`,
         config
       );
     },
-    fetchCategoryResult(
-      { resultId, categoryId }: { resultId: string; categoryId: string },
+    fetchMetricsResult(
+      {
+        questionnaireId,
+        assessmentId,
+      }: { questionnaireId: TId; assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/assessment/result/${assessmentId}/${questionnaireId}/`,
+        config
+      );
+    },
+    fetchTotalProgress(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/progress/${assessmentId}/`, config);
+    },
+    fetchQuestionnaireResult(
+      {
+        resultId,
+        questionnaireId,
+      }: { resultId: string; questionnaireId: string },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.get(`/assessment/results/${resultId}/metricvalues/`, {
         ...config,
-        params: { metric_category_pk: categoryId, ...(config.params || {}) },
+        params: {
+          metric_category_pk: questionnaireId,
+          ...(config.params || {}),
+        },
       });
     },
   };
