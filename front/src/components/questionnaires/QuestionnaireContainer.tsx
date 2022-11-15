@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
@@ -7,7 +7,11 @@ import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
 import { useQuery } from "../../utils/useQuery";
 import { useServiceContext } from "../../providers/ServiceProvider";
-import { IQuestionnairesModel, ITotalProgressModel } from "../../types";
+import {
+  IQuestionnairesModel,
+  IQuestionnairesPageDataModel,
+  ITotalProgressModel,
+} from "../../types";
 import Title from "../shared/Title";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -15,12 +19,18 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
+import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 
 const QuestionnaireContainer = () => {
-  const { totalProgressQueryData, questionnaireQueryData } = useQuestionnaire();
+  const { pageQueryData, questionnaireQueryData } = useQuestionnaire();
+  const progress = questionnaireQueryData.data?.progress || 0;
+  const loaded = useRef(false);
 
-  const { state } = useLocation();
-  const progress = totalProgressQueryData.data?.total_progress?.progress || 0;
+  useEffect(() => {
+    if (questionnaireQueryData.loaded) {
+      loaded.current = true;
+    }
+  }, [questionnaireQueryData.loading]);
 
   return (
     <Box>
@@ -28,10 +38,10 @@ const QuestionnaireContainer = () => {
         backLink={-1}
         sup={
           <Box display="flex" alignItems={"center"}>
-            {totalProgressQueryData.loading ? (
+            {pageQueryData.loading ? (
               <Skeleton width="80px" height="22px" sx={{ mr: 1 }} />
             ) : (
-              totalProgressQueryData.data.assessment_project_title
+              pageQueryData.data.assessment_title
             )}{" "}
             <Trans i18nKey="assessment" />
           </Box>
@@ -41,15 +51,19 @@ const QuestionnaireContainer = () => {
         <Trans i18nKey="Questionnaires" />
       </Title>
 
-      {totalProgressQueryData.loaded && (
-        <NotCompletedAlert isCompleted={progress == 100} />
-      )}
+      <NotCompletedAlert
+        isCompleted={progress == 100}
+        loaded={questionnaireQueryData.loaded}
+      />
       <Box
         flexWrap={"wrap"}
         sx={{
           ...styles.centerCV,
-          backgroundColor: "#2e7d72",
-          background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+          transition: "height 1s ease",
+          backgroundColor: "#01221e",
+          background: questionnaireQueryData.loading
+            ? undefined
+            : `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
           px: { xs: 1, sm: 2, md: 3, lg: 4 },
           pt: { xs: 5, sm: 3 },
           pb: 5,
@@ -61,7 +75,7 @@ const QuestionnaireContainer = () => {
       >
         <QuestionnaireList
           questionnaireQueryData={questionnaireQueryData}
-          totalProgressQueryData={totalProgressQueryData}
+          pageQueryData={pageQueryData}
         />
       </Box>
     </Box>
@@ -79,51 +93,65 @@ const useQuestionnaire = () => {
       service.fetchQuestionnaires({ assessmentId, ...(args || {}) }, config),
   });
 
-  const totalProgressQueryData = useQuery<ITotalProgressModel>({
+  const pageQueryData = useQuery<IQuestionnairesPageDataModel>({
     service: (args = { assessmentId }, config) =>
-      service.fetchTotalProgress(args, config),
+      service.fetchQuestionnairesPageData(args, config),
   });
 
   return {
-    totalProgressQueryData,
+    pageQueryData,
     questionnaireQueryData,
   };
 };
 
-const NotCompletedAlert = (props: { isCompleted: boolean }) => {
-  const { isCompleted } = props;
+const NotCompletedAlert = (props: {
+  isCompleted: boolean;
+  loaded: boolean;
+}) => {
+  const { isCompleted, loaded } = props;
   const [open, setOpen] = useState(!isCompleted);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (loaded) {
+      setLoading(false);
+    }
+  }, [loaded]);
 
   return (
     <Collapse in={open}>
       <Box mt={2}>
-        <Alert
-          severity="info"
-          action={
-            <IconButton
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          <AlertTitle>
+        {loading ? (
+          <LoadingSkeleton height="76px" />
+        ) : (
+          <Alert
+            severity="info"
+            action={
+              <IconButton
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            <AlertTitle>
+              {isCompleted ? (
+                <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
+              ) : (
+                <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
+              )}
+            </AlertTitle>
             {isCompleted ? (
-              <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
+              <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
             ) : (
-              <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
+              <Trans i18nKey="pickupQuestionnaire" />
             )}
-          </AlertTitle>
-          {isCompleted ? (
-            <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
-          ) : (
-            <Trans i18nKey="pickupQuestionnaire" />
-          )}
-        </Alert>
+          </Alert>
+        )}
       </Box>
     </Collapse>
   );
