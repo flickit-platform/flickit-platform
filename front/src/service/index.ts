@@ -304,6 +304,13 @@ export const createService = (
     ) {
       return axios.get(`/assessment/progress/${assessmentId}/`, config);
     },
+    fetchQuestionnairesPageData(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/subjects/${assessmentId}/`, config);
+    },
+
     fetchQuestionnaireResult(
       {
         resultId,
