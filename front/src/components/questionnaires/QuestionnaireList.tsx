@@ -5,9 +5,7 @@ import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import {
   IQuestionnairesModel,
-  ISubjectInfo,
-  ITotalProgress,
-  ITotalProgressModel,
+  IQuestionnairesPageDataModel,
   TId,
   TQueryData,
   TQueryFunction,
@@ -23,18 +21,18 @@ import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: TQueryData<IQuestionnairesModel>;
-  totalProgressQueryData: TQueryData<ITotalProgressModel>;
+  pageQueryData: TQueryData<IQuestionnairesPageDataModel>;
 }
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {
-  const { questionnaireQueryData, totalProgressQueryData } = props;
+  const { questionnaireQueryData, pageQueryData } = props;
   const { query: fetchQuestionnaires } = questionnaireQueryData;
 
   return (
     <>
       <Box display={"flex"} justifyContent="space-between">
         <QueryData
-          {...(questionnaireQueryData || {})}
+          {...(pageQueryData || {})}
           errorComponent={<></>}
           renderLoading={() => {
             return (
@@ -77,15 +75,14 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
           }}
         >
           <QueryData
-            {...(totalProgressQueryData || {})}
+            {...(questionnaireQueryData || {})}
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const { total_progress } = data || {};
               const {
                 total_metric_number = 0,
                 total_answered_metric_number = 0,
-              } = total_progress;
+              } = data || {};
               return (
                 <QANumberIndicator
                   color="white"
