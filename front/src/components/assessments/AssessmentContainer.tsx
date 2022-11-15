@@ -23,7 +23,9 @@ const AssessmentContainer = () => {
   const { data, error, errorObject, requested_space } = rest;
   const isEmpty = data.length == 0;
 
-  return error && errorObject?.type === ECustomErrorType.NOT_FOUND ? (
+  return error &&
+    (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
+      errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
     <NotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">

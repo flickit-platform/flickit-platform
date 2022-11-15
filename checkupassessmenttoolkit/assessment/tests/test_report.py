@@ -2,8 +2,8 @@ from rest_framework import status
 import pytest
 from model_bakery import baker
 
-from assessment.models import AssessmentProject, AssessmentProfile
-from assessment.models import QualityAttributeValue
+from assessment.models import AssessmentProject, AssessmentProfile, QualityAttributeValue
+from assessmentcore.models import User
 
 
 @pytest.fixture
@@ -18,8 +18,9 @@ def add_metric_value(api_client):
 class Test_Add_metric_value:
     def test_add_metric_value(self, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
+        test_user = User.objects.get(username = 'test')
         profile = baker.make(AssessmentProfile, is_default=True)
-        project = baker.make(AssessmentProject, assessment_profile = profile)
+        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -31,16 +32,15 @@ class Test_Add_metric_value:
         result_id = project.assessment_results.all()[0].id
         response = add_metric_value(str(result_id), {'answer': answer_template_wit_value_5_for_metric_11_id, 'metric_id': metric11_id})
         att_values = QualityAttributeValue.objects.filter(assessment_result_id = project.assessment_results.all()[0].id)
-        assert att_values.first().maturity_level_value == 2
+        assert att_values.first().maturity_level_value == 1
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['id'] is not None
-
-@pytest.mark.django_db
-class Test_Add_metric_value_Invalid_metric:
-    def test_add_metric_value(self, authenticate, init_data, add_metric_value):
+    
+    def test_add_metric_value_invalid_metric(self, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
+        test_user = User.objects.get(username = 'test')
         profile = baker.make(AssessmentProfile, is_default=True)
-        project = baker.make(AssessmentProject, assessment_profile = profile)
+        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -54,12 +54,14 @@ class Test_Add_metric_value_Invalid_metric:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.data['non_field_errors'][0] == 'The options is invalid'
 
+
 @pytest.mark.django_db
 class Test_calculate_maturity_level_value:
-    def test_add_metric_value(self, api_client, authenticate, init_data, add_metric_value):
+    def test_calculate_maturity_level(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
+        test_user = User.objects.get(username = 'test')
         profile = baker.make(AssessmentProfile, is_default=True)
-        project = baker.make(AssessmentProject, assessment_profile = profile)
+        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -93,21 +95,20 @@ class Test_calculate_maturity_level_value:
         
         response = api_client.get('/assessment/reports/' + str(project.id) + "/")
 
-        
         sorted_att_values = att_values.order_by('-maturity_level_value').all()
         assert sorted_att_values[0].maturity_level_value == 5
         assert sorted_att_values[1].maturity_level_value == 5
         assert sorted_att_values[2].maturity_level_value == 4
         assert response.data['status'] == "OPTIMIZED"
         assert response.data['most_significant_strength_atts'][0] == sorted_att_values[0].quality_attribute.title
-        assert response.data['most_significant_weaknessness_atts'][0] == att_values.order_by('maturity_level_value').first().quality_attribute.title
 
 @pytest.mark.django_db
 class Test_Report_Subject:
-    def test_add_metric_value(self, api_client, authenticate, init_data, add_metric_value):
+    def test_report_subject(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
+        test_user = User.objects.get(username = 'test')
         profile = baker.make(AssessmentProfile, is_default=True)
-        project = baker.make(AssessmentProject, assessment_profile = profile)
+        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -154,4 +155,3 @@ class Test_Report_Subject:
         assert sorted_att_values[2].maturity_level_value == 4
         assert response.data['status'] == "OPTIMIZED"
         assert response.data['most_significant_strength_atts'][0]['title'] == sorted_att_values[0].quality_attribute.title
-        assert response.data['most_significant_weaknessness_atts'][0]['title'] == sorted_att_values[2].quality_attribute.title

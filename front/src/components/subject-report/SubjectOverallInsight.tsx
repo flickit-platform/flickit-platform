@@ -12,14 +12,10 @@ const SubjectOverallInsight = (props: any) => {
   const { title = "" } = data;
   return (
     <Box>
-      <Title sx={{ opacity: 0.9 }} inPageLink="#insight">
+      {/* <Title sx={{ opacity: 0.9 }} inPageLink="#insight">
         <Trans i18nKey="overallStatusOf" values={{ title }} />
-      </Title>
-      <Box
-        display="flex"
-        mt={2}
-        sx={{ flexDirection: { xs: "column", sm: "row" } }}
-      >
+      </Title> */}
+      <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }}>
         <OverallInsightText {...props} />
         <Box sx={{ pl: { xs: 0, sm: 3, md: 6 }, mt: { xs: 4, sm: 0 } }}>
           <SubjectOverallStatusLevelChart {...props} />

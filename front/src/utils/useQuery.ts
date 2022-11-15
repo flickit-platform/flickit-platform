@@ -93,5 +93,3 @@ export const useQuery = <T extends any = any, A extends any = any>(
     abortController: controller.current,
   };
 };
-
-export type TQueryData = ReturnType<typeof useQuery>;

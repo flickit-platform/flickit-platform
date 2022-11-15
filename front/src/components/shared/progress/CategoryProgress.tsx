@@ -8,11 +8,11 @@ import { Trans } from "react-i18next";
 import QANumberIndicator from "../QANumberIndicator";
 import { styles } from "../../../config/styles";
 
-interface ICategoryProgress extends BoxProps {
+interface IQuestionnaireProgress extends BoxProps {
   progress: number;
   q?: number;
   a?: number;
-  isCategory?: boolean;
+  isQuestionnaire?: boolean;
   isSmallScreen?: boolean;
 }
 
@@ -31,8 +31,8 @@ const progressToColorMapColor: Record<number, string> = {
   100: "#2e7d32",
 };
 
-const CategoryProgress = (props: ICategoryProgress) => {
-  const { progress = 0, q, a, isCategory, isSmallScreen, ...rest } = props;
+const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
+  const { progress = 0, q, a, isQuestionnaire, isSmallScreen, ...rest } = props;
   return (
     <Box sx={{ ...styles.centerV }} flex="1" {...rest}>
       <Box flex={1}>
@@ -47,7 +47,7 @@ const CategoryProgress = (props: ICategoryProgress) => {
         />
       </Box>
       <Box pl="8px" mr="-2px">
-        {isCategory && isSmallScreen ? (
+        {isQuestionnaire && isSmallScreen ? (
           <QANumberIndicator q={q} a={a} />
         ) : (
           <Typography
@@ -63,4 +63,4 @@ const CategoryProgress = (props: ICategoryProgress) => {
   );
 };
 
-export default CategoryProgress;
+export default QuestionnaireProgress;

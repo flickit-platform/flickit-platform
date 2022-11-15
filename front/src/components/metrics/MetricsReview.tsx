@@ -39,7 +39,7 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
             }}
             textTransform={"uppercase"}
           >
-            <Trans i18nKey="youFinishedCategory" />
+            <Trans i18nKey="youFinishedQuestionnaire" />
           </Typography>
           <Typography variant="h5" fontFamily="RobotoBold">
             <Trans i18nKey="youCan" />{" "}
@@ -48,7 +48,7 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
               variant="contained"
               size="large"
               component={Link}
-              to={"./../..#insight"}
+              to={"./../../.."}
             >
               <Trans i18nKey="viewInsights" />
             </Button>{" "}
