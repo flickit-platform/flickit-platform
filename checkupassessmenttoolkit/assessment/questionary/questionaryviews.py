@@ -9,6 +9,15 @@ from ..models import AssessmentProject, QualityAttributeValue
 from ..report.categoryreport import CategoryReportInfo
 
 
+class QuestionaryBaseInfoView(APIView):
+    permission_classes = [IsAuthenticated, IsSpaceMember]
+    def get(self, request,assessment_project_id):
+        assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
+        content = {}
+        content['subjects'] = assessment_project.assessment_profile.assessment_subjects.values('id','title')
+        content['assessment_title'] = assessment_project.title
+        return Response(content)
+
 
 class QuestionaryView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
@@ -25,11 +34,22 @@ class QuestionaryView(APIView):
         else:
             metric_categories = assessment_project.assessment_profile.metric_categories.all()
         category_report_info = self.__extract_category_info(result_id, metric_categories)
+
         content = {}
         content['questionaries_info'] = category_report_info.metric_categories_info
-        content['assessment_title'] = assessment_project.title
-        content['subjects'] = assessment_project.assessment_profile.assessment_subjects.values('id','title')
+        self.calculate_total_progress(category_report_info, content)
         return Response(content)
+
+    def calculate_total_progress(self, category_report_info, content):
+        total_answered_metric_number = 0
+        total_metric_number = 0
+        for category_info in category_report_info.metric_categories_info:
+            total_answered_metric_number += category_info['answered_metric']
+            total_metric_number += category_info['metric_number']
+
+        content['total_answered_metric_number'] = total_answered_metric_number
+        content['total_metric_number'] = total_metric_number
+        content['progress'] =  (total_answered_metric_number/total_metric_number) * 100
 
     def __extract_category_info(self, result_id, metric_categories):
         category_report_info = CategoryReportInfo(metric_categories)
