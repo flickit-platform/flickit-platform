@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..models import QualityAttributeValue
 from ..serializers import QualityAttributeSerilizer
-from ..common import *
+from ..assessmentcommon import *
 
 
 class SubjectReportSerializer(serializers.ModelSerializer):

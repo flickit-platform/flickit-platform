@@ -17,8 +17,6 @@ class SpaceSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         space = super().save(**kwargs)
         current_user = self.context.get('request', None).user
-
-
         try:
             user_access = UserAccess.objects.get(space_id = space.id, user_id = current_user.id)
             user_access.save()
@@ -28,7 +26,6 @@ class SpaceSerializer(serializers.ModelSerializer):
         
         space.owner_id = current_user.id
         space.save()
-        # User.objects.update(id = current_user.id, current_space_id = space.id)
         return space
     
     class Meta:
@@ -48,31 +45,23 @@ class UserSerializer(BaseUserSerializer):
 
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)
-    # space = SpaceSerializer(read_only = True)
     class Meta:
         model = UserAccess
         fields = ['id', 'user', 'space']
 
 class SpaceListSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer()
-    # user_count = serializers.SerializerMethodField()
     members_number = serializers.IntegerField(source='users.count', read_only=True)
-    # def get_user_count(self, obj):
-    #     return obj.user_set.count() + 1
     class Meta:
         model = Space
         fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number'] 
-
-
-
 
 class AddSpaceAccessToUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user_id = serializers.EmailField()
     def validate_user_id(self, value):
         if not User.objects.filter(email=value).exists():
-            raise serializers.ValidationError(
-                'No user with the given email was found.')
+            raise serializers.ValidationError('No user with the given email was found.')
         return value
 
     def save(self, **kwargs):
@@ -87,8 +76,6 @@ class AddSpaceAccessToUserSerializer(serializers.ModelSerializer):
             self.instance = user_access
         except UserAccess.DoesNotExist:
             self.instance = UserAccess.objects.create(user_id = user_id, space_id = space_id)
-
-        # User.objects.filter(pk=user_id).update(current_space_id=space_id)
         return self.instance
 
     class Meta:

@@ -10,7 +10,7 @@ const LoadingSkeletonOfAssessments = () => {
         {[1, 2, 3, 4, 5, 6].map((item: any) => {
           return (
             <Grid item lg={3} md={4} sm={6} xs={12} key={item}>
-              <LoadingSkeleton height="290px" />
+              <LoadingSkeleton height="425px" />
             </Grid>
           );
         })}

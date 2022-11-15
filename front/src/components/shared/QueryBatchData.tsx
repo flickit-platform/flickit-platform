@@ -101,7 +101,10 @@ export const defaultRenderError = (
       return errorComponent;
     }
   }
-  if (err.type === ECustomErrorType.NOT_FOUND) {
+  if (
+    err.type === ECustomErrorType.NOT_FOUND ||
+    err.type === ECustomErrorType.ACCESS_DENIED
+  ) {
     return <NotFoundOrAccessDenied />;
   }
   return errorComponent;

@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { Hidden, Link, Paper, Skeleton, Typography } from "@mui/material";
+import Hidden from "@mui/material/Hidden";
+import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "../../components/shared/loadings/GettingThingsReadyLoading";
 import QueryData from "../../components/shared/QueryData";
 import Title from "../../components/shared/Title";
@@ -14,20 +17,14 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { CategoryContainer } from "../categories/CategoryContainer";
 import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
+import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
+import Button from "@mui/material/Button";
 
 const SubjectContainer = () => {
-  const {
-    noStatus,
-    loading,
-    loaded,
-    hasError,
-    subjectQueryData,
-    linkRef,
-    hash,
-  } = useSubject();
+  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
+    useSubject();
 
   return (
     <QueryData
@@ -35,16 +32,25 @@ const SubjectContainer = () => {
       error={hasError}
       loading={loading}
       loaded={loaded}
-      render={() => {
+      render={(data) => {
+        const { progress, title, total_answered_metric, total_metric_number } =
+          data;
+        const isComplete = progress === 100;
+
         return (
           <Box>
-            <a ref={linkRef} href={hash} style={{ display: "none" }} />
-            <Box id="categories"></Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
-            <CategoryContainer
-              subjectQueryData={{ ...subjectQueryData, loading }}
-            />
-            <Box id="insight"></Box>
+            {!isComplete && loaded && !noStatus && (
+              <Box mt={2} mb={1}>
+                <QuestionnairesNotCompleteAlert
+                  subjectName={title}
+                  subjectId={subjectId}
+                  q={total_metric_number}
+                  a={total_answered_metric}
+                  progress={progress}
+                />
+              </Box>
+            )}
             {loading ? (
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
@@ -53,7 +59,7 @@ const SubjectContainer = () => {
               <NoInsightYetMessage {...subjectQueryData} />
             ) : (
               <Box sx={{ px: 0.5 }}>
-                <Box mt={12}>
+                <Box mt={3}>
                   <SubjectOverallInsight
                     {...subjectQueryData}
                     loading={loading}
@@ -94,8 +100,6 @@ const SubjectContainer = () => {
 const useSubject = () => {
   const { service } = useServiceContext();
   const { subjectId = "", assessmentId = "" } = useParams();
-  const linkRef = useRef<any>(null);
-  const { hash, state } = useLocation();
   const resultsQueryData = useQuery<IAssessmentResultModel>({
     service: (args, config) => service.fetchResults(args, config),
   });
@@ -116,14 +120,8 @@ const useSubject = () => {
   }, [resultsQueryData.loading]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (subjectQueryData.loaded && hash) {
-        linkRef.current.click();
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }, 350);
-  }, [subjectQueryData.loaded]);
+    window.scrollTo(0, 0);
+  }, []);
 
   const hasError = subjectQueryData.error || resultsQueryData.error;
 
@@ -137,9 +135,8 @@ const useSubject = () => {
     loading,
     loaded,
     hasError,
+    subjectId,
     subjectQueryData,
-    linkRef,
-    hash,
   };
 };
 
@@ -157,22 +154,22 @@ const SubjectTitle = (props: {
 
   return (
     <Title
-      size="large"
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
       backLink="./.."
+      id="insight"
+      inPageLink="#insight"
       sup={
-        <Typography variant="subLarge">
+        <>
           {assessment_profile_description || (
             <Trans i18nKey="technicalDueDiligence" />
           )}{" "}
           {assessment_project_title}
-        </Typography>
+        </>
       }
     >
       <Box sx={{ ...styles.centerV }}>
         <QueryStatsRoundedIcon
-          fontSize="large"
           sx={{
             mr: 1,
             color: assessment_project_color_code,
@@ -191,10 +188,11 @@ const SubjectTitle = (props: {
 
 const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
   const { data } = props;
-  const { no_insight_yet_message } = data || {};
+  const { no_insight_yet_message, title } = data || {};
+  const { subjectId } = useParams();
 
   return (
-    <Box>
+    <Box mt={2}>
       <Paper
         sx={{
           ...styles.centerCVH,
@@ -216,14 +214,18 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
             <Typography variant="h5" fontFamily={"RobotoLight"} sx={{ mt: 2 }}>
-              <Trans i18nKey="completeSomeOfCategories" />
+              <Trans i18nKey="completeSomeOfQuestionnaires" />
             </Typography>
           </>
         )}
-
-        <Link href="#categories" sx={{ mt: 3, color: "white" }}>
-          <Trans i18nKey="listOfCategories" />
-        </Link>
+        <Button
+          sx={{ mt: 3 }}
+          variant="contained"
+          component={Link}
+          to={`./../questionnaires?subject_pk=${subjectId}`}
+        >
+          {title} <Trans i18nKey="questionnaires" />
+        </Button>
       </Paper>
     </Box>
   );

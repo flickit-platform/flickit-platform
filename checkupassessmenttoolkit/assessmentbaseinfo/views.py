@@ -21,20 +21,6 @@ class MetricViewSet(ModelViewSet):
 
 class MetricCategoryBySubjectViewSet(ModelViewSet):
     serializer_class = MetricCategoryBySubjectSerilizer
-
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
-        # metric_categories = response.data['results']
-        # for category in metric_categories:
-        #     answered_question = 0
-        #     total_question = 0
-        #     metrics = MetricCategory.objects.get(pk = category['id']).metric_set.all()
-        #     total_question = metrics.len()
-        #     #metric_values = MetricValue.objects.
-        #     response.data['results']
-        #     print(metrics)
-        return response
-
     def get_queryset(self):
         return MetricCategory.objects.prefetch_related('assessment_subjects').filter(assessment_subjects__id=self.kwargs['assessment_subject_pk'])
 
