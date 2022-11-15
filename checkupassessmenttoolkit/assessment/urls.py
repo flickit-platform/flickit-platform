@@ -3,7 +3,7 @@ from rest_framework_nested import routers
 from . import views
 from assessment.report import reportviews
 from assessment.report.subjectreportviews import SubjectReportViewSet
-from .questionary.questionaryviews import QuestionaryView
+from .questionary.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
 from .metricvalue.metricvalueviews import MetricValueViewSet, MetricValueListView, TotalProgressView
 
 
@@ -25,4 +25,5 @@ urlpatterns += [
     path("questionaries/<str:assessment_project_id>/", QuestionaryView.as_view()),
     path("result/<str:assessment_project_id>/<str:metric_category_id>/", MetricValueListView.as_view()),
     path("progress/<str:assessment_project_id>/", TotalProgressView.as_view()),
+    path("subjects/<str:assessment_project_id>/", QuestionaryBaseInfoView.as_view()),
 ]
