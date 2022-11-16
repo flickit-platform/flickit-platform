@@ -22,14 +22,14 @@ class MetricViewSet(ModelViewSet):
 class MetricCategoryBySubjectViewSet(ModelViewSet):
     serializer_class = MetricCategoryBySubjectSerilizer
     def get_queryset(self):
-        return MetricCategory.objects.prefetch_related('assessment_subjects').filter(assessment_subjects__id=self.kwargs['assessment_subject_pk'])
+        return MetricCategory.objects.prefetch_related('assessment_subjects').filter(assessment_subjects__id=self.kwargs['assessment_subject_pk']).order_by('index')
 
 
 class AssessmentSubjectViewSet(ModelViewSet):
     serializer_class = AssessmentSubjectSerilizer
 
     def get_queryset(self):
-        return AssessmentSubject.objects.all()
+        return AssessmentSubject.objects.all().order_by('index')
 
 
 class QualityAttributeViewSet(ModelViewSet):
@@ -37,9 +37,9 @@ class QualityAttributeViewSet(ModelViewSet):
 
     def get_queryset(self):
         if 'assessment_subject_pk' in self.kwargs:
-            return QualityAttribute.objects.filter(assessment_subject_id=self.kwargs['assessment_subject_pk']);
+            return QualityAttribute.objects.filter(assessment_subject_id=self.kwargs['assessment_subject_pk']).order_by('index');
         else:
-            return QualityAttribute.objects.all()
+            return QualityAttribute.objects.all().order_by('index')
             
 
 
