@@ -21,7 +21,7 @@ class AssessmentProjectViewSet(ModelViewSet):
             return AssessmentProjectListSerilizer
 
     def get_queryset(self):
-        return AssessmentProject.objects.all()
+        return AssessmentProject.objects.all().order_by('creation_time')
 
 class AssessmentProjectBySpaceViewSet(ModelViewSet):
     permission_classes=[IsAuthenticated, IsSpaceMember]
