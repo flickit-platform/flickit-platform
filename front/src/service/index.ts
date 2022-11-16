@@ -68,9 +68,9 @@ export const createService = (
   const fulfillResponseInterceptor = (res: AxiosResponse<any, any>) => {
     const { config = {} } = res;
 
-    if (config.url === "auth/jwt/create/" && res.data.access) {
+    if (config.url === "auth/jwt/create/" && res.data?.access) {
       //@ts-expect-error
-      axios.defaults.headers["Authorization"] = `JWT ${res.data.access}`;
+      axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
     }
 
     return res;
