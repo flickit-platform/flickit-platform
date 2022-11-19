@@ -32,7 +32,11 @@ class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()
     space = SpaceSimpleSerializer()
     assessment_profile = AssessmentProfileSimpleSerilizer()
+    total_progress = serializers.SerializerMethodField()
+
+    def get_total_progress(self, project: AssessmentProject):
+        return extract_total_progress(project.get_assessment_result())
     class Meta:
         model = AssessmentProject
-        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'space']
+        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'space', 'total_progress']
 
