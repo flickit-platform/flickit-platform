@@ -1,4 +1,4 @@
-from rest_framework.mixins import *
+from rest_framework.mixins import Response, status
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from statistics import mean
@@ -8,11 +8,11 @@ from assessment.models import QualityAttributeValue
 from assessment.models import AssessmentResult
 from assessmentbaseinfo.models import AssessmentSubject
 from assessmentbaseinfo.models import QualityAttribute
+from assessmentcore.permission.spaceperm import IsSpaceMember
 
-from ..permissions import IsSpaceMember
 from .categoryreport import CategoryReportInfo
-from ..common import *
-from ..assessmentcommon import *
+from ..fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
+from ..fixture.metricstatistic import extract_total_progress
 
 class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, IsSpaceMember]

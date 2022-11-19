@@ -1,5 +1,3 @@
-from ..assessmentcommon import *
-
 class CategoryReportInfo():
     def __init__(self, metric_categories):
         self.metric_categories_info = []
