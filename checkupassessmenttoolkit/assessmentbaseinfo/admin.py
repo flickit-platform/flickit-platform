@@ -27,18 +27,21 @@ class SubjectImageFormInline(admin.TabularInline):
 @admin.register(models.AssessmentSubject)
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['metric_categories']
-    search_fields = ['code', 'title']
-    fields = ['code', 'title', 'description', 'metric_categories', 'assessment_profile']
-    list_display = ['code', 'title']
+    search_fields = ['code', 'title', 'assessment_profile']
+    fields = ['code', 'title', 'description', 'assessment_profile', 'index']
+    list_display = ['code', 'title', 'subject_categories', 'assessment_profile']
     list_editable = ['title']
     list_per_page = 10
     inlines= [SubjectImageFormInline]
 
+    def subject_categories(self, obj):
+        return "\n".join([att.title for att in obj.metric_categories.all()])
+
 
 @admin.register( models.MetricCategory)
 class MetricCategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    search_fields = ['code', 'title']
-    fields = ['code', 'title', 'description', 'assessment_profile']
+    search_fields = ['code', 'title', 'assessment_profile']
+    fields = ['code', 'title', 'description', 'assessment_profile', 'index']
     list_display = ['code', 'title', 'assessment_profile']
     list_editable = ['title']
     list_per_page = 10
@@ -52,7 +55,7 @@ class MetricImpactFormInline(admin.TabularInline):
 
 class AnswerTemplateFormInline(admin.TabularInline):
      model = models.AnswerTemplate
-     fields= ['caption', 'value']
+     fields= ['caption', 'value', 'index']
      extra = 0
 
 class QualityAttributeImageFormInline(admin.TabularInline):
@@ -74,8 +77,8 @@ class MetricAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(models.QualityAttribute)
 class QualityAttributeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    fields = ['code', 'title', 'description', 'assessment_subject']
-    search_fields = ['title']
+    fields = ['code', 'title', 'description', 'assessment_subject', 'index']
+    search_fields = ['title', 'assessment_subject']
     list_display = ['code', 'title', 'assessment_subject']
     list_editable = ['title']
     list_per_page = 10

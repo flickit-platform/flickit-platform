@@ -35,6 +35,7 @@ class MetricCategory(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='metric_categories')
+    index = models.PositiveIntegerField(null=True)
 
     class Meta:
         verbose_name = 'Metric Category'
@@ -51,6 +52,7 @@ class AssessmentSubject(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='assessment_subjects')
     metric_categories = models.ManyToManyField(MetricCategory, related_name = 'assessment_subjects')
+    index = models.PositiveIntegerField(null=True)
 
     class Meta:
         verbose_name = 'Assessment Subject'
@@ -67,6 +69,7 @@ class QualityAttribute(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE)
+    index = models.PositiveIntegerField(null=True)
 
     class Meta:
         verbose_name = 'Quality Attribute'
@@ -84,7 +87,8 @@ class MetricImpact(models.Model):
 class AnswerTemplate(models.Model):
     metric = models.ForeignKey('Metric', on_delete=models.CASCADE, related_name='answer_templates')
     caption = models.CharField(max_length=255)
-    value = models.PositiveSmallIntegerField()     
+    value = models.PositiveSmallIntegerField()
+    index = models.PositiveIntegerField(null=True)    
 
 class Metric(models.Model):
     title = models.TextField()

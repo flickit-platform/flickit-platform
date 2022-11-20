@@ -164,6 +164,13 @@ const Navbar = () => {
               </Button>
             )}
           </Box>
+          <Button
+            component={NavLink}
+            to={`/compare`}
+            sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+          >
+            <Trans i18nKey="compare" />
+          </Button>
           <Box ml="auto">
             <Button
               sx={{ ml: 2, mr: "-8px", px: 1.5 }}
