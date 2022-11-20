@@ -20,7 +20,12 @@ interface IComparePartsItemProps {
 
 const ComparePartItem = (props: IComparePartsItemProps) => {
   const { data, fetchCompare } = props;
-  const dialogProps = useDialog();
+  const dialogProps = useDialog({
+    context: {
+      data,
+      type: data?.id ? "update" : "create",
+    },
+  });
   return (
     <Paper>
       <Button
@@ -43,16 +48,22 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
       >
         {data ? (
           <Box>
-            <Title>
+            <Title
+              wrapperProps={{ alignItems: "baseline" }}
+              textAlign={"left"}
+              sup={data.space.title}
+              toolbar={
+                <ProgressChip
+                  progress={data?.total_progress?.progress}
+                  size="small"
+                  sx={{ ml: 2 }}
+                />
+              }
+              color={data?.color?.color_code}
+            >
               {data.title}
-              <ProgressChip
-                progress={data?.total_progress?.progress}
-                size="small"
-                sx={{ ml: 2 }}
-              />
             </Title>
-            <Box display="flex" justifyContent="space-between">
-              <Box></Box>
+            <Box display="flex" justifyContent="center">
               <Gauge systemStatus={data.status} maxWidth="255px" mt="auto" />
             </Box>
           </Box>
