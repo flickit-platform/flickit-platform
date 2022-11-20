@@ -1,3 +1,4 @@
+import { DialogProps } from "@mui/material/Dialog";
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { ToastOptions } from "react-toastify";
 import { string } from "yup";
@@ -333,4 +334,17 @@ export type TQueryData<T extends any = any, A extends any = any> = {
 export interface IQuestionnairesPageDataModel {
   assessment_title: string;
   subjects: { id: TId; title: string }[];
+}
+
+export interface IDialogProps extends DialogProps {
+  onClose: () => void;
+  onSubmitForm?: () => void;
+  openDialog?: any;
+  context?: { type: TDialogContextType | (string & {}); data?: any };
+}
+
+export type TDialogContextType = "update" | "create";
+
+export interface ICompareModel {
+  assessment_project_compare_list: any[];
 }
