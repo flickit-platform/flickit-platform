@@ -5,13 +5,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from assessment.models import MetricValue
+from assessment.models import MetricValue, AssessmentProject
+from assessmentcore.permission.spaceperm import IsSpaceMember
 from assessmentbaseinfo.models import MetricCategory
-from assessment.serializers import *
 from .serializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
-from ..permissions import IsSpaceMember
-from ..assessmentcommon import *
-
+from ..fixture.dictionary import Dictionary
+from ..fixture.metricstatistic import extract_total_progress
 
 
 class MetricValueViewSet(ModelViewSet):
@@ -57,7 +56,7 @@ class MetricValueListView(APIView):
 
         return Response(content)
 
-    # TODO: Find a better way for serilizing -> pickle
+    # TODO: Find a better way for serilizing -> pickle or serilizer.data MetricSerilizer
     def extract_metrics(self, category, metric_values):
         metrics = []
         metric_query_set = category.metric_set.all().order_by('index')
