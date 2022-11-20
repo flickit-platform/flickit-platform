@@ -102,7 +102,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             required={true}
             autoFocus={true}
             name="assessmentId"
-            defaultValue={defaultValues?.color?.id || ""}
+            defaultValue={defaultValues?.id || ""}
             label={<Trans i18nKey="assessment" />}
             size="medium"
             renderOption={(option) => {
