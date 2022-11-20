@@ -3,12 +3,11 @@ from rest_framework import serializers
 from assessmentbaseinfo.models import Metric
 from assessmentbaseinfo.serializers import AnswerTemplateSerializer
 from assessmentbaseinfo.serializers import SimpleMetricSerializers
-
-from assessment.common import *
-from assessment.assessmentcommon import *
 from assessment.models import MetricValue, QualityAttributeValue
 
+from ..fixture.common import update_assessment_status
 from .maturitylevel import calculate_maturity_level
+
 
 
 class MetricValueSerializer(serializers.ModelSerializer):

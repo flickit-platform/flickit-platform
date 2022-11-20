@@ -1,5 +1,5 @@
 from assessmentbaseinfo.models import MetricImpact
-from assessment.common import *
+from ..fixture.dictionary import Dictionary
 
 
 def calculate_maturity_level(result, quality_attribute):
@@ -69,3 +69,16 @@ def calculate_maturity_level(result, quality_attribute):
                     maturity_level_value = 4
             i += 1
         return maturity_level_value + 1
+
+def normlize_Value(value):
+    match value:
+        case 1:
+            return 0
+        case 2:
+            return 0
+        case 3:
+            return 0.5
+        case 4:
+            return 0.9
+        case 5:
+            return 1
