@@ -7,6 +7,7 @@ from assessment.report.subjectreportviews import SubjectReportViewSet
 from .questionary.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
 from .metricvalue.metricvalueviews import MetricValueViewSet, MetricValueListView, TotalProgressView
 from assessment.comparison import views as compareviews
+from assessment.common import views as commonviews
 
 
 
@@ -31,5 +32,6 @@ urlpatterns += [
     path("subjects/<str:assessment_project_id>/", QuestionaryBaseInfoView.as_view()),
     path("savecompare/<str:assessment_project_id>/", compareviews.ComparisionSaveView.as_view()),
     path("loadcompare/", compareviews.ComparisionLoadView.as_view()),
+    path("breadcrumbinfo/", commonviews.BreadcrumbInformationView.as_view()),
     # path("compare/", compareviews.CompareAssessmentView.as_view()),
 ]
