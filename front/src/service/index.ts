@@ -335,6 +335,15 @@ export const createService = (
         withCredentials: true,
       });
     },
+    compare(
+      args: { assessment_list: string[] },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/loadcompare/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
     saveCompareItem(
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
