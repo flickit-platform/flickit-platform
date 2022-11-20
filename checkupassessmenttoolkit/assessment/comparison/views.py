@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.mixins import status
 
 from ..models import AssessmentProject
-from ..project.serializers import AssessmentProjectSimpleSerilizer
+from ..project.serializers import AssessmentProjectCompareSerilizer
 from assessmentcore.permission.spaceperm import IsSpaceMember
 
 
@@ -56,7 +56,7 @@ class ComparisionLoadView(APIView):
         assessment_list = []
         for assessment_id in assessment_project_compare_list:
             load_assessment = AssessmentProject.objects.get(id = assessment_id)
-            serilizers = AssessmentProjectSimpleSerilizer(load_assessment)
+            serilizers = AssessmentProjectCompareSerilizer(load_assessment)
             assessment_list.append(serilizers.data)
         content['assessment_project_compare_list'] = assessment_list
         return Response(assessment_list, status=status.HTTP_200_OK)   
