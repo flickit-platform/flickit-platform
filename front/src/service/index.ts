@@ -326,6 +326,30 @@ export const createService = (
         },
       });
     },
+    fetchCompare(
+      args: any | undefined,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/loadcompare/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
+    saveCompareItem(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/savecompare/${assessmentId}/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
+    fetchCompareItemAssessments(
+      args: any | undefined,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/currentuserprojects/`, config);
+    },
   };
 
   return service;
