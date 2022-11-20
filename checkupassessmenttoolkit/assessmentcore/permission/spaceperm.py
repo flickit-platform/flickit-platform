@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from .models import AssessmentResult, AssessmentProject
+from assessment.models import AssessmentResult, AssessmentProject
 
 
 class IsSpaceMember(BasePermission):
