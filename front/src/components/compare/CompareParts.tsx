@@ -9,6 +9,8 @@ import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 import { ICompareModel } from "../../types";
+import getAssessmentResult from "../../utils/getAssessmentResult";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 const CompareParts = () => {
   const { compareQueryData } = useCompareParts();
@@ -35,10 +37,16 @@ const CompareParts = () => {
             );
           }}
           render={(data) => {
-            const { assessment_project_compare_list } = data;
+            const { assessment_project_compare_list = [] } = data;
+            const canCompare = assessment_project_compare_list.length > 1;
             return (
               <>
-                <CompareButton />
+                <CompareButton
+                  disabled={!canCompare}
+                  assessmentIds={extractAssessmentIdsFromCompareList(
+                    assessment_project_compare_list
+                  )}
+                />
                 <Grid container spacing={3}>
                   {[0, 1, 2, 3].map((index) => {
                     const data = assessment_project_compare_list[index];
@@ -70,8 +78,24 @@ const useCompareParts = () => {
   return { compareQueryData };
 };
 
-const CompareButton = (props: { disabled?: boolean }) => {
-  const { disabled = false } = props;
+const CompareButton = (props: {
+  disabled?: boolean;
+  assessmentIds?: string[];
+}) => {
+  const { disabled = false, assessmentIds } = props;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (assessmentIds) {
+      navigate({
+        pathname: "compare-result",
+        search: createSearchParams({
+          assessmentIds,
+        }).toString(),
+      });
+    }
+  };
+
   return (
     <>
       <Button
@@ -88,6 +112,7 @@ const CompareButton = (props: { disabled?: boolean }) => {
           height: "96px",
           zIndex: 2,
         }}
+        onClick={handleClick}
       >
         <Trans i18nKey="compare" />
       </Button>
@@ -106,6 +131,15 @@ const CompareButton = (props: { disabled?: boolean }) => {
       />
     </>
   );
+};
+
+const extractAssessmentIdsFromCompareList = (
+  compareList: any[] | undefined
+) => {
+  if (!compareList || compareList?.length === 0) {
+    return undefined;
+  }
+  return compareList.map((compareItem) => compareItem.id);
 };
 
 export default CompareParts;
