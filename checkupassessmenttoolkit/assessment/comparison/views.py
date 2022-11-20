@@ -49,7 +49,7 @@ class ComparisionLoadView(APIView):
         content = {}
         if 'comparision_dict' not in request.session:
             content['assessment_project_compare_list'] = []
-            return Response(content)   
+            return Response(content,status=status.HTTP_200_OK)   
         
         comparision_dict = request.session['comparision_dict']
         assessment_project_compare_list = comparision_dict.get(str(request.user.id))
@@ -59,5 +59,5 @@ class ComparisionLoadView(APIView):
             serilizers = AssessmentProjectSimpleSerilizer(load_assessment)
             assessment_list.append(serilizers.data)
         content['assessment_project_compare_list'] = assessment_list
-        return Response(assessment_list)   
+        return Response(assessment_list, status=status.HTTP_200_OK)   
             
