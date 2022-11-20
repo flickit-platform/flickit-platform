@@ -340,7 +340,12 @@ export interface IDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm?: () => void;
   openDialog?: any;
-  context?: { type: TDialogContextType | (string & {}); data?: any };
+  context?: IDialogContext;
+}
+
+export interface IDialogContext {
+  type: TDialogContextType | (string & {});
+  data?: any;
 }
 
 export type TDialogContextType = "update" | "create";
