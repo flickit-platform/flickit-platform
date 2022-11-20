@@ -25,7 +25,8 @@ import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 const QuestionnaireContainer = () => {
-  const { pageQueryData, questionnaireQueryData } = useQuestionnaire();
+  const { pageQueryData, questionnaireQueryData, totalProgressQueryData } =
+    useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
   const { spaceId } = useParams();
 
@@ -57,8 +58,10 @@ const QuestionnaireContainer = () => {
       </Title>
 
       <NotCompletedAlert
-        isCompleted={progress == 100}
-        loaded={questionnaireQueryData.loaded}
+        isCompleted={
+          totalProgressQueryData.data?.total_progress?.progress == 100
+        }
+        loading={totalProgressQueryData.loading}
       />
       <Box
         flexWrap={"wrap"}
@@ -103,62 +106,45 @@ const useQuestionnaire = () => {
       service.fetchQuestionnairesPageData(args, config),
   });
 
+  const totalProgressQueryData = useQuery<ITotalProgressModel>({
+    service: (args = { assessmentId }, config) =>
+      service.fetchTotalProgress(args, config),
+  });
+
   return {
     pageQueryData,
     questionnaireQueryData,
+    totalProgressQueryData,
   };
 };
 
 const NotCompletedAlert = (props: {
   isCompleted: boolean;
-  loaded: boolean;
+  loading: boolean;
 }) => {
-  const { isCompleted, loaded } = props;
-  const [open, setOpen] = useState(!isCompleted);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (loaded) {
-      setLoading(false);
-    }
-  }, [loaded]);
+  const { isCompleted, loading } = props;
 
   return (
-    <Collapse in={open}>
-      <Box mt={2}>
-        {loading ? (
-          <LoadingSkeleton height="76px" />
-        ) : (
-          <Alert
-            severity="info"
-            action={
-              <IconButton
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            <AlertTitle>
-              {isCompleted ? (
-                <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
-              ) : (
-                <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
-              )}
-            </AlertTitle>
+    <Box mt={2}>
+      {loading ? (
+        <LoadingSkeleton height="76px" />
+      ) : (
+        <Alert severity={isCompleted ? "success" : "info"}>
+          <AlertTitle>
             {isCompleted ? (
-              <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
+              <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
             ) : (
-              <Trans i18nKey="pickupQuestionnaire" />
+              <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
             )}
-          </Alert>
-        )}
-      </Box>
-    </Collapse>
+          </AlertTitle>
+          {isCompleted ? (
+            <Trans i18nKey={"ToChangeYourInsightTryEditingQuestionnaires"} />
+          ) : (
+            <Trans i18nKey="pickupQuestionnaire" />
+          )}
+        </Alert>
+      )}
+    </Box>
   );
 };
 

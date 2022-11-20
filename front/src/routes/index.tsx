@@ -37,6 +37,10 @@ const MetricScreen = React.lazy(() => import("../screens/MetricScreen"));
 const QuestionnairesScreen = React.lazy(
   () => import("../screens/QuestionnairesScreen")
 );
+const CompareScreen = React.lazy(() => import("../screens/CompareScreen"));
+const CompareResultScreen = React.lazy(
+  () => import("../screens/CompareResultScreen")
+);
 
 const Routes = () => {
   return (
@@ -92,6 +96,11 @@ const Routes = () => {
             <Route path="" element={<MetricScreen />} />
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
+          <Route path="/compare" element={<CompareScreen />} />
+          <Route
+            path="/compare/compare-result"
+            element={<CompareResultScreen />}
+          />
         </Route>
         <Route path="*" element={<PageNotFoundError />} />
       </RrdRoutes>
