@@ -27,7 +27,7 @@ class AssessmentProjecCreateSerilizer(serializers.ModelSerializer):
         model = AssessmentProject
         fields = ['id', 'title', 'color', 'space']
 
-class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
+class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     color = ColorSerilizer()
     space = SpaceSimpleSerializer()
@@ -39,4 +39,15 @@ class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentProject
         fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'space', 'total_progress']
+
+
+class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    color = ColorSerilizer()
+    space = SpaceSimpleSerializer()
+    assessment_profile = AssessmentProfileSimpleSerilizer()
+
+    class Meta:
+        model = AssessmentProject
+        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'space']
 
