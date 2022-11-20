@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { IDialogContext } from "../types";
 
 interface IUseDialogProps {
-  context?: any;
+  context?: IDialogContext;
 }
 
 const useDialog = (props: IUseDialogProps = {}) => {
@@ -15,7 +16,7 @@ const useDialog = (props: IUseDialogProps = {}) => {
 
   const openDialog = (context: undefined | any) => {
     setOpen(true);
-    if (context) {
+    if (context.type && !context.target) {
       setContext(context);
     }
   };
