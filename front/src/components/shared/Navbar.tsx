@@ -88,6 +88,15 @@ const Navbar = () => {
             </ListItemButton>
           </ListItem>
         )}
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/compare`}
+          >
+            <ListItemText primary={<Trans i18nKey="compare" />} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -109,7 +118,7 @@ const Navbar = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { md: "none" } }}
           >
             <MenuIcon />
           </IconButton>
@@ -119,7 +128,7 @@ const Navbar = () => {
             sx={{
               display: {
                 xs: "none",
-                sm: "block",
+                md: "block",
                 color: "grey",
                 height: "48px",
                 width: "110px",
@@ -133,7 +142,7 @@ const Navbar = () => {
           >
             <Logo />
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" }, ml: 3 }}>
+          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <Button
               component={NavLink}
               to="spaces"
@@ -212,7 +221,7 @@ const Navbar = () => {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "block", md: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
