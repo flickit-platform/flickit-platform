@@ -25,10 +25,10 @@ const SupTitleBreadcrumb = (
   const { routes = [] } = props;
   return (
     <Breadcrumbs>
-      {routes.map((route) => {
+      {routes.map((route, index) => {
         const { to, title, sup, icon } = route;
         return to ? (
-          <Box display="flex" flexDirection={"column"}>
+          <Box display="flex" flexDirection={"column"} key={index}>
             {/* {sup && (
               <Typography
                 sx={{
@@ -52,7 +52,7 @@ const SupTitleBreadcrumb = (
                 ...styles.centerV,
                 fontSize: "0.8rem",
                 fontFamily: "RobotoBold",
-                opacity: 0.6,
+                opacity: 0.8,
                 letterSpacing: "0.085em",
                 color: "primary.dark",
               }}

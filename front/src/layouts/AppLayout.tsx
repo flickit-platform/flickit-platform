@@ -6,7 +6,7 @@ import Navbar from "../components/shared/Navbar";
 const AppLayout = (props: PropsWithChildren<{}>) => {
   const { children } = props;
   return (
-    <Box sx={{ overflowX: "hidden" }}>
+    <Box sx={{ overflowX: "hidden", minHeight: "100vh" }}>
       <Navbar />
       <Box
         sx={{
