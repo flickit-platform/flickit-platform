@@ -6,6 +6,10 @@ import formatDate from "../../utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import { IAssessmentReportModel } from "../../types";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { useParams } from "react-router-dom";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 interface IAssessmentReportTitle {
   data: IAssessmentReportModel;
@@ -23,6 +27,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
     },
   } = data;
   const { title: spaceTitle = "" } = space || {};
+  const { spaceId } = useParams();
 
   return (
     <Title
@@ -33,9 +38,22 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
         },
       }}
       sup={
-        <Typography variant="subLarge" sx={{ opacity: 0.6 }}>
-          {spaceTitle}
-        </Typography>
+        <SupTitleBreadcrumb
+          routes={[
+            {
+              title: spaceTitle,
+              to: "/spaces/",
+              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+            },
+            {
+              title,
+              to: `/${spaceId}/assessments`,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
+            },
+          ]}
+        />
       }
       toolbar={
         <Box sx={{ mt: { xs: 1.5, md: 0 } }}>

@@ -16,6 +16,8 @@ import { useAuthContext } from "../../providers/AuthProvider";
 import AccessDeniedError from "../shared/errors/AccessDeniedError";
 import { styles } from "../../config/styles";
 import { ISpaceModel } from "../../types";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 
 const SpaceSettingContainer = () => {
   const { spaceId = "" } = useParams();
@@ -31,7 +33,21 @@ const SpaceSettingContainer = () => {
 
   return (
     <Box maxWidth="1440px" m="auto">
-      <Title sup="spaces" backLink={"/spaces"}>
+      <Title
+        sup={
+          <SupTitleBreadcrumb
+            routes={[
+              {
+                to: "/spaces",
+                title: "spaces",
+                sup: "spaces",
+                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              },
+            ]}
+          />
+        }
+        backLink={-1}
+      >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
           {loading ? (
             <Skeleton variant="rounded" width="110px" sx={{ mr: 1 }} />

@@ -9,7 +9,7 @@ import QANumberIndicator from "../shared/QANumberIndicator";
 
 type TQuestionnairesNotCompleteAlertProps = {
   subjectName?: string;
-  subjectId?: TId;
+  to?: string;
   progress?: number;
   q?: number;
   a?: number;
@@ -18,7 +18,7 @@ type TQuestionnairesNotCompleteAlertProps = {
 const QuestionnairesNotCompleteAlert = (
   props: TQuestionnairesNotCompleteAlertProps
 ) => {
-  const { subjectName, subjectId, progress, q, a } = props;
+  const { subjectName, to, progress, q, a } = props;
   const location = useLocation();
   return (
     <Alert
@@ -33,36 +33,38 @@ const QuestionnairesNotCompleteAlert = (
         borderRadius: 2,
       }}
       action={
-        <Button
-          color="inherit"
-          sx={{
-            backgroundColor: "#ffffff22",
-            "&:hover": {
-              backgroundColor: "#ffffff55",
-            },
-          }}
-          component={Link}
-          state={location}
-          to={
-            subjectId
-              ? `./../questionnaires?subject_pk=${subjectId}`
-              : "questionnaires"
-          }
-        >
-          {subjectName} questionnaires{" "}
-          {q && a && (
-            <QANumberIndicator
-              q={q}
-              a={a}
+        <>
+          {to ? (
+            <Button
+              color="inherit"
               sx={{
-                ml: 1,
-                pl: 1,
-                color: "white",
-                borderLeft: "1px dashed #ffffff52",
+                backgroundColor: "#ffffff22",
+                "&:hover": {
+                  backgroundColor: "#ffffff55",
+                },
               }}
-            />
+              component={Link}
+              state={location}
+              to={to}
+            >
+              {subjectName} questionnaires{" "}
+              {q && a && (
+                <QANumberIndicator
+                  q={q}
+                  a={a}
+                  sx={{
+                    ml: 1,
+                    pl: 1,
+                    color: "white",
+                    borderLeft: "1px dashed #ffffff52",
+                  }}
+                />
+              )}
+            </Button>
+          ) : (
+            <></>
           )}
-        </Button>
+        </>
       }
     >
       <AlertTitle>

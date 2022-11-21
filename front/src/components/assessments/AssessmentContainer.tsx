@@ -7,7 +7,6 @@ import { useServiceContext } from "../../providers/ServiceProvider";
 import useDialog from "../../utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
 import CreateAssessmentDialog from "./AssessmentCEFromDialog";
-import AddchartRoundedIcon from "@mui/icons-material/AddchartRounded";
 import { Box, Typography } from "@mui/material";
 import { ICustomError } from "../../utils/CustomError";
 import { useParams } from "react-router-dom";
@@ -16,6 +15,10 @@ import toastError from "../../utils/toastError";
 import { ToolbarCreateItemBtn } from "../../components/shared/buttons/ToolbarCreateItemBtn";
 import { ECustomErrorType } from "../../types";
 import { NotFoundOrAccessDenied } from "../../components/shared/errors/NotFoundOrAccessDenied";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
@@ -31,17 +34,29 @@ const AssessmentContainer = () => {
     <Box display="flex" flexDirection="column" m="auto">
       <Title
         borderBottom={true}
-        sup={requested_space || ""}
+        sup={
+          <SupTitleBreadcrumb
+            routes={[
+              {
+                to: "/spaces",
+                title: requested_space,
+                sup: "spaces",
+                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              },
+            ]}
+          />
+        }
         toolbar={
           <ToolbarCreateItemBtn
             onClick={dialogProps.openDialog}
-            icon={<AddchartRoundedIcon />}
+            icon={<NoteAddRoundedIcon />}
             shouldAnimate={isEmpty}
             minWidth="195px"
             text="createAssessment"
           />
         }
       >
+        <DescriptionRoundedIcon sx={{ mr: 1 }} />
         <Trans i18nKey="assessments" />
       </Title>
       <QueryData
