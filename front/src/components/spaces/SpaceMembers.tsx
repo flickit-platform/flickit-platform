@@ -46,7 +46,7 @@ export const SpaceMembers = () => {
     runOnMount: false,
     toastError: (err) => {
       if (err?.data?.user_id?.[0]) {
-        toast.error(err.data.user_id[0]);
+        toast.error(err.data?.user_id[0]);
       } else if (
         Array.isArray(err?.data) &&
         typeof err?.data?.[0] === "string"
