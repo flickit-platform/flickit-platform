@@ -17,6 +17,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 
 const drawerWidth = 240;
 
@@ -135,6 +138,11 @@ const Navbar = () => {
               component={NavLink}
               to="spaces"
               sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+              startIcon={
+                <FolderRoundedIcon
+                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                />
+              }
             >
               <Box sx={{ ...styles.centerV }}>
                 <Trans i18nKey="spaces" />
@@ -159,18 +167,28 @@ const Navbar = () => {
                 component={NavLink}
                 to={`/${current_space?.id}/assessments`}
                 sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+                startIcon={
+                  <DescriptionRoundedIcon
+                    sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                  />
+                }
               >
                 <Trans i18nKey="assessments" />
               </Button>
             )}
+            <Button
+              component={NavLink}
+              to={`/compare`}
+              startIcon={
+                <CompareRoundedIcon
+                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                />
+              }
+              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+            >
+              <Trans i18nKey="compare" />
+            </Button>
           </Box>
-          <Button
-            component={NavLink}
-            to={`/compare`}
-            sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
-          >
-            <Trans i18nKey="compare" />
-          </Button>
           <Box ml="auto">
             <Button
               sx={{ ml: 2, mr: "-8px", px: 1.5 }}
