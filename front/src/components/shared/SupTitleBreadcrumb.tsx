@@ -6,17 +6,22 @@ import { Link } from "react-router-dom";
 import { styles } from "../../config/styles";
 import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "./loadings/LoadingSkeleton";
+import { TId } from "../../types";
+import { useServiceContext } from "../../providers/ServiceProvider";
+import { useQuery } from "../../utils/useQuery";
 
-interface ISupTitleBreadcrumbProps extends BreadcrumbsProps {
+interface ISupTitleBreadcrumbProps {
   routes: {
     sup?: string;
-    title: string | JSX.Element;
     to?: string;
     icon?: JSX.Element;
+    title: string | JSX.Element;
   }[];
 }
 
-const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps) => {
+const SupTitleBreadcrumb = (
+  props: ISupTitleBreadcrumbProps & BreadcrumbsProps
+) => {
   const { routes = [] } = props;
   return (
     <Breadcrumbs>
@@ -65,6 +70,25 @@ const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps) => {
       {/* <Typography color="text.primary">Breadcrumbs</Typography> */}
     </Breadcrumbs>
   );
+};
+
+export const useSupTitleBreadcrumb = (
+  params: Record<string, string | undefined>
+) => {
+  const { service } = useServiceContext();
+
+  const { loading, data } = useQuery({
+    service: (args = params, config) =>
+      service.fetchBreadcrumbInfo(args, config),
+  });
+
+  return {
+    space: !loading ? data?.space || "spaces" : data?.space,
+    assessment: !loading ? data?.assessment || "assessments" : data?.assessment,
+    questionnaire: !loading
+      ? data?.category || "questionnaires"
+      : data?.category,
+  };
 };
 
 export default SupTitleBreadcrumb;
