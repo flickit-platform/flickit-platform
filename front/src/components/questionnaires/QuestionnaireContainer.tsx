@@ -11,6 +11,7 @@ import {
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   ITotalProgressModel,
+  TQueryData,
 } from "../../types";
 import Title from "../shared/Title";
 import Alert from "@mui/material/Alert";
@@ -20,38 +21,20 @@ import IconButton from "@mui/material/IconButton";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
+import SupTitleBreadcrumb, {
+  useSupTitleBreadcrumb,
+} from "../shared/SupTitleBreadcrumb";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 const QuestionnaireContainer = () => {
   const { pageQueryData, questionnaireQueryData, totalProgressQueryData } =
     useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
-  const loaded = useRef(false);
-
-  useEffect(() => {
-    if (questionnaireQueryData.loaded) {
-      loaded.current = true;
-    }
-  }, [questionnaireQueryData.loading]);
 
   return (
     <Box>
-      <Title
-        backLink={-1}
-        sup={
-          <Box display="flex" alignItems={"center"}>
-            {pageQueryData.loading ? (
-              <Skeleton width="80px" height="22px" sx={{ mr: 1 }} />
-            ) : (
-              pageQueryData.data.assessment_title
-            )}{" "}
-            <Trans i18nKey="assessment" />
-          </Box>
-        }
-      >
-        <QuizRoundedIcon sx={{ mr: 1 }} />
-        <Trans i18nKey="Questionnaires" />
-      </Title>
-
+      <QuestionnaireTitle />
       <NotCompletedAlert
         isCompleted={
           totalProgressQueryData.data?.total_progress?.progress == 100
@@ -140,6 +123,41 @@ const NotCompletedAlert = (props: {
         </Alert>
       )}
     </Box>
+  );
+};
+
+const QuestionnaireTitle = () => {
+  const { spaceId, assessmentId } = useParams();
+  const breadcrumbInfo = useSupTitleBreadcrumb({
+    spaceId,
+    assessmentId,
+  });
+
+  return (
+    <Title
+      backLink={-1}
+      sup={
+        <SupTitleBreadcrumb
+          routes={[
+            {
+              title: breadcrumbInfo.space,
+              to: "/spaces/",
+              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+            },
+            {
+              title: breadcrumbInfo.assessment,
+              to: `/${spaceId}/assessments`,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
+            },
+          ]}
+        />
+      }
+    >
+      <QuizRoundedIcon sx={{ mr: 1 }} />
+      <Trans i18nKey="Questionnaires" />
+    </Title>
   );
 };
 

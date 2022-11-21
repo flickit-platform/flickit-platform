@@ -359,6 +359,21 @@ export const createService = (
     ) {
       return axios.get(`/assessment/currentuserprojects/`, config);
     },
+    fetchBreadcrumbInfo(
+      args: { assessmentId?: TId; spaceId?: TId; questionnaireId?: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const {
+        assessmentId: assessment_id,
+        spaceId: space_id,
+        questionnaireId: category_id,
+      } = args || {};
+      return axios.post(
+        `/assessment/breadcrumbinfo/`,
+        { assessment_id, space_id, category_id },
+        config
+      );
+    },
   };
 
   return service;

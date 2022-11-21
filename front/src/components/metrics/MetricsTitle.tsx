@@ -13,6 +13,11 @@ import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedI
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { IQuestionnaireModel } from "../../types";
+import SupTitleBreadcrumb, {
+  useSupTitleBreadcrumb,
+} from "../shared/SupTitleBreadcrumb";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 const MetricsTitle = (props: {
   data: IQuestionnaireModel;
@@ -25,9 +30,14 @@ const MetricsTitle = (props: {
     assessmentStatus,
     isSubmitting,
   } = useMetricContext();
-  const { metricIndex } = useParams();
+  const { spaceId, assessmentId, metricIndex, questionnaireId } = useParams();
   const isComplete = metricIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
+  const breadcrumbInfo = useSupTitleBreadcrumb({
+    spaceId,
+    assessmentId,
+    questionnaireId,
+  });
 
   return (
     <Box sx={{ pt: 1, pb: 0 }}>
@@ -66,9 +76,27 @@ const MetricsTitle = (props: {
         }
         backLink={-1}
         sup={
-          <Typography variant="subLarge">
-            <Trans i18nKey="assessment" />
-          </Typography>
+          <SupTitleBreadcrumb
+            routes={[
+              {
+                title: breadcrumbInfo?.space,
+                to: "/spaces/",
+                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              },
+              {
+                title: breadcrumbInfo?.assessment,
+                to: `/${spaceId}/assessments`,
+                icon: (
+                  <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+                ),
+              },
+              {
+                title: breadcrumbInfo?.questionnaire,
+                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
+                icon: <QuizRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              },
+            ]}
+          />
         }
       >
         {isReview ? (
