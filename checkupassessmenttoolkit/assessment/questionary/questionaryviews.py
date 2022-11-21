@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from assessmentbaseinfo.models import QualityAttribute
-from ..permissions import IsSpaceMember
+from assessmentcore.permission.spaceperm import IsSpaceMember
 from ..models import AssessmentProject, QualityAttributeValue
 from ..report.categoryreport import CategoryReportInfo
 

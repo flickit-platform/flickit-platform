@@ -1,8 +1,7 @@
-from rest_framework.mixins import *
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from assessment.permissions import IsSpaceMember
+from assessmentcore.permission.spaceperm import IsSpaceMember
 from assessment.models import AssessmentResult
 from assessment.report.reportserilaizers import AssessmentReportSerilizer
 

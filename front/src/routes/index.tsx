@@ -37,6 +37,10 @@ const MetricScreen = React.lazy(() => import("../screens/MetricScreen"));
 const QuestionnairesScreen = React.lazy(
   () => import("../screens/QuestionnairesScreen")
 );
+const CompareScreen = React.lazy(() => import("../screens/CompareScreen"));
+const CompareResultScreen = React.lazy(
+  () => import("../screens/CompareResultScreen")
+);
 
 const Routes = () => {
   return (
@@ -70,28 +74,33 @@ const Routes = () => {
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
           <Route
-            path="/:spaceId/assessments/:assessmentId"
+            path="/:spaceId/assessments/:assessmentId/insights"
             element={<AssessmentReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/insights/:subjectId"
+            element={<SubjectReportScreen />}
           />
           <Route
             path="/:spaceId/assessments/:assessmentId/questionnaires"
             element={<QuestionnairesScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:assessmentId/:subjectId"
-            element={<SubjectReportScreen />}
-          />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/:subjectId/:questionnaireId/review"
+            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId/review"
             element={<MetricsReviewScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:assessmentId/:subjectId/:questionnaireId"
+            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId"
             element={<MetricsScreen />}
           >
             <Route path="" element={<MetricScreen />} />
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
+          <Route path="/compare" element={<CompareScreen />} />
+          <Route
+            path="/compare/compare-result"
+            element={<CompareResultScreen />}
+          />
         </Route>
         <Route path="*" element={<PageNotFoundError />} />
       </RrdRoutes>

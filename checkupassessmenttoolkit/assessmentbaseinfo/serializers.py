@@ -6,13 +6,13 @@ from .imagecomponent.serializers import QualityAttributeImageSerializer, Profile
 class MetricCategorySerilizer(serializers.ModelSerializer):
     class Meta:
         model = MetricCategory
-        fields = ['id', 'code', 'title']
+        fields = ['id', 'code', 'title', 'index']
 
 
 class MetricCategoryBySubjectSerilizer(serializers.ModelSerializer):
     class Meta:
         model = MetricCategory
-        fields = ['id', 'code', 'title', 'total_question']
+        fields = ['id', 'code', 'title', 'total_question', 'index']
     total_question = serializers.SerializerMethodField()
 
     def get_total_question(self, category:MetricCategory):
@@ -24,7 +24,7 @@ class AssessmentSubjectSerilizer(serializers.ModelSerializer):
     images = SubjectImageSerializer(many=True)
     class Meta:
         model = AssessmentSubject
-        fields = ['id', 'code', 'title', 'description', 'images']
+        fields = ['id', 'code', 'title', 'description', 'images', 'index']
 
 
 class MetricImpactSerilizer(serializers.ModelSerializer):
@@ -37,7 +37,7 @@ class QualityAttributeSerilizer(serializers.ModelSerializer):
     images = QualityAttributeImageSerializer(many=True)
     class Meta:
         model = QualityAttribute
-        fields = ['id', 'code', 'title', 'description', 'images']
+        fields = ['id', 'code', 'title', 'description', 'images', 'index']
 
 
 class AssessmentProfileSerilizer(serializers.ModelSerializer):
@@ -62,7 +62,7 @@ class AnswerTemplateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     class Meta:
         model = AnswerTemplate
-        fields = ['id', 'caption', 'value']
+        fields = ['id', 'caption', 'value', 'index']
 
 class SimpleMetricSerializers(serializers.ModelSerializer):
     quality_attributes = QualityAttributeSerilizer(many=True)
