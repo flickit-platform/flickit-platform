@@ -165,7 +165,7 @@ const AnswerTemplate = (props: {
       dispatch(metricActions.setMetricInfo({ ...metricInfo, answer: value }));
       if (isLastMetric) {
         dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
-        navigate(`../completed`);
+        navigate(`../completed`, { replace: true });
         return;
       }
       if (value) {
@@ -176,7 +176,7 @@ const AnswerTemplate = (props: {
       const newMetricIndex = metricIndex + 1;
       dispatch(metricActions.goToMetric(newMetricIndex));
       navigate(`../${newMetricIndex}`, {
-        replace: newMetricIndex === 1 ? true : false,
+        replace: true,
       });
     } catch (e) {
       dispatch(metricActions.setIsSubmitting(false));

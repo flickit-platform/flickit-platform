@@ -21,6 +21,10 @@ import { IAssessmentResultModel, ISubjectReportModel } from "../../types";
 import hasStatus from "../../utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 const SubjectContainer = () => {
   const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
@@ -44,7 +48,7 @@ const SubjectContainer = () => {
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
                   subjectName={title}
-                  subjectId={subjectId}
+                  to={`./../../questionnaires?subject_pk=${subjectId}`}
                   q={total_metric_number}
                   a={total_answered_metric}
                   progress={progress}
@@ -149,23 +153,49 @@ const SubjectTitle = (props: {
     assessment_profile_description,
     assessment_project_title,
     assessment_project_color_code,
+    assessment_project_space_title,
     title,
   } = data || {};
+  const { spaceId, assessmentId } = useParams();
 
   return (
     <Title
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
-      backLink="./.."
+      backLink={-1}
       id="insight"
       inPageLink="#insight"
       sup={
-        <>
-          {assessment_profile_description || (
-            <Trans i18nKey="technicalDueDiligence" />
-          )}{" "}
-          {assessment_project_title}
-        </>
+        <SupTitleBreadcrumb
+          routes={[
+            {
+              title: assessment_project_space_title,
+              to: "/spaces/",
+              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+            },
+            {
+              title: assessment_project_title,
+              to: `/${spaceId}/assessments`,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
+            },
+            {
+              title: (
+                <>
+                  {assessment_profile_description || (
+                    <Trans i18nKey="technicalDueDiligence" />
+                  )}{" "}
+                  {assessment_project_title}
+                </>
+              ),
+              to: `/${spaceId}/assessments/${assessmentId}/insights`,
+              icon: (
+                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
+            },
+          ]}
+        />
       }
     >
       <Box sx={{ ...styles.centerV }}>

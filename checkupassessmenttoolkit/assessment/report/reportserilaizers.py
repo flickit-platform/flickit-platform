@@ -3,16 +3,14 @@ from rest_framework import serializers
 import more_itertools
 
 from assessmentbaseinfo.serializers import AssessmentProfileSimpleSerilizer
-from assessmentbaseinfo.models import *
-
 from assessment.serializers import ColorSerilizer
 from assessmentcore.serializers import SpaceSerializer
 
 
 from ..models import AssessmentProject, AssessmentResult
-from ..common import *
-from ..assessmentcommon import *
-
+from ..fixture.common import calculate_staus, ANSWERED_QUESTION_NUMBER_BOUNDARY
+from ..fixture.dictionary import Dictionary
+from ..fixture.metricstatistic import calculate_total_metric_number_by_subject, calculate_answered_metric_by_subject, extract_total_progress
 
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()

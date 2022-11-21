@@ -47,6 +47,7 @@ const AssessmentReportContainer = () => {
               <Box mt={3}>
                 <QuestionnairesNotCompleteAlert
                   progress={total_progress.progress}
+                  to="./../questionnaires"
                   q={total_progress.total_metric_number}
                   a={total_progress.total_answered_metric_number}
                 />

@@ -62,7 +62,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         <Grid
           container
           component={Link}
-          to={isComplete ? `${item.id}` : `${item.id}/questionnaires`}
+          to={isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`}
           sx={{ textDecoration: "none", height: "100%" }}
         >
           <Grid item xs={12}>
@@ -105,7 +105,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasStat ? `${item.id}` : ""}
+              to={hasStat ? `${item.id}/insights` : ""}
               variant={isComplete ? "contained" : undefined}
             >
               <Trans i18nKey="insights" />

@@ -13,7 +13,9 @@ import { useQuery } from "../../utils/useQuery";
 import AddRounded from "@mui/icons-material/AddRounded";
 import { Skeleton, Typography } from "@mui/material";
 import { ToolbarCreateItemBtn } from "../../components/shared/buttons/ToolbarCreateItemBtn";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import { ISpacesModel } from "../../types";
+import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
@@ -32,14 +34,14 @@ const SpaceContainer = () => {
           borderBottom={true}
           toolbar={
             <ToolbarCreateItemBtn
-              icon={<AddRounded />}
+              icon={<CreateNewFolderRoundedIcon />}
               onClick={dialogProps.openDialog}
               shouldAnimate={isEmpty}
               text="createSpace"
             />
           }
         >
-          <Trans i18nKey="spaces" />
+          <FolderRoundedIcon sx={{ mr: 1 }} /> <Trans i18nKey="spaces" />
         </Title>
       }
     >

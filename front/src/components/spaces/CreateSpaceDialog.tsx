@@ -15,6 +15,7 @@ import { useServiceContext } from "../../providers/ServiceProvider";
 import { ICustomError } from "../../utils/CustomError";
 import setServerFieldErrors from "../../utils/setServerFieldError";
 import toastError from "../../utils/toastError";
+import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 
 interface ICreateSpaceDialogProps extends DialogProps {
   onClose: () => void;
@@ -77,11 +78,14 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       {...rest}
       closeDialog={close}
       title={
-        type === "update" ? (
-          <Trans i18nKey="updateSpace" />
-        ) : (
-          <Trans i18nKey="createSpace" />
-        )
+        <>
+          <CreateNewFolderRoundedIcon sx={{ mr: 1 }} />
+          {type === "update" ? (
+            <Trans i18nKey="updateSpace" />
+          ) : (
+            <Trans i18nKey="createSpace" />
+          )}
+        </>
       }
     >
       <FormProviderWithForm
