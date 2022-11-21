@@ -8,6 +8,7 @@ import { styles } from "../../config/styles";
 import { useQuery } from "../../utils/useQuery";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import {
+  IAssessmentReportModel,
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   ITotalProgressModel,
@@ -16,9 +17,7 @@ import {
 import Title from "../shared/Title";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 import SupTitleBreadcrumb, {
@@ -26,10 +25,17 @@ import SupTitleBreadcrumb, {
 } from "../shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import hasStatus from "../../utils/hasStatus";
+import Button from "@mui/material/Button";
+import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 
 const QuestionnaireContainer = () => {
-  const { pageQueryData, questionnaireQueryData, totalProgressQueryData } =
-    useQuestionnaire();
+  const {
+    pageQueryData,
+    questionnaireQueryData,
+    totalProgressQueryData,
+    assessmentQueryData,
+  } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
 
   return (
@@ -39,7 +45,8 @@ const QuestionnaireContainer = () => {
         isCompleted={
           totalProgressQueryData.data?.total_progress?.progress == 100
         }
-        loading={totalProgressQueryData.loading}
+        hasStatus={hasStatus(assessmentQueryData.data?.status)}
+        loading={totalProgressQueryData.loading || assessmentQueryData.loading}
       />
       <Box
         flexWrap={"wrap"}
@@ -89,28 +96,51 @@ const useQuestionnaire = () => {
       service.fetchTotalProgress(args, config),
   });
 
+  const assessmentQueryData = useQuery<IAssessmentReportModel>({
+    service: (args = { assessmentId }, config) =>
+      service.fetchAssessment(args, config),
+  });
+
   return {
     pageQueryData,
     questionnaireQueryData,
     totalProgressQueryData,
+    assessmentQueryData,
   };
 };
 
 const NotCompletedAlert = (props: {
   isCompleted: boolean;
   loading: boolean;
+  hasStatus: boolean;
 }) => {
-  const { isCompleted, loading } = props;
+  const { isCompleted, loading, hasStatus } = props;
 
   return (
     <Box mt={2}>
       {loading ? (
         <LoadingSkeleton height="76px" />
       ) : (
-        <Alert severity={isCompleted ? "success" : "info"}>
+        <Alert
+          severity={isCompleted ? "success" : "info"}
+          action={
+            <Button
+              variant="contained"
+              color="info"
+              disabled={!hasStatus}
+              component={Link}
+              to="./../insights"
+              startIcon={<AnalyticsRoundedIcon />}
+            >
+              <Trans i18nKey="viewInsights" />
+            </Button>
+          }
+        >
           <AlertTitle>
             {isCompleted ? (
               <Trans i18nKey={"YouHaveFinishedAllQuestionnaires"} />
+            ) : hasStatus ? (
+              <Trans i18nKey="toGetMoreAccurateInsights" />
             ) : (
               <Trans i18nKey="toAssessSystemNeedToAnswerQuestions" />
             )}

@@ -115,7 +115,7 @@ const useSubject = () => {
 
   useEffect(() => {
     if (resultsQueryData.loaded) {
-      const result = resultsQueryData.data.results.find(
+      const result = resultsQueryData.data?.results.find(
         (item: any) => item?.assessment_project == assessmentId
       );
       const { id: resultId } = result || {};

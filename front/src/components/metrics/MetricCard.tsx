@@ -165,7 +165,7 @@ const AnswerTemplate = (props: {
       dispatch(metricActions.setMetricInfo({ ...metricInfo, answer: value }));
       if (isLastMetric) {
         dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
-        navigate(`../completed`);
+        navigate(`../completed`, { replace: true });
         return;
       }
       if (value) {
