@@ -57,7 +57,7 @@
   "shape": "shape",
   "profile": "Profile",
   "evidence": "evidence",
-  "inprogress": "in progress",
+  "inprogress": "In progress",
   "notFound": "404 - PAGE NOT FOUND",
   "accessDenied": "Access Denied",
   "youDontHaveCorrectPermissions": "You don't have correct permissions",
@@ -145,5 +145,10 @@
   "thisReportIsNotAccurate": "The report is not accurate enough.",
   "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires to make it more accurate.",
   "pleaseCompleteAllQuestionnaires": "Please complete more questionnaires to get a better accuracy.",
-  "toGetMoreAccurateInsights": "In order to get more accurate insights, fill all questionnaires."
+  "toGetMoreAccurateInsights": "In order to get more accurate insights, fill all questionnaires.",
+  "selectAssessmentForComparison": "Select an assessment for comparison.",
+  "selectAssessment": "Select assessment",
+  "changeAssessment": "Change assessment",
+  "addToCompareList": "Add to compare list",
+  "statusIsEvaluatedAs": "Status is evaluated as"
 }

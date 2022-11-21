@@ -61,6 +61,7 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
         height="100%"
         sx={{ ...styles.centerV }}
         component={Link}
+        replace={isNext ? true : true}
         color="#ffffff96"
         onClick={() => {
           if (!isSubmitting && isNext && !hasNextQuestion) {

@@ -65,8 +65,6 @@ const Title = (props: ITitle) => {
         {backLink ? (
           <Box display="flex" justifyContent={"flex-start"}>
             <Box
-              component={RLink}
-              to={backLink as To}
               minWidth="40px"
               sx={{
                 ...styles.centerV,
@@ -74,12 +72,14 @@ const Title = (props: ITitle) => {
                 ml: sup ? { xs: 0, md: "-22px" } : "-4px",
               }}
             >
-              <ArrowBackRoundedIcon
-                fontSize="small"
-                color="inherit"
-                sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
-                {...backIconProps}
-              />
+              <Box component={RLink} to={backLink as To} display="flex">
+                <ArrowBackRoundedIcon
+                  fontSize="small"
+                  color="inherit"
+                  sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
+                  {...backIconProps}
+                />
+              </Box>
               {sup && (
                 <Typography
                   textTransform="uppercase"

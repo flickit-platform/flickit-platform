@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { IDialogContext } from "../types";
 
-const useDialog = () => {
+interface IUseDialogProps {
+  context?: IDialogContext;
+}
+
+const useDialog = (props: IUseDialogProps = {}) => {
+  const { context: initialContext = undefined } = props;
   const [open, setOpen] = useState(false);
-  const [context, setContext] = useState(undefined);
+  const [context, setContext] = useState(initialContext);
 
   const onClose = () => {
     setOpen(false);
@@ -10,7 +16,9 @@ const useDialog = () => {
 
   const openDialog = (context: undefined | any) => {
     setOpen(true);
-    setContext(context);
+    if (context.type && !context.target) {
+      setContext(context);
+    }
   };
 
   return { open, onClose, openDialog, context };

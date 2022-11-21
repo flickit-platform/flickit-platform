@@ -326,6 +326,54 @@ export const createService = (
         },
       });
     },
+    fetchCompare(
+      args: any | undefined,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/loadcompare/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
+    compare(
+      args: { assessment_list: string[] },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/loadcompare/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
+    saveCompareItem(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/savecompare/${assessmentId}/`, {
+        ...config,
+        withCredentials: true,
+      });
+    },
+    fetchCompareItemAssessments(
+      args: any | undefined,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/assessment/currentuserprojects/`, config);
+    },
+    fetchBreadcrumbInfo(
+      args: { assessmentId?: TId; spaceId?: TId; questionnaireId?: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const {
+        assessmentId: assessment_id,
+        spaceId: space_id,
+        questionnaireId: category_id,
+      } = args || {};
+      return axios.post(
+        `/assessment/breadcrumbinfo/`,
+        { assessment_id, space_id, category_id },
+        config
+      );
+    },
   };
 
   return service;

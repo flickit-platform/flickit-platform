@@ -1,5 +1,5 @@
 from . import views
-from assessment.views import *
+from assessment.project import views as projectviews
 from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
@@ -12,7 +12,7 @@ user_access_router.register('useraccess', views.UserAccessViewSet, basename='spa
 
 
 assessments_router = routers.NestedDefaultRouter(router, 'spaces', lookup='space')
-assessments_router.register('assessments', AssessmentProjectBySpaceViewSet, basename='space-assessments')
+assessments_router.register('assessments', projectviews.AssessmentProjectBySpaceViewSet, basename='space-assessments')
 
 
 
