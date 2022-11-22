@@ -12,8 +12,21 @@ class CategoryReportInfo():
             self.total_metric_number += metrics_number
             answered_metric = self.__calculate_metric_number(assessment_result_pk, metrics)
             category_info = self.__set_base_category_info(category, answered_metric)
+            category_info['current_metric_index'] = self.find_current_metric_index(assessment_result_pk, metrics)
             category_info['progress'] = self.__calculate_progress(metrics_number, answered_metric)
             self.metric_categories_info.append(category_info)
+
+    def find_current_metric_index(self, assessment_result_pk, metrics):
+        no_answered_metric_index_list = []
+        for metric in metrics:
+            metric_value = metric.metric_values.filter(assessment_result_id=assessment_result_pk, metric_id = metric.id).first()
+            if metric_value is None or metric_value.answer is None:
+                no_answered_metric_index_list.append(metric.index)
+        if no_answered_metric_index_list:
+            current_index = min(no_answered_metric_index_list)
+        else:
+            current_index = -1
+        return current_index
 
     def __calculate_progress(self, metrics_number, answered_metric):
         if metrics_number != 0:
