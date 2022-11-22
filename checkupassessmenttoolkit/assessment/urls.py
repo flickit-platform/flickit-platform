@@ -30,8 +30,9 @@ urlpatterns += [
     path("result/<str:assessment_project_id>/<str:metric_category_id>/", MetricValueListView.as_view()),
     path("progress/<str:assessment_project_id>/", TotalProgressView.as_view()),
     path("subjects/<str:assessment_project_id>/", QuestionaryBaseInfoView.as_view()),
-    path("savecompare/<str:assessment_project_id>/", compareviews.ComparisionSaveView.as_view()),
-    path("loadcompare/", compareviews.ComparisionLoadView.as_view()),
+    # path("savecompare/<str:assessment_project_id>/", compareviews.ComparisionSaveView.as_view()),
+    # path("loadcompare/", compareviews.ComparisionLoadView.as_view()),
     path("breadcrumbinfo/", commonviews.BreadcrumbInformationView.as_view()),
-    # path("compare/", compareviews.CompareAssessmentView.as_view()),
+    path("compare/", compareviews.CompareAssessmentView.as_view()),
+    path("compareselect/", projectviews.AssessmentProjectSelectForCompareView.as_view()),
 ]
