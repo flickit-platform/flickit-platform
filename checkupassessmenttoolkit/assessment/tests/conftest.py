@@ -7,7 +7,7 @@ from assessmentbaseinfo.models import AssessmentSubject, MetricCategory
 from assessmentbaseinfo.models import Metric, MetricImpact, QualityAttribute
 from assessmentbaseinfo.models import AnswerTemplate
 
-from assessment.common import *
+from assessment.fixture.dictionary import Dictionary
 
 
 
@@ -30,10 +30,10 @@ def init_data():
     def do_init_data():
         profile = AssessmentProfile.objects.filter(is_default=True).first()
         metric_category_list = []
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile))
+        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 1, title = 'c1'))
+        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 2, title = 'c2'))
+        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 3, title = 'c3'))
+        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 4, title = 'c4'))
 
         metrics_list = []
         metrics_list.append(baker.make(Metric, metric_category = metric_category_list[0], index = 1))
