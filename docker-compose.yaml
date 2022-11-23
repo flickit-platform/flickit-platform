@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  checkupassessmenttoolkit:
+  backend:
     build:
       context: .
     command: >
@@ -11,15 +11,15 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+      - ./backend:/backend
       - static-data:/admin/vol/web
     environment:
-      - SECRET_KEY=devsecretkey
-      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
       - DB_HOST=db
-      - DB_NAME=checkupassessment
-      - DB_USER=postgres
-      - DB_PASS=123456
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - EMAIL_HOST=${EMAIL_HOST}
       - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
@@ -32,10 +32,11 @@ services:
 
   db:
     image: postgres:11
+    restart: always
     environment:
-      - POSTGRES_DB=checkupassessment
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -47,42 +48,42 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A checkupassessmenttoolkit worker -l info
+    command: celery -A backend worker -l info
     volumes:
-      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+      - ./backend:/backend
     environment:
-      - SECRET_KEY=devsecretkey
-      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
       - DB_HOST=db
-      - DB_NAME=checkupassessment
-      - DB_USER=postgres
-      - DB_PASS=123456
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - CELERY_BROKER_URL=redis://redis:6379/1
       - DOMAIN=${DOMAIN}
     depends_on:
       - db
       - redis
-      - checkupassessmenttoolkit
+      - backend
 
   flower:
     build: .
-    command: celery -A checkupassessmenttoolkit flower
+    command: celery -A backend flower
     volumes:
-      - ./checkupassessmenttoolkit:/checkupassessmenttoolkit
+      - ./backend:/backend
     depends_on:
-      - checkupassessmenttoolkit
+      - backend
       - redis
       - celery
     environment:
       - DEBUG=1
       - CELERY_BROKER=redis://redis:6379/1
       - CELERY_BACKEND=redis://redis:6379/1
-      - SECRET_KEY=devsecretkey
+      - SECRET_KEY=${SECRET_KEY}
       - DB_HOST=db
-      - DB_NAME=checkupassessment
-      - DB_USER=postgres
-      - DB_PASS=123456
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - DOMAIN=${DOMAIN}
     ports:
@@ -91,17 +92,17 @@ services:
   frontend:
     restart: always
     command : npm start
-    container_name: front
+    container_name: frontend
     build:
-      context: ./front
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
-      - BASE_URL=http://checkupassessmenttoolkit:8000
+      - BASE_URL=http://backend:8000
     stdin_open: true
     depends_on:
-      - checkupassessmenttoolkit  
+      - backend  
 
 volumes:
   postgres-data:
