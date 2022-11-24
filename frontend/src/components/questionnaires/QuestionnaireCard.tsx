@@ -30,6 +30,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
     progress = 0,
     subject: subjects,
     title,
+    current_metric_index,
   } = data || {};
 
   const isSmallScreen = useScreenResize("sm");
@@ -105,6 +106,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             id={id}
             progress={progress}
             number_of_answers={number_of_answers}
+            current_metric_index={current_metric_index}
           />
         </Box>
       </Box>
@@ -116,8 +118,9 @@ const ActionButtons = (props: {
   id: TId;
   progress: number;
   number_of_answers: number;
+  current_metric_index: number;
 }) => {
-  const { id, progress, number_of_answers } = props;
+  const { id, progress, number_of_answers, current_metric_index } = props;
 
   return (
     <Box display="flex">
@@ -138,7 +141,7 @@ const ActionButtons = (props: {
       )}
       {progress < 100 && progress > 0 && (
         <ActionButton
-          to={`${id}/${number_of_answers + 1}`}
+          to={`${id}/${current_metric_index || number_of_answers + 1}`}
           text="continue"
           icon={<PlayArrowRoundedIcon fontSize="small" />}
         />
