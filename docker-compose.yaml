@@ -48,7 +48,7 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A backend worker -l info
+    command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
     environment:
@@ -68,7 +68,7 @@ services:
 
   flower:
     build: .
-    command: celery -A backend flower
+    command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend
     depends_on:
@@ -76,7 +76,7 @@ services:
       - redis
       - celery
     environment:
-      - DEBUG=1
+      - DEBUG=${DEBUG}
       - CELERY_BROKER=redis://redis:6379/1
       - CELERY_BACKEND=redis://redis:6379/1
       - SECRET_KEY=${SECRET_KEY}
