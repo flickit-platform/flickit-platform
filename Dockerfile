@@ -3,10 +3,10 @@ FROM python:3.10-alpine3.13
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /requirements.txt
-COPY ./assessmentplatform /assessmentplatform
+COPY ./backend /backend
 COPY ./scripts /scripts
 
-WORKDIR /assessmentplatform
+WORKDIR /backend
 EXPOSE 8000
 
 USER root
