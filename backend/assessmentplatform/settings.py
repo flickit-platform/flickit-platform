@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'account',
     'baseinfo',
     'assessment',
+    'assessmentplatform'
     # 'djversion',
 ]
 
