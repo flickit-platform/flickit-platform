@@ -6,11 +6,11 @@
 .docker
 
 # Python
-checkupassessmenttoolkit/__pycache__/
-checkupassessmenttoolkit/*/__pycache__/
-checkupassessmenttoolkit/*/*/__pycache__/
-checkupassessmenttoolkit/*/*/*/__pycache__/
-checkupassessmenttoolkit/local_settings.py
+assessmentplatform/__pycache__/
+assessmentplatform/*/__pycache__/
+assessmentplatform/*/*/__pycache__/
+assessmentplatform/*/*/*/__pycache__/
+assessmentplatform/local_settings.py
 local_settings.py
 .env/
 .venv/
