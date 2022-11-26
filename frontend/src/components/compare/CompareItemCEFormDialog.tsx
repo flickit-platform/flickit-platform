@@ -1,32 +1,30 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Trans } from "react-i18next";
-import { IDialogProps } from "../../types";
+import { IDialogProps, TId } from "../../types";
 import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import FormProviderWithForm from "../shared/FormProviderWithForm";
 import Grid from "@mui/material/Grid";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { getColorOfStatus, styles } from "../../config/styles";
+import { styles } from "../../config/styles";
 import { SelectFieldUC } from "../shared/fields/SelectField";
 import useConnectSelectField from "../../utils/useConnectSelectField";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
-import setServerFieldErrors from "../../utils/setServerFieldError";
-import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
+import Chip from "@mui/material/Chip";
 import Title from "../shared/Title";
-import getStatusText from "../../utils/getStatusText";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "../../providers/CompareProvider";
 
 interface ICompareItemCEFormDialog
   extends Omit<ICompareItemCEForm, "closeDialog"> {}
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
-  const { onClose, context, open, openDialog, ...rest } = props;
+  const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
 
   const closeDialog = () => {
     onClose();
@@ -41,8 +39,8 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
         <>
           {context?.type === "update" ? (
             <>
-              <BorderColorRoundedIcon />
-              <Trans i18nKey="changeAssessment" />
+              <BorderColorRoundedIcon sx={{ mr: 1 }} />
+              <Trans i18nKey="changeSelectedAssessment" />
             </>
           ) : (
             <>
@@ -53,9 +51,6 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
         </>
       }
     >
-      {/* <Alert severity="info">
-        <Trans i18nKey="selectAssessmentForComparison" />
-      </Alert> */}
       <CompareItemCEForm {...props} closeDialog={closeDialog} />
     </CEDialog>
   );
@@ -63,33 +58,31 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
 
 interface ICompareItemCEForm extends IDialogProps {
   closeDialog: () => void;
+  index: number;
 }
 
 const CompareItemCEForm = (props: ICompareItemCEForm) => {
-  const [loading, setLoading] = React.useState(false);
-  const { service } = useServiceContext();
-  const { closeDialog, context, onSubmitForm = () => {}, open } = props;
+  const { closeDialog, context, open, index } = props;
   const { type, data } = context || {};
   const defaultValues = type === "update" ? data || {} : {};
   const formMethods = useForm({ shouldUnregister: true });
-  const abortController = useMemo(() => new AbortController(), [open]);
+  const { assessmentIds } = useCompareContext();
+  const dispatch = useCompareDispatch();
 
-  const onSubmit = async (data: any) => {
-    setLoading(true);
+  const onSubmit = (data: any) => {
     try {
-      await service.saveCompareItem(data, { signal: abortController.signal });
-
-      setLoading(false);
-      onSubmitForm?.();
+      const newAssessmentIds = addToAssessmentIds(
+        data.assessmentId,
+        assessmentIds,
+        index
+      );
+      dispatch(compareActions.setAssessmentIds(newAssessmentIds));
       closeDialog();
     } catch (e) {
-      const err = e as ICustomError;
-      setLoading(false);
-      toastError(err);
-      setServerFieldErrors(err, formMethods);
+      closeDialog();
     }
   };
-
+  console.log("dd", defaultValues?.id);
   return (
     <FormProviderWithForm
       formMethods={formMethods}
@@ -98,14 +91,23 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
       <Grid container spacing={2} sx={{ ...styles.formGrid, pt: 0, mt: 0 }}>
         <Grid item xs={12}>
           <SelectFieldUC
-            {...useConnectSelectField(`/assessment/currentuserprojects/`)}
+            {...useConnectSelectField({
+              url: `/assessment/currentuserprojects/`,
+              filterOptions: (options) =>
+                options.filter(
+                  (option) =>
+                    !assessmentIds.includes(option?.id) ||
+                    option?.id == defaultValues?.id
+                ),
+            })}
             required={true}
             autoFocus={true}
             name="assessmentId"
-            defaultValue={defaultValues?.id || ""}
+            defaultValue={defaultValues.id || ""}
             label={<Trans i18nKey="assessment" />}
             size="medium"
-            renderOption={(option) => {
+            renderOption={(option = {}) => {
+              console.log("opt", option.id);
               return (
                 <MenuItem
                   value={option.id}
@@ -116,27 +118,18 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                     option.title
                   ) : (
                     <>
-                      <Title size="small" sup={option.space.title}>
+                      <Title
+                        size="small"
+                        sup={option.space.title}
+                        color={option?.color?.color_code || "#101c32"}
+                      >
                         {option.title}
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
-                        <Typography
-                          sx={{
-                            mr: 1,
-                          }}
-                          variant="body2"
-                        >
-                          <Trans i18nKey={"statusIsEvaluatedAs"} />
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            color: getColorOfStatus(option.status),
-                            fontSize: "1.01rem",
-                          }}
-                        >
-                          {getStatusText(option.status, true)}
-                        </Typography>
+                        <Chip
+                          label={option.assessment_profile.title}
+                          size="small"
+                        />
                       </Box>
                     </>
                   )}
@@ -148,12 +141,25 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
       </Grid>
       <CEDialogActions
         closeDialog={closeDialog}
-        loading={loading}
+        loading={false}
         type={type}
         submitButtonLabel={"addToCompareList"}
       />
     </FormProviderWithForm>
   );
+};
+
+const addToAssessmentIds = (
+  assessmentId: TId,
+  assessmentIds: TId[],
+  index: number
+) => {
+  const newAssessmentIds: TId[] = assessmentIds;
+  if (assessmentIds[index] && assessmentIds[index] == assessmentId) {
+    return assessmentIds;
+  }
+  newAssessmentIds[index] = assessmentId;
+  return newAssessmentIds;
 };
 
 export default CompareItemCEFormDialog;

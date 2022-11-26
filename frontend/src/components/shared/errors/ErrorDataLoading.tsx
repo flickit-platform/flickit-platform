@@ -5,9 +5,9 @@ import { Typography } from "@mui/material";
 import { Trans } from "react-i18next";
 import { styles } from "../../../config/styles";
 
-interface IDataLoadingErrorProps extends BoxProps {}
+interface IErrorDataLoadingProps extends BoxProps {}
 
-const DataLoadingError = (props: IDataLoadingErrorProps) => {
+const ErrorDataLoading = (props: IErrorDataLoadingProps) => {
   const { ...rest } = props;
   return (
     <Box sx={{ ...styles.centerCVH }} pt="64px" pb="44px" {...rest}>
@@ -19,4 +19,4 @@ const DataLoadingError = (props: IDataLoadingErrorProps) => {
   );
 };
 
-export default DataLoadingError;
+export default ErrorDataLoading;

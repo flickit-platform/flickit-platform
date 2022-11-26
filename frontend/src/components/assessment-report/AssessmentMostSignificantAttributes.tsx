@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import { styles } from "../../config/styles";
 import Title from "../shared/Title";
-import EmptyError from "../shared/errors/EmptyError";
+import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
 
 interface IAssessmentMostSignificantAttributesProps {
   most_significant_items: string[];
@@ -59,7 +59,7 @@ export const AssessmentMostSignificantAttributes = (
         </Box>
         <Box display="flex" flexDirection={"column"} mt={4}>
           {isEmpty ? (
-            <EmptyError p={2} hideMessage={true} />
+            <ErrorEmptyData p={2} hideMessage={true} />
           ) : (
             most_significant_items.map((item, index) => {
               return (

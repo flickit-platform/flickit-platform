@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useServiceContext } from "../providers/ServiceProvider";
 
-const useConnectSelectField = (url: any) => {
-  const [options, setOptions] = useState([]);
+const useConnectSelectField = (props: {
+  url: string;
+  filterOptions?: (options: any[]) => any[];
+}) => {
+  const { url, filterOptions = (options) => options } = props;
+  const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -24,8 +28,8 @@ const useConnectSelectField = (url: any) => {
         data: { results },
       } = await service.fetchOptions({ url }, { signal });
 
-      if (results) {
-        setOptions(results);
+      if (results && Array.isArray(results)) {
+        setOptions(filterOptions(results));
         setError(false);
       } else {
         setOptions([]);

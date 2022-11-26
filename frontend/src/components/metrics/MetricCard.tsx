@@ -202,8 +202,8 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {answer_templates.map((template) => {
-            const { value: templateValue, caption } = template;
+          {answer_templates?.map((template) => {
+            const { value: templateValue, caption } = template || {};
             return (
               <Box
                 key={template.value}

@@ -66,9 +66,40 @@ const auth = {
   }),
 };
 
+const buttons = {
+  compareButton: style({
+    position: { xs: "fixed", md: "absolute" },
+    borderRadius: { xs: 0, sm: "100%" },
+    transform: {
+      xs: "translate(0,0)",
+      md: "translate(50%,calc(50% + 24px))",
+    },
+    right: { xs: 0, sm: "26px", md: "50%" },
+    bottom: { xs: 0, sm: "26px", md: "50%" },
+    width: { xs: "100%", sm: "96px" },
+    height: { xs: "40px", sm: "96px" },
+    zIndex: 2,
+  }),
+  compareButtonBg: style({
+    position: { xs: "fixed", md: "absolute" },
+    borderRadius: { xs: 0, sm: "100%" },
+    right: { xs: 0, sm: "19px", md: "50%" },
+    bottom: { xs: 0, sm: "19px", md: "50%" },
+    background: "white",
+    transform: {
+      xs: "translate(0,0)",
+      md: "translate(50%,calc(50% + 24px))",
+    },
+    width: { xs: "100%", sm: "110px" },
+    height: { xs: "46px", sm: "110px" },
+    zIndex: 1,
+  }),
+};
+
 export const styles = {
   ...commonStyles,
   ...auth,
+  ...buttons,
   cards,
 };
 

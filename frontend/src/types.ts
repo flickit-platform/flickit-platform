@@ -126,6 +126,13 @@ export interface IAssessmentProfileModel {
   >;
 }
 
+export interface IProfile {
+  code: string;
+  description: string;
+  id: TId;
+  title: string;
+}
+
 export interface IAssessmentResult {
   assessment_project: string;
   id: TId;
@@ -285,7 +292,6 @@ export interface IQuestionnairesInfo {
   metric_number: number;
   progress: number;
   last_updated?: string;
-  current_metric_index: number;
   title: string;
   subject: { id: TId; title: string }[];
 }
@@ -339,7 +345,7 @@ export interface IQuestionnairesPageDataModel {
 
 export interface IDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: () => void;
+  onSubmitForm?: (args: any) => void;
   openDialog?: any;
   context?: IDialogContext;
 }

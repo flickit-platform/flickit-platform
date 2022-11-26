@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { styles } from "../../../config/styles";
 
-interface IEmptyErrorProps extends BoxProps {
+interface IErrorEmptyDataProps extends BoxProps {
   suggests?: JSX.Element;
   emptyMessage?: JSX.Element;
   img?: JSX.Element;
@@ -13,7 +13,7 @@ interface IEmptyErrorProps extends BoxProps {
   hideMessage?: boolean;
 }
 
-const EmptyError = (props: IEmptyErrorProps) => {
+const ErrorEmptyData = (props: IErrorEmptyDataProps) => {
   const {
     emptyMessage = <Trans i18nKey="thisPlaceIsEmpty" />,
     useIllustration = false,
@@ -48,4 +48,4 @@ const EmptyError = (props: IEmptyErrorProps) => {
   );
 };
 
-export default EmptyError;
+export default ErrorEmptyData;
