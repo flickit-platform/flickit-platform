@@ -157,12 +157,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3333",
     "http://127.0.0.1:3333",
-    "https://checkup.asta.ir",
+    "https://checkuptest.asta.ir",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ['https://checkup.asta.ir']
+CSRF_TRUSTED_ORIGINS = ['https://checkuptest.asta.ir']
 
 
 
@@ -249,8 +249,8 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
 
 
-STATIC_URL = '/admin/static/'
-MEDIA_URL = '/admin/media/'
+STATIC_URL = '/admin/vol/web/static/'
+MEDIA_URL = '/admin/vol/web/media/'
 
 MEDIA_ROOT = '/admin/vol/web/media'
 STATIC_ROOT = '/admin/vol/web/static'
