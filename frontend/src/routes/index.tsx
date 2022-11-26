@@ -4,7 +4,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import Layout from "../layouts/Layout";
 import Redirect from "./Redirect";
 import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
-import PageNotFoundError from "../components/shared/errors/PageNotFoundError";
+import ErrorNotFoundPage from "../components/shared/errors/ErrorNotFoundPage";
 import AuthRoutes from "./AuthRoutes";
 import AuthLayout from "../layouts/AuthLayout";
 import AppLayout from "../layouts/AppLayout";
@@ -102,7 +102,7 @@ const Routes = () => {
             element={<CompareResultScreen />}
           />
         </Route>
-        <Route path="*" element={<PageNotFoundError />} />
+        <Route path="*" element={<ErrorNotFoundPage />} />
       </RrdRoutes>
     </React.Suspense>
   );

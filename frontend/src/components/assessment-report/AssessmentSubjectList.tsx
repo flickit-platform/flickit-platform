@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import EmptyError from "../shared/errors/EmptyError";
+import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
 import Title from "../shared/Title";
 import { AssessmentSubjectCard } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
@@ -29,7 +29,7 @@ export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
       </Box>
       <Box mt={3}>
         {isEmpty ? (
-          <EmptyError />
+          <ErrorEmptyData />
         ) : (
           <Grid
             container

@@ -29,6 +29,7 @@ import hasStatus from "../../utils/hasStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "../shared/PermissionControl";
+import AlertBox from "../shared/AlertBox";
 
 const QuestionnaireContainer = () => {
   const {
@@ -133,7 +134,7 @@ const NotCompletedAlert = (props: {
       {loading ? (
         <LoadingSkeleton height="76px" />
       ) : (
-        <Alert
+        <AlertBox
           severity={isCompleted ? "success" : "info"}
           action={
             <Button
@@ -162,7 +163,7 @@ const NotCompletedAlert = (props: {
           ) : (
             <Trans i18nKey="pickupQuestionnaire" />
           )}
-        </Alert>
+        </AlertBox>
       )}
     </Box>
   );

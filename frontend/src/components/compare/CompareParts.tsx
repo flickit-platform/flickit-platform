@@ -1,25 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ComparePartItem from "./ComparePartItem";
+import Button from "@mui/material/Button";
+import { Trans } from "react-i18next";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useQuery } from "../../utils/useQuery";
 import QueryData from "../shared/QueryData";
-import Button from "@mui/material/Button";
-import { Trans } from "react-i18next";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
-import { ICompareModel } from "../../types";
-import getAssessmentResult from "../../utils/getAssessmentResult";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "../../providers/CompareProvider";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Chip from "@mui/material/Chip";
+import { styles } from "../../config/styles";
+import AlertBox from "../shared/AlertBox";
 
 const CompareParts = () => {
-  const { compareQueryData } = useCompareParts();
+  const { assessmentIds, assessmentsInfoQueryData } = useCompareParts();
 
   return (
-    <Box>
+    <Box sx={{ pb: { xs: 6, sm: 0 } }}>
+      <Box my={3}>
+        <ProfileField />
+      </Box>
       <Box position={"relative"}>
         <QueryData
-          {...compareQueryData}
+          {...assessmentsInfoQueryData}
+          isDataEmpty={() => false}
           renderLoading={() => {
             return (
               <>
@@ -27,8 +43,12 @@ const CompareParts = () => {
                 <Grid container spacing={3}>
                   {[0, 1, 2, 3].map((index) => {
                     return (
-                      <Grid item xs={12} sm={6} key={index}>
-                        <LoadingSkeleton height="264px" />
+                      <Grid item xs={12} md={6} key={index}>
+                        <LoadingSkeleton
+                          height={
+                            assessmentIds?.length === 0 ? "264px" : "290px"
+                          }
+                        />
                       </Grid>
                     );
                   })}
@@ -36,25 +56,25 @@ const CompareParts = () => {
               </>
             );
           }}
-          render={(data) => {
-            const { assessment_project_compare_list = [] } = data;
-            const canCompare = assessment_project_compare_list.length > 1;
+          render={(res = []) => {
             return (
               <>
                 <CompareButton
-                  disabled={!canCompare}
-                  assessmentIds={extractAssessmentIdsFromCompareList(
-                    assessment_project_compare_list
-                  )}
+                  assessmentIds={assessmentIds as string[]}
+                  disabled={assessmentIds?.length <= 1}
                 />
                 <Grid container spacing={3}>
                   {[0, 1, 2, 3].map((index) => {
-                    const data = assessment_project_compare_list[index];
+                    const data = res[index];
                     return (
-                      <Grid item xs={12} sm={6} key={index}>
+                      <Grid item xs={12} md={6} key={index}>
                         <ComparePartItem
                           data={data}
-                          fetchCompare={compareQueryData.query}
+                          index={index}
+                          disabled={
+                            assessmentIds.length >= index ? false : true
+                          }
+                          fetchAssessmentsInfo={assessmentsInfoQueryData.query}
                         />
                       </Grid>
                     );
@@ -71,18 +91,51 @@ const CompareParts = () => {
 
 const useCompareParts = () => {
   const { service } = useServiceContext();
-  const compareQueryData = useQuery<ICompareModel>({
-    service: (args, config) => service.fetchCompare(args, config),
+  const [searchParams, setSearchParams] = useSearchParams();
+  const assessmentsInfoQueryData = useQuery({
+    service: (args, config) => service.fetchAssessmentsInfo(args, config),
+    runOnMount: false,
+    initialLoading: true,
+    initialData: [],
   });
+  const { assessmentIds, profile: contextProfile } = useCompareContext();
+  const dispatch = useCompareDispatch();
 
-  return { compareQueryData };
+  useEffect(() => {
+    assessmentsInfoQueryData.query({ assessmentIds });
+    setSearchParams(createSearchParams({ assessmentIds } as any), {
+      replace: true,
+    });
+  }, [assessmentIds.join()]);
+
+  useEffect(() => {
+    if (assessmentsInfoQueryData.loaded && !contextProfile) {
+      const profile = assessmentsInfoQueryData.data?.find(
+        (item: any) => item?.assessment_profile
+      );
+      if (profile) {
+        dispatch(compareActions.setProfile(profile.assessment_profile));
+      }
+    }
+  }, [assessmentsInfoQueryData.loaded]);
+
+  useEffect(() => {
+    const assessmentIdsParams = searchParams.getAll("assessmentIds");
+    if (assessmentIdsParams.length == 0 && assessmentIds.length > 0) {
+      assessmentsInfoQueryData.query({ assessmentIds: [] });
+      dispatch(compareActions.setProfile(null));
+      dispatch(compareActions.setAssessmentIds(assessmentIdsParams));
+    }
+  }, [searchParams]);
+
+  return { assessmentIds, assessmentsInfoQueryData };
 };
 
 const CompareButton = (props: {
   disabled?: boolean;
   assessmentIds?: string[];
 }) => {
-  const { disabled = false, assessmentIds } = props;
+  const { assessmentIds, disabled = false } = props;
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -102,44 +155,46 @@ const CompareButton = (props: {
         variant="contained"
         size="large"
         disabled={disabled}
-        sx={{
-          position: "absolute",
-          borderRadius: "100%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%,calc(-50% + 12px))",
-          width: "96px",
-          height: "96px",
-          zIndex: 2,
-        }}
+        sx={{ ...styles.compareButton }}
         onClick={handleClick}
       >
         <Trans i18nKey="compare" />
       </Button>
-      <Box
-        sx={{
-          position: "absolute",
-          borderRadius: "100%",
-          left: "50%",
-          top: "50%",
-          background: "white",
-          transform: "translate(-50%,calc(-50% + 12px))",
-          width: "110px",
-          height: "110px",
-          zIndex: 1,
-        }}
-      />
+      <Box sx={{ ...styles.compareButtonBg }} />
     </>
   );
 };
 
-const extractAssessmentIdsFromCompareList = (
-  compareList: any[] | undefined
-) => {
-  if (!compareList || compareList?.length === 0) {
-    return undefined;
-  }
-  return compareList.map((compareItem) => compareItem.id);
+const ProfileField = () => {
+  const { profile } = useCompareContext();
+  const dispatch = useCompareDispatch();
+  const makeNewComparison = () => {
+    dispatch(compareActions.setAssessmentIds([]));
+    dispatch(compareActions.setProfile(null));
+  };
+  return profile ? (
+    <AlertBox
+      severity="info"
+      action={
+        <Button
+          variant="contained"
+          size="small"
+          color="info"
+          onClick={makeNewComparison}
+        >
+          <Trans i18nKey="newComparison" />
+        </Button>
+      }
+    >
+      <AlertTitle>
+        <Trans i18nKey="assessmentsAreFilteredBy" />{" "}
+        <Chip label={profile.title} />
+      </AlertTitle>
+      <Trans i18nKey="inOrderToSelectAssessmentsFromOtherProfiles" />
+    </AlertBox>
+  ) : (
+    <></>
+  );
 };
 
 export default CompareParts;

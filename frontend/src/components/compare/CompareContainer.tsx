@@ -4,6 +4,7 @@ import { Trans } from "react-i18next";
 import Title from "../shared/Title";
 import CompareParts from "./CompareParts";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
+import { CompareProvider } from "../../providers/CompareProvider";
 
 const CompareContainer = () => {
   return (
@@ -13,7 +14,9 @@ const CompareContainer = () => {
         <Trans i18nKey="compare" />
       </Title>
       <Box mt={3}>
-        <CompareParts />
+        <CompareProvider>
+          <CompareParts />
+        </CompareProvider>
       </Box>
     </Box>
   );

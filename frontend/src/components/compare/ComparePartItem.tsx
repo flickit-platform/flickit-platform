@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
@@ -11,31 +11,58 @@ import CompareItemCEFormDialog from "./CompareItemCEFormDialog";
 import Title from "../shared/Title";
 import { Gauge } from "../shared/charts/Gauge";
 import ProgressChip from "../shared/ProgressChip";
-import { ICompareModel, TQueryFunction } from "../../types";
+import { TId, TQueryFunction } from "../../types";
+import IconButton from "@mui/material/IconButton";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "../../providers/CompareProvider";
 
 interface IComparePartsItemProps {
   data: any;
-  fetchCompare: TQueryFunction<ICompareModel>;
+  index: number;
+  disabled: boolean;
+  fetchAssessmentsInfo: TQueryFunction;
 }
 
 const ComparePartItem = (props: IComparePartsItemProps) => {
-  const { data, fetchCompare } = props;
+  const { data, index, disabled, fetchAssessmentsInfo } = props;
   const dialogProps = useDialog({
     context: {
       data,
       type: data?.id ? "update" : "create",
     },
   });
+
   return (
-    <Paper>
+    <Box
+      display="flex"
+      flexDirection={"column"}
+      minHeight="264px"
+      height="100%"
+      position="relative"
+    >
+      {data?.id && (
+        <DeleteAssessmentIconBtn
+          fetchAssessmentsInfo={fetchAssessmentsInfo}
+          index={index}
+          id={data?.id}
+        />
+      )}
       <Button
         fullWidth
         color="inherit"
+        disabled={disabled}
         sx={{
           p: 3,
+          height: "100%",
           px: 3.5,
           borderRadius: 2,
-          minHeight: "264px",
+
+          border: `2px dashed ${
+            disabled ? "#101c324f" : data?.color?.color_code || "#101c32"
+          }`,
           ...(data
             ? {
                 display: "flex",
@@ -76,8 +103,47 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
           </>
         )}
       </Button>
-      <CompareItemCEFormDialog {...dialogProps} onSubmitForm={fetchCompare} />
-    </Paper>
+      <CompareItemCEFormDialog {...dialogProps} index={index} />
+    </Box>
+  );
+};
+
+const DeleteAssessmentIconBtn = (props: {
+  id: TId;
+  index: number;
+  fetchAssessmentsInfo: TQueryFunction;
+}) => {
+  const { id, index, fetchAssessmentsInfo } = props;
+  const { assessmentIds } = useCompareContext();
+  const dispatch = useCompareDispatch();
+
+  const handleClick = () => {
+    const newAssessmentIds = assessmentIds.filter(
+      (assessmentId) => assessmentId != id
+    );
+
+    if (newAssessmentIds.length === 0) {
+      dispatch(compareActions.setProfile(null));
+    }
+    dispatch(compareActions.setAssessmentIds(newAssessmentIds));
+  };
+
+  return (
+    <IconButton
+      color="error"
+      onClick={handleClick}
+      className="delete-compare-item"
+      sx={{
+        opacity: 0.9,
+        position: "absolute",
+        zIndex: -1,
+        bottom: "10px",
+        left: "10px",
+        right: index % 2 !== 0 ? { xs: "none", md: "10px" } : undefined,
+      }}
+    >
+      <DeleteRoundedIcon />
+    </IconButton>
   );
 };
 

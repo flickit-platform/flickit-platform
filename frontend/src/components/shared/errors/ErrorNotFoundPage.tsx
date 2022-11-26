@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import PageNotFoundImage from "../../../assets/svg/404.svg";
 import { styles } from "../../../config/styles";
 
-const PageNotFoundError = () => {
+const ErrorNotFoundPage = () => {
   return (
     <Box
       sx={{ ...styles.centerCVH }}
@@ -17,4 +17,4 @@ const PageNotFoundError = () => {
   );
 };
 
-export default PageNotFoundError;
+export default ErrorNotFoundPage;
