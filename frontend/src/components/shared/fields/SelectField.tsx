@@ -4,7 +4,7 @@ import InputLabel, { InputLabelProps } from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectProps } from "@mui/material/Select";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, UseFormRegister } from "react-hook-form";
 import getFieldError from "../../../utils/getFieldError";
 import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
 import Box from "@mui/material/Box";
@@ -15,19 +15,44 @@ const selectField = () => {
   return <div>selectField</div>;
 };
 
-interface ISelectFieldUC extends SelectProps {
+interface ISelectFieldUC extends ISelectField {}
+
+const SelectFieldUC = (props: ISelectFieldUC) => {
+  const { name, ...rest } = props;
+
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const { hasError, errorMessage } = getFieldError(errors, name);
+
+  return (
+    <SelectField
+      {...rest}
+      name={name}
+      register={register}
+      helperText={errorMessage as string}
+      error={hasError}
+    />
+  );
+};
+
+interface ISelectField extends SelectProps {
   renderOption?: (option: any) => JSX.Element;
   InputLabelProps?: InputLabelProps;
-  helperText?: string | JSX.Element;
+  helperText?: string | JSX.Element | Element;
   options: any[];
   nullable?: boolean;
   name: string;
   size?: "small" | "medium" | undefined;
   loading?: boolean;
   renderLoading?: () => JSX.Element;
+  error?: boolean;
+  fetchOptions?: any;
+  register?: UseFormRegister<any>;
 }
 
-const SelectFieldUC = (props: ISelectFieldUC) => {
+export const SelectField = (props: ISelectField) => {
   const {
     name,
     required,
@@ -41,20 +66,19 @@ const SelectFieldUC = (props: ISelectFieldUC) => {
     loading = false,
     renderOption = defaultRenderOption,
     renderLoading = defaultRenderLoading,
+    fetchOptions,
+    error,
+    register,
     ...rest
   } = props;
 
   const selectOptions = nullable
     ? [{ id: "", title: "---" }, ...options]
     : options;
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-  const { hasError, errorMessage } = getFieldError(errors, name);
 
+  console.log(defaultValue);
   return (
-    <FormControl fullWidth error={hasError} size={size} variant="outlined">
+    <FormControl fullWidth error={error} size={size} variant="outlined">
       <InputLabel
         required={required}
         id={`select_label_id_${name}`}
@@ -64,9 +88,9 @@ const SelectFieldUC = (props: ISelectFieldUC) => {
       </InputLabel>
       <Select
         {...rest}
+        {...(register ? register(name, { required }) : {})}
         defaultValue={defaultValue}
         labelId={`select_label_id_${name}`}
-        {...register(name, { required })}
         sx={{
           ...(rest?.sx || {}),
           "& .MuiSelect-select": { display: "flex", alignItems: "center" },
@@ -78,9 +102,7 @@ const SelectFieldUC = (props: ISelectFieldUC) => {
               return renderOption(option);
             })}
       </Select>
-      {(errorMessage || helperText) && (
-        <FormHelperText>{(errorMessage || helperText) as any}</FormHelperText>
-      )}
+      {helperText && <FormHelperText>{helperText as any}</FormHelperText>}
     </FormControl>
   );
 };
@@ -109,13 +131,8 @@ const defaultRenderOption = (option: any) => {
 const defaultRenderLoading = () => {
   return [1, 2, 3, 4].map((index) => {
     return (
-      <Box m={0.5}>
-        <LoadingSkeleton
-          key={index}
-          sx={{ borderRadius: 1 }}
-          height="36px"
-          width="100%"
-        />
+      <Box m={0.5} key={index}>
+        <LoadingSkeleton sx={{ borderRadius: 1 }} height="36px" width="100%" />
       </Box>
     );
   });

@@ -374,6 +374,20 @@ export const createService = (
         config
       );
     },
+    fetchAssessmentsInfo(
+      args: { assessmentIds: TId[] },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentIds } = args || {};
+      return axios.post(
+        `/assessment/compareselect/`,
+        { assessment_list_ids: assessmentIds || [] },
+        {
+          ...config,
+          withCredentials: true,
+        }
+      );
+    },
   };
 
   return service;

@@ -4,7 +4,7 @@ import "./config/i18n";
 import useGetSignedInUserInfo from "./utils/useGetSignedInUserInfo";
 import Box from "@mui/material/Box";
 import { styles } from "./config/styles";
-import DataLoadingError from "./components/shared/errors/DataLoadingError";
+import ErrorDataLoading from "./components/shared/errors/ErrorDataLoading";
 import GettingThingsReadyLoading from "./components/shared/loadings/GettingThingsReadyLoading";
 import ErrorBoundary from "./components/shared/errors/ErrorBoundry";
 
@@ -13,7 +13,7 @@ function App() {
 
   return error ? (
     <Box sx={{ ...styles.centerVH }} height="100vh">
-      <DataLoadingError />
+      <ErrorDataLoading />
     </Box>
   ) : (
     <ErrorBoundary>

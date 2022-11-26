@@ -12,14 +12,14 @@ import {
 } from "../../providers/MetricProvider";
 import { MetricCard } from "./MetricCard";
 import { Trans } from "react-i18next";
-import EmptyError from "../../components/shared/errors/EmptyError";
+import ErrorEmptyData from "../../components/shared/errors/ErrorEmptyData";
 import { Review } from "./MetricsReview";
 import { TransitionGroup } from "react-transition-group";
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
 import MetricNextPrev from "./MetricNextPrev";
 import { MetricsProgress } from "./MetricsProgress";
-import { NotFoundOrAccessDenied } from "../../components/shared/errors/NotFoundOrAccessDenied";
+import { ErrorNotFoundOrAccessDenied } from "../../components/shared/errors/ErrorNotFoundOrAccessDenied";
 
 export const MetricContainer = () => {
   const {
@@ -89,14 +89,14 @@ export const MetricContainer = () => {
               </>
             ) : (
               <Box mt={6}>
-                <NotFoundOrAccessDenied />
+                <ErrorNotFoundOrAccessDenied />
               </Box>
             )}
           </Box>
         )}
       </Box>
     ) : (
-      <EmptyError />
+      <ErrorEmptyData />
     )
   ) : null;
 };

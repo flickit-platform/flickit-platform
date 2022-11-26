@@ -5,12 +5,12 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { styles } from "../../../config/styles";
 
-interface IAccessDeniedErrorProps {
+interface IErrorAccessDeniedProps {
   hasAccess: boolean;
 }
 
-const AccessDeniedError = (
-  props: PropsWithChildren<IAccessDeniedErrorProps>
+const ErrorAccessDenied = (
+  props: PropsWithChildren<IErrorAccessDeniedProps>
 ) => {
   const { hasAccess, children } = props;
   return hasAccess ? (
@@ -28,4 +28,4 @@ const AccessDeniedError = (
   );
 };
 
-export default AccessDeniedError;
+export default ErrorAccessDenied;

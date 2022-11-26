@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import Title from "../../components/shared/Title";
 import QueryData from "../../components/shared/QueryData";
-import EmptyError from "../../components/shared/errors/EmptyError";
+import ErrorEmptyData from "../../components/shared/errors/ErrorEmptyData";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import useDialog from "../../utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
@@ -14,7 +14,7 @@ import { LoadingSkeletonOfAssessments } from "../../components/shared/loadings/L
 import toastError from "../../utils/toastError";
 import { ToolbarCreateItemBtn } from "../../components/shared/buttons/ToolbarCreateItemBtn";
 import { ECustomErrorType } from "../../types";
-import { NotFoundOrAccessDenied } from "../../components/shared/errors/NotFoundOrAccessDenied";
+import { ErrorNotFoundOrAccessDenied } from "../../components/shared/errors/ErrorNotFoundOrAccessDenied";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
@@ -29,7 +29,7 @@ const AssessmentContainer = () => {
   return error &&
     (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
       errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
-    <NotFoundOrAccessDenied />
+    <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
       <Title
@@ -63,7 +63,7 @@ const AssessmentContainer = () => {
         {...rest}
         renderLoading={() => <LoadingSkeletonOfAssessments />}
         emptyDataComponent={
-          <EmptyError
+          <ErrorEmptyData
             emptyMessage={<Trans i18nKey="nothingToSeeHere" />}
             suggests={
               <Typography variant="subtitle1" textAlign="center">
