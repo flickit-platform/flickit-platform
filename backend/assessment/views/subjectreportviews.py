@@ -48,7 +48,7 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
         
         if category_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
             response.data['status'] = 'Not Calculated'
-            response.data['no_insight_yet_message'] = 'For insight views, you must answer more metrics'
+            response.data['no_insight_yet_message'] = 'To view SOFTWARE insights, you need to answer more questions'
             response.data['results'] = None
         else:
             self.extract_report_details(response, quality_attribute_values)
