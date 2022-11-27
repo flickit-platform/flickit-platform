@@ -49,8 +49,12 @@ class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
         current_user = self.request.user
         current_user_space_list = current_user.spaces.all()
         query_set = AssessmentProject.objects.none()
+        profile_id = self.request.query_params.get('profile_id')
         for space in current_user_space_list:
-            query_set |= AssessmentProject.objects.filter(space_id=space.id)
+            if profile_id is not None:
+                query_set |= AssessmentProject.objects.filter(space_id=space.id, assessment_profile_id=profile_id)
+            else:
+                query_set |= AssessmentProject.objects.filter(space_id=space.id)
         return query_set
 
 
