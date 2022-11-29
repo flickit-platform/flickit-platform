@@ -292,6 +292,7 @@ export interface IQuestionnairesInfo {
   metric_number: number;
   progress: number;
   last_updated?: string;
+  current_metric_index: number;
   title: string;
   subject: { id: TId; title: string }[];
 }
