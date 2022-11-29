@@ -16,6 +16,7 @@ const CompareResultContainer = () => {
   const compareResultQueryData = useQuery<ICompareResultModel>({
     service: (args = { assessmentIds }, config) =>
       service.fetchCompareResult(args, config),
+    toastError: true,
   });
 
   return (
