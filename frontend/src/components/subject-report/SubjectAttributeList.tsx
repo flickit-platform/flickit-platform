@@ -10,7 +10,7 @@ export const SubjectAttributeList = (props: any) => {
   const { data } = props;
   return (
     <Box mt={15} id="attributes">
-      <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="#attributes">
+      <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="attributes">
         {data?.title} <Trans i18nKey="attributes" />
       </Title>
       <Box mt={3}>

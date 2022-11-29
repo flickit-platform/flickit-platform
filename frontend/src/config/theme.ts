@@ -14,6 +14,10 @@ declare module "@mui/material/styles/createPalette" {
     secondary: string;
     secondaryDark: string;
   }
+  interface PaletteOptions {
+    ml: { primary: React.CSSProperties["color"] };
+    cl: { primary: React.CSSProperties["color"] };
+  }
 }
 
 declare module "@mui/material/styles" {
@@ -29,6 +33,11 @@ declare module "@mui/material/styles" {
     subMedium?: React.CSSProperties;
     subLarge?: React.CSSProperties;
   }
+
+  interface Palette {
+    ml: { primary: React.CSSProperties["color"] };
+    cl: { primary: React.CSSProperties["color"] };
+  }
 }
 
 // Update the Typography's variant prop options
@@ -42,6 +51,8 @@ declare module "@mui/material/Typography" {
 
 const palette = createPalette({
   background: { secondary: "#273248", secondaryDark: "#121d33" },
+  ml: { primary: "#6035A1" },
+  cl: { primary: "#3596A1" },
 });
 
 export const theme = createTheme({

@@ -3,9 +3,14 @@ import { useServiceContext } from "../providers/ServiceProvider";
 
 const useConnectSelectField = (props: {
   url: string;
+  searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
 }) => {
-  const { url, filterOptions = (options) => options } = props;
+  const {
+    url,
+    filterOptions = (options) => options,
+    searchParams = {},
+  } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -26,7 +31,7 @@ const useConnectSelectField = (props: {
     try {
       const {
         data: { results },
-      } = await service.fetchOptions({ url }, { signal });
+      } = await service.fetchOptions({ url }, { signal, params: searchParams });
 
       if (results && Array.isArray(results)) {
         setOptions(filterOptions(results));
