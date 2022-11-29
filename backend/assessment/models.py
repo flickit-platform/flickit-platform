@@ -11,6 +11,13 @@ class Color(models.Model):
     title = models.CharField(max_length=40)
     color_code = models.CharField(max_length=20)
 
+class AssessmentProjectManager(models.Manager):
+    def load(self, assessment_id):
+        try:
+            return AssessmentProject.objects.get(id = assessment_id)
+        except AssessmentProject.DoesNotExist:
+            return None
+
 class AssessmentProject(models.Model):
 
     STATUS_CHOICES = [
@@ -31,6 +38,7 @@ class AssessmentProject(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True)
     color = models.ForeignKey(Color, on_delete=models.PROTECT, null=True)
     space = models.ForeignKey(Space, on_delete=models.PROTECT, null=True)
+    objects = AssessmentProjectManager()
 
     def __str__(self) -> str:
         return self.title
