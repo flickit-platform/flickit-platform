@@ -55,7 +55,7 @@ const SubjectBar = (props: any) => {
           dataKey="ml"
           name={t("maturityLevel")}
           fill="#6035A1"
-          maxBarSize={80}
+          maxBarSize={40}
         />
       </BarChart>
     </ResponsiveContainer>
