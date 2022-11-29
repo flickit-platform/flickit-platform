@@ -1,4 +1,4 @@
-import { TQueryData } from "../types";
+import { TQueryProps } from "../types";
 import { ICustomError } from "./CustomError";
 
 type TCombinedQueryData = {
@@ -10,7 +10,7 @@ type TCombinedQueryData = {
   query: ((...arg: any) => Promise<any>)[];
 };
 
-const combineQueryData = (...args: TQueryData[]) => {
+const combineQueryData = (...args: TQueryProps[]) => {
   const errorObject: undefined | ICustomError[] = [];
   const data: undefined | any[] = [];
   const query: ((...arg: any) => Promise<any>)[] = [];

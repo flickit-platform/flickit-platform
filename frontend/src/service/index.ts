@@ -335,14 +335,19 @@ export const createService = (
         withCredentials: true,
       });
     },
-    compare(
-      args: { assessment_list: string[] },
+    fetchCompareResult(
+      args: { assessmentIds: string[] },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/assessment/loadcompare/`, {
-        ...config,
-        withCredentials: true,
-      });
+      const { assessmentIds } = args || {};
+      return axios.post(
+        `/assessment/compare/`,
+        { assessment_list_ids: assessmentIds || [] },
+        {
+          ...config,
+          withCredentials: true,
+        }
+      );
     },
     saveCompareItem(
       { assessmentId }: { assessmentId: TId },
@@ -372,6 +377,20 @@ export const createService = (
         `/assessment/breadcrumbinfo/`,
         { assessment_id, space_id, category_id },
         config
+      );
+    },
+    fetchAssessmentsInfo(
+      args: { assessmentIds: TId[] },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentIds } = args || {};
+      return axios.post(
+        `/assessment/compareselect/`,
+        { assessment_list_ids: assessmentIds || [] },
+        {
+          ...config,
+          withCredentials: true,
+        }
       );
     },
   };

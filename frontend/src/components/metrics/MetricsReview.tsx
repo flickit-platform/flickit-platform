@@ -48,7 +48,7 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
               variant="contained"
               size="large"
               component={Link}
-              to={"./../../.."}
+              to={"./../../../insights"}
             >
               <Trans i18nKey="viewInsights" />
             </Button>{" "}

@@ -1,11 +1,10 @@
 import React from "react";
-import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Trans } from "react-i18next";
 import Button from "@mui/material/Button";
 import { Link, useLocation } from "react-router-dom";
-import { TId } from "../../types";
 import QANumberIndicator from "../shared/QANumberIndicator";
+import AlertBox from "../shared/AlertBox";
 
 type TQuestionnairesNotCompleteAlertProps = {
   subjectName?: string;
@@ -21,7 +20,7 @@ const QuestionnairesNotCompleteAlert = (
   const { subjectName, to, progress, q, a } = props;
   const location = useLocation();
   return (
-    <Alert
+    <AlertBox
       severity="warning"
       variant="filled"
       sx={{
@@ -78,7 +77,7 @@ const QuestionnairesNotCompleteAlert = (
       ) : (
         <Trans i18nKey="pleaseCompleteAllQuestionnaires" />
       )}
-    </Alert>
+    </AlertBox>
   );
 };
 

@@ -8,6 +8,7 @@ import defToastError, { IToastErrorOptions } from "./toastError";
 interface IUseQueryProps<T, A> {
   initialData?: any;
   runOnMount?: boolean;
+  initialLoading?: boolean;
   toastError?:
     | boolean
     | ((err: ICustomError, options?: IToastErrorOptions) => void);
@@ -25,11 +26,12 @@ export const useQuery = <T extends any = any, A extends any = any>(
     initialData,
     service,
     runOnMount = true,
+    initialLoading = runOnMount,
     toastError = false,
     toastErrorOptions,
   } = props;
   const [data, setData] = useState<T>(initialData);
-  const [loading, setLoading] = useState(() => (runOnMount ? true : false));
+  const [loading, setLoading] = useState(initialLoading);
   const [error, setError] = useState(false);
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined

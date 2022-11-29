@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import { ECustomErrorType } from "../../types";
 import { ICustomError } from "../../utils/CustomError";
-import { NotFoundOrAccessDenied } from "./errors/NotFoundOrAccessDenied";
+import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 
 interface IPermissionControl {
   error: (ICustomError | undefined) | (ICustomError | undefined)[];
@@ -18,7 +18,7 @@ const PermissionControl = (props: PropsWithChildren<IPermissionControl>) => {
   const hasViewPermission = getHasViewPermission(error);
 
   if (!hasViewPermission) {
-    return <NotFoundOrAccessDenied />;
+    return <ErrorNotFoundOrAccessDenied />;
   }
 
   return <>{children}</>;

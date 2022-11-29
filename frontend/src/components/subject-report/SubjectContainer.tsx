@@ -164,7 +164,7 @@ const SubjectTitle = (props: {
       sx={{ opacity: 0.9 }}
       backLink={-1}
       id="insight"
-      inPageLink="#insight"
+      inPageLink="insight"
       sup={
         <SupTitleBreadcrumb
           routes={[

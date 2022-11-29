@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import { styles } from "../../config/styles";
 import { ECustomErrorType } from "../../types";
 import { ICustomError } from "../../utils/CustomError";
-import EmptyError from "./errors/EmptyError";
-import DataLoadingError from "./errors/DataLoadingError";
-import { NotFoundOrAccessDenied } from "./errors/NotFoundOrAccessDenied";
+import ErrorEmptyData from "./errors/ErrorEmptyData";
+import ErrorDataLoading from "./errors/ErrorDataLoading";
+import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 import GettingThingsReadyLoading from "./loadings/GettingThingsReadyLoading";
 import { AxiosRequestConfig } from "axios";
 
@@ -46,7 +46,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
     render,
     queryBatchData = [],
     isDataEmpty,
-    errorComponent = <DataLoadingError />,
+    errorComponent = <ErrorDataLoading />,
     renderLoading = () => loadingComponent,
     loadingComponent = (
       <Box sx={{ ...styles.centerVH }} pt={3}>
@@ -54,7 +54,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
       </Box>
     ),
     renderError = defaultRenderError,
-    emptyDataComponent = <EmptyError />,
+    emptyDataComponent = <ErrorEmptyData />,
     data = reduceData<T>(queryBatchData),
     loading = reduceLoadings<T>(queryBatchData),
     loaded = reduceLoaded<T>(queryBatchData),
@@ -81,7 +81,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
 
 export const defaultRenderError = (
   err: ICustomError | (ICustomError | ICustomError[] | undefined)[] | undefined,
-  errorComponent: JSX.Element = <DataLoadingError />
+  errorComponent: JSX.Element = <ErrorDataLoading />
 ): any => {
   if (!err) {
     return errorComponent;
@@ -105,7 +105,7 @@ export const defaultRenderError = (
     err.type === ECustomErrorType.NOT_FOUND ||
     err.type === ECustomErrorType.ACCESS_DENIED
   ) {
-    return <NotFoundOrAccessDenied />;
+    return <ErrorNotFoundOrAccessDenied />;
   }
   return errorComponent;
 };
