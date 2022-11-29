@@ -12,7 +12,7 @@ from account.permission.spaceperm import IsSpaceMember
 
 from ..services.categoryreport import CategoryReportInfo
 from ..fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
-from ..fixture.metricstatistic import extract_total_progress
+from ..services.metricstatistic import extract_total_progress
 
 class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, IsSpaceMember]

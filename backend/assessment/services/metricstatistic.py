@@ -1,5 +1,5 @@
 from baseinfo.models import MetricCategory, AssessmentSubject
-from .dictionary import Dictionary
+from ..fixture.dictionary import Dictionary
 from ..models import AssessmentResult
 
 
@@ -46,6 +46,16 @@ def extract_total_progress(result):
     total_progress = Dictionary()
     total_answered_metric_number = calculate_answered_metric_by_result(result)
     total_metric_number = calculate_total_metric_number_by_result(result)
+
+    total_progress.add("total_answered_metric_number", total_answered_metric_number)
+    total_progress.add("total_metric_number", total_metric_number)
+    total_progress.add("progress", (total_answered_metric_number/total_metric_number) * 100)
+    return total_progress
+
+def extract_subject_total_progress(result: AssessmentResult, subject: AssessmentSubject):
+    total_progress = Dictionary()
+    total_answered_metric_number = calculate_answered_metric_by_subject(result, subject)
+    total_metric_number = calculate_total_metric_number_by_subject(subject)
 
     total_progress.add("total_answered_metric_number", total_answered_metric_number)
     total_progress.add("total_metric_number", total_metric_number)

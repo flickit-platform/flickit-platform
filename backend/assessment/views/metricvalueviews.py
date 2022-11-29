@@ -10,7 +10,7 @@ from account.permission.spaceperm import IsSpaceMember
 from baseinfo.models import MetricCategory
 from ..serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
 from ..fixture.dictionary import Dictionary
-from ..fixture.metricstatistic import extract_total_progress
+from ..services.metricstatistic import extract_total_progress
 
 
 class MetricValueViewSet(ModelViewSet):
