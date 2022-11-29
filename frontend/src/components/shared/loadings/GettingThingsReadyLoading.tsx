@@ -10,7 +10,7 @@ const GettingThingsReadyLoading = (props: IGettingThingsReadyLoadingProps) => {
   const { ...rest } = props;
   return (
     <Box
-      color="white"
+      color="gray"
       {...rest}
       sx={{
         width: "100%",

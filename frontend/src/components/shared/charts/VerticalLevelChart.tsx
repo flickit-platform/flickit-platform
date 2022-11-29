@@ -1,12 +1,12 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { getColorOfStatus, styles } from "../../../config/styles";
 import Skeleton from "@mui/material/Skeleton";
 import { TStatus } from "../../../types";
 
-interface IVerticalLevelChartProps {
+interface IVerticalLevelChartProps extends BoxProps {
   loading?: boolean;
   title: string;
   status: TStatus;
@@ -15,11 +15,14 @@ interface IVerticalLevelChartProps {
 }
 
 const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
-  const { loading, title, status, cl, ml } = props;
+  const { loading, title, status, cl, ml, ...rest } = props;
   const statusColor = getColorOfStatus(status);
 
   return (
-    <Box sx={{ ...styles.centerCH }}>
+    <Box
+      {...rest}
+      sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}
+    >
       <Box textAlign={"center"}>
         <Typography textAlign={"center"}>
           {loading ? (

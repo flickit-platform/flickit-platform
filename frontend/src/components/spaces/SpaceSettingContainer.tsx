@@ -13,7 +13,7 @@ import { useServiceContext } from "../../providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import { useAuthContext } from "../../providers/AuthProvider";
-import AccessDeniedError from "../shared/errors/AccessDeniedError";
+import ErrorAccessDenied from "../shared/errors/ErrorAccessDenied";
 import { styles } from "../../config/styles";
 import { ISpaceModel } from "../../types";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
@@ -87,9 +87,9 @@ function SpaceSettings(props: { isOwner: boolean }) {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ p: { xs: 1, sm: 3 } }}>
-          <AccessDeniedError hasAccess={isOwner}>
+          <ErrorAccessDenied hasAccess={isOwner}>
             <SpaceMembers />
-          </AccessDeniedError>
+          </ErrorAccessDenied>
         </TabPanel>
       </TabContext>
     </Box>

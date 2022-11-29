@@ -16,7 +16,7 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   backIconProps?: SvgIconProps;
   size?: "small" | "medium" | "large";
   wrapperProps?: BoxProps;
-  inPageLink?: `#${string}`;
+  inPageLink?: string;
 }
 
 const Title = (props: ITitle) => {
@@ -113,11 +113,12 @@ const Title = (props: ITitle) => {
         ) : (
           <></>
         )}
-        <Box sx={{ ...styles.centerV }}>
+        <Box sx={{ ...styles.centerV, display: { xs: "block", sm: "flex" } }}>
           {children}
           {inPageLink && (
             <Link
-              href={inPageLink}
+              href={`#${inPageLink}`}
+              id={inPageLink}
               className="title-hash-link"
               sx={{
                 display: "flex",
