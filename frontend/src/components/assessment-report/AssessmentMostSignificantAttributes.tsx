@@ -17,7 +17,8 @@ export const AssessmentMostSignificantAttributes = (
   props: IAssessmentMostSignificantAttributesProps
 ) => {
   const { most_significant_items = [], isWeakness } = props;
-  const isEmpty = most_significant_items.length === 0;
+  const isEmpty =
+    most_significant_items?.length === 0 || !most_significant_items;
 
   return (
     <Paper sx={{ height: "100%", borderRadius: 3 }} elevation={3}>

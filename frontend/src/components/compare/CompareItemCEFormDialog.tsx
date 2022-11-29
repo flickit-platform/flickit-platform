@@ -19,6 +19,7 @@ import {
   useCompareContext,
   useCompareDispatch,
 } from "../../providers/CompareProvider";
+import hasStatus from "../../utils/hasStatus";
 
 interface ICompareItemCEFormDialog
   extends Omit<ICompareItemCEForm, "closeDialog"> {}
@@ -97,8 +98,9 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               filterOptions: (options) =>
                 options.filter(
                   (option) =>
-                    !assessmentIds.includes(option?.id) ||
-                    option?.id == defaultValues?.id
+                    (!assessmentIds.includes(option?.id) ||
+                      option?.id == defaultValues?.id) &&
+                    hasStatus(option.status)
                 ),
             })}
             required={true}
