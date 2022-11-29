@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-from ..fixture.metricstatistic import extract_total_progress
+from ..services.metricstatistic import extract_total_progress
 from ..models import AssessmentProject
 from .commonserializers import ColorSerilizer
 from baseinfo.serializers import AssessmentProfileSerilizer, AssessmentProfileSimpleSerilizer

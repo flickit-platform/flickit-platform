@@ -24,7 +24,7 @@ class QuestionaryView(APIView):
     def get (self, request, assessment_project_id):
         assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
         result_id = assessment_project.get_assessment_result().id
-        if self.is_qulaity_attribute_value_exists(result_id) == False:
+        if not self.is_qulaity_attribute_value_exists(result_id):
             self.init_quality_attribute_value(result_id)
 
         

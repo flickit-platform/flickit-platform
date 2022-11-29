@@ -12,6 +12,8 @@ from account.permission.spaceperm import IsSpaceMember
 from ..serializers.projectserializers import AssessmentProjecCreateSerilizer, AssessmentProjectListSerilizer,\
      AssessmentProjectSimpleSerilizer, AssessmentProjectCompareSerilizer
 
+from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME
+
 class AssessmentProjectViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ('create', 'update'):
@@ -39,7 +41,7 @@ class AssessmentProjectBySpaceViewSet(ModelViewSet):
     def get_queryset(self):
         return AssessmentProject.objects.filter(space_id=self.kwargs['space_pk'])
 
-# TODO filter by profile
+
 class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
     permission_classes=[IsAuthenticated]
     def get_serializer_class(self):
@@ -60,14 +62,14 @@ class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
 
 
 class AssessmentProjectSelectForCompareView(APIView):
-    # TODO check authorization
+    permission_classes=[IsAuthenticated, IsSpaceMember]
     def post(self, request):
-        assessment_list_ids = request.data.get('assessment_list_ids')
+        assessment_list_ids = request.data.get(ASSESSMENT_LIST_IDS_PARAM_NAME)
         assessment_list = []
         for assessment_id in assessment_list_ids:
             try:
                 assessment = AssessmentProject.objects.get(id=assessment_id)
                 assessment_list.append(AssessmentProjectCompareSerilizer(assessment).data)
             except AssessmentProject.DoesNotExist:
-                return Response({'error: The assessment_id {} is invalid'.format(assessment_id)},status=status.HTTP_404_NOT_FOUND)
+                return Response({'error: The assessment_id {id} is invalid'.format(id=assessment_id)},status=status.HTTP_404_NOT_FOUND)
         return Response(assessment_list)
