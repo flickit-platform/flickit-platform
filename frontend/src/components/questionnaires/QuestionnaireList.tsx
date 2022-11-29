@@ -7,7 +7,7 @@ import {
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   TId,
-  TQueryData,
+  TQueryProps,
   TQueryFunction,
 } from "../../types";
 import LoadingSkeletonOfQuestionnaires from "../shared/loadings/LoadingSkeletonOfQuestionnaires";
@@ -20,8 +20,8 @@ import { useSearchParams } from "react-router-dom";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
-  questionnaireQueryData: TQueryData<IQuestionnairesModel>;
-  pageQueryData: TQueryData<IQuestionnairesPageDataModel>;
+  questionnaireQueryData: TQueryProps<IQuestionnairesModel>;
+  pageQueryData: TQueryProps<IQuestionnairesPageDataModel>;
 }
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {

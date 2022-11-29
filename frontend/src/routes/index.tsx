@@ -97,10 +97,7 @@ const Routes = () => {
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
           <Route path="/compare" element={<CompareScreen />} />
-          <Route
-            path="/compare/compare-result"
-            element={<CompareResultScreen />}
-          />
+          <Route path="/compare/result" element={<CompareResultScreen />} />
         </Route>
         <Route path="*" element={<ErrorNotFoundPage />} />
       </RrdRoutes>

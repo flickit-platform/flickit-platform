@@ -12,9 +12,6 @@ const SubjectOverallInsight = (props: any) => {
   const { title = "" } = data;
   return (
     <Box>
-      {/* <Title sx={{ opacity: 0.9 }} inPageLink="#insight">
-        <Trans i18nKey="overallStatusOf" values={{ title }} />
-      </Title> */}
       <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }}>
         <OverallInsightText {...props} />
         <Box sx={{ pl: { xs: 0, sm: 3, md: 6 }, mt: { xs: 4, sm: 0 } }}>
@@ -105,14 +102,16 @@ const OverallInsightText = (props: any) => {
   );
 };
 
-const MostSigItems = ({
+export const MostSigItems = ({
   loading,
   att,
+  items,
   color,
   text,
 }: {
   loading: boolean;
-  att: any[];
+  att?: any[];
+  items?: string[];
   color: string;
   text: string;
 }) => {
@@ -126,15 +125,15 @@ const MostSigItems = ({
       >
         <Trans i18nKey={text} />
       </Title>
-      <Box p={1}>
+      <ul style={{ marginBlockStart: "8px", paddingInlineStart: "26px" }}>
         {loading ? (
           <MostSigItemLoadingSkeleton />
         ) : (
-          att?.map((attribute: any, index: any) => {
-            return <Typography key={index}>{attribute?.title}</Typography>;
+          (att || items)?.map((item: any, index: any) => {
+            return <li key={index}>{att ? item?.title : item}</li>;
           })
         )}
-      </Box>
+      </ul>
     </>
   );
 };

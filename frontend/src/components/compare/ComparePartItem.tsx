@@ -136,9 +136,9 @@ const DeleteAssessmentIconBtn = (props: {
       sx={{
         opacity: 0.9,
         position: "absolute",
-        zIndex: -1,
+        zIndex: 2,
         bottom: "10px",
-        left: "10px",
+        left: index % 2 !== 0 ? undefined : "10px",
         right: index % 2 !== 0 ? { xs: "none", md: "10px" } : undefined,
       }}
     >
