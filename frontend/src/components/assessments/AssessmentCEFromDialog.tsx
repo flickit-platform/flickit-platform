@@ -108,7 +108,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           </Grid>
           <Grid item xs={12} md={4}>
             <SelectFieldUC
-              {...useConnectSelectField("/assessment/colors/")}
+              {...useConnectSelectField({ url: "/assessment/colors/" })}
               name="color"
               defaultValue={defaultValues?.color?.id || ""}
               label={<Trans i18nKey="color" />}

@@ -126,6 +126,13 @@ export interface IAssessmentProfileModel {
   >;
 }
 
+export interface IProfile {
+  code: string;
+  description: string;
+  id: TId;
+  title: string;
+}
+
 export interface IAssessmentResult {
   assessment_project: string;
   id: TId;
@@ -285,7 +292,6 @@ export interface IQuestionnairesInfo {
   metric_number: number;
   progress: number;
   last_updated?: string;
-  current_metric_index: number;
   title: string;
   subject: { id: TId; title: string }[];
 }
@@ -319,7 +325,7 @@ export type TQueryFunction<T extends any = any, A extends any = any> = (
   config?: AxiosRequestConfig<any> | undefined
 ) => Promise<T>;
 
-export type TQueryData<T extends any = any, A extends any = any> = {
+export type TQueryProps<T extends any = any, A extends any = any> = {
   data: T;
   loading: boolean;
   loaded: boolean;
@@ -339,7 +345,7 @@ export interface IQuestionnairesPageDataModel {
 
 export interface IDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: () => void;
+  onSubmitForm?: (args: any) => void;
   openDialog?: any;
   context?: IDialogContext;
 }
@@ -353,4 +359,35 @@ export type TDialogContextType = "update" | "create";
 
 export interface ICompareModel {
   assessment_project_compare_list: any[];
+}
+
+export interface ICompareResultBaseInfo {
+  id: TId;
+  title: string;
+  status: TStatus;
+  profile: string;
+}
+export type TCompareResultBaseInfos = ICompareResultBaseInfo[];
+
+export interface ICompareResultCompareItems {
+  title: string;
+  items: any[];
+}
+
+export type TCompareResultAttributeInfo = {
+  title: string;
+} & {
+  [key: string]: number;
+};
+
+export interface ICompareResultSubject {
+  title: string;
+  subject_report_info: ICompareResultCompareItems[];
+  attributes_info: TCompareResultAttributeInfo[];
+}
+
+export interface ICompareResultModel {
+  base_infos: TCompareResultBaseInfos;
+  overall_insights: ICompareResultCompareItems[];
+  subjects: ICompareResultSubject[];
 }

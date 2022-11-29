@@ -150,5 +150,20 @@
   "selectAssessment": "Select assessment",
   "changeAssessment": "Change assessment",
   "addToCompareList": "Add to compare list",
-  "statusIsEvaluatedAs": "Status is evaluated as"
+  "statusIsEvaluatedAs": "Status is evaluated as",
+  "changeSelectedAssessment": "Change selected assessment",
+  "assessmentsAreFilteredBy": "Assessments are filtered by",
+  "inOrderToSelectAssessmentsFromOtherProfiles": "In order to select assessments from other profiles make a new comparison.",
+  "newComparison": "New comparison",
+  "addToCompare": "Add to compare",
+  "theResultOfComparing": "The result of comparing",
+  "numberOfSubjects": "Number of subjects",
+  "numberOf": "Number of",
+  "completedQuestionnaires": "Completed questionnaires",
+  "questionnaires": "Questionnaires",
+  "questions": "Questions",
+  "answers": "Answers",
+  "generalSpecification": "General specification",
+  "allOfTheSelectedAssessmentsUse": "All of the selected assessments use",
+  "whichHasNamed": "Which has {{value}} subjects named"
 }

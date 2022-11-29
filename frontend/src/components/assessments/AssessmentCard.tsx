@@ -3,7 +3,12 @@ import { Gauge } from "../../components/shared/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "../../utils/useMenu";
 import { useServiceContext } from "../../providers/ServiceProvider";
-import { Link, useLocation } from "react-router-dom";
+import {
+  createSearchParams,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
@@ -23,6 +28,7 @@ import QueryStatsRounded from "@mui/icons-material/QueryStatsRounded";
 import hasStatus from "../../utils/hasStatus";
 import { toast } from "react-toastify";
 import { t } from "i18next";
+import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 
 interface IAssessmentCardProps {
   item: IAssessment;
@@ -145,6 +151,7 @@ const Actions = (props: {
   const { deleteAssessment, item, dialogProps, abortController } = props;
   const [editLoading, setEditLoading] = React.useState(false);
   const { service } = useServiceContext();
+  const navigate = useNavigate();
 
   const deleteItem = async (e: any) => {
     try {
@@ -173,23 +180,52 @@ const Actions = (props: {
       });
   };
 
+  const addToCompare = (e: any) => {
+    navigate({
+      pathname: "/compare",
+      search: createSearchParams({
+        assessmentIds: item.id as string,
+      }).toString(),
+    });
+  };
+
   return (
     <MoreActions
       {...useMenu()}
       loading={editLoading}
       boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
-      items={[
-        {
-          icon: <EditRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="edit" />,
-          onClick: openEditDialog,
-        },
-        {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
-          onClick: deleteItem,
-        },
-      ]}
+      items={
+        hasStatus(item.status)
+          ? [
+              {
+                icon: <EditRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="edit" />,
+                onClick: openEditDialog,
+              },
+              {
+                icon: <CompareRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="addToCompare" />,
+                onClick: addToCompare,
+              },
+              {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+              },
+            ]
+          : [
+              {
+                icon: <EditRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="edit" />,
+                onClick: openEditDialog,
+              },
+              {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+              },
+            ]
+      }
     />
   );
 };
