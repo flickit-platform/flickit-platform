@@ -25,9 +25,15 @@ class CompareAssessmentView(APIView):
         subjects = []
         if not self.assessment_ids_is_valid(assessment_list_ids):
             error_message = 'No project exists with the given assessment_id'
-            return Response({'message': error_message}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         assessment_projects = self.extract_assessments(assessment_list_ids)
+
+        for project in assessment_projects:
+            if not project.status:
+                error_message = 'The assessment with title {} is not evaluated.'.format(project.title)
+                return Response({'message': error_message}, status=status.HTTP_404_NOT_FOUND)
+
 
         # extract base info
         for assessment_project in assessment_projects:
