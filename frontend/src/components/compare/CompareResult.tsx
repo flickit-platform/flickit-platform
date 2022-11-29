@@ -1,11 +1,13 @@
 import React from "react";
-import { Alert, Chip, CircularProgress, Link, Typography } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
+import MuiLink from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Trans } from "react-i18next";
 import { getColorOfStatus, styles } from "../../config/styles";
 import { Gauge } from "../shared/charts/Gauge";
-import ProgressChip from "../shared/ProgressChip";
 import Title from "../shared/Title";
 import {
   Bar,
@@ -17,14 +19,12 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import { t } from "i18next";
 import {
   ICompareResultBaseInfo,
   ICompareResultCompareItems,
   ICompareResultModel,
   ICompareResultSubject,
   ITotalProgress,
-  ITotalProgressModel,
   TStatus,
 } from "../../types";
 import AlertBox from "../shared/AlertBox";
@@ -82,9 +82,9 @@ const GeneralInfo = (props: { data: ICompareResultModel }) => {
       <Chip sx={{ mx: 0.6 }} label={profile} />{" "}
       <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
       {subjects.map((subject) => (
-        <Link href={`#${subject.title}`} sx={{ mx: 0.6 }}>
+        <MuiLink href={`#${subject.title}`} sx={{ mx: 0.6 }}>
           {subject.title}
-        </Link>
+        </MuiLink>
       ))}
     </AlertBox>
   );

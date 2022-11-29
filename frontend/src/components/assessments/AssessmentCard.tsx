@@ -194,23 +194,38 @@ const Actions = (props: {
       {...useMenu()}
       loading={editLoading}
       boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
-      items={[
-        {
-          icon: <EditRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="edit" />,
-          onClick: openEditDialog,
-        },
-        {
-          icon: <CompareRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="addToCompare" />,
-          onClick: addToCompare,
-        },
-        {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
-          onClick: deleteItem,
-        },
-      ]}
+      items={
+        hasStatus(item.status)
+          ? [
+              {
+                icon: <EditRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="edit" />,
+                onClick: openEditDialog,
+              },
+              {
+                icon: <CompareRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="addToCompare" />,
+                onClick: addToCompare,
+              },
+              {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+              },
+            ]
+          : [
+              {
+                icon: <EditRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="edit" />,
+                onClick: openEditDialog,
+              },
+              {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+              },
+            ]
+      }
     />
   );
 };
