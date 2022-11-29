@@ -335,14 +335,19 @@ export const createService = (
         withCredentials: true,
       });
     },
-    compare(
-      args: { assessment_list: string[] },
+    fetchCompareResult(
+      args: { assessmentIds: string[] },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/assessment/loadcompare/`, {
-        ...config,
-        withCredentials: true,
-      });
+      const { assessmentIds } = args || {};
+      return axios.post(
+        `/assessment/compare/`,
+        { assessment_list_ids: assessmentIds || [] },
+        {
+          ...config,
+          withCredentials: true,
+        }
+      );
     },
     saveCompareItem(
       { assessmentId }: { assessmentId: TId },

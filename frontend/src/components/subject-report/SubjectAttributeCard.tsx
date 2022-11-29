@@ -98,8 +98,8 @@ const AttributeStatusBarContainer = (props: any) => {
     >
       <Box display={"flex"} flex={1}>
         <Box width="100%">
-          <AttributeStatusBar ml={ml} isMl={true} />
-          <AttributeStatusBar cl={cl} />
+          {ml && <AttributeStatusBar ml={ml} isMl={true} />}
+          {cl && <AttributeStatusBar cl={cl} />}
         </Box>
       </Box>
       <Box
@@ -124,8 +124,8 @@ const AttributeStatusBarContainer = (props: any) => {
   );
 };
 
-const AttributeStatusBar = (props: any) => {
-  const { ml, cl, isMl } = props;
+export const AttributeStatusBar = (props: any) => {
+  const { ml, cl, isMl, isBasic } = props;
   const width = isMl
     ? ml
       ? `${(ml / 5) * 100}%`
@@ -140,8 +140,8 @@ const AttributeStatusBar = (props: any) => {
       sx={{
         my: 0.5,
         background: "gray",
-        borderTopRightRadius: "8px",
-        borderBottomRightRadius: "8px",
+        borderTopRightRadius: 1,
+        borderBottomRightRadius: 1,
         position: "relative",
         color: "white",
         display: "flex",
@@ -153,8 +153,8 @@ const AttributeStatusBar = (props: any) => {
         width={width}
         sx={{
           background: isMl ? "#6035A1" : "#3596A1",
-          borderTopRightRadius: "8px",
-          borderBottomRightRadius: "8px",
+          borderTopRightRadius: 1,
+          borderBottomRightRadius: 1,
         }}
       ></Box>
       <Typography

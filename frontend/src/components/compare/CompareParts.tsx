@@ -23,68 +23,73 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Chip from "@mui/material/Chip";
 import { styles } from "../../config/styles";
 import AlertBox from "../shared/AlertBox";
+import PermissionControl from "../shared/PermissionControl";
 
 const CompareParts = () => {
   const { assessmentIds, assessmentsInfoQueryData } = useCompareParts();
 
   return (
     <Box sx={{ pb: { xs: 6, sm: 0 } }}>
-      <Box my={3}>
-        <ProfileField />
-      </Box>
-      <Box position={"relative"}>
-        <QueryData
-          {...assessmentsInfoQueryData}
-          isDataEmpty={() => false}
-          renderLoading={() => {
-            return (
-              <>
-                <CompareButton disabled={true} />
-                <Grid container spacing={3}>
-                  {[0, 1, 2, 3].map((index) => {
-                    return (
-                      <Grid item xs={12} md={6} key={index}>
-                        <LoadingSkeleton
-                          height={
-                            assessmentIds?.length === 0 ? "264px" : "290px"
-                          }
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </>
-            );
-          }}
-          render={(res = []) => {
-            return (
-              <>
-                <CompareButton
-                  assessmentIds={assessmentIds as string[]}
-                  disabled={assessmentIds?.length <= 1}
-                />
-                <Grid container spacing={3}>
-                  {[0, 1, 2, 3].map((index) => {
-                    const data = res[index];
-                    return (
-                      <Grid item xs={12} md={6} key={index}>
-                        <ComparePartItem
-                          data={data}
-                          index={index}
-                          disabled={
-                            assessmentIds.length >= index ? false : true
-                          }
-                          fetchAssessmentsInfo={assessmentsInfoQueryData.query}
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </>
-            );
-          }}
-        />
-      </Box>
+      <PermissionControl error={assessmentsInfoQueryData.errorObject}>
+        <Box my={3}>
+          <ProfileField />
+        </Box>
+        <Box position={"relative"}>
+          <QueryData
+            {...assessmentsInfoQueryData}
+            isDataEmpty={() => false}
+            renderLoading={() => {
+              return (
+                <>
+                  <CompareButton disabled={true} />
+                  <Grid container spacing={3}>
+                    {[0, 1, 2, 3].map((index) => {
+                      return (
+                        <Grid item xs={12} md={6} key={index}>
+                          <LoadingSkeleton
+                            height={
+                              assessmentIds?.length === 0 ? "264px" : "290px"
+                            }
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </>
+              );
+            }}
+            render={(res = []) => {
+              return (
+                <>
+                  <CompareButton
+                    assessmentIds={assessmentIds as string[]}
+                    disabled={assessmentIds?.length <= 1}
+                  />
+                  <Grid container spacing={3}>
+                    {[0, 1, 2, 3].map((index) => {
+                      const data = res[index];
+                      return (
+                        <Grid item xs={12} md={6} key={index}>
+                          <ComparePartItem
+                            data={data}
+                            index={index}
+                            disabled={
+                              assessmentIds.length >= index ? false : true
+                            }
+                            fetchAssessmentsInfo={
+                              assessmentsInfoQueryData.query
+                            }
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </>
+              );
+            }}
+          />
+        </Box>
+      </PermissionControl>
     </Box>
   );
 };
@@ -141,7 +146,7 @@ const CompareButton = (props: {
   const handleClick = () => {
     if (assessmentIds) {
       navigate({
-        pathname: "compare-result",
+        pathname: "result",
         search: createSearchParams({
           assessmentIds,
         }).toString(),

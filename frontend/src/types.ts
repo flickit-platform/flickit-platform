@@ -325,7 +325,7 @@ export type TQueryFunction<T extends any = any, A extends any = any> = (
   config?: AxiosRequestConfig<any> | undefined
 ) => Promise<T>;
 
-export type TQueryData<T extends any = any, A extends any = any> = {
+export type TQueryProps<T extends any = any, A extends any = any> = {
   data: T;
   loading: boolean;
   loaded: boolean;
@@ -359,4 +359,35 @@ export type TDialogContextType = "update" | "create";
 
 export interface ICompareModel {
   assessment_project_compare_list: any[];
+}
+
+export interface ICompareResultBaseInfo {
+  id: TId;
+  title: string;
+  status: TStatus;
+  profile: string;
+}
+export type TCompareResultBaseInfos = ICompareResultBaseInfo[];
+
+export interface ICompareResultCompareItems {
+  title: string;
+  items: any[];
+}
+
+export type TCompareResultAttributeInfo = {
+  title: string;
+} & {
+  [key: string]: number;
+};
+
+export interface ICompareResultSubject {
+  title: string;
+  subject_report_info: ICompareResultCompareItems[];
+  attributes_info: TCompareResultAttributeInfo[];
+}
+
+export interface ICompareResultModel {
+  base_infos: TCompareResultBaseInfos;
+  overall_insights: ICompareResultCompareItems[];
+  subjects: ICompareResultSubject[];
 }

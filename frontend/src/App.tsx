@@ -18,7 +18,7 @@ function App() {
   ) : (
     <ErrorBoundary>
       {loading ? (
-        <Box width="100%" sx={{ minHeight: "100vh", ...styles.centerVH }}>
+        <Box width="100%" sx={{ mt: 10, ...styles.centerVH }}>
           <GettingThingsReadyLoading color="gray" />
         </Box>
       ) : (

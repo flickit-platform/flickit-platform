@@ -66,7 +66,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { type, data } = context || {};
   const defaultValues = type === "update" ? data || {} : {};
   const formMethods = useForm({ shouldUnregister: true });
-  const { assessmentIds } = useCompareContext();
+  const { assessmentIds, profile } = useCompareContext();
   const dispatch = useCompareDispatch();
 
   const onSubmit = (data: any) => {
@@ -82,7 +82,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
       closeDialog();
     }
   };
-  console.log("dd", defaultValues?.id);
+
   return (
     <FormProviderWithForm
       formMethods={formMethods}
@@ -93,6 +93,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
           <SelectFieldUC
             {...useConnectSelectField({
               url: `/assessment/currentuserprojects/`,
+              searchParams: { profile_id: profile?.id },
               filterOptions: (options) =>
                 options.filter(
                   (option) =>

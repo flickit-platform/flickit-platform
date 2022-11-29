@@ -22,7 +22,7 @@ export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
         <Title
           borderBottom={true}
           sx={{ borderBottomColor: colorCode }}
-          inPageLink="#subjects"
+          inPageLink="subjects"
         >
           <Trans i18nKey="subjects" />
         </Title>

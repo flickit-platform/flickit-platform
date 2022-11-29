@@ -34,7 +34,7 @@ const AuthLayout = (props: PropsWithChildren<{}>) => {
         <React.Suspense
           fallback={
             <Box mt={6}>
-              <GettingThingsReadyLoading />
+              <GettingThingsReadyLoading color="white" />
             </Box>
           }
         >

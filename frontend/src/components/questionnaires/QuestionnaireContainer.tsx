@@ -12,7 +12,7 @@ import {
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   ITotalProgressModel,
-  TQueryData,
+  TQueryProps,
 } from "../../types";
 import Title from "../shared/Title";
 import Alert from "@mui/material/Alert";
