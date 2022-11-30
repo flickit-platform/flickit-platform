@@ -44,6 +44,16 @@ const commonStyles = {
       color: (theme) => theme.palette.primary.dark,
     },
   }),
+  circularProgressBackgroundStroke: style({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    [`& .MuiCircularProgress-circle`]: {
+      strokeLinecap: "round",
+    },
+    boxShadow: "0 0 4px #bbb7b7 inset",
+    borderRadius: "100%",
+  }),
 };
 
 const cards = {
@@ -96,10 +106,19 @@ const buttons = {
   }),
 };
 
+const compare = {
+  compareResultBorder: style({
+    "&:not(:last-of-type) > div": {
+      borderRight: "1px solid #e7e7e7",
+    },
+  }),
+};
+
 export const styles = {
   ...commonStyles,
   ...auth,
   ...buttons,
+  ...compare,
   cards,
 };
 
