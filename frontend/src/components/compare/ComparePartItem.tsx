@@ -57,10 +57,10 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
         sx={{
           p: 3,
           height: "100%",
-          px: 3.5,
+          px: 3.8,
           borderRadius: 2,
 
-          border: `2px dashed ${
+          border: `1.5px dashed ${
             disabled ? "#101c324f" : data?.color?.color_code || "#101c32"
           }`,
           ...(data
@@ -98,7 +98,10 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
           <>
             <AddBoxRoundedIcon sx={{ mb: 0.5 }} fontSize="large" />
             <Typography textTransform={"none"} textAlign="center">
-              <Trans i18nKey="selectAssessmentForComparison" />
+              <Trans
+                i18nKey="selectAssessmentForComparison"
+                values={{ value: numberMap[index] }}
+              />
             </Typography>
           </>
         )}
@@ -107,6 +110,8 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
     </Box>
   );
 };
+
+const numberMap = ["first", "second", "third", "fourth"];
 
 const DeleteAssessmentIconBtn = (props: {
   id: TId;
