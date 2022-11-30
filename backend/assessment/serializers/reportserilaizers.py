@@ -79,10 +79,10 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
 
 
     def get_most_significant_strength_atts(self, result: AssessmentResult):
-        extract_most_significant_strength_atts(result)
+        return extract_most_significant_strength_atts(result)
         
     def get_most_significant_weaknessness_atts(self, result: AssessmentResult):
-        extract_most_significant_weaknessness_atts(result)
+        return extract_most_significant_weaknessness_atts(result)
     
     def calculate_total_status(self, result: AssessmentResult):
         if result.quality_attribute_values.all():
