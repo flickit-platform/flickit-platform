@@ -32,7 +32,7 @@ class CompareAssessmentView(APIView):
         for project in assessment_projects:
             if not project.status:
                 error_message = 'The assessment with title {} is not evaluated.'.format(project.title)
-                return Response({'message': error_message}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'message': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
         # extract base info
@@ -103,7 +103,7 @@ class CompareAssessmentView(APIView):
 
     def extract_strength_info(self, assessment_projects, subject):
         strength_infos = Dictionary()
-        strength_infos.add('title', 'Strength')
+        strength_infos.add('title', 'Strengths')
         strength_list = []
 
         
@@ -120,7 +120,7 @@ class CompareAssessmentView(APIView):
 
     def extract_weakness_info(self, assessment_projects, subject):
         weakness_infos = Dictionary()
-        weakness_infos.add('title', 'Weakness')
+        weakness_infos.add('title', 'Weaknesses')
         weakness_list = []
 
         
