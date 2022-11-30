@@ -20,6 +20,7 @@ import {
   useCompareDispatch,
 } from "../../providers/CompareProvider";
 import hasStatus from "../../utils/hasStatus";
+import AlertBox from "../shared/AlertBox";
 
 interface ICompareItemCEFormDialog
   extends Omit<ICompareItemCEForm, "closeDialog"> {}
@@ -52,6 +53,9 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
         </>
       }
     >
+      <AlertBox severity="info">
+        <Trans i18nKey="onlyAssessmentsWithEvaluatedStatus" />
+      </AlertBox>
       <CompareItemCEForm {...props} closeDialog={closeDialog} />
     </CEDialog>
   );
