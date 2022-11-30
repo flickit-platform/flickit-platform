@@ -252,7 +252,7 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
           sx={{ mt: 3 }}
           variant="contained"
           component={Link}
-          to={`./../questionnaires?subject_pk=${subjectId}`}
+          to={`./../../questionnaires?subject_pk=${subjectId}`}
         >
           {title} <Trans i18nKey="questionnaires" />
         </Button>

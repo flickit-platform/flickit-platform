@@ -14,14 +14,14 @@ const AlertBox = (props: IAlertBox) => {
       {...rest}
       action={!isSmall ? action : undefined}
       sx={
-        isSmall
+        isSmall && action
           ? { ...(rest.sx || {}), "& .MuiAlert-message": { width: "100%" } }
           : rest.sx
       }
     >
       <Box sx={isSmall ? { flexDirection: "column", width: "100%" } : {}}>
         {children}
-        {isSmall ? (
+        {isSmall && action ? (
           <Box
             sx={{
               pt: { xs: 1.5, md: 0.5 },

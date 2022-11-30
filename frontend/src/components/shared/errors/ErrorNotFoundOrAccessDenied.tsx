@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { styles } from "../../../config/styles";
-import ErrorNotFoundOrAccessDeniedImage from "../../../assets/svg/404-withmsg.svg";
+import ErrorNotFoundOrAccessDeniedImage from "../../../assets/svg/notFoundOrAccessDenied.svg";
 
 export const ErrorNotFoundOrAccessDenied = () => {
   return (

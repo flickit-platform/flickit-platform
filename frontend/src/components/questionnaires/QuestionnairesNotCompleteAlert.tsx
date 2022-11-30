@@ -19,6 +19,7 @@ const QuestionnairesNotCompleteAlert = (
 ) => {
   const { subjectName, to, progress, q, a } = props;
   const location = useLocation();
+  console.log(to);
   return (
     <AlertBox
       severity="warning"
@@ -46,7 +47,7 @@ const QuestionnairesNotCompleteAlert = (
               state={location}
               to={to}
             >
-              {subjectName} questionnaires{" "}
+              {subjectName} <Trans i18nKey="questionnaires" />{" "}
               {q && a && (
                 <QANumberIndicator
                   q={q}
