@@ -43,32 +43,13 @@ const CompareResultContainer = () => {
                 </Button>
               }
             >
-              <Trans i18nKey="theResultOfComparing" />{" "}
-              <Box sx={{ ml: { xs: 0, sm: 1 } }} display="inline">
-                {data.base_infos.map((item: any, index: number) => (
-                  <>
-                    {item.title}
-                    {getConjunction(data.base_infos?.length, index)}{" "}
-                  </>
-                ))}
-              </Box>
+              <Trans i18nKey="comparisonResult" />{" "}
             </Title>
             <CompareResult data={data} />{" "}
           </Box>
         );
       }}
     />
-  );
-};
-
-const getConjunction = (length: number, index: number) => {
-  return index < length - 1 ? (
-    <>
-      {" "}
-      <Trans i18nKey="and" />
-    </>
-  ) : (
-    ""
   );
 };
 
