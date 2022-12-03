@@ -170,5 +170,6 @@
   "and": "and",
   "attributes": "Attributes",
   "subjectAttributes": "{{subject}} attributes",
-  "editComparisonItems": "Edit comparison items"
+  "editComparisonItems": "Edit comparison items",
+  "comparisonResult": "Comparison result"
 }
