@@ -197,13 +197,20 @@ const Navbar = () => {
             >
               <Trans i18nKey="compare" />
             </Button>
+            <Button
+              component={NavLink}
+              to={`/profiles`}
+              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+            >
+              <Trans i18nKey="profiles" />
+            </Button>
           </Box>
           <Box ml="auto">
             <Button
               sx={{ ml: 2, mr: "-8px", px: 1.5 }}
               size="small"
               component={NavLink}
-              to="profile"
+              to="account"
               endIcon={<Avatar sx={{ width: 26, height: 26, ml: 1 }} />}
             >
               {userInfo.username}
