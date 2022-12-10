@@ -142,6 +142,8 @@
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
   "notEvaluated": "NOT EVALUATED",
+  "viewProfileMarket": "View profile market",
+  "noOptions": "No options",
   "thisReportIsNotAccurate": "The report is not accurate enough.",
   "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires to make it more accurate.",
   "pleaseCompleteAllQuestionnaires": "Please complete more questionnaires to get a better accuracy.",
@@ -171,5 +173,11 @@
   "attributes": "Attributes",
   "subjectAttributes": "{{subject}} attributes",
   "editComparisonItems": "Edit comparison items",
-  "comparisonResult": "Comparison result"
+  "comparisonResult": "Comparison result",
+  "aboutAuthor": "About author",
+  "viewOtherProfilesFromThisAuthor": "View other profiles from this author",
+  "questionImpact": "Question impact",
+  "aboutProfile": "About profile",
+  "created": "Created",
+  "description": "Description"
 }

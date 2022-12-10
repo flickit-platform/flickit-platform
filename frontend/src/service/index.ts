@@ -358,6 +358,11 @@ export const createService = (
         withCredentials: true,
       });
     },
+    fetchProfiles(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
+      const { query } = args || {};
+      const params = query ? { query } : {};
+      return axios.get(`/baseinfo/profiles/`, { params, ...config });
+    },
     fetchCompareItemAssessments(
       args: any | undefined,
       config: AxiosRequestConfig<any> | undefined
@@ -387,11 +392,15 @@ export const createService = (
       return axios.post(
         `/assessment/compareselect/`,
         { assessment_list_ids: assessmentIds || [] },
-        {
-          ...config,
-          withCredentials: true,
-        }
+        config
       );
+    },
+    fetchProfile(
+      args: { profileId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { profileId } = args || {};
+      return axios.get(`/baseinfo/profiles/${profileId}/`, config);
     },
   };
 
