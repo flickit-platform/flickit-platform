@@ -21,6 +21,7 @@
     "nanoid": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.34.2",
     "react-i18next": "^11.18.4",
     "react-router-dom": "^6.4.1",

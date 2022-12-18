@@ -171,5 +171,7 @@
   "attributes": "Attributes",
   "subjectAttributes": "{{subject}} attributes",
   "editComparisonItems": "Edit comparison items",
-  "comparisonResult": "Comparison result"
+  "comparisonResult": "Comparison result",
+  "oneFileOnly": "You can only upload one file at a time.",
+  "dropYourFileHere": "Drop your file here"
 }
