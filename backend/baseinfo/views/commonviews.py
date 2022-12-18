@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from .models import AssessmentProfile, AssessmentSubject, Metric, MetricCategory, QualityAttribute
-from .serializers import AssessmentProfileSerilizer, AssessmentSubjectSerilizer, MetricCategorySerilizer, MetricSerilizer, QualityAttributeSerilizer, MetricCategoryBySubjectSerilizer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+from ..models import AssessmentProfile, AssessmentSubject, Metric, MetricCategory, QualityAttribute
+from ..serializers import AssessmentProfileSerilizer, AssessmentSubjectSerilizer, MetricCategorySerilizer, MetricSerilizer, QualityAttributeSerilizer, MetricCategoryBySubjectSerilizer
 
 
 class MetricCategoryViewSet(ModelViewSet):
