@@ -395,6 +395,24 @@ export const createService = (
         config
       );
     },
+    uploadProfilePhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
+      return axios.post(
+        `/baseinfo/profiles/1/images/`,
+        { image: file },
+        {
+          ...config,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    },
+    deleteProfilePhoto(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.delete(`/baseinfo/profiles/1/images/${args?.id}/`, config);
+    },
     fetchProfile(
       args: { profileId: TId },
       config: AxiosRequestConfig<any> | undefined

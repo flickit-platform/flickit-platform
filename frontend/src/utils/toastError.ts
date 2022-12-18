@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { toast } from "react-toastify";
 import { ECustomErrorType } from "../types";
 import { ICustomError } from "./CustomError";
@@ -8,7 +9,19 @@ export interface IToastErrorOptions {
   filterIfHasData?: boolean;
 }
 
-const toastError = (err: ICustomError, options?: IToastErrorOptions) => {
+const toastError = (
+  err: ICustomError | string | true,
+  options?: IToastErrorOptions
+) => {
+  if (typeof err === "boolean" && err) {
+    toast.error(t("someThingWentWrong") as string);
+    return;
+  }
+  if (typeof err === "string") {
+    toast.error(err);
+    return;
+  }
+
   const {
     filterByStatus = [],
     filterByType = [],
