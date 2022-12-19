@@ -181,5 +181,8 @@
   "questionImpact": "Question impact",
   "aboutProfile": "About profile",
   "created": "Created",
-  "description": "Description"
+  "description": "Description",
+  "createProfile": "Create profile",
+  "updateProfile": "Update profile",
+  "dsl": "DSL"
 }

@@ -26,6 +26,7 @@ import Collapse from "@mui/material/Collapse";
 import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
 import ListAccordion from "../shared/lists/ListAccordion";
 import InfoItem from "../shared/InfoItem";
+import formatDate from "../../utils/formatDate";
 
 const ProfileContainer = () => {
   const { profileQueryProps } = useProfile();
@@ -34,16 +35,14 @@ const ProfileContainer = () => {
     <Box>
       <QueryData
         {...profileQueryProps}
-        render={(data) => {
-          const {
-            profileInfos: { createdAt },
-          } = data;
+        render={(data = {}) => {
+          const { creation_date } = data;
           return (
             <Box>
               <Title
                 toolbar={
                   <Typography variant="subMedium">
-                    <Trans i18nKey="created" />: {createdAt}
+                    <Trans i18nKey="created" />: {formatDate(creation_date)}
                   </Typography>
                 }
               >
@@ -91,7 +90,7 @@ const ProfileSectionsTabs = (props: { data: any }) => {
           </TabList>
         </Box>
         <TabPanel value="subjects" sx={{ p: { xs: 1, sm: 3 } }}>
-          <ProfileSubjects subjects={data.subjects} />
+          <ProfileSubjects subjects={data.subjectsInfos} />
         </TabPanel>
         <TabPanel value="questionnaires" sx={{ p: { xs: 1, sm: 3 } }}>
           <ProfileQuestionnaires questionnaires={data.questionnaires} />
@@ -119,9 +118,14 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
             expanded={isExpanded}
             onChange={handleChange(subject.title)}
             sx={{
-              background: isExpanded
-                ? "linear-gradient(154deg, #d9c1ff 0%, transparent 100%)"
-                : "linear-gradient(154deg, #d9c1ff 0%, transparent 50%)",
+              mb: 1,
+              borderRadius: 2,
+              background: isExpanded ? "#e9e9e9" : "#f5f2f2",
+              boxShadow: "none",
+              border: "none,",
+              "&::before": {
+                display: "none",
+              },
             }}
           >
             <AccordionSummary
@@ -160,7 +164,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               <Box p={1}>
                 <Grid container spacing={4} sx={{ mb: 1 }}>
                   <Grid item xs={3}>
-                    {subject.infos.map((info: any) => {
+                    {subject.report_infos.map((info: any) => {
                       return <InfoItem info={info} />;
                     })}
                   </Grid>
@@ -190,7 +194,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                   <Trans i18nKey="attributes" />
                 </Typography>
                 <ListAccordion
-                  items={subject.attributes}
+                  items={subject.attributes_infos}
                   renderItem={(item, index, isExpanded) => {
                     return (
                       <>
@@ -219,7 +223,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             variant="body2"
                             fontFamily="RobotoRegular"
                           >
-                            {item.item}
+                            {item.description}
                           </Typography>
                         </Box>
                         <ProfileQuestionsList questions={item.questions} />
@@ -254,8 +258,14 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
             expanded={isExpanded}
             onChange={handleChange(questionnaire.title)}
             sx={{
-              background:
-                "linear-gradient(154deg, #d9c1ff 0%, transparent 50%)",
+              mb: 1,
+              borderRadius: 2,
+              background: isExpanded ? "#f7f7f7" : "#f5f2f2",
+              boxShadow: "none",
+              border: "none,",
+              "&::before": {
+                display: "none",
+              },
             }}
           >
             <AccordionSummary
@@ -293,27 +303,32 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
             <AccordionDetails>
               <Box p={1}>
                 <Grid container spacing={4} sx={{ mb: 1 }}>
-                  <Grid item xs={3}>
-                    {questionnaire.infos.map((info: any) => {
-                      return <InfoItem info={info} />;
+                  <Grid item xs={4}>
+                    {questionnaire.report_infos.map((info: any) => {
+                      return (
+                        <InfoItem
+                          info={{
+                            ...info,
+                            type:
+                              info.title === "Related subjects"
+                                ? "tags"
+                                : info.type,
+                          }}
+                        />
+                      );
                     })}
                   </Grid>
-                  <Grid item xs={9}>
-                    <Box display="flex" justifyContent={"space-between"}>
+                  <Grid item xs={8}>
+                    <Box display="flex">
                       <Typography variant="body2" fontFamily="RobotoRegular">
-                        Description:
+                        <Trans i18nKey="description" />:
                       </Typography>
                       <Typography
                         variant="body2"
                         fontFamily="RobotoMedium"
                         sx={{ ml: 2 }}
                       >
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Esse, sed tenetur sint consectetur maxime dolorum amet
-                        quae fugit! Accusantium, eum numquam at esse ut vel unde
-                        earum voluptate nam error. sed tenetur sint consectetur
-                        maxime dolorum amet quae fugit! Accusantium, eum numquam
-                        at esse ut vel unde earum voluptate nam error.
+                        {questionnaire.description}
                       </Typography>
                     </Box>
                   </Grid>
@@ -347,7 +362,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                             py={1}
                           >
                             <Grid container spacing={2} columns={14}>
-                              <Grid xs={5} item>
+                              <Grid xs={7} item>
                                 <Typography
                                   variant="body1"
                                   fontFamily="RobotoBold"
@@ -373,7 +388,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                   {question.title}
                                 </Typography>{" "}
                               </Grid>
-                              <Grid item xs={5}>
+                              <Grid item xs={4}>
                                 {" "}
                                 <Box position={"relative"} minWidth="160px">
                                   {index === 0 && (
@@ -394,15 +409,14 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                     </Typography>
                                   )}
                                   <ul style={{ paddingInlineStart: "20px" }}>
-                                    <li>option 1 im not so sure about this</li>
-                                    <li>option 2</li>
-                                    <li>option 1 im not so sure about this</li>
-                                    <li>option 1 im not so sure about this</li>
+                                    {question.listOfOptions.map((op: any) => {
+                                      return <li>{op}</li>;
+                                    })}
                                   </ul>
                                 </Box>
                               </Grid>
-                              <Grid item xs={4}>
-                                <Box position={"relative"} minWidth="300px">
+                              <Grid item xs={3}>
+                                <Box position={"relative"}>
                                   {index === 0 && (
                                     <Typography
                                       sx={{
@@ -426,36 +440,47 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                       </Box>
                                     </Typography>
                                   )}
-                                  <Box
-                                    sx={{
-                                      background: (t) =>
-                                        t.palette.secondary.main,
-                                      borderRadius: 8,
-                                      color: "white",
-                                      width: "auto",
-                                    }}
-                                  >
-                                    <Box py={0.3} px={2} mb={0.5} mr={0.5}>
-                                      <Typography
-                                        variant="body2"
-                                        sx={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                        }}
-                                      >
-                                        att.title
-                                        <Typography
-                                          variant="subMedium"
+                                  {question.relatedAttributes.map(
+                                    (att: any) => {
+                                      return (
+                                        <Box
                                           sx={{
+                                            background: (t) =>
+                                              t.palette.secondary.main,
+                                            borderRadius: 8,
                                             color: "white",
-                                            position: "relative",
+                                            width: "auto",
                                           }}
                                         >
-                                          4
-                                        </Typography>
-                                      </Typography>
-                                    </Box>
-                                  </Box>
+                                          <Box
+                                            py={0.3}
+                                            px={2}
+                                            mb={0.5}
+                                            mr={0.5}
+                                          >
+                                            <Typography
+                                              variant="body2"
+                                              sx={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                              }}
+                                            >
+                                              {att.title}
+                                              <Typography
+                                                variant="subMedium"
+                                                sx={{
+                                                  color: "white",
+                                                  position: "relative",
+                                                }}
+                                              >
+                                                {att.item}
+                                              </Typography>
+                                            </Typography>
+                                          </Box>
+                                        </Box>
+                                      );
+                                    }
+                                  )}
                                 </Box>
                               </Grid>
                             </Grid>
@@ -489,7 +514,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
         fontSize=".9rem"
       >
         <Trans i18nKey="questions" />
-        <span style={{ float: "right" }}>32</span>
+        <span style={{ float: "right" }}>{questions.length}</span>
       </Typography>
       <Box sx={{ marginTop: 6 }} component="ol">
         {questions.map((question: any, index: number) => {
@@ -635,7 +660,6 @@ const useProfile = () => {
   const profileQueryProps = useQuery({
     service: (args = { profileId }, config) =>
       service.fetchProfile(args, config),
-    runOnMount: false,
     initialData: {
       title: "Common profile",
       profileInfos: {
@@ -942,6 +966,8 @@ const useProfile = () => {
       ],
     },
   });
+
+  console.log(profileQueryProps.data);
 
   return { profileQueryProps };
 };
