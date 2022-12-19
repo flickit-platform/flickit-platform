@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from baseinfo.models import Metric
-from baseinfo.serializers import AnswerTemplateSerializer
-from baseinfo.serializers import SimpleMetricSerializers
+from baseinfo.serializers.commonserializers import AnswerTemplateSerializer, SimpleMetricSerializers
 from assessment.models import MetricValue, QualityAttributeValue
 
 from ..fixture.common import update_assessment_status
