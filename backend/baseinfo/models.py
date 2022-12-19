@@ -25,8 +25,10 @@ class AssessmentProfile(models.Model):
         verbose_name = "Assessment Profile"
         verbose_name_plural = "Assessment Profiles"
         ordering = ['title']
-        
 
+class ProfileDsl(models.Model):
+    dsl = models.FileField(upload_to='profile/dsl')
+    profile = models.OneToOneField(AssessmentProfile, on_delete=models.CASCADE, related_name='dsl')
 
 class MetricCategory(models.Model):
     code = models.CharField(max_length=50)
