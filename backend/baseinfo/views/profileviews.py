@@ -1,13 +1,11 @@
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from ..models import AssessmentProfile
 from ..services import profileservice
-from ..serializers import AssessmentSubjectSerilizer
-from rest_framework import serializers
-
-
+from ..serializers.profileserializers import ProfileDslSerializer
+from ..models import ProfileDsl
 
 
 class ProfileDetailDisplayApi(APIView):
@@ -18,12 +16,25 @@ class ProfileDetailDisplayApi(APIView):
             return Response({"message": error_message}, status = status.HTTP_400_BAD_REQUEST)
         response = {}
         response['title'] = profile.title
+        response['description'] = profile.description
         response['last_update'] = profile.last_modification_date
         response['creation_date'] = profile.creation_time
         response['profileInfos'] = profileservice.extract_profile_infos(profile)
         response['subjectsInfos'] = profileservice.extract_subjects_infos(profile)
         response['questionnaires'] = profileservice.extract_questionnaires_infos(profile)
         return Response(response, status = status.HTTP_200_OK)
+    
+class UploadProfileApi(ModelViewSet):
+    serializer_class = ProfileDslSerializer
+    def get_serializer_context(self):
+        return {'profile_id': self.kwargs['profile_pk']}
+
+    def get_queryset(self):
+        return ProfileDsl.objects.filter(profile_id=self.kwargs['profile_pk'])
+
+    
+
+    
 
     
 

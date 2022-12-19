@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import AnswerTemplate, AssessmentProfile, AssessmentSubject, Metric, MetricImpact, QualityAttribute, MetricCategory
-from .imagecomponent.serializers import QualityAttributeImageSerializer, ProfileImageSerializer, SubjectImageSerializer
+from ..models import AnswerTemplate, AssessmentSubject, Metric, MetricImpact, QualityAttribute, MetricCategory
+from ..imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 
 class MetricCategorySerilizer(serializers.ModelSerializer):
     class Meta:
@@ -39,25 +39,6 @@ class QualityAttributeSerilizer(serializers.ModelSerializer):
         model = QualityAttribute
         fields = ['id', 'code', 'title', 'description', 'images', 'index']
 
-
-class AssessmentProfileSerilizer(serializers.ModelSerializer):
-    images = ProfileImageSerializer(many=True)
-    metric_categories = MetricCategorySerilizer(many=True)
-    assessment_subjects = AssessmentSubjectSerilizer(many=True)
-    class Meta:
-        model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images']
-
-class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentProfile
-        fields = ['id']
-
-class AssessmentProfileSimpleSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'description']
-
 class AnswerTemplateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     class Meta:
@@ -76,4 +57,3 @@ class MetricSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Metric
         fields = ['id', 'title', 'index', 'answer_templates']
-
