@@ -6,7 +6,7 @@ import { styles } from "../../config/styles";
 import { InputFieldUC } from "../shared/fields/InputField";
 import Title from "../shared/Title";
 import { Trans } from "react-i18next";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import {
   FieldValues,
   FormProvider,
@@ -250,7 +250,7 @@ const SuccessfullyCreatedAccountMessage = () => {
 
         <Typography
           variant="h6"
-          fontFamily="RobotoMedium"
+          fontFamily="Roboto"
           sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}
         >
           <Trans i18nKey="pleaseCheckYouEmail" />

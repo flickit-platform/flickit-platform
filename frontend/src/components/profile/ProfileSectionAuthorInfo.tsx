@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Button from "@mui/material/Button";
 import { styles } from "../../config/styles";
@@ -29,7 +29,7 @@ const ProfileSectionAuthorInfo = (props: IProfileSectionAuthorInfo) => {
             <AccountBoxRoundedIcon fontSize="inherit" />
           </Box>
           <Box py={1} ml={1}>
-            <Typography fontFamily="RobotoBold">
+            <Typography fontFamily="Roboto" fontWeight={"bold"}>
               {data.profileInfos.authorInfos.name}
             </Typography>
             <Box sx={{ ...styles.centerV }}>

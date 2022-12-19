@@ -62,7 +62,7 @@ const SubjectRadar = (props: any) => {
         />
         {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar
-          name={t("maturityLevel")}
+          name={t("maturityLevel") as string}
           dataKey="ml"
           stroke="#491e8a"
           fill="#6035A1"

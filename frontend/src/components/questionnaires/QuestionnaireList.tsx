@@ -11,7 +11,7 @@ import {
   TQueryFunction,
 } from "../../types";
 import LoadingSkeletonOfQuestionnaires from "../shared/loadings/LoadingSkeletonOfQuestionnaires";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import QANumberIndicator from "../shared/QANumberIndicator";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import LockPersonRoundedIcon from "@mui/icons-material/LockPersonRounded";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
