@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from baseinfo.serializers import QualityAttributeSerilizer
+from baseinfo.serializers.commonserializers import QualityAttributeSerilizer
 from ..models import AssessmentResult, Color, QualityAttributeValue
 
 
