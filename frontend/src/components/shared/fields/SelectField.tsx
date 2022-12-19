@@ -76,7 +76,6 @@ export const SelectField = (props: ISelectField) => {
     ? [{ id: "", title: "---" }, ...options]
     : options;
 
-  console.log(defaultValue);
   return (
     <FormControl fullWidth error={error} size={size} variant="outlined">
       <InputLabel

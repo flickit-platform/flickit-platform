@@ -418,7 +418,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { profileId } = args || {};
-      return axios.get(`/baseinfo/profiles/${profileId}/`, config);
+      return axios.get(`/baseinfo/inspectprofile/${profileId}/`, config);
     },
   };
 

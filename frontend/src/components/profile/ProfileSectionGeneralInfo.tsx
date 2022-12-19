@@ -5,6 +5,8 @@ import { styles } from "../../config/styles";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import InfoItem from "../shared/InfoItem";
+import formatDate from "../../utils/formatDate";
+import { t } from "i18next";
 
 interface IProfileSectionAuthorInfo {
   data: any;
@@ -26,16 +28,28 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
         }}
       >
         <Grid container spacing={1}>
-          <Grid item xs={3}>
-            {data.profileInfos.primaryInfos.map((info: any) => {
-              return <InfoItem info={info} />;
+          <Grid item xs={4}>
+            {data.profileInfos.map((info: any) => {
+              return (
+                <InfoItem
+                  info={{
+                    ...info,
+                    type: info.title === "Subjects" ? "tags" : info.type,
+                  }}
+                />
+              );
             })}
           </Grid>
           <Grid item xs={2}></Grid>
           <Grid item xs={2}>
-            {data.profileInfos.secondaryInfos.map((info: any) => {
-              return <InfoItem info={info} />;
-            })}
+            {data?.last_update && (
+              <InfoItem
+                info={{
+                  item: formatDate(data?.last_update),
+                  title: t("lastUpdated"),
+                }}
+              />
+            )}
           </Grid>
           <Grid item xs={12}>
             <Typography
@@ -43,7 +57,8 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
               fontFamily="RobotoRegular"
               sx={{ my: 1 }}
             >
-              {data.description}
+              {data.description ||
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolorem deleniti libero ratione repudiandae modi deserunt rem doloremque perferendis, mollitia doloribus saepe incidunt numquam sequi porro quos exercitationem dolor placeat?"}
             </Typography>
           </Grid>
         </Grid>
