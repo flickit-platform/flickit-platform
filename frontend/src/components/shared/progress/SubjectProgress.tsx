@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
@@ -29,7 +29,8 @@ const SubjectProgress = (props: ISubjectProgressProps) => {
         sx={{
           mt: 1,
           opacity: 0.7,
-          fontFamily: "OswaldRegular",
+          fontFamily: "Oswald",
+          fontWeight: 400,
           color: colorCode
             ? (t) => t.palette.getContrastText(colorCode)
             : "white",

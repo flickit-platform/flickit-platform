@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -57,7 +57,7 @@ function AccountSettings() {
                 <Typography
                   sx={{ opacity: 0.85 }}
                   fontSize={"1rem"}
-                  fontFamily="RobotoMedium"
+                  fontFamily="Roboto"
                   letterSpacing=".05rem"
                 >
                   <Trans i18nKey="signOutOfYourAccount" />

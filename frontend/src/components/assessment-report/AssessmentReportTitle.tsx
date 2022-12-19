@@ -1,6 +1,6 @@
 import React from "react";
 import Title from "../shared/Title";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import formatDate from "../../utils/formatDate";
 import Typography from "@mui/material/Typography";

@@ -17,7 +17,7 @@ export const createService = (
 ) => {
   axios.defaults.baseURL = BASE_URL;
   axios.defaults.withCredentials = true;
-  axios.defaults.timeoutErrorMessage = t("checkNetworkConnection");
+  axios.defaults.timeoutErrorMessage = t("checkNetworkConnection") as string;
 
   const rejectResponseInterceptor = async (err: any = {}) => {
     if (err._isCustomError) {
@@ -46,7 +46,6 @@ export const createService = (
           const newAccessToken = await fetchNewAccessToken(refreshToken);
           if (newAccessToken) {
             setAccessToken(newAccessToken);
-            //@ts-expect-error
             axios.defaults.headers["Authorization"] = `JWT ${newAccessToken}`;
             prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
             const result = await axios.request(prevRequest);
@@ -69,7 +68,6 @@ export const createService = (
     const { config = {} } = res;
 
     if (config.url === "auth/jwt/create/" && res.data?.access) {
-      //@ts-expect-error
       axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
     }
 

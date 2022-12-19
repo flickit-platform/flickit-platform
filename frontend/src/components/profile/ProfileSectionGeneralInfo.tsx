@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
 import Typography from "@mui/material/Typography";
@@ -52,11 +52,7 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography
-              variant="body2"
-              fontFamily="RobotoRegular"
-              sx={{ my: 1 }}
-            >
+            <Typography variant="body2" fontFamily="Roboto" sx={{ my: 1 }}>
               {data.description ||
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolorem deleniti libero ratione repudiandae modi deserunt rem doloremque perferendis, mollitia doloribus saepe incidunt numquam sequi porro quos exercitationem dolor placeat?"}
             </Typography>

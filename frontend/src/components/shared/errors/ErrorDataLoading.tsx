@@ -1,4 +1,4 @@
-import Box, { BoxProps } from "@mui/material/Box";
+import { Box, BoxProps } from "@mui/material";
 import React from "react";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 import { Typography } from "@mui/material";

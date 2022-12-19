@@ -53,7 +53,7 @@ const SubjectBar = (props: any) => {
         <Legend />
         <Bar
           dataKey="ml"
-          name={t("maturityLevel")}
+          name={t("maturityLevel") as string}
           fill="#6035A1"
           maxBarSize={40}
         />

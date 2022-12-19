@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chip, CircularProgress, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useServiceContext } from "../../providers/ServiceProvider";
@@ -136,7 +136,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Typography
             component={Link}
             variant="h6"
-            fontFamily={"RobotoBold"}
+            fontFamily={"Roboto"}
             to={`/${id}/assessments`}
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
@@ -167,7 +167,9 @@ const SpaceCard = (props: ISpaceCardProps) => {
       <Box ml="auto" sx={{ ...styles.centerV }}>
         <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
           <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-          <Typography fontFamily={"RobotoBold"}>{members_number}</Typography>
+          <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            {members_number}
+          </Typography>
         </Box>
       </Box>
       <Box

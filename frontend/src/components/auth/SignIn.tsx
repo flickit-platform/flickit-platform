@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import { styles } from "../../config/styles";
 import { InputFieldUC } from "../shared/fields/InputField";
 import { Trans } from "react-i18next";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";

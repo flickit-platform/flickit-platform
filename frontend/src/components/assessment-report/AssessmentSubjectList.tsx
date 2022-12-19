@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
 import Title from "../shared/Title";

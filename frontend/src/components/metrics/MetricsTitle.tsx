@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
@@ -105,7 +105,7 @@ const MetricsTitle = (props: {
             <Typography
               display="inline-block"
               variant="h5"
-              sx={{ opacity: 0.6, marginLeft: 1 }}
+              sx={{ opacity: 0.6, marginLeft: 1, fontWeight: "bold" }}
             >
               <Trans i18nKey="review" />
             </Typography>
@@ -125,6 +125,7 @@ const MetricsTitle = (props: {
                   display="inline-flex"
                   variant="h5"
                   sx={{
+                    fontWeight: "bold",
                     opacity: 0.6,
                     ml: { xs: 0, sm: 1 },
                     alignItems: "center",
@@ -136,6 +137,7 @@ const MetricsTitle = (props: {
                 <Typography
                   display="inline-block"
                   variant="h5"
+                  fontWeight={"bold"}
                   sx={{ opacity: 0.6, ml: { xs: 0, sm: 1 } }}
                 >
                   {" "}

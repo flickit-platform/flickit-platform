@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Title from "../../components/shared/Title";
@@ -82,7 +82,7 @@ export const SpaceMembers = () => {
         <Title
           size="small"
           fontSize={"1rem"}
-          fontFamily="RobotoMedium"
+          fontFamily="Roboto"
           textTransform={"unset"}
           letterSpacing=".05rem"
           mb={2}
@@ -104,7 +104,7 @@ export const SpaceMembers = () => {
             size="small"
             variant="outlined"
             inputRef={user_id_ref}
-            placeholder={t("enterEmailOfTheUserYouWantToAdd")}
+            placeholder={t("enterEmailOfTheUserYouWantToAdd") as string}
             label={<Trans i18nKey="userEmail" />}
             InputProps={{
               endAdornment: <AddMemberButton loading={loading} />,
@@ -117,13 +117,13 @@ export const SpaceMembers = () => {
           size="small"
           mb={2}
           fontSize={"1rem"}
-          fontFamily="RobotoMedium"
+          fontFamily="Roboto"
           textTransform={"capitalize"}
           letterSpacing=".05rem"
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-              <Typography fontFamily={"RobotoBold"}>
+              <Typography fontFamily="Roboto" fontWeight={"bold"}>
                 {spaceData?.data?.results?.length}
               </Typography>
             </Box>
