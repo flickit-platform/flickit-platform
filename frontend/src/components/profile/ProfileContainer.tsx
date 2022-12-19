@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from "react";
-import Box from "@mui/material/Box";
+import React from "react";
+import { Box } from "@mui/material";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "../../utils/useQuery";
@@ -7,7 +7,6 @@ import QueryData from "../shared/QueryData";
 import Title from "../shared/Title";
 import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
-import Button from "@mui/material/Button";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import { styles } from "../../config/styles";
@@ -20,9 +19,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
-import { styled } from "@mui/material";
-import get from "lodash/get";
-import Collapse from "@mui/material/Collapse";
 import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
 import ListAccordion from "../shared/lists/ListAccordion";
 import InfoItem from "../shared/InfoItem";
@@ -136,7 +132,8 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "RobotoBold",
+                  fontFamily: "Roboto",
+                  fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
                 }}
@@ -170,12 +167,12 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                   </Grid>
                   <Grid item xs={9}>
                     <Box display="flex">
-                      <Typography variant="body2" fontFamily="RobotoRegular">
+                      <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="RobotoMedium"
+                        fontFamily="Roboto"
                         sx={{ ml: 2 }}
                       >
                         {subject.description}
@@ -188,7 +185,8 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               <Box m={1} mt={2}>
                 <Typography
                   variant="h6"
-                  fontFamily="RobotoBold"
+                  fontFamily="Roboto"
+                  fontWeight={"bold"}
                   fontSize="1rem"
                 >
                   <Trans i18nKey="attributes" />
@@ -207,7 +205,8 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                         >
                           <Typography
                             variant="body1"
-                            fontFamily="RobotoBold"
+                            fontFamily="Roboto"
+                            fontWeight={"bold"}
                             minWidth="180px"
                           >
                             {item.title}
@@ -221,7 +220,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                               ...(isExpanded ? {} : styles.ellipsis),
                             }}
                             variant="body2"
-                            fontFamily="RobotoRegular"
+                            fontFamily="Roboto"
                           >
                             {item.description}
                           </Typography>
@@ -276,7 +275,8 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "RobotoBold",
+                  fontFamily: "Roboto",
+                  fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
                 }}
@@ -320,12 +320,12 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                   </Grid>
                   <Grid item xs={8}>
                     <Box display="flex">
-                      <Typography variant="body2" fontFamily="RobotoRegular">
+                      <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="RobotoMedium"
+                        fontFamily="Roboto"
                         sx={{ ml: 2 }}
                       >
                         {questionnaire.description}
@@ -339,7 +339,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                 <Typography
                   variant="h6"
                   sx={{ opacity: 0.9 }}
-                  fontFamily="RobotoRegular"
+                  fontFamily="Roboto"
                   fontSize=".9rem"
                 >
                   <Trans i18nKey="questions" />
@@ -365,7 +365,8 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                               <Grid xs={7} item>
                                 <Typography
                                   variant="body1"
-                                  fontFamily="RobotoBold"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
                                   position="relative"
                                 >
                                   {index === 0 && (
@@ -375,7 +376,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                         top: "-36px",
                                         pb: "2px",
                                         color: "#767676",
-                                        fontFamily: "RobotoRegular",
+                                        fontFamily: "Roboto",
                                         width: "100%",
                                         borderBottom: (t) =>
                                           `1px solid ${t.palette.primary.light}`,
@@ -398,7 +399,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                         width: "100%",
                                         top: "-36px",
                                         pb: "2px",
-                                        fontFamily: "RobotoRegular",
+                                        fontFamily: "Roboto",
                                         color: "#767676",
                                         borderBottom: (t) =>
                                           `1px solid ${t.palette.warning.main}`,
@@ -425,7 +426,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                         top: "-36px",
                                         pb: "2px",
                                         color: "#767676",
-                                        fontFamily: "RobotoRegular",
+                                        fontFamily: "Roboto",
                                         borderBottom: (t) =>
                                           `1px solid ${t.palette.secondary.dark}`,
                                       }}
@@ -510,7 +511,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
       <Typography
         variant="h6"
         sx={{ opacity: 0.8 }}
-        fontFamily="RobotoMedium"
+        fontFamily="Roboto"
         fontSize=".9rem"
       >
         <Trans i18nKey="questions" />
@@ -535,7 +536,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                   <Grid xs={8} item>
                     <Typography
                       variant="body1"
-                      fontFamily="RobotoBold"
+                      fontFamily="Roboto"
+                      fontWeight={"bold"}
                       position="relative"
                     >
                       {index === 0 && (
@@ -545,7 +547,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                             top: "-36px",
                             pb: "2px",
                             color: "#767676",
-                            fontFamily: "RobotoRegular",
+                            fontFamily: "Roboto",
                             width: "100%",
                             borderBottom: (t) =>
                               `1px solid ${t.palette.primary.light}`,
@@ -567,7 +569,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                             width: "100%",
                             top: "-36px",
                             pb: "2px",
-                            fontFamily: "RobotoRegular",
+                            fontFamily: "Roboto",
                             color: "#767676",
                             borderBottom: (t) =>
                               `1px solid ${t.palette.warning.main}`,
@@ -595,7 +597,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               top: "-36px",
                               pb: "2px",
                               color: "#767676",
-                              fontFamily: "RobotoRegular",
+                              fontFamily: "Roboto",
                               borderBottom: (t) =>
                                 `1px solid ${t.palette.secondary.dark}`,
                             }}
@@ -619,7 +621,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               top: "-36px",
                               pb: "2px",
                               color: "#767676",
-                              fontFamily: "RobotoRegular",
+                              fontFamily: "Roboto",
                               borderBottom: (t) =>
                                 `1px solid ${t.palette.secondary.dark}`,
                             }}

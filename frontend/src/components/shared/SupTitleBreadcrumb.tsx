@@ -4,7 +4,7 @@ import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { styles } from "../../config/styles";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { LoadingSkeleton } from "./loadings/LoadingSkeleton";
 import { TId } from "../../types";
 import { useServiceContext } from "../../providers/ServiceProvider";
@@ -33,7 +33,7 @@ const SupTitleBreadcrumb = (
               <Typography
                 sx={{
                   fontSize: "0.6rem",
-                  fontFamily: "RobotoMedium",
+                  fontFamily: "Roboto",
                   opacity: 0.6,
                   letterSpacing: "0.07em",
                   color: "text.primary",
@@ -51,7 +51,8 @@ const SupTitleBreadcrumb = (
               sx={{
                 ...styles.centerV,
                 fontSize: "0.8rem",
-                fontFamily: "RobotoBold",
+                fontFamily: "Roboto",
+                fontWeight: "bold",
                 opacity: 0.8,
                 letterSpacing: "0.085em",
                 color: "primary.dark",

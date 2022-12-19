@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
 import MuiLink from "@mui/material/Link";

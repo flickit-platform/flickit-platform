@@ -3,7 +3,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Hidden from "@mui/material/Hidden";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import {
   EAssessmentStatus,
   metricActions,

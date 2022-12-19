@@ -1,5 +1,5 @@
 import React from "react";
-import Box, { BoxProps } from "@mui/material/Box";
+import { Box, BoxProps } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";

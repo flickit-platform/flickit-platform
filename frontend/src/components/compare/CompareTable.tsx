@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
@@ -33,7 +33,7 @@ const CompareTable = (props: {
                 <Typography
                   sx={{
                     fontSize: "1rem",
-                    fontFamily: "RobotoRegular",
+                    fontFamily: "Roboto",
                     opacity: 0.7,
                   }}
                 >
@@ -70,7 +70,7 @@ const CompareTable = (props: {
                               <li>
                                 <Typography
                                   sx={{ my: 0.3 }}
-                                  fontFamily={"RobotoMedium"}
+                                  fontFamily={"Roboto"}
                                   fontSize="1.1rem"
                                 >
                                   {text}
@@ -95,7 +95,7 @@ const CompareTable = (props: {
 };
 
 const textStyle = {
-  fontFamily: "RobotoBold",
+  fontFamily: "Roboto",
   fontSize: "1.1rem",
   fontWeight: "bolder",
 };

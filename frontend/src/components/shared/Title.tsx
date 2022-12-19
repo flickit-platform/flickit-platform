@@ -1,6 +1,6 @@
 import React from "react";
 import Typography, { TypographyProps } from "@mui/material/Typography";
-import Box, { BoxProps } from "@mui/material/Box";
+import { Box, BoxProps } from "@mui/material";
 import { Link as RLink, To } from "react-router-dom";
 import Link from "@mui/material/Link";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
