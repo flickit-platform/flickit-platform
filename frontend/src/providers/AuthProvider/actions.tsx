@@ -19,7 +19,6 @@ interface ISignInPayload {
 
 export const signIn = (payload: ISignInPayload = {}) => {
   if (payload.refresh && payload.access) {
-    //@ts-expect-error
     axios.defaults.headers["Authorization"] = `JWT ${payload.access}`;
     localStorage.setItem("refreshToken", JSON.stringify(payload.refresh));
     localStorage.setItem("accessToken", JSON.stringify(payload.access));
@@ -54,7 +53,6 @@ export const setUserInfoLoading = (payload: boolean) => {
 
 export const signOut = () => {
   localStorage.clear();
-  //@ts-expect-error
   axios.defaults.headers["Authorization"] = ``;
   return { type: AUTH_ACTIONS_TYPE.SIGN_OUT };
 };

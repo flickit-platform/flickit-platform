@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -88,7 +88,7 @@ export const MetricCard = (props: IMetricCardProps) => {
         <Box>
           <Typography
             variant="subLarge"
-            fontFamily={"RobotoRegular"}
+            fontFamily={"Roboto"}
             sx={{ color: "white", opacity: 0.65 }}
           >
             <Trans i18nKey="question" />
@@ -100,7 +100,7 @@ export const MetricCard = (props: IMetricCardProps) => {
               pt: 0.5,
               pb: 5,
               fontSize: { xs: "1.4rem", sm: "2rem" },
-              fontFamily: { xs: "RobotoRegular", lg: "RobotoMedium" },
+              fontFamily: { xs: "Roboto", lg: "Roboto" },
             }}
           >
             {title}
@@ -224,7 +224,7 @@ const AnswerTemplate = (props: {
                     p: { xs: 0.6, sm: 1 },
                     textAlign: "left",
                     fontSize: { xs: "1.15rem", sm: "1.3rem" },
-                    fontFamily: { xs: "RobotoRegular", sm: "RobotoMedium" },
+                    fontFamily: { xs: "Roboto", sm: "Roboto" },
                     justifyContent: "flex-start",
                     boxShadow: "0 0 2px white",
                     borderWidth: "2px",
@@ -326,7 +326,7 @@ const MyAnswer = ({ answer_templates, value }: any) => {
         <Box mb={1.8}>
           <Typography
             variant="subLarge"
-            fontFamily={"RobotoRegular"}
+            fontFamily={"Roboto"}
             component={Link}
             to="#"
             sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
@@ -398,7 +398,7 @@ const MyAnswer = ({ answer_templates, value }: any) => {
         <Box>
           <Typography
             variant="subLarge"
-            fontFamily={"RobotoRegular"}
+            fontFamily={"Roboto"}
             component={Link}
             to="#"
             sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}

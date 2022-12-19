@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import { styles } from "../../../config/styles";
 

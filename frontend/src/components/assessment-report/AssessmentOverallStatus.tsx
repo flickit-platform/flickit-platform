@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Paper from "@mui/material/Paper";
 import { ESystemStatus, ISubjectInfo, TStatus } from "../../types";
@@ -37,7 +37,8 @@ export const AssessmentOverallStatus = (
                     key={subject?.id}
                     sx={{ mb: 0.6 }}
                     fontSize="1.1rem"
-                    fontFamily={"RobotoMedium"}
+                    fontFamily={"Roboto"}
+                    fontWeight={500}
                     letterSpacing=".03em"
                   >
                     <span style={{ textTransform: "uppercase" }}>

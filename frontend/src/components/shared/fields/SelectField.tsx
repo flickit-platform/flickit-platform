@@ -7,7 +7,7 @@ import React from "react";
 import { useFormContext, UseFormRegister } from "react-hook-form";
 import getFieldError from "../../../utils/getFieldError";
 import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { styles } from "../../../config/styles";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 

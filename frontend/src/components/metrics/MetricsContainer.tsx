@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   EAssessmentStatus,

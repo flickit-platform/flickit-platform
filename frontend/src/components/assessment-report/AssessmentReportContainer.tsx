@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryData from "../shared/QueryData";
 import { useParams } from "react-router-dom";
