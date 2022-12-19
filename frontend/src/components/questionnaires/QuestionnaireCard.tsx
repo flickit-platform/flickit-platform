@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { Trans } from "react-i18next";
@@ -53,7 +53,8 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 `${(<Trans i18nKey={"lastUpdated"} />)} ${last_updated}`
               }
               size="small"
-              fontFamily={"RobotoBold"}
+              fontFamily="Roboto"
+              fontWeight={"bold"}
             >
               <Box flex="1" display="flex" alignItems={"flex-start"}>
                 {title}

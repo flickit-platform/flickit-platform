@@ -1,2 +1,0 @@
-# checkup-assessment-toolkit-front
-

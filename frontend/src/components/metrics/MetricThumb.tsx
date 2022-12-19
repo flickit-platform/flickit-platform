@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
@@ -23,7 +23,7 @@ export const MetricThumb = (props: any) => {
         <Typography textTransform={"capitalize"} variant="subMedium">
           <Trans i18nKey={"question"} /> {metricIndex}/{total_number_of_metrics}
         </Typography>
-        <Typography variant="h6" fontFamily={"RobotoMedium"}>
+        <Typography variant="h6" fontFamily={"Roboto"}>
           {metric?.title}
         </Typography>
       </Box>

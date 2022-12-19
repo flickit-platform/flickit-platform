@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Hidden from "@mui/material/Hidden";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -147,7 +147,7 @@ export const MetricProgressItem = (props: any) => {
             fontSize: metric.index == metricIndex ? ".75rem" : ".7rem",
             textAlign: "center",
             lineHeight: "13px",
-            fontFamily: "RobotoMedium",
+            fontFamily: "Roboto",
             opacity: metric.index == metricIndex ? 1 : 0.6,
             color: metric.answer ? `white` : "gray",
             transition: "opacity .1s ease",

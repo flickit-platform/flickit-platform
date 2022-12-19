@@ -1,6 +1,6 @@
 import React from "react";
 import { SpaceLayout } from "./SpaceLayout";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Title from "../../components/shared/Title";
 import QueryData from "../../components/shared/QueryData";

@@ -13,7 +13,7 @@ import {
   ICompareResultBaseInfo,
   TCompareResultAttributeInfo,
 } from "../../types";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 
@@ -28,7 +28,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
       <Typography
         sx={{
           fontSize: "1.05rem",
-          fontFamily: "RobotoRegular",
+          fontFamily: "Roboto",
           opacity: 0.7,
           mb: 0.5,
           mt: 2,

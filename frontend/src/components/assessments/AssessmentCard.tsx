@@ -19,7 +19,7 @@ import MoreActions from "../../components/shared/MoreActions";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { IAssessment, TId, TQueryFunction } from "../../types";
 import { TDialogProps } from "../../utils/useDialog";
 import Button from "@mui/material/Button";
@@ -79,6 +79,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 textTransform={"uppercase"}
                 sx={{
                   padding: "8px 28px",
+                  fontWeight: "bold",
                   pb: 0,
                   textAlign: "center",
                   color: item.color?.color_code || "#101c32",

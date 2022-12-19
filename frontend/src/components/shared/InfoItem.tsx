@@ -23,7 +23,7 @@ const DefaultInfoItemComponent = (
     <Typography
       mb={1}
       variant="body2"
-      sx={{ ...styles.centerV, fontFamily: "RobotoRegular" }}
+      sx={{ ...styles.centerV, fontFamily: "Roboto" }}
       justifyContent="space-between"
     >
       {title}: <strong>{children}</strong>

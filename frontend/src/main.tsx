@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
+import React, { Suspense } from "react";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -12,26 +12,20 @@ import { AuthProvider } from "./providers/AuthProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import "react-toastify/dist/ReactToastify.css";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-
-root.render(
-  <>
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <ThemeProvider theme={theme}>
     <BrowserRouter>
       <Suspense fallback="loading...">
         <AppProvider>
           <AuthProvider>
             <ServiceProvider>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <ToastContainer {...toastDefaultConfig} />
-                <App />
-              </ThemeProvider>
+              <CssBaseline />
+              <ToastContainer {...toastDefaultConfig} />
+              <App />
             </ServiceProvider>
           </AuthProvider>
         </AppProvider>
       </Suspense>
     </BrowserRouter>
-  </>
+  </ThemeProvider>
 );
