@@ -114,7 +114,6 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             label={<Trans i18nKey="assessment" />}
             size="medium"
             renderOption={(option = {}) => {
-              console.log("opt", option.id);
               return (
                 <MenuItem
                   value={option.id}

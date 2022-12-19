@@ -142,6 +142,8 @@
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
   "notEvaluated": "NOT EVALUATED",
+  "viewProfileMarket": "View profile market",
+  "noOptions": "No options",
   "thisReportIsNotAccurate": "The report is not accurate enough.",
   "pleaseCompleteAllSubjectQuestionnaires": "Please complete all {{subjectName}} questionnaires to make it more accurate.",
   "pleaseCompleteAllQuestionnaires": "Please complete more questionnaires to get a better accuracy.",
@@ -173,5 +175,14 @@
   "editComparisonItems": "Edit comparison items",
   "comparisonResult": "Comparison result",
   "oneFileOnly": "You can only upload one file at a time.",
-  "dropYourFileHere": "Drop your file here"
+  "dropYourFileHere": "Drop your file here",
+  "aboutAuthor": "About author",
+  "viewOtherProfilesFromThisAuthor": "View other profiles from this author",
+  "questionImpact": "Question impact",
+  "aboutProfile": "About profile",
+  "created": "Created",
+  "description": "Description",
+  "createProfile": "Create profile",
+  "updateProfile": "Update profile",
+  "dsl": "DSL"
 }

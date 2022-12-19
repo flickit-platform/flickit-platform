@@ -1,8 +1,6 @@
 import React, { useReducer, FC, useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { createService } from "../../service";
 import { TService } from "../../service";
-import { appActions, useAppDispatch } from "../AppProvider";
 import { authActions, useAuthContext } from "../AuthProvider";
 import serviceReducer from "./reducer";
 
@@ -12,12 +10,10 @@ interface IServiceProviderProps {
 
 export interface IServiceContext {
   service: TService;
-  dispatch: React.Dispatch<any>;
 }
 
 export const ServiceContext = React.createContext<IServiceContext>({
   service: {} as any,
-  dispatch: () => {},
 });
 
 export const ServiceProvider: FC<IServiceProviderProps> = ({ children }) => {
@@ -31,15 +27,10 @@ export const ServiceProvider: FC<IServiceProviderProps> = ({ children }) => {
     []
   );
 
-  const [state, dispatch] = useReducer(serviceReducer, {
-    service,
-    dispatch: () => {},
-  });
+  const [state] = useReducer(serviceReducer, { service });
 
   return (
-    <ServiceContext.Provider value={{ ...state, dispatch }}>
-      {children}
-    </ServiceContext.Provider>
+    <ServiceContext.Provider value={state}>{children}</ServiceContext.Provider>
   );
 };
 
