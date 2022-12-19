@@ -11,7 +11,7 @@ import { styles } from "../../config/styles";
 import { SelectFieldUC } from "../shared/fields/SelectField";
 import useConnectSelectField from "../../utils/useConnectSelectField";
 import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import Title from "../shared/Title";
 import {

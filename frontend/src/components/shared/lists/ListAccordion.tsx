@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import React, { FC } from "react";
 import { styles } from "../../../config/styles";

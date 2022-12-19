@@ -2,7 +2,7 @@ import React from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Title from "../../components/shared/Title";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import Hidden from "@mui/material/Hidden";
@@ -28,18 +28,23 @@ const SUbjectAttributeCard = (props: any) => {
               textTransform={"uppercase"}
               fontWeight="bolder"
               sx={{ opacity: 0.95, letterSpacing: ".05em" }}
-              fontFamily="RobotoBold"
+              fontFamily="Roboto"
             >
               {title}
             </Title>
           </Box>
           <AttributeStatusBarContainer status={status} ml={ml} cl={1} />
           <Box mt={3}>
-            <Typography fontSize="1.15rem" fontFamily={"RobotoBold"}>
+            <Typography
+              fontSize="1.15rem"
+              fontFamily="Roboto"
+              fontWeight={"bold"}
+            >
               <Trans i18nKey={"withConfidence"} />
               <Typography
                 component="span"
-                fontFamily={"RobotoBold"}
+                fontFamily="Roboto"
+                fontWeight={"bold"}
                 color="#3596A1"
                 fontSize="1.12rem"
               >
@@ -49,7 +54,8 @@ const SUbjectAttributeCard = (props: any) => {
               <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
               <Typography
                 component="span"
-                fontFamily={"RobotoBold"}
+                fontFamily="Roboto"
+                fontWeight={"bold"}
                 color="#6035A1"
                 fontSize="1.2rem"
               >
@@ -60,7 +66,7 @@ const SUbjectAttributeCard = (props: any) => {
             </Typography>
           </Box>
           <Box mt={0.6}>
-            <Typography fontSize="1.05rem" fontFamily="RobotoMedium">
+            <Typography fontSize="1.05rem" fontFamily="Roboto">
               {description}
             </Typography>
           </Box>
@@ -108,6 +114,7 @@ const AttributeStatusBarContainer = (props: any) => {
       >
         <Typography
           variant="h4"
+          fontWeight={"bold"}
           letterSpacing=".15em"
           sx={{
             borderLeft: `2px solid ${statusColor}`,

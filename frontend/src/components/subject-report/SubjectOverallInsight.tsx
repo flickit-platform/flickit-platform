@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
@@ -37,7 +37,8 @@ const OverallInsightText = (props: any) => {
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
       <Typography
-        fontFamily={"RobotoMedium"}
+        fontFamily={"Roboto"}
+        fontWeight="500"
         fontSize="1.3rem"
         sx={{ opacity: 0.96 }}
       >
@@ -48,7 +49,7 @@ const OverallInsightText = (props: any) => {
             <Trans i18nKey="withConfidence" />{" "}
             <Typography
               component="span"
-              fontFamily={"RobotoBold"}
+              fontFamily={"Roboto"}
               fontWeight="bold"
               sx={{ color: "#3596A1" }}
               fontSize="1.15rem"
@@ -59,14 +60,18 @@ const OverallInsightText = (props: any) => {
             <Typography
               component="span"
               fontWeight="bold"
-              fontFamily={"RobotoBold"}
+              fontFamily={"Roboto"}
               sx={{ color: "#6035A1" }}
               fontSize="1.15rem"
             >
               {ml}.
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
-            <Typography component="span" fontFamily={"RobotoBold"}>
+            <Typography
+              component="span"
+              fontFamily="Roboto"
+              fontWeight={"bold"}
+            >
               {status}.
             </Typography>
             <Box>

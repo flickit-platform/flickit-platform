@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { styles } from "../../config/styles";
 import { useAuthContext } from "../../providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";

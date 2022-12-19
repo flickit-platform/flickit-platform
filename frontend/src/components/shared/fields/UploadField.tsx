@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import React, { useCallback, useState } from "react";
 import { Accept, DropEvent, FileRejection, useDropzone } from "react-dropzone";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";

@@ -29,7 +29,8 @@ function CustomError(props: {
     toastConfig,
   } = props;
   const defaultAction =
-    action && typeof action === "function" && action.bind(this, data);
+    //@ts-expect-error
+    action && typeof action === "function" && action.bind(this as any, data);
   const formattedMessage = getFormattedMessage(message, status);
   const customError: ICustomError = {
     name: "CustomError",

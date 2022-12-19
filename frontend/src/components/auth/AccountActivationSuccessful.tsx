@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -37,7 +37,7 @@ const AccountActivationSuccessful = () => {
               <Box>
                 <Typography
                   variant="h6"
-                  fontFamily="RobotoMedium"
+                  fontFamily="Roboto"
                   sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}
                 >
                   <Trans i18nKey="youHaveVerifiedYourAccount" />

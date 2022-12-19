@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -34,14 +34,14 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
             sx={{
               opacity: 0.8,
               mb: 4,
-              fontFamily: "RobotoBold",
+              fontFamily: "Roboto",
               fontWeight: "bolder",
             }}
             textTransform={"uppercase"}
           >
             <Trans i18nKey="youFinishedQuestionnaire" />
           </Typography>
-          <Typography variant="h5" fontFamily="RobotoBold">
+          <Typography variant="h5" fontFamily="Roboto" fontWeight="bold">
             <Trans i18nKey="youCan" />{" "}
             <Button
               startIcon={<QueryStatsRoundedIcon />}
@@ -99,7 +99,11 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
                     >
                       <Trans i18nKey={"question"} />
                     </Typography>
-                    <Typography variant="h6" fontFamily={"RobotoBold"}>
+                    <Typography
+                      variant="h6"
+                      fontFamily="Roboto"
+                      fontWeight="bold"
+                    >
                       {metric.title}
                     </Typography>
                   </Box>
@@ -112,7 +116,11 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
                       >
                         <Trans i18nKey={"yourAnswer"} />
                       </Typography>
-                      <Typography variant="h6" fontFamily={"RobotoBold"}>
+                      <Typography
+                        variant="h6"
+                        fontFamily="Roboto"
+                        fontWeight="bold"
+                      >
                         {metric.answer.caption}
                       </Typography>
                     </Box>

@@ -3,7 +3,7 @@ import Hidden from "@mui/material/Hidden";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "../../components/shared/loadings/GettingThingsReadyLoading";
@@ -235,15 +235,20 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
         }}
       >
         {no_insight_yet_message ? (
-          <Typography variant="h4" fontFamily={"RobotoRegular"}>
+          <Typography variant="h4" fontFamily={"Roboto"}>
             {no_insight_yet_message}
           </Typography>
         ) : (
           <>
-            <Typography variant="h4" fontFamily={"RobotoRegular"}>
+            <Typography variant="h4" fontFamily={"Roboto"}>
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
-            <Typography variant="h5" fontFamily={"RobotoLight"} sx={{ mt: 2 }}>
+            <Typography
+              variant="h5"
+              fontFamily={"Roboto"}
+              fontWeight="300"
+              sx={{ mt: 2 }}
+            >
               <Trans i18nKey="completeSomeOfQuestionnaires" />
             </Typography>
           </>

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import pl1 from "../assets/svg/pl1.svg";
 import Logo from "../assets/svg/logo.svg";

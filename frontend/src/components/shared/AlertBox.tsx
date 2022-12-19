@@ -1,6 +1,6 @@
 import React from "react";
 import Alert, { AlertProps } from "@mui/material/Alert";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import useScreenResize from "../../utils/useScreenResize";
 
 interface IAlertBox extends AlertProps {}
