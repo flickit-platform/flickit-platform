@@ -24,6 +24,7 @@ subject_router.register('images', SubjectImageViewSet, basename='subject-images'
 
 profile_router = routers.NestedDefaultRouter(router, 'profiles', lookup='profile')
 profile_router.register('images', ProfileImageViewSet, basename='profile-images')
+profile_router.register('dsl', profileviews.UploadProfileApi, basename='profile-dsl')
 
 metric_category_by_subject_router = routers.NestedDefaultRouter(router, 'subjects', lookup='assessment_subject')
 metric_category_by_subject_router.register('metriccategories', commonviews.MetricCategoryBySubjectViewSet, basename='subject-metriccategories')
