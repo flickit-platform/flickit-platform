@@ -15,7 +15,7 @@ import FilePresentRoundedIcon from "@mui/icons-material/FilePresentRounded";
 import { styles } from "../../../config/styles";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import { useServiceContext } from "../../../providers/ServiceProvider";
-import { useQuery } from "../../../utils/useQuery";
+import { TQueryServiceFunction, useQuery } from "../../../utils/useQuery";
 import toastError from "../../../utils/toastError";
 import { t } from "i18next";
 import { ICustomError } from "../../../utils/CustomError";
@@ -38,6 +38,8 @@ interface IUploadFieldProps {
   defaultValue?: any[];
   accept?: Accept;
   maxSize?: number;
+  uploadService: TQueryServiceFunction<any, any>;
+  deleteService: TQueryServiceFunction<any, any>;
 }
 
 const UploadField = (props: IUploadFieldProps) => {
@@ -77,19 +79,31 @@ interface IUploadProps {
   maxSize?: number;
   required?: boolean;
   defaultValue?: any[];
+  uploadService: TQueryServiceFunction<any, any>;
+  deleteService: TQueryServiceFunction<any, any>;
 }
 
 const Uploader = (props: IUploadProps) => {
-  const { fieldProps, errors, label, accept, maxSize, required } = props;
-  console.log(fieldProps.value);
+  const {
+    fieldProps,
+    errors,
+    label,
+    accept,
+    maxSize,
+    required,
+    uploadService,
+    deleteService,
+  } = props;
+
   const [myFiles, setMyFiles] = useState<File[]>([]);
-  const { service } = useServiceContext();
+
   const uploadQueryProps = useQuery({
-    service: (args, config) => service.uploadProfilePhoto(args, config),
+    service: uploadService,
     runOnMount: false,
   });
+
   const deleteQueryProps = useQuery({
-    service: (args, config) => service.deleteProfilePhoto(args, config),
+    service: deleteService,
     runOnMount: false,
   });
 
@@ -125,7 +139,6 @@ const Uploader = (props: IUploadProps) => {
     onDrop,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
-      console.dir(rejectedFiles, event);
       if (rejectedFiles.length > 1) {
         toastError(t("oneFileOnly") as string);
       }
@@ -138,9 +151,13 @@ const Uploader = (props: IUploadProps) => {
   const file = myFiles?.[0] || fieldProps.value?.[0];
 
   const loading = uploadQueryProps.loading || deleteQueryProps.loading;
+  const isDownloadable =
+    (!uploadQueryProps.loading &&
+      !uploadQueryProps.error &&
+      uploadQueryProps.data?.[fieldProps.name]) ||
+    (file as any)?.[fieldProps.name];
 
   const { errorMessage, hasError } = getFieldError(errors, fieldProps.name);
-  console.log(file);
   return (
     <FormControl sx={{ width: "100%" }} error={hasError}>
       <Box
@@ -174,10 +191,7 @@ const Uploader = (props: IUploadProps) => {
                     p={1}
                     sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}
                   >
-                    {((!uploadQueryProps.loading &&
-                      !uploadQueryProps.error &&
-                      uploadQueryProps.data?.[fieldProps.name]) ||
-                      (file as any)?.[fieldProps.name]) && (
+                    {isDownloadable && (
                       <IconButton
                         onClick={(e: any) => e.stopPropagation()}
                         sx={{ mr: 0.2 }}

@@ -54,6 +54,11 @@ const commonStyles = {
     boxShadow: "0 0 4px #bbb7b7 inset",
     borderRadius: "100%",
   }),
+  ellipsis: style({
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  }),
 };
 
 const cards = {

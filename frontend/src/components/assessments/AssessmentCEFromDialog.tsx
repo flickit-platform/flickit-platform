@@ -11,13 +11,19 @@ import setServerFieldErrors from "../../utils/setServerFieldError";
 import useConnectSelectField from "../../utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
 import {
   CEDialog,
   CEDialogActions,
 } from "../../components/shared/dialogs/CEDialog";
 import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "../shared/fields/AutocompleteAsyncField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -114,10 +120,34 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               label={<Trans i18nKey="color" />}
             />
           </Grid>
+          <Grid item xs={12}>
+            <ProfileField defaultValue={defaultValues?.assessment_profile} />
+          </Grid>
         </Grid>
         <CEDialogActions closeDialog={close} loading={loading} type={type} />
       </FormProviderWithForm>
     </CEDialog>
+  );
+};
+
+const ProfileField = ({
+  defaultValue = { title: "Common profile", id: 6 },
+}: {
+  defaultValue: any;
+}) => {
+  const { service } = useServiceContext();
+  const queryData = useConnectAutocompleteField({
+    service: (args, config) => service.fetchProfiles(args, config),
+  });
+
+  return (
+    <AutocompleteAsyncField
+      {...queryData}
+      name="profile"
+      required={true}
+      defaultValue={defaultValue}
+      label={<Trans i18nKey="profile" />}
+    />
   );
 };
 

@@ -19,7 +19,6 @@ const QuestionnairesNotCompleteAlert = (
 ) => {
   const { subjectName, to, progress, q, a } = props;
   const location = useLocation();
-  console.log(to);
   return (
     <AlertBox
       severity="warning"
