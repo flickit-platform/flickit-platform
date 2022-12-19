@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes as RrdRoutes } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
-import Layout from "../layouts/Layout";
 import Redirect from "./Redirect";
 import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
 import ErrorNotFoundPage from "../components/shared/errors/ErrorNotFoundPage";
@@ -11,7 +10,7 @@ import AppLayout from "../layouts/AppLayout";
 
 const SignInScreen = React.lazy(() => import("../screens/SignInScreen"));
 const SignUpScreen = React.lazy(() => import("../screens/SignUpScreen"));
-const ProfileScreen = React.lazy(() => import("../screens/ProfileScreen"));
+const AccountScreen = React.lazy(() => import("../screens/AccountScreen"));
 const ActivationSuccessfulScreen = React.lazy(
   () => import("../screens/ActivationSuccessfulScreen")
 );
@@ -42,6 +41,9 @@ const CompareResultScreen = React.lazy(
   () => import("../screens/CompareResultScreen")
 );
 
+const ProfilesScreen = React.lazy(() => import("../screens/ProfilesScreen"));
+const ProfileScreen = React.lazy(() => import("../screens/ProfileScreen"));
+
 const Routes = () => {
   return (
     <React.Suspense fallback={<GettingThingsReadyLoading />}>
@@ -69,8 +71,10 @@ const Routes = () => {
             </AppLayout>
           }
         >
-          <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/account" element={<AccountScreen />} />
           <Route path="/spaces" element={<SpacesScreen />} />
+          <Route path="/profiles" element={<ProfilesScreen />} />
+          <Route path="/profiles/:profileId" element={<ProfileScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
           <Route

@@ -1,10 +1,14 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ICustomError } from "./CustomError";
 import dataExist from "./dataExist";
 import defToastError, { IToastErrorOptions } from "./toastError";
+import get from "lodash/get";
 
+export type TQueryServiceFunction<T extends any = any, A extends any = any> = (
+  args?: A,
+  config?: AxiosRequestConfig<any> | undefined
+) => Promise<AxiosResponse<T, any>>;
 interface IUseQueryProps<T, A> {
   initialData?: any;
   runOnMount?: boolean;
@@ -13,10 +17,8 @@ interface IUseQueryProps<T, A> {
     | boolean
     | ((err: ICustomError, options?: IToastErrorOptions) => void);
   toastErrorOptions?: IToastErrorOptions;
-  service: (
-    args?: A,
-    config?: AxiosRequestConfig<any> | undefined
-  ) => Promise<AxiosResponse<T, any>>;
+  service: TQueryServiceFunction<T, A>;
+  accessor?: string;
 }
 
 export const useQuery = <T extends any = any, A extends any = any>(
@@ -29,6 +31,7 @@ export const useQuery = <T extends any = any, A extends any = any>(
     initialLoading = runOnMount,
     toastError = false,
     toastErrorOptions,
+    accessor,
   } = props;
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(initialLoading);
@@ -55,10 +58,11 @@ export const useQuery = <T extends any = any, A extends any = any>(
     setErrorObject(undefined);
 
     try {
-      const { data } = await service(args, {
+      const { data: res } = await service(args, {
         signal: controller.current.signal,
         ...config,
       });
+      const data = accessor ? get(res, accessor, initialData) : res;
       if (data) {
         setData(data);
         setError(false);
