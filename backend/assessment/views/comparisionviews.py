@@ -189,7 +189,7 @@ class CompareAssessmentView(APIView):
     def extract_strength(self, assessment_projects):
         strength_infos = Dictionary()
         strength_list = []
-        strength_infos.add('title', 'Strength')
+        strength_infos.add('title', 'Strengths')
         for assessment_project in assessment_projects:
             strength_list.append(extract_most_significant_strength_atts(assessment_project.get_assessment_result()))
         strength_infos.add('items', strength_list)
@@ -198,7 +198,7 @@ class CompareAssessmentView(APIView):
     def extract_weakness(self, assessment_projects):
         weakness_infos = Dictionary()
         weakness_list = []
-        weakness_infos.add('title', 'Weakness')
+        weakness_infos.add('title', 'Weaknesses')
         for assessment_project in assessment_projects:
             weakness_list.append(extract_most_significant_weaknessness_atts(assessment_project.get_assessment_result()))
         weakness_infos.add('items', weakness_list)
