@@ -93,6 +93,7 @@ const SignIn = () => {
                 variant="contained"
                 size="large"
                 loading={loading}
+                data-cy="btn-sign-in"
               >
                 <Trans i18nKey="signIn" />
               </LoadingButton>
@@ -104,6 +105,7 @@ const SignIn = () => {
           <Box pt={1}>
             <Trans i18nKey="dontHaveAccount" />{" "}
             <Button
+              data-cy="btn-sign-up"
               onClick={() => {
                 navigate("/sign-up");
               }}
