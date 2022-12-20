@@ -111,6 +111,7 @@ const Navbar = () => {
           borderRadius: "16px",
           background: "white",
         }}
+        data-cy="nav-bar"
       >
         <Toolbar variant="dense" sx={{ backgroundColor: "white" }}>
           <IconButton
