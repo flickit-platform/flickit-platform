@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, { Suspense } from "react";
-import App from "./App";
+import { Box } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { toastDefaultConfig } from "./utils/toast";
@@ -11,6 +11,7 @@ import { AppProvider } from "./providers/AppProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import "react-toastify/dist/ReactToastify.css";
+import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider theme={theme}>
