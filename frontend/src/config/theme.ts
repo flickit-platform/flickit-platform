@@ -1,5 +1,5 @@
 import createPalette from "@mui/material/styles/createPalette";
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from "@mui/material";
 import "@fontsource/oswald/300.css";
 import "@fontsource/oswald/400.css";
 import "@fontsource/oswald/500.css";

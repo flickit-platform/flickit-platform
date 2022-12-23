@@ -393,6 +393,18 @@ export const createService = (
         config
       );
     },
+    uploadProfile(file: any, config: AxiosRequestConfig<any> | undefined) {
+      return axios.post(
+        `/baseinfo/profiles/1/dsl/`,
+        { image: file },
+        {
+          ...config,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    },
     uploadProfilePhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(
         `/baseinfo/profiles/1/images/`,
