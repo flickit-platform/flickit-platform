@@ -94,7 +94,7 @@ class AnswerTemplate(models.Model):
 
 class Metric(models.Model):
     title = models.TextField()
-    description = models.TextField()
+    description = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     metric_category = models.ForeignKey(MetricCategory, on_delete=models.CASCADE)

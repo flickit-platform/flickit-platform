@@ -34,4 +34,5 @@ urlpatterns = router.urls + metric_category_router.urls + metric_category_by_sub
 
 urlpatterns += [
     path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),
+    path("importprofile/", profileviews.ImportProfileApi.as_view()),
 ]
