@@ -184,5 +184,6 @@
   "description": "Description",
   "createProfile": "Create profile",
   "updateProfile": "Update profile",
-  "dsl": "DSL"
+  "dsl": "DSL",
+  "currentSpace": "Current space"
 }

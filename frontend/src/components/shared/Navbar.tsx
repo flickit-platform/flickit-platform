@@ -20,6 +20,10 @@ import Avatar from "@mui/material/Avatar";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
+import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 
 const drawerWidth = 240;
 
@@ -144,34 +148,7 @@ const Navbar = () => {
             <Logo />
           </Typography>
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
-            <Button
-              component={NavLink}
-              to="spaces"
-              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
-              startIcon={
-                <FolderRoundedIcon
-                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
-                />
-              }
-            >
-              <Box sx={{ ...styles.centerV }}>
-                <Trans i18nKey="spaces" />
-                {current_space?.title && (
-                  <Typography
-                    variant="caption"
-                    textTransform={"none"}
-                    sx={{
-                      pl: 0.5,
-                      ml: 0.5,
-                      lineHeight: "1",
-                      borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
-                    }}
-                  >
-                    {current_space?.title}
-                  </Typography>
-                )}
-              </Box>
-            </Button>
+            <SpacesButton currentSpace={current_space} />
             {current_space?.id && (
               <Button
                 component={NavLink}
@@ -379,6 +356,60 @@ const Logo = () => {
         />
       </g>
     </svg>
+  );
+};
+
+const SpacesButton = ({ currentSpace }: any) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={handleClick}
+        sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+        startIcon={
+          <FolderRoundedIcon
+            sx={{ opacity: 0.8, fontSize: "18px !important" }}
+          />
+        }
+        endIcon={
+          open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
+        }
+      >
+        <Trans i18nKey={"spaces"} />
+      </Button>
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{ sx: { minWidth: "260px" } }}
+      >
+        <Typography variant="subMedium" sx={{ px: 1, py: 0.3, opacity: 0.8 }}>
+          <Trans i18nKey={"currentSpace"} />
+        </Typography>
+        <MenuItem
+          dense
+          component={NavLink}
+          onClick={handleClose}
+          to={`/spaces`}
+        >
+          {currentSpace?.title}
+        </MenuItem>
+        <Divider />
+        <MenuItem dense onClick={handleClose}>
+          <Trans i18nKey={"allSpaces"} />
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
