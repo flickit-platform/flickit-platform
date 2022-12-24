@@ -38,9 +38,8 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     ...rest
   } = props;
   const { type, data = {} } = context;
-  const { id: rowId } = data;
+  const { id } = data;
   const defaultValues = type === "update" ? data : {};
-  const { spaceId } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const close = () => {
@@ -55,28 +54,28 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    // setLoading(true);
-    // try {
-    //   const { data: res } =
-    //     type === "update"
-    //       ? await service.updateProfile(
-    //           { rowId, data: { space: spaceId, ...data } },
-    //           { signal: abortController.signal }
-    //         )
-    //       : await service.createProfile(
-    //           { data: { space: spaceId, ...data } },
-    //           { signal: abortController.signal }
-    //         );
-    //   setLoading(false);
-    //   onSubmitForm();
-    //   close();
-    // } catch (e) {
-    //   const err = e as ICustomError;
-    //   setLoading(false);
-    //   setServerFieldErrors(err, formMethods);
-    //   toastError(err);
-    // }
+    const formattedData = { dsl_id: data.dsl_id.id };
+    setLoading(true);
+    try {
+      const { data: res } =
+        type === "update"
+          ? await service.updateProfile(
+              { data: formattedData, id },
+              { signal: abortController.signal }
+            )
+          : await service.createProfile(
+              { data: formattedData },
+              { signal: abortController.signal }
+            );
+      setLoading(false);
+      onSubmitForm();
+      close();
+    } catch (e) {
+      const err = e as ICustomError;
+      setLoading(false);
+      setServerFieldErrors(err, formMethods);
+      toastError(err);
+    }
   };
 
   return (
@@ -101,13 +100,14 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12}>
             <UploadField
+              accept={{ "application/zip": [".zip"] }}
               uploadService={(args, config) =>
-                service.uploadProfilePhoto(args, config)
+                service.uploadProfileDSL(args, config)
               }
               deleteService={(args, config) =>
-                service.deleteProfilePhoto(args, config)
+                service.deleteProfileDSL(args, config)
               }
-              name="image"
+              name="dsl_id"
               required={true}
               label={<Trans i18nKey="dsl" />}
             />
