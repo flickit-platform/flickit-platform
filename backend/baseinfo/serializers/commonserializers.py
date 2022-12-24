@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.serializers import Serializer, FileField
 from ..models import AnswerTemplate, AssessmentSubject, Metric, MetricImpact, QualityAttribute, MetricCategory
 from ..imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 
@@ -57,8 +56,3 @@ class MetricSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Metric
         fields = ['id', 'title', 'index', 'answer_templates']
-
-class FileUploadSerializer(Serializer):
-    file = FileField()
-    class Meta:
-        fields = ('file',)
