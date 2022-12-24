@@ -14,7 +14,13 @@ const ListAccordion = (props: IListAccordion) => {
   const { items, renderItem, LiComponent = UnOrderedListAccordionItem } = props;
 
   return (
-    <ul>
+    <Box
+      component="ul"
+      sx={{
+        paddingInlineStart: { xs: "0", md: "30px" },
+        listStyle: { xs: "none", md: "disc" },
+      }}
+    >
       {items.map((item: any, index: number) => {
         return (
           <LiComponent
@@ -23,7 +29,7 @@ const ListAccordion = (props: IListAccordion) => {
           />
         );
       })}
-    </ul>
+    </Box>
   );
 };
 

@@ -16,32 +16,36 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   const { data } = props;
 
   return (
-    <Box my={4} mx={2}>
+    <Box my={4} sx={{ mx: { xs: 0, sm: 1, md: 2 } }}>
       <Typography variant="h6" sx={{ opacity: 0.8, fontSize: "1.1rem" }}>
         <Trans i18nKey="aboutProfile" />
       </Typography>
       <Box
         sx={{
-          border: (t) => `1px dashed ${t.palette.primary.dark}`,
-          p: 2,
+          p: 1,
           borderRadius: 2,
         }}
       >
         <Grid container spacing={1}>
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={7} md={5} lg={4}>
             {data.profileInfos.map((info: any) => {
               return (
                 <InfoItem
                   info={{
                     ...info,
-                    type: info.title === "Subjects" ? "tags" : info.type,
+                    type: info.title === "Subjects" ? "array" : info.type,
                   }}
                 />
               );
             })}
           </Grid>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={2}>
+          <Grid
+            item
+            sm={0}
+            md={1}
+            sx={{ display: { xs: "none", md: "block" } }}
+          ></Grid>
+          <Grid item xs={12} sm={5} md={4} lg={3}>
             {data?.last_update && (
               <InfoItem
                 info={{
@@ -52,9 +56,18 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body2" fontFamily="Roboto" sx={{ my: 1 }}>
-              {data.description ||
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores dolorem deleniti libero ratione repudiandae modi deserunt rem doloremque perferendis, mollitia doloribus saepe incidunt numquam sequi porro quos exercitationem dolor placeat?"}
+            <Typography
+              variant="body2"
+              fontFamily="Roboto"
+              sx={{
+                my: 0.5,
+                background: "#f5f2f2",
+                py: 1,
+                px: 1,
+                borderRadius: 1,
+              }}
+            >
+              {data.description}
             </Typography>
           </Grid>
         </Grid>
