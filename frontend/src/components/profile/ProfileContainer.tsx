@@ -697,7 +697,7 @@ const useProfile = () => {
   const { profileId } = useParams();
   const profileQueryProps = useQuery({
     service: (args = { profileId }, config) =>
-      service.fetchProfile(args, config),
+      service.inspectProfile(args, config),
     initialData: {
       title: "Common profile",
       profileInfos: {
