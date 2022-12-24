@@ -27,8 +27,7 @@ class AssessmentProfile(models.Model):
         ordering = ['title']
 
 class ProfileDsl(models.Model):
-    dsl = models.FileField(upload_to='profile/dsl')
-    profile = models.OneToOneField(AssessmentProfile, on_delete=models.CASCADE, related_name='dsl')
+    dsl_file = models.FileField(upload_to='profile/dsl')
 
 class MetricCategory(models.Model):
     code = models.CharField(max_length=50)
@@ -94,7 +93,7 @@ class AnswerTemplate(models.Model):
 
 class Metric(models.Model):
     title = models.TextField()
-    description = models.TextField()
+    description = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     metric_category = models.ForeignKey(MetricCategory, on_delete=models.CASCADE)
