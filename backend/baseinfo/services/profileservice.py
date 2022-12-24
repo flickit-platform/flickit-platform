@@ -7,6 +7,21 @@ def load_profile(profile_id) -> AssessmentProfile:
     except AssessmentProfile.DoesNotExist:
         return None
 
+def extract_detail_of_profile(profile):
+    response = extract_profile_basic_infos(profile)
+    response['profileInfos'] = extract_profile_report_infos(profile)
+    response['subjectsInfos'] = extract_subjects_infos(profile)
+    response['questionnaires'] = extract_questionnaires_infos(profile)
+    return response
+
+def extract_profile_basic_infos(profile):
+    response = {}
+    response['title'] = profile.title
+    response['description'] = profile.description
+    response['last_update'] = profile.last_modification_date
+    response['creation_date'] = profile.creation_time
+    return response
+
 def extract_questionnaires_infos(profile):
     questionnairesInfos = []
     categories = profile.metric_categories.all()
@@ -32,7 +47,7 @@ def extract_subjects_infos(profile):
         subjectsInfos.append(subject_infos)
     return subjectsInfos
 
-def extract_profile_infos(profile):
+def extract_profile_report_infos(profile):
     profileInfos = []
     subjects = profile.assessment_subjects.all()
     profileInfos.append(__extract_profile_category_count(profile.metric_categories))
