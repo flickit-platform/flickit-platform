@@ -393,10 +393,10 @@ export const createService = (
         config
       );
     },
-    uploadProfile(file: any, config: AxiosRequestConfig<any> | undefined) {
+    uploadProfileDSL(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(
-        `/baseinfo/profiles/1/dsl/`,
-        { image: file },
+        `/baseinfo/dsl/`,
+        { dsl_file: file },
         {
           ...config,
           headers: {
@@ -404,6 +404,41 @@ export const createService = (
           },
         }
       );
+    },
+    deleteProfileDSL(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args || {};
+      return axios.delete(`/baseinfo/dsl/${id}`, config);
+    },
+    createProfile(
+      args: { data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { data } = args || {};
+      return axios.post(`/baseinfo/importprofile/`, data, config);
+    },
+    updateProfile(
+      args: { id: TId; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id, data } = args || {};
+      return axios.put(`/baseinfo/importprofile/${id}`, data, config);
+    },
+    fetchProfile(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args || {};
+      return axios.get(`/baseinfo/importprofile/${id}`, config);
+    },
+    deleteProfile(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args || {};
+      return axios.delete(`/baseinfo/importprofile/${id}`, config);
     },
     uploadProfilePhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(
@@ -423,7 +458,7 @@ export const createService = (
     ) {
       return axios.delete(`/baseinfo/profiles/1/images/${args?.id}/`, config);
     },
-    fetchProfile(
+    inspectProfile(
       args: { profileId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
