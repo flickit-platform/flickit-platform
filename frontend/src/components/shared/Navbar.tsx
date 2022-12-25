@@ -101,6 +101,15 @@ const Navbar = () => {
             <ListItemText primary={<Trans i18nKey="compare" />} />
           </ListItemButton>
         </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/profiles`}
+          >
+            <ListItemText primary={<Trans i18nKey="profiles" />} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
