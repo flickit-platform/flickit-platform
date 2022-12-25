@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from ..models import AnswerTemplate, AssessmentSubject, Metric, MetricImpact, QualityAttribute, MetricCategory
 from ..imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 

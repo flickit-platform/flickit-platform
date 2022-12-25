@@ -35,22 +35,22 @@ const ProfilesContainer = (props: PropsWithChildren<{}>) => {
                 }
                 value="list"
               />
-              <Tab
+              {/* <Tab
                 label={
                   <Box sx={{ ...styles.centerV }}>
                     <Trans i18nKey="market" />
                   </Box>
                 }
                 value="market"
-              />
+              /> */}
             </TabList>
           </Box>
           <TabPanel value="list" sx={{ p: { xs: 1, sm: 3 } }}>
             <ProfilesListContainer />
           </TabPanel>
-          <TabPanel value="market" sx={{ p: { xs: 1, sm: 3 } }}>
+          {/* <TabPanel value="market" sx={{ p: { xs: 1, sm: 3 } }}>
             <ProfilesMarketContainer />
-          </TabPanel>
+          </TabPanel> */}
         </TabContext>
       </Box>
     </Box>
