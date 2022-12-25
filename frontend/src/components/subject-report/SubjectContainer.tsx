@@ -25,6 +25,7 @@ import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import { t } from "i18next";
 
 const SubjectContainer = () => {
   const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
@@ -170,12 +171,12 @@ const SubjectTitle = (props: {
           routes={[
             {
               title: assessment_project_space_title,
-              to: "/spaces/",
+              to: `/${spaceId}/assessments`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title: assessment_project_title,
-              to: `/${spaceId}/assessments`,
+              title: `${assessment_project_title} ${t("insights")}`,
+              to: `/${spaceId}/assessments/${assessmentId}/insights`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),
@@ -189,7 +190,6 @@ const SubjectTitle = (props: {
                   {assessment_project_title}
                 </>
               ),
-              to: `/${spaceId}/assessments/${assessmentId}/insights`,
               icon: (
                 <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

@@ -18,6 +18,7 @@ import SupTitleBreadcrumb, {
 } from "../shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import { t } from "i18next";
 
 const MetricsTitle = (props: {
   data: IQuestionnaireModel;
@@ -80,12 +81,12 @@ const MetricsTitle = (props: {
             routes={[
               {
                 title: breadcrumbInfo?.space,
-                to: "/spaces/",
+                to: `/${spaceId}/assessments`,
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
-                title: breadcrumbInfo?.assessment,
-                to: `/${spaceId}/assessments`,
+                title: `${breadcrumbInfo?.assessment} ${t("questionnaires")}`,
+                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
                 icon: (
                   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
                 ),
