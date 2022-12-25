@@ -42,12 +42,11 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           routes={[
             {
               title: spaceTitle,
-              to: "/spaces/",
+              to: `/${spaceId}/assessments/`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title,
-              to: `/${spaceId}/assessments`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

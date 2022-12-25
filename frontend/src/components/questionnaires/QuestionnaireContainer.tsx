@@ -184,12 +184,11 @@ const QuestionnaireTitle = () => {
           routes={[
             {
               title: breadcrumbInfo.space,
-              to: "/spaces/",
+              to: `/${spaceId}/assessments`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: breadcrumbInfo.assessment,
-              to: `/${spaceId}/assessments`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

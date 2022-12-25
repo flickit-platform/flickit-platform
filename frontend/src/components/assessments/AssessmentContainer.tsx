@@ -25,6 +25,7 @@ const AssessmentContainer = () => {
   const { fetchAssessments, ...rest } = useFetchAssessments();
   const { data, error, errorObject, requested_space } = rest;
   const isEmpty = data.length == 0;
+  const { spaceId } = useParams();
 
   return error &&
     (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
@@ -38,7 +39,6 @@ const AssessmentContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                to: "/spaces",
                 title: requested_space,
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
