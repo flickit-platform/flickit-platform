@@ -20,7 +20,7 @@ const ProfilesContainer = (props: PropsWithChildren<{}>) => {
   return (
     <Box>
       <Title>
-        <Trans i18nKey="profile" />
+        <Trans i18nKey="profiles" />
       </Title>
 
       <Box mt={2}>

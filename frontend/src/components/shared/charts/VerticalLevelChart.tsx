@@ -45,6 +45,8 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
             borderBottom: loading ? undefined : `2px solid ${statusColor}`,
           }}
           variant="h3"
+          fontFamily={"Oswald"}
+          fontWeight="bold"
           letterSpacing={".1em"}
         >
           {loading ? <Skeleton width={"164px"} /> : status}
