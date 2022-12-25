@@ -1,6 +1,6 @@
 import React from "react";
 import { Trans } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "../../config/styles";
 import { useAuthContext } from "../../providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
@@ -58,27 +58,7 @@ const Navbar = () => {
             component={NavLink}
             to="spaces"
           >
-            <ListItemText
-              primary={
-                <>
-                  <Trans i18nKey="spaces" />
-                  {current_space?.title && (
-                    <Typography
-                      variant="caption"
-                      textTransform={"none"}
-                      sx={{
-                        pl: 0.5,
-                        ml: 0.5,
-                        lineHeight: "1",
-                        borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
-                      }}
-                    >
-                      {current_space?.title}
-                    </Typography>
-                  )}
-                </>
-              }
-            />
+            <ListItemText primary={<Trans i18nKey="spaces" />} />
           </ListItemButton>
         </ListItem>
         {current_space?.id && (
@@ -88,7 +68,27 @@ const Navbar = () => {
               component={NavLink}
               to={`/${current_space?.id}/assessments`}
             >
-              <ListItemText primary={<Trans i18nKey="assessments" />} />
+              <ListItemText
+                primary={
+                  <>
+                    <Trans i18nKey="assessments" />
+                    {current_space?.title && (
+                      <Typography
+                        variant="caption"
+                        textTransform={"none"}
+                        sx={{
+                          pl: 0.5,
+                          ml: 0.5,
+                          lineHeight: "1",
+                          borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
+                        }}
+                      >
+                        {current_space?.title}
+                      </Typography>
+                    )}
+                  </>
+                }
+              />
             </ListItemButton>
           </ListItem>
         )}
@@ -158,7 +158,7 @@ const Navbar = () => {
           </Typography>
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <SpacesButton currentSpace={current_space} />
-            {current_space?.id && (
+            {/* {current_space?.id && (
               <Button
                 component={NavLink}
                 to={`/${current_space?.id}/assessments`}
@@ -171,7 +171,7 @@ const Navbar = () => {
               >
                 <Trans i18nKey="assessments" />
               </Button>
-            )}
+            )} */}
             <Button
               component={NavLink}
               to={`/compare`}
@@ -180,7 +180,7 @@ const Navbar = () => {
                   sx={{ opacity: 0.8, fontSize: "18px !important" }}
                 />
               }
-              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+              sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
             >
               <Trans i18nKey="compare" />
             </Button>
@@ -377,22 +377,47 @@ const SpacesButton = ({ currentSpace }: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const navigate = useNavigate();
 
   return (
     <>
       <Button
-        onClick={handleClick}
-        sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+        onClick={() =>
+          currentSpace?.id && navigate(`/${currentSpace?.id}/assessments`)
+        }
+        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
         startIcon={
           <FolderRoundedIcon
             sx={{ opacity: 0.8, fontSize: "18px !important" }}
           />
         }
         endIcon={
-          open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
+          <Button
+            sx={{ minWidth: "8px", ml: 0.6, px: 0.2, py: 0.2 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick(e);
+            }}
+          >
+            {open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
+          </Button>
         }
       >
         <Trans i18nKey={"spaces"} />
+        {currentSpace?.title && (
+          <Typography
+            variant="caption"
+            textTransform={"none"}
+            sx={{
+              pl: 0.5,
+              ml: 0.5,
+              lineHeight: "1",
+              borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
+            }}
+          >
+            {currentSpace?.title}
+          </Typography>
+        )}
       </Button>
 
       <Menu
@@ -402,19 +427,35 @@ const SpacesButton = ({ currentSpace }: any) => {
         onClose={handleClose}
         PaperProps={{ sx: { minWidth: "260px" } }}
       >
-        <Typography variant="subMedium" sx={{ px: 1, py: 0.3, opacity: 0.8 }}>
-          <Trans i18nKey={"currentSpace"} />
-        </Typography>
+        {currentSpace?.id && (
+          <>
+            <Typography
+              variant="subMedium"
+              sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}
+            >
+              <Trans i18nKey={"currentSpace"} />
+            </Typography>
+            <MenuItem
+              dense
+              component={NavLink}
+              to={
+                currentSpace?.id
+                  ? `/${currentSpace?.id}/assessments`
+                  : `/spaces`
+              }
+              onClick={handleClose}
+            >
+              {currentSpace?.title}
+            </MenuItem>
+            <Divider />
+          </>
+        )}
         <MenuItem
           dense
-          component={NavLink}
           onClick={handleClose}
+          component={NavLink}
           to={`/spaces`}
         >
-          {currentSpace?.title}
-        </MenuItem>
-        <Divider />
-        <MenuItem dense onClick={handleClose}>
           <Trans i18nKey={"allSpaces"} />
         </MenuItem>
       </Menu>

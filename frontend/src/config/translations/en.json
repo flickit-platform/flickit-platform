@@ -185,5 +185,9 @@
   "createProfile": "Create profile",
   "updateProfile": "Update profile",
   "dsl": "DSL",
-  "currentSpace": "Current space"
+  "currentSpace": "Current space",
+  "allSpaces": "All spaces",
+  "questionOptions": "Question options",
+  "impact": "Impact",
+  "relatedAttributes": "Related attributes"
 }
