@@ -430,7 +430,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                         }}
                                         variant="subMedium"
                                       >
-                                        <Trans i18nKey={"question options"} />
+                                        <Trans i18nKey={"questionOptions"} />
                                       </Typography>
                                     )}
                                     <ul style={{ paddingInlineStart: "20px" }}>
@@ -456,7 +456,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                         }}
                                         variant="subMedium"
                                       >
-                                        <Trans i18nKey={"Related attributes"} />
+                                        <Trans i18nKey={"relatedAttributes"} />
                                         <Box
                                           component="span"
                                           sx={{ float: "right", mr: 1 }}
@@ -611,7 +611,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                             }}
                             variant="subMedium"
                           >
-                            <Trans i18nKey={"question options"} />
+                            <Trans i18nKey={"questionOptions"} />
                           </Typography>
                         )}
                         <ul style={{ paddingInlineStart: "20px" }}>
@@ -662,7 +662,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               }}
                               variant="subMedium"
                             >
-                              <Trans i18nKey={"Related attributes"} />
+                              <Trans i18nKey={"relatedAttributes"} />
                             </Typography>
                           )}
                           <Box>
