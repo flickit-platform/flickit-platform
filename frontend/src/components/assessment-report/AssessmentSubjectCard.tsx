@@ -20,15 +20,7 @@ interface IAssessmentSubjectCardProps extends ISubjectInfo {
 }
 
 export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
-  const {
-    title,
-    progress = 0,
-    status,
-    id,
-    image,
-    colorCode,
-    description = "",
-  } = props;
+  const { title, progress = 0, status, id, image, colorCode, description = "" } = props;
   return (
     <Paper
       sx={{
@@ -59,36 +51,20 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           height: "100%",
         }}
       >
-        <Typography
-          variant="h4"
-          textTransform={"uppercase"}
-          letterSpacing={".13em"}
-          fontFamily="Oswald"
-          fontWeight={500}
-        >
+        <Typography variant="h4" textTransform={"uppercase"} letterSpacing={".13em"} fontFamily="Oswald" fontWeight={500}>
           {title}
         </Typography>
-        <ReadMoreAboutSubject
-          colorCode={colorCode}
-          title={title}
-          description={description}
-        />
+        <ReadMoreAboutSubject colorCode={colorCode} title={title} description={description} />
         <Box
           mt={2}
           sx={{
             filter: (t) => {
-              const shouldInvert =
-                t.palette.getContrastText(colorCode) === "rgba(0, 0, 0, 0.87)";
+              const shouldInvert = t.palette.getContrastText(colorCode) === "rgba(0, 0, 0, 0.87)";
               return shouldInvert ? "invert(.93)" : undefined;
             },
           }}
         >
-          <img
-            src={`${BASE_URL}${image}`}
-            alt={title}
-            width={"90px"}
-            style={{ filter: "drop-shadow(1px 4px 4px #00000050)" }}
-          />
+          <img src={`${BASE_URL}${image}`} alt={title} width={"90px"} style={{ filter: "drop-shadow(1px 4px 4px #00000050)" }} />
         </Box>
         <SubjectProgress progress={progress} colorCode={colorCode} />
 
@@ -101,13 +77,9 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
             state={{ status }}
-            startIcon={
-              progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />
-            }
+            startIcon={progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />}
           >
-            <Trans
-              i18nKey={progress === 0 ? "startAssessment" : "viewInsights"}
-            />
+            <Trans i18nKey={"viewInsights"} />
           </Button>
         </Box>
       </Box>
@@ -115,9 +87,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   );
 };
 
-const SubjectStatus = (
-  props: Pick<IAssessmentSubjectCardProps, "title" | "status">
-) => {
+const SubjectStatus = (props: Pick<IAssessmentSubjectCardProps, "title" | "status">) => {
   const { title, status } = props;
   const hasStats = hasStatus(status);
   return (
@@ -125,17 +95,14 @@ const SubjectStatus = (
       {
         <>
           <Typography textAlign={"center"}>
-            <Trans i18nKey="subjectStatusIs" values={{ title }} />{" "}
-            {hasStats && <Trans i18nKey="evaluatedAs" />}
+            <Trans i18nKey="subjectStatusIs" values={{ title }} /> {hasStats && <Trans i18nKey="evaluatedAs" />}
           </Typography>
           <Typography
             variant={hasStats ? "h3" : "h4"}
             letterSpacing=".17em"
             sx={{
               fontWeight: "500",
-              borderBottom: hasStats
-                ? `3px solid ${getColorOfStatus(status)}`
-                : undefined,
+              borderBottom: hasStats ? `3px solid ${getColorOfStatus(status)}` : undefined,
               pl: 1,
               pr: 1,
             }}
@@ -148,12 +115,7 @@ const SubjectStatus = (
   );
 };
 
-const ReadMoreAboutSubject = (
-  props: Pick<
-    IAssessmentSubjectCardProps,
-    "title" | "colorCode" | "description"
-  >
-) => {
+const ReadMoreAboutSubject = (props: Pick<IAssessmentSubjectCardProps, "title" | "colorCode" | "description">) => {
   const { title, colorCode, description } = props;
   return (
     <Box
