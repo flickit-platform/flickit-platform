@@ -13,14 +13,9 @@ import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
 import { Link, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
-import {
-  CEDialog,
-  CEDialogActions,
-} from "../../components/shared/dialogs/CEDialog";
+import { CEDialog, CEDialogActions } from "../../components/shared/dialogs/CEDialog";
 import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "../shared/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -35,13 +30,7 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const {
-    onClose: closeDialog,
-    onSubmitForm,
-    context = {},
-    openDialog,
-    ...rest
-  } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { id: rowId } = data;
   const defaultValues = type === "update" ? data : {};
@@ -64,14 +53,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateAssessment(
-              { rowId, data: { space: spaceId, ...data } },
-              { signal: abortController.signal }
-            )
-          : await service.createAssessment(
-              { data: { space: spaceId, ...data } },
-              { signal: abortController.signal }
-            );
+          ? await service.updateAssessment({ rowId, data: { space: spaceId, ...data } }, { signal: abortController.signal })
+          : await service.createAssessment({ data: { space: spaceId, ...data } }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
       close();
@@ -90,18 +73,11 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? (
-            <Trans i18nKey="updateAssessment" />
-          ) : (
-            <Trans i18nKey="createAssessment" />
-          )}
+          {type === "update" ? <Trans i18nKey="updateAssessment" /> : <Trans i18nKey="createAssessment" />}
         </>
       }
     >
-      <FormProviderWithForm
-        formMethods={formMethods}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-      >
+      <FormProviderWithForm formMethods={formMethods} onSubmit={formMethods.handleSubmit(onSubmit)}>
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12} md={8}>
             <InputFieldUC
@@ -130,11 +106,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   );
 };
 
-const ProfileField = ({
-  defaultValue = { title: "Common profile", id: 6 },
-}: {
-  defaultValue: any;
-}) => {
+const ProfileField = ({ defaultValue }: { defaultValue: any }) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchProfiles(args, config),
