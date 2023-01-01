@@ -2,9 +2,7 @@ FROM python:3.10-alpine3.13
 
 ENV PYTHONUNBUFFERED 1
 
-COPY ./requirements.txt /requirements.txt
-COPY ./backend /backend
-COPY ./scripts /scripts
+COPY . ./
 
 WORKDIR /backend
 EXPOSE 8000
