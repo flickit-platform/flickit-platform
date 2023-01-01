@@ -11,6 +11,8 @@ from ..services import importprofileservice
 from ..serializers.profileserializers import ProfileDslSerializer
 from ..models import ProfileDsl
 
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+
 class ProfileDetailDisplayApi(APIView):
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
@@ -32,7 +34,7 @@ class ImportProfileApi(APIView):
         dsl = ProfileDsl.objects.get(id = dsl_id)
         input_zip = ZipFile(dsl.dsl_file)
         dsl_contents = importprofileservice.extract_dsl_contents(input_zip)
-        resp = requests.post("http://localhost:8080/extract/", json={"dslContent": dsl_contents}).json()
+        resp = requests.post(DSL_PARSER_URL_SERVICE, json={"dslContent": dsl_contents}).json()
         if resp['hasError']:
             return Response({"message": "The uploaded dsl is invalid."}, status = status.HTTP_400_BAD_REQUEST)
         try:

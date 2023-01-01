@@ -30,6 +30,12 @@ services:
     depends_on:
       - db
 
+  dsl:
+      build: ./dsl-parser
+      restart: on-failure
+      ports:
+        - 8080:8080
+
   db:
     image: postgres:11
     restart: always
