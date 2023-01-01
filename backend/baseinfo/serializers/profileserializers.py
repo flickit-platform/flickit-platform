@@ -12,10 +12,9 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
     images = ProfileImageSerializer(many=True)
     metric_categories = MetricCategorySerilizer(many=True)
     assessment_subjects = AssessmentSubjectSerilizer(many=True)
-    dsl = ProfileDslSerializer()
     class Meta:
         model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images', 'dsl']
+        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images']
 
 class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:
