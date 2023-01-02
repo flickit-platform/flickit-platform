@@ -26,6 +26,7 @@ import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const SubjectContainer = () => {
   const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
@@ -158,6 +159,10 @@ const SubjectTitle = (props: {
     title,
   } = data || {};
   const { spaceId, assessmentId } = useParams();
+
+  useEffect(() => {
+    setDocumentTitle(`${title} ${t("insight")}`);
+  }, [title]);
 
   return (
     <Title

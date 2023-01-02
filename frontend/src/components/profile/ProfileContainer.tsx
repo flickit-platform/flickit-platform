@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useParams } from "react-router-dom";
@@ -23,6 +23,8 @@ import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
 import ListAccordion from "../shared/lists/ListAccordion";
 import InfoItem from "../shared/InfoItem";
 import formatDate from "../../utils/formatDate";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 const ProfileContainer = () => {
   const { profileQueryProps } = useProfile();
@@ -1005,7 +1007,9 @@ const useProfile = () => {
     },
   });
 
-  console.log(profileQueryProps.data);
+  useEffect(() => {
+    setDocumentTitle(`${t("profile")}: ${profileQueryProps.data?.title}`);
+  }, [profileQueryProps.data?.title]);
 
   return { profileQueryProps };
 };
