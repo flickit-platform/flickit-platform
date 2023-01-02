@@ -1,6 +1,7 @@
 from django.db import transaction
 from baseinfo.models import AssessmentProfile, MetricCategory, AssessmentSubject \
-    , QualityAttribute, Metric, MetricImpact, AnswerTemplate
+    , QualityAttribute, Metric, MetricImpact, AnswerTemplate, ProfileTag
+from ..services import profileservice
 
 def extract_dsl_contents(input_zip):
     all_content = ''
@@ -18,22 +19,35 @@ def __trim_content(content):
             new_content = new_content + '\n' + line
     return new_content
 @transaction.atomic
-def import_profile(descriptive_profile):
-    assessment_profile = __import_profile_base_info(descriptive_profile)
+def import_profile(descriptive_profile, tag_ids):
+    tags = extract_tags(tag_ids)
+    assessment_profile = __import_profile_base_info(descriptive_profile, tags)
     __import_categories(descriptive_profile['categoryModels'], assessment_profile)
     __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
     __import_attributes(descriptive_profile['attributeModels'])
     __import_metrics(descriptive_profile['metricModels'])
     pass
 
+def extract_tags(tag_ids):
+    tags = []
+    if tag_ids:
+        for tag_id in tag_ids:
+            tag = profileservice.load_profile_tag(tag_id)
+            if tag:
+                tags.append(tag)
+    return tags
 
-def __import_profile_base_info(descriptive_profile):
+
+def __import_profile_base_info(descriptive_profile, tags):
     profile_model = descriptive_profile['profileModel']
     assessment_profile = AssessmentProfile()
     assessment_profile.code = profile_model['code']
     assessment_profile.title = profile_model['title']
     assessment_profile.description = profile_model['description']
     assessment_profile.is_default = False
+    assessment_profile.save()
+    for tag in tags:
+        assessment_profile.tags.add(tag)
     assessment_profile.save()
     return assessment_profile
 

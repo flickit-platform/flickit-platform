@@ -7,11 +7,12 @@ from django.urls import path
 
 
 router = routers.DefaultRouter()
-router.register('profiles', commonviews.AssessmentProfileViewSet, basename='profiles')
+router.register('profiles', profileviews.AssessmentProfileViewSet, basename='profiles')
 router.register('metriccategories', commonviews.MetricCategoryViewSet, basename='metriccategories')
 router.register('subjects', commonviews.AssessmentSubjectViewSet, basename='subjects')
 router.register('attributes', commonviews.QualityAttributeViewSet, basename='attributes')
 router.register('dsl', profileviews.UploadProfileApi, basename='dsl')
+router.register('tags', profileviews.ProfileTagViewSet, basename='tags')
 
 
 metric_category_router = routers.NestedDefaultRouter(router, 'metriccategories', lookup='metric_category')

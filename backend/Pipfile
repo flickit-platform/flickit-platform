@@ -18,6 +18,8 @@ eventlet = "*"
 celery = "*"
 django-templated-mail = "*"
 django-cors-headers = "*"
+django-rest-swagger = "*"
+drf-yasg = "*"
 
 [dev-packages]
 pytest = "*"

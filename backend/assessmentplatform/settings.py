@@ -129,7 +129,8 @@ INSTALLED_APPS = [
     'account',
     'baseinfo',
     'assessment',
-    'assessmentplatform'
+    'assessmentplatform',
+    # 'drf_yasg',
     # 'djversion',
 ]
 
@@ -201,7 +202,7 @@ AUTH_USER_MODEL = 'account.User'
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
     ("BaseInfo", ("baseinfo.AssessmentProfile", "baseinfo.MetricCategory",
-    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric")),
+    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric", "baseinfo.ProfileTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
        "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),

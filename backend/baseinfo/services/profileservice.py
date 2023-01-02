@@ -1,10 +1,16 @@
-from ..models import AssessmentProfile
+from ..models import AssessmentProfile, ProfileTag
 
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
         return AssessmentProfile.objects.get(id = profile_id)
     except AssessmentProfile.DoesNotExist:
+        return None
+
+def load_profile_tag(tag_id) -> ProfileTag:
+    try:
+        return ProfileTag.objects.get(id = tag_id)
+    except ProfileTag.DoesNotExist:
         return None
 
 def extract_detail_of_profile(profile):
@@ -54,6 +60,7 @@ def extract_profile_report_infos(profile):
     profileInfos.append(__extract_profile_attribute_count(subjects))
     profileInfos.append(__extract_profile_metric_count(profile.metric_categories))
     profileInfos.append(__extract_profile_subjects(subjects))
+    profileInfos.append(__extract_profile_tags(profile.tags.all()))
     return profileInfos
 
 def __extract_subject_attributes_info(attributes_qs):
@@ -113,6 +120,10 @@ def __extract_category_report_info(category):
 def __extract_profile_subjects(subjects):
     subject_titles = [subject.title for subject in subjects]
     return {'title' : 'Subjects', 'item': subject_titles}
+
+def __extract_profile_tags(tags):
+    tag_titles = [tag.title for tag in tags]
+    return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
     
 def __extract_profile_category_count(metric_categories):
     return {'title' : 'Questionnaires count', 'item': metric_categories.count()}
