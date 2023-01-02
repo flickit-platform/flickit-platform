@@ -117,7 +117,7 @@ def __extract_profile_subjects(subjects):
 
 def __extract_profile_tags(tags):
     tag_titles = [tag.title for tag in tags]
-    return {'title' : 'Tags', 'item': tag_titles, 'type': 'tag'}
+    return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
     
 def __extract_profile_category_count(metric_categories):
     return {'title' : 'Questionnaires count', 'item': metric_categories.count()}
