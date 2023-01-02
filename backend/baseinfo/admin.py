@@ -85,8 +85,11 @@ class QualityAttributeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(models.ProfileTag)
 class TagAdmin(admin.ModelAdmin):
-    fields = ['code', 'title', 'profile']
-    search_fields = ['title', 'code', 'profile']
-    list_display = ['code', 'title', 'profile']
+    fields = ['code', 'title', 'profiles']
+    search_fields = ['title', 'code']
+    list_display = ['code', 'title']
     list_editable = ['title']
     list_per_page = 10
+
+    def profiles(self, obj):
+        return "\n".join([tag.title for tag in obj.tags.all()])

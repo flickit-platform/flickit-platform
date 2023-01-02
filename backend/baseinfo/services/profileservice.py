@@ -1,10 +1,16 @@
-from ..models import AssessmentProfile
+from ..models import AssessmentProfile, ProfileTag
 
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
         return AssessmentProfile.objects.get(id = profile_id)
     except AssessmentProfile.DoesNotExist:
+        return None
+
+def load_profile_tag(tag_id) -> ProfileTag:
+    try:
+        return ProfileTag.objects.get(id = tag_id)
+    except ProfileTag.DoesNotExist:
         return None
 
 def extract_detail_of_profile(profile):

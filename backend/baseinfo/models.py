@@ -32,7 +32,7 @@ class ProfileDsl(models.Model):
 class ProfileTag(models.Model):
     code = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
-    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='tags')
+    profiles = models.ManyToManyField(AssessmentProfile, related_name = 'tags')
 
     class Meta:
         verbose_name = 'Profile Tag'
