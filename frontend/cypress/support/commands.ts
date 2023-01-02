@@ -35,3 +35,24 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add(
+  "loginByApi",
+  (
+    username = Cypress.env("USER_USERNAME"),
+    password = Cypress.env("USER_PASSWORD")
+  ) => {
+    console.log(Cypress.env());
+    cy.request("POST", `auth/jwt/create/`, {
+      username,
+      password,
+    }).then((response) => {
+      const {
+        body: { refresh, access },
+      } = response;
+      localStorage.setItem("refreshToken", JSON.stringify(refresh));
+      localStorage.setItem("accessToken", JSON.stringify(access));
+      cy.visit("http://localhost:3000");
+    });
+  }
+);

@@ -2,7 +2,7 @@
 
 context("Navigation", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000");
+    cy.loginByApi();
   });
 
   it("cy.go() - navigate to spaces page", () => {
