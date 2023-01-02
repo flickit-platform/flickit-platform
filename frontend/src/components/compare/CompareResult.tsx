@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
@@ -9,6 +9,8 @@ import { ICompareResultModel } from "../../types";
 import { getMinWithBaseOnNumberOfAssessments } from "./utils";
 import CompareResultAssessmentsSection from "./CompareResultAssessmentsSection";
 import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 interface ICompareResultProps {
   data: ICompareResultModel;
@@ -16,6 +18,14 @@ interface ICompareResultProps {
 
 const CompareResult = (props: ICompareResultProps) => {
   const { data } = props;
+
+  useEffect(() => {
+    setDocumentTitle(
+      `${t("comparisonResultT")} ${data.base_infos
+        .map((bi) => bi.title)
+        .join(` & `)}`
+    );
+  }, [data.base_infos]);
 
   return (
     <Box mt={4}>

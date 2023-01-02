@@ -1,7 +1,8 @@
-import React from "react";
 import { MetricContainer } from "../components/metrics/MetricContainer";
+import useDocumentTitle from "../utils/useDocumentTitle";
 
 const MetricScreen = () => {
+  useDocumentTitle();
   return <MetricContainer />;
 };
 

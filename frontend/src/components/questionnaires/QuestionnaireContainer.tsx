@@ -30,6 +30,8 @@ import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "../shared/PermissionControl";
 import AlertBox from "../shared/AlertBox";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 const QuestionnaireContainer = () => {
   const {
@@ -175,6 +177,10 @@ const QuestionnaireTitle = () => {
     spaceId,
     assessmentId,
   });
+
+  useEffect(() => {
+    setDocumentTitle(`${breadcrumbInfo.assessment} ${t("questionnaires")}`);
+  }, [breadcrumbInfo?.assessment]);
 
   return (
     <Title

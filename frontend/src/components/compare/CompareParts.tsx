@@ -24,6 +24,8 @@ import { styles } from "../../config/styles";
 import AlertBox from "../shared/AlertBox";
 import PermissionControl from "../shared/PermissionControl";
 import forLoopComponent from "../../utils/forLoopComponent";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 const CompareParts = () => {
   const { assessmentIds, assessmentsInfoQueryData } = useCompareParts();
@@ -109,6 +111,7 @@ const useCompareParts = () => {
     setSearchParams(createSearchParams({ assessmentIds } as any), {
       replace: true,
     });
+    setDocumentTitle(`${t("compare")} ${assessmentIds.length} ${t("items")}`);
   }, [assessmentIds.join()]);
 
   useEffect(() => {

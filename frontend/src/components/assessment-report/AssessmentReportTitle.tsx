@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Title from "../shared/Title";
 import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
@@ -10,6 +10,8 @@ import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 interface IAssessmentReportTitle {
   data: IAssessmentReportModel;
@@ -28,6 +30,10 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   } = data;
   const { title: spaceTitle = "" } = space || {};
   const { spaceId } = useParams();
+
+  useEffect(() => {
+    setDocumentTitle(`${title} ${t("overallInsightsT")}`);
+  }, [title]);
 
   return (
     <Title

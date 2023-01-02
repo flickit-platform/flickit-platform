@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -19,6 +19,7 @@ import SupTitleBreadcrumb, {
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const MetricsTitle = (props: {
   data: IQuestionnaireModel;
@@ -39,6 +40,12 @@ const MetricsTitle = (props: {
     assessmentId,
     questionnaireId,
   });
+
+  useEffect(() => {
+    if (isComplete) {
+      setDocumentTitle(`${title} ${t("questionnaireFinished")}`);
+    }
+  }, [title, isComplete]);
 
   return (
     <Box sx={{ pt: 1, pb: 0 }}>

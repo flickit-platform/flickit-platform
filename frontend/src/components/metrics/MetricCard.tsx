@@ -45,6 +45,8 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import useScreenResize from "../../utils/useScreenResize";
 import toastError from "../../utils/toastError";
+import setDocumentTitle from "../../utils/setDocumentTitle";
+import { t } from "i18next";
 
 interface IMetricCardProps {
   metricInfo: IMetricInfo;
@@ -62,6 +64,10 @@ export const MetricCard = (props: IMetricCardProps) => {
       abortController.current.abort();
     };
   }, []);
+
+  useEffect(() => {
+    setDocumentTitle(`${t("question")} ${metricIndex}: ${title}`);
+  }, [title]);
 
   return (
     <Paper
