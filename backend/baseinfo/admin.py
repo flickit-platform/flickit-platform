@@ -17,8 +17,6 @@ class AssessmentProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_per_page = 10
     inlines= [ProfileImageFormInline]
 
-
-
 class SubjectImageFormInline(admin.TabularInline):
      model = SubjectImage
      fields= ['image']
@@ -84,3 +82,11 @@ class QualityAttributeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_per_page = 10
     inlines= [QualityAttributeImageFormInline]
 
+
+@admin.register(models.ProfileTag)
+class TagAdmin(admin.ModelAdmin):
+    fields = ['code', 'title', 'profile']
+    search_fields = ['title', 'code', 'profile']
+    list_display = ['code', 'title', 'profile']
+    list_editable = ['title']
+    list_per_page = 10
