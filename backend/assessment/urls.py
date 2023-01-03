@@ -27,4 +27,5 @@ urlpatterns += [
     path("breadcrumbinfo/", commonviews.BreadcrumbInformationView.as_view()),
     path("compare/", comparisionviews.CompareAssessmentView.as_view()),
     path("compareselect/", projectviews.AssessmentProjectSelectForCompareView.as_view()),
+    path("checkreport/<str:assessment_project_id>/", reportviews.AssessmentCheckReportApi.as_view()),
 ]
