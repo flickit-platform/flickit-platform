@@ -468,6 +468,12 @@ export const createService = (
       const { profileId } = args || {};
       return axios.get(`/baseinfo/inspectprofile/${profileId}/`, config);
     },
+    fetchUserExpertGroups(
+      args: any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/baseinfo/tags/`, config);
+    },
   };
 
   return service;
