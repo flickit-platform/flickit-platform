@@ -18,9 +18,9 @@ const InfoItem = (props: IInfoItems) => {
 };
 
 const DefaultInfoItemComponent = (
-  props: PropsWithChildren<{ title: string; bg?: "white" }>
+  props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string }>
 ) => {
-  const { title, children, bg } = props;
+  const { title, children, bg, itemBg } = props;
   return (
     <Typography
       mb={1}
@@ -41,7 +41,8 @@ const DefaultInfoItemComponent = (
         sx={{
           py: 0.2,
           px: 0.6,
-          background: "white",
+          background: itemBg || "white",
+
           borderRadius: 1,
         }}
       >
@@ -53,7 +54,7 @@ const DefaultInfoItemComponent = (
 
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
-    <DefaultInfoItemComponent title={title} {...props}>
+    <DefaultInfoItemComponent title={title} {...props} itemBg={"#f5f2f2"}>
       {items.map((item) => (
         <Chip size="small" label={item} sx={{ mr: 0.3 }} />
       ))}
