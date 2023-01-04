@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import throttle from "lodash/throttle";
 import TextField from "@mui/material/TextField";
@@ -68,6 +68,7 @@ interface IAutocompleteAsyncFieldBase
   label: string | JSX.Element;
   filterSelectedOption?: (options: readonly any[], value: any) => any[];
   required?: boolean;
+  searchOnType?: boolean;
 }
 
 const AutocompleteBaseField = (
@@ -95,6 +96,7 @@ const AutocompleteBaseField = (
     errorObject,
     abortController,
     defaultValue,
+    searchOnType = true,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -102,6 +104,7 @@ const AutocompleteBaseField = (
     formState: { errors },
     setValue,
   } = useFormContext();
+  const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
   const [inputValue, setInputValue] = React.useState(
     () => getOptionLabel(defaultValue) || ""
@@ -111,17 +114,22 @@ const AutocompleteBaseField = (
   const fetch = React.useMemo(
     () =>
       throttle((request: any) => {
-        query({ query: formatRequest(request) });
+        query?.({ query: formatRequest(request) });
       }, 800),
     []
   );
 
   useEffect(() => {
+    if (!searchOnType && !isFirstFetchRef.current) {
+      return;
+    }
+
     if (getOptionLabel(value) == inputValue) {
       fetch("");
     } else {
       fetch(inputValue);
     }
+    isFirstFetchRef.current = false;
   }, [inputValue, fetch]);
 
   useEffect(() => {

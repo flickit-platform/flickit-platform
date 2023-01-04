@@ -42,7 +42,6 @@ Cypress.Commands.add(
     username = Cypress.env("USER_USERNAME"),
     password = Cypress.env("USER_PASSWORD")
   ) => {
-    console.log(Cypress.env());
     cy.request("POST", `auth/jwt/create/`, {
       username,
       password,
