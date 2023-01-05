@@ -10,9 +10,10 @@ from rest_framework.filters import SearchFilter
 
 from ..services import profileservice
 from ..services import importprofileservice
+from ..services import expertgroupservice
 from ..serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
-from ..models import ProfileDsl, ProfileTag
-from ..models import AssessmentProfile, MetricCategory
+from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from ..models.basemodels import MetricCategory
 
 DSL_PARSER_URL_SERVICE = "http://localhost:8080/extract/"
 
@@ -66,6 +67,8 @@ class ImportProfileApi(APIView):
             return Response({"message": "The uploaded dsl is invalid."}, status = status.HTTP_400_BAD_REQUEST)
         try:
             tag_ids = request.data.get('tag_ids')
+            expert_group_id = request.data.get('expert_group_id')
+
             importprofileservice.import_profile(base_infos_resp, tag_ids)
             return Response({"message": "The profile imported successfully", "resp": base_infos_resp}, status = status.HTTP_200_OK)
         except Exception as e:

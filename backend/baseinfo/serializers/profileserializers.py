@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import AssessmentProfile, ProfileDsl, ProfileTag
+from ..models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
 from ..imagecomponent.serializers import ProfileImageSerializer
 from ..serializers.commonserializers import MetricCategorySerilizer, AssessmentSubjectSerilizer
 

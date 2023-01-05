@@ -1,6 +1,7 @@
 from django.db import transaction
-from baseinfo.models import AssessmentProfile, MetricCategory, AssessmentSubject \
-    , QualityAttribute, Metric, MetricImpact, AnswerTemplate, ProfileTag
+from ..models.basemodels import MetricCategory, AssessmentSubject, QualityAttribute
+from ..models.metricmodels import Metric, MetricImpact, AnswerTemplate
+from ..models.profilemodels import AssessmentProfile
 from ..services import profileservice
 
 def extract_dsl_contents(input_zip):

@@ -2,6 +2,7 @@ from .views import commonviews
 from .imagecomponent.views import QualityAttributeImageViewSet, SubjectImageViewSet, ProfileImageViewSet
 from rest_framework_nested import routers
 from .views import profileviews
+from .views import expertgroupviews
 from django.urls import path
 
 
@@ -13,6 +14,7 @@ router.register('subjects', commonviews.AssessmentSubjectViewSet, basename='subj
 router.register('attributes', commonviews.QualityAttributeViewSet, basename='attributes')
 router.register('dsl', profileviews.UploadProfileApi, basename='dsl')
 router.register('tags', profileviews.ProfileTagViewSet, basename='tags')
+router.register('expertgroups', expertgroupviews.ExpertGroupViewSet, basename='expertgroups')
 
 
 metric_category_router = routers.NestedDefaultRouter(router, 'metriccategories', lookup='metric_category')
@@ -36,4 +38,5 @@ urlpatterns = router.urls + metric_category_router.urls + metric_category_by_sub
 urlpatterns += [
     path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),
     path("importprofile/", profileviews.ImportProfileApi.as_view()),
+    path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
 ]
