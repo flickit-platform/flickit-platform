@@ -8,6 +8,8 @@ class ExpertGroup(models.Model):
     website = models.URLField(max_length = 200, null=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True)
     users = models.ManyToManyField(User, related_name = 'expert_groups')
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    
 
 class AssessmentProfile(models.Model):
     code = models.CharField(max_length=50)

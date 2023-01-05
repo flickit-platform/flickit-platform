@@ -3,20 +3,19 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers, ExpertGroupListSerilizers
+from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers
 from ..services import expertgroupservice
 from account.services import userservices
 from ..models.profilemodels import ExpertGroup
 
 
 class ExpertGroupViewSet(ModelViewSet):
-    serializer_class = ExpertGroupSerilizer
-
+   
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return ExpertGroupCreateSerilizers
         elif self.request.method in ['GET']:
-            return ExpertGroupListSerilizers
+            return ExpertGroupSerilizer
         return ExpertGroupSerilizer
 
     def get_queryset(self):
