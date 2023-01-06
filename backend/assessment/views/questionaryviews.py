@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from baseinfo.models import QualityAttribute
+from baseinfo.models.basemodels import QualityAttribute
 from account.permission.spaceperm import IsSpaceMember
 from ..models import AssessmentProject, QualityAttributeValue
 from ..services.categoryreport import CategoryReportInfo

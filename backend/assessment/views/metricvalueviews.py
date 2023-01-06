@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from assessment.models import MetricValue, AssessmentProject
 from account.permission.spaceperm import IsSpaceMember
-from baseinfo.models import MetricCategory
+from baseinfo.models.basemodels import MetricCategory
 from ..serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
 from ..fixture.dictionary import Dictionary
 from ..services.metricstatistic import extract_total_progress

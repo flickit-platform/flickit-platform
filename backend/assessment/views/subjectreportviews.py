@@ -6,8 +6,7 @@ from statistics import mean
 from assessment.serializers.subjectreportserializers import SubjectReportSerializer
 from assessment.models import QualityAttributeValue
 from assessment.models import AssessmentResult
-from baseinfo.models import AssessmentSubject
-from baseinfo.models import QualityAttribute
+from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
 from account.permission.spaceperm import IsSpaceMember
 
 from ..services.categoryreport import CategoryReportInfo

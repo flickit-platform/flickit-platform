@@ -1,4 +1,4 @@
-from baseinfo.models import MetricImpact
+from baseinfo.models.metricmodels import MetricImpact
 from ..fixture.dictionary import Dictionary
 
 
