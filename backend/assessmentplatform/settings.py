@@ -3,13 +3,11 @@ import os
 from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 
+__version__ = "0.5.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 USE_MODELTRANSLATION = False
-
-# DJVERSION_VERSION='0.1.0'
-# DJVERSION_UPDATED='11/3/2022'
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -130,8 +128,7 @@ INSTALLED_APPS = [
     'baseinfo',
     'assessment',
     'assessmentplatform',
-    # 'drf_yasg',
-    # 'djversion',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = (
