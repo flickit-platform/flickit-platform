@@ -49,7 +49,10 @@ def extract_total_progress(result):
 
     total_progress.add("total_answered_metric_number", total_answered_metric_number)
     total_progress.add("total_metric_number", total_metric_number)
-    total_progress.add("progress", (total_answered_metric_number/total_metric_number) * 100)
+    if total_metric_number == 0:
+        total_progress.add("progress", 0)
+    else:
+        total_progress.add("progress", (total_answered_metric_number/total_metric_number) * 100)
     return total_progress
 
 def extract_subject_total_progress(result: AssessmentResult, subject: AssessmentSubject):

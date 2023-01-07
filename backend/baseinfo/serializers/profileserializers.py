@@ -2,8 +2,7 @@ from rest_framework import serializers
 from ..models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
 from ..models.profilemodels import ExpertGroup
 from ..imagecomponent.serializers import ProfileImageSerializer
-from ..serializers.commonserializers import MetricCategorySerilizer, AssessmentSubjectSerilizer
-
+from assessment.models import AssessmentProject
 class ProfileDslSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileDsl
@@ -21,13 +20,27 @@ class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
 
 class AssessmentProfileSerilizer(serializers.ModelSerializer):
     images = ProfileImageSerializer(many=True)
-    metric_categories = MetricCategorySerilizer(many=True)
-    assessment_subjects = AssessmentSubjectSerilizer(many=True)
     tags =  ProfileTagSerializer(many = True)
     expert_group = ExpertGroupSimpleSerilizers()
+    number_of_assessment = serializers.SerializerMethodField()
+    current_user_delete_permission = serializers.SerializerMethodField()
+
+    def get_number_of_assessment(self, profile: AssessmentProfile):
+        return AssessmentProject.objects.filter(assessment_profile_id = profile.id).count()
+
+    def get_current_user_delete_permission(self, profile: AssessmentProfile):
+        number_of_assessment = AssessmentProject.objects.filter(assessment_profile_id = profile.id).count()
+        if number_of_assessment > 0:
+            return False
+        if profile.expert_group is not None:
+            request = self.context.get('request', None)
+            user = profile.expert_group.users.filter(id = request.user.id)
+            return user.count() > 0
+        return True
+
     class Meta:
         model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images', 'tags', 'expert_group']
+        fields = ['id', 'code', 'title', 'description', 'images', 'tags', 'expert_group', 'number_of_assessment', 'current_user_delete_permission']
 
 class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:
