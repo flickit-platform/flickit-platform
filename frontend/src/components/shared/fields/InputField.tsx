@@ -35,8 +35,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     <TextField
       {...rest}
       {...register(name, { required, minLength })}
-      fullWidth
       type={showPassword ? "text" : type}
+      fullWidth
       size="small"
       variant="outlined"
       InputLabelProps={{ ...InputLabelProps, required }}
