@@ -2,7 +2,7 @@ from rest_framework import status
 import pytest
 from model_bakery import baker
 
-from assessment.models import AssessmentProject, AssessmentProfile, QualityAttributeValue
+from assessment.models import AssessmentProject, AssessmentProfile
 from account.models import User
 
 @pytest.fixture
