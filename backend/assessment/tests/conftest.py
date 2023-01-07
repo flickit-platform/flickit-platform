@@ -3,10 +3,8 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
 from assessment.models import AssessmentProfile
-from baseinfo.models import AssessmentSubject, MetricCategory
-from baseinfo.models import Metric, MetricImpact, QualityAttribute
-from baseinfo.models import AnswerTemplate
-
+from baseinfo.models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
+from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate
 from assessment.fixture.dictionary import Dictionary
 
 
