@@ -8,7 +8,7 @@ class MetricCategory(models.Model):
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='metric_categories')
+    assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='metric_categories')
     index = models.PositiveIntegerField(null=True)
 
     class Meta:
@@ -24,7 +24,7 @@ class AssessmentSubject(models.Model):
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='assessment_subjects')
+    assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='assessment_subjects')
     metric_categories = models.ManyToManyField(MetricCategory, related_name = 'assessment_subjects')
     index = models.PositiveIntegerField(null=True)
 
