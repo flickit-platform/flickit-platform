@@ -4,7 +4,7 @@ from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateS
 from djoser.serializers import UserCreatePasswordRetypeSerializer 
 
 from .models import Space, UserAccess, User
-
+from baseinfo.models.profilemodels import ExpertGroup
 
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,11 +37,18 @@ class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
         fields = ['id', 'username', 'password',
                   'email', 'first_name', 'last_name']
 
+class ExpertGroupSerilizer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ExpertGroup
+        fields = ['id', 'name', 'description', 'website', 'picture']
+
 class UserSerializer(BaseUserSerializer):
     current_space = SpaceSerializer()
     spaces = SpaceSerializer(many = True)
+    expert_groups = ExpertGroupSerilizer(many = True)
     class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'username', 'email', 'first_name', 'last_name', 'current_space', 'spaces', 'is_active']
+        fields= ['id', 'username', 'email', 'first_name', 'last_name', 'current_space', 'spaces', 'is_active' , 'expert_groups']
 
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)
@@ -86,6 +93,8 @@ class AddSpaceAccessToUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccess
         fields = ['id', 'user_id']
+
+
 
 
 
