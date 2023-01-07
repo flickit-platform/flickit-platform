@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from assessment.models import AssessmentResult, AssessmentProject, Color
 from ..serializers.commonserializers import ColorSerilizer, AssessmentResultSerilizer
-from baseinfo.models import MetricCategory
+from baseinfo.models.basemodels import MetricCategory
 from account.models import Space
 
 

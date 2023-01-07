@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from ..models import AssessmentProfile, ProfileDsl, ProfileTag
+from ..models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
+from ..models.profilemodels import ExpertGroup
 from ..imagecomponent.serializers import ProfileImageSerializer
 from ..serializers.commonserializers import MetricCategorySerilizer, AssessmentSubjectSerilizer
 
@@ -13,14 +14,20 @@ class ProfileTagSerializer(serializers.ModelSerializer):
         model = ProfileTag
         fields = ['id', 'code', 'title']
 
+class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
+    class Meta:
+        model = ExpertGroup
+        fields = ['id', 'name']
+
 class AssessmentProfileSerilizer(serializers.ModelSerializer):
     images = ProfileImageSerializer(many=True)
     metric_categories = MetricCategorySerilizer(many=True)
     assessment_subjects = AssessmentSubjectSerilizer(many=True)
     tags =  ProfileTagSerializer(many = True)
+    expert_group = ExpertGroupSimpleSerilizers()
     class Meta:
         model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images', 'tags']
+        fields = ['id', 'code', 'title', 'metric_categories', 'assessment_subjects', 'description', 'images', 'tags', 'expert_group']
 
 class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:
