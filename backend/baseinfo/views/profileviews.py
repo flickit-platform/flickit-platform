@@ -14,7 +14,7 @@ from ..serializers.profileserializers import ProfileDslSerializer, AssessmentPro
 from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
 from assessment.models import AssessmentProject
 
-DSL_PARSER_URL_SERVICE = "http://localhost:8080/extract/"
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 class AssessmentProfileViewSet(ModelViewSet):
     serializer_class = AssessmentProfileSerilizer
@@ -78,7 +78,7 @@ class ImportProfileApi(APIView):
             extra_info['tag_ids'] = request.data.get('tag_ids')
             extra_info['expert_group_id'] = request.data.get('expert_group_id')
             assessment_profile = importprofileservice.import_profile(base_infos_resp, extra_info)
-            return Response({"message": "The profile imported successfully", "profile_id": assessment_profile.id}, status = status.HTTP_200_OK)
+            return Response({"message": "The profile imported successfully", "id": assessment_profile.id}, status = status.HTTP_200_OK)
         except Exception as e:
             message = traceback.format_exc()
             print(message)
