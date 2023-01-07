@@ -75,6 +75,7 @@ const RichEditorFieldBase = (props: any) => {
         {label}
       </InputLabel>
       <RichEditor
+        isEditable={true}
         className={
           "MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall" +
           (focus ? " Mui-focused" : "") +
