@@ -13,6 +13,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import generateRandomColor from "../../utils/generateRandomColor";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../providers/AuthProvider";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -20,6 +21,9 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data } = props;
+  const { id } = data || {};
+  const { userInfo } = useAuthContext();
+  const { username } = userInfo || {};
 
   return (
     <Box>
@@ -27,13 +31,13 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         <CardHeader
           titleTypographyProps={{
             component: Link,
-            to: "/account/erfan/expertGroup",
+            to: `${id}`,
             sx: { textDecoration: "none" },
           }}
           avatar={
             <Avatar
               component={Link}
-              to="/account/erfan/expertGroup"
+              to={`${id}`}
               sx={(() => {
                 const randomColor = generateRandomColor();
                 return {
@@ -109,3 +113,6 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 };
 
 export default ExpertGroupsItem;
+function useAuth() {
+  throw new Error("Function not implemented.");
+}

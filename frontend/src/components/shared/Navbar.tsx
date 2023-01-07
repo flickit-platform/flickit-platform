@@ -197,7 +197,7 @@ const Navbar = () => {
               sx={{ ml: 2, mr: "-8px", px: 1.5 }}
               size="small"
               component={NavLink}
-              to="account"
+              to={`account/${userInfo.username}/about`}
               endIcon={<Avatar sx={{ width: 26, height: 26, ml: 1 }} />}
             >
               {userInfo.username}
