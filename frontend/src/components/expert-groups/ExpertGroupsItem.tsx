@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../providers/AuthProvider";
 import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 import { styles } from "../../config/styles";
+import RichEditor from "../shared/rich-editor/RichEditor";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -87,17 +88,17 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }
         />
         <CardContent>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+          <RichEditor
+            boxProps={{
+              sx: {
+                color: "text.secondary",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              },
             }}
-          >
-            {description}
-          </Typography>
+            content={description}
+          />
         </CardContent>
         <Divider sx={{ mx: 2 }} />
         <CardActions disableSpacing>

@@ -63,8 +63,8 @@ const ExpertGroupContainer = () => {
               {name}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={9}>
-                <Box minHeight={"140px"} mb={4}>
+              <Grid item xs={12} md={8}>
+                <Box minHeight={"340px"} mb={4}>
                   <RichEditor content={description} />
                 </Box>
                 <Box>
@@ -76,86 +76,94 @@ const ExpertGroupContainer = () => {
                   </Box>
                 </Box>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    display="flex"
-                    alignItems={"center"}
-                    sx={{ mb: 2 }}
-                  >
-                    <Trans i18nKey="about" />
-                  </Typography>
-                  <Box sx={{ ...styles.centerV }}>
-                    <InsertLinkRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, transform: "rotateZ(-45deg)", opacity: 0.8 }}
-                    />
-
-                    <MLink
-                      target="_blank"
-                      href={website}
-                      sx={{
-                        textDecoration: "none",
-                        opacity: 0.9,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {website?.replace("https://", "").replace("http://", "")}
-                    </MLink>
-                  </Box>
-                  <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
-                    <PeopleRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, opacity: 0.8 }}
-                    />
-
+              <Grid item xs={12} md={4}>
+                <Box p={2} sx={{ borderRadius: 1, background: "#f5f5f5" }}>
+                  <Box>
                     <Typography
-                      sx={{
-                        opacity: 0.9,
-                        fontSize: "inherit",
-                      }}
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
                     >
-                      {number_of_members} {t("members").toLowerCase()}
+                      <Trans i18nKey="about" />
                     </Typography>
-                  </Box>
-                  <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                    <AssignmentRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, opacity: 0.8 }}
-                    />
+                    <Box sx={{ ...styles.centerV }}>
+                      <InsertLinkRoundedIcon
+                        fontSize="small"
+                        sx={{
+                          mr: 1,
+                          transform: "rotateZ(-45deg)",
+                          opacity: 0.8,
+                        }}
+                      />
 
+                      <MLink
+                        target="_blank"
+                        href={website}
+                        sx={{
+                          textDecoration: "none",
+                          opacity: 0.9,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {website
+                          ?.replace("https://", "")
+                          .replace("http://", "")}
+                      </MLink>
+                    </Box>
+                    <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
+                      <PeopleRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {number_of_members} {t("members").toLowerCase()}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
+                      <AssignmentRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {number_of_profiles} {t("profiles").toLowerCase()}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ mt: 2, mb: 2 }} />
+                  </Box>
+                  {/* --------------------------- */}
+                  <Box>
                     <Typography
-                      sx={{
-                        opacity: 0.9,
-                        fontSize: "inherit",
-                      }}
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
                     >
-                      {number_of_profiles} {t("profiles").toLowerCase()}
+                      <Trans i18nKey="members" />
                     </Typography>
+                    <AddingNewMember queryData={queryData} />
+                    <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
+                      <AvatarGroup>
+                        {users.map((user: IUserInfo) => {
+                          const name = getUserName(user);
+                          return <Avatar alt={name} title={name} src="/" />;
+                        })}
+                      </AvatarGroup>
+                    </Box>
+                    {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
                   </Box>
-                  <Divider sx={{ mt: 2, mb: 2 }} />
-                </Box>
-                {/* --------------------------- */}
-                <Box>
-                  <Typography
-                    variant="h6"
-                    display="flex"
-                    alignItems={"center"}
-                    sx={{ mb: 2 }}
-                  >
-                    <Trans i18nKey="members" />
-                  </Typography>
-                  <AddingNewMember queryData={queryData} />
-                  <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
-                    <AvatarGroup>
-                      {users.map((user: IUserInfo) => {
-                        const name = getUserName(user);
-                        return <Avatar alt={name} title={name} src="/" />;
-                      })}
-                    </AvatarGroup>
-                  </Box>
-                  {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
                 </Box>
               </Grid>
             </Grid>
