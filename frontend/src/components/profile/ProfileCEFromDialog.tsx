@@ -11,7 +11,7 @@ import setServerFieldErrors from "../../utils/setServerFieldError";
 import useConnectSelectField from "../../utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
 import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
 import FormProviderWithForm from "../shared/FormProviderWithForm";
@@ -42,6 +42,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
+  const navigate = useNavigate();
   const close = () => {
     abortController.abort();
     closeDialog();
@@ -53,8 +54,8 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     };
   }, []);
 
-  const onSubmit = async (data: any) => {
-    const { dsl_id, tags, ...restOfData } = data;
+  const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
+    const { dsl_id, tags = [], ...restOfData } = data;
     const formattedData = {
       dsl_id: dsl_id.id,
       tag_ids: tags.map((t: any) => t.id),
@@ -75,6 +76,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
+      shouldView && res?.id && navigate(`${res.id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -98,10 +100,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
         </>
       }
     >
-      <FormProviderWithForm
-        formMethods={formMethods}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-      >
+      <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12}>
             <UploadField
@@ -124,14 +123,21 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
                   service.fetchProfileTags(args, config),
               })}
               name="tags"
-              required={true}
               multiple={true}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
           </Grid>
         </Grid>
-        <CEDialogActions closeDialog={close} loading={loading} type={type} />
+        <CEDialogActions
+          closeDialog={close}
+          loading={loading}
+          type={type}
+          hasViewBtn={true}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))()
+          }
+        />
       </FormProviderWithForm>
     </CEDialog>
   );

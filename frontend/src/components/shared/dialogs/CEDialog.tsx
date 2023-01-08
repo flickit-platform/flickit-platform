@@ -10,6 +10,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 import { TDialogContextType } from "../../../types";
+import { t } from "i18next";
 
 interface ICEDialogProps extends Omit<DialogProps, "title"> {
   closeDialog?: () => void;
@@ -44,6 +45,8 @@ interface ICEDialogActionsProps extends DialogActionsProps {
   onClose?: () => void;
   type: (string & {}) | TDialogContextType | undefined;
   submitButtonLabel?: string;
+  hasViewBtn?: boolean;
+  onSubmit?: (e: any, shouldView?: boolean) => void;
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -52,7 +55,9 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     loading,
     closeDialog,
     onClose = closeDialog,
-    submitButtonLabel = type === "update" ? "update" : "create",
+    onSubmit,
+    hasViewBtn,
+    submitButtonLabel = type === "update" ? t("update") : t("create"),
   } = props;
   const fullScreen = useScreenResize("sm");
   if (!onClose) {
@@ -65,9 +70,26 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
       }}
     >
       <Grid container spacing={2} justifyContent="flex-end">
+        {hasViewBtn && (
+          <Grid item>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={loading}
+              onClick={(e: any) => onSubmit?.(e, true)}
+            >
+              <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
+            </LoadingButton>
+          </Grid>
+        )}
         <Grid item>
-          <LoadingButton type="submit" variant="contained" loading={loading}>
-            <Trans i18nKey={submitButtonLabel} />
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={loading}
+            onClick={(e: any) => onSubmit?.(e)}
+          >
+            <Trans i18nKey={submitButtonLabel as string} />
           </LoadingButton>
         </Grid>
         <Grid item>
