@@ -200,5 +200,10 @@
   "items": "Items",
   "comparisonResultT": "Comparison Result Of",
   "spaceSettingT": "Space Setting",
-  "andView": "and view"
+  "andView": "and view",
+  "expertGroups": "Expert groups",
+  "createExpertGroup": "Create expert group",
+  "expertGroupT": "Expert Group",
+  "addLink": "Add link",
+  "about": "About"
 }

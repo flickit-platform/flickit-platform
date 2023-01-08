@@ -1,7 +1,7 @@
 from django.db import models
 
-from baseinfo.models import QualityAttribute, AssessmentSubject
-from baseinfo.models import AssessmentProfile
+from ..models.basemodels import QualityAttribute, AssessmentSubject
+from ..models.profilemodels import AssessmentProfile
 # Create your models here.
     
 class QualityAttributeImage(models.Model):

@@ -1,4 +1,4 @@
-from ..models import AssessmentProfile, ProfileTag
+from ..models.profilemodels import AssessmentProfile, ProfileTag
 
 
 def load_profile(profile_id) -> AssessmentProfile:

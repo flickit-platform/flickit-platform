@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from ..models import AssessmentSubject, Metric, MetricCategory, QualityAttribute
+from ..models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
+from ..models.metricmodels import Metric
 from ..serializers.commonserializers import AssessmentSubjectSerilizer, MetricCategorySerilizer, MetricSerilizer, QualityAttributeSerilizer, MetricCategoryBySubjectSerilizer
 
 

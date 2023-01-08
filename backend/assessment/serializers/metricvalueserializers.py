@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from baseinfo.models import Metric
+from baseinfo.models.metricmodels import Metric
 from baseinfo.serializers.commonserializers import AnswerTemplateSerializer, SimpleMetricSerializers
 from assessment.models import MetricValue, QualityAttributeValue
 

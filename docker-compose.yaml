@@ -3,7 +3,7 @@ version: '3.9'
 services:
   backend:
     build:
-      context: .
+      context: ./backend
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
@@ -31,7 +31,7 @@ services:
       - db
 
   dsl:
-      build: ./dsl-parser
+      build: ./dsl
       restart: on-failure
       ports:
         - 8080:8080
@@ -53,7 +53,7 @@ services:
   celery:
     restart: always
     build:
-      context: .
+      context: ./backend
     command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
@@ -73,7 +73,7 @@ services:
       - backend
 
   flower:
-    build: .
+    build: ./backend
     command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend

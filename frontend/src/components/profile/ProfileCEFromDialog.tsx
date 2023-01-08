@@ -55,7 +55,12 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const formattedData = { dsl_id: data.dsl_id.id };
+    const { dsl_id, tags, ...restOfData } = data;
+    const formattedData = {
+      dsl_id: dsl_id.id,
+      tag_ids: tags.map((t: any) => t.id),
+      ...restOfData,
+    };
     setLoading(true);
     try {
       const { data: res } =
@@ -109,6 +114,19 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
               name="dsl_id"
               required={true}
               label={<Trans i18nKey="dsl" />}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <AutocompleteAsyncField
+              {...useConnectAutocompleteField({
+                service: (args, config) =>
+                  service.fetchProfileTags(args, config),
+              })}
+              name="tags"
+              required={true}
+              multiple={true}
+              searchOnType={false}
+              label={<Trans i18nKey="tags" />}
             />
           </Grid>
         </Grid>

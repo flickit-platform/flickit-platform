@@ -433,6 +433,9 @@ export const createService = (
       const { id } = args || {};
       return axios.get(`/baseinfo/importprofile/${id}`, config);
     },
+    fetchProfileTags(args: any, config: AxiosRequestConfig<any> | undefined) {
+      return axios.get(`/baseinfo/tags/`, config);
+    },
     deleteProfile(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -464,6 +467,26 @@ export const createService = (
     ) {
       const { profileId } = args || {};
       return axios.get(`/baseinfo/inspectprofile/${profileId}/`, config);
+    },
+    fetchUserExpertGroups(
+      args: any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/baseinfo/expertgroups/`, config);
+    },
+    fetchUserExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args || {};
+      return axios.get(`/baseinfo/expertgroups/${id}/`, config);
+    },
+    addMemberToExpertGroup(
+      args: { id: TId; email: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id, email } = args || {};
+      return axios.post(`/baseinfo/addexpertgroup/${id}/`, { email }, config);
     },
   };
 

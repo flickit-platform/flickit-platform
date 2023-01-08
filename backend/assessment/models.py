@@ -1,9 +1,11 @@
 from django.db import models
-from baseinfo.models import AssessmentProfile, Metric
 from uuid import uuid4
 from django.utils.text import slugify 
-from baseinfo.models import AnswerTemplate
-from baseinfo.models import QualityAttribute
+
+from baseinfo.models.profilemodels import AssessmentProfile
+from baseinfo.models.metricmodels import Metric
+from baseinfo.models.metricmodels import AnswerTemplate
+from baseinfo.models.basemodels import QualityAttribute
 from account.models import Space
 
 

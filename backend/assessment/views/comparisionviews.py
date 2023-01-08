@@ -6,7 +6,7 @@ from statistics import mean
 from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME, IsSpaceMember
 
 from ..models import AssessmentProject
-from baseinfo.models import QualityAttribute
+from baseinfo.models.basemodels import QualityAttribute
 from ..fixture.dictionary import Dictionary
 from ..fixture.common import calculate_staus
 from ..services.metricstatistic import extract_total_progress, extract_subject_total_progress
