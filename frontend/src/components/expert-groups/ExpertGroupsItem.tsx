@@ -9,10 +9,14 @@ import {
   Divider,
   IconButton,
   Typography,
+  Link as MLink,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import generateRandomColor from "../../utils/generateRandomColor";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../providers/AuthProvider";
+import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
+import { styles } from "../../config/styles";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -20,6 +24,9 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data } = props;
+  const { id, name, description = "", picture, website } = data || {};
+  const { userInfo } = useAuthContext();
+  const { username } = userInfo || {};
 
   return (
     <Box>
@@ -27,13 +34,13 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         <CardHeader
           titleTypographyProps={{
             component: Link,
-            to: "/account/erfan/expertGroup",
+            to: `${id}`,
             sx: { textDecoration: "none" },
           }}
           avatar={
             <Avatar
               component={Link}
-              to="/account/erfan/expertGroup"
+              to={`${id}`}
               sx={(() => {
                 const randomColor = generateRandomColor();
                 return {
@@ -42,8 +49,9 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
                   textDecoration: "none",
                 };
               })()}
+              src={picture}
             >
-              {data.title[0]?.toUpperCase()}
+              {name?.[0]?.toUpperCase()}
             </Avatar>
           }
           action={
@@ -57,8 +65,26 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               <MoreVertIcon />
             </IconButton>
           }
-          title={data.title}
-          subheader="September 14, 2016"
+          title={
+            <Box component={"b"} color="GrayText" fontSize=".95rem">
+              {name}
+            </Box>
+          }
+          subheader={
+            <Box sx={{ ...styles.centerV }}>
+              <LanguageRoundedIcon
+                fontSize="inherit"
+                sx={{ opacity: 0.8, mr: 0.5 }}
+              />{" "}
+              <MLink
+                target="_blank"
+                href={website}
+                sx={{ textDecoration: "none", fontSize: ".8rem", opacity: 0.9 }}
+              >
+                {website?.replace("https://", "").replace("http://", "")}
+              </MLink>
+            </Box>
+          }
         />
         <CardContent>
           <Typography
@@ -70,9 +96,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               whiteSpace: "nowrap",
             }}
           >
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
+            {description}
           </Typography>
         </CardContent>
         <Divider sx={{ mx: 2 }} />
@@ -109,3 +133,6 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 };
 
 export default ExpertGroupsItem;
+function useAuth() {
+  throw new Error("Function not implemented.");
+}
