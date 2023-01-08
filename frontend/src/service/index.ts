@@ -472,7 +472,21 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/baseinfo/tags/`, config);
+      return axios.get(`/baseinfo/expertgroups/`, config);
+    },
+    fetchUserExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args || {};
+      return axios.get(`/baseinfo/expertgroups/${id}/`, config);
+    },
+    addMemberToExpertGroup(
+      args: { id: TId; email: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id, email } = args || {};
+      return axios.post(`/baseinfo/addexpertgroup/${id}/`, { email }, config);
     },
   };
 
