@@ -55,7 +55,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { dsl_id, tags, ...restOfData } = data;
+    const { dsl_id, tags = [], ...restOfData } = data;
     const formattedData = {
       dsl_id: dsl_id.id,
       tag_ids: tags.map((t: any) => t.id),
@@ -123,7 +123,6 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
                   service.fetchProfileTags(args, config),
               })}
               name="tags"
-              required={true}
               multiple={true}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
@@ -135,7 +134,9 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
           loading={loading}
           type={type}
           hasViewBtn={true}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))()
+          }
         />
       </FormProviderWithForm>
     </CEDialog>
