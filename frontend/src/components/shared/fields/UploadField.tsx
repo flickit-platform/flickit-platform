@@ -38,8 +38,8 @@ interface IUploadFieldProps {
   defaultValue?: any[];
   accept?: Accept;
   maxSize?: number;
-  uploadService: TQueryServiceFunction<any, any>;
-  deleteService: TQueryServiceFunction<any, any>;
+  uploadService?: TQueryServiceFunction<any, any>;
+  deleteService?: TQueryServiceFunction<any, any>;
 }
 
 const UploadField = (props: IUploadFieldProps) => {
@@ -79,8 +79,8 @@ interface IUploadProps {
   maxSize?: number;
   required?: boolean;
   defaultValue?: any[];
-  uploadService: TQueryServiceFunction<any, any>;
-  deleteService: TQueryServiceFunction<any, any>;
+  uploadService?: TQueryServiceFunction<any, any>;
+  deleteService?: TQueryServiceFunction<any, any>;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -98,12 +98,12 @@ const Uploader = (props: IUploadProps) => {
   const [myFiles, setMyFiles] = useState<File[]>([]);
 
   const uploadQueryProps = useQuery({
-    service: uploadService,
+    service: uploadService || ((() => null) as any),
     runOnMount: false,
   });
 
   const deleteQueryProps = useQuery({
-    service: deleteService,
+    service: deleteService || ((() => null) as any),
     runOnMount: false,
   });
 
@@ -113,6 +113,11 @@ const Uploader = (props: IUploadProps) => {
         const reader = new FileReader();
         reader.onload = async () => {
           const binaryStr = reader.result;
+          if (!uploadService) {
+            setMyFiles(acceptedFiles);
+            fieldProps.onChange(acceptedFiles?.[0]);
+            return;
+          }
           try {
             const res = await uploadQueryProps.query(binaryStr);
             setMyFiles(acceptedFiles);
@@ -216,6 +221,11 @@ const Uploader = (props: IUploadProps) => {
                         aria-label="delete"
                         onClick={async (e) => {
                           e.stopPropagation();
+                          if (!deleteService) {
+                            setMyFiles([]);
+                            fieldProps.onChange("");
+                            return;
+                          }
                           if (uploadQueryProps.error) {
                             setMyFiles([]);
                             return;
@@ -225,7 +235,6 @@ const Uploader = (props: IUploadProps) => {
                             fieldProps.value?.[0]?.id;
                           if (!id) {
                             toastError(true);
-
                             return;
                           }
                           try {

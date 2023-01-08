@@ -46,7 +46,7 @@ interface ICEDialogActionsProps extends DialogActionsProps {
   type: (string & {}) | TDialogContextType | undefined;
   submitButtonLabel?: string;
   hasViewBtn?: boolean;
-  onSubmit?: (e: any, shouldView?: boolean) => void;
+  onSubmit?: (e: any, shouldView?: boolean) => any;
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -76,7 +76,10 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
               type="submit"
               variant="contained"
               loading={loading}
-              onClick={(e: any) => onSubmit?.(e, true)}
+              onClick={(e: any) => {
+                e.preventDefault();
+                onSubmit?.(e, true)();
+              }}
             >
               <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
             </LoadingButton>
@@ -87,7 +90,10 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             type="submit"
             variant="contained"
             loading={loading}
-            onClick={(e: any) => onSubmit?.(e)}
+            onClick={(e: any) => {
+              e.preventDefault();
+              onSubmit?.(e)();
+            }}
           >
             <Trans i18nKey={submitButtonLabel as string} />
           </LoadingButton>

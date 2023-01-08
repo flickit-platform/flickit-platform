@@ -59,7 +59,7 @@ const RichEditorFieldBase = (props: any) => {
       }}
       sx={{
         position: "relative",
-        minHeight: "calc(100% + 8px)",
+        minHeight: "54px",
         "& .MuiInputBase-input": {
           marginTop: shrink ? 0 : 0.8,
         },
