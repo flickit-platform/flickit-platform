@@ -7,17 +7,23 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  IconButton,
-  Typography,
   Link as MLink,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import generateRandomColor from "../../utils/generateRandomColor";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../providers/AuthProvider";
 import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 import { styles } from "../../config/styles";
 import RichEditor from "../shared/rich-editor/RichEditor";
+import useMenu from "../../utils/useMenu";
+import MoreActions from "../shared/MoreActions";
+import { useQueryDataContext } from "../shared/QueryData";
+import { useServiceContext } from "../../providers/ServiceProvider";
+import { useQuery } from "../../utils/useQuery";
+import { Trans } from "react-i18next";
+import useDialog from "../../utils/useDialog";
+import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -25,7 +31,16 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data } = props;
-  const { id, name, description = "", picture, website } = data || {};
+  const {
+    id,
+    name,
+    description = "",
+    picture,
+    website,
+    about = "",
+    users = [],
+    number_of_profiles,
+  } = data || {};
   const { userInfo } = useAuthContext();
   const { username } = userInfo || {};
 
@@ -55,55 +70,24 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               {name?.[0]?.toUpperCase()}
             </Avatar>
           }
-          action={
-            <IconButton
-              aria-label="settings"
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-            >
-              <MoreVertIcon />
-            </IconButton>
-          }
+          action={<Actions expertGroup={data} />}
           title={
             <Box component={"b"} color="GrayText" fontSize=".95rem">
               {name}
             </Box>
           }
           subheader={
-            <Box sx={{ ...styles.centerV }}>
-              <LanguageRoundedIcon
-                fontSize="inherit"
-                sx={{ opacity: 0.8, mr: 0.5 }}
-              />{" "}
-              <MLink
-                target="_blank"
-                href={website}
-                sx={{ textDecoration: "none", fontSize: ".8rem", opacity: 0.9 }}
-              >
-                {website?.replace("https://", "").replace("http://", "")}
-              </MLink>
+            <Box sx={{ ...styles.centerV, textTransform: "lowercase" }}>
+              {number_of_profiles} <Trans i18nKey="profiles" />
             </Box>
           }
         />
-        <CardContent>
-          <RichEditor
-            boxProps={{
-              sx: {
-                color: "text.secondary",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              },
-            }}
-            content={description}
-          />
-        </CardContent>
+        <CardContent>{about}</CardContent>
         <Divider sx={{ mx: 2 }} />
         <CardActions disableSpacing>
           <AvatarGroup
-            total={24}
+            total={users.length}
+            max={5}
             sx={{ mx: 0.5 }}
             slotProps={{
               additionalAvatar: {
@@ -111,21 +95,17 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               },
             }}
           >
-            <Avatar
-              sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
-            />
-            <Avatar
-              sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-              alt="Travis Howard"
-              src="/static/images/avatar/2.jpg"
-            />
-            <Avatar
-              sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-              alt="Agnes Walker"
-              src="/static/images/avatar/4.jpg"
-            />
+            {users.map((user: any) => {
+              return (
+                <Avatar
+                  key={user.id}
+                  sx={{ width: 28, height: 28, fontSize: ".8rem" }}
+                  alt={user.username}
+                  title={user.username}
+                  src="/"
+                />
+              );
+            })}
           </AvatarGroup>
         </CardActions>
       </Card>
@@ -133,7 +113,46 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   );
 };
 
+const Actions = (props: any) => {
+  const { expertGroup } = props;
+  const { query: fetchExpertGroups } = useQueryDataContext();
+  const { service } = useServiceContext();
+  const { id } = expertGroup;
+  const { query: fetchExpertGroup, loading } = useQuery({
+    service: (args = { id }, config) =>
+      service.fetchUserExpertGroup(args, config),
+    runOnMount: false,
+  });
+  const dialogProps = useDialog();
+
+  const openEditDialog = async (e: any) => {
+    const data = await fetchExpertGroup();
+    dialogProps.openDialog({
+      data,
+      type: "update",
+    });
+  };
+
+  return (
+    <>
+      <MoreActions
+        {...useMenu()}
+        boxProps={{ ml: 0.2 }}
+        loading={loading}
+        items={[
+          {
+            icon: <EditRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="edit" />,
+            onClick: openEditDialog,
+          },
+        ]}
+      />
+      <ExpertGroupCEFormDialog
+        {...dialogProps}
+        onSubmitForm={fetchExpertGroups}
+      />
+    </>
+  );
+};
+
 export default ExpertGroupsItem;
-function useAuth() {
-  throw new Error("Function not implemented.");
-}

@@ -205,5 +205,10 @@
   "createExpertGroup": "Create expert group",
   "expertGroupT": "Expert Group",
   "addLink": "Add link",
-  "about": "About"
+  "about": "About",
+  "groupPicture": "Group picture",
+  "name": "Name",
+  "website": "Website",
+  "tags": "Tags",
+  "updateExpertGroup": "Update expert group"
 }

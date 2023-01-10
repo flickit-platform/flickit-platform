@@ -335,7 +335,7 @@ export type TQueryProps<T extends any = any, A extends any = any> = {
     args?: A | undefined,
     config?: AxiosRequestConfig<any> | undefined
   ) => Promise<T>;
-  abortController: AbortController;
+  abortController?: AbortController;
 };
 
 export interface IQuestionnairesPageDataModel {
@@ -353,6 +353,8 @@ export interface IDialogProps extends DialogProps {
 export interface IDialogContext {
   type: TDialogContextType | (string & {});
   data?: any;
+  onSubmit?: (...args: any) => any;
+  getViewLink?: (data: any) => string;
 }
 
 export type TDialogContextType = "update" | "create";
