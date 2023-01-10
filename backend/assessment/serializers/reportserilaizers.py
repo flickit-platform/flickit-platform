@@ -1,8 +1,8 @@
 from statistics import mean
 from rest_framework import serializers
-from baseinfo.serializers.profileserializers import AssessmentProfileSimpleSerilizer
+from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
 from assessment.serializers.commonserializers import ColorSerilizer
-from account.serializers import SpaceSerializer
+from account.serializers.commonserializers import SpaceSerializer
 
 
 from ..models import AssessmentProject, AssessmentResult

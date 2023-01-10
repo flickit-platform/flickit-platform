@@ -1,10 +1,10 @@
 from django.db import transaction
 
 from rest_framework import serializers
-from account.serializers import UserSimpleSerializer
+from account.serializers.userserializers import UserSimpleSerializer
 
 from ..models.profilemodels import ExpertGroup
-from ..serializers.profileserializers import AssessmentProfileSimpleSerilizer
+from ..serializers.commonserializers import AssessmentProfileSimpleSerilizer
 
 
 class ExpertGroupSerilizer(serializers.ModelSerializer):

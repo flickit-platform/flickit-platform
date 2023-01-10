@@ -7,10 +7,9 @@ from rest_framework.views import APIView
 from djoser.email import ActivationEmail
 from django.db import transaction
 
-from .models import UserAccess
-from .tasks import async_send
-from .serializers import AddSpaceAccessToUserSerializer, SpaceListSerializer, \
-    SpaceSerializer, UserAccessSerializer, UserSerializer
+from ..models import UserAccess
+from ..tasks import async_send
+from ..serializers.userserializers import UserAccessSerializer, UserSerializer
 
 
 class UserActivationView(APIView):
@@ -27,16 +26,6 @@ class UserActivationView(APIView):
         else:
             return Response({'message': 'Something went wrong in activation user'}, status=status.HTTP_403_FORBIDDEN)
             
-
-class ChangeCurrentSpaceViewSet(APIView):
-    def post(self, request, space_id):
-        current_user = request.user
-        if current_user.spaces.filter(id = space_id).exists():
-            current_user.current_space_id = space_id
-            current_user.save()
-            return Response({'message': 'The current space of user is changed successfully'})
-        else:
-            return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
         
 class CustomActivationEmail(ActivationEmail):
     template_name = "email/activation.html"
@@ -50,29 +39,14 @@ class CustomActivationEmail(ActivationEmail):
         async_send.delay(url, to, protocol)
 
 
-class SpaceViewSet(ModelViewSet):
-    def get_serializer_class(self):
-        if self.action in ('create', 'update'):
-            return SpaceSerializer   
-        else:
-            return SpaceListSerializer
-    def get_queryset(self):
-        current_user = self.request.user
-        if current_user.spaces is not None:
-            return current_user.spaces.all()
-
 class UserAccessViewSet(ModelViewSet):
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'delete']
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return AddSpaceAccessToUserSerializer
         return UserAccessSerializer
     def get_queryset(self):
         return UserAccess.objects \
         .filter(space_id = self.kwargs['space_pk']) \
         .select_related('user')
-
-
     def get_serializer_context(self):
         return {'space_id': self.kwargs['space_pk']}
 
@@ -91,6 +65,8 @@ class UserAccessViewSet(ModelViewSet):
             instance.user.current_space_id = None
             instance.user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
     

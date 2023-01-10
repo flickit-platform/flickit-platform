@@ -4,8 +4,8 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 from django.views.i18n import set_language
 from mezzanine.conf import settings
-from account.views import UserActivationView
-from account.views import ChangeCurrentSpaceViewSet
+from account.views.userviews import UserActivationView
+from account.views.spaceviews import ChangeCurrentSpaceViewSet
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
