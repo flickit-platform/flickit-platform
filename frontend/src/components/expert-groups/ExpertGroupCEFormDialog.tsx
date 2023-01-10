@@ -51,9 +51,10 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { ...restOfData } = data;
+    const { picture, ...restOfData } = data;
     const formattedData = {
       ...restOfData,
+      picture: picture || null,
     };
     setLoading(true);
     try {
@@ -96,27 +97,43 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
+          <Grid item xs={12} md={5}>
+            <UploadField
+              defaultValue={defaultValues.picture}
+              defaultValueType="image"
+              hideDropText
+              name="picture"
+              label={<Trans i18nKey="groupPicture" />}
+            />
+          </Grid>
           <Grid item xs={12} md={7}>
             <InputFieldUC
+              defaultValue={defaultValues.name || ""}
               name="name"
               label={<Trans i18nKey="name" />}
               required
             />
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={8}>
+            <InputFieldUC
+              name="about"
+              label={<Trans i18nKey="about" />}
+              defaultValue={defaultValues.about || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
             <InputFieldUC
               name="website"
               label={<Trans i18nKey="website" />}
               placeholder="https://example.com"
+              defaultValue={defaultValues.website || ""}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <UploadField name="picture" label={<Trans i18nKey="photo" />} />
           </Grid>
           <Grid item xs={12}>
             <RichEditorField
               name="description"
               label={<Trans i18nKey="description" />}
+              defaultValue={defaultValues.description || ""}
             />
           </Grid>
         </Grid>
