@@ -20,9 +20,6 @@ const ProfilesListContainer = () => {
 
   return (
     <Box>
-      <Box display="flex" mb={1} position="relative">
-        <CreateProfileButton onSubmitForm={profilesQueryData.query} />
-      </Box>
       <QueryData
         {...profilesQueryData}
         renderLoading={() => (
@@ -50,30 +47,6 @@ const ProfilesListContainer = () => {
         }}
       />
     </Box>
-  );
-};
-
-const CreateProfileButton = (props: { onSubmitForm: TQueryFunction }) => {
-  const { onSubmitForm } = props;
-  const dialogProps = useDialog();
-
-  return (
-    <>
-      <Button
-        variant="contained"
-        size="small"
-        sx={{
-          ml: "auto",
-          position: { xs: "static", sm: "absolute" },
-          right: "-16px",
-          top: "-64px",
-        }}
-        onClick={dialogProps.openDialog}
-      >
-        <Trans i18nKey="createProfile" />
-      </Button>
-      <ProfileCEFromDialog {...dialogProps} onSubmitForm={onSubmitForm} />
-    </>
   );
 };
 

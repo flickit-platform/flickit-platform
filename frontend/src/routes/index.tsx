@@ -83,6 +83,10 @@ const Routes = () => {
             path="/account/:username/expert-groups/:expertGroupId"
             element={<ExpertGroupScreen />}
           />
+          <Route
+            path="/account/:username/expert-groups/:expertGroupId/profiles/:profileId"
+            element={<ProfileScreen />}
+          />
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/profiles" element={<ProfilesScreen />} />
           <Route path="/profiles/:profileId" element={<ProfileScreen />} />

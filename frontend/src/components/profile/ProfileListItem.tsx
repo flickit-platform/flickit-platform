@@ -11,6 +11,8 @@ import { useQuery } from "../../utils/useQuery";
 import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
+import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
+import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 
 interface IProfileListItemProps {
   data: {
@@ -18,10 +20,11 @@ interface IProfileListItemProps {
     title: string;
   };
   fetchProfiles?: TQueryFunction;
+  link?: string;
 }
 
 const ProfileListItem = (props: IProfileListItemProps) => {
-  const { data, fetchProfiles } = props;
+  const { data, fetchProfiles, link } = props;
   const { id, title } = data || {};
   return (
     <Box
@@ -43,7 +46,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           }}
           alignSelf="stretch"
           component={Link}
-          to={`${id}`}
+          to={link || `${id}`}
         >
           <Typography
             variant="h6"
@@ -80,7 +83,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 
 const Actions = (props: any) => {
   const { profile, fetchProfiles, dialogProps, setUserInfo } = props;
-  const { id } = profile;
+  const { id, current_user_delete_permission = false } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const {
@@ -130,19 +133,17 @@ const Actions = (props: any) => {
       boxProps={{ ml: 0.2 }}
       loading={loading || editLoading}
       items={[
-        // {
-        //   icon: <EditRoundedIcon fontSize="small" />,
-        //   text: <Trans i18nKey="edit" />,
-        //   onClick: openEditDialog,
-        // },
-        // !isActiveSpace
-        //   ? {
-        //       icon: <DeleteRoundedIcon fontSize="small" />,
-        //       text: <Trans i18nKey="delete" />,
-        //       onClick: deleteItem,
-        //     }
-        //   : undefined,
         {
+          icon: <NewReleasesRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="release" />,
+          onClick: () => alert("released"),
+        },
+        {
+          icon: <ArchiveRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="archive" />,
+          onClick: () => alert("archived"),
+        },
+        current_user_delete_permission && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,
           onClick: deleteItem,
