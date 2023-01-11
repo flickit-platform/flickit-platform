@@ -23,4 +23,5 @@ urlpatterns = router.urls + user_access_router.urls + assessments_router.urls
 
 urlpatterns += [
     path("spaces/adduser/<str:space_id>/", spaceviews.SpaceAccessAPI.as_view()),
+    path("users/invite/<str:space_id>/", userviews.InviteMemberApi.as_view()),
 ]

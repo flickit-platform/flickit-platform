@@ -5,20 +5,23 @@ from ..models import Space
 from ..services import userservices
 from .commonserializers import UserSimpleSerializer
 
-
-
-
 class InputSpaceAccessSerializer(serializers.Serializer):
-        email = serializers.EmailField()
-        def validate(self, attrs):
-            print(attrs)
-            user = userservices.load_user_by_email(attrs['email'])
-            if user is None:
-                raise serializers.ValidationError({'message': 'No user with the given email was found.'})
-            if not user.is_active:
-                raise serializers.ValidationError({'message': 'User with the given email is not active.'})
-            return attrs
+    email = serializers.EmailField()
+    def validate(self, attrs):
+        user = userservices.load_user_by_email(attrs['email'])
+        if user is None:
+            raise serializers.ValidationError({'message': 'No user with the given email was found.'})
+        if not user.is_active:
+            raise serializers.ValidationError({'message': 'User with the given email is not active.'})
+        return attrs
 
+class InviteMemberSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    def validate(self, attrs):
+        user = userservices.load_user_by_email(attrs['email'])
+        if user is not None:
+            raise serializers.ValidationError({'message': 'An account exists with this email'})
+        return attrs
 
 class SpaceListSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer()

@@ -15,3 +15,13 @@ def async_send(url, to, protocol):
     except BadHeaderError:
         pass
 
+
+@shared_task
+def async_send_invite(url, to, protocol):
+    context ={'site_name': SITE_NAME, 'domain': DOMAIN, 'protocol': protocol, 'url': url}
+    try:
+        message = BaseEmailMessage(template_name='emails/invite.html', context = context)
+        message.send([to])
+    except BadHeaderError:
+        pass
+

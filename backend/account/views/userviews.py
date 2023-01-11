@@ -10,6 +10,8 @@ from django.db import transaction
 from ..models import UserAccess
 from ..tasks import async_send
 from ..serializers.userserializers import UserAccessSerializer, UserSerializer
+from ..serializers.spaceserializers import InviteMemberSerializer
+from ..services import spaceservices, userservices
 
 
 class UserActivationView(APIView):
@@ -41,31 +43,26 @@ class CustomActivationEmail(ActivationEmail):
 
 class UserAccessViewSet(ModelViewSet):
     http_method_names = ['get', 'delete']
-    def get_serializer_class(self):
-        return UserAccessSerializer
+    serializer_class = UserAccessSerializer
+
     def get_queryset(self):
-        return UserAccess.objects \
-        .filter(space_id = self.kwargs['space_pk']) \
-        .select_related('user')
+        return UserAccess.objects .filter(space_id = self.kwargs['space_pk']).select_related('user')
+
     def get_serializer_context(self):
         return {'space_id': self.kwargs['space_pk']}
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        current_user = self.request.user
+        return spaceservices.perform_delete(self.get_object(), request.user)
 
-        if current_user.id != instance.space.owner_id:
-            return Response({"message": "The user does not access to delete memeber"}, status=status.HTTP_403_FORBIDDEN)
-        
-        if instance.user_id == instance.space.owner_id:
-            return Response({"message": "The owner of the space can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_destroy(instance)
-        if instance.space.id == instance.user.current_space_id:
-            instance.user.current_space_id = None
-            instance.user.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+class InviteMemberApi(APIView):
+    serializer_class =  InviteMemberSerializer
+    def post(self, request, space_id):
+        serializer = InviteMemberSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        userservices.invite_member(space_id, **serializer.validated_data)
+        return Response(status=status.HTTP_200_OK)
+       
 
 
 

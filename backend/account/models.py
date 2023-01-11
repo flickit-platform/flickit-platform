@@ -20,7 +20,8 @@ class User(AbstractUser):
 
 class UserAccess(models.Model):
     space = models.ForeignKey('Space', on_delete=models.CASCADE)
-    user =  models.ForeignKey('User', on_delete=models.CASCADE)
+    user =  models.ForeignKey('User', on_delete=models.CASCADE, null=True)
+    invite_email = models.EmailField(null = True)
 
     class Meta:
         unique_together = ('space', 'user')

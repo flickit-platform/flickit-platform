@@ -232,7 +232,7 @@ DJOSER = {
         'current_user': 'account.serializers.userserializers.UserSerializer',
     },
     'EMAIL': {
-            'activation': 'account.views.CustomActivationEmail'
+            'activation': 'account.views.userviews.CustomActivationEmail'
     }
 }
 

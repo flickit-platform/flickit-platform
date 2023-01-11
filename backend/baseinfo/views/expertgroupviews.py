@@ -14,8 +14,6 @@ class ExpertGroupViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return ExpertGroupCreateSerilizers
-        elif self.request.method in ['GET']:
-            return ExpertGroupSerilizer
         return ExpertGroupSerilizer
 
     def get_queryset(self):

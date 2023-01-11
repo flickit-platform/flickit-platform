@@ -6,22 +6,15 @@ from rest_framework.views import APIView
 
 from ..serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
 from ..serializers.commonserializers import SpaceSerializer
-from ..services import spaceservices
+from ..services import spaceservices, userservices
 
 class ChangeCurrentSpaceViewSet(APIView):
     def post(self, request, space_id):
-        current_user = request.user
-        if current_user.spaces.filter(id = space_id).exists():
-            current_user.current_space_id = space_id
-            current_user.save()
-            return Response({'message': 'The current space of user is changed successfully'})
-        else:
-            return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
+        return spaceservices.change_current_space(request.user, space_id)
+
 
 class SpaceAccessAPI(APIView):
     serializer_class = InputSpaceAccessSerializer
-    # user_response = openapi.Response('response description', UserSerializer)
-    # @swagger_auto_schema(request_body=InputSpaceAccessSerializer, responses={200: user_response})
     def post(self, request, space_id):
         serializer = InputSpaceAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
