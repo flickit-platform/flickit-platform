@@ -4,30 +4,26 @@ import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
 import { InputFieldUC } from "../shared/fields/InputField";
-import { SelectFieldUC } from "../shared/fields/SelectField";
 import { styles } from "../../config/styles";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import setServerFieldErrors from "../../utils/setServerFieldError";
-import useConnectSelectField from "../../utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
 import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
 import FormProviderWithForm from "../shared/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "../shared/fields/AutocompleteAsyncField";
+import RichEditorField from "../shared/fields/RichEditorField";
 import UploadField from "../shared/fields/UploadField";
 
-interface IProfileCEFromDialogProps extends DialogProps {
+interface IExpertGroupCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
 
-const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
+const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
   const {
@@ -38,8 +34,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     ...rest
   } = props;
   const { type, data = {} } = context;
-  const { expertGroupId: fallbackExpertGroupId } = useParams();
-  const { id, expertGroupId = fallbackExpertGroupId } = data;
+  const { id } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
@@ -56,23 +51,20 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    event.preventDefault();
-    const { dsl_id, tags = [], ...restOfData } = data;
+    const { picture, ...restOfData } = data;
     const formattedData = {
-      dsl_id: dsl_id.id,
-      tag_ids: tags.map((t: any) => t.id),
-      expert_group_id: expertGroupId,
       ...restOfData,
+      picture: picture || null,
     };
     setLoading(true);
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile(
+          ? await service.updateExpertGroup(
               { data: formattedData, id },
               { signal: abortController.signal }
             )
-          : await service.createProfile(
+          : await service.createExpertGroup(
               { data: formattedData },
               { signal: abortController.signal }
             );
@@ -96,39 +88,52 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
           {type === "update" ? (
-            <Trans i18nKey="updateProfile" />
+            <Trans i18nKey="updateExpertGroup" />
           ) : (
-            <Trans i18nKey="createProfile" />
+            <Trans i18nKey="createExpertGroup" />
           )}
         </>
       }
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={5}>
             <UploadField
-              accept={{ "application/zip": [".zip"] }}
-              uploadService={(args, config) =>
-                service.uploadProfileDSL(args, config)
-              }
-              deleteService={(args, config) =>
-                service.deleteProfileDSL(args, config)
-              }
-              name="dsl_id"
-              required={true}
-              label={<Trans i18nKey="dsl" />}
+              defaultValue={defaultValues.picture}
+              defaultValueType="image"
+              hideDropText
+              name="picture"
+              label={<Trans i18nKey="groupPicture" />}
+            />
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <InputFieldUC
+              defaultValue={defaultValues.name || ""}
+              name="name"
+              label={<Trans i18nKey="name" />}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <InputFieldUC
+              name="about"
+              label={<Trans i18nKey="about" />}
+              defaultValue={defaultValues.about || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <InputFieldUC
+              name="website"
+              label={<Trans i18nKey="website" />}
+              placeholder="https://example.com"
+              defaultValue={defaultValues.website || ""}
             />
           </Grid>
           <Grid item xs={12}>
-            <AutocompleteAsyncField
-              {...useConnectAutocompleteField({
-                service: (args, config) =>
-                  service.fetchProfileTags(args, config),
-              })}
-              name="tags"
-              multiple={true}
-              searchOnType={false}
-              label={<Trans i18nKey="tags" />}
+            <RichEditorField
+              name="description"
+              label={<Trans i18nKey="description" />}
+              defaultValue={defaultValues.description || ""}
             />
           </Grid>
         </Grid>
@@ -146,4 +151,4 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   );
 };
 
-export default ProfileCEFromDialog;
+export default ExpertGroupCEFormDialog;

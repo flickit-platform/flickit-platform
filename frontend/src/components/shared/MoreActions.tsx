@@ -58,7 +58,12 @@ const MoreActions = (props: IMoreActionsProps) => {
         </IconButton>
       )}
 
-      <Menu open={open} onClose={closeMenu} anchorEl={anchorEl}>
+      <Menu
+        open={open}
+        onClose={closeMenu}
+        anchorEl={anchorEl}
+        PaperProps={{ sx: { minWidth: "160px" } }}
+      >
         {items.map((item, index) => {
           if (!item) {
             return null;

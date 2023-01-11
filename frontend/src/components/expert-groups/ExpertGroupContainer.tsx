@@ -2,6 +2,7 @@ import {
   Avatar,
   AvatarGroup,
   Box,
+  Button,
   Collapse,
   Divider,
   Grid,
@@ -22,7 +23,7 @@ import RichEditor from "../shared/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { t } from "i18next";
-import { IUserInfo } from "../../types";
+import { IUserInfo, TQueryFunction } from "../../types";
 import getUserName from "../../utils/getUserName";
 import forLoopComponent from "../../utils/forLoop";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
@@ -33,6 +34,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useRef, useState } from "react";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import { ICustomError } from "../../utils/CustomError";
+import useDialog from "../../utils/useDialog";
+import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -63,99 +66,102 @@ const ExpertGroupContainer = () => {
               {name}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={9}>
-                <Box minHeight={"140px"} mb={4}>
+              <Grid item xs={12} md={8}>
+                <Box minHeight={"340px"} mb={4}>
                   <RichEditor content={description} />
                 </Box>
                 <Box>
-                  <Title size="small">
-                    <Trans i18nKey={"profiles"} />
-                  </Title>
-                  <Box mt={2}>
-                    <ProfilesList queryData={queryData} />
-                  </Box>
+                  <ProfilesList queryData={queryData} />
                 </Box>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    display="flex"
-                    alignItems={"center"}
-                    sx={{ mb: 2 }}
-                  >
-                    <Trans i18nKey="about" />
-                  </Typography>
-                  <Box sx={{ ...styles.centerV }}>
-                    <InsertLinkRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, transform: "rotateZ(-45deg)", opacity: 0.8 }}
-                    />
-
-                    <MLink
-                      target="_blank"
-                      href={website}
-                      sx={{
-                        textDecoration: "none",
-                        opacity: 0.9,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {website?.replace("https://", "").replace("http://", "")}
-                    </MLink>
-                  </Box>
-                  <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
-                    <PeopleRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, opacity: 0.8 }}
-                    />
-
+              <Grid item xs={12} md={4}>
+                <Box p={2} sx={{ borderRadius: 1, background: "#f5f5f5" }}>
+                  <Box>
                     <Typography
-                      sx={{
-                        opacity: 0.9,
-                        fontSize: "inherit",
-                      }}
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
                     >
-                      {number_of_members} {t("members").toLowerCase()}
+                      <Trans i18nKey="about" />
                     </Typography>
-                  </Box>
-                  <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                    <AssignmentRoundedIcon
-                      fontSize="small"
-                      sx={{ mr: 1, opacity: 0.8 }}
-                    />
+                    <Box sx={{ ...styles.centerV }}>
+                      <InsertLinkRoundedIcon
+                        fontSize="small"
+                        sx={{
+                          mr: 1,
+                          transform: "rotateZ(-45deg)",
+                          opacity: 0.8,
+                        }}
+                      />
 
+                      <MLink
+                        target="_blank"
+                        href={website}
+                        sx={{
+                          textDecoration: "none",
+                          opacity: 0.9,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {website
+                          ?.replace("https://", "")
+                          .replace("http://", "")}
+                      </MLink>
+                    </Box>
+                    <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
+                      <PeopleRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {number_of_members} {t("members").toLowerCase()}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
+                      <AssignmentRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {number_of_profiles} {t("profiles").toLowerCase()}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ mt: 2, mb: 2 }} />
+                  </Box>
+                  {/* --------------------------- */}
+                  <Box>
                     <Typography
-                      sx={{
-                        opacity: 0.9,
-                        fontSize: "inherit",
-                      }}
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
                     >
-                      {number_of_profiles} {t("profiles").toLowerCase()}
+                      <Trans i18nKey="members" />
                     </Typography>
+                    <AddingNewMember queryData={queryData} />
+                    <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
+                      <AvatarGroup>
+                        {users.map((user: IUserInfo) => {
+                          const name = getUserName(user);
+                          return <Avatar alt={name} title={name} src="/" />;
+                        })}
+                      </AvatarGroup>
+                    </Box>
+                    {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
                   </Box>
-                  <Divider sx={{ mt: 2, mb: 2 }} />
-                </Box>
-                {/* --------------------------- */}
-                <Box>
-                  <Typography
-                    variant="h6"
-                    display="flex"
-                    alignItems={"center"}
-                    sx={{ mb: 2 }}
-                  >
-                    <Trans i18nKey="members" />
-                  </Typography>
-                  <AddingNewMember queryData={queryData} />
-                  <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
-                    <AvatarGroup>
-                      {users.map((user: IUserInfo) => {
-                        const name = getUserName(user);
-                        return <Avatar alt={name} title={name} src="/" />;
-                      })}
-                    </AvatarGroup>
-                  </Box>
-                  {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
                 </Box>
               </Grid>
             </Grid>
@@ -279,37 +285,65 @@ const ProfilesList = (props: any) => {
   const { queryData } = props;
 
   return (
-    <QueryData
-      {...queryData}
-      renderLoading={() => (
-        <>
-          {forLoopComponent(5, (index) => (
-            <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
-          ))}
-        </>
-      )}
-      isDataEmpty={(data) => {
-        const { profiles = [] } = data;
-        const isEmpty = profiles.length === 0;
-        return isEmpty;
-      }}
-      render={(data) => {
-        const { profiles = [] } = data;
-        return (
-          <>
-            {profiles.map((profile: any) => {
-              return (
-                <ProfileListItem
-                  key={profile?.id}
-                  data={profile}
-                  fetchProfiles={queryData.query}
-                />
-              );
-            })}
-          </>
-        );
-      }}
-    />
+    <>
+      <Title
+        size="small"
+        toolbar={<CreateProfileButton onSubmitForm={queryData.query} />}
+      >
+        <Trans i18nKey={"profiles"} />
+      </Title>
+      <Box mt={2}>
+        <QueryData
+          {...queryData}
+          renderLoading={() => (
+            <>
+              {forLoopComponent(5, (index) => (
+                <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
+              ))}
+            </>
+          )}
+          isDataEmpty={(data) => {
+            const { profiles = [] } = data;
+            const isEmpty = profiles.length === 0;
+            return isEmpty;
+          }}
+          render={(data) => {
+            const { profiles = [] } = data;
+            return (
+              <>
+                {profiles.map((profile: any) => {
+                  return (
+                    <ProfileListItem
+                      link={`profiles/${profile?.id}`}
+                      key={profile?.id}
+                      data={profile}
+                      fetchProfiles={queryData.query}
+                    />
+                  );
+                })}
+              </>
+            );
+          }}
+        />
+      </Box>
+    </>
+  );
+};
+
+const CreateProfileButton = (props: { onSubmitForm: TQueryFunction }) => {
+  const { onSubmitForm } = props;
+  const { expertGroupId } = useParams();
+  const dialogProps = useDialog({
+    context: { type: "create", data: { expertGroupId } },
+  });
+
+  return (
+    <>
+      <Button variant="contained" size="small" onClick={dialogProps.openDialog}>
+        <Trans i18nKey="createProfile" />
+      </Button>
+      <ProfileCEFromDialog {...dialogProps} onSubmitForm={onSubmitForm} />
+    </>
   );
 };
 
