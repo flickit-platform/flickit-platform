@@ -38,7 +38,8 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     ...rest
   } = props;
   const { type, data = {} } = context;
-  const { id } = data;
+  const { expertGroupId: fallbackExpertGroupId } = useParams();
+  const { id, expertGroupId = fallbackExpertGroupId } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
@@ -60,6 +61,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     const formattedData = {
       dsl_id: dsl_id.id,
       tag_ids: tags.map((t: any) => t.id),
+      expert_group_id: expertGroupId,
       ...restOfData,
     };
     setLoading(true);
