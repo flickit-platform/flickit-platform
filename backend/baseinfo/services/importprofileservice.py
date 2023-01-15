@@ -1,10 +1,13 @@
 from django.db import transaction
+from zipfile import ZipFile
 from ..models.basemodels import MetricCategory, AssessmentSubject, QualityAttribute
 from ..models.metricmodels import Metric, MetricImpact, AnswerTemplate
-from ..models.profilemodels import AssessmentProfile
+from ..models.profilemodels import AssessmentProfile, ProfileDsl
 from ..services import profileservice, expertgroupservice
 
-def extract_dsl_contents(input_zip):
+def extract_dsl_contents(dsl_id):
+    dsl = ProfileDsl.objects.get(id = dsl_id)
+    input_zip = ZipFile(dsl.dsl_file)
     all_content = ''
     for name in input_zip.namelist():
         content = input_zip.read(name).decode('utf-8')
@@ -20,9 +23,9 @@ def __trim_content(content):
             new_content = new_content + '\n' + line
     return new_content
 @transaction.atomic
-def import_profile(descriptive_profile, extra_info):
-    tags = extract_tags(extra_info['tag_ids'])
-    expert_group = expertgroupservice.load_expert_group(extra_info['expert_group_id'])
+def import_profile(descriptive_profile, **kwargs):
+    tags = extract_tags(kwargs['tag_ids'])
+    expert_group = expertgroupservice.load_expert_group(kwargs['expert_group_id'])
     assessment_profile = __import_profile_base_info(descriptive_profile, tags, expert_group)
     __import_categories(descriptive_profile['categoryModels'], assessment_profile)
     __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
@@ -45,7 +48,7 @@ def __import_profile_base_info(descriptive_profile, tags, expert_group):
     assessment_profile = AssessmentProfile()
     assessment_profile.code = profile_model['code']
     assessment_profile.title = profile_model['title']
-    assessment_profile.description = profile_model['description']
+    assessment_profile.summary = profile_model['description']
     assessment_profile.is_default = False
     assessment_profile.save()
     for tag in tags:

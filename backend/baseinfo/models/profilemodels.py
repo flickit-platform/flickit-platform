@@ -21,6 +21,7 @@ class AssessmentProfile(models.Model):
     is_default = models.BooleanField(default=False)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles', null=True)
     is_active = models.BooleanField(default=False)
+    likes = models.IntegerField(default=0)
 
     def save(self):
         if(self.is_default == True):

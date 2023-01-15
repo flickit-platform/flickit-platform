@@ -14,6 +14,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     profiles = AssessmentProfileSimpleSerilizer(many=True)
     number_of_members = serializers.SerializerMethodField()
     number_of_profiles = serializers.SerializerMethodField()
+    owner = UserSimpleSerializer()
 
     def get_number_of_members(self, expert_group: ExpertGroup):
         return expert_group.users.count()
@@ -23,7 +24,8 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     
     class Meta:
         model = ExpertGroup
-        fields = ['id', 'name', 'description', 'website', 'picture', 'users','number_of_members', 'profiles', 'number_of_profiles']
+        fields = ['id', 'name', 'description', 'website', 'picture', 'users',
+        'number_of_members', 'profiles', 'number_of_profiles', 'owner']
 
 
 class ExpertGroupAccessSerializer(serializers.Serializer):
