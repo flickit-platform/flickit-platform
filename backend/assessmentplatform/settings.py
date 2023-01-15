@@ -7,6 +7,8 @@ __version__ = "0.5.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+TOKEN_KEY = '-Urn2uB97sQwaWG4ni65wJYEqyxLEDDsfYg82XIcToM='
+
 USE_MODELTRANSLATION = False
 
 ALLOWED_HOSTS = []

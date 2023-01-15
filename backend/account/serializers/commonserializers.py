@@ -4,10 +4,9 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from ..models import Space, UserAccess
-from ..models import UserAccess, User
-
-
+from ..services import spaceservices
+from ..models import Space
+from ..models import User
 
 
 class UserSimpleSerializer(serializers.ModelSerializer):
@@ -21,16 +20,7 @@ class SpaceSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         space = super().save(**kwargs)
         current_user = self.context.get('request', None).user
-        try:
-            user_access = UserAccess.objects.get(space_id = space.id, user_id = current_user.id)
-            user_access.save()
-        except UserAccess.DoesNotExist:
-            user_access = UserAccess.objects.create(user_id = current_user.id, space_id = space.id)
-            user_access.save()
-        
-        space.owner_id = current_user.id
-        space.save()
-        return space
+        return spaceservices.add_owner_to_space(space, current_user.id)
     
     class Meta:
         model = Space

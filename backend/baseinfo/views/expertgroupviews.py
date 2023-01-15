@@ -1,11 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
-
-from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers
+from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers, ExpertGroupAccessSerializer
 from ..services import expertgroupservice
-from account.services import userservices
 from ..models.profilemodels import ExpertGroup
 
 
@@ -21,17 +17,18 @@ class ExpertGroupViewSet(ModelViewSet):
 
 
 class AddUserToExpertGroupApi(APIView):
+    serializer_class = ExpertGroupAccessSerializer
     def post(self, request, expert_group_id):
-        expert_group = expertgroupservice.load_expert_group(expert_group_id)
-        if expert_group is None:
-            return Response({'message: expert_group with id {} is not Valid', expert_group_id}, status=status.HTTP_400_BAD_REQUEST)
-        email = request.data['email']
-        user = userservices.load_user_by_email(email)
-        if user is None:
-            return Response({'message: user with email {} is not found'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
-        expert_group.users.add(user)
-        expert_group.save()
-        return Response({'message: User with email {} is added to expert group'.format(email)}, status=status.HTTP_200_OK)
+        serializer = ExpertGroupAccessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return expertgroupservice.add_user_to_expert_group(expert_group_id, **serializer.validated_data)
+
+class ConfirmUserForExpertGroupApi(APIView):
+    def post(self, request, token):
+        return expertgroupservice.confirm_user_for_registering_in_expert_group(token, request.user.id)
+
+    
+
 
         
         

@@ -4,13 +4,13 @@ from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateS
 from djoser.serializers import UserCreatePasswordRetypeSerializer 
 from ..models import UserAccess
 from .commonserializers import UserSimpleSerializer, SpaceSerializer
+from .spaceserializers import SpaceSimpleSerializer
 from  baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from ..services import spaceservices
 
-
-
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)
+    space = SpaceSimpleSerializer()
     class Meta:
         model = UserAccess
         fields = ['id', 'user', 'space']
