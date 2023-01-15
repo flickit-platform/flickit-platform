@@ -42,7 +42,7 @@ def confirm_user_for_registering_in_expert_group(token, current_user_id):
     try:
         decrypt_message = cryptoservices.decrypt_message(token)
     except:
-        return Response({'message': 'The token is not vliad for registering in expert group'}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'message': 'The token is not valid for registering in expert group'}, status=status.HTTP_403_FORBIDDEN)
 
     info_ids = decrypt_message.split()
     user_id = info_ids[0].decode()
