@@ -1,0 +1,28 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Invite on {{ expert_group_name }}{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}You're receiving this email because you are invited to register on {{ expert_group_name }} expert group.{% endblocktrans %}
+
+{% trans "Please go to the following page to sign up" %}
+{{ protocol }}://{{ domain }}/{{ url|safe }}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ expert_group_name }} team{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>{% blocktrans %}You're receiving this email because you are invited to register on {{ expert_group_name }} expert group.{% endblocktrans %}</p>
+
+<p>{% trans "Please go to the following page to sign up" %}</p>
+<p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+
+<p>{% trans "Thanks for using our site!" %}</p>
+
+<p>{% blocktrans %}The {{ expert_group_name }} expert group{% endblocktrans %}</p>
+
+{% endblock html_body %}

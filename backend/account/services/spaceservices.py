@@ -12,6 +12,16 @@ def add_user_to_space(space_id, email):
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
 
+def add_owner_to_space(space, current_user_id):
+    try:
+        user_access = UserAccess.objects.get(space_id = space.id, user_id = current_user_id)
+    except UserAccess.DoesNotExist:
+        user_access = UserAccess.objects.create(user_id = current_user_id, space_id = space.id)
+        user_access.save()
+    space.owner_id = current_user_id
+    space.save()
+    return space
+
 def add_invited_user_to_space(user):
     user_accesses = UserAccess.objects.filter(invite_email = user.email)
     for ua in user_accesses:

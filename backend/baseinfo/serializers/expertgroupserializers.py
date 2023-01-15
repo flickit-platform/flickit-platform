@@ -5,6 +5,8 @@ from account.serializers.userserializers import UserSimpleSerializer
 
 from ..models.profilemodels import ExpertGroup
 from ..serializers.commonserializers import AssessmentProfileSimpleSerilizer
+from ..services import expertgroupservice
+from account.services import userservices
 
 
 class ExpertGroupSerilizer(serializers.ModelSerializer):
@@ -24,16 +26,23 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'website', 'picture', 'users','number_of_members', 'profiles', 'number_of_profiles']
 
 
+class ExpertGroupAccessSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    def validate(self, attrs):
+        user = userservices.load_user_by_email(attrs['email'])
+        if user is None:
+            error_message = 'user with email {} is not found'.format(attrs['email'])
+            raise serializers.ValidationError({'message': error_message})
+        return attrs
+
+
 class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
 
     @transaction.atomic
     def save(self, **kwargs):
         expert_group = super().save(**kwargs)
         current_user = self.context.get('request', None).user
-        expert_group.users.add(current_user)
-        expert_group.owner_id = current_user.id
-        expert_group.save()
-        return expert_group
+        return expertgroupservice.add_expert_group_coordinator(expert_group, current_user)
 
     class Meta:
         model = ExpertGroup

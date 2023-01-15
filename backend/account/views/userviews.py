@@ -55,12 +55,12 @@ class UserAccessViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return spaceservices.perform_delete(self.get_object(), request.user)
 
-class InviteMemberApi(APIView):
+class InviteMemberForSpaceApi(APIView):
     serializer_class =  InviteMemberSerializer
     def post(self, request, space_id):
         serializer = InviteMemberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        userservices.invite_member(space_id, **serializer.validated_data)
+        userservices.invite_member_for_space(space_id, **serializer.validated_data)
         return Response(status=status.HTTP_200_OK)
        
 
