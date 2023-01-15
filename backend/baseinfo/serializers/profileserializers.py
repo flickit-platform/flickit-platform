@@ -35,7 +35,7 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'description', 'images', 'tags', 'expert_group', 'number_of_assessment', 'current_user_delete_permission']
+        fields = ['id', 'code', 'title', 'summary', 'about', 'images', 'tags', 'expert_group', 'number_of_assessment', 'current_user_delete_permission']
 
 class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:

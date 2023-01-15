@@ -14,7 +14,8 @@ class ExpertGroup(models.Model):
 class AssessmentProfile(models.Model):
     code = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    summary = models.TextField(null=True)
+    about = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     is_default = models.BooleanField(default=False)
