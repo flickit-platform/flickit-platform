@@ -4,7 +4,8 @@ from account.models import User
 
 class ExpertGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(null=True)
+    bio = models.CharField(max_length=200, null=True)
+    about = models.TextField(null=True)
     website = models.URLField(max_length = 200, null=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True)
     users = models.ManyToManyField(User, related_name = 'expert_groups')
@@ -22,6 +23,7 @@ class AssessmentProfile(models.Model):
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles', null=True)
     is_active = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
+
 
     def save(self):
         if(self.is_default == True):

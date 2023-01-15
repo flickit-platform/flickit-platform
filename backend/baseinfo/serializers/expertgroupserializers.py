@@ -24,7 +24,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     
     class Meta:
         model = ExpertGroup
-        fields = ['id', 'name', 'description', 'website', 'picture', 'users',
+        fields = ['id', 'name', 'about', 'bio', 'website', 'picture', 'users',
         'number_of_members', 'profiles', 'number_of_profiles', 'owner']
 
 
@@ -48,4 +48,4 @@ class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
 
     class Meta:
         model = ExpertGroup
-        fields = ['id', 'name', 'description', 'website', 'picture']
+        fields = ['id', 'name', 'bio', 'about', 'website', 'picture']

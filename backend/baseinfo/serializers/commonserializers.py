@@ -67,4 +67,4 @@ class AssessmentProfileSimpleSerilizer(serializers.ModelSerializer):
 class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name', 'bio', 'about']
