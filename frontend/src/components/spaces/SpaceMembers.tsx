@@ -77,7 +77,7 @@ export const SpaceMembers = () => {
   }, [data]);
 
   return (
-    <Box mt={1}>
+    <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
         <Title
           size="small"
@@ -166,11 +166,11 @@ export const SpaceMembers = () => {
                       key={id}
                       sx={{
                         ...styles.centerV,
-                        boxShadow: (t) =>
-                          `0 5px 8px -8px ${t.palette.grey[400]}`,
+                        boxShadow: 1,
                         borderRadius: 2,
-                        pb: 0.4,
-                        mb: 2,
+                        my: 1,
+                        py: 0.8,
+                        px: 1.5,
                       }}
                     >
                       <Box sx={{ ...styles.centerV }}>

@@ -111,6 +111,9 @@ export const theme = createTheme({
         html {
           scroll-behavior: smooth;
         }
+        body {
+          background: #f5f5f5;
+        }
       `,
     },
     MuiTypography: {
@@ -119,6 +122,42 @@ export const theme = createTheme({
           subSmall: "h6",
           subMedium: "h6",
           subLarge: "h6",
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          background: "white",
+          borderRadius: "4px",
+          overflow: "auto",
+          padding: "6px 8px",
+        },
+        indicator: {
+          display: "none",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          padding: "4px 8px",
+          margin: "0px 4px",
+          borderRadius: "5px",
+          minHeight: "40px",
+          transition: "background-color .1s ease, color .1s ease",
+          "&.Mui-selected": {
+            backgroundColor: palette.secondary.main,
+            color: palette.getContrastText(palette.secondary.main),
+          },
+        },
+      },
+    },
+    //@ts-expect-error
+    MuiTabPanel: {
+      styleOverrides: {
+        root: {
+          padding: "4px 2px",
         },
       },
     },

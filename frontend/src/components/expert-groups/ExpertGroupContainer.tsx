@@ -67,15 +67,17 @@ const ExpertGroupContainer = () => {
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
               <Grid item xs={12} md={8}>
-                <Box minHeight={"340px"} mb={4}>
-                  <RichEditor content={description} />
+                <Box sx={{ p: 3, borderRadius: 2, background: "white" }}>
+                  <Box minHeight={"160px"} mb={4}>
+                    <RichEditor content={description} />
+                  </Box>
                 </Box>
                 <Box>
                   <ProfilesList queryData={queryData} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
-                <Box p={2} sx={{ borderRadius: 1, background: "#f5f5f5" }}>
+                <Box p={2} sx={{ borderRadius: 2, p: 3, background: "white" }}>
                   <Box>
                     <Typography
                       variant="h6"

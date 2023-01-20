@@ -126,7 +126,10 @@ const Navbar = () => {
         }}
         data-cy="nav-bar"
       >
-        <Toolbar variant="dense" sx={{ backgroundColor: "white" }}>
+        <Toolbar
+          variant="dense"
+          sx={{ backgroundColor: "white", minHeight: "42px", borderRadius: 1 }}
+        >
           <IconButton
             color="primary"
             aria-label="open drawer"
@@ -144,7 +147,7 @@ const Navbar = () => {
                 xs: "none",
                 md: "block",
                 color: "grey",
-                height: "48px",
+                height: "42px",
                 width: "110px",
               },
             }}
@@ -181,6 +184,7 @@ const Navbar = () => {
                 />
               }
               sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+              size="small"
             >
               <Trans i18nKey="compare" />
             </Button>
@@ -188,6 +192,7 @@ const Navbar = () => {
               component={NavLink}
               to={`/profiles`}
               sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+              size="small"
             >
               <Trans i18nKey="profiles" />
             </Button>
@@ -391,6 +396,7 @@ const SpacesButton = ({ currentSpace }: any) => {
             sx={{ opacity: 0.8, fontSize: "18px !important" }}
           />
         }
+        size="small"
         endIcon={
           <Button
             sx={{ minWidth: "8px", ml: 0.6, px: 0.2, py: 0.2 }}

@@ -17,15 +17,7 @@ const CompareTable = (props: {
   const { data, title, base_infos } = props;
   return (
     <>
-      <Box mt={2}>
-        <Title
-          size="small"
-          sx={{ opacity: 0.9, flex: 1 }}
-          inPageLink={`${title}`}
-        >
-          <Trans i18nKey={title} />
-        </Title>
-
+      <Box>
         {data.map((part) => {
           return (
             <Box borderBottom={"1px dashed #e7e7e7"} py={1}>

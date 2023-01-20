@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Skeleton } from "@mui/material";
 import { Trans } from "react-i18next";
+import { styles } from "../../config/styles";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { TQueryFunction } from "../../types";
 import forLoopComponent from "../../utils/forLoop";
@@ -18,8 +19,20 @@ const ExpertGroupsContainer = () => {
 
   return (
     <Box>
-      <Box display="flex" sx={{ my: 1 }}>
-        <CreateExpertGroupButton onSubmitForm={queryData.query} />
+      <Box
+        sx={{
+          background: "white",
+          py: 1,
+          px: 2,
+          ...styles.centerV,
+          borderRadius: 1,
+          my: 2,
+        }}
+      >
+        <Box></Box>
+        <Box ml="auto">
+          <CreateExpertGroupButton onSubmitForm={queryData.query} />
+        </Box>
       </Box>
       <QueryData
         {...queryData}

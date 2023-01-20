@@ -16,6 +16,7 @@ import { ToolbarCreateItemBtn } from "../../components/shared/buttons/ToolbarCre
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import { ISpacesModel } from "../../types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
+import { styles } from "../../config/styles";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
@@ -30,21 +31,31 @@ const SpaceContainer = () => {
   return (
     <SpaceLayout
       title={
-        <Title
-          borderBottom={true}
-          toolbar={
-            <ToolbarCreateItemBtn
-              icon={<CreateNewFolderRoundedIcon />}
-              onClick={dialogProps.openDialog}
-              shouldAnimate={isEmpty}
-              text="createSpace"
-            />
-          }
-        >
+        <Title borderBottom={true}>
           <FolderRoundedIcon sx={{ mr: 1 }} /> <Trans i18nKey="spaces" />
         </Title>
       }
     >
+      <Box
+        sx={{
+          background: "white",
+          py: 1,
+          px: 2,
+          ...styles.centerV,
+          borderRadius: 1,
+          my: 3,
+        }}
+      >
+        <Box></Box>
+        <Box ml="auto">
+          <ToolbarCreateItemBtn
+            icon={<CreateNewFolderRoundedIcon />}
+            onClick={dialogProps.openDialog}
+            shouldAnimate={isEmpty}
+            text="createSpace"
+          />
+        </Box>
+      </Box>
       <QueryData
         {...spacesQueryData}
         renderLoading={() => (

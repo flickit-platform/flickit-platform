@@ -28,7 +28,15 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
       sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}
     >
       {!isReviewPage && (
-        <Box mb={6} mt={6} p={0.5}>
+        <Box
+          mb={6}
+          mt={6}
+          sx={{
+            background: "white",
+            borderRadius: 2,
+            p: { xs: 2, sm: 3, md: 5 },
+          }}
+        >
           <Typography
             variant="h4"
             sx={{
@@ -56,7 +64,7 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
           </Typography>
           <Hidden smDown>
             <Box display="flex" justifyContent={"flex-end"}>
-              <Box width="480px" mt="-64px">
+              <Box width="480px" sx={{ minHeight: "310px" }} mt="-64px">
                 <img
                   src={assessmentDoneSvg}
                   alt="assessment done"

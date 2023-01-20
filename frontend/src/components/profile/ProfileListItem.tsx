@@ -12,7 +12,7 @@ import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
+import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 
 interface IProfileListItemProps {
   data: {
@@ -134,8 +134,8 @@ const Actions = (props: any) => {
       loading={loading || editLoading}
       items={[
         {
-          icon: <NewReleasesRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="release" />,
+          icon: <PublishedWithChangesRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="publish" />,
           onClick: () => alert("released"),
         },
         {

@@ -27,7 +27,7 @@ interface IQueryDataProps<T> {
       | undefined
   ) => JSX.Element;
   isDataEmpty?: (data: T) => boolean;
-  query: TQueryFunction<T>;
+  query?: TQueryFunction<T>;
 }
 
 const QueryDataContext = React.createContext<TQueryProps>({
@@ -59,7 +59,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
     renderError = defaultRenderError,
     emptyDataComponent = <ErrorEmptyData />,
     abortController,
-    query,
+    query = async () => null,
   } = props;
 
   if (loading) {
