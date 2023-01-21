@@ -63,7 +63,7 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def extract_base_info(self, response, result):
         response.data['assessment_project_title'] = result.assessment_project.title
         response.data['assessment_project_id'] = result.assessment_project_id
-        response.data['assessment_profile_description'] = result.assessment_project.assessment_profile.description
+        response.data['assessment_profile_description'] = result.assessment_project.assessment_profile.summary
 
         if result.assessment_project.color is not None :
             response.data['assessment_project_color_code'] = result.assessment_project.color.color_code   

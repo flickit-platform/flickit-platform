@@ -35,12 +35,9 @@ SITE_ID = 1
 
 USE_I18N = False
 
-AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
-
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 DATABASES = {
     "default": {
@@ -51,9 +48,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASS'),
     }
 }
-
-
-
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL'),
 
@@ -90,11 +84,8 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "django.template.context_processors.request",
                 "django.template.context_processors.tz",
-                "mezzanine.conf.context_processors.settings",
-                "mezzanine.pages.context_processors.page",
             ],
             "loaders": [
-                "mezzanine.template.loaders.host_themes.Loader",
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
@@ -115,15 +106,6 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    "mezzanine.boot",
-    "mezzanine.conf",
-    "mezzanine.core",
-    "mezzanine.generic",
-    "mezzanine.pages",
-    "mezzanine.blog",
-    "mezzanine.forms",
-    "mezzanine.galleries",
-    'mezzanine.accounts',
     'import_export',
     'djoser',
     'account',
@@ -135,21 +117,12 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = (
     "corsheaders.middleware.CorsMiddleware",
-    "mezzanine.core.middleware.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # Uncomment if using internationalisation or localisation
-    # 'django.middleware.locale.LocaleMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "mezzanine.core.request.CurrentRequestMiddleware",
-    "mezzanine.core.middleware.RedirectFallbackMiddleware",
-    "mezzanine.core.middleware.AdminLoginInterfaceSelectorMiddleware",
-    "mezzanine.core.middleware.SitePermissionMiddleware",
-    "mezzanine.pages.middleware.PageMiddleware",
-    "mezzanine.core.middleware.FetchFromCacheMiddleware",
 )
 
 CORS_ALLOWED_ORIGINS = [
@@ -163,8 +136,6 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = ['https://checkuptest.asta.ir']
-
-
 
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"
@@ -188,15 +159,14 @@ if os.path.exists(f):
     sys.modules[module_name] = module
     exec(open(f, "rb").read())
 
-try:
-    from mezzanine.utils.conf import set_dynamic_settings
-except ImportError:
-    pass
-else:
-    set_dynamic_settings(globals())
-
 
 AUTH_USER_MODEL = 'account.User'
+
+ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
+    "username",
+    "first_name",
+    "last_name",
+)
 
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
@@ -222,7 +192,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
 }
 
 DJOSER = {
@@ -235,17 +205,14 @@ DJOSER = {
     },
     'EMAIL': {
             'activation': 'account.views.userviews.CustomActivationEmail'
-    }
+    },
 }
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
-
 ACCOUNTS_VERIFICATION_REQUIRED = True
-
 
 STATIC_URL = '/admin/vol/web/static/'
 MEDIA_URL = '/admin/vol/web/media/'
 
 MEDIA_ROOT = '/admin/vol/web/media'
 STATIC_ROOT = '/admin/vol/web/static'
-

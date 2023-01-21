@@ -19,7 +19,7 @@ class AssessmentProfileViewSet(ModelViewSet):
     search_fields = ['title']
 
     def get_queryset(self):
-        return AssessmentProfile.objects.filter()
+        return AssessmentProfile.objects.filter(is_active=True)
 
     def destroy(self, request, *args, **kwargs):
         resp = profileservice.delete_validation(kwargs['pk'], request.user.id)

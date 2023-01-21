@@ -11,8 +11,8 @@ and identify areas of improvement.
 
 **Table of contents:**
 
-- [Features](#Features)
-- [Getting Started](#Getting Started)
+- [Features](#features)
+- [Getting Started](#getting-started)
   
 
 # Features
@@ -23,6 +23,14 @@ and identify areas of improvement.
 - Option to compare assessment results 
 
 # Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+## Prerequisites ##
+
+List any necessary prerequisites for the project, such as specific software or libraries that need to be installed.
+
+## Installation ##
+
 
 
 
