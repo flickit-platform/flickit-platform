@@ -13,7 +13,15 @@ const CompareResultAssessmentsSection = (props: {
   const { data } = props;
 
   return (
-    <Box>
+    <Box
+      sx={{
+        py: 2,
+        px: { xs: 1, sm: 2, md: 3 },
+        background: "white",
+        borderRadius: 2,
+        mt: 1,
+      }}
+    >
       <Grid container spacing={2}>
         {data.map((item) => {
           return (

@@ -46,6 +46,9 @@ const CompareResultScreen = React.lazy(
 );
 
 const ProfilesScreen = React.lazy(() => import("../screens/ProfilesScreen"));
+const ProfileExpertViewScreen = React.lazy(
+  () => import("../screens/ProfileExpertViewScreen")
+);
 const ProfileScreen = React.lazy(() => import("../screens/ProfileScreen"));
 
 const Routes = () => {
@@ -85,7 +88,7 @@ const Routes = () => {
           />
           <Route
             path="/account/:username/expert-groups/:expertGroupId/profiles/:profileId"
-            element={<ProfileScreen />}
+            element={<ProfileExpertViewScreen />}
           />
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/profiles" element={<ProfilesScreen />} />

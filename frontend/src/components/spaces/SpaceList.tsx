@@ -55,7 +55,7 @@ const SpacesList = (props: ISpaceListProps) => {
 
   return (
     <Box sx={{ overflowX: "auto", py: 1 }}>
-      <Box mt={4} minWidth="440px">
+      <Box minWidth="440px">
         {results.map((item: any) => {
           const isActiveSpace = current_space?.id == item?.id;
           const isOwner = userId == item?.owner.id;
@@ -126,9 +126,10 @@ const SpaceCard = (props: ISpaceCardProps) => {
         ...styles.centerV,
         boxShadow: (t) => `0 5px 8px -8px ${t.palette.grey[400]}`,
         borderRadius: 2,
-        pb: 1,
-        pt: 1,
+        px: 1,
+        py: 1,
         mb: 1,
+        backgroundColor: "white",
       }}
     >
       <Box sx={{ ...styles.centerV }} alignSelf="stretch">

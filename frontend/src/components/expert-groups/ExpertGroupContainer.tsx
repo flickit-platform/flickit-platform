@@ -36,13 +36,13 @@ import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import { ICustomError } from "../../utils/CustomError";
 import useDialog from "../../utils/useDialog";
 import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
+import { toast } from "react-toastify";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
   const queryData = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
-      service.fetchUserExpertGroup(args, {}),
+    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, {}),
   });
 
   return (
@@ -53,67 +53,64 @@ const ExpertGroupContainer = () => {
           name,
           picture,
           website,
-          description,
+          about = "",
           number_of_members,
           number_of_profiles,
           users = [],
+          bio,
           profiles = [],
         } = data || {};
         return (
           <Box>
-            <Title pb={1}>
-              <Avatar src={picture} sx={{ mr: 1 }} />
+            <Title borderBottom pb={1} avatar={<Avatar src={picture} sx={{ mr: 1 }} />} sub={bio}>
               {name}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
               <Grid item xs={12} md={8}>
-                <Box minHeight={"340px"} mb={4}>
-                  <RichEditor content={description} />
+                <Title size="small">
+                  <Trans i18nKey="about" />
+                </Title>
+                <Box sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}>
+                  <Box minHeight={"160px"} mb={4}>
+                    <RichEditor content={about} />
+                  </Box>
                 </Box>
-                <Box>
+                <Box mt={4}>
                   <ProfilesList queryData={queryData} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
-                <Box p={2} sx={{ borderRadius: 1, background: "#f5f5f5" }}>
+                <Box p={2} sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}>
                   <Box>
-                    <Typography
-                      variant="h6"
-                      display="flex"
-                      alignItems={"center"}
-                      sx={{ mb: 2 }}
-                    >
-                      <Trans i18nKey="about" />
+                    <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 2 }}>
+                      <Trans i18nKey="summary" />
                     </Typography>
-                    <Box sx={{ ...styles.centerV }}>
-                      <InsertLinkRoundedIcon
-                        fontSize="small"
-                        sx={{
-                          mr: 1,
-                          transform: "rotateZ(-45deg)",
-                          opacity: 0.8,
-                        }}
-                      />
+                    {website && (
+                      <Box sx={{ ...styles.centerV }}>
+                        <InsertLinkRoundedIcon
+                          fontSize="small"
+                          sx={{
+                            mr: 1,
+                            transform: "rotateZ(-45deg)",
+                            opacity: 0.8,
+                          }}
+                        />
 
-                      <MLink
-                        target="_blank"
-                        href={website}
-                        sx={{
-                          textDecoration: "none",
-                          opacity: 0.9,
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {website
-                          ?.replace("https://", "")
-                          .replace("http://", "")}
-                      </MLink>
-                    </Box>
+                        <MLink
+                          target="_blank"
+                          href={website}
+                          sx={{
+                            textDecoration: "none",
+                            opacity: 0.9,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {website?.replace("https://", "").replace("http://", "")}
+                        </MLink>
+                      </Box>
+                    )}
                     <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
-                      <PeopleRoundedIcon
-                        fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
-                      />
+                      <PeopleRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
 
                       <Typography
                         sx={{
@@ -125,10 +122,7 @@ const ExpertGroupContainer = () => {
                       </Typography>
                     </Box>
                     <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                      <AssignmentRoundedIcon
-                        fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
-                      />
+                      <AssignmentRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
 
                       <Typography
                         sx={{
@@ -143,12 +137,7 @@ const ExpertGroupContainer = () => {
                   </Box>
                   {/* --------------------------- */}
                   <Box>
-                    <Typography
-                      variant="h6"
-                      display="flex"
-                      alignItems={"center"}
-                      sx={{ mb: 2 }}
-                    >
+                    <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 2 }}>
                       <Trans i18nKey="members" />
                     </Typography>
                     <AddingNewMember queryData={queryData} />
@@ -191,11 +180,7 @@ const AddingNewMember = (props: any) => {
             ml: "auto",
           }}
         >
-          {open ? (
-            <MinimizeRoundedIcon fontSize="small" />
-          ) : (
-            <AddRoundedIcon fontSize="small" />
-          )}
+          {open ? <MinimizeRoundedIcon fontSize="small" /> : <AddRoundedIcon fontSize="small" />}
         </Box>
       </Typography>
       <Collapse in={open}>
@@ -219,15 +204,21 @@ const AddMember = (props: any) => {
 
   const addMember = async () => {
     try {
-      await addMemberQueryData.query({
+      const res = await addMemberQueryData.query({
         id: expertGroupId,
         email: inputRef.current?.value,
       });
+      res?.message && toast.success(res.message);
       query();
     } catch (e) {
+      console.log(e);
       const error = e as ICustomError;
-      if (error.data?.[0]?.includes("message:")) {
-        toastError(error.data?.[0]);
+      if ("message" in error.data || {}) {
+        if (Array.isArray(error.data.message)) {
+          toastError(error.data?.message[0]);
+        } else if (error.data?.message) {
+          toastError(error.data?.message);
+        }
       }
     }
   };
@@ -252,9 +243,7 @@ const AddMember = (props: any) => {
         placeholder={t("enterEmailOfTheUserYouWantToAdd") as string}
         label={<Trans i18nKey="userEmail" />}
         InputProps={{
-          endAdornment: (
-            <AddMemberButton loading={addMemberQueryData.loading} />
-          ),
+          endAdornment: <AddMemberButton loading={addMemberQueryData.loading} />,
         }}
       />
     </Box>
@@ -282,19 +271,20 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const ProfilesList = (props: any) => {
-  const { queryData } = props;
+  const { expertGroupId } = useParams();
+  const { service } = useServiceContext();
+  const profileQuery = useQuery({
+    service: (args = { id: expertGroupId }, config) => service.fetchExpertGroupProfiles(args, config),
+  });
 
   return (
     <>
-      <Title
-        size="small"
-        toolbar={<CreateProfileButton onSubmitForm={queryData.query} />}
-      >
+      <Title size="small" toolbar={<CreateProfileButton onSubmitForm={profileQuery.query} />}>
         <Trans i18nKey={"profiles"} />
       </Title>
       <Box mt={2}>
         <QueryData
-          {...queryData}
+          {...profileQuery}
           renderLoading={() => (
             <>
               {forLoopComponent(5, (index) => (
@@ -302,22 +292,16 @@ const ProfilesList = (props: any) => {
               ))}
             </>
           )}
-          isDataEmpty={(data) => {
-            const { profiles = [] } = data;
-            const isEmpty = profiles.length === 0;
-            return isEmpty;
-          }}
-          render={(data) => {
-            const { profiles = [] } = data;
+          render={(data = []) => {
             return (
               <>
-                {profiles.map((profile: any) => {
+                {data.map((profile: any) => {
                   return (
                     <ProfileListItem
                       link={`profiles/${profile?.id}`}
                       key={profile?.id}
                       data={profile}
-                      fetchProfiles={queryData.query}
+                      fetchProfiles={profileQuery.query}
                     />
                   );
                 })}

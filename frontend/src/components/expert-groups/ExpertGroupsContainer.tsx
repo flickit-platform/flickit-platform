@@ -1,5 +1,7 @@
 import { Box, Button, Grid, Skeleton } from "@mui/material";
 import { Trans } from "react-i18next";
+import { styles } from "../../config/styles";
+import { useAuthContext } from "../../providers/AuthProvider";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { TQueryFunction } from "../../types";
 import forLoopComponent from "../../utils/forLoop";
@@ -12,14 +14,28 @@ import ExpertGroupsList from "./ExpertGroupsList";
 
 const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
+  const { userInfo } = useAuthContext();
+  const { id } = userInfo || {};
   const queryData = useQuery({
-    service: (args, config) => service.fetchUserExpertGroups(args, config),
+    service: (args = { id }, config) => service.fetchUserExpertGroups(args, config),
   });
 
   return (
     <Box>
-      <Box display="flex" sx={{ my: 1 }}>
-        <CreateExpertGroupButton onSubmitForm={queryData.query} />
+      <Box
+        sx={{
+          background: "white",
+          py: 1,
+          px: 2,
+          ...styles.centerV,
+          borderRadius: 1,
+          my: 2,
+        }}
+      >
+        <Box></Box>
+        <Box ml="auto">
+          <CreateExpertGroupButton onSubmitForm={queryData.query} />
+        </Box>
       </Box>
       <QueryData
         {...queryData}
@@ -50,12 +66,7 @@ const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ ml: "auto" }}
-        size="small"
-        onClick={dialogProps.openDialog}
-      >
+      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />

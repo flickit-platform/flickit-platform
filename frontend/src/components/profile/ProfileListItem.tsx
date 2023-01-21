@@ -12,7 +12,8 @@ import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
+import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
+import { toast } from "react-toastify";
 
 interface IProfileListItemProps {
   data: {
@@ -69,11 +70,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           </Typography>
         </Box>
 
-        <Box
-          ml="auto"
-          sx={{ ...styles.centerV, color: "#525252" }}
-          alignSelf="stretch"
-        >
+        <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
           <Actions profile={data} fetchProfiles={fetchProfiles} />
         </Box>
       </Box>
@@ -83,22 +80,26 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 
 const Actions = (props: any) => {
   const { profile, fetchProfiles, dialogProps, setUserInfo } = props;
-  const { id, current_user_delete_permission = false } = profile;
+  const { id, current_user_delete_permission = false, is_active = false } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
-  const {
-    query: deleteProfile,
-    loading,
-    abortController,
-  } = useQuery({
+  const deleteProfileQuery = useQuery({
     service: (args, config) => service.deleteProfile({ id }, config),
     runOnMount: false,
   });
 
+  const publishProfileQuery = useQuery({
+    service: (args, config) => service.publishProfile({ id }, config),
+    runOnMount: false,
+  });
+
+  const unPublishProfileQuery = useQuery({
+    service: (args, config) => service.unPublishProfile({ id }, config),
+    runOnMount: false,
+  });
+
   if (!fetchProfiles) {
-    console.warn(
-      "fetchProfiles not provided. profile list won't be updated on any action"
-    );
+    console.warn("fetchProfiles not provided. profile list won't be updated on any action");
   }
 
   // const openEditDialog = (e: any) => {
@@ -118,9 +119,31 @@ const Actions = (props: any) => {
 
   const deleteItem = async (e: any) => {
     try {
-      await deleteProfile();
+      await deleteProfileQuery.query();
       await fetchProfiles?.();
       await setUserInfo();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const publishProfile = async (e: any) => {
+    try {
+      const res = await publishProfileQuery.query();
+      res.message && toast.success(res.message);
+      await fetchProfiles?.();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const unPublishProfile = async (e: any) => {
+    try {
+      const res = await unPublishProfileQuery.query();
+      res.message && toast.success(res.message);
+      await fetchProfiles?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -131,18 +154,20 @@ const Actions = (props: any) => {
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.2 }}
-      loading={loading || editLoading}
+      loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
       items={[
-        {
-          icon: <NewReleasesRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="release" />,
-          onClick: () => alert("released"),
-        },
-        {
-          icon: <ArchiveRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="archive" />,
-          onClick: () => alert("archived"),
-        },
+        is_active
+          ? {
+              icon: <ArchiveRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="archive" />,
+              onClick: unPublishProfile,
+            }
+          : {
+              icon: <PublishedWithChangesRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="publish" />,
+              onClick: publishProfile,
+            },
+
         current_user_delete_permission && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,

@@ -13,7 +13,7 @@ interface IAssessmentListProps {
 const AssessmentsList = (props: IAssessmentListProps) => {
   const { data } = props;
   return (
-    <Box py={6} sx={{ px: { xs: 1, sm: 3 } }}>
+    <Box>
       <Grid container spacing={4}>
         {data.map((item) => {
           return <AssessmentCard item={item} {...props} key={item?.id} />;

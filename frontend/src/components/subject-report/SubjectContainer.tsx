@@ -65,29 +65,44 @@ const SubjectContainer = () => {
               <NoInsightYetMessage {...subjectQueryData} />
             ) : (
               <Box sx={{ px: 0.5 }}>
-                <Box mt={3}>
-                  <SubjectOverallInsight
-                    {...subjectQueryData}
-                    loading={loading}
-                  />
-                </Box>
-                <Hidden smDown>
-                  <Box height={"620px"} mb={10} mt={10}>
-                    <Typography>
-                      <Trans
-                        i18nKey="inTheRadarChartBelow"
-                        values={{ title: subjectQueryData?.data?.title || "" }}
-                      />
-                    </Typography>
-                    <SubjectRadarChart
+                <Box
+                  mt={3}
+                  sx={{
+                    background: "white",
+                    borderRadius: 2,
+                    py: 4,
+                    px: { xs: 1, sm: 2, md: 3 },
+                  }}
+                >
+                  <Box>
+                    <SubjectOverallInsight
                       {...subjectQueryData}
                       loading={loading}
                     />
                   </Box>
-                  <Box height={"520px"} mt={10}>
-                    <SubjectBarChart {...subjectQueryData} loading={loading} />
-                  </Box>
-                </Hidden>
+                  <Hidden smDown>
+                    <Box height={"620px"} mb={10} mt={10}>
+                      <Typography>
+                        <Trans
+                          i18nKey="inTheRadarChartBelow"
+                          values={{
+                            title: subjectQueryData?.data?.title || "",
+                          }}
+                        />
+                      </Typography>
+                      <SubjectRadarChart
+                        {...subjectQueryData}
+                        loading={loading}
+                      />
+                    </Box>
+                    <Box height={"520px"} mt={10}>
+                      <SubjectBarChart
+                        {...subjectQueryData}
+                        loading={loading}
+                      />
+                    </Box>
+                  </Hidden>
+                </Box>
                 <Box>
                   <SubjectAttributeList
                     {...subjectQueryData}

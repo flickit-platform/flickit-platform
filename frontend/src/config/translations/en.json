@@ -210,5 +210,13 @@
   "name": "Name",
   "website": "Website",
   "tags": "Tags",
-  "updateExpertGroup": "Update expert group"
+  "updateExpertGroup": "Update expert group",
+  "bio": "Bio",
+  "summary": "Summary",
+  "creationDate": "Creation date",
+  "numberOfQuestionnaires": "Number of questionnaires",
+  "price": "Price",
+  "pricing": "Pricing",
+  "useIt": "Use it?",
+  "inviteMember": "Invite member"
 }
