@@ -75,6 +75,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const dispatch = useCompareDispatch();
 
   const onSubmit = (data: any) => {
+    console.log(data);
     try {
       const newAssessmentIds = addToAssessmentIds(
         data.assessmentId,
@@ -89,10 +90,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   };
 
   return (
-    <FormProviderWithForm
-      formMethods={formMethods}
-      onSubmit={formMethods.handleSubmit(onSubmit)}
-    >
+    <FormProviderWithForm formMethods={formMethods}>
       <Grid container spacing={2} sx={{ ...styles.formGrid, pt: 0, mt: 0 }}>
         <Grid item xs={12}>
           <SelectFieldUC
@@ -150,6 +148,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
         loading={false}
         type={type}
         submitButtonLabel={"addToCompareList"}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
       />
     </FormProviderWithForm>
   );

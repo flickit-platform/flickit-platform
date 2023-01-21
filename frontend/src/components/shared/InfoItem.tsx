@@ -17,9 +17,7 @@ const InfoItem = (props: IInfoItems) => {
   return renderInfo(info, { component, renderMap, bg });
 };
 
-const DefaultInfoItemComponent = (
-  props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string }>
-) => {
+const DefaultInfoItemComponent = (props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string }>) => {
   const { title, children, bg, itemBg } = props;
   return (
     <Typography
@@ -54,17 +52,15 @@ const DefaultInfoItemComponent = (
 
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
-    <DefaultInfoItemComponent title={title} {...props} itemBg={"#f5f2f2"}>
+    <DefaultInfoItemComponent title={title} {...props}>
       {items.map((item) => (
-        <Chip size="small" label={item} sx={{ mr: 0.3 }} />
+        <Chip size="small" label={item} sx={{ ml: 0.3 }} />
       ))}
     </DefaultInfoItemComponent>
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map(
-        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
-      )}
+      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
     </DefaultInfoItemComponent>
   ),
 };
@@ -78,12 +74,7 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const {
-    component: Component = DefaultInfoItemComponent,
-    renderMap = defaultRenderMap,
-    useTitleAsFallbackType,
-    bg,
-  } = config;
+  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
   const { title, item, type } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 

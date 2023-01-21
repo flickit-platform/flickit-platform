@@ -1,6 +1,6 @@
 import React from "react";
 import Typography, { TypographyProps } from "@mui/material/Typography";
-import { Box, BoxProps } from "@mui/material";
+import { Avatar, Box, BoxProps } from "@mui/material";
 import { Link as RLink, To } from "react-router-dom";
 import Link from "@mui/material/Link";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
@@ -16,7 +16,9 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   backIconProps?: SvgIconProps;
   size?: "small" | "medium" | "large";
   wrapperProps?: BoxProps;
+  toolbarProps?: BoxProps;
   inPageLink?: string;
+  avatar?: JSX.Element;
 }
 
 const Title = (props: ITitle) => {
@@ -30,7 +32,9 @@ const Title = (props: ITitle) => {
     backLink,
     backIconProps = {},
     wrapperProps = {},
+    toolbarProps = {},
     inPageLink,
+    avatar,
     ...rest
   } = props;
 
@@ -55,6 +59,7 @@ const Title = (props: ITitle) => {
       }}
       {...wrapperProps}
     >
+      {avatar && <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>}
       <Typography
         textTransform="uppercase"
         variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
@@ -83,13 +88,7 @@ const Title = (props: ITitle) => {
               {sup && (
                 <Typography
                   textTransform="uppercase"
-                  variant={
-                    size === "small"
-                      ? "subSmall"
-                      : size === "large"
-                      ? "subLarge"
-                      : "subMedium"
-                  }
+                  variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
                   lineHeight={0}
                 >
                   {sup}
@@ -100,13 +99,7 @@ const Title = (props: ITitle) => {
         ) : sup ? (
           <Typography
             textTransform="uppercase"
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
+            variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
           >
             {sup}
           </Typography>
@@ -133,20 +126,12 @@ const Title = (props: ITitle) => {
           )}
         </Box>
         {sub && (
-          <Typography
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
-          >
-            {sub}
-          </Typography>
+          <Typography variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}>{sub}</Typography>
         )}
       </Typography>
-      <Box ml="auto">{toolbar}</Box>
+      <Box ml="auto" {...toolbarProps}>
+        {toolbar}
+      </Box>
     </Box>
   );
 };

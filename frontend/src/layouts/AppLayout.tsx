@@ -7,7 +7,7 @@ import { styles } from "../config/styles";
 const AppLayout = (props: PropsWithChildren<{}>) => {
   const { children } = props;
   return (
-    <Box sx={{ overflowX: "hidden", minHeight: "100vh" }}>
+    <Box sx={{ overflowX: "clip", minHeight: "100vh" }}>
       <Navbar />
       <Box
         sx={{

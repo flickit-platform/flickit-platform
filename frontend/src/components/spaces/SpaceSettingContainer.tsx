@@ -73,7 +73,7 @@ function SpaceSettings(props: { isOwner: boolean }) {
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box>
           <TabList onChange={handleChange}>
             <Tab
               label={
@@ -86,7 +86,7 @@ function SpaceSettings(props: { isOwner: boolean }) {
             />
           </TabList>
         </Box>
-        <TabPanel value="1" sx={{ p: { xs: 1, sm: 3 } }}>
+        <TabPanel value="1">
           <ErrorAccessDenied hasAccess={isOwner}>
             <SpaceMembers />
           </ErrorAccessDenied>
