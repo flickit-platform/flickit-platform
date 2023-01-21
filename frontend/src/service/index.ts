@@ -63,7 +63,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
   const fulfillResponseInterceptor = (res: AxiosResponse<any, any>) => {
     const { config = {} } = res;
 
-    if (config.url === "auth/jwt/create/" && res.data?.access) {
+    if (config.url === "authinfo/jwt/create/" && res.data?.access) {
       axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
     }
 
@@ -84,12 +84,12 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 
   const service = {
     activateUser({ uid, token }: { uid: string; token: string }, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/activate/${uid}/${token}/`, config);
+      return axios.get(`/authinfo/activate/${uid}/${token}/`, config);
     },
-    signIn(data: { username: string; password: string }, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`/auth/jwt/create/`, data, config);
+    signIn(data: { email: string; password: string }, config: AxiosRequestConfig<any> | undefined) {
+      return axios.post(`/authinfo/jwt/create/`, data, config);
     },
-    signUp(data: { username: string; password: string }, config: AxiosRequestConfig<any> | undefined) {
+    signUp(data: { display_name: string; email: string; password: string }, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(`/auth/users/`, data, config);
     },
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
@@ -121,7 +121,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       );
     },
     setCurrentSpace({ spaceId }: { spaceId: string | number }, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`/changecurrentspace/${spaceId}/`, config);
+      return axios.post(`/authinfo/changecurrentspace/${spaceId}/`, config);
     },
     deleteSpaceMember({ spaceId, memberId }: { spaceId: string; memberId: string }, config: AxiosRequestConfig<any> | undefined) {
       return axios.delete(`/authinfo/spaces/${spaceId}/useraccess/${memberId}/`, config);
@@ -387,7 +387,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 };
 
 const fetchNewAccessToken = async (refresh: string) => {
-  const { data = {} } = await axios.post("/auth/jwt/refresh", { refresh }, { isRefreshTokenReq: true });
+  const { data = {} } = await axios.post("/authinfo/jwt/refresh", { refresh }, { isRefreshTokenReq: true });
 
   const { access } = data as any;
 

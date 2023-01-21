@@ -23,7 +23,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data } = props;
   const { id, name, picture, bio = "", website, about = "", users = [], number_of_profiles } = data || {};
   const { userInfo } = useAuthContext();
-  const { username } = userInfo || {};
+  const { display_name } = userInfo || {};
 
   return (
     <Box>
@@ -81,8 +81,8 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
                 <Avatar
                   key={user.id}
                   sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-                  alt={user.username}
-                  title={user.username}
+                  alt={user.display_name}
+                  title={user.display_name}
                   src="/"
                 />
               );

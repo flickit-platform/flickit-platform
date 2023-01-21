@@ -171,10 +171,10 @@ const Navbar = () => {
               sx={{ ml: 2, mr: "-8px", px: 1.5 }}
               size="small"
               component={NavLink}
-              to={`account/${userInfo.username}/about`}
+              to={`account/${userInfo.id}/about`}
               endIcon={<Avatar sx={{ width: 26, height: 26, ml: 1 }} />}
             >
-              {userInfo.username}
+              {userInfo.display_name}
             </Button>
           </Box>
         </Toolbar>
@@ -326,7 +326,7 @@ const SpacesButton = ({ currentSpace }: any) => {
   return (
     <>
       <Button
-        onClick={() => currentSpace?.id && navigate(`/${currentSpace?.id}/assessments`)}
+        onClick={() => (currentSpace?.id ? navigate(`/${currentSpace?.id}/assessments`) : navigate("/spaces"))}
         sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
         startIcon={<FolderRoundedIcon sx={{ opacity: 0.8, fontSize: "18px !important" }} />}
         size="small"

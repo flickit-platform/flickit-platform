@@ -27,6 +27,7 @@ import { IDialogProps, IMemberModel, TQueryProps } from "../../types";
 import InviteMemberDialog from "../shared/dialogs/InviteMemberDialog";
 import useDialog from "../../utils/useDialog";
 import { ICustomError } from "../../utils/CustomError";
+import getUserName from "../../utils/getUserName";
 
 export const SpaceMembers = () => {
   const { spaceId = "" } = useParams();
@@ -148,35 +149,37 @@ export const SpaceMembers = () => {
             return (
               <>
                 {results.map((member: any) => {
-                  const { user = {}, id } = member;
-                  const name = user?.first_name && user?.last_name ? user?.first_name + " " + user?.last_name : user?.username;
+                  const { user, id } = member;
+                  const name = getUserName(user);
                   const isOwner = userId == user?.id;
 
                   return (
-                    <Box
-                      key={id}
-                      sx={{
-                        ...styles.centerV,
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        my: 1,
-                        py: 0.8,
-                        px: 1.5,
-                      }}
-                    >
-                      <Box sx={{ ...styles.centerV }}>
-                        <Box>
-                          <Avatar sx={{ width: 34, height: 34 }}>
-                            <PersonRoundedIcon />
-                          </Avatar>
+                    user && (
+                      <Box
+                        key={id}
+                        sx={{
+                          ...styles.centerV,
+                          boxShadow: 1,
+                          borderRadius: 2,
+                          my: 1,
+                          py: 0.8,
+                          px: 1.5,
+                        }}
+                      >
+                        <Box sx={{ ...styles.centerV }}>
+                          <Box>
+                            <Avatar sx={{ width: 34, height: 34 }}>
+                              <PersonRoundedIcon />
+                            </Avatar>
+                          </Box>
+                          <Box ml={2}>{name}</Box>
                         </Box>
-                        <Box ml={2}>{name}</Box>
+                        <Box ml="auto" sx={{ ...styles.centerV }}>
+                          {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
+                          {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
+                        </Box>
                       </Box>
-                      <Box ml="auto" sx={{ ...styles.centerV }}>
-                        {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
-                        {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
-                      </Box>
-                    </Box>
+                    )
                   );
                 })}
               </>
