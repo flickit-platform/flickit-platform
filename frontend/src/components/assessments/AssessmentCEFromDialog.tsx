@@ -77,7 +77,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
         </>
       }
     >
-      <FormProviderWithForm formMethods={formMethods} onSubmit={formMethods.handleSubmit(onSubmit)}>
+      <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12} md={8}>
             <InputFieldUC
@@ -100,7 +100,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <ProfileField defaultValue={defaultValues?.assessment_profile} />
           </Grid>
         </Grid>
-        <CEDialogActions closeDialog={close} loading={loading} type={type} />
+        <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
       </FormProviderWithForm>
     </CEDialog>
   );

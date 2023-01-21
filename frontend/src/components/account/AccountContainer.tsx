@@ -47,11 +47,7 @@ function AccountSettings() {
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box>
-          <TabList
-            onChange={handleChange}
-            scrollButtons="auto"
-            variant="scrollable"
-          >
+          <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
@@ -80,12 +76,7 @@ function AccountSettings() {
             <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
               <Grid container spacing={4}>
                 <Grid item md={4} sm={6} xs={12}>
-                  <Typography
-                    sx={{ opacity: 0.85 }}
-                    fontSize={"1rem"}
-                    fontFamily="Roboto"
-                    letterSpacing=".05rem"
-                  >
+                  <Typography sx={{ opacity: 0.85 }} fontSize={"1rem"} fontFamily="Roboto" letterSpacing=".05rem">
                     <Trans i18nKey="signOutOfYourAccount" />
                   </Typography>
                   <SignOut />
@@ -104,13 +95,13 @@ function AccountSettings() {
 
 const About = () => {
   const { userInfo } = useAuthContext();
-  const { username } = userInfo;
+  const { display_name } = userInfo;
 
   return (
     <Box sx={{ ...styles.centerV }}>
       <Avatar sx={{ width: "64px", height: "64px" }} />
       <Box ml={2}>
-        <Typography variant="h6">{username}</Typography>
+        <Typography variant="h6">{display_name}</Typography>
       </Box>
     </Box>
   );
