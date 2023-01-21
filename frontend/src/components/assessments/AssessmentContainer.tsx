@@ -19,6 +19,7 @@ import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
+import { styles } from "../../config/styles";
 
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
@@ -46,7 +47,22 @@ const AssessmentContainer = () => {
             ]}
           />
         }
-        toolbar={
+      >
+        <DescriptionRoundedIcon sx={{ mr: 1 }} />
+        <Trans i18nKey="assessments" />
+      </Title>
+      <Box
+        sx={{
+          background: "white",
+          py: 1,
+          px: 2,
+          ...styles.centerV,
+          borderRadius: 1,
+          my: 3,
+        }}
+      >
+        <Box></Box>
+        <Box ml="auto">
           <ToolbarCreateItemBtn
             onClick={dialogProps.openDialog}
             icon={<NoteAddRoundedIcon />}
@@ -54,11 +70,8 @@ const AssessmentContainer = () => {
             minWidth="195px"
             text="createAssessment"
           />
-        }
-      >
-        <DescriptionRoundedIcon sx={{ mr: 1 }} />
-        <Trans i18nKey="assessments" />
-      </Title>
+        </Box>
+      </Box>
       <QueryData
         {...rest}
         renderLoading={() => <LoadingSkeletonOfAssessments />}

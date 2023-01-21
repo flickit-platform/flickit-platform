@@ -1,16 +1,11 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { styles } from "../../config/styles";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useQuery } from "../../utils/useQuery";
 import QueryData from "../shared/QueryData";
 import forLoopComponent from "../../utils/forLoopComponent";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
-import Button from "@mui/material/Button";
-import { Trans } from "react-i18next";
-import ProfileCEFromDialog from "./ProfileCEFromDialog";
-import useDialog from "../../utils/useDialog";
-import { TQueryFunction } from "../../types";
-import ProfileListItem from "./ProfileListItem";
+import ProfilesMarketListItem from "./ProfilesMarketListItem";
 
 const ProfilesListContainer = () => {
   const { service } = useServiceContext();
@@ -24,24 +19,32 @@ const ProfilesListContainer = () => {
         {...profilesQueryData}
         renderLoading={() => (
           <>
-            {forLoopComponent(5, (index) => (
-              <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
-            ))}
+            <Box mt={`2`}>
+              <Grid container spacing={2}>
+                {forLoopComponent(5, (index) => (
+                  <Grid item xs={12} md={6} lg={4}>
+                    <LoadingSkeleton key={index} sx={{ height: "340px", mb: 1 }} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           </>
         )}
         render={(data) => {
           const { results = [] } = data;
           return (
             <>
-              {results.map((profile: any) => {
-                return (
-                  <ProfileListItem
-                    key={profile?.id}
-                    data={profile}
-                    fetchProfiles={profilesQueryData.query}
-                  />
-                );
-              })}
+              <Box mt={3}>
+                <Grid container spacing={2}>
+                  {results.map((profile: any) => {
+                    return (
+                      <Grid item xs={12} md={6} lg={4}>
+                        <ProfilesMarketListItem bg1={"#4568dc"} bg2={"#b06ab3"} data={profile} />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
             </>
           );
         }}

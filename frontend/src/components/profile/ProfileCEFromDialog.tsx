@@ -15,10 +15,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
 import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
 import FormProviderWithForm from "../shared/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "../shared/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
 import UploadField from "../shared/fields/UploadField";
+import RichEditorField from "../shared/fields/RichEditorField";
 
 interface IProfileCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -30,13 +29,7 @@ interface IProfileCEFromDialogProps extends DialogProps {
 const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const {
-    onClose: closeDialog,
-    onSubmitForm,
-    context = {},
-    openDialog,
-    ...rest
-  } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
@@ -68,18 +61,12 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile(
-              { data: formattedData, id },
-              { signal: abortController.signal }
-            )
-          : await service.createProfile(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+          ? await service.updateProfile({ data: formattedData, id }, { signal: abortController.signal })
+          : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && res?.id && navigate(`${res.id}`);
+      shouldView && res?.id && navigate(`profiles/${res.id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -95,11 +82,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? (
-            <Trans i18nKey="updateProfile" />
-          ) : (
-            <Trans i18nKey="createProfile" />
-          )}
+          {type === "update" ? <Trans i18nKey="updateProfile" /> : <Trans i18nKey="createProfile" />}
         </>
       }
     >
@@ -108,22 +91,17 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
           <Grid item xs={12}>
             <UploadField
               accept={{ "application/zip": [".zip"] }}
-              uploadService={(args, config) =>
-                service.uploadProfileDSL(args, config)
-              }
-              deleteService={(args, config) =>
-                service.deleteProfileDSL(args, config)
-              }
+              uploadService={(args, config) => service.uploadProfileDSL(args, config)}
+              deleteService={(args, config) => service.deleteProfileDSL(args, config)}
               name="dsl_id"
               required={true}
               label={<Trans i18nKey="dsl" />}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
-                service: (args, config) =>
-                  service.fetchProfileTags(args, config),
+                service: (args, config) => service.fetchProfileTags(args, config),
               })}
               name="tags"
               multiple={true}
@@ -131,15 +109,19 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
               label={<Trans i18nKey="tags" />}
             />
           </Grid>
+          <Grid item xs={12} md={12}>
+            <InputFieldUC name="summary" label={<Trans i18nKey="summary" />} defaultValue={defaultValues.summary || ""} />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <RichEditorField name="about" label={<Trans i18nKey="about" />} defaultValue={defaultValues.about || ""} />
+          </Grid>
         </Grid>
         <CEDialogActions
           closeDialog={close}
           loading={loading}
           type={type}
           hasViewBtn={true}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
         />
       </FormProviderWithForm>
     </CEDialog>

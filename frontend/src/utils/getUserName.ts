@@ -4,10 +4,7 @@ const getUserName = (userInfo: IUserInfo) => {
   if (!userInfo) {
     return "";
   }
-  if (userInfo.first_name && userInfo.last_name) {
-    return `${userInfo.first_name} ${userInfo.last_name}`;
-  }
-  return userInfo.username;
+  return userInfo.display_name || userInfo.email;
 };
 
 export default getUserName;

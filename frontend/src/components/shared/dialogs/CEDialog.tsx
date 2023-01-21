@@ -22,19 +22,11 @@ export const CEDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   const fullScreen = useScreenResize("sm");
 
   return (
-    <Dialog
-      onClose={closeDialog}
-      fullWidth
-      maxWidth="md"
-      fullScreen={fullScreen}
-      {...rest}
-    >
+    <Dialog onClose={closeDialog} fullWidth maxWidth="md" fullScreen={fullScreen} {...rest}>
       <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
         {title}
       </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
-        {children}
-      </DialogContent>
+      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>{children}</DialogContent>
     </Dialog>
   );
 };
@@ -75,6 +67,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             <LoadingButton
               type="submit"
               variant="contained"
+              color="success"
               loading={loading}
               onClick={(e: any) => {
                 e.preventDefault();

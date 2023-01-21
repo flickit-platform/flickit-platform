@@ -17,10 +17,8 @@ export interface IAuthContext {
 }
 
 export const defaultUserInfo = {
-  username: "",
-  last_name: "",
+  display_name: "",
   id: "",
-  first_name: "",
   email: "",
   current_space: null,
 };
@@ -67,11 +65,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
   //   }
   // }, [state.isAuthenticatedUser]);
 
-  return (
-    <AuthContext.Provider value={{ ...state, dispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuthContext = () => {

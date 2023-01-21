@@ -11,41 +11,24 @@ import AppLayout from "../layouts/AppLayout";
 const SignInScreen = React.lazy(() => import("../screens/SignInScreen"));
 const SignUpScreen = React.lazy(() => import("../screens/SignUpScreen"));
 const AccountScreen = React.lazy(() => import("../screens/AccountScreen"));
-const ActivationSuccessfulScreen = React.lazy(
-  () => import("../screens/ActivationSuccessfulScreen")
-);
+const ActivationSuccessfulScreen = React.lazy(() => import("../screens/ActivationSuccessfulScreen"));
 
-const ExpertGroupScreen = React.lazy(
-  () => import("../screens/ExpertGroupScreen")
-);
+const ExpertGroupScreen = React.lazy(() => import("../screens/ExpertGroupScreen"));
 
-const AssessmentReportScreen = React.lazy(
-  () => import("../screens/AssessmentReportScreen")
-);
-const SubjectReportScreen = React.lazy(
-  () => import("../screens/SubjectReportScreen")
-);
+const AssessmentReportScreen = React.lazy(() => import("../screens/AssessmentReportScreen"));
+const SubjectReportScreen = React.lazy(() => import("../screens/SubjectReportScreen"));
 const SpacesScreen = React.lazy(() => import("../screens/SpacesScreen"));
-const SpaceSettingScreen = React.lazy(
-  () => import("../screens/SpaceSettingScreen")
-);
-const AssessmentsScreen = React.lazy(
-  () => import("../screens/AssessmentsScreen")
-);
+const SpaceSettingScreen = React.lazy(() => import("../screens/SpaceSettingScreen"));
+const AssessmentsScreen = React.lazy(() => import("../screens/AssessmentsScreen"));
 const MetricsScreen = React.lazy(() => import("../screens/MetricsScreen"));
-const MetricsReviewScreen = React.lazy(
-  () => import("../screens/MetricsReviewScreen")
-);
+const MetricsReviewScreen = React.lazy(() => import("../screens/MetricsReviewScreen"));
 const MetricScreen = React.lazy(() => import("../screens/MetricScreen"));
-const QuestionnairesScreen = React.lazy(
-  () => import("../screens/QuestionnairesScreen")
-);
+const QuestionnairesScreen = React.lazy(() => import("../screens/QuestionnairesScreen"));
 const CompareScreen = React.lazy(() => import("../screens/CompareScreen"));
-const CompareResultScreen = React.lazy(
-  () => import("../screens/CompareResultScreen")
-);
+const CompareResultScreen = React.lazy(() => import("../screens/CompareResultScreen"));
 
 const ProfilesScreen = React.lazy(() => import("../screens/ProfilesScreen"));
+const ProfileExpertViewScreen = React.lazy(() => import("../screens/ProfileExpertViewScreen"));
 const ProfileScreen = React.lazy(() => import("../screens/ProfileScreen"));
 
 const Routes = () => {
@@ -62,10 +45,7 @@ const Routes = () => {
         >
           <Route path="/sign-in" element={<SignInScreen />} />
           <Route path="/sign-up" element={<SignUpScreen />} />
-          <Route
-            path="/account/active/:uid/:token"
-            element={<ActivationSuccessfulScreen />}
-          />
+          <Route path="/account/active/:uid/:token" element={<ActivationSuccessfulScreen />} />
         </Route>
 
         <Route
@@ -75,43 +55,22 @@ const Routes = () => {
             </AppLayout>
           }
         >
-          <Route
-            path="/account/:username/:accountTab"
-            element={<AccountScreen />}
-          />
-          <Route
-            path="/account/:username/expert-groups/:expertGroupId"
-            element={<ExpertGroupScreen />}
-          />
-          <Route
-            path="/account/:username/expert-groups/:expertGroupId/profiles/:profileId"
-            element={<ProfileScreen />}
-          />
+          <Route path="/account/:userId/:accountTab" element={<AccountScreen />} />
+          <Route path="/account/:userId/expert-groups/:expertGroupId" element={<ExpertGroupScreen />} />
+          <Route path="/account/:userId/expert-groups/:expertGroupId/profiles/:profileId" element={<ProfileExpertViewScreen />} />
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/profiles" element={<ProfilesScreen />} />
           <Route path="/profiles/:profileId" element={<ProfileScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/insights"
-            element={<AssessmentReportScreen />}
-          />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/insights/:subjectId"
-            element={<SubjectReportScreen />}
-          />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/questionnaires"
-            element={<QuestionnairesScreen />}
-          />
+          <Route path="/:spaceId/assessments/:assessmentId/insights" element={<AssessmentReportScreen />} />
+          <Route path="/:spaceId/assessments/:assessmentId/insights/:subjectId" element={<SubjectReportScreen />} />
+          <Route path="/:spaceId/assessments/:assessmentId/questionnaires" element={<QuestionnairesScreen />} />
           <Route
             path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId/review"
             element={<MetricsReviewScreen />}
           />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId"
-            element={<MetricsScreen />}
-          >
+          <Route path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId" element={<MetricsScreen />}>
             <Route path="" element={<MetricScreen />} />
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>

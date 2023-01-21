@@ -46,8 +46,8 @@ function AccountSettings() {
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList onChange={handleChange}>
+        <Box>
+          <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
@@ -68,27 +68,24 @@ function AccountSettings() {
             />
           </TabList>
         </Box>
-        <TabPanel value="about" sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
-          <Box mt={3}>
-            <About />
-          </Box>
-          <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
-            <Grid container spacing={4}>
-              <Grid item md={4} sm={6} xs={12}>
-                <Typography
-                  sx={{ opacity: 0.85 }}
-                  fontSize={"1rem"}
-                  fontFamily="Roboto"
-                  letterSpacing=".05rem"
-                >
-                  <Trans i18nKey="signOutOfYourAccount" />
-                </Typography>
-                <SignOut />
+        <TabPanel value="about">
+          <Box sx={{ p: 2, background: "white", borderRadius: 1 }} mt={2}>
+            <Box>
+              <About />
+            </Box>
+            <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
+              <Grid container spacing={4}>
+                <Grid item md={4} sm={6} xs={12}>
+                  <Typography sx={{ opacity: 0.85 }} fontSize={"1rem"} fontFamily="Roboto" letterSpacing=".05rem">
+                    <Trans i18nKey="signOutOfYourAccount" />
+                  </Typography>
+                  <SignOut />
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
         </TabPanel>
-        <TabPanel value="expert-groups" sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+        <TabPanel value="expert-groups">
           <ExpertGroupsContainer />
         </TabPanel>
       </TabContext>
@@ -98,13 +95,13 @@ function AccountSettings() {
 
 const About = () => {
   const { userInfo } = useAuthContext();
-  const { username } = userInfo;
+  const { display_name } = userInfo;
 
   return (
     <Box sx={{ ...styles.centerV }}>
       <Avatar sx={{ width: "64px", height: "64px" }} />
       <Box ml={2}>
-        <Typography variant="h6">{username}</Typography>
+        <Typography variant="h6">{display_name}</Typography>
       </Box>
     </Box>
   );

@@ -5,7 +5,7 @@ import { LoadingSkeleton } from "./LoadingSkeleton";
 
 const LoadingSkeletonOfAssessments = () => {
   return (
-    <Box py={6} sx={{ px: { xs: 1, sm: 3 } }}>
+    <Box>
       <Grid container spacing={4}>
         {[1, 2, 3, 4, 5, 6].map((item: any) => {
           return (

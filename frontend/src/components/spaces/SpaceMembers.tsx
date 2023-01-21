@@ -23,7 +23,11 @@ import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import toastError from "../../utils/toastError";
 import useScreenResize from "../../utils/useScreenResize";
 import { styles } from "../../config/styles";
-import { IMemberModel } from "../../types";
+import { IDialogProps, IMemberModel, TQueryProps } from "../../types";
+import InviteMemberDialog from "../shared/dialogs/InviteMemberDialog";
+import useDialog from "../../utils/useDialog";
+import { ICustomError } from "../../utils/CustomError";
+import getUserName from "../../utils/getUserName";
 
 export const SpaceMembers = () => {
   const { spaceId = "" } = useParams();
@@ -31,38 +35,36 @@ export const SpaceMembers = () => {
   const { dispatch, userInfo } = useAuthContext();
   const userId = userInfo?.id;
   const user_id_ref = useRef<HTMLInputElement>(null);
-  const spaceData = useQuery<IMemberModel>({
+  const spaceMembersQueryData = useQuery<IMemberModel>({
     service: (args, config) => service.fetchSpaceMembers({ spaceId }, config),
   });
+  const dialogProps = useDialog();
   const {
     query: addMember,
     loading,
     data,
   } = useQuery({
-    service: (
-      { id = spaceId, value = user_id_ref.current?.value }: any,
-      config
-    ) => service.addMember({ spaceId: id, user_id: value }, config),
+    service: ({ id = spaceId, value = user_id_ref.current?.value }: any, config) =>
+      service.addMemberToSpace({ spaceId: id, email: value }, config),
     runOnMount: false,
-    toastError: (err) => {
-      if (err?.data?.user_id?.[0]) {
-        toast.error(err.data?.user_id[0]);
-      } else if (
-        Array.isArray(err?.data) &&
-        typeof err?.data?.[0] === "string"
-      ) {
-        toast.error(err?.data?.[0]);
-      } else {
-        toastError(err);
-      }
-    },
+    // toastError: (err) => {
+    //   if (err?.data?.email?.[0]) {
+    //     toast.error(err.data?.email[0]);
+    //   } else if (Array.isArray(err?.data) && typeof err?.data?.[0] === "string") {
+    //     toast.error(err?.data?.[0]);
+    //   } else if (err?.data?.message?.[0]) {
+    //     toastError(err?.data?.message?.[0]);
+    //   } else {
+    //     toastError(err);
+    //   }
+    // },
   });
 
   useEffect(() => {
     let controller: AbortController;
     if (data?.id) {
       controller = new AbortController();
-      spaceData.query();
+      spaceMembersQueryData.query();
       user_id_ref.current?.form?.reset();
       service
         .getSignedInUser(undefined, { signal: controller.signal })
@@ -77,25 +79,24 @@ export const SpaceMembers = () => {
   }, [data]);
 
   return (
-    <Box mt={1}>
+    <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
-        <Title
-          size="small"
-          fontSize={"1rem"}
-          fontFamily="Roboto"
-          textTransform={"unset"}
-          letterSpacing=".05rem"
-          mb={2}
-        >
+        <Title size="small" fontSize={"1rem"} fontFamily="Roboto" textTransform={"unset"} letterSpacing=".05rem" mb={2}>
           <Trans i18nKey="addNewMember" />
         </Title>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             if (!user_id_ref.current?.value) {
               toast.error(t("pleaseEnterEmailAddress") as string);
-            } else
-              addMember({ id: spaceId, value: user_id_ref.current?.value });
+            } else {
+              try {
+                await addMember({ id: spaceId, value: user_id_ref.current?.value });
+              } catch (e) {
+                const err = e as ICustomError;
+                dialogProps.openDialog({ type: "invite", data: { email: user_id_ref.current?.value } });
+              }
+            }
           }}
         >
           <TextField
@@ -124,7 +125,7 @@ export const SpaceMembers = () => {
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
-                {spaceData?.data?.results?.length}
+                {spaceMembersQueryData?.data?.results?.length}
               </Typography>
             </Box>
           }
@@ -132,18 +133,12 @@ export const SpaceMembers = () => {
           <Trans i18nKey="members" />
         </Title>
         <QueryData
-          {...spaceData}
+          {...spaceMembersQueryData}
           renderLoading={() => {
             return (
               <>
                 {[1, 2, 3, 4, 5].map((item) => {
-                  return (
-                    <Skeleton
-                      key={item}
-                      variant="rectangular"
-                      sx={{ borderRadius: 2, height: "50px", mb: 1 }}
-                    />
-                  );
+                  return <Skeleton key={item} variant="rectangular" sx={{ borderRadius: 2, height: "50px", mb: 1 }} />;
                 })}
               </>
             );
@@ -154,50 +149,37 @@ export const SpaceMembers = () => {
             return (
               <>
                 {results.map((member: any) => {
-                  const { user = {}, id } = member;
-                  const name =
-                    user.first_name && user.last_name
-                      ? user.first_name + " " + user.last_name
-                      : user.username;
+                  const { user, id } = member;
+                  const name = getUserName(user);
                   const isOwner = userId == user?.id;
 
                   return (
-                    <Box
-                      key={id}
-                      sx={{
-                        ...styles.centerV,
-                        boxShadow: (t) =>
-                          `0 5px 8px -8px ${t.palette.grey[400]}`,
-                        borderRadius: 2,
-                        pb: 0.4,
-                        mb: 2,
-                      }}
-                    >
-                      <Box sx={{ ...styles.centerV }}>
-                        <Box>
-                          <Avatar sx={{ width: 34, height: 34 }}>
-                            <PersonRoundedIcon />
-                          </Avatar>
+                    user && (
+                      <Box
+                        key={id}
+                        sx={{
+                          ...styles.centerV,
+                          boxShadow: 1,
+                          borderRadius: 2,
+                          my: 1,
+                          py: 0.8,
+                          px: 1.5,
+                        }}
+                      >
+                        <Box sx={{ ...styles.centerV }}>
+                          <Box>
+                            <Avatar sx={{ width: 34, height: 34 }}>
+                              <PersonRoundedIcon />
+                            </Avatar>
+                          </Box>
+                          <Box ml={2}>{name}</Box>
                         </Box>
-                        <Box ml={2}>{name}</Box>
+                        <Box ml="auto" sx={{ ...styles.centerV }}>
+                          {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
+                          {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
+                        </Box>
                       </Box>
-                      <Box ml="auto" sx={{ ...styles.centerV }}>
-                        {isOwner && (
-                          <Chip
-                            label={<Trans i18nKey="owner" />}
-                            size="small"
-                            sx={{ mr: 1.5 }}
-                          />
-                        )}
-                        {
-                          <Actions
-                            isOwner={isOwner}
-                            member={member}
-                            fetchSpaceMembers={spaceData.query}
-                          />
-                        }
-                      </Box>
-                    </Box>
+                    )
                   );
                 })}
               </>
@@ -205,6 +187,7 @@ export const SpaceMembers = () => {
           }}
         />
       </Box>
+      <InviteSpaceMemberDialog {...dialogProps} spaceMembersQueryData={spaceMembersQueryData} />
     </Box>
   );
 };
@@ -226,11 +209,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
         variant="contained"
         size="small"
       >
-        {isSmallScreen ? (
-          <AddRoundedIcon fontSize="small" />
-        ) : (
-          <Trans i18nKey={"addMember"} />
-        )}
+        {isSmallScreen ? <AddRoundedIcon fontSize="small" /> : <Trans i18nKey={"addMember"} />}
       </LoadingButton>
     </InputAdornment>
   );
@@ -241,8 +220,7 @@ const Actions = (props: any) => {
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteSpaceMember, loading } = useQuery({
-    service: (arg, config) =>
-      service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
+    service: (arg, config) => service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
     runOnMount: false,
     toastError: true,
   });
@@ -264,5 +242,34 @@ const Actions = (props: any) => {
         },
       ]}
     />
+  );
+};
+
+const InviteSpaceMemberDialog = (props: { spaceMembersQueryData: TQueryProps } & IDialogProps) => {
+  const { spaceMembersQueryData, ...rest } = props;
+  const { spaceId } = useParams();
+  const { service } = useServiceContext();
+  const { query: inviteMemberQuery, loading } = useQuery({
+    service: (args = { id: spaceId, data: rest.context?.data || {} }, config) => service.inviteSpaceMember(args, config),
+    runOnMount: false,
+  });
+
+  const onInvite = async () => {
+    try {
+      await inviteMemberQuery();
+      toast.success("Invitation has been send successfully.");
+      rest.onClose();
+      spaceMembersQueryData.query();
+    } catch (e) {
+      toastError(e as ICustomError);
+    }
+  };
+
+  return (
+    <InviteMemberDialog {...(rest as any)} onInvite={onInvite} loading={loading} maxWidth="sm">
+      <Typography>
+        {rest.context?.data?.email || "This user"} is not Checkup user. Do you want to send him an invitation?
+      </Typography>
+    </InviteMemberDialog>
   );
 };
