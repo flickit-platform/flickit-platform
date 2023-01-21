@@ -13,7 +13,11 @@ class ExpertGroupViewSet(ModelViewSet):
         return ExpertGroupSerilizer
 
     def get_queryset(self):
+        user_id = self.request.query_params.get('user_id')
+        if user_id is not None:
+            return ExpertGroup.objects.filter(users__id=user_id).prefetch_related('users').all()
         return ExpertGroup.objects.all()
+
 
 
 class AddUserToExpertGroupApi(APIView):
