@@ -7,6 +7,7 @@ from .commonserializers import UserSimpleSerializer, SpaceSerializer
 from .spaceserializers import SpaceSimpleSerializer
 from  baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from ..services import spaceservices
+from django.contrib.auth.hashers import make_password
 
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)
@@ -18,8 +19,8 @@ class UserAccessSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
     class Meta(BaseUserCreateSerializer.Meta):
-        fields = ['id', 'username', 'password',
-                  'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'password',
+                  'email', 'display_name']
     
     @transaction.atomic
     def perform_create(self, validated_data):
@@ -32,6 +33,4 @@ class UserSerializer(BaseUserSerializer):
     spaces = SpaceSerializer(many = True)
     expert_groups = ExpertGroupSimpleSerilizers(many = True)
     class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'username', 'email', 'first_name', 'last_name', 'current_space', 'spaces', 'is_active' , 'expert_groups']
-
-
+        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups']
