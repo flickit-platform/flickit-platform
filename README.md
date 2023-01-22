@@ -1,7 +1,7 @@
 
-# Checkup Platform
+# Flickit Platform
 
-Welcome to the Checkup Platform! 
+Welcome to the Flickit Platform! 
 This online platform provides a comprehensive set of tools 
 for assessing software teams, products, and any other aspect 
 related to software applications. With this toolkit,
@@ -13,6 +13,9 @@ and identify areas of improvement.
 
 - [Features](#features)
 - [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites )
+- [Installation](#installation)
+- [Screenshots](#screenshots)
   
 
 # Features
@@ -27,11 +30,38 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Prerequisites ##
 
-List any necessary prerequisites for the project, such as specific software or libraries that need to be installed.
+- git
+- docker && docker-compose
 
 ## Installation ##
 
+Clone the project:
+
+    $ git clone https://github.com/avansoft/checkup-platform.git
+
+Rename .env.sample to .env and change the properties based on you requirements
+
+Start application with docker-compose
+
+    $ docker-compose up --build
+
+Access application through 
+
+    $ http://localhost:3000
+
+# Screenshots
+
+![List of assessments](https://github.com/avansoft/flickit-doc/blob/main/shot1.png?raw=true)
 
 
+![List of questionnaires](https://github.com/avansoft/flickit-doc/blob/main/shot5.png?raw=true)
 
+![Assessment Report Preview](https://github.com/avansoft/flickit-doc/blob/main/shot3.png?raw=true)
+
+
+![Assessment Report](https://github.com/avansoft/flickit-doc/blob/main/shot2.png?raw=true)
+
+![Assessment Report](https://github.com/avansoft/flickit-doc/blob/main/shot4.png?raw=true)
+
+![Assessment Compare](https://github.com/avansoft/flickit-doc/blob/main/shot4.png?raw=true)
 
