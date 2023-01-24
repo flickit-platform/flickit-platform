@@ -219,5 +219,6 @@
   "pricing": "Pricing",
   "useIt": "Use it?",
   "inviteMember": "Invite member",
-  "displayName": "Display name"
+  "displayName": "Display name",
+  "sorryYouCanCreateAssessmentWithThisProfile": "Sorry! You can't create assessment with this profile."
 }
