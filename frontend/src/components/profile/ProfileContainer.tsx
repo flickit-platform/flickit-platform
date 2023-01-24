@@ -12,6 +12,7 @@ import { Trans } from "react-i18next";
 import RichEditor from "../shared/rich-editor/RichEditor";
 import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
 import useDialog from "../../utils/useDialog";
+import AlertBox from "../shared/AlertBox";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
@@ -45,6 +46,7 @@ const Profile = (props: any) => {
     number_of_assessment,
     subjectsInfos = [],
     questionnaires = [],
+    is_active,
   } = data || {};
 
   const dialogProps = useDialog({ context: { type: "create", staticData: { profile: { id: profileId, title } } } });
@@ -198,6 +200,14 @@ const Profile = (props: any) => {
         </Box>
       </Box>
       <Box mt={15}>
+        {!is_active && (
+          <Box my={5}>
+            <AlertBox severity="warning">
+              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisProfile" />
+            </AlertBox>
+          </Box>
+        )}
+
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4} md={3}>
             <Box sx={{ height: "100%" }}>
@@ -233,7 +243,7 @@ const Profile = (props: any) => {
                   </Typography>
                   <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
                 </Box>
-                <Button fullWidth variant="contained" sx={{ mt: 6 }} onClick={dialogProps.openDialog}>
+                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
                   <Trans i18nKey="createAssessment" />
                 </Button>
                 <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
