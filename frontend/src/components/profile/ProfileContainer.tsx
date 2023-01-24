@@ -13,6 +13,7 @@ import RichEditor from "../shared/rich-editor/RichEditor";
 import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
 import useDialog from "../../utils/useDialog";
 import AlertBox from "../shared/AlertBox";
+import { LoadingButton } from "@mui/lab";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
@@ -41,10 +42,10 @@ const Profile = (props: any) => {
     about = "",
     likes = 0,
     expert_group = {},
-    creation_date,
-    last_update,
+    creation_time,
+    last_modification_date,
     number_of_assessment,
-    subjectsInfos = [],
+    subjects_with_desc = [],
     questionnaires = [],
     is_active,
   } = data || {};
@@ -116,10 +117,10 @@ const Profile = (props: any) => {
                   sx: { textDecoration: "none" },
                   color: "white",
                 }}
-                avatar={<Avatar alt="Expert group" src={"/"} />}
+                avatar={<Avatar alt={expert_group?.name || "E"} src={"/"} />}
                 title={
                   <Box component={"b"} fontSize=".95rem">
-                    {expert_group.name}
+                    {expert_group?.name}
                   </Box>
                 }
               />
@@ -159,7 +160,7 @@ const Profile = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(creation_date)}
+                  {formatDate(creation_time)}
                 </Box>
               </Box>
               <Box
@@ -175,27 +176,11 @@ const Profile = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(last_update)}
+                  {formatDate(last_modification_date)}
                 </Box>
               </Box>
             </Box>
-            <Button
-              sx={{
-                ...styles.centerV,
-                mt: 1.5,
-                fontSize: ".95rem",
-                textTransform: "none",
-                ml: 0.5,
-                color: "white",
-                py: 0.2,
-              }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<ThumbUpOffAltRoundedIcon fontSize="inherit" />}
-            >
-              <Box sx={{ mx: 0.6 }}>{likes}</Box>
-            </Button>
+            <LikeProfile likes={likes} />
           </Box>
         </Box>
       </Box>
@@ -212,7 +197,7 @@ const Profile = (props: any) => {
           <Grid item xs={12} sm={4} md={3}>
             <Box sx={{ height: "100%" }}>
               <Title>
-                <Trans i18nKey="useIt" />
+                <Trans i18nKey="tryIt" />
               </Title>
               <Box
                 sx={{
@@ -235,7 +220,7 @@ const Profile = (props: any) => {
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{subjectsInfos.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
                 </Box>
                 <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
@@ -266,7 +251,7 @@ const Profile = (props: any) => {
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
-                {subjectsInfos.map((subject: any) => {
+                {subjects_with_desc.map((subject: any) => {
                   return (
                     <Box component="li" mb={2}>
                       <b>{subject.title}</b>: {subject.description}
@@ -293,6 +278,42 @@ const Profile = (props: any) => {
         </Grid>
       </Box>
     </Box>
+  );
+};
+
+const LikeProfile = ({ likes }: any) => {
+  const { service } = useServiceContext();
+  const { profileId } = useParams();
+  const likeQueryData = useQuery({
+    service: (args = { id: profileId }, config) => service.likeProfile(args, config),
+    runOnMount: false,
+  });
+
+  const like = async () => {
+    const res = await likeQueryData.query();
+    console.log(res);
+  };
+
+  return (
+    <LoadingButton
+      sx={{
+        ...styles.centerV,
+        mt: 1.5,
+        fontSize: ".95rem",
+        textTransform: "none",
+        ml: 0.5,
+        color: "white",
+        py: 0.2,
+      }}
+      variant="contained"
+      color="secondary"
+      size="small"
+      startIcon={<ThumbUpOffAltRoundedIcon fontSize="inherit" />}
+      onClick={like}
+      loading={likeQueryData.loading}
+    >
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.likes || likes}</Box>
+    </LoadingButton>
   );
 };
 

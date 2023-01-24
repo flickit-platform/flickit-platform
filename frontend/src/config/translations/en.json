@@ -226,5 +226,6 @@
   "times": "Times",
   "acceptInvitation": "Accept invitation",
   "decline": "Decline",
-  "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?"
+  "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?",
+  "tryIt": "Try it"
 }
