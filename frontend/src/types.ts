@@ -331,6 +331,7 @@ export interface IDialogProps extends DialogProps {
 export interface IDialogContext {
   type: TDialogContextType | (string & {});
   data?: any;
+  staticData?: any;
   onSubmit?: (...args: any) => any;
   getViewLink?: (data: any) => string;
 }

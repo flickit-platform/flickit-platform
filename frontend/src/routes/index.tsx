@@ -14,6 +14,7 @@ const AccountScreen = React.lazy(() => import("../screens/AccountScreen"));
 const ActivationSuccessfulScreen = React.lazy(() => import("../screens/ActivationSuccessfulScreen"));
 
 const ExpertGroupScreen = React.lazy(() => import("../screens/ExpertGroupScreen"));
+const ExpertGroupConfirmInvitationScreen = React.lazy(() => import("../screens/ExpertGroupConfirmInvitationScreen"));
 
 const AssessmentReportScreen = React.lazy(() => import("../screens/AssessmentReportScreen"));
 const SubjectReportScreen = React.lazy(() => import("../screens/SubjectReportScreen"));
@@ -58,6 +59,7 @@ const Routes = () => {
           <Route path="/account/:userId/:accountTab" element={<AccountScreen />} />
           <Route path="/account/:userId/expert-groups/:expertGroupId" element={<ExpertGroupScreen />} />
           <Route path="/account/:userId/expert-groups/:expertGroupId/profiles/:profileId" element={<ProfileExpertViewScreen />} />
+          <Route path="/account/expert-group-invitation/:expertGroupId/:token" element={<ExpertGroupConfirmInvitationScreen />} />
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/profiles" element={<ProfilesScreen />} />
           <Route path="/profiles/:profileId" element={<ProfileScreen />} />
