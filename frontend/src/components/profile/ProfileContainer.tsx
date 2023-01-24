@@ -10,26 +10,30 @@ import QueryData from "../shared/QueryData";
 import formatDate from "../../utils/formatDate";
 import { Trans } from "react-i18next";
 import RichEditor from "../shared/rich-editor/RichEditor";
+import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
+import useDialog from "../../utils/useDialog";
+import AlertBox from "../shared/AlertBox";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
-  const queryData = useQuery({
+  const profileQueryData = useQuery({
     service: (args = { id: profileId }, config) => service.fetchProfile(args, config),
   });
 
   return (
     <QueryData
-      {...queryData}
+      {...profileQueryData}
       render={(data) => {
-        return <Profile data={data} />;
+        return <Profile data={data} query={profileQueryData.query} />;
       }}
     />
   );
 };
 
 const Profile = (props: any) => {
-  const { data } = props;
+  const { data, query } = props;
+  const { profileId } = useParams();
   const {
     title,
     tags = [],
@@ -42,7 +46,11 @@ const Profile = (props: any) => {
     number_of_assessment,
     subjectsInfos = [],
     questionnaires = [],
+    is_active,
   } = data || {};
+
+  const dialogProps = useDialog({ context: { type: "create", staticData: { profile: { id: profileId, title } } } });
+
   return (
     <Box>
       <Box
@@ -192,6 +200,14 @@ const Profile = (props: any) => {
         </Box>
       </Box>
       <Box mt={15}>
+        {!is_active && (
+          <Box my={5}>
+            <AlertBox severity="warning">
+              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisProfile" />
+            </AlertBox>
+          </Box>
+        )}
+
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4} md={3}>
             <Box sx={{ height: "100%" }}>
@@ -227,9 +243,10 @@ const Profile = (props: any) => {
                   </Typography>
                   <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
                 </Box>
-                <Button fullWidth variant="contained" sx={{ mt: 6 }}>
+                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
                   <Trans i18nKey="createAssessment" />
                 </Button>
+                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
               </Box>
             </Box>
           </Grid>
