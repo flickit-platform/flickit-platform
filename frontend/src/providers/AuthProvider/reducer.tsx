@@ -1,10 +1,7 @@
 import { AUTH_ACTIONS_TYPE } from "./actions";
 import { IAuthContext } from "./provider";
 
-const authReducer = (
-  prevState: any,
-  action: { type: AUTH_ACTIONS_TYPE; payload: any }
-): IAuthContext => {
+const authReducer = (prevState: any, action: { type: AUTH_ACTIONS_TYPE; payload: any }): IAuthContext => {
   switch (action.type) {
     case AUTH_ACTIONS_TYPE.SIGN_IN:
       return { ...prevState, ...action.payload, isAuthenticatedUser: true };
@@ -14,6 +11,8 @@ const authReducer = (
       return { ...prevState, accessToken: action.payload };
     case AUTH_ACTIONS_TYPE.SET_USER_INFO:
       return { ...prevState, userInfo: action.payload };
+    case AUTH_ACTIONS_TYPE.SET_REDIRECT_ROUTE:
+      return { ...prevState, redirectRoute: action.payload };
     case AUTH_ACTIONS_TYPE.SET_USER_INFO_LOADING:
       return { ...prevState, loadingUserInfo: action.payload };
     case AUTH_ACTIONS_TYPE.SET_CURRENT_SPACE:

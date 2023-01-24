@@ -6,7 +6,7 @@ const AuthRoutes = (props: PropsWithChildren<{}>) => {
   const { isAuthenticatedUser } = useAuthContext();
 
   if (isAuthenticatedUser) {
-    return <Navigate to="/" />;
+    return <Navigate to={"/"} />;
   }
 
   return <Outlet />;
