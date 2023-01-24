@@ -25,6 +25,8 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
     current_user_is_coordinator = serializers.SerializerMethodField()
     number_of_subject = serializers.SerializerMethodField()
     number_of_questionaries = serializers.SerializerMethodField()
+    subjects_with_desc = serializers.SerializerMethodField()
+    questionnaires = serializers.SerializerMethodField()
 
     def get_number_of_assessment(self, profile: AssessmentProfile):
         return AssessmentProject.objects.filter(assessment_profile_id = profile.id).count()
@@ -40,12 +42,19 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
 
     def get_number_of_questionaries(self, profile: AssessmentProfile):
         return profile.metric_categories.all().count()
+
+    def get_subjects_with_desc(self, profile: AssessmentProfile):
+        return profile.assessment_subjects.values('id', 'title', 'description')
+
+    def get_questionnaires(self, profile: AssessmentProfile):
+        return profile.metric_categories.values('id', 'title', 'description')
     
     class Meta:
         model = AssessmentProfile
         fields = ['id', 'code', 'title', 'summary', 'about', 'images', 'tags', 'expert_group', 
         'creation_time', 'last_modification_date', 'likes', 'number_of_subject', 'number_of_questionaries',
-        'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator']
+        'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator', 
+        'subjects_with_desc', 'questionnaires']
 
 class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:

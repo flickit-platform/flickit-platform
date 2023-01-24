@@ -43,4 +43,6 @@ urlpatterns += [
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
     path("profiles/archive/<str:profile_id>/", profileviews.ProfileArchiveApi.as_view()),
     path("profiles/publish/<str:profile_id>/", profileviews.ProfilePublishApi.as_view()),
+    path("profiles/like/<str:profile_id>/", profileviews.ProfileLikeApi.as_view()),
+    path("profiles/options/select/", profileviews.ProfileListOptionsApi.as_view()),
 ]
