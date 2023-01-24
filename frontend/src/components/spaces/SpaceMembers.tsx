@@ -125,7 +125,7 @@ export const SpaceMembers = () => {
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
-                {spaceMembersQueryData?.data?.results?.length}
+                {spaceMembersQueryData?.data?.results?.filter((item: any) => !!item.user)?.length}
               </Typography>
             </Box>
           }
@@ -145,7 +145,7 @@ export const SpaceMembers = () => {
           }}
           render={(data) => {
             const { results } = data;
-            const hasInvitees = results.findIndex((item: any) => !item.user) !== -1;
+            const invitees = results.filter((item: any) => !item.user);
 
             return (
               <Box>
@@ -183,13 +183,13 @@ export const SpaceMembers = () => {
                     )
                   );
                 })}
-                {hasInvitees && (
+                {invitees.length > 0 && (
                   <Box mt={4}>
                     <Title textTransform={"none"} size="small" fontSize={".95rem"} fontFamily="Roboto">
                       <Trans i18nKey="invitees" />
                     </Title>
                     <Box mt={1}>
-                      {results.map((member: any) => {
+                      {invitees.map((member: any) => {
                         const { user, id } = member;
                         const name = getUserName(user);
                         const isOwner = userId == user?.id;
@@ -215,10 +215,10 @@ export const SpaceMembers = () => {
                                 </Box>
                                 <Box ml={2}>{name}</Box>
                               </Box>
-                              <Box ml="auto" sx={{ ...styles.centerV }}>
+                              {/* <Box ml="auto" sx={{ ...styles.centerV }}>
                                 {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
                                 {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
-                              </Box>
+                              </Box> */}
                             </Box>
                           )
                         );
