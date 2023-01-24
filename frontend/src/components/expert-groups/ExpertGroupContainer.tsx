@@ -67,15 +67,19 @@ const ExpertGroupContainer = () => {
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
               <Grid item xs={12} md={8}>
-                <Title size="small">
-                  <Trans i18nKey="about" />
-                </Title>
-                <Box sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}>
-                  <Box minHeight={"160px"} mb={4}>
-                    <RichEditor content={about} />
-                  </Box>
-                </Box>
-                <Box mt={4}>
+                {about && (
+                  <>
+                    <Title size="small">
+                      <Trans i18nKey="about" />
+                    </Title>
+                    <Box sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}>
+                      <Box minHeight={"160px"} mb={4}>
+                        <RichEditor content={about} />
+                      </Box>
+                    </Box>
+                  </>
+                )}
+                <Box mt={5}>
                   <ProfilesList queryData={queryData} />
                 </Box>
               </Grid>
