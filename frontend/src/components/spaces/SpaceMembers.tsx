@@ -125,7 +125,7 @@ export const SpaceMembers = () => {
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
-                {spaceMembersQueryData?.data?.results?.length}
+                {spaceMembersQueryData?.data?.results?.filter((item: any) => !!item.user)?.length}
               </Typography>
             </Box>
           }
@@ -145,9 +145,10 @@ export const SpaceMembers = () => {
           }}
           render={(data) => {
             const { results } = data;
+            const invitees = results.filter((item: any) => !item.user);
 
             return (
-              <>
+              <Box>
                 {results.map((member: any) => {
                   const { user, id } = member;
                   const name = getUserName(user);
@@ -182,7 +183,50 @@ export const SpaceMembers = () => {
                     )
                   );
                 })}
-              </>
+                {invitees.length > 0 && (
+                  <Box mt={4}>
+                    <Title textTransform={"none"} size="small" fontSize={".95rem"} fontFamily="Roboto">
+                      <Trans i18nKey="invitees" />
+                    </Title>
+                    <Box mt={1}>
+                      {invitees.map((member: any) => {
+                        const { user, id } = member;
+                        const name = getUserName(user);
+                        const isOwner = userId == user?.id;
+
+                        return (
+                          !user && (
+                            <Box
+                              key={id}
+                              sx={{
+                                ...styles.centerV,
+                                boxShadow: 1,
+                                borderRadius: 2,
+                                my: 1,
+                                py: 0.8,
+                                px: 1.5,
+                              }}
+                            >
+                              <Box sx={{ ...styles.centerV }}>
+                                <Box>
+                                  <Avatar sx={{ width: 34, height: 34 }}>
+                                    <PersonRoundedIcon />
+                                  </Avatar>
+                                </Box>
+                                <Box ml={2}>{name}</Box>
+                              </Box>
+                              {/* <Box ml="auto" sx={{ ...styles.centerV }}>
+                                {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
+                                {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
+                              </Box> */}
+                            </Box>
+                          )
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
             );
           }}
         />
