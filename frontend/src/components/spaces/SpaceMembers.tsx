@@ -145,9 +145,10 @@ export const SpaceMembers = () => {
           }}
           render={(data) => {
             const { results } = data;
+            const hasInvitees = results.findIndex((item: any) => !item.user) !== -1;
 
             return (
-              <>
+              <Box>
                 {results.map((member: any) => {
                   const { user, id } = member;
                   const name = getUserName(user);
@@ -182,7 +183,50 @@ export const SpaceMembers = () => {
                     )
                   );
                 })}
-              </>
+                {hasInvitees && (
+                  <Box mt={4}>
+                    <Title textTransform={"none"} size="small" fontSize={".95rem"} fontFamily="Roboto">
+                      <Trans i18nKey="invitees" />
+                    </Title>
+                    <Box mt={1}>
+                      {results.map((member: any) => {
+                        const { user, id } = member;
+                        const name = getUserName(user);
+                        const isOwner = userId == user?.id;
+
+                        return (
+                          !user && (
+                            <Box
+                              key={id}
+                              sx={{
+                                ...styles.centerV,
+                                boxShadow: 1,
+                                borderRadius: 2,
+                                my: 1,
+                                py: 0.8,
+                                px: 1.5,
+                              }}
+                            >
+                              <Box sx={{ ...styles.centerV }}>
+                                <Box>
+                                  <Avatar sx={{ width: 34, height: 34 }}>
+                                    <PersonRoundedIcon />
+                                  </Avatar>
+                                </Box>
+                                <Box ml={2}>{name}</Box>
+                              </Box>
+                              <Box ml="auto" sx={{ ...styles.centerV }}>
+                                {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
+                                {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
+                              </Box>
+                            </Box>
+                          )
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
             );
           }}
         />
