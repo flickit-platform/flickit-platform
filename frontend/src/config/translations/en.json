@@ -220,6 +220,8 @@
   "useIt": "Use it?",
   "inviteMember": "Invite member",
   "displayName": "Display name",
+  "sorryYouCanCreateAssessmentWithThisProfile": "Sorry! You can't create assessment with this profile.",
+  "invitees": "The invitees",
   "used": "Used",
   "times": "Times",
   "acceptInvitation": "Accept invitation",
