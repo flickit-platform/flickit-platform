@@ -2,7 +2,7 @@ from ..services import userservices
 from ..models import UserAccess
 from rest_framework.response import Response
 from rest_framework import status
-
+from datetime import datetime
 
 def add_user_to_space(space_id, email):
     user = userservices.load_user_by_email(email)
@@ -23,7 +23,9 @@ def add_owner_to_space(space, current_user_id):
     return space
 
 def add_invited_user_to_space(user):
-    user_accesses = UserAccess.objects.filter(invite_email = user.email)
+    user_accesses = UserAccess.objects.filter(invite_email = user.email, invite_expiration_date__gt=datetime.now())
+    if user_accesses.count() == 0:
+        expire_user_accesses = UserAccess.objects.filter(invite_email = user.email, invite_expiration_date__gt=datetime.now())
     for ua in user_accesses:
         ua.user = user
         ua.invite_email = None

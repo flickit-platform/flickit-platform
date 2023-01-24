@@ -46,7 +46,7 @@ class UserAccessViewSet(ModelViewSet):
     serializer_class = UserAccessSerializer
 
     def get_queryset(self):
-        return UserAccess.objects .filter(space_id = self.kwargs['space_pk']).select_related('user')
+        return UserAccess.objects.filter(space_id = self.kwargs['space_pk']).select_related('user')
 
     def get_serializer_context(self):
         return {'space_id': self.kwargs['space_pk']}

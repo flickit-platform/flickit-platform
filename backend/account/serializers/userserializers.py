@@ -14,7 +14,7 @@ class UserAccessSerializer(serializers.ModelSerializer):
     space = SpaceSimpleSerializer()
     class Meta:
         model = UserAccess
-        fields = ['id', 'user', 'space']
+        fields = ['id', 'user', 'space', 'invite_email']
 
 
 class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
