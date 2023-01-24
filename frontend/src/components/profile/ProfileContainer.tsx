@@ -37,10 +37,10 @@ const Profile = (props: any) => {
     about = "",
     likes = 0,
     expert_group = {},
-    creation_date,
-    last_update,
+    creation_time,
+    last_modification_date,
     number_of_assessment,
-    subjectsInfos = [],
+    subjects = [],
     questionnaires = [],
   } = data || {};
   return (
@@ -151,7 +151,7 @@ const Profile = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(creation_date)}
+                  {formatDate(creation_time)}
                 </Box>
               </Box>
               <Box
@@ -167,7 +167,7 @@ const Profile = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(last_update)}
+                  {formatDate(last_modification_date)}
                 </Box>
               </Box>
             </Box>
@@ -196,7 +196,7 @@ const Profile = (props: any) => {
           <Grid item xs={12} sm={4} md={3}>
             <Box sx={{ height: "100%" }}>
               <Title>
-                <Trans i18nKey="useIt" />
+                <Trans i18nKey="tryIt" />
               </Title>
               <Box
                 sx={{
@@ -219,7 +219,7 @@ const Profile = (props: any) => {
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{subjectsInfos.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>{subjects.length || 0}</Typography>
                 </Box>
                 <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
@@ -249,7 +249,7 @@ const Profile = (props: any) => {
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
-                {subjectsInfos.map((subject: any) => {
+                {subjects.map((subject: any) => {
                   return (
                     <Box component="li" mb={2}>
                       <b>{subject.title}</b>: {subject.description}

@@ -95,6 +95,10 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/auth/users/me/`, config);
     },
+    updateAccount(args: any, config: AxiosRequestConfig<any> | undefined) {
+      const { data, id } = args || {};
+      return axios.put(`/auth/users/${id}/`, data, config);
+    },
     fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/authinfo/spaces/`, config);
     },
@@ -297,7 +301,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     },
     fetchProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/inspectprofile/${id}/`, config);
+      return axios.get(`/baseinfo/profiles/${id}/`, config);
     },
     fetchProfileTags(args: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/baseinfo/tags/`, config);
