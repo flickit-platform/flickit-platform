@@ -384,7 +384,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     confirmExpertGroupInvitation(args: { token: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { token } = args || {};
 
-      return axios.get(`/baseinfo/expertgroup/confirm/${token}/`, {
+      return axios.post(`/baseinfo/expertgroup/confirm/${token}/`, {
         ...(config || {}),
       });
     },

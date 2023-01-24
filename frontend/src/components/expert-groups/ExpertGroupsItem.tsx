@@ -40,10 +40,8 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               component={Link}
               to={`${id}`}
               sx={(() => {
-                const randomColor = generateRandomColor();
                 return {
-                  bgcolor: randomColor,
-                  color: (t) => t.palette.getContrastText(randomColor),
+                  bgcolor: (t) => t.palette.grey[800],
                   textDecoration: "none",
                 };
               })()}

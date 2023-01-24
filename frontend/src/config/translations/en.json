@@ -221,5 +221,8 @@
   "inviteMember": "Invite member",
   "displayName": "Display name",
   "used": "Used",
-  "times": "Times"
+  "times": "Times",
+  "acceptInvitation": "Accept invitation",
+  "decline": "Decline",
+  "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?"
 }

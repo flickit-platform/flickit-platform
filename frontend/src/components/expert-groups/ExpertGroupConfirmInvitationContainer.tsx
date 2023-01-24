@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Button } from "@mui/material";
+import { Trans } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { styles } from "../../config/styles";
@@ -43,7 +44,9 @@ const ExpertGroupConfirmInvitationContainer = () => {
       render={(data) => {
         return (
           <Box sx={{ maxWidth: { xs: "100%", sm: "90%", md: "60%", lg: "40%" }, m: "auto" }}>
-            <Title size="small">You have been invited to this group. do you want to accept this invitation?</Title>
+            <Title size="small" textTransform={"none"} fontFamily="Roboto">
+              <Trans i18nKey="youHaveBeenInvitedToExpertGroup" />
+            </Title>
             <Box my={3}>
               <ExpertGroupsItem data={data} disableActions={true} />
             </Box>
@@ -54,9 +57,11 @@ const ExpertGroupConfirmInvitationContainer = () => {
                 variant="contained"
                 onClick={confirmInvitation}
               >
-                Accept
+                <Trans i18nKey="acceptInvitation" />
               </LoadingButton>
-              <LoadingButton loading={confirmInvitationQueryData.loading}>Reject</LoadingButton>
+              <LoadingButton loading={confirmInvitationQueryData.loading}>
+                <Trans i18nKey="decline" />
+              </LoadingButton>
             </Box>
           </Box>
         );
