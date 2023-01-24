@@ -219,5 +219,7 @@
   "pricing": "Pricing",
   "useIt": "Use it?",
   "inviteMember": "Invite member",
-  "displayName": "Display name"
+  "displayName": "Display name",
+  "used": "Used",
+  "times": "Times"
 }

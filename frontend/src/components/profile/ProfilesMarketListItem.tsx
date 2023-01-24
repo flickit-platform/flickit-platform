@@ -4,6 +4,7 @@ import { styles } from "../../config/styles";
 import Title from "../shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
+import formatDate from "../../utils/formatDate";
 
 const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   return (
@@ -100,9 +101,27 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       </Box>
       <Divider color="white" sx={{ opacity: 0.3 }} />
       <Box mt={2} sx={{ ...styles.centerV }}>
-        <Button size="small" variant="contained">
+        {/* <Button size="small" variant="contained">
           <Trans i18nKey="createAssessment" />
-        </Button>
+        </Button> */}
+        <Box>
+          <Box
+            sx={{
+              py: 0.3,
+              px: 0.8,
+              background: "white",
+              color: "gray",
+              fontSize: ".8rem",
+              borderRadius: 1,
+              m: 0.2,
+            }}
+          >
+            <Trans i18nKey="used" />:{" "}
+            <Box component="span" color="black" textTransform="lowercase">
+              {data.number_of_assessment} <Trans i18nKey="times" />
+            </Box>
+          </Box>
+        </Box>
         <Typography fontWeight={"bold"} sx={{ ml: "auto" }}>
           {data.price || "FREE"}
         </Typography>

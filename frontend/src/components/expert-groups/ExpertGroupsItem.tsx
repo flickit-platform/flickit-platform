@@ -17,10 +17,11 @@ import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 
 interface IExpertGroupsItemProps {
   data: any;
+  disableActions?: boolean;
 }
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
-  const { data } = props;
+  const { data, disableActions = false } = props;
   const { id, name, picture, bio = "", website, about = "", users = [], number_of_profiles } = data || {};
   const { userInfo } = useAuthContext();
   const { display_name } = userInfo || {};
@@ -51,7 +52,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               {name?.[0]?.toUpperCase()}
             </Avatar>
           }
-          action={<Actions expertGroup={data} />}
+          action={!disableActions && <Actions expertGroup={data} />}
           title={
             <Box component={"b"} color="GrayText" fontSize=".95rem">
               {name}
