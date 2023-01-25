@@ -8,7 +8,7 @@ const PrivateRoutes = (props: PropsWithChildren<{}>) => {
   let location = useLocation();
 
   if (!isAuthenticatedUser) {
-    return <Navigate to="/sign-in" state={{ from: location }} />;
+    return <Navigate to="/sign-in" />;
   }
 
   return <Outlet />;

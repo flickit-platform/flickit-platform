@@ -257,6 +257,11 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const params = query ? { query } : {};
       return axios.get(`/baseinfo/profiles/`, { params, ...config });
     },
+    fetchProfilesOptions(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
+      const { query } = args || {};
+      const params = query ? { query } : {};
+      return axios.get(`/baseinfo/profiles/options/select/`, { params, ...config });
+    },
     fetchCompareItemAssessments(args: any | undefined, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/assessment/currentuserprojects/`, config);
     },
@@ -297,7 +302,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     },
     fetchProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/inspectprofile/${id}/`, config);
+      return axios.get(`/baseinfo/profiles/${id}/`, config);
     },
     fetchProfileTags(args: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/baseinfo/tags/`, config);
@@ -385,6 +390,13 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { token } = args || {};
 
       return axios.post(`/baseinfo/expertgroup/confirm/${token}/`, {
+        ...(config || {}),
+      });
+    },
+    likeProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { id } = args || {};
+
+      return axios.post(`/baseinfo/profiles/like/${id}/`, {
         ...(config || {}),
       });
     },

@@ -4,7 +4,7 @@ import { useAuthContext } from "../providers/AuthProvider";
 
 const Redirect = () => {
   const location = useLocation();
-  const { isAuthenticatedUser, userInfo } = useAuthContext();
+  const { isAuthenticatedUser, userInfo, redirectRoute } = useAuthContext();
   const isRoot = location.pathname === "/";
   const shouldNavigateToLoginPage = !isAuthenticatedUser && isRoot;
   const spaceId = userInfo.current_space?.id;
@@ -14,6 +14,8 @@ const Redirect = () => {
       to={
         shouldNavigateToLoginPage
           ? "/sign-in"
+          : redirectRoute
+          ? redirectRoute
           : isRoot
           ? spaceId
             ? `/${spaceId}/assessments`

@@ -7,15 +7,12 @@ import { useServiceContext } from "../providers/ServiceProvider";
 import { ECustomErrorType } from "../types";
 import { ICustomError } from "./CustomError";
 
-const useGetSignedInUserInfo = (
-  props: { runOnMount: boolean } = { runOnMount: true }
-) => {
+const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: true }) => {
   const { runOnMount } = props;
   const { service } = useServiceContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } =
-    useAuthContext();
+  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } = useAuthContext();
   const [error, setError] = useState(false);
   const abortController = useRef(new AbortController());
 
@@ -61,6 +58,10 @@ const useGetSignedInUserInfo = (
     if (runOnMount) {
       getUser();
     }
+    location.pathname &&
+      !location.pathname.includes("sign-") &&
+      !isAuthenticatedUser &&
+      dispatch(authActions.setRedirectRoute(location.pathname));
 
     return () => {
       // abortController.current?.abort();

@@ -121,7 +121,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
 const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
-    service: (args, config) => service.fetchProfiles(args, config),
+    service: (args, config) => service.fetchProfilesOptions(args, config),
   });
 
   return (
