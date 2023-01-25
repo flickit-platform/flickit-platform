@@ -19,9 +19,9 @@ def custom_exception_handler(exc, context):
         elif isinstance(exc, ValidationError):
             data = {'message': exc.message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-        elif isinstance(exc, IntegrityError):
-            data = {'message': 'Integrity Error, check the request body and try again'}
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        # elif isinstance(exc, IntegrityError):
+        #     data = {'message': 'Integrity Error, check the request body and try again'}
+        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
         elif isinstance(exc, Http404):
             data = {'message': 'Not found.'}
             return Response(data, status=status.HTTP_404_NOT_FOUND)

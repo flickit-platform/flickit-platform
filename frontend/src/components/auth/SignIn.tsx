@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { authActions, useAuthContext } from "../../providers/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import { styles } from "../../config/styles";
 import { InputFieldUC } from "../shared/fields/InputField";
@@ -18,9 +18,10 @@ import Title from "../shared/Title";
 import useGetSignedInUserInfo from "../../utils/useGetSignedInUserInfo";
 
 const SignIn = () => {
-  const { dispatch, isAuthenticatedUser } = useAuthContext();
+  const { dispatch, isAuthenticatedUser, redirectRoute } = useAuthContext();
   const { service } = useServiceContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = React.useState(false);
   const abortController = useRef(new AbortController());
   const { getUser } = useGetSignedInUserInfo({ runOnMount: false });
@@ -46,6 +47,8 @@ const SignIn = () => {
       if (us) {
         setLoading(false);
         dispatch(authActions.signIn(res));
+        redirectRoute && navigate(redirectRoute);
+        dispatch(authActions.setRedirectRoute(""));
       }
     } catch (e) {
       const err = e as ICustomError;

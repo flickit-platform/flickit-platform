@@ -1,5 +1,6 @@
 import requests
 import traceback
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
@@ -9,7 +10,7 @@ from rest_framework.filters import SearchFilter
 
 from ..services import profileservice, importprofileservice, expertgroupservice
 from ..serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer, ImportProfileSerializer
-from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile, ProfileLike
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
@@ -96,8 +97,15 @@ class ImportProfileApi(APIView):
             return Response({"message": "Error in importing profile"}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ProfileLikeApi(APIView):
+    @transaction.atomic
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
-        profile.likes += 1
-        profile.save()
-        return Response({"message": "The profile is liked successfully", 'likes': profile.likes})
+        profile_like_user = ProfileLike.objects.filter(user_id = request.user.id, profile_id = profile.id)
+        if profile_like_user.count() == 1:
+            profile.likes.filter(user_id = request.user, profile_id = profile.id).delete()
+            profile.save()
+        elif profile_like_user.count() == 0:
+            profile_like_create = ProfileLike.objects.create(user_id = request.user.id, profile_id = profile.id)
+            profile.likes.add(profile_like_create)
+            profile.save()
+        return Response({'likes': profile.likes.count()})

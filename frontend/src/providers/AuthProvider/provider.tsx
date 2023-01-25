@@ -13,6 +13,7 @@ export interface IAuthContext {
   userInfo: IUserInfo;
   accessToken: string;
   loadingUserInfo: boolean;
+  redirectRoute: string;
   dispatch: React.Dispatch<any>;
 }
 
@@ -37,6 +38,7 @@ export const AuthContext = React.createContext<IAuthContext>({
   accessToken: getAccessTokenFormStorage(),
   loadingUserInfo: true,
   userInfo: defaultUserInfo,
+  redirectRoute: "",
   dispatch: () => {},
 });
 
@@ -49,6 +51,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     accessToken: getAccessTokenFormStorage(),
     loadingUserInfo: true,
     userInfo: defaultUserInfo,
+    redirectRoute: "",
     dispatch: () => {},
   });
 

@@ -9,6 +9,7 @@ export enum AUTH_ACTIONS_TYPE {
   SET_USER_INFO = "SET_USER_INFO",
   SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN",
   SET_CURRENT_SPACE = "SET_CURRENT_SPACE",
+  SET_REDIRECT_ROUTE = "SET_REDIRECT_ROUTE",
   SET_USER_INFO_LOADING = "SET_USER_INFO_LOADING",
 }
 
@@ -51,6 +52,10 @@ export const setUserInfoLoading = (payload: boolean) => {
   return { type: AUTH_ACTIONS_TYPE.SET_USER_INFO_LOADING, payload };
 };
 
+export const setRedirectRoute = (payload: string) => {
+  return { type: AUTH_ACTIONS_TYPE.SET_REDIRECT_ROUTE, payload };
+};
+
 export const signOut = () => {
   localStorage.clear();
   axios.defaults.headers["Authorization"] = ``;
@@ -64,5 +69,6 @@ export const authActions = {
   setUserInfo,
   setAccessToken,
   setCurrentSpace,
+  setRedirectRoute,
   setUserInfoLoading,
 };
