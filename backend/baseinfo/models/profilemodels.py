@@ -9,7 +9,7 @@ class ExpertGroup(models.Model):
     website = models.URLField(max_length = 200, null=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True)
     users = models.ManyToManyField(User, related_name = 'expert_groups')
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
 
 class AssessmentProfile(models.Model):
@@ -22,7 +22,6 @@ class AssessmentProfile(models.Model):
     is_default = models.BooleanField(default=False)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles', null=True)
     is_active = models.BooleanField(default=False)
-    likes = models.IntegerField(default=0)
 
 
     def save(self):
@@ -55,3 +54,7 @@ class ProfileTag(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+class ProfileLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='likes')
