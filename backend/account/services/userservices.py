@@ -1,6 +1,8 @@
 from ..models import User, UserAccess
 from ..tasks import async_send_invite
 from django.db import transaction
+from datetime import timedelta
+from django.utils import timezone
 
 
 def load_user_by_email(email) -> User:
@@ -26,6 +28,8 @@ def invite_member_for_space(space_id, email):
 
 def create_user_access_temp_record(space_id, email):
     try:
-        UserAccess.objects.get(invite_email = email, space_id = space_id)
+        user_access = UserAccess.objects.get(invite_email = email, space_id = space_id)
+        user_access.invite_expiration_date = timezone.now() + timedelta(seconds=7)
+        user_access.save()
     except UserAccess.DoesNotExist:
-        UserAccess.objects.create(invite_email = email, space_id = space_id)
+        UserAccess.objects.create(invite_email = email, space_id = space_id, invite_expiration_date =  timezone.now() + timedelta(seconds=7))

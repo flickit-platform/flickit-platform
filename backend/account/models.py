@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-
-
+from datetime import datetime
 
 
 class CustomUserManager(BaseUserManager):
@@ -64,6 +63,7 @@ class UserAccess(models.Model):
     space = models.ForeignKey('Space', on_delete=models.CASCADE)
     user =  models.ForeignKey('User', on_delete=models.CASCADE, null=True)
     invite_email = models.EmailField(null = True)
+    invite_expiration_date = models.DateTimeField(null=True)
 
     class Meta:
         unique_together = ('space', 'user')

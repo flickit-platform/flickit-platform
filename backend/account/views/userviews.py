@@ -46,7 +46,7 @@ class UserAccessViewSet(ModelViewSet):
     serializer_class = UserAccessSerializer
 
     def get_queryset(self):
-        return UserAccess.objects .filter(space_id = self.kwargs['space_pk']).select_related('user')
+        return UserAccess.objects.filter(space_id = self.kwargs['space_pk']).select_related('user')
 
     def get_serializer_context(self):
         return {'space_id': self.kwargs['space_pk']}
@@ -54,6 +54,15 @@ class UserAccessViewSet(ModelViewSet):
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
         return spaceservices.perform_delete(self.get_object(), request.user)
+
+    @transaction.atomic
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        if response.status_code == 200:
+            spaceservices.remove_expire_invitions(response.data['results'])
+        return super().list(request, *args, **kwargs)
+
+
 
 class InviteMemberForSpaceApi(APIView):
     serializer_class =  InviteMemberSerializer
