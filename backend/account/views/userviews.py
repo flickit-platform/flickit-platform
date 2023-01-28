@@ -55,6 +55,15 @@ class UserAccessViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return spaceservices.perform_delete(self.get_object(), request.user)
 
+    @transaction.atomic
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        if response.status_code == 200:
+            spaceservices.remove_expire_invitions(response.data['results'])
+        return super().list(request, *args, **kwargs)
+
+
+
 class InviteMemberForSpaceApi(APIView):
     serializer_class =  InviteMemberSerializer
     def post(self, request, space_id):
