@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Chip } from "@mui/material";
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
@@ -14,11 +14,14 @@ import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import { toast } from "react-toastify";
+import formatDate from "../../utils/formatDate";
 
 interface IProfileListItemProps {
   data: {
     id: TId;
     title: string;
+    last_modification_date: string;
+    is_active: boolean;
   };
   fetchProfiles?: TQueryFunction;
   link?: string;
@@ -26,7 +29,7 @@ interface IProfileListItemProps {
 
 const ProfileListItem = (props: IProfileListItemProps) => {
   const { data, fetchProfiles, link } = props;
-  const { id, title } = data || {};
+  const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
       sx={{
@@ -41,7 +44,8 @@ const ProfileListItem = (props: IProfileListItemProps) => {
       <Box sx={{ ...styles.centerV, flex: 1 }} alignSelf="stretch">
         <Box
           sx={{
-            ...styles.centerV,
+            ...styles.centerCV,
+
             textDecoration: "none",
             color: (t) => t.palette.primary.dark,
           }}
@@ -68,9 +72,17 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           >
             {title}
           </Typography>
+          <Typography color="GrayText" variant="body2">
+            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_date)}
+          </Typography>
         </Box>
 
         <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
+          {is_active ? (
+            <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+          ) : (
+            <Chip label={<Trans i18nKey="unPublished" />} size="small" />
+          )}
           <Actions profile={data} fetchProfiles={fetchProfiles} />
         </Box>
       </Box>
@@ -153,7 +165,7 @@ const Actions = (props: any) => {
   return (
     <MoreActions
       {...useMenu()}
-      boxProps={{ ml: 0.2 }}
+      boxProps={{ ml: 0.4 }}
       loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
       items={[
         is_active

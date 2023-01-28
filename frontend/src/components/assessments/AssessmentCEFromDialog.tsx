@@ -11,7 +11,7 @@ import setServerFieldErrors from "../../utils/setServerFieldError";
 import useConnectSelectField from "../../utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
 import { CEDialog, CEDialogActions } from "../../components/shared/dialogs/CEDialog";
 import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
@@ -19,6 +19,7 @@ import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/f
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
+import { t } from "i18next";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -37,6 +38,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const { spaceId } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
+  const navigate = useNavigate();
   const close = () => {
     abortController.abort();
     closeDialog();
@@ -48,7 +50,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     };
   }, []);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     const { space, ...restOfData } = data;
     setLoading(true);
     try {
@@ -65,6 +67,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
+      !!staticData.profile && navigate(`/${res.space}/assessments`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -112,7 +115,12 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <ProfileField defaultValue={defaultValues?.assessment_profile} staticValue={staticData.profile} />
           </Grid>
         </Grid>
-        <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
+        <CEDialogActions
+          closeDialog={close}
+          loading={loading}
+          type={type}
+          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+        />
       </FormProviderWithForm>
     </CEDialog>
   );
