@@ -8,8 +8,12 @@ class ExpertGroup(models.Model):
     about = models.TextField(null=True)
     website = models.URLField(max_length = 200, null=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True)
-    users = models.ManyToManyField(User, related_name = 'expert_groups')
+    users = models.ManyToManyField(User, through='ExpertGroupAccess', related_name = 'expert_groups')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+class ExpertGroupAccess(models.Model):
+    expert_group = models.ForeignKey('ExpertGroup', on_delete=models.CASCADE)
+    user =  models.ForeignKey(User, on_delete=models.CASCADE)
     
 
 class AssessmentProfile(models.Model):

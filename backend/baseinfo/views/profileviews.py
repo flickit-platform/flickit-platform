@@ -71,7 +71,7 @@ class ProfileListApi(APIView):
 class ProfileListOptionsApi(APIView):
     def get(self, request):
         profile_options =  AssessmentProfile.objects.values('id', 'title')
-        return Response({'profiles': profile_options})
+        return Response({'results': profile_options})
     
 class UploadProfileApi(ModelViewSet):
     serializer_class = ProfileDslSerializer
