@@ -60,6 +60,7 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
     }
     location.pathname &&
       !location.pathname.includes("sign-") &&
+      location.pathname !== "/" &&
       !isAuthenticatedUser &&
       dispatch(authActions.setRedirectRoute(location.pathname));
 
