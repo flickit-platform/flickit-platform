@@ -29,6 +29,7 @@ import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
 import useDialog from "../../utils/useDialog";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
@@ -43,6 +44,17 @@ const ProfileExpertViewContainer = () => {
           return (
             <Box>
               <Title
+                // sup={
+                //   <SupTitleBreadcrumb
+                //     routes={[
+                //       {
+                //         title: requested_space,
+                //         sup: "spaces",
+                //         icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+                //       },
+                //     ]}
+                //   />
+                // }
                 sub={data.summary}
                 toolbar={
                   current_user_is_coordinator && (
