@@ -70,7 +70,7 @@ class ProfileListApi(APIView):
 
 class ProfileListOptionsApi(APIView):
     def get(self, request):
-        profile_options =  AssessmentProfile.objects.values('id', 'title')
+        profile_options =  AssessmentProfile.objects.filter(is_active = True).values('id', 'title')
         return Response({'results': profile_options})
     
 class UploadProfileApi(ModelViewSet):
