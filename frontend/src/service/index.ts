@@ -261,6 +261,11 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const params = query ? { query } : {};
       return axios.get(`/baseinfo/profiles/`, { params, ...config });
     },
+    fetchProfilesOptions(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
+      const { query } = args || {};
+      const params = query ? { query } : {};
+      return axios.get(`/baseinfo/profiles/options/select/`, { params, ...config });
+    },
     fetchCompareItemAssessments(args: any | undefined, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/assessment/currentuserprojects/`, config);
     },
@@ -295,9 +300,9 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { data } = args || {};
       return axios.post(`/baseinfo/importprofile/`, data, config);
     },
-    updateProfile(args: { id: TId; data: any }, config: AxiosRequestConfig<any> | undefined) {
-      const { id, data } = args || {};
-      return axios.put(`/baseinfo/importprofile/${id}/`, data, config);
+    updateProfile(args: { profileId?: TId; expertGroupId?: TId; data: any }, config: AxiosRequestConfig<any> | undefined) {
+      const { expertGroupId, profileId, data } = args || {};
+      return axios.put(`/baseinfo/expertgroup/profiles/${expertGroupId}/${profileId}/`, data, config);
     },
     fetchProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
@@ -382,6 +387,20 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { data = {}, id } = args || {};
 
       return axios.post(`/baseinfo/expertgroups/${id}/`, data, {
+        ...(config || {}),
+      });
+    },
+    confirmExpertGroupInvitation(args: { token: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { token } = args || {};
+
+      return axios.post(`/baseinfo/expertgroup/confirm/${token}/`, {
+        ...(config || {}),
+      });
+    },
+    likeProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { id } = args || {};
+
+      return axios.post(`/baseinfo/profiles/like/${id}/`, {
         ...(config || {}),
       });
     },

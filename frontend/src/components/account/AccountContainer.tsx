@@ -74,7 +74,7 @@ function AccountSettings() {
           </TabList>
         </Box>
         <TabPanel value="about">
-          <Box sx={{ p: 2, background: "white", borderRadius: 1 }} mt={2}>
+          <Box sx={{ p: 4, background: "white", borderRadius: 1 }} mt={2}>
             <Box>
               <About />
             </Box>

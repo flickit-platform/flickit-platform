@@ -37,9 +37,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 Clone the project:
 
-    $ git clone https://github.com/avansoft/checkup-platform.git
+    $ git clone https://github.com/avansoft/flickit-platform.git
 
-Rename .env.sample to .env and change the properties based on you requirements
+Rename .env.sample to .env and change the properties based on your requirements
 
 Start application with docker-compose
 

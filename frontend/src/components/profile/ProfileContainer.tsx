@@ -10,26 +10,31 @@ import QueryData from "../shared/QueryData";
 import formatDate from "../../utils/formatDate";
 import { Trans } from "react-i18next";
 import RichEditor from "../shared/rich-editor/RichEditor";
+import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
+import useDialog from "../../utils/useDialog";
+import AlertBox from "../shared/AlertBox";
+import { LoadingButton } from "@mui/lab";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
-  const queryData = useQuery({
+  const profileQueryData = useQuery({
     service: (args = { id: profileId }, config) => service.fetchProfile(args, config),
   });
 
   return (
     <QueryData
-      {...queryData}
+      {...profileQueryData}
       render={(data) => {
-        return <Profile data={data} />;
+        return <Profile data={data} query={profileQueryData.query} />;
       }}
     />
   );
 };
 
 const Profile = (props: any) => {
-  const { data } = props;
+  const { data, query } = props;
+  const { profileId } = useParams();
   const {
     title,
     tags = [],
@@ -40,9 +45,13 @@ const Profile = (props: any) => {
     creation_time,
     last_modification_date,
     number_of_assessment,
-    subjects = [],
+    subjects_with_desc = [],
     questionnaires = [],
+    is_active,
   } = data || {};
+
+  const dialogProps = useDialog({ context: { type: "create", staticData: { profile: { id: profileId, title } } } });
+
   return (
     <Box>
       <Box
@@ -108,10 +117,10 @@ const Profile = (props: any) => {
                   sx: { textDecoration: "none" },
                   color: "white",
                 }}
-                avatar={<Avatar alt="Expert group" src={"/"} />}
+                avatar={<Avatar alt={expert_group?.name || "E"} src={"/"} />}
                 title={
                   <Box component={"b"} fontSize=".95rem">
-                    {expert_group.name}
+                    {expert_group?.name}
                   </Box>
                 }
               />
@@ -171,27 +180,19 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             </Box>
-            <Button
-              sx={{
-                ...styles.centerV,
-                mt: 1.5,
-                fontSize: ".95rem",
-                textTransform: "none",
-                ml: 0.5,
-                color: "white",
-                py: 0.2,
-              }}
-              variant="contained"
-              color="secondary"
-              size="small"
-              startIcon={<ThumbUpOffAltRoundedIcon fontSize="inherit" />}
-            >
-              <Box sx={{ mx: 0.6 }}>{likes}</Box>
-            </Button>
+            <LikeProfile likes={likes} />
           </Box>
         </Box>
       </Box>
       <Box mt={15}>
+        {!is_active && (
+          <Box my={5}>
+            <AlertBox severity="warning">
+              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisProfile" />
+            </AlertBox>
+          </Box>
+        )}
+
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4} md={3}>
             <Box sx={{ height: "100%" }}>
@@ -219,7 +220,7 @@ const Profile = (props: any) => {
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{subjects.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
                 </Box>
                 <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
@@ -227,9 +228,10 @@ const Profile = (props: any) => {
                   </Typography>
                   <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
                 </Box>
-                <Button fullWidth variant="contained" sx={{ mt: 6 }}>
+                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
                   <Trans i18nKey="createAssessment" />
                 </Button>
+                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
               </Box>
             </Box>
           </Grid>
@@ -249,7 +251,7 @@ const Profile = (props: any) => {
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
-                {subjects.map((subject: any) => {
+                {subjects_with_desc.map((subject: any) => {
                   return (
                     <Box component="li" mb={2}>
                       <b>{subject.title}</b>: {subject.description}
@@ -276,6 +278,42 @@ const Profile = (props: any) => {
         </Grid>
       </Box>
     </Box>
+  );
+};
+
+const LikeProfile = ({ likes }: any) => {
+  const { service } = useServiceContext();
+  const { profileId } = useParams();
+  const likeQueryData = useQuery({
+    service: (args = { id: profileId }, config) => service.likeProfile(args, config),
+    runOnMount: false,
+  });
+
+  const like = async () => {
+    const res = await likeQueryData.query();
+    console.log(res);
+  };
+
+  return (
+    <LoadingButton
+      sx={{
+        ...styles.centerV,
+        mt: 1.5,
+        fontSize: ".95rem",
+        textTransform: "none",
+        ml: 0.5,
+        color: "white",
+        py: 0.2,
+      }}
+      variant="contained"
+      color="secondary"
+      size="small"
+      startIcon={<ThumbUpOffAltRoundedIcon fontSize="inherit" />}
+      onClick={like}
+      loading={likeQueryData.loading}
+    >
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.likes || likes}</Box>
+    </LoadingButton>
   );
 };
 

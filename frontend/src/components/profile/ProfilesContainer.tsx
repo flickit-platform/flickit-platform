@@ -24,7 +24,8 @@ const ProfilesContainer = (props: PropsWithChildren<{}>) => {
       </Title>
 
       <Box mt={2}>
-        <TabContext value={value}>
+        <ProfilesListContainer />
+        {/* <TabContext value={value}>
           <Box>
             <TabList onChange={handleChange}>
               <Tab
@@ -35,23 +36,22 @@ const ProfilesContainer = (props: PropsWithChildren<{}>) => {
                 }
                 value="list"
               />
-              {/* <Tab
+              <Tab
                 label={
                   <Box sx={{ ...styles.centerV }}>
                     <Trans i18nKey="market" />
                   </Box>
                 }
                 value="market"
-              /> */}
+              />
             </TabList>
           </Box>
           <TabPanel value="list">
-            <ProfilesListContainer />
           </TabPanel>
-          {/* <TabPanel value="market" sx={{ p: { xs: 1, sm: 3 } }}>
+          <TabPanel value="market" sx={{ p: { xs: 1, sm: 3 } }}>
             <ProfilesMarketContainer />
-          </TabPanel> */}
-        </TabContext>
+          </TabPanel>
+        </TabContext> */}
       </Box>
     </Box>
   );

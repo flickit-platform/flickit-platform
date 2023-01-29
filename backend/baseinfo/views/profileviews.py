@@ -1,5 +1,6 @@
 import requests
 import traceback
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
@@ -9,9 +10,9 @@ from rest_framework.filters import SearchFilter
 
 from ..services import profileservice, importprofileservice, expertgroupservice
 from ..serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer, ImportProfileSerializer
-from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile, ProfileLike
 
-DSL_PARSER_URL_SERVICE = "http://localhost:8080/extract/"
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 class AssessmentProfileViewSet(ModelViewSet):
     serializer_class = AssessmentProfileSerilizer
@@ -23,20 +24,19 @@ class AssessmentProfileViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         resp = profileservice.delete_validation(kwargs['pk'], request.user.id)
-        if 'status' not in resp:
+        if resp['is_deletable'] == True:
             return super().destroy(request, *args, ** kwargs)
         else:
             return Response({'message': resp['message']}, status=resp['status'])
-
 
 class ProfileArchiveApi(APIView):
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         resp = profileservice.delete_validation(profile_id, request.user.id)
-        if 'status' not in resp:
+        if resp['is_deletable'] == True:
             profile.is_active = False
             profile.save()
-            return Response({'message': 'The profile is archived successfully'}, status = status.HTTP_200_OK)
+            return Response({'message': 'The profile is archived successfully'})
         else:
             return Response({'message': resp['message']}, status=resp['status'])
 
@@ -44,13 +44,12 @@ class ProfilePublishApi(APIView):
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         resp = profileservice.delete_validation(profile_id, request.user.id)
-        if 'status' not in resp:
+        if resp['is_deletable'] == True:
             profile.is_active = True
             profile.save()
-            return Response({'message': 'The profile is published successfully'}, status = status.HTTP_200_OK)
+            return Response({'message': 'The profile is published successfully'})
         else:
             return Response({'message': resp['message']}, status=resp['status'])
-
     
 class ProfileTagViewSet(ModelViewSet):
     serializer_class = ProfileTagSerializer
@@ -60,9 +59,6 @@ class ProfileTagViewSet(ModelViewSet):
 class ProfileDetailDisplayApi(APIView):
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
-        if profile is None:
-            error_message = "No profile is Found with the given profile_id {}".format(profile_id)
-            return Response({"message": error_message}, status = status.HTTP_400_BAD_REQUEST)
         response = profileservice.extract_detail_of_profile(profile, request)
         return Response(response, status = status.HTTP_200_OK)
 
@@ -71,6 +67,11 @@ class ProfileListApi(APIView):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
         response = AssessmentProfileSerilizer(expert_group.profiles, many = True, context={'request': request}).data
         return Response(response, status = status.HTTP_200_OK)
+
+class ProfileListOptionsApi(APIView):
+    def get(self, request):
+        profile_options =  AssessmentProfile.objects.filter(is_active = True).values('id', 'title')
+        return Response({'results': profile_options})
     
 class UploadProfileApi(ModelViewSet):
     serializer_class = ProfileDslSerializer
@@ -94,3 +95,17 @@ class ImportProfileApi(APIView):
             message = traceback.format_exc()
             print(message)
             return Response({"message": "Error in importing profile"}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ProfileLikeApi(APIView):
+    @transaction.atomic
+    def post(self, request, profile_id):
+        profile = profileservice.load_profile(profile_id)
+        profile_like_user = ProfileLike.objects.filter(user_id = request.user.id, profile_id = profile.id)
+        if profile_like_user.count() == 1:
+            profile.likes.filter(user_id = request.user, profile_id = profile.id).delete()
+            profile.save()
+        elif profile_like_user.count() == 0:
+            profile_like_create = ProfileLike.objects.create(user_id = request.user.id, profile_id = profile.id)
+            profile.likes.add(profile_like_create)
+            profile.save()
+        return Response({'likes': profile.likes.count()})

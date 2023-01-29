@@ -1,7 +1,9 @@
+from datetime import datetime
+from rest_framework import status
+from rest_framework.response import Response
+
 from ..services import userservices
 from ..models import UserAccess
-from rest_framework.response import Response
-from rest_framework import status
 
 
 def add_user_to_space(space_id, email):
@@ -23,12 +25,16 @@ def add_owner_to_space(space, current_user_id):
     return space
 
 def add_invited_user_to_space(user):
-    user_accesses = UserAccess.objects.filter(invite_email = user.email)
+    user_accesses = UserAccess.objects.filter(invite_email = user.email, invite_expiration_date__gt=datetime.now())
+    if user_accesses.count() == 0:
+        expire_user_accesses = UserAccess.objects.filter(invite_email = user.email)
+        for eua in expire_user_accesses:
+            eua.delete()
     for ua in user_accesses:
         ua.user = user
         ua.invite_email = None
+        ua.invite_expiration_date = None
         ua.save()
-
 
 def perform_delete(instance: UserAccess, current_user):
     if current_user.id != instance.space.owner_id:
@@ -37,7 +43,7 @@ def perform_delete(instance: UserAccess, current_user):
     if instance.user_id == instance.space.owner_id:
         return Response({"message": "The owner of the space can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
     instance.delete()
-    if instance.space.id == instance.user.current_space_id:
+    if instance.user is not None and instance.space.id == instance.user.current_space_id:
         instance.user.current_space_id = None
         instance.user.save()
     return Response(status=status.HTTP_204_NO_CONTENT)
@@ -49,6 +55,13 @@ def change_current_space(current_user, space_id):
         return Response({'message': 'The current space of user is changed successfully'})
     else:
         return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
+
+def remove_expire_invitions(user_space_access_list):
+    user_space_access_list_id = [obj['id'] for obj in user_space_access_list]
+    qs = UserAccess.objects.filter(id__in=user_space_access_list_id)
+    expire_list = qs.filter(invite_expiration_date__lt=datetime.now())
+    for expire in expire_list.all():
+        UserAccess.objects.get(id = expire.id).delete()
 
 
 

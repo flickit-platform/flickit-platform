@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from ..serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
 from ..serializers.commonserializers import SpaceSerializer
-from ..services import spaceservices, userservices
+from ..services import spaceservices
 
 class ChangeCurrentSpaceViewSet(APIView):
     def post(self, request, space_id):

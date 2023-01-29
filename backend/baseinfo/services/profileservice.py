@@ -1,4 +1,6 @@
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import PermissionDenied
 from ..serializers.profileserializers import AssessmentProfileSerilizer
 from ..models.profilemodels import AssessmentProfile, ProfileTag
 from assessment.models import AssessmentProject
@@ -7,31 +9,28 @@ from assessment.models import AssessmentProject
 def load_profile(profile_id) -> AssessmentProfile:
     try:
         return AssessmentProfile.objects.get(id = profile_id)
-    except AssessmentProfile.DoesNotExist:
-        return None
+    except AssessmentProfile.DoesNotExist as e:
+        raise AssessmentProfile.DoesNotExist
 
 def load_profile_tag(tag_id) -> ProfileTag:
     try:
         return ProfileTag.objects.get(id = tag_id)
     except ProfileTag.DoesNotExist:
-        return None
+        raise ObjectDoesNotExist
 
 def delete_validation(profile_id, user_id):
     delete_validation_res = {}
     profile = load_profile(profile_id)
-    if profile is None:
-        error_message = 'The Assessment Profile with given Id {profile_id} does not exists'.format(profile_id = profile.id)
-        delete_validation_res['message'] = error_message
-        delete_validation_res['status'] = status.HTTP_400_BAD_REQUEST
     qs = AssessmentProject.objects.filter(assessment_profile_id = profile.id)
     if qs.count() > 0:
         delete_validation_res['message'] = 'Some assessment with this profile exist'
-        delete_validation_res['status'] = status.HTTP_400_BAD_REQUEST        
-    if profile.expert_group is not None:
-        user = profile.expert_group.users.filter(id = user_id)
-        if user.count() == 0:
-            delete_validation_res['message'] = 'The current user does not have permission for deleting profile'
-            delete_validation_res['status'] = status.HTTP_403_FORBIDDEN        
+        delete_validation_res['status'] = status.HTTP_400_BAD_REQUEST    
+        delete_validation_res['is_deletable'] = False    
+        return delete_validation_res    
+    user = profile.expert_group.users.filter(id = user_id)
+    if user.count() == 0:
+        raise PermissionDenied
+    delete_validation_res['is_deletable'] = True
     return delete_validation_res
 
 def extract_detail_of_profile(profile, request):

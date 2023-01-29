@@ -37,7 +37,9 @@ interface ICEDialogActionsProps extends DialogActionsProps {
   onClose?: () => void;
   type: (string & {}) | TDialogContextType | undefined;
   submitButtonLabel?: string;
+  submitAndViewButtonLabel?: string;
   hasViewBtn?: boolean;
+  hideSubmitButton?: boolean;
   onSubmit?: (e: any, shouldView?: boolean) => any;
 }
 
@@ -49,7 +51,9 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     onClose = closeDialog,
     onSubmit,
     hasViewBtn,
+    hideSubmitButton = false,
     submitButtonLabel = type === "update" ? t("update") : t("create"),
+    submitAndViewButtonLabel,
   } = props;
   const fullScreen = useScreenResize("sm");
   if (!onClose) {
@@ -74,23 +78,25 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
                 onSubmit?.(e, true)();
               }}
             >
-              <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
+              {submitAndViewButtonLabel || <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />}
             </LoadingButton>
           </Grid>
         )}
-        <Grid item>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={loading}
-            onClick={(e: any) => {
-              e.preventDefault();
-              onSubmit?.(e)?.();
-            }}
-          >
-            <Trans i18nKey={submitButtonLabel as string} />
-          </LoadingButton>
-        </Grid>
+        {!hideSubmitButton && (
+          <Grid item>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={loading}
+              onClick={(e: any) => {
+                e.preventDefault();
+                onSubmit?.(e)?.();
+              }}
+            >
+              <Trans i18nKey={submitButtonLabel as string} />
+            </LoadingButton>
+          </Grid>
+        )}
         <Grid item>
           <Button onClick={onClose}>
             <Trans i18nKey="cancel" />

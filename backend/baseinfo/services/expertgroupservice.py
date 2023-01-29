@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from account.services import userservices
-from ..models.profilemodels import ExpertGroup
+from ..models.profilemodels import ExpertGroup, ExpertGroupAccess
 from ..tasks import async_send_invite_for_expert_group
 from ..services import cryptoservices, expertgroupservice
 
@@ -14,14 +14,12 @@ def load_expert_group(expert_group_id) -> ExpertGroup:
 
 def add_expert_group_coordinator(expert_group, current_user):
     try:
-        expert_group = ExpertGroup.objects.get(expert_group_id = expert_group.id, user_id = current_user.id)
-    except ExpertGroup.DoesNotExist:
-        user_access = ExpertGroup.objects.create(user_id = current_user.id, expert_group_id = expert_group.id)
-        user_access.save()
-    expert_group.owner = current_user
-    expert_group.save()
-    return expert_group
-
+        expert_group_access = ExpertGroupAccess.objects.get(expert_group_id = expert_group.id, user_id = current_user.id)
+    except ExpertGroupAccess.DoesNotExist:
+        expert_group_access = ExpertGroupAccess.objects.create(user_id = current_user.id, expert_group_id = expert_group.id)
+        expert_group_access.save()
+    expert_group_access.owner = current_user
+    expert_group_access.save()
 
 def add_user_to_expert_group(expert_group_id, email):
     expert_group = load_expert_group(expert_group_id)

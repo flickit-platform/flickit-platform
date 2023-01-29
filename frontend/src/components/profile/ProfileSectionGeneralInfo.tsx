@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Chip, Divider, IconButton } from "@mui/material";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
 import Typography from "@mui/material/Typography";
@@ -9,13 +9,50 @@ import formatDate from "../../utils/formatDate";
 import { t } from "i18next";
 import RichEditor from "../shared/rich-editor/RichEditor";
 import Title from "../shared/Title";
+import { useServiceContext } from "../../providers/ServiceProvider";
+import { useQuery } from "../../utils/useQuery";
+import { TQueryFunction } from "../../types";
+import { useParams } from "react-router";
+import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
+import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
+import { toast } from "react-toastify";
 
 interface IProfileSectionAuthorInfo {
   data: any;
+  query: TQueryFunction;
 }
 
 const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
-  const { data } = props;
+  const { data, query } = props;
+  const { is_active, current_user_is_coordinator } = data || {};
+  const { profileId } = useParams();
+  const { service } = useServiceContext();
+  const publishQuery = useQuery({
+    service: (args = { id: profileId }, config) => service.publishProfile(args, config),
+    runOnMount: false,
+    toastError: true,
+  });
+  const unPublishQuery = useQuery({
+    service: (args = { id: profileId }, config) => service.unPublishProfile(args, config),
+    runOnMount: false,
+    toastError: true,
+  });
+
+  const publishProfile = async () => {
+    try {
+      const res = await publishQuery.query();
+      res.message && toast.success(res.message);
+      query();
+    } catch (e) {}
+  };
+
+  const unPublishProfile = async () => {
+    try {
+      const res = await unPublishQuery.query();
+      res.message && toast.success(res.message);
+      query();
+    } catch (e) {}
+  };
 
   return (
     <Grid container spacing={4}>
@@ -24,12 +61,7 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
           <Trans i18nKey="about" />
         </Title>
         <Box sx={{ background: "white", borderRadius: 2, p: 2.5, mt: 1 }}>
-          <RichEditor
-            content={
-              data.about ||
-              `<ul><li><p>The <strong>summary</strong> should be self-contained, almost as if the material being summarized had never existed.</p><p><a target="_blank" rel="noopener noreferrer nofollow" class="source" href="https://www.amazon.com/dp/0143127799?tag=vocabulary01-20"><em>The Sense of Style</em></a></p></li><li><p>The phrase ‘in model’ is extremely rare, but a single sheet published in 1651 is described in its title as a <strong>summary</strong> of Christian doctrine ‘in model’: it is a wall-chart.</p><p><a target="_blank" rel="noopener noreferrer nofollow" class="source" href="https://www.amazon.com/dp/0061759538?tag=vocabulary01-20"><em>The Invention of Science</em></a></p></li><li><p>After all of these experts have examined the statue, we will write a <strong>summary</strong> of their opinions which we will release to the press.</p><p><a target="_blank" rel="noopener noreferrer nofollow" class="source" href="https://www.amazon.com/dp/0689711816?tag=vocabulary01-20"><em>From the Mixed-Up Files of Mrs. Basil E. Frankweiler</em></a></p></li><li><p>She works quickly, efficiently, but stops just short of being <strong>summary</strong>.</p></li></u>`
-            }
-          />
+          <RichEditor content={data.about} />
         </Box>
       </Grid>
       <Grid item xs={12} md={5}>
@@ -44,6 +76,30 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
             background: "white",
           }}
         >
+          <Box my={1.5}>
+            <InfoItem
+              bg="white"
+              info={{
+                action: current_user_is_coordinator ? (
+                  is_active ? (
+                    <IconButton color="primary" title="Un publish" onClick={unPublishProfile}>
+                      <ArchiveRoundedIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton color="primary" title="Publish" onClick={publishProfile}>
+                      <PublishedWithChangesRoundedIcon />
+                    </IconButton>
+                  )
+                ) : undefined,
+                item: is_active ? (
+                  <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+                ) : (
+                  <Chip label={<Trans i18nKey="unPublished" />} size="small" />
+                ),
+                title: "Publish status",
+              }}
+            />
+          </Box>
           {data.profileInfos.map((info: any) => {
             return (
               <Box my={1.5}>
@@ -79,12 +135,6 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
               />
             </Box>
           )}
-          <Divider sx={{ my: 3 }} />
-          <Box mt={1}>
-            <Button variant="contained" color="success">
-              publish
-            </Button>
-          </Box>
         </Box>
       </Grid>
     </Grid>

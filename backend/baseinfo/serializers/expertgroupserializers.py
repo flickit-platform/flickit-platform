@@ -44,7 +44,8 @@ class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
     def save(self, **kwargs):
         expert_group = super().save(**kwargs)
         current_user = self.context.get('request', None).user
-        return expertgroupservice.add_expert_group_coordinator(expert_group, current_user)
+        expertgroupservice.add_expert_group_coordinator(expert_group, current_user)
+        return expert_group
 
     class Meta:
         model = ExpertGroup
