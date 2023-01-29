@@ -235,5 +235,6 @@
   "profileSetting": "Profile setting",
   "thereIsNoUserWithThisEmail": "There is no user with this email address.",
   "youCanSendInvitationToSignUpAndBeAMemberOfYourSpace": "You can send an invitation for {{email}} to sign up and be a member of your space.",
-  "tryIt": "Try it"
+  "tryIt": "Try it",
+  "updateAccount": "Update Account"
 }

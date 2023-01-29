@@ -54,7 +54,7 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
     setLoading(true);
     try {
       const { data: res } = await service.updateAccount(
-        { id, data: { ...defaultValues, ...data } },
+        { id, data: { email: defaultValues?.email, id: defaultValues?.id, ...data } },
         { signal: abortController.signal }
       );
       setLoading(false);
