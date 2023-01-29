@@ -7,7 +7,7 @@ import { Box } from "@mui/material";
 interface IInfoItems {
   renderMap?: Record<string, (...args: any) => JSX.Element>;
   component?: FC<{ title: string }>;
-  info: { title: string; item: any | any[]; type?: string };
+  info: { title: string; item: any | any[]; type?: string; action?: JSX.Element };
   bg?: "white";
 }
 
@@ -17,8 +17,10 @@ const InfoItem = (props: IInfoItems) => {
   return renderInfo(info, { component, renderMap, bg });
 };
 
-const DefaultInfoItemComponent = (props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string }>) => {
-  const { title, children, bg, itemBg } = props;
+const DefaultInfoItemComponent = (
+  props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string; action?: JSX.Element }>
+) => {
+  const { title, children, bg, itemBg, action } = props;
   return (
     <Typography
       mb={1}
@@ -40,10 +42,11 @@ const DefaultInfoItemComponent = (props: PropsWithChildren<{ title: string; bg?:
           py: 0.2,
           px: 0.6,
           background: itemBg || "white",
-
+          ...styles.centerV,
           borderRadius: 1,
         }}
       >
+        {action && <Box mx={0.5}>{action}</Box>}
         {children}
       </Box>
     </Typography>
@@ -66,7 +69,7 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
 };
 
 const renderInfo = (
-  info: { title: string; item: any | any[]; type?: string },
+  info: { title: string; item: any | any[]; type?: string; action?: JSX.Element },
   config: {
     component?: any;
     renderMap?: any;
@@ -75,13 +78,13 @@ const renderInfo = (
   } = {}
 ) => {
   const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
-  const { title, item, type } = info;
+  const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 
   return key && renderMap[key] ? (
-    renderMap[key](title, item, { bg })
+    renderMap[key](title, item, { bg, action })
   ) : (
-    <Component title={title} bg={bg}>
+    <Component title={title} bg={bg} action={action}>
       {item}
     </Component>
   );

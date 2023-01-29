@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "../../utils/useQuery";
@@ -22,46 +22,47 @@ import Divider from "@mui/material/Divider";
 import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
 import ListAccordion from "../shared/lists/ListAccordion";
 import InfoItem from "../shared/InfoItem";
-import formatDate from "../../utils/formatDate";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "../../utils/setDocumentTitle";
 import { t } from "i18next";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
+import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
+import useDialog from "../../utils/useDialog";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
+  const dialogProps = useDialog();
 
   return (
     <Box>
       <QueryData
         {...profileQueryProps}
         render={(data = {}) => {
-          const { creation_date } = data;
+          const { current_user_is_coordinator } = data;
           return (
             <Box>
               <Title
-                toolbar={
-                  <Box>
-                    <Button size="small" color="info" sx={{ mr: 1 }} startIcon={<NewReleasesRoundedIcon fontSize="small" />}>
-                      <Trans i18nKey="release" />
-                    </Button>
-                    <Button size="small" color="info" startIcon={<ArchiveRoundedIcon fontSize="small" />}>
-                      <Trans i18nKey="archive" />
-                    </Button>
-                  </Box>
-                }
                 sub={data.summary}
+                toolbar={
+                  current_user_is_coordinator && (
+                    <IconButton title="Setting" color="primary" onClick={() => dialogProps.openDialog({ type: "update", data })}>
+                      <SettingsRoundedIcon />
+                    </IconButton>
+                  )
+                }
               >
                 {data.title}
               </Title>
               <Box mt={3}>
-                <ProfileSectionGeneralInfo data={data} />
+                <ProfileSectionGeneralInfo data={data} query={profileQueryProps.query} />
                 <ProfileSectionsTabs data={data} />
               </Box>
             </Box>
           );
         }}
       />
+      <ProfileSettingFormDialog {...dialogProps} onSubmitForm={profileQueryProps.query} />
     </Box>
   );
 };
@@ -75,9 +76,9 @@ const ProfileSectionsTabs = (props: { data: any }) => {
   };
 
   return (
-    <Box mt={4} mx={1.5}>
+    <Box mt={6}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box>
           <TabList onChange={handleTabChange}>
             <Tab
               label={
@@ -127,7 +128,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
             sx={{
               mb: 1,
               borderRadius: 2,
-              background: "#f5f2f2",
+              background: "white",
               boxShadow: "none",
               border: "none,",
               "&::before": {
@@ -265,7 +266,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
             sx={{
               mb: 1,
               borderRadius: 2,
-              background: "#f5f2f2",
+              background: "white",
               boxShadow: "none",
               border: "none,",
               "&::before": {

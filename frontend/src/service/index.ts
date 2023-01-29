@@ -296,9 +296,9 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { data } = args || {};
       return axios.post(`/baseinfo/importprofile/`, data, config);
     },
-    updateProfile(args: { id: TId; data: any }, config: AxiosRequestConfig<any> | undefined) {
-      const { id, data } = args || {};
-      return axios.put(`/baseinfo/importprofile/${id}/`, data, config);
+    updateProfile(args: { profileId?: TId; expertGroupId?: TId; data: any }, config: AxiosRequestConfig<any> | undefined) {
+      const { expertGroupId, profileId, data } = args || {};
+      return axios.put(`/baseinfo/expertgroup/profiles/${expertGroupId}/${profileId}/`, data, config);
     },
     fetchProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};

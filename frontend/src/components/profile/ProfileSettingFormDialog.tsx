@@ -18,20 +18,22 @@ import FormProviderWithForm from "../shared/FormProviderWithForm";
 import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
 import UploadField from "../shared/fields/UploadField";
 import RichEditorField from "../shared/fields/RichEditorField";
+import { t } from "i18next";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
-interface IProfileCEFromDialogProps extends DialogProps {
+interface IProfileSettingFormDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
 
-const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
+const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;
-  const { expertGroupId: fallbackExpertGroupId } = useParams();
+  const { expertGroupId: fallbackExpertGroupId, profileId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
@@ -52,7 +54,6 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     event.preventDefault();
     const { dsl_id, tags = [], ...restOfData } = data;
     const formattedData = {
-      dsl_id: dsl_id.id,
       tag_ids: tags.map((t: any) => t.id),
       expert_group_id: expertGroupId,
       ...restOfData,
@@ -61,7 +62,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile({ data: formattedData, profileId: id }, { signal: abortController.signal })
+          ? await service.updateProfile({ data: formattedData, profileId, expertGroupId }, { signal: abortController.signal })
           : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
@@ -81,23 +82,13 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? <Trans i18nKey="updateProfile" /> : <Trans i18nKey="createProfile" />}
+          <SettingsRoundedIcon sx={{ mr: 1 }} />
+          {<Trans i18nKey="profileSetting" />}
         </>
       }
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12}>
-            <UploadField
-              accept={{ "application/zip": [".zip"] }}
-              uploadService={(args, config) => service.uploadProfileDSL(args, config)}
-              deleteService={(args, config) => service.deleteProfileDSL(args, config)}
-              name="dsl_id"
-              required={true}
-              label={<Trans i18nKey="dsl" />}
-            />
-          </Grid>
           <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
@@ -120,12 +111,12 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          hasViewBtn={true}
-          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+          submitButtonLabel={t("saveChanges") as string}
+          onSubmit={formMethods.handleSubmit(onSubmit)}
         />
       </FormProviderWithForm>
     </CEDialog>
   );
 };
 
-export default ProfileCEFromDialog;
+export default ProfileSettingFormDialog;
