@@ -22,7 +22,7 @@ const SUbjectAttributeCard = (props: any) => {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item md={9} xs={12}>
+        <Grid item md={11} xs={12}>
           <Box mb={1}>
             <Title
               textTransform={"uppercase"}
@@ -35,30 +35,14 @@ const SUbjectAttributeCard = (props: any) => {
           </Box>
           <AttributeStatusBarContainer status={status} ml={ml} cl={1} />
           <Box mt={3}>
-            <Typography
-              fontSize="1.15rem"
-              fontFamily="Roboto"
-              fontWeight={"bold"}
-            >
+            <Typography fontSize="1.15rem" fontFamily="Roboto" fontWeight={"bold"}>
               <Trans i18nKey={"withConfidence"} />
-              <Typography
-                component="span"
-                fontFamily="Roboto"
-                fontWeight={"bold"}
-                color="#3596A1"
-                fontSize="1.12rem"
-              >
+              <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#3596A1" fontSize="1.12rem">
                 {" "}
                 1 of 5{" "}
               </Typography>
               <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
-              <Typography
-                component="span"
-                fontFamily="Roboto"
-                fontWeight={"bold"}
-                color="#6035A1"
-                fontSize="1.2rem"
-              >
+              <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#6035A1" fontSize="1.2rem">
                 {" "}
                 {ml}.{" "}
               </Typography>
@@ -72,16 +56,16 @@ const SUbjectAttributeCard = (props: any) => {
           </Box>
         </Grid>
         <Hidden smDown>
-          {images[0] && (
-            <Grid item md={3} xs={0}>
-              <Box sx={{ ...styles.centerVH }} height="100%" width="100%">
+          {images?.[0] && (
+            <Grid item md={1} xs={0}>
+              {/* <Box sx={{ ...styles.centerVH }} height="100%" width="100%">
                 <img
                   src={images[0].image}
                   alt={title}
                   width="100%"
                   style={{ maxHeight: "270px" }}
                 />
-              </Box>
+              </Box> */}
             </Grid>
           )}
         </Hidden>
@@ -108,10 +92,7 @@ const AttributeStatusBarContainer = (props: any) => {
           {cl && <AttributeStatusBar cl={cl} />}
         </Box>
       </Box>
-      <Box
-        sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }}
-        minWidth={"245px"}
-      >
+      <Box sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }} minWidth={"245px"}>
         <Typography
           variant="h4"
           fontWeight={"bold"}
@@ -133,13 +114,7 @@ const AttributeStatusBarContainer = (props: any) => {
 
 export const AttributeStatusBar = (props: any) => {
   const { ml, cl, isMl, isBasic } = props;
-  const width = isMl
-    ? ml
-      ? `${(ml / 5) * 100}%`
-      : "0%"
-    : cl
-    ? `${(cl / 5) * 100}%`
-    : "0%";
+  const width = isMl ? (ml ? `${(ml / 5) * 100}%` : "0%") : cl ? `${(cl / 5) * 100}%` : "0%";
   return (
     <Box
       height={"38px"}
@@ -177,10 +152,7 @@ export const AttributeStatusBar = (props: any) => {
       >
         <Trans i18nKey={isMl ? "maturityLevel" : "confidenceLevel"} />
       </Typography>
-      <Typography
-        sx={{ position: "absolute", zIndex: 1, right: "12px" }}
-        variant="h6"
-      >
+      <Typography sx={{ position: "absolute", zIndex: 1, right: "12px" }} variant="h6">
         {isMl ? ml : cl}/5
       </Typography>
     </Box>

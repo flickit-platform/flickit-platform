@@ -55,7 +55,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           {title}
         </Typography>
         <ReadMoreAboutSubject colorCode={colorCode} title={title} description={description} />
-        <Box
+        {/* <Box
           mt={2}
           sx={{
             filter: (t) => {
@@ -65,7 +65,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           }}
         >
           <img src={`${BASE_URL}${image}`} alt={title} width={"90px"} style={{ filter: "drop-shadow(1px 4px 4px #00000050)" }} />
-        </Box>
+        </Box> */}
         <SubjectProgress progress={progress} colorCode={colorCode} />
 
         <SubjectStatus title={title} status={status} />
