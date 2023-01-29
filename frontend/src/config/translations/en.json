@@ -219,6 +219,7 @@
   "pricing": "Pricing",
   "useIt": "Use it?",
   "inviteMember": "Invite member",
+  "updateAccount": "Update account",
   "displayName": "Display name",
   "sorryYouCanCreateAssessmentWithThisProfile": "Sorry! You can't create assessment with this profile.",
   "invitees": "The invitees",
@@ -233,5 +234,7 @@
   "saveChanges": "Save changes",
   "profileSetting": "Profile setting",
   "thereIsNoUserWithThisEmail": "There is no user with this email address.",
-  "youCanSendInvitationToSignUpAndBeAMemberOfYourSpace": "You can send an invitation for {{email}} to sign up and be a member of your space."
+  "youCanSendInvitationToSignUpAndBeAMemberOfYourSpace": "You can send an invitation for {{email}} to sign up and be a member of your space.",
+  "tryIt": "Try it",
+  "updateAccount": "Update Account"
 }

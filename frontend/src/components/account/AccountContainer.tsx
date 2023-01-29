@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { Trans } from "react-i18next";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -15,6 +15,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { styles } from "../../config/styles";
 import ExpertGroupsContainer from "../expert-groups/ExpertGroupsContainer";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import AccountCEFormDialog from "./AccountCEFormDialog";
+import useDialog from "../../utils/useDialog";
+import { useServiceContext } from "../../providers/ServiceProvider";
+import { useQuery } from "../../utils/useQuery";
 
 const AccountContainer = () => {
   return (
@@ -93,9 +98,21 @@ function AccountSettings() {
   );
 }
 
-const About = () => {
-  const { userInfo } = useAuthContext();
+const About = ({ fetchAccount }: any) => {
+  const { userInfo, dispatch } = useAuthContext();
+  const { service } = useServiceContext();
+  const userQueryData = useQuery({ service: (args, config) => service.getSignedInUser(args, config), runOnMount: false });
   const { display_name } = userInfo;
+  const dialogProps = useDialog();
+
+  const onSubmit = async () => {
+    const res = await userQueryData.query();
+    dispatch(authActions.setUserInfo(res));
+  };
+
+  const openDialog = () => {
+    dialogProps.openDialog({ type: "update", data: userInfo });
+  };
 
   return (
     <Box sx={{ ...styles.centerV }}>
@@ -103,6 +120,10 @@ const About = () => {
       <Box ml={2}>
         <Typography variant="h6">{display_name}</Typography>
       </Box>
+      <IconButton sx={{ ml: "auto" }} onClick={openDialog}>
+        <BorderColorRoundedIcon />
+      </IconButton>
+      <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
     </Box>
   );
 };
