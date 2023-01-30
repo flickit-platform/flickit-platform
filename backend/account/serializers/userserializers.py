@@ -28,9 +28,14 @@ class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
         spaceservices.add_invited_user_to_space(user)
         return user
 
-class UserSerializer(BaseUserSerializer):
+class UserCustomSerializer(BaseUserSerializer):
     current_space = SpaceSerializer()
     spaces = SpaceSerializer(many = True)
     expert_groups = ExpertGroupSimpleSerilizers(many = True)
     class Meta(BaseUserSerializer.Meta):
         fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups']
+
+class UserSerializer(BaseUserSerializer):
+    
+    class Meta(BaseUserSerializer.Meta):
+        fields= ['id', 'email', 'display_name']

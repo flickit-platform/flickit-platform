@@ -9,7 +9,7 @@ from django.db import transaction
 
 from ..models import UserAccess
 from ..tasks import async_send
-from ..serializers.userserializers import UserAccessSerializer, UserSerializer
+from ..serializers.userserializers import UserAccessSerializer, UserCustomSerializer
 from ..serializers.spaceserializers import InviteMemberSerializer
 from ..services import spaceservices, userservices
 
@@ -34,7 +34,7 @@ class CustomActivationEmail(ActivationEmail):
     def send(self, to):
         print('sending email with celery')
         context = self.get_context_data()
-        context['user'] = UserSerializer(context['user']).data
+        context['user'] = UserCustomSerializer(context['user']).data
         url = context['url']
         to = context['user']['email']
         protocol = context['protocol']
