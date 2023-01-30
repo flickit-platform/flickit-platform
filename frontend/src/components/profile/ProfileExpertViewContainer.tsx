@@ -34,28 +34,33 @@ import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
   const dialogProps = useDialog();
+  const { userId, expertGroupId } = useParams();
 
   return (
     <Box>
       <QueryData
         {...profileQueryProps}
         render={(data = {}) => {
-          const { current_user_is_coordinator } = data;
+          const { current_user_is_coordinator, expert_group } = data;
           return (
             <Box>
               <Title
-                // sup={
-                //   <SupTitleBreadcrumb
-                //     routes={[
-                //       {
-                //         title: requested_space,
-                //         sup: "spaces",
-                //         icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
-                //       },
-                //     ]}
-                //   />
-                // }
-                sub={data.summary}
+                backLink={-1}
+                sup={
+                  <SupTitleBreadcrumb
+                    routes={[
+                      {
+                        title: t("expertGroups") as string,
+                        to: `/account/${userId}/expert-groups`,
+                      },
+                      {
+                        title: expert_group?.name,
+                        to: `/account/${userId}/expert-groups/${expertGroupId}`,
+                      },
+                    ]}
+                  />
+                }
+                // sub={data.summary}
                 toolbar={
                   current_user_is_coordinator && (
                     <IconButton title="Setting" color="primary" onClick={() => dialogProps.openDialog({ type: "update", data })}>

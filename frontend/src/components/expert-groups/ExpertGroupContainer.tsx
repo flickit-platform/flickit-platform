@@ -37,10 +37,13 @@ import { ICustomError } from "../../utils/CustomError";
 import useDialog from "../../utils/useDialog";
 import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
 import { toast } from "react-toastify";
+import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
+  const { userId } = useParams();
   const queryData = useQuery({
     service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, {}),
   });
@@ -62,7 +65,22 @@ const ExpertGroupContainer = () => {
         } = data || {};
         return (
           <Box>
-            <Title borderBottom pb={1} avatar={<Avatar src={picture} sx={{ mr: 1 }} />} sub={bio}>
+            <Title
+              borderBottom
+              pb={1}
+              avatar={<Avatar src={picture} sx={{ mr: 1 }} />}
+              // sub={bio}
+              sup={
+                <SupTitleBreadcrumb
+                  routes={[
+                    {
+                      title: t("expertGroups") as string,
+                      to: `/account/${userId}/expert-groups`,
+                    },
+                  ]}
+                />
+              }
+            >
               {name}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
@@ -87,7 +105,7 @@ const ExpertGroupContainer = () => {
                 <Box p={2} sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}>
                   <Box>
                     <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 2 }}>
-                      <Trans i18nKey="summary" />
+                      <Trans i18nKey="groupSummary" />
                     </Typography>
                     {website && (
                       <Box sx={{ ...styles.centerV }}>
@@ -289,6 +307,11 @@ const ProfilesList = (props: any) => {
       <Box mt={2}>
         <QueryData
           {...profileQuery}
+          emptyDataComponent={
+            <Box sx={{ background: "white", borderRadius: 2 }}>
+              <ErrorEmptyData emptyMessage={<Trans i18nKey="thereIsNoProfileYet" />} />
+            </Box>
+          }
           renderLoading={() => (
             <>
               {forLoopComponent(5, (index) => (

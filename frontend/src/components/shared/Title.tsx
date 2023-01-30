@@ -38,10 +38,6 @@ const Title = (props: ITitle) => {
     ...rest
   } = props;
 
-  if (sub && sup) {
-    throw new Error("you can pass only one of sub or sup");
-  }
-
   return (
     <Box
       display="flex"

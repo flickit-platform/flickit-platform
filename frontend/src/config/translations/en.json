@@ -222,7 +222,7 @@
   "updateAccount": "Update account",
   "displayName": "Display name",
   "sorryYouCanCreateAssessmentWithThisProfile": "Sorry! You can't create assessment with this profile.",
-  "invitees": "The invitees",
+  "invitees": "Invitees",
   "used": "Used",
   "times": "Times",
   "acceptInvitation": "Accept invitation",
@@ -230,11 +230,15 @@
   "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?",
   "tryIt": "Try it",
   "published": "published",
-  "unPublished": "Un published",
+  "unPublished": "Unpublished",
   "saveChanges": "Save changes",
   "profileSetting": "Profile setting",
-  "thereIsNoUserWithThisEmail": "There is no user with this email address.",
-  "youCanSendInvitationToSignUpAndBeAMemberOfYourSpace": "You can send an invitation for {{email}} to sign up and be a member of your space.",
+  "emailIsNotOnFlickitYet": "{{email}} is not on Flickit yet.",
+  "wouldYouLikeToInviteThemToJoin": "Would you like to invite them to join?",
   "tryIt": "Try it",
-  "updateAccount": "Update Account"
+  "updateAccount": "Update Account",
+  "color": "Color",
+  "space": "Space",
+  "groupSummary": "Group summary",
+  "thereIsNoProfileYet": "There is no profile yet"
 }

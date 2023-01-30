@@ -306,11 +306,8 @@ const InviteSpaceMemberDialog = (props: { spaceMembersQueryData: TQueryProps; re
   return (
     <InviteMemberDialog {...(rest as any)} onInvite={onInvite} loading={loading} maxWidth="sm">
       <Typography>
-        <Trans i18nKey="thereIsNoUserWithThisEmail" />{" "}
-        <Trans
-          i18nKey={"youCanSendInvitationToSignUpAndBeAMemberOfYourSpace"}
-          values={{ email: rest.context?.data?.email || "this user" }}
-        />
+        <Trans i18nKey="emailIsNotOnFlickitYet" values={{ email: rest.context?.data?.email || "This user" }} />{" "}
+        <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />
       </Typography>
     </InviteMemberDialog>
   );

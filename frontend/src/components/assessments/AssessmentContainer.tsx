@@ -62,7 +62,7 @@ const AssessmentContainer = () => {
         <Box></Box>
         <Box ml="auto">
           <ToolbarCreateItemBtn
-            onClick={dialogProps.openDialog}
+            onClick={() => dialogProps.openDialog({ type: "create", data: { space: { id: spaceId, title: requested_space } } })}
             icon={<NoteAddRoundedIcon />}
             shouldAnimate={isEmpty}
             minWidth="195px"

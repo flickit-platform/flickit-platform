@@ -106,11 +106,9 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               label={<Trans i18nKey="color" />}
             />
           </Grid>
-          {staticData.profile && (
-            <Grid item xs={12}>
-              <SpaceField defaultValue={defaultValues?.space} />
-            </Grid>
-          )}
+          <Grid item xs={12}>
+            <SpaceField defaultValue={defaultValues?.space || data?.space} />
+          </Grid>
           <Grid item xs={12}>
             <ProfileField defaultValue={defaultValues?.assessment_profile} staticValue={staticData.profile} />
           </Grid>
@@ -146,6 +144,7 @@ const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; static
 
 const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
   const { service } = useServiceContext();
+  const { spaceId } = useParams();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchSpaces(args, config),
   });
@@ -155,6 +154,7 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
       {...queryData}
       name="space"
       required={true}
+      disabled={!!spaceId}
       defaultValue={defaultValue}
       label={<Trans i18nKey="space" />}
     />
