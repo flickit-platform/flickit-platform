@@ -15,7 +15,8 @@ interface ICEDialogProps extends Omit<DialogProps, "title"> {
 
 const InviteMemberDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   const {
-    closeDialog,
+    onClose = () => {},
+    closeDialog = onClose,
     title = <Trans i18nKey="inviteMember" />,
     children,
     inviteButtonLabel = "invite",
@@ -51,7 +52,7 @@ const InviteMemberDialog = (props: PropsWithChildren<ICEDialogProps>) => {
             </LoadingButton>
           </Grid>
           <Grid item>
-            <Button onClick={closeDialog}>
+            <Button onClick={closeDialog as any}>
               <Trans i18nKey="cancel" />
             </Button>
           </Grid>

@@ -14,6 +14,8 @@ import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
 import useDialog from "../../utils/useDialog";
 import AlertBox from "../shared/AlertBox";
 import { LoadingButton } from "@mui/lab";
+import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { t } from "i18next";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
@@ -40,7 +42,7 @@ const Profile = (props: any) => {
     tags = [],
     summary = "",
     about = "",
-    likes = 0,
+    likes_number = 0,
     expert_group = {},
     creation_time,
     last_modification_date,
@@ -84,6 +86,17 @@ const Profile = (props: any) => {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Title
               size="large"
+              sup={
+                <SupTitleBreadcrumb
+                  color="white"
+                  routes={[
+                    {
+                      title: t("profiles") as string,
+                      to: `/profiles`,
+                    },
+                  ]}
+                />
+              }
               sub={
                 <Box
                   sx={{
@@ -180,7 +193,7 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             </Box>
-            <LikeProfile likes={likes} />
+            <LikeProfile likes_number={likes_number} />
           </Box>
         </Box>
       </Box>
@@ -281,7 +294,7 @@ const Profile = (props: any) => {
   );
 };
 
-const LikeProfile = ({ likes }: any) => {
+const LikeProfile = ({ likes_number }: any) => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const likeQueryData = useQuery({
@@ -312,7 +325,7 @@ const LikeProfile = ({ likes }: any) => {
       onClick={like}
       loading={likeQueryData.loading}
     >
-      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.likes || likes}</Box>
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.likes || likes_number}</Box>
     </LoadingButton>
   );
 };

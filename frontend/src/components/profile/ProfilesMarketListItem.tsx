@@ -55,7 +55,7 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         toolbar={
           <Box sx={{ ...styles.centerV }}>
             <ThumbUpOffAltRoundedIcon fontSize="inherit" sx={{ mr: 0.5, pb: 0.2 }} />
-            {data.likes || 0}
+            {data.likes_number || 0}
           </Box>
         }
         sub={

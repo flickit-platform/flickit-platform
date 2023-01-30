@@ -83,6 +83,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12} md={5}>
             <UploadField
+              accept={{ "image/jpeg": [".jpeg", ".jpg"], "image/png": [".png"] }}
               defaultValue={defaultValues.picture}
               defaultValueType="image"
               hideDropText

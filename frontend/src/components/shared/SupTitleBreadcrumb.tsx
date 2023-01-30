@@ -19,12 +19,11 @@ interface ISupTitleBreadcrumbProps {
   }[];
 }
 
-const SupTitleBreadcrumb = (
-  props: ISupTitleBreadcrumbProps & BreadcrumbsProps
-) => {
-  const { routes = [] } = props;
+const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) => {
+  const { routes = [], ...rest } = props;
+  console.log(rest.color);
   return (
-    <Breadcrumbs>
+    <Breadcrumbs {...rest}>
       {routes.map((route, index) => {
         const { to, title, sup, icon } = route;
         const disabled = routes.length - 1 === index || !to;
@@ -57,13 +56,11 @@ const SupTitleBreadcrumb = (
                 fontWeight: "bold",
                 opacity: 0.8,
                 letterSpacing: "0.085em",
-                color: disabled ? "GrayText" : "primary.dark",
+                color: rest?.color ? rest.color : disabled ? "GrayText" : "primary.dark",
               }}
             >
               {icon}
-              {title || (
-                <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />
-              )}
+              {title || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
             </MuiLink>
           </Box>
         );
@@ -73,22 +70,17 @@ const SupTitleBreadcrumb = (
   );
 };
 
-export const useSupTitleBreadcrumb = (
-  params: Record<string, string | undefined>
-) => {
+export const useSupTitleBreadcrumb = (params: Record<string, string | undefined>) => {
   const { service } = useServiceContext();
 
   const { loading, data } = useQuery({
-    service: (args = params, config) =>
-      service.fetchBreadcrumbInfo(args, config),
+    service: (args = params, config) => service.fetchBreadcrumbInfo(args, config),
   });
 
   return {
     space: !loading ? data?.space || "spaces" : data?.space,
     assessment: !loading ? data?.assessment || "assessments" : data?.assessment,
-    questionnaire: !loading
-      ? data?.category || "questionnaires"
-      : data?.category,
+    questionnaire: !loading ? data?.category || "questionnaires" : data?.category,
   };
 };
 
