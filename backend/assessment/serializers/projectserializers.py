@@ -1,12 +1,13 @@
 from rest_framework import serializers
 
-
-from ..services.metricstatistic import extract_total_progress
-from ..models import AssessmentProject
-from .commonserializers import ColorSerilizer
+from django.utils.text import slugify 
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
 from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
 from account.serializers.spaceserializers import SpaceSimpleSerializer
+from ..services.metricstatistic import extract_total_progress
+from ..models import AssessmentProject, AssessmentResult
+from .commonserializers import ColorSerilizer
+
 
 
 class AssessmentProjectListSerilizer(serializers.ModelSerializer):
@@ -26,7 +27,14 @@ class AssessmentProjecCreateSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     class Meta:
         model = AssessmentProject
-        fields = ['id', 'title', 'color', 'space']
+        fields = ['id', 'title', 'color', 'space', 'assessment_profile']
+
+    def save(self, **kwargs):
+        validated_data = self.validated_data
+        validated_data['code'] = slugify(validated_data['title'])
+        profile = super().save(**kwargs)
+        if not AssessmentResult.objects.filter(assessment_project_id = profile.id).exists():
+            AssessmentResult.objects.create(assessment_project_id = profile.id)
 
 class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)

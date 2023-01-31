@@ -1,7 +1,7 @@
 from .views import commonviews
 from .imagecomponent.views import QualityAttributeImageViewSet, SubjectImageViewSet, ProfileImageViewSet
 from rest_framework_nested import routers
-from .views import profileviews
+from .views import profileviews, importprofileviews
 from .views import expertgroupviews
 from django.urls import path
 
@@ -38,7 +38,7 @@ urlpatterns = router.urls + metric_category_router.urls + metric_category_by_sub
 urlpatterns += [
     path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),
     path("expertgroup/profiles/<str:expert_group_id>/", profileviews.ProfileListApi.as_view()),
-    path("importprofile/", profileviews.ImportProfileApi.as_view()),
+    path("importprofile/", importprofileviews.ImportProfileApi.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
     path("profiles/archive/<str:profile_id>/", profileviews.ProfileArchiveApi.as_view()),

@@ -4,9 +4,9 @@ from account.models import User
 
 class ExpertGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    bio = models.CharField(max_length=200, null=True)
+    bio = models.CharField(max_length=200, null=True, blank=True)
     about = models.TextField(null=True)
-    website = models.URLField(max_length = 200, null=True)
+    website = models.CharField(max_length = 200, null=True, blank=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True)
     users = models.ManyToManyField(User, through='ExpertGroupAccess', related_name = 'expert_groups')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -17,8 +17,8 @@ class ExpertGroupAccess(models.Model):
     
 
 class AssessmentProfile(models.Model):
-    code = models.CharField(max_length=50)
-    title = models.CharField(max_length=100)
+    code = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100, unique=True)
     summary = models.TextField(null=True)
     about = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -48,8 +48,8 @@ class ProfileDsl(models.Model):
     dsl_file = models.FileField(upload_to='profile/dsl')
 
 class ProfileTag(models.Model):
-    code = models.CharField(max_length=50)
-    title = models.CharField(max_length=100)
+    code = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100, unique=True)
     profiles = models.ManyToManyField(AssessmentProfile, related_name = 'tags')
 
     class Meta:

@@ -70,6 +70,8 @@ class ImportProfileSerializer(serializers.Serializer):
     tag_ids = serializers.ListField(child=serializers.IntegerField())
     expert_group_id = serializers.IntegerField()
     dsl_id = serializers.IntegerField()
+    about = serializers.CharField()
+    summary = serializers.CharField()
     
 
 

@@ -1,9 +1,12 @@
-from rest_framework import status
+from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
+
+from assessment.models import AssessmentProject
+from ..models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
 from ..serializers.profileserializers import AssessmentProfileSerilizer
 from ..models.profilemodels import AssessmentProfile, ProfileTag
-from assessment.models import AssessmentProject
+
 
 
 def load_profile(profile_id) -> AssessmentProfile:
@@ -18,20 +21,26 @@ def load_profile_tag(tag_id) -> ProfileTag:
     except ProfileTag.DoesNotExist:
         raise ObjectDoesNotExist
 
-def delete_validation(profile_id, user_id):
-    delete_validation_res = {}
+def is_profile_deletable(profile_id, user_id):
     profile = load_profile(profile_id)
+    if is_profile_used_in_assessments(profile):
+        return False    
+    if not is_user_access_to_profile(profile, user_id):
+        raise PermissionDenied
+    return True
+
+def is_profile_used_in_assessments(profile: AssessmentProfile):
     qs = AssessmentProject.objects.filter(assessment_profile_id = profile.id)
     if qs.count() > 0:
-        delete_validation_res['message'] = 'Some assessment with this profile exist'
-        delete_validation_res['status'] = status.HTTP_400_BAD_REQUEST    
-        delete_validation_res['is_deletable'] = False    
-        return delete_validation_res    
+        return True
+    return False
+
+def is_user_access_to_profile(profile: AssessmentProfile, user_id):
     user = profile.expert_group.users.filter(id = user_id)
     if user.count() == 0:
-        raise PermissionDenied
-    delete_validation_res['is_deletable'] = True
-    return delete_validation_res
+        return False
+    return True
+
 
 def extract_detail_of_profile(profile, request):
     response = extract_profile_basic_infos(profile)
@@ -184,6 +193,39 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
                 return True
     return False
 
+@transaction.atomic
+def archive_profile(profile: AssessmentProfile, user_id):
+    result = is_profile_deletable(profile.id, user_id)
+    if not result:
+        return False
+    profile.is_active = False
+    profile.save()
+    return True
+
+@transaction.atomic     
+def publish_profile(profile: AssessmentProfile, user_id):
+    if profile.is_active:
+        return False
+    if not is_user_access_to_profile(profile, user_id):
+        raise PermissionDenied
+    profile.is_active = True
+    profile.save()
+    return True
+
+@transaction.atomic
+def like_profile(user_id, profile_id):
+    profile = load_profile(profile_id)
+    profile_like_user = ProfileLike.objects.filter(user_id = user_id, profile_id = profile.id)
+    if profile_like_user.count() == 1:
+        profile.likes.filter(user_id = user_id, profile_id = profile.id).delete()
+        profile.save()
+    elif profile_like_user.count() == 0:
+        profile_like_create = ProfileLike.objects.create(user_id = user_id, profile_id = profile.id)
+        profile.likes.add(profile_like_create)
+        profile.save()
+    return profile
+    
+    
 
 
     

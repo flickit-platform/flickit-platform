@@ -29,7 +29,7 @@ def invite_member_for_space(space_id, email):
 def create_user_access_temp_record(space_id, email):
     try:
         user_access = UserAccess.objects.get(invite_email = email, space_id = space_id)
-        user_access.invite_expiration_date = timezone.now() + timedelta(seconds=7)
+        user_access.invite_expiration_date = timezone.now() + timedelta(days=7)
         user_access.save()
     except UserAccess.DoesNotExist:
-        UserAccess.objects.create(invite_email = email, space_id = space_id, invite_expiration_date =  timezone.now() + timedelta(seconds=7))
+        UserAccess.objects.create(invite_email = email, space_id = space_id, invite_expiration_date =  timezone.now() + timedelta(days=7))

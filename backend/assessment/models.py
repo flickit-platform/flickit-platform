@@ -1,6 +1,5 @@
 from django.db import models
 from uuid import uuid4
-from django.utils.text import slugify 
 
 from baseinfo.models.profilemodels import AssessmentProfile
 from baseinfo.models.metricmodels import Metric
@@ -44,14 +43,6 @@ class AssessmentProject(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
-    def save(self, *args, **kwargs):
-        self.code = slugify(self.title)
-        default_profile = AssessmentProfile.objects.filter(is_default = True).values()[0]
-        self.assessment_profile_id = default_profile['id']
-        super(AssessmentProject, self).save(*args, **kwargs)
-        if not AssessmentResult.objects.filter(assessment_project_id = self.id).exists():
-            AssessmentResult.objects.create(assessment_project_id = self.id)
         
     def get_assessment_result(self):
         return self.assessment_results.first()
