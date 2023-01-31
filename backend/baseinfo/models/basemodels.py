@@ -3,7 +3,7 @@ from ..models.profilemodels import AssessmentProfile
 # Create your models here.
 
 class MetricCategory(models.Model):
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -19,7 +19,7 @@ class MetricCategory(models.Model):
         return self.title
 
 class AssessmentSubject(models.Model):
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -37,7 +37,7 @@ class AssessmentSubject(models.Model):
 
 
 class QualityAttribute(models.Model):
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)

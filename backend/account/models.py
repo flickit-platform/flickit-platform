@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from datetime import datetime
 
 
 class CustomUserManager(BaseUserManager):
@@ -39,8 +38,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class Space(models.Model):
-    code = models.CharField(max_length=50)
-    title = models.CharField(max_length=100)
+    code = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)

@@ -32,7 +32,7 @@ def add_user_to_expert_group(expert_group_id, email):
     token = cryptoservices.encrypt_message(str(user.id) + ' ' + str(expert_group.id))
     url = 'baseinfo/expertgroup/confirm/' + str(token)
     async_send_invite_for_expert_group.delay(url , email)
-    message = 'An invitation is send successfully for user with email {email}'.format(email = email)
+    message = 'An invitation has been sent successfully to user with email {email}'.format(email = email)
     return Response({'message': message}, status=status.HTTP_200_OK)
 
 def confirm_user_for_registering_in_expert_group(token, current_user_id):
