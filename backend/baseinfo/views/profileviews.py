@@ -9,10 +9,12 @@ from rest_framework.filters import SearchFilter
 from ..services import profileservice, expertgroupservice
 from ..serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
 from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from ..permissions import ManageExpertGroupPermission
 
 class AssessmentProfileViewSet(ModelViewSet):
     serializer_class = AssessmentProfileSerilizer
     filter_backends=[DjangoFilterBackend, SearchFilter]
+    permission_classes = [ManageExpertGroupPermission]
     search_fields = ['title']
 
     def get_queryset(self):
@@ -26,7 +28,8 @@ class AssessmentProfileViewSet(ModelViewSet):
             return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileArchiveApi(APIView):
-    def get(self, request, profile_id):
+    permission_classes = [ManageExpertGroupPermission]
+    def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.archive_profile(profile, request.user.id)
         if result:
@@ -35,7 +38,8 @@ class ProfileArchiveApi(APIView):
             return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)      
 
 class ProfilePublishApi(APIView):
-    def get(self, request, profile_id):
+    permission_classes = [ManageExpertGroupPermission]
+    def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.publish_profile(profile, request.user.id)
         if not result:
@@ -48,6 +52,7 @@ class ProfileTagViewSet(ModelViewSet):
         return ProfileTag.objects.all()
 
 class ProfileDetailDisplayApi(APIView):
+    permission_classes = [ManageExpertGroupPermission]
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         response = profileservice.extract_detail_of_profile(profile, request)

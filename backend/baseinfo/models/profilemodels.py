@@ -11,6 +11,11 @@ class ExpertGroup(models.Model):
     users = models.ManyToManyField(User, through='ExpertGroupAccess', related_name = 'expert_groups')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
+    class Meta:
+        permissions = [
+            ('manage_expert_group', 'Manage Expert Groups')
+        ]
+
 class ExpertGroupAccess(models.Model):
     expert_group = models.ForeignKey('ExpertGroup', on_delete=models.CASCADE)
     user =  models.ForeignKey(User, on_delete=models.CASCADE)

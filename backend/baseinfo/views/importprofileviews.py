@@ -7,11 +7,14 @@ from rest_framework.response import Response
 
 from ..services import importprofileservice
 from ..serializers.profileserializers import ImportProfileSerializer
+from ..permissions import ManageExpertGroupPermission
 
-DSL_PARSER_URL_SERVICE = "http://localhost:8080/extract/"
+
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer
+    permission_classes = [ManageExpertGroupPermission]
     def post(self, request):
         serializer = ImportProfileSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

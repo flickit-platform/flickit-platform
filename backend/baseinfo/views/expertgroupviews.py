@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers, ExpertGroupAccessSerializer
 from ..services import expertgroupservice
 from ..models.profilemodels import ExpertGroup
-
+from ..permissions import ManageExpertGroupPermission
 
 class ExpertGroupViewSet(ModelViewSet):
-   
+    permission_classes = [ManageExpertGroupPermission]
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return ExpertGroupCreateSerilizers
@@ -22,6 +22,7 @@ class ExpertGroupViewSet(ModelViewSet):
 
 class AddUserToExpertGroupApi(APIView):
     serializer_class = ExpertGroupAccessSerializer
+    permission_classes = [ManageExpertGroupPermission]
     def post(self, request, expert_group_id):
         serializer = ExpertGroupAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
