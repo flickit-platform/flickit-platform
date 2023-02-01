@@ -9,8 +9,8 @@ from account.models import Space
 
 
 class Color(models.Model):
-    title = models.CharField(max_length=40)
-    color_code = models.CharField(max_length=20)
+    title = models.CharField(max_length=40, unique=True)
+    color_code = models.CharField(max_length=20, unique=True)
 
 class AssessmentProjectManager(models.Manager):
     def load(self, assessment_id):
@@ -30,7 +30,7 @@ class AssessmentProject(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4)
-    code = models.SlugField(max_length=100)
+    code = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
