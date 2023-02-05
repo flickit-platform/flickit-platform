@@ -1,3 +1,4 @@
+from rest_framework import exceptions
 from cryptography.fernet import Fernet
 from assessmentplatform.settings import TOKEN_KEY
 
@@ -16,3 +17,8 @@ def decrypt_message(encrypted_message):
     f = Fernet(TOKEN_KEY)
     print(encrypted_message)
     return f.decrypt(encrypted_message.encode())
+
+
+class ValidateTokenException(exceptions.APIException):
+    status_code = 403
+    default_detail = 'The token is not valid for registering in expert group'

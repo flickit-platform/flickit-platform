@@ -18,7 +18,12 @@ class ExpertGroup(models.Model):
 
 class ExpertGroupAccess(models.Model):
     expert_group = models.ForeignKey('ExpertGroup', on_delete=models.CASCADE)
-    user =  models.ForeignKey(User, on_delete=models.CASCADE)
+    user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    invite_email = models.EmailField(null = True)
+    invite_expiration_date = models.DateTimeField(null=True)
+
+    class Meta:
+        unique_together = ('expert_group', 'user')
     
 
 class AssessmentProfile(models.Model):
