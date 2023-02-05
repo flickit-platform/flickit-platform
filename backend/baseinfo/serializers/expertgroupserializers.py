@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from account.serializers.userserializers import UserSimpleSerializer
 
-from ..models.profilemodels import ExpertGroup
+from ..models.profilemodels import ExpertGroup, ExpertGroupAccess
 from ..serializers.commonserializers import AssessmentProfileSimpleSerilizer
 from ..services import expertgroupservice
 from account.services import userservices
@@ -29,7 +29,22 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         'number_of_members', 'profiles', 'number_of_profiles', 'owner']
 
 
-class ExpertGroupAccessSerializer(serializers.Serializer):
+class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):
+    owner = UserSimpleSerializer()
+    
+    class Meta:
+        model = ExpertGroup
+        fields = ['id', 'name', 'owner']
+
+
+class ExpertGroupAccessSerializer(serializers.ModelSerializer):
+    expert_group = ExpertGroupSimpleSerilizer()
+    user = UserSimpleSerializer()
+    class Meta:
+        model = ExpertGroupAccess
+        fields = ['id', 'user', 'expert_group', 'invite_email', 'invite_expiration_date']
+
+class ExpertGroupGiveAccessSerializer(serializers.Serializer):
     email = serializers.EmailField()
     def validate(self, attrs):
         user = userservices.load_user_by_email(attrs['email'])

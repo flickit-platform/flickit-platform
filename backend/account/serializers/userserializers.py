@@ -7,7 +7,6 @@ from .commonserializers import UserSimpleSerializer, SpaceSerializer
 from .spaceserializers import SpaceSimpleSerializer
 from  baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from ..services import spaceservices
-from django.contrib.auth.hashers import make_password
 
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)
