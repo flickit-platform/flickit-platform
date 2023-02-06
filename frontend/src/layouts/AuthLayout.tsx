@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from "react";
 import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
 import pl1 from "../assets/svg/pl1.svg";
 import Logo from "../assets/svg/logo.svg";
 import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
@@ -21,7 +20,7 @@ const AuthLayout = (props: PropsWithChildren<{}>) => {
           width: "165px",
         }}
       >
-        <img src={Logo} alt="checkup" width="100%" />
+        <img src={Logo} alt="Flickit" width="100%" />
       </Box>
       <Box
         sx={{
