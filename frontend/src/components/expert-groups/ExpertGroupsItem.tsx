@@ -10,12 +10,8 @@ import {
   Link as MLink,
 } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import generateRandomColor from "../../utils/generateRandomColor";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../providers/AuthProvider";
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 import { styles } from "../../config/styles";
-import RichEditor from "../shared/rich-editor/RichEditor";
 import useMenu from "../../utils/useMenu";
 import MoreActions from "../shared/MoreActions";
 import { useQueryDataContext } from "../shared/QueryData";
@@ -42,8 +38,6 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     users = [],
     number_of_profiles,
   } = data || {};
-  const { userInfo } = useAuthContext();
-  const { display_name } = userInfo || {};
 
   return (
     <Box>
@@ -81,7 +75,22 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
             </Box>
           }
         />
-        <CardContent>{bio}</CardContent>
+        <CardContent
+          sx={{
+            height: "48px",
+            padding: 0,
+            margin: 2,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "calc(100% - 16px)",
+            whiteSpace: "pre-wrap",
+            display: "-webkit-box",
+            "-webkit-box-orient": "vertical",
+            "-webkit-line-clamp": "2",
+          }}
+        >
+          {bio}
+        </CardContent>
         <Divider sx={{ mx: 2 }} />
         <CardActions disableSpacing>
           <AvatarGroup

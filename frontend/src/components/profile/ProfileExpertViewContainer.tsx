@@ -25,8 +25,6 @@ import InfoItem from "../shared/InfoItem";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "../../utils/setDocumentTitle";
 import { t } from "i18next";
-import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
 import useDialog from "../../utils/useDialog";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
