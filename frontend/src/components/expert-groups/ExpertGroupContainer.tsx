@@ -45,7 +45,8 @@ const ExpertGroupContainer = () => {
   const { expertGroupId } = useParams();
   const { userId } = useParams();
   const queryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, {}),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, {}),
   });
 
   return (
@@ -90,7 +91,9 @@ const ExpertGroupContainer = () => {
                     <Title size="small">
                       <Trans i18nKey="about" />
                     </Title>
-                    <Box sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}>
+                    <Box
+                      sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}
+                    >
                       <Box minHeight={"160px"} mb={4}>
                         <RichEditor content={about} />
                       </Box>
@@ -102,9 +105,17 @@ const ExpertGroupContainer = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
-                <Box p={2} sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}>
+                <Box
+                  p={2}
+                  sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}
+                >
                   <Box>
-                    <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
+                    >
                       <Trans i18nKey="groupSummary" />
                     </Typography>
                     {website && (
@@ -127,12 +138,17 @@ const ExpertGroupContainer = () => {
                             fontWeight: "bold",
                           }}
                         >
-                          {website?.replace("https://", "").replace("http://", "")}
+                          {website
+                            ?.replace("https://", "")
+                            .replace("http://", "")}
                         </MLink>
                       </Box>
                     )}
                     <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
-                      <PeopleRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
+                      <PeopleRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
 
                       <Typography
                         sx={{
@@ -144,7 +160,10 @@ const ExpertGroupContainer = () => {
                       </Typography>
                     </Box>
                     <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                      <AssignmentRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
+                      <AssignmentRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
 
                       <Typography
                         sx={{
@@ -159,7 +178,12 @@ const ExpertGroupContainer = () => {
                   </Box>
                   {/* --------------------------- */}
                   <Box>
-                    <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 2 }}
+                    >
                       <Trans i18nKey="members" />
                     </Typography>
                     <AddingNewMember queryData={queryData} />
@@ -202,7 +226,11 @@ const AddingNewMember = (props: any) => {
             ml: "auto",
           }}
         >
-          {open ? <MinimizeRoundedIcon fontSize="small" /> : <AddRoundedIcon fontSize="small" />}
+          {open ? (
+            <MinimizeRoundedIcon fontSize="small" />
+          ) : (
+            <AddRoundedIcon fontSize="small" />
+          )}
         </Box>
       </Typography>
       <Collapse in={open}>
@@ -233,7 +261,6 @@ const AddMember = (props: any) => {
       res?.message && toast.success(res.message);
       query();
     } catch (e) {
-      console.log(e);
       const error = e as ICustomError;
       if ("message" in error.data || {}) {
         if (Array.isArray(error.data.message)) {
@@ -265,7 +292,9 @@ const AddMember = (props: any) => {
         placeholder={t("enterEmailOfTheUserYouWantToAdd") as string}
         label={<Trans i18nKey="userEmail" />}
         InputProps={{
-          endAdornment: <AddMemberButton loading={addMemberQueryData.loading} />,
+          endAdornment: (
+            <AddMemberButton loading={addMemberQueryData.loading} />
+          ),
         }}
       />
     </Box>
@@ -296,12 +325,16 @@ const ProfilesList = (props: any) => {
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchExpertGroupProfiles(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupProfiles(args, config),
   });
 
   return (
     <>
-      <Title size="small" toolbar={<CreateProfileButton onSubmitForm={profileQuery.query} />}>
+      <Title
+        size="small"
+        toolbar={<CreateProfileButton onSubmitForm={profileQuery.query} />}
+      >
         <Trans i18nKey={"profiles"} />
       </Title>
       <Box mt={2}>
@@ -309,7 +342,9 @@ const ProfilesList = (props: any) => {
           {...profileQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
-              <ErrorEmptyData emptyMessage={<Trans i18nKey="thereIsNoProfileYet" />} />
+              <ErrorEmptyData
+                emptyMessage={<Trans i18nKey="thereIsNoProfileYet" />}
+              />
             </Box>
           }
           renderLoading={() => (
