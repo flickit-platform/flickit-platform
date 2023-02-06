@@ -109,6 +109,7 @@ const SubmitOnSelectCheckBox = () => {
   return (
     <FormControlLabel
       sx={{ mr: 0 }}
+      data-cy="automatic-submit-check"
       control={
         <Checkbox
           checked={submitOnAnswerSelection}

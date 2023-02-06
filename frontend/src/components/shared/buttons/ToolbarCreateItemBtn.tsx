@@ -13,11 +13,12 @@ interface IToolbarCreateItemBtnProps {
 }
 
 export const ToolbarCreateItemBtn = (props: IToolbarCreateItemBtnProps) => {
-  const { icon, shouldAnimate, onClick, text, minWidth } = props;
+  const { icon, shouldAnimate, onClick, text, minWidth, ...rest } = props;
   const isSmallScreen = useScreenResize("sm");
 
   return (
     <Button
+      {...rest}
       size="small"
       startIcon={icon}
       onClick={onClick}

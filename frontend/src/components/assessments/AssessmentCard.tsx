@@ -63,6 +63,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           },
         }}
         elevation={4}
+        data-cy="assessment-card"
       >
         <Actions {...props} abortController={abortController} />
         <Grid
@@ -84,6 +85,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   textAlign: "center",
                   color: item.color?.color_code || "#101c32",
                 }}
+                data-cy="assessment-card-title"
               >
                 {item.title}
               </Typography>
@@ -114,6 +116,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               component={Link}
               to={hasStat ? `${item.id}/insights` : ""}
               variant={isComplete ? "contained" : undefined}
+              data-cy="view-insights-btn"
             >
               <Trans i18nKey="insights" />
             </Button>
@@ -133,6 +136,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 backgroundColor: "#2e7d72",
                 background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
               }}
+              data-cy="questionnaires-btn"
             >
               <Trans i18nKey="questionnaires" />
             </Button>
@@ -212,6 +216,7 @@ const Actions = (props: {
                 icon: <DeleteRoundedIcon fontSize="small" />,
                 text: <Trans i18nKey="delete" />,
                 onClick: deleteItem,
+                menuItemProps: { "data-cy": "delete-action-btn" },
               },
             ]
           : [
@@ -224,6 +229,7 @@ const Actions = (props: {
                 icon: <DeleteRoundedIcon fontSize="small" />,
                 text: <Trans i18nKey="delete" />,
                 onClick: deleteItem,
+                menuItemProps: { "data-cy": "delete-action-btn" },
               },
             ]
       }

@@ -36,7 +36,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const isSmallScreen = useScreenResize("sm");
 
   return (
-    <Paper sx={{ height: "100%", mt: 3 }}>
+    <Paper sx={{ height: "100%", mt: 3 }} data-cy="questionnaire-card">
       <Box
         p="8px 6px"
         pl={"12px"}
@@ -108,6 +108,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             progress={progress}
             number_of_answers={number_of_answers}
             current_metric_index={current_metric_index}
+            title={title}
           />
         </Box>
       </Box>
@@ -117,11 +118,13 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
 
 const ActionButtons = (props: {
   id: TId;
+  title: string;
   progress: number;
   number_of_answers: number;
   current_metric_index: number;
 }) => {
-  const { id, progress, number_of_answers, current_metric_index } = props;
+  const { id, progress, number_of_answers, current_metric_index, title } =
+    props;
 
   return (
     <Box display="flex">
@@ -145,6 +148,7 @@ const ActionButtons = (props: {
           to={`${id}/${current_metric_index || number_of_answers + 1}`}
           text="continue"
           icon={<PlayArrowRoundedIcon fontSize="small" />}
+          data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
       {progress === 0 && (
@@ -152,6 +156,7 @@ const ActionButtons = (props: {
           to={`${id}/1`}
           text="start"
           icon={<StartRoundedIcon fontSize="small" />}
+          data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
     </Box>
@@ -164,9 +169,10 @@ const ActionButton = (props: {
   icon: JSX.Element;
   state?: any;
 }) => {
-  const { to, text, icon, state = {} } = props;
+  const { to, text, icon, state = {}, ...rest } = props;
   return (
     <Button
+      {...rest}
       size="small"
       component={Link}
       state={state}

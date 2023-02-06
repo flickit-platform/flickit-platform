@@ -39,11 +39,11 @@
 Cypress.Commands.add(
   "loginByApi",
   (
-    username = Cypress.env("USER_USERNAME"),
+    email = Cypress.env("USER_EMAIL"),
     password = Cypress.env("USER_PASSWORD")
   ) => {
-    cy.request("POST", `auth/jwt/create/`, {
-      username,
+    cy.request("POST", `https://checkuptest.asta.ir/authinfo/jwt/create/`, {
+      email,
       password,
     }).then((response) => {
       const {
@@ -53,5 +53,24 @@ Cypress.Commands.add(
       localStorage.setItem("accessToken", JSON.stringify(access));
       cy.visit("http://localhost:3000");
     });
+  }
+);
+
+Cypress.Commands.add("ifElementExist", (selector, cb) => {
+  cy.get("body").then(($body) => {
+    const element = $body.find(selector);
+    if (element.length > 0) {
+      return cb(element) || cy.wrap(element);
+    }
+  });
+});
+
+Cypress.Commands.add(
+  "runXTimesEveryYSeconds",
+  (cb, iterationCount, timeBetweenEachIteration = 1000) => {
+    for (let i = 0; i < iterationCount; i++) {
+      cb();
+      cy.wait(timeBetweenEachIteration);
+    }
   }
 );
