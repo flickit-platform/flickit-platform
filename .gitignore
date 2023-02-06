@@ -6,6 +6,8 @@
 local_settings.py
 /static
 /media
+Pipfile
+Pipfile.lock
 
 
 .vscode
