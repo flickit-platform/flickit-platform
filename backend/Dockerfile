@@ -28,4 +28,6 @@ ENV PATH="/scripts:/py/bin:$PATH"
 
 USER assessmentplatform
 
-CMD ["run.sh"]
+WORKDIR /backend/apps
+
+CMD ["scripts/run.sh"]

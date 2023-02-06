@@ -1,5 +1,4 @@
 import os
-
 from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 
@@ -215,8 +214,8 @@ DJOSER = {
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
 
-STATIC_URL = '/admin/vol/web/static/'
-MEDIA_URL = '/admin/vol/web/media/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/admin/vol/web/media'
 STATIC_ROOT = '/admin/vol/web/static'
