@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import { getColorOfStatus, styles } from "../../config/styles";
 import { Gauge } from "../shared/charts/Gauge";
 import Title from "../shared/Title";
+import hasStatus from "../../utils/hasStatus";
 
 interface IAssessmentOverallStatusProps {
   status: TStatus;
@@ -49,6 +50,7 @@ export const AssessmentOverallStatus = (
                       style={{
                         color: getColorOfStatus(subject.status, "#747373"),
                       }}
+                      data-cy={"status"}
                     >
                       {subject.status || "NOT EVALUATED"}
                     </b>

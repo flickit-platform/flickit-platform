@@ -131,6 +131,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         mb: 1,
         backgroundColor: "white",
       }}
+      data-cy="space-card"
     >
       <Box sx={{ ...styles.centerV }} alignSelf="stretch">
         <Box sx={{ ...styles.centerV }} alignSelf="stretch">
@@ -139,6 +140,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             variant="h6"
             fontFamily={"Roboto"}
             to={`/${id}/assessments`}
+            data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
               fontSize: { xs: "1.05rem", sm: "1.1rem", md: "1.2rem" },

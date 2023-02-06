@@ -22,11 +22,19 @@ export const CEDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   const fullScreen = useScreenResize("sm");
 
   return (
-    <Dialog onClose={closeDialog} fullWidth maxWidth="md" fullScreen={fullScreen} {...rest}>
+    <Dialog
+      onClose={closeDialog}
+      fullWidth
+      maxWidth="md"
+      fullScreen={fullScreen}
+      {...rest}
+    >
       <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
         {title}
       </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>{children}</DialogContent>
+      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
+        {children}
+      </DialogContent>
     </Dialog>
   );
 };
@@ -73,12 +81,15 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
               variant="contained"
               color="success"
               loading={loading}
+              data-cy="submit-ad-view"
               onClick={(e: any) => {
                 e.preventDefault();
                 onSubmit?.(e, true)();
               }}
             >
-              {submitAndViewButtonLabel || <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />}
+              {submitAndViewButtonLabel || (
+                <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
+              )}
             </LoadingButton>
           </Grid>
         )}
@@ -86,6 +97,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
           <Grid item>
             <LoadingButton
               type="submit"
+              data-cy="submit"
               variant="contained"
               loading={loading}
               onClick={(e: any) => {
@@ -98,7 +110,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
           </Grid>
         )}
         <Grid item>
-          <Button onClick={onClose}>
+          <Button onClick={onClose} data-cy="cancel">
             <Trans i18nKey="cancel" />
           </Button>
         </Grid>

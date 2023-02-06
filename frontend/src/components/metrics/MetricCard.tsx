@@ -218,6 +218,7 @@ const AnswerTemplate = (props: {
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
               >
                 <ToggleButton
+                  data-cy="answer-option"
                   color="success"
                   fullWidth
                   size="large"

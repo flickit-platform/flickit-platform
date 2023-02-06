@@ -38,7 +38,10 @@ const Navbar = () => {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ pl: 1, pr: 1, textAlign: "center" }}>
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ pl: 1, pr: 1, textAlign: "center" }}
+    >
       <Typography
         variant="h6"
         sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
@@ -50,7 +53,11 @@ const Navbar = () => {
       <Divider />
       <List dense>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "left", borderRadius: 1.5 }} component={NavLink} to="spaces">
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to="spaces"
+          >
             <ListItemText primary={<Trans i18nKey="spaces" />} />
           </ListItemButton>
         </ListItem>
@@ -86,12 +93,20 @@ const Navbar = () => {
           </ListItem>
         )}
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "left", borderRadius: 1.5 }} component={NavLink} to={`/compare`}>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/compare`}
+          >
             <ListItemText primary={<Trans i18nKey="compare" />} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "left", borderRadius: 1.5 }} component={NavLink} to={`/profiles`}>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/profiles`}
+          >
             <ListItemText primary={<Trans i18nKey="profiles" />} />
           </ListItemButton>
         </ListItem>
@@ -111,7 +126,10 @@ const Navbar = () => {
         }}
         data-cy="nav-bar"
       >
-        <Toolbar variant="dense" sx={{ backgroundColor: "white", borderRadius: 1 }}>
+        <Toolbar
+          variant="dense"
+          sx={{ backgroundColor: "white", borderRadius: 1 }}
+        >
           <IconButton
             color="primary"
             aria-label="open drawer"
@@ -133,7 +151,11 @@ const Navbar = () => {
                 width: "110px",
               },
             }}
-            to={current_space?.id ? `/${current_space?.id}/assessments` : `/spaces`}
+            to={
+              current_space?.id
+                ? `/${current_space?.id}/assessments`
+                : `/spaces`
+            }
           >
             <Logo />
           </Typography>
@@ -156,13 +178,22 @@ const Navbar = () => {
             <Button
               component={NavLink}
               to={`/compare`}
-              startIcon={<CompareRoundedIcon sx={{ opacity: 0.8, fontSize: "18px !important" }} />}
+              startIcon={
+                <CompareRoundedIcon
+                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                />
+              }
               sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
               size="small"
             >
               <Trans i18nKey="compare" />
             </Button>
-            <Button component={NavLink} to={`/profiles`} sx={{ ...styles.activeNavbarLink, ml: 0.1 }} size="small">
+            <Button
+              component={NavLink}
+              to={`/profiles`}
+              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+              size="small"
+            >
               <Trans i18nKey="profiles" />
             </Button>
           </Box>
@@ -268,7 +299,14 @@ const Logo = () => {
 		c-5.688,0-12.117,1.074-19.313,3.222v38.621h24.145c4.289,0,6.432-2.146,6.432-6.44v-29.771c0-1.607-0.533-2.949-1.609-4.02
 		c-1.072-1.071-2.412-1.612-4.018-1.612H911.091z"
         />
-        <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="39.752" y1="125.3828" x2="205.752" y2="125.3828">
+        <linearGradient
+          id="SVGID_1_"
+          gradientUnits="userSpaceOnUse"
+          x1="39.752"
+          y1="125.3828"
+          x2="205.752"
+          y2="125.3828"
+        >
           <stop offset="0" style={{ stopColor: "#6034A5" }} />
           <stop offset="0.8081" style={{ stopColor: "#744DB0" }} />
           <stop offset="1" style={{ stopColor: "#7954B3" }} />
@@ -279,11 +317,27 @@ const Logo = () => {
 		c0-2,1.717-2.785,3.716-2.785h117.31l-11.729-24H68.468c-14.969,0-28.716,11.814-28.716,26.785v112.615
 		c0,14.969,13.747,28.6,28.716,28.6h111.68c14.969,0,25.604-13.631,25.604-28.6V90.104L183.752,113.881z"
         />
-        <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="94.2266" y1="97.1201" x2="124.7301" y2="44.3767">
+        <linearGradient
+          id="SVGID_2_"
+          gradientUnits="userSpaceOnUse"
+          x1="94.2266"
+          y1="97.1201"
+          x2="124.7301"
+          y2="44.3767"
+        >
           <stop offset="0" style={{ stopColor: "#5AD0AF", stopOpacity: 0 }} />
-          <stop offset="0.1548" style={{ stopColor: "#4FB79A", stopOpacity: 0.1548 }} />
-          <stop offset="0.4852" style={{ stopColor: "#347563", stopOpacity: 0.4852 }} />
-          <stop offset="0.9619" style={{ stopColor: "#090E0C", stopOpacity: 0.9619 }} />
+          <stop
+            offset="0.1548"
+            style={{ stopColor: "#4FB79A", stopOpacity: 0.1548 }}
+          />
+          <stop
+            offset="0.4852"
+            style={{ stopColor: "#347563", stopOpacity: 0.4852 }}
+          />
+          <stop
+            offset="0.9619"
+            style={{ stopColor: "#090E0C", stopOpacity: 0.9619 }}
+          />
           <stop offset="1" style={{ stopColor: "#7954B3" }} />
         </linearGradient>
         <path
@@ -291,7 +345,14 @@ const Logo = () => {
           d="M64.752,92.834V68.168c0-2,1.716-2.785,3.716-2.785h119.125l-64.927-24H68.468
 		c-14.969,0-28.716,11.814-28.716,26.785v16.377L64.752,92.834z"
         />
-        <linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="104.584" y1="157.3535" x2="149.418" y2="27.6339">
+        <linearGradient
+          id="SVGID_3_"
+          gradientUnits="userSpaceOnUse"
+          x1="104.584"
+          y1="157.3535"
+          x2="149.418"
+          y2="27.6339"
+        >
           <stop offset="0" style={{ stopColor: "#3BC7A0" }} />
           <stop offset="0.1686" style={{ stopColor: "#41C9A3" }} />
           <stop offset="1" style={{ stopColor: "#5AD0AF" }} />
@@ -326,9 +387,18 @@ const SpacesButton = ({ currentSpace }: any) => {
   return (
     <>
       <Button
-        onClick={() => (currentSpace?.id ? navigate(`/${currentSpace?.id}/assessments`) : navigate("/spaces"))}
+        data-cy="spaces"
+        onClick={() =>
+          currentSpace?.id
+            ? navigate(`/${currentSpace?.id}/assessments`)
+            : navigate("/spaces")
+        }
         sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
-        startIcon={<FolderRoundedIcon sx={{ opacity: 0.8, fontSize: "18px !important" }} />}
+        startIcon={
+          <FolderRoundedIcon
+            sx={{ opacity: 0.8, fontSize: "18px !important" }}
+          />
+        }
         size="small"
         endIcon={
           <Button
@@ -359,16 +429,29 @@ const SpacesButton = ({ currentSpace }: any) => {
         )}
       </Button>
 
-      <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ sx: { minWidth: "260px" } }}>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{ sx: { minWidth: "260px" } }}
+      >
         {currentSpace?.id && (
           <>
-            <Typography variant="subMedium" sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}>
+            <Typography
+              variant="subMedium"
+              sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}
+            >
               <Trans i18nKey={"currentSpace"} />
             </Typography>
             <MenuItem
               dense
               component={NavLink}
-              to={currentSpace?.id ? `/${currentSpace?.id}/assessments` : `/spaces`}
+              to={
+                currentSpace?.id
+                  ? `/${currentSpace?.id}/assessments`
+                  : `/spaces`
+              }
               onClick={handleClose}
             >
               {currentSpace?.title}
@@ -376,7 +459,12 @@ const SpacesButton = ({ currentSpace }: any) => {
             <Divider />
           </>
         )}
-        <MenuItem dense onClick={handleClose} component={NavLink} to={`/spaces`}>
+        <MenuItem
+          dense
+          onClick={handleClose}
+          component={NavLink}
+          to={`/spaces`}
+        >
           <Trans i18nKey={"allSpaces"} />
         </MenuItem>
       </Menu>

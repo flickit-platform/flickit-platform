@@ -13,9 +13,14 @@ import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "../../utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
-import { CEDialog, CEDialogActions } from "../../components/shared/dialogs/CEDialog";
+import {
+  CEDialog,
+  CEDialogActions,
+} from "../../components/shared/dialogs/CEDialog";
 import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "../shared/fields/AutocompleteAsyncField";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -31,7 +36,13 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {}, staticData = {} } = context;
   const { id: rowId } = data;
   const defaultValues = type === "update" ? data : {};
@@ -51,17 +62,30 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, ...restOfData } = data;
+    const { space, profile, ...restOfData } = data;
     setLoading(true);
     try {
       const { data: res } =
         type === "update"
           ? await service.updateAssessment(
-              { rowId, data: { space: spaceId || space?.id, ...restOfData } },
+              {
+                rowId,
+                data: {
+                  space: spaceId || space?.id,
+                  assessment_profile: profile?.id,
+                  ...restOfData,
+                },
+              },
               { signal: abortController.signal }
             )
           : await service.createAssessment(
-              { data: { space: spaceId || space?.id, ...restOfData } },
+              {
+                data: {
+                  space: spaceId || space?.id,
+                  assessment_profile: profile?.id,
+                  ...restOfData,
+                },
+              },
               { signal: abortController.signal }
             );
       setLoading(false);
@@ -83,7 +107,11 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? <Trans i18nKey="updateAssessment" /> : <Trans i18nKey="createAssessment" />}
+          {type === "update" ? (
+            <Trans i18nKey="updateAssessment" />
+          ) : (
+            <Trans i18nKey="createAssessment" />
+          )}
         </>
       }
     >
@@ -96,6 +124,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               name="title"
               required={true}
               label={<Trans i18nKey="title" />}
+              data-cy="title"
             />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -110,21 +139,32 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <ProfileField defaultValue={defaultValues?.assessment_profile} staticValue={staticData.profile} />
+            <ProfileField
+              defaultValue={defaultValues?.assessment_profile}
+              staticValue={staticData.profile}
+            />
           </Grid>
         </Grid>
         <CEDialogActions
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>
   );
 };
 
-const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
+const ProfileField = ({
+  defaultValue,
+  staticValue,
+}: {
+  defaultValue: any;
+  staticValue: any;
+}) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchProfilesOptions(args, config),
@@ -132,12 +172,15 @@ const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; static
 
   return (
     <AutocompleteAsyncField
-      {...(staticValue ? ({ loading: false, loaded: true, options: [] } as any) : queryData)}
+      {...(staticValue
+        ? ({ loading: false, loaded: true, options: [] } as any)
+        : queryData)}
       name="profile"
       required={true}
       defaultValue={staticValue ?? defaultValue}
       disabled={!!staticValue}
       label={<Trans i18nKey="profile" />}
+      data-cy="profile"
     />
   );
 };
@@ -157,6 +200,7 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
       disabled={!!spaceId}
       defaultValue={defaultValue}
       label={<Trans i18nKey="space" />}
+      data-cy="space"
     />
   );
 };

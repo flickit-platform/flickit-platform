@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import MenuItem, { MenuItemProps } from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Trans } from "react-i18next";
@@ -22,6 +22,7 @@ interface IMoreActionsProps {
         icon?: JSX.Element;
         onClick?: React.MouseEventHandler<HTMLLIElement> | undefined;
         text: JSX.Element;
+        menuItemProps?: MenuItemProps & { "data-cy"?: string };
       }
     | null
     | undefined
@@ -44,6 +45,7 @@ const MoreActions = (props: IMoreActionsProps) => {
     <Box {...boxProps}>
       {!hideInnerIconButton && (
         <IconButton
+          data-cy="more-action-btn"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -68,9 +70,10 @@ const MoreActions = (props: IMoreActionsProps) => {
           if (!item) {
             return null;
           }
-          const { onClick = () => {}, icon, text } = item;
+          const { onClick = () => {}, icon, text, menuItemProps = {} } = item;
           return (
             <MenuItem
+              {...menuItemProps}
               key={index}
               onClick={(e) => {
                 closeMenu(e);

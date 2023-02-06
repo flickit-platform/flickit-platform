@@ -8,6 +8,6 @@ export default defineConfig({
     env: {
       ROOT: "http://localhost:3000",
     },
-    baseUrl: "https://checkuptest.asta.ir/",
+    baseUrl: "http://localhost:3000/",
   },
 });
