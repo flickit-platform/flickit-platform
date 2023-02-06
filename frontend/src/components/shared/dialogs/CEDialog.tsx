@@ -74,6 +74,27 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
       }}
     >
       <Grid container spacing={2} justifyContent="flex-end">
+        <Grid item>
+          <Button onClick={onClose} data-cy="cancel">
+            <Trans i18nKey="cancel" />
+          </Button>
+        </Grid>
+        {!hideSubmitButton && (
+          <Grid item>
+            <LoadingButton
+              type="submit"
+              data-cy="submit"
+              variant="contained"
+              loading={loading}
+              onClick={(e: any) => {
+                e.preventDefault();
+                onSubmit?.(e)?.();
+              }}
+            >
+              <Trans i18nKey={submitButtonLabel as string} />
+            </LoadingButton>
+          </Grid>
+        )}
         {hasViewBtn && (
           <Grid item>
             <LoadingButton
@@ -93,27 +114,6 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             </LoadingButton>
           </Grid>
         )}
-        {!hideSubmitButton && (
-          <Grid item>
-            <LoadingButton
-              type="submit"
-              data-cy="submit"
-              variant="contained"
-              loading={loading}
-              onClick={(e: any) => {
-                e.preventDefault();
-                onSubmit?.(e)?.();
-              }}
-            >
-              <Trans i18nKey={submitButtonLabel as string} />
-            </LoadingButton>
-          </Grid>
-        )}
-        <Grid item>
-          <Button onClick={onClose} data-cy="cancel">
-            <Trans i18nKey="cancel" />
-          </Button>
-        </Grid>
       </Grid>
     </DialogActions>
   );
