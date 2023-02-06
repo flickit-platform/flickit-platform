@@ -1,9 +1,11 @@
-from .views import commonviews
-from .imagecomponent.views import QualityAttributeImageViewSet, SubjectImageViewSet, ProfileImageViewSet
-from rest_framework_nested import routers
-from .views import profileviews, importprofileviews
-from .views import expertgroupviews
 from django.urls import path
+from rest_framework_nested import routers
+
+from baseinfo.views import commonviews
+from baseinfo.imagecomponent.views import QualityAttributeImageViewSet, SubjectImageViewSet, ProfileImageViewSet
+from baseinfo.views import profileviews, importprofileviews
+from baseinfo.views import expertgroupviews
+
 
 
 

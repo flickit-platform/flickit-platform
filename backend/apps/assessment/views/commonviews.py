@@ -2,13 +2,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from account.models import Space
+from baseinfo.models.basemodels import MetricCategory
 
 from assessment.models import AssessmentResult, AssessmentProject, Color
-from ..serializers.commonserializers import ColorSerilizer, AssessmentResultSerilizer
-from baseinfo.models.basemodels import MetricCategory
-from account.models import Space
-
-
+from assessment.serializers.commonserializers import ColorSerilizer, AssessmentResultSerilizer
 
 class AssessmentResultRegisterViewSet(ModelViewSet):
     queryset = AssessmentResult.objects.all()

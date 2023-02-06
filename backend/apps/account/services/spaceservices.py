@@ -2,8 +2,8 @@ from datetime import datetime
 from rest_framework import status
 from rest_framework.response import Response
 
-from ..services import userservices
-from ..models import UserAccess
+from account.services import userservices
+from account.models import UserAccess
 
 
 def add_user_to_space(space_id, email):

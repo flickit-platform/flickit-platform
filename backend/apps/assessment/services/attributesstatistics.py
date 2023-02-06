@@ -1,5 +1,6 @@
 import more_itertools
-from ..models import AssessmentResult
+
+from assessment.models import AssessmentResult
 
 
 def extract_most_significant_strength_atts(result: AssessmentResult):

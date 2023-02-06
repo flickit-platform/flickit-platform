@@ -1,10 +1,9 @@
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from rest_framework.exceptions import PermissionDenied
-from django.db import IntegrityError
 from rest_framework import status
-from django.http import Http404
 from rest_framework.exceptions import NotAuthenticated, AuthenticationFailed
 
 def custom_exception_handler(exc, context):

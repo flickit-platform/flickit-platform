@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 
-from ..serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
-from ..serializers.commonserializers import SpaceSerializer
-from ..services import spaceservices
+from account.serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
+from account.serializers.commonserializers import SpaceSerializer
+from account.services import spaceservices
 
 class ChangeCurrentSpaceViewSet(APIView):
     def post(self, request, space_id):

@@ -1,9 +1,10 @@
-from django.db import transaction
 from zipfile import ZipFile
-from ..models.basemodels import MetricCategory, AssessmentSubject, QualityAttribute
-from ..models.metricmodels import Metric, MetricImpact, AnswerTemplate
-from ..models.profilemodels import AssessmentProfile, ProfileDsl
-from ..services import profileservice, expertgroupservice
+from django.db import transaction
+
+from baseinfo.models.basemodels import MetricCategory, AssessmentSubject, QualityAttribute
+from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl
+from baseinfo.services import profileservice, expertgroupservice
 
 def extract_dsl_contents(dsl_id):
     dsl = ProfileDsl.objects.get(id = dsl_id)

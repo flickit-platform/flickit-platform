@@ -1,18 +1,17 @@
+from statistics import mean
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from statistics import mean
+
 from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME, IsSpaceMember
-
-from ..models import AssessmentProject
 from baseinfo.models.basemodels import QualityAttribute
-from ..fixture.dictionary import Dictionary
-from ..fixture.common import calculate_staus
-from ..services.metricstatistic import extract_total_progress, extract_subject_total_progress
-from ..services.attributesstatistics import extract_most_significant_weaknessness_atts, extract_most_significant_strength_atts
 
-
+from assessment.models import AssessmentProject
+from assessment.fixture.dictionary import Dictionary
+from assessment.fixture.common import calculate_staus
+from assessment.services.metricstatistic import extract_total_progress, extract_subject_total_progress
+from assessment.services.attributesstatistics import extract_most_significant_weaknessness_atts, extract_most_significant_strength_atts
 
 class CompareAssessmentView(APIView):
     # TODO check authorization

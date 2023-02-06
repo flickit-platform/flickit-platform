@@ -1,6 +1,7 @@
 from baseinfo.models.basemodels import MetricCategory, AssessmentSubject
-from ..fixture.dictionary import Dictionary
-from ..models import AssessmentResult
+
+from assessment.fixture.dictionary import Dictionary
+from assessment.models import AssessmentResult
 
 
 def extract_total_answered_metric_number(result: AssessmentResult, category: MetricCategory):

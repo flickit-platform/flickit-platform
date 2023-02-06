@@ -3,8 +3,8 @@ from django.urls import include, path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from .settings import __version__
 from django.conf.urls.static import static
+
 from assessmentplatform import settings
 
 admin.autodiscover()
@@ -12,7 +12,7 @@ admin.autodiscover()
 schema_view = get_schema_view(
    openapi.Info(
       title="Assessment-Platform API",
-      default_version= __version__,
+      default_version= settings.__version__,
       description="Test description",
    ),
    public=True,

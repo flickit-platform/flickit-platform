@@ -1,4 +1,5 @@
 from rest_framework.permissions import BasePermission
+
 from assessment.models import AssessmentResult, AssessmentProject
 
 ASSESSMENT_LIST_IDS_PARAM_NAME = 'assessment_list_ids'

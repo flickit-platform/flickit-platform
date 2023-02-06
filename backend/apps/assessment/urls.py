@@ -1,8 +1,9 @@
 from django.urls import path
 from rest_framework_nested import routers
-from .views import reportviews, commonviews, comparisionviews, metricvalueviews, projectviews
+
+from assessment.views import reportviews, commonviews, comparisionviews, metricvalueviews, projectviews
 from assessment.views.subjectreportviews import SubjectReportViewSet
-from .views.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
+from assessment.views.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
 
 
 router = routers.DefaultRouter()

@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from ..models.basemodels import AssessmentSubject, QualityAttribute, MetricCategory
-from ..models.metricmodels import AnswerTemplate, Metric, MetricImpact
-from ..models.profilemodels import AssessmentProfile, ExpertGroup
-from ..imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
+
+from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, MetricCategory
+from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact
+from baseinfo.models.profilemodels import AssessmentProfile, ExpertGroup
+from baseinfo.imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 
 class MetricCategorySerilizer(serializers.ModelSerializer):
     class Meta:

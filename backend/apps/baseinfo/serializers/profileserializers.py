@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from ..models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
-from ..imagecomponent.serializers import ProfileImageSerializer
-from .commonserializers import ExpertGroupSimpleSerilizers
+
 from assessment.models import AssessmentProject
+
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
+from baseinfo.imagecomponent.serializers import ProfileImageSerializer
+from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
+
 from ..services import profileservice
 
 

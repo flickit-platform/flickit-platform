@@ -1,16 +1,17 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
-from assessment.models import MetricValue, AssessmentProject
 from account.permission.spaceperm import IsSpaceMember
 from baseinfo.models.basemodels import MetricCategory
-from ..serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
-from ..fixture.dictionary import Dictionary
-from ..services.metricstatistic import extract_total_progress
+
+from assessment.models import MetricValue, AssessmentProject
+from assessment.serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
+from assessment.fixture.dictionary import Dictionary
+from assessment.services.metricstatistic import extract_total_progress
 
 
 class MetricValueViewSet(ModelViewSet):

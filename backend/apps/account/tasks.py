@@ -1,7 +1,7 @@
 from celery import shared_task
-
-from django.core.mail import BadHeaderError
 from templated_mail.mail import BaseEmailMessage
+from django.core.mail import BadHeaderError
+
 from assessmentplatform.settings import SITE_NAME, DOMAIN
 
 

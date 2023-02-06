@@ -1,5 +1,6 @@
 from django.db import models
-from ..models.basemodels import MetricCategory, QualityAttribute
+
+from baseinfo.models.basemodels import MetricCategory, QualityAttribute
 
 class MetricImpact(models.Model):
     level = models.PositiveIntegerField()

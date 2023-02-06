@@ -1,15 +1,15 @@
 from statistics import mean
 from rest_framework import serializers
+
 from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
-from assessment.serializers.commonserializers import ColorSerilizer
 from account.serializers.commonserializers import SpaceSerializer
 
-
-from ..models import AssessmentProject, AssessmentResult
-from ..fixture.common import calculate_staus, ANSWERED_QUESTION_NUMBER_BOUNDARY
-from ..fixture.dictionary import Dictionary
-from ..services.metricstatistic import calculate_total_metric_number_by_subject, calculate_answered_metric_by_subject, extract_total_progress
-from ..services.attributesstatistics import extract_most_significant_strength_atts, extract_most_significant_weaknessness_atts
+from assessment.serializers.commonserializers import ColorSerilizer
+from assessment.models import AssessmentProject, AssessmentResult
+from assessment.fixture.common import calculate_staus, ANSWERED_QUESTION_NUMBER_BOUNDARY
+from assessment.fixture.dictionary import Dictionary
+from assessment.services.metricstatistic import calculate_total_metric_number_by_subject, calculate_answered_metric_by_subject, extract_total_progress
+from assessment.services.attributesstatistics import extract_most_significant_strength_atts, extract_most_significant_weaknessness_atts
 
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()

@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from ..models import QualityAttributeValue
-from ..serializers.commonserializers import QualityAttributeSerilizer
-from ..fixture.common import calculate_staus
+
+from assessment.models import QualityAttributeValue
+from assessment.serializers.commonserializers import QualityAttributeSerilizer
+from assessment.fixture.common import calculate_staus
 
 class SubjectReportSerializer(serializers.ModelSerializer):
     class Meta:

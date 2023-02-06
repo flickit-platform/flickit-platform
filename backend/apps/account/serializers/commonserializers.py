@@ -1,12 +1,9 @@
-
-
-
 from django.db import transaction
 from rest_framework import serializers
 
-from ..services import spaceservices
-from ..models import Space
-from ..models import User
+from account.services import spaceservices
+from account.models import Space
+from account.models import User
 
 
 class UserSimpleSerializer(serializers.ModelSerializer):

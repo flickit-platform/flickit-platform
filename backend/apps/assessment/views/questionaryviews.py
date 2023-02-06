@@ -5,8 +5,9 @@ from rest_framework.response import Response
 
 from baseinfo.models.basemodels import QualityAttribute
 from account.permission.spaceperm import IsSpaceMember
-from ..models import AssessmentProject, QualityAttributeValue
-from ..services.categoryreport import CategoryReportInfo
+
+from assessment.models import AssessmentProject, QualityAttributeValue
+from assessment.services.categoryreport import CategoryReportInfo
 
 
 class QuestionaryBaseInfoView(APIView):

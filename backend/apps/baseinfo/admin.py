@@ -1,11 +1,11 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models.profilemodels import AssessmentProfile, ProfileTag
-from .models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
-from .models.metricmodels import AnswerTemplate, MetricImpact, Metric
+
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
+from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric
 from baseinfo.imagecomponent.models import QualityAttributeImage, SubjectImage, ProfileImage
     
-
 class ProfileImageFormInline(admin.TabularInline):
      model = ProfileImage
      fields= ['image']

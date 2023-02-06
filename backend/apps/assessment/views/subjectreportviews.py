@@ -1,17 +1,17 @@
+from statistics import mean
 from rest_framework.mixins import Response, status
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from statistics import mean
+
+from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
+from account.permission.spaceperm import IsSpaceMember
 
 from assessment.serializers.subjectreportserializers import SubjectReportSerializer
 from assessment.models import QualityAttributeValue
 from assessment.models import AssessmentResult
-from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
-from account.permission.spaceperm import IsSpaceMember
-
-from ..services.categoryreport import CategoryReportInfo
-from ..fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
-from ..services.metricstatistic import extract_total_progress
+from assessment.services.categoryreport import CategoryReportInfo
+from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
+from assessment.services.metricstatistic import extract_total_progress
 
 class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, IsSpaceMember]

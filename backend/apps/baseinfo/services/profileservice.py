@@ -3,11 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
 
 from assessment.models import AssessmentProject
-from ..models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
-from ..serializers.profileserializers import AssessmentProfileSerilizer
-from ..models.profilemodels import AssessmentProfile, ProfileTag
 
-
+from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
+from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:

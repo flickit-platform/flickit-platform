@@ -1,5 +1,5 @@
-from django.db import models
 from uuid import uuid4
+from django.db import models
 
 from baseinfo.models.profilemodels import AssessmentProfile
 from baseinfo.models.metricmodels import Metric
