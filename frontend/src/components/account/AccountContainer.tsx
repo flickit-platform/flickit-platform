@@ -38,21 +38,31 @@ function AccountSettings() {
 
   useEffect(() => {
     if (!["about", "expert-groups"].includes(accountTab as string)) {
-      navigate("./../about", { replace: true });
+      navigate(`/account/about`, { replace: true });
       setValue("about");
     }
   }, []);
 
+  useEffect(() => {
+    if (accountTab && accountTab !== value) {
+      setValue(accountTab);
+    }
+  }, [accountTab]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
-    navigate(`./../${newValue}`);
+    navigate(`/account/${newValue}`);
   };
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box>
-          <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
+          <TabList
+            onChange={handleChange}
+            scrollButtons="auto"
+            variant="scrollable"
+          >
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
@@ -60,7 +70,7 @@ function AccountSettings() {
                   <Trans i18nKey="accountSetting" />
                 </Box>
               }
-              value="about"
+              value={`about`}
             />
             <Tab
               label={
@@ -81,7 +91,12 @@ function AccountSettings() {
             <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
               <Grid container spacing={4}>
                 <Grid item md={4} sm={6} xs={12}>
-                  <Typography sx={{ opacity: 0.85 }} fontSize={"1rem"} fontFamily="Roboto" letterSpacing=".05rem">
+                  <Typography
+                    sx={{ opacity: 0.85 }}
+                    fontSize={"1rem"}
+                    fontFamily="Roboto"
+                    letterSpacing=".05rem"
+                  >
                     <Trans i18nKey="signOutOfYourAccount" />
                   </Typography>
                   <SignOut />
@@ -101,7 +116,10 @@ function AccountSettings() {
 const About = ({ fetchAccount }: any) => {
   const { userInfo, dispatch } = useAuthContext();
   const { service } = useServiceContext();
-  const userQueryData = useQuery({ service: (args, config) => service.getSignedInUser(args, config), runOnMount: false });
+  const userQueryData = useQuery({
+    service: (args, config) => service.getSignedInUser(args, config),
+    runOnMount: false,
+  });
   const { display_name } = userInfo;
   const dialogProps = useDialog();
 

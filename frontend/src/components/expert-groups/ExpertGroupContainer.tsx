@@ -39,11 +39,12 @@ import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
 import { toast } from "react-toastify";
 import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { useAuthContext } from "../../providers/AuthProvider";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
-  const { userId } = useParams();
+  const { userInfo } = useAuthContext();
   const queryData = useQuery({
     service: (args = { id: expertGroupId }, config) =>
       service.fetchUserExpertGroup(args, {}),
@@ -76,7 +77,7 @@ const ExpertGroupContainer = () => {
                   routes={[
                     {
                       title: t("expertGroups") as string,
-                      to: `/account/${userId}/expert-groups`,
+                      to: `/account/${userInfo.id}/expert-groups`,
                     },
                   ]}
                 />
