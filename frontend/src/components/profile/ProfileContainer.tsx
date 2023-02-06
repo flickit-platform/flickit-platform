@@ -12,7 +12,7 @@ import Title from "../shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import ProfilesListContainer from "./ProfilesListContainer";
 import { useServiceContext } from "../../providers/ServiceProvider";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "../../utils/useQuery";
 import QueryData from "../shared/QueryData";
 import formatDate from "../../utils/formatDate";
@@ -141,7 +141,10 @@ const Profile = (props: any) => {
                 display: "flex",
                 alignItems: "center",
                 ml: "auto",
+                textDecoration: "none",
               }}
+              component={Link}
+              to={`/account/expert-groups/${expert_group.id}`}
             >
               <CardHeader
                 titleTypographyProps={{

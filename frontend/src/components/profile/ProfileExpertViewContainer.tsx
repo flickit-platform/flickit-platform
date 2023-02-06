@@ -30,11 +30,14 @@ import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
 import useDialog from "../../utils/useDialog";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { useAuthContext } from "../../providers/AuthProvider";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
   const dialogProps = useDialog();
-  const { userId, expertGroupId } = useParams();
+  const { userInfo } = useAuthContext();
+  const userId = userInfo.id;
+  const { expertGroupId } = useParams();
 
   return (
     <Box>
@@ -63,7 +66,13 @@ const ProfileExpertViewContainer = () => {
                 // sub={data.summary}
                 toolbar={
                   current_user_is_coordinator && (
-                    <IconButton title="Setting" color="primary" onClick={() => dialogProps.openDialog({ type: "update", data })}>
+                    <IconButton
+                      title="Setting"
+                      color="primary"
+                      onClick={() =>
+                        dialogProps.openDialog({ type: "update", data })
+                      }
+                    >
                       <SettingsRoundedIcon />
                     </IconButton>
                   )
@@ -72,14 +81,20 @@ const ProfileExpertViewContainer = () => {
                 {data.title}
               </Title>
               <Box mt={3}>
-                <ProfileSectionGeneralInfo data={data} query={profileQueryProps.query} />
+                <ProfileSectionGeneralInfo
+                  data={data}
+                  query={profileQueryProps.query}
+                />
                 <ProfileSectionsTabs data={data} />
               </Box>
             </Box>
           );
         }}
       />
-      <ProfileSettingFormDialog {...dialogProps} onSubmitForm={profileQueryProps.query} />
+      <ProfileSettingFormDialog
+        {...dialogProps}
+        onSubmitForm={profileQueryProps.query}
+      />
     </Box>
   );
 };
@@ -130,9 +145,10 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
   const { subjects } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   return (
     <Box>
@@ -208,7 +224,11 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                       <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
-                      <Typography variant="body2" fontFamily="Roboto" sx={{ ml: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontFamily="Roboto"
+                        sx={{ ml: 2 }}
+                      >
                         {subject.description}
                       </Typography>
                     </Box>
@@ -217,7 +237,12 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               </Box>
               <Divider />
               <Box m={1} mt={2}>
-                <Typography variant="h6" fontFamily="Roboto" fontWeight={"bold"} fontSize="1rem">
+                <Typography
+                  variant="h6"
+                  fontFamily="Roboto"
+                  fontWeight={"bold"}
+                  fontSize="1rem"
+                >
                   <Trans i18nKey="attributes" />
                 </Typography>
                 <ListAccordion
@@ -232,7 +257,12 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             flexDirection: isExpanded ? "column" : "row",
                           }}
                         >
-                          <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} minWidth="180px">
+                          <Typography
+                            variant="body1"
+                            fontFamily="Roboto"
+                            fontWeight={"bold"}
+                            minWidth="180px"
+                          >
                             {item.title}
                           </Typography>{" "}
                           <Typography
@@ -240,7 +270,9 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                               opacity: 0.9,
                               marginLeft: isExpanded ? 0 : 5,
                               marginTop: isExpanded ? 2 : 0,
-                              maxWidth: isExpanded ? undefined : { xs: "90px", md: "130px", lg: "320px" },
+                              maxWidth: isExpanded
+                                ? undefined
+                                : { xs: "90px", md: "130px", lg: "320px" },
                               display: { xs: "none", md: "block" },
                               ...(isExpanded ? {} : styles.ellipsis),
                             }}
@@ -268,9 +300,10 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
   const { questionnaires } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   return (
     <Box>
@@ -335,7 +368,10 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                           bg="white"
                           info={{
                             ...info,
-                            type: info.title === "Related subjects" ? "array" : info.type,
+                            type:
+                              info.title === "Related subjects"
+                                ? "array"
+                                : info.type,
                           }}
                         />
                       );
@@ -354,7 +390,11 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                       <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
-                      <Typography variant="body2" fontFamily="Roboto" sx={{ ml: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontFamily="Roboto"
+                        sx={{ ml: 2 }}
+                      >
                         {questionnaire.description}
                       </Typography>
                     </Box>
@@ -363,7 +403,12 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
               </Box>
               <Divider />
               <Box m={1} mt={2}>
-                <Typography variant="h6" sx={{ opacity: 0.9 }} fontFamily="Roboto" fontSize=".9rem">
+                <Typography
+                  variant="h6"
+                  sx={{ opacity: 0.9 }}
+                  fontFamily="Roboto"
+                  fontSize=".9rem"
+                >
                   <Trans i18nKey="questions" />
                 </Typography>
                 <Box sx={{ overflowX: "auto" }}>
@@ -376,120 +421,148 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                       paddingRight: 2,
                     }}
                   >
-                    {questionnaire.questions.map((question: any, index: number) => {
-                      return (
-                        <li style={{ marginBottom: "12px" }}>
-                          <Box display="flex" justifyContent={"space-between"} py={1}>
-                            <Grid container spacing={2} columns={14}>
-                              <Grid xs={6} md={6} lg={7} item>
-                                <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} position="relative">
-                                  {index === 0 && (
-                                    <Typography
-                                      sx={{
-                                        position: "absolute",
-                                        top: "-36px",
-                                        pb: "2px",
-                                        color: "#767676",
-                                        fontFamily: "Roboto",
-                                        width: "100%",
-                                        borderBottom: (t) => `1px solid ${t.palette.primary.light}`,
-                                      }}
-                                      variant="subMedium"
-                                    >
-                                      <Trans i18nKey={"title"} />
-                                    </Typography>
-                                  )}
-                                  {question.title}
-                                </Typography>{" "}
-                              </Grid>
-                              <Grid item xs={4} md={4} lg={4}>
-                                {" "}
-                                <Box position={"relative"} minWidth="160px">
-                                  {index === 0 && (
-                                    <Typography
-                                      sx={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        top: "-36px",
-                                        pb: "2px",
-                                        fontFamily: "Roboto",
-                                        color: "#767676",
-                                        borderBottom: (t) => `1px solid ${t.palette.warning.main}`,
-                                      }}
-                                      variant="subMedium"
-                                    >
-                                      <Trans i18nKey={"questionOptions"} />
-                                    </Typography>
-                                  )}
-                                  <ul style={{ paddingInlineStart: "20px" }}>
-                                    {question.listOfOptions.map((op: any) => {
-                                      return <li>{op}</li>;
-                                    })}
-                                  </ul>
-                                </Box>
-                              </Grid>
-                              <Grid item xs={4} md={4} lg={3}>
-                                <Box position={"relative"}>
-                                  {index === 0 && (
-                                    <Typography
-                                      sx={{
-                                        width: "100%",
-                                        position: "absolute",
-                                        top: "-36px",
-                                        pb: "2px",
-                                        color: "#767676",
-                                        fontFamily: "Roboto",
-                                        borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
-                                      }}
-                                      variant="subMedium"
-                                    >
-                                      <Trans i18nKey={"relatedAttributes"} />
-                                      <Box component="span" sx={{ float: "right", mr: 1 }}>
-                                        <Trans i18nKey="impact" />
-                                      </Box>
-                                    </Typography>
-                                  )}
-                                  {question.relatedAttributes.map((att: any) => {
-                                    return (
-                                      <Box
+                    {questionnaire.questions.map(
+                      (question: any, index: number) => {
+                        return (
+                          <li style={{ marginBottom: "12px" }}>
+                            <Box
+                              display="flex"
+                              justifyContent={"space-between"}
+                              py={1}
+                            >
+                              <Grid container spacing={2} columns={14}>
+                                <Grid xs={6} md={6} lg={7} item>
+                                  <Typography
+                                    variant="body1"
+                                    fontFamily="Roboto"
+                                    fontWeight={"bold"}
+                                    position="relative"
+                                  >
+                                    {index === 0 && (
+                                      <Typography
                                         sx={{
-                                          background: (t) => t.palette.secondary.main,
-                                          borderRadius: 8,
-                                          color: "white",
-                                          width: "auto",
+                                          position: "absolute",
+                                          top: "-36px",
+                                          pb: "2px",
+                                          color: "#767676",
+                                          fontFamily: "Roboto",
+                                          width: "100%",
+                                          borderBottom: (t) =>
+                                            `1px solid ${t.palette.primary.light}`,
                                         }}
+                                        variant="subMedium"
                                       >
-                                        <Box py={0.3} px={2} mb={0.5} mr={0.5}>
-                                          <Typography
-                                            variant="body2"
+                                        <Trans i18nKey={"title"} />
+                                      </Typography>
+                                    )}
+                                    {question.title}
+                                  </Typography>{" "}
+                                </Grid>
+                                <Grid item xs={4} md={4} lg={4}>
+                                  {" "}
+                                  <Box position={"relative"} minWidth="160px">
+                                    {index === 0 && (
+                                      <Typography
+                                        sx={{
+                                          position: "absolute",
+                                          width: "100%",
+                                          top: "-36px",
+                                          pb: "2px",
+                                          fontFamily: "Roboto",
+                                          color: "#767676",
+                                          borderBottom: (t) =>
+                                            `1px solid ${t.palette.warning.main}`,
+                                        }}
+                                        variant="subMedium"
+                                      >
+                                        <Trans i18nKey={"questionOptions"} />
+                                      </Typography>
+                                    )}
+                                    <ul style={{ paddingInlineStart: "20px" }}>
+                                      {question.listOfOptions.map((op: any) => {
+                                        return <li>{op}</li>;
+                                      })}
+                                    </ul>
+                                  </Box>
+                                </Grid>
+                                <Grid item xs={4} md={4} lg={3}>
+                                  <Box position={"relative"}>
+                                    {index === 0 && (
+                                      <Typography
+                                        sx={{
+                                          width: "100%",
+                                          position: "absolute",
+                                          top: "-36px",
+                                          pb: "2px",
+                                          color: "#767676",
+                                          fontFamily: "Roboto",
+                                          borderBottom: (t) =>
+                                            `1px solid ${t.palette.secondary.dark}`,
+                                        }}
+                                        variant="subMedium"
+                                      >
+                                        <Trans i18nKey={"relatedAttributes"} />
+                                        <Box
+                                          component="span"
+                                          sx={{ float: "right", mr: 1 }}
+                                        >
+                                          <Trans i18nKey="impact" />
+                                        </Box>
+                                      </Typography>
+                                    )}
+                                    {question.relatedAttributes.map(
+                                      (att: any) => {
+                                        return (
+                                          <Box
                                             sx={{
-                                              display: "flex",
-                                              justifyContent: "space-between",
+                                              background: (t) =>
+                                                t.palette.secondary.main,
+                                              borderRadius: 8,
+                                              color: "white",
+                                              width: "auto",
                                             }}
                                           >
-                                            {att.title}
-                                            <Typography
-                                              variant="subMedium"
-                                              sx={{
-                                                color: "white",
-                                                position: "relative",
-                                              }}
+                                            <Box
+                                              py={0.3}
+                                              px={2}
+                                              mb={0.5}
+                                              mr={0.5}
                                             >
-                                              {att.item}
-                                            </Typography>
-                                          </Typography>
-                                        </Box>
-                                      </Box>
-                                    );
-                                  })}
-                                </Box>
+                                              <Typography
+                                                variant="body2"
+                                                sx={{
+                                                  display: "flex",
+                                                  justifyContent:
+                                                    "space-between",
+                                                }}
+                                              >
+                                                {att.title}
+                                                <Typography
+                                                  variant="subMedium"
+                                                  sx={{
+                                                    color: "white",
+                                                    position: "relative",
+                                                  }}
+                                                >
+                                                  {att.item}
+                                                </Typography>
+                                              </Typography>
+                                            </Box>
+                                          </Box>
+                                        );
+                                      }
+                                    )}
+                                  </Box>
+                                </Grid>
                               </Grid>
-                            </Grid>
-                          </Box>
-                          {index !== questionnaire.questions.length - 1 && <Divider sx={{ mt: 3 }} />}
-                        </li>
-                      );
-                    })}
+                            </Box>
+                            {index !== questionnaire.questions.length - 1 && (
+                              <Divider sx={{ mt: 3 }} />
+                            )}
+                          </li>
+                        );
+                      }
+                    )}
                   </Box>
                 </Box>
               </Box>
@@ -506,7 +579,12 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
 
   return (
     <Box m={1} mt={5}>
-      <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
+      <Typography
+        variant="h6"
+        sx={{ opacity: 0.8 }}
+        fontFamily="Roboto"
+        fontSize=".9rem"
+      >
         <Trans i18nKey="questions" />
         <span style={{ float: "right" }}>{questions.length}</span>
       </Typography>
@@ -521,7 +599,12 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
           component="ol"
         >
           {questions.map((question: any, index: number) => {
-            const { title, options = [], relatedAttributes = [], impact } = question || {};
+            const {
+              title,
+              options = [],
+              relatedAttributes = [],
+              impact,
+            } = question || {};
             const hasRelatedAttributes = relatedAttributes.length > 0;
             const hasImpact = impact !== null && impact !== undefined;
             const gridColumns = hasRelatedAttributes || hasImpact ? 15 : 12;
@@ -531,7 +614,12 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                 <Box display="flex" justifyContent={"space-between"} py={1}>
                   <Grid container spacing={2} columns={gridColumns}>
                     <Grid xs={8} item>
-                      <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} position="relative">
+                      <Typography
+                        variant="body1"
+                        fontFamily="Roboto"
+                        fontWeight={"bold"}
+                        position="relative"
+                      >
                         {index === 0 && (
                           <Typography
                             sx={{
@@ -541,7 +629,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               color: "#767676",
                               fontFamily: "Roboto",
                               width: "100%",
-                              borderBottom: (t) => `1px solid ${t.palette.primary.light}`,
+                              borderBottom: (t) =>
+                                `1px solid ${t.palette.primary.light}`,
                             }}
                             variant="subMedium"
                           >
@@ -562,7 +651,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               pb: "2px",
                               fontFamily: "Roboto",
                               color: "#767676",
-                              borderBottom: (t) => `1px solid ${t.palette.warning.main}`,
+                              borderBottom: (t) =>
+                                `1px solid ${t.palette.warning.main}`,
                             }}
                             variant="subMedium"
                           >
@@ -588,7 +678,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                                 pb: "2px",
                                 color: "#767676",
                                 fontFamily: "Roboto",
-                                borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
+                                borderBottom: (t) =>
+                                  `1px solid ${t.palette.secondary.dark}`,
                               }}
                               variant="subMedium"
                             >
@@ -611,7 +702,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                                 pb: "2px",
                                 color: "#767676",
                                 fontFamily: "Roboto",
-                                borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
+                                borderBottom: (t) =>
+                                  `1px solid ${t.palette.secondary.dark}`,
                               }}
                               variant="subMedium"
                             >
@@ -620,7 +712,14 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                           )}
                           <Box>
                             {relatedAttributes.map((att: any) => {
-                              return <Chip label={att.title} color="secondary" sx={{ mr: 0.5, mb: 0.2 }} size="small" />;
+                              return (
+                                <Chip
+                                  label={att.title}
+                                  color="secondary"
+                                  sx={{ mr: 0.5, mb: 0.2 }}
+                                  size="small"
+                                />
+                              );
                             })}
                           </Box>
                         </Box>
@@ -642,7 +741,8 @@ const useProfile = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const profileQueryProps = useQuery({
-    service: (args = { profileId }, config) => service.inspectProfile(args, config),
+    service: (args = { profileId }, config) =>
+      service.inspectProfile(args, config),
   });
 
   useEffect(() => {
