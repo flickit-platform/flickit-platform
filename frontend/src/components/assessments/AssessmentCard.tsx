@@ -31,7 +31,7 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 
 interface IAssessmentCardProps {
-  item: IAssessment;
+  item: IAssessment & { space: any };
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
@@ -149,7 +149,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment;
+  item: IAssessment & { space: any };
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -176,7 +176,10 @@ const Actions = (props: {
       )
       .then(({ data }) => {
         setEditLoading(false);
-        dialogProps.openDialog({ data, type: "update" });
+        dialogProps.openDialog({
+          data: { ...data, space: item.space },
+          type: "update",
+        });
       })
       .catch((e) => {
         setEditLoading(false);

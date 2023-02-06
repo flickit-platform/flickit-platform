@@ -75,6 +75,7 @@ const AssessmentContainer = () => {
             shouldAnimate={isEmpty}
             minWidth="195px"
             text="createAssessment"
+            disabled={rest.loading}
           />
         </Box>
       </Box>
@@ -93,7 +94,12 @@ const AssessmentContainer = () => {
         }
         render={(data) => {
           return (
-            <AssessmentsList {...rest} data={data} dialogProps={dialogProps} />
+            <AssessmentsList
+              {...rest}
+              data={data}
+              space={{ id: spaceId, title: requested_space }}
+              dialogProps={dialogProps}
+            />
           );
         }}
       />

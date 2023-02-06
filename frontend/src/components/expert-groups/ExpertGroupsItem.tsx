@@ -1,4 +1,14 @@
-import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Link as MLink } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Link as MLink,
+} from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import generateRandomColor from "../../utils/generateRandomColor";
 import { Link } from "react-router-dom";
@@ -22,7 +32,16 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data, disableActions = false } = props;
-  const { id, name, picture, bio = "", website, about = "", users = [], number_of_profiles } = data || {};
+  const {
+    id,
+    name,
+    picture,
+    bio = "",
+    website,
+    about = "",
+    users = [],
+    number_of_profiles,
+  } = data || {};
   const { userInfo } = useAuthContext();
   const { display_name } = userInfo || {};
 
@@ -99,14 +118,14 @@ const Actions = (props: any) => {
   const { service } = useServiceContext();
   const { id } = expertGroup;
   const { query: fetchExpertGroup, loading } = useQuery({
-    service: (args = { id }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id }, config) =>
+      service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
   const dialogProps = useDialog();
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
-    console.log("data", data);
     dialogProps.openDialog({
       data,
       type: "update",
@@ -127,7 +146,10 @@ const Actions = (props: any) => {
           },
         ]}
       />
-      <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={fetchExpertGroups} />
+      <ExpertGroupCEFormDialog
+        {...dialogProps}
+        onSubmitForm={fetchExpertGroups}
+      />
     </>
   );
 };

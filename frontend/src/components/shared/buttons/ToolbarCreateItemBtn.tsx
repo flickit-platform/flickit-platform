@@ -1,10 +1,10 @@
 import React from "react";
-import Button from "@mui/material/Button";
+import Button, { ButtonProps } from "@mui/material/Button";
 import useScreenResize from "../../../utils/useScreenResize";
 import { animations } from "../../../config/styles";
 import { Trans } from "react-i18next";
 
-interface IToolbarCreateItemBtnProps {
+interface IToolbarCreateItemBtnProps extends ButtonProps {
   icon?: JSX.Element;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   shouldAnimate?: boolean;

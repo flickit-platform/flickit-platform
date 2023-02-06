@@ -75,7 +75,6 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const dispatch = useCompareDispatch();
 
   const onSubmit = (data: any) => {
-    console.log(data);
     try {
       const newAssessmentIds = addToAssessmentIds(
         data.assessmentId,
