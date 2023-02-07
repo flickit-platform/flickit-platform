@@ -22,7 +22,7 @@ urlpatterns = router.urls + metric_value_router.urls
 
 urlpatterns += [
     path("questionaries/<str:assessment_project_id>/", QuestionaryView.as_view()),
-    path("result/<str:assessment_project_id>/<str:metric_category_id>/", metricvalueviews.MetricValueListView.as_view()),
+    path("result/<str:assessment_project_id>/<str:questionnaire_id>/", metricvalueviews.MetricValueListView.as_view()),
     path("progress/<str:assessment_project_id>/", metricvalueviews.TotalProgressView.as_view()),
     path("subjects/<str:assessment_project_id>/", QuestionaryBaseInfoView.as_view()),
     path("breadcrumbinfo/", commonviews.BreadcrumbInformationView.as_view()),

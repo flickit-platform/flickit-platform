@@ -1,6 +1,6 @@
 from django.db import models
 
-from baseinfo.models.basemodels import MetricCategory, QualityAttribute
+from baseinfo.models.basemodels import Questionnaire, QualityAttribute
 
 class MetricImpact(models.Model):
     level = models.PositiveIntegerField()
@@ -18,7 +18,7 @@ class Metric(models.Model):
     description = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    metric_category = models.ForeignKey(MetricCategory, on_delete=models.CASCADE)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
     quality_attributes = models.ManyToManyField(QualityAttribute, through=MetricImpact)
     index = models.IntegerField(null=True)
 

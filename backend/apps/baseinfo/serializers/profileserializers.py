@@ -45,13 +45,13 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
         return profile.assessment_subjects.all().count()
 
     def get_number_of_questionaries(self, profile: AssessmentProfile):
-        return profile.metric_categories.all().count()
+        return profile.questionnaires.all().count()
 
     def get_subjects_with_desc(self, profile: AssessmentProfile):
         return profile.assessment_subjects.values('id', 'title', 'description')
 
     def get_questionnaires(self, profile: AssessmentProfile):
-        return profile.metric_categories.values('id', 'title', 'description')
+        return profile.questionnaires.values('id', 'title', 'description')
 
     def get_likes_number(self, profile: AssessmentProfile):
         return profile.likes.count()

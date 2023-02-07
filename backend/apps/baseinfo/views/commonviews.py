@@ -1,26 +1,26 @@
 from rest_framework.viewsets import ModelViewSet
 
-from baseinfo.models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
+from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import Metric
 from baseinfo.serializers import commonserializers
 
-class MetricCategoryViewSet(ModelViewSet):
-    serializer_class = commonserializers.MetricCategorySerilizer
+class QuestionnaireViewSet(ModelViewSet):
+    serializer_class = commonserializers.QuestionnaireSerializer
 
     def get_queryset(self):
-        return MetricCategory.objects.all()
+        return Questionnaire.objects.all()
 
 
 class MetricViewSet(ModelViewSet):
     serializer_class = commonserializers.MetricSerilizer
     def get_queryset(self):
-        return Metric.objects.filter(metric_category_id=self.kwargs['metric_category_pk']).order_by('index')
+        return Metric.objects.filter(questionnaire_id=self.kwargs['questionnaire_pk']).order_by('index')
 
 
-class MetricCategoryBySubjectViewSet(ModelViewSet):
-    serializer_class = commonserializers.MetricCategoryBySubjectSerilizer
+class QuestionnaireBySubjectViewSet(ModelViewSet):
+    serializer_class = commonserializers.QuestionnaireBySubjectSerilizer
     def get_queryset(self):
-        return MetricCategory.objects.prefetch_related('assessment_subjects').filter(assessment_subjects__id=self.kwargs['assessment_subject_pk']).order_by('index')
+        return Questionnaire.objects.prefetch_related('assessment_subjects').filter(assessment_subjects__id=self.kwargs['assessment_subject_pk']).order_by('index')
 
 
 class AssessmentSubjectViewSet(ModelViewSet):

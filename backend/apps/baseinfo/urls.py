@@ -11,7 +11,7 @@ from baseinfo.views import expertgroupviews
 
 router = routers.DefaultRouter()
 router.register('profiles', profileviews.AssessmentProfileViewSet, basename='profiles')
-router.register('metriccategories', commonviews.MetricCategoryViewSet, basename='metriccategories')
+router.register('questionnaires', commonviews.QuestionnaireViewSet, basename='questionnaires')
 router.register('subjects', commonviews.AssessmentSubjectViewSet, basename='subjects')
 router.register('attributes', commonviews.QualityAttributeViewSet, basename='attributes')
 router.register('dsl', profileviews.UploadProfileApi, basename='dsl')
@@ -19,8 +19,8 @@ router.register('tags', profileviews.ProfileTagViewSet, basename='tags')
 router.register('expertgroups', expertgroupviews.ExpertGroupViewSet, basename='expertgroups')
 
 
-metric_category_router = routers.NestedDefaultRouter(router, 'metriccategories', lookup='metric_category')
-metric_category_router.register('metrics', commonviews.MetricViewSet, basename='metric-category-metrics')
+questionnaire_router = routers.NestedDefaultRouter(router, 'questionnaires', lookup='questionnaire')
+questionnaire_router.register('metrics', commonviews.MetricViewSet, basename='questionnaire-metrics')
 
 attribute_router = routers.NestedDefaultRouter(router, 'attributes', lookup='attribute')
 attribute_router.register('images', QualityAttributeImageViewSet, basename='attribute-images')
@@ -34,11 +34,11 @@ profile_router.register('images', ProfileImageViewSet, basename='profile-images'
 expert_group_access_router = routers.NestedDefaultRouter(router, 'expertgroups', lookup='expertgroup')
 expert_group_access_router.register('expertgroupaccess', expertgroupviews.ExpertGroupAccessViewSet, basename='expertgroup-user-access')
 
-metric_category_by_subject_router = routers.NestedDefaultRouter(router, 'subjects', lookup='assessment_subject')
-metric_category_by_subject_router.register('metriccategories', commonviews.MetricCategoryBySubjectViewSet, basename='subject-metriccategories')
+questionnaire_by_subject_router = routers.NestedDefaultRouter(router, 'subjects', lookup='assessment_subject')
+questionnaire_by_subject_router.register('questionnaires', commonviews.QuestionnaireBySubjectViewSet, basename='subject-questionnaires')
 
 
-urlpatterns = router.urls + metric_category_router.urls + metric_category_by_subject_router.urls + attribute_router.urls + subject_router.urls + profile_router.urls + expert_group_access_router.urls
+urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject_router.urls + attribute_router.urls + subject_router.urls + profile_router.urls + expert_group_access_router.urls
 
 urlpatterns += [
     path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),

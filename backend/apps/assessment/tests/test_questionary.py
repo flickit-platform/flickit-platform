@@ -45,7 +45,7 @@ class Test_QuestionaryView:
         print(str(response.data))
         print(len(response.data['questionaries_info']))
 
-        newlist = sorted(base_info['metric_categories'], key=lambda x: x.index, reverse=True)
+        newlist = sorted(base_info['questionnaires'], key=lambda x: x.index, reverse=True)
 
         assert response.data['questionaries_info'][0]['title'] == newlist[0].title
         assert response.data['questionaries_info'][0]['metric_number'] == 2

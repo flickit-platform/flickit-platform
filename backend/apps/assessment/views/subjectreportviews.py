@@ -9,7 +9,7 @@ from account.permission.spaceperm import IsSpaceMember
 from assessment.serializers.subjectreportserializers import SubjectReportSerializer
 from assessment.models import QualityAttributeValue
 from assessment.models import AssessmentResult
-from assessment.services.categoryreport import CategoryReportInfo
+from assessment.services.questionnairereport import QuestionnaireReportInfo
 from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
 from assessment.services.metricstatistic import extract_total_progress
 
@@ -36,16 +36,16 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
 
     def calculate_report(self, response, quality_attribute_values):
         result = self.extract_assessment_result()
-        metric_categories = self.extract_category_from_assessment_result(result)
+        questionnaires = self.extract_questionnaire_from_assessment_result(result)
         self.extract_base_info(response, result)
-        category_report_info = self.extract_category_info(response, metric_categories)
-        response.data['total_metric_number'] = category_report_info.total_metric_number
-        response.data['total_answered_metric'] = category_report_info.total_answered_metric
-        self.calculate_subject_progress(response, category_report_info)
+        questionnaire_report_info = self.extract_questionnaire_info(response, questionnaires)
+        response.data['total_metric_number'] = questionnaire_report_info.total_metric_number
+        response.data['total_answered_metric'] = questionnaire_report_info.total_answered_metric
+        self.calculate_subject_progress(response, questionnaire_report_info)
 
         self.calculate_total_progress(response, result)
         
-        if category_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
+        if questionnaire_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
             response.data['status'] = 'Not Calculated'
             response.data['no_insight_yet_message'] = 'To view insights, you need to answer more questions'
             response.data['results'] = None
@@ -56,8 +56,8 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def extract_assessment_result(self):
         return AssessmentResult.objects.filter(pk=self.request.query_params.get('assessment_result_pk')).first()
 
-    def extract_category_from_assessment_result(self, result):
-        return result.assessment_project.assessment_profile.metric_categories\
+    def extract_questionnaire_from_assessment_result(self, result):
+        return result.assessment_project.assessment_profile.questionnaires\
             .filter(assessment_subjects__id = self.request.query_params.get('assessment_subject_pk')).all()
 
     def extract_base_info(self, response, result):
@@ -91,8 +91,8 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def extract_most_significant_strength_atts(self, quality_attribute_values):
         return [o['quality_attribute'] for o in quality_attribute_values if o['maturity_level_value'] > 2][:2]
 
-    def calculate_subject_progress(self, response, category_report_info):
-        if category_report_info.total_metric_number != 0:
+    def calculate_subject_progress(self, response, questionnaire_report_info):
+        if questionnaire_report_info.total_metric_number != 0:
             response.data['progress'] = int((response.data['total_answered_metric'] / response.data['total_metric_number']) * 100)
         else:
             response.data['progress'] = 0
@@ -100,11 +100,11 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     def calculate_total_progress(self, response, result: AssessmentResult):
         response.data['total_progress'] = extract_total_progress(result)
 
-    def extract_category_info(self, response, metric_categories):
-        category_report_info = CategoryReportInfo(metric_categories)
-        category_report_info.calculate_category_info(self.request.query_params.get('assessment_result_pk'))
-        # response.data['metric_categories_info'] = category_report_info.metric_categories_info
-        return category_report_info
+    def extract_questionnaire_info(self, response, questionnaires):
+        questionnaire_report_info = QuestionnaireReportInfo(questionnaires)
+        questionnaire_report_info.calculate_questionnaire_info(self.request.query_params.get('assessment_result_pk'))
+        # response.data['questionnaires_info'] = questionnaire_report_info.questionnaires_info
+        return questionnaire_report_info
 
     def get_serializer_class(self):
         return SubjectReportSerializer

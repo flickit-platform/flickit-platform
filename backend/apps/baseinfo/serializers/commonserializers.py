@@ -1,24 +1,24 @@
 from rest_framework import serializers
 
-from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, MetricCategory
+from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact
 from baseinfo.models.profilemodels import AssessmentProfile, ExpertGroup
 from baseinfo.imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 
-class MetricCategorySerilizer(serializers.ModelSerializer):
+class QuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MetricCategory
+        model = Questionnaire
         fields = ['id', 'code', 'title', 'index']
 
 
-class MetricCategoryBySubjectSerilizer(serializers.ModelSerializer):
+class QuestionnaireBySubjectSerilizer(serializers.ModelSerializer):
     class Meta:
-        model = MetricCategory
+        model = Questionnaire
         fields = ['id', 'code', 'title', 'total_question', 'index']
     total_question = serializers.SerializerMethodField()
 
-    def get_total_question(self, category:MetricCategory):
-        metrics = MetricCategory.objects.get(pk = category.id).metric_set.all()
+    def get_total_question(self, questionnaire:Questionnaire):
+        metrics = Questionnaire.objects.get(pk = questionnaire.id).metric_set.all()
         return len(metrics)
 
 
