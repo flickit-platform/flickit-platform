@@ -91,8 +91,8 @@ export const useSupTitleBreadcrumb = (
     space: !loading ? data?.space || "spaces" : data?.space,
     assessment: !loading ? data?.assessment || "assessments" : data?.assessment,
     questionnaire: !loading
-      ? data?.category || "questionnaires"
-      : data?.category,
+      ? data?.questionnaire || "questionnaires"
+      : data?.questionnaire,
   };
 };
 

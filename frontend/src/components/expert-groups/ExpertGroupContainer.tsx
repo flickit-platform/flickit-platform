@@ -40,6 +40,11 @@ import { toast } from "react-toastify";
 import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import { useAuthContext } from "../../providers/AuthProvider";
+import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
+import formatDate from "../../utils/formatDate";
+import useMenu from "../../utils/useMenu";
+import MoreActions from "../shared/MoreActions";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -47,7 +52,12 @@ const ExpertGroupContainer = () => {
   const { userInfo } = useAuthContext();
   const queryData = useQuery({
     service: (args = { id: expertGroupId }, config) =>
-      service.fetchUserExpertGroup(args, {}),
+      service.fetchUserExpertGroup(args, config),
+  });
+
+  const expertGroupMembersQueryData = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupMembers(args, config),
   });
 
   return (
@@ -65,6 +75,7 @@ const ExpertGroupContainer = () => {
           bio,
           profiles = [],
         } = data || {};
+
         return (
           <Box>
             <Title
@@ -178,32 +189,162 @@ const ExpertGroupContainer = () => {
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
                   {/* --------------------------- */}
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      display="flex"
-                      alignItems={"center"}
-                      sx={{ mb: 2 }}
-                    >
-                      <Trans i18nKey="members" />
-                    </Typography>
-                    <AddingNewMember queryData={queryData} />
-                    <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
-                      <AvatarGroup>
-                        {users.map((user: IUserInfo) => {
-                          const name = getUserName(user);
-                          return <Avatar alt={name} title={name} src="/" />;
-                        })}
-                      </AvatarGroup>
-                    </Box>
-                    {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
-                  </Box>
+                  <ExpertGroupMembers {...expertGroupMembersQueryData} />
                 </Box>
               </Grid>
             </Grid>
           </Box>
         );
       }}
+    />
+  );
+};
+
+const ExpertGroupMembers = (props: any) => {
+  return (
+    <QueryData
+      {...props}
+      render={(data) => {
+        const { results = [] } = data;
+        const invitees = results.filter((user: any) => user.user === null);
+        const users = results.filter((user: any) => user.user !== null);
+        const hasInvitees = invitees.length > 0;
+        return (
+          <Box>
+            <Typography
+              variant="h6"
+              display="flex"
+              alignItems={"center"}
+              sx={{ mb: 2 }}
+            >
+              <Trans i18nKey="members" />
+            </Typography>
+            <AddingNewMember queryData={props.query} />
+            {hasInvitees && (
+              <Box mb={2}>
+                <Invitees users={invitees} query={props.query} />
+              </Box>
+            )}
+            <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
+              <AvatarGroup>
+                {users.map((user: any) => {
+                  const name = getUserName(user?.user);
+                  return <Avatar alt={name} title={name} src="/" />;
+                })}
+              </AvatarGroup>
+            </Box>
+            {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
+          </Box>
+        );
+      }}
+    />
+  );
+};
+
+const Invitees = (props: any) => {
+  const { users, query } = props;
+  const [open, setOpen] = useState(false);
+  return (
+    <Box>
+      <Typography
+        variant="h6"
+        display="flex"
+        alignItems={"center"}
+        sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
+        onClick={() => setOpen(!open)}
+      >
+        <Trans i18nKey="invitees" />
+        <Box
+          sx={{
+            ...styles.centerV,
+            ml: "auto",
+          }}
+        >
+          {open ? (
+            <MinimizeRoundedIcon fontSize="small" />
+          ) : (
+            <AddRoundedIcon fontSize="small" />
+          )}
+        </Box>
+      </Typography>
+      <Collapse in={open}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", my: 1 }}>
+          {users.map((user: any) => {
+            const { invite_email, invite_expiration_date, id } = user;
+            return (
+              <Box
+                key={user.id}
+                sx={{
+                  ...styles.centerV,
+                  boxShadow: 1,
+                  borderRadius: 2,
+                  my: 0.5,
+                  py: 0.8,
+                  px: 1.5,
+                  width: "100%",
+                }}
+              >
+                <Box sx={{ ...styles.centerV }}>
+                  <Box>
+                    <Avatar sx={{ width: 34, height: 34 }} alt={invite_email} />
+                  </Box>
+                  <Box ml={2}>{invite_email}</Box>
+                </Box>
+                <Box ml="auto" sx={{ ...styles.centerV }}>
+                  <Box sx={{ ...styles.centerV, opacity: 0.8, px: 0.2 }}>
+                    <EventBusyRoundedIcon fontSize="small" sx={{ mr: 0.5 }} />
+                    <Typography variant="body2">
+                      {formatDate(invite_expiration_date)}
+                    </Typography>
+                  </Box>
+                  {/* {isOwner && (
+                    <Chip
+                      label={<Trans i18nKey="owner" />}
+                      size="small"
+                      sx={{ mr: 1.5 }}
+                    />
+                  )} */}
+                  <MemberActions query={query} userId={id} />
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
+      </Collapse>
+    </Box>
+  );
+};
+
+const MemberActions = (props: any) => {
+  const { query, userId } = props;
+  const { expertGroupId = "" } = useParams();
+  const { service } = useServiceContext();
+  const { query: deleteExpertGroupMember, loading } = useQuery({
+    service: (arg, config) =>
+      service.deleteExpertGroupMember(
+        { id: expertGroupId, userId: userId },
+        config
+      ),
+    runOnMount: false,
+    toastError: true,
+  });
+
+  const deleteItem = async (e: any) => {
+    await deleteExpertGroupMember();
+    await query();
+  };
+
+  return (
+    <MoreActions
+      {...useMenu()}
+      loading={loading}
+      items={[
+        {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="delete" />,
+          onClick: deleteItem,
+        },
+      ]}
     />
   );
 };
@@ -249,7 +390,6 @@ const AddMember = (props: any) => {
   const { expertGroupId } = useParams();
   const addMemberQueryData = useQuery({
     service: (args, config) => service.addMemberToExpertGroup(args, config),
-    toastError: true,
     runOnMount: false,
   });
 
@@ -276,7 +416,7 @@ const AddMember = (props: any) => {
   return (
     <Box
       component="form"
-      sx={{ my: 0.5 }}
+      sx={{ mb: 2, mt: 0 }}
       onSubmit={(e) => {
         e.preventDefault();
         if (!inputRef.current?.value) {

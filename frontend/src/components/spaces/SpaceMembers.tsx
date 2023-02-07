@@ -29,6 +29,8 @@ import useDialog from "../../utils/useDialog";
 import { ICustomError } from "../../utils/CustomError";
 import getUserName from "../../utils/getUserName";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import formatDate from "../../utils/formatDate";
+import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 
 export const SpaceMembers = () => {
   const { spaceId = "" } = useParams();
@@ -257,6 +259,22 @@ export const SpaceMembers = () => {
                                 <Box ml={2}>{name}</Box>
                               </Box>
                               <Box ml="auto" sx={{ ...styles.centerV }}>
+                                <Box
+                                  sx={{
+                                    ...styles.centerV,
+                                    opacity: 0.8,
+                                    px: 0.4,
+                                    mr: 2,
+                                  }}
+                                >
+                                  <EventBusyRoundedIcon
+                                    fontSize="small"
+                                    sx={{ mr: 0.5 }}
+                                  />
+                                  <Typography variant="body2">
+                                    {formatDate(invite_expiration_date)}
+                                  </Typography>
+                                </Box>
                                 {isOwner && (
                                   <Chip
                                     label={<Trans i18nKey="owner" />}
