@@ -240,5 +240,6 @@
   "color": "Color",
   "space": "Space",
   "groupSummary": "Group summary",
-  "thereIsNoProfileYet": "There is no profile yet"
+  "thereIsNoProfileYet": "There is no profile yet",
+  "resendAndInvitation": "Resend and invitation"
 }
