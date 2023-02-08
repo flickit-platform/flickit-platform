@@ -25,10 +25,11 @@ interface IProfileListItemProps {
   };
   fetchProfiles?: TQueryFunction;
   link?: string;
+  hasAccess?: boolean;
 }
 
 const ProfileListItem = (props: IProfileListItemProps) => {
-  const { data, fetchProfiles, link } = props;
+  const { data, fetchProfiles, link, hasAccess } = props;
   const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
@@ -77,13 +78,25 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           </Typography>
         </Box>
 
-        <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
+        <Box
+          ml="auto"
+          sx={{ ...styles.centerV, color: "#525252" }}
+          alignSelf="stretch"
+        >
           {is_active ? (
-            <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+            <Chip
+              label={<Trans i18nKey="published" />}
+              color="success"
+              size="small"
+            />
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions profile={data} fetchProfiles={fetchProfiles} />
+          <Actions
+            profile={data}
+            fetchProfiles={fetchProfiles}
+            hasAccess={hasAccess}
+          />
         </Box>
       </Box>
     </Box>
@@ -91,8 +104,12 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { profile, fetchProfiles, dialogProps, setUserInfo } = props;
-  const { id, current_user_delete_permission = false, is_active = false } = profile;
+  const { profile, fetchProfiles, dialogProps, setUserInfo, hasAccess } = props;
+  const {
+    id,
+    current_user_delete_permission = false,
+    is_active = false,
+  } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const deleteProfileQuery = useQuery({
@@ -111,7 +128,9 @@ const Actions = (props: any) => {
   });
 
   if (!fetchProfiles) {
-    console.warn("fetchProfiles not provided. profile list won't be updated on any action");
+    console.warn(
+      "fetchProfiles not provided. profile list won't be updated on any action"
+    );
   }
 
   // const openEditDialog = (e: any) => {
@@ -162,11 +181,16 @@ const Actions = (props: any) => {
     }
   };
 
-  return (
+  return hasAccess ? (
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
-      loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
+      loading={
+        deleteProfileQuery.loading ||
+        publishProfileQuery.loading ||
+        unPublishProfileQuery.loading ||
+        editLoading
+      }
       items={[
         is_active
           ? {
@@ -187,7 +211,7 @@ const Actions = (props: any) => {
         },
       ]}
     />
-  );
+  ) : null;
 };
 
 export default ProfileListItem;
