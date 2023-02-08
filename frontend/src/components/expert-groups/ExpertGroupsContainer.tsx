@@ -16,7 +16,7 @@ const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { id } = userInfo || {};
-  const { is_expert = true } = userInfo;
+  const { is_expert = false } = userInfo;
   const queryData = useQuery({
     service: (args = { id }, config) =>
       service.fetchUserExpertGroups(args, config),

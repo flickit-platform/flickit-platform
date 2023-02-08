@@ -75,9 +75,10 @@ const ExpertGroupContainer = () => {
           users = [],
           bio,
           owner,
+          is_expert = false,
           profiles = [],
         } = data || {};
-        const isOwner = userInfo.id === owner?.id;
+        const hasAccess = userInfo.id === owner?.id || is_expert;
 
         return (
           <Box>
@@ -116,7 +117,7 @@ const ExpertGroupContainer = () => {
                   </>
                 )}
                 <Box mt={5}>
-                  <ProfilesList queryData={queryData} />
+                  <ProfilesList queryData={queryData} hasAccess={hasAccess} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
@@ -194,7 +195,7 @@ const ExpertGroupContainer = () => {
                   {/* --------------------------- */}
                   <ExpertGroupMembers
                     {...expertGroupMembersQueryData}
-                    isOwner={isOwner}
+                    hasAccess={hasAccess}
                   />
                 </Box>
               </Grid>
@@ -207,7 +208,10 @@ const ExpertGroupContainer = () => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { isOwner, ...rest } = props;
+  const { hasAccess, ...rest } = props;
+  const [openInvitees, setOpenInvitees] = useState(false);
+  const [openAddMembers, setOpenAddMembers] = useState(false);
+
   return (
     <QueryData
       {...rest}
@@ -227,10 +231,21 @@ const ExpertGroupMembers = (props: any) => {
             >
               <Trans i18nKey="members" />
             </Typography>
-            {isOwner && <AddingNewMember queryData={rest.query} />}
-            {isOwner && hasInvitees && (
+            {hasAccess && (
+              <AddingNewMember
+                queryData={rest}
+                setOpenAddMembers={setOpenAddMembers}
+                openAddMembers={openAddMembers}
+              />
+            )}
+            {hasAccess && hasInvitees && (
               <Box mb={2}>
-                <Invitees users={invitees} query={rest.query} />
+                <Invitees
+                  users={invitees}
+                  query={rest.query}
+                  setOpenInvitees={setOpenInvitees}
+                  openInvitees={openInvitees}
+                />
               </Box>
             )}
             <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
@@ -250,8 +265,8 @@ const ExpertGroupMembers = (props: any) => {
 };
 
 const Invitees = (props: any) => {
-  const { users, query } = props;
-  const [open, setOpen] = useState(false);
+  const { users, query, setOpenInvitees, openInvitees } = props;
+
   return (
     <Box>
       <Typography
@@ -259,7 +274,7 @@ const Invitees = (props: any) => {
         display="flex"
         alignItems={"center"}
         sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpenInvitees((state: boolean) => !state)}
       >
         <Trans i18nKey="invitees" />
         <Box
@@ -268,14 +283,14 @@ const Invitees = (props: any) => {
             ml: "auto",
           }}
         >
-          {open ? (
+          {openInvitees ? (
             <MinimizeRoundedIcon fontSize="small" />
           ) : (
             <AddRoundedIcon fontSize="small" />
           )}
         </Box>
       </Typography>
-      <Collapse in={open}>
+      <Collapse in={openInvitees}>
         <Box sx={{ display: "flex", flexWrap: "wrap", my: 1 }}>
           {users.map((user: any) => {
             const { invite_email, invite_expiration_date, id } = user;
@@ -296,15 +311,20 @@ const Invitees = (props: any) => {
                   <Box>
                     <Avatar sx={{ width: 34, height: 34 }} alt={invite_email} />
                   </Box>
-                  <Box ml={2}>{invite_email}</Box>
+                  <Box ml={2}>
+                    {invite_email}
+                    <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
+                      <EventBusyRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 0.7, opacity: 0.9 }}
+                      />
+                      <Typography variant="body2">
+                        {formatDate(invite_expiration_date)}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
                 <Box ml="auto" sx={{ ...styles.centerV }}>
-                  <Box sx={{ ...styles.centerV, opacity: 0.8, px: 0.2 }}>
-                    <EventBusyRoundedIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    <Typography variant="body2">
-                      {formatDate(invite_expiration_date)}
-                    </Typography>
-                  </Box>
                   <MemberActions
                     query={query}
                     userId={id}
@@ -388,8 +408,8 @@ const MemberActions = (props: any) => {
 };
 
 const AddingNewMember = (props: any) => {
-  const { queryData } = props;
-  const [open, setOpen] = useState(false);
+  const { queryData, setOpenAddMembers, openAddMembers } = props;
+
   return (
     <Box>
       <Typography
@@ -397,7 +417,7 @@ const AddingNewMember = (props: any) => {
         display="flex"
         alignItems={"center"}
         sx={{ mb: 2, fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpenAddMembers((state: boolean) => !state)}
       >
         <Trans i18nKey="addMember" />
         <Box
@@ -406,14 +426,14 @@ const AddingNewMember = (props: any) => {
             ml: "auto",
           }}
         >
-          {open ? (
+          {openAddMembers ? (
             <MinimizeRoundedIcon fontSize="small" />
           ) : (
             <AddRoundedIcon fontSize="small" />
           )}
         </Box>
       </Typography>
-      <Collapse in={open}>
+      <Collapse in={openAddMembers}>
         <AddMember queryData={queryData} />
       </Collapse>
     </Box>
@@ -501,6 +521,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const ProfilesList = (props: any) => {
+  const { hasAccess } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
@@ -512,7 +533,9 @@ const ProfilesList = (props: any) => {
     <>
       <Title
         size="small"
-        toolbar={<CreateProfileButton onSubmitForm={profileQuery.query} />}
+        toolbar={
+          hasAccess && <CreateProfileButton onSubmitForm={profileQuery.query} />
+        }
       >
         <Trans i18nKey={"profiles"} />
       </Title>
@@ -539,10 +562,15 @@ const ProfilesList = (props: any) => {
                 {data.map((profile: any) => {
                   return (
                     <ProfileListItem
-                      link={`profiles/${profile?.id}`}
+                      link={
+                        hasAccess
+                          ? `profiles/${profile?.id}`
+                          : `/profiles/${profile?.id}`
+                      }
                       key={profile?.id}
                       data={profile}
                       fetchProfiles={profileQuery.query}
+                      hasAccess={hasAccess}
                     />
                   );
                 })}
