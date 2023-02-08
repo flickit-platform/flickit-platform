@@ -10,7 +10,7 @@ const ExpertGroupsList = (props: IExpertGroupsListProps) => {
   const { results = [] } = data;
 
   return (
-    <Box>
+    <Box mt={2}>
       <Grid container spacing={3}>
         {results.map((expertGroup: any) => {
           return (

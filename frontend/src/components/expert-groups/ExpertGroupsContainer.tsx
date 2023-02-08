@@ -16,32 +16,38 @@ const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { id } = userInfo || {};
+  const { is_expert = true } = userInfo;
   const queryData = useQuery({
-    service: (args = { id }, config) => service.fetchUserExpertGroups(args, config),
+    service: (args = { id }, config) =>
+      service.fetchUserExpertGroups(args, config),
   });
 
   return (
     <Box>
-      <Box
-        sx={{
-          background: "white",
-          py: 1,
-          px: 2,
-          ...styles.centerV,
-          borderRadius: 1,
-          my: 2,
-        }}
-      >
-        <Box></Box>
-        <Box ml="auto">
-          <CreateExpertGroupButton onSubmitForm={queryData.query} />
+      {is_expert && (
+        <Box
+          sx={{
+            background: "white",
+            py: 1,
+            px: 2,
+            ...styles.centerV,
+            borderRadius: 1,
+            mt: 2,
+          }}
+        >
+          <Box></Box>
+          <Box ml="auto">
+            {is_expert && (
+              <CreateExpertGroupButton onSubmitForm={queryData.query} />
+            )}
+          </Box>
         </Box>
-      </Box>
+      )}
       <QueryData
         {...queryData}
         renderLoading={() => {
           return (
-            <Grid container spacing={3}>
+            <Grid container spacing={3} mt={2}>
               {forLoopComponent(4, (i) => {
                 return (
                   <Grid item key={i} xs={12} sm={6} lg={4}>
@@ -66,7 +72,12 @@ const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
 
   return (
     <>
-      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
+      <Button
+        variant="contained"
+        sx={{ ml: "auto" }}
+        size="small"
+        onClick={dialogProps.openDialog}
+      >
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />
