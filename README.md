@@ -62,6 +62,3 @@ Access application through
 ![Assessment Report](https://github.com/avansoft/flickit-doc/blob/main/shot2.png?raw=true)
 
 ![Assessment Report](https://github.com/avansoft/flickit-doc/blob/main/shot4.png?raw=true)
-
-![Assessment Compare](https://github.com/avansoft/flickit-doc/blob/main/shot4.png?raw=true)
-
