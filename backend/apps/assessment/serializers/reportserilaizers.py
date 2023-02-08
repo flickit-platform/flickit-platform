@@ -1,7 +1,7 @@
 from statistics import mean
 from rest_framework import serializers
 
-from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
+from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
 from account.serializers.commonserializers import SpaceSerializer
 
 from assessment.serializers.commonserializers import ColorSerilizer
@@ -14,7 +14,7 @@ from assessment.services.attributesstatistics import extract_most_significant_st
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()
     space = SpaceSerializer()
-    assessment_profile = AssessmentProfileSimpleSerilizer()
+    assessment_profile = AssessmentProfileSerilizer()
     class Meta:
         model = AssessmentProject
         fields = ['title', 'last_modification_date', 'color', 'assessment_results', 'space', 'assessment_profile']
