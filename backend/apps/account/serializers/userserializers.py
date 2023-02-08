@@ -2,11 +2,13 @@ from django.db import transaction
 from rest_framework import serializers
 from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserCreatePasswordRetypeSerializer 
-from ..models import UserAccess
-from .commonserializers import UserSimpleSerializer, SpaceSerializer
-from .spaceserializers import SpaceSimpleSerializer
-from  baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
-from ..services import spaceservices
+
+from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
+
+from account.models import UserAccess
+from account.serializers.commonserializers import UserSimpleSerializer, SpaceSerializer
+from account.serializers.spaceserializers import SpaceSimpleSerializer
+from account.services import spaceservices
 
 class UserAccessSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only = True)

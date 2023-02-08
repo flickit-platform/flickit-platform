@@ -1,11 +1,11 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models.profilemodels import AssessmentProfile, ProfileTag
-from .models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
-from .models.metricmodels import AnswerTemplate, MetricImpact, Metric
+
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
+from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric
 from baseinfo.imagecomponent.models import QualityAttributeImage, SubjectImage, ProfileImage
     
-
 class ProfileImageFormInline(admin.TabularInline):
      model = ProfileImage
      fields= ['image']
@@ -26,20 +26,20 @@ class SubjectImageFormInline(admin.TabularInline):
 
 @admin.register(AssessmentSubject)
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    autocomplete_fields = ['metric_categories']
+    autocomplete_fields = ['questionnaires']
     search_fields = ['code', 'title', 'assessment_profile']
-    fields = ['code', 'title', 'description', 'assessment_profile', 'metric_categories', 'index']
-    list_display = ['code', 'title', 'subject_categories', 'assessment_profile']
+    fields = ['code', 'title', 'description', 'assessment_profile', 'questionnaires', 'index']
+    list_display = ['code', 'title', 'subject_questionnaires', 'assessment_profile']
     list_editable = ['title']
     list_per_page = 10
     inlines= [SubjectImageFormInline]
 
-    def subject_categories(self, obj):
-        return "\n".join([att.title for att in obj.metric_categories.all()])
+    def subject_questionnaires(self, obj):
+        return "\n".join([att.title for att in obj.questionnaires.all()])
 
 
-@admin.register(MetricCategory)
-class MetricCategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(Questionnaire)
+class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['code', 'title', 'assessment_profile']
     fields = ['code', 'title', 'description', 'assessment_profile', 'index']
     list_display = ['code', 'title', 'assessment_profile']
@@ -65,10 +65,10 @@ class QualityAttributeImageFormInline(admin.TabularInline):
 
 @admin.register(Metric)
 class MetricAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    autocomplete_fields = ['metric_category']
+    autocomplete_fields = ['questionnaire']
     search_fields = ['title']
-    list_filter = ['metric_category', 'last_modification_date']
-    list_display = ['title', 'metric_category', 'quality_attributes_metric']
+    list_filter = ['questionnaire', 'last_modification_date']
+    list_display = ['title', 'questionnaire', 'quality_attributes_metric']
     list_per_page = 10
     inlines = [MetricImpactFormInline, AnswerTemplateFormInline]
 

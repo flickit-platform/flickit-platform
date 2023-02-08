@@ -3,18 +3,18 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from ..serializers.expertgroupserializers import ExpertGroupSerilizer, ExpertGroupCreateSerilizers, \
-    ExpertGroupGiveAccessSerializer, ExpertGroupAccessSerializer
-from ..services import expertgroupservice
-from ..models.profilemodels import ExpertGroup, ExpertGroupAccess
-from ..permissions import ManageExpertGroupPermission
+
+from baseinfo.serializers import expertgroupserializers 
+from baseinfo.services import expertgroupservice
+from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
+from baseinfo.permissions import ManageExpertGroupPermission
 
 class ExpertGroupViewSet(ModelViewSet):
     permission_classes = [ManageExpertGroupPermission]
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
-            return ExpertGroupCreateSerilizers
-        return ExpertGroupSerilizer
+            return expertgroupserializers.ExpertGroupCreateSerilizers
+        return expertgroupserializers.ExpertGroupSerilizer
 
     def get_queryset(self):
         user_id = self.request.query_params.get('user_id')
@@ -24,7 +24,7 @@ class ExpertGroupViewSet(ModelViewSet):
 
 class ExpertGroupAccessViewSet(ModelViewSet):
     http_method_names = ['get', 'delete']
-    serializer_class = ExpertGroupAccessSerializer
+    serializer_class = expertgroupserializers.ExpertGroupAccessSerializer
 
     def get_queryset(self):
         return ExpertGroupAccess.objects.filter(expert_group_id = self.kwargs['expertgroup_pk']).select_related('user')
@@ -45,10 +45,10 @@ class ExpertGroupAccessViewSet(ModelViewSet):
 
 
 class AddUserToExpertGroupApi(APIView):
-    serializer_class = ExpertGroupGiveAccessSerializer
+    serializer_class = expertgroupserializers.ExpertGroupGiveAccessSerializer
     permission_classes = [ManageExpertGroupPermission]
     def post(self, request, expert_group_id):
-        serializer = ExpertGroupGiveAccessSerializer(data=request.data)
+        serializer = expertgroupserializers.ExpertGroupGiveAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = expertgroupservice.add_user_to_expert_group(expert_group_id, **serializer.validated_data)
         email = serializer.validated_data['email']

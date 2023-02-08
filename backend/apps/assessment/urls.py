@@ -1,8 +1,9 @@
 from django.urls import path
 from rest_framework_nested import routers
-from .views import reportviews, commonviews, comparisionviews, metricvalueviews, projectviews
+
+from assessment.views import reportviews, commonviews, comparisionviews, metricvalueviews, projectviews
 from assessment.views.subjectreportviews import SubjectReportViewSet
-from .views.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
+from assessment.views.questionaryviews import QuestionaryView, QuestionaryBaseInfoView
 
 
 router = routers.DefaultRouter()
@@ -21,7 +22,7 @@ urlpatterns = router.urls + metric_value_router.urls
 
 urlpatterns += [
     path("questionaries/<str:assessment_project_id>/", QuestionaryView.as_view()),
-    path("result/<str:assessment_project_id>/<str:metric_category_id>/", metricvalueviews.MetricValueListView.as_view()),
+    path("result/<str:assessment_project_id>/<str:questionnaire_id>/", metricvalueviews.MetricValueListView.as_view()),
     path("progress/<str:assessment_project_id>/", metricvalueviews.TotalProgressView.as_view()),
     path("subjects/<str:assessment_project_id>/", QuestionaryBaseInfoView.as_view()),
     path("breadcrumbinfo/", commonviews.BreadcrumbInformationView.as_view()),

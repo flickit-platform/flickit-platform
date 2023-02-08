@@ -1,9 +1,10 @@
-from django.db import transaction
 from zipfile import ZipFile
-from ..models.basemodels import MetricCategory, AssessmentSubject, QualityAttribute
-from ..models.metricmodels import Metric, MetricImpact, AnswerTemplate
-from ..models.profilemodels import AssessmentProfile, ProfileDsl
-from ..services import profileservice, expertgroupservice
+from django.db import transaction
+
+from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
+from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl
+from baseinfo.services import profileservice, expertgroupservice
 
 def extract_dsl_contents(dsl_id):
     dsl = ProfileDsl.objects.get(id = dsl_id)
@@ -25,7 +26,7 @@ def __trim_content(content):
 @transaction.atomic
 def import_profile(descriptive_profile, **kwargs):
     assessment_profile = __import_profile_base_info(descriptive_profile, kwargs)
-    __import_categories(descriptive_profile['categoryModels'], assessment_profile)
+    __import_questionnaires(descriptive_profile['questionnaireModels'], assessment_profile)
     __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
     __import_attributes(descriptive_profile['attributeModels'])
     __import_metrics(descriptive_profile['metricModels'])
@@ -58,15 +59,15 @@ def __import_profile_base_info(descriptive_profile, extra_info):
     assessment_profile.save()
     return assessment_profile
 
-def __import_categories(category_models, profile):
-    for category_model in category_models:
-        category = MetricCategory()
-        category.code = category_model['code']
-        category.title = category_model['title']
-        category.description = category_model['description']
-        category.index = category_model['index']
-        category.assessment_profile = profile
-        category.save()
+def __import_questionnaires(questionnaire_models, profile):
+    for questionnaire_model in questionnaire_models:
+        questionnaire = Questionnaire()
+        questionnaire.code = questionnaire_model['code']
+        questionnaire.title = questionnaire_model['title']
+        questionnaire.description = questionnaire_model['description']
+        questionnaire.index = questionnaire_model['index']
+        questionnaire.assessment_profile = profile
+        questionnaire.save()
 
 def __import_subjects(subject_models, profile):
     for model in subject_models:
@@ -76,11 +77,11 @@ def __import_subjects(subject_models, profile):
         subject.description = model['description']
         subject.index = model['index']
         subject.assessment_profile = profile
-        category_codes = model['categoryCodes']
+        questionnaire_codes = model['questionnaireCodes']
         subject.save()
-        for category_code in category_codes:
-            metric_category = MetricCategory.objects.filter(code = category_code).first()
-            subject.metric_categories.add(metric_category)
+        for questionnaire_code in questionnaire_codes:
+            questionnaire = Questionnaire.objects.filter(code = questionnaire_code).first()
+            subject.questionnaires.add(questionnaire)
             subject.save()
         
 
@@ -100,7 +101,7 @@ def __import_metrics(metricModels):
         metric = Metric()
         metric.title = model['question']
         metric.index = model['index']
-        metric.metric_category = MetricCategory.objects.filter(code=model['categoryCode']).first()
+        metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
         metric.save()
         for impact_model in model['metricImpacts']:
             impact = MetricImpact()

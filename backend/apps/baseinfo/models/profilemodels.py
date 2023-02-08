@@ -1,6 +1,6 @@
 from django.db import models
-from account.models import User
 
+from account.models import User
 
 class ExpertGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)

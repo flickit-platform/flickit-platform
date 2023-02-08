@@ -1,7 +1,7 @@
 from rest_framework import exceptions
 from cryptography.fernet import Fernet
-from assessmentplatform.settings import TOKEN_KEY
 
+from assessmentplatform.settings import TOKEN_KEY
 
 def encrypt_message(message):
     encoded_message = message.encode()

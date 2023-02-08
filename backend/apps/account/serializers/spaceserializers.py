@@ -1,9 +1,9 @@
 
 from rest_framework import serializers
 
-from ..models import Space
-from ..services import userservices
-from .commonserializers import UserSimpleSerializer
+from account.models import Space
+from account.services import userservices
+from account.serializers.commonserializers import UserSimpleSerializer
 
 class InputSpaceAccessSerializer(serializers.Serializer):
     email = serializers.EmailField()

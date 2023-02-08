@@ -3,7 +3,7 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
 from assessment.models import AssessmentProfile
-from baseinfo.models.basemodels import AssessmentSubject, MetricCategory, QualityAttribute
+from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate
 from assessment.fixture.dictionary import Dictionary
 
@@ -27,27 +27,27 @@ def authenticate(api_client):
 def init_data():
     def do_init_data():
         profile = AssessmentProfile.objects.filter(is_default=True).first()
-        metric_category_list = []
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 1, title = 'c1'))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 2, title = 'c2'))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 3, title = 'c3'))
-        metric_category_list.append(baker.make(MetricCategory, assessment_profile = profile, index = 4, title = 'c4'))
+        questionnaire_list = []
+        questionnaire_list.append(baker.make(Questionnaire, assessment_profile = profile, index = 1, title = 'c1'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_profile = profile, index = 2, title = 'c2'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_profile = profile, index = 3, title = 'c3'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_profile = profile, index = 4, title = 'c4'))
 
         metrics_list = []
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[0], index = 1))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[0], index = 2))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[0], index = 3))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[0], index = 1))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[0], index = 2))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[0], index = 3))
 
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[1], index = 1))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[1], index = 2))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[1], index = 3))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[1], index = 1))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[1], index = 2))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[1], index = 3))
 
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[2], index = 1))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[2], index = 2))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[2], index = 3))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[2], index = 1))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[2], index = 2))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[2], index = 3))
 
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[3], index = 1))
-        metrics_list.append(baker.make(Metric, metric_category = metric_category_list[3], index = 2))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[3], index = 1))
+        metrics_list.append(baker.make(Metric, questionnaire = questionnaire_list[3], index = 2))
 
         answer_templates = []
         answer_templates.append(baker.make(AnswerTemplate, metric = metrics_list[0], value = 1))
@@ -84,8 +84,8 @@ def init_data():
         answer_templates.append(baker.make(AnswerTemplate, metric = metrics_list[10], value = 4))
         answer_templates.append(baker.make(AnswerTemplate, metric = metrics_list[10], value = 5))
         
-        subject1 = baker.make(AssessmentSubject, assessment_profile = profile, metric_categories = [metric_category_list[0], metric_category_list[1]])
-        subject2 = baker.make(AssessmentSubject, assessment_profile = profile,  metric_categories = [metric_category_list[2], metric_category_list[3]])
+        subject1 = baker.make(AssessmentSubject, assessment_profile = profile, questionnaires = [questionnaire_list[0], questionnaire_list[1]])
+        subject2 = baker.make(AssessmentSubject, assessment_profile = profile,  questionnaires = [questionnaire_list[2], questionnaire_list[3]])
 
 
         atts = []
@@ -141,7 +141,7 @@ def init_data():
 
     
         base_info = Dictionary()
-        base_info.add("metric_categories", metric_category_list)
+        base_info.add("questionnaires", questionnaire_list)
         base_info.add("metrics", metrics_list)
         base_info.add("answer_templates", answer_templates)
         base_info.add("subject1", subject1)

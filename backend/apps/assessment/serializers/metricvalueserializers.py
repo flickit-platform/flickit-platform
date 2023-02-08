@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from baseinfo.models.metricmodels import Metric
 from baseinfo.serializers.commonserializers import AnswerTemplateSerializer, SimpleMetricSerializers
-from assessment.models import MetricValue, QualityAttributeValue
 
-from ..fixture.common import update_assessment_status
-from ..services.maturitylevel import calculate_maturity_level
+from assessment.models import MetricValue, QualityAttributeValue
+from assessment.fixture.common import update_assessment_status
+from assessment.services.maturitylevel import calculate_maturity_level
 
 
 

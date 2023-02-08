@@ -1,9 +1,9 @@
-from django.db import transaction
 from datetime import timedelta
+from django.db import transaction
 from django.utils import timezone
 
-from ..models import User, UserAccess
-from ..tasks import async_send_invite
+from account.models import User, UserAccess
+from account.tasks import async_send_invite
 
 
 def load_user_by_email(email) -> User:

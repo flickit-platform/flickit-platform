@@ -1,21 +1,22 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
+
+from account.permission.spaceperm import IsSpaceMember
+from baseinfo.models.basemodels import Questionnaire
 
 from assessment.models import MetricValue, AssessmentProject
-from account.permission.spaceperm import IsSpaceMember
-from baseinfo.models.basemodels import MetricCategory
-from ..serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
-from ..fixture.dictionary import Dictionary
-from ..services.metricstatistic import extract_total_progress
+from assessment.serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
+from assessment.fixture.dictionary import Dictionary
+from assessment.services.metricstatistic import extract_total_progress
 
 
 class MetricValueViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend,SearchFilter]
-    search_field = ['metric__metric_category']
+    search_field = ['metric__questionnaire']
     permission_classes = [IsAuthenticated, IsSpaceMember]
 
     def get_serializer_class(self):
@@ -27,8 +28,8 @@ class MetricValueViewSet(ModelViewSet):
     
     def get_queryset(self):
         query_set = MetricValue.objects.filter(assessment_result_id = self.kwargs['assessment_result_pk']).select_related('metric')
-        if('metric_category_pk' in self.request.query_params):
-            return query_set.filter(metric__metric_category_id = self.request.query_params.get('metric_category_pk'))
+        if('questionnaire_pk' in self.request.query_params):
+            return query_set.filter(metric__questionnaire_id = self.request.query_params.get('questionnaire_pk'))
         return query_set
 
     def get_serializer_context(self):
@@ -45,21 +46,21 @@ class TotalProgressView(APIView):
 
 class MetricValueListView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
-    def get (self, request, assessment_project_id, metric_category_id):
-        category = MetricCategory.objects.get(id = metric_category_id)
+    def get (self, request, assessment_project_id, questionnaire_id):
+        questionnaire = Questionnaire.objects.get(id = questionnaire_id)
         content = {}
         assessment = AssessmentProject.objects.get(id = assessment_project_id)
         metric_values = assessment.get_assessment_result().metric_values.all()
-        metrics = self.extract_metrics(category, metric_values)
+        metrics = self.extract_metrics(questionnaire, metric_values)
         content['metrics'] = metrics
         content['assessment_result_id'] = assessment.get_assessment_result().id
 
         return Response(content)
 
     # TODO: Find a better way for serilizing -> pickle or serilizer.data MetricSerilizer
-    def extract_metrics(self, category, metric_values):
+    def extract_metrics(self, questionnaire, metric_values):
         metrics = []
-        metric_query_set = category.metric_set.all().order_by('index')
+        metric_query_set = questionnaire.metric_set.all().order_by('index')
         for item in metric_query_set:
             metric = Dictionary()
             metric.add('id', item.id)

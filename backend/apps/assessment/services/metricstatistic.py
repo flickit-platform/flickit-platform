@@ -1,10 +1,11 @@
-from baseinfo.models.basemodels import MetricCategory, AssessmentSubject
-from ..fixture.dictionary import Dictionary
-from ..models import AssessmentResult
+from baseinfo.models.basemodels import Questionnaire, AssessmentSubject
+
+from assessment.fixture.dictionary import Dictionary
+from assessment.models import AssessmentResult
 
 
-def extract_total_answered_metric_number(result: AssessmentResult, category: MetricCategory):
-    metrics = category.metric_set.all()
+def extract_total_answered_metric_number(result: AssessmentResult, questionnaire: Questionnaire):
+    metrics = questionnaire.metric_set.all()
     answered_metric = 0
     total_answered_metric_number = 0
     for metric in metrics:
@@ -18,27 +19,27 @@ def extract_total_answered_metric_number(result: AssessmentResult, category: Met
 
 def calculate_answered_metric_by_subject(result: AssessmentResult, subject: AssessmentSubject):
     total_answered_metric_number = 0
-    for category in subject.metric_categories.all():
-        total_answered_metric_number += extract_total_answered_metric_number(result, category) 
+    for questionnaire in subject.questionnaires.all():
+        total_answered_metric_number += extract_total_answered_metric_number(result, questionnaire) 
     return total_answered_metric_number
 
 def calculate_total_metric_number_by_subject(subject: AssessmentSubject):
     total_metric_number = 0
-    for category in subject.metric_categories.all():
-        metrics = category.metric_set.all()
+    for questionnaire in subject.questionnaires.all():
+        metrics = questionnaire.metric_set.all()
         total_metric_number += len(metrics)
     return total_metric_number
 
 def calculate_answered_metric_by_result(result:AssessmentResult):
     total_answered_metric_number = 0
-    for category in MetricCategory.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
-        total_answered_metric_number += extract_total_answered_metric_number(result, category) 
+    for questionnaire in Questionnaire.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+        total_answered_metric_number += extract_total_answered_metric_number(result, questionnaire) 
     return total_answered_metric_number
 
 def calculate_total_metric_number_by_result(result:AssessmentResult):
     total_metric_number = 0
-    for category in MetricCategory.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
-        metrics = category.metric_set.all()
+    for questionnaire in Questionnaire.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+        metrics = questionnaire.metric_set.all()
         total_metric_number += len(metrics)
     return total_metric_number
 

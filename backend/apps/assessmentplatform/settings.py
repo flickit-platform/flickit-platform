@@ -1,6 +1,6 @@
 import os
-from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 
 __version__ = "0.5.0-SNAPSHOT"
 
@@ -186,7 +186,7 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
-    ("BaseInfo", ("baseinfo.AssessmentProfile", "baseinfo.MetricCategory",
+    ("BaseInfo", ("baseinfo.AssessmentProfile", "baseinfo.Questionnaire",
     "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric", "baseinfo.ProfileTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
        "generic.ThreadedComment", (_("Media Library"), "media-library"),)),

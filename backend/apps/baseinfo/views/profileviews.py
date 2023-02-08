@@ -1,15 +1,15 @@
 from django.db import transaction
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 
-from ..services import profileservice, expertgroupservice
-from ..serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
-from ..models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
-from ..permissions import ManageExpertGroupPermission
+from baseinfo.services import profileservice, expertgroupservice
+from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
+from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from baseinfo.permissions import ManageExpertGroupPermission
 
 class AssessmentProfileViewSet(ModelViewSet):
     serializer_class = AssessmentProfileSerilizer

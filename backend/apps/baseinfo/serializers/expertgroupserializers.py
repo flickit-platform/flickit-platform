@@ -2,12 +2,14 @@ from django.db import transaction
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from account.serializers.userserializers import UserSimpleSerializer
 
-from ..models.profilemodels import ExpertGroup, ExpertGroupAccess
-from ..serializers.commonserializers import AssessmentProfileSimpleSerilizer
-from ..services import expertgroupservice
+from account.serializers.userserializers import UserSimpleSerializer
 from account.services import userservices
+
+from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
+from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
+from baseinfo.services import expertgroupservice
+
 
 
 class ExpertGroupSerilizer(serializers.ModelSerializer):

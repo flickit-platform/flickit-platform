@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from ..models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
-from ..imagecomponent.serializers import ProfileImageSerializer
-from .commonserializers import ExpertGroupSimpleSerilizers
+
 from assessment.models import AssessmentProject
+
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
+from baseinfo.imagecomponent.serializers import ProfileImageSerializer
+from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
+
 from ..services import profileservice
 
 
@@ -42,13 +45,13 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
         return profile.assessment_subjects.all().count()
 
     def get_number_of_questionaries(self, profile: AssessmentProfile):
-        return profile.metric_categories.all().count()
+        return profile.questionnaires.all().count()
 
     def get_subjects_with_desc(self, profile: AssessmentProfile):
         return profile.assessment_subjects.values('id', 'title', 'description')
 
     def get_questionnaires(self, profile: AssessmentProfile):
-        return profile.metric_categories.values('id', 'title', 'description')
+        return profile.questionnaires.values('id', 'title', 'description')
 
     def get_likes_number(self, profile: AssessmentProfile):
         return profile.likes.count()

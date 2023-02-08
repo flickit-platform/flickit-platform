@@ -1,5 +1,6 @@
 from baseinfo.models.metricmodels import MetricImpact
-from ..fixture.dictionary import Dictionary
+
+from assessment.fixture.dictionary import Dictionary
 
 
 def calculate_maturity_level(result, quality_attribute):

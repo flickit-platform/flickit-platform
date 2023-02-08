@@ -2,24 +2,23 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework.permissions import IsAuthenticated
 
-from assessment.models import AssessmentProject
 from account.models import Space
 from account.permission.spaceperm import IsSpaceMember
-
-from ..serializers.projectserializers import AssessmentProjecCreateSerilizer, AssessmentProjectListSerilizer,\
-     AssessmentProjectSimpleSerilizer, AssessmentProjectCompareSerilizer
-
 from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME
+
+from assessment.models import AssessmentProject
+from assessment.serializers import projectserializers 
+
+
 
 class AssessmentProjectViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ('create', 'update'):
-            return AssessmentProjecCreateSerilizer   
+            return projectserializers.AssessmentProjecCreateSerilizer   
         else:
-            return AssessmentProjectListSerilizer
+            return projectserializers.AssessmentProjectListSerilizer
 
     def get_queryset(self):
         return AssessmentProject.objects.all().order_by('creation_time')
@@ -27,7 +26,7 @@ class AssessmentProjectViewSet(ModelViewSet):
 class AssessmentProjectBySpaceViewSet(ModelViewSet):
     permission_classes=[IsAuthenticated, IsSpaceMember]
     def get_serializer_class(self):
-        return AssessmentProjectListSerilizer
+        return projectserializers.AssessmentProjectListSerilizer
 
     # TODO: Handle requested space to suitable position
     def list(self, request, *args, **kwargs):
@@ -45,7 +44,7 @@ class AssessmentProjectBySpaceViewSet(ModelViewSet):
 class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
     permission_classes=[IsAuthenticated]
     def get_serializer_class(self):
-        return AssessmentProjectSimpleSerilizer
+        return projectserializers.AssessmentProjectSimpleSerilizer
 
     def get_queryset(self):
         current_user = self.request.user
@@ -69,7 +68,7 @@ class AssessmentProjectSelectForCompareView(APIView):
         for assessment_id in assessment_list_ids:
             try:
                 assessment = AssessmentProject.objects.get(id=assessment_id)
-                assessment_list.append(AssessmentProjectCompareSerilizer(assessment).data)
+                assessment_list.append(projectserializers.AssessmentProjectCompareSerilizer(assessment).data)
             except AssessmentProject.DoesNotExist:
                 return Response({'error: The assessment_id {id} is invalid'.format(id=assessment_id)},status=status.HTTP_404_NOT_FOUND)
         return Response(assessment_list)

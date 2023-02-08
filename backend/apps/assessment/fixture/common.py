@@ -1,6 +1,6 @@
 from statistics import mean
-from ..models import AssessmentProject, AssessmentResult
-from ..services.metricstatistic import calculate_answered_metric_by_result
+from assessment.models import AssessmentProject, AssessmentResult
+from assessment.services.metricstatistic import calculate_answered_metric_by_result
 
 
 ANSWERED_QUESTION_NUMBER_BOUNDARY = 5

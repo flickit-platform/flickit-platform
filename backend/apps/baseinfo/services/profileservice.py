@@ -3,11 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
 
 from assessment.models import AssessmentProject
-from ..models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
-from ..serializers.profileserializers import AssessmentProfileSerilizer
-from ..models.profilemodels import AssessmentProfile, ProfileTag
 
-
+from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
+from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
@@ -66,14 +65,14 @@ def extract_profile_basic_infos(profile: AssessmentProfile):
 
 def extract_questionnaires_infos(profile: AssessmentProfile):
     questionnairesInfos = []
-    categories = profile.metric_categories.all()
-    for category in categories:
-        category_infos = {}
-        category_infos['title'] = category.title
-        category_infos['description'] = category.description
-        category_infos['report_infos'] = __extract_category_report_info(category)
-        category_infos['questions'] = __extract_category_metric_info(category) 
-        questionnairesInfos.append(category_infos)
+    questionnaires = profile.questionnaires.all()
+    for questionnaire in questionnaires:
+        questionnaire_infos = {}
+        questionnaire_infos['title'] = questionnaire.title
+        questionnaire_infos['description'] = questionnaire.description
+        questionnaire_infos['report_infos'] = __extract_questionnaire_report_info(questionnaire)
+        questionnaire_infos['questions'] = __extract_questionnaire_metric_info(questionnaire) 
+        questionnairesInfos.append(questionnaire_infos)
     return questionnairesInfos
 
 def extract_subjects_infos(profile):
@@ -92,9 +91,9 @@ def extract_subjects_infos(profile):
 def extract_profile_report_infos(profile):
     profileInfos = []
     subjects = profile.assessment_subjects.all()
-    profileInfos.append(__extract_profile_category_count(profile.metric_categories))
+    profileInfos.append(__extract_profile_questionnaire_count(profile.questionnaires))
     profileInfos.append(__extract_profile_attribute_count(subjects))
-    profileInfos.append(__extract_profile_metric_count(profile.metric_categories))
+    profileInfos.append(__extract_profile_metric_count(profile.questionnaires))
     profileInfos.append(__extract_profile_subjects(subjects))
     profileInfos.append(__extract_profile_tags(profile.tags.all()))
     return profileInfos
@@ -126,9 +125,9 @@ def __extratc_subject_report_info(subject):
     report_infos.append({'title' : 'Index of the {}'.format(subject.title), 'item': subject.index})
     return report_infos
 
-def __extract_category_metric_info(category):
+def __extract_questionnaire_metric_info(questionnaire):
     questions = []
-    for metric in category.metric_set.all():
+    for metric in questionnaire.metric_set.all():
         info = {}
         info['title'] = metric.title
         info['inedx'] = metric.index
@@ -146,11 +145,11 @@ def __extratc_metric_related_attributes(metric):
 def __extract_metric_options(metric):
     return [answer.caption for answer in metric.answer_templates.all()]
 
-def __extract_category_report_info(category):
+def __extract_questionnaire_report_info(questionnaire):
     report_infos = []
-    report_infos.append({'title' : 'Number of questions', 'item': category.metric_set.count()})
-    report_infos.append({'title' : 'Questionnaire index', 'item': category.index})
-    report_infos.append({'title' : 'Related subjects', 'item': [subject.title for subject in category.assessment_subjects.all()]})
+    report_infos.append({'title' : 'Number of questions', 'item': questionnaire.metric_set.count()})
+    report_infos.append({'title' : 'Questionnaire index', 'item': questionnaire.index})
+    report_infos.append({'title' : 'Related subjects', 'item': [subject.title for subject in questionnaire.assessment_subjects.all()]})
     return report_infos
 
 def __extract_profile_subjects(subjects):
@@ -161,13 +160,13 @@ def __extract_profile_tags(tags):
     tag_titles = [tag.title for tag in tags]
     return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
     
-def __extract_profile_category_count(metric_categories):
-    return {'title' : 'Questionnaires count', 'item': metric_categories.count()}
+def __extract_profile_questionnaire_count(questionnaires):
+    return {'title' : 'Questionnaires count', 'item': questionnaires.count()}
 
-def __extract_profile_metric_count(metric_categories):
+def __extract_profile_metric_count(questionnaires):
     total_metric_count = 0
-    for category in metric_categories.all():
-        total_metric_count += category.metric_set.count()
+    for questionnaire in questionnaires.all():
+        total_metric_count += questionnaire.metric_set.count()
     return {'title' : 'Total questions count', 'item': total_metric_count}
 
 def __extract_profile_attribute_count(subjects):

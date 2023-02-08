@@ -5,9 +5,9 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from ..services import importprofileservice
-from ..serializers.profileserializers import ImportProfileSerializer
-from ..permissions import ManageExpertGroupPermission
+from baseinfo.services import importprofileservice
+from baseinfo.serializers.profileserializers import ImportProfileSerializer
+from baseinfo.permissions import ManageExpertGroupPermission
 
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"

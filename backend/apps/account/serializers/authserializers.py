@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import PasswordField
 from rest_framework_simplejwt.tokens import RefreshToken
-from ..models import User
+
+from account.models import User
 
 class MyTokenObtainSerializer(serializers.Serializer):
     username_field = User.USERNAME_FIELD

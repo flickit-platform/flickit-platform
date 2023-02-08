@@ -2,11 +2,13 @@ from django.urls import path, re_path
 from rest_framework_nested import routers
 from rest_framework_simplejwt import views
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .views import userviews, spaceviews
+
 from assessment.views import projectviews
+
+from account.views import userviews, spaceviews
 from account.views.userviews import UserActivationView
 from account.views.spaceviews import ChangeCurrentSpaceViewSet
-from .serializers.authserializers import MyTokenObtainPairSerializer
+from account.serializers.authserializers import MyTokenObtainPairSerializer
 
 router = routers.DefaultRouter()
 router.register('spaces', spaceviews.SpaceViewSet, basename='spaces')

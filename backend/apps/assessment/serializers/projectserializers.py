@@ -1,12 +1,13 @@
+from django.utils.text import slugify 
 from rest_framework import serializers
 
-from django.utils.text import slugify 
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
 from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
 from account.serializers.spaceserializers import SpaceSimpleSerializer
-from ..services.metricstatistic import extract_total_progress
-from ..models import AssessmentProject, AssessmentResult
-from .commonserializers import ColorSerilizer
+
+from assessment.services.metricstatistic import extract_total_progress
+from assessment.models import AssessmentProject, AssessmentResult
+from assessment.serializers.commonserializers import ColorSerilizer
 
 
 
