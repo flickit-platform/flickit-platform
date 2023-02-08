@@ -73,8 +73,10 @@ const ExpertGroupContainer = () => {
           number_of_profiles,
           users = [],
           bio,
+          owner,
           profiles = [],
         } = data || {};
+        const isOwner = userInfo.id === owner?.id;
 
         return (
           <Box>
@@ -189,7 +191,10 @@ const ExpertGroupContainer = () => {
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
                   {/* --------------------------- */}
-                  <ExpertGroupMembers {...expertGroupMembersQueryData} />
+                  <ExpertGroupMembers
+                    {...expertGroupMembersQueryData}
+                    isOwner={isOwner}
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -201,14 +206,16 @@ const ExpertGroupContainer = () => {
 };
 
 const ExpertGroupMembers = (props: any) => {
+  const { isOwner, ...rest } = props;
   return (
     <QueryData
-      {...props}
+      {...rest}
       render={(data) => {
         const { results = [] } = data;
         const invitees = results.filter((user: any) => user.user === null);
         const users = results.filter((user: any) => user.user !== null);
         const hasInvitees = invitees.length > 0;
+
         return (
           <Box>
             <Typography
@@ -219,10 +226,10 @@ const ExpertGroupMembers = (props: any) => {
             >
               <Trans i18nKey="members" />
             </Typography>
-            <AddingNewMember queryData={props.query} />
-            {hasInvitees && (
+            {isOwner && <AddingNewMember queryData={rest.query} />}
+            {isOwner && hasInvitees && (
               <Box mb={2}>
-                <Invitees users={invitees} query={props.query} />
+                <Invitees users={invitees} query={rest.query} />
               </Box>
             )}
             <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
@@ -297,13 +304,6 @@ const Invitees = (props: any) => {
                       {formatDate(invite_expiration_date)}
                     </Typography>
                   </Box>
-                  {/* {isOwner && (
-                    <Chip
-                      label={<Trans i18nKey="owner" />}
-                      size="small"
-                      sx={{ mr: 1.5 }}
-                    />
-                  )} */}
                   <MemberActions query={query} userId={id} />
                 </Box>
               </Box>
