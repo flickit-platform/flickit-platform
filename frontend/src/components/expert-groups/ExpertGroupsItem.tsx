@@ -20,6 +20,7 @@ import { useQuery } from "../../utils/useQuery";
 import { Trans } from "react-i18next";
 import useDialog from "../../utils/useDialog";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
+import { useAuthContext } from "../../providers/AuthProvider";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -124,6 +125,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 const Actions = (props: any) => {
   const { expertGroup } = props;
   const { query: fetchExpertGroups } = useQueryDataContext();
+  const { userInfo } = useAuthContext();
   const { service } = useServiceContext();
   const { id } = expertGroup;
   const { query: fetchExpertGroup, loading } = useQuery({
@@ -132,6 +134,7 @@ const Actions = (props: any) => {
     runOnMount: false,
   });
   const dialogProps = useDialog();
+  const isOwner = expertGroup?.owner?.id === userInfo.id;
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
@@ -141,7 +144,7 @@ const Actions = (props: any) => {
     });
   };
 
-  return (
+  return isOwner ? (
     <>
       <MoreActions
         {...useMenu()}
@@ -160,7 +163,7 @@ const Actions = (props: any) => {
         onSubmitForm={fetchExpertGroups}
       />
     </>
-  );
+  ) : null;
 };
 
 export default ExpertGroupsItem;

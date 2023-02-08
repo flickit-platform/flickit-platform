@@ -45,6 +45,7 @@ import formatDate from "../../utils/formatDate";
 import useMenu from "../../utils/useMenu";
 import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -304,7 +305,12 @@ const Invitees = (props: any) => {
                       {formatDate(invite_expiration_date)}
                     </Typography>
                   </Box>
-                  <MemberActions query={query} userId={id} />
+                  <MemberActions
+                    query={query}
+                    userId={id}
+                    email={invite_email}
+                    isInvitationExpired={true}
+                  />
                 </Box>
               </Box>
             );
@@ -316,7 +322,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query, userId } = props;
+  const { query, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -329,9 +335,34 @@ const MemberActions = (props: any) => {
     toastError: true,
   });
 
+  const addMemberQueryData = useQuery({
+    service: (args, config) => service.addMemberToExpertGroup(args, config),
+    runOnMount: false,
+  });
+
   const deleteItem = async (e: any) => {
     await deleteExpertGroupMember();
     await query();
+  };
+
+  const inviteMember = async () => {
+    try {
+      const res = await addMemberQueryData.query({
+        id: expertGroupId,
+        email,
+      });
+      res?.message && toast.success(res.message);
+      query();
+    } catch (e) {
+      const error = e as ICustomError;
+      if ("message" in error.data || {}) {
+        if (Array.isArray(error.data.message)) {
+          toastError(error.data?.message[0]);
+        } else if (error.data?.message) {
+          toastError(error.data?.message);
+        }
+      }
+    }
   };
 
   return (
@@ -339,6 +370,13 @@ const MemberActions = (props: any) => {
       {...useMenu()}
       loading={loading}
       items={[
+        isInvitationExpired
+          ? {
+              icon: <EmailRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="resendAndInvitation" />,
+              onClick: inviteMember,
+            }
+          : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,

@@ -57,13 +57,21 @@ export type TAnswer = {
   caption: string;
 };
 
-export type TStatus = "WEAK" | "RISKY" | "NORMAL" | "GOOD" | "OPTIMIZED" | "Not Calculated" | null;
+export type TStatus =
+  | "WEAK"
+  | "RISKY"
+  | "NORMAL"
+  | "GOOD"
+  | "OPTIMIZED"
+  | "Not Calculated"
+  | null;
 
 export interface IUserInfo {
   id: TId;
   display_name: string;
   email: string;
   current_space: ISpaceInfo | null;
+  is_expert?: boolean;
 }
 
 export interface ISpaceInfo {
@@ -107,7 +115,13 @@ export interface IAssessmentProfileModel {
   title: string;
   images: TImages;
   metric_categories: IQuestionnaireModel[];
-  assessment_subjects: Omit<ISubjectInfo, "total_answered_metric_number" | "total_metric_number" | "progress" | "status">;
+  assessment_subjects: Omit<
+    ISubjectInfo,
+    | "total_answered_metric_number"
+    | "total_metric_number"
+    | "progress"
+    | "status"
+  >;
 }
 
 export interface IProfile {
@@ -121,7 +135,8 @@ export interface IAssessmentResult {
   assessment_project: string;
   id: TId;
 }
-export interface IAssessmentResultModel extends IDefaultModel<IAssessmentResult> {}
+export interface IAssessmentResultModel
+  extends IDefaultModel<IAssessmentResult> {}
 
 export type TAssessmentResultsModel = string[];
 
@@ -149,7 +164,10 @@ export interface ISpaceModel {
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
 export interface IAssessmentReport {
-  assessment_profile: Omit<IAssessmentProfileModel, "metric_categories" | "images" | "assessment_subjects">;
+  assessment_profile: Omit<
+    IAssessmentProfileModel,
+    "metric_categories" | "images" | "assessment_subjects"
+  >;
   assessment_results: string[];
   color: IColorModel;
   last_modification_date: string;
@@ -312,7 +330,10 @@ export type TQueryProps<T extends any = any, A extends any = any> = {
   loaded: boolean;
   error: boolean;
   errorObject: ICustomError | undefined;
-  query: (args?: A | undefined, config?: AxiosRequestConfig<any> | undefined) => Promise<T>;
+  query: (
+    args?: A | undefined,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => Promise<T>;
   abortController?: AbortController;
 };
 

@@ -1,7 +1,10 @@
 import { ICustomError } from "./CustomError";
 
 const setServerFieldErrors = (e: ICustomError | unknown, formMethods: any) => {
-  const { data = {} } = e as ICustomError;
+  const { data = {}, status } = e as ICustomError;
+  if (status !== 400) {
+    return;
+  }
   Object.keys(data).forEach((key, index) => {
     formMethods.setError(
       key,
