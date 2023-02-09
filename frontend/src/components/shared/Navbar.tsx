@@ -2,7 +2,7 @@ import React from "react";
 import { Trans } from "react-i18next";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "../../config/styles";
-import { useAuthContext } from "../../providers/AuthProvider";
+import { authActions, useAuthContext } from "../../providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
 import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -198,15 +198,7 @@ const Navbar = () => {
             </Button>
           </Box>
           <Box ml="auto">
-            <Button
-              sx={{ ml: 2, mr: "-8px", px: 1.5 }}
-              size="small"
-              component={NavLink}
-              to={`/account/about`}
-              endIcon={<Avatar sx={{ width: 26, height: 26, ml: 1 }} />}
-            >
-              {userInfo.display_name}
-            </Button>
+            <AccountDropDownButton userInfo={userInfo} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -466,6 +458,74 @@ const SpacesButton = ({ currentSpace }: any) => {
           to={`/spaces`}
         >
           <Trans i18nKey={"allSpaces"} />
+        </MenuItem>
+      </Menu>
+    </>
+  );
+};
+
+const AccountDropDownButton = ({ userInfo }: any) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const navigate = useNavigate();
+  const { dispatch } = useAuthContext();
+
+  return (
+    <>
+      <Button
+        data-cy="spaces"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClick(e);
+        }}
+        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+        size="small"
+        endIcon={
+          open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
+        }
+      >
+        <Avatar sx={{ width: 26, height: 26, mr: 1.3 }} />{" "}
+        {userInfo.display_name}
+      </Button>
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{ sx: { minWidth: "140px" } }}
+      >
+        <MenuItem
+          dense
+          component={NavLink}
+          to={`/account/about`}
+          onClick={handleClose}
+        >
+          <Trans i18nKey={"account"} />
+        </MenuItem>
+        <MenuItem
+          dense
+          onClick={handleClose}
+          component={NavLink}
+          to={`/account/expert-groups`}
+        >
+          <Trans i18nKey={"expertGroups"} />
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          dense
+          onClick={() => {
+            dispatch(authActions.setUserInfo());
+            dispatch(authActions.signOut());
+          }}
+        >
+          <Trans i18nKey={"signOut"} />
         </MenuItem>
       </Menu>
     </>
