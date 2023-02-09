@@ -18,13 +18,17 @@ import { styles } from "../../config/styles";
 import { ISpaceModel } from "../../types";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import useDialog from "../../utils/useDialog";
+import CreateSpaceDialog from "./CreateSpaceDialog";
+import { LoadingButton } from "@mui/lab";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
 const SpaceSettingContainer = () => {
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const userId = userInfo?.id;
-  const { loading, data } = useQuery<ISpaceModel>({
+  const { loading, data, query } = useQuery<ISpaceModel>({
     service: (args, config) => service.fetchSpace({ spaceId }, config),
   });
 
@@ -46,6 +50,7 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
+        toolbar={<EditSpaceButton fetchSpace={query} />}
         backLink={-1}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
@@ -59,6 +64,39 @@ const SpaceSettingContainer = () => {
       </Title>
       <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} />}</Box>
     </Box>
+  );
+};
+
+const EditSpaceButton = (props: any) => {
+  const { fetchSpace } = props;
+  const { service } = useServiceContext();
+  const { spaceId } = useParams();
+  const queryData = useQuery({
+    service: (args = { spaceId }, config) => service.fetchSpace(args, config),
+    runOnMount: false,
+  });
+  const dialogProps = useDialog();
+
+  const openEditDialog = async (e: any) => {
+    const data = await queryData.query();
+    dialogProps.openDialog({
+      data,
+      type: "update",
+    });
+  };
+
+  return (
+    <>
+      <LoadingButton
+        loading={queryData.loading}
+        startIcon={<BorderColorRoundedIcon />}
+        size="small"
+        onClick={openEditDialog}
+      >
+        <Trans i18nKey="editSpace" />
+      </LoadingButton>
+      <CreateSpaceDialog {...dialogProps} onSubmitForm={fetchSpace} />
+    </>
   );
 };
 

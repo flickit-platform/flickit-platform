@@ -21,6 +21,7 @@ interface IExpertGroupCEFromDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
+  hideSubmitAndView?: boolean;
 }
 
 const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
@@ -31,6 +32,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     onSubmitForm,
     context = {},
     openDialog,
+    hideSubmitAndView,
     ...rest
   } = props;
   const { type, data = {} } = context;
@@ -145,7 +147,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          hasViewBtn={true}
+          hasViewBtn={hideSubmitAndView ? false : true}
           onSubmit={(...args) =>
             formMethods.handleSubmit((data) => onSubmit(data, ...args))
           }

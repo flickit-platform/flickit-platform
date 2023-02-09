@@ -244,5 +244,7 @@
   "resendAndInvitation": "Resend and invitation",
   "providedBy": "Provided by",
   "expertGroup": "Expert group",
-  "account": "Account"
+  "account": "Account",
+  "editExpertGroup": "Edit expert group",
+  "editSpace": "Edit space"
 }
