@@ -41,6 +41,8 @@ const AssessmentReportContainer = () => {
         } = data || {};
         const colorCode = assessment_project?.color?.color_code || "#101c32";
         const isComplete = total_progress.progress === 100;
+        const { assessment_profile } = assessment_project || {};
+        const { expert_group } = assessment_profile || {};
 
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
@@ -66,7 +68,7 @@ const AssessmentReportContainer = () => {
                     }}
                     alignSelf="stretch"
                     component={Link}
-                    to={`/profiles/${assessment_project?.assessment_profile?.id}`}
+                    to={`/profiles/${assessment_profile?.id}`}
                   >
                     <Typography
                       variant="h6"
@@ -85,10 +87,10 @@ const AssessmentReportContainer = () => {
                         alignSelf: "stretch",
                       }}
                     >
-                      {assessment_project?.assessment_profile?.title}
+                      {assessment_profile?.title}
                     </Typography>
                     <Typography color="GrayText" variant="body2">
-                      {assessment_project?.assessment_profile?.summary}
+                      {assessment_profile?.summary}
                     </Typography>
                   </Box>
                   <Box
@@ -96,20 +98,24 @@ const AssessmentReportContainer = () => {
                       display: "flex",
                       alignItems: "center",
                       ml: "auto",
+                      mr: 2,
                       textDecoration: "none",
                     }}
                     component={Link}
-                    to={`/account/expert-groups/${1}`}
+                    to={`/account/expert-groups/${expert_group?.id}`}
                   >
+                    <Typography color="grayText" variant="subLarge">
+                      <Trans i18nKey="providedBy" />
+                    </Typography>
                     <CardHeader
-                      sx={{ p: 0 }}
+                      sx={{ p: 0, ml: 1.8 }}
                       titleTypographyProps={{
                         sx: { textDecoration: "none" },
                       }}
-                      avatar={<Avatar alt="Expert group" src={"/"} />}
+                      avatar={<Avatar alt={expert_group?.name} src={"/"} />}
                       title={
                         <Box component={"b"} fontSize=".95rem" color="Gray">
-                          Expert group
+                          {expert_group?.name}
                         </Box>
                       }
                     />

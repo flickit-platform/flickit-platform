@@ -241,5 +241,6 @@
   "space": "Space",
   "groupSummary": "Group summary",
   "thereIsNoProfileYet": "There is no profile yet",
-  "resendAndInvitation": "Resend and invitation"
+  "resendAndInvitation": "Resend and invitation",
+  "providedBy": "Provided by"
 }
