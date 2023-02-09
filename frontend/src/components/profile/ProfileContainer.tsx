@@ -24,6 +24,8 @@ import AlertBox from "../shared/AlertBox";
 import { LoadingButton } from "@mui/lab";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import { t } from "i18next";
+import useDocumentTitle from "../../utils/useDocumentTitle";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
@@ -37,6 +39,7 @@ const ProfileContainer = () => {
     <QueryData
       {...profileQueryData}
       render={(data) => {
+        setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
         return <Profile data={data} query={profileQueryData.query} />;
       }}
     />

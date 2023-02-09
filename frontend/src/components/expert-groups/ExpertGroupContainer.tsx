@@ -31,7 +31,7 @@ import ProfileListItem from "../profile/ProfileListItem";
 import toastError from "../../utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import { ICustomError } from "../../utils/CustomError";
 import useDialog from "../../utils/useDialog";
@@ -46,6 +46,7 @@ import useMenu from "../../utils/useMenu";
 import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import useDocumentTitle from "../../utils/useDocumentTitle";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -60,6 +61,8 @@ const ExpertGroupContainer = () => {
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupMembers(args, config),
   });
+
+  const setDocTitle = useDocumentTitle(t("expertGroup") as string);
 
   return (
     <QueryData
@@ -79,7 +82,7 @@ const ExpertGroupContainer = () => {
           profiles = [],
         } = data || {};
         const hasAccess = userInfo.id === owner?.id || is_expert;
-
+        setDocTitle(`${t("expertGroup")}: ${name || ""}`);
         return (
           <Box>
             <Title

@@ -1,4 +1,5 @@
 import { Box, Button, Grid, Skeleton } from "@mui/material";
+import { t } from "i18next";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
 import { useAuthContext } from "../../providers/AuthProvider";
@@ -6,6 +7,7 @@ import { useServiceContext } from "../../providers/ServiceProvider";
 import { TQueryFunction } from "../../types";
 import forLoopComponent from "../../utils/forLoop";
 import useDialog from "../../utils/useDialog";
+import useDocumentTitle from "../../utils/useDocumentTitle";
 import { useQuery } from "../../utils/useQuery";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 import QueryData from "../shared/QueryData";
@@ -21,6 +23,8 @@ const ExpertGroupsContainer = () => {
     service: (args = { id }, config) =>
       service.fetchUserExpertGroups(args, config),
   });
+
+  useDocumentTitle(t("expertGroups") as string);
 
   return (
     <Box>
