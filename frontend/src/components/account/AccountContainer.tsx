@@ -20,6 +20,9 @@ import AccountCEFormDialog from "./AccountCEFormDialog";
 import useDialog from "../../utils/useDialog";
 import { useServiceContext } from "../../providers/ServiceProvider";
 import { useQuery } from "../../utils/useQuery";
+import getUserName from "../../utils/getUserName";
+import useDocumentTitle from "../../utils/useDocumentTitle";
+import { t } from "i18next";
 
 const AccountContainer = () => {
   return (
@@ -122,6 +125,7 @@ const About = ({ fetchAccount }: any) => {
   });
   const { display_name } = userInfo;
   const dialogProps = useDialog();
+  useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
   const onSubmit = async () => {
     const res = await userQueryData.query();

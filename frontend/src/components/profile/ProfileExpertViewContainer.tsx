@@ -43,6 +43,8 @@ const ProfileExpertViewContainer = () => {
         {...profileQueryProps}
         render={(data = {}) => {
           const { current_user_is_coordinator, expert_group } = data;
+          setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
+
           return (
             <Box>
               <Title
@@ -52,11 +54,11 @@ const ProfileExpertViewContainer = () => {
                     routes={[
                       {
                         title: t("expertGroups") as string,
-                        to: `/account/${userId}/expert-groups`,
+                        to: `/account/expert-groups`,
                       },
                       {
                         title: expert_group?.name,
-                        to: `/account/${userId}/expert-groups/${expertGroupId}`,
+                        to: `/account/expert-groups/${expertGroupId}`,
                       },
                     ]}
                   />
@@ -742,10 +744,6 @@ const useProfile = () => {
     service: (args = { profileId }, config) =>
       service.inspectProfile(args, config),
   });
-
-  useEffect(() => {
-    setDocumentTitle(`${t("profile")}: ${profileQueryProps.data?.title}`);
-  }, [profileQueryProps.data?.title]);
 
   return { profileQueryProps };
 };

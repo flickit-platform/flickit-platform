@@ -5,6 +5,8 @@ const useDocumentTitle = (title: string = "") => {
   useLayoutEffect(() => {
     setDocumentTitle(title);
   }, []);
+
+  return setDocumentTitle;
 };
 
 export default useDocumentTitle;
