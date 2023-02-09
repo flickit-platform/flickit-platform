@@ -48,6 +48,8 @@ import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import useDocumentTitle from "../../utils/useDocumentTitle";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -104,6 +106,9 @@ const ExpertGroupContainer = () => {
                     },
                   ]}
                 />
+              }
+              toolbar={
+                <EditExpertGroupButton fetchExpertGroup={queryData.query} />
               }
             >
               {name}
@@ -248,6 +253,44 @@ const ExpertGroupContainer = () => {
         );
       }}
     />
+  );
+};
+
+const EditExpertGroupButton = (props: any) => {
+  const { fetchExpertGroup } = props;
+  const { service } = useServiceContext();
+  const { expertGroupId } = useParams();
+  const queryData = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
+    runOnMount: false,
+  });
+  const dialogProps = useDialog();
+
+  const openEditDialog = async (e: any) => {
+    const data = await queryData.query();
+    dialogProps.openDialog({
+      data,
+      type: "update",
+    });
+  };
+
+  return (
+    <>
+      <LoadingButton
+        loading={queryData.loading}
+        startIcon={<BorderColorRoundedIcon />}
+        size="small"
+        onClick={openEditDialog}
+      >
+        <Trans i18nKey="editExpertGroup" />
+      </LoadingButton>
+      <ExpertGroupCEFormDialog
+        {...dialogProps}
+        hideSubmitAndView={true}
+        onSubmitForm={fetchExpertGroup}
+      />
+    </>
   );
 };
 
