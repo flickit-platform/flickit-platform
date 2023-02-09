@@ -20,17 +20,21 @@ const ExpertGroupConfirmInvitationContainer = () => {
   const { id } = userInfo;
   const navigate = useNavigate();
   const expertGroupQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
   });
   const confirmInvitationQueryData = useQuery({
-    service: (args = { token }, config) => service.confirmExpertGroupInvitation(args, config),
+    service: (args = { token }, config) =>
+      service.confirmExpertGroupInvitation(args, config),
     runOnMount: false,
   });
 
   const confirmInvitation = async () => {
     try {
       await confirmInvitationQueryData.query();
-      navigate(`/account/${id}/expert-groups/${expertGroupId}`, { replace: true });
+      navigate(`/account/${id}/expert-groups/${expertGroupId}`, {
+        replace: true,
+      });
       toast.success("You have joined this expert group successfully.");
     } catch (e) {
       const err = e as ICustomError;
@@ -38,12 +42,25 @@ const ExpertGroupConfirmInvitationContainer = () => {
     }
   };
 
+  const decline = () => {
+    navigate(
+      userInfo.current_space?.id
+        ? `/${userInfo.current_space?.id}/assessments`
+        : "/spaces"
+    );
+  };
+
   return (
     <QueryData
       {...expertGroupQueryData}
       render={(data) => {
         return (
-          <Box sx={{ maxWidth: { xs: "100%", sm: "90%", md: "60%", lg: "40%" }, m: "auto" }}>
+          <Box
+            sx={{
+              maxWidth: { xs: "100%", sm: "90%", md: "60%", lg: "40%" },
+              m: "auto",
+            }}
+          >
             <Title size="small" textTransform={"none"} fontFamily="Roboto">
               <Trans i18nKey="youHaveBeenInvitedToExpertGroup" />
             </Title>
@@ -59,7 +76,10 @@ const ExpertGroupConfirmInvitationContainer = () => {
               >
                 <Trans i18nKey="acceptInvitation" />
               </LoadingButton>
-              <LoadingButton loading={confirmInvitationQueryData.loading}>
+              <LoadingButton
+                loading={confirmInvitationQueryData.loading}
+                onClick={decline}
+              >
                 <Trans i18nKey="decline" />
               </LoadingButton>
             </Box>
