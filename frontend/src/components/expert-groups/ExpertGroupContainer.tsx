@@ -6,6 +6,7 @@ import {
   Collapse,
   Divider,
   Grid,
+  IconButton,
   InputAdornment,
   Link as MLink,
   TextField,
@@ -23,7 +24,7 @@ import RichEditor from "../shared/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { t } from "i18next";
-import { IUserInfo, TQueryFunction } from "../../types";
+import { IDialogProps, IUserInfo, TQueryFunction } from "../../types";
 import getUserName from "../../utils/getUserName";
 import forLoopComponent from "../../utils/forLoop";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
@@ -63,6 +64,9 @@ const ExpertGroupContainer = () => {
   });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
+  const createProfileDialogProps = useDialog({
+    context: { type: "create", data: { expertGroupId } },
+  });
 
   return (
     <QueryData
@@ -83,6 +87,7 @@ const ExpertGroupContainer = () => {
         } = data || {};
         const hasAccess = userInfo.id === owner?.id || is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
+
         return (
           <Box>
             <Title
@@ -120,7 +125,11 @@ const ExpertGroupContainer = () => {
                   </>
                 )}
                 <Box mt={5}>
-                  <ProfilesList queryData={queryData} hasAccess={hasAccess} />
+                  <ProfilesList
+                    queryData={queryData}
+                    hasAccess={hasAccess}
+                    dialogProps={createProfileDialogProps}
+                  />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
@@ -183,7 +192,17 @@ const ExpertGroupContainer = () => {
                         {number_of_members} {t("members").toLowerCase()}
                       </Typography>
                     </Box>
-                    <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
+                    <Box
+                      sx={{
+                        ...styles.centerV,
+                        mt: 1,
+                        fontSize: ".9rem",
+                        textDecoration: "none",
+                        color: "inherit",
+                      }}
+                      component="a"
+                      href="#profiles"
+                    >
                       <AssignmentRoundedIcon
                         fontSize="small"
                         sx={{ mr: 1, opacity: 0.8 }}
@@ -197,6 +216,23 @@ const ExpertGroupContainer = () => {
                       >
                         {number_of_profiles} {t("profiles").toLowerCase()}
                       </Typography>
+                      {hasAccess && (
+                        <Box ml="auto">
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => {
+                              console.log("here");
+                              createProfileDialogProps.openDialog({
+                                type: "create",
+                                data: { expertGroupId },
+                              });
+                            }}
+                          >
+                            <AddRoundedIcon fontSize="small" />
+                          </IconButton>
+                        </Box>
+                      )}
                     </Box>
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
@@ -529,7 +565,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const ProfilesList = (props: any) => {
-  const { hasAccess } = props;
+  const { hasAccess, dialogProps, about } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
@@ -540,9 +576,15 @@ const ProfilesList = (props: any) => {
   return (
     <>
       <Title
+        inPageLink="profiles"
         size="small"
         toolbar={
-          hasAccess && <CreateProfileButton onSubmitForm={profileQuery.query} />
+          hasAccess && (
+            <CreateProfileButton
+              onSubmitForm={profileQuery.query}
+              dialogProps={dialogProps}
+            />
+          )
         }
       >
         <Trans i18nKey={"profiles"} />
@@ -591,12 +633,11 @@ const ProfilesList = (props: any) => {
   );
 };
 
-const CreateProfileButton = (props: { onSubmitForm: TQueryFunction }) => {
-  const { onSubmitForm } = props;
-  const { expertGroupId } = useParams();
-  const dialogProps = useDialog({
-    context: { type: "create", data: { expertGroupId } },
-  });
+const CreateProfileButton = (props: {
+  onSubmitForm: TQueryFunction;
+  dialogProps: IDialogProps;
+}) => {
+  const { onSubmitForm, dialogProps } = props;
 
   return (
     <>

@@ -55,7 +55,9 @@ const Title = (props: ITitle) => {
       }}
       {...wrapperProps}
     >
-      {avatar && <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>}
+      {avatar && (
+        <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>
+      )}
       <Typography
         textTransform="uppercase"
         variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
@@ -84,7 +86,13 @@ const Title = (props: ITitle) => {
               {sup && (
                 <Typography
                   textTransform="uppercase"
-                  variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
+                  variant={
+                    size === "small"
+                      ? "subSmall"
+                      : size === "large"
+                      ? "subLarge"
+                      : "subMedium"
+                  }
                   lineHeight={0}
                 >
                   {sup}
@@ -95,7 +103,13 @@ const Title = (props: ITitle) => {
         ) : sup ? (
           <Typography
             textTransform="uppercase"
-            variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
+            variant={
+              size === "small"
+                ? "subSmall"
+                : size === "large"
+                ? "subLarge"
+                : "subMedium"
+            }
           >
             {sup}
           </Typography>
@@ -107,7 +121,6 @@ const Title = (props: ITitle) => {
           {inPageLink && (
             <Link
               href={`#${inPageLink}`}
-              id={inPageLink}
               className="title-hash-link"
               sx={{
                 display: "flex",
@@ -115,14 +128,26 @@ const Title = (props: ITitle) => {
                 alignItems: "center",
                 ml: 1,
                 transition: "opacity .1s ease",
+                position: "relative",
               }}
             >
               <AnchorRoundedIcon fontSize="small" />
+              <Box id={inPageLink} position="absolute" top="-84px" />
             </Link>
           )}
         </Box>
         {sub && (
-          <Typography variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}>{sub}</Typography>
+          <Typography
+            variant={
+              size === "small"
+                ? "subSmall"
+                : size === "large"
+                ? "subLarge"
+                : "subMedium"
+            }
+          >
+            {sub}
+          </Typography>
         )}
       </Typography>
       <Box ml="auto" {...toolbarProps}>
