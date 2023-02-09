@@ -133,12 +133,17 @@ const ExpertGroupContainer = () => {
                       variant="h6"
                       display="flex"
                       alignItems={"center"}
-                      sx={{ mb: 2 }}
+                      sx={{ mb: 1.5 }}
                     >
                       <Trans i18nKey="groupSummary" />
                     </Typography>
+                    {bio && (
+                      <Box mt={1}>
+                        <Typography>{bio}</Typography>
+                      </Box>
+                    )}
                     {website && (
-                      <Box sx={{ ...styles.centerV }}>
+                      <Box sx={{ ...styles.centerV, mt: 1 }}>
                         <InsertLinkRoundedIcon
                           fontSize="small"
                           sx={{
@@ -163,7 +168,7 @@ const ExpertGroupContainer = () => {
                         </MLink>
                       </Box>
                     )}
-                    <Box sx={{ ...styles.centerV, mt: 2, fontSize: ".9rem" }}>
+                    <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
                       <PeopleRoundedIcon
                         fontSize="small"
                         sx={{ mr: 1, opacity: 0.8 }}

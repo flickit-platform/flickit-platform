@@ -28,12 +28,14 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   const { profileId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.publishProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.publishProfile(args, config),
     runOnMount: false,
     toastError: true,
   });
   const unPublishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.unPublishProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.unPublishProfile(args, config),
     runOnMount: false,
     toastError: true,
   });
@@ -76,23 +78,40 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
             background: "white",
           }}
         >
+          {data.summary && (
+            <Typography sx={{ p: 1 }} variant="body2">
+              {data.summary}
+            </Typography>
+          )}
           <Box my={1.5}>
             <InfoItem
               bg="white"
               info={{
                 action: current_user_is_coordinator ? (
                   is_active ? (
-                    <IconButton color="primary" title="Un publish" onClick={unPublishProfile}>
+                    <IconButton
+                      color="primary"
+                      title="Un publish"
+                      onClick={unPublishProfile}
+                    >
                       <ArchiveRoundedIcon />
                     </IconButton>
                   ) : (
-                    <IconButton color="primary" title="Publish" onClick={publishProfile}>
+                    <IconButton
+                      color="primary"
+                      title="Publish"
+                      onClick={publishProfile}
+                    >
                       <PublishedWithChangesRoundedIcon />
                     </IconButton>
                   )
                 ) : undefined,
                 item: is_active ? (
-                  <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+                  <Chip
+                    label={<Trans i18nKey="published" />}
+                    color="success"
+                    size="small"
+                  />
                 ) : (
                   <Chip label={<Trans i18nKey="unPublished" />} size="small" />
                 ),
