@@ -46,7 +46,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         <CardHeader
           titleTypographyProps={{
             component: Link,
-            to: `${id}`,
+            to: `/account/expert-groups/${id}`,
             sx: { textDecoration: "none" },
           }}
           avatar={
