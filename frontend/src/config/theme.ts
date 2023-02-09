@@ -128,13 +128,14 @@ export const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
-          background: "white",
-          borderRadius: "4px",
+          borderRadius: "0px",
           overflow: "auto",
-          padding: "6px 8px",
+          padding: "0px 8px",
+          borderBottom: "1px solid #d3d3d3",
         },
         indicator: {
-          display: "none",
+          backgroundColor: palette.secondary.main,
+          borderRadius: 1,
         },
       },
     },
@@ -146,9 +147,11 @@ export const theme = createTheme({
           borderRadius: "5px",
           minHeight: "40px",
           transition: "background-color .1s ease, color .1s ease",
+          "&:hover": {
+            backgroundColor: "#e1dede",
+          },
           "&.Mui-selected": {
-            backgroundColor: palette.secondary.main,
-            color: palette.getContrastText(palette.secondary.main),
+            color: palette.secondary.main,
           },
         },
       },
