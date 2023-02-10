@@ -66,14 +66,15 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         data-cy="assessment-card"
       >
         <Actions {...props} abortController={abortController} />
-        <Grid
-          container
-          component={Link}
-          to={isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`}
-          sx={{ textDecoration: "none", height: "100%" }}
-        >
+        <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
-            <Box>
+            <Box
+              sx={{ textDecoration: "none" }}
+              component={Link}
+              to={
+                isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`
+              }
+            >
               <Typography
                 variant="h5"
                 color="CaptionText"
@@ -99,7 +100,14 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={2}>
+          <Grid
+            item
+            xs={12}
+            sx={{ ...styles.centerCH, textDecoration: "none" }}
+            mt={2}
+            component={Link}
+            to={hasStat ? `${item.id}/insights` : `${item.id}/questionnaires`}
+          >
             <Gauge systemStatus={item.status} maxWidth="275px" mt="auto" />
           </Grid>
           <Grid item xs={12} sx={{ ...styles.centerCH }} mt={4}>

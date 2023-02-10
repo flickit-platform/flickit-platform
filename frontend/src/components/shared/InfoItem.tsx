@@ -7,7 +7,12 @@ import { Box } from "@mui/material";
 interface IInfoItems {
   renderMap?: Record<string, (...args: any) => JSX.Element>;
   component?: FC<{ title: string }>;
-  info: { title: string; item: any | any[]; type?: string; action?: JSX.Element };
+  info: {
+    title: string;
+    item: any | any[];
+    type?: string;
+    action?: JSX.Element;
+  };
   bg?: "white";
 }
 
@@ -18,7 +23,12 @@ const InfoItem = (props: IInfoItems) => {
 };
 
 const DefaultInfoItemComponent = (
-  props: PropsWithChildren<{ title: string; bg?: "white"; itemBg?: string; action?: JSX.Element }>
+  props: PropsWithChildren<{
+    title: string;
+    bg?: "white";
+    itemBg?: string;
+    action?: JSX.Element;
+  }>
 ) => {
   const { title, children, bg, itemBg, action } = props;
   return (
@@ -46,7 +56,11 @@ const DefaultInfoItemComponent = (
           borderRadius: 1,
         }}
       >
-        {action && <Box mx={0.5}>{action}</Box>}
+        {action && (
+          <Box mx={0.5} component="span" display="block">
+            {action}
+          </Box>
+        )}
         {children}
       </Box>
     </Typography>
@@ -57,19 +71,26 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
       {items.map((item) => (
-        <Chip size="small" label={item} sx={{ ml: 0.3 }} />
+        <Chip size="small" label={item} sx={{ ml: 0.3 }} component="span" />
       ))}
     </DefaultInfoItemComponent>
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
+      {items.map(
+        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+      )}
     </DefaultInfoItemComponent>
   ),
 };
 
 const renderInfo = (
-  info: { title: string; item: any | any[]; type?: string; action?: JSX.Element },
+  info: {
+    title: string;
+    item: any | any[];
+    type?: string;
+    action?: JSX.Element;
+  },
   config: {
     component?: any;
     renderMap?: any;
@@ -77,7 +98,12 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
+  const {
+    component: Component = DefaultInfoItemComponent,
+    renderMap = defaultRenderMap,
+    useTitleAsFallbackType,
+    bg,
+  } = config;
   const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 

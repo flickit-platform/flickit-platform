@@ -388,7 +388,14 @@ const SpacesButton = ({ currentSpace }: any) => {
             ? navigate(`/${currentSpace?.id}/assessments`)
             : navigate("/spaces")
         }
-        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+        sx={{
+          ...styles.activeNavbarLink,
+          ml: 0.1,
+          mr: 0.8,
+          "&:hover .MuiButton-endIcon > div": {
+            borderLeftColor: "#8080802b",
+          },
+        }}
         startIcon={
           <FolderRoundedIcon
             sx={{ opacity: 0.8, fontSize: "18px !important" }}
@@ -396,15 +403,22 @@ const SpacesButton = ({ currentSpace }: any) => {
         }
         size="small"
         endIcon={
-          <Button
-            sx={{ minWidth: "8px", ml: 0.6, px: 0.2, py: 0.2 }}
-            onClick={(e) => {
+          <Box
+            sx={{
+              minWidth: "8px",
+              ml: 0.6,
+              px: 0.2,
+              borderLeft: "1px solid #80808000",
+              transition: "border .1s ease",
+              display: "flex",
+            }}
+            onClick={(e: any) => {
               e.stopPropagation();
               handleClick(e);
             }}
           >
             {open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
-          </Button>
+          </Box>
         }
       >
         <Trans i18nKey={"spaces"} />
@@ -432,7 +446,7 @@ const SpacesButton = ({ currentSpace }: any) => {
         PaperProps={{ sx: { minWidth: "260px" } }}
       >
         {currentSpace?.id && (
-          <>
+          <Box>
             <Typography
               variant="subMedium"
               sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}
@@ -452,7 +466,7 @@ const SpacesButton = ({ currentSpace }: any) => {
               {currentSpace?.title}
             </MenuItem>
             <Divider />
-          </>
+          </Box>
         )}
         <MenuItem
           dense

@@ -14,7 +14,7 @@ const ExpertGroupsList = (props: IExpertGroupsListProps) => {
       <Grid container spacing={3}>
         {results.map((expertGroup: any) => {
           return (
-            <Grid item xs={12} sm={6} lg={4}>
+            <Grid item xs={12} sm={6} lg={4} key={expertGroup.id}>
               <ExpertGroupsItem data={expertGroup} />
             </Grid>
           );

@@ -126,6 +126,7 @@ const Profile = (props: any) => {
                 >
                   {tags.map((tag: any) => (
                     <Chip
+                      key={tag.id}
                       label={tag.title}
                       size="small"
                       sx={{ mr: 0.4, background: "white" }}
@@ -306,7 +307,7 @@ const Profile = (props: any) => {
               <Box component="ul" mt={3}>
                 {subjects_with_desc.map((subject: any) => {
                   return (
-                    <Box component="li" mb={2}>
+                    <Box component="li" mb={2} key={subject.id}>
                       <b>{subject.title}</b>: {subject.description}
                     </Box>
                   );
@@ -320,7 +321,7 @@ const Profile = (props: any) => {
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any) => {
                   return (
-                    <Box component="li" mb={2}>
+                    <Box component="li" mb={2} key={questionnaire.id}>
                       <b>{questionnaire.title}</b>: {questionnaire.description}
                     </Box>
                   );

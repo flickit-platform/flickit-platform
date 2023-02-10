@@ -108,20 +108,25 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
                 ) : undefined,
                 item: is_active ? (
                   <Chip
+                    component="span"
                     label={<Trans i18nKey="published" />}
                     color="success"
                     size="small"
                   />
                 ) : (
-                  <Chip label={<Trans i18nKey="unPublished" />} size="small" />
+                  <Chip
+                    component="span"
+                    label={<Trans i18nKey="unPublished" />}
+                    size="small"
+                  />
                 ),
                 title: "Publish status",
               }}
             />
           </Box>
-          {data.profileInfos.map((info: any) => {
+          {data.profileInfos.map((info: any, index: number) => {
             return (
-              <Box my={1.5}>
+              <Box my={1.5} key={index}>
                 <InfoItem
                   bg="white"
                   info={{

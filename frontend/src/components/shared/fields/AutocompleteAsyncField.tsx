@@ -33,7 +33,14 @@ interface IAutocompleteAsyncFieldProps<T>
 const AutocompleteAsyncField = <T extends any = any>(
   props: IAutocompleteAsyncFieldProps<T> & Omit<TQueryProps, "data">
 ) => {
-  const { name, rules = {}, defaultValue, required = false, ...rest } = props;
+  const {
+    name,
+    rules = {},
+    multiple,
+    defaultValue = multiple ? undefined : null,
+    required = false,
+    ...rest
+  } = props;
   const { control, setValue } = useFormContext();
   const { options } = rest;
 
@@ -48,6 +55,7 @@ const AutocompleteAsyncField = <T extends any = any>(
         return (
           <AutocompleteBaseField
             {...rest}
+            multiple={multiple}
             name={name}
             required={required}
             field={field}
@@ -97,6 +105,7 @@ const AutocompleteBaseField = (
     abortController,
     defaultValue,
     searchOnType = true,
+    multiple,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -148,7 +157,8 @@ const AutocompleteBaseField = (
     <Autocomplete
       {...restFields}
       defaultValue={defaultValue}
-      value={value}
+      value={value || multiple ? undefined : null}
+      multiple={multiple}
       loading={loading}
       loadingText={
         options.length > 5 ? <LoadingComponent options={options} /> : undefined

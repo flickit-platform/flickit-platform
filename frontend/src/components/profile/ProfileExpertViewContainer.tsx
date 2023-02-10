@@ -152,10 +152,11 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
 
   return (
     <Box>
-      {subjects.map((subject) => {
+      {subjects.map((subject, index) => {
         const isExpanded = expanded === subject.title;
         return (
           <Accordion
+            key={index}
             expanded={isExpanded}
             onChange={handleChange(subject.title)}
             sx={{
@@ -207,8 +208,8 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               <Box p={1}>
                 <Grid container spacing={2} sx={{ mb: 1 }}>
                   <Grid item xs={12} sm={5} md={4} lg={3}>
-                    {subject.report_infos.map((info: any) => {
-                      return <InfoItem info={info} bg="white" />;
+                    {subject.report_infos.map((info: any, index: number) => {
+                      return <InfoItem info={info} bg="white" key={index} />;
                     })}
                   </Grid>
                   <Grid item xs={12} sm={7} md={8} lg={9}>
@@ -249,7 +250,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                   items={subject.attributes_infos}
                   renderItem={(item, index, isExpanded) => {
                     return (
-                      <>
+                      <React.Fragment key={index}>
                         <Box
                           sx={{
                             display: "flex",
@@ -283,7 +284,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                           </Typography>
                         </Box>
                         <ProfileQuestionsList questions={item.questions} />
-                      </>
+                      </React.Fragment>
                     );
                   }}
                 />
@@ -307,10 +308,11 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
 
   return (
     <Box>
-      {questionnaires.map((questionnaire) => {
+      {questionnaires.map((questionnaire, index) => {
         const isExpanded = expanded === questionnaire.title;
         return (
           <Accordion
+            key={index}
             expanded={isExpanded}
             onChange={handleChange(questionnaire.title)}
             sx={{
@@ -362,20 +364,23 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
               <Box p={1}>
                 <Grid container spacing={3} sx={{ mb: 1 }}>
                   <Grid item xs={12} md={5} lg={4}>
-                    {questionnaire.report_infos.map((info: any) => {
-                      return (
-                        <InfoItem
-                          bg="white"
-                          info={{
-                            ...info,
-                            type:
-                              info.title === "Related subjects"
-                                ? "array"
-                                : info.type,
-                          }}
-                        />
-                      );
-                    })}
+                    {questionnaire.report_infos.map(
+                      (info: any, index: number) => {
+                        return (
+                          <InfoItem
+                            key={index}
+                            bg="white"
+                            info={{
+                              ...info,
+                              type:
+                                info.title === "Related subjects"
+                                  ? "array"
+                                  : info.type,
+                            }}
+                          />
+                        );
+                      }
+                    )}
                   </Grid>
                   <Grid item xs={12} md={7} lg={8}>
                     <Box
@@ -424,7 +429,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                     {questionnaire.questions.map(
                       (question: any, index: number) => {
                         return (
-                          <li style={{ marginBottom: "12px" }}>
+                          <li style={{ marginBottom: "12px" }} key={index}>
                             <Box
                               display="flex"
                               justifyContent={"space-between"}
@@ -446,11 +451,13 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                           pb: "2px",
                                           color: "#767676",
                                           fontFamily: "Roboto",
+                                          display: "block",
+                                          fontSize: ".8rem",
                                           width: "100%",
                                           borderBottom: (t) =>
                                             `1px solid ${t.palette.primary.light}`,
                                         }}
-                                        variant="subMedium"
+                                        component="span"
                                       >
                                         <Trans i18nKey={"title"} />
                                       </Typography>
@@ -479,9 +486,11 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                       </Typography>
                                     )}
                                     <ul style={{ paddingInlineStart: "20px" }}>
-                                      {question.listOfOptions.map((op: any) => {
-                                        return <li>{op}</li>;
-                                      })}
+                                      {question.listOfOptions.map(
+                                        (op: any, index: number) => {
+                                          return <li key={index}>{op}</li>;
+                                        }
+                                      )}
                                     </ul>
                                   </Box>
                                 </Grid>
@@ -511,9 +520,10 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                       </Typography>
                                     )}
                                     {question.relatedAttributes.map(
-                                      (att: any) => {
+                                      (att: any, index: number) => {
                                         return (
                                           <Box
+                                            key={index}
                                             sx={{
                                               background: (t) =>
                                                 t.palette.secondary.main,
@@ -538,8 +548,9 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                               >
                                                 {att.title}
                                                 <Typography
-                                                  variant="subMedium"
+                                                  component="span"
                                                   sx={{
+                                                    fontWeight: "bold",
                                                     color: "white",
                                                     position: "relative",
                                                   }}
@@ -610,7 +621,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
             const gridColumns = hasRelatedAttributes || hasImpact ? 15 : 12;
 
             return (
-              <li style={{ marginBottom: "12px" }}>
+              <li style={{ marginBottom: "12px" }} key={index}>
                 <Box display="flex" justifyContent={"space-between"} py={1}>
                   <Grid container spacing={2} columns={gridColumns}>
                     <Grid xs={8} item>
@@ -627,12 +638,14 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                               top: "-36px",
                               pb: "2px",
                               color: "#767676",
+                              display: "block",
                               fontFamily: "Roboto",
+                              fontSize: "0.8rem",
                               width: "100%",
                               borderBottom: (t) =>
                                 `1px solid ${t.palette.primary.light}`,
                             }}
-                            variant="subMedium"
+                            component="span"
                           >
                             <Trans i18nKey={"title"} />
                           </Typography>
@@ -660,7 +673,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                           </Typography>
                         )}
                         <ul style={{ paddingInlineStart: "20px" }}>
-                          {options.map((option: string) => {
+                          {options.map((option: string, index: number) => {
                             return <li key={option}>{option}</li>;
                           })}
                         </ul>
@@ -714,6 +727,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                             {relatedAttributes.map((att: any) => {
                               return (
                                 <Chip
+                                  key={att.id}
                                   label={att.title}
                                   color="secondary"
                                   sx={{ mr: 0.5, mb: 0.2 }}

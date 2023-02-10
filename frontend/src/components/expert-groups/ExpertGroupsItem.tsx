@@ -86,8 +86,8 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
             maxWidth: "calc(100% - 16px)",
             whiteSpace: "pre-wrap",
             display: "-webkit-box",
-            "-webkit-box-orient": "vertical",
-            "-webkit-line-clamp": "2",
+            webkitBoxOrient: "vertical",
+            webkitLineClamp: "2",
           }}
         >
           {bio}
