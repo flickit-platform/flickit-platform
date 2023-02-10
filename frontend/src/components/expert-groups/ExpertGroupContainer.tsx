@@ -339,7 +339,9 @@ const ExpertGroupMembers = (props: any) => {
               <AvatarGroup>
                 {users.map((user: any) => {
                   const name = getUserName(user?.user);
-                  return <Avatar alt={name} title={name} src="/" />;
+                  return (
+                    <Avatar key={user.id} alt={name} title={name} src="/" />
+                  );
                 })}
               </AvatarGroup>
             </Box>

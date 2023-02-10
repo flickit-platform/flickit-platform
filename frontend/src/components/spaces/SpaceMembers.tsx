@@ -81,11 +81,13 @@ export const SpaceMembers = () => {
       <Box>
         <Title
           size="small"
-          fontSize={"1rem"}
-          fontFamily="Roboto"
-          textTransform={"unset"}
-          letterSpacing=".05rem"
           mb={2}
+          titleProps={{
+            fontSize: "1rem",
+            fontFamily: "Roboto",
+            textTransform: "unset",
+            letterSpacing: ".05rem",
+          }}
         >
           <Trans i18nKey="addNewMember" />
         </Title>
@@ -126,12 +128,14 @@ export const SpaceMembers = () => {
       </Box>
       <Box mt={6}>
         <Title
-          size="small"
           mb={2}
-          fontSize={"1rem"}
-          fontFamily="Roboto"
-          textTransform={"capitalize"}
-          letterSpacing=".05rem"
+          size="small"
+          titleProps={{
+            fontSize: "1rem",
+            fontFamily: "Roboto",
+            textTransform: "capitalize",
+            letterSpacing: ".05rem",
+          }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
@@ -219,10 +223,12 @@ export const SpaceMembers = () => {
                 {invitees.length > 0 && (
                   <Box mt={4}>
                     <Title
-                      textTransform={"none"}
                       size="small"
-                      fontSize={".95rem"}
-                      fontFamily="Roboto"
+                      titleProps={{
+                        textTransform: "none",
+                        fontSize: ".95rem",
+                        fontFamily: "Roboto",
+                      }}
                     >
                       <Trans i18nKey="invitees" />
                     </Title>

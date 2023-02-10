@@ -19,6 +19,7 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   toolbarProps?: BoxProps;
   inPageLink?: string;
   avatar?: JSX.Element;
+  titleProps?: TypographyProps;
 }
 
 const Title = (props: ITitle) => {
@@ -33,6 +34,7 @@ const Title = (props: ITitle) => {
     backIconProps = {},
     wrapperProps = {},
     toolbarProps = {},
+    titleProps = {},
     inPageLink,
     avatar,
     ...rest
@@ -58,13 +60,7 @@ const Title = (props: ITitle) => {
       {avatar && (
         <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>
       )}
-      <Typography
-        textTransform="uppercase"
-        variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
-        fontWeight="bold"
-        sx={{ flex: 1 }}
-        {...rest}
-      >
+      <Box sx={{ flex: 1 }} {...rest}>
         {backLink ? (
           <Box display="flex" justifyContent={"flex-start"}>
             <Box
@@ -116,7 +112,17 @@ const Title = (props: ITitle) => {
         ) : (
           <></>
         )}
-        <Box sx={{ ...styles.centerV, display: { xs: "block", sm: "flex" } }}>
+        <Typography
+          variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
+          textTransform="uppercase"
+          fontWeight="bold"
+          {...titleProps}
+          sx={{
+            ...styles.centerV,
+            display: { xs: "block", sm: "flex" },
+            ...((titleProps?.sx || {}) as any),
+          }}
+        >
           {children}
           {inPageLink && (
             <Link
@@ -135,7 +141,7 @@ const Title = (props: ITitle) => {
               <Box id={inPageLink} position="absolute" top="-84px" />
             </Link>
           )}
-        </Box>
+        </Typography>
         {sub && (
           <Typography
             variant={
@@ -149,7 +155,7 @@ const Title = (props: ITitle) => {
             {sub}
           </Typography>
         )}
-      </Typography>
+      </Box>
       <Box ml="auto" {...toolbarProps}>
         {toolbar}
       </Box>

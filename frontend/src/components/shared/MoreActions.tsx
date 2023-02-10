@@ -41,7 +41,15 @@ const MoreActions = (props: IMoreActionsProps) => {
     items = [],
     hideInnerIconButton = false,
   } = props;
-  return items.length > 0 ? (
+
+  const menuItems = items.filter((item) => !!item) as {
+    icon?: JSX.Element;
+    onClick?: React.MouseEventHandler<HTMLLIElement> | undefined;
+    text: JSX.Element;
+    menuItemProps?: MenuItemProps & { "data-cy"?: string };
+  }[];
+
+  return menuItems.length > 0 ? (
     <Box {...boxProps}>
       {!hideInnerIconButton && (
         <IconButton
@@ -66,16 +74,18 @@ const MoreActions = (props: IMoreActionsProps) => {
         anchorEl={anchorEl}
         PaperProps={{ sx: { minWidth: "160px" } }}
       >
-        {items.map((item, index) => {
-          if (!item) {
-            return null;
-          }
-          const { onClick = () => {}, icon, text, menuItemProps = {} } = item;
+        {menuItems.map((item, index) => {
+          const {
+            onClick = () => {},
+            icon,
+            text,
+            menuItemProps = {},
+          } = item || {};
           return (
             <MenuItem
-              {...menuItemProps}
               key={index}
-              onClick={(e) => {
+              {...menuItemProps}
+              onClick={(e: any) => {
                 closeMenu(e);
                 onClick(e);
               }}
