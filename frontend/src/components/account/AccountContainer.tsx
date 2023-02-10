@@ -6,13 +6,13 @@ import TabList from "@mui/lab/TabList";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { authActions, useAuthContext } from "../../providers/AuthProvider";
 import { useNavigate, useParams } from "react-router-dom";
-import EngineeringIcon from "@mui/icons-material/Engineering";
 import { styles } from "../../config/styles";
 import ExpertGroupsContainer from "../expert-groups/ExpertGroupsContainer";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
@@ -23,6 +23,7 @@ import { useQuery } from "../../utils/useQuery";
 import getUserName from "../../utils/getUserName";
 import useDocumentTitle from "../../utils/useDocumentTitle";
 import { t } from "i18next";
+import Title from "../shared/Title";
 
 const AccountContainer = () => {
   return (
@@ -87,11 +88,11 @@ function AccountSettings() {
           </TabList>
         </Box>
         <TabPanel value="about">
-          <Box sx={{ p: 4, background: "white", borderRadius: 1 }} mt={2}>
+          <Box mt={2}>
             <Box>
               <About />
             </Box>
-            <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
+            {/* <Box mt={16} borderTop={"1px solid #cfc7c7"} pt={1}>
               <Grid container spacing={4}>
                 <Grid item md={4} sm={6} xs={12}>
                   <Typography
@@ -105,7 +106,7 @@ function AccountSettings() {
                   <SignOut />
                 </Grid>
               </Grid>
-            </Box>
+            </Box> */}
           </Box>
         </TabPanel>
         <TabPanel value="expert-groups">
@@ -123,7 +124,7 @@ const About = ({ fetchAccount }: any) => {
     service: (args, config) => service.getSignedInUser(args, config),
     runOnMount: false,
   });
-  const { display_name } = userInfo;
+  const { display_name, email } = userInfo;
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -137,15 +138,87 @@ const About = ({ fetchAccount }: any) => {
   };
 
   return (
-    <Box sx={{ ...styles.centerV }}>
-      <Avatar sx={{ width: "64px", height: "64px" }} />
-      <Box ml={2}>
-        <Typography variant="h6">{display_name}</Typography>
+    <Box>
+      <Box
+        height={"200px"}
+        width="100%"
+        sx={{
+          borderRadius: "80px 6px 6px 6px",
+          background: "linear-gradient(145deg, #efaa9d, #ccf7f9)",
+        }}
+      >
+        <Box position={"relative"} top="168px" left="24px">
+          <Avatar
+            sx={{
+              width: "94px",
+              height: "94px",
+              border: "4px solid whitesmoke",
+            }}
+          />
+        </Box>
       </Box>
-      <IconButton sx={{ ml: "auto" }} onClick={openDialog}>
-        <BorderColorRoundedIcon />
-      </IconButton>
-      <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
+      <Box ml={"130px"} mt={1}>
+        <Title
+          textTransform={"capitalize"}
+          sub={<Box textTransform={"none"}>{email}</Box>}
+          toolbar={
+            <>
+              <IconButton
+                sx={{ ml: "auto", mb: 1.2, mr: 1.5 }}
+                onClick={openDialog}
+                color="primary"
+                size="small"
+              >
+                <BorderColorRoundedIcon />
+              </IconButton>
+              <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
+            </>
+          }
+        >
+          {display_name}
+        </Title>
+      </Box>
+      <Box mt={8}>
+        <Box borderTop={"1px solid #d1d1d1"} px={1} py={3} m={1}>
+          <Grid container spacing={3}>
+            <Grid item md={3}>
+              <Title size="small" textTransform={"none"}>
+                <Trans i18nKey="about" />
+              </Title>
+            </Grid>
+            <Grid item md={9}>
+              <Box>
+                <Typography variant="subLarge">
+                  <Trans i18nKey="emailAddress" />
+                </Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  {email}
+                </Typography>
+              </Box>
+              <Box mt={2.5}>
+                <Typography variant="subLarge">
+                  <Trans i18nKey="accessLevel" />
+                </Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  Expert
+                </Typography>
+              </Box>
+              <Box mt={2.5}>
+                <Typography variant="subLarge">
+                  <Trans i18nKey="bio" />
+                </Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Consectetur, dolor atque delectus quibusdam expedita
+                  architecto pariatur quos hic mollitia cupiditate
+                  necessitatibus eius tempora in, accusantium incidunt illo
+                  minus voluptatem aliquam!
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 };

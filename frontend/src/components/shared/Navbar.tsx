@@ -4,7 +4,7 @@ import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "../../config/styles";
 import { authActions, useAuthContext } from "../../providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
-import { Box } from "@mui/material";
+import { Box, ListItemIcon } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
@@ -24,6 +24,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
+import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 const drawerWidth = 240;
 
@@ -499,7 +502,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{ sx: { minWidth: "140px" } }}
+        PaperProps={{ sx: { minWidth: "180px" } }}
       >
         <MenuItem
           dense
@@ -507,7 +510,12 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           to={`/account/about`}
           onClick={handleClose}
         >
-          <Trans i18nKey={"account"} />
+          <ListItemIcon>
+            <AccountBoxRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>
+            <Trans i18nKey={"account"} />
+          </ListItemText>
         </MenuItem>
         <MenuItem
           dense
@@ -515,7 +523,13 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           component={NavLink}
           to={`/account/expert-groups`}
         >
-          <Trans i18nKey={"expertGroups"} />
+          <ListItemIcon>
+            <EngineeringIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>
+            {" "}
+            <Trans i18nKey={"expertGroups"} />
+          </ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem
@@ -525,7 +539,13 @@ const AccountDropDownButton = ({ userInfo }: any) => {
             dispatch(authActions.signOut());
           }}
         >
-          <Trans i18nKey={"signOut"} />
+          <ListItemIcon>
+            <LogoutRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>
+            {" "}
+            <Trans i18nKey={"signOut"} />
+          </ListItemText>
         </MenuItem>
       </Menu>
     </>

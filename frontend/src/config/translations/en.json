@@ -246,5 +246,8 @@
   "expertGroup": "Expert group",
   "account": "Account",
   "editExpertGroup": "Edit expert group",
-  "editSpace": "Edit space"
+  "editSpace": "Edit space",
+  "emailAddress": "Email address",
+  "accessLevel": "Access level",
+  "accountPicture": "Account picture"
 }

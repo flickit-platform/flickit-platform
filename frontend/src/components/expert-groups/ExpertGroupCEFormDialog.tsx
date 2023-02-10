@@ -105,8 +105,8 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
                 "image/jpeg": [".jpeg", ".jpg"],
                 "image/png": [".png"],
               }}
-              defaultValue={defaultValues.picture}
               defaultValueType="image"
+              defaultValue={defaultValues.picture}
               hideDropText
               name="picture"
               label={<Trans i18nKey="groupPicture" />}

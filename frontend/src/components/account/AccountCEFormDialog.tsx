@@ -13,12 +13,18 @@ import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import { ICustomError } from "../../utils/CustomError";
 import { Link, useParams } from "react-router-dom";
 import toastError from "../../utils/toastError";
-import { CEDialog, CEDialogActions } from "../../components/shared/dialogs/CEDialog";
+import {
+  CEDialog,
+  CEDialogActions,
+} from "../../components/shared/dialogs/CEDialog";
 import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "../shared/fields/AutocompleteAsyncField";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
+import UploadField from "../shared/fields/UploadField";
 
 interface IAccountCEFormDialogProps extends DialogProps {
   onClose: () => void;
@@ -30,7 +36,13 @@ interface IAccountCEFormDialogProps extends DialogProps {
 const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { id } = data;
   const defaultValues = type === "update" ? data : {};
@@ -54,7 +66,10 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
     setLoading(true);
     try {
       const { data: res } = await service.updateAccount(
-        { id, data: { email: defaultValues?.email, id: defaultValues?.id, ...data } },
+        {
+          id,
+          data: { email: defaultValues?.email, id: defaultValues?.id, ...data },
+        },
         { signal: abortController.signal }
       );
       setLoading(false);
@@ -81,6 +96,17 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
+          {/* <Grid item xs={12} sm={6}>
+            <UploadField
+              accept={{
+                "image/jpeg": [".jpeg", ".jpg"],
+                "image/png": [".png"],
+              }}
+              defaultValueType="image"
+              name="picture"
+              label={<Trans i18nKey="accountPicture" />}
+            />
+          </Grid> */}
           <Grid item xs={12}>
             <InputFieldUC
               autoFocus={true}
@@ -90,8 +116,21 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
               label={<Trans i18nKey="displayName" />}
             />
           </Grid>
+          {/* <Grid item xs={12}>
+            <InputFieldUC
+              multiline
+              defaultValue={defaultValues.bio || ""}
+              name="bio"
+              label={<Trans i18nKey="bio" />}
+            />
+          </Grid> */}
         </Grid>
-        <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
+        <CEDialogActions
+          closeDialog={close}
+          loading={loading}
+          type={type}
+          onSubmit={formMethods.handleSubmit(onSubmit)}
+        />
       </FormProviderWithForm>
     </CEDialog>
   );
