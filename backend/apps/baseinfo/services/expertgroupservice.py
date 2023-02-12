@@ -24,7 +24,6 @@ def add_expert_group_coordinator(expert_group, current_user):
     except ExpertGroupAccess.DoesNotExist:
         expert_group_access = ExpertGroupAccess.objects.create(user_id = current_user.id, expert_group_id = expert_group.id)
         expert_group_access.save()
-    # expert_group.owner = current_user
     expert_group.save()
     expert_group_access.save()
 
@@ -34,7 +33,7 @@ def add_user_to_expert_group(expert_group_id, email):
     if user in expert_group.users.all():
         return False
     token = cryptoservices.encrypt_message(str(user.id) + ' ' + str(expert_group.id))
-    url = '/account/expert-group-invitation/' + str(expert_group.id) + '/' + str(token)
+    url = 'account/expert-group-invitation/' + str(expert_group.id) + '/' + str(token)
     async_send_invite_for_expert_group.delay(url , email)
     create_expert_group_access_temp_record(expert_group_id, email)
     return True
