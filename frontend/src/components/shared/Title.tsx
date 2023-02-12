@@ -20,6 +20,7 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   inPageLink?: string;
   avatar?: JSX.Element;
   titleProps?: TypographyProps;
+  subProps?: TypographyProps;
 }
 
 const Title = (props: ITitle) => {
@@ -35,6 +36,7 @@ const Title = (props: ITitle) => {
     wrapperProps = {},
     toolbarProps = {},
     titleProps = {},
+    subProps = {},
     inPageLink,
     avatar,
     ...rest
@@ -57,9 +59,7 @@ const Title = (props: ITitle) => {
       }}
       {...wrapperProps}
     >
-      {avatar && (
-        <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>
-      )}
+      {avatar && <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>}
       <Box sx={{ flex: 1 }} {...rest}>
         {backLink ? (
           <Box display="flex" justifyContent={"flex-start"}>
@@ -82,13 +82,7 @@ const Title = (props: ITitle) => {
               {sup && (
                 <Typography
                   textTransform="uppercase"
-                  variant={
-                    size === "small"
-                      ? "subSmall"
-                      : size === "large"
-                      ? "subLarge"
-                      : "subMedium"
-                  }
+                  variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
                   lineHeight={0}
                 >
                   {sup}
@@ -99,13 +93,8 @@ const Title = (props: ITitle) => {
         ) : sup ? (
           <Typography
             textTransform="uppercase"
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
+            variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
+            {...subProps}
           >
             {sup}
           </Typography>
@@ -143,17 +132,7 @@ const Title = (props: ITitle) => {
           )}
         </Typography>
         {sub && (
-          <Typography
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
-          >
-            {sub}
-          </Typography>
+          <Typography variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}>{sub}</Typography>
         )}
       </Box>
       <Box ml="auto" {...toolbarProps}>
