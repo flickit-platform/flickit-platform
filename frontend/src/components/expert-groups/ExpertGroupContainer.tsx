@@ -86,10 +86,10 @@ const ExpertGroupContainer = () => {
           users = [],
           bio,
           owner,
-          is_expert = false,
+          is_group_expert = true,
           profiles = [],
         } = data || {};
-        const hasAccess = userInfo.id === owner?.id || is_expert;
+        const hasAccess = userInfo.id === owner?.id || is_group_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
 
         return (

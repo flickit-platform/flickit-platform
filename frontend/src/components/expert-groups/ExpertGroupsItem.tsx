@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Divider,
-  Link as MLink,
-} from "@mui/material";
+import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Link as MLink } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Link } from "react-router-dom";
 import { styles } from "../../config/styles";
@@ -29,16 +19,7 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data, disableActions = false } = props;
-  const {
-    id,
-    name,
-    picture,
-    bio = "",
-    website,
-    about = "",
-    users = [],
-    number_of_profiles,
-  } = data || {};
+  const { id, name, picture, bio = "", website, about = "", users = [], number_of_profiles } = data || {};
 
   return (
     <Box>
@@ -129,12 +110,11 @@ const Actions = (props: any) => {
   const { service } = useServiceContext();
   const { id } = expertGroup;
   const { query: fetchExpertGroup, loading } = useQuery({
-    service: (args = { id }, config) =>
-      service.fetchUserExpertGroup(args, config),
+    service: (args = { id }, config) => service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
   const dialogProps = useDialog();
-  const isOwner = expertGroup?.owner?.id === userInfo.id;
+  const hasAccess = expertGroup?.owner?.id === userInfo.id || expertGroup.is_group_expert;
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
@@ -144,7 +124,7 @@ const Actions = (props: any) => {
     });
   };
 
-  return isOwner ? (
+  return hasAccess ? (
     <>
       <MoreActions
         {...useMenu()}
@@ -158,10 +138,7 @@ const Actions = (props: any) => {
           },
         ]}
       />
-      <ExpertGroupCEFormDialog
-        {...dialogProps}
-        onSubmitForm={fetchExpertGroups}
-      />
+      <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={fetchExpertGroups} />
     </>
   ) : null;
 };
