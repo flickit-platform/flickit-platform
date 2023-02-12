@@ -3,7 +3,6 @@ from rest_framework import serializers
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact
 from baseinfo.models.profilemodels import AssessmentProfile, ExpertGroup
-from baseinfo.imagecomponent.serializers import QualityAttributeImageSerializer, SubjectImageSerializer
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,10 +22,9 @@ class QuestionnaireBySubjectSerilizer(serializers.ModelSerializer):
 
 
 class AssessmentSubjectSerilizer(serializers.ModelSerializer):
-    images = SubjectImageSerializer(many=True)
     class Meta:
         model = AssessmentSubject
-        fields = ['id', 'code', 'title', 'description', 'images', 'index']
+        fields = ['id', 'code', 'title', 'description', 'index']
 
 
 class MetricImpactSerilizer(serializers.ModelSerializer):
@@ -36,10 +34,9 @@ class MetricImpactSerilizer(serializers.ModelSerializer):
 
 
 class QualityAttributeSerilizer(serializers.ModelSerializer):
-    images = QualityAttributeImageSerializer(many=True)
     class Meta:
         model = QualityAttribute
-        fields = ['id', 'code', 'title', 'description', 'images', 'index']
+        fields = ['id', 'code', 'title', 'description', 'index']
 
 class AnswerTemplateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

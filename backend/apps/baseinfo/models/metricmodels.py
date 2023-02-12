@@ -11,7 +11,12 @@ class AnswerTemplate(models.Model):
     metric = models.ForeignKey('Metric', on_delete=models.CASCADE, related_name='answer_templates')
     caption = models.CharField(max_length=255)
     value = models.PositiveSmallIntegerField()
-    index = models.PositiveIntegerField(null=True)    
+    index = models.PositiveIntegerField()  
+
+    class Meta:
+        verbose_name = 'Questionnaire'
+        verbose_name_plural = "Questionnaires"
+        unique_together = [('index', 'metric')]  
 
 class Metric(models.Model):
     title = models.TextField()
