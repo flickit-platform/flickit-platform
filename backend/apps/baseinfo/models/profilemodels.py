@@ -1,15 +1,17 @@
 from django.db import models
 
+from common.validators import validate_file_size, validate_dsl_extension
+
 from account.models import User
 
 class ExpertGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    bio = models.CharField(max_length=200, null=True, blank=True)
-    about = models.TextField(null=True)
+    bio = models.CharField(max_length=200)
+    about = models.TextField()
     website = models.CharField(max_length = 200, null=True, blank=True)
-    picture = models.ImageField(upload_to='expertgroup/images', null=True)
+    picture = models.ImageField(upload_to='expertgroup/images', null=True, validators=[validate_file_size])
     users = models.ManyToManyField(User, through='ExpertGroupAccess', related_name = 'expert_groups')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
     class Meta:
         permissions = [
@@ -29,22 +31,12 @@ class ExpertGroupAccess(models.Model):
 class AssessmentProfile(models.Model):
     code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100, unique=True)
-    summary = models.TextField(null=True)
-    about = models.TextField(null=True)
+    summary = models.TextField()
+    about = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    is_default = models.BooleanField(default=False)
-    expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles', null=True)
+    expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles')
     is_active = models.BooleanField(default=False)
-
-
-    def save(self):
-        if(self.is_default == True):
-            default_profile = AssessmentProfile.objects.filter(is_default=True).first()
-            if(default_profile and self.id != default_profile.id):
-                default_profile.is_default = False
-                default_profile.save()
-        return super(AssessmentProfile, self).save()
 
     def __str__(self) -> str:
         return self.title
@@ -55,7 +47,7 @@ class AssessmentProfile(models.Model):
         ordering = ['title']
 
 class ProfileDsl(models.Model):
-    dsl_file = models.FileField(upload_to='profile/dsl')
+    dsl_file = models.FileField(upload_to='profile/dsl', validators=[validate_file_size, validate_dsl_extension])
 
 class ProfileTag(models.Model):
     code = models.CharField(max_length=50, unique=True)

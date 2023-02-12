@@ -49,7 +49,6 @@ def __import_profile_base_info(descriptive_profile, extra_info):
     assessment_profile = AssessmentProfile()
     assessment_profile.code = profile_model['code']
     assessment_profile.title = profile_model['title']
-    assessment_profile.is_default = False
     assessment_profile.about = extra_info['about']
     assessment_profile.summary = extra_info['summary']
     assessment_profile.save()

@@ -1,6 +1,4 @@
 from django.db import transaction
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from account.serializers.userserializers import UserSimpleSerializer
@@ -55,27 +53,20 @@ class ExpertGroupGiveAccessSerializer(serializers.Serializer):
             raise serializers.ValidationError({'message': error_message})
         return attrs
 
-
 class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
 
     @transaction.atomic
-    def save(self, **kwargs):
-        expert_group = super().save(**kwargs)
+    def create(self, validated_data):
         current_user = self.context.get('request', None).user
+        expert_group = ExpertGroup(**validated_data)
+        expert_group.owner = current_user
+        expert_group.save()
         expertgroupservice.add_expert_group_coordinator(expert_group, current_user)
         return expert_group
 
     def validate_website(self, website):
-        if not website.startswith("http://") and not website.startswith("https://"):
-            if "." not in website:
-                raise ValidationError("Invalid URL")
-            website = "http://" + website
-        try:
-            URLValidator(schemes=['http', 'https'])(website)
-            return website
-        except ValidationError:
-            raise ValidationError("Invalid URL")
-
+        return expertgroupservice.validate_website(website)
+        
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'bio', 'about', 'website', 'picture']

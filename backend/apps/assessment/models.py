@@ -38,8 +38,11 @@ class AssessmentProject(models.Model):
     assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='assessment_projects')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True)
     color = models.ForeignKey(Color, on_delete=models.PROTECT, null=True)
-    space = models.ForeignKey(Space, on_delete=models.PROTECT, null=True)
+    space = models.ForeignKey(Space, on_delete=models.PROTECT)
     objects = AssessmentProjectManager()
+
+    class Meta:
+        unique_together = [('title', 'space')]
 
     def __str__(self) -> str:
         return self.title
@@ -54,8 +57,8 @@ class AssessmentResult(models.Model):
 class QualityAttributeValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4)
     assessment_result = models.ForeignKey(AssessmentResult, on_delete=models.CASCADE, related_name='quality_attribute_values')
-    quality_attribute = models.ForeignKey(QualityAttribute, on_delete=models.CASCADE, related_name='quality_attribute_values', null=True)
-    maturity_level_value = models.PositiveIntegerField(null=True)
+    quality_attribute = models.ForeignKey(QualityAttribute, on_delete=models.CASCADE, related_name='quality_attribute_values')
+    maturity_level_value = models.PositiveIntegerField()
 
 
 class MetricValue(models.Model):

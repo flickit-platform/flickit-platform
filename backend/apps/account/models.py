@@ -43,7 +43,7 @@ class Space(models.Model):
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True)
+    owner = models.ForeignKey('User', on_delete=models.PROTECT)
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=254, error_messages={'unique':"A user with this email address already exists."})

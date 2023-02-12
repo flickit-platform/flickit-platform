@@ -1,5 +1,7 @@
 from datetime import timedelta, datetime
 from django.utils import timezone
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -22,7 +24,7 @@ def add_expert_group_coordinator(expert_group, current_user):
     except ExpertGroupAccess.DoesNotExist:
         expert_group_access = ExpertGroupAccess.objects.create(user_id = current_user.id, expert_group_id = expert_group.id)
         expert_group_access.save()
-    expert_group.owner = current_user
+    # expert_group.owner = current_user
     expert_group.save()
     expert_group_access.save()
 
@@ -91,5 +93,19 @@ def remove_expire_invitions(user_expert_group_access_list):
     expire_list = qs.filter(invite_expiration_date__lt=datetime.now())
     for expire in expire_list.all():
         ExpertGroupAccess.objects.get(id = expire.id).delete()
+
+
+def validate_website(website):
+    if not website:
+        return website
+    if not website.startswith("http://") and not website.startswith("https://"):
+        if "." not in website:
+            raise ValidationError("Invalid URL")
+        website = "http://" + website
+    try:
+        URLValidator(schemes=['http', 'https'])(website)
+        return website
+    except ValidationError:
+        raise ValidationError("Invalid URL")
 
     

@@ -3,7 +3,6 @@ from rest_framework import serializers
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag
-from baseinfo.imagecomponent.serializers import ProfileImageSerializer
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
 from ..services import profileservice
@@ -20,7 +19,6 @@ class ProfileTagSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title']
 
 class AssessmentProfileSerilizer(serializers.ModelSerializer):
-    images = ProfileImageSerializer(many=True)
     tags =  ProfileTagSerializer(many = True)
     expert_group = ExpertGroupSimpleSerilizers()
     number_of_assessment = serializers.SerializerMethodField()
@@ -58,7 +56,7 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
     
     class Meta:
         model = AssessmentProfile
-        fields = ['id', 'code', 'title', 'summary', 'about', 'images', 'tags', 'expert_group', 
+        fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group', 
         'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject', 'number_of_questionaries',
         'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator', 
         'subjects_with_desc', 'questionnaires']
@@ -67,7 +65,6 @@ class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentProfile
         fields = ['id']
-
 
 class ImportProfileSerializer(serializers.Serializer):
     tag_ids = serializers.ListField(child=serializers.IntegerField())
