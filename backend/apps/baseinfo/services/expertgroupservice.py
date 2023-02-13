@@ -106,5 +106,8 @@ def validate_website(website):
         return website
     except ValidationError:
         raise ValidationError("Invalid URL")
+    
+def is_current_user_expert(expert_group, user):
+    return expert_group.users.filter(pk=user.pk).exists() and user.has_perm('baseinfo.manage_expert_group')
 
     

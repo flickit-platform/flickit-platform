@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 
+from baseinfo.decorators import is_expert
 from baseinfo.services import profileservice, expertgroupservice
 from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
 from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
@@ -59,10 +60,11 @@ class ProfileDetailDisplayApi(APIView):
         return Response(response, status = status.HTTP_200_OK)
 
 class ProfileListApi(APIView):
+    @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
         response = AssessmentProfileSerilizer(expert_group.profiles, many = True, context={'request': request}).data
-        return Response(response, status = status.HTTP_200_OK)
+        return Response({'results' : response}, status = status.HTTP_200_OK)
 
 class ProfileListOptionsApi(APIView):
     def get(self, request):

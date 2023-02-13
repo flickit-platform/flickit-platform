@@ -5,7 +5,7 @@ from djoser.serializers import UserCreatePasswordRetypeSerializer
 
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
-from account.models import UserAccess
+from account.models import UserAccess, User
 from account.serializers.commonserializers import UserSimpleSerializer, SpaceSerializer
 from account.serializers.spaceserializers import SpaceSimpleSerializer
 from account.services import spaceservices
@@ -33,8 +33,13 @@ class UserCustomSerializer(BaseUserSerializer):
     current_space = SpaceSerializer()
     spaces = SpaceSerializer(many = True)
     expert_groups = ExpertGroupSimpleSerilizers(many = True)
+    is_expert = serializers.SerializerMethodField(method_name='has_expet_access')
+
+    def has_expet_access(self, user: User):
+        return user.has_perm('baseinfo.manage_expert_group')
+
     class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups']
+        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups', 'is_expert']
 
 class UserSerializer(BaseUserSerializer):
     

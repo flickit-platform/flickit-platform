@@ -9,8 +9,10 @@ from baseinfo.services import expertgroupservice
 from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
 from baseinfo.permissions import ManageExpertGroupPermission
 
+
 class ExpertGroupViewSet(ModelViewSet):
     permission_classes = [ManageExpertGroupPermission]
+
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return expertgroupserializers.ExpertGroupCreateSerilizers
