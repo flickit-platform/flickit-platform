@@ -60,8 +60,6 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
         subject_info.add("id", subject.id)
         subject_info.add("title", subject.title)
         subject_info.add("description", subject.description)
-        if subject.images.first() is not None:
-            subject_info.add("image", subject.images.first().image.url)
         return subject_info
 
     def calculate_progress_param(self, result, subject, subject_info):

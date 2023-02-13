@@ -13,12 +13,16 @@ class UserSimpleSerializer(serializers.ModelSerializer):
         
 class SpaceSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer(read_only=True)
-    @transaction.atomic
-    def save(self, **kwargs):
-        space = super().save(**kwargs)
-        current_user = self.context.get('request', None).user
-        return spaceservices.add_owner_to_space(space, current_user.id)
     
+    @transaction.atomic
+    def create(self, validated_data):
+        current_user = self.context.get('request', None).user
+        space = Space(**validated_data)
+        space.owner = current_user
+        space.save()
+        spaceservices.add_owner_to_space(space, current_user.id)
+        return space
+
     class Meta:
         model = Space
         fields = ['id', 'code', 'title', 'owner']
