@@ -42,7 +42,7 @@ const ProfileExpertViewContainer = () => {
       <QueryData
         {...profileQueryProps}
         render={(data = {}) => {
-          const { is_group_expert = true, expert_group } = data;
+          const { is_expert = true, expert_group } = data;
           setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
 
           return (
@@ -65,7 +65,7 @@ const ProfileExpertViewContainer = () => {
                 }
                 // sub={data.summary}
                 toolbar={
-                  is_group_expert && (
+                  is_expert && (
                     <IconButton title="Setting" color="primary" onClick={() => dialogProps.openDialog({ type: "update", data })}>
                       <SettingsRoundedIcon />
                     </IconButton>

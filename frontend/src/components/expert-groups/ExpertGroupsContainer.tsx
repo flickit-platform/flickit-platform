@@ -18,7 +18,7 @@ const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { id } = userInfo || {};
-  const { is_expert = true } = userInfo;
+  const { is_expert } = userInfo;
   const queryData = useQuery({
     service: (args = { id }, config) => service.fetchUserExpertGroups(args, config),
   });
@@ -46,7 +46,7 @@ const ExpertGroupsContainer = () => {
         {...queryData}
         renderLoading={() => {
           return (
-            <Grid container spacing={3} mt={2}>
+            <Grid container spacing={3} mt={1}>
               {forLoopComponent(4, (i) => {
                 return (
                   <Grid item key={i} xs={12} sm={6} lg={4}>
