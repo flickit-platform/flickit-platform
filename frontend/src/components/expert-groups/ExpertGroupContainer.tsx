@@ -3,14 +3,12 @@ import {
   AvatarGroup,
   Box,
   Button,
-  Chip,
   Collapse,
   Divider,
   Grid,
   IconButton,
   InputAdornment,
   Link as MLink,
-  Skeleton,
   TextField,
   Typography,
 } from "@mui/material";
@@ -26,7 +24,7 @@ import RichEditor from "../shared/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { t } from "i18next";
-import { IDialogProps, IUserInfo, TQueryFunction } from "../../types";
+import { IDialogProps, TQueryFunction } from "../../types";
 import getUserName from "../../utils/getUserName";
 import forLoopComponent from "../../utils/forLoop";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
@@ -34,7 +32,7 @@ import ProfileListItem from "../profile/ProfileListItem";
 import toastError from "../../utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import { ICustomError } from "../../utils/CustomError";
 import useDialog from "../../utils/useDialog";
@@ -86,10 +84,10 @@ const ExpertGroupContainer = () => {
           users = [],
           bio,
           owner,
-          is_group_expert = true,
+          is_expert,
           profiles = [],
         } = data || {};
-        const hasAccess = userInfo.id === owner?.id || is_group_expert;
+        const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
 
         return (
@@ -98,7 +96,6 @@ const ExpertGroupContainer = () => {
               borderBottom
               pb={1}
               avatar={<Avatar src={picture} sx={{ mr: 1 }} />}
-              // sub={bio}
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -109,7 +106,7 @@ const ExpertGroupContainer = () => {
                   ]}
                 />
               }
-              toolbar={<EditExpertGroupButton fetchExpertGroup={queryData.query} />}
+              toolbar={hasAccess && <EditExpertGroupButton fetchExpertGroup={queryData.query} />}
             >
               {name}
             </Title>
@@ -131,7 +128,7 @@ const ExpertGroupContainer = () => {
                   <ProfilesList queryData={queryData} hasAccess={hasAccess} dialogProps={createProfileDialogProps} />
                 </Box>
                 <Box mt={5}>
-                  <ExpertGroupMembersDetail queryData={expertGroupMembersQueryData} />
+                  <ExpertGroupMembersDetail queryData={expertGroupMembersQueryData} hasAccess={hasAccess} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
@@ -208,7 +205,6 @@ const ExpertGroupContainer = () => {
                             size="small"
                             color="primary"
                             onClick={() => {
-                              console.log("here");
                               createProfileDialogProps.openDialog({
                                 type: "create",
                                 data: { expertGroupId },
@@ -304,7 +300,6 @@ const ExpertGroupMembers = (props: any) => {
                 })}
               </AvatarGroup>
             </Box>
-            {/* <Divider sx={{ mt: 2, mb: 2 }} /> */}
           </Box>
         );
       }}
@@ -576,17 +571,18 @@ const ProfilesList = (props: any) => {
               ))}
             </>
           )}
-          render={(data = []) => {
+          render={(data = {}) => {
+            const { results = [], is_expert } = data;
             return (
               <>
-                {data.map((profile: any) => {
+                {results.map((profile: any) => {
                   return (
                     <ProfileListItem
-                      link={hasAccess ? `profiles/${profile?.id}` : `/profiles/${profile?.id}`}
+                      link={is_expert ? `profiles/${profile?.id}` : `/profiles/${profile?.id}`}
                       key={profile?.id}
                       data={profile}
                       fetchProfiles={profileQuery.query}
-                      hasAccess={hasAccess}
+                      hasAccess={is_expert}
                     />
                   );
                 })}
@@ -613,7 +609,7 @@ const CreateProfileButton = (props: { onSubmitForm: TQueryFunction; dialogProps:
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData } = props;
+  const { queryData, hasAccess } = props;
 
   return (
     <>
@@ -621,21 +617,23 @@ const ExpertGroupMembersDetail = (props: any) => {
         <Trans i18nKey={"members"} />
       </Title>
       <Box mt={2} p={3} sx={{ borderRadius: 2, background: "white" }}>
-        <Box>
-          <Title
-            size="small"
-            mb={2}
-            titleProps={{
-              fontSize: "1rem",
-              fontFamily: "Roboto",
-              textTransform: "unset",
-              letterSpacing: ".05rem",
-            }}
-          >
-            <Trans i18nKey="addNewMember" />
-          </Title>
-          <AddMember queryData={queryData} />
-        </Box>
+        {hasAccess && (
+          <Box>
+            <Title
+              size="small"
+              mb={2}
+              titleProps={{
+                fontSize: "1rem",
+                fontFamily: "Roboto",
+                textTransform: "unset",
+                letterSpacing: ".05rem",
+              }}
+            >
+              <Trans i18nKey="addNewMember" />
+            </Title>
+            <AddMember queryData={queryData} />
+          </Box>
+        )}
 
         <QueryData
           {...queryData}
@@ -646,20 +644,22 @@ const ExpertGroupMembersDetail = (props: any) => {
             const hasInvitees = invitees.length > 0;
 
             return (
-              <Box mt={6}>
+              <Box mt={hasAccess ? 6 : 1}>
                 <Box>
                   <Box>
-                    <Title
-                      size="small"
-                      titleProps={{
-                        textTransform: "none",
-                        fontSize: ".95rem",
-                        fontFamily: "Roboto",
-                        mb: 1,
-                      }}
-                    >
-                      <Trans i18nKey="members" />
-                    </Title>
+                    {hasAccess && (
+                      <Title
+                        size="small"
+                        titleProps={{
+                          textTransform: "none",
+                          fontSize: ".95rem",
+                          fontFamily: "Roboto",
+                          mb: 1,
+                        }}
+                      >
+                        <Trans i18nKey="members" />
+                      </Title>
+                    )}
                     <Grid container spacing={2}>
                       {users.map((member: any) => {
                         const { user, id } = member;
@@ -679,7 +679,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 px: 1.8,
                               }}
                             >
-                              <Box sx={{ mt: "28px", ...styles.centerCH }}>
+                              <Box sx={{ mt: "28px", ...styles.centerCH, width: "100%" }}>
                                 <Box sx={{ ...styles.centerCH }}>
                                   <Avatar sx={{ width: 58, height: 58, border: "4px solid white" }}>
                                     <PersonRoundedIcon />
@@ -702,8 +702,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 </Box>
                                 <Box mt={1} px={1} py={1} pb={3}>
                                   <Typography variant="body2" textAlign={"center"}>
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil, illum. Dolorem, hic placeat
-                                    sequi ipsa illum in, est temporibus omnis
+                                    {user.bio}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -717,7 +716,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                       })}
                     </Grid>
                   </Box>
-                  {hasInvitees && (
+                  {hasInvitees && hasAccess && (
                     <Box mt={4}>
                       <Title
                         size="small"

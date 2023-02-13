@@ -24,7 +24,7 @@ interface IProfileSectionAuthorInfo {
 
 const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   const { data, query } = props;
-  const { is_active, is_group_expert = true } = data || {};
+  const { is_active, is_expert = true } = data || {};
   const { profileId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
@@ -85,7 +85,7 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
             <InfoItem
               bg="white"
               info={{
-                action: is_group_expert ? (
+                action: is_expert ? (
                   is_active ? (
                     <IconButton color="primary" title="Unpublish" onClick={unPublishProfile}>
                       <ArchiveRoundedIcon />

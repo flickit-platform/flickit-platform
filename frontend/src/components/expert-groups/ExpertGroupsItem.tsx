@@ -114,7 +114,7 @@ const Actions = (props: any) => {
     runOnMount: false,
   });
   const dialogProps = useDialog();
-  const hasAccess = expertGroup?.owner?.id === userInfo.id || expertGroup.is_group_expert;
+  const hasAccess = expertGroup?.owner?.id === userInfo.id || expertGroup.is_expert;
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();

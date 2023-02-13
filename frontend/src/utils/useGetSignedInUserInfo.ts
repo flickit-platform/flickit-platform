@@ -56,13 +56,16 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
 
   useEffect(() => {
     if (runOnMount) {
-      getUser();
+      getUser().then((res) => {
+        if (!res) {
+          location.pathname &&
+            !location.pathname.includes("sign-") &&
+            location.pathname !== "/" &&
+            !isAuthenticatedUser &&
+            dispatch(authActions.setRedirectRoute(location.pathname));
+        }
+      });
     }
-    location.pathname &&
-      !location.pathname.includes("sign-") &&
-      location.pathname !== "/" &&
-      !isAuthenticatedUser &&
-      dispatch(authActions.setRedirectRoute(location.pathname));
 
     return () => {
       // abortController.current?.abort();

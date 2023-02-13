@@ -62,11 +62,7 @@ function AccountSettings() {
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box>
-          <TabList
-            onChange={handleChange}
-            scrollButtons="auto"
-            variant="scrollable"
-          >
+          <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
@@ -124,7 +120,7 @@ const About = ({ fetchAccount }: any) => {
     service: (args, config) => service.getSignedInUser(args, config),
     runOnMount: false,
   });
-  const { display_name, email } = userInfo;
+  const { display_name, email, is_expert, bio } = userInfo;
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -163,12 +159,7 @@ const About = ({ fetchAccount }: any) => {
           sub={<Box textTransform={"none"}>{email}</Box>}
           toolbar={
             <>
-              <IconButton
-                sx={{ ml: "auto", mb: 1.2, mr: 1.5 }}
-                onClick={openDialog}
-                color="primary"
-                size="small"
-              >
+              <IconButton sx={{ ml: "auto", mb: 1.2, mr: 1.5 }} onClick={openDialog} color="primary" size="small">
                 <BorderColorRoundedIcon />
               </IconButton>
               <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
@@ -191,29 +182,23 @@ const About = ({ fetchAccount }: any) => {
                 <Typography variant="subLarge">
                   <Trans i18nKey="emailAddress" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
-                  {email}
-                </Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{email}</Typography>
               </Box>
-              <Box mt={2.5}>
-                <Typography variant="subLarge">
-                  <Trans i18nKey="accessLevel" />
-                </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
-                  Expert
-                </Typography>
-              </Box>
+              {is_expert && (
+                <Box mt={2.5}>
+                  <Typography variant="subLarge">
+                    <Trans i18nKey="accessLevel" />
+                  </Typography>
+                  <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                    <Trans i18nKey="expert" />
+                  </Typography>
+                </Box>
+              )}
               <Box mt={2.5}>
                 <Typography variant="subLarge">
                   <Trans i18nKey="bio" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Consectetur, dolor atque delectus quibusdam expedita
-                  architecto pariatur quos hic mollitia cupiditate
-                  necessitatibus eius tempora in, accusantium incidunt illo
-                  minus voluptatem aliquam!
-                </Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{bio}</Typography>
               </Box>
             </Grid>
           </Grid>

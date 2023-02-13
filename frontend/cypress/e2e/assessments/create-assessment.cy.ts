@@ -32,9 +32,9 @@ context("Create an assessment", () => {
     cy.get("[data-cy=submit]").click();
     cy.wait(1000);
     cy.get("[data-cy=questionnaires-btn]").click();
-    cy.wait(2000);
+    cy.wait(3000);
     cy.get("[data-cy=questionnaire-DevOps-start-btn]").click({ force: true });
-    cy.wait(2000);
+    cy.wait(3000);
 
     cy.get("[data-cy=automatic-submit-check]").click();
 
