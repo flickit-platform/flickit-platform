@@ -18,10 +18,9 @@ const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { id } = userInfo || {};
-  const { is_expert = false } = userInfo;
+  const { is_expert = true } = userInfo;
   const queryData = useQuery({
-    service: (args = { id }, config) =>
-      service.fetchUserExpertGroups(args, config),
+    service: (args = { id }, config) => service.fetchUserExpertGroups(args, config),
   });
 
   useDocumentTitle(t("expertGroups") as string);
@@ -40,11 +39,7 @@ const ExpertGroupsContainer = () => {
           }}
         >
           <Box></Box>
-          <Box ml="auto">
-            {is_expert && (
-              <CreateExpertGroupButton onSubmitForm={queryData.query} />
-            )}
-          </Box>
+          <Box ml="auto">{is_expert && <CreateExpertGroupButton onSubmitForm={queryData.query} />}</Box>
         </Box>
       )}
       <QueryData
@@ -76,12 +71,7 @@ const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ ml: "auto" }}
-        size="small"
-        onClick={dialogProps.openDialog}
-      >
+      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />
