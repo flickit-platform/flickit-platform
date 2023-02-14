@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import { QuestionnaireCard } from "./QuestionnaireCard";
-import QueryData from "../shared/QueryData";
+import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import {
-  IQuestionnairesModel,
-  IQuestionnairesPageDataModel,
-  TId,
-  TQueryProps,
-  TQueryFunction,
-} from "../../types";
-import LoadingSkeletonOfQuestionnaires from "../shared/loadings/LoadingSkeletonOfQuestionnaires";
-import { Box } from "@mui/material";
-import QANumberIndicator from "../shared/QANumberIndicator";
+import { IQuestionnairesModel, IQuestionnairesPageDataModel, TId, TQueryProps, TQueryFunction } from "@types";
+import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
+import Box from "@mui/material/Box";
+import QANumberIndicator from "@common/QANumberIndicator";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import { useSearchParams } from "react-router-dom";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: TQueryProps<IQuestionnairesModel>;
@@ -38,26 +32,14 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             return (
               <Box height="100%" sx={{ ...styles.centerV, pl: 1 }}>
                 {[1, 2, 3].map((item) => {
-                  return (
-                    <LoadingSkeleton
-                      height="36px"
-                      width="70px"
-                      key={item}
-                      sx={{ ml: 1 }}
-                    />
-                  );
+                  return <LoadingSkeleton height="36px" width="70px" key={item} sx={{ ml: 1 }} />;
                 })}
               </Box>
             );
           }}
           render={(data) => {
             const { subjects = [] } = data;
-            return (
-              <FilterBySubject
-                fetchQuestionnaires={fetchQuestionnaires}
-                subjects={subjects}
-              />
-            );
+            return <FilterBySubject fetchQuestionnaires={fetchQuestionnaires} subjects={subjects} />;
           }}
         />
 
@@ -79,18 +61,8 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const {
-                total_metric_number = 0,
-                total_answered_metric_number = 0,
-              } = data || {};
-              return (
-                <QANumberIndicator
-                  color="white"
-                  q={total_metric_number}
-                  a={total_answered_metric_number}
-                  variant="h6"
-                />
-              );
+              const { total_metric_number = 0, total_answered_metric_number = 0 } = data || {};
+              return <QANumberIndicator color="white" q={total_metric_number} a={total_answered_metric_number} variant="h6" />;
             }}
           />
         </Box>
@@ -123,15 +95,11 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
   );
 };
 
-const FilterBySubject = (props: {
-  subjects: { id: TId; title: string }[];
-  fetchQuestionnaires: TQueryFunction;
-}) => {
+const FilterBySubject = (props: { subjects: { id: TId; title: string }[]; fetchQuestionnaires: TQueryFunction }) => {
   const { subjects, fetchQuestionnaires } = props;
   const [searchParams, setSearchParams] = useSearchParams();
   const subjectIdParam = searchParams.get("subject_pk");
-  const [activeFilterSubjectId, setActiveFilterSubjectId] =
-    useState(subjectIdParam);
+  const [activeFilterSubjectId, setActiveFilterSubjectId] = useState(subjectIdParam);
 
   const handleClick = (subjectId: TId) => {
     if (activeFilterSubjectId == subjectId) {
@@ -173,11 +141,7 @@ const FilterBySubject = (props: {
   );
 };
 
-const FilterButton = (props: {
-  subject: { id: TId; title: string };
-  handleClick: (subjectId: TId) => void;
-  active: boolean;
-}) => {
+const FilterButton = (props: { subject: { id: TId; title: string }; handleClick: (subjectId: TId) => void; active: boolean }) => {
   const { subject, handleClick, active } = props;
   const { title, id } = subject;
 

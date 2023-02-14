@@ -1,4 +1,4 @@
-import { FieldError, FieldErrorsImpl, LiteralUnion } from "react-hook-form";
+import { FieldErrorsImpl } from "react-hook-form";
 import { Trans } from "react-i18next";
 
 type TErrorTypes =
@@ -25,7 +25,12 @@ const errorMessagesBaseOnErrorTypes: TErrorMessagesBaseOnErrorTypes = {
   required: <Trans i18nKey="requiredFieldError" />,
   minLength: <Trans i18nKey="minLengthFieldError" />,
 };
-
+/**
+ * Finds field error in form errors
+ * @param errors All errors of form
+ * @param name field name
+ * @returns
+ */
 const getFieldError = (
   errors: FieldErrorsImpl<{
     [x: string]: any;
@@ -34,8 +39,7 @@ const getFieldError = (
 ) => {
   const error = errors?.[name];
   const hasError = !!error?.type;
-  const errorMessage =
-    errorMessagesBaseOnErrorTypes[error?.type as TErrorTypes] || error?.message;
+  const errorMessage = errorMessagesBaseOnErrorTypes[error?.type as TErrorTypes] || error?.message;
 
   return { hasError, errorMessage };
 };

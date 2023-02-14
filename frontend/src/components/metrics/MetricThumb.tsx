@@ -1,19 +1,11 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 
 export const MetricThumb = (props: any) => {
-  const {
-    metricsInfo,
-    metric = {},
-    metricIndex,
-    onClose = () => {},
-    link,
-    isSubmitting,
-  } = props;
+  const { metricsInfo, metric = {}, metricIndex, onClose = () => {}, link, isSubmitting } = props;
   const { total_number_of_metrics } = metricsInfo;
 
   const navigate = useNavigate();
@@ -45,11 +37,7 @@ export const MetricThumb = (props: any) => {
             onClose();
           }}
         >
-          {metric.answer ? (
-            <Trans i18nKey="edit" />
-          ) : (
-            <Trans i18nKey="submitAnAnswer" />
-          )}
+          {metric.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
         </Button>
       </Box>
     </Box>

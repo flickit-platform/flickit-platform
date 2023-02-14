@@ -1,19 +1,6 @@
-import React from "react";
-import {
-  Bar,
-  XAxis,
-  YAxis,
-  Legend,
-  Tooltip,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
-import {
-  ICompareResultBaseInfo,
-  TCompareResultAttributeInfo,
-} from "../../types";
-import { Box } from "@mui/material";
+import { Bar, XAxis, YAxis, Legend, Tooltip, BarChart, CartesianGrid, ResponsiveContainer } from "recharts";
+import { ICompareResultBaseInfo, TCompareResultAttributeInfo } from "@types";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 
@@ -55,14 +42,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
               <Legend />
               {base_infos.map((assessment, index) => {
                 const title = assessment.title;
-                return title ? (
-                  <Bar
-                    dataKey={assessment.id}
-                    name={title}
-                    fill={barColors[index]}
-                    maxBarSize={20}
-                  />
-                ) : null;
+                return title ? <Bar dataKey={assessment.id} name={title} fill={barColors[index]} maxBarSize={20} /> : null;
               })}
             </BarChart>
           </ResponsiveContainer>

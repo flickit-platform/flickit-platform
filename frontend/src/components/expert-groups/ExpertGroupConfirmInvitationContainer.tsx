@@ -3,14 +3,14 @@ import { Box, Button } from "@mui/material";
 import { Trans } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { styles } from "../../config/styles";
-import { useAuthContext } from "../../providers/AuthProvider";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
-import { useQuery } from "../../utils/useQuery";
-import QueryData from "../shared/QueryData";
-import Title from "../shared/Title";
+import { styles } from "@styles";
+import { useAuthContext } from "@providers/AuthProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@common/QueryData";
+import Title from "@common/Title";
 import ExpertGroupsItem from "./ExpertGroupsItem";
 
 const ExpertGroupConfirmInvitationContainer = () => {
@@ -20,19 +20,17 @@ const ExpertGroupConfirmInvitationContainer = () => {
   const { id } = userInfo;
   const navigate = useNavigate();
   const expertGroupQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
-      service.fetchUserExpertGroup(args, config),
+    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, config),
   });
   const confirmInvitationQueryData = useQuery({
-    service: (args = { token }, config) =>
-      service.confirmExpertGroupInvitation(args, config),
+    service: (args = { token }, config) => service.confirmExpertGroupInvitation(args, config),
     runOnMount: false,
   });
 
   const confirmInvitation = async () => {
     try {
       await confirmInvitationQueryData.query();
-      navigate(`/account/${id}/expert-groups/${expertGroupId}`, {
+      navigate(`/user/expert-groups/${expertGroupId}`, {
         replace: true,
       });
       toast.success("You have joined this expert group successfully.");
@@ -43,11 +41,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
   };
 
   const decline = () => {
-    navigate(
-      userInfo.current_space?.id
-        ? `/${userInfo.current_space?.id}/assessments`
-        : "/spaces"
-    );
+    navigate(userInfo.current_space?.id ? `/${userInfo.current_space?.id}/assessments` : "/spaces");
   };
 
   return (
@@ -76,10 +70,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
               >
                 <Trans i18nKey="acceptInvitation" />
               </LoadingButton>
-              <LoadingButton
-                loading={confirmInvitationQueryData.loading}
-                onClick={decline}
-              >
+              <LoadingButton loading={confirmInvitationQueryData.loading} onClick={decline}>
                 <Trans i18nKey="decline" />
               </LoadingButton>
             </Box>

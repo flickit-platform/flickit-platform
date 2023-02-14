@@ -1,4 +1,4 @@
-import { IProfile, TId } from "../../types";
+import { IProfile, TId } from "@types";
 
 export enum COMPARE_ACTIONS_TYPE {
   SET_PROFILE = "SET_PROFILE",

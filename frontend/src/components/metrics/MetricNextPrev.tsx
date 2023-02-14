@@ -1,16 +1,10 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
-import { styles } from "../../config/styles";
-import {
-  EAssessmentStatus,
-  metricActions,
-  useMetricContext,
-  useMetricDispatch,
-} from "../../providers/MetricProvider";
+import { styles } from "@styles";
+import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
 import { MetricThumb } from "./MetricThumb";
 
 interface IMetricNextPrevProps {
@@ -22,9 +16,7 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
   const { isNext, hasNextQuestion } = props;
   const { metricsInfo, metricIndex, isSubmitting } = useMetricContext();
   const nextMetric = isNext ? Number(metricIndex) + 1 : Number(metricIndex) - 1;
-  const metric = metricsInfo?.metrics?.find(
-    (metric) => metric.index == nextMetric
-  );
+  const metric = metricsInfo?.metrics?.find((metric) => metric.index == nextMetric);
   const dispatch = useMetricDispatch();
 
   return (
@@ -35,9 +27,7 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
         position: "absolute",
         height: "calc(100% - 80px)",
         width: "calc(100% - 80px)",
-        transform: isNext
-          ? "translateX(calc(100% - 40px))"
-          : "translateX(calc(-100% + 40px))",
+        transform: isNext ? "translateX(calc(100% - 40px))" : "translateX(calc(-100% + 40px))",
         "&": isNext ? { right: 0 } : { left: 0 },
         display: "flex",
         alignItems: "center",
@@ -68,15 +58,7 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
             dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
           }
         }}
-        to={
-          isSubmitting
-            ? ""
-            : isNext
-            ? hasNextQuestion
-              ? `../${metricIndex + 1}`
-              : "../completed"
-            : `../${metricIndex - 1}`
-        }
+        to={isSubmitting ? "" : isNext ? (hasNextQuestion ? `../${metricIndex + 1}` : "../completed") : `../${metricIndex - 1}`}
       >
         <Typography
           sx={{

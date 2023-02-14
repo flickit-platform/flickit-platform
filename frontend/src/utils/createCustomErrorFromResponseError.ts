@@ -1,6 +1,11 @@
-import { ECustomErrorType } from "../types";
+import { ECustomErrorType } from "@types";
 import CustomError from "./CustomError";
 
+/**
+ *
+ * Creates custom error object out of service response
+ *
+ */
 const createCustomErrorFromResponseError = (err: any) => {
   const { response = {}, config = {} } = err;
   const { toastConfig } = config;
@@ -26,9 +31,7 @@ const getCustomErrorType = (err: any) => {
     return ECustomErrorType.DEFAULT;
   }
   const errorType =
-    errorToErrorTypeMap[statusText as string] ||
-    errorToErrorTypeMap[code as string] ||
-    errorToErrorTypeMap[status];
+    errorToErrorTypeMap[statusText as string] || errorToErrorTypeMap[code as string] || errorToErrorTypeMap[status];
 
   return errorType;
 };

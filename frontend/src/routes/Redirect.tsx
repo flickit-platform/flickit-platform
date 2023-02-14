@@ -1,5 +1,5 @@
 import { Location, Navigate, useLocation } from "react-router-dom";
-import { IAuthContext, useAuthContext } from "../providers/AuthProvider";
+import { IAuthContext, useAuthContext } from "@providers/AuthProvider";
 
 const Redirect = () => {
   const location = useLocation();
@@ -18,6 +18,7 @@ const getWhereToGo = (location: Location, authContext: IAuthContext) => {
     // If user is not signed in and not on
     return "/sign-in";
   }
+  // Will redirect user to the page which user wanted to visit while he wasn't sign in
   if (redirectRoute) {
     return redirectRoute;
   }

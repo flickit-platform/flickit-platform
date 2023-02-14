@@ -1,31 +1,26 @@
 import React, { useRef } from "react";
-import { Gauge } from "../../components/shared/charts/Gauge";
+import { Gauge } from "@common/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import useMenu from "../../utils/useMenu";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import {
-  createSearchParams,
-  Link,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import useMenu from "@utils/useMenu";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { createSearchParams, Link, useLocation, useNavigate } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
-import formatDate from "../../utils/formatDate";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
-import MoreActions from "../../components/shared/MoreActions";
+import { styles } from "@styles";
+import formatDate from "@utils/formatDate";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import MoreActions from "@common/MoreActions";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
-import { IAssessment, TId, TQueryFunction } from "../../types";
-import { TDialogProps } from "../../utils/useDialog";
+import Box from "@mui/material/Box";
+import { IAssessment, TId, TQueryFunction } from "@types";
+import { TDialogProps } from "@utils/useDialog";
 import Button from "@mui/material/Button";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import QueryStatsRounded from "@mui/icons-material/QueryStatsRounded";
-import hasStatus from "../../utils/hasStatus";
+import hasStatus from "@utils/hasStatus";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
@@ -71,9 +66,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             <Box
               sx={{ textDecoration: "none" }}
               component={Link}
-              to={
-                isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`
-              }
+              to={isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`}
             >
               <Typography
                 variant="h5"
@@ -90,13 +83,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               >
                 {item.title}
               </Typography>
-              <Typography
-                variant="subMedium"
-                color="GrayText"
-                sx={{ padding: "1px 4px", textAlign: "center" }}
-              >
-                <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(item.last_modification_date)}
+              <Typography variant="subMedium" color="GrayText" sx={{ padding: "1px 4px", textAlign: "center" }}>
+                <Trans i18nKey="lastUpdated" /> {formatDate(item.last_modification_date)}
               </Typography>
             </Box>
           </Grid>
@@ -178,10 +166,7 @@ const Actions = (props: {
   const openEditDialog = (e: any) => {
     setEditLoading(true);
     service
-      .loadAssessment(
-        { rowId: item.id },
-        { signal: abortController.current.signal }
-      )
+      .loadAssessment({ rowId: item.id }, { signal: abortController.current.signal })
       .then(({ data }) => {
         setEditLoading(false);
         dialogProps.openDialog({

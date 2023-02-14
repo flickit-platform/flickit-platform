@@ -1,4 +1,3 @@
-import React from "react";
 import { t } from "i18next";
 
 const getProgressLabel = (progress: number = 0): string => {

@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Chip, CircularProgress, Typography } from "@mui/material";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { useQuery } from "../../utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import { authActions, useAuthContext } from "../../providers/AuthProvider";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import useMenu from "../../utils/useMenu";
+import useMenu from "@utils/useMenu";
 import IconButton from "@mui/material/IconButton";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
-import MoreActions from "../../components/shared/MoreActions";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import MoreActions from "@common/MoreActions";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
-import { styles } from "../../config/styles";
-import { TDialogProps } from "../../utils/useDialog";
-import { ISpaceModel, ISpacesModel, TQueryFunction } from "../../types";
+import { styles } from "@styles";
+import { TDialogProps } from "@utils/useDialog";
+import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -86,14 +86,7 @@ interface ISpaceCardProps {
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const {
-    item,
-    isActiveSpace,
-    dialogProps,
-    fetchSpaces,
-    isOwner,
-    setUserInfo,
-  } = props;
+  const { item, isActiveSpace, dialogProps, fetchSpaces, isOwner, setUserInfo } = props;
   const { service } = useServiceContext();
   const navigate = useNavigate();
   const {
@@ -157,14 +150,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           >
             {loading ? <CircularProgress size="20px" /> : <>{title}</>}
           </Typography>
-          {isOwner && (
-            <Chip
-              sx={{ ml: 1, opacity: 0.7 }}
-              label={<Trans i18nKey={"owner"} />}
-              size="small"
-              variant="outlined"
-            />
-          )}
+          {isOwner && <Chip sx={{ ml: 1, opacity: 0.7 }} label={<Trans i18nKey={"owner"} />} size="small" variant="outlined" />}
         </Box>
       </Box>
       <Box ml="auto" sx={{ ...styles.centerV }}>
@@ -175,17 +161,10 @@ const SpaceCard = (props: ISpaceCardProps) => {
           </Typography>
         </Box>
       </Box>
-      <Box
-        justifyContent={"flex-end"}
-        sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}
-      >
+      <Box justifyContent={"flex-end"} sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}>
         {isActiveSpace && (
           <Box mr={1}>
-            <Chip
-              label={<Trans i18nKey={"current"} />}
-              color="info"
-              size="small"
-            />
+            <Chip label={<Trans i18nKey={"current"} />} color="info" size="small" />
           </Box>
         )}
         {isOwner && (

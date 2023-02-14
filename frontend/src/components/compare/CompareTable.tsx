@@ -1,12 +1,11 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "../../types";
-import Title from "../shared/Title";
+import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "@types";
+import Title from "@common/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
-import { getColorOfStatus, styles } from "../../config/styles";
+import { getColorOfStatus, styles } from "@styles";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const CompareTable = (props: {
@@ -37,9 +36,7 @@ const CompareTable = (props: {
                   return (
                     <Grid
                       item
-                      xs={calcGridSizeBasedOnTheLengthOfAssessments(
-                        base_infos?.length
-                      )}
+                      xs={calcGridSizeBasedOnTheLengthOfAssessments(base_infos?.length)}
                       sx={{
                         ...styles.compareResultBorder,
                       }}
@@ -60,11 +57,7 @@ const CompareTable = (props: {
                           >
                             {value.map((text) => (
                               <li>
-                                <Typography
-                                  sx={{ my: 0.3 }}
-                                  fontFamily={"Roboto"}
-                                  fontSize="1.1rem"
-                                >
+                                <Typography sx={{ my: 0.3 }} fontFamily={"Roboto"} fontSize="1.1rem">
                                   {text}
                                 </Typography>
                               </li>
@@ -98,11 +91,7 @@ const renderMap: Record<string, (arg: any) => JSX.Element> = {
     return (
       <Box sx={{ ...styles.centerV }}>
         <Typography {...textStyle}>
-          {progress > 0 && progress < 1 ? (
-            <>{progress.toFixed(1)} % </>
-          ) : (
-            <>{progress.toFixed(0)} % </>
-          )}
+          {progress > 0 && progress < 1 ? <>{progress.toFixed(1)} % </> : <>{progress.toFixed(0)} % </>}
         </Typography>
 
         <Box>
@@ -137,9 +126,7 @@ const renderMap: Record<string, (arg: any) => JSX.Element> = {
 };
 
 const renderCompareItem = (key: string, value: any) => {
-  const component =
-    renderMap[key] ||
-    ((text) => <Typography {...textStyle}>{text}</Typography>);
+  const component = renderMap[key] || ((text) => <Typography {...textStyle}>{text}</Typography>);
 
   return component(value);
 };

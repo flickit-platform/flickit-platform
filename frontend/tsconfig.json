@@ -15,7 +15,21 @@
     "isolatedModules": true,
     "noEmit": true,
     "types":["cypress","node"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@providers/*": ["src/providers/*"],
+      "@service": ["src/service/index.ts"],
+      "@types": ["src/types.ts"],
+      "@common/*": ["src/components/common/*"],
+      "@styles": ["src/config/styles.ts"],
+      "@constants": ["src/config/constants.ts"],
+      "@assets": ["src/assets/*"],
+      "@config/*": ["src/config/*"],
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

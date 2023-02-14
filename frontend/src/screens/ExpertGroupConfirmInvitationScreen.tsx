@@ -1,4 +1,4 @@
-import ExpertGroupConfirmInvitationContainer from "../components/expert-groups/ExpertGroupConfirmInvitationContainer";
+import ExpertGroupConfirmInvitationContainer from "@components/expert-groups/ExpertGroupConfirmInvitationContainer";
 
 const ExpertGroupConfirmInvitationScreen = () => {
   return <ExpertGroupConfirmInvitationContainer />;

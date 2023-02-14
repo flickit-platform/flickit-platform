@@ -1,9 +1,9 @@
-import React, { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
-import pl1 from "../assets/svg/pl1.svg";
-import Logo from "../assets/svg/logo.svg";
-import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
-import { styles } from "../config/styles";
+import React, { PropsWithChildren, Suspense } from "react";
+import Box from "@mui/material/Box";
+import pl1 from "@assets/svg/pl1.svg";
+import Logo from "@assets/svg/logo.svg";
+import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
+import { styles } from "@styles";
 
 const AuthLayout = (props: PropsWithChildren<{}>) => {
   const { children } = props;
@@ -30,7 +30,7 @@ const AuthLayout = (props: PropsWithChildren<{}>) => {
           mt: "84px",
         }}
       >
-        <React.Suspense
+        <Suspense
           fallback={
             <Box mt={6}>
               <GettingThingsReadyLoading color="white" />
@@ -38,7 +38,7 @@ const AuthLayout = (props: PropsWithChildren<{}>) => {
           }
         >
           {children}
-        </React.Suspense>
+        </Suspense>
       </Box>
       <BGPolygonLeft />
       <BGPolygonRight />

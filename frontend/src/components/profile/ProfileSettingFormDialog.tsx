@@ -1,23 +1,19 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../shared/fields/InputField";
-import { SelectFieldUC } from "../shared/fields/SelectField";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import setServerFieldErrors from "../../utils/setServerFieldError";
-import useConnectSelectField from "../../utils/useConnectSelectField";
-import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-import { ICustomError } from "../../utils/CustomError";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import toastError from "../../utils/toastError";
-import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
-import FormProviderWithForm from "../shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
-import UploadField from "../shared/fields/UploadField";
-import RichEditorField from "../shared/fields/RichEditorField";
+import { InputFieldUC } from "@common/fields/InputField";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import setServerFieldErrors from "@utils/setServerFieldError";
+import { ICustomError } from "@utils/CustomError";
+import { useNavigate, useParams } from "react-router-dom";
+import toastError from "@utils/toastError";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
+import FormProviderWithForm from "@common/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
@@ -29,7 +25,7 @@ interface IProfileSettingFormDialogProps extends DialogProps {
 }
 
 const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;

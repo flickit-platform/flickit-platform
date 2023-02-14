@@ -1,27 +1,13 @@
 import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
 import React, { useMemo } from "react";
-import {
-  Bar,
-  XAxis,
-  YAxis,
-  Legend,
-  Tooltip,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
-import convertToSubjectChartData from "../../utils/convertToSubjectChartData";
+import { Bar, XAxis, YAxis, Legend, Tooltip, BarChart, CartesianGrid, ResponsiveContainer } from "recharts";
+import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 
 const SubjectBarChart = (props: any) => {
   const { loading, ...rest } = props;
   return loading ? (
-    <Skeleton
-      height={"520px"}
-      width="520px"
-      variant="rectangular"
-      sx={{ margin: "auto" }}
-    />
+    <Skeleton height={"520px"} width="520px" variant="rectangular" sx={{ margin: "auto" }} />
   ) : (
     <SubjectBar {...rest} />
   );
@@ -51,12 +37,7 @@ const SubjectBar = (props: any) => {
         <YAxis type="number" domain={[0, 5]} tickCount={6} />
         <Tooltip />
         <Legend />
-        <Bar
-          dataKey="ml"
-          name={t("maturityLevel") as string}
-          fill="#6035A1"
-          maxBarSize={40}
-        />
+        <Bar dataKey="ml" name={t("maturityLevel") as string} fill="#6035A1" maxBarSize={40} />
       </BarChart>
     </ResponsiveContainer>
   );

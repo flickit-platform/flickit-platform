@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import Title from "../shared/Title";
-import { Box } from "@mui/material";
+import Title from "@common/Title";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import formatDate from "../../utils/formatDate";
+import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import { IAssessmentReportModel } from "../../types";
-import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { IAssessmentReportModel } from "@types";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 interface IAssessmentReportTitle {
@@ -21,12 +21,7 @@ interface IAssessmentReportTitle {
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   const { data, colorCode } = props;
   const {
-    assessment_project: {
-      title,
-      last_modification_date,
-      assessment_profile,
-      space,
-    },
+    assessment_project: { title, last_modification_date, assessment_profile, space },
   } = data;
   const { title: spaceTitle = "" } = space || {};
   const { spaceId } = useParams();
@@ -53,9 +48,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
             },
             {
               title,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
           ]}
         />
@@ -84,11 +77,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           }}
           fontSize="large"
         />
-        <span style={{ opacity: 0.9 }}>
-          {assessment_profile.description || (
-            <Trans i18nKey="technicalDueDiligence" />
-          )}
-        </span>{" "}
+        <span style={{ opacity: 0.9 }}>{assessment_profile.description || <Trans i18nKey="technicalDueDiligence" />}</span>{" "}
         <Box
           sx={{
             display: "inline-block",
