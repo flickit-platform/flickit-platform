@@ -1,6 +1,6 @@
 import React from "react";
 import Chip, { ChipProps } from "@mui/material/Chip";
-import getProgressLabel from "../../utils/getProgressLabel";
+import getProgressLabel from "../@utils/getProgressLabel";
 
 interface IProgressChip extends ChipProps {
   progress: number;

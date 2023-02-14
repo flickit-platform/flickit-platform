@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { getColorOfStatus, styles } from "../../../config/styles";
 import Skeleton from "@mui/material/Skeleton";
-import { TStatus } from "../../../types";
+import { TStatus } from "../../@types";
 
 interface IVerticalLevelChartProps extends BoxProps {
   loading?: boolean;
@@ -19,10 +19,7 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
   const statusColor = getColorOfStatus(status);
 
   return (
-    <Box
-      {...rest}
-      sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}
-    >
+    <Box {...rest} sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}>
       <Box textAlign={"center"}>
         <Typography textAlign={"center"}>
           {loading ? (
@@ -54,22 +51,12 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
       </Box>
       <Box display="flex" mt={2}>
         {loading ? (
-          <Skeleton
-            variant="rectangular"
-            sx={{ borderRadius: 20, mx: 1 }}
-            width="74px"
-            height="264px"
-          />
+          <Skeleton variant="rectangular" sx={{ borderRadius: 20, mx: 1 }} width="74px" height="264px" />
         ) : (
           <VerticalLevel cl={cl} />
         )}
         {loading ? (
-          <Skeleton
-            variant="rectangular"
-            sx={{ borderRadius: 20, mx: 1 }}
-            width="74px"
-            height="264px"
-          />
+          <Skeleton variant="rectangular" sx={{ borderRadius: 20, mx: 1 }} width="74px" height="264px" />
         ) : (
           <VerticalLevel ml={ml} />
         )}
@@ -124,12 +111,7 @@ const VerticalLevel = ({ cl, ml }: { cl?: number; ml?: number }) => {
             width: "100%",
           }}
         >
-          <Typography
-            sx={{ color: cl ? "#3596A1" : "#6035A1" }}
-            variant="h6"
-            textTransform={"uppercase"}
-            lineHeight={"1.3"}
-          >
+          <Typography sx={{ color: cl ? "#3596A1" : "#6035A1" }} variant="h6" textTransform={"uppercase"} lineHeight={"1.3"}>
             <Trans i18nKey={cl ? "cl" : "ml"} />
             <Typography>{cl || ml || "0"}/5</Typography>
           </Typography>
@@ -143,9 +125,7 @@ const VerticalLevel = ({ cl, ml }: { cl?: number; ml?: number }) => {
           transition: "transform .3s ease",
           minHeight: "76px",
           height: "100%",
-          transform: `translateY(-${
-            mapToPercent[(cl || ml) as number] || "70"
-          }%)`,
+          transform: `translateY(-${mapToPercent[(cl || ml) as number] || "70"}%)`,
           borderRadius: "100px",
         }}
       ></Box>

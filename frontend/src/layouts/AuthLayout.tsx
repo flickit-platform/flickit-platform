@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import { Box } from "@mui/material";
 import pl1 from "../assets/svg/pl1.svg";
 import Logo from "../assets/svg/logo.svg";
-import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
+import GettingThingsReadyLoading from "@components/shared/loadings/GettingThingsReadyLoading";
 import { styles } from "../config/styles";
 
 const AuthLayout = (props: PropsWithChildren<{}>) => {

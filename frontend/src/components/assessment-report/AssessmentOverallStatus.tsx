@@ -2,22 +2,20 @@ import React from "react";
 import { Box } from "@mui/material";
 import { Trans } from "react-i18next";
 import Paper from "@mui/material/Paper";
-import { ESystemStatus, ISubjectInfo, TStatus } from "../../types";
+import { ESystemStatus, ISubjectInfo, TStatus } from "../@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { getColorOfStatus, styles } from "../../config/styles";
 import { Gauge } from "../shared/charts/Gauge";
 import Title from "../shared/Title";
-import hasStatus from "../../utils/hasStatus";
+import hasStatus from "../@utils/hasStatus";
 
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects: ISubjectInfo[];
 }
 
-export const AssessmentOverallStatus = (
-  props: IAssessmentOverallStatusProps
-) => {
+export const AssessmentOverallStatus = (props: IAssessmentOverallStatusProps) => {
   const { status, subjects = [] } = props;
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
@@ -27,11 +25,7 @@ export const AssessmentOverallStatus = (
         </Title>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={7} sx={{ pt: "0px !important" }}>
-            <Box
-              height={"100%"}
-              mt={"8px"}
-              sx={{ ...styles.centerCV, pt: { xs: 2, lg: "0" } }}
-            >
+            <Box height={"100%"} mt={"8px"} sx={{ ...styles.centerCV, pt: { xs: 2, lg: "0" } }}>
               {subjects.map((subject) => {
                 return (
                   <Typography
@@ -42,10 +36,7 @@ export const AssessmentOverallStatus = (
                     fontWeight={500}
                     letterSpacing=".03em"
                   >
-                    <span style={{ textTransform: "uppercase" }}>
-                      {subject.title}
-                    </span>{" "}
-                    <Trans i18nKey={"statusIs"} />{" "}
+                    <span style={{ textTransform: "uppercase" }}>{subject.title}</span> <Trans i18nKey={"statusIs"} />{" "}
                     <b
                       style={{
                         color: getColorOfStatus(subject.status, "#747373"),

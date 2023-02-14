@@ -8,12 +8,12 @@ import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getColorOfStatus, styles } from "../../config/styles";
-import { ISubjectInfo } from "../../types";
+import { ISubjectInfo } from "../@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import { BASE_URL } from "../../config/constants";
-import getStatusText from "../../utils/getStatusText";
-import hasStatus from "../../utils/hasStatus";
+import getStatusText from "../@utils/getStatusText";
+import hasStatus from "../@utils/hasStatus";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;

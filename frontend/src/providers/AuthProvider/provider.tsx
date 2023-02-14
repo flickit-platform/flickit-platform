@@ -1,6 +1,6 @@
 import React, { useReducer, FC, useContext, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IUserInfo } from "../../types";
+import { IUserInfo } from "../@types";
 import { appActions, useAppDispatch } from "../AppProvider";
 import authReducer from "./reducer";
 

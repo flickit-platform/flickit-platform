@@ -3,7 +3,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import React, { ReactNode, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import getFieldError from "../../../utils/getFieldError";
+import getFieldError from "../../@utils/getFieldError";
 
 const InputField = () => {
   return <TextField />;
@@ -15,15 +15,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
-  const {
-    name,
-    required,
-    InputLabelProps,
-    type,
-    minLength,
-    helperText,
-    ...rest
-  } = props;
+  const { name, required, InputLabelProps, type, minLength, helperText, ...rest } = props;
   const {
     register,
     formState: { errors },

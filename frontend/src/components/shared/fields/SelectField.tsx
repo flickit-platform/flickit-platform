@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectProps } from "@mui/material/Select";
 import React from "react";
 import { useFormContext, UseFormRegister } from "react-hook-form";
-import getFieldError from "../../../utils/getFieldError";
+import getFieldError from "../../@utils/getFieldError";
 import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
 import { Box } from "@mui/material";
 import { styles } from "../../../config/styles";
@@ -26,15 +26,7 @@ const SelectFieldUC = (props: ISelectFieldUC) => {
   } = useFormContext();
   const { hasError, errorMessage } = getFieldError(errors, name);
 
-  return (
-    <SelectField
-      {...rest}
-      name={name}
-      register={register}
-      helperText={errorMessage as string}
-      error={hasError}
-    />
-  );
+  return <SelectField {...rest} name={name} register={register} helperText={errorMessage as string} error={hasError} />;
 };
 
 interface ISelectField extends SelectProps {
@@ -72,17 +64,11 @@ export const SelectField = (props: ISelectField) => {
     ...rest
   } = props;
 
-  const selectOptions = nullable
-    ? [{ id: "", title: "---" }, ...options]
-    : options;
+  const selectOptions = nullable ? [{ id: "", title: "---" }, ...options] : options;
 
   return (
     <FormControl fullWidth error={error} size={size} variant="outlined">
-      <InputLabel
-        required={required}
-        id={`select_label_id_${name}`}
-        sx={{ backgroundColor: "white", pl: "4px", pr: "4px" }}
-      >
+      <InputLabel required={required} id={`select_label_id_${name}`} sx={{ backgroundColor: "white", pl: "4px", pr: "4px" }}>
         {label}
       </InputLabel>
       <Select
@@ -116,11 +102,7 @@ const ColorOption = ({ value }: { value: string }) => {
 
 const defaultRenderOption = (option: any) => {
   return (
-    <MenuItem
-      value={option.id}
-      key={option.id}
-      sx={{ display: "flex", alignItems: "center" }}
-    >
+    <MenuItem value={option.id} key={option.id} sx={{ display: "flex", alignItems: "center" }}>
       {option.color_code ? <ColorOption value={option.color_code} /> : null}
       {option.title}
     </MenuItem>

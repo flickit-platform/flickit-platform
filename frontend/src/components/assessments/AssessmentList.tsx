@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
 import AssessmentCard from "./AssessmentCard";
-import { IAssessment, TId, TQueryFunction } from "../../types";
-import { TDialogProps } from "../../utils/useDialog";
+import { IAssessment, TId, TQueryFunction } from "../@types";
+import { TDialogProps } from "../@utils/useDialog";
 
 interface IAssessmentListProps {
   data: IAssessment[];
@@ -17,13 +17,7 @@ const AssessmentsList = (props: IAssessmentListProps) => {
     <Box>
       <Grid container spacing={4}>
         {data.map((item) => {
-          return (
-            <AssessmentCard
-              item={{ ...item, space }}
-              {...props}
-              key={item?.id}
-            />
-          );
+          return <AssessmentCard item={{ ...item, space }} {...props} key={item?.id} />;
         })}
       </Grid>
     </Box>

@@ -11,9 +11,9 @@ import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
-import useScreenResize from "../../utils/useScreenResize";
+import useScreenResize from "../@utils/useScreenResize";
 import { styles } from "../../config/styles";
-import { IQuestionnairesInfo, ISubjectInfo, TId } from "../../types";
+import { IQuestionnairesInfo, ISubjectInfo, TId } from "../@types";
 import Chip from "@mui/material/Chip";
 
 interface IQuestionnaireCardProps {
@@ -37,21 +37,11 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
 
   return (
     <Paper sx={{ height: "100%", mt: 3 }} data-cy="questionnaire-card">
-      <Box
-        p="8px 6px"
-        pl={"12px"}
-        display="flex"
-        flexDirection={"column"}
-        height="100%"
-        justifyContent={"space-between"}
-      >
+      <Box p="8px 6px" pl={"12px"} display="flex" flexDirection={"column"} height="100%" justifyContent={"space-between"}>
         <Box>
           <Box flex={1}>
             <Title
-              sub={
-                last_updated &&
-                `${(<Trans i18nKey={"lastUpdated"} />)} ${last_updated}`
-              }
+              sub={last_updated && `${(<Trans i18nKey={"lastUpdated"} />)} ${last_updated}`}
               size="small"
               fontFamily="Roboto"
               fontWeight={"bold"}
@@ -68,10 +58,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                       minWidth: "80px",
                     }}
                   >
-                    <QANumberIndicator
-                      q={number_of_questions}
-                      a={number_of_answers}
-                    />
+                    <QANumberIndicator q={number_of_questions} a={number_of_answers} />
                   </Box>
                 )}
               </Box>
@@ -93,14 +80,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
           <Box>
             {subjects.map((subject) => {
               const { title, id } = subject;
-              return (
-                <Chip
-                  label={title}
-                  size="small"
-                  sx={{ mr: 0.3, mb: 0.1 }}
-                  key={id}
-                />
-              );
+              return <Chip label={title} size="small" sx={{ mr: 0.3, mb: 0.1 }} key={id} />;
             })}
           </Box>
           <ActionButtons
@@ -123,18 +103,11 @@ const ActionButtons = (props: {
   number_of_answers: number;
   current_metric_index: number;
 }) => {
-  const { id, progress, number_of_answers, current_metric_index, title } =
-    props;
+  const { id, progress, number_of_answers, current_metric_index, title } = props;
 
   return (
     <Box display="flex">
-      {progress === 100 && (
-        <ActionButton
-          to={`${id}/1`}
-          text="edit"
-          icon={<ModeEditOutlineRoundedIcon fontSize="small" />}
-        />
-      )}
+      {progress === 100 && <ActionButton to={`${id}/1`} text="edit" icon={<ModeEditOutlineRoundedIcon fontSize="small" />} />}
       {progress > 0 && (
         <ActionButton
           to={`${id}/review`}
@@ -163,23 +136,10 @@ const ActionButtons = (props: {
   );
 };
 
-const ActionButton = (props: {
-  to: string;
-  text: string;
-  icon: JSX.Element;
-  state?: any;
-}) => {
+const ActionButton = (props: { to: string; text: string; icon: JSX.Element; state?: any }) => {
   const { to, text, icon, state = {}, ...rest } = props;
   return (
-    <Button
-      {...rest}
-      size="small"
-      component={Link}
-      state={state}
-      to={to}
-      startIcon={icon}
-      sx={{ ml: 0.5 }}
-    >
+    <Button {...rest} size="small" component={Link} state={state} to={to} startIcon={icon} sx={{ ml: 0.5 }}>
       <Trans i18nKey={text} />
     </Button>
   );

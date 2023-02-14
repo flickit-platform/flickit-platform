@@ -1,10 +1,7 @@
-import { IMetricInfo } from "../../types";
+import { IMetricInfo } from "../@types";
 import { METRIC_ACTIONS_TYPE } from "./actions";
 
-const metricReducer = (
-  prevState: any,
-  action: { type: METRIC_ACTIONS_TYPE; payload: any }
-) => {
+const metricReducer = (prevState: any, action: { type: METRIC_ACTIONS_TYPE; payload: any }) => {
   switch (action.type) {
     case METRIC_ACTIONS_TYPE.GO_TO_METRIC:
       return {

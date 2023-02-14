@@ -1,19 +1,10 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, CardHeader, Chip, Divider, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styles } from "../../config/styles";
 import Title from "../shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
-import formatDate from "../../utils/formatDate";
+import formatDate from "../@utils/formatDate";
 
 const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   return (
@@ -63,10 +54,7 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         size="small"
         toolbar={
           <Box sx={{ ...styles.centerV }}>
-            <ThumbUpOffAltRoundedIcon
-              fontSize="inherit"
-              sx={{ mr: 0.5, pb: 0.2 }}
-            />
+            <ThumbUpOffAltRoundedIcon fontSize="inherit" sx={{ mr: 0.5, pb: 0.2 }} />
             {data.likes_number || 0}
           </Box>
         }
@@ -83,23 +71,13 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             }}
           >
             {data.tags.map((tag: any) => {
-              return (
-                <Chip
-                  label={tag?.title}
-                  size="small"
-                  sx={{ m: 0.2, background: "white" }}
-                />
-              );
+              return <Chip label={tag?.title} size="small" sx={{ m: 0.2, background: "white" }} />;
             })}
           </Box>
         }
         toolbarProps={{ alignSelf: "flex-start", p: 1 }}
       >
-        <Box
-          component={Link}
-          to={`/profiles/${data.id}`}
-          sx={{ textDecoration: "none", color: "white" }}
-        >
+        <Box component={Link} to={`/profiles/${data.id}`} sx={{ textDecoration: "none", color: "white" }}>
           {data.title}
         </Box>
       </Title>

@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, BoxProps } from "@mui/material";
-import { TStatus } from "../../../types";
-import getStatusText from "../../../utils/getStatusText";
-import hasStatus from "../../../utils/hasStatus";
+import { TStatus } from "../../@types";
+import getStatusText from "../../@utils/getStatusText";
+import hasStatus from "../../@utils/hasStatus";
 
 interface IGaugeProps extends BoxProps {
   systemStatus: TStatus;

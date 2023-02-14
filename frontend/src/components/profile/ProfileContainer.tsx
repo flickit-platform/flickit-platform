@@ -1,38 +1,29 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/material";
 import { styles } from "../../config/styles";
 import Title from "../shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import ProfilesListContainer from "./ProfilesListContainer";
-import { useServiceContext } from "../../providers/ServiceProvider";
+import { useServiceContext } from "../@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "../../utils/useQuery";
+import { useQuery } from "../@utils/useQuery";
 import QueryData from "../shared/QueryData";
-import formatDate from "../../utils/formatDate";
+import formatDate from "../@utils/formatDate";
 import { Trans } from "react-i18next";
 import RichEditor from "../shared/rich-editor/RichEditor";
 import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
-import useDialog from "../../utils/useDialog";
+import useDialog from "../@utils/useDialog";
 import AlertBox from "../shared/AlertBox";
 import { LoadingButton } from "@mui/lab";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
 import { t } from "i18next";
-import useDocumentTitle from "../../utils/useDocumentTitle";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import useDocumentTitle from "../@utils/useDocumentTitle";
+import setDocumentTitle from "../@utils/setDocumentTitle";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const profileQueryData = useQuery({
-    service: (args = { id: profileId }, config) =>
-      service.fetchProfile(args, config),
+    service: (args = { id: profileId }, config) => service.fetchProfile(args, config),
   });
 
   return (
@@ -125,12 +116,7 @@ const Profile = (props: any) => {
                   }}
                 >
                   {tags.map((tag: any) => (
-                    <Chip
-                      key={tag.id}
-                      label={tag.title}
-                      size="small"
-                      sx={{ mr: 0.4, background: "white" }}
-                    />
+                    <Chip key={tag.id} label={tag.title} size="small" sx={{ mr: 0.4, background: "white" }} />
                   ))}
                 </Box>
               }
@@ -248,41 +234,25 @@ const Profile = (props: any) => {
                   mt: 2,
                 }}
               >
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>FREE</Typography>
                 </Box>
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>
-                    {subjects_with_desc.length || 0}
-                  </Typography>
+                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
                 </Box>
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfQuestionnaires" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>
-                    {questionnaires.length || 0}
-                  </Typography>
+                  <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
                 </Box>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 6 }}
-                  disabled={!is_active}
-                  onClick={dialogProps.openDialog}
-                >
+                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
                   <Trans i18nKey="createAssessment" />
                 </Button>
                 <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
@@ -339,8 +309,7 @@ const LikeProfile = ({ likes_number }: any) => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const likeQueryData = useQuery({
-    service: (args = { id: profileId }, config) =>
-      service.likeProfile(args, config),
+    service: (args = { id: profileId }, config) => service.likeProfile(args, config),
     runOnMount: false,
   });
 

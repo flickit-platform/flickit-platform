@@ -1,5 +1,5 @@
-import { MetricContainer } from "../components/metrics/MetricContainer";
-import useDocumentTitle from "../utils/useDocumentTitle";
+import { MetricContainer } from "@components/metrics/MetricContainer";
+import useDocumentTitle from "@utils/useDocumentTitle";
 
 const MetricScreen = () => {
   useDocumentTitle();

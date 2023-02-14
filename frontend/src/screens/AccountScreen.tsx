@@ -1,4 +1,4 @@
-import AccountContainer from "../components/account/AccountContainer";
+import AccountContainer from "@components/account/AccountContainer";
 
 const AccountScreen = () => {
   return <AccountContainer />;

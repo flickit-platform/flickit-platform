@@ -2,19 +2,19 @@ import { Typography, Box, Chip } from "@mui/material";
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { TId, TQueryFunction } from "../../types";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
-import useMenu from "../../utils/useMenu";
-import { useQuery } from "../../utils/useQuery";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import { TId, TQueryFunction } from "../@types";
+import { ICustomError } from "../@utils/CustomError";
+import toastError from "../@utils/toastError";
+import useMenu from "../@utils/useMenu";
+import { useQuery } from "../@utils/useQuery";
 import MoreActions from "../shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import { toast } from "react-toastify";
-import formatDate from "../../utils/formatDate";
+import formatDate from "../@utils/formatDate";
 
 interface IProfileListItemProps {
   data: {
@@ -78,25 +78,13 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           </Typography>
         </Box>
 
-        <Box
-          ml="auto"
-          sx={{ ...styles.centerV, color: "#525252" }}
-          alignSelf="stretch"
-        >
+        <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
           {is_active ? (
-            <Chip
-              label={<Trans i18nKey="published" />}
-              color="success"
-              size="small"
-            />
+            <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions
-            profile={data}
-            fetchProfiles={fetchProfiles}
-            hasAccess={hasAccess}
-          />
+          <Actions profile={data} fetchProfiles={fetchProfiles} hasAccess={hasAccess} />
         </Box>
       </Box>
     </Box>
@@ -105,11 +93,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 
 const Actions = (props: any) => {
   const { profile, fetchProfiles, dialogProps, setUserInfo, hasAccess } = props;
-  const {
-    id,
-    current_user_delete_permission = false,
-    is_active = false,
-  } = profile;
+  const { id, current_user_delete_permission = false, is_active = false } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const deleteProfileQuery = useQuery({
@@ -128,9 +112,7 @@ const Actions = (props: any) => {
   });
 
   if (!fetchProfiles) {
-    console.warn(
-      "fetchProfiles not provided. profile list won't be updated on any action"
-    );
+    console.warn("fetchProfiles not provided. profile list won't be updated on any action");
   }
 
   // const openEditDialog = (e: any) => {
@@ -185,12 +167,7 @@ const Actions = (props: any) => {
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
-      loading={
-        deleteProfileQuery.loading ||
-        publishProfileQuery.loading ||
-        unPublishProfileQuery.loading ||
-        editLoading
-      }
+      loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
       items={[
         is_active
           ? {

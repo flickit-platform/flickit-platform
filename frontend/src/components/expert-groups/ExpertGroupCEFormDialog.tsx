@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
 import { InputFieldUC } from "../shared/fields/InputField";
 import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import setServerFieldErrors from "../../utils/setServerFieldError";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import setServerFieldErrors from "../@utils/setServerFieldError";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-import { ICustomError } from "../../utils/CustomError";
+import { ICustomError } from "../@utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import toastError from "../../utils/toastError";
+import toastError from "../@utils/toastError";
 import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
 import FormProviderWithForm from "../shared/FormProviderWithForm";
 import RichEditorField from "../shared/fields/RichEditorField";
@@ -27,14 +27,7 @@ interface IExpertGroupCEFromDialogProps extends DialogProps {
 const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const {
-    onClose: closeDialog,
-    onSubmitForm,
-    context = {},
-    openDialog,
-    hideSubmitAndView,
-    ...rest
-  } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, hideSubmitAndView, ...rest } = props;
   const { type, data = {} } = context;
   const { id } = data;
   const defaultValues = type === "update" ? data : {};
@@ -62,14 +55,8 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateExpertGroup(
-              { data: formattedData, id },
-              { signal: abortController.signal }
-            )
-          : await service.createExpertGroup(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+          ? await service.updateExpertGroup({ data: formattedData, id }, { signal: abortController.signal })
+          : await service.createExpertGroup({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
       close();
@@ -89,11 +76,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? (
-            <Trans i18nKey="updateExpertGroup" />
-          ) : (
-            <Trans i18nKey="createExpertGroup" />
-          )}
+          {type === "update" ? <Trans i18nKey="updateExpertGroup" /> : <Trans i18nKey="createExpertGroup" />}
         </>
       }
     >
@@ -113,19 +96,10 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
             />
           </Grid>
           <Grid item xs={12} md={7}>
-            <InputFieldUC
-              defaultValue={defaultValues.name || ""}
-              name="name"
-              label={<Trans i18nKey="name" />}
-              required
-            />
+            <InputFieldUC defaultValue={defaultValues.name || ""} name="name" label={<Trans i18nKey="name" />} required />
           </Grid>
           <Grid item xs={12} md={8}>
-            <InputFieldUC
-              name="bio"
-              label={<Trans i18nKey="bio" />}
-              defaultValue={defaultValues.bio || ""}
-            />
+            <InputFieldUC name="bio" label={<Trans i18nKey="bio" />} defaultValue={defaultValues.bio || ""} />
           </Grid>
           <Grid item xs={12} md={4}>
             <InputFieldUC
@@ -136,11 +110,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <RichEditorField
-              name="about"
-              label={<Trans i18nKey="about" />}
-              defaultValue={defaultValues.about || ""}
-            />
+            <RichEditorField name="about" label={<Trans i18nKey="about" />} defaultValue={defaultValues.about || ""} />
           </Grid>
         </Grid>
         <CEDialogActions
@@ -148,9 +118,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
           loading={loading}
           type={type}
           hasViewBtn={hideSubmitAndView ? false : true}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
         />
       </FormProviderWithForm>
     </CEDialog>

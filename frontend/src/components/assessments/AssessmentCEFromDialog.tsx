@@ -3,24 +3,19 @@ import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../../components/shared/fields/InputField";
+import { InputFieldUC } from "../@components/shared/fields/InputField";
 import { SelectFieldUC } from "../shared/fields/SelectField";
 import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import setServerFieldErrors from "../../utils/setServerFieldError";
-import useConnectSelectField from "../../utils/useConnectSelectField";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import setServerFieldErrors from "../@utils/setServerFieldError";
+import useConnectSelectField from "../@utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-import { ICustomError } from "../../utils/CustomError";
+import { ICustomError } from "../@utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import toastError from "../../utils/toastError";
-import {
-  CEDialog,
-  CEDialogActions,
-} from "../../components/shared/dialogs/CEDialog";
-import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "../shared/fields/AutocompleteAsyncField";
+import toastError from "../@utils/toastError";
+import { CEDialog, CEDialogActions } from "../@components/shared/dialogs/CEDialog";
+import FormProviderWithForm from "../@components/shared/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -36,13 +31,7 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const {
-    onClose: closeDialog,
-    onSubmitForm,
-    context = {},
-    openDialog,
-    ...rest
-  } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {}, staticData = {} } = context;
   const { id: rowId } = data;
   const defaultValues = type === "update" ? data : {};
@@ -107,11 +96,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? (
-            <Trans i18nKey="updateAssessment" />
-          ) : (
-            <Trans i18nKey="createAssessment" />
-          )}
+          {type === "update" ? <Trans i18nKey="updateAssessment" /> : <Trans i18nKey="createAssessment" />}
         </>
       }
     >
@@ -139,32 +124,21 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <ProfileField
-              defaultValue={defaultValues?.assessment_profile}
-              staticValue={staticData.profile}
-            />
+            <ProfileField defaultValue={defaultValues?.assessment_profile} staticValue={staticData.profile} />
           </Grid>
         </Grid>
         <CEDialogActions
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
         />
       </FormProviderWithForm>
     </CEDialog>
   );
 };
 
-const ProfileField = ({
-  defaultValue,
-  staticValue,
-}: {
-  defaultValue: any;
-  staticValue: any;
-}) => {
+const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchProfilesOptions(args, config),
@@ -172,9 +146,7 @@ const ProfileField = ({
 
   return (
     <AutocompleteAsyncField
-      {...(staticValue
-        ? ({ loading: false, loaded: true, options: [] } as any)
-        : queryData)}
+      {...(staticValue ? ({ loading: false, loaded: true, options: [] } as any) : queryData)}
       name="profile"
       required={true}
       defaultValue={staticValue ?? defaultValue}

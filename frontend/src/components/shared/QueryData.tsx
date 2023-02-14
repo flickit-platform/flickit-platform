@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useContext } from "react";
 import { Box } from "@mui/material";
 import { styles } from "../../config/styles";
-import { ECustomErrorType, TQueryFunction, TQueryProps } from "../../types";
-import { ICustomError } from "../../utils/CustomError";
+import { ECustomErrorType, TQueryFunction, TQueryProps } from "../@types";
+import { ICustomError } from "../@utils/CustomError";
 import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
@@ -20,12 +20,7 @@ interface IQueryDataProps<T> {
   abortController?: AbortController;
   render: (data: T) => JSX.Element;
   renderLoading?: () => JSX.Element;
-  renderError?: (
-    err:
-      | ICustomError
-      | (ICustomError | ICustomError[] | undefined)[]
-      | undefined
-  ) => JSX.Element;
+  renderError?: (err: ICustomError | (ICustomError | ICustomError[] | undefined)[] | undefined) => JSX.Element;
   isDataEmpty?: (data: T) => boolean;
   query?: TQueryFunction<T>;
 }
@@ -92,9 +87,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
 export const useQueryDataContext = () => {
   const context = useContext(QueryDataContext);
   if (context === undefined) {
-    throw new Error(
-      "useQueryDataContext must be used within a QueryData render method"
-    );
+    throw new Error("useQueryDataContext must be used within a QueryData render method");
   }
   return context;
 };
@@ -119,17 +112,11 @@ const defaultIsDataEmpty = (data: any) => {
   return false;
 };
 
-export const defaultRenderError = (
-  err: ICustomError | undefined,
-  errorComponent: JSX.Element = <ErrorDataLoading />
-): any => {
+export const defaultRenderError = (err: ICustomError | undefined, errorComponent: JSX.Element = <ErrorDataLoading />): any => {
   if (!err) {
     return errorComponent;
   }
-  if (
-    err.type === ECustomErrorType.NOT_FOUND ||
-    err.type === ECustomErrorType.ACCESS_DENIED
-  ) {
+  if (err.type === ECustomErrorType.NOT_FOUND || err.type === ECustomErrorType.ACCESS_DENIED) {
     return <ErrorNotFoundOrAccessDenied />;
   }
   return errorComponent;

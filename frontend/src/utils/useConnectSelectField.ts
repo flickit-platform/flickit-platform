@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useServiceContext } from "../providers/ServiceProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
 
 const useConnectSelectField = (props: {
   url: string;
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
 }) => {
-  const {
-    url,
-    filterOptions = (options) => options,
-    searchParams = {},
-  } = props;
+  const { url, filterOptions = (options) => options, searchParams = {} } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

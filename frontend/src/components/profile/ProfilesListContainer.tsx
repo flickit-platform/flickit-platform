@@ -1,9 +1,9 @@
 import { Box, Grid } from "@mui/material";
 import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { useQuery } from "../../utils/useQuery";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import { useQuery } from "../@utils/useQuery";
 import QueryData from "../shared/QueryData";
-import forLoopComponent from "../../utils/forLoopComponent";
+import forLoopComponent from "../@utils/forLoopComponent";
 import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
 import ProfilesMarketListItem from "./ProfilesMarketListItem";
 
@@ -23,10 +23,7 @@ const ProfilesListContainer = () => {
               <Grid container spacing={2}>
                 {forLoopComponent(5, (index) => (
                   <Grid item xs={12} md={6} lg={4} key={index}>
-                    <LoadingSkeleton
-                      key={index}
-                      sx={{ height: "340px", mb: 1 }}
-                    />
+                    <LoadingSkeleton key={index} sx={{ height: "340px", mb: 1 }} />
                   </Grid>
                 ))}
               </Grid>
@@ -42,11 +39,7 @@ const ProfilesListContainer = () => {
                   {results.map((profile: any) => {
                     return (
                       <Grid item xs={12} md={6} lg={4} key={profile.id}>
-                        <ProfilesMarketListItem
-                          bg1={"#4568dc"}
-                          bg2={"#b06ab3"}
-                          data={profile}
-                        />
+                        <ProfilesMarketListItem bg1={"#4568dc"} bg2={"#b06ab3"} data={profile} />
                       </Grid>
                     );
                   })}

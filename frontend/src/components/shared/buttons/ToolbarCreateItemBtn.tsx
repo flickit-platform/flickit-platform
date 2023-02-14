@@ -1,6 +1,6 @@
 import React from "react";
 import Button, { ButtonProps } from "@mui/material/Button";
-import useScreenResize from "../../../utils/useScreenResize";
+import useScreenResize from "../../@utils/useScreenResize";
 import { animations } from "../../../config/styles";
 import { Trans } from "react-i18next";
 
@@ -26,9 +26,7 @@ export const ToolbarCreateItemBtn = (props: IToolbarCreateItemBtnProps) => {
       sx={{
         mb: "1px",
         minWidth: isSmallScreen ? undefined : minWidth,
-        animation: shouldAnimate
-          ? `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)`
-          : undefined,
+        animation: shouldAnimate ? `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)` : undefined,
         "&:hover": {
           animation: `${animations.noPomp}`,
         },

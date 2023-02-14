@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle,
 import { PropsWithChildren } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "../../../config/styles";
-import useScreenResize from "../../../utils/useScreenResize";
+import useScreenResize from "../../@utils/useScreenResize";
 
 interface ICEDialogProps extends Omit<DialogProps, "title"> {
   closeDialog?: () => void;

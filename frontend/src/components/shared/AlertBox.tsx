@@ -1,7 +1,7 @@
 import React from "react";
 import Alert, { AlertProps } from "@mui/material/Alert";
 import { Box } from "@mui/material";
-import useScreenResize from "../../utils/useScreenResize";
+import useScreenResize from "../@utils/useScreenResize";
 
 interface IAlertBox extends AlertProps {}
 
@@ -13,11 +13,7 @@ const AlertBox = (props: IAlertBox) => {
     <Alert
       {...rest}
       action={!isSmall ? action : undefined}
-      sx={
-        isSmall && action
-          ? { ...(rest.sx || {}), "& .MuiAlert-message": { width: "100%" } }
-          : rest.sx
-      }
+      sx={isSmall && action ? { ...(rest.sx || {}), "& .MuiAlert-message": { width: "100%" } } : rest.sx}
     >
       <Box sx={isSmall ? { flexDirection: "column", width: "100%" } : {}}>
         {children}

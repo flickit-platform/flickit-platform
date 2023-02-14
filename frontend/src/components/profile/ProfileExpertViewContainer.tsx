@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Box, Button, IconButton } from "@mui/material";
-import { useServiceContext } from "../../providers/ServiceProvider";
+import { useServiceContext } from "../@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
-import { useQuery } from "../../utils/useQuery";
+import { useQuery } from "../@utils/useQuery";
 import QueryData from "../shared/QueryData";
 import Title from "../shared/Title";
 import Chip from "@mui/material/Chip";
@@ -23,12 +23,12 @@ import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
 import ListAccordion from "../shared/lists/ListAccordion";
 import InfoItem from "../shared/InfoItem";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import setDocumentTitle from "../@utils/setDocumentTitle";
 import { t } from "i18next";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
-import useDialog from "../../utils/useDialog";
+import useDialog from "../@utils/useDialog";
 import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
-import { useAuthContext } from "../../providers/AuthProvider";
+import { useAuthContext } from "../@providers/AuthProvider";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();

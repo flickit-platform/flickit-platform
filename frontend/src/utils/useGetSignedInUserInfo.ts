@@ -2,9 +2,9 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { authActions, useAuthContext } from "../providers/AuthProvider";
-import { useServiceContext } from "../providers/ServiceProvider";
-import { ECustomErrorType } from "../types";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { ECustomErrorType } from "@types";
 import { ICustomError } from "./CustomError";
 
 const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: true }) => {

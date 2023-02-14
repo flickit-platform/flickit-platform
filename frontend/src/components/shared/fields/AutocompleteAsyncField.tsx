@@ -2,15 +2,15 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import throttle from "lodash/throttle";
 import TextField from "@mui/material/TextField";
-import { TQueryServiceFunction, useQuery } from "../../../utils/useQuery";
+import { TQueryServiceFunction, useQuery } from "../../@utils/useQuery";
 import { Controller, ControllerRenderProps, RegisterOptions, useFormContext } from "react-hook-form";
-import getFieldError from "../../../utils/getFieldError";
+import getFieldError from "../../@utils/getFieldError";
 import { Box } from "@mui/material";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
-import forLoopComponent from "../../../utils/forLoop";
+import forLoopComponent from "../../@utils/forLoop";
 import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "../../../config/styles";
-import { TQueryProps } from "../../../types";
+import { TQueryProps } from "../../@types";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<IAutocompleteAsyncFieldBase, "serviceQueryData" | "field">;
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { authActions, useAuthContext } from "../../providers/AuthProvider";
+import { authActions, useAuthContext } from "../@providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import { styles } from "../../config/styles";
@@ -11,11 +11,11 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import { LoadingButton } from "@mui/lab";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { ICustomError } from "../../utils/CustomError";
-import toastError from "../../utils/toastError";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import { ICustomError } from "../@utils/CustomError";
+import toastError from "../@utils/toastError";
 import Title from "../shared/Title";
-import useGetSignedInUserInfo from "../../utils/useGetSignedInUserInfo";
+import useGetSignedInUserInfo from "../@utils/useGetSignedInUserInfo";
 
 const SignIn = () => {
   const { dispatch, isAuthenticatedUser, redirectRoute } = useAuthContext();

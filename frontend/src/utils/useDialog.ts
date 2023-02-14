@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IDialogContext } from "../types";
+import { IDialogContext } from "@types";
 
 interface IUseDialogProps {
   context?: IDialogContext;

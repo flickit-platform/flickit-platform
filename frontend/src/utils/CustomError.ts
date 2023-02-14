@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { ECustomErrorType, TToastConfig } from "../types";
+import { ECustomErrorType, TToastConfig } from "@types";
 
 export interface ICustomError {
   name: string;
@@ -20,14 +20,7 @@ function CustomError(props: {
   action?: ((...arg: any) => any) | undefined;
   toastConfig?: TToastConfig | undefined;
 }) {
-  const {
-    type = ECustomErrorType.DEFAULT,
-    message = t("somethingWentWrong"),
-    data = {},
-    status,
-    action,
-    toastConfig,
-  } = props;
+  const { type = ECustomErrorType.DEFAULT, message = t("somethingWentWrong"), data = {}, status, action, toastConfig } = props;
   const defaultAction =
     //@ts-expect-error
     action && typeof action === "function" && action.bind(this as any, data);

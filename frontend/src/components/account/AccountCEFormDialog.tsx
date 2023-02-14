@@ -3,24 +3,19 @@ import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../../components/shared/fields/InputField";
+import { InputFieldUC } from "../@components/shared/fields/InputField";
 import { SelectFieldUC } from "../shared/fields/SelectField";
 import { styles } from "../../config/styles";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import setServerFieldErrors from "../../utils/setServerFieldError";
-import useConnectSelectField from "../../utils/useConnectSelectField";
+import { useServiceContext } from "../@providers/ServiceProvider";
+import setServerFieldErrors from "../@utils/setServerFieldError";
+import useConnectSelectField from "../@utils/useConnectSelectField";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
-import { ICustomError } from "../../utils/CustomError";
+import { ICustomError } from "../@utils/CustomError";
 import { Link, useParams } from "react-router-dom";
-import toastError from "../../utils/toastError";
-import {
-  CEDialog,
-  CEDialogActions,
-} from "../../components/shared/dialogs/CEDialog";
-import FormProviderWithForm from "../../components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "../shared/fields/AutocompleteAsyncField";
+import toastError from "../@utils/toastError";
+import { CEDialog, CEDialogActions } from "../@components/shared/dialogs/CEDialog";
+import FormProviderWithForm from "../@components/shared/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -36,13 +31,7 @@ interface IAccountCEFormDialogProps extends DialogProps {
 const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
   const [loading, setLoading] = React.useState(false);
   const { service } = useServiceContext();
-  const {
-    onClose: closeDialog,
-    onSubmitForm,
-    context = {},
-    openDialog,
-    ...rest
-  } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { id } = data;
   const defaultValues = type === "update" ? data : {};
@@ -125,12 +114,7 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
             />
           </Grid> */}
         </Grid>
-        <CEDialogActions
-          closeDialog={close}
-          loading={loading}
-          type={type}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
-        />
+        <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
       </FormProviderWithForm>
     </CEDialog>
   );

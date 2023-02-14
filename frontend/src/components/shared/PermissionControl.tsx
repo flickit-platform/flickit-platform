@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { ECustomErrorType } from "../../types";
-import { ICustomError } from "../../utils/CustomError";
+import { ECustomErrorType } from "../@types";
+import { ICustomError } from "../@utils/CustomError";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 
 interface IPermissionControl {
@@ -24,13 +24,8 @@ const PermissionControl = (props: PropsWithChildren<IPermissionControl>) => {
   return <>{children}</>;
 };
 
-const getHasViewPermission = (
-  error: (ICustomError | undefined) | (ICustomError | undefined)[]
-) => {
-  if (
-    !error ||
-    (typeof error === "object" && Object.keys(error).length === 0)
-  ) {
+const getHasViewPermission = (error: (ICustomError | undefined) | (ICustomError | undefined)[]) => {
+  if (!error || (typeof error === "object" && Object.keys(error).length === 0)) {
     return true;
   }
   if (Array.isArray(error)) {
@@ -38,20 +33,13 @@ const getHasViewPermission = (
       return true;
     }
     if (
-      error.findIndex(
-        (err) =>
-          err?.type === ECustomErrorType.ACCESS_DENIED ||
-          err?.type === ECustomErrorType.NOT_FOUND
-      ) !== -1
+      error.findIndex((err) => err?.type === ECustomErrorType.ACCESS_DENIED || err?.type === ECustomErrorType.NOT_FOUND) !== -1
     ) {
       return false;
     }
     return true;
   }
-  if (
-    error.type === ECustomErrorType.ACCESS_DENIED ||
-    error.type === ECustomErrorType.NOT_FOUND
-  ) {
+  if (error.type === ECustomErrorType.ACCESS_DENIED || error.type === ECustomErrorType.NOT_FOUND) {
     return false;
   }
   return true;

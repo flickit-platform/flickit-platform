@@ -3,7 +3,7 @@ import { Editor } from "@tiptap/react";
 import { t } from "i18next";
 import { useRef } from "react";
 import { Trans } from "react-i18next";
-import toastError from "../../../utils/toastError";
+import toastError from "../../@utils/toastError";
 import { IRichEditorMenuItem } from "./RichEditorMenuItem";
 import FormatBoldRoundedIcon from "@mui/icons-material/FormatBoldRounded";
 import FormatItalicRoundedIcon from "@mui/icons-material/FormatItalicRounded";
@@ -24,9 +24,7 @@ import FormatAlignJustifyRoundedIcon from "@mui/icons-material/FormatAlignJustif
 import FormatAlignCenterRoundedIcon from "@mui/icons-material/FormatAlignCenterRounded";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 
-const defaultGetMenuItems = (
-  editor: Editor
-): (IRichEditorMenuItem | { type: "divider" })[] => {
+const defaultGetMenuItems = (editor: Editor): (IRichEditorMenuItem | { type: "divider" })[] => {
   return [
     {
       title: "H1",
@@ -71,8 +69,7 @@ const defaultGetMenuItems = (
     {
       icon: <FormatAlignCenterRoundedIcon fontSize="small" />,
       title: "align-center",
-      action: () =>
-        (editor.chain().focus() as any).setTextAlign("center").run(),
+      action: () => (editor.chain().focus() as any).setTextAlign("center").run(),
       isActive: () => editor.isActive({ textAlign: "center" }),
     },
     {
@@ -84,8 +81,7 @@ const defaultGetMenuItems = (
     {
       icon: <FormatAlignJustifyRoundedIcon fontSize="small" />,
       title: "align-justify",
-      action: () =>
-        (editor.chain().focus() as any).setTextAlign("justify").run(),
+      action: () => (editor.chain().focus() as any).setTextAlign("justify").run(),
       isActive: () => editor.isActive({ textAlign: "justify" }),
     },
     {
@@ -119,9 +115,7 @@ const defaultGetMenuItems = (
         },
         title: t("addLink") as string,
       },
-      action: editor.isActive("link")
-        ? () => editor.chain().focus().unsetLink().run()
-        : ({ openDialog }) => openDialog(),
+      action: editor.isActive("link") ? () => editor.chain().focus().unsetLink().run() : ({ openDialog }) => openDialog(),
       isActive: () => editor.isActive("link"),
     },
     {
@@ -175,13 +169,7 @@ const PromptLinkBody = (props: { editor: Editor; closePrompt: () => void }) => {
   return (
     <>
       <DialogContent>
-        <TextField
-          placeholder="https://example.com"
-          fullWidth
-          size="small"
-          inputRef={inputRef}
-          defaultValue="https://"
-        />
+        <TextField placeholder="https://example.com" fullWidth size="small" inputRef={inputRef} defaultValue="https://" />
       </DialogContent>
       <DialogActions sx={{ py: 2, px: 3 }}>
         <Button onClick={closePrompt} size="small">

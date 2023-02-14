@@ -9,33 +9,22 @@ import QASvg from "../../assets/svg/qa.svg";
 import AnswerSvg from "../../assets/svg/answer.svg";
 import Button from "@mui/material/Button";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import {
-  EAssessmentStatus,
-  metricActions,
-  useMetricContext,
-  useMetricDispatch,
-} from "../../providers/MetricProvider";
-import { IMetricInfo, TAnswer, TMetricsInfo } from "../../types";
+import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "../@providers/MetricProvider";
+import { IMetricInfo, TAnswer, TMetricsInfo } from "../@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
-import { useServiceContext } from "../../providers/ServiceProvider";
+import { useServiceContext } from "../@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
-import { ICustomError } from "../../utils/CustomError";
+import { ICustomError } from "../@utils/CustomError";
 import { toast } from "react-toastify";
-import useDialog from "../../utils/useDialog";
-import {
-  Avatar,
-  Collapse,
-  DialogActions,
-  DialogContent,
-  Grid,
-} from "@mui/material";
+import useDialog from "../@utils/useDialog";
+import { Avatar, Collapse, DialogActions, DialogContent, Grid } from "@mui/material";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormProvider, useForm } from "react-hook-form";
 import { styles } from "../../config/styles";
-import Title from "../../components/shared/Title";
-import { InputFieldUC } from "../../components/shared/fields/InputField";
+import Title from "../@components/shared/Title";
+import { InputFieldUC } from "../@components/shared/fields/InputField";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -43,9 +32,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
-import useScreenResize from "../../utils/useScreenResize";
-import toastError from "../../utils/toastError";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import useScreenResize from "../@utils/useScreenResize";
+import toastError from "../@utils/toastError";
+import setDocumentTitle from "../@utils/setDocumentTitle";
 import { t } from "i18next";
 
 interface IMetricCardProps {
@@ -92,11 +81,7 @@ export const MetricCard = (props: IMetricCardProps) => {
     >
       <Box>
         <Box>
-          <Typography
-            variant="subLarge"
-            fontFamily={"Roboto"}
-            sx={{ color: "white", opacity: 0.65 }}
-          >
+          <Typography variant="subLarge" fontFamily={"Roboto"} sx={{ color: "white", opacity: 0.65 }}>
             <Trans i18nKey="question" />
           </Typography>
           <Typography
@@ -139,14 +124,10 @@ const AnswerTemplate = (props: {
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastMetric = metricIndex == total_number_of_metrics;
-  const isSelectedValueTheSameAsAnswer =
-    metricInfo?.answer?.value == value?.value;
+  const isSelectedValueTheSameAsAnswer = metricInfo?.answer?.value == value?.value;
   const changeHappened = useRef(false);
 
-  const onChange = (
-    event: React.MouseEvent<HTMLElement>,
-    v: TAnswer | null
-  ) => {
+  const onChange = (event: React.MouseEvent<HTMLElement>, v: TAnswer | null) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
@@ -175,9 +156,7 @@ const AnswerTemplate = (props: {
         return;
       }
       if (value) {
-        dispatch(
-          metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS)
-        );
+        dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS));
       }
       const newMetricIndex = metricIndex + 1;
       dispatch(metricActions.goToMetric(newMetricIndex));
@@ -211,12 +190,7 @@ const AnswerTemplate = (props: {
           {answer_templates?.map((template) => {
             const { value: templateValue, caption } = template || {};
             return (
-              <Box
-                key={template.value}
-                mb={2}
-                mr={2}
-                sx={{ minWidth: { xs: "180px", sm: "320px" } }}
-              >
+              <Box key={template.value} mb={2} mr={2} sx={{ minWidth: { xs: "180px", sm: "320px" } }}>
                 <ToggleButton
                   data-cy="answer-option"
                   color="success"
@@ -314,9 +288,7 @@ const AnswerTemplate = (props: {
 
 const MyAnswer = ({ answer_templates, value }: any) => {
   const dialogProps = useDialog();
-  const caption = answer_templates.find(
-    (temp: any) => temp.value === value?.value
-  )?.caption;
+  const caption = answer_templates.find((temp: any) => temp.value === value?.value)?.caption;
 
   return (
     <Collapse in={!!caption} sx={{ flex: 1 }}>
@@ -347,20 +319,11 @@ const MyAnswer = ({ answer_templates, value }: any) => {
               flexDirection: "column",
             }}
           >
-            <Box
-              display="flex"
-              alignItems={"baseline"}
-              sx={{ flexDirection: { xs: "column", sm: "row" } }}
-            >
+            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
               <Typography>
                 <Trans i18nKey={"myConfidenceLevelOnThisQuestionIs"} />
               </Typography>
-              <Box
-                width="90px"
-                sx={{ ml: { xs: 0, sm: 1 }, mt: { xs: 1, sm: 0 } }}
-                position="relative"
-                bottom="1px"
-              >
+              <Box width="90px" sx={{ ml: { xs: 0, sm: 1 }, mt: { xs: 1, sm: 0 } }} position="relative" bottom="1px">
                 <FormControl fullWidth>
                   <NativeSelect
                     sx={{
@@ -419,11 +382,7 @@ const MyAnswer = ({ answer_templates, value }: any) => {
               flexDirection: "column",
             }}
           >
-            <Box
-              display="flex"
-              alignItems={"baseline"}
-              sx={{ flexDirection: { xs: "column", sm: "row" } }}
-            >
+            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
               <Typography>
                 <Trans i18nKey={"noEvidenceYet"} />
               </Typography>
@@ -462,10 +421,7 @@ const Evidence = (props: any) => {
       maxWidth="lg"
       fullScreen={fullScreen}
     >
-      <DialogTitle
-        textTransform={"uppercase"}
-        sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}
-      >
+      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}>
         <AssignmentRoundedIcon sx={{ mr: 1 }} />
         <Trans i18nKey="evidence" />
       </DialogTitle>
@@ -477,10 +433,7 @@ const Evidence = (props: any) => {
         }}
       >
         <FormProvider {...formMethods}>
-          <form
-            onSubmit={formMethods.handleSubmit(onSubmit)}
-            style={{ flex: 1, display: "flex", flexDirection: "column" }}
-          >
+          <form onSubmit={formMethods.handleSubmit(onSubmit)} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <Grid container spacing={1} sx={styles.formGrid}>
               <Grid item xs={12}>
                 <InputFieldUC
@@ -507,9 +460,7 @@ const Evidence = (props: any) => {
               </Title>
               <Box>
                 <Box display="flex" flexDirection="column">
-                  <ListItem
-                    sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}
-                  >
+                  <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
                     <ListItemIcon
                       sx={{
                         minWidth: "45px",
@@ -524,17 +475,11 @@ const Evidence = (props: any) => {
                     />
                     <Box display="flex" sx={{ flexDirection: "column" }}>
                       <Box sx={{ ...styles.centerV }}>
-                        <AccessTimeRoundedIcon
-                          sx={{ mr: 0.7, color: "gray" }}
-                          fontSize="small"
-                        />
+                        <AccessTimeRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
                         2022/02/01
                       </Box>
                       <Box sx={{ ...styles.centerV }}>
-                        <PersonOutlineRoundedIcon
-                          sx={{ mr: 0.7, color: "gray" }}
-                          fontSize="small"
-                        />
+                        <PersonOutlineRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
                         erfan kaboli
                       </Box>
                     </Box>

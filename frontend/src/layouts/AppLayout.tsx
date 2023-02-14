@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import { Box } from "@mui/material";
-import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
-import Navbar from "../components/shared/Navbar";
+import GettingThingsReadyLoading from "@components/shared/loadings/GettingThingsReadyLoading";
+import Navbar from "@components/shared/Navbar";
 import { styles } from "../config/styles";
 
 const AppLayout = (props: PropsWithChildren<{}>) => {
