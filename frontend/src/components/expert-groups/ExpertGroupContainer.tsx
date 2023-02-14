@@ -571,12 +571,17 @@ const ProfilesList = (props: any) => {
               ))}
             </>
           )}
+          isDataEmpty={(data) => {
+            const { results = [], is_expert } = data;
+            const isEmpty = is_expert ? results.length === 0 : results.filter((p: any) => !!p?.is_active)?.length === 0;
+            return isEmpty;
+          }}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
             return (
               <>
                 {results.map((profile: any) => {
-                  return (
+                  return profile.is_active ? (
                     <ProfileListItem
                       link={is_expert ? `profiles/${profile?.id}` : `/profiles/${profile?.id}`}
                       key={profile?.id}
@@ -584,7 +589,7 @@ const ProfilesList = (props: any) => {
                       fetchProfiles={profileQuery.query}
                       hasAccess={is_expert}
                     />
-                  );
+                  ) : null;
                 })}
               </>
             );
