@@ -38,7 +38,7 @@ class AssessmentProject(models.Model):
     assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='assessment_projects')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True)
     color = models.ForeignKey(Color, on_delete=models.PROTECT, null=True)
-    space = models.ForeignKey(Space, on_delete=models.PROTECT)
+    space = models.ForeignKey(Space, on_delete=models.PROTECT, related_name='projects')
     objects = AssessmentProjectManager()
 
     class Meta:

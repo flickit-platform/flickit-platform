@@ -26,9 +26,11 @@ class InviteMemberSerializer(serializers.Serializer):
 class SpaceListSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer()
     members_number = serializers.IntegerField(source='users.count', read_only=True)
+    assessment_numbers = serializers.IntegerField(source= 'projects.count', read_only = True)
+
     class Meta:
         model = Space
-        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number'] 
+        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers'] 
 
 class SpaceSimpleSerializer(serializers.ModelSerializer):
     class Meta:
