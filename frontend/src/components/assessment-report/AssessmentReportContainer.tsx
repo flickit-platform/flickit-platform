@@ -20,8 +20,7 @@ const AssessmentReportContainer = () => {
   const { assessmentId = "" } = useParams();
 
   const queryData = useQuery<IAssessmentReportModel>({
-    service: (args, config) =>
-      service.fetchAssessment({ assessmentId }, config),
+    service: (args, config) => service.fetchAssessment({ assessmentId }, config),
     toastError: true,
     toastErrorOptions: { filterByStatus: [404] },
   });
@@ -64,11 +63,8 @@ const AssessmentReportContainer = () => {
                     sx={{
                       ...styles.centerCV,
                       textDecoration: "none",
-                      color: (t) => t.palette.primary.dark,
                     }}
                     alignSelf="stretch"
-                    component={Link}
-                    to={`/profiles/${assessment_profile?.id}`}
                   >
                     <Typography
                       variant="h6"
@@ -87,7 +83,14 @@ const AssessmentReportContainer = () => {
                         alignSelf: "stretch",
                       }}
                     >
-                      {assessment_profile?.title}
+                      <Trans i18nKey="theProfileUsedInThisAssessmentIs" />{" "}
+                      <Box
+                        component={Link}
+                        to={`/profiles/${assessment_profile?.id}`}
+                        sx={{ color: (t) => t.palette.primary.dark, textDecoration: "none", ml: 0.5 }}
+                      >
+                        {assessment_profile?.title}
+                      </Box>
                     </Typography>
                     <Typography color="GrayText" variant="body2">
                       {assessment_profile?.summary}
@@ -112,7 +115,7 @@ const AssessmentReportContainer = () => {
                       titleTypographyProps={{
                         sx: { textDecoration: "none" },
                       }}
-                      avatar={<Avatar alt={expert_group?.name} src={"/"} />}
+                      avatar={<Avatar alt={expert_group?.name} src={expert_group?.picture || "/"} />}
                       title={
                         <Box component={"b"} fontSize=".95rem" color="Gray">
                           {expert_group?.name}
@@ -125,16 +128,10 @@ const AssessmentReportContainer = () => {
             </Box>
             <Grid container spacing={3} columns={14} mt={0.2}>
               <Grid item lg={8} md={14} sm={14} xs={14}>
-                <AssessmentOverallStatus
-                  status={status}
-                  subjects={subjects_info}
-                />
+                <AssessmentOverallStatus status={status} subjects={subjects_info} />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes
-                  isWeakness={false}
-                  most_significant_items={most_significant_strength_atts}
-                />
+                <AssessmentMostSignificantAttributes isWeakness={false} most_significant_items={most_significant_strength_atts} />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
                 <AssessmentMostSignificantAttributes
@@ -143,10 +140,7 @@ const AssessmentReportContainer = () => {
                 />
               </Grid>
               <Grid item sm={14} xs={14} id="subjects">
-                <AssessmentSubjectList
-                  subjects={subjects_info}
-                  colorCode={colorCode}
-                />
+                <AssessmentSubjectList subjects={subjects_info} colorCode={colorCode} />
               </Grid>
             </Grid>
           </Box>
