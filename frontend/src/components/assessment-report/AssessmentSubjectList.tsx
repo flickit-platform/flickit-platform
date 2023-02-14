@@ -1,11 +1,10 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
-import Title from "../shared/Title";
+import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
+import Title from "@shared/Title";
 import { AssessmentSubjectCard } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
-import { ISubjectInfo } from "../@types";
+import { ISubjectInfo } from "@types";
 
 interface IAssessmentSubjectListProps {
   subjects: ISubjectInfo[];

@@ -1,14 +1,14 @@
 import Routes from "./routes";
-import "./config/i18n";
+import "@config/i18n";
 import useGetSignedInUserInfo from "./utils/useGetSignedInUserInfo";
-import { styles } from "./config/styles";
-import { Box } from "@mui/material";
+import { styles } from "@styles";
+import Box from "@mui/material/Box";
 import ErrorDataLoading from "./components/shared/errors/ErrorDataLoading";
 import GettingThingsReadyLoading from "./components/shared/loadings/GettingThingsReadyLoading";
 import ErrorBoundary from "./components/shared/errors/ErrorBoundry";
 
 function App() {
-  const { error, loading } = useGetSignedInUserInfo();
+  const { error, loading } = useGetSignedInUserInfo(); // Checks if the user is signed in
 
   return error ? (
     <Box sx={{ ...styles.centerVH }} height="100vh">

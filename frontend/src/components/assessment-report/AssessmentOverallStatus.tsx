@@ -1,14 +1,13 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Paper from "@mui/material/Paper";
-import { ESystemStatus, ISubjectInfo, TStatus } from "../@types";
+import { ESystemStatus, ISubjectInfo, TStatus } from "@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { getColorOfStatus, styles } from "../../config/styles";
-import { Gauge } from "../shared/charts/Gauge";
-import Title from "../shared/Title";
-import hasStatus from "../@utils/hasStatus";
+import { getColorOfStatus, styles } from "@styles";
+import { Gauge } from "@shared/charts/Gauge";
+import Title from "@shared/Title";
+import hasStatus from "@utils/hasStatus";
 
 interface IAssessmentOverallStatusProps {
   status: TStatus;

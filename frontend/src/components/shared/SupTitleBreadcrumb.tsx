@@ -1,14 +1,13 @@
-import React from "react";
 import Breadcrumbs, { BreadcrumbsProps } from "@mui/material/Breadcrumbs";
 import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
-import { styles } from "../../config/styles";
-import { Box } from "@mui/material";
+import { styles } from "@styles";
+import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "./loadings/LoadingSkeleton";
-import { TId } from "../@types";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
+import { TId } from "@types";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 
 interface ISupTitleBreadcrumbProps {
   routes: {

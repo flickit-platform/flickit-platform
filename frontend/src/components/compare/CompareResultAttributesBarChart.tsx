@@ -1,7 +1,6 @@
-import React from "react";
 import { Bar, XAxis, YAxis, Legend, Tooltip, BarChart, CartesianGrid, ResponsiveContainer } from "recharts";
-import { ICompareResultBaseInfo, TCompareResultAttributeInfo } from "../@types";
-import { Box } from "@mui/material";
+import { ICompareResultBaseInfo, TCompareResultAttributeInfo } from "@types";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 

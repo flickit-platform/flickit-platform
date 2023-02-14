@@ -3,14 +3,14 @@ import { Box, Button } from "@mui/material";
 import { Trans } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { styles } from "../../config/styles";
-import { useAuthContext } from "../@providers/AuthProvider";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { ICustomError } from "../@utils/CustomError";
-import toastError from "../@utils/toastError";
-import { useQuery } from "../@utils/useQuery";
-import QueryData from "../shared/QueryData";
-import Title from "../shared/Title";
+import { styles } from "@styles";
+import { useAuthContext } from "@providers/AuthProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@shared/QueryData";
+import Title from "@shared/Title";
 import ExpertGroupsItem from "./ExpertGroupsItem";
 
 const ExpertGroupConfirmInvitationContainer = () => {
@@ -30,7 +30,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
   const confirmInvitation = async () => {
     try {
       await confirmInvitationQueryData.query();
-      navigate(`/account/${id}/expert-groups/${expertGroupId}`, {
+      navigate(`/user/expert-groups/${expertGroupId}`, {
         replace: true,
       });
       toast.success("You have joined this expert group successfully.");

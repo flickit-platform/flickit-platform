@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
-import Title from "../@components/shared/Title";
-import QueryData from "../@components/shared/QueryData";
-import ErrorEmptyData from "../@components/shared/errors/ErrorEmptyData";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import useDialog from "../@utils/useDialog";
+import Title from "@shared/Title";
+import QueryData from "@shared/QueryData";
+import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
+import { useServiceContext } from "@providers/ServiceProvider";
+import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
 import { Box, Typography } from "@mui/material";
-import { ICustomError } from "../@utils/CustomError";
+import { ICustomError } from "@utils/CustomError";
 import { useParams } from "react-router-dom";
-import { LoadingSkeletonOfAssessments } from "../@components/shared/loadings/LoadingSkeletonOfAssessments";
-import toastError from "../@utils/toastError";
-import { ToolbarCreateItemBtn } from "../@components/shared/buttons/ToolbarCreateItemBtn";
-import { ECustomErrorType } from "../@types";
-import { ErrorNotFoundOrAccessDenied } from "../@components/shared/errors/ErrorNotFoundOrAccessDenied";
-import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import { LoadingSkeletonOfAssessments } from "@shared/loadings/LoadingSkeletonOfAssessments";
+import toastError from "@utils/toastError";
+import { ToolbarCreateItemBtn } from "@shared/buttons/ToolbarCreateItemBtn";
+import { ECustomErrorType } from "@types";
+import { ErrorNotFoundOrAccessDenied } from "@shared/errors/ErrorNotFoundOrAccessDenied";
+import SupTitleBreadcrumb from "@shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 
 const AssessmentContainer = () => {

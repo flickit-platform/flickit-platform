@@ -1,20 +1,20 @@
 import { Typography, Box, Chip } from "@mui/material";
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { TId, TQueryFunction } from "../@types";
-import { ICustomError } from "../@utils/CustomError";
-import toastError from "../@utils/toastError";
-import useMenu from "../@utils/useMenu";
-import { useQuery } from "../@utils/useQuery";
-import MoreActions from "../shared/MoreActions";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { TId, TQueryFunction } from "@types";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import useMenu from "@utils/useMenu";
+import { useQuery } from "@utils/useQuery";
+import MoreActions from "@shared/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import { toast } from "react-toastify";
-import formatDate from "../@utils/formatDate";
+import formatDate from "@utils/formatDate";
 
 interface IProfileListItemProps {
   data: {

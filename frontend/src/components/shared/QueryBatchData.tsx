@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
-import { styles } from "../../config/styles";
-import { ECustomErrorType } from "../@types";
-import { ICustomError } from "../@utils/CustomError";
+import Box from "@mui/material/Box";
+import { styles } from "@styles";
+import { ECustomErrorType } from "@types";
+import { ICustomError } from "@utils/CustomError";
 import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";

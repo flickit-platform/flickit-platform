@@ -10,6 +10,11 @@ type TCombinedQueryData = {
   query: ((...arg: any) => Promise<any>)[];
 };
 
+/**
+ *
+ * #### Can be use for multiple query
+ * @returns object with array data which contains each query data in the order you passed params
+ */
 const combineQueryData = (...args: TQueryProps[]) => {
   const errorObject: undefined | ICustomError[] = [];
   const data: undefined | any[] = [];

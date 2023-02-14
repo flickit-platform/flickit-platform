@@ -1,17 +1,15 @@
 import React, { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import LockPersonRoundedIcon from "@mui/icons-material/LockPersonRounded";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { styles } from "../../../config/styles";
+import { styles } from "@styles";
 
 interface IErrorAccessDeniedProps {
   hasAccess: boolean;
 }
 
-const ErrorAccessDenied = (
-  props: PropsWithChildren<IErrorAccessDeniedProps>
-) => {
+const ErrorAccessDenied = (props: PropsWithChildren<IErrorAccessDeniedProps>) => {
   const { hasAccess, children } = props;
   return hasAccess ? (
     <>{children}</>

@@ -1,13 +1,12 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
-import QueryData from "../shared/QueryData";
-import Title from "../shared/Title";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@shared/QueryData";
+import Title from "@shared/Title";
 import CompareResult from "./CompareResult";
-import { ICompareResultModel } from "../@types";
+import { ICompareResultModel } from "@types";
 import Button from "@mui/material/Button";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 

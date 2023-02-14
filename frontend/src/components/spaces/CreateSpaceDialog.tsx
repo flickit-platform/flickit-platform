@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../@components/shared/fields/InputField";
-import { CEDialog, CEDialogActions } from "../@components/shared/dialogs/CEDialog";
-import FormProviderWithForm from "../shared/FormProviderWithForm";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { ICustomError } from "../@utils/CustomError";
-import setServerFieldErrors from "../@utils/setServerFieldError";
-import toastError from "../@utils/toastError";
+import { InputFieldUC } from "@shared/fields/InputField";
+import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
+import FormProviderWithForm from "@shared/FormProviderWithForm";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { ICustomError } from "@utils/CustomError";
+import setServerFieldErrors from "@utils/setServerFieldError";
+import toastError from "@utils/toastError";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 
 interface ICreateSpaceDialogProps extends DialogProps {
@@ -22,7 +22,7 @@ interface ICreateSpaceDialogProps extends DialogProps {
 }
 
 const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;

@@ -1,8 +1,8 @@
 import React from "react";
 import { Trans } from "react-i18next";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { styles } from "../../config/styles";
-import { authActions, useAuthContext } from "../@providers/AuthProvider";
+import { styles } from "@styles";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
 import { Box, ListItemIcon } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -422,7 +422,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
       </Button>
 
       <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ sx: { minWidth: "180px" } }}>
-        <MenuItem dense component={NavLink} to={`/account/about`} onClick={handleClose}>
+        <MenuItem dense component={NavLink} to={`/user/account`} onClick={handleClose}>
           <ListItemIcon>
             <AccountBoxRoundedIcon fontSize="small" />
           </ListItemIcon>
@@ -430,7 +430,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
             <Trans i18nKey={"account"} />
           </ListItemText>
         </MenuItem>
-        <MenuItem dense onClick={handleClose} component={NavLink} to={`/account/expert-groups`}>
+        <MenuItem dense onClick={handleClose} component={NavLink} to={`/user/expert-groups`}>
           <ListItemIcon>
             <EngineeringIcon fontSize="small" />
           </ListItemIcon>

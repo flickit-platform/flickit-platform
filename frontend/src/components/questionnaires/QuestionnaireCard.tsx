@@ -1,19 +1,18 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { Trans } from "react-i18next";
-import Title from "../shared/Title";
-import QANumberIndicator from "../shared/QANumberIndicator";
-import QuestionnaireProgress from "../shared/progress/CategoryProgress";
+import Title from "@shared/Title";
+import QANumberIndicator from "@shared/QANumberIndicator";
+import QuestionnaireProgress from "@shared/progress/CategoryProgress";
 import { Link } from "react-router-dom";
 import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
-import useScreenResize from "../@utils/useScreenResize";
-import { styles } from "../../config/styles";
-import { IQuestionnairesInfo, ISubjectInfo, TId } from "../@types";
+import useScreenResize from "@utils/useScreenResize";
+import { styles } from "@styles";
+import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
 
 interface IQuestionnaireCardProps {

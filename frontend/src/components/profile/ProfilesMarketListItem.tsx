@@ -1,10 +1,10 @@
 import { Avatar, Box, Button, CardHeader, Chip, Divider, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { styles } from "../../config/styles";
-import Title from "../shared/Title";
+import { styles } from "@styles";
+import Title from "@shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
-import formatDate from "../@utils/formatDate";
+import formatDate from "@utils/formatDate";
 
 const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   return (
@@ -87,7 +87,7 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       <Box mt="auto">
         <CardHeader
           component={Link}
-          to={`/account/expert-groups/${data.expert_group?.id}`}
+          to={`/user/expert-groups/${data.expert_group?.id}`}
           sx={{ px: 0, textDecoration: "none" }}
           titleTypographyProps={{
             sx: { textDecoration: "none" },

@@ -1,13 +1,13 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { useNavigate, useParams } from "react-router-dom";
-import { EAssessmentStatus, metricActions, useMetricDispatch } from "../@providers/MetricProvider";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
-import LoadingSkeletonOfMetrics from "../shared/loadings/LoadingSkeletonOfMetrics";
+import { EAssessmentStatus, metricActions, useMetricDispatch } from "@providers/MetricProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import LoadingSkeletonOfMetrics from "@shared/loadings/LoadingSkeletonOfMetrics";
 import MetricsTitle from "./MetricsTitle";
-import QueryBatchData from "../shared/QueryBatchData";
-import { IQuestionnaireModel, IMetricsModel, TId } from "../@types";
+import QueryBatchData from "@shared/QueryBatchData";
+import { IQuestionnaireModel, IMetricsModel, TId } from "@types";
 
 const MetricsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) => {
   const { metricIndex } = useParams();

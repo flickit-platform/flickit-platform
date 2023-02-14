@@ -3,18 +3,18 @@ import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Hidden from "@mui/material/Hidden";
-import { Box } from "@mui/material";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "../@providers/MetricProvider";
+import Box from "@mui/material/Box";
+import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
 import { MetricCard } from "./MetricCard";
 import { Trans } from "react-i18next";
-import ErrorEmptyData from "../@components/shared/errors/ErrorEmptyData";
+import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
 import { Review } from "./MetricsReview";
 import { TransitionGroup } from "react-transition-group";
-import useScreenResize from "../@utils/useScreenResize";
-import { styles } from "../../config/styles";
+import useScreenResize from "@utils/useScreenResize";
+import { styles } from "@styles";
 import MetricNextPrev from "./MetricNextPrev";
 import { MetricsProgress } from "./MetricsProgress";
-import { ErrorNotFoundOrAccessDenied } from "../@components/shared/errors/ErrorNotFoundOrAccessDenied";
+import { ErrorNotFoundOrAccessDenied } from "@shared/errors/ErrorNotFoundOrAccessDenied";
 
 export const MetricContainer = () => {
   const {

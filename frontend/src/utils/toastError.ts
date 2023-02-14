@@ -4,11 +4,26 @@ import { ECustomErrorType } from "@types";
 import { ICustomError } from "./CustomError";
 
 export interface IToastErrorOptions {
+  /**
+   * Don't show error if status is one of
+   */
   filterByStatus?: number[];
+  /**
+   * Don't show error if its type is one of
+   */
   filterByType?: ECustomErrorType[];
+  /**
+   * Don't show error if it has any data
+   */
   filterIfHasData?: boolean;
 }
 
+/**
+ * This function will try to find errors in passed CustomError object and show it
+ * @param err If provided with CustomError it will try to find the message inside error data object or message and show it otherwise if passed a string it will show it and for boolean it shows its own generated errors
+ * @param options toast config
+ * @returns
+ */
 const toastError = (err: ICustomError | string | true, options?: IToastErrorOptions) => {
   if (typeof err === "boolean" && err) {
     toast.error(t("someThingWentWrong") as string);

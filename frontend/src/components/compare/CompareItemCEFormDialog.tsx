@@ -1,22 +1,21 @@
-import React from "react";
 import { Trans } from "react-i18next";
-import { IDialogProps, TId } from "../@types";
-import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
+import { IDialogProps, TId } from "@types";
+import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import FormProviderWithForm from "../shared/FormProviderWithForm";
+import FormProviderWithForm from "@shared/FormProviderWithForm";
 import Grid from "@mui/material/Grid";
 import { useForm } from "react-hook-form";
-import { styles } from "../../config/styles";
-import { SelectFieldUC } from "../shared/fields/SelectField";
-import useConnectSelectField from "../@utils/useConnectSelectField";
+import { styles } from "@styles";
+import { SelectFieldUC } from "@shared/fields/SelectField";
+import useConnectSelectField from "@utils/useConnectSelectField";
 import MenuItem from "@mui/material/MenuItem";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Title from "../shared/Title";
-import { compareActions, useCompareContext, useCompareDispatch } from "../@providers/CompareProvider";
-import hasStatus from "../@utils/hasStatus";
-import AlertBox from "../shared/AlertBox";
+import Title from "@shared/Title";
+import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
+import hasStatus from "@utils/hasStatus";
+import AlertBox from "@shared/AlertBox";
 
 interface ICompareItemCEFormDialog extends Omit<ICompareItemCEForm, "closeDialog"> {}
 

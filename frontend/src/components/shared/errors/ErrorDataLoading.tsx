@@ -1,9 +1,9 @@
 import { Box, BoxProps } from "@mui/material";
-import React from "react";
+
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 import { Typography } from "@mui/material";
 import { Trans } from "react-i18next";
-import { styles } from "../../../config/styles";
+import { styles } from "@styles";
 
 interface IErrorDataLoadingProps extends BoxProps {}
 

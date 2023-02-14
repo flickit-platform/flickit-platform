@@ -1,13 +1,11 @@
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Editor } from "@tiptap/react";
 import RichEditorMenuItem, { IRichEditorMenuItem } from "./RichEditorMenuItem";
 import defaultGetMenuItems from "./defaultGetMenuItems";
 
 interface IRichEditorMenuBarProps {
   editor: Editor;
-  getMenuItems?: (
-    editor: Editor
-  ) => (IRichEditorMenuItem | { type: "divider" })[];
+  getMenuItems?: (editor: Editor) => (IRichEditorMenuItem | { type: "divider" })[];
 }
 
 const RichEditorMenuBar = (props: IRichEditorMenuBarProps) => {

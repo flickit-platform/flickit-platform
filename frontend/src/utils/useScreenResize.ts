@@ -1,6 +1,9 @@
 import { Breakpoint, useMediaQuery, useTheme } from "@mui/material";
-import React from "react";
 
+/**
+ *
+ * returns true when the screen size meets the breakpoint size
+ */
 const useScreenResize = (key: number | Breakpoint) => {
   const theme = useTheme();
   const mediaQuery = useMediaQuery(theme.breakpoints.down(key));

@@ -1,4 +1,3 @@
-import React from "react";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import { Avatar, Box, BoxProps } from "@mui/material";
 import { Link as RLink, To } from "react-router-dom";
@@ -6,7 +5,7 @@ import Link from "@mui/material/Link";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { IconProps, SvgIconProps } from "@mui/material";
 import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
   sub?: JSX.Element | string;

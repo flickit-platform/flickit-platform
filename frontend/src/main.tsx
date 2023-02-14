@@ -1,12 +1,11 @@
 import ReactDOM from "react-dom/client";
 import React, { Suspense } from "react";
-import { Box } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { toastDefaultConfig } from "./utils/toast";
+import { toastDefaultConfig } from "@config/toastConfigs";
 import { ServiceProvider } from "./providers/ServiceProvider";
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./config/theme";
+import { theme } from "@config/theme";
 import { AppProvider } from "./providers/AppProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import CssBaseline from "@mui/material/CssBaseline";

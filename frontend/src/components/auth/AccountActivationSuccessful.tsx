@@ -1,17 +1,16 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
-import { useAuthContext } from "../@providers/AuthProvider";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
+import { useAuthContext } from "@providers/AuthProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 import CircularProgress from "@mui/material/CircularProgress";
-import QueryData from "../shared/QueryData";
+import QueryData from "@shared/QueryData";
 
 const AccountActivationSuccessful = () => {
   const { isAuthenticatedUser } = useAuthContext();

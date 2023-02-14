@@ -1,5 +1,4 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
@@ -19,21 +18,14 @@ const SubjectProgress = (props: ISubjectProgressProps) => {
 
   return (
     <Box mt={9} mb={4}>
-      <LinearProgress
-        sx={{ borderRadius: 3 }}
-        value={progress}
-        variant="determinate"
-        color="inherit"
-      />
+      <LinearProgress sx={{ borderRadius: 3 }} value={progress} variant="determinate" color="inherit" />
       <Typography
         sx={{
           mt: 1,
           opacity: 0.7,
           fontFamily: "Oswald",
           fontWeight: 400,
-          color: colorCode
-            ? (t) => t.palette.getContrastText(colorCode)
-            : "white",
+          color: colorCode ? (t) => t.palette.getContrastText(colorCode) : "white",
         }}
         variant="h6"
         textTransform={"uppercase"}

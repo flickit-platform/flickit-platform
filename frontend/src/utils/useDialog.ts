@@ -5,6 +5,12 @@ interface IUseDialogProps {
   context?: IDialogContext;
 }
 
+/**
+ * #### Hook for creating dialog logics
+ *
+ * you can pass context on create or on open dialog which is recommended way
+ * remember to pass context type otherwise we don't set your context
+ */
 const useDialog = (props: IUseDialogProps = {}) => {
   const { context: initialContext = undefined } = props;
   const [open, setOpen] = useState(false);

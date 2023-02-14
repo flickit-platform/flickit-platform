@@ -1,11 +1,10 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
-import { styles } from "../../config/styles";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "../@providers/MetricProvider";
+import { styles } from "@styles";
+import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
 import { MetricThumb } from "./MetricThumb";
 
 interface IMetricNextPrevProps {

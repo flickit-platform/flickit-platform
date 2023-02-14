@@ -1,12 +1,11 @@
-import React from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Title from "../@components/shared/Title";
-import { Box } from "@mui/material";
+import Title from "@shared/Title";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import Hidden from "@mui/material/Hidden";
-import { getColorOfStatus, styles } from "../../config/styles";
+import { getColorOfStatus, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
   const { quality_attribute = {}, maturity_level_value: ml, status } = props;

@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Chip, CircularProgress, Typography } from "@mui/material";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import { authActions, useAuthContext } from "../@providers/AuthProvider";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import useMenu from "../@utils/useMenu";
+import useMenu from "@utils/useMenu";
 import IconButton from "@mui/material/IconButton";
-import { ICustomError } from "../@utils/CustomError";
-import toastError from "../@utils/toastError";
-import MoreActions from "../@components/shared/MoreActions";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import MoreActions from "@shared/MoreActions";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
-import { styles } from "../../config/styles";
-import { TDialogProps } from "../@utils/useDialog";
-import { ISpaceModel, ISpacesModel, TQueryFunction } from "../@types";
+import { styles } from "@styles";
+import { TDialogProps } from "@utils/useDialog";
+import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;

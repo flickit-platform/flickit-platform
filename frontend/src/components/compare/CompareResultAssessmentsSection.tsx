@@ -1,10 +1,9 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { styles } from "../../config/styles";
-import { ICompareResultBaseInfo } from "../@types";
-import { Gauge } from "../shared/charts/Gauge";
-import Title from "../shared/Title";
+import { styles } from "@styles";
+import { ICompareResultBaseInfo } from "@types";
+import { Gauge } from "@shared/charts/Gauge";
+import Title from "@shared/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
 
 const CompareResultAssessmentsSection = (props: { data: ICompareResultBaseInfo[] }) => {

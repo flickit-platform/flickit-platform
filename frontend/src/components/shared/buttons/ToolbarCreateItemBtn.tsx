@@ -1,7 +1,6 @@
-import React from "react";
 import Button, { ButtonProps } from "@mui/material/Button";
-import useScreenResize from "../../@utils/useScreenResize";
-import { animations } from "../../../config/styles";
+import useScreenResize from "@utils/useScreenResize";
+import { animations } from "@styles";
 import { Trans } from "react-i18next";
 
 interface IToolbarCreateItemBtnProps extends ButtonProps {

@@ -1,8 +1,8 @@
-import React from "react";
 import { Trans } from "react-i18next";
-import ErrorImage from "../../../assets/img/errorBoundary.png";
+import ErrorImage from "@assets/img/errorBoundary.png";
+import { Component } from "react";
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
   constructor(props: any) {
     super(props);
     this.state = { hasError: false };

@@ -1,35 +1,35 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../@components/shared/fields/InputField";
-import { SelectFieldUC } from "../shared/fields/SelectField";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import setServerFieldErrors from "../@utils/setServerFieldError";
-import useConnectSelectField from "../@utils/useConnectSelectField";
+import { InputFieldUC } from "@shared/fields/InputField";
+import { SelectFieldUC } from "@shared/fields/SelectField";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import setServerFieldErrors from "@utils/setServerFieldError";
+import useConnectSelectField from "@utils/useConnectSelectField";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
-import { ICustomError } from "../@utils/CustomError";
+import { ICustomError } from "@utils/CustomError";
 import { Link, useParams } from "react-router-dom";
-import toastError from "../@utils/toastError";
-import { CEDialog, CEDialogActions } from "../@components/shared/dialogs/CEDialog";
-import FormProviderWithForm from "../@components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
-import { Box } from "@mui/material";
+import toastError from "@utils/toastError";
+import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
+import FormProviderWithForm from "@shared/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "@shared/fields/AutocompleteAsyncField";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import UploadField from "../shared/fields/UploadField";
+import UploadField from "@shared/fields/UploadField";
 
-interface IAccountCEFormDialogProps extends DialogProps {
+interface IUserCEFormDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
 
-const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
-  const [loading, setLoading] = React.useState(false);
+const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
+  const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {} } = context;
@@ -54,7 +54,7 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
     }
     setLoading(true);
     try {
-      const { data: res } = await service.updateAccount(
+      const { data: res } = await service.updateUserInfo(
         {
           id,
           data: { email: defaultValues?.email, id: defaultValues?.id, ...data },
@@ -79,7 +79,7 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
       title={
         <>
           <AccountBoxRoundedIcon sx={{ mr: 1 }} />
-          <Trans i18nKey="updateAccount" />
+          <Trans i18nKey="updateUser" />
         </>
       }
     >
@@ -120,4 +120,4 @@ const AccountCEFormDialog = (props: IAccountCEFormDialogProps) => {
   );
 };
 
-export default AccountCEFormDialog;
+export default UserCEFormDialog;

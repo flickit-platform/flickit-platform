@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, useContext } from "react";
-import { Box } from "@mui/material";
-import { styles } from "../../config/styles";
-import { ECustomErrorType, TQueryFunction, TQueryProps } from "../@types";
-import { ICustomError } from "../@utils/CustomError";
+import React, { createContext, PropsWithChildren, useContext } from "react";
+import Box from "@mui/material/Box";
+import { styles } from "@styles";
+import { ECustomErrorType, TQueryFunction, TQueryProps } from "@types";
+import { ICustomError } from "@utils/CustomError";
 import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
@@ -25,7 +25,7 @@ interface IQueryDataProps<T> {
   query?: TQueryFunction<T>;
 }
 
-const QueryDataContext = React.createContext<TQueryProps>({
+const QueryDataContext = createContext<TQueryProps>({
   data: undefined,
   error: false,
   loading: true,

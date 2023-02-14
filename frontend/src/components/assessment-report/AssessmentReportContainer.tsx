@@ -1,19 +1,18 @@
-import React from "react";
 import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import QueryData from "../shared/QueryData";
+import QueryData from "@shared/QueryData";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "../@utils/useQuery";
+import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
-import { useServiceContext } from "../@providers/ServiceProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
 import { AssessmentOverallStatus } from "./AssessmentOverallStatus";
 import { AssessmentMostSignificantAttributes } from "./AssessmentMostSignificantAttributes";
-import LoadingSkeletonOfAssessmentReport from "../shared/loadings/LoadingSkeletonOfAssessmentReport";
+import LoadingSkeletonOfAssessmentReport from "@shared/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
-import { IAssessmentReportModel } from "../@types";
+import { IAssessmentReportModel } from "@types";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 
 const AssessmentReportContainer = () => {
   const { service } = useServiceContext();
@@ -105,7 +104,7 @@ const AssessmentReportContainer = () => {
                       textDecoration: "none",
                     }}
                     component={Link}
-                    to={`/account/expert-groups/${expert_group?.id}`}
+                    to={`/user/expert-groups/${expert_group?.id}`}
                   >
                     <Typography color="grayText" variant="subLarge">
                       <Trans i18nKey="providedBy" />

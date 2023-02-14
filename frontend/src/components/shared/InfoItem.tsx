@@ -1,8 +1,8 @@
 import React, { FC, PropsWithChildren } from "react";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
-import { styles } from "../../config/styles";
-import { Box } from "@mui/material";
+import { styles } from "@styles";
+import Box from "@mui/material/Box";
 
 interface IInfoItems {
   renderMap?: Record<string, (...args: any) => JSX.Element>;
@@ -77,9 +77,7 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map(
-        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
-      )}
+      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
     </DefaultInfoItemComponent>
   ),
 };
@@ -98,12 +96,7 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const {
-    component: Component = DefaultInfoItemComponent,
-    renderMap = defaultRenderMap,
-    useTitleAsFallbackType,
-    bg,
-  } = config;
+  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
   const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 

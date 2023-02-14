@@ -3,12 +3,12 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel, { InputLabelProps } from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectProps } from "@mui/material/Select";
-import React from "react";
+
 import { useFormContext, UseFormRegister } from "react-hook-form";
-import getFieldError from "../../@utils/getFieldError";
+import getFieldError from "@utils/getFieldError";
 import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
-import { Box } from "@mui/material";
-import { styles } from "../../../config/styles";
+import Box from "@mui/material/Box";
+import { styles } from "@styles";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 
 const selectField = () => {

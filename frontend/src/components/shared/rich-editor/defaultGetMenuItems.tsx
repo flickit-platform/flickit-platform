@@ -3,7 +3,7 @@ import { Editor } from "@tiptap/react";
 import { t } from "i18next";
 import { useRef } from "react";
 import { Trans } from "react-i18next";
-import toastError from "../../@utils/toastError";
+import toastError from "@utils/toastError";
 import { IRichEditorMenuItem } from "./RichEditorMenuItem";
 import FormatBoldRoundedIcon from "@mui/icons-material/FormatBoldRounded";
 import FormatItalicRoundedIcon from "@mui/icons-material/FormatItalicRounded";

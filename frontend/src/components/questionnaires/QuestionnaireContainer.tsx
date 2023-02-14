@@ -1,34 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
-import { useQuery } from "../@utils/useQuery";
-import { useServiceContext } from "../@providers/ServiceProvider";
+import { styles } from "@styles";
+import { useQuery } from "@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
 import {
   IAssessmentReportModel,
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   ITotalProgressModel,
   TQueryProps,
-} from "../@types";
-import Title from "../shared/Title";
+} from "@types";
+import Title from "@shared/Title";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
-import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "../shared/SupTitleBreadcrumb";
+import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
+import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import hasStatus from "../@utils/hasStatus";
+import hasStatus from "@utils/hasStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import PermissionControl from "../shared/PermissionControl";
-import AlertBox from "../shared/AlertBox";
-import setDocumentTitle from "../@utils/setDocumentTitle";
+import PermissionControl from "@shared/PermissionControl";
+import AlertBox from "@shared/AlertBox";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 const QuestionnaireContainer = () => {

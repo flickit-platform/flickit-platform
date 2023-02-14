@@ -1,22 +1,21 @@
-import React from "react";
 import { SpaceLayout } from "./SpaceLayout";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import Title from "../@components/shared/Title";
-import QueryData from "../@components/shared/QueryData";
-import ErrorEmptyData from "../@components/shared/errors/ErrorEmptyData";
-import useDialog from "../@utils/useDialog";
+import Title from "@shared/Title";
+import QueryData from "@shared/QueryData";
+import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
+import useDialog from "@utils/useDialog";
 import CreateSpaceDialog from "./CreateSpaceDialog";
 import { SpacesList } from "./SpaceList";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 import AddRounded from "@mui/icons-material/AddRounded";
 import { Skeleton, Typography } from "@mui/material";
-import { ToolbarCreateItemBtn } from "../@components/shared/buttons/ToolbarCreateItemBtn";
+import { ToolbarCreateItemBtn } from "@shared/buttons/ToolbarCreateItemBtn";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import { ISpacesModel } from "../@types";
+import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();

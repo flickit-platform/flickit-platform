@@ -1,4 +1,3 @@
-import React from "react";
 import { TStatus } from "@types";
 
 const hasStatus = (status: TStatus) => {

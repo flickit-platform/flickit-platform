@@ -1,4 +1,4 @@
-import { IMetricInfo, TMetricsInfo } from "../@types";
+import { IMetricInfo, TMetricsInfo } from "@types";
 import { EAssessmentStatus } from "./provider";
 
 export enum METRIC_ACTIONS_TYPE {

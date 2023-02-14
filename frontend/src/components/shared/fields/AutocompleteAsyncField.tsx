@@ -1,16 +1,16 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState, useMemo } from "react";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import throttle from "lodash/throttle";
 import TextField from "@mui/material/TextField";
-import { TQueryServiceFunction, useQuery } from "../../@utils/useQuery";
+import { TQueryServiceFunction, useQuery } from "@utils/useQuery";
 import { Controller, ControllerRenderProps, RegisterOptions, useFormContext } from "react-hook-form";
-import getFieldError from "../../@utils/getFieldError";
-import { Box } from "@mui/material";
+import getFieldError from "@utils/getFieldError";
+import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
-import forLoopComponent from "../../@utils/forLoop";
+import forLoopComponent from "@utils/forLoopComponent";
 import ErrorDataLoading from "../errors/ErrorDataLoading";
-import { styles } from "../../../config/styles";
-import { TQueryProps } from "../../@types";
+import { styles } from "@styles";
+import { TQueryProps } from "@types";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<IAutocompleteAsyncFieldBase, "serviceQueryData" | "field">;
 
@@ -88,10 +88,10 @@ const AutocompleteBaseField = (props: IAutocompleteAsyncFieldBase & Omit<TQueryP
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
-  const [inputValue, setInputValue] = React.useState(() => getOptionLabel(defaultValue) || "");
-  const [options, setOptions] = React.useState<any[]>([]);
+  const [inputValue, setInputValue] = useState(() => getOptionLabel(defaultValue) || "");
+  const [options, setOptions] = useState<any[]>([]);
 
-  const fetch = React.useMemo(
+  const fetch = useMemo(
     () =>
       throttle((request: any) => {
         query?.({ query: formatRequest(request) });

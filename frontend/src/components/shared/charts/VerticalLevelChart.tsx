@@ -1,10 +1,9 @@
-import React from "react";
 import { Box, BoxProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { getColorOfStatus, styles } from "../../../config/styles";
+import { getColorOfStatus, styles } from "@styles";
 import Skeleton from "@mui/material/Skeleton";
-import { TStatus } from "../../@types";
+import { TStatus } from "@types";
 
 interface IVerticalLevelChartProps extends BoxProps {
   loading?: boolean;

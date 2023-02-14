@@ -1,5 +1,3 @@
-import React from "react";
-
 const convertToSubjectChartData = (data: any[]) => {
   return data.map((item) => {
     return {

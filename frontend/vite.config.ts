@@ -9,17 +9,56 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      "@/": `${path.resolve(__dirname, "src")}/`,
-      "@components": `${path.resolve(__dirname, "src/components")}/`,
-      "@shared": `${path.resolve(__dirname, "src/components/shared")}/`,
-      "@utils": `${path.resolve(__dirname, "src/utils")}/`,
-      "@service": `${path.resolve(__dirname, "src/service")}/`,
-      "@providers": `${path.resolve(__dirname, "src/providers")}/`,
-      "@styles": `${path.resolve(__dirname, "src/config/styles.ts")}/`,
-      "@constants": `${path.resolve(__dirname, "src/config/constants.ts")}/`,
-      "@types": `${path.resolve(__dirname, "src/types.ts")}/`,
-    },
+    alias: [
+      {
+        find: "@/",
+        replacement: `${path.resolve(__dirname, "src")}/`,
+      },
+      {
+        find: "@components",
+        replacement: `${path.resolve(__dirname, "src/components")}/`,
+      },
+      {
+        find: "@shared",
+        replacement: `${path.resolve(__dirname, "src/components/shared")}/`,
+      },
+      {
+        find: "@utils",
+        replacement: `${path.resolve(__dirname, "src/utils")}/`,
+      },
+      {
+        find: "@service",
+        replacement: `${path.resolve(__dirname, "src/service")}/`,
+      },
+      {
+        find: "@providers",
+        replacement: `${path.resolve(__dirname, "src/providers")}/`,
+      },
+      {
+        find: "@styles",
+        replacement: `${path.resolve(__dirname, "src/config/styles.ts")}/`,
+      },
+      {
+        find: "@constants",
+        replacement: `${path.resolve(__dirname, "src/config/constants.ts")}/`,
+      },
+      {
+        find: "@types",
+        replacement: `${path.resolve(__dirname, "src/types.ts")}/`,
+      },
+      {
+        find: "@assets",
+        replacement: `${path.resolve(__dirname, "src/assets")}/`,
+      },
+      {
+        find: "@config",
+        replacement: `${path.resolve(__dirname, "src/config")}/`,
+      },
+      {
+        find: /^@mui\/icons-material\/(.*)/,
+        replacement: "@mui/icons-material/esm/$1",
+      },
+    ],
   },
   server: {
     host: true,

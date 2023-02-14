@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, BoxProps } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -7,7 +6,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem, { MenuItemProps } from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Trans } from "react-i18next";
 
 interface IMoreActionsProps {
   boxProps?: BoxProps;
@@ -31,16 +29,7 @@ interface IMoreActionsProps {
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
-  const {
-    boxProps = {},
-    openMenu,
-    closeMenu,
-    loading = false,
-    open,
-    anchorEl,
-    items = [],
-    hideInnerIconButton = false,
-  } = props;
+  const { boxProps = {}, openMenu, closeMenu, loading = false, open, anchorEl, items = [], hideInnerIconButton = false } = props;
 
   const menuItems = items.filter((item) => !!item) as {
     icon?: JSX.Element;
@@ -60,27 +49,13 @@ const MoreActions = (props: IMoreActionsProps) => {
             !loading && openMenu(e);
           }}
         >
-          {loading ? (
-            <CircularProgress size="20px" />
-          ) : (
-            <MoreVertIcon fontSize="small" />
-          )}
+          {loading ? <CircularProgress size="20px" /> : <MoreVertIcon fontSize="small" />}
         </IconButton>
       )}
 
-      <Menu
-        open={open}
-        onClose={closeMenu}
-        anchorEl={anchorEl}
-        PaperProps={{ sx: { minWidth: "160px" } }}
-      >
+      <Menu open={open} onClose={closeMenu} anchorEl={anchorEl} PaperProps={{ sx: { minWidth: "160px" } }}>
         {menuItems.map((item, index) => {
-          const {
-            onClick = () => {},
-            icon,
-            text,
-            menuItemProps = {},
-          } = item || {};
+          const { onClick = () => {}, icon, text, menuItemProps = {} } = item || {};
           return (
             <MenuItem
               key={index}

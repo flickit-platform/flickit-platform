@@ -1,9 +1,8 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import Title from "../@components/shared/Title";
+import Title from "@shared/Title";
 import Typography from "@mui/material/Typography";
 import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
 

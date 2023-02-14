@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, RadarChart, ResponsiveContainer, Text, Radar, Legend } from "recharts";
 import Skeleton from "@mui/material/Skeleton";
-import convertToSubjectChartData from "../@utils/convertToSubjectChartData";
+import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 import { t } from "i18next";
 
 const SubjectRadarChart = (props: any) => {

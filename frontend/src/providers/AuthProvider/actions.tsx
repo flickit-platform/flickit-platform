@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ISpaceInfo, IUserInfo } from "../@types";
+import { ISpaceInfo, IUserInfo } from "@types";
 import { defaultUserInfo } from "./provider";
 
 export enum AUTH_ACTIONS_TYPE {

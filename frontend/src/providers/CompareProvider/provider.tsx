@@ -1,6 +1,6 @@
 import React, { useReducer, FC, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import { IProfile, TId } from "../@types";
+import { IProfile, TId } from "@types";
 import compareReducer from "./reducer";
 
 interface ICompareProviderProps {

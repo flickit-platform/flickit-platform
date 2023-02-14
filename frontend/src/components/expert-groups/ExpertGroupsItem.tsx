@@ -1,16 +1,16 @@
 import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Link as MLink } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Link } from "react-router-dom";
-import { styles } from "../../config/styles";
-import useMenu from "../@utils/useMenu";
-import MoreActions from "../shared/MoreActions";
-import { useQueryDataContext } from "../shared/QueryData";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
+import { styles } from "@styles";
+import useMenu from "@utils/useMenu";
+import MoreActions from "@shared/MoreActions";
+import { useQueryDataContext } from "@shared/QueryData";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
 import { Trans } from "react-i18next";
-import useDialog from "../@utils/useDialog";
+import useDialog from "@utils/useDialog";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
-import { useAuthContext } from "../@providers/AuthProvider";
+import { useAuthContext } from "@providers/AuthProvider";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -27,7 +27,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         <CardHeader
           titleTypographyProps={{
             component: Link,
-            to: `/account/expert-groups/${id}`,
+            to: `/user/expert-groups/${id}`,
             sx: { textDecoration: "none" },
           }}
           avatar={

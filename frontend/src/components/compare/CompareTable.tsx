@@ -1,12 +1,11 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "../@types";
-import Title from "../shared/Title";
+import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "@types";
+import Title from "@shared/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
-import { getColorOfStatus, styles } from "../../config/styles";
+import { getColorOfStatus, styles } from "@styles";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const CompareTable = (props: {

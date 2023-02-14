@@ -17,9 +17,10 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 
   const rejectResponseInterceptor = async (err: any = {}) => {
     if (err._isCustomError) {
+      // if its our generated error don't do the process again and throw the error
       throw err;
-      return;
     }
+
     const { response = {}, config = {} } = err;
     const { status } = response;
     const { isRefreshTokenReq } = config;
@@ -27,23 +28,31 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     const Error = createCustomErrorFromResponseError(err);
 
     if (status) {
+      // checks if the error is about authentication
       if (status === 401 && !prevRequest.sent) {
         if (isRefreshTokenReq) {
+          // if the request is refresh token request (which we fire in order to refresh the access token when its expired)
+          // This means refreshing token failed and refresh token is expired or not valid any more so we should sign the user out
           signOut();
           Error.action = "signOut";
           Error.type = ECustomErrorType.INVALID_TOKEN;
           throw Error;
         }
+
         prevRequest.sent = true;
+
         const lRefreshToken = localStorage.getItem("refreshToken");
         const refreshToken = lRefreshToken && JSON.parse(lRefreshToken);
 
         if (refreshToken) {
+          // checks if any refresh token is available (we save the refresh token inside local storage which is not safe!!!)
+          // remember that we are on the auth failed request this might be because of access token expiration so we try the refresh it using our refresh token
           const newAccessToken = await fetchNewAccessToken(refreshToken);
           if (newAccessToken) {
             setAccessToken(newAccessToken);
             axios.defaults.headers["Authorization"] = `JWT ${newAccessToken}`;
             prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
+            // if we got the new access token we set it then we try to call the last request again which failed because of the access token expiration with new token
             const result = await axios.request(prevRequest);
 
             return result;
@@ -62,15 +71,15 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 
   const fulfillResponseInterceptor = (res: AxiosResponse<any, any>) => {
     const { config } = res;
-
+    // We intercept the response and if the url is jwt/create we set the access token received in response on headers
     if (config?.url === "authinfo/jwt/create/" && res.data?.access) {
       axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
     }
-
     return res;
   };
 
   axios.interceptors.request.use((req: AxiosRequestConfig = {}) => {
+    // We check the request headers and if there is no header and we have the access token we set it on the request
     if (!req.headers?.["Authorization"] && accessToken) {
       (req as any).headers["Authorization"] = `JWT ${accessToken}`;
     }
@@ -95,7 +104,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/auth/users/me/`, config);
     },
-    updateAccount(args: any, config: AxiosRequestConfig<any> | undefined) {
+    updateUserInfo(args: any, config: AxiosRequestConfig<any> | undefined) {
       const { data, id } = args || {};
       return axios.put(`/auth/users/${id}/`, data, config);
     },
@@ -426,6 +435,9 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
   return service;
 };
 
+/**
+ * fetches new access token
+ */
 const fetchNewAccessToken = async (refresh: string) => {
   const { data = {} } = await axios.post("/authinfo/jwt/refresh", { refresh }, { isRefreshTokenReq: true });
 

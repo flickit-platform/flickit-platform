@@ -2,8 +2,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Grid } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { Trans } from "react-i18next";
-import { styles } from "../../../config/styles";
-import useScreenResize from "../../@utils/useScreenResize";
+import { styles } from "@styles";
+import useScreenResize from "@utils/useScreenResize";
 
 interface ICEDialogProps extends Omit<DialogProps, "title"> {
   closeDialog?: () => void;

@@ -2,7 +2,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
 import React, { useMemo } from "react";
 import { Bar, XAxis, YAxis, Legend, Tooltip, BarChart, CartesianGrid, ResponsiveContainer } from "recharts";
-import convertToSubjectChartData from "../@utils/convertToSubjectChartData";
+import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 
 const SubjectBarChart = (props: any) => {
   const { loading, ...rest } = props;

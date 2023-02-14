@@ -1,10 +1,10 @@
 import { Box, Grid } from "@mui/material";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
-import QueryData from "../shared/QueryData";
-import forLoopComponent from "../@utils/forLoopComponent";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@shared/QueryData";
+import forLoopComponent from "@utils/forLoopComponent";
+import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
 import ProfilesMarketListItem from "./ProfilesMarketListItem";
 
 const ProfilesListContainer = () => {

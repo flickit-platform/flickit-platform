@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
 import MuiLink from "@mui/material/Link";
 import CompareTable from "./CompareTable";
-import AlertBox from "../shared/AlertBox";
-import { ICompareResultModel } from "../@types";
+import AlertBox from "@shared/AlertBox";
+import { ICompareResultModel } from "@types";
 import { getMinWithBaseOnNumberOfAssessments } from "./utils";
 import CompareResultAssessmentsSection from "./CompareResultAssessmentsSection";
 import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
-import setDocumentTitle from "../@utils/setDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-import Title from "../shared/Title";
+import Title from "@shared/Title";
 
 interface ICompareResultProps {
   data: ICompareResultModel;

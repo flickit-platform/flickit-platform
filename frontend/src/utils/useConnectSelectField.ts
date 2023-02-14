@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useServiceContext } from "@providers/ServiceProvider";
 
+/**
+ *
+ * can be use to fetch select fields options
+ * @returns
+ */
 const useConnectSelectField = (props: {
   url: string;
   searchParams?: Record<string, any>;

@@ -1,15 +1,15 @@
 import React, { PropsWithChildren } from "react";
-import { styles } from "../../../config/styles";
+import { styles } from "@styles";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import useScreenResize from "../../@utils/useScreenResize";
+import useScreenResize from "@utils/useScreenResize";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions, { DialogActionsProps } from "@mui/material/DialogActions";
 import Grid from "@mui/material/Grid";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
-import { TDialogContextType } from "../../@types";
+import { TDialogContextType } from "@types";
 import { t } from "i18next";
 
 interface ICEDialogProps extends Omit<DialogProps, "title"> {

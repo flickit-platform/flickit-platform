@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { ECustomErrorType } from "../@types";
-import { ICustomError } from "../@utils/CustomError";
+import { ECustomErrorType } from "@types";
+import { ICustomError } from "@utils/CustomError";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 
 interface IPermissionControl {

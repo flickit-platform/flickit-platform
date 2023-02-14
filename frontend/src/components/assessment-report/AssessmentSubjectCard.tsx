@@ -1,19 +1,18 @@
-import React from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
-import BgLines1 from "../../assets/svg/bgLines1.svg";
-import SubjectProgress from "../shared/progress/SubjectProgress";
+import Box from "@mui/material/Box";
+import BgLines1 from "@assets/svg/bgLines1.svg";
+import SubjectProgress from "@shared/progress/SubjectProgress";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
-import { getColorOfStatus, styles } from "../../config/styles";
-import { ISubjectInfo } from "../@types";
+import { getColorOfStatus, styles } from "@styles";
+import { ISubjectInfo } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
-import { BASE_URL } from "../../config/constants";
-import getStatusText from "../@utils/getStatusText";
-import hasStatus from "../@utils/hasStatus";
+import { BASE_URL } from "@config/constants";
+import getStatusText from "@utils/getStatusText";
+import hasStatus from "@utils/hasStatus";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;

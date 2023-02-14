@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogTitle } from "@mui/material";
 
-import useDialog from "../../@utils/useDialog";
-import { IDialogProps } from "../../@types";
+import useDialog from "@utils/useDialog";
+import { IDialogProps } from "@types";
 
 export interface IRichEditorMenuItem {
   icon?: JSX.Element;

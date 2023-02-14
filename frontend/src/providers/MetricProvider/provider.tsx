@@ -1,7 +1,7 @@
 import React, { useReducer, FC, useContext, useEffect, useCallback, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { IMetricInfo, TMetricsInfo } from "../@types";
-import { metricActions, TMetricActions } from "./actions";
+import { useParams } from "react-router-dom";
+import { TMetricsInfo } from "@types";
+import { metricActions } from "./actions";
 import appReducer from "./reducer";
 
 interface IMetricProviderProps {

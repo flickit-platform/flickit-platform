@@ -1,13 +1,12 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Hidden from "@mui/material/Hidden";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { styles } from "../../config/styles";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "../@providers/MetricProvider";
-import usePopover from "../@utils/usePopover";
+import { styles } from "@styles";
+import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
+import usePopover from "@utils/usePopover";
 import Typography from "@mui/material/Typography";
 import { MetricThumb } from "./MetricThumb";
 import { MetricPopover } from "./MetricPopover";

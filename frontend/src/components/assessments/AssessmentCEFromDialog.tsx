@@ -1,25 +1,21 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "../@components/shared/fields/InputField";
-import { SelectFieldUC } from "../shared/fields/SelectField";
-import { styles } from "../../config/styles";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import setServerFieldErrors from "../@utils/setServerFieldError";
-import useConnectSelectField from "../@utils/useConnectSelectField";
+import { InputFieldUC } from "@shared/fields/InputField";
+import { SelectFieldUC } from "@shared/fields/SelectField";
+import { styles } from "@styles";
+import { useServiceContext } from "@providers/ServiceProvider";
+import setServerFieldErrors from "@utils/setServerFieldError";
+import useConnectSelectField from "@utils/useConnectSelectField";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-import { ICustomError } from "../@utils/CustomError";
+import { ICustomError } from "@utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import toastError from "../@utils/toastError";
-import { CEDialog, CEDialogActions } from "../@components/shared/dialogs/CEDialog";
-import FormProviderWithForm from "../@components/shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "../shared/fields/AutocompleteAsyncField";
-import { Box } from "@mui/material";
-import Button from "@mui/material/Button";
-import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import { t } from "i18next";
+import toastError from "@utils/toastError";
+import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
+import FormProviderWithForm from "@shared/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "@shared/fields/AutocompleteAsyncField";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -29,7 +25,7 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 }
 
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
   const { type, data = {}, staticData = {} } = context;

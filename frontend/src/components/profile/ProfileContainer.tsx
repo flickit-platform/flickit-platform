@@ -1,23 +1,23 @@
 import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/material";
-import { styles } from "../../config/styles";
-import Title from "../shared/Title";
+import { styles } from "@styles";
+import Title from "@shared/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import ProfilesListContainer from "./ProfilesListContainer";
-import { useServiceContext } from "../@providers/ServiceProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "../@utils/useQuery";
-import QueryData from "../shared/QueryData";
-import formatDate from "../@utils/formatDate";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@shared/QueryData";
+import formatDate from "@utils/formatDate";
 import { Trans } from "react-i18next";
-import RichEditor from "../shared/rich-editor/RichEditor";
+import RichEditor from "@shared/rich-editor/RichEditor";
 import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
-import useDialog from "../@utils/useDialog";
-import AlertBox from "../shared/AlertBox";
+import useDialog from "@utils/useDialog";
+import AlertBox from "@shared/AlertBox";
 import { LoadingButton } from "@mui/lab";
-import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@shared/SupTitleBreadcrumb";
 import { t } from "i18next";
-import useDocumentTitle from "../@utils/useDocumentTitle";
-import setDocumentTitle from "../@utils/setDocumentTitle";
+import useDocumentTitle from "@utils/useDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 
 const ProfileContainer = () => {
   const { service } = useServiceContext();
@@ -134,7 +134,7 @@ const Profile = (props: any) => {
                 textDecoration: "none",
               }}
               component={Link}
-              to={`/account/expert-groups/${expert_group.id}`}
+              to={`/user/expert-groups/${expert_group.id}`}
             >
               <CardHeader
                 titleTypographyProps={{

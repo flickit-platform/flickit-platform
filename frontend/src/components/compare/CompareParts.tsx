@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ComparePartItem from "./ComparePartItem";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useServiceContext } from "../@providers/ServiceProvider";
-import { useQuery } from "../@utils/useQuery";
-import QueryData from "../shared/QueryData";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
-import { compareActions, useCompareContext, useCompareDispatch } from "../@providers/CompareProvider";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@shared/QueryData";
+import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
+import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
 import AlertTitle from "@mui/material/AlertTitle";
 import Chip from "@mui/material/Chip";
-import { styles } from "../../config/styles";
-import AlertBox from "../shared/AlertBox";
-import PermissionControl from "../shared/PermissionControl";
-import forLoopComponent from "../@utils/forLoopComponent";
-import setDocumentTitle from "../@utils/setDocumentTitle";
+import { styles } from "@styles";
+import AlertBox from "@shared/AlertBox";
+import PermissionControl from "@shared/PermissionControl";
+import forLoopComponent from "@utils/forLoopComponent";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 const CompareParts = () => {

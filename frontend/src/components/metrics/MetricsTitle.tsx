@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import Title from "../@components/shared/Title";
-import { EAssessmentStatus, useMetricContext } from "../@providers/MetricProvider";
+import Title from "@shared/Title";
+import { EAssessmentStatus, useMetricContext } from "@providers/MetricProvider";
 import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedInRounded";
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
-import { IQuestionnaireModel } from "../@types";
-import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "../shared/SupTitleBreadcrumb";
+import { IQuestionnaireModel } from "@types";
+import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@shared/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
-import setDocumentTitle from "../@utils/setDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 
 const MetricsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) => {
   const { data, isReview } = props;

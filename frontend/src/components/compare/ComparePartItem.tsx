@@ -1,19 +1,18 @@
-import React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
-import useDialog from "../@utils/useDialog";
+import useDialog from "@utils/useDialog";
 import CompareItemCEFormDialog from "./CompareItemCEFormDialog";
-import Title from "../shared/Title";
-import { Gauge } from "../shared/charts/Gauge";
-import ProgressChip from "../shared/ProgressChip";
-import { TId, TQueryFunction } from "../@types";
+import Title from "@shared/Title";
+import { Gauge } from "@shared/charts/Gauge";
+import ProgressChip from "@shared/ProgressChip";
+import { TId, TQueryFunction } from "@types";
 import IconButton from "@mui/material/IconButton";
-import { compareActions, useCompareContext, useCompareDispatch } from "../@providers/CompareProvider";
+import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
 
 interface IComparePartsItemProps {
   data: any;

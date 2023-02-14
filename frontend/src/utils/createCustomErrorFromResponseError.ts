@@ -1,6 +1,11 @@
 import { ECustomErrorType } from "@types";
 import CustomError from "./CustomError";
 
+/**
+ *
+ * Creates custom error object out of service response
+ *
+ */
 const createCustomErrorFromResponseError = (err: any) => {
   const { response = {}, config = {} } = err;
   const { toastConfig } = config;

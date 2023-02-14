@@ -1,7 +1,7 @@
 import { FormControl, FormHelperText, InputLabel } from "@mui/material";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import getFieldError from "../../@utils/getFieldError";
+import getFieldError from "@utils/getFieldError";
 import RichEditor from "../rich-editor/RichEditor";
 
 const RichEditorField = (props: any) => {
