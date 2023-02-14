@@ -250,5 +250,6 @@
   "emailAddress": "Email address",
   "accessLevel": "Access level",
   "accountPicture": "Account picture",
-  "expert": "Expert"
+  "expert": "Expert",
+  "theProfileUsedInThisAssessmentIs": "The profile used in this assessment is"
 }
