@@ -10,7 +10,7 @@ import { useAuthContext } from "@providers/AuthProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import CircularProgress from "@mui/material/CircularProgress";
-import QueryData from "@shared/QueryData";
+import QueryData from "@common/QueryData";
 
 const AccountActivationSuccessful = () => {
   const { isAuthenticatedUser } = useAuthContext();

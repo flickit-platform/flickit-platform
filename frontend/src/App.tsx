@@ -3,9 +3,9 @@ import "@config/i18n";
 import useGetSignedInUserInfo from "./utils/useGetSignedInUserInfo";
 import { styles } from "@styles";
 import Box from "@mui/material/Box";
-import ErrorDataLoading from "./components/shared/errors/ErrorDataLoading";
-import GettingThingsReadyLoading from "./components/shared/loadings/GettingThingsReadyLoading";
-import ErrorBoundary from "./components/shared/errors/ErrorBoundry";
+import ErrorDataLoading from "@common/errors/ErrorDataLoading";
+import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
+import ErrorBoundary from "@common/errors/ErrorBoundry";
 
 function App() {
   const { error, loading } = useGetSignedInUserInfo(); // Checks if the user is signed in

@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, CardHeader, Chip, Divider, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";

@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import { useMetricContext } from "@providers/MetricProvider";
 import assessmentDoneSvg from "@assets/svg/assessmentDone.svg";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";

@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
-import Title from "@shared/Title";
+import ErrorEmptyData from "@common/errors/ErrorEmptyData";
+import Title from "@common/Title";
 import { AssessmentSubjectCard } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
 import { ISubjectInfo } from "@types";

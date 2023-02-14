@@ -4,14 +4,14 @@ import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
 import MuiLink from "@mui/material/Link";
 import CompareTable from "./CompareTable";
-import AlertBox from "@shared/AlertBox";
+import AlertBox from "@common/AlertBox";
 import { ICompareResultModel } from "@types";
 import { getMinWithBaseOnNumberOfAssessments } from "./utils";
 import CompareResultAssessmentsSection from "./CompareResultAssessmentsSection";
 import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 
 interface ICompareResultProps {
   data: ICompareResultModel;

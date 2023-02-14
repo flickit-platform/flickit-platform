@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import { IAssessmentReportModel } from "@types";
-import SupTitleBreadcrumb from "@shared/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";

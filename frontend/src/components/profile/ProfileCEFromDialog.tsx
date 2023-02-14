@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "@shared/fields/InputField";
+import { InputFieldUC } from "@common/fields/InputField";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import setServerFieldErrors from "@utils/setServerFieldError";
@@ -11,11 +11,11 @@ import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { ICustomError } from "@utils/CustomError";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
-import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
-import FormProviderWithForm from "@shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@shared/fields/AutocompleteAsyncField";
-import UploadField from "@shared/fields/UploadField";
-import RichEditorField from "@shared/fields/RichEditorField";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
+import FormProviderWithForm from "@common/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import UploadField from "@common/fields/UploadField";
+import RichEditorField from "@common/fields/RichEditorField";
 
 interface IProfileCEFromDialogProps extends DialogProps {
   onClose: () => void;

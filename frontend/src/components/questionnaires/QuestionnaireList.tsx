@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { QuestionnaireCard } from "./QuestionnaireCard";
-import QueryData from "@shared/QueryData";
+import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import { IQuestionnairesModel, IQuestionnairesPageDataModel, TId, TQueryProps, TQueryFunction } from "@types";
-import LoadingSkeletonOfQuestionnaires from "@shared/loadings/LoadingSkeletonOfQuestionnaires";
+import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
 import Box from "@mui/material/Box";
-import QANumberIndicator from "@shared/QANumberIndicator";
+import QANumberIndicator from "@common/QANumberIndicator";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { styles } from "@styles";
 import { useSearchParams } from "react-router-dom";
-import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: TQueryProps<IQuestionnairesModel>;

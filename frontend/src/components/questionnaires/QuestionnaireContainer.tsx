@@ -14,20 +14,20 @@ import {
   ITotalProgressModel,
   TQueryProps,
 } from "@types";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
-import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
-import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@shared/SupTitleBreadcrumb";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import hasStatus from "@utils/hasStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import PermissionControl from "@shared/PermissionControl";
-import AlertBox from "@shared/AlertBox";
+import PermissionControl from "@common/PermissionControl";
+import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 

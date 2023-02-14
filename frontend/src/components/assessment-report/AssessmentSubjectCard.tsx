@@ -2,7 +2,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import BgLines1 from "@assets/svg/bgLines1.svg";
-import SubjectProgress from "@shared/progress/SubjectProgress";
+import SubjectProgress from "@common/progress/SubjectProgress";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";

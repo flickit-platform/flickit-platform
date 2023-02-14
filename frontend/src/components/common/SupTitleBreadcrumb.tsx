@@ -27,20 +27,6 @@ const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) 
         const disabled = routes.length - 1 === index || !to;
         return (
           <Box display="flex" flexDirection={"column"} key={index}>
-            {/* {sup && (
-          <Typography
-            sx={{
-              fontSize: "0.6rem",
-              fontFamily: "Roboto",
-              opacity: 0.6,
-              letterSpacing: "0.07em",
-              color: "text.primary",
-            }}
-          >
-            {sup}
-          </Typography>
-        )} */}
-
             <MuiLink
               component={disabled ? "p" : Link}
               underline={disabled ? "none" : "hover"}
@@ -63,11 +49,13 @@ const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) 
           </Box>
         );
       })}
-      {/* <Typography color="text.primary">Breadcrumbs</Typography> */}
     </Breadcrumbs>
   );
 };
 
+/**
+ * fetch the passed arguments ids title
+ */
 export const useSupTitleBreadcrumb = (params: Record<string, string | undefined>) => {
   const { service } = useServiceContext();
 

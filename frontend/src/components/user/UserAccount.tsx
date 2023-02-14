@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import { Trans } from "react-i18next";
 import useDialog from "@utils/useDialog";
 import { useQuery } from "@utils/useQuery";

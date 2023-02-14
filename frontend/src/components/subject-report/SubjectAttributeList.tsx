@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import Title from "@shared/Title";
-import QueryData from "@shared/QueryData";
+import Title from "@common/Title";
+import QueryData from "@common/QueryData";
 import { Trans } from "react-i18next";
 import Skeleton from "@mui/material/Skeleton";
 import SubjectAttributeCard from "./SubjectAttributeCard";

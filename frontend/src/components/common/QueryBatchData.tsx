@@ -19,7 +19,7 @@ interface IQueryData<T> {
   abortController?: AbortController;
 }
 
-interface IQueryDataProps<T> {
+interface IQueryBatchDataProps<T> {
   loadingComponent?: JSX.Element;
   emptyDataComponent?: JSX.Element;
   errorComponent?: JSX.Element;
@@ -35,7 +35,7 @@ interface IQueryDataProps<T> {
   errorObject?: (ICustomError | undefined)[];
 }
 
-const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
+const QueryBatchData = <T extends any = any>(props: IQueryBatchDataProps<T>) => {
   const {
     render,
     queryBatchData = [],
@@ -128,4 +128,4 @@ const reduceErrorObject = <T extends any = any>(queryBatchData: IQueryData<T>[])
   return queryBatchData.map((query) => query.errorObject);
 };
 
-export default QueryData;
+export default QueryBatchData;

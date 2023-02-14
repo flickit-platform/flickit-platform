@@ -9,8 +9,8 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import { useQuery } from "@utils/useQuery";
-import QueryData from "@shared/QueryData";
-import Title from "@shared/Title";
+import QueryData from "@common/QueryData";
+import Title from "@common/Title";
 import ExpertGroupsItem from "./ExpertGroupsItem";
 
 const ExpertGroupConfirmInvitationContainer = () => {

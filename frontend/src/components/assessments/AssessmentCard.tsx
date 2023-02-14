@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Gauge } from "@shared/charts/Gauge";
+import { Gauge } from "@common/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "@utils/useMenu";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -10,7 +10,7 @@ import { styles } from "@styles";
 import formatDate from "@utils/formatDate";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import MoreActions from "@shared/MoreActions";
+import MoreActions from "@common/MoreActions";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";

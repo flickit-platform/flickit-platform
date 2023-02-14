@@ -24,7 +24,7 @@
       "@providers/*": ["src/providers/*"],
       "@service": ["src/service/index.ts"],
       "@types": ["src/types.ts"],
-      "@shared/*": ["src/components/shared/*"],
+      "@common/*": ["src/components/common/*"],
       "@styles": ["src/config/styles.ts"],
       "@constants": ["src/config/constants.ts"],
       "@assets": ["src/assets/*"],

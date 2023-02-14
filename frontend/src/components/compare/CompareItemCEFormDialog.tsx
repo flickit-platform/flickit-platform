@@ -1,21 +1,21 @@
 import { Trans } from "react-i18next";
 import { IDialogProps, TId } from "@types";
-import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import FormProviderWithForm from "@shared/FormProviderWithForm";
+import FormProviderWithForm from "@common/FormProviderWithForm";
 import Grid from "@mui/material/Grid";
 import { useForm } from "react-hook-form";
 import { styles } from "@styles";
-import { SelectFieldUC } from "@shared/fields/SelectField";
+import { SelectFieldUC } from "@common/fields/SelectField";
 import useConnectSelectField from "@utils/useConnectSelectField";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
 import hasStatus from "@utils/hasStatus";
-import AlertBox from "@shared/AlertBox";
+import AlertBox from "@common/AlertBox";
 
 interface ICompareItemCEFormDialog extends Omit<ICompareItemCEForm, "closeDialog"> {}
 

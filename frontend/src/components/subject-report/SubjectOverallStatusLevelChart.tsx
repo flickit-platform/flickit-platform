@@ -1,4 +1,4 @@
-import VerticalLevelChart from "@shared/charts/VerticalLevelChart";
+import VerticalLevelChart from "@common/charts/VerticalLevelChart";
 
 const SubjectOverallStatusLevelChart = (props: any) => {
   const { data = {}, loading } = props;

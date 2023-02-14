@@ -5,8 +5,8 @@ import { ESystemStatus, ISubjectInfo, TStatus } from "@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { getColorOfStatus, styles } from "@styles";
-import { Gauge } from "@shared/charts/Gauge";
-import Title from "@shared/Title";
+import { Gauge } from "@common/charts/Gauge";
+import Title from "@common/Title";
 import hasStatus from "@utils/hasStatus";
 
 interface IAssessmentOverallStatusProps {

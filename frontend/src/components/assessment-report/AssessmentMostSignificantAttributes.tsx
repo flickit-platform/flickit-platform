@@ -4,8 +4,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import { styles } from "@styles";
-import Title from "@shared/Title";
-import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
+import Title from "@common/Title";
+import ErrorEmptyData from "@common/errors/ErrorEmptyData";
 
 interface IAssessmentMostSignificantAttributesProps {
   most_significant_items: string[];

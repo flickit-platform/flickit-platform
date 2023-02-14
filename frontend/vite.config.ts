@@ -19,8 +19,8 @@ export default defineConfig({
         replacement: `${path.resolve(__dirname, "src/components")}/`,
       },
       {
-        find: "@shared",
-        replacement: `${path.resolve(__dirname, "src/components/shared")}/`,
+        find: "@common",
+        replacement: `${path.resolve(__dirname, "src/components/common")}/`,
       },
       {
         find: "@utils",

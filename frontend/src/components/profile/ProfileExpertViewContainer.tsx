@@ -3,8 +3,8 @@ import { Box, IconButton } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import QueryData from "@shared/QueryData";
-import Title from "@shared/Title";
+import QueryData from "@common/QueryData";
+import Title from "@common/Title";
 import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
@@ -20,14 +20,14 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
 import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
-import ListAccordion from "@shared/lists/ListAccordion";
-import InfoItem from "@shared/InfoItem";
+import ListAccordion from "@common/lists/ListAccordion";
+import InfoItem from "@common/InfoItem";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
 import useDialog from "@utils/useDialog";
-import SupTitleBreadcrumb from "@shared/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useAuthContext } from "@providers/AuthProvider";
 
 const ProfileExpertViewContainer = () => {

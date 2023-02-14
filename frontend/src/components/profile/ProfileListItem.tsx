@@ -8,7 +8,7 @@ import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import useMenu from "@utils/useMenu";
 import { useQuery } from "@utils/useQuery";
-import MoreActions from "@shared/MoreActions";
+import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";

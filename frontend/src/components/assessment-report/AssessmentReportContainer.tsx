@@ -1,13 +1,13 @@
 import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import QueryData from "@shared/QueryData";
+import QueryData from "@common/QueryData";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { AssessmentOverallStatus } from "./AssessmentOverallStatus";
 import { AssessmentMostSignificantAttributes } from "./AssessmentMostSignificantAttributes";
-import LoadingSkeletonOfAssessmentReport from "@shared/loadings/LoadingSkeletonOfAssessmentReport";
+import LoadingSkeletonOfAssessmentReport from "@common/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
 import { IAssessmentReportModel } from "@types";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";

@@ -1,6 +1,6 @@
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";

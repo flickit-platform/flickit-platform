@@ -2,8 +2,8 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { Trans } from "react-i18next";
 import Button from "@mui/material/Button";
 import { Link, useLocation } from "react-router-dom";
-import QANumberIndicator from "@shared/QANumberIndicator";
-import AlertBox from "@shared/AlertBox";
+import QANumberIndicator from "@common/QANumberIndicator";
+import AlertBox from "@common/AlertBox";
 
 type TQuestionnairesNotCompleteAlertProps = {
   subjectName?: string;

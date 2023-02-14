@@ -7,14 +7,14 @@ import Box from "@mui/material/Box";
 import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
 import { MetricCard } from "./MetricCard";
 import { Trans } from "react-i18next";
-import ErrorEmptyData from "@shared/errors/ErrorEmptyData";
+import ErrorEmptyData from "@common/errors/ErrorEmptyData";
 import { Review } from "./MetricsReview";
 import { TransitionGroup } from "react-transition-group";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
 import MetricNextPrev from "./MetricNextPrev";
 import { MetricsProgress } from "./MetricsProgress";
-import { ErrorNotFoundOrAccessDenied } from "@shared/errors/ErrorNotFoundOrAccessDenied";
+import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
 
 export const MetricContainer = () => {
   const {

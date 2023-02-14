@@ -9,8 +9,8 @@ import forLoopComponent from "@utils/forLoopComponent";
 import useDialog from "@utils/useDialog";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import { useQuery } from "@utils/useQuery";
-import { LoadingSkeleton } from "@shared/loadings/LoadingSkeleton";
-import QueryData from "@shared/QueryData";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+import QueryData from "@common/QueryData";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import ExpertGroupsList from "./ExpertGroupsList";
 

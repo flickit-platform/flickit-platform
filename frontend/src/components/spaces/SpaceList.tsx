@@ -12,7 +12,7 @@ import useMenu from "@utils/useMenu";
 import IconButton from "@mui/material/IconButton";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import MoreActions from "@shared/MoreActions";
+import MoreActions from "@common/MoreActions";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import { styles } from "@styles";
 import { TDialogProps } from "@utils/useDialog";

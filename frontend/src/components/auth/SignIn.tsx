@@ -3,7 +3,7 @@ import { authActions, useAuthContext } from "@providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import { styles } from "@styles";
-import { InputFieldUC } from "@shared/fields/InputField";
+import { InputFieldUC } from "@common/fields/InputField";
 import { Trans } from "react-i18next";
 import Box from "@mui/material/Box";
 import { FormProvider, useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import useGetSignedInUserInfo from "@utils/useGetSignedInUserInfo";
 
 const SignIn = () => {

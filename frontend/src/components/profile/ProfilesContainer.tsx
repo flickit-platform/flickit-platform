@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import Title from "@shared/Title";
+import Title from "@common/Title";
 import ProfilesListContainer from "./ProfilesListContainer";
 
 const ProfilesContainer = (props: PropsWithChildren<{}>) => {

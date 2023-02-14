@@ -35,6 +35,13 @@ const QueryDataContext = createContext<TQueryProps>({
   abortController: undefined as any,
 });
 
+/**
+ *
+ * - Can be use with useQuery together
+ * - This component will take whatever useQuery returns and renders an appropriate component
+ * - You should pass the render method to render your component after request resolve
+ * - It will make the data available for all children through context api so you don't need to drill down the data
+ */
 const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
   const {
     render,

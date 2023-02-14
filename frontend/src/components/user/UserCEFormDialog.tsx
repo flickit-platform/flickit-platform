@@ -3,8 +3,8 @@ import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
-import { InputFieldUC } from "@shared/fields/InputField";
-import { SelectFieldUC } from "@shared/fields/SelectField";
+import { InputFieldUC } from "@common/fields/InputField";
+import { SelectFieldUC } from "@common/fields/SelectField";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import setServerFieldErrors from "@utils/setServerFieldError";
@@ -13,13 +13,13 @@ import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import { ICustomError } from "@utils/CustomError";
 import { Link, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
-import { CEDialog, CEDialogActions } from "@shared/dialogs/CEDialog";
-import FormProviderWithForm from "@shared/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@shared/fields/AutocompleteAsyncField";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
+import FormProviderWithForm from "@common/FormProviderWithForm";
+import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import UploadField from "@shared/fields/UploadField";
+import UploadField from "@common/fields/UploadField";
 
 interface IUserCEFormDialogProps extends DialogProps {
   onClose: () => void;
