@@ -4,6 +4,7 @@ from django.db.utils import IntegrityError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from baseinfo.services import importprofileservice
 from baseinfo.serializers.profileserializers import ImportProfileSerializer
@@ -14,7 +15,7 @@ DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer
-    permission_classes = [ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request):
         serializer = ImportProfileSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
 
 from baseinfo.decorators import is_expert
 from baseinfo.services import profileservice, expertgroupservice
@@ -15,7 +16,7 @@ from baseinfo.permissions import ManageExpertGroupPermission
 class AssessmentProfileViewSet(ModelViewSet):
     serializer_class = AssessmentProfileSerilizer
     filter_backends=[DjangoFilterBackend, SearchFilter]
-    permission_classes = [ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     search_fields = ['title']
 
     def get_queryset(self):
@@ -29,7 +30,7 @@ class AssessmentProfileViewSet(ModelViewSet):
             return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileArchiveApi(APIView):
-    permission_classes = [ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.archive_profile(profile, request.user.id)
@@ -39,7 +40,7 @@ class ProfileArchiveApi(APIView):
             return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)      
 
 class ProfilePublishApi(APIView):
-    permission_classes = [ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.publish_profile(profile, request.user.id)
@@ -53,7 +54,7 @@ class ProfileTagViewSet(ModelViewSet):
         return ProfileTag.objects.all()
 
 class ProfileDetailDisplayApi(APIView):
-    permission_classes = [ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         response = profileservice.extract_detail_of_profile(profile, request)
