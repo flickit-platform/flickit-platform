@@ -40,7 +40,7 @@ class IsSpaceMember(BasePermission):
     def has_permision_for_assessment_result(self, assessment_project, current_user_space_list):
         assessment_list = []
         for space in current_user_space_list:
-            assessment_list.extend(space.assessmentproject_set.all()) 
+            assessment_list.extend(space.projects.all()) 
         for assessment in assessment_list:
             if str(assessment_project.id) == str(assessment.id):
                 return True
