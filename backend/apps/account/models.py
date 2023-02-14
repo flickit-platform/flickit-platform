@@ -39,7 +39,7 @@ class CustomUserManager(BaseUserManager):
 
 class Space(models.Model):
     code = models.CharField(max_length=50, unique=True)
-    title = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100)
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
