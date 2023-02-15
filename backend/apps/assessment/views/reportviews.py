@@ -29,6 +29,6 @@ class AssessmentCheckReportApi(APIView):
             else:
                 return Response({'report_available': True}, status=status.HTTP_200_OK)
         except AssessmentProject.DoesNotExist:
-            return Response({'message': 'the assessment id is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+            raise AssessmentProject.DoesNotExist
 
         

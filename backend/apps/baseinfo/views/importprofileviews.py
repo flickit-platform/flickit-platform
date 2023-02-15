@@ -38,6 +38,6 @@ class ImportProfileApi(APIView):
             column_value = error_message.split("(")[2].split(")")[0]
             model_name = error_message.split(".")[0].split("_")[1]
             refined_message = f"A value '{column_value}' for the '{column_name}' field in '{model_name}' model already exists."
-            return Response({'error': refined_message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': refined_message}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'message': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

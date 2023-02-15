@@ -17,7 +17,7 @@ class AssessmentProjectManager(models.Manager):
         try:
             return AssessmentProject.objects.get(id = assessment_id)
         except AssessmentProject.DoesNotExist:
-            return None
+            raise AssessmentProject.DoesNotExist
 
 class AssessmentProject(models.Model):
 

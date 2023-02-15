@@ -66,9 +66,6 @@ class AssessmentProjectSelectForCompareView(APIView):
         assessment_list_ids = request.data.get(ASSESSMENT_LIST_IDS_PARAM_NAME)
         assessment_list = []
         for assessment_id in assessment_list_ids:
-            try:
-                assessment = AssessmentProject.objects.get(id=assessment_id)
-                assessment_list.append(projectserializers.AssessmentProjectCompareSerilizer(assessment).data)
-            except AssessmentProject.DoesNotExist:
-                return Response({'error: The assessment_id {id} is invalid'.format(id=assessment_id)},status=status.HTTP_404_NOT_FOUND)
+            assessment = AssessmentProject.objects.load(assessment_id)
+            assessment_list.append(projectserializers.AssessmentProjectCompareSerilizer(assessment).data)
         return Response(assessment_list)

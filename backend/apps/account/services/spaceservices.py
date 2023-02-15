@@ -1,6 +1,7 @@
 from datetime import datetime
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from account.services import userservices
 from account.models import UserAccess
@@ -38,7 +39,7 @@ def add_invited_user_to_space(user):
 
 def perform_delete(instance: UserAccess, current_user):
     if current_user.id != instance.space.owner_id:
-        return Response({"message": "The user does not access to delete memeber"}, status=status.HTTP_403_FORBIDDEN)
+        raise PermissionDenied
     
     if instance.user_id == instance.space.owner_id:
         return Response({"message": "The owner of the space can not be removed"}, status=status.HTTP_400_BAD_REQUEST)

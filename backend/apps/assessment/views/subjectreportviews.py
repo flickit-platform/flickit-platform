@@ -15,24 +15,10 @@ from assessment.services.metricstatistic import extract_total_progress
 
 class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, IsSpaceMember]
-    def list(self, request, *args, **kwargs): 
-        result_id = self.request.query_params.get('assessment_result_pk')
-        subject_id = self.request.query_params.get('assessment_subject_pk')
-        # TODO validate url parametrs in middle-ware
-        if self.is_subject_report_param_valid(result_id, subject_id) != True :
-            return Response({"message": "The requested is not valid"}, status=status.HTTP_404_NOT_FOUND)
-
+    def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         quality_attribute_values = response.data['results']
         return self.calculate_report(response, quality_attribute_values)
-
-    def is_subject_report_param_valid(self, result_id, subject_id):
-        try:
-            AssessmentSubject.objects.get(id=subject_id)
-            AssessmentResult.objects.get(id=result_id)
-            return True
-        except AssessmentSubject.DoesNotExist:
-            return False
 
     def calculate_report(self, response, quality_attribute_values):
         result = self.extract_assessment_result()

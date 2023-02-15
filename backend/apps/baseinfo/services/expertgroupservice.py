@@ -4,6 +4,7 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from account.services import userservices
 
@@ -51,7 +52,7 @@ def confirm_user_for_registering_in_expert_group(token, current_user_id):
     info_ids = decrypted_message.split()
     user_id = info_ids[0].decode()
     if user_id != str(current_user_id):
-        return False
+        raise PermissionDenied
     user = userservices.load_user(user_id)
     add_invited_user_to_expert_group(user)
     return True
@@ -79,8 +80,7 @@ def add_invited_user_to_expert_group(user):
 
 def perform_delete(instance: ExpertGroupAccess, current_user):
     if current_user.id != instance.expert_group.owner_id:
-        return Response({"message": "The user does not access to delete memeber"}, status=status.HTTP_403_FORBIDDEN)
-    
+        raise PermissionDenied
     if instance.user_id == instance.expert_group.owner_id:
         return Response({"message": "The owner of the expert group can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
     instance.delete()
