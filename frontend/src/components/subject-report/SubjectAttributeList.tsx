@@ -1,7 +1,6 @@
-import React from "react";
-import { Box } from "@mui/material";
-import Title from "../../components/shared/Title";
-import QueryData from "../../components/shared/QueryData";
+import Box from "@mui/material/Box";
+import Title from "@common/Title";
+import QueryData from "@common/QueryData";
 import { Trans } from "react-i18next";
 import Skeleton from "@mui/material/Skeleton";
 import SubjectAttributeCard from "./SubjectAttributeCard";
@@ -18,14 +17,7 @@ export const SubjectAttributeList = (props: any) => {
           {...props}
           renderLoading={() => {
             return [1, 2, 3, 4, 5].map((item) => {
-              return (
-                <Skeleton
-                  key={item}
-                  variant="rectangular"
-                  height="260px"
-                  sx={{ mb: 2, borderRadius: 2 }}
-                />
-              );
+              return <Skeleton key={item} variant="rectangular" height="260px" sx={{ mb: 2, borderRadius: 2 }} />;
             });
           }}
           render={(data) => {

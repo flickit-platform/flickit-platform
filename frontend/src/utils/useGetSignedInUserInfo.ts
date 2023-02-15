@@ -1,20 +1,23 @@
 import axios from "axios";
+import { ECustomErrorType } from "@types";
+import { ICustomError } from "./CustomError";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { authActions, useAuthContext } from "../providers/AuthProvider";
-import { useServiceContext } from "../providers/ServiceProvider";
-import { ECustomErrorType } from "../types";
-import { ICustomError } from "./CustomError";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
 
+/**
+ * Checks if any token is available and then checks if the user with the founded token is still authenticated or not.
+ *
+ */
 const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: true }) => {
   const { runOnMount } = props;
-  const { service } = useServiceContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } = useAuthContext();
+  const { service } = useServiceContext();
   const [error, setError] = useState(false);
   const abortController = useRef(new AbortController());
+  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } = useAuthContext();
 
   const getUser = async (token?: string) => {
     setError(false);
@@ -30,17 +33,20 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
             }
           : axios.defaults.headers,
       });
+
       dispatch(authActions.setUserInfoLoading(false));
       dispatch(authActions.setUserInfo(data));
+
       if (!isAuthenticatedUser) {
         dispatch(authActions.signIn());
       }
       return true;
     } catch (e) {
       const err = e as ICustomError;
-      dispatch(authActions.setUserInfoLoading(false));
 
+      dispatch(authActions.setUserInfoLoading(false));
       dispatch(authActions.setUserInfo());
+
       if (err?.type === ECustomErrorType.UNAUTHORIZED) {
         if (location.pathname == "/sign-up") {
           navigate("/sign-up");
@@ -50,6 +56,7 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
       } else if (err?.action && err?.action !== "signOut") {
         setError(true);
       }
+
       return false;
     }
   };
@@ -57,6 +64,7 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
   useEffect(() => {
     if (runOnMount) {
       getUser().then((res) => {
+        // This will save the url which user was attempting to open before being redirected to sign-in page
         if (!res) {
           location.pathname &&
             !location.pathname.includes("sign-") &&

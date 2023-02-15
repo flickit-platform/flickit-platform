@@ -1,6 +1,6 @@
 import { t } from "i18next";
-import ProfileContainer from "../components/profile/ProfileContainer";
-import useDocumentTitle from "../utils/useDocumentTitle";
+import ProfileContainer from "@components/profile/ProfileContainer";
+import useDocumentTitle from "@utils/useDocumentTitle";
 
 const ProfileScreen = () => {
   useDocumentTitle(t("profile") as string);

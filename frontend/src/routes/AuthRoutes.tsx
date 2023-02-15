@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthContext } from "../providers/AuthProvider";
+import { useAuthContext } from "@providers/AuthProvider";
 
 const AuthRoutes = (props: PropsWithChildren<{}>) => {
   const { isAuthenticatedUser } = useAuthContext();

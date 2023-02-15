@@ -1,29 +1,23 @@
-import React from "react";
 import { Trans } from "react-i18next";
-import { IDialogProps, TId } from "../../types";
-import { CEDialog, CEDialogActions } from "../shared/dialogs/CEDialog";
+import { IDialogProps, TId } from "@types";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import FormProviderWithForm from "../shared/FormProviderWithForm";
+import FormProviderWithForm from "@common/FormProviderWithForm";
 import Grid from "@mui/material/Grid";
 import { useForm } from "react-hook-form";
-import { styles } from "../../config/styles";
-import { SelectFieldUC } from "../shared/fields/SelectField";
-import useConnectSelectField from "../../utils/useConnectSelectField";
+import { styles } from "@styles";
+import { SelectFieldUC } from "@common/fields/SelectField";
+import useConnectSelectField from "@utils/useConnectSelectField";
 import MenuItem from "@mui/material/MenuItem";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Title from "../shared/Title";
-import {
-  compareActions,
-  useCompareContext,
-  useCompareDispatch,
-} from "../../providers/CompareProvider";
-import hasStatus from "../../utils/hasStatus";
-import AlertBox from "../shared/AlertBox";
+import Title from "@common/Title";
+import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
+import hasStatus from "@utils/hasStatus";
+import AlertBox from "@common/AlertBox";
 
-interface ICompareItemCEFormDialog
-  extends Omit<ICompareItemCEForm, "closeDialog"> {}
+interface ICompareItemCEFormDialog extends Omit<ICompareItemCEForm, "closeDialog"> {}
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
   const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
@@ -76,11 +70,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
 
   const onSubmit = (data: any) => {
     try {
-      const newAssessmentIds = addToAssessmentIds(
-        data.assessmentId,
-        assessmentIds,
-        index
-      );
+      const newAssessmentIds = addToAssessmentIds(data.assessmentId, assessmentIds, index);
       dispatch(compareActions.setAssessmentIds(newAssessmentIds));
       closeDialog();
     } catch (e) {
@@ -98,10 +88,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               searchParams: { profile_id: profile?.id },
               filterOptions: (options) =>
                 options.filter(
-                  (option) =>
-                    (!assessmentIds.includes(option?.id) ||
-                      option?.id == defaultValues?.id) &&
-                    hasStatus(option.status)
+                  (option) => (!assessmentIds.includes(option?.id) || option?.id == defaultValues?.id) && hasStatus(option.status)
                 ),
             })}
             required={true}
@@ -112,27 +99,16 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             size="medium"
             renderOption={(option = {}) => {
               return (
-                <MenuItem
-                  value={option.id}
-                  key={option.id}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
+                <MenuItem value={option.id} key={option.id} sx={{ display: "flex", alignItems: "center" }}>
                   {option.id === "" ? (
                     option.title
                   ) : (
                     <>
-                      <Title
-                        size="small"
-                        sup={option.space.title}
-                        color={option?.color?.color_code || "#101c32"}
-                      >
+                      <Title size="small" sup={option.space.title} color={option?.color?.color_code || "#101c32"}>
                         {option.title}
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
-                        <Chip
-                          label={option.assessment_profile.title}
-                          size="small"
-                        />
+                        <Chip label={option.assessment_profile.title} size="small" />
                       </Box>
                     </>
                   )}
@@ -153,11 +129,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   );
 };
 
-const addToAssessmentIds = (
-  assessmentId: TId,
-  assessmentIds: TId[],
-  index: number
-) => {
+const addToAssessmentIds = (assessmentId: TId, assessmentIds: TId[], index: number) => {
   const newAssessmentIds: TId[] = assessmentIds;
   if (assessmentIds[index] && assessmentIds[index] == assessmentId) {
     return assessmentIds;

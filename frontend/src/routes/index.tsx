@@ -1,63 +1,47 @@
-import React from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes as RrdRoutes } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
 import Redirect from "./Redirect";
-import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
-import ErrorNotFoundPage from "../components/shared/errors/ErrorNotFoundPage";
+import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
+import ErrorNotFoundPage from "@common/errors/ErrorNotFoundPage";
 import AuthRoutes from "./AuthRoutes";
 import AuthLayout from "../layouts/AuthLayout";
 import AppLayout from "../layouts/AppLayout";
 
-const SignInScreen = React.lazy(() => import("../screens/SignInScreen"));
-const SignUpScreen = React.lazy(() => import("../screens/SignUpScreen"));
-const AccountScreen = React.lazy(() => import("../screens/AccountScreen"));
-const ActivationSuccessfulScreen = React.lazy(
-  () => import("../screens/ActivationSuccessfulScreen")
-);
+const SignInScreen = lazy(() => import("../screens/SignInScreen"));
+const SignUpScreen = lazy(() => import("../screens/SignUpScreen"));
+const UserScreen = lazy(() => import("../screens/UserScreen"));
+const ActivationSuccessfulScreen = lazy(() => import("../screens/ActivationSuccessfulScreen"));
 
-const ExpertGroupScreen = React.lazy(
-  () => import("../screens/ExpertGroupScreen")
-);
-const ExpertGroupConfirmInvitationScreen = React.lazy(
-  () => import("../screens/ExpertGroupConfirmInvitationScreen")
-);
+const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
+const ExpertGroupConfirmInvitationScreen = lazy(() => import("../screens/ExpertGroupConfirmInvitationScreen"));
 
-const AssessmentReportScreen = React.lazy(
-  () => import("../screens/AssessmentReportScreen")
-);
-const SubjectReportScreen = React.lazy(
-  () => import("../screens/SubjectReportScreen")
-);
-const SpacesScreen = React.lazy(() => import("../screens/SpacesScreen"));
-const SpaceSettingScreen = React.lazy(
-  () => import("../screens/SpaceSettingScreen")
-);
-const AssessmentsScreen = React.lazy(
-  () => import("../screens/AssessmentsScreen")
-);
-const MetricsScreen = React.lazy(() => import("../screens/MetricsScreen"));
-const MetricsReviewScreen = React.lazy(
-  () => import("../screens/MetricsReviewScreen")
-);
-const MetricScreen = React.lazy(() => import("../screens/MetricScreen"));
-const QuestionnairesScreen = React.lazy(
-  () => import("../screens/QuestionnairesScreen")
-);
-const CompareScreen = React.lazy(() => import("../screens/CompareScreen"));
-const CompareResultScreen = React.lazy(
-  () => import("../screens/CompareResultScreen")
-);
+const AssessmentReportScreen = lazy(() => import("../screens/AssessmentReportScreen"));
+const SubjectReportScreen = lazy(() => import("../screens/SubjectReportScreen"));
+const SpacesScreen = lazy(() => import("../screens/SpacesScreen"));
+const SpaceSettingScreen = lazy(() => import("../screens/SpaceSettingScreen"));
+const AssessmentsScreen = lazy(() => import("../screens/AssessmentsScreen"));
+const MetricsScreen = lazy(() => import("../screens/MetricsScreen"));
+const MetricsReviewScreen = lazy(() => import("../screens/MetricsReviewScreen"));
+const MetricScreen = lazy(() => import("../screens/MetricScreen"));
+const QuestionnairesScreen = lazy(() => import("../screens/QuestionnairesScreen"));
+const CompareScreen = lazy(() => import("../screens/CompareScreen"));
+const CompareResultScreen = lazy(() => import("../screens/CompareResultScreen"));
 
-const ProfilesScreen = React.lazy(() => import("../screens/ProfilesScreen"));
-const ProfileExpertViewScreen = React.lazy(
-  () => import("../screens/ProfileExpertViewScreen")
-);
-const ProfileScreen = React.lazy(() => import("../screens/ProfileScreen"));
+const ProfilesScreen = lazy(() => import("../screens/ProfilesScreen"));
+const ProfileExpertViewScreen = lazy(() => import("../screens/ProfileExpertViewScreen"));
+const ProfileScreen = lazy(() => import("../screens/ProfileScreen"));
 
+/**
+ * How does it work?
+ * We have two separate routes for users, for unauthorized users we have AuthRoutes and for authenticated users we use PrivateRoutes
+ *
+ */
 const Routes = () => {
   return (
-    <React.Suspense fallback={<GettingThingsReadyLoading />}>
+    <Suspense fallback={<GettingThingsReadyLoading />}>
       <RrdRoutes>
+        {/* Handles redirecting users to where they wanted to go before login  */}
         <Route path="/" element={<Redirect />} />
         <Route
           element={
@@ -68,10 +52,7 @@ const Routes = () => {
         >
           <Route path="/sign-in" element={<SignInScreen />} />
           <Route path="/sign-up" element={<SignUpScreen />} />
-          <Route
-            path="/account/active/:uid/:token"
-            element={<ActivationSuccessfulScreen />}
-          />
+          <Route path="/account/active/:uid/:token" element={<ActivationSuccessfulScreen />} />
         </Route>
 
         <Route
@@ -81,53 +62,42 @@ const Routes = () => {
             </AppLayout>
           }
         >
-          <Route path="/account/:accountTab" element={<AccountScreen />} />
-          <Route
-            path="/account/:accountTab/:expertGroupId"
-            element={<ExpertGroupScreen />}
-          />
-          <Route
-            path="/account/:accountTab/:expertGroupId/profiles/:profileId"
-            element={<ProfileExpertViewScreen />}
-          />
-          <Route
-            path="/account/expert-group-invitation/:expertGroupId/:token"
-            element={<ExpertGroupConfirmInvitationScreen />}
-          />
+          {/* Account related routes */}
+          <Route path="/user/:accountTab" element={<UserScreen />} />
+          <Route path="/user/:accountTab/:expertGroupId" element={<ExpertGroupScreen />} />
+          <Route path="/user/:accountTab/:expertGroupId/profiles/:profileId" element={<ProfileExpertViewScreen />} />
+          <Route path="/account/expert-group-invitation/:expertGroupId/:token" element={<ExpertGroupConfirmInvitationScreen />} />
+
+          {/* Spaces and assessments related routes */}
           <Route path="/spaces" element={<SpacesScreen />} />
-          <Route path="/profiles" element={<ProfilesScreen />} />
-          <Route path="/profiles/:profileId" element={<ProfileScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/insights"
-            element={<AssessmentReportScreen />}
-          />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/insights/:subjectId"
-            element={<SubjectReportScreen />}
-          />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/questionnaires"
-            element={<QuestionnairesScreen />}
-          />
+          <Route path="/:spaceId/assessments/:assessmentId/insights" element={<AssessmentReportScreen />} />
+          <Route path="/:spaceId/assessments/:assessmentId/insights/:subjectId" element={<SubjectReportScreen />} />
+          {/* Questionnaires and questions related routes */}
+          <Route path="/:spaceId/assessments/:assessmentId/questionnaires" element={<QuestionnairesScreen />} />
           <Route
             path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId/review"
             element={<MetricsReviewScreen />}
           />
-          <Route
-            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId"
-            element={<MetricsScreen />}
-          >
+          <Route path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId" element={<MetricsScreen />}>
             <Route path="" element={<MetricScreen />} />
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
+
+          {/* Profiles related routes */}
+          <Route path="/profiles" element={<ProfilesScreen />} />
+          <Route path="/profiles/:profileId" element={<ProfileScreen />} />
+
+          {/* Compare routes */}
           <Route path="/compare" element={<CompareScreen />} />
           <Route path="/compare/result" element={<CompareResultScreen />} />
         </Route>
+
+        {/* Any other routes results in 404 page */}
         <Route path="*" element={<ErrorNotFoundPage />} />
       </RrdRoutes>
-    </React.Suspense>
+    </Suspense>
   );
 };
 

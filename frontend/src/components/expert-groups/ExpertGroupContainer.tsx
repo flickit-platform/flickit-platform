@@ -13,41 +13,41 @@ import {
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useServiceContext } from "../../providers/ServiceProvider";
-import { useQuery } from "../../utils/useQuery";
-import QueryData from "../shared/QueryData";
-import Title from "../shared/Title";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import QueryData, { useQueryDataContext } from "@common/QueryData";
+import Title from "@common/Title";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import { Trans } from "react-i18next";
-import RichEditor from "../shared/rich-editor/RichEditor";
+import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { t } from "i18next";
-import { IDialogProps, TQueryFunction } from "../../types";
-import getUserName from "../../utils/getUserName";
-import forLoopComponent from "../../utils/forLoop";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
+import { IDialogProps, TQueryFunction } from "@types";
+import getUserName from "@utils/getUserName";
+import forLoopComponent from "@utils/forLoopComponent";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import ProfileListItem from "../profile/ProfileListItem";
-import toastError from "../../utils/toastError";
+import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRef, useState } from "react";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
-import { ICustomError } from "../../utils/CustomError";
-import useDialog from "../../utils/useDialog";
+import { ICustomError } from "@utils/CustomError";
+import useDialog from "@utils/useDialog";
 import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
 import { toast } from "react-toastify";
-import ErrorEmptyData from "../shared/errors/ErrorEmptyData";
-import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
-import { useAuthContext } from "../../providers/AuthProvider";
+import ErrorEmptyData from "@common/errors/ErrorEmptyData";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import { useAuthContext } from "@providers/AuthProvider";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
-import formatDate from "../../utils/formatDate";
-import useMenu from "../../utils/useMenu";
-import MoreActions from "../shared/MoreActions";
+import formatDate from "@utils/formatDate";
+import useMenu from "@utils/useMenu";
+import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import useDocumentTitle from "../../utils/useDocumentTitle";
+import useDocumentTitle from "@utils/useDocumentTitle";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
@@ -101,7 +101,7 @@ const ExpertGroupContainer = () => {
                   routes={[
                     {
                       title: t("expertGroups") as string,
-                      to: `/account/${userInfo.id}/expert-groups`,
+                      to: `/user/expert-groups`,
                     },
                   ]}
                 />

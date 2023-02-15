@@ -1,8 +1,7 @@
-import React from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Button from "@mui/material/Button";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import Typography from "@mui/material/Typography";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 

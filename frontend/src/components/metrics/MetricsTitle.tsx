@@ -1,30 +1,22 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import Title from "../../components/shared/Title";
-import {
-  EAssessmentStatus,
-  useMetricContext,
-} from "../../providers/MetricProvider";
+import Title from "@common/Title";
+import { EAssessmentStatus, useMetricContext } from "@providers/MetricProvider";
 import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedInRounded";
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
-import { IQuestionnaireModel } from "../../types";
-import SupTitleBreadcrumb, {
-  useSupTitleBreadcrumb,
-} from "../shared/SupTitleBreadcrumb";
+import { IQuestionnaireModel } from "@types";
+import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 
-const MetricsTitle = (props: {
-  data: IQuestionnaireModel;
-  isReview?: boolean;
-}) => {
+const MetricsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) => {
   const { data, isReview } = props;
   const { title } = data || {};
   const {
@@ -71,12 +63,7 @@ const MetricsTitle = (props: {
               </Button>
             )}
             {canFinishQuestionnaire && (
-              <Button
-                disabled={isSubmitting}
-                component={Link}
-                to={"./review"}
-                startIcon={<GradingRoundedIcon />}
-              >
+              <Button disabled={isSubmitting} component={Link} to={"./review"} startIcon={<GradingRoundedIcon />}>
                 <Trans i18nKey="review" />
               </Button>
             )}
@@ -94,9 +81,7 @@ const MetricsTitle = (props: {
               {
                 title: `${breadcrumbInfo?.assessment} ${t("questionnaires")}`,
                 to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
-                icon: (
-                  <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-                ),
+                icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
                 title: breadcrumbInfo?.questionnaire,
@@ -110,21 +95,14 @@ const MetricsTitle = (props: {
         {isReview ? (
           <>
             {title}
-            <Typography
-              display="inline-block"
-              variant="h5"
-              sx={{ opacity: 0.6, marginLeft: 1, fontWeight: "bold" }}
-            >
+            <Typography display="inline-block" variant="h5" sx={{ opacity: 0.6, marginLeft: 1, fontWeight: "bold" }}>
               <Trans i18nKey="review" />
             </Typography>
           </>
         ) : (
           <>
             {assessmentStatus === EAssessmentStatus.DONE && (
-              <AssignmentTurnedInRoundedIcon
-                sx={{ mr: 0.5, opacity: 0.6 }}
-                fontSize="large"
-              />
+              <AssignmentTurnedInRoundedIcon sx={{ mr: 0.5, opacity: 0.6 }} fontSize="large" />
             )}
             <Box display="block">
               {title}{" "}
@@ -142,15 +120,9 @@ const MetricsTitle = (props: {
                   <Trans i18nKey="questionnaireFinished" />
                 </Typography>
               ) : (
-                <Typography
-                  display="inline-block"
-                  variant="h5"
-                  fontWeight={"bold"}
-                  sx={{ opacity: 0.6, ml: { xs: 0, sm: 1 } }}
-                >
+                <Typography display="inline-block" variant="h5" fontWeight={"bold"} sx={{ opacity: 0.6, ml: { xs: 0, sm: 1 } }}>
                   {" "}
-                  <Trans i18nKey="question" /> {metricIndex}/
-                  {total_number_of_metrics}
+                  <Trans i18nKey="question" /> {metricIndex}/{total_number_of_metrics}
                 </Typography>
               )}
             </Box>

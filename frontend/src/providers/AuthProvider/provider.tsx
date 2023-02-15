@@ -1,7 +1,5 @@
-import React, { useReducer, FC, useContext, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { IUserInfo } from "../../types";
-import { appActions, useAppDispatch } from "../AppProvider";
+import React, { useReducer, FC, useContext, Dispatch, createContext } from "react";
+import { IUserInfo } from "@types";
 import authReducer from "./reducer";
 
 interface IAuthProviderProps {
@@ -14,7 +12,7 @@ export interface IAuthContext {
   accessToken: string;
   loadingUserInfo: boolean;
   redirectRoute: string;
-  dispatch: React.Dispatch<any>;
+  dispatch: Dispatch<any>;
 }
 
 export const defaultUserInfo = {
@@ -33,7 +31,7 @@ const getAccessTokenFormStorage = () => {
   }
 };
 
-export const AuthContext = React.createContext<IAuthContext>({
+export const AuthContext = createContext<IAuthContext>({
   isAuthenticatedUser: false,
   accessToken: getAccessTokenFormStorage(),
   loadingUserInfo: true,
@@ -54,19 +52,6 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     redirectRoute: "",
     dispatch: () => {},
   });
-
-  // useEffect(() => {
-  //   if (state.isAuthenticatedUser === null) {
-  //     return;
-  //   }
-  //   if (state.isAuthenticatedUser) {
-  //     navigate("/", { replace: true });
-  //   } else {
-  //     navigate("/sign-in", {
-  //       replace: true,
-  //     });
-  //   }
-  // }, [state.isAuthenticatedUser]);
 
   return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>;
 };

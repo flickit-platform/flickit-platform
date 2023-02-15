@@ -1,4 +1,4 @@
-import { APP_LABEL } from "../config/constants";
+import { APP_LABEL } from "@config/constants";
 
 const setDocumentTitle = (str: string = "") => {
   document.title = `${str}${str ? " | " : ""}${APP_LABEL}`;

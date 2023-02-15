@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { Box, Button, IconButton } from "@mui/material";
-import { useServiceContext } from "../../providers/ServiceProvider";
+import React, { useState } from "react";
+import { Box, IconButton } from "@mui/material";
+import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
-import { useQuery } from "../../utils/useQuery";
-import QueryData from "../shared/QueryData";
-import Title from "../shared/Title";
+import { useQuery } from "@utils/useQuery";
+import QueryData from "@common/QueryData";
+import Title from "@common/Title";
 import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import { styles } from "../../config/styles";
+import { styles } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Grid from "@mui/material/Grid";
@@ -20,15 +20,15 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
 import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
-import ListAccordion from "../shared/lists/ListAccordion";
-import InfoItem from "../shared/InfoItem";
+import ListAccordion from "@common/lists/ListAccordion";
+import InfoItem from "@common/InfoItem";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
-import useDialog from "../../utils/useDialog";
-import SupTitleBreadcrumb from "../shared/SupTitleBreadcrumb";
-import { useAuthContext } from "../../providers/AuthProvider";
+import useDialog from "@utils/useDialog";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import { useAuthContext } from "@providers/AuthProvider";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
@@ -54,11 +54,11 @@ const ProfileExpertViewContainer = () => {
                     routes={[
                       {
                         title: t("expertGroups") as string,
-                        to: `/account/expert-groups`,
+                        to: `/user/expert-groups`,
                       },
                       {
                         title: expert_group?.name,
-                        to: `/account/expert-groups/${expertGroupId}`,
+                        to: `/user/expert-groups/${expertGroupId}`,
                       },
                     ]}
                   />
@@ -90,7 +90,7 @@ const ProfileExpertViewContainer = () => {
 const ProfileSectionsTabs = (props: { data: any }) => {
   const { data } = props;
 
-  const [value, setValue] = React.useState("subjects");
+  const [value, setValue] = useState("subjects");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };

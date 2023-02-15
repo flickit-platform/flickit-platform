@@ -1,8 +1,8 @@
-import React, { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
-import GettingThingsReadyLoading from "../components/shared/loadings/GettingThingsReadyLoading";
-import Navbar from "../components/shared/Navbar";
-import { styles } from "../config/styles";
+import React, { PropsWithChildren, Suspense } from "react";
+import Box from "@mui/material/Box";
+import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
+import Navbar from "@common/Navbar";
+import { styles } from "@styles";
 
 const AppLayout = (props: PropsWithChildren<{}>) => {
   const { children } = props;
@@ -21,7 +21,7 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
         maxWidth="1440px"
         m="auto"
       >
-        <React.Suspense
+        <Suspense
           fallback={
             <Box sx={{ ...styles.centerVH }}>
               <GettingThingsReadyLoading color={"gray"} />
@@ -29,7 +29,7 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
           }
         >
           {children}
-        </React.Suspense>
+        </Suspense>
       </Box>
     </Box>
   );

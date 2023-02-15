@@ -1,45 +1,38 @@
 import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
-import { styles } from "../../config/styles";
-import { useQuery } from "../../utils/useQuery";
-import { useServiceContext } from "../../providers/ServiceProvider";
+import { styles } from "@styles";
+import { useQuery } from "@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
 import {
   IAssessmentReportModel,
   IQuestionnairesModel,
   IQuestionnairesPageDataModel,
   ITotalProgressModel,
   TQueryProps,
-} from "../../types";
-import Title from "../shared/Title";
+} from "@types";
+import Title from "@common/Title";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
-import { LoadingSkeleton } from "../shared/loadings/LoadingSkeleton";
-import SupTitleBreadcrumb, {
-  useSupTitleBreadcrumb,
-} from "../shared/SupTitleBreadcrumb";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import hasStatus from "../../utils/hasStatus";
+import hasStatus from "@utils/hasStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import PermissionControl from "../shared/PermissionControl";
-import AlertBox from "../shared/AlertBox";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import PermissionControl from "@common/PermissionControl";
+import AlertBox from "@common/AlertBox";
+import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 const QuestionnaireContainer = () => {
-  const {
-    pageQueryData,
-    questionnaireQueryData,
-    totalProgressQueryData,
-    assessmentQueryData,
-  } = useQuestionnaire();
+  const { pageQueryData, questionnaireQueryData, totalProgressQueryData, assessmentQueryData } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
 
   return (
@@ -54,13 +47,9 @@ const QuestionnaireContainer = () => {
       <Box>
         <QuestionnaireTitle />
         <NotCompletedAlert
-          isCompleted={
-            totalProgressQueryData.data?.total_progress?.progress == 100
-          }
+          isCompleted={totalProgressQueryData.data?.total_progress?.progress == 100}
           hasStatus={hasStatus(assessmentQueryData.data?.status)}
-          loading={
-            totalProgressQueryData.loading || assessmentQueryData.loading
-          }
+          loading={totalProgressQueryData.loading || assessmentQueryData.loading}
         />
         <Box
           flexWrap={"wrap"}
@@ -80,10 +69,7 @@ const QuestionnaireContainer = () => {
           color="white"
           position={"relative"}
         >
-          <QuestionnaireList
-            questionnaireQueryData={questionnaireQueryData}
-            pageQueryData={pageQueryData}
-          />
+          <QuestionnaireList questionnaireQueryData={questionnaireQueryData} pageQueryData={pageQueryData} />
         </Box>
       </Box>
     </PermissionControl>
@@ -102,18 +88,15 @@ const useQuestionnaire = () => {
   });
 
   const pageQueryData = useQuery<IQuestionnairesPageDataModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchQuestionnairesPageData(args, config),
+    service: (args = { assessmentId }, config) => service.fetchQuestionnairesPageData(args, config),
   });
 
   const totalProgressQueryData = useQuery<ITotalProgressModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchTotalProgress(args, config),
+    service: (args = { assessmentId }, config) => service.fetchTotalProgress(args, config),
   });
 
   const assessmentQueryData = useQuery<IAssessmentReportModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchAssessment(args, config),
+    service: (args = { assessmentId }, config) => service.fetchAssessment(args, config),
   });
 
   return {
@@ -124,11 +107,7 @@ const useQuestionnaire = () => {
   };
 };
 
-const NotCompletedAlert = (props: {
-  isCompleted: boolean;
-  loading: boolean;
-  hasStatus: boolean;
-}) => {
+const NotCompletedAlert = (props: { isCompleted: boolean; loading: boolean; hasStatus: boolean }) => {
   const { isCompleted, loading, hasStatus } = props;
 
   return (
@@ -195,9 +174,7 @@ const QuestionnaireTitle = () => {
             },
             {
               title: breadcrumbInfo.assessment,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
           ]}
         />

@@ -1,4 +1,4 @@
-import CompareResultContainer from "../components/compare/CompareResultContainer";
+import CompareResultContainer from "@components/compare/CompareResultContainer";
 
 const CompareResultScreen = () => {
   return <CompareResultContainer />;
