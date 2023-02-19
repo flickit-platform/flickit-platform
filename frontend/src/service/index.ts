@@ -393,6 +393,9 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 
       return axios.put(`/baseinfo/expertgroups/${id}/`, data, {
         ...(config || {}),
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
     inviteSpaceMember(args: { id: TId; data: any }, config: AxiosRequestConfig<any> | undefined) {
@@ -428,6 +431,14 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
 
       return axios.post(`/baseinfo/profiles/like/${id}/`, {
         ...(config || {}),
+      });
+    },
+    fetchImage(args: { url: string }, config: AxiosRequestConfig<any> | undefined) {
+      const { url } = args || {};
+
+      return axios.get(url, {
+        ...(config || {}),
+        responseType: "blob",
       });
     },
   };
