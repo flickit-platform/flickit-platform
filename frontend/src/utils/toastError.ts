@@ -52,12 +52,19 @@ const toastError = (err: ICustomError | string | true, options?: IToastErrorOpti
     }
   }
   if (filterIfHasData) {
-    if (typeof err.data === "object" && Object.keys(err.data).length > 0 && !err?.data?.message && !err?.data?.detail) return;
+    if (
+      typeof err.data === "object" &&
+      Object.keys(err.data).length > 0 &&
+      !err?.data?.message &&
+      !err?.data?.detail &&
+      err?.data?.non_field_errors?.length === 0
+    )
+      return;
   }
   if (err.status == 401 || err.type == ECustomErrorType.INVALID_TOKEN || err.type == ECustomErrorType.CANCELED) {
     return;
   }
-  toast.error(err?.data?.message || err?.data?.detail || err.message);
+  toast.error(err?.data?.message || err?.data?.detail || err?.data?.non_field_errors?.[0] || err.message);
 };
 
 export default toastError;

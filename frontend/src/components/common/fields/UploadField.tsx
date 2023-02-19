@@ -2,7 +2,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Accept, DropEvent, FileRejection, useDropzone } from "react-dropzone";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import Box from "@mui/material/Box";
@@ -24,6 +24,7 @@ import getFieldError from "@utils/getFieldError";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { Trans } from "react-i18next";
 import getFileNameFromSrc from "@utils/getFileNameFromSrc";
+import { useServiceContext } from "@/providers/ServiceProvider";
 
 interface IUploadFieldProps {
   name: string;
@@ -91,19 +92,40 @@ const Uploader = (props: IUploadProps) => {
     defaultValueType,
   } = props;
 
-  const [myFiles, setMyFiles] = useState<(File | { src: string; name: string; type: string })[]>(
-    shouldFetchFileInfo || !defaultValue
-      ? []
-      : typeof defaultValue === "string"
-      ? ([
-          {
-            src: defaultValue,
-            name: getFileNameFromSrc(defaultValue),
-            type: defaultValueType || "",
-          },
-        ] as { src: string; name: string; type: string }[])
-      : []
-  );
+  const { service } = useServiceContext();
+  const defaultValueQuery = useQuery({
+    service: (args = { url: defaultValue?.replace("http://checkuptest.asta.ir", "") }, config) =>
+      service.fetchImage(args, config),
+    runOnMount: false,
+  });
+
+  const setTheState = () => {
+    if (!defaultValue) {
+      return [];
+    }
+    if (typeof defaultValue === "string") {
+      return [
+        {
+          src: defaultValue,
+          name: getFileNameFromSrc(defaultValue),
+          type: defaultValueType || "",
+        },
+      ] as { src: string; name: string; type: string }[];
+    }
+    console.warn("Type of default value must be array of strings");
+    return [];
+  };
+
+  const [myFiles, setMyFiles] = useState<(File | { src: string; name: string; type: string })[]>(setTheState);
+
+  useEffect(() => {
+    if (typeof defaultValue === "string" && defaultValue && shouldFetchFileInfo) {
+      defaultValueQuery.query().then((data) => {
+        const myFile = new File([data], "image.jpeg", { type: data.type });
+        fieldProps.onChange(myFile);
+      });
+    }
+  }, []);
 
   const uploadQueryProps = useQuery({
     service: uploadService || ((() => null) as any),
@@ -165,6 +187,7 @@ const Uploader = (props: IUploadProps) => {
     (!uploadQueryProps.loading && !uploadQueryProps.error && uploadQueryProps.data?.[fieldProps.name]) ||
     (file as any)?.[fieldProps.name];
   const { errorMessage, hasError } = getFieldError(errors, fieldProps.name);
+
   return (
     <FormControl sx={{ width: "100%" }} error={hasError}>
       <Box
@@ -205,7 +228,7 @@ const Uploader = (props: IUploadProps) => {
                       </IconButton>
                     )}
                     {loading && (
-                      <IconButton edge="end" aria-label="delete">
+                      <IconButton edge="end">
                         <CircularProgress size="20px" />
                       </IconButton>
                     )}

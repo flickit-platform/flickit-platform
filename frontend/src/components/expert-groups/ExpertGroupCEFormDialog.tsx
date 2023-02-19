@@ -47,9 +47,10 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     const { picture, ...restOfData } = data;
+
     const formattedData = {
       ...restOfData,
-      picture: picture || null,
+      picture: picture || "",
     };
     setLoading(true);
     try {
@@ -90,6 +91,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
               }}
               defaultValueType="image"
               defaultValue={defaultValues.picture}
+              shouldFetchFileInfo={true}
               hideDropText
               name="picture"
               label={<Trans i18nKey="groupPicture" />}
