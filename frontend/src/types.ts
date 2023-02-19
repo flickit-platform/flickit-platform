@@ -147,6 +147,7 @@ export interface ISpaceModel {
   title: string;
   last_modification_date?: string;
   members_number?: number;
+  assessment_numbers?: number;
 }
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
