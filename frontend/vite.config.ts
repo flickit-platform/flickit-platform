@@ -1,4 +1,5 @@
-import { defineConfig } from "vite";
+import { defineConfig, type PluginOption } from "vite";
+import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
 import rpr from "rollup-plugin-replace";
 import rpc from "rollup-plugin-commonjs";
@@ -7,7 +8,7 @@ import react from "@vitejs/plugin-react-swc";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), visualizer() as PluginOption],
   resolve: {
     alias: [
       {
@@ -82,13 +83,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       plugins: [
-        //@ts-expect-error
         rpr({
           "process.env.NODE_ENV": JSON.stringify("production"),
         }),
-        //@ts-expect-error
         rpc(),
-        //@ts-expect-error
         terser(),
       ],
     },
