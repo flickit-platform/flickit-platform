@@ -25,7 +25,7 @@ def __trim_content(content):
     return new_content
 @transaction.atomic
 def import_profile(descriptive_profile, **kwargs):
-    assessment_profile = __import_profile_base_info(descriptive_profile, kwargs)
+    assessment_profile = __import_profile_base_info(kwargs)
     __import_questionnaires(descriptive_profile['questionnaireModels'], assessment_profile)
     __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
     __import_attributes(descriptive_profile['attributeModels'])
@@ -42,19 +42,18 @@ def extract_tags(tag_ids):
     return tags
 
 
-def __import_profile_base_info(descriptive_profile, extra_info):
+def __import_profile_base_info(extra_info):
     tags = extract_tags(extra_info['tag_ids'])
     expert_group = expertgroupservice.load_expert_group(extra_info['expert_group_id'])
-    profile_model = descriptive_profile['profileModel']
     assessment_profile = AssessmentProfile()
-    assessment_profile.code = profile_model['code']
-    assessment_profile.title = profile_model['title']
+    assessment_profile.code = extra_info['code']
+    assessment_profile.title = extra_info['title']
     assessment_profile.about = extra_info['about']
     assessment_profile.summary = extra_info['summary']
+    assessment_profile.expert_group = expert_group
     assessment_profile.save()
     for tag in tags:
         assessment_profile.tags.add(tag)
-    assessment_profile.expert_group = expert_group
     assessment_profile.save()
     return assessment_profile
 
@@ -112,6 +111,7 @@ def __import_metrics(metricModels):
             answer = AnswerTemplate()
             answer.caption = answer_model['caption']
             answer.value = answer_model['value']
+            answer.index = answer_model['index']
             answer.metric = metric
             answer.save()
             metric.answer_templates.add(answer)

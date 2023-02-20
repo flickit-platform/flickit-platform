@@ -11,7 +11,7 @@ from baseinfo.serializers.profileserializers import ImportProfileSerializer
 from baseinfo.permissions import ManageExpertGroupPermission
 
 
-DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+DSL_PARSER_URL_SERVICE = "http://localhost:8080/extract/"
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer
