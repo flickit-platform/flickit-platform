@@ -17,6 +17,7 @@ import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import { styles } from "@styles";
 import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -99,7 +100,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0 } = item || {};
+  const { title, id, members_number = 0, assessment_numbers = 0 } = item || {};
 
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
@@ -158,6 +159,12 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
           <Typography fontFamily="Roboto" fontWeight={"bold"}>
             {members_number}
+          </Typography>
+        </Box>
+        <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
+          <DescriptionRoundedIcon sx={{ mr: 0.5, opacity: 0.8 }} fontSize="small" />
+          <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            {assessment_numbers}
           </Typography>
         </Box>
       </Box>

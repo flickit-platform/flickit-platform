@@ -86,6 +86,12 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
+          <Grid item xs={8} md={7}>
+            <InputFieldUC name="title" label={<Trans i18nKey="title" />} required defaultValue={defaultValues.title || ""} />
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <InputFieldUC name="code" label={<Trans i18nKey="code" />} required defaultValue={defaultValues.code || ""} />
+          </Grid>
           <Grid item xs={12}>
             <UploadField
               accept={{ "application/zip": [".zip"] }}
