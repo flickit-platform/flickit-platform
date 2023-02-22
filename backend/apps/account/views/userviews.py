@@ -2,17 +2,35 @@ import requests
 from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from djoser.email import ActivationEmail
+from djoser.views import UserViewSet
 
 from account.models import UserAccess
 from account.tasks import async_send
-from account.serializers.userserializers import UserAccessSerializer, UserCustomSerializer
+from account.serializers.userserializers import UserAccessSerializer, UserCustomSerializer, UserCreateSerializer, UserSerializer
 from account.serializers.spaceserializers import InviteMemberSerializer
 from account.services import spaceservices, userservices
+from djoser.views import UserViewSet
 
+
+class CustomUserViewSet(UserViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserCreateSerializer
+        elif self.request.method == 'PUT':
+            return UserSerializer
+        return UserCustomSerializer
+    
+    def perform_update(self, serializer):
+        send_activation_email = False  # Set this to False to disable activation email
+        serializer.save(send_activation_email=send_activation_email)
 
 class UserActivationView(APIView):
     permission_classes = [AllowAny]
@@ -61,7 +79,6 @@ class UserAccessViewSet(ModelViewSet):
         if response.status_code == 200:
             spaceservices.remove_expire_invitions(response.data['results'])
         return super().list(request, *args, **kwargs)
-
 
 
 class InviteMemberForSpaceApi(APIView):

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from common.validators import validate_file_size
+
 
 class CustomUserManager(BaseUserManager):
 
@@ -52,6 +54,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     current_space = models.ForeignKey(Space, on_delete=models.PROTECT, null=True)
+    picture = models.ImageField(upload_to='user/images', null=True, validators=[validate_file_size])
+    bio = models.CharField(null=True, max_length=400)
+    linkedin = models.URLField(null=True, blank=True)
 
     objects = CustomUserManager()
 

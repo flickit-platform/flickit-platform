@@ -13,7 +13,7 @@ from account.serializers.authserializers import MyTokenObtainPairSerializer
 router = routers.DefaultRouter()
 router.register('spaces', spaceviews.SpaceViewSet, basename='spaces')
 
-
+router.register('users', userviews.CustomUserViewSet, basename='users')
 
 user_access_router = routers.NestedDefaultRouter(router, 'spaces', lookup='space')
 user_access_router.register('useraccess', userviews.UserAccessViewSet, basename='space-user-access')
