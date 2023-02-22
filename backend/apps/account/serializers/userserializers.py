@@ -10,13 +10,18 @@ from account.serializers.commonserializers import UserSimpleSerializer, SpaceSer
 from account.serializers.spaceserializers import SpaceSimpleSerializer
 from account.services import spaceservices
 
-class UserAccessSerializer(serializers.ModelSerializer):
-    user = UserSimpleSerializer(read_only = True)
-    space = SpaceSimpleSerializer()
-    class Meta:
-        model = UserAccess
-        fields = ['id', 'user', 'space', 'invite_email', 'invite_expiration_date']
 
+class UserCustomSerializer(BaseUserSerializer):
+    current_space = SpaceSerializer()
+    spaces = SpaceSerializer(many = True)
+    expert_groups = ExpertGroupSimpleSerilizers(many = True)
+    is_expert = serializers.SerializerMethodField(method_name='has_expet_access')
+
+    def has_expet_access(self, user: User):
+        return user.has_perm('baseinfo.manage_expert_group')
+
+    class Meta(BaseUserSerializer.Meta):
+        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups', 'is_expert', 'bio', 'picture', 'linkedin']
 
 class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
     class Meta(BaseUserCreateSerializer.Meta):
@@ -29,19 +34,15 @@ class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
         spaceservices.add_invited_user_to_space(user)
         return user
 
-class UserCustomSerializer(BaseUserSerializer):
-    current_space = SpaceSerializer()
-    spaces = SpaceSerializer(many = True)
-    expert_groups = ExpertGroupSimpleSerilizers(many = True)
-    is_expert = serializers.SerializerMethodField(method_name='has_expet_access')
-
-    def has_expet_access(self, user: User):
-        return user.has_perm('baseinfo.manage_expert_group')
-
-    class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups', 'is_expert']
 
 class UserSerializer(BaseUserSerializer):
-    
     class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'email', 'display_name']
+        fields= ['id', 'email', 'display_name', 'bio', 'picture', 'linkedin']
+
+
+class UserAccessSerializer(serializers.ModelSerializer):
+    user = UserSimpleSerializer(read_only = True)
+    space = SpaceSimpleSerializer()
+    class Meta:
+        model = UserAccess
+        fields = ['id', 'user', 'space', 'invite_email', 'invite_expiration_date']

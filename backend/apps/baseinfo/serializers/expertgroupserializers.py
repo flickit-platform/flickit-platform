@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from account.serializers.userserializers import UserSimpleSerializer
+from account.serializers.userserializers import UserSimpleSerializer, UserSerializer
 from account.services import userservices
 
 from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
@@ -44,7 +44,7 @@ class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):
 
 class ExpertGroupAccessSerializer(serializers.ModelSerializer):
     expert_group = ExpertGroupSimpleSerilizer()
-    user = UserSimpleSerializer()
+    user = UserSerializer()
     class Meta:
         model = ExpertGroupAccess
         fields = ['id', 'user', 'expert_group', 'invite_email', 'invite_expiration_date']
