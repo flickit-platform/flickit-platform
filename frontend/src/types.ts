@@ -66,6 +66,9 @@ export interface IUserInfo {
   current_space: ISpaceInfo | null;
   is_expert?: boolean;
   bio?: string;
+  picture?: null | string;
+  linkedin?: string | null;
+  is_active?: boolean;
 }
 
 export interface ISpaceInfo {
