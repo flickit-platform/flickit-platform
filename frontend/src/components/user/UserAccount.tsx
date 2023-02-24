@@ -22,7 +22,7 @@ const UserAccount = () => {
     service: (args, config) => service.getSignedInUser(args, config),
     runOnMount: false,
   });
-  const { display_name, email, is_expert, bio } = userInfo;
+  const { display_name, email, is_expert, bio, linkedin, picture } = userInfo;
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -52,6 +52,8 @@ const UserAccount = () => {
               height: "94px",
               border: "4px solid whitesmoke",
             }}
+            alt={display_name}
+            src={picture || "/"}
           />
         </Box>
       </Box>
@@ -82,9 +84,9 @@ const UserAccount = () => {
             <Grid item md={9}>
               <Box>
                 <Typography variant="subLarge">
-                  <Trans i18nKey="emailAddress" />
+                  <Trans i18nKey="linkedin" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{email}</Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{linkedin}</Typography>
               </Box>
               {is_expert && (
                 <Box mt={2.5}>
