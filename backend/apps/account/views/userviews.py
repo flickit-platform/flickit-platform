@@ -19,8 +19,6 @@ from djoser.views import UserViewSet
 
 
 class CustomUserViewSet(UserViewSet):
-    permission_classes = [IsAuthenticated]
-
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return UserCreateSerializer
