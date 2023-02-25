@@ -296,7 +296,7 @@ const ExpertGroupMembers = (props: any) => {
               <AvatarGroup>
                 {users.map((user: any) => {
                   const name = getUserName(user?.user);
-                  return <Avatar key={user.id} alt={name} title={name} src="/" />;
+                  return <Avatar key={user.id} alt={name} title={name} src={user?.picture || "/"} />;
                 })}
               </AvatarGroup>
             </Box>
@@ -669,7 +669,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                       {users.map((member: any) => {
                         const { user, id } = member;
                         const name = getUserName(user);
-
+                        console.log(user.picture);
                         return (
                           <Grid item xs={12} sm={6} md={4} key={id}>
                             <Box
@@ -686,9 +686,11 @@ const ExpertGroupMembersDetail = (props: any) => {
                             >
                               <Box sx={{ mt: "28px", ...styles.centerCH, width: "100%" }}>
                                 <Box sx={{ ...styles.centerCH }}>
-                                  <Avatar sx={{ width: 58, height: 58, border: "4px solid white" }}>
-                                    <PersonRoundedIcon />
-                                  </Avatar>
+                                  <Avatar
+                                    sx={{ width: 58, height: 58, border: "4px solid white" }}
+                                    alt={name}
+                                    src={user?.picture || "/"}
+                                  />
                                   <Title
                                     titleProps={{
                                       sx: {
@@ -696,11 +698,23 @@ const ExpertGroupMembersDetail = (props: any) => {
                                         justifyContent: "center",
                                       },
                                     }}
-                                    subProps={{ textAlign: "center", justifyContent: "center" }}
+                                    subProps={{
+                                      textAlign: "center",
+                                      justifyContent: "center",
+                                    }}
                                     ml={1}
                                     pt={0.5}
                                     size="small"
-                                    sub={user.email}
+                                    sub={
+                                      <Box
+                                        component="a"
+                                        href={user.linkedin}
+                                        target="_blank"
+                                        sx={{ textDecoration: "none", color: "inherit" }}
+                                      >
+                                        {user.linkedin}
+                                      </Box>
+                                    }
                                   >
                                     {name}
                                   </Title>

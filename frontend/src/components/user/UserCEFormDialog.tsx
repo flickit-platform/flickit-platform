@@ -85,18 +85,20 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          {/* <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
             <UploadField
               accept={{
                 "image/jpeg": [".jpeg", ".jpg"],
                 "image/png": [".png"],
               }}
               defaultValueType="image"
+              defaultValue={defaultValues.picture}
+              shouldFetchFileInfo={true}
               name="picture"
               label={<Trans i18nKey="accountPicture" />}
             />
-          </Grid> */}
-          <Grid item xs={12}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <InputFieldUC
               autoFocus={true}
               defaultValue={defaultValues.display_name || ""}
@@ -105,14 +107,12 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
               label={<Trans i18nKey="displayName" />}
             />
           </Grid>
-          {/* <Grid item xs={12}>
-            <InputFieldUC
-              multiline
-              defaultValue={defaultValues.bio || ""}
-              name="bio"
-              label={<Trans i18nKey="bio" />}
-            />
-          </Grid> */}
+          <Grid item xs={12} sm={8}>
+            <InputFieldUC multiline defaultValue={defaultValues.bio || ""} name="bio" label={<Trans i18nKey="bio" />} />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <InputFieldUC defaultValue={defaultValues.linkedin || ""} name="linkedin" label={<Trans i18nKey="linkedin" />} />
+          </Grid>
         </Grid>
         <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
       </FormProviderWithForm>

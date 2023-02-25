@@ -99,14 +99,19 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       return axios.post(`/authinfo/jwt/create/`, data, config);
     },
     signUp(data: { display_name: string; email: string; password: string }, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`/auth/users/`, data, config);
+      return axios.post(`/authinfo/users/`, data, config);
     },
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/auth/users/me/`, config);
+      return axios.get(`/authinfo/users/me/`, config);
     },
     updateUserInfo(args: any, config: AxiosRequestConfig<any> | undefined) {
       const { data, id } = args || {};
-      return axios.put(`/auth/users/${id}/`, data, config);
+      return axios.put(`/authinfo/users/${id}/`, data, {
+        ...config,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
     fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/authinfo/spaces/`, config);
