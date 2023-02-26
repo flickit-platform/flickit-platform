@@ -15,7 +15,7 @@ def api_client():
 def authenticate(api_client):
     def do_authenticate(is_staff=False):
         space1 = baker.make(Space)
-        user1 = baker.make(User, current_space = space1, username = 'test')
+        user1 = baker.make(User, current_space = space1, email = 'test@test.com')
         user_access11 = baker.make(UserAccess, space = space1, user = user1)
         return api_client.force_authenticate(user1)
     return do_authenticate
@@ -23,6 +23,6 @@ def authenticate(api_client):
 @pytest.fixture
 def init_data():
     def do_init_data():
-        profile = baker.make(AssessmentProfile, is_default=True)
+        profile = baker.make(AssessmentProfile)
         return profile
     return do_init_data

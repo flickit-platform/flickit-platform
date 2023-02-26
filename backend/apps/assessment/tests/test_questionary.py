@@ -2,7 +2,7 @@ from rest_framework import status
 import pytest
 from model_bakery import baker
 
-from assessment.models import AssessmentProject, AssessmentProfile
+from assessment.models import AssessmentProject, AssessmentProfile, AssessmentResult
 from account.models import User
 
 @pytest.fixture
@@ -15,9 +15,11 @@ def add_metric_value(api_client):
 class Test_QuestionaryView:
     def test_questionary_report(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
-        test_user = User.objects.get(username = 'test')
-        profile = baker.make(AssessmentProfile, is_default=True)
+        test_user = User.objects.get(email = 'test@test.com')
+        profile = baker.make(AssessmentProfile)
         project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        AssessmentResult.objects.create(assessment_project_id = project.id)
+
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -47,26 +49,26 @@ class Test_QuestionaryView:
 
         newlist = sorted(base_info['questionnaires'], key=lambda x: x.index, reverse=True)
 
-        assert response.data['questionaries_info'][0]['title'] == newlist[0].title
-        assert response.data['questionaries_info'][0]['metric_number'] == 2
-        assert response.data['questionaries_info'][0]['answered_metric'] == 0
-        assert response.data['questionaries_info'][0]['progress'] == 0.0
-        assert response.data['questionaries_info'][0]['current_metric_index'] == 1
+        assert response.data['questionaries_info'][3]['title'] == newlist[0].title
+        assert response.data['questionaries_info'][3]['metric_number'] == 2
+        assert response.data['questionaries_info'][3]['answered_metric'] == 0
+        assert response.data['questionaries_info'][3]['progress'] == 0.0
+        assert response.data['questionaries_info'][3]['current_metric_index'] == 1
         
-        assert response.data['questionaries_info'][1]['title'] == newlist[1].title
-        assert response.data['questionaries_info'][1]['metric_number'] == 3
-        assert response.data['questionaries_info'][1]['answered_metric'] == 2
-        assert response.data['questionaries_info'][1]['progress'] == 66.66666666666666
-        assert response.data['questionaries_info'][1]['current_metric_index'] == 1
-
-        assert response.data['questionaries_info'][2]['title'] == newlist[2].title
+        assert response.data['questionaries_info'][2]['title'] == newlist[1].title
         assert response.data['questionaries_info'][2]['metric_number'] == 3
         assert response.data['questionaries_info'][2]['answered_metric'] == 2
         assert response.data['questionaries_info'][2]['progress'] == 66.66666666666666
         assert response.data['questionaries_info'][2]['current_metric_index'] == 1
 
-        assert response.data['questionaries_info'][3]['title'] == newlist[3].title
-        assert response.data['questionaries_info'][3]['metric_number'] == 3
-        assert response.data['questionaries_info'][3]['answered_metric'] == 2
-        assert response.data['questionaries_info'][3]['progress'] == 66.66666666666666
-        assert response.data['questionaries_info'][3]['current_metric_index'] == 2
+        assert response.data['questionaries_info'][1]['title'] == newlist[2].title
+        assert response.data['questionaries_info'][1]['metric_number'] == 3
+        assert response.data['questionaries_info'][1]['answered_metric'] == 2
+        assert response.data['questionaries_info'][1]['progress'] == 66.66666666666666
+        assert response.data['questionaries_info'][1]['current_metric_index'] == 1
+
+        assert response.data['questionaries_info'][0]['title'] == newlist[3].title
+        assert response.data['questionaries_info'][0]['metric_number'] == 3
+        assert response.data['questionaries_info'][0]['answered_metric'] == 2
+        assert response.data['questionaries_info'][0]['progress'] == 66.66666666666666
+        assert response.data['questionaries_info'][0]['current_metric_index'] == 2

@@ -33,9 +33,9 @@ class AssessmentProjecCreateSerilizer(serializers.ModelSerializer):
     def save(self, **kwargs):
         validated_data = self.validated_data
         validated_data['code'] = slugify(validated_data['title'])
-        profile = super().save(**kwargs)
-        if not AssessmentResult.objects.filter(assessment_project_id = profile.id).exists():
-            AssessmentResult.objects.create(assessment_project_id = profile.id)
+        project  = super().save(**kwargs)
+        if not AssessmentResult.objects.filter(assessment_project_id = project .id).exists():
+            AssessmentResult.objects.create(assessment_project_id = project .id)
 
 class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)

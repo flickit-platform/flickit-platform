@@ -35,7 +35,7 @@ class UserActivationView(APIView):
     def get (self, request, uid, token):
         protocol = 'https://' if request.is_secure() else 'http://'
         web_url = protocol + 'localhost:8000'
-        post_url = web_url + "/auth/users/activation/?uid=(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$'"
+        post_url = web_url + "/authinfo/users/activation/?uid=(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$'"
         post_data = {'uid': uid, 'token': token}
         result = requests.post(post_url, data = post_data)
         content = result.text
