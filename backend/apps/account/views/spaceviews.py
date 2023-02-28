@@ -18,9 +18,7 @@ class SpaceAccessAPI(APIView):
     def post(self, request, space_id):
         serializer = InputSpaceAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        spaceservices.add_user_to_space(space_id, **serializer.validated_data)
-        return Response(status=status.HTTP_200_OK)
-
+        return spaceservices.add_user_to_space(space_id, **serializer.validated_data)
 
 class SpaceViewSet(ModelViewSet):
     def get_serializer_class(self):

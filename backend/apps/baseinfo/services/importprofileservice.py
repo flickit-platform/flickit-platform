@@ -1,4 +1,5 @@
 from zipfile import ZipFile
+from django.utils.text import slugify 
 from django.db import transaction
 
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
@@ -46,7 +47,7 @@ def __import_profile_base_info(extra_info):
     tags = extract_tags(extra_info['tag_ids'])
     expert_group = expertgroupservice.load_expert_group(extra_info['expert_group_id'])
     assessment_profile = AssessmentProfile()
-    assessment_profile.code = extra_info['code']
+    assessment_profile.code = slugify(extra_info['title'])
     assessment_profile.title = extra_info['title']
     assessment_profile.about = extra_info['about']
     assessment_profile.summary = extra_info['summary']

@@ -10,10 +10,11 @@ from account.models import UserAccess
 def add_user_to_space(space_id, email):
     user = userservices.load_user_by_email(email)
     try:
-        user_access = UserAccess.objects.get(space_id = space_id, user = user)
-        user_access.save()
+        UserAccess.objects.get(space_id = space_id, user = user)
+        return Response({"message": "The invited user has already existed in the space"}, status=status.HTTP_400_BAD_REQUEST)
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
+        return Response(status=status.HTTP_200_OK)
 
 def add_owner_to_space(space, current_user_id):
     try:

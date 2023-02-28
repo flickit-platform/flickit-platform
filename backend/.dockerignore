@@ -1,20 +1,25 @@
-# Git
-.git
-.gitignore
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
 
-# Docker
-.docker
+# Ignore static and media files
+static/
+media/
 
-# Python
-assessmentplatform/__pycache__/
-assessmentplatform/*/__pycache__/
-assessmentplatform/*/*/__pycache__/
-assessmentplatform/*/*/*/__pycache__/
-assessmentplatform/local_settings.py
-local_settings.py
-.env/
-.venv/
-venv/
+# Ignore database files
+*.sqlite3
+*.db
 
-# Local PostgreSQL data
-data/
+# Ignore logs
+logs/
+*.log
+
+# Ignore local development files
+*.env
+*.env.*
+*.pyc
+*.swp
+*.swo
+*.vscode
+.idea/
+.vs/
