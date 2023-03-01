@@ -1,3 +1,4 @@
+
 from django.db import transaction
 from rest_framework import serializers
 from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateSerializer as BaseUserCreateSerializer
@@ -31,7 +32,7 @@ class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
     @transaction.atomic
     def perform_create(self, validated_data):
         user =  super().perform_create(validated_data)
-        spaceservices.add_invited_user_to_space(user)
+        spaceservices.create_default_space(user)
         return user
 
 
