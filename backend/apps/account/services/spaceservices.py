@@ -1,10 +1,12 @@
+import random
+import string
 from datetime import datetime
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 
 from account.services import userservices
-from account.models import UserAccess
+from account.models import UserAccess, User, Space
 
 
 def add_user_to_space(space_id, email):
@@ -15,6 +17,16 @@ def add_user_to_space(space_id, email):
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
         return Response(status=status.HTTP_200_OK)
+    
+def create_default_space(user:User):
+    alphabet = string.digits
+    space = Space()
+    space.code = ''.join(random.choice(alphabet) for _ in range(6))
+    space.title = user.display_name + '_default_space'
+    space.owner = user
+    space.save()
+    add_owner_to_space(space, user.id)
+    add_invited_user_to_space(user)
 
 def add_owner_to_space(space, current_user_id):
     try:
