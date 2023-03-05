@@ -1,4 +1,14 @@
-import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Link as MLink } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Link as MLink,
+} from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
@@ -19,7 +29,16 @@ interface IExpertGroupsItemProps {
 
 const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data, disableActions = false } = props;
-  const { id, name, picture, bio = "", website, about = "", users = [], number_of_profiles } = data || {};
+  const {
+    id,
+    name,
+    picture,
+    bio = "",
+    website,
+    about = "",
+    users = [],
+    number_of_profiles,
+  } = data || {};
 
   return (
     <Box>
@@ -53,7 +72,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }
           subheader={
             <Box sx={{ ...styles.centerV, textTransform: "lowercase" }}>
-              {number_of_profiles} <Trans i18nKey="profiles" />
+              <Trans i18nKey="publishedProfiles" />: {number_of_profiles}
             </Box>
           }
         />
@@ -110,11 +129,13 @@ const Actions = (props: any) => {
   const { service } = useServiceContext();
   const { id } = expertGroup;
   const { query: fetchExpertGroup, loading } = useQuery({
-    service: (args = { id }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id }, config) =>
+      service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
   const dialogProps = useDialog();
-  const hasAccess = expertGroup?.owner?.id === userInfo.id || expertGroup.is_expert;
+  const hasAccess =
+    expertGroup?.owner?.id === userInfo.id || expertGroup.is_expert;
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
@@ -138,7 +159,10 @@ const Actions = (props: any) => {
           },
         ]}
       />
-      <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={fetchExpertGroups} />
+      <ExpertGroupCEFormDialog
+        {...dialogProps}
+        onSubmitForm={fetchExpertGroups}
+      />
     </>
   ) : null;
 };
