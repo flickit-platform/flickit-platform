@@ -4,15 +4,10 @@ services:
   backend:
     build:
       context: ./backend
-    command: >
-      sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
     ports:
       - 8000:8000
     volumes:
-      - ./backend:/backend
-      - static-data:/admin/vol/web
+      - static-data:/vol/web
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
@@ -108,8 +103,9 @@ services:
       - BASE_URL=http://backend:8000
     stdin_open: true
     depends_on:
-      - backend  
+      - backend
 
 volumes:
   postgres-data:
   static-data:
+

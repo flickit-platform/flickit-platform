@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = False
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -232,5 +232,5 @@ ACCOUNTS_VERIFICATION_REQUIRED = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/admin/vol/web/media'
-STATIC_ROOT = '/admin/vol/web/static'
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
