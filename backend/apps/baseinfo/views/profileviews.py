@@ -64,7 +64,15 @@ class ProfileListApi(APIView):
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
-        response = AssessmentProfileSerilizer(expert_group.profiles, many = True, context={'request': request}).data
+        response = AssessmentProfileSerilizer(expert_group.profiles.filter(is_active=True), many = True, context={'request': request}).data
+        return Response({'results' : response}, status = status.HTTP_200_OK)
+    
+class UnpublishedProfileListApi(APIView):
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    @is_expert
+    def get(self, request, expert_group_id):
+        expert_group = expertgroupservice.load_expert_group(expert_group_id)
+        response = AssessmentProfileSerilizer(expert_group.profiles.filter(is_active=True), many = True, context={'request': request}).data
         return Response({'results' : response}, status = status.HTTP_200_OK)
 
 class ProfileListOptionsApi(APIView):

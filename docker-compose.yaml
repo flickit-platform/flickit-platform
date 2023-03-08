@@ -2,16 +2,11 @@ version: '3.9'
 
 services:
   backend:
-    command: >
-      sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
-    image: ghcr.io/avansoft/flickit-platform:0.6.1
+    image: ghcr.io/avansoft/flickit-platform:0.6.2
     ports:
       - 8000:8000
     volumes:
-      - ./backend:/backend
-      - static-data:/admin/vol/web
+      - static-data:/vol/web
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
@@ -51,7 +46,7 @@ services:
     image: redis:alpine
   celery:
     restart: always
-    image: ghcr.io/avansoft/flickit-platform:0.6.1
+    image: ghcr.io/avansoft/flickit-platform:0.6.2
     command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
@@ -71,7 +66,7 @@ services:
       - backend
 
   flower:
-    image: ghcr.io/avansoft/flickit-platform:0.6.1
+    image: ghcr.io/avansoft/flickit-platform:0.6.2
     command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend

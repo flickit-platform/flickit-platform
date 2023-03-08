@@ -22,7 +22,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         return expert_group.users.count()
     
     def get_number_of_profiles(self, expert_group: ExpertGroup):
-        return expert_group.profiles.count()
+        return expert_group.profiles.filter(is_active = True).count()
     
     def check_expert(self, expert_group: ExpertGroup):
         current_user = self.context.get('request', None).user
