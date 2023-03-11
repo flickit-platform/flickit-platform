@@ -49,26 +49,26 @@ class Test_QuestionaryView:
 
         newlist = sorted(base_info['questionnaires'], key=lambda x: x.index, reverse=True)
 
-        assert response.data['questionaries_info'][3]['title'] == newlist[0].title
-        assert response.data['questionaries_info'][3]['metric_number'] == 2
-        assert response.data['questionaries_info'][3]['answered_metric'] == 0
-        assert response.data['questionaries_info'][3]['progress'] == 0.0
-        assert response.data['questionaries_info'][3]['current_metric_index'] == 1
+        assert response.data['questionaries_info'][0]['title'] == newlist[0].title
+        assert response.data['questionaries_info'][0]['metric_number'] == 2
+        assert response.data['questionaries_info'][0]['answered_metric'] == 0
+        assert response.data['questionaries_info'][0]['progress'] == 0.0
+        assert response.data['questionaries_info'][0]['current_metric_index'] == 1
         
-        assert response.data['questionaries_info'][2]['title'] == newlist[1].title
-        assert response.data['questionaries_info'][2]['metric_number'] == 3
-        assert response.data['questionaries_info'][2]['answered_metric'] == 2
-        assert response.data['questionaries_info'][2]['progress'] == 66.66666666666666
-        assert response.data['questionaries_info'][2]['current_metric_index'] == 1
-
-        assert response.data['questionaries_info'][1]['title'] == newlist[2].title
+        assert response.data['questionaries_info'][1]['title'] == newlist[1].title
         assert response.data['questionaries_info'][1]['metric_number'] == 3
         assert response.data['questionaries_info'][1]['answered_metric'] == 2
         assert response.data['questionaries_info'][1]['progress'] == 66.66666666666666
         assert response.data['questionaries_info'][1]['current_metric_index'] == 1
 
-        assert response.data['questionaries_info'][0]['title'] == newlist[3].title
-        assert response.data['questionaries_info'][0]['metric_number'] == 3
-        assert response.data['questionaries_info'][0]['answered_metric'] == 2
-        assert response.data['questionaries_info'][0]['progress'] == 66.66666666666666
-        assert response.data['questionaries_info'][0]['current_metric_index'] == 2
+        assert response.data['questionaries_info'][2]['title'] == newlist[2].title
+        assert response.data['questionaries_info'][2]['metric_number'] == 3
+        assert response.data['questionaries_info'][2]['answered_metric'] == 2
+        assert response.data['questionaries_info'][2]['progress'] == 66.66666666666666
+        assert response.data['questionaries_info'][2]['current_metric_index'] == 1
+
+        assert response.data['questionaries_info'][3]['title'] == newlist[3].title
+        assert response.data['questionaries_info'][3]['metric_number'] == 3
+        assert response.data['questionaries_info'][3]['answered_metric'] == 2
+        assert response.data['questionaries_info'][3]['progress'] == 66.66666666666666
+        assert response.data['questionaries_info'][3]['current_metric_index'] == 2
