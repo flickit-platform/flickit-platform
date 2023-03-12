@@ -37,7 +37,11 @@ class ExpertGroupAccessViewSet(ModelViewSet):
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        return expertgroupservice.perform_delete(self.get_object(), request.user)
+        result = expertgroupservice.perform_delete(self.get_object(), request.user)
+        if not result:
+            return Response({"message": "The owner of the expert group can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
     @transaction.atomic
     def list(self, request, *args, **kwargs):

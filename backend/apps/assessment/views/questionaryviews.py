@@ -3,17 +3,17 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from baseinfo.models.basemodels import QualityAttribute
+from common.abstractservices import load_model
 from account.permission.spaceperm import IsSpaceMember
 
-from assessment.models import AssessmentProject, QualityAttributeValue
-from assessment.services.questionnairereport import QuestionnaireReportInfo
+from assessment.models import AssessmentProject
+from assessment.services import questionnaireservices, attributeservices
 
 
-class QuestionaryBaseInfoView(APIView):
+class QuestionaryBaseInfoApi(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
-    def get(self, request,assessment_project_id):
-        assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
+    def get(self, request, assessment_project_id):
+        assessment_project = load_model(AssessmentProject, assessment_project_id)
         content = {}
         content['subjects'] = assessment_project.assessment_profile.assessment_subjects.values('id','title')
         content['assessment_title'] = assessment_project.title
@@ -23,47 +23,17 @@ class QuestionaryBaseInfoView(APIView):
 class QuestionaryView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
     def get (self, request, assessment_project_id):
-        assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
+        assessment_project = load_model(AssessmentProject, assessment_project_id)
         result_id = assessment_project.get_assessment_result().id
-        if not self.is_qulaity_attribute_value_exists(result_id):
-            self.init_quality_attribute_value(result_id)
-
-        
         subject_id = request.query_params.get("subject_pk", None)
-        if subject_id:
-            questionnaires = assessment_project.assessment_profile.questionnaires.filter(assessment_subjects__id=subject_id)
-        else:
-            questionnaires = assessment_project.assessment_profile.questionnaires.all()
-        questionnaire_report_info = self.__extract_questionnaire_info(result_id, questionnaires)
-
         content = {}
+
+        if not attributeservices.is_qulaity_attribute_value_exists(result_id):
+            attributeservices.init_quality_attribute_value(result_id)
+        questionnaire_report_info = questionnaireservices.extract_questionnaire_report_info(subject_id, assessment_project, result_id)
         content['questionaries_info'] = questionnaire_report_info.questionnaires_info
-        self.calculate_total_progress(questionnaire_report_info, content)
+        questionnaireservices.calculate_total_progress(questionnaire_report_info, content)
         return Response(content)
 
-    def calculate_total_progress(self, questionnaire_report_info, content):
-        total_answered_metric_number = 0
-        total_metric_number = 0
-        for questionnaire_info in questionnaire_report_info.questionnaires_info:
-            total_answered_metric_number += questionnaire_info['answered_metric']
-            total_metric_number += questionnaire_info['metric_number']
 
-        content['total_answered_metric_number'] = total_answered_metric_number
-        content['total_metric_number'] = total_metric_number
-        content['progress'] =  (total_answered_metric_number/total_metric_number) * 100
-
-    def __extract_questionnaire_info(self, result_id, questionnaires):
-        questionnaire_report_info = QuestionnaireReportInfo(questionnaires)
-        questionnaire_report_info.calculate_questionnaire_info(result_id)
-        return questionnaire_report_info
-
-    def is_qulaity_attribute_value_exists(self, result_id):
-        return QualityAttributeValue.objects.filter(assessment_result_id = result_id).exists()
-
-    def init_quality_attribute_value(self, result_id):
-        quality_attributes = QualityAttribute.objects.all()
-        for att in quality_attributes:
-            try:
-                QualityAttributeValue.objects.get(assessment_result_id = result_id, quality_attribute_id = att.id)
-            except QualityAttributeValue.DoesNotExist:
-                QualityAttributeValue.objects.create(assessment_result_id = result_id, quality_attribute_id = att.id, maturity_level_value = 1)
+    

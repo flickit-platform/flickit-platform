@@ -1,104 +1,22 @@
-from statistics import mean
-from rest_framework.mixins import Response, status
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
 from account.permission.spaceperm import IsSpaceMember
 
 from assessment.serializers.subjectreportserializers import SubjectReportSerializer
 from assessment.models import QualityAttributeValue
-from assessment.models import AssessmentResult
-from assessment.services.questionnairereport import QuestionnaireReportInfo
-from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY, calculate_staus
-from assessment.services.metricstatistic import extract_total_progress
+from assessment.services import subjectreportservices, attributeservices
 
 class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, IsSpaceMember]
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
-        quality_attribute_values = response.data['results']
-        return self.calculate_report(response, quality_attribute_values)
-
-    def calculate_report(self, response, quality_attribute_values):
-        result = self.extract_assessment_result()
-        questionnaires = self.extract_questionnaire_from_assessment_result(result)
-        self.extract_base_info(response, result)
-        questionnaire_report_info = self.extract_questionnaire_info(response, questionnaires)
-        response.data['total_metric_number'] = questionnaire_report_info.total_metric_number
-        response.data['total_answered_metric'] = questionnaire_report_info.total_answered_metric
-        self.calculate_subject_progress(response, questionnaire_report_info)
-
-        self.calculate_total_progress(response, result)
-        
-        if questionnaire_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
-            response.data['status'] = 'Not Calculated'
-            response.data['no_insight_yet_message'] = 'To view insights, you need to answer more questions'
-            response.data['results'] = None
-        else:
-            self.extract_report_details(response, quality_attribute_values)
-        return response
-
-    def extract_assessment_result(self):
-        return AssessmentResult.objects.filter(pk=self.request.query_params.get('assessment_result_pk')).first()
-
-    def extract_questionnaire_from_assessment_result(self, result):
-        return result.assessment_project.assessment_profile.questionnaires\
-            .filter(assessment_subjects__id = self.request.query_params.get('assessment_subject_pk')).all()
-
-    def extract_base_info(self, response, result):
-        response.data['assessment_project_title'] = result.assessment_project.title
-        response.data['assessment_project_id'] = result.assessment_project_id
-        response.data['assessment_profile_description'] = result.assessment_project.assessment_profile.summary
-
-        if result.assessment_project.color is not None :
-            response.data['assessment_project_color_code'] = result.assessment_project.color.color_code   
-        if result.assessment_project.space is not None:
-            response.data['assessment_project_space_id'] = result.assessment_project.space_id
-            response.data['assessment_project_space_title'] = result.assessment_project.space.title
-        response.data['title'] = AssessmentSubject.objects.get(pk=self.request.query_params.get('assessment_subject_pk')).title
-
-    def extract_report_details(self, response, quality_attribute_values):
-        if not quality_attribute_values:
-            response.data['status'] = 'Not Calculated'
-        else:
-            value = self.calculate_maturity_level_value(quality_attribute_values)
-            response.data['status'] = calculate_staus(value)
-            response.data['maturity_level_value'] = value
-            response.data['most_significant_strength_atts'] = self.extract_most_significant_strength_atts(quality_attribute_values)
-            response.data['most_significant_weaknessness_atts'] = self.extract_most_significant_weaknessness_atts(quality_attribute_values)
-
-    def calculate_maturity_level_value(self, quality_attribute_values):
-        return round(mean([item['maturity_level_value'] for item in quality_attribute_values]))
-
-    def extract_most_significant_weaknessness_atts(self, quality_attribute_values):
-        return [o['quality_attribute'] for o in quality_attribute_values  if o['maturity_level_value'] < 3][:-3:-1]
-
-    def extract_most_significant_strength_atts(self, quality_attribute_values):
-        return [o['quality_attribute'] for o in quality_attribute_values if o['maturity_level_value'] > 2][:2]
-
-    def calculate_subject_progress(self, response, questionnaire_report_info):
-        if questionnaire_report_info.total_metric_number != 0:
-            response.data['progress'] = int((response.data['total_answered_metric'] / response.data['total_metric_number']) * 100)
-        else:
-            response.data['progress'] = 0
-
-    def calculate_total_progress(self, response, result: AssessmentResult):
-        response.data['total_progress'] = extract_total_progress(result)
-
-    def extract_questionnaire_info(self, response, questionnaires):
-        questionnaire_report_info = QuestionnaireReportInfo(questionnaires)
-        questionnaire_report_info.calculate_questionnaire_info(self.request.query_params.get('assessment_result_pk'))
-        # response.data['questionnaires_info'] = questionnaire_report_info.questionnaires_info
-        return questionnaire_report_info
 
     def get_serializer_class(self):
         return SubjectReportSerializer
 
     def get_queryset(self):
         result_id = self.request.query_params.get('assessment_result_pk')
-        if self.is_qulaity_attribute_value_exists(result_id) == False:
-            self.init_quality_attribute_value(result_id)
+        if attributeservices.is_qulaity_attribute_value_exists(result_id) == False:
+            attributeservices.init_quality_attribute_value(result_id)
 
         query_set = QualityAttributeValue.objects.all()
 
@@ -111,13 +29,11 @@ class SubjectReportViewSet(viewsets.ReadOnlyModelViewSet):
                             .order_by('-maturity_level_value')
         return query_set
 
-    def is_qulaity_attribute_value_exists(self, result_id):
-        return QualityAttributeValue.objects.filter(assessment_result_id = result_id).exists()
-
-    def init_quality_attribute_value(self, result_id):
-        quality_attributes = QualityAttribute.objects.all()
-        for att in quality_attributes:
-            try:
-                QualityAttributeValue.objects.get(assessment_result_id = result_id, quality_attribute_id = att.id)
-            except QualityAttributeValue.DoesNotExist:
-                QualityAttributeValue.objects.create(assessment_result_id = result_id, quality_attribute_id = att.id, maturity_level_value = 1)
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        quality_attribute_values = response.data['results']
+        assessment_subject_pk = request.query_params.get('assessment_subject_pk')
+        assessment_result_pk = request.query_params.get('assessment_result_pk')
+        result = subjectreportservices.calculate_report(assessment_subject_pk, assessment_result_pk, quality_attribute_values)
+        response.data.update(result.data)
+        return response
