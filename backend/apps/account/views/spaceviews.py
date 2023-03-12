@@ -2,7 +2,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 
-from account.serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
+from account.serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer,InputSpaceExitSerializer
 from account.serializers.commonserializers import SpaceSerializer
 from account.services import spaceservices
 
@@ -28,3 +28,12 @@ class SpaceViewSet(ModelViewSet):
         current_user = self.request.user
         if current_user.spaces is not None:
             return current_user.spaces.all()
+
+
+
+class SpaceExitUser(APIView):
+    serializer_class = InputSpaceExitSerializer
+    def post(self, request, space_id):
+        serializer = InputSpaceExitSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return spaceservices.exit_user_the_space(request.user,space_id, **serializer.validated_data)
