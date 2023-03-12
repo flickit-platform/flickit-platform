@@ -2,8 +2,6 @@ from datetime import timedelta, datetime
 from django.utils import timezone
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 
 from account.services import userservices
@@ -82,9 +80,9 @@ def perform_delete(instance: ExpertGroupAccess, current_user):
     if current_user.id != instance.expert_group.owner_id:
         raise PermissionDenied
     if instance.user_id == instance.expert_group.owner_id:
-        return Response({"message": "The owner of the expert group can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
+        return False
     instance.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return True
 
 def remove_expire_invitions(user_expert_group_access_list):
     user_expert_group_access_list_id = [obj['id'] for obj in user_expert_group_access_list]
