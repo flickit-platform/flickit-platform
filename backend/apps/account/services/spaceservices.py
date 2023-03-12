@@ -78,4 +78,14 @@ def remove_expire_invitions(user_space_access_list):
         UserAccess.objects.get(id = expire.id).delete()
 
 
+def exit_user_the_space(current_user,space_id,user_id):
+    if current_user.id == user_id:
+        user = userservices.load_user(user_id)
+        if UserAccess.objects.get(space_id = space_id, user = user):
+                UserAccess.objects.get(space_id = space_id, user = user).delete()
+                return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "There is no such user and space"}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        raise PermissionDenied
 
