@@ -1,10 +1,9 @@
 import random
 import string
 from datetime import datetime
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 
+from common.restutil import ActionResult
 from account.services import userservices
 from account.models import UserAccess, User, Space
 
@@ -13,10 +12,10 @@ def add_user_to_space(space_id, email):
     user = userservices.load_user_by_email(email)
     try:
         UserAccess.objects.get(space_id = space_id, user = user)
-        return Response({"message": "The invited user has already existed in the space"}, status=status.HTTP_400_BAD_REQUEST)
+        return False
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
-        return Response(status=status.HTTP_200_OK)
+        return True
     
 def create_default_space(user:User):
     alphabet = string.digits
@@ -55,20 +54,20 @@ def perform_delete(instance: UserAccess, current_user):
         raise PermissionDenied
     
     if instance.user_id == instance.space.owner_id:
-        return Response({"message": "The owner of the space can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
+        return False
     instance.delete()
     if instance.user is not None and instance.space.id == instance.user.current_space_id:
         instance.user.current_space_id = None
         instance.user.save()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return True
 
 def change_current_space(current_user, space_id):
     if current_user.spaces.filter(id = space_id).exists():
         current_user.current_space_id = space_id
         current_user.save()
-        return Response({'message': 'The current space of user is changed successfully'})
+        return True
     else:
-        return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
+        return False
 
 def remove_expire_invitions(user_space_access_list):
     user_space_access_list_id = [obj['id'] for obj in user_space_access_list]
@@ -78,14 +77,13 @@ def remove_expire_invitions(user_space_access_list):
         UserAccess.objects.get(id = expire.id).delete()
 
 
-def exit_user_the_space(current_user,space_id,user_id):
-    if current_user.id == user_id:
-        user = userservices.load_user(user_id)
-        if UserAccess.objects.get(space_id = space_id, user = user):
-                UserAccess.objects.get(space_id = space_id, user = user).delete()
-                return Response(status=status.HTTP_200_OK)
-        else:
-            return Response({"message": "There is no such user and space"}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        raise PermissionDenied
+def exit_user_the_space(space_id, current_user):
+    try:
+        space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
+        space_user_access.delete()
+        return ActionResult(success=True, message='Leaving from the space is done successfully')
+    except UserAccess.DoesNotExist:
+        return ActionResult(success=False, message='There is no such user and space')
+
+
 

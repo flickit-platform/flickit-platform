@@ -2,8 +2,6 @@ import requests
 from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -69,7 +67,10 @@ class UserAccessViewSet(ModelViewSet):
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        return spaceservices.perform_delete(self.get_object(), request.user)
+        result =  spaceservices.perform_delete(self.get_object(), request.user)
+        if not result:
+            return Response({"message": "The owner of the space can not be removed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @transaction.atomic
     def list(self, request, *args, **kwargs):

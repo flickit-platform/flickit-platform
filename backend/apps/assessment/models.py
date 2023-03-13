@@ -5,7 +5,7 @@ from baseinfo.models.profilemodels import AssessmentProfile
 from baseinfo.models.metricmodels import Metric
 from baseinfo.models.metricmodels import AnswerTemplate
 from baseinfo.models.basemodels import QualityAttribute
-from account.models import Space
+from account.models import Space, User
 
 
 class Color(models.Model):
@@ -68,6 +68,12 @@ class MetricValue(models.Model):
     answer = models.ForeignKey(AnswerTemplate, on_delete=models.CASCADE, null=True)
 
 
+class Evidence(models.Model):
+    description = models.TextField()
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    metric_value = models.ForeignKey(MetricValue, on_delete=models.CASCADE, related_name='evidences')
 
 
 

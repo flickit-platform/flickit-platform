@@ -36,9 +36,3 @@ class SpaceSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
         fields = ['id', 'code', 'title'] 
-        
-        
-class InputSpaceExitSerializer(serializers.Serializer):
-    user_id = serializers.IntegerField()
-    def validate(self, attrs):
-        return attrs

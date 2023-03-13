@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 from common.validators import validate_file_size
 
-
 class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, display_name, **extra_fields):

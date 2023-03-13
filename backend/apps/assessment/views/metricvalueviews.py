@@ -5,13 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from common.abstractservices import load_model
+
 from account.permission.spaceperm import IsSpaceMember
 from baseinfo.models.basemodels import Questionnaire
 
 from assessment.models import MetricValue, AssessmentProject
-from assessment.serializers.metricvalueserializers import AddMetricValueSerializer, UpdateMetricValueSerializer, MetricValueSerializer
-from assessment.fixture.dictionary import Dictionary
-from assessment.services.metricstatistic import extract_total_progress
+from assessment.serializers.metricvalueserializers import AddMetricValueSerializer, MetricValueSerializer
+from assessment.services import metricstatistic, metricservices
 
 
 class MetricValueViewSet(ModelViewSet):
@@ -22,8 +23,6 @@ class MetricValueViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return AddMetricValueSerializer
-        elif self.request.method == 'PATCH':
-            return UpdateMetricValueSerializer
         return MetricValueSerializer
     
     def get_queryset(self):
@@ -33,54 +32,26 @@ class MetricValueViewSet(ModelViewSet):
         return query_set
 
     def get_serializer_context(self):
-        return {'assessment_result_id': self.kwargs['assessment_result_pk']}
-
+        return {'assessment_result_id': self.kwargs['assessment_result_pk'], 'request': self.request}
+    
+    
 class TotalProgressView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
     def get (self, request, assessment_project_id):
         assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
         content = {}
-        content['total_progress'] = extract_total_progress(assessment_project.get_assessment_result())
+        content['total_progress'] = metricstatistic.extract_total_progress(assessment_project.get_assessment_result())
         content['assessment_project_title'] = assessment_project.title
         return Response(content)
 
 class MetricValueListView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
     def get (self, request, assessment_project_id, questionnaire_id):
-        questionnaire = Questionnaire.objects.get(id = questionnaire_id)
+        questionnaire = load_model(Questionnaire, questionnaire_id)
+        assessment = load_model(AssessmentProject, assessment_project_id)
         content = {}
-        assessment = AssessmentProject.objects.get(id = assessment_project_id)
         metric_values = assessment.get_assessment_result().metric_values.all()
-        metrics = self.extract_metrics(questionnaire, metric_values)
+        metrics = metricservices.extract_metrics(questionnaire, metric_values)
         content['metrics'] = metrics
         content['assessment_result_id'] = assessment.get_assessment_result().id
-
         return Response(content)
-
-    # TODO: Find a better way for serilizing -> pickle or serilizer.data MetricSerilizer
-    def extract_metrics(self, questionnaire, metric_values):
-        metrics = []
-        metric_query_set = questionnaire.metric_set.all().order_by('index')
-        for item in metric_query_set:
-            metric = Dictionary()
-            metric.add('id', item.id)
-            metric.add('title', item.title)
-            metric.add('index', item.index)
-            answer_templates = []
-            for answer in item.answer_templates.all():
-                answer_template = Dictionary()
-                answer_template.add('id', answer.id)
-                answer_template.add('caption', answer.caption)
-                answer_template.add('value', answer.value)
-                answer_templates.append(answer_template)
-                metric.add('answer_templates', answer_templates)
-            for value in metric_values:
-                if value.answer is not None and value.metric.id == item.id:
-                    answer = Dictionary()
-                    answer.add('id', value.answer.id)
-                    answer.add('caption', value.answer.caption)
-                    answer.add('value', value.answer.value)
-                    metric.add('answer', answer)
-                    break
-            metrics.append(metric)
-        return metrics
