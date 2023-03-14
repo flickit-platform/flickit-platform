@@ -77,7 +77,7 @@ def remove_expire_invitions(user_space_access_list):
         UserAccess.objects.get(id = expire.id).delete()
 
 
-def exit_user_the_space(space_id, current_user):
+def leave_user_space(space_id, current_user):
     try:
         space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
         space_user_access.delete()
