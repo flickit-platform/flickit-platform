@@ -1,9 +1,9 @@
 
 from rest_framework import serializers
-
 from account.models import Space
 from account.services import userservices
 from account.serializers.commonserializers import UserSimpleSerializer
+# from django.db.models.fields import IntegerField
 
 class InputSpaceAccessSerializer(serializers.Serializer):
     email = serializers.EmailField()

@@ -3,6 +3,7 @@ import string
 from datetime import datetime
 from rest_framework.exceptions import PermissionDenied
 
+from common.restutil import ActionResult
 from account.services import userservices
 from account.models import UserAccess, User, Space
 
@@ -74,6 +75,15 @@ def remove_expire_invitions(user_space_access_list):
     expire_list = qs.filter(invite_expiration_date__lt=datetime.now())
     for expire in expire_list.all():
         UserAccess.objects.get(id = expire.id).delete()
+
+
+def leave_user_space(space_id, current_user):
+    try:
+        space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
+        space_user_access.delete()
+        return ActionResult(success=True, message='Leaving from the space is done successfully')
+    except UserAccess.DoesNotExist:
+        return ActionResult(success=False, message='There is no such user and space')
 
 
 
