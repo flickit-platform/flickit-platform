@@ -52,7 +52,8 @@ class CustomActivationEmail(ActivationEmail):
         url = context['url']
         to = context['user']['email']
         protocol = context['protocol']
-        async_send.delay(url, to, protocol)
+        display_name = context['user']['display_name']
+        async_send.delay(url, to, protocol, display_name)
 
 
 class UserAccessViewSet(ModelViewSet):
@@ -85,7 +86,7 @@ class InviteMemberForSpaceApi(APIView):
     def post(self, request, space_id):
         serializer = InviteMemberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        userservices.invite_member_for_space(space_id, **serializer.validated_data)
+        userservices.invite_member_for_space(space_id, request.user.display_name, **serializer.validated_data)
         return Response(status=status.HTTP_200_OK)
        
 
