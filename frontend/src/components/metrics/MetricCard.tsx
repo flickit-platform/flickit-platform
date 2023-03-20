@@ -256,9 +256,7 @@ const AnswerTemplate = (props: {
           alignItems: { xs: "stretch", md: "flex-end" },
         }}
       >
-        {/* {!submitOnAnswerSelection && (
-          <MyAnswer answer_templates={answer_templates} value={value} />
-        )} */}
+        {!submitOnAnswerSelection && <AnswerDetails answer_templates={answer_templates} value={value} />}
         <Box
           sx={{
             mt: { xs: 4, md: 1 },
@@ -286,7 +284,7 @@ const AnswerTemplate = (props: {
   );
 };
 
-const MyAnswer = ({ answer_templates, value }: any) => {
+const AnswerDetails = ({ answer_templates, value }: any) => {
   const dialogProps = useDialog();
   const caption = answer_templates.find((temp: any) => temp.value === value?.value)?.caption;
 
@@ -302,7 +300,7 @@ const MyAnswer = ({ answer_templates, value }: any) => {
           flexDirection: "column",
         }}
       >
-        <Box mb={1.8}>
+        {/* <Box mb={1.8}>
           <Typography
             variant="subLarge"
             fontFamily={"Roboto"}
@@ -364,7 +362,7 @@ const MyAnswer = ({ answer_templates, value }: any) => {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
         <Box>
           <Typography
             variant="subLarge"
