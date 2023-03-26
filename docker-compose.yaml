@@ -90,19 +90,32 @@ services:
 
   frontend:
     restart: always
-    command : npm start
     container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    volumes:
+      - frontend_build:/app/frontend/dist
     environment:
       - BASE_URL=http://backend:8000
     stdin_open: true
     depends_on:
-      - backend  
+      - backend
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - frontend_build:/var/www/frontend
+    
+    depends_on:
+      - backend
+      - frontend
+
 
 volumes:
   postgres-data:
   static-data:
+  frontend_build:
