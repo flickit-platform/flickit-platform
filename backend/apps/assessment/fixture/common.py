@@ -15,17 +15,16 @@ STATUS_CHOICES = [
 ]
 
 def calculate_staus(value):
-    match value:
-        case 1:
-            return "WEAK"
-        case 2:
-            return "RISKY"
-        case 3:
-            return "NORMAL"
-        case 4:
-            return "GOOD"
-        case 5:
-            return "OPTIMIZED"
+    if value == 1:
+        return "WEAK"
+    if value == 2:
+        return "RISKY"
+    if value == 3:
+        return "NORMAL"
+    if value == 4:
+        return "GOOD"
+    if value == 5:
+        return "OPTIMIZED"
 
 
 def update_assessment_status(result:AssessmentResult):
