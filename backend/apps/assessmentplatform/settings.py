@@ -145,13 +145,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3333",
     "http://127.0.0.1:3333",
-    "https://checkuptest.asta.ir",
     "https://flickit.org"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ['https://checkuptest.asta.ir', 'https://flickit.org']
+CSRF_TRUSTED_ORIGINS = ['https://flickit.org']
 
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"
