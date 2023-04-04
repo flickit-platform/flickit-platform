@@ -26,6 +26,8 @@ def create_default_space(user:User):
     space.save()
     add_owner_to_space(space, user.id)
     add_invited_user_to_space(user)
+    user.default_space=space
+    user.save()
 
 def add_owner_to_space(space, current_user_id):
     try:
@@ -79,9 +81,10 @@ def remove_expire_invitions(user_space_access_list):
 
 def leave_user_space(space_id, current_user):
     try:
-        space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
-        space_user_access.delete()
-        return ActionResult(success=True, message='Leaving from the space is done successfully')
+        if change_current_space(current_user,current_user.default_space.id):
+            space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
+            space_user_access.delete()
+            return ActionResult(success=True, message='Leaving from the space is done successfully')
     except UserAccess.DoesNotExist:
         return ActionResult(success=False, message='There is no such user and space')
 
