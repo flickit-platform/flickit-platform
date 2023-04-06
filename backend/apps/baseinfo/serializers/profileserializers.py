@@ -67,7 +67,7 @@ class AssessmentProfileCreateSerilizer(serializers.ModelSerializer):
         fields = ['id']
 
 class ImportProfileSerializer(serializers.Serializer):
-    code = serializers.CharField()
+    # code = serializers.CharField()
     title = serializers.CharField()
     about = serializers.CharField()
     summary = serializers.CharField()
