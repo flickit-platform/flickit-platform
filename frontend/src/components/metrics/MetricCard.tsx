@@ -9,7 +9,15 @@ import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import Button from "@mui/material/Button";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import {
+  EAssessmentStatus,
+  metricActions,
+  useMetricContext,
+  useMetricDispatch,
+  setEvidenceDescription,
+} from "@providers/MetricProvider";
 import { IMetricInfo, TAnswer, TMetricsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
@@ -18,7 +26,13 @@ import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import { toast } from "react-toastify";
 import useDialog from "@utils/useDialog";
-import { Avatar, Collapse, DialogActions, DialogContent, Grid } from "@mui/material";
+import {
+  Avatar,
+  Collapse,
+  DialogActions,
+  DialogContent,
+  Grid,
+} from "@mui/material";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormProvider, useForm } from "react-hook-form";
@@ -36,7 +50,8 @@ import useScreenResize from "@utils/useScreenResize";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-
+import { useQuery } from "@utils/useQuery";
+import formatDate from "@utils/formatDate";
 interface IMetricCardProps {
   metricInfo: IMetricInfo;
   metricsInfo: TMetricsInfo;
@@ -81,7 +96,11 @@ export const MetricCard = (props: IMetricCardProps) => {
     >
       <Box>
         <Box>
-          <Typography variant="subLarge" fontFamily={"Roboto"} sx={{ color: "white", opacity: 0.65 }}>
+          <Typography
+            variant="subLarge"
+            fontFamily={"Roboto"}
+            sx={{ color: "white", opacity: 0.65 }}
+          >
             <Trans i18nKey="question" />
           </Typography>
           <Typography
@@ -114,7 +133,8 @@ const AnswerTemplate = (props: {
   metricsInfo: TMetricsInfo;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const { submitOnAnswerSelection, isSubmitting } = useMetricContext();
+  const { submitOnAnswerSelection, isSubmitting, evidences } =
+    useMetricContext();
   const { metricInfo, metricIndex, metricsInfo, abortController } = props;
   const { answer_templates, answer } = metricInfo;
   const { total_number_of_metrics, resultId } = metricsInfo;
@@ -124,28 +144,41 @@ const AnswerTemplate = (props: {
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastMetric = metricIndex == total_number_of_metrics;
-  const isSelectedValueTheSameAsAnswer = metricInfo?.answer?.value == value?.value;
+  const isSelectedValueTheSameAsAnswer =
+    metricInfo?.answer?.value == value?.value;
   const changeHappened = useRef(false);
-
-  const onChange = (event: React.MouseEvent<HTMLElement>, v: TAnswer | null) => {
+  const onChange = (
+    event: React.MouseEvent<HTMLElement>,
+    v: TAnswer | null
+  ) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
     setValue((prevValue) => (prevValue?.value === v?.value ? null : v));
   };
-
+  // first checking if evidences have been submited or not
   const submitQuestion = async () => {
     dispatch(metricActions.setIsSubmitting(true));
     try {
       const res = await service.submitAnswer(
-        {
-          resultId,
-          questionnaireId,
-          data: {
-            metric_id: metricInfo?.id,
-            answer: value?.id || null,
-          },
-        },
+        !answer?.evidences && evidences
+          ? {
+              resultId,
+              questionnaireId,
+              data: {
+                metric_id: metricInfo?.id,
+                answer: value?.id || null,
+                evidences: [{ description: evidences }],
+              },
+            }
+          : {
+              resultId,
+              questionnaireId,
+              data: {
+                metric_id: metricInfo?.id,
+                answer: value?.id || null,
+              },
+            },
         { signal: abortController.current.signal }
       );
       dispatch(metricActions.setIsSubmitting(false));
@@ -156,7 +189,9 @@ const AnswerTemplate = (props: {
         return;
       }
       if (value) {
-        dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS));
+        dispatch(
+          metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS)
+        );
       }
       const newMetricIndex = metricIndex + 1;
       dispatch(metricActions.goToMetric(newMetricIndex));
@@ -190,7 +225,12 @@ const AnswerTemplate = (props: {
           {answer_templates?.map((template) => {
             const { value: templateValue, caption } = template || {};
             return (
-              <Box key={template.value} mb={2} mr={2} sx={{ minWidth: { xs: "180px", sm: "320px" } }}>
+              <Box
+                key={template.value}
+                mb={2}
+                mr={2}
+                sx={{ minWidth: { xs: "180px", sm: "320px" } }}
+              >
                 <ToggleButton
                   data-cy="answer-option"
                   color="success"
@@ -256,7 +296,13 @@ const AnswerTemplate = (props: {
           alignItems: { xs: "stretch", md: "flex-end" },
         }}
       >
-        {!submitOnAnswerSelection && <AnswerDetails answer_templates={answer_templates} value={value} />}
+        {!submitOnAnswerSelection && (
+          <AnswerDetails
+            answer_templates={answer_templates}
+            value={value}
+            answer={answer}
+          />
+        )}
         <Box
           sx={{
             mt: { xs: 4, md: 1 },
@@ -284,9 +330,11 @@ const AnswerTemplate = (props: {
   );
 };
 
-const AnswerDetails = ({ answer_templates, value }: any) => {
+const AnswerDetails = ({ answer_templates, value, answer }: any) => {
   const dialogProps = useDialog();
-  const caption = answer_templates.find((temp: any) => temp.value === value?.value)?.caption;
+  const caption = answer_templates.find(
+    (temp: any) => temp.value === value?.value
+  )?.caption;
 
   return (
     <Collapse in={!!caption} sx={{ flex: 1 }}>
@@ -380,9 +428,22 @@ const AnswerDetails = ({ answer_templates, value }: any) => {
               flexDirection: "column",
             }}
           >
-            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              sx={{ flexDirection: { xs: "column", sm: "row" } }}
+            >
               <Typography>
-                <Trans i18nKey={"noEvidenceYet"} />
+                {answer && answer.evidences ? (
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ marginRight: "5px" }}>
+                      {answer.evidences.length}
+                    </Box>
+                    <Trans i18nKey={"numOfEvidence"} />
+                  </Box>
+                ) : (
+                  <Trans i18nKey={"noEvidenceYet"} />
+                )}
               </Typography>
               <Button
                 sx={{ ml: { xs: -1, sm: 1 }, minWidth: "112px" }}
@@ -393,7 +454,7 @@ const AnswerDetails = ({ answer_templates, value }: any) => {
                 <Trans i18nKey="addEvidence" />
               </Button>
             </Box>
-            <Evidence {...dialogProps} />
+            <Evidence value={value} {...dialogProps} answer={answer} />
           </Box>
         </Box>
       </Box>
@@ -402,11 +463,31 @@ const AnswerDetails = ({ answer_templates, value }: any) => {
 };
 
 const Evidence = (props: any) => {
+  const dispatch = useMetricDispatch();
+  const { service } = useServiceContext();
   const { onClose: closeDialog, ...rest } = props;
+  const { value, answer } = props;
   const formMethods = useForm({ shouldUnregister: true });
-
-  const onSubmit = async (data: any) => {};
-
+  const addEvidence = useQuery({
+    service: (args, config) => service.addEvidence(args, config),
+    runOnMount: false,
+  });
+  //if there is a evidence we should use addEvidence service
+  const onSubmit = async (data: any) => {
+    try {
+      answer &&
+        answer.evidences &&
+        data.evidence &&
+        (await addEvidence.query({
+          description: data.evidence,
+          metric_value_id: answer.evidences[0].metric_value_id,
+        }));
+      await dispatch(metricActions.setEvidenceDescription(data.evidence));
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
   const fullScreen = useScreenResize("sm");
 
   return (
@@ -419,7 +500,10 @@ const Evidence = (props: any) => {
       maxWidth="lg"
       fullScreen={fullScreen}
     >
-      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}>
+      <DialogTitle
+        textTransform={"uppercase"}
+        sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}
+      >
         <AssignmentRoundedIcon sx={{ mr: 1 }} />
         <Trans i18nKey="evidence" />
       </DialogTitle>
@@ -431,7 +515,10 @@ const Evidence = (props: any) => {
         }}
       >
         <FormProvider {...formMethods}>
-          <form onSubmit={formMethods.handleSubmit(onSubmit)} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <form
+            onSubmit={formMethods.handleSubmit(onSubmit)}
+            style={{ flex: 1, display: "flex", flexDirection: "column" }}
+          >
             <Grid container spacing={1} sx={styles.formGrid}>
               <Grid item xs={12}>
                 <InputFieldUC
@@ -442,6 +529,8 @@ const Evidence = (props: any) => {
                   defaultValue={""}
                   name="evidence"
                   label={<Trans i18nKey="evidence" />}
+                  required={true}
+                  placeholder="Please write your evidence"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -456,9 +545,12 @@ const Evidence = (props: any) => {
               <Title size="small">
                 <Trans i18nKey="listOfEvidence" />
               </Title>
-              <Box>
+              <EvidenceDetail answer={answer} />
+              {/* <Box>
                 <Box display="flex" flexDirection="column">
-                  <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
+                  <ListItem
+                    sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}
+                  >
                     <ListItemIcon
                       sx={{
                         minWidth: "45px",
@@ -473,17 +565,23 @@ const Evidence = (props: any) => {
                     />
                     <Box display="flex" sx={{ flexDirection: "column" }}>
                       <Box sx={{ ...styles.centerV }}>
-                        <AccessTimeRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
-                        2022/02/01
+                        <AccessTimeRoundedIcon
+                          sx={{ mr: 0.7, color: "gray" }}
+                          fontSize="small"
+                        />
+                        2022/02/  01
                       </Box>
                       <Box sx={{ ...styles.centerV }}>
-                        <PersonOutlineRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
+                        <PersonOutlineRoundedIcon
+                          sx={{ mr: 0.7, color: "gray" }}
+                          fontSize="small"
+                        />
                         erfan kaboli
                       </Box>
                     </Box>
                   </ListItem>
                 </Box>
-              </Box>
+              </Box> */}
             </Box>
             <DialogActions
               sx={{
@@ -502,6 +600,87 @@ const Evidence = (props: any) => {
         </FormProvider>
       </DialogContent>
     </Dialog>
+  );
+};
+const EvidenceDetail = (props: any) => {
+  const { answer } = props;
+  const { service } = useServiceContext();
+  const { evidences } = useMetricContext();
+  const deleteEvidence = useQuery({
+    service: (args, config) => service.deleteEvidence(args, config),
+    runOnMount: false,
+  });
+  const updateEvidence = useQuery({
+    service: (args, config) => service.updateEvidence(args, config),
+    runOnMount: false,
+  });
+  const onDelete = async (pk: any) => {
+    try {
+      await deleteEvidence.query({
+        pk,
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const onUpdate = async (pk: any) => {
+    console.log(evidences);
+    try {
+      await updateEvidence.query({
+        description: evidences,
+        pk,
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+  return (
+    answer &&
+    answer.evidences &&
+    answer.evidences.map((item: any, index: any) => (
+      <Box key={index}>
+        <Box display="flex" flexDirection="column">
+          <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
+            <ListItemIcon
+              sx={{
+                minWidth: "45px",
+                display: { xs: "none", sm: "inline-flex" },
+              }}
+            >
+              <AssignmentRoundedIcon />
+            </ListItemIcon>
+            <ListItemText sx={{ pr: 2 }} primary={item.description} />
+            <Box display="flex" sx={{ flexDirection: "column" }}>
+              <Box sx={{ ...styles.centerV }}>
+                <AccessTimeRoundedIcon
+                  sx={{ mr: 0.7, color: "gray" }}
+                  fontSize="small"
+                />
+                {formatDate(item.creation_time)}
+                <Box sx={{ marginLeft: "10px", display: "flex" }}>
+                  <Box onClick={() => onDelete(item.id)}>
+                    <DeleteForeverRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
+                  </Box>
+                  <Box onClick={() => onUpdate(item.id)}>
+                    <CreateRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
+                  </Box>
+                </Box>
+              </Box>
+              {/* <Box sx={{ ...styles.centerV }}>
+                <PersonOutlineRoundedIcon
+                  sx={{ mr: 0.7, color: "gray" }}
+                  fontSize="small"
+                />
+                erfan kaboli
+              </Box> */}
+            </Box>
+          </ListItem>
+        </Box>
+      </Box>
+    ))
   );
 };
 

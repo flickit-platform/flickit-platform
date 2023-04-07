@@ -8,6 +8,7 @@ export enum METRIC_ACTIONS_TYPE {
   SET_ASSESSMENT_STATUS = "SET_ASSESSMENT_STATUS",
   SET_SUBMIT_ON_ANSWER_SELECTION = "SET_SUBMIT_ON_ANSWER_SELECTION",
   SET_IS_SUBMITTING = "SET_IS_SUBMITTING",
+  SET_EVIDENCE_DESCRIPTION="SET_EVIDENCE_DESCRIPTION"
 }
 
 export const goToMetric = function (payload: number | string | undefined) {
@@ -39,6 +40,9 @@ export const setSubmitOnAnswerSelection = function (payload: boolean) {
 export const setIsSubmitting = function (payload: boolean) {
   return { payload, type: METRIC_ACTIONS_TYPE.SET_IS_SUBMITTING };
 };
+export const setEvidenceDescription = function (payload: String) {
+  return { payload, type: METRIC_ACTIONS_TYPE.SET_EVIDENCE_DESCRIPTION };
+};
 
 export const metricActions = {
   goToMetric,
@@ -47,5 +51,6 @@ export const metricActions = {
   setAssessmentStatus,
   setSubmitOnAnswerSelection,
   setIsSubmitting,
+  setEvidenceDescription
 };
 export type TMetricActions = typeof metricActions;

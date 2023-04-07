@@ -62,6 +62,7 @@
   "accessDenied": "Access Denied",
   "youDontHaveCorrectPermissions": "You don't have correct permissions",
   "noEvidenceYet": "No evidence yet",
+  "numOfEvidence":"Evidences",
   "howSureAreYou": "How sure are you?",
   "myConfidenceLevelOnThisQuestionIs": "Confidence level of this answer ",
   "listOfEvidence": "List of Evidence",
