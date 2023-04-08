@@ -631,7 +631,10 @@ const ProfilesList = (props: any) => {
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupProfiles(args, config),
   });
-
+  const unpublishedProfileQuery = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupUnpublishedProfiles(args, config),
+  });
   return (
     <>
       <Title
@@ -651,6 +654,7 @@ const ProfilesList = (props: any) => {
       <Box mt={2}>
         <QueryData
           {...profileQuery}
+          {...unpublishedProfileQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
@@ -674,7 +678,6 @@ const ProfilesList = (props: any) => {
           }}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
-            console.log(results)
             return (
               <>
                 {results.map((profile: any) => {
@@ -688,6 +691,20 @@ const ProfilesList = (props: any) => {
                     key={profile?.id}
                     data={profile}
                     fetchProfiles={profileQuery.query}
+                    hasAccess={is_expert}
+                  />)
+                })}
+                {is_expert&&unpublishedProfileQuery?.data?.results.map((profile: any) => {
+                  return(
+                  <ProfileListItem
+                    link={
+                      is_expert
+                        ? `profiles/${profile?.id}`
+                        : `/profiles/${profile?.id}`
+                    }
+                    key={profile?.id}
+                    data={profile}
+                    fetchProfiles={unpublishedProfileQuery.query}
                     hasAccess={is_expert}
                   />)
                 })}

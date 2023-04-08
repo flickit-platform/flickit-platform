@@ -371,6 +371,10 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { id } = args || {};
       return axios.get(`/baseinfo/expertgroup/profiles/${id}/`, config);
     },
+    fetchExpertGroupUnpublishedProfiles(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { id } = args || {};
+      return axios.get(`/baseinfo/expertgroup/unpublishedprofiles/${id}/`, config);
+    },
     publishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
       return axios.get(`/baseinfo/profiles/publish/${id}/`, config);
