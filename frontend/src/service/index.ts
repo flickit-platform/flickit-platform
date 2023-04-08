@@ -381,7 +381,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     },
     unPublishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/archive/${id}/`, config);
+      return axios.post(`/baseinfo/profiles/archive/${id}/`, config);
     },
     addMemberToExpertGroup(args: { id: TId; email: string }, config: AxiosRequestConfig<any> | undefined) {
       const { id, email } = args || {};

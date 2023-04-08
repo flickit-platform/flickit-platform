@@ -654,7 +654,6 @@ const ProfilesList = (props: any) => {
       <Box mt={2}>
         <QueryData
           {...profileQuery}
-          {...unpublishedProfileQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
