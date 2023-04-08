@@ -377,7 +377,7 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
     },
     publishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/publish/${id}/`, config);
+      return axios.post(`/baseinfo/profiles/publish/${id}/`, config);
     },
     unPublishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
