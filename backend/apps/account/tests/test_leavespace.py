@@ -54,5 +54,6 @@ class TestLeaveSpace:
         resp = view(request, space_list[0].id)
 
         assert resp.status_code == status.HTTP_200_OK
+        assert resp.data['message'] == 'Leaving from the space is done successfully.'
         
         

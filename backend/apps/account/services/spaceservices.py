@@ -93,7 +93,7 @@ def leave_user_space(space_id, current_user):
         result = change_current_space(current_user, current_user.default_space.id)
         if not result.success:
             return ActionResult(success=False, message="The user's current space cannot be set to user's default space.")
-        return ActionResult(success=True, message='Leaving from the space is done successfully')
+        return ActionResult(success=True, message='Leaving from the space is done successfully.')
     except UserAccess.DoesNotExist:
         return ActionResult(success=False, message='There is no such user or space')
 
