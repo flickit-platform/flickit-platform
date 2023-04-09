@@ -534,19 +534,20 @@ export const createService = (
       const { id } = args || {};
       return axios.get(`/baseinfo/expertgroup/profiles/${id}/`, config);
     },
-    publishProfile(
-      args: { id: TId },
-      config: AxiosRequestConfig<any> | undefined
-    ) {
+    fetchExpertGroupUnpublishedProfiles(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/publish/${id}/`, config);
+      return axios.get(`/baseinfo/expertgroup/unpublishedprofiles/${id}/`, config);
+    },
+    publishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { id } = args || {};
+      return axios.post(`/baseinfo/profiles/publish/${id}/`, config);
     },
     unPublishProfile(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/archive/${id}/`, config);
+      return axios.post(`/baseinfo/profiles/archive/${id}/`, config);
     },
     addMemberToExpertGroup(
       args: { id: TId; email: string },

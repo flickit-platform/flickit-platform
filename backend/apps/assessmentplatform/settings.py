@@ -74,7 +74,8 @@ DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL'),
 EMAIL_USE_TLS=True
 
 DOMAIN = (os.environ.get('DOMAIN')) 
-SITE_NAME = ('Assessment Platform') 
+SITE_NAME = ('Flickit') 
+EXPIRATION_DAYS = 7
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
@@ -144,12 +145,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3333",
     "http://127.0.0.1:3333",
-    "https://checkuptest.asta.ir",
+    "https://flickit.org"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ['https://checkuptest.asta.ir']
+CSRF_TRUSTED_ORIGINS = ['https://flickit.org']
 
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"

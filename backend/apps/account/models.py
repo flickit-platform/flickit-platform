@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     current_space = models.ForeignKey(Space, on_delete=models.PROTECT, null=True)
-    default_space = models.OneToOneField(Space, on_delete=models.PROTECT, null=True,related_name="default_space")
+    default_space = models.OneToOneField(Space, on_delete=models.PROTECT, null=True, related_name="default_member")
     picture = models.ImageField(upload_to='user/images', null=True, validators=[validate_file_size])
     bio = models.CharField(null=True, max_length=400)
     linkedin = models.URLField(null=True, blank=True)

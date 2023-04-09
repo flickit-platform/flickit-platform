@@ -37,7 +37,7 @@
 // }
 
 Cypress.Commands.add("loginByApi", (email = Cypress.env("USER_EMAIL"), password = Cypress.env("USER_PASSWORD")) => {
-  cy.request("POST", `https://checkuptest.asta.ir/authinfo/jwt/create/`, {
+  cy.request("POST", `https://flickit.org/authinfo/jwt/create/`, {
     email,
     password,
   }).then((response) => {

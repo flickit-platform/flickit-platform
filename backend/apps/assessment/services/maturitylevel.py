@@ -72,14 +72,13 @@ def calculate_maturity_level(result, quality_attribute):
         return maturity_level_value + 1
 
 def normalize_Value(value):
-    match value:
-        case 1:
-            return 0
-        case 2:
-            return 0
-        case 3:
-            return 0.5
-        case 4:
-            return 0.9
-        case 5:
-            return 1
+    if value == 1:
+        return 0
+    if value == 2:
+        return 0
+    if value == 3:
+        return 0.5
+    if value == 4:
+        return 0.9
+    if value == 5:
+        return 1

@@ -1,28 +1,25 @@
 {% load i18n %}
 
 {% block subject %}
-{% blocktrans %}Invite on {{ site_name }}{% endblocktrans %}
+{% blocktrans %}Invite to Join{% endblocktrans %}
 {% endblock subject %}
 
 {% block text_body %}
-{% blocktrans %}You're receiving this email because you are invited to register on {{ site_name }}.{% endblocktrans %}
+{% blocktrans %}You have been invited by {{inviter_name}} to join on in {{ site_name }} Platform.{% endblocktrans %}
 
-{% trans "Please go to the following page to sign up" %}
+{% blocktrans %}To accept this invitation, please click the following link within {{ expiration_days }} days.{% endblocktrans %}
 {{ protocol }}://{{ domain }}/{{ url|safe }}
 
-{% trans "Thanks for using our site!" %}
 
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% blocktrans %}Sincerely, {{ site_name }} Team{% endblocktrans %}
 {% endblock text_body %}
 
 {% block html_body %}
-<p>{% blocktrans %}You're receiving this email because you are invited to register on {{ site_name }}.{% endblocktrans %}</p>
+<p>{% blocktrans %}You have been invited by {{inviter_name}} to join on in {{ site_name }} Platform.{% endblocktrans %}</p>
 
-<p>{% trans "Please go to the following page to sign up" %}</p>
+<p>{% blocktrans %}To accept this invitation, please click the following link within {{ expiration_days }} days.{% endblocktrans %}</p>
 <p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
 
-<p>{% trans "Thanks for using our site!" %}</p>
-
-<p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}</p>
+<p>{% blocktrans %}Sincerely, {{ site_name }} Team{% endblocktrans %}</p>
 
 {% endblock html_body %}

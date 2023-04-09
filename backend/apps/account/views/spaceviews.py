@@ -12,9 +12,10 @@ from account.services import spaceservices
 class ChangeCurrentSpaceViewSet(APIView):
     def post(self, request, space_id):
         result = spaceservices.change_current_space(request.user, space_id)
-        if not result:
-            return Response({"message": "The space does not exists in the user's spaces."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'message': 'The current space of user is changed successfully'})
+        if result.success:
+            return Response({'message': result.message})
+        else:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
         
 
 class SpaceAccessAPI(APIView):

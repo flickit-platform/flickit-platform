@@ -57,7 +57,8 @@ class AddUserToExpertGroupApi(APIView):
     def post(self, request, expert_group_id):
         serializer = expertgroupserializers.ExpertGroupGiveAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = expertgroupservice.add_user_to_expert_group(expert_group_id, **serializer.validated_data)
+        inviter_name = request.user.display_name
+        result = expertgroupservice.add_user_to_expert_group(expert_group_id, inviter_name, **serializer.validated_data)
         email = serializer.validated_data['email']
         if not result:
             error_message = 'User with email {} is member of expert group'.format(email)

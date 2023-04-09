@@ -19,12 +19,12 @@ def load_user(user_id) -> User:
         return None
 
 @transaction.atomic
-def invite_member_for_space(space_id, email):
+def invite_member_for_space(space_id,inviter_name, email):
     print('sending email with celery for inviting member')
     url = 'sign-up/'
     to = email
     protocol = 'https'
-    async_send_invite.delay(url, to, protocol)
+    async_send_invite.delay(url, to, protocol, inviter_name)
     create_user_access_temp_record(space_id, email)
 
 def create_user_access_temp_record(space_id, email):
