@@ -29,7 +29,8 @@ urlpatterns += [
     path("compare/", comparisionviews.CompareAssessmentView.as_view()),
     path("compareselect/", projectviews.AssessmentProjectSelectForCompareView.as_view()),
     path("checkreport/<str:assessment_project_id>/", reportviews.AssessmentCheckReportApi.as_view()),
-    path("addevidence/<str:metric_value_id>/", evidenceviews.AddEvidenceApi.as_view()),
+    path("addevidence/<str:metric_id>/<str:assessment_id>", evidenceviews.AddEvidenceApi.as_view()),
     path("updateevidence/<str:pk>/", evidenceviews.EvidenceUpdateAPI.as_view()),
     path("deleteevidence/<str:pk>/", evidenceviews.EvidenceDeleteAPI.as_view()),
+    path("evidences/<str:metric_id>/<str:assessment_id>/", evidenceviews.EvidenceListApi.as_view()),
 ]

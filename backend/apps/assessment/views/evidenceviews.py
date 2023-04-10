@@ -2,17 +2,26 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-from assessment.models import Evidence
+from assessment.models import Evidence, EvidenceRelation
 
 
 class AddEvidenceApi(APIView):
     @transaction.atomic
-    def post(self, request, metric_value_id):
+    def post(self, request, metric_id, assessment_id):
+        evidence_relation = None
+        try:
+            evidence_relation = EvidenceRelation.objects.get(metric_id = metric_id, assessment_id = assessment_id)
+        except EvidenceRelation.DoesNotExist:
+            evidence_relation = EvidenceRelation.objects.create(metric_id = metric_id, assessment_id = assessment_id)
+
+        evidence_relation.assessment_id = assessment_id
+        evidence_relation.metric_id = metric_id
+        evidence_relation.save()
+
         evidence = Evidence()
         evidence.created_by = self.request.user
         evidence.description = request.data.get('description')
-        evidence.metric_value_id = metric_value_id
+        evidence.evidence_relation = evidence_relation
         evidence.save()
         return Response()
     
@@ -35,3 +44,16 @@ class EvidenceDeleteAPI(APIView):
         
         instance.delete()
         return Response({'message': 'Evidence deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+class EvidenceListApi(APIView):
+    def get (self, request, metric_id, assessment_id):
+        try:
+            evidence_relation = EvidenceRelation.objects.get(assessment_id = assessment_id, metric_id = metric_id)
+        except EvidenceRelation.DoesNotExist:
+            return Response({})
+        content = {}
+        if evidence_relation is None:
+            return Response(content)
+        evidence_qs = Evidence.objects.filter(evidence_relation_id = evidence_relation.id)
+        content['evidences'] = evidence_qs.values()
+        return Response(content)
