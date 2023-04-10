@@ -30,7 +30,7 @@ class AssessmentProject(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4)
-    code = models.SlugField(max_length=100, unique=True)
+    code = models.SlugField(max_length=100)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -42,7 +42,7 @@ class AssessmentProject(models.Model):
     objects = AssessmentProjectManager()
 
     class Meta:
-        unique_together = [('title', 'space')]
+        unique_together = [('title', 'space'), ('code', 'space')]
 
     def __str__(self) -> str:
         return self.title
