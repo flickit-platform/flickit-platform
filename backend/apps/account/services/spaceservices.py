@@ -25,6 +25,7 @@ def create_default_space(user:User):
     space.code = ''.join(random.choice(alphabet) for _ in range(6))
     space.title = user.display_name + '_default_space'
     space.owner = user
+    space.is_default_spaces=True
     space.save()
     add_owner_to_space(space, user.id)
     add_invited_user_to_space(user)

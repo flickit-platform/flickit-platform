@@ -30,7 +30,7 @@ class SpaceListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers'] 
+        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers','is_default_spaces'] 
 
 class SpaceSimpleSerializer(serializers.ModelSerializer):
     class Meta:
