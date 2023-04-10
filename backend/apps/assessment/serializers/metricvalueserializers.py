@@ -1,25 +1,12 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from account.serializers.commonserializers import UserSimpleSerializer
-
 from baseinfo.models.metricmodels import Metric
 from baseinfo.serializers.commonserializers import AnswerTemplateSerializer, SimpleMetricSerializers
 
-from assessment.models import MetricValue, Evidence
+from assessment.models import MetricValue
 from assessment.fixture.common import update_assessment_status
-from assessment.services import attributeservices, metricservices
-
-class EvidenceSerializer(serializers.ModelSerializer):
-    created_by = UserSimpleSerializer()
-    class Meta:
-        model = Evidence
-        fields = ['id', 'description', 'created_by']
-
-class EvidenceCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Evidence
-        fields = ['id', 'description']
+from assessment.services import attributeservices
 
 class MetricValueSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)

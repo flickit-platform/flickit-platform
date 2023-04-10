@@ -1,9 +1,22 @@
 from django.db import transaction
+from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from assessment.models import Evidence, EvidenceRelation
+from account.serializers.commonserializers import UserSimpleSerializer
 
+
+class EvidenceSerializer(serializers.ModelSerializer):
+    created_by = UserSimpleSerializer()
+    class Meta:
+        model = Evidence
+        fields = ['id', 'description', 'created_by', 'creation_time', 'last_modification_date']
+
+class EvidenceCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Evidence
+        fields = ['id', 'description']
 
 class AddEvidenceApi(APIView):
     @transaction.atomic
@@ -55,5 +68,5 @@ class EvidenceListApi(APIView):
         if evidence_relation is None:
             return Response(content)
         evidence_qs = Evidence.objects.filter(evidence_relation_id = evidence_relation.id)
-        content['evidences'] = evidence_qs.values()
+        content['evidences'] = EvidenceSerializer(list(evidence_qs), many=True).data
         return Response(content)
