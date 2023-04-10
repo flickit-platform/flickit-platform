@@ -1,20 +1,8 @@
 from statistics import mean
-from rest_framework import serializers
-
-from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
-from account.serializers.commonserializers import SpaceSerializer
-
-from statistics import mean
-from rest_framework import serializers
-
-from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
-from account.serializers.commonserializers import SpaceSerializer
-
-from assessment.serializers.commonserializers import ColorSerilizer
-from assessment.models import AssessmentProject, AssessmentResult
+from assessment.models import AssessmentResult
 from assessment.fixture.common import calculate_staus, ANSWERED_QUESTION_NUMBER_BOUNDARY
 from assessment.fixture.dictionary import Dictionary
-from assessment.services import attributesstatistics, reportservices, metricstatistic
+from assessment.services import metricstatistic
 
 
 

@@ -1,5 +1,4 @@
 from assessment.fixture.dictionary import Dictionary
-from assessment.models import MetricValue, Evidence
 
 # TODO: Handle with a better way for serilizing -> pickle or serilizer.data MetricSerilizer
 def extract_metrics(questionnaire, metric_values):

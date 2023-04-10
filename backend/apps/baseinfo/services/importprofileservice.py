@@ -24,6 +24,7 @@ def __trim_content(content):
             line = line.replace('.', '')
             new_content = new_content + '\n' + line
     return new_content
+
 @transaction.atomic
 def import_profile(descriptive_profile, **kwargs):
     assessment_profile = __import_profile_base_info(kwargs)
