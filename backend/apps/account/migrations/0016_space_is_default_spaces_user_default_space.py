@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='space',
-            name='is_default_spaces',
+            name='is_default_space',
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(

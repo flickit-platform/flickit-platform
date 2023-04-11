@@ -24,7 +24,7 @@ def init_space():
     def do_init_data():
         user = baker.make(User, email = 'test@test.com')
         curent_space = baker.make(Space, code = '01', title = "current_space_test", owner = user)
-        default_space = baker.make(Space, code = '02', title = "default_space_test", owner = user)
+        default_space = baker.make(Space, code = '02', title = "default_space_test", owner = user, is_default_space = True)
         user.current_space = curent_space
         user.default_space = default_space
         user.save()
@@ -56,4 +56,6 @@ class TestLeaveSpace:
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data['message'] == 'Leaving from the space is done successfully.'
         
-        
+        resp = view(request, space_list[1].id)
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['message'] == 'The user cannot leave the default space.'
