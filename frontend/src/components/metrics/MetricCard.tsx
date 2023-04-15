@@ -161,24 +161,14 @@ const AnswerTemplate = (props: {
     dispatch(metricActions.setIsSubmitting(true));
     try {
       const res = await service.submitAnswer(
-        !answer?.evidences && evidences
-          ? {
-              resultId,
-              questionnaireId,
-              data: {
-                metric_id: metricInfo?.id,
-                answer: value?.id || null,
-                evidences: [{ description: evidences }],
-              },
-            }
-          : {
-              resultId,
-              questionnaireId,
-              data: {
-                metric_id: metricInfo?.id,
-                answer: value?.id || null,
-              },
-            },
+        {
+          resultId,
+          questionnaireId,
+          data: {
+            metric_id: metricInfo?.id,
+            answer: value?.id || null,
+          },
+        },
         { signal: abortController.current.signal }
       );
       dispatch(metricActions.setIsSubmitting(false));
@@ -301,6 +291,7 @@ const AnswerTemplate = (props: {
             answer_templates={answer_templates}
             value={value}
             answer={answer}
+            metricInfo={metricInfo}
           />
         )}
         <Box
@@ -330,7 +321,12 @@ const AnswerTemplate = (props: {
   );
 };
 
-const AnswerDetails = ({ answer_templates, value, answer }: any) => {
+const AnswerDetails = ({
+  answer_templates,
+  value,
+  answer,
+  metricInfo,
+}: any) => {
   const dialogProps = useDialog();
   const caption = answer_templates.find(
     (temp: any) => temp.value === value?.value
@@ -454,7 +450,11 @@ const AnswerDetails = ({ answer_templates, value, answer }: any) => {
                 <Trans i18nKey="addEvidence" />
               </Button>
             </Box>
-            <Evidence value={value} {...dialogProps} answer={answer} />
+            <Evidence
+              {...dialogProps}
+              answer={answer}
+              metricInfo={metricInfo}
+            />
           </Box>
         </Box>
       </Box>
@@ -466,23 +466,32 @@ const Evidence = (props: any) => {
   const dispatch = useMetricDispatch();
   const { service } = useServiceContext();
   const { onClose: closeDialog, ...rest } = props;
-  const { value, answer } = props;
+  const { value, answer, metricInfo } = props;
+  const { assessmentId = "" } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
   const addEvidence = useQuery({
     service: (args, config) => service.addEvidence(args, config),
     runOnMount: false,
   });
+  const evidencesQueryData = useQuery({
+    service: (args, config) => service.fetchEvidences(args, config),
+    runOnMount: false,
+    toastError: true,
+  });
+  useEffect(() => {
+    evidencesQueryData.query({ metricId: metricInfo.id, assessmentId });
+  }, []);
+
   //if there is a evidence we should use addEvidence service
   const onSubmit = async (data: any) => {
     try {
-      answer &&
-        answer.evidences &&
-        data.evidence &&
-        (await addEvidence.query({
-          description: data.evidence,
-          metric_value_id: answer.evidences[0].metric_value_id,
-        }));
-      await dispatch(metricActions.setEvidenceDescription(data.evidence));
+      await addEvidence.query({
+        description: data.evidence,
+        metricId: metricInfo.id,
+        assessmentId,
+      });
+      await await evidencesQueryData.query({ metricId: metricInfo.id, assessmentId });
+      // await dispatch(metricActions.setEvidenceDescription(data.evidence));
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -545,7 +554,11 @@ const Evidence = (props: any) => {
               <Title size="small">
                 <Trans i18nKey="listOfEvidence" />
               </Title>
-              <EvidenceDetail answer={answer} />
+              {evidencesQueryData?.data?.evidences&&
+                evidencesQueryData?.data?.evidences.map(
+                  (item: any, index: number) => <EvidenceDetail item={item} evidencesQueryData={evidencesQueryData}metricInfo={metricInfo}assessmentId={assessmentId} />
+                )}
+
               {/* <Box>
                 <Box display="flex" flexDirection="column">
                   <ListItem
@@ -603,9 +616,10 @@ const Evidence = (props: any) => {
   );
 };
 const EvidenceDetail = (props: any) => {
-  const { answer } = props;
   const { service } = useServiceContext();
   const { evidences } = useMetricContext();
+  const { item ,evidencesQueryData,assessmentId,metricInfo} = props;
+  const { description, last_modification_date, created_by,id } = item;
   const deleteEvidence = useQuery({
     service: (args, config) => service.deleteEvidence(args, config),
     runOnMount: false,
@@ -619,6 +633,7 @@ const EvidenceDetail = (props: any) => {
       await deleteEvidence.query({
         pk,
       });
+      await evidencesQueryData.query({ metricId: metricInfo.id, assessmentId });
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -632,55 +647,52 @@ const EvidenceDetail = (props: any) => {
         description: evidences,
         pk,
       });
+      await evidencesQueryData.query({ metricId: metricInfo.id, assessmentId });
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
   };
   return (
-    answer &&
-    answer.evidences &&
-    answer.evidences.map((item: any, index: any) => (
-      <Box key={index}>
-        <Box display="flex" flexDirection="column">
-          <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
-            <ListItemIcon
-              sx={{
-                minWidth: "45px",
-                display: { xs: "none", sm: "inline-flex" },
-              }}
-            >
-              <AssignmentRoundedIcon />
-            </ListItemIcon>
-            <ListItemText sx={{ pr: 2 }} primary={item.description} />
-            <Box display="flex" sx={{ flexDirection: "column" }}>
-              <Box sx={{ ...styles.centerV }}>
-                <AccessTimeRoundedIcon
-                  sx={{ mr: 0.7, color: "gray" }}
-                  fontSize="small"
-                />
-                {formatDate(item.creation_time)}
-                <Box sx={{ marginLeft: "10px", display: "flex" }}>
-                  <Box onClick={() => onDelete(item.id)}>
-                    <DeleteForeverRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
-                  </Box>
-                  <Box onClick={() => onUpdate(item.id)}>
-                    <CreateRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
-                  </Box>
+    <Box>
+      <Box display="flex" flexDirection="column">
+        <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
+          <ListItemIcon
+            sx={{
+              minWidth: "45px",
+              display: { xs: "none", sm: "inline-flex" },
+            }}
+          >
+            <AssignmentRoundedIcon />
+          </ListItemIcon>
+          <ListItemText sx={{ pr: 2 }} primary={description} />
+          <Box display="flex" sx={{ flexDirection: "column" }}>
+            <Box sx={{ ...styles.centerV }}>
+              <AccessTimeRoundedIcon
+                sx={{ mr: 0.7, color: "gray" }}
+                fontSize="small"
+              />
+              {formatDate(last_modification_date)}
+              <Box sx={{ marginLeft: "10px", display: "flex" }}>
+                <Box onClick={() => onDelete(id)}>
+                  <DeleteForeverRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
                 </Box>
+                {/* <Box onClick={() => onUpdate(id)}>
+                  <CreateRoundedIcon sx={{ mr: 0.7, color: "gray" }} />
+                </Box> */}
               </Box>
-              {/* <Box sx={{ ...styles.centerV }}>
-                <PersonOutlineRoundedIcon
-                  sx={{ mr: 0.7, color: "gray" }}
-                  fontSize="small"
-                />
-                erfan kaboli
-              </Box> */}
             </Box>
-          </ListItem>
-        </Box>
+            <Box sx={{ ...styles.centerV }}>
+              <PersonOutlineRoundedIcon
+                sx={{ mr: 0.7, color: "gray" }}
+                fontSize="small"
+              />
+              {created_by.display_name}
+            </Box>
+          </Box>
+        </ListItem>
       </Box>
-    ))
+    </Box>
   );
 };
 

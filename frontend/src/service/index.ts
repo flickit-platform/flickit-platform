@@ -643,11 +643,11 @@ export const createService = (
       });
     },
     addEvidence(
-      args: { description: string; metric_value_id: TId },
+      args: { description: string; metricId:TId,assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { description, metric_value_id } = args || {};
-      return axios.post(`/assessment/addevidence/${metric_value_id}/`, {
+      const { description, metricId, assessmentId } = args || {};
+      return axios.post(`/assessment/addevidence/${metricId}/${assessmentId}`, {
         description,
       });
     },
@@ -665,6 +665,16 @@ export const createService = (
       const { description, pk } = args || {};
       return axios.put(`/assessment/updateevidence/${pk}/`, {
         description,
+      });
+    },
+    fetchEvidences(
+      args: { metricId:TId,assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { metricId, assessmentId} = args || {};
+
+      return axios.get(`/assessment/evidences/${metricId}/${assessmentId}/`, {
+        ...(config || {}),
       });
     },
   };
