@@ -25,6 +25,7 @@ def create_default_space(user:User):
     space.code = ''.join(random.choice(alphabet) for _ in range(6))
     space.title = user.display_name + '_default_space'
     space.owner = user
+    space.is_default_space=True
     space.save()
     add_owner_to_space(space, user.id)
     add_invited_user_to_space(user)
@@ -88,7 +89,11 @@ def remove_expire_invitions(user_space_access_list):
 @transaction.atomic
 def leave_user_space(space_id, current_user):
     try:
+        
         space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
+        space=Space.objects.get(id=space_id)
+        if space.is_default_space == True:
+            return ActionResult(success=False, message="The user cannot leave the default space.")
         space_user_access.delete()
         result = change_current_space(current_user, current_user.default_space.id)
         if not result.success:
