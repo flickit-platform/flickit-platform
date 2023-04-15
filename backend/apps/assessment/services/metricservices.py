@@ -23,7 +23,6 @@ def extract_metrics(questionnaire, metric_values):
                 answer.add('id', value.answer.id)
                 answer.add('caption', value.answer.caption)
                 answer.add('value', value.answer.value)
-                answer.add('evidences', value.evidences.values())    
                 metric.add('answer', answer)
                 break
         metrics.append(metric)
