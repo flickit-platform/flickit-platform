@@ -652,12 +652,61 @@ const ProfilesList = (props: any) => {
         <Trans i18nKey={"profiles"} />
       </Title>
       <Box mt={2}>
+        {/* published */}
         <QueryData
           {...profileQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
-                emptyMessage={<Trans i18nKey="thereIsNoProfileYet" />}
+                emptyMessage={<Trans i18nKey="thereIsNoPublishedProfileYet" />}
+              />
+            </Box>
+          }
+          isDataEmpty={(data) => {
+            const { results = [], is_expert } = data;
+            const isEmpty = is_expert
+              ? results.length === 0
+              : results.filter((p: any) => !!p?.is_active)?.length === 0;
+            return isEmpty;
+          }}
+          renderLoading={() => (
+            <>
+              {forLoopComponent(5, (index) => (
+                <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
+              ))}
+            </>
+          )}
+          render={(data = {}) => {
+            const { results = [], is_expert } = data;
+            return (
+              <>
+                {results.map((profile: any) => {
+                  return (
+                    <ProfileListItem
+                      link={
+                        is_expert
+                          ? `profiles/${profile?.id}`
+                          : `/profiles/${profile?.id}`
+                      }
+                      key={profile?.id}
+                      data={profile}
+                      fetchProfiles={profileQuery.query}
+                      fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                      hasAccess={is_expert}
+                    />
+                  );
+                })}
+              </>
+            );
+          }}
+        />
+        {/* unpublished */}
+        <QueryData
+          {...unpublishedProfileQuery}
+          emptyDataComponent={
+            <Box sx={{ background: "white", borderRadius: 2 }}>
+              <ErrorEmptyData
+                emptyMessage={<Trans i18nKey="thereIsNoUnpublishedProfileYet" />}
               />
             </Box>
           }
@@ -675,38 +724,28 @@ const ProfilesList = (props: any) => {
               : results.filter((p: any) => !!p?.is_active)?.length === 0;
             return isEmpty;
           }}
+         
           render={(data = {}) => {
             const { results = [], is_expert } = data;
             return (
               <>
-                {results.map((profile: any) => {
-                  return(
-                  <ProfileListItem
-                    link={
-                      is_expert
-                        ? `profiles/${profile?.id}`
-                        : `/profiles/${profile?.id}`
-                    }
-                    key={profile?.id}
-                    data={profile}
-                    fetchProfiles={profileQuery.query}
-                    hasAccess={is_expert}
-                  />)
-                })}
-                {is_expert&&unpublishedProfileQuery?.data?.results.map((profile: any) => {
-                  return(
-                  <ProfileListItem
-                    link={
-                      is_expert
-                        ? `profiles/${profile?.id}`
-                        : `/profiles/${profile?.id}`
-                    }
-                    key={profile?.id}
-                    data={profile}
-                    fetchProfiles={unpublishedProfileQuery.query}
-                    hasAccess={is_expert}
-                  />)
-                })}
+                {is_expert &&
+                  results.map((profile: any) => {
+                    return (
+                      <ProfileListItem
+                        link={
+                          is_expert
+                            ? `profiles/${profile?.id}`
+                            : `/profiles/${profile?.id}`
+                        }
+                        key={profile?.id}
+                        data={profile}
+                        fetchProfiles={profileQuery.query}
+                        fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                        hasAccess={is_expert}
+                      />
+                    );
+                  })}
               </>
             );
           }}

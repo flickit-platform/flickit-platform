@@ -241,6 +241,8 @@
   "space": "Space",
   "groupSummary": "Group summary",
   "thereIsNoProfileYet": "There is no profile yet",
+  "thereIsNoPublishedProfileYet":"There is no published profile yet",
+  "thereIsNoUnpublishedProfileYet":"There is no unpublished profile yet",
   "resendAndInvitation": "Resend and invitation",
   "providedBy": "Provided by",
   "expertGroup": "Expert group",
