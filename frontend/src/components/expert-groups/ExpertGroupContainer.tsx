@@ -23,6 +23,7 @@ import { Trans } from "react-i18next";
 import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
+import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { t } from "i18next";
 import { IDialogProps, TQueryFunction } from "@types";
 import getUserName from "@utils/getUserName";
@@ -228,7 +229,9 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {number_of_profiles} {t("profiles").toLowerCase()}
+                        {`${number_of_profiles} ${t(
+                          "publishedProfiles"
+                        ).toLowerCase()}`}
                       </Typography>
                       {hasAccess && (
                         <Box ml="auto">
@@ -246,6 +249,33 @@ const ExpertGroupContainer = () => {
                           </IconButton>
                         </Box>
                       )}
+                    </Box>
+                    <Box
+                      sx={{
+                        ...styles.centerV,
+                        mt: 1,
+                        fontSize: ".9rem",
+                        textDecoration: "none",
+                        color: "inherit",
+                      }}
+                      component="a"
+                      href="#profiles"
+                    >
+                      <AssignmentLateRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {`${profiles.length-number_of_profiles} ${t(
+                          "unpublishedProfiles"
+                        ).toLowerCase()}`}
+                      </Typography>
                     </Box>
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
@@ -680,33 +710,36 @@ const ProfilesList = (props: any) => {
             return (
               <>
                 {results.map((profile: any) => {
-                  return(
-                  <ProfileListItem
-                    link={
-                      is_expert
-                        ? `profiles/${profile?.id}`
-                        : `/profiles/${profile?.id}`
-                    }
-                    key={profile?.id}
-                    data={profile}
-                    fetchProfiles={profileQuery.query}
-                    hasAccess={is_expert}
-                  />)
+                  return (
+                    <ProfileListItem
+                      link={
+                        is_expert
+                          ? `profiles/${profile?.id}`
+                          : `/profiles/${profile?.id}`
+                      }
+                      key={profile?.id}
+                      data={profile}
+                      fetchProfiles={profileQuery.query}
+                      hasAccess={is_expert}
+                    />
+                  );
                 })}
-                {is_expert&&unpublishedProfileQuery?.data?.results.map((profile: any) => {
-                  return(
-                  <ProfileListItem
-                    link={
-                      is_expert
-                        ? `profiles/${profile?.id}`
-                        : `/profiles/${profile?.id}`
-                    }
-                    key={profile?.id}
-                    data={profile}
-                    fetchProfiles={unpublishedProfileQuery.query}
-                    hasAccess={is_expert}
-                  />)
-                })}
+                {is_expert &&
+                  unpublishedProfileQuery?.data?.results.map((profile: any) => {
+                    return (
+                      <ProfileListItem
+                        link={
+                          is_expert
+                            ? `profiles/${profile?.id}`
+                            : `/profiles/${profile?.id}`
+                        }
+                        key={profile?.id}
+                        data={profile}
+                        fetchProfiles={unpublishedProfileQuery.query}
+                        hasAccess={is_expert}
+                      />
+                    );
+                  })}
               </>
             );
           }}
