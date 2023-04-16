@@ -33,11 +33,8 @@ class ProfileArchiveApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
-        result = profileservice.archive_profile(profile, request.user.id)
-        if result:
-            return Response({'message': 'The profile is archived successfully'})
-        else:
-            return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)      
+        result = profileservice.archive_profile(profile)
+        return Response({'message': result.message})    
 
 class ProfilePublishApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
@@ -72,7 +69,7 @@ class UnpublishedProfileListApi(APIView):
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
-        response = AssessmentProfileSerilizer(expert_group.profiles.filter(is_active=True), many = True, context={'request': request}).data
+        response = AssessmentProfileSerilizer(expert_group.profiles.filter(is_active=False), many = True, context={'request': request}).data
         return Response({'results' : response}, status = status.HTTP_200_OK)
 
 class ProfileListOptionsApi(APIView):
