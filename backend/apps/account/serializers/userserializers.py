@@ -22,7 +22,7 @@ class UserCustomSerializer(BaseUserSerializer):
         return user.has_perm('baseinfo.manage_expert_group')
 
     class Meta(BaseUserSerializer.Meta):
-        fields= ['id', 'email', 'display_name', 'current_space', 'spaces', 'is_active' , 'expert_groups', 'is_expert', 'bio', 'picture', 'linkedin']
+        fields= ['id', 'email', 'display_name', 'current_space', 'default_space', 'spaces', 'is_active' , 'expert_groups', 'is_expert', 'bio', 'picture', 'linkedin']
 
 class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
     class Meta(BaseUserCreateSerializer.Meta):

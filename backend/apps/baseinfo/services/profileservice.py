@@ -2,6 +2,8 @@ from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
 
+from common.restutil import ActionResult
+
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
@@ -193,13 +195,10 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile, user_id):
-    result = is_profile_deletable(profile.id, user_id)
-    if not result:
-        return False
+def archive_profile(profile: AssessmentProfile):
     profile.is_active = False
     profile.save()
-    return True
+    return ActionResult(True, "The profile is archived successfully")
 
 @transaction.atomic     
 def publish_profile(profile: AssessmentProfile, user_id):

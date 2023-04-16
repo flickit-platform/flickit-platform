@@ -138,6 +138,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
               name="tags"
               multiple={true}
               searchOnType={false}
+              required={true}
               label={<Trans i18nKey="tags" />}
             />
           </Grid>
@@ -145,6 +146,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
             <InputFieldUC
               name="summary"
               label={<Trans i18nKey="summary" />}
+              required={true}
               defaultValue={defaultValues.summary || ""}
             />
           </Grid>
@@ -152,6 +154,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
             <RichEditorField
               name="about"
               label={<Trans i18nKey="about" />}
+              required={true}
               defaultValue={defaultValues.about || ""}
             />
           </Grid>
