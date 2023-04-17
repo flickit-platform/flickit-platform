@@ -108,7 +108,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0, assessment_numbers = 0 } = item || {};
+  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space} = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
     await setCurrentSpace();
@@ -212,6 +212,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             fetchSpaces={fetchSpaces}
             setUserInfo={setUserInfo}
             isOwner={isOwner}
+            is_default_space={is_default_space}
           />
         </>
         {/* )} */}
@@ -228,9 +229,13 @@ const Actions = (props: any) => {
     isActiveSpace,
     setUserInfo,
     isOwner,
+    is_default_space
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
+  const { userInfo } = useAuthContext();
+  const { default_space } = userInfo;
+  console.log(default_space)
   const [editLoading, setEditLoading] = useState(false);
   const {
     query: deleteSpaceMember,
@@ -291,6 +296,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
+        !is_default_space&&
         {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,
