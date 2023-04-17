@@ -7,7 +7,13 @@ import { InputFieldUC } from "@common/fields/InputField";
 import Title from "@common/Title";
 import { Trans } from "react-i18next";
 import Box from "@mui/material/Box";
-import { FieldValues, FormProvider, useForm, UseFormReturn, useWatch } from "react-hook-form";
+import {
+  FieldValues,
+  FormProvider,
+  useForm,
+  UseFormReturn,
+  useWatch,
+} from "react-hook-form";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -78,20 +84,32 @@ const SignUp = () => {
               <Grid item xs={12}>
                 <InputFieldUC
                   autoFocus={true}
-                  autoComplete={"off"}
+                  autoComplete="new-password"
                   required
                   name="display_name"
                   label={<Trans i18nKey="displayName" />}
                 />
               </Grid>
               <Grid item xs={12}>
-                <InputFieldUC type="email" autoComplete={"off"} required={true} name="email" label={<Trans i18nKey="email" />} />
+                <InputFieldUC
+                  type="email"
+                  autoComplete="new-password"
+                  required={true}
+                  name="email"
+                  label={<Trans i18nKey="email" />}
+                />
               </Grid>
               <Grid item xs={12} sx={{ position: "relative" }}>
                 <InputFieldPassword formMethods={formMethods} />
               </Grid>
               <Grid item xs={12} sx={{ mt: { xs: 4, md: 15 } }}>
-                <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={loading}>
+                <LoadingButton
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  loading={loading}
+                >
                   <Trans i18nKey="signUp" />
                 </LoadingButton>
               </Grid>
@@ -116,7 +134,9 @@ const SignUp = () => {
   ) : null;
 };
 
-const InputFieldPassword = (props: { formMethods: UseFormReturn<FieldValues, any> }) => {
+const InputFieldPassword = (props: {
+  formMethods: UseFormReturn<FieldValues, any>;
+}) => {
   const { formMethods } = props;
   const { control } = formMethods;
   const value = useWatch({ control, name: "password" });
@@ -152,7 +172,11 @@ const InputFieldPassword = (props: { formMethods: UseFormReturn<FieldValues, any
       } else {
         symbolCountRef.current = 0;
       }
-      const totalProgress = capsCountRef.current + smallCountRef.current + numberCountRef.current + symbolCountRef.current;
+      const totalProgress =
+        capsCountRef.current +
+        smallCountRef.current +
+        numberCountRef.current +
+        symbolCountRef.current;
       setProgress(totalProgress);
     } else {
       setProgress(0);
@@ -165,16 +189,27 @@ const InputFieldPassword = (props: { formMethods: UseFormReturn<FieldValues, any
         type="password"
         minLength={8}
         required={true}
-        autoComplete="off"
+        autoComplete="new-password"
         name="password"
-        helperText={progress >= 25 && progress < 75 && <Trans i18nKey="needStrongPassword" />}
+        helperText={
+          progress >= 25 &&
+          progress < 75 && <Trans i18nKey="needStrongPassword" />
+        }
         label={<Trans i18nKey="password" />}
       />
       {progress > 0 && (
         <LinearProgress
           variant="determinate"
           value={progress}
-          color={progress === 25 ? "error" : progress === 50 ? "warning" : progress === 75 ? "info" : "success"}
+          color={
+            progress === 25
+              ? "error"
+              : progress === 50
+              ? "warning"
+              : progress === 75
+              ? "info"
+              : "success"
+          }
           sx={{
             height: 2,
             width: "calc(100% - 38px)",
@@ -199,11 +234,20 @@ const SuccessfullyCreatedAccountMessage = () => {
           <Trans i18nKey="youHaveSignedUpSuccessfully" />
         </Alert>
 
-        <Typography variant="h6" fontFamily="Roboto" sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}>
+        <Typography
+          variant="h6"
+          fontFamily="Roboto"
+          sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}
+        >
           <Trans i18nKey="pleaseCheckYouEmail" />
         </Typography>
         <Box display="flex" flexDirection={"column"}>
-          <Button variant="contained" component={"a"} href="https://gmail.com" target="_blank">
+          <Button
+            variant="contained"
+            component={"a"}
+            href="https://gmail.com"
+            target="_blank"
+          >
             <Trans i18nKey={"checkYourInbox"} />
           </Button>
           <Button component={Link} to="/sign-in" size="small" sx={{ mt: 2 }}>
