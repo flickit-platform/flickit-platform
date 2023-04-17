@@ -1,5 +1,4 @@
-from baseinfo.models.metricmodels import MetricImpact
-
+from baseinfo.models.metricmodels import MetricImpact, OptionValue
 from assessment.fixture.dictionary import Dictionary
 
 
@@ -21,15 +20,56 @@ def calculate_maturity_level(result, quality_attribute):
         impact_metric_value_level_4 = Dictionary()
 
         for metric_value, impacts in metric_impact_attribute.items():
+            is_in_impact_level1 = False
+            is_in_impact_level2 = False
+            is_in_impact_level3 = False
+            is_in_impact_level4 = False
             for impact in impacts:
+                impact_option_values = impact.option_values.all()
+                answer_value = next((x for x in impact_option_values if x.option.id == metric_value.answer.id), None)
                 if impact.level == 1 and metric_value.answer is not None:
-                    impact_metric_value_level_1.add(impact, normalize_Value(metric_value.answer.value))
+                    impact_metric_value_level_1.add(impact, answer_value)
+                    if answer_value is not None:
+                        if answer_value.value > 0 and answer_value.value < 1:
+                            is_in_impact_level1 = True
+                    else:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
+                        impact_metric_value_level_1.add(impact, effectivr_answer_value)
                 elif impact.level == 2 and metric_value.answer is not None:
-                    impact_metric_value_level_2.add(impact, normalize_Value(metric_value.answer.value))
+                    impact_metric_value_level_2.add(impact, answer_value)
+                    if answer_value is not None:
+                        if answer_value.value > 0 and answer_value.value < 1:
+                            is_in_impact_level2 = True
+                    elif is_in_impact_level1:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
+                        impact_metric_value_level_2.add(impact, effectivr_answer_value)
+                    else:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
+                        impact_metric_value_level_2.add(impact, effectivr_answer_value)
+
                 elif impact.level == 3 and metric_value.answer is not None:
-                    impact_metric_value_level_3.add(impact, normalize_Value(metric_value.answer.value))
+                    impact_metric_value_level_3.add(impact, answer_value)
+                    if answer_value is not None:
+                        if answer_value.value > 0 and answer_value.value < 1:
+                            is_in_impact_level3 = True
+                    elif is_in_impact_level1 or is_in_impact_level2:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
+                        impact_metric_value_level_3.add(impact, effectivr_answer_value)
+                    else:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
+                        impact_metric_value_level_3.add(impact, effectivr_answer_value)
                 elif impact.level == 4 and metric_value.answer is not None:
-                    impact_metric_value_level_4.add(impact, normalize_Value(metric_value.answer.value))
+                    impact_metric_value_level_4.add(impact, answer_value)
+                    if answer_value is not None:
+                        if answer_value.value > 0 and answer_value.value < 1:
+                            is_in_impact_level4 = True
+                    elif is_in_impact_level1 or is_in_impact_level2 or is_in_impact_level3:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
+                        impact_metric_value_level_4.add(impact, effectivr_answer_value)
+                    else:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
+                        impact_metric_value_level_4.add(impact, effectivr_answer_value)
+                    
 
         impact_metric_value_level_list = []
         impact_metric_value_level_list.append(impact_metric_value_level_1)
@@ -46,8 +86,8 @@ def calculate_maturity_level(result, quality_attribute):
 
         for impact_metric_value_level_dict in impact_metric_value_level_list:
             sum_of_values = 0
-            for impact, value in impact_metric_value_level_dict.items():
-                sum_of_values += value
+            for impact, option_value in impact_metric_value_level_dict.items():
+                sum_of_values += option_value.value
             if i == 1 and len(impact_metric_value_level_dict) != 0:
                 impacts = MetricImpact.objects.filter(level=1,quality_attribute=quality_attribute.id)
                 score_level_1 = sum_of_values/len(impacts)
