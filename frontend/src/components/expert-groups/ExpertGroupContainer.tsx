@@ -272,6 +272,7 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
+                        
                         {`${profiles.length-number_of_profiles} ${t(
                           "unpublishedProfiles"
                         ).toLowerCase()}`}
