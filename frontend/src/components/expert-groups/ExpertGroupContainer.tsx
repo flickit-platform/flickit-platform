@@ -1,4 +1,3 @@
-
 import {
   Avatar,
   AvatarGroup,
@@ -24,6 +23,7 @@ import { Trans } from "react-i18next";
 import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
+import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { t } from "i18next";
 import { IDialogProps, TQueryFunction } from "@types";
 import getUserName from "@utils/getUserName";
@@ -229,7 +229,9 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {number_of_profiles} {t("profiles").toLowerCase()}
+                        {`${number_of_profiles} ${t(
+                          "publishedProfiles"
+                        ).toLowerCase()}`}
                       </Typography>
                       {hasAccess && (
                         <Box ml="auto">
@@ -247,6 +249,33 @@ const ExpertGroupContainer = () => {
                           </IconButton>
                         </Box>
                       )}
+                    </Box>
+                    <Box
+                      sx={{
+                        ...styles.centerV,
+                        mt: 1,
+                        fontSize: ".9rem",
+                        textDecoration: "none",
+                        color: "inherit",
+                      }}
+                      component="a"
+                      href="#profiles"
+                    >
+                      <AssignmentLateRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {`${profiles.length-number_of_profiles} ${t(
+                          "unpublishedProfiles"
+                        ).toLowerCase()}`}
+                      </Typography>
                     </Box>
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
@@ -707,7 +736,9 @@ const ProfilesList = (props: any) => {
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
-                emptyMessage={<Trans i18nKey="thereIsNoUnpublishedProfileYet" />}
+                emptyMessage={
+                  <Trans i18nKey="thereIsNoUnpublishedProfileYet" />
+                }
               />
             </Box>
           }
@@ -725,7 +756,6 @@ const ProfilesList = (props: any) => {
               : results.filter((p: any) => !!p?.is_active)?.length === 0;
             return isEmpty;
           }}
-         
           render={(data = {}) => {
             const { results = [], is_expert } = data;
             return (
