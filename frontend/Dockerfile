@@ -14,12 +14,12 @@ FROM node:18.9.0-alpine
 WORKDIR /app/frontend
 
 # Copy the current directory contents into the container at /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json /app/frontend
 
 # Install any needed packages specified in package.json
 RUN npm install
 
-COPY . ./
+COPY . /app/frontend
 
 # Build the React app
 RUN npm run build
