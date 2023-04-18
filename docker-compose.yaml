@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   backend:
-    image: ghcr.io/avansoft/flickit-platform:0.6.2
+    image: ghcr.io/avansoft/flickit-platform:0.6.4
     ports:
       - 8000:8000
     volumes:
@@ -25,7 +25,7 @@ services:
       - db
 
   dsl:
-      image: ghcr.io/avansoft/flickit-dsl-parser:0.0.1
+      image: ghcr.io/avansoft/flickit-dsl-parser:0.1.1
       restart: on-failure
       ports:
         - 8080:8080
@@ -46,7 +46,7 @@ services:
     image: redis:alpine
   celery:
     restart: always
-    image: ghcr.io/avansoft/flickit-platform:0.6.2
+    image: ghcr.io/avansoft/flickit-platform:0.6.4
     command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
@@ -66,7 +66,7 @@ services:
       - backend
 
   flower:
-    image: ghcr.io/avansoft/flickit-platform:0.6.2
+    image: ghcr.io/avansoft/flickit-platform:0.6.4
     command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend
@@ -88,26 +88,15 @@ services:
     ports:
       - 5555:5555
 
-  # frontend:
-  #   restart: always
-  #   command : npm start
-  #   container_name: frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - BASE_URL=http://backend:8000
-  #   stdin_open: true
-  #   depends_on:
-  #     - backend  
-
-  frontend:
-    image: docker.pkg.github.com/avansoft/flickit-platform/flickit-platform-frontend:latest
+frontend:
+    image: ghcr.io/avansoft/flickit-platform-frontend:0.6.4
     ports:
       - "80:80"
-
+    environment:
+      - BASE_URL=http://backend:8000
+    stdin_open: true
+    depends_on:
+      - backend
 
 volumes:
   postgres-data:
