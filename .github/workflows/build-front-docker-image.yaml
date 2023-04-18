@@ -1,8 +1,9 @@
 name: Build and push Docker image
+
 on:
   push:
-    branches:
-      - OTAT-340-new
+    tags:
+      - '*'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
