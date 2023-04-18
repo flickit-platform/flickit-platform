@@ -88,20 +88,26 @@ services:
     ports:
       - 5555:5555
 
+  # frontend:
+  #   restart: always
+  #   command : npm start
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - BASE_URL=http://backend:8000
+  #   stdin_open: true
+  #   depends_on:
+  #     - backend  
+
   frontend:
-    restart: always
-    command : npm start
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: docker.pkg.github.com/avansoft/flickit-platform/flickit-platform-frontend:latest
     ports:
-      - "3000:3000"
-    environment:
-      - BASE_URL=http://backend:8000
-    stdin_open: true
-    depends_on:
-      - backend  
+      - "80:80"
+
 
 volumes:
   postgres-data:

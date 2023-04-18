@@ -25,4 +25,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: docker.pkg.github.com/${{ github.repository }}/flickit-platform-frontend:${{ github.sha }}
+          tags: docker.pkg.github.com/${{ github.repository }}/flickit-platform-frontend:${{ steps.vars.outputs.tag }}
