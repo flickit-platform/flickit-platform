@@ -8,16 +8,18 @@
 
 
 # Use an official Node runtime as a parent image
-FROM node:14-alpine
+FROM node:18.9.0-alpine
 
 # Set the working directory to /app
-WORKDIR /frontend
+WORKDIR /app/frontend
 
 # Copy the current directory contents into the container at /app
-COPY . /frontend
+COPY package.json package-lock.json ./
 
 # Install any needed packages specified in package.json
 RUN npm install
+
+COPY . ./
 
 # Build the React app
 RUN npm run build
