@@ -26,4 +26,4 @@ jobs:
         pip install flake8
       
     - name: Run Flake8
-      run: flake8 --exclude=tests, migrations, settings.py backend/apps
+      run: flake8 backend/apps --exclude=tests,*/migrations/*,assessmentplatform/settings.py
