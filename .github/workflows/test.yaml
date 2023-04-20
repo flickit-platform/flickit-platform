@@ -63,10 +63,19 @@ jobs:
       run: |
         pip install coverage
 
+    - name: Run migrations
+      env: 
+        SECRET_KEY: test-secret-key
+      run: python backend/apps/manage.py migrate
+
     - name: Run tests with coverage
+      env: 
+        SECRET_KEY: test-secret-key
       run: |
         coverage run backend/apps/manage.py test
 
     - name: Report coverage
+      env: 
+        SECRET_KEY: test-secret-key
       run: |
         coverage report --fail-under=70
