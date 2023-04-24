@@ -340,9 +340,14 @@ const Actions = (props: any) => {
               onClick: inviteMember,
             }
           : undefined,
-        {
+          isInvitees&&{
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="cancelInvitation" />,
+          onClick: deleteItem,
+        },
+        !isInvitees&&{
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="removeMember" />,
           onClick: deleteItem,
         },
       ]}
