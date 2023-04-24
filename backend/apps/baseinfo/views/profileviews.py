@@ -20,7 +20,12 @@ class AssessmentProfileViewSet(ModelViewSet):
     search_fields = ['title']
 
     def get_queryset(self):
-        return AssessmentProfile.objects.filter(is_active=True)
+        if self.action == 'list':
+            return AssessmentProfile.objects.filter(is_active = True)
+        return AssessmentProfile.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         result = profileservice.is_profile_deletable(kwargs['pk'], request.user.id)
@@ -28,27 +33,7 @@ class AssessmentProfileViewSet(ModelViewSet):
             return super().destroy(request, *args, ** kwargs)
         else:
             return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-class ProfileArchiveApi(APIView):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
-    def post(self, request, profile_id):
-        profile = profileservice.load_profile(profile_id)
-        result = profileservice.archive_profile(profile)
-        return Response({'message': result.message})    
-
-class ProfilePublishApi(APIView):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
-    def post(self, request, profile_id):
-        profile = profileservice.load_profile(profile_id)
-        result = profileservice.publish_profile(profile, request.user.id)
-        if not result:
-            return Response({'message': 'The profile has already been published'}, status=status.HTTP_400_BAD_REQUEST) 
-        return Response({'message': 'The profile is published successfully'})
-
-class ProfileTagViewSet(ModelViewSet):
-    serializer_class = ProfileTagSerializer
-    def get_queryset(self):
-        return ProfileTag.objects.all()
+        
 
 class ProfileDetailDisplayApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
@@ -76,6 +61,27 @@ class ProfileListOptionsApi(APIView):
     def get(self, request):
         profile_options =  AssessmentProfile.objects.filter(is_active = True).values('id', 'title')
         return Response({'results': profile_options})
+
+class ProfileArchiveApi(APIView):
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    def post(self, request, profile_id):
+        profile = profileservice.load_profile(profile_id)
+        result = profileservice.archive_profile(profile)
+        return Response({'message': result.message})    
+
+class ProfilePublishApi(APIView):
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    def post(self, request, profile_id):
+        profile = profileservice.load_profile(profile_id)
+        result = profileservice.publish_profile(profile, request.user.id)
+        if not result:
+            return Response({'message': 'The profile has already been published'}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'message': 'The profile is published successfully'})
+
+class ProfileTagViewSet(ModelViewSet):
+    serializer_class = ProfileTagSerializer
+    def get_queryset(self):
+        return ProfileTag.objects.all()
     
 class UploadProfileApi(ModelViewSet):
     serializer_class = ProfileDslSerializer
