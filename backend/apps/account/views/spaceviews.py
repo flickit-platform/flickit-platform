@@ -23,10 +23,12 @@ class SpaceAccessAPI(APIView):
     def post(self, request, space_id):
         serializer = InputSpaceAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result =  spaceservices.add_user_to_space(space_id, **serializer.validated_data)
-        if not result:
-             return Response({"message": "The invited user has already existed in the space"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_200_OK)
+        result =  spaceservices.add_user_to_space(space_id, request.user, **serializer.validated_data)
+        if result.success:
+            return Response({'message': result.message})
+        else:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class SpaceViewSet(ModelViewSet):
     def get_serializer_class(self):
