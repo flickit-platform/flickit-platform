@@ -347,7 +347,7 @@ const Actions = (props: any) => {
         },
         !isInvitees&&{
           icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="removeMember" />,
+          text: <Trans i18nKey="remove" />,
           onClick: deleteItem,
         },
       ]}
