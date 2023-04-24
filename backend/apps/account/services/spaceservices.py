@@ -92,7 +92,7 @@ def leave_user_space(space_id, current_user):
         
         space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
         space=Space.objects.get(id=space_id)
-        if space.is_default_space == True:
+        if space.is_default_space == True and current_user.default_space == space:
             return ActionResult(success=False, message="The user cannot leave the default space.")
         space_user_access.delete()
         result = change_current_space(current_user, current_user.default_space.id)
