@@ -180,6 +180,14 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
+
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
     import imp
@@ -229,9 +237,3 @@ DJOSER = {
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = '/vol/web/media'
-STATIC_ROOT = '/vol/web/static'

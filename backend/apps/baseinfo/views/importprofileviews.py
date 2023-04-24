@@ -6,12 +6,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from assessmentplatform.settings import DSL_PARSER_URL_SERVICE
+
 from baseinfo.services import importprofileservice
 from baseinfo.serializers.profileserializers import ImportProfileSerializer
 from baseinfo.permissions import ManageExpertGroupPermission
-
-
-DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer
