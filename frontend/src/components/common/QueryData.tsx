@@ -22,6 +22,7 @@ interface IQueryDataProps<T> {
   renderLoading?: () => JSX.Element;
   renderError?: (err: ICustomError | (ICustomError | ICustomError[] | undefined)[] | undefined) => JSX.Element;
   isDataEmpty?: (data: T) => boolean;
+  showEmptyError?:boolean,
   query?: TQueryFunction<T>;
 }
 
@@ -51,6 +52,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
     error,
     errorObject,
     isDataEmpty = defaultIsDataEmpty,
+    showEmptyError,
     errorComponent = <ErrorDataLoading />,
     renderLoading = () => loadingComponent,
     loadingComponent = (
@@ -71,7 +73,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
     return renderError(errorObject, errorComponent);
   }
   const isEmpty = loaded && data ? isDataEmpty(data) : false;
-  if (isEmpty) {
+  if (isEmpty&&showEmptyError) {
     return emptyDataComponent;
   }
   return (
