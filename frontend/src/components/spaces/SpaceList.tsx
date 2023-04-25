@@ -108,7 +108,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space} = item || {};
+  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
     await setCurrentSpace();
@@ -212,7 +212,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             fetchSpaces={fetchSpaces}
             setUserInfo={setUserInfo}
             isOwner={isOwner}
-            is_default_space={is_default_space}
+            is_default_space_for_current_user={is_default_space_for_current_user}
           />
         </>
         {/* )} */}
@@ -229,7 +229,7 @@ const Actions = (props: any) => {
     isActiveSpace,
     setUserInfo,
     isOwner,
-    is_default_space
+    is_default_space_for_current_user
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -296,7 +296,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        !is_default_space&&
+        !is_default_space_for_current_user&&
         {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,

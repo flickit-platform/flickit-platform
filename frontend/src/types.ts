@@ -152,7 +152,7 @@ export interface ISpaceModel {
   last_modification_date?: string;
   members_number?: number;
   assessment_numbers?: number;
-  is_default_space?:boolean;
+  is_default_space_for_current_user?:boolean;
 }
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
