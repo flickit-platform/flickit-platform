@@ -2,7 +2,8 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - main
+      - OTAT-396
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
