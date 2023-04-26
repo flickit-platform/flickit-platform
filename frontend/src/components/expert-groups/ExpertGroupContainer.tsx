@@ -250,33 +250,35 @@ const ExpertGroupContainer = () => {
                         </Box>
                       )}
                     </Box>
-                    <Box
-                      sx={{
-                        ...styles.centerV,
-                        mt: 1,
-                        fontSize: ".9rem",
-                        textDecoration: "none",
-                        color: "inherit",
-                      }}
-                      component="a"
-                      href="#profiles"
-                    >
-                      <AssignmentLateRoundedIcon
-                        fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
-                      />
-
-                      <Typography
+                    {is_expert && (
+                      <Box
                         sx={{
-                          opacity: 0.9,
-                          fontSize: "inherit",
+                          ...styles.centerV,
+                          mt: 1,
+                          fontSize: ".9rem",
+                          textDecoration: "none",
+                          color: "inherit",
                         }}
+                        component="a"
+                        href="#profiles"
                       >
-                        {`${profiles.length-number_of_profiles} ${t(
-                          "unpublishedProfiles"
-                        ).toLowerCase()}`}
-                      </Typography>
-                    </Box>
+                        <AssignmentLateRoundedIcon
+                          fontSize="small"
+                          sx={{ mr: 1, opacity: 0.8 }}
+                        />
+
+                        <Typography
+                          sx={{
+                            opacity: 0.9,
+                            fontSize: "inherit",
+                          }}
+                        >
+                          {`${profiles.length - number_of_profiles} ${t(
+                            "unpublishedProfiles"
+                          ).toLowerCase()}`}
+                        </Typography>
+                      </Box>
+                    )}
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
                   {/* --------------------------- */}
@@ -733,6 +735,7 @@ const ProfilesList = (props: any) => {
         {/* unpublished */}
         <QueryData
           {...unpublishedProfileQuery}
+          showEmptyError={false}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
