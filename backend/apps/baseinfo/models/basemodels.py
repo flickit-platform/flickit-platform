@@ -44,7 +44,7 @@ class QualityAttribute(models.Model):
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE)
+    assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE, related_name='quality_attributes')
     index = models.PositiveIntegerField(null=True)
 
     class Meta:
