@@ -8,15 +8,17 @@ from common.restutil import ActionResult
 from account.services import userservices
 from account.models import UserAccess, User, Space
 
-@transaction.atomic
-def add_user_to_space(space_id, email):
+def add_user_to_space(space_id,current_user, email):
     user = userservices.load_user_by_email(email)
+    space = Space.objects.get(id=space_id)
+    if current_user not in space.users.all():
+        return ActionResult(success=False, message='Only member users of the space can add users to the space.')
     try:
         UserAccess.objects.get(space_id = space_id, user = user)
-        return False
+        return ActionResult(success=False, message='This user is a member in this space.')
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
-        return True
+        return ActionResult(success=True, message='This user has successfully joined this space.')
     
 @transaction.atomic
 def create_default_space(user:User):
@@ -89,7 +91,6 @@ def remove_expire_invitions(user_space_access_list):
 @transaction.atomic
 def leave_user_space(space_id, current_user):
     try:
-        
         space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
         space=Space.objects.get(id=space_id)
         if space.is_default_space == True and current_user.default_space == space:
