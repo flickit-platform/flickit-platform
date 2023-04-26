@@ -91,7 +91,6 @@ def remove_expire_invitions(user_space_access_list):
 @transaction.atomic
 def leave_user_space(space_id, current_user):
     try:
-        
         space_user_access = UserAccess.objects.get(space_id = space_id, user = current_user)
         space=Space.objects.get(id=space_id)
         if space.is_default_space == True and current_user.default_space == space:
