@@ -62,7 +62,7 @@
   "accessDenied": "Access Denied",
   "youDontHaveCorrectPermissions": "You don't have correct permissions",
   "noEvidenceYet": "No evidence yet",
-  "numOfEvidence":"Evidences",
+  "numOfEvidence": "Evidences",
   "howSureAreYou": "How sure are you?",
   "myConfidenceLevelOnThisQuestionIs": "Confidence level of this answer ",
   "listOfEvidence": "List of Evidence",
@@ -256,5 +256,9 @@
   "updateUser": "Update user",
   "linkedin": "Linkedin",
   "publishedProfiles": "Published profiles",
-  "leaveSpace":"Leave space"
+  "leaveSpace": "Leave space",
+  "answerDetail": "Answer details",
+  "addDetailsToYourAnswer": "Add details to your answer for better measurements",
+  "evidences": "Evidences",
+  "updateEvidence": "Update evidence"
 }

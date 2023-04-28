@@ -41,10 +41,15 @@ export const MetricContainer = () => {
           <Box position="relative" sx={{ ...styles.centerVH, px: { xs: 0, sm: 5, md: 6 } }}>
             {metricsInfo.metrics?.[metricIndex - 1] ? (
               <>
-                <Hidden smDown>
-                  <MetricNextPrev hasNextQuestion={hasNextQuestion} isNext={true} />
-                </Hidden>
-                <Box display="flex" flexDirection={"column"} flex="1" py={2} sx={{ pt: { xs: 0, sm: 2 } }} ref={container}>
+                <Box
+                  display="flex"
+                  flexDirection={"column"}
+                  flex="1"
+                  py={2}
+                  sx={{ pt: { xs: 0, sm: 2 } }}
+                  ref={container}
+                  maxWidth={"1376px"}
+                >
                   <TransitionGroup>
                     <Collapse key={metricsInfo.metrics[metricIndex - 1].index as any}>
                       <MetricCard
@@ -54,13 +59,7 @@ export const MetricContainer = () => {
                       />
                     </Collapse>
                   </TransitionGroup>
-                  <Box display="flex" sx={{ mx: { xs: 2, sm: 3, md: 5.5 } }}>
-                    <Box>
-                      <SubmitOnSelectCheckBox />
-                    </Box>
-                  </Box>
                 </Box>
-                <Hidden smDown>{hasPreviousQuestion && <MetricNextPrev isNext={false} />}</Hidden>
               </>
             ) : (
               <Box mt={6}>
@@ -76,7 +75,7 @@ export const MetricContainer = () => {
   ) : null;
 };
 
-const SubmitOnSelectCheckBox = () => {
+export const SubmitOnSelectCheckBox = () => {
   const { submitOnAnswerSelection } = useMetricContext();
   const dispatch = useMetricDispatch();
   const isSmallerScreen = useScreenResize("sm");
