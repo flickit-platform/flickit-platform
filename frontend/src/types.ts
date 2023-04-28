@@ -55,8 +55,16 @@ export type TAnswer = {
   id: TId;
   value: string | number;
   caption: string;
+  evidences:TEvidences
 };
-
+export type TEvidences={
+  created_by_id:TId,
+  creation_time:TimeRanges,
+  description:string,
+  id:TId,
+  last_modification_date:TimeRanges,
+  metric_value_id:string
+}
 export type TStatus = "WEAK" | "RISKY" | "NORMAL" | "GOOD" | "OPTIMIZED" | "Not Calculated" | null;
 
 export interface IUserInfo {

@@ -9,7 +9,17 @@ import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import Button from "@mui/material/Button";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
+import {
+  EAssessmentStatus,
+  metricActions,
+  useMetricContext,
+  useMetricDispatch,
+  setEvidenceDescription,
+} from "@providers/MetricProvider";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { IMetricInfo, TAnswer, TMetricsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
@@ -21,7 +31,7 @@ import useDialog from "@utils/useDialog";
 import { Avatar, Collapse, DialogActions, DialogContent, Grid } from "@mui/material";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
@@ -36,7 +46,12 @@ import useScreenResize from "@utils/useScreenResize";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-
+import { useQuery } from "@utils/useQuery";
+import formatDate from "@utils/formatDate";
+import useMenu from "@/utils/useMenu";
+import MoreActions from "../common/MoreActions";
+import { SubmitOnSelectCheckBox } from "./MetricContainer";
+import QueryData from "../common/QueryData";
 interface IMetricCardProps {
   metricInfo: IMetricInfo;
   metricsInfo: TMetricsInfo;
@@ -59,52 +74,69 @@ export const MetricCard = (props: IMetricCardProps) => {
   }, [title]);
 
   return (
-    <Paper
-      sx={{
-        px: { xs: 2.5, sm: 4, md: 5 },
-        py: { xs: 3, sm: 5 },
-        backgroundColor: "#273248",
-        flex: 1,
-        backgroundImage: `url(${QASvg})`,
-        color: "white",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "auto",
-        backgroundPosition: "-140px -140px",
-        position: "relative",
-        overflow: "hidden",
-        my: { xs: 2, md: 5 },
-        mx: { xs: 1, sm: 3, md: 5 },
-        mb: { xs: 0.5, sm: 1, md: 1 },
-        borderRadius: "8px",
-      }}
-      elevation={3}
-    >
-      <Box>
+    <Box>
+      <Paper
+        sx={{
+          px: { xs: 2.5, sm: 4, md: 5 },
+          py: { xs: 3, sm: 5 },
+          backgroundColor: "#273248",
+          flex: 1,
+          backgroundImage: `url(${QASvg})`,
+          color: "white",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "auto",
+          backgroundPosition: "-140px -140px",
+          position: "relative",
+          overflow: "hidden",
+          my: { xs: 2, md: 5 },
+          mx: { xs: 2, sm: "auto" },
+          mb: { xs: 0.5, sm: 1, md: 1 },
+          maxWidth: "1376px",
+          borderRadius: "8px",
+        }}
+        elevation={3}
+      >
         <Box>
-          <Typography variant="subLarge" fontFamily={"Roboto"} sx={{ color: "white", opacity: 0.65 }}>
-            <Trans i18nKey="question" />
-          </Typography>
-          <Typography
-            variant="h4"
-            letterSpacing=".05em"
-            sx={{
-              pt: 0.5,
-              pb: 5,
-              fontSize: { xs: "1.4rem", sm: "2rem" },
-              fontFamily: { xs: "Roboto", lg: "Roboto" },
-            }}
-          >
-            {title}
-          </Typography>
+          <Box>
+            <Typography variant="subLarge" fontFamily={"Roboto"} sx={{ color: "white", opacity: 0.65 }}>
+              <Trans i18nKey="question" />
+            </Typography>
+            <Typography
+              variant="h4"
+              letterSpacing=".05em"
+              sx={{
+                pt: 0.5,
+                pb: 5,
+                fontSize: { xs: "1.4rem", sm: "2rem" },
+                fontFamily: { xs: "Roboto", lg: "Roboto" },
+              }}
+            >
+              {title}
+            </Typography>
+          </Box>
+          <AnswerTemplate
+            abortController={abortController}
+            metricInfo={metricInfo}
+            metricIndex={metricIndex}
+            metricsInfo={metricsInfo}
+          />
         </Box>
-        <AnswerTemplate
-          abortController={abortController}
-          metricInfo={metricInfo}
-          metricIndex={metricIndex}
-          metricsInfo={metricsInfo}
-        />
+      </Paper>
+      <Box sx={{ px: { xs: 2, sm: 0 } }}>
+        <SubmitOnSelectCheckBox />
+        <Box
+          display={"flex"}
+          justifyContent="space-between"
+          mt={3}
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "flex-end" },
+          }}
+        >
+          <AnswerDetails metricInfo={metricInfo} />
+        </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 };
 
@@ -114,7 +146,7 @@ const AnswerTemplate = (props: {
   metricsInfo: TMetricsInfo;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const { submitOnAnswerSelection, isSubmitting } = useMetricContext();
+  const { submitOnAnswerSelection, isSubmitting, evidences } = useMetricContext();
   const { metricInfo, metricIndex, metricsInfo, abortController } = props;
   const { answer_templates, answer } = metricInfo;
   const { total_number_of_metrics, resultId } = metricsInfo;
@@ -126,14 +158,13 @@ const AnswerTemplate = (props: {
   const isLastMetric = metricIndex == total_number_of_metrics;
   const isSelectedValueTheSameAsAnswer = metricInfo?.answer?.value == value?.value;
   const changeHappened = useRef(false);
-
   const onChange = (event: React.MouseEvent<HTMLElement>, v: TAnswer | null) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
     setValue((prevValue) => (prevValue?.value === v?.value ? null : v));
   };
-
+  // first checking if evidences have been submited or not
   const submitQuestion = async () => {
     dispatch(metricActions.setIsSubmitting(true));
     try {
@@ -249,60 +280,66 @@ const AnswerTemplate = (props: {
         </Box>
       </Box>
       <Box
-        display={"flex"}
-        justifyContent="space-between"
         sx={{
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: { xs: "stretch", md: "flex-end" },
+          mt: { xs: 4, md: 1 },
+          mr: { xs: 0, md: 2 },
+          display: "flex",
+          flexDirection: "column",
+          ml: "auto",
         }}
       >
-        {/* {!submitOnAnswerSelection && (
-          <MyAnswer answer_templates={answer_templates} value={value} />
-        )} */}
-        <Box
+        <LoadingButton
+          variant="contained"
+          color={"info"}
+          loading={isSubmitting}
           sx={{
-            mt: { xs: 4, md: 1 },
-            mr: { xs: 0, md: 2 },
-            display: "flex",
-            flexDirection: "column",
+            fontSize: "1.2rem",
             ml: "auto",
           }}
+          onClick={submitQuestion}
         >
-          <LoadingButton
-            variant="contained"
-            color={"info"}
-            loading={isSubmitting}
-            sx={{
-              fontSize: "1.2rem",
-              ml: "auto",
-            }}
-            onClick={submitQuestion}
-          >
-            <Trans i18nKey={"nextQuestion"} />
-          </LoadingButton>
-        </Box>
+          <Trans i18nKey={"nextQuestion"} />
+        </LoadingButton>
       </Box>
     </>
   );
 };
 
-const MyAnswer = ({ answer_templates, value }: any) => {
+const AnswerDetails = ({ metricInfo }: any) => {
   const dialogProps = useDialog();
-  const caption = answer_templates.find((temp: any) => temp.value === value?.value)?.caption;
+  const [collapse, setCollapse] = useState<boolean>(false);
 
   return (
-    <Collapse in={!!caption} sx={{ flex: 1 }}>
+    <Box mt={2} width="100%">
+      <Title sup={<Trans i18nKey="addDetailsToYourAnswer" />} size="small">
+        <Trans i18nKey="answerDetail" />
+      </Title>
       <Box
-        mt={8}
-        sx={{
-          flex: 1,
-          mr: { xs: 0, md: 4 },
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-        }}
+        mt={2}
+        display={"flex"}
+        sx={{ cursor: "pointer" }}
+        alignItems="center"
+        position={"relative"}
+        width="100%"
+        onClick={() => setCollapse(!collapse)}
       >
-        <Box mb={1.8}>
+        {!collapse ? <AddRoundedIcon /> : <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />}
+        <Typography ml={1} variant="h6">
+          <Trans i18nKey={"evidences"} />
+        </Typography>
+      </Box>
+      <Collapse in={collapse} sx={{ flex: 1, borderLeft: "1px dashed purple", px: 1, ml: 1.5, width: "100%" }}>
+        <Box
+          sx={{
+            flex: 1,
+            mr: { xs: 0, md: 4 },
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          {/* <Box mb={1.8}>
           <Typography
             variant="subLarge"
             fontFamily={"Roboto"}
@@ -364,146 +401,184 @@ const MyAnswer = ({ answer_templates, value }: any) => {
               </Box>
             </Box>
           </Box>
-        </Box>
-        <Box>
-          <Typography
-            variant="subLarge"
-            fontFamily={"Roboto"}
-            component={Link}
-            to="#"
-            sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
-          >
-            <Trans i18nKey="gotAnyEvidence" />
-          </Typography>
+        </Box> */}
           <Box
             display="flex"
             alignItems={"baseline"}
             sx={{
               flexDirection: "column",
+              px: 2,
+              width: "100%",
             }}
           >
-            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-              <Typography>
-                <Trans i18nKey={"noEvidenceYet"} />
-              </Typography>
-              <Button
-                sx={{ ml: { xs: -1, sm: 1 }, minWidth: "112px" }}
-                onClick={() => {
-                  dialogProps.openDialog({});
-                }}
-              >
-                <Trans i18nKey="addEvidence" />
-              </Button>
-            </Box>
-            <Evidence {...dialogProps} />
+            <Evidence {...dialogProps} metricInfo={metricInfo} />
           </Box>
         </Box>
-      </Box>
-    </Collapse>
+      </Collapse>
+    </Box>
   );
 };
 
 const Evidence = (props: any) => {
-  const { onClose: closeDialog, ...rest } = props;
+  const { service } = useServiceContext();
+  const { onClose: closeDialog, openDialog, ...rest } = props;
+  const { metricInfo } = props;
+  const { assessmentId = "" } = useParams();
+  const [evidenceId, setEvidenceId] = useState(null);
   const formMethods = useForm({ shouldUnregister: true });
+  const addEvidence = useQuery({
+    service: (args, config) => service.addEvidence(args, config),
+    runOnMount: false,
+  });
+  const evidencesQueryData = useQuery({
+    service: (args = { metricId: metricInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
+    toastError: true,
+  });
 
-  const onSubmit = async (data: any) => {};
-
-  const fullScreen = useScreenResize("sm");
+  //if there is a evidence we should use addEvidence service
+  const onSubmit = async (data: any) => {
+    try {
+      await addEvidence.query({
+        description: data.evidence,
+        metricId: metricInfo.id,
+        assessmentId,
+        id: evidenceId,
+      });
+      await await evidencesQueryData.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    } finally {
+      setEvidenceId(null);
+      formMethods.reset();
+    }
+  };
 
   return (
-    <Dialog
-      {...rest}
-      onClose={() => {
-        closeDialog();
-      }}
-      fullWidth
-      maxWidth="lg"
-      fullScreen={fullScreen}
-    >
-      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}>
-        <AssignmentRoundedIcon sx={{ mr: 1 }} />
-        <Trans i18nKey="evidence" />
-      </DialogTitle>
-      <DialogContent
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          px: { xs: 1.5, sm: 3 },
-        }}
-      >
-        <FormProvider {...formMethods}>
-          <form onSubmit={formMethods.handleSubmit(onSubmit)} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <Grid container spacing={1} sx={styles.formGrid}>
-              <Grid item xs={12}>
-                <InputFieldUC
-                  multiline
-                  minRows={3}
-                  maxRows={8}
-                  autoFocus={true}
-                  defaultValue={""}
-                  name="evidence"
-                  label={<Trans i18nKey="evidence" />}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Box display={"flex"}>
-                  <LoadingButton sx={{ ml: "auto" }} type="submit">
-                    <Trans i18nKey={"addEvidence"} />
-                  </LoadingButton>
-                </Box>
-              </Grid>
+    <Box display={"flex"} flexDirection={"column"} width="100%">
+      <FormProvider {...formMethods}>
+        <form onSubmit={formMethods.handleSubmit(onSubmit)} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <Grid container spacing={1} sx={styles.formGrid}>
+            <Grid item xs={12}>
+              <InputFieldUC
+                multiline
+                minRows={3}
+                maxRows={8}
+                autoFocus={true}
+                defaultValue={""}
+                name="evidence"
+                label={<Trans i18nKey="evidence" />}
+                required={true}
+                placeholder="Please write your evidence"
+              />
             </Grid>
-            <Box mt={4}>
-              <Title size="small">
-                <Trans i18nKey="listOfEvidence" />
-              </Title>
-              <Box>
-                <Box display="flex" flexDirection="column">
-                  <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
-                    <ListItemIcon
-                      sx={{
-                        minWidth: "45px",
-                        display: { xs: "none", sm: "inline-flex" },
-                      }}
-                    >
-                      <AssignmentRoundedIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      sx={{ pr: 2 }}
-                      primary="Sing sda sd da sdasda sda  asdf asd fa dsfa df asdf ads fa dsf sdasd asdas asd asd asd asdasda sdas das dasle-line "
-                    />
-                    <Box display="flex" sx={{ flexDirection: "column" }}>
-                      <Box sx={{ ...styles.centerV }}>
-                        <AccessTimeRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
-                        2022/02/01
-                      </Box>
-                      <Box sx={{ ...styles.centerV }}>
-                        <PersonOutlineRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
-                        erfan kaboli
-                      </Box>
-                    </Box>
-                  </ListItem>
-                </Box>
+            <Grid item xs={12}>
+              <Box display={"flex"}>
+                <LoadingButton sx={{ ml: "auto" }} type="submit" variant="contained" loading={evidencesQueryData.loading}>
+                  <Trans i18nKey={evidenceId ? "updateEvidence" : "addEvidence"} />
+                </LoadingButton>
               </Box>
-            </Box>
-            <DialogActions
-              sx={{
-                marginTop: fullScreen ? "auto" : (theme) => theme.spacing(4),
-              }}
-            >
-              <Grid container spacing={2} justifyContent="flex-end">
-                <Grid item>
-                  <Button onClick={closeDialog}>
-                    <Trans i18nKey="close" />
-                  </Button>
-                </Grid>
-              </Grid>
-            </DialogActions>
-          </form>
-        </FormProvider>
-      </DialogContent>
-    </Dialog>
+            </Grid>
+          </Grid>
+        </form>
+        <Box mt={3}>
+          <QueryData
+            {...evidencesQueryData}
+            render={(data) => {
+              const { evidences } = data;
+              return evidences.map((item: any, index: number) => (
+                <EvidenceDetail
+                  item={item}
+                  setEvidenceId={setEvidenceId}
+                  evidencesQueryData={evidencesQueryData}
+                  metricInfo={metricInfo}
+                  assessmentId={assessmentId}
+                />
+              ));
+            }}
+          />
+        </Box>
+      </FormProvider>
+    </Box>
+  );
+};
+
+const EvidenceDetail = (props: any) => {
+  const { item, evidencesQueryData, setEvidenceId } = props;
+  const { description, last_modification_date, created_by, id } = item;
+
+  return (
+    <Box display="flex" flexDirection="column" width="100%">
+      <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
+        <ListItemIcon
+          sx={{
+            minWidth: "45px",
+            display: { xs: "none", sm: "inline-flex" },
+          }}
+        >
+          <AssignmentRoundedIcon />
+        </ListItemIcon>
+        <ListItemText sx={{ pr: 2 }} primary={description} />
+        <Box display="flex">
+          <Box sx={{ ...styles.centerV, mr: 2 }}>
+            <PersonOutlineRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
+            {created_by.display_name}
+          </Box>
+          <Box sx={{ ...styles.centerV }}>
+            <AccessTimeRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
+            {formatDate(last_modification_date)}
+          </Box>
+        </Box>
+        <Box>
+          <Actions fetchEvidences={evidencesQueryData.query} id={id} setEvidenceId={setEvidenceId} description={description} />
+        </Box>
+      </ListItem>
+    </Box>
+  );
+};
+
+const Actions = (props: any) => {
+  const { fetchEvidences, id, setEvidenceId, description } = props;
+  const { service } = useServiceContext();
+  const formContext = useFormContext();
+  const deleteEvidence = useQuery({
+    service: (args = { id }, config) => service.deleteEvidence(args, config),
+    runOnMount: false,
+  });
+
+  const onUpdate = async () => {
+    formContext.setValue("evidence", description);
+    setEvidenceId(id);
+  };
+
+  const deleteItem = async (e: any) => {
+    try {
+      await deleteEvidence.query();
+      await fetchEvidences?.();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  return (
+    <MoreActions
+      {...useMenu()}
+      boxProps={{ ml: 0.4 }}
+      loading={deleteEvidence.loading}
+      items={[
+        {
+          icon: <EditRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="edit" />,
+          onClick: onUpdate,
+        },
+        {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="delete" />,
+          onClick: deleteItem,
+        },
+      ]}
+    />
   );
 };
 

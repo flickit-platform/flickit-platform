@@ -20,12 +20,18 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
 
   return (
     <Box position="relative" sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}>
-      <Hidden smDown mdDown={metrics.length > 25 ? true : false} xlDown={metrics.length > 30 ? true : false}>
+      <Hidden
+        smDown
+        mdDown={metrics.length > 20 ? true : false}
+        lgDown={metrics.length > 23 ? true : false}
+        xlDown={metrics.length > 32 ? true : false}
+      >
         <Box
           position={"absolute"}
           sx={{
             ...styles.centerV,
-            width: { xs: "100%", sm: "calc(100% - 24px)" },
+            width: "calc(100% - 114px)",
+            ml: "57px",
           }}
           height="100%"
           justifyContent="space-evenly"
@@ -44,46 +50,34 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
         </Box>
       </Hidden>
       <Box sx={{ ...styles.centerV, px: { xs: 0.5, sm: 0 } }}>
-        <Hidden
-          smUp={metrics.length > 25 ? false : true}
-          mdUp={metrics.length > 25 && metrics.length <= 30 ? true : false}
-          xlUp={metrics.length > 30 ? true : false}
+        <Button
+          size="small"
+          disabled={!hasPreviousQuestion || isSubmitting}
+          sx={{ minWidth: 0, width: "56px", mr: "1px" }}
+          component={Link}
+          to={`../${metricIndex - 1}`}
         >
-          <Button
-            size="small"
-            disabled={!hasPreviousQuestion || isSubmitting}
-            sx={{ minWidth: 0, mr: "1px" }}
-            component={Link}
-            to={`../${metricIndex - 1}`}
-          >
-            <Trans i18nKey={isFinish ? "edit" : "prev"} />
-          </Button>
-        </Hidden>
+          <Trans i18nKey={isFinish ? "edit" : "prev"} />
+        </Button>
         <LinearProgress
           sx={{ flex: 1, borderRadius: 4 }}
           variant="determinate"
           value={assessmentStatus === EAssessmentStatus.DONE ? 100 : (100 / (total_number_of_metrics + 1)) * metricIndex}
         />
-        <Hidden
-          smUp={metrics.length > 25 ? false : true}
-          mdUp={metrics.length > 25 && metrics.length <= 30 ? true : false}
-          xlUp={metrics.length > 30 ? true : false}
+        <Button
+          size="small"
+          disabled={isFinish || isSubmitting}
+          sx={{ minWidth: 0, width: "56px", ml: "1px" }}
+          component={Link}
+          to={hasNextQuestion ? `../${metricIndex + 1}` : "../completed"}
+          onClick={() => {
+            if (!hasNextQuestion) {
+              dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
+            }
+          }}
         >
-          <Button
-            size="small"
-            disabled={isFinish || isSubmitting}
-            sx={{ minWidth: 0, ml: "1px" }}
-            component={Link}
-            to={hasNextQuestion ? `../${metricIndex + 1}` : "../completed"}
-            onClick={() => {
-              if (!hasNextQuestion) {
-                dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
-              }
-            }}
-          >
-            <Trans i18nKey={"skip"} />
-          </Button>
-        </Hidden>
+          <Trans i18nKey={"skip"} />
+        </Button>
       </Box>
     </Box>
   );

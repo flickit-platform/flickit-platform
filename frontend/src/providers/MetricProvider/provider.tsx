@@ -20,6 +20,7 @@ export interface IMetricContext {
   assessmentStatus: EAssessmentStatus;
   submitOnAnswerSelection: boolean;
   isSubmitting: boolean;
+  evidences:string;
 }
 
 export const MetricContext = React.createContext<IMetricContext>({
@@ -32,6 +33,7 @@ export const MetricContext = React.createContext<IMetricContext>({
   },
   submitOnAnswerSelection: false,
   isSubmitting: false,
+  evidences:"",
 });
 
 const MetricDispatchContext = React.createContext<any>({
@@ -48,6 +50,7 @@ export const MetricProvider: FC<IMetricProviderProps> = ({ children }) => {
     },
     submitOnAnswerSelection: false,
     isSubmitting: false,
+    evidences:"",
   });
   const { subjectId } = useParams();
 
