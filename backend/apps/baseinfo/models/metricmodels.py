@@ -7,6 +7,11 @@ class MetricImpact(models.Model):
     metric = models.ForeignKey('Metric', on_delete=models.CASCADE, related_name='metric_impacts')
     quality_attribute = models.ForeignKey('QualityAttribute', on_delete=models.CASCADE, related_name='metric_impacts')
 
+class OptionValue(models.Model):
+    option = models.ForeignKey('AnswerTemplate', on_delete=models.CASCADE, related_name='option_values')
+    value = models.DecimalField(max_digits=3, decimal_places=2)
+    metric_impact = models.ForeignKey(MetricImpact, on_delete=models.CASCADE, related_name='option_values')
+
 class AnswerTemplate(models.Model):
     metric = models.ForeignKey('Metric', on_delete=models.CASCADE, related_name='answer_templates')
     caption = models.CharField(max_length=255)
@@ -14,8 +19,8 @@ class AnswerTemplate(models.Model):
     index = models.PositiveIntegerField()  
 
     class Meta:
-        verbose_name = 'Questionnaire'
-        verbose_name_plural = "Questionnaires"
+        verbose_name = 'Answer Template'
+        verbose_name_plural = "Answer Templates"
         unique_together = [('index', 'metric')]  
 
 class Metric(models.Model):

@@ -24,12 +24,13 @@ interface IProfileListItemProps {
     is_active: boolean;
   };
   fetchProfiles?: TQueryFunction;
+  fetchUnpublishedProfiles?:TQueryFunction;
   link?: string;
   hasAccess?: boolean;
 }
 
 const ProfileListItem = (props: IProfileListItemProps) => {
-  const { data, fetchProfiles, link, hasAccess } = props;
+  const { data, fetchProfiles,fetchUnpublishedProfiles, link, hasAccess } = props;
   const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
@@ -84,7 +85,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions profile={data} fetchProfiles={fetchProfiles} hasAccess={hasAccess} />
+          <Actions profile={data} fetchProfiles={fetchProfiles} fetchUnpublishedProfiles={fetchUnpublishedProfiles} hasAccess={hasAccess} />
         </Box>
       </Box>
     </Box>
@@ -92,7 +93,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { profile, fetchProfiles, dialogProps, setUserInfo, hasAccess } = props;
+  const { profile, fetchProfiles,fetchUnpublishedProfiles, dialogProps, setUserInfo, hasAccess } = props;
   const { id, current_user_delete_permission = false, is_active = false } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
@@ -134,6 +135,7 @@ const Actions = (props: any) => {
     try {
       await deleteProfileQuery.query();
       await fetchProfiles?.();
+      await fetchUnpublishedProfiles?.();
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -146,6 +148,7 @@ const Actions = (props: any) => {
       const res = await publishProfileQuery.query();
       res.message && toast.success(res.message);
       await fetchProfiles?.();
+      await fetchUnpublishedProfiles?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -156,7 +159,8 @@ const Actions = (props: any) => {
     try {
       const res = await unPublishProfileQuery.query();
       res.message && toast.success(res.message);
-      await fetchProfiles?.();
+      await fetchProfiles();
+      await fetchUnpublishedProfiles?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);

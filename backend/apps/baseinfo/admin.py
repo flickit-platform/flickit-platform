@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric
+from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric, OptionValue
     
 
 @admin.register(AssessmentProfile)
@@ -34,9 +34,31 @@ class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_editable = ['title']
     list_per_page = 10
 
+
+@admin.register(MetricImpact)
+class MetricImpactAdmin(admin.ModelAdmin):
+    fields= ['level', 'quality_attribute']
+    list_display = ['level', 'quality_attribute', 'option_values', 'metric']
+    autocomplete_fields= ['quality_attribute']
+    extra = 0
+
+    def option_values(self, obj):
+        return "\n".join(['(' + str(option_value.option.index) + ', ' + str(option_value.value) + ')' for option_value in obj.option_values.all()])
+
+
+# class OptionValueFormInline(admin.TabularInline):
+#     model = OptionValue
+#     # fields = ['option', 'value']
+#     # extra = 0
+
+# def option_valuess(self, obj):
+#     return "\n".join([option_value.value for option_value in obj.option_values.all()])
+
+
 class MetricImpactFormInline(admin.TabularInline):
      model = MetricImpact
      fields= ['level', 'quality_attribute']
+     list_display = ['level', 'quality_attribute']
      autocomplete_fields= ['quality_attribute']
      extra = 0
 

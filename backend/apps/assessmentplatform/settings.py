@@ -145,13 +145,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3333",
     "http://127.0.0.1:3333",
-    "https://checkuptest.asta.ir",
     "https://flickit.org"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ['https://checkuptest.asta.ir', 'https://flickit.org']
+CSRF_TRUSTED_ORIGINS = ['https://flickit.org']
 
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"
@@ -180,6 +179,14 @@ REST_FRAMEWORK = {
     'PAGE_SIZE':200,
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
+
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
@@ -230,9 +237,3 @@ DJOSER = {
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = '/vol/web/media'
-STATIC_ROOT = '/vol/web/static'

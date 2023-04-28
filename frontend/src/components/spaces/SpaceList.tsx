@@ -8,6 +8,7 @@ import { useQuery } from "@utils/useQuery";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import useMenu from "@utils/useMenu";
 import IconButton from "@mui/material/IconButton";
 import { ICustomError } from "@utils/CustomError";
@@ -87,7 +88,14 @@ interface ISpaceCardProps {
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const { item, isActiveSpace, dialogProps, fetchSpaces, isOwner, setUserInfo } = props;
+  const {
+    item,
+    isActiveSpace,
+    dialogProps,
+    fetchSpaces,
+    isOwner,
+    setUserInfo,
+  } = props;
   const { service } = useServiceContext();
   const navigate = useNavigate();
   const {
@@ -100,8 +108,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0, assessment_numbers = 0 } = item || {};
-
+  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
     await setCurrentSpace();
@@ -151,7 +158,14 @@ const SpaceCard = (props: ISpaceCardProps) => {
           >
             {loading ? <CircularProgress size="20px" /> : <>{title}</>}
           </Typography>
-          {isOwner && <Chip sx={{ ml: 1, opacity: 0.7 }} label={<Trans i18nKey={"owner"} />} size="small" variant="outlined" />}
+          {isOwner && (
+            <Chip
+              sx={{ ml: 1, opacity: 0.7 }}
+              label={<Trans i18nKey={"owner"} />}
+              size="small"
+              variant="outlined"
+            />
+          )}
         </Box>
       </Box>
       <Box ml="auto" sx={{ ...styles.centerV }}>
@@ -162,43 +176,66 @@ const SpaceCard = (props: ISpaceCardProps) => {
           </Typography>
         </Box>
         <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
-          <DescriptionRoundedIcon sx={{ mr: 0.5, opacity: 0.8 }} fontSize="small" />
+          <DescriptionRoundedIcon
+            sx={{ mr: 0.5, opacity: 0.8 }}
+            fontSize="small"
+          />
           <Typography fontFamily="Roboto" fontWeight={"bold"}>
             {assessment_numbers}
           </Typography>
         </Box>
       </Box>
-      <Box justifyContent={"flex-end"} sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}>
+      <Box
+        justifyContent={"flex-end"}
+        sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}
+      >
         {isActiveSpace && (
           <Box mr={1}>
-            <Chip label={<Trans i18nKey={"current"} />} color="info" size="small" />
+            <Chip
+              label={<Trans i18nKey={"current"} />}
+              color="info"
+              size="small"
+            />
           </Box>
         )}
-        {isOwner && (
-          <>
-            <Box sx={{ ...styles.centerV }}>
-              <IconButton size="small" component={Link} to={`/${id}/setting`}>
-                <SettingsRoundedIcon />
-              </IconButton>
-            </Box>
-            <Actions
-              isActiveSpace={isActiveSpace}
-              dialogProps={dialogProps}
-              space={item}
-              fetchSpaces={fetchSpaces}
-              setUserInfo={setUserInfo}
-            />
-          </>
-        )}
+        {/* {isOwner && ( */}
+        <>
+          <Box sx={{ ...styles.centerV }}>
+            <IconButton size="small" component={Link} to={`/${id}/setting`}>
+              <SettingsRoundedIcon />
+            </IconButton>
+          </Box>
+          <Actions
+            isActiveSpace={isActiveSpace}
+            dialogProps={dialogProps}
+            space={item}
+            fetchSpaces={fetchSpaces}
+            setUserInfo={setUserInfo}
+            isOwner={isOwner}
+            is_default_space_for_current_user={is_default_space_for_current_user}
+          />
+        </>
+        {/* )} */}
       </Box>
     </Box>
   );
 };
 
 const Actions = (props: any) => {
-  const { space, fetchSpaces, dialogProps, isActiveSpace, setUserInfo } = props;
+  const {
+    space,
+    fetchSpaces,
+    dialogProps,
+    isActiveSpace,
+    setUserInfo,
+    isOwner,
+    is_default_space_for_current_user
+  } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
+  const { userInfo } = useAuthContext();
+  const { default_space } = userInfo;
+  console.log(default_space)
   const [editLoading, setEditLoading] = useState(false);
   const {
     query: deleteSpaceMember,
@@ -208,7 +245,10 @@ const Actions = (props: any) => {
     service: (args, config) => service.deleteSpace({ spaceId }, config),
     runOnMount: false,
   });
-
+  const leaveSpaceQuery = useQuery({
+    service: (args, config) => service.leaveSpace({ spaceId }, config),
+    runOnMount: false,
+  });
   const openEditDialog = (e: any) => {
     setEditLoading(true);
     service
@@ -234,17 +274,33 @@ const Actions = (props: any) => {
       toastError(err);
     }
   };
+  const leaveSpace = async (e: any) => {
+    try {
+      await leaveSpaceQuery.query();
+      await fetchSpaces();
+      await setUserInfo();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
 
   return (
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.2 }}
-      loading={loading || editLoading}
+      loading={loading || editLoading || leaveSpaceQuery.loading}
       items={[
-        {
+        isOwner && {
           icon: <EditRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
+        },
+        !is_default_space_for_current_user&&
+        {
+          icon: <ExitToAppRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="leaveSpace" />,
+          onClick: leaveSpace,
         },
         // !isActiveSpace
         //   ? {

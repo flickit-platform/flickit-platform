@@ -47,7 +47,7 @@ class AssessmentProfile(models.Model):
         ordering = ['title']
 
 class ProfileDsl(models.Model):
-    dsl_file = models.FileField(upload_to='profile/dsl', validators=[validate_file_size, validate_dsl_extension])
+    dsl_file = models.FileField(upload_to='profile/dsl', validators=[validate_file_size])
 
 class ProfileTag(models.Model):
     code = models.CharField(max_length=50, unique=True)

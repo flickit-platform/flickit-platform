@@ -336,13 +336,18 @@ const Actions = (props: any) => {
         isInvitees && isInvitationExpired
           ? {
               icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendAndInvitation" />,
+              text: <Trans i18nKey="resendInvitation" />,
               onClick: inviteMember,
             }
           : undefined,
-        {
+          isInvitees&&{
           icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
+          text: <Trans i18nKey="cancelInvitation" />,
+          onClick: deleteItem,
+        },
+        !isInvitees&&{
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="remove" />,
           onClick: deleteItem,
         },
       ]}

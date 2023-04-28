@@ -77,6 +77,7 @@ export interface IUserInfo {
   picture?: null | string;
   linkedin?: string | null;
   is_active?: boolean;
+  default_space?:any
 }
 
 export interface ISpaceInfo {
@@ -159,6 +160,7 @@ export interface ISpaceModel {
   last_modification_date?: string;
   members_number?: number;
   assessment_numbers?: number;
+  is_default_space_for_current_user?:boolean;
 }
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}

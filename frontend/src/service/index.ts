@@ -371,9 +371,13 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { id } = args || {};
       return axios.get(`/baseinfo/expertgroup/profiles/${id}/`, config);
     },
+    fetchExpertGroupUnpublishedProfiles(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { id } = args || {};
+      return axios.get(`/baseinfo/expertgroup/unpublishedprofiles/${id}/`, config);
+    },
     publishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/publish/${id}/`, config);
+      return axios.post(`/baseinfo/profiles/publish/${id}/`, config);
     },
     unPublishProfile(args: { id: TId }, config: AxiosRequestConfig<any> | undefined) {
       const { id } = args || {};
@@ -473,6 +477,13 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
       const { metricId, assessmentId } = args || {};
 
       return axios.get(`/assessment/evidences/${metricId}/${assessmentId}/`, {
+        ...(config || {}),
+      });
+    },
+    leaveSpace(args: { spaceId: TId }, config: AxiosRequestConfig<any> | undefined) {
+      const { spaceId } = args || {};
+
+      return axios.post(`/authinfo/spaces/leave/${spaceId}/`, {
         ...(config || {}),
       });
     },

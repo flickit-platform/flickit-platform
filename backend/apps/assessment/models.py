@@ -30,7 +30,7 @@ class AssessmentProject(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4)
-    code = models.SlugField(max_length=100, unique=True)
+    code = models.SlugField(max_length=100)
     title = models.CharField(max_length=100)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -42,7 +42,7 @@ class AssessmentProject(models.Model):
     objects = AssessmentProjectManager()
 
     class Meta:
-        unique_together = [('title', 'space')]
+        unique_together = [('title', 'space'), ('code', 'space')]
 
     def __str__(self) -> str:
         return self.title
@@ -68,12 +68,22 @@ class MetricValue(models.Model):
     answer = models.ForeignKey(AnswerTemplate, on_delete=models.CASCADE, null=True)
 
 
+class EvidenceRelation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4)
+    metric = models.ForeignKey(Metric, on_delete=models.CASCADE, related_name='evidences')
+    assessment = models.ForeignKey(AssessmentProject, on_delete=models.CASCADE, related_name='evidences')
+    
+
 class Evidence(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4)
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    metric_value = models.ForeignKey(MetricValue, on_delete=models.CASCADE, related_name='evidences')
+    evidence_relation = models.ForeignKey(EvidenceRelation, on_delete=models.CASCADE)
+    
+
+
 
 
 

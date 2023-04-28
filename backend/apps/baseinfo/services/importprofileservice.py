@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from django.db import transaction
 
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate
+from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl
 from baseinfo.services import profileservice, expertgroupservice
 
@@ -24,6 +24,7 @@ def __trim_content(content):
             line = line.replace('.', '')
             new_content = new_content + '\n' + line
     return new_content
+
 @transaction.atomic
 def import_profile(descriptive_profile, **kwargs):
     assessment_profile = __import_profile_base_info(kwargs)
@@ -42,7 +43,7 @@ def extract_tags(tag_ids):
                 tags.append(tag)
     return tags
 
-
+@transaction.atomic
 def __import_profile_base_info(extra_info):
     tags = extract_tags(extra_info['tag_ids'])
     expert_group = expertgroupservice.load_expert_group(extra_info['expert_group_id'])
@@ -58,6 +59,7 @@ def __import_profile_base_info(extra_info):
     assessment_profile.save()
     return assessment_profile
 
+@transaction.atomic
 def __import_questionnaires(questionnaire_models, profile):
     for questionnaire_model in questionnaire_models:
         questionnaire = Questionnaire()
@@ -68,6 +70,7 @@ def __import_questionnaires(questionnaire_models, profile):
         questionnaire.assessment_profile = profile
         questionnaire.save()
 
+@transaction.atomic
 def __import_subjects(subject_models, profile):
     for model in subject_models:
         subject = AssessmentSubject()
@@ -83,7 +86,7 @@ def __import_subjects(subject_models, profile):
             subject.questionnaires.add(questionnaire)
             subject.save()
         
-
+@transaction.atomic
 def __import_attributes(attributeModels):
     for model in attributeModels:
         attribute = QualityAttribute()
@@ -94,7 +97,7 @@ def __import_attributes(attributeModels):
         attribute.assessment_subject = AssessmentSubject.objects.filter(code = model['subjectCode']).first()
         attribute.save()
 
-
+@transaction.atomic
 def __import_metrics(metricModels):
     for model in metricModels:
         metric = Metric()
@@ -102,12 +105,7 @@ def __import_metrics(metricModels):
         metric.index = model['index']
         metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
         metric.save()
-        for impact_model in model['metricImpacts']:
-            impact = MetricImpact()
-            impact.level = impact_model['level']
-            impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
-            impact.metric = metric
-            impact.save()
+        
         for answer_model in model['answers']:
             answer = AnswerTemplate()
             answer.caption = answer_model['caption']
@@ -116,6 +114,28 @@ def __import_metrics(metricModels):
             answer.metric = metric
             answer.save()
             metric.answer_templates.add(answer)
+
+        for impact_model in model['metricImpacts']:
+            impact = MetricImpact()
+            impact.level = impact_model['level']
+            impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
+            impact.metric = metric
+            impact.save()
+
+            option_values_map = impact_model['optionValues']
+            for option_number, option_value in option_values_map.items():
+                option_value_model = OptionValue()
+                for option in metric.answer_templates.all():
+                    if option.index == int(option_number):
+                        option_value_model.option = option
+                        option_value_model.metric_impact = impact
+                        option_value_model.value = option_value
+                option_value_model.save()
+                impact.option_values.add(option_value_model)
+            
+            impact.save()
+
+        
         metric.save()
             
 

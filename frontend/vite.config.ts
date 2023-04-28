@@ -69,7 +69,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/": {
-        target: "https://checkuptest.asta.ir/",
+        target: "https://flickit.org/",
         changeOrigin: true,
         secure: false,
       },

@@ -50,7 +50,7 @@ class QualityAttribute(models.Model):
     class Meta:
         verbose_name = 'Quality Attribute'
         verbose_name_plural = "Quality Attributes"
-        unique_together = [('title', 'assessment_subject'), ('index', 'assessment_subject')]
+        unique_together = [('title', 'assessment_subject')]
 
     def __str__(self) -> str:
         return self.title

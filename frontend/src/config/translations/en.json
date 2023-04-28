@@ -242,7 +242,12 @@
   "space": "Space",
   "groupSummary": "Group summary",
   "thereIsNoProfileYet": "There is no profile yet",
+  "thereIsNoPublishedProfileYet": "There is no published profile yet",
+  "thereIsNoUnpublishedProfileYet": "There is no unpublished profile yet",
   "resendAndInvitation": "Resend and invitation",
+  "resendInvitation": "Resend invitation",
+  "cancelInvitation": "Cancel invitation",
+  "remove": "Remove",
   "providedBy": "Provided by",
   "expertGroup": "Expert group",
   "account": "Account",
@@ -256,9 +261,10 @@
   "updateUser": "Update user",
   "linkedin": "Linkedin",
   "publishedProfiles": "Published profiles",
-  "leaveSpace": "Leave space",
   "answerDetail": "Answer details",
   "addDetailsToYourAnswer": "Add details to your answer for better measurements",
   "evidences": "Evidences",
-  "updateEvidence": "Update evidence"
+  "updateEvidence": "Update evidence",
+  "unpublishedProfiles": "Unpublished profiles",
+  "leaveSpace": "Leave space"
 }

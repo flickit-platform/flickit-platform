@@ -23,6 +23,7 @@ import { Trans } from "react-i18next";
 import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
+import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { t } from "i18next";
 import { IDialogProps, TQueryFunction } from "@types";
 import getUserName from "@utils/getUserName";
@@ -58,11 +59,13 @@ const ExpertGroupContainer = () => {
   const { expertGroupId } = useParams();
   const { userInfo } = useAuthContext();
   const queryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
   });
 
   const expertGroupMembersQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchExpertGroupMembers(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupMembers(args, config),
   });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
@@ -106,7 +109,11 @@ const ExpertGroupContainer = () => {
                   ]}
                 />
               }
-              toolbar={hasAccess && <EditExpertGroupButton fetchExpertGroup={queryData.query} />}
+              toolbar={
+                hasAccess && (
+                  <EditExpertGroupButton fetchExpertGroup={queryData.query} />
+                )
+              }
             >
               {name}
             </Title>
@@ -117,7 +124,9 @@ const ExpertGroupContainer = () => {
                     <Title size="small">
                       <Trans i18nKey="about" />
                     </Title>
-                    <Box sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}>
+                    <Box
+                      sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}
+                    >
                       <Box minHeight={"160px"} mb={4}>
                         <RichEditor content={about} />
                       </Box>
@@ -125,16 +134,31 @@ const ExpertGroupContainer = () => {
                   </>
                 )}
                 <Box mt={5}>
-                  <ProfilesList queryData={queryData} hasAccess={hasAccess} dialogProps={createProfileDialogProps} />
+                  <ProfilesList
+                    queryData={queryData}
+                    hasAccess={hasAccess}
+                    dialogProps={createProfileDialogProps}
+                  />
                 </Box>
                 <Box mt={5}>
-                  <ExpertGroupMembersDetail queryData={expertGroupMembersQueryData} hasAccess={hasAccess} />
+                  <ExpertGroupMembersDetail
+                    queryData={expertGroupMembersQueryData}
+                    hasAccess={hasAccess}
+                  />
                 </Box>
               </Grid>
               <Grid item xs={12} md={4}>
-                <Box p={2} sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}>
+                <Box
+                  p={2}
+                  sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}
+                >
                   <Box>
-                    <Typography variant="h6" display="flex" alignItems={"center"} sx={{ mb: 1.5 }}>
+                    <Typography
+                      variant="h6"
+                      display="flex"
+                      alignItems={"center"}
+                      sx={{ mb: 1.5 }}
+                    >
                       <Trans i18nKey="groupSummary" />
                     </Typography>
                     {bio && (
@@ -162,12 +186,17 @@ const ExpertGroupContainer = () => {
                             fontWeight: "bold",
                           }}
                         >
-                          {website?.replace("https://", "").replace("http://", "")}
+                          {website
+                            ?.replace("https://", "")
+                            .replace("http://", "")}
                         </MLink>
                       </Box>
                     )}
                     <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                      <PeopleRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
+                      <PeopleRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
 
                       <Typography
                         sx={{
@@ -189,7 +218,10 @@ const ExpertGroupContainer = () => {
                       component="a"
                       href="#profiles"
                     >
-                      <AssignmentRoundedIcon fontSize="small" sx={{ mr: 1, opacity: 0.8 }} />
+                      <AssignmentRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 1, opacity: 0.8 }}
+                      />
 
                       <Typography
                         sx={{
@@ -197,7 +229,9 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {number_of_profiles} {t("profiles").toLowerCase()}
+                        {`${number_of_profiles} ${t(
+                          "publishedProfiles"
+                        ).toLowerCase()}`}
                       </Typography>
                       {hasAccess && (
                         <Box ml="auto">
@@ -216,10 +250,42 @@ const ExpertGroupContainer = () => {
                         </Box>
                       )}
                     </Box>
+                    {is_expert && (
+                      <Box
+                        sx={{
+                          ...styles.centerV,
+                          mt: 1,
+                          fontSize: ".9rem",
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                        component="a"
+                        href="#profiles"
+                      >
+                        <AssignmentLateRoundedIcon
+                          fontSize="small"
+                          sx={{ mr: 1, opacity: 0.8 }}
+                        />
+
+                        <Typography
+                          sx={{
+                            opacity: 0.9,
+                            fontSize: "inherit",
+                          }}
+                        >
+                          {`${profiles.length - number_of_profiles} ${t(
+                            "unpublishedProfiles"
+                          ).toLowerCase()}`}
+                        </Typography>
+                      </Box>
+                    )}
                     <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
                   {/* --------------------------- */}
-                  <ExpertGroupMembers {...expertGroupMembersQueryData} hasAccess={hasAccess} />
+                  <ExpertGroupMembers
+                    {...expertGroupMembersQueryData}
+                    hasAccess={hasAccess}
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -235,7 +301,8 @@ const EditExpertGroupButton = (props: any) => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
   const queryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
   const dialogProps = useDialog();
@@ -250,10 +317,19 @@ const EditExpertGroupButton = (props: any) => {
 
   return (
     <>
-      <LoadingButton loading={queryData.loading} startIcon={<BorderColorRoundedIcon />} size="small" onClick={openEditDialog}>
+      <LoadingButton
+        loading={queryData.loading}
+        startIcon={<BorderColorRoundedIcon />}
+        size="small"
+        onClick={openEditDialog}
+      >
         <Trans i18nKey="editExpertGroup" />
       </LoadingButton>
-      <ExpertGroupCEFormDialog {...dialogProps} hideSubmitAndView={true} onSubmitForm={fetchExpertGroup} />
+      <ExpertGroupCEFormDialog
+        {...dialogProps}
+        hideSubmitAndView={true}
+        onSubmitForm={fetchExpertGroup}
+      />
     </>
   );
 };
@@ -285,18 +361,34 @@ const ExpertGroupMembers = (props: any) => {
               <Trans i18nKey="members" />
             </Typography>
             {hasAccess && (
-              <AddingNewMember queryData={rest} setOpenAddMembers={setOpenAddMembers} openAddMembers={openAddMembers} />
+              <AddingNewMember
+                queryData={rest}
+                setOpenAddMembers={setOpenAddMembers}
+                openAddMembers={openAddMembers}
+              />
             )}
             {hasAccess && hasInvitees && (
               <Box mb={2}>
-                <Invitees users={invitees} query={rest.query} setOpenInvitees={setOpenInvitees} openInvitees={openInvitees} />
+                <Invitees
+                  users={invitees}
+                  query={rest.query}
+                  setOpenInvitees={setOpenInvitees}
+                  openInvitees={openInvitees}
+                />
               </Box>
             )}
             <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
               <AvatarGroup>
                 {users.map((user: any) => {
                   const name = getUserName(user?.user);
-                  return <Avatar key={user.id} alt={name} title={name} src={user?.picture || "/"} />;
+                  return (
+                    <Avatar
+                      key={user.id}
+                      alt={name}
+                      title={name}
+                      src={user?.picture || "/"}
+                    />
+                  );
                 })}
               </AvatarGroup>
             </Box>
@@ -326,7 +418,11 @@ const Invitees = (props: any) => {
             ml: "auto",
           }}
         >
-          {openInvitees ? <MinimizeRoundedIcon fontSize="small" /> : <AddRoundedIcon fontSize="small" />}
+          {openInvitees ? (
+            <MinimizeRoundedIcon fontSize="small" />
+          ) : (
+            <AddRoundedIcon fontSize="small" />
+          )}
         </Box>
       </Typography>
       <Collapse in={openInvitees}>
@@ -353,13 +449,23 @@ const Invitees = (props: any) => {
                   <Box ml={2}>
                     {invite_email}
                     <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
-                      <EventBusyRoundedIcon fontSize="small" sx={{ mr: 0.7, opacity: 0.9 }} />
-                      <Typography variant="body2">{formatDate(invite_expiration_date)}</Typography>
+                      <EventBusyRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: 0.7, opacity: 0.9 }}
+                      />
+                      <Typography variant="body2">
+                        {formatDate(invite_expiration_date)}
+                      </Typography>
                     </Box>
                   </Box>
                 </Box>
                 <Box ml="auto" sx={{ ...styles.centerV }}>
-                  <MemberActions query={query} userId={id} email={invite_email} isInvitationExpired={true} />
+                  <MemberActions
+                    query={query}
+                    userId={id}
+                    email={invite_email}
+                    isInvitationExpired={true}
+                  />
                 </Box>
               </Box>
             );
@@ -375,7 +481,11 @@ const MemberActions = (props: any) => {
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
-    service: (arg, config) => service.deleteExpertGroupMember({ id: expertGroupId, userId: userId }, config),
+    service: (arg, config) =>
+      service.deleteExpertGroupMember(
+        { id: expertGroupId, userId: userId },
+        config
+      ),
     runOnMount: false,
     toastError: true,
   });
@@ -418,13 +528,13 @@ const MemberActions = (props: any) => {
         isInvitationExpired
           ? {
               icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendAndInvitation" />,
+              text: <Trans i18nKey="resendInvitation" />,
               onClick: inviteMember,
             }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
+          text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
       ]}
@@ -451,7 +561,11 @@ const AddingNewMember = (props: any) => {
             ml: "auto",
           }}
         >
-          {openAddMembers ? <MinimizeRoundedIcon fontSize="small" /> : <AddRoundedIcon fontSize="small" />}
+          {openAddMembers ? (
+            <MinimizeRoundedIcon fontSize="small" />
+          ) : (
+            <AddRoundedIcon fontSize="small" />
+          )}
         </Box>
       </Typography>
       <Collapse in={openAddMembers}>
@@ -512,7 +626,9 @@ const AddMember = (props: any) => {
         placeholder={t("enterEmailOfTheUserYouWantToAdd") as string}
         label={<Trans i18nKey="userEmail" />}
         InputProps={{
-          endAdornment: <AddMemberButton loading={addMemberQueryData.loading} />,
+          endAdornment: (
+            <AddMemberButton loading={addMemberQueryData.loading} />
+          ),
         }}
       />
     </Box>
@@ -544,24 +660,89 @@ const ProfilesList = (props: any) => {
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchExpertGroupProfiles(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupProfiles(args, config),
   });
-
+  const unpublishedProfileQuery = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchExpertGroupUnpublishedProfiles(args, config),
+  });
   return (
     <>
       <Title
         inPageLink="profiles"
         size="small"
-        toolbar={hasAccess && <CreateProfileButton onSubmitForm={profileQuery.query} dialogProps={dialogProps} />}
+        toolbar={
+          hasAccess && (
+            <CreateProfileButton
+              onSubmitForm={profileQuery.query}
+              dialogProps={dialogProps}
+            />
+          )
+        }
       >
         <Trans i18nKey={"profiles"} />
       </Title>
       <Box mt={2}>
+        {/* published */}
         <QueryData
           {...profileQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
-              <ErrorEmptyData emptyMessage={<Trans i18nKey="thereIsNoProfileYet" />} />
+              <ErrorEmptyData
+                emptyMessage={<Trans i18nKey="thereIsNoPublishedProfileYet" />}
+              />
+            </Box>
+          }
+          isDataEmpty={(data) => {
+            const { results = [], is_expert } = data;
+            const isEmpty = is_expert
+              ? results.length === 0
+              : results.filter((p: any) => !!p?.is_active)?.length === 0;
+            return isEmpty;
+          }}
+          renderLoading={() => (
+            <>
+              {forLoopComponent(5, (index) => (
+                <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
+              ))}
+            </>
+          )}
+          render={(data = {}) => {
+            const { results = [], is_expert } = data;
+            return (
+              <>
+                {results.map((profile: any) => {
+                  return (
+                    <ProfileListItem
+                      link={
+                        is_expert
+                          ? `profiles/${profile?.id}`
+                          : `/profiles/${profile?.id}`
+                      }
+                      key={profile?.id}
+                      data={profile}
+                      fetchProfiles={profileQuery.query}
+                      fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                      hasAccess={is_expert}
+                    />
+                  );
+                })}
+              </>
+            );
+          }}
+        />
+        {/* unpublished */}
+        <QueryData
+          {...unpublishedProfileQuery}
+          showEmptyError={false}
+          emptyDataComponent={
+            <Box sx={{ background: "white", borderRadius: 2 }}>
+              <ErrorEmptyData
+                emptyMessage={
+                  <Trans i18nKey="thereIsNoUnpublishedProfileYet" />
+                }
+              />
             </Box>
           }
           renderLoading={() => (
@@ -573,24 +754,32 @@ const ProfilesList = (props: any) => {
           )}
           isDataEmpty={(data) => {
             const { results = [], is_expert } = data;
-            const isEmpty = is_expert ? results.length === 0 : results.filter((p: any) => !!p?.is_active)?.length === 0;
+            const isEmpty = is_expert
+              ? results.length === 0
+              : results.filter((p: any) => !!p?.is_active)?.length === 0;
             return isEmpty;
           }}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
             return (
               <>
-                {results.map((profile: any) => {
-                  return profile.is_active ? (
-                    <ProfileListItem
-                      link={is_expert ? `profiles/${profile?.id}` : `/profiles/${profile?.id}`}
-                      key={profile?.id}
-                      data={profile}
-                      fetchProfiles={profileQuery.query}
-                      hasAccess={is_expert}
-                    />
-                  ) : null;
-                })}
+                {is_expert &&
+                  results.map((profile: any) => {
+                    return (
+                      <ProfileListItem
+                        link={
+                          is_expert
+                            ? `profiles/${profile?.id}`
+                            : `/profiles/${profile?.id}`
+                        }
+                        key={profile?.id}
+                        data={profile}
+                        fetchProfiles={profileQuery.query}
+                        fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                        hasAccess={is_expert}
+                      />
+                    );
+                  })}
               </>
             );
           }}
@@ -600,7 +789,10 @@ const ProfilesList = (props: any) => {
   );
 };
 
-const CreateProfileButton = (props: { onSubmitForm: TQueryFunction; dialogProps: IDialogProps }) => {
+const CreateProfileButton = (props: {
+  onSubmitForm: TQueryFunction;
+  dialogProps: IDialogProps;
+}) => {
   const { onSubmitForm, dialogProps } = props;
 
   return (
@@ -677,17 +869,28 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 ...styles.centerV,
                                 boxShadow: 1,
                                 borderRadius: 4,
-                                background: "linear-gradient(145deg, #efaa9d, #ccf7f9)",
+                                background:
+                                  "linear-gradient(145deg, #efaa9d, #ccf7f9)",
                                 backgroundSize: "100% 64px",
                                 backgroundRepeat: "no-repeat",
                                 py: 1,
                                 px: 1.8,
                               }}
                             >
-                              <Box sx={{ mt: "28px", ...styles.centerCH, width: "100%" }}>
+                              <Box
+                                sx={{
+                                  mt: "28px",
+                                  ...styles.centerCH,
+                                  width: "100%",
+                                }}
+                              >
                                 <Box sx={{ ...styles.centerCH }}>
                                   <Avatar
-                                    sx={{ width: 58, height: 58, border: "4px solid white" }}
+                                    sx={{
+                                      width: 58,
+                                      height: 58,
+                                      border: "4px solid white",
+                                    }}
                                     alt={name}
                                     src={user?.picture || "/"}
                                   />
@@ -710,7 +913,10 @@ const ExpertGroupMembersDetail = (props: any) => {
                                         component="a"
                                         href={user.linkedin}
                                         target="_blank"
-                                        sx={{ textDecoration: "none", color: "inherit" }}
+                                        sx={{
+                                          textDecoration: "none",
+                                          color: "inherit",
+                                        }}
                                       >
                                         {user.linkedin}
                                       </Box>
@@ -720,7 +926,10 @@ const ExpertGroupMembersDetail = (props: any) => {
                                   </Title>
                                 </Box>
                                 <Box mt={1} px={1} py={1} pb={3}>
-                                  <Typography variant="body2" textAlign={"center"}>
+                                  <Typography
+                                    variant="body2"
+                                    textAlign={"center"}
+                                  >
                                     {user.bio}
                                   </Typography>
                                 </Box>
@@ -749,7 +958,12 @@ const ExpertGroupMembersDetail = (props: any) => {
                       </Title>
                       <Box mt={1}>
                         {invitees.map((member: any) => {
-                          const { user, id, invite_email, invite_expiration_date } = member;
+                          const {
+                            user,
+                            id,
+                            invite_email,
+                            invite_expiration_date,
+                          } = member;
                           const name = invite_email;
 
                           return (
@@ -781,8 +995,13 @@ const ExpertGroupMembersDetail = (props: any) => {
                                     mr: 2,
                                   }}
                                 >
-                                  <EventBusyRoundedIcon fontSize="small" sx={{ mr: 0.5 }} />
-                                  <Typography variant="body2">{formatDate(invite_expiration_date)}</Typography>
+                                  <EventBusyRoundedIcon
+                                    fontSize="small"
+                                    sx={{ mr: 0.5 }}
+                                  />
+                                  <Typography variant="body2">
+                                    {formatDate(invite_expiration_date)}
+                                  </Typography>
                                 </Box>
                                 <MemberActions
                                   query={queryData.query}
