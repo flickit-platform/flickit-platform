@@ -102,7 +102,7 @@ def extract_subject_report(profile, assessment_projects):
         subject_report_info.append(strength_info)
         subject_report_info.append(weakness_info)
         
-        subject_atts = subject.qualityattribute_set.all()
+        subject_atts = subject.qualityattributes.all()
         for att in subject_atts:
             att_info = Dictionary()
             att_info.add('title', att.title)

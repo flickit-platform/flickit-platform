@@ -86,7 +86,7 @@ def extract_subjects_infos(profile):
     subjectsInfos = []
     subjects = profile.assessment_subjects.all()
     for subject in subjects:
-        attributes_qs = subject.qualityattribute_set
+        attributes_qs = subject.qualityattributes
         subject_infos = {}
         subject_infos['title'] = subject.title
         subject_infos['description'] = subject.description
@@ -128,7 +128,7 @@ def __extract_related_attribute_metrics(att):
 
 def __extratc_subject_report_info(subject):
     report_infos = []
-    report_infos.append({'title' : 'Number of attributes', 'item': subject.qualityattribute_set.count()})
+    report_infos.append({'title' : 'Number of attributes', 'item': subject.qualityattributes.count()})
     report_infos.append({'title' : 'Index of the {}'.format(subject.title), 'item': subject.index})
     return report_infos
 
@@ -179,7 +179,7 @@ def __extract_profile_metric_count(questionnaires):
 def __extract_profile_attribute_count(subjects):
     attributes = []
     for subject in subjects:
-        attributes.extend(subject.qualityattribute_set.all())
+        attributes.extend(subject.qualityattributes.all())
     return {'title' : 'Attributes count', 'item': len(attributes)}
 
 
