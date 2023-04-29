@@ -1,14 +1,19 @@
+import itertools
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Count, F
 
 from common.restutil import ActionResult
+from common.abstractservices import load_model
 
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
+from baseinfo.serializers.commonserializers import QualityAttributeSerilizer
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.models.metricmodels import MetricImpact
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
@@ -222,6 +227,52 @@ def like_profile(user_id, profile_id):
         profile.likes.add(profile_like_create)
         profile.save()
     return profile
+
+def analyze(profile_id):
+    # Load the AssessmentProfile model with the given ID
+    profile = AssessmentProfile.objects.get(pk=profile_id)
+
+    # Query the MetricImpact objects filtered by the given profile ID and annotate them by the metric number
+    queryset = MetricImpact.objects.filter(
+        quality_attribute__assessment_subject__assessment_profile=profile
+    ).values('quality_attribute__title', 'level').annotate(
+        metric_number=Count('metric')
+    ).order_by('quality_attribute__title', 'level')
+
+    # Define an empty dictionary to hold the aggregated data
+    result = {}
+
+    # Iterate over the queryset, aggregating by quality attribute and level
+    for obj in queryset:
+        title = obj['quality_attribute__title']
+        level = obj['level']
+        metric_number = obj['metric_number']
+
+        # If the quality attribute is not in the result dictionary, add it with an empty dictionary as the value
+        if title not in result:
+            result[title] = {}
+
+        # If the level is not in the quality attribute's dictionary, add it with the metric number as the value
+        if level not in result[title]:
+            result[title][level] = metric_number
+
+    # Convert the aggregated data into the desired output format
+    output = []
+    for title, levels in result.items():
+        metrics_number_by_level = [{'level': level, 'metric_number': metric_number} for level, metric_number in levels.items()]
+        output.append({'attributes': title, 'metrics_number_by_level': metrics_number_by_level})
+
+    # Return the output as a successful ActionResult
+    return ActionResult(data=output, success=True)
+
+def extract_profile_attribute(profile):
+    subjects = profile.assessment_subjects.all()
+    attributes = []
+    for subject in subjects:
+        attributes.append(subject.quality_attributes.values('id', 'title'))
+    return list(itertools.chain(*attributes))
+
+
     
     
 
