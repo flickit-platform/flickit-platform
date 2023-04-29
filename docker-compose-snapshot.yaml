@@ -26,10 +26,12 @@ services:
       - db
 
   dsl:
-      image: ghcr.io/avansoft/flickit-dsl-parser:0.0.1
-      restart: on-failure
-      ports:
-        - 8080:8080
+    image: ghcr.io/avansoft/flickit-dsl-parser:0.0.1
+    restart: on-failure
+    ports:
+      - 8080:8080
+    volumes:
+      - /opt/dsl-parser:/opt/dsl-parser
 
   db:
     image: postgres:11
