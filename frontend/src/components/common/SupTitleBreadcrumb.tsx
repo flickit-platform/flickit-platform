@@ -64,9 +64,9 @@ export const useSupTitleBreadcrumb = (params: Record<string, string | undefined>
   });
 
   return {
-    space: !loading ? data?.space || "spaces" : data?.space,
-    assessment: !loading ? data?.assessment || "assessments" : data?.assessment,
-    questionnaire: !loading ? data?.questionnaire || "questionnaires" : data?.questionnaire,
+    space: !loading ? data?.space_id || "spaces" : data?.space_id,
+    assessment: !loading ? data?.assessment_id || "assessments" : data?.assessment_id,
+    questionnaire: !loading ? data?.questionnaire_id || "questionnaires" : data?.questionnaire_id,
   };
 };
 
