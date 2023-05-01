@@ -182,7 +182,7 @@ const SubjectTitle = (props: { data: ISubjectReportModel; loading: boolean }) =>
             {
               title: (
                 <>
-                  {assessment_profile_description || <Trans i18nKey="technicalDueDiligence" />} {assessment_project_title}
+                  {title || <Trans i18nKey="technicalDueDiligence" />} 
                 </>
               ),
               icon: <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,

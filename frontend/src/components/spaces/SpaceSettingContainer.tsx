@@ -50,11 +50,16 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
-        toolbar={<EditSpaceButton fetchSpace={query} />}
+        toolbar={isOwner?<EditSpaceButton fetchSpace={query} />:<div/>}
         backLink={-1}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
-          {loading ? <Skeleton variant="rounded" width="110px" sx={{ mr: 1 }} /> : title} <Trans i18nKey="setting" />
+          {loading ? (
+            <Skeleton variant="rounded" width="110px" sx={{ mr: 1 }} />
+          ) : (
+            title
+          )}
+          <Trans i18nKey="setting" />
         </Box>
       </Title>
       <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} />}</Box>
@@ -82,7 +87,12 @@ const EditSpaceButton = (props: any) => {
 
   return (
     <>
-      <LoadingButton loading={queryData.loading} startIcon={<BorderColorRoundedIcon />} size="small" onClick={openEditDialog}>
+      <LoadingButton
+        loading={queryData.loading}
+        startIcon={<BorderColorRoundedIcon />}
+        size="small"
+        onClick={openEditDialog}
+      >
         <Trans i18nKey="editSpace" />
       </LoadingButton>
       <CreateSpaceDialog {...dialogProps} onSubmitForm={fetchSpace} />
@@ -115,9 +125,9 @@ function SpaceSettings(props: { isOwner: boolean }) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <ErrorAccessDenied hasAccess={isOwner}>
-            <SpaceMembers />
-          </ErrorAccessDenied>
+          {/* <ErrorAccessDenied hasAccess={isOwner}> */}
+          <SpaceMembers />
+          {/* </ErrorAccessDenied> */}
         </TabPanel>
       </TabContext>
     </Box>

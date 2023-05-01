@@ -60,13 +60,15 @@ class EvidenceDeleteAPI(APIView):
     
 class EvidenceListApi(APIView):
     def get (self, request, metric_id, assessment_id):
+        content = {}
+        content['evidences'] = []
         try:
             evidence_relation = EvidenceRelation.objects.get(assessment_id = assessment_id, metric_id = metric_id)
         except EvidenceRelation.DoesNotExist:
-            return Response({})
-        content = {}
+            return Response(content)
+        
         if evidence_relation is None:
             return Response(content)
-        evidence_qs = Evidence.objects.filter(evidence_relation_id = evidence_relation.id)
+        evidence_qs = Evidence.objects.filter(evidence_relation_id = evidence_relation.id).order_by('-creation_time')
         content['evidences'] = EvidenceSerializer(list(evidence_qs), many=True).data
         return Response(content)

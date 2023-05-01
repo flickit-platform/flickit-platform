@@ -231,7 +231,7 @@
   "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?",
   "tryIt": "Try it",
   "published": "published",
-  "unPublished": "Unpublished",
+  "unPublished": "unpublished",
   "saveChanges": "Save changes",
   "profileSetting": "Profile setting",
   "emailIsNotOnFlickitYet": "{{email}} is not on Flickit yet.",
@@ -266,5 +266,10 @@
   "evidences": "Evidences",
   "updateEvidence": "Update evidence",
   "unpublishedProfiles": "Unpublished profiles",
-  "leaveSpace": "Leave space"
+  "leaveSpace": "Leave space",
+  "metrics":"Metrics",
+  "attribute": "Attribute",
+  "level":"Level"
 }
+
+

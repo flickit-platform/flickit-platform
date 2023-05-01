@@ -487,6 +487,16 @@ export const createService = (signOut: () => void, accessToken: string, setAcces
         ...(config || {}),
       });
     },
+    analyzeProfile(
+      args: { profileId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { profileId } = args || {};
+
+      return axios.get(`/baseinfo/analyzeprofile/${profileId}/`, {
+        ...(config || {}),
+      });
+    },
   };
 
   return service;
