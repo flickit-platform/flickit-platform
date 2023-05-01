@@ -266,5 +266,10 @@
   "evidences": "Evidences",
   "updateEvidence": "Update evidence",
   "unpublishedProfiles": "Unpublished profiles",
-  "leaveSpace": "Leave space"
+  "leaveSpace": "Leave space",
+  "metrics":"Metrics",
+  "attribute": "Attribute",
+  "level":"Level"
 }
+
+
