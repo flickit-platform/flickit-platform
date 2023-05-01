@@ -100,12 +100,18 @@ export const SpaceMembers = () => {
                   id: spaceId,
                   value: user_id_ref.current?.value,
                 });
+                await spaceMembersQueryData.query();
+                user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                dialogProps.openDialog({
-                  type: "invite",
-                  data: { email: user_id_ref.current?.value },
-                });
+                if (err.data.message === "This user is a member in this space.") {
+                  toastError(err.data.message);
+                } else {
+                  dialogProps.openDialog({
+                    type: "invite",
+                    data: { email: user_id_ref.current?.value },
+                  });
+                }
               }
             }
           }}
@@ -340,12 +346,12 @@ const Actions = (props: any) => {
               onClick: inviteMember,
             }
           : undefined,
-          isInvitees&&{
+        isInvitees && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
-        !isInvitees&&{
+        !isInvitees && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="remove" />,
           onClick: deleteItem,
