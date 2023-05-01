@@ -307,7 +307,23 @@ const AnswerTemplate = (props: {
 
 const AnswerDetails = ({ metricInfo }: any) => {
   const dialogProps = useDialog();
+  const evidencesQueryData = useQuery({
+    service: (args = { metricId: metricInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
+    toastError: true,
+  });
+  const hasSetCollapse = useRef(false);
   const [collapse, setCollapse] = useState<boolean>(false);
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  useEffect(() => {
+    if (!hasSetCollapse.current && evidencesQueryData.loaded) {
+      if (evidencesQueryData.data?.evidences?.length > 0) {
+        setCollapse(true);
+        hasSetCollapse.current = true;
+      }
+    }
+  }, [evidencesQueryData.loaded]);
 
   return (
     <Box mt={2} width="100%">
@@ -411,7 +427,7 @@ const AnswerDetails = ({ metricInfo }: any) => {
               width: "100%",
             }}
           >
-            <Evidence {...dialogProps} metricInfo={metricInfo} />
+            <Evidence {...dialogProps} metricInfo={metricInfo} evidencesQueryData={evidencesQueryData} />
           </Box>
         </Box>
       </Collapse>
@@ -422,17 +438,13 @@ const AnswerDetails = ({ metricInfo }: any) => {
 const Evidence = (props: any) => {
   const { service } = useServiceContext();
   const { onClose: closeDialog, openDialog, ...rest } = props;
-  const { metricInfo } = props;
+  const { metricInfo, evidencesQueryData } = props;
   const { assessmentId = "" } = useParams();
   const [evidenceId, setEvidenceId] = useState(null);
   const formMethods = useForm({ shouldUnregister: true });
   const addEvidence = useQuery({
     service: (args, config) => service.addEvidence(args, config),
     runOnMount: false,
-  });
-  const evidencesQueryData = useQuery({
-    service: (args = { metricId: metricInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
-    toastError: true,
   });
 
   //if there is a evidence we should use addEvidence service
