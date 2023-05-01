@@ -171,6 +171,7 @@
   "onlyAssessmentsWithEvaluatedStatus": "Only assessments with evaluated status can be selected to compare.",
   "and": "and",
   "attributes": "Attributes",
+  "attribute": "Attribute",
   "subjectAttributes": "{{subject}} attributes",
   "editComparisonItems": "Edit comparison items",
   "comparisonResult": "Comparison result",
@@ -261,5 +262,7 @@
   "linkedin": "Linkedin",
   "publishedProfiles": "Published profiles",
   "unpublishedProfiles": "Unpublished profiles",
-  "leaveSpace": "Leave space"
+  "leaveSpace": "Leave space",
+  "metrics":"Metrics",
+  "level":"Level"
 }
