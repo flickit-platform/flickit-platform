@@ -22,11 +22,11 @@ class AssessmentProjectManager(models.Manager):
 class AssessmentProject(models.Model):
 
     STATUS_CHOICES = [
+        ('ElEMENTARY', 'ElEMENTARY'),
         ('WEAK', 'WEAK'),
-        ('RISKY', 'RISKY'),
-        ('NORMAL', 'NORMAL'),
+        ('MODERATE', 'MODERATE'),
         ('GOOD', 'GOOD'),
-        ('OPTIMIZED', 'OPTIMIZED')
+        ('GREAT', 'GREAT')
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4)

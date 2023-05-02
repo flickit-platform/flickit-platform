@@ -11,7 +11,7 @@ from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME
 
 from assessment.models import AssessmentProject
 from assessment.serializers import projectserializers 
-from assessment.services import assessmentprojectservices
+from assessment.services import assessmentprojectservices, compareservices
 
 class AssessmentProjectViewSet(ModelViewSet):
     def get_serializer_class(self):
@@ -50,5 +50,5 @@ class AssessmentProjectSelectForCompareView(APIView):
     permission_classes=[IsAuthenticated, IsSpaceMember]
     def post(self, request):
         assessment_list_ids = request.data.get(ASSESSMENT_LIST_IDS_PARAM_NAME)
-        assessment_list = assessmentprojectservices.loadAssessmentsByIds(assessment_list_ids)
+        assessment_list = compareservices.loadAssessmentsByIdsForComapre(assessment_list_ids)
         return Response(assessment_list)
