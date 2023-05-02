@@ -15,7 +15,8 @@ const Gauge = (props: IGaugeProps) => {
     <Box p={1} position="relative" width="100%" {...rest}>
       <img
         width="100%"
-        src={`/assets/svg/${hasStat ? systemStatus : "noStatus"}.svg`}
+        // src={`/assets/svg/${hasStat ? systemStatus : "noStatus"}.svg`}
+        src={"/assets/svg/WEAK.svg"}
         alt={getStatusText(systemStatus, true) as string}
       />
     </Box>

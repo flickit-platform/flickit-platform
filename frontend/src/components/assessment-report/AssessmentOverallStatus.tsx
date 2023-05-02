@@ -16,6 +16,7 @@ interface IAssessmentOverallStatusProps {
 
 export const AssessmentOverallStatus = (props: IAssessmentOverallStatusProps) => {
   const { status, subjects = [] } = props;
+
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
       <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
