@@ -38,9 +38,9 @@ export const AssessmentOverallStatus = (props: IAssessmentOverallStatusProps) =>
                   >
                     <span style={{ textTransform: "uppercase" }}>{subject.title}</span> <Trans i18nKey={"statusIs"} />{" "}
                     <b
-                      style={{
-                        color: getColorOfStatus(subject.status, "#747373"),
-                      }}
+                      // style={{
+                      //   color: getColorOfStatus(subject.status, "#747373"),
+                      // }}
                       data-cy={"status"}
                     >
                       {subject.status || "NOT EVALUATED"}
