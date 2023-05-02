@@ -10,6 +10,7 @@ interface IGaugeProps extends BoxProps {
 
 const Gauge = (props: IGaugeProps) => {
   const { systemStatus, name = "This system", ...rest } = props;
+  console.log(systemStatus)
   const hasStat = hasStatus(systemStatus);
   return (
     <Box p={1} position="relative" width="100%" {...rest}>

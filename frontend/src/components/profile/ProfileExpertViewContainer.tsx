@@ -388,7 +388,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                   >
                     {questionnaire.questions.map((question: any, index: number) => {
                       return (
-                        <li style={{ marginBottom: "12px" }} key={index}>
+                        <li style={{ marginBottom: "12px",marginLeft:"6px" }} key={index}>
                           <Box display="flex" justifyContent={"space-between"} py={1}>
                             <Grid container spacing={2} columns={14}>
                               <Grid xs={10} md={10} lg={11} item>
