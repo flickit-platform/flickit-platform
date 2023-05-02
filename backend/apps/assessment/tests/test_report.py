@@ -100,7 +100,7 @@ class Test_calculate_maturity_level_value:
         assert sorted_att_values[0].maturity_level_value == 5
         assert sorted_att_values[1].maturity_level_value == 5
         assert sorted_att_values[2].maturity_level_value == 4
-        assert response.data['status'] == "OPTIMIZED"
+        assert response.data['status'] == "GREAT"
         assert response.data['most_significant_strength_atts'][0] == sorted_att_values[0].quality_attribute.title
 
 @pytest.mark.django_db
@@ -155,5 +155,5 @@ class Test_Report_Subject:
         assert sorted_att_values[0].maturity_level_value == 5
         assert sorted_att_values[1].maturity_level_value == 5
         assert sorted_att_values[2].maturity_level_value == 4
-        assert response.data['status'] == "OPTIMIZED"
+        assert response.data['status'] == "GREAT"
         # assert response.data['most_significant_strength_atts'][0]['title'] == sorted_att_values[0].quality_attribute.title
