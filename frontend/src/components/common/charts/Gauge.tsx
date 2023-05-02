@@ -10,13 +10,13 @@ interface IGaugeProps extends BoxProps {
 
 const Gauge = (props: IGaugeProps) => {
   const { systemStatus, name = "This system", ...rest } = props;
+  console.log(systemStatus)
   const hasStat = hasStatus(systemStatus);
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
       <img
         width="100%"
-        // src={`/assets/svg/${hasStat ? systemStatus : "noStatus"}.svg`}
-        src={"/assets/svg/WEAK.svg"}
+        src={`/assets/svg/${hasStat ? systemStatus : "noStatus"}.svg`}
         alt={getStatusText(systemStatus, true) as string}
       />
     </Box>
