@@ -8,7 +8,7 @@ ANSWERED_QUESTION_NUMBER_BOUNDARY = 5
 
 
 STATUS_CHOICES = [
-    ('ElEMENTARY', 'ElEMENTARY'),
+    ('ELEMENTARY', 'ELEMENTARY'),
     ('WEAK', 'WEAK'),
     ('MODERATE', 'MODERATE'),
     ('GOOD', 'GOOD'),
@@ -17,7 +17,7 @@ STATUS_CHOICES = [
 
 def calculate_staus(value):
     if value == 1:
-        return "ElEMENTARY"
+        return "ELEMENTARY"
     if value == 2:
         return "WEAK"
     if value == 3:

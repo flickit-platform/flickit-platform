@@ -22,7 +22,7 @@ class AssessmentProjectManager(models.Manager):
 class AssessmentProject(models.Model):
 
     STATUS_CHOICES = [
-        ('ElEMENTARY', 'ElEMENTARY'),
+        ('ELEMENTARY', 'ELEMENTARY'),
         ('WEAK', 'WEAK'),
         ('MODERATE', 'MODERATE'),
         ('GOOD', 'GOOD'),
