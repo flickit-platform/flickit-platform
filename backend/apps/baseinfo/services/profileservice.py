@@ -1,4 +1,5 @@
 import itertools
+import re
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
@@ -49,6 +50,8 @@ def is_user_access_to_profile(profile: AssessmentProfile, user_id):
 
 
 def extract_detail_of_profile(profile, request):
+    if not is_user_access_to_profile(profile, request.user.id):
+        raise PermissionDenied
     response = extract_profile_basic_infos(profile)
     response['profileInfos'] = extract_profile_report_infos(profile)
     response['subjectsInfos'] = extract_subjects_infos(profile)
