@@ -22,7 +22,6 @@ const AutocompleteAsyncField = <T extends any = any>(props: IAutocompleteAsyncFi
   const { name, rules = {}, multiple, defaultValue = multiple ? undefined : null, required = false, ...rest } = props;
   const { control, setValue } = useFormContext();
   const { options } = rest;
-
   return (
     <Controller
       name={name}
@@ -90,7 +89,6 @@ const AutocompleteBaseField = (props: IAutocompleteAsyncFieldBase & Omit<TQueryP
   const { hasError, errorMessage } = getFieldError(errors, name);
   const [inputValue, setInputValue] = useState(() => getOptionLabel(defaultValue) || "");
   const [options, setOptions] = useState<any[]>([]);
-
   const fetch = useMemo(
     () =>
       throttle((request: any) => {
@@ -204,7 +202,6 @@ export const useConnectAutocompleteField = <T extends any = any>(props: {
   });
 
   const { data: options, ...rest } = serviceQueryData;
-
   return { ...rest, options };
 };
 
