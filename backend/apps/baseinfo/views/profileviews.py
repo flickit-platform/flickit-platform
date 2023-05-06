@@ -72,8 +72,10 @@ class ProfileArchiveApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
-        result = profileservice.archive_profile(profile)
-        return Response({'message': result.message})    
+        result = profileservice.archive_profile(profile ,request.user.id)
+        if not result:
+            return Response({'message': 'The profile has already been archived'}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'message': 'The profile is archived successfully'})
 
 class ProfilePublishApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]

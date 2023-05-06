@@ -200,10 +200,14 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile):
+def archive_profile(profile: AssessmentProfile ,user_id):
+    if profile.is_active ==False:
+            return False
+    if not is_user_access_to_profile(profile, user_id):
+        raise PermissionDenied
     profile.is_active = False
     profile.save()
-    return ActionResult(True, "The profile is archived successfully")
+    return True
 
 @transaction.atomic     
 def publish_profile(profile: AssessmentProfile, user_id):
