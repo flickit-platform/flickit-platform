@@ -7,6 +7,28 @@ from assessment.models import AssessmentProfile
 
 
 @pytest.fixture
+def create_user():
+    def do_create_user(email):
+        user = baker.make(User, email = email)
+        return user
+    return do_create_user
+
+@pytest.fixture
+def create_profile():
+    def do_create_profile(assessmentprofile):
+        profile = baker.make(assessmentprofile)
+        return profile
+    return do_create_profile
+
+@pytest.fixture
+def create_expertgroup():
+    def do_create_expertgroup(expertgroup ,user):
+        expert_group = baker.make(expertgroup)
+        expert_group.users.add(user)
+        return expert_group
+    return do_create_expertgroup
+
+@pytest.fixture
 def api_client():
     return APIClient()
 
