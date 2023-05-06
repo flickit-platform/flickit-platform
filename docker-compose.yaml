@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   backend:
-    image: ghcr.io/avansoft/flickit-platform:0.6.4
+    image: ghcr.io/avansoft/flickit-platform:0.7.0
     ports:
       - 8000:8000
     volumes:
@@ -19,16 +19,19 @@ services:
       - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
       - EMAIL_HOST_USER=${EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - EMAIL_HOST_PORT=${EMAIL_HOST_PORT}
       - DOMAIN=${DOMAIN}
       - CELERY_BROKER_URL=redis://redis:6379/1
     depends_on:
       - db
 
   dsl:
-      image: ghcr.io/avansoft/flickit-dsl-parser:0.1.1
-      restart: on-failure
-      ports:
-        - 8080:8080
+    image: ghcr.io/avansoft/flickit-dsl-parser:0.2.1
+    restart: on-failure
+    ports:
+      - 8080:8080
+    volumes:
+      - /opt/dsl-parser:/opt/dsl-parser
 
   db:
     image: postgres:11
@@ -46,7 +49,7 @@ services:
     image: redis:alpine
   celery:
     restart: always
-    image: ghcr.io/avansoft/flickit-platform:0.6.4
+    image: ghcr.io/avansoft/flickit-platform:0.7.0
     command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
@@ -66,7 +69,7 @@ services:
       - backend
 
   flower:
-    image: ghcr.io/avansoft/flickit-platform:0.6.4
+    image: ghcr.io/avansoft/flickit-platform:0.7.0
     command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend
@@ -89,7 +92,7 @@ services:
       - 5555:5555
 
 frontend:
-    image: ghcr.io/avansoft/flickit-platform-frontend:0.6.4
+    image: ghcr.io/avansoft/flickit-platform-frontend:0.7.0
     ports:
       - "80:80"
     environment:

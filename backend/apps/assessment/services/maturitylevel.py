@@ -1,5 +1,6 @@
 from baseinfo.models.metricmodels import MetricImpact, OptionValue
 from assessment.fixture.dictionary import Dictionary
+from assessment.models import MetricValue
 
 
 def calculate_maturity_level(result, quality_attribute):
@@ -12,7 +13,8 @@ def calculate_maturity_level(result, quality_attribute):
                 if impact.quality_attribute.id == quality_attribute.id:
                     impacts.append(impact)
             if impacts:
-                metric_impact_attribute.add(metric_value, impacts)
+                sorted_impacts = sorted(impacts, key=lambda x: x.level, reverse=False)
+                metric_impact_attribute.add(metric_value, sorted_impacts)
 
         impact_metric_value_level_1 = Dictionary()
         impact_metric_value_level_2 = Dictionary()
@@ -26,49 +28,40 @@ def calculate_maturity_level(result, quality_attribute):
             is_in_impact_level4 = False
             for impact in impacts:
                 impact_option_values = impact.option_values.all()
-                answer_value = next((x for x in impact_option_values if x.option.id == metric_value.answer.id), None)
+                # answer_value = next((x for x in list(impact_option_values) if metric_value.answer is not None and x.option.id == metric_value.answer.id), None)
+                # # for impact_op_value in impact_option_values:
+                # #     if impact_op_value.option is not None and 
+                answer_value = next((x for x in list(impact_option_values) if x.option.id == metric_value.answer.id), None)
                 if impact.level == 1 and metric_value.answer is not None:
-                    impact_metric_value_level_1.add(impact, answer_value)
-                    if answer_value is not None:
-                        if answer_value.value > 0 and answer_value.value < 1:
-                            is_in_impact_level1 = True
-                    else:
-                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
-                        impact_metric_value_level_1.add(impact, effectivr_answer_value)
-                elif impact.level == 2 and metric_value.answer is not None:
-                    impact_metric_value_level_2.add(impact, answer_value)
-                    if answer_value is not None:
-                        if answer_value.value > 0 and answer_value.value < 1:
-                            is_in_impact_level2 = True
-                    elif is_in_impact_level1:
-                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
-                        impact_metric_value_level_2.add(impact, effectivr_answer_value)
-                    else:
+                    if answer_value is None:   
                         effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
-                        impact_metric_value_level_2.add(impact, effectivr_answer_value)
-
+                        impact_metric_value_level_1.add(impact, effectivr_answer_value)     
+                    else:
+                        impact_metric_value_level_1.add(impact, answer_value)
+                        is_in_impact_level1 = True
+                elif impact.level == 2 and metric_value.answer is not None:
+                    if answer_value is None and is_in_impact_level1:   
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
+                        impact_metric_value_level_2.add(impact, effectivr_answer_value) 
+                    elif answer_value is None and not is_in_impact_level1:
+                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
+                        impact_metric_value_level_2.add(impact, effectivr_answer_value) 
+                    else:
+                        impact_metric_value_level_2.add(impact, answer_value)
+                        is_in_impact_level2 = True
+                    
                 elif impact.level == 3 and metric_value.answer is not None:
                     impact_metric_value_level_3.add(impact, answer_value)
-                    if answer_value is not None:
-                        if answer_value.value > 0 and answer_value.value < 1:
-                            is_in_impact_level3 = True
-                    elif is_in_impact_level1 or is_in_impact_level2:
+                    if answer_value is None and (is_in_impact_level1 or is_in_impact_level2):   
                         effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
                         impact_metric_value_level_3.add(impact, effectivr_answer_value)
-                    else:
+                    elif answer_value is None and not is_in_impact_level1 and not is_in_impact_level2:
                         effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
-                        impact_metric_value_level_3.add(impact, effectivr_answer_value)
+                        impact_metric_value_level_3.add(impact, effectivr_answer_value) 
+                    else:
+                        impact_metric_value_level_3.add(impact, answer_value)
                 elif impact.level == 4 and metric_value.answer is not None:
                     impact_metric_value_level_4.add(impact, answer_value)
-                    if answer_value is not None:
-                        if answer_value.value > 0 and answer_value.value < 1:
-                            is_in_impact_level4 = True
-                    elif is_in_impact_level1 or is_in_impact_level2 or is_in_impact_level3:
-                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 0)
-                        impact_metric_value_level_4.add(impact, effectivr_answer_value)
-                    else:
-                        effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
-                        impact_metric_value_level_4.add(impact, effectivr_answer_value)
                     
 
         impact_metric_value_level_list = []

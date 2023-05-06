@@ -62,6 +62,7 @@
   "accessDenied": "Access Denied",
   "youDontHaveCorrectPermissions": "You don't have correct permissions",
   "noEvidenceYet": "No evidence yet",
+  "numOfEvidence": "Evidences",
   "howSureAreYou": "How sure are you?",
   "myConfidenceLevelOnThisQuestionIs": "Confidence level of this answer ",
   "listOfEvidence": "List of Evidence",
@@ -230,7 +231,7 @@
   "youHaveBeenInvitedToExpertGroup": "You have been invited to this group. Do you want to accept this invitation?",
   "tryIt": "Try it",
   "published": "published",
-  "unPublished": "Unpublished",
+  "unPublished": "unpublished",
   "saveChanges": "Save changes",
   "profileSetting": "Profile setting",
   "emailIsNotOnFlickitYet": "{{email}} is not on Flickit yet.",
@@ -246,7 +247,7 @@
   "resendAndInvitation": "Resend and invitation",
   "resendInvitation": "Resend invitation",
   "cancelInvitation": "Cancel invitation",
-  "remove":"Remove",
+  "remove": "Remove",
   "providedBy": "Provided by",
   "expertGroup": "Expert group",
   "account": "Account",
@@ -260,6 +261,15 @@
   "updateUser": "Update user",
   "linkedin": "Linkedin",
   "publishedProfiles": "Published profiles",
+  "answerDetail": "Answer details",
+  "addDetailsToYourAnswer": "Add details to your answer for better measurements",
+  "evidences": "Evidences",
+  "updateEvidence": "Update evidence",
   "unpublishedProfiles": "Unpublished profiles",
-  "leaveSpace": "Leave space"
+  "leaveSpace": "Leave space",
+  "metrics":"Metrics",
+  "attribute": "Attribute",
+  "level":"Level"
 }
+
+

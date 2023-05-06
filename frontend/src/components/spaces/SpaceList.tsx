@@ -235,7 +235,6 @@ const Actions = (props: any) => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { default_space } = userInfo;
-  console.log(default_space)
   const [editLoading, setEditLoading] = useState(false);
   const {
     query: deleteSpaceMember,

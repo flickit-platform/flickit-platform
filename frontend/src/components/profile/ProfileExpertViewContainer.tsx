@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
@@ -29,6 +29,10 @@ import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useAuthContext } from "@providers/AuthProvider";
+import Dialog from "@mui/material/Dialog";
+import { DialogActions, DialogContent } from "@mui/material";
+import DialogTitle from "@mui/material/DialogTitle";
+import useScreenResize from "@utils/useScreenResize";
 
 const ProfileExpertViewContainer = () => {
   const { profileQueryProps } = useProfile();
@@ -254,7 +258,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             {item.description}
                           </Typography>
                         </Box>
-                        <ProfileQuestionsList questions={item.questions} />
+                        <ProfileQuestionsList questions={item.questions} index={index} />
                       </React.Fragment>
                     );
                   }}
@@ -271,7 +275,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
 const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
   const { questionnaires } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
-
+  const dialogProps = useDialog();
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -384,11 +388,20 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                   >
                     {questionnaire.questions.map((question: any, index: number) => {
                       return (
-                        <li style={{ marginBottom: "12px" }} key={index}>
+                        <li style={{ marginBottom: "12px",marginLeft:"6px" }} key={index}>
                           <Box display="flex" justifyContent={"space-between"} py={1}>
                             <Grid container spacing={2} columns={14}>
-                              <Grid xs={6} md={6} lg={7} item>
-                                <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} position="relative">
+                              <Grid xs={10} md={10} lg={11} item>
+                                <Typography
+                                  // onClick={() => {
+                                  //   dialogProps.openDialog({});
+                                  // }}
+                                  sx={{ cursor: "pointer" }}
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  position="relative"
+                                >
                                   {index === 0 && (
                                     <Typography
                                       sx={{
@@ -408,10 +421,9 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                     </Typography>
                                   )}
                                   {question.title}
-                                </Typography>{" "}
+                                </Typography>
                               </Grid>
-                              <Grid item xs={4} md={4} lg={4}>
-                                {" "}
+                              {/* <Grid item xs={4} md={4} lg={4}>
                                 <Box position={"relative"} minWidth="160px">
                                   {index === 0 && (
                                     <Typography
@@ -435,7 +447,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                     })}
                                   </ul>
                                 </Box>
-                              </Grid>
+                              </Grid> */}
                               <Grid item xs={4} md={4} lg={3}>
                                 <Box position={"relative"}>
                                   {index === 0 && (
@@ -492,6 +504,10 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                       </Box>
                                     );
                                   })}
+                                  {/* <ProfileDialog
+                                      {...dialogProps}
+                                      question={question}
+                                    /> */}
                                 </Box>
                               </Grid>
                             </Grid>
@@ -511,15 +527,15 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
   );
 };
 
-const ProfileQuestionsList = (props: { questions: any[] }) => {
-  const { questions } = props;
-
+const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
+  const { questions, index } = props;
+  const questionsRef = {} as Record<string, boolean>;
   return (
     <Box m={1} mt={5}>
-      <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
+      {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
         <Trans i18nKey="questions" />
         <span style={{ float: "right" }}>{questions.length}</span>
-      </Typography>
+      </Typography> */}
       <Box sx={{ overflowX: "auto" }}>
         <Box
           sx={{
@@ -530,17 +546,23 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
           }}
           component="ol"
         >
+          {/* <AttributeDetails index={index} /> */}
           {questions.map((question: any, index: number) => {
             const { title, options = [], relatedAttributes = [], impact } = question || {};
             const hasRelatedAttributes = relatedAttributes.length > 0;
             const hasImpact = impact !== null && impact !== undefined;
             const gridColumns = hasRelatedAttributes || hasImpact ? 15 : 12;
+            if (title && questionsRef[title]) {
+              return null;
+            } else if (title && !questionsRef[title]) {
+              questionsRef[title] = true;
+            }
 
             return (
               <li style={{ marginBottom: "12px" }} key={index}>
                 <Box display="flex" justifyContent={"space-between"} py={1}>
-                  <Grid container spacing={2} columns={gridColumns}>
-                    <Grid xs={8} item>
+                  <Grid container spacing={2} columns={12}>
+                    <Grid xs={12} item>
                       <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} position="relative">
                         {index === 0 && (
                           <Typography
@@ -563,7 +585,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                         {title}
                       </Typography>
                     </Grid>
-                    <Grid item xs={5}>
+                    {/* <Grid item xs={5}>
                       <Box position={"relative"} minWidth="160px">
                         {index === 0 && (
                           <Typography
@@ -587,8 +609,8 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                           })}
                         </ul>
                       </Box>
-                    </Grid>
-                    {hasImpact && (
+                    </Grid> */}
+                    {/* {hasImpact && (
                       <Grid item xs={2}>
                         <Box position={"relative"}>
                           {index === 0 && (
@@ -610,7 +632,7 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
                           <Box px={1}>{impact}</Box>
                         </Box>
                       </Grid>
-                    )}
+                    )} */}
                     {hasRelatedAttributes && (
                       <Grid item xs={3}>
                         <Box position={"relative"} minWidth="300px">
@@ -652,14 +674,127 @@ const ProfileQuestionsList = (props: { questions: any[] }) => {
   );
 };
 
+// const ProfileDialog = (props: any) => {
+//   const { question, onClose: closeDialog, ...rest } = props;
+//   const {
+//     title,
+//     options = [],
+//     relatedAttributes = [],
+//     impact,
+//   } = question || {};
+//   console.log(question);
+//   const onSubmit = async (data: any) => {};
+//   const fullScreen = useScreenResize("sm");
+//   return (
+//     <Dialog
+//       {...rest}
+//       onClose={() => {
+//         closeDialog();
+//       }}
+//       fullWidth
+//       maxWidth="lg"
+//       fullScreen={fullScreen}
+//     >
+//       <DialogTitle
+//         textTransform={"uppercase"}
+//         sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}
+//       >
+//         {title}
+//       </DialogTitle>
+//       <DialogContent
+//         sx={{
+//           display: "flex",
+//           flexDirection: "column",
+//           px: { xs: 1.5, sm: 3 },
+//         }}
+//       >
+//         {options.map((option: any, index: number) => {
+//           console.log(option);
+//         })}
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
+const AttributeDetails = (props: { index: number }) => {
+  const { index } = props;
+  const { queryData } = useProfile();
+  const { data, loaded } = queryData;
+  const gridColumns = (loaded && data[index].metrics_number_by_level.length * 3) || 3;
+
+  return (
+    <Box display="flex" justifyContent={"space-between"} marginBottom={5}>
+      <Grid container spacing={2} columns={15}>
+        {loaded &&
+          data[index].metrics_number_by_level.map((item: any) => (
+            <Grid item xs={3}>
+              <Box position={"relative"}>
+                <Typography
+                  sx={{
+                    width: "100%",
+                    position: "absolute",
+                    top: "-36px",
+                    pb: "2px",
+                    color: "#767676",
+                    fontFamily: "Roboto",
+                    borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
+                  }}
+                  variant="subMedium"
+                >
+                  <Trans i18nKey={"level"} />
+                  <Box component="span" sx={{ float: "right", mr: 1 }}>
+                    <Trans i18nKey="metrics" />
+                  </Box>
+                </Typography>
+
+                <Box
+                  sx={{
+                    background: (t) => t.palette.secondary.main,
+                    borderRadius: 8,
+                    color: "white",
+                    width: "auto",
+                  }}
+                >
+                  <Box py={0.3} px={2} mb={0.5} mr={0.5}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      {item.level}
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontWeight: "bold",
+                          color: "white",
+                          position: "relative",
+                        }}
+                      >
+                        {item.metric_number}
+                      </Typography>
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          ))}
+      </Grid>
+    </Box>
+  );
+};
 const useProfile = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const profileQueryProps = useQuery({
     service: (args = { profileId }, config) => service.inspectProfile(args, config),
   });
-
-  return { profileQueryProps };
+  const queryData = useQuery({
+    service: (args = { profileId }, config) => service.analyzeProfile(args, config),
+    runOnMount: true,
+  });
+  return { profileQueryProps, queryData };
 };
 
 export default ProfileExpertViewContainer;

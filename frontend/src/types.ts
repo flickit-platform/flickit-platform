@@ -19,6 +19,9 @@ export enum ESystemStatus {
   "NORMAL" = "NORMAL",
   "RISKY" = "RISKY",
   "WEAK" = "WEAK",
+  "GREAT" = "GREAT",
+  "MODERATE" = "MODERATE",
+  "ELEMENTARY" = "ELEMENTARY",
 }
 
 export type TId = string | number;
@@ -55,9 +58,27 @@ export type TAnswer = {
   id: TId;
   value: string | number;
   caption: string;
+  evidences: TEvidences;
 };
-
-export type TStatus = "WEAK" | "RISKY" | "NORMAL" | "GOOD" | "OPTIMIZED" | "Not Calculated" | null;
+export type TEvidences = {
+  created_by_id: TId;
+  creation_time: TimeRanges;
+  description: string;
+  id: TId;
+  last_modification_date: TimeRanges;
+  metric_value_id: string;
+};
+export type TStatus =
+  | "WEAK"
+  | "RISKY"
+  | "NORMAL"
+  | "GOOD"
+  | "OPTIMIZED"
+  | "ELEMENTARY"
+  | "MODERATE"
+  | "GREAT"
+  | "Not Calculated"
+  | null;
 
 export interface IUserInfo {
   id: TId;
@@ -69,7 +90,7 @@ export interface IUserInfo {
   picture?: null | string;
   linkedin?: string | null;
   is_active?: boolean;
-  default_space?:any
+  default_space?: any;
 }
 
 export interface ISpaceInfo {
@@ -113,7 +134,13 @@ export interface IAssessmentProfileModel {
   title: string;
   images: TImages;
   metric_categories: IQuestionnaireModel[];
-  assessment_subjects: Omit<ISubjectInfo, "total_answered_metric_number" | "total_metric_number" | "progress" | "status">;
+  assessment_subjects: Omit<
+    ISubjectInfo,
+    | "total_answered_metric_number"
+    | "total_metric_number"
+    | "progress"
+    | "status"
+  >;
 }
 
 export interface IProfile {
@@ -127,7 +154,8 @@ export interface IAssessmentResult {
   assessment_project: string;
   id: TId;
 }
-export interface IAssessmentResultModel extends IDefaultModel<IAssessmentResult> {}
+export interface IAssessmentResultModel
+  extends IDefaultModel<IAssessmentResult> {}
 
 export type TAssessmentResultsModel = string[];
 
@@ -152,12 +180,15 @@ export interface ISpaceModel {
   last_modification_date?: string;
   members_number?: number;
   assessment_numbers?: number;
-  is_default_space_for_current_user?:boolean;
+  is_default_space_for_current_user?: boolean;
 }
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
 export interface IAssessmentReport {
-  assessment_profile: Omit<IAssessmentProfileModel, "metric_categories" | "images" | "assessment_subjects">;
+  assessment_profile: Omit<
+    IAssessmentProfileModel,
+    "metric_categories" | "images" | "assessment_subjects"
+  >;
   assessment_results: string[];
   color: IColorModel;
   last_modification_date: string;
@@ -320,7 +351,10 @@ export type TQueryProps<T extends any = any, A extends any = any> = {
   loaded: boolean;
   error: boolean;
   errorObject: ICustomError | undefined;
-  query: (args?: A | undefined, config?: AxiosRequestConfig<any> | undefined) => Promise<T>;
+  query: (
+    args?: A | undefined,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => Promise<T>;
   abortController?: AbortController;
 };
 

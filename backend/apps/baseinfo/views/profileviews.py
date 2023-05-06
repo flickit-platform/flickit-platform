@@ -42,6 +42,12 @@ class ProfileDetailDisplayApi(APIView):
         response = profileservice.extract_detail_of_profile(profile, request)
         return Response(response, status = status.HTTP_200_OK)
 
+class ProfileAnalyzeApi(APIView):
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    def get(self, request, profile_id):
+        result = profileservice.analyze(profile_id)
+        return Response(result.data, status = status.HTTP_200_OK)
+
 class ProfileListApi(APIView):
     @is_expert
     def get(self, request, expert_group_id):

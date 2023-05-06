@@ -74,7 +74,8 @@ const cards = {
 
 const auth = {
   authLayout: style({
-    background: (theme) => `radial-gradient(${theme.palette.background.secondary},${theme.palette.background.secondaryDark})`,
+    background: (theme) =>
+      `radial-gradient(${theme.palette.background.secondary},${theme.palette.background.secondaryDark})`,
     minHeight: "100vh",
     ...commonStyles.centerCH,
   }),
@@ -127,15 +128,22 @@ export const styles = {
 };
 
 export const statusColorMap: Record<NonNullable<TStatus>, string> = {
-  WEAK: "#bb0000",
-  RISKY: "#e9730d",
-  NORMAL: "#e5da10",
-  GOOD: "#45a53a",
+  WEAK: "#da7930",
+  RISKY: "#da7930",
+  NORMAL: "#faee56",
+  GOOD: "#60a349",
   OPTIMIZED: "#107e3e",
+  ELEMENTARY: "#ab2317",
+  MODERATE: "#faee56",
+  GREAT: "#ceb04e",
+
   "Not Calculated": "#b7b7b7",
 };
 
-export const getColorOfStatus = (status: TStatus, fallBackColor: string = "#b7b7b7") => {
+export const getColorOfStatus = (
+  status: TStatus,
+  fallBackColor: string = "#b7b7b7"
+) => {
   if (hasStatus(status)) {
     return statusColorMap[status as NonNullable<TStatus>];
   }

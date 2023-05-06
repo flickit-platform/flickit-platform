@@ -20,16 +20,19 @@ services:
       - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
       - EMAIL_HOST_USER=${EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - EMAIL_HOST_PORT=${EMAIL_HOST_PORT}
       - DOMAIN=${DOMAIN}
       - CELERY_BROKER_URL=redis://redis:6379/1
     depends_on:
       - db
 
   dsl:
-      image: ghcr.io/avansoft/flickit-dsl-parser:0.0.1
-      restart: on-failure
-      ports:
-        - 8080:8080
+    image: ghcr.io/avansoft/flickit-dsl-parser:0.0.1
+    restart: on-failure
+    ports:
+      - 8080:8080
+    volumes:
+      - /opt/dsl-parser:/opt/dsl-parser
 
   db:
     image: postgres:11

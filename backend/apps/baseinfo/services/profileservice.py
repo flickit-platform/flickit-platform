@@ -1,14 +1,19 @@
+import itertools
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Count, F
 
 from common.restutil import ActionResult
+from common.abstractservices import load_model
 
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
+from baseinfo.serializers.commonserializers import QualityAttributeSerilizer
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.models.metricmodels import MetricImpact
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
@@ -81,7 +86,7 @@ def extract_subjects_infos(profile):
     subjectsInfos = []
     subjects = profile.assessment_subjects.all()
     for subject in subjects:
-        attributes_qs = subject.qualityattribute_set
+        attributes_qs = subject.quality_attributes
         subject_infos = {}
         subject_infos['title'] = subject.title
         subject_infos['description'] = subject.description
@@ -123,7 +128,7 @@ def __extract_related_attribute_metrics(att):
 
 def __extratc_subject_report_info(subject):
     report_infos = []
-    report_infos.append({'title' : 'Number of attributes', 'item': subject.qualityattribute_set.count()})
+    report_infos.append({'title' : 'Number of attributes', 'item': subject.quality_attributes.count()})
     report_infos.append({'title' : 'Index of the {}'.format(subject.title), 'item': subject.index})
     return report_infos
 
@@ -174,7 +179,7 @@ def __extract_profile_metric_count(questionnaires):
 def __extract_profile_attribute_count(subjects):
     attributes = []
     for subject in subjects:
-        attributes.extend(subject.qualityattribute_set.all())
+        attributes.extend(subject.quality_attributes.all())
     return {'title' : 'Attributes count', 'item': len(attributes)}
 
 
@@ -222,6 +227,44 @@ def like_profile(user_id, profile_id):
         profile.likes.add(profile_like_create)
         profile.save()
     return profile
+
+def analyze(profile_id):
+    profile = AssessmentProfile.objects.get(pk=profile_id)
+
+    queryset = MetricImpact.objects.filter(
+        quality_attribute__assessment_subject__assessment_profile=profile
+    ).values('quality_attribute__title', 'level').annotate(
+        metric_number=Count('metric')
+    ).order_by('quality_attribute__title', 'level')
+
+    result = {}
+
+    for obj in queryset:
+        title = obj['quality_attribute__title']
+        level = obj['level']
+        metric_number = obj['metric_number']
+
+        if title not in result:
+            result[title] = {}
+
+        if level not in result[title]:
+            result[title][level] = metric_number
+
+    output = []
+    for title, levels in result.items():
+        metrics_number_by_level = [{'level': level, 'metric_number': metric_number} for level, metric_number in levels.items()]
+        output.append({'attributes': title, 'metrics_number_by_level': metrics_number_by_level})
+
+    return ActionResult(data=output, success=True)
+
+def extract_profile_attribute(profile):
+    subjects = profile.assessment_subjects.all()
+    attributes = []
+    for subject in subjects:
+        attributes.append(subject.quality_attributes.values('id', 'title'))
+    return list(itertools.chain(*attributes))
+
+
     
     
 

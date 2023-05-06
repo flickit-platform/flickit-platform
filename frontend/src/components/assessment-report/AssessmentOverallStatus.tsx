@@ -16,6 +16,7 @@ interface IAssessmentOverallStatusProps {
 
 export const AssessmentOverallStatus = (props: IAssessmentOverallStatusProps) => {
   const { status, subjects = [] } = props;
+
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
       <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
@@ -37,9 +38,9 @@ export const AssessmentOverallStatus = (props: IAssessmentOverallStatusProps) =>
                   >
                     <span style={{ textTransform: "uppercase" }}>{subject.title}</span> <Trans i18nKey={"statusIs"} />{" "}
                     <b
-                      style={{
-                        color: getColorOfStatus(subject.status, "#747373"),
-                      }}
+                      // style={{
+                      //   color: getColorOfStatus(subject.status, "#747373"),
+                      // }}
                       data-cy={"status"}
                     >
                       {subject.status || "NOT EVALUATED"}

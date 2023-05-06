@@ -32,6 +32,7 @@ urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject
 
 urlpatterns += [
     path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),
+    path("analyzeprofile/<str:profile_id>/", profileviews.ProfileAnalyzeApi.as_view()),
     path("expertgroup/profiles/<str:expert_group_id>/", profileviews.ProfileListApi.as_view()),
     path("expertgroup/unpublishedprofiles/<str:expert_group_id>/", profileviews.UnpublishedProfileListApi.as_view()),
     path("importprofile/", importprofileviews.ImportProfileApi.as_view()),

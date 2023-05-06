@@ -41,6 +41,11 @@ const metricReducer = (prevState: any, action: { type: METRIC_ACTIONS_TYPE; payl
         ...prevState,
         isSubmitting: action.payload,
       };
+      case METRIC_ACTIONS_TYPE.SET_EVIDENCE_DESCRIPTION:
+      return {
+        ...prevState,
+        evidences: action.payload,
+      };
     default:
       return prevState;
   }
