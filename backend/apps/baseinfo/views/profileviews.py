@@ -98,6 +98,8 @@ class UploadProfileApi(ModelViewSet):
 class ProfileLikeApi(APIView):
     @transaction.atomic
     def post(self, request, profile_id):
-        profile = profileservice.like_profile(request.user.id, profile_id)
-        return Response({'likes': profile.likes.count()})
+        result = profileservice.like_profile(request.user.id, profile_id)
+        if result == False:
+            return Response({'message': 'The submitted request is invalid.'}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'likes': result.likes.count()})
 
