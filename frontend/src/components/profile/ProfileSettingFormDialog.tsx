@@ -35,6 +35,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const navigate = useNavigate();
+  
   const close = () => {
     abortController.abort();
     closeDialog();
@@ -92,6 +93,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
               })}
               name="tags"
               multiple={true}
+              defaultValue={defaultValues?.profileInfos&&defaultValues.profileInfos[4].item}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
