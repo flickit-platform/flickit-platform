@@ -72,8 +72,10 @@ class ProfileArchiveApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
-        result = profileservice.archive_profile(profile)
-        return Response({'message': result.message})    
+        result = profileservice.archive_profile(profile ,request.user.id)
+        if not result:
+            return Response({'message': 'The profile has already been archived'}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'message': 'The profile is archived successfully'})
 
 class ProfilePublishApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
@@ -98,6 +100,8 @@ class UploadProfileApi(ModelViewSet):
 class ProfileLikeApi(APIView):
     @transaction.atomic
     def post(self, request, profile_id):
-        profile = profileservice.like_profile(request.user.id, profile_id)
-        return Response({'likes': profile.likes.count()})
+        result = profileservice.like_profile(request.user.id, profile_id)
+        if result == False:
+            return Response({'message': 'The submitted request is invalid.'}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'likes': result.likes.count()})
 

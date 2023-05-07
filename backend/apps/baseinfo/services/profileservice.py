@@ -200,10 +200,14 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile):
+def archive_profile(profile: AssessmentProfile ,user_id):
+    if profile.is_active ==False:
+            return False
+    if not is_user_access_to_profile(profile, user_id):
+        raise PermissionDenied
     profile.is_active = False
     profile.save()
-    return ActionResult(True, "The profile is archived successfully")
+    return True
 
 @transaction.atomic     
 def publish_profile(profile: AssessmentProfile, user_id):
@@ -218,6 +222,8 @@ def publish_profile(profile: AssessmentProfile, user_id):
 @transaction.atomic
 def like_profile(user_id, profile_id):
     profile = load_profile(profile_id)
+    if profile.is_active == False:
+        return False
     profile_like_user = ProfileLike.objects.filter(user_id = user_id, profile_id = profile.id)
     if profile_like_user.count() == 1:
         profile.likes.filter(user_id = user_id, profile_id = profile.id).delete()
