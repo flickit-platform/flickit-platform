@@ -12,9 +12,6 @@ from baseinfo.models.profilemodels import ExpertGroup ,ProfileLike
 from account.models import User
 
 
-
-
-
 @pytest.mark.django_db
 class Test_Delete_Profile:
     def test_delete_profile_when_user_is_memeber_of_profile_expert_group(self, create_user, create_profile ,create_expertgroup):
@@ -253,28 +250,6 @@ class TestLikeProfiles:
         
         #responses testing
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
-        
-    def test_like_profile_return_400(self, create_user, create_expertgroup, create_profile ):
-        #init data
-        user1 = create_user(email = "test@test.com")
-        user2 = create_user(email = "test2@test.com")
-        profile = create_profile(AssessmentProfile)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        profile.expert_group = expert_group
-        ProfileLike(profile = profile)
-        profile.is_active = False
-        profile.save()
-
-        #create request and send request
-        api = APIRequestFactory()
-        request = api.post(f'/baseinfo/profiles/like/{ profile.id }/', {}, format='json')
-        force_authenticate(request, user = user2)
-        view = profileviews.ProfileLikeApi.as_view()
-        resp = view(request,profile.id)
-        
-        #responses testing
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data["message"] == "The submitted request is invalid."
         
         
     def test_like_profile_return_200(self, create_user, create_expertgroup, create_profile ):

@@ -149,9 +149,3 @@ def init_data():
         
     return do_init_data
 
-# @pytest.fixture
-# def init_data():
-#     def do_init_data():
-#         profile = baker.make(AssessmentProfile)
-#         return profile
-#     return do_init_data
