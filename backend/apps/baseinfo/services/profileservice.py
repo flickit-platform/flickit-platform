@@ -167,8 +167,8 @@ def __extract_profile_subjects(subjects):
     return {'title' : 'Subjects', 'item': subject_titles}
 
 def __extract_profile_tags(tags):
-    tag_titles = [tag.title for tag in tags]
-    return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
+    data_tags = [{"id":tag.id,"title":tag.title}  for tag in tags]
+    return {'title' : 'Tags', 'item': data_tags, 'type': 'tags'}
     
 def __extract_profile_questionnaire_count(questionnaires):
     return {'title' : 'Questionnaires count', 'item': questionnaires.count()}
