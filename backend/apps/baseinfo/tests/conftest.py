@@ -15,6 +15,28 @@ from assessment.fixture.dictionary import Dictionary
 
 
 @pytest.fixture
+def create_user():
+    def do_create_user(email):
+        user = baker.make(User, email = email)
+        return user
+    return do_create_user
+
+@pytest.fixture
+def create_profile():
+    def do_create_profile(assessmentprofile):
+        profile = baker.make(assessmentprofile)
+        return profile
+    return do_create_profile
+
+@pytest.fixture
+def create_expertgroup():
+    def do_create_expertgroup(expertgroup ,user):
+        expert_group = baker.make(expertgroup)
+        expert_group.users.add(user)
+        return expert_group
+    return do_create_expertgroup
+
+@pytest.fixture
 def api_client():
     return APIClient()
 
@@ -127,9 +149,3 @@ def init_data():
         
     return do_init_data
 
-# @pytest.fixture
-# def init_data():
-#     def do_init_data():
-#         profile = baker.make(AssessmentProfile)
-#         return profile
-#     return do_init_data

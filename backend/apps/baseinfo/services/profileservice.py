@@ -1,4 +1,5 @@
 import itertools
+import re
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import PermissionDenied
@@ -49,6 +50,8 @@ def is_user_access_to_profile(profile: AssessmentProfile, user_id):
 
 
 def extract_detail_of_profile(profile, request):
+    if not is_user_access_to_profile(profile, request.user.id):
+        raise PermissionDenied
     response = extract_profile_basic_infos(profile)
     response['profileInfos'] = extract_profile_report_infos(profile)
     response['subjectsInfos'] = extract_subjects_infos(profile)
@@ -200,10 +203,14 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile):
+def archive_profile(profile: AssessmentProfile ,user_id):
+    if profile.is_active ==False:
+            return False
+    if not is_user_access_to_profile(profile, user_id):
+        raise PermissionDenied
     profile.is_active = False
     profile.save()
-    return ActionResult(True, "The profile is archived successfully")
+    return True
 
 @transaction.atomic     
 def publish_profile(profile: AssessmentProfile, user_id):
