@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 from common.validators import validate_file_size, validate_dsl_extension
@@ -37,10 +39,34 @@ class AssessmentProfile(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles')
     is_active = models.BooleanField(default=False)
+    profile_settings = models.JSONField(null=True)
 
     def __str__(self) -> str:
         return self.title
+    
+    # def create_settings(self,profile_settings):
+    #     self.profile_settings = json.loads(profile_settings)
+    #     self.save()
+    @classmethod
+    def create(cls, code, title, about, summary, expert_group, tags, profile_settings):
+        profile = cls()
+        profile.code = code
+        profile.title = title
+        profile.about = about
+        profile.summary = summary
+        profile.expert_group = expert_group
+        profile.profile_settings = json.dumps(profile_settings)
+        profile.save()
+        for tag in tags:
+            profile.tags.add(tag)
+        profile.save()
+        return profile
 
+    def update_settings(self,profile_settings):
+        self.profile_settings = json.dumps(profile_settings)
+        self.save()
+
+    
     class Meta:
         verbose_name = "Assessment Profile"
         verbose_name_plural = "Assessment Profiles"
