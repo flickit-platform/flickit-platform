@@ -1,7 +1,9 @@
+from calendar import c
 from django.contrib.auth.models import Permission
 from rest_framework import status
 from rest_framework.test import APIRequestFactory ,force_authenticate
 import pytest
+import json
 from model_bakery import baker
 from unittest import skip
 from baseinfo.views import profileviews, importprofileviews , expertgroupviews
@@ -364,3 +366,93 @@ class Test_Analyse_Profile:
         assert analyze_list[0]['metrics_number_by_level'][3]['metric_number'] == 2
         assert analyze_list[0]['metrics_number_by_level'][4]['metric_number'] == 2
         assert response.status_code == status.HTTP_200_OK
+
+@pytest.mark.django_db
+
+class TestGetDataProfile:
+    def test_profile_list_options_return_401(self):
+        api = APIRequestFactory()
+        request = api.get(f'/baseinfo/profiles/get/1/', {}, format='json')
+        view = profileviews.GetDataProfileApi.as_view()
+        resp = view(request)
+        
+        #responses testing
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_profile_list_options_return_403(self, create_user, create_expertgroup, create_profile, create_tag):
+        #init data
+        user1 = create_user(email = "test@test.com")
+        user2 = create_user(email = "test2@test.com")
+        profile = create_profile(AssessmentProfile)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        profile.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        profile.code = "tu1"
+        profile.title = "title user1"
+        profile.about = "about user 1"
+        profile.summary = "summary user1"
+        profile.expert_group = expert_group
+        profile.tags.add(tag1)
+        profile.tags.add(tag2)
+        profile.save()
+
+        #create request and send request
+        api = APIRequestFactory()
+        request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
+        force_authenticate(request, user = user2)
+        view = profileviews.GetDataProfileApi.as_view()
+        resp = view(request,profile.id)
+        
+        #responses testing
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+  
+    def test_profile_list_options_return_200(self, create_user, create_expertgroup, create_profile, create_tag):
+        #init data
+        user1 = create_user(email = "test@test.com")
+        profile = create_profile(AssessmentProfile)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        profile.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        profile.code = "tu1"
+        profile.title = "title user1"
+        profile.about = "about user 1"
+        profile.summary = "summary user1"
+        profile.expert_group = expert_group
+        profile.tags.add(tag1)
+        profile.tags.add(tag2)
+        profile.save()
+
+        #create request and send request
+        api = APIRequestFactory()
+        request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
+        force_authenticate(request, user = user1)
+        view = profileviews.GetDataProfileApi.as_view()
+        resp = view(request,profile.id)
+        
+        #responses testing
+        data = [
+                    {
+                        "id": profile.id,
+                        "title": "title user1",
+                        "summary": "summary user1",
+                        "about": "about user 1",
+                        "tags": [
+                           
+                            {
+                                "id": tag1.id,
+                                "code": "tc1",
+                                "title": "devops"
+                            },
+                            {
+                                "id": tag2.id,
+                                "code": "tc2",
+                                "title": "team"
+                            }
+                        ]
+                    }
+                ]
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data == data

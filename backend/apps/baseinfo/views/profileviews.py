@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from baseinfo.decorators import is_expert
 from baseinfo.services import profileservice, expertgroupservice
-from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer
+from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer, GetDataProfileSerilizer
 from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
 from baseinfo.permissions import ManageExpertGroupPermission
 
@@ -102,3 +102,11 @@ class ProfileLikeApi(APIView):
     def post(self, request, profile_id):
         profile = profileservice.like_profile(request.user.id, profile_id)
         return Response({'likes': profile.likes.count()})
+
+class GetDataProfileApi(APIView):
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    def get(self, request,profile_id):
+        profile = profileservice.load_profile(profile_id)
+        data = profileservice.get_extrac_profile_data(profile ,request)
+        response = GetDataProfileSerilizer(data, many = True, context={'request': request}).data      
+        return Response(response, status = status.HTTP_200_OK)
