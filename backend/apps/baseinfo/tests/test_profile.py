@@ -368,9 +368,8 @@ class Test_Analyse_Profile:
         assert response.status_code == status.HTTP_200_OK
 
 @pytest.mark.django_db
-
 class TestGetDataProfile:
-    def test_profile_list_options_return_401(self):
+    def test_get_data_profile_return_401(self):
         api = APIRequestFactory()
         request = api.get(f'/baseinfo/profiles/get/1/', {}, format='json')
         view = profileviews.GetDataProfileApi.as_view()
@@ -379,7 +378,7 @@ class TestGetDataProfile:
         #responses testing
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_profile_list_options_return_403(self, create_user, create_expertgroup, create_profile, create_tag):
+    def test_get_data_profile_return_403(self, create_user, create_expertgroup, create_profile, create_tag):
         #init data
         user1 = create_user(email = "test@test.com")
         user2 = create_user(email = "test2@test.com")
@@ -408,7 +407,7 @@ class TestGetDataProfile:
         assert resp.status_code == status.HTTP_403_FORBIDDEN
 
   
-    def test_profile_list_options_return_200(self, create_user, create_expertgroup, create_profile, create_tag):
+    def test_get_data_profile_return_200(self, create_user, create_expertgroup, create_profile, create_tag):
         #init data
         user1 = create_user(email = "test@test.com")
         profile = create_profile(AssessmentProfile)
@@ -456,3 +455,153 @@ class TestGetDataProfile:
                 ]
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data == data
+        
+
+
+@pytest.mark.django_db
+class TestUpdateProfile:
+    def test_update_profile_return_401(self):
+        api = APIRequestFactory()
+        request = api.post(f'/baseinfo/profiles/get/1/', {}, format='json')
+        view = profileviews.UpdateProfileApi.as_view()
+        resp = view(request)
+        
+        #responses testing
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+    
+    def test_update_profile_return_400(self,create_user, create_expertgroup, create_profile, create_tag):
+        #init data
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        profile = create_profile(AssessmentProfile)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        profile.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        profile.code = "tu1"
+        profile.title = "title user1"
+        profile.about = "about user 1"
+        profile.summary = "summary user1"
+        profile.expert_group = expert_group
+        profile.tags.add(tag1)
+        profile.tags.add(tag2)
+        profile.save()
+
+        data ={
+            "tags" : [tag2.id+1000],
+            "title" : "test2",
+            "summary" : "test2",
+            "about":"<p>test2</p>",
+            }
+        api = APIRequestFactory()
+        request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
+        force_authenticate(request, user = user1)
+        view = profileviews.UpdateProfileApi.as_view()
+        resp = view(request, profile.id)
+        
+        api1 = APIRequestFactory()
+        request1 = api1.post(f'/baseinfo/profiles/update/{ profile.id }/', {}, format='json')
+        view1 = profileviews.UpdateProfileApi.as_view()
+        force_authenticate(request1, user = user1)
+        resp1= view1(request1,profile.id)
+        
+        #responses testing
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] ==  "There is no profile tag with this id."
+        
+        assert resp1.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp1.data["message"] ==  "All fields cannot be empty."
+    
+  
+        
+    def test_update_profile_return_403(self,create_user, create_expertgroup, create_profile, create_tag):
+        #init data
+        user1 = create_user(email = "test@test.com")
+        user2 = create_user(email = "test2@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        user2.user_permissions.add(permission)
+        profile = create_profile(AssessmentProfile)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        profile.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        profile.code = "tu1"
+        profile.title = "title user1"
+        profile.about = "about user 1"
+        profile.summary = "summary user1"
+        profile.expert_group = expert_group
+        profile.tags.add(tag1)
+        profile.tags.add(tag2)
+        profile.save()
+
+        data ={
+            "tags" : [tag2.id],
+            "title" : "test2",
+            "summary" : "test2",
+            "about":"<p>test2</p>",
+            }
+        api = APIRequestFactory()
+        request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
+        force_authenticate(request, user = user2)
+        view = profileviews.UpdateProfileApi.as_view()
+        resp = view(request, profile.id)
+        #responses testing
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+    
+    def test_update_profile_return_200(self,create_user, create_expertgroup, create_profile, create_tag):
+        #init data
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        profile = create_profile(AssessmentProfile)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        profile.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        profile.code = "tu1"
+        profile.title = "title user1"
+        profile.about = "about user 1"
+        profile.summary = "summary user1"
+        profile.expert_group = expert_group
+        profile.tags.add(tag1)
+        profile.tags.add(tag2)
+        profile.save()
+
+        data ={
+            "tags" : [tag2.id],
+            "title" : "test2",
+            "summary" : "test2",
+            "about":"<p>test2</p>",
+            }
+        api = APIRequestFactory()
+        request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
+        force_authenticate(request, user = user1)
+        view = profileviews.UpdateProfileApi.as_view()
+        resp = view(request, profile.id)
+        
+        api1 = APIRequestFactory()
+        request1 = api1.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
+        view1 = profileviews.GetDataProfileApi.as_view()
+        force_authenticate(request1, user = user1)
+        resp1= view1(request1,profile.id)
+        
+        data =[
+                {
+                    "id": profile.id,
+                    "title": "test2",
+                    "summary": "test2",
+                    "about": "<p>test2</p>",
+                    "tags": [
+                        {
+                            "id": tag2.id,
+                            "code": "tc2",
+                            "title": "team"
+                        }
+                    ]
+                }
+            ]
+        #responses testing
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp1.data == data

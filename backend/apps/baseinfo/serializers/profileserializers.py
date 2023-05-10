@@ -81,5 +81,11 @@ class GetDataProfileSerilizer(serializers.ModelSerializer):
         model = AssessmentProfile
         fields = ['id', 'title', 'summary', 'about', 'tags']
 
+class UpdateProfileSerializer(serializers.Serializer):
+    title = serializers.CharField(required=False)
+    about = serializers.CharField(required=False)
+    summary = serializers.CharField(required=False)
+    tags = serializers.ListField(child=serializers.IntegerField(),required=False)
+
 
 

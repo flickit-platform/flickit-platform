@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from baseinfo.decorators import is_expert
 from baseinfo.services import profileservice, expertgroupservice
-from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer, GetDataProfileSerilizer
+from baseinfo.serializers.profileserializers import ProfileDslSerializer, AssessmentProfileSerilizer, ProfileTagSerializer, GetDataProfileSerilizer, UpdateProfileSerializer
 from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
 from baseinfo.permissions import ManageExpertGroupPermission
 
@@ -105,8 +105,22 @@ class ProfileLikeApi(APIView):
 
 class GetDataProfileApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
-    def get(self, request,profile_id):
+    def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         data = profileservice.get_extrac_profile_data(profile ,request)
         response = GetDataProfileSerilizer(data, many = True, context={'request': request}).data      
         return Response(response, status = status.HTTP_200_OK)
+
+
+class UpdateProfileApi(APIView):
+    serializer_class = UpdateProfileSerializer
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    def post(self, request, profile_id):
+        serializer = UpdateProfileSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        profile = profileservice.load_profile(profile_id)
+        result = profileservice.update_profile(profile ,request,**serializer.validated_data)
+        if result.success:
+            return Response({'message': result.message})
+        else:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
