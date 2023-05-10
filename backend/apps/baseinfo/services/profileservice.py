@@ -1,18 +1,14 @@
 import itertools
-import re
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.exceptions import PermissionDenied
-from django.db.models import Count, F
+from django.db.models import Count
 
 from common.restutil import ActionResult
-from common.abstractservices import load_model
 
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
-from baseinfo.serializers.commonserializers import QualityAttributeSerilizer
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
 from baseinfo.models.metricmodels import MetricImpact
 
@@ -28,13 +24,11 @@ def load_profile_tag(tag_id) -> ProfileTag:
     except ProfileTag.DoesNotExist:
         raise ObjectDoesNotExist
 
-def is_profile_deletable(profile_id, user_id):
+def is_profile_deletable(profile_id):
     profile = load_profile(profile_id)
     if is_profile_used_in_assessments(profile):
-        return False    
-    if not is_user_access_to_profile(profile, user_id):
-        raise PermissionDenied
-    return True
+        return ActionResult(success=False, message='Some assessments with this profile exist')    
+    return ActionResult(success=True) 
 
 def is_profile_used_in_assessments(profile: AssessmentProfile):
     qs = AssessmentProject.objects.filter(assessment_profile_id = profile.id)
@@ -42,16 +36,7 @@ def is_profile_used_in_assessments(profile: AssessmentProfile):
         return True
     return False
 
-def is_user_access_to_profile(profile: AssessmentProfile, user_id):
-    user = profile.expert_group.users.filter(id = user_id)
-    if user.count() == 0:
-        return False
-    return True
-
-
 def extract_detail_of_profile(profile, request):
-    if not is_user_access_to_profile(profile, request.user.id):
-        raise PermissionDenied
     response = extract_profile_basic_infos(profile)
     response['profileInfos'] = extract_profile_report_infos(profile)
     response['subjectsInfos'] = extract_subjects_infos(profile)
@@ -203,24 +188,20 @@ def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id)
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile ,user_id):
-    if profile.is_active ==False:
-            return False
-    if not is_user_access_to_profile(profile, user_id):
-        raise PermissionDenied
+def archive_profile(profile: AssessmentProfile):
+    if not profile.is_active:
+        return ActionResult(success=False, message='The profile has already been archived')
     profile.is_active = False
     profile.save()
-    return True
+    return ActionResult(success=True, message='The profile is archived successfully')
 
 @transaction.atomic     
 def publish_profile(profile: AssessmentProfile, user_id):
     if profile.is_active:
-        return False
-    if not is_user_access_to_profile(profile, user_id):
-        raise PermissionDenied
+        return ActionResult(success=False, message='The profile has already been published')
     profile.is_active = True
     profile.save()
-    return True
+    return ActionResult(success=False, message='The profile is published successfully')
 
 @transaction.atomic
 def like_profile(user_id, profile_id):

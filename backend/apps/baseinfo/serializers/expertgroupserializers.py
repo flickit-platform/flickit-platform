@@ -5,14 +5,12 @@ from account.serializers.userserializers import UserSimpleSerializer, UserSerial
 from account.services import userservices
 
 from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
-from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
 from baseinfo.services import expertgroupservice
 
 
 
 class ExpertGroupSerilizer(serializers.ModelSerializer):
     users = UserSimpleSerializer(many=True)
-    profiles = AssessmentProfileSimpleSerilizer(many=True)
     number_of_members = serializers.SerializerMethodField()
     number_of_profiles = serializers.SerializerMethodField()
     owner = UserSimpleSerializer()
@@ -31,7 +29,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'about', 'bio', 'website', 'picture', 'users',
-        'number_of_members', 'profiles', 'number_of_profiles', 'owner', 'is_expert']
+        'number_of_members', 'number_of_profiles', 'owner', 'is_expert']
 
 
 class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):

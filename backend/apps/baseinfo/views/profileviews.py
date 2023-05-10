@@ -27,12 +27,13 @@ class AssessmentProfileViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
+    @transaction.atomic
     def destroy(self, request, *args, **kwargs):
         result = profileservice.is_profile_deletable(kwargs['pk'], request.user.id)
-        if result:
+        if result.success:
             return super().destroy(request, *args, ** kwargs)
         else:
-            return Response({'message': 'Some assessments with this profile exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
         
 
 class ProfileDetailDisplayApi(APIView):
@@ -73,18 +74,18 @@ class ProfileArchiveApi(APIView):
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.archive_profile(profile ,request.user.id)
-        if not result:
-            return Response({'message': 'The profile has already been archived'}, status=status.HTTP_400_BAD_REQUEST) 
-        return Response({'message': 'The profile is archived successfully'})
+        if not result.success:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'message': result.message})
 
 class ProfilePublishApi(APIView):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         result = profileservice.publish_profile(profile, request.user.id)
-        if not result:
-            return Response({'message': 'The profile has already been published'}, status=status.HTTP_400_BAD_REQUEST) 
-        return Response({'message': 'The profile is published successfully'})
+        if not result.success:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST) 
+        return Response({'message': result.message})
 
 class ProfileTagViewSet(ModelViewSet):
     serializer_class = ProfileTagSerializer

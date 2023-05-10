@@ -1,9 +1,12 @@
 from django.db import transaction
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.decorators import permission_classes
 
 from baseinfo.serializers import expertgroupserializers 
 from baseinfo.services import expertgroupservice
@@ -11,23 +14,34 @@ from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
 from baseinfo.permissions import ManageExpertGroupPermission
 
 
-class ExpertGroupViewSet(ModelViewSet):
+class ExpertGroupViewSet(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   GenericViewSet):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
-
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return expertgroupserializers.ExpertGroupCreateSerilizers
         return expertgroupserializers.ExpertGroupSerilizer
 
     def get_queryset(self):
-        user_id = self.request.query_params.get('user_id')
-        if user_id is not None:
-            return ExpertGroup.objects.filter(users__id=user_id).prefetch_related('users').all()
         return ExpertGroup.objects.all()
+    
+class UserExpertGroupsApiView(APIView):
+    pagination_class = PageNumberPagination
+    def get(self, request):
+        paginator = self.pagination_class()
+        qs = ExpertGroup.objects.filter(users__id=request.user.id).prefetch_related('users').all()
+        paginated_queryset = paginator.paginate_queryset(qs, request)
+        serializer = expertgroupserializers.ExpertGroupSerilizer(paginated_queryset, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
-class ExpertGroupAccessViewSet(ModelViewSet):
-    http_method_names = ['get', 'delete']
+class ExpertGroupAccessViewSet(mixins.RetrieveModelMixin,
+                   mixins.DestroyModelMixin,
+                   mixins.ListModelMixin,
+                   GenericViewSet):
     serializer_class = expertgroupserializers.ExpertGroupAccessSerializer
+    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
 
     def get_queryset(self):
         return ExpertGroupAccess.objects.filter(expert_group_id = self.kwargs['expertgroup_pk']).select_related('user')
@@ -48,7 +62,7 @@ class ExpertGroupAccessViewSet(ModelViewSet):
         response = super().list(request, *args, **kwargs)
         if response.status_code == 200:
             expertgroupservice.remove_expire_invitions(response.data['results'])
-        return super().list(request, *args, **kwargs)
+        return response
 
 
 class AddUserToExpertGroupApi(APIView):

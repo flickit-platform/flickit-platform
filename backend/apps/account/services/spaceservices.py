@@ -25,7 +25,7 @@ def create_default_space(user:User):
     alphabet = string.digits
     space = Space()
     space.code = ''.join(random.choice(alphabet) for _ in range(6))
-    space.title = user.display_name + '_default_space'
+    space.title = user.display_name + 'Default Space'
     space.owner = user
     space.is_default_space=True
     space.save()
