@@ -368,11 +368,11 @@ class Test_Analyse_Profile:
         assert response.status_code == status.HTTP_200_OK
 
 @pytest.mark.django_db
-class TestGetDataProfile:
+class TestProfileInitForm:
     def test_get_data_profile_return_401(self):
         api = APIRequestFactory()
         request = api.get(f'/baseinfo/profiles/get/1/', {}, format='json')
-        view = profileviews.GetDataProfileApi.as_view()
+        view = profileviews.ProfileInitFormApi.as_view()
         resp = view(request)
         
         #responses testing
@@ -400,7 +400,7 @@ class TestGetDataProfile:
         api = APIRequestFactory()
         request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
-        view = profileviews.GetDataProfileApi.as_view()
+        view = profileviews.ProfileInitFormApi.as_view()
         resp = view(request,profile.id)
         
         #responses testing
@@ -428,7 +428,7 @@ class TestGetDataProfile:
         api = APIRequestFactory()
         request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
-        view = profileviews.GetDataProfileApi.as_view()
+        view = profileviews.ProfileInitFormApi.as_view()
         resp = view(request,profile.id)
         
         #responses testing
@@ -583,7 +583,7 @@ class TestUpdateProfile:
         
         api1 = APIRequestFactory()
         request1 = api1.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
-        view1 = profileviews.GetDataProfileApi.as_view()
+        view1 = profileviews.ProfileInitFormApi.as_view()
         force_authenticate(request1, user = user1)
         resp1= view1(request1,profile.id)
         
