@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import permission_classes
 
 from baseinfo.serializers import expertgroupserializers 
 from baseinfo.services import expertgroupservice

@@ -103,7 +103,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -128,7 +128,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -150,7 +150,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_200_OK
@@ -185,7 +185,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -209,7 +209,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request,profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -232,7 +232,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_200_OK

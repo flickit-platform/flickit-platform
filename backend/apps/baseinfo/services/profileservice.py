@@ -196,12 +196,12 @@ def archive_profile(profile: AssessmentProfile):
     return ActionResult(success=True, message='The profile is archived successfully')
 
 @transaction.atomic     
-def publish_profile(profile: AssessmentProfile, user_id):
+def publish_profile(profile: AssessmentProfile):
     if profile.is_active:
         return ActionResult(success=False, message='The profile has already been published')
     profile.is_active = True
     profile.save()
-    return ActionResult(success=False, message='The profile is published successfully')
+    return ActionResult(success=True, message='The profile is published successfully')
 
 @transaction.atomic
 def like_profile(user_id, profile_id):
