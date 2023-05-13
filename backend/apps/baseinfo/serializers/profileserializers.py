@@ -75,8 +75,17 @@ class ImportProfileSerializer(serializers.Serializer):
     expert_group_id = serializers.IntegerField()
     dsl_id = serializers.IntegerField()
 
-    
+class ProfileInitFormSerilizer(serializers.ModelSerializer):
+    tags =  ProfileTagSerializer(many = True)
+    class Meta:
+        model = AssessmentProfile
+        fields = ['id', 'title', 'summary', 'about', 'tags']
 
+class UpdateProfileSerializer(serializers.Serializer):
+    title = serializers.CharField(required=False)
+    about = serializers.CharField(required=False)
+    summary = serializers.CharField(required=False)
+    tags = serializers.ListField(child=serializers.IntegerField(),required=False)
 
 
 
