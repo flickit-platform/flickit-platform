@@ -8,7 +8,7 @@ import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
-from assessment.models import AssessmentProfile
+from baseinfo.models.profilemodels import  ProfileTag
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
 from assessment.fixture.dictionary import Dictionary
@@ -49,6 +49,15 @@ def authenticate(api_client):
         user_access11 = baker.make(UserAccess, space = space1, user = user1)
         return api_client.force_authenticate(user1)
     return do_authenticate
+
+
+@pytest.fixture
+def create_tag():
+    def do_create_tag(code, title):
+        tag = baker.make(ProfileTag, code=code, title=title)
+        return tag
+    return do_create_tag
+
 
 @pytest.fixture
 def init_data():

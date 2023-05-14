@@ -43,4 +43,6 @@ urlpatterns += [
     path("profiles/publish/<str:profile_id>/", profileviews.ProfilePublishApi.as_view()),
     path("profiles/like/<str:profile_id>/", profileviews.ProfileLikeApi.as_view()),
     path("profiles/options/select/", profileviews.ProfileListOptionsApi.as_view()),
+    path("profiles/update/<str:profile_id>", profileviews.UpdateProfileApi.as_view()),
+    path("profiles/get/<str:profile_id>", profileviews.ProfileInitFormApi.as_view()),
 ]

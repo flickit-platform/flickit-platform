@@ -252,9 +252,34 @@ def extract_profile_attribute(profile):
         attributes.append(subject.quality_attributes.values('id', 'title'))
     return list(itertools.chain(*attributes))
 
+def get_extrac_profile_data(profile, request):
+    if not is_user_access_to_profile(profile, request.user.id):
+        raise PermissionDenied
+    result =[]
+    data = {}
+    data["id"] = profile.id
+    data["title"] = profile.title
+    data['summary'] = profile.summary
+    data['about'] = profile.about
+    data["tags"] = profile.tags.all()
+    result.append(data)
+    return result
 
-    
-    
+@transaction.atomic
+def update_profile(profile, request,**kwargs):
+    if len(kwargs) == 0 :
+        return ActionResult(success=False, message="All fields cannot be empty.")
+    try:
+        if not is_user_access_to_profile(profile, request.user.id):
+            raise PermissionDenied
+        if "tags" in kwargs:
+            profile.tags.clear()
+            for tag in kwargs["tags"]:
+                profile.tags.add(ProfileTag.objects.get(id=tag))
+            profile.save()
+            kwargs.pop("tags")
+        profile = AssessmentProfile.objects.filter(id=profile.id).update(**kwargs)
+        return ActionResult(success=True, message="Profile edited successfully.")
+    except ProfileTag.DoesNotExist:
+        return ActionResult(success=False, message="There is no profile tag with this id.")
 
-
-    
