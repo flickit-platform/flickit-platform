@@ -10,7 +10,7 @@ from assessmentplatform.settings import DSL_PARSER_URL_SERVICE
 
 from baseinfo.services import importprofileservice
 from baseinfo.serializers.profileserializers import ImportProfileSerializer
-from baseinfo.permissions import ManageExpertGroupPermission, ManageProfilePermission
+from baseinfo.permissions import ManageExpertGroupPermission
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer

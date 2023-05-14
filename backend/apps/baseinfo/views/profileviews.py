@@ -108,7 +108,7 @@ class ProfileLikeApi(APIView):
         return Response({'likes': profile.likes.count()})
 
 class ProfileInitFormApi(APIView):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageProfilePermission]
     def get(self, request, profile_id):
         profile = profileservice.load_profile(profile_id)
         data = profileservice.get_extrac_profile_data(profile ,request)
@@ -118,7 +118,7 @@ class ProfileInitFormApi(APIView):
 
 class UpdateProfileApi(APIView):
     serializer_class = UpdateProfileSerializer
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, ManageProfilePermission]
     def post(self, request, profile_id):
         serializer = UpdateProfileSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

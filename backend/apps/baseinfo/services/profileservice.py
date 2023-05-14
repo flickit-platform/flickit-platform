@@ -253,8 +253,6 @@ def extract_profile_attribute(profile):
     return list(itertools.chain(*attributes))
 
 def get_extrac_profile_data(profile, request):
-    if not is_user_access_to_profile(profile, request.user.id):
-        raise PermissionDenied
     result =[]
     data = {}
     data["id"] = profile.id
@@ -270,8 +268,6 @@ def update_profile(profile, request,**kwargs):
     if len(kwargs) == 0 :
         return ActionResult(success=False, message="All fields cannot be empty.")
     try:
-        if not is_user_access_to_profile(profile, request.user.id):
-            raise PermissionDenied
         if "tags" in kwargs:
             profile.tags.clear()
             for tag in kwargs["tags"]:
