@@ -135,7 +135,7 @@ const Actions = (props: any) => {
     try {
       await deleteProfileQuery.query();
       await fetchProfiles?.();
-      await fetchUnpublishedProfiles?.();
+      hasAccess&&await fetchUnpublishedProfiles?.();
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -148,7 +148,7 @@ const Actions = (props: any) => {
       const res = await publishProfileQuery.query();
       res.message && toast.success(res.message);
       await fetchProfiles?.();
-      await fetchUnpublishedProfiles?.();
+      hasAccess&&await fetchUnpublishedProfiles?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -160,7 +160,7 @@ const Actions = (props: any) => {
       const res = await unPublishProfileQuery.query();
       res.message && toast.success(res.message);
       await fetchProfiles();
-      await fetchUnpublishedProfiles?.();
+      hasAccess&&await fetchUnpublishedProfiles?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);

@@ -20,7 +20,7 @@ const ExpertGroupsContainer = () => {
   const { id } = userInfo || {};
   const { is_expert } = userInfo;
   const queryData = useQuery({
-    service: (args = { id }, config) => service.fetchUserExpertGroups(args, config),
+    service: (args = { id }, config) => service.fetchExpertGroups(args, config),
   });
 
   useDocumentTitle(t("expertGroups") as string);

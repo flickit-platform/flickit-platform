@@ -72,7 +72,7 @@ const ExpertGroupContainer = () => {
   const createProfileDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-
+  const [unpublishedProfiles, setUnpublishedProfiles] = useState<any>({});
   return (
     <QueryData
       {...queryData}
@@ -135,6 +135,7 @@ const ExpertGroupContainer = () => {
                 )}
                 <Box mt={5}>
                   <ProfilesList
+                    setUnpublishedProfiles={setUnpublishedProfiles}
                     queryData={queryData}
                     hasAccess={hasAccess}
                     dialogProps={createProfileDialogProps}
@@ -273,7 +274,7 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {`${profiles.length - number_of_profiles} ${t(
+                          {`${ unpublishedProfiles?.length } ${t(
                             "unpublishedProfiles"
                           ).toLowerCase()}`}
                         </Typography>
@@ -656,7 +657,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const ProfilesList = (props: any) => {
-  const { hasAccess, dialogProps, about } = props;
+  const { hasAccess, dialogProps, about ,setUnpublishedProfiles} = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
@@ -761,6 +762,7 @@ const ProfilesList = (props: any) => {
           }}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
+            setUnpublishedProfiles(results)
             return (
               <>
                 {is_expert &&
