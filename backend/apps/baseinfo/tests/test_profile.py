@@ -105,7 +105,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -130,7 +130,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -152,7 +152,7 @@ class TestArchiveProfiles:
         request = api.post(f'/baseinfo/profiles/archive/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfileArchiveApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_200_OK
@@ -187,7 +187,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -211,7 +211,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request,profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -234,7 +234,7 @@ class TestPublishProfiles:
         request = api.post(f'/baseinfo/profiles/publish/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfilePublishApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_200_OK
@@ -401,7 +401,7 @@ class TestProfileInitForm:
         request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.ProfileInitFormApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -412,6 +412,8 @@ class TestProfileInitForm:
         user1 = create_user(email = "test@test.com")
         profile = create_profile(AssessmentProfile)
         expert_group = create_expertgroup(ExpertGroup, user1)
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
         profile.expert_group = expert_group
         tag1 = create_tag(code = "tc1" , title = "devops")
         tag2 = create_tag(code = "tc2" , title = "team")
@@ -429,7 +431,7 @@ class TestProfileInitForm:
         request = api.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.ProfileInitFormApi.as_view()
-        resp = view(request,profile.id)
+        resp = view(request, profile_id = profile.id)
         
         #responses testing
         data = [
@@ -498,13 +500,13 @@ class TestUpdateProfile:
         request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.UpdateProfileApi.as_view()
-        resp = view(request, profile.id)
+        resp = view(request, profile_id = profile.id)
         
         api1 = APIRequestFactory()
         request1 = api1.post(f'/baseinfo/profiles/update/{ profile.id }/', {}, format='json')
         view1 = profileviews.UpdateProfileApi.as_view()
         force_authenticate(request1, user = user1)
-        resp1= view1(request1,profile.id)
+        resp1= view1(request1, profile_id = profile.id)
         
         #responses testing
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -546,7 +548,7 @@ class TestUpdateProfile:
         request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
         force_authenticate(request, user = user2)
         view = profileviews.UpdateProfileApi.as_view()
-        resp = view(request, profile.id)
+        resp = view(request, profile_id = profile.id)
         #responses testing
         assert resp.status_code == status.HTTP_403_FORBIDDEN
     
@@ -579,13 +581,13 @@ class TestUpdateProfile:
         request = api.post(f'/baseinfo/profiles/update/{profile.id}', data, format='json')
         force_authenticate(request, user = user1)
         view = profileviews.UpdateProfileApi.as_view()
-        resp = view(request, profile.id)
+        resp = view(request, profile_id = profile.id)
         
         api1 = APIRequestFactory()
         request1 = api1.get(f'/baseinfo/profiles/get/{ profile.id }/', {}, format='json')
         view1 = profileviews.ProfileInitFormApi.as_view()
         force_authenticate(request1, user = user1)
-        resp1= view1(request1,profile.id)
+        resp1= view1(request1, profile_id = profile.id)
         
         data =[
                 {
