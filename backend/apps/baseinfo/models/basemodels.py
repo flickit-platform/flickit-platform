@@ -46,6 +46,7 @@ class QualityAttribute(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE, related_name='quality_attributes')
     index = models.PositiveIntegerField(null=True)
+    weight = models.PositiveIntegerField(default=1)
 
     class Meta:
         verbose_name = 'Quality Attribute'
