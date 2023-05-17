@@ -1,7 +1,7 @@
 from uuid import uuid4
 from django.db import models
 
-from baseinfo.models.profilemodels import AssessmentProfile
+from baseinfo.models.profilemodels import AssessmentProfile, MaturityLevel
 from baseinfo.models.metricmodels import Metric
 from baseinfo.models.metricmodels import AnswerTemplate
 from baseinfo.models.basemodels import QualityAttribute
@@ -37,6 +37,7 @@ class AssessmentProject(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_profile = models.ForeignKey(AssessmentProfile, on_delete=models.PROTECT, related_name='assessment_projects')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True)
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='assessment_projects', null= True)
     color = models.ForeignKey(Color, on_delete=models.PROTECT, null=True)
     space = models.ForeignKey(Space, on_delete=models.PROTECT, related_name='projects')
     objects = AssessmentProjectManager()
@@ -59,6 +60,7 @@ class QualityAttributeValue(models.Model):
     assessment_result = models.ForeignKey(AssessmentResult, on_delete=models.CASCADE, related_name='quality_attribute_values')
     quality_attribute = models.ForeignKey(QualityAttribute, on_delete=models.CASCADE, related_name='quality_attribute_values')
     maturity_level_value = models.PositiveIntegerField()
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='quality_attribute_values', null = True)
 
 
 class MetricValue(models.Model):

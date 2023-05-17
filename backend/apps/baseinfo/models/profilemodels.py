@@ -1,8 +1,7 @@
-import json
 
 from django.db import models
 
-from common.validators import validate_file_size, validate_dsl_extension
+from common.validators import validate_file_size
 
 from account.models import User
 
@@ -39,33 +38,9 @@ class AssessmentProfile(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles')
     is_active = models.BooleanField(default=False)
-    profile_settings = models.JSONField(null=True)
 
     def __str__(self) -> str:
         return self.title
-    
-    # def create_settings(self,profile_settings):
-    #     self.profile_settings = json.loads(profile_settings)
-    #     self.save()
-    @classmethod
-    def create(cls, code, title, about, summary, expert_group, tags, profile_settings):
-        profile = cls()
-        profile.code = code
-        profile.title = title
-        profile.about = about
-        profile.summary = summary
-        profile.expert_group = expert_group
-        profile.profile_settings = json.dumps(profile_settings)
-        profile.save()
-        for tag in tags:
-            profile.tags.add(tag)
-        profile.save()
-        return profile
-
-    def update_settings(self,profile_settings):
-        self.profile_settings = json.dumps(profile_settings)
-        self.save()
-
     
     class Meta:
         verbose_name = "Assessment Profile"
@@ -90,3 +65,20 @@ class ProfileTag(models.Model):
 class ProfileLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='likes')
+
+
+class MaturityLevel(models.Model):
+    title = models.CharField(max_length=100)
+    value = models.PositiveSmallIntegerField()
+    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='maturity_levels')
+
+    class Meta:
+        verbose_name = 'Questionnaire'
+        verbose_name_plural = "Questionnaires"
+        unique_together = [('title', 'profile'), ('value', 'profile')]
+
+class LevelCompetence(models.Model):
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences')
+    value = models.PositiveIntegerField(null=True)
+    maturity_level_competence = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, null=True)
+    
