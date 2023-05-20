@@ -1,6 +1,7 @@
+
 from django.db import models
 
-from common.validators import validate_file_size, validate_dsl_extension
+from common.validators import validate_file_size
 
 from account.models import User
 
@@ -40,7 +41,7 @@ class AssessmentProfile(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
+    
     class Meta:
         verbose_name = "Assessment Profile"
         verbose_name_plural = "Assessment Profiles"
@@ -65,3 +66,20 @@ class ProfileTag(models.Model):
 class ProfileLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='likes')
+
+
+class MaturityLevel(models.Model):
+    title = models.CharField(max_length=100)
+    value = models.PositiveSmallIntegerField()
+    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='maturity_levels')
+
+    class Meta:
+        verbose_name = 'Questionnaire'
+        verbose_name_plural = "Questionnaires"
+        unique_together = [('title', 'profile'), ('value', 'profile')]
+
+class LevelCompetence(models.Model):
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences')
+    value = models.PositiveIntegerField(null=True)
+    maturity_level_competence = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, null=True)
+    

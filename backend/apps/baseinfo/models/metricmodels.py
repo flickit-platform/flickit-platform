@@ -1,11 +1,14 @@
 from django.db import models
 
 from baseinfo.models.basemodels import Questionnaire, QualityAttribute
+from baseinfo.models.profilemodels import MaturityLevel
 
 class MetricImpact(models.Model):
-    level = models.PositiveIntegerField()
+    level = models.PositiveIntegerField(null=True)
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='metric_impacts', null = True)
     metric = models.ForeignKey('Metric', on_delete=models.CASCADE, related_name='metric_impacts')
     quality_attribute = models.ForeignKey('QualityAttribute', on_delete=models.CASCADE, related_name='metric_impacts')
+    weight = models.PositiveIntegerField(default=1)
 
 class OptionValue(models.Model):
     option = models.ForeignKey('AnswerTemplate', on_delete=models.CASCADE, related_name='option_values')

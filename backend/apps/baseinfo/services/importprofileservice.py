@@ -7,7 +7,7 @@ from django.db import transaction
 from common.restutil import ActionResult
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
-from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, MaturityLevel, LevelCompetence
 from baseinfo.services import profileservice, expertgroupservice
 
 def extract_dsl_contents(dsl_id):
@@ -15,7 +15,7 @@ def extract_dsl_contents(dsl_id):
     input_zip = ZipFile(dsl.dsl_file)
     all_content = ''
     for name in input_zip.namelist():
-        content = input_zip.read(name).decode('utf-8')
+        content = input_zip.read(name).decode()
         trim_content = __trim_content(content)
         all_content = all_content + '\n' + trim_content
     return all_content
@@ -24,18 +24,42 @@ def __trim_content(content):
     new_content = ''
     for line in content.splitlines():
         if not line.strip().startswith('import'):
-            line = line.replace('.', '')
+            # line = line.replace('.', '')
             new_content = new_content + '\n' + line
     return new_content
 
 @transaction.atomic
 def import_profile(descriptive_profile, **kwargs):
     assessment_profile = __import_profile_base_info(kwargs)
+    __import_maturity_levels(descriptive_profile, assessment_profile)
+    level_models = descriptive_profile['levelModels']
+    for level_model in level_models:
+        level_model_competence_dict = level_model['levelCompetence'] 
+        if level_model_competence_dict is None:
+            continue
+        for m_l_title, competence_value in level_model_competence_dict.items():
+            level_competence = LevelCompetence()
+            level_competence.maturity_level = extract_maturity_level_by_title(level_model['title'], assessment_profile)
+            level_competence.maturity_level_competence = extract_maturity_level_by_title(m_l_title, assessment_profile)
+            level_competence.value = competence_value
+            level_competence.save()
     __import_questionnaires(descriptive_profile['questionnaireModels'], assessment_profile)
     __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
     __import_attributes(descriptive_profile['attributeModels'])
-    __import_metrics(descriptive_profile['metricModels'])
+    __import_metrics(descriptive_profile['metricModels'], assessment_profile)
     return assessment_profile
+
+def __import_maturity_levels(descriptive_profile, assessment_profile):
+    level_models = descriptive_profile['levelModels']
+    for level_model in level_models:
+        maturity_level = MaturityLevel()
+        maturity_level.title = level_model['title']
+        maturity_level.value = level_model['index']
+        maturity_level.profile = assessment_profile
+        maturity_level.save()
+
+def extract_maturity_level_by_title(title, profile):
+    return MaturityLevel.objects.get(title = title, profile = profile)
 
 def extract_tags(tag_ids):
     tags = []
@@ -100,11 +124,12 @@ def __import_attributes(attributeModels):
         attribute.title = model['title']
         attribute.description = model['description']
         attribute.index = model['index']
+        attribute.weight = model['weight']
         attribute.assessment_subject = AssessmentSubject.objects.filter(code = model['subjectCode']).first()
         attribute.save()
 
 @transaction.atomic
-def __import_metrics(metricModels):
+def __import_metrics(metricModels, profile):
     for model in metricModels:
         metric = Metric()
         metric.title = model['question']
@@ -123,9 +148,10 @@ def __import_metrics(metricModels):
 
         for impact_model in model['metricImpacts']:
             impact = MetricImpact()
-            impact.level = impact_model['level']
+            impact.maturity_level = MaturityLevel.objects.get(profile = profile, title = impact_model['level']['title'])
             impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
             impact.metric = metric
+            impact.weight = impact_model['weight']
             impact.save()
 
             option_values_map = impact_model['optionValues']
