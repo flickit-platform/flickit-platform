@@ -19,7 +19,8 @@ const AssessmentReportContainer = () => {
   const { assessmentId = "" } = useParams();
 
   const queryData = useQuery<IAssessmentReportModel>({
-    service: (args, config) => service.fetchAssessment({ assessmentId }, config),
+    service: (args, config) =>
+      service.fetchAssessment({ assessmentId }, config),
     toastError: true,
     toastErrorOptions: { filterByStatus: [404] },
   });
@@ -57,7 +58,14 @@ const AssessmentReportContainer = () => {
             )}
             <Box mt={3}>
               <Paper elevation={2} sx={{ borderRadius: 3, height: "100%" }}>
-                <Box py={2} sx={{ px: 3, ...styles.centerV }}>
+                <Box
+                  py={2}
+                  sx={{
+                    px: 3,
+                    ...styles.centerV,
+                    flexDirection: { xs: "column" },
+                  }}
+                >
                   <Box
                     sx={{
                       ...styles.centerCV,
@@ -69,7 +77,7 @@ const AssessmentReportContainer = () => {
                       variant="h6"
                       sx={{
                         fontSize: {
-                          xs: "1.05rem",
+                          xs: "1rem",
                           sm: "1.1rem",
                           md: "1.3rem",
                           fontFamily: "Roboto",
@@ -86,7 +94,11 @@ const AssessmentReportContainer = () => {
                       <Box
                         component={Link}
                         to={`/profiles/${assessment_profile?.id}`}
-                        sx={{ color: (t) => t.palette.primary.dark, textDecoration: "none", ml: 0.5 }}
+                        sx={{
+                          color: (t) => t.palette.primary.dark,
+                          textDecoration: "none",
+                          ml: 0.5,
+                        }}
                       >
                         {assessment_profile?.title}
                       </Box>
@@ -100,13 +112,17 @@ const AssessmentReportContainer = () => {
                       display: "flex",
                       alignItems: "center",
                       ml: "auto",
-                      mr: 2,
+                      // mr: 2,
                       textDecoration: "none",
                     }}
                     component={Link}
                     to={`/user/expert-groups/${expert_group?.id}`}
                   >
-                    <Typography color="grayText" variant="subLarge">
+                    <Typography
+                      color="grayText"
+                      variant="subLarge"
+                      sx={{ fontSize: { xs: "0.6rem", md: "0.8rem" } }}
+                    >
                       <Trans i18nKey="providedBy" />
                     </Typography>
                     <CardHeader
@@ -114,9 +130,18 @@ const AssessmentReportContainer = () => {
                       titleTypographyProps={{
                         sx: { textDecoration: "none" },
                       }}
-                      avatar={<Avatar alt={expert_group?.name} src={expert_group?.picture || "/"} />}
+                      avatar={
+                        <Avatar
+                          alt={expert_group?.name}
+                          src={expert_group?.picture || "/"}
+                        />
+                      }
                       title={
-                        <Box component={"b"} fontSize=".95rem" color="Gray">
+                        <Box
+                          component={"b"}
+                          sx={{ fontSize: { xs: "0.6rem", md: "0.95rem" } }}
+                          color="Gray"
+                        >
                           {expert_group?.name}
                         </Box>
                       }
@@ -127,10 +152,16 @@ const AssessmentReportContainer = () => {
             </Box>
             <Grid container spacing={3} columns={14} mt={0.2}>
               <Grid item lg={8} md={14} sm={14} xs={14}>
-                <AssessmentOverallStatus status={status} subjects={subjects_info} />
+                <AssessmentOverallStatus
+                  status={status}
+                  subjects={subjects_info}
+                />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes isWeakness={false} most_significant_items={most_significant_strength_atts} />
+                <AssessmentMostSignificantAttributes
+                  isWeakness={false}
+                  most_significant_items={most_significant_strength_atts}
+                />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
                 <AssessmentMostSignificantAttributes
@@ -139,7 +170,10 @@ const AssessmentReportContainer = () => {
                 />
               </Grid>
               <Grid item sm={14} xs={14} id="subjects">
-                <AssessmentSubjectList subjects={subjects_info} colorCode={colorCode} />
+                <AssessmentSubjectList
+                  subjects={subjects_info}
+                  colorCode={colorCode}
+                />
               </Grid>
             </Grid>
           </Box>
