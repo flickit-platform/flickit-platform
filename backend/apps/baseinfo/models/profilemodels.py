@@ -48,6 +48,7 @@ class AssessmentProfile(models.Model):
 
 class ProfileDsl(models.Model):
     dsl_file = models.FileField(upload_to='profile/dsl', validators=[validate_file_size])
+    profile = models.OneToOneField(AssessmentProfile, on_delete=models.CASCADE, related_name='dsl' , null=True)
 
 class ProfileTag(models.Model):
     code = models.CharField(max_length=50, unique=True)
