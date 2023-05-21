@@ -82,10 +82,11 @@ const AssessmentReportContainer = () => {
                           md: "1.3rem",
                           fontFamily: "Roboto",
                         },
+                        marginBottom:"6px",
                         fontWeight: "bold",
                         textDecoration: "none",
                         height: "100%",
-                        display: "flex",
+                        display: {xs:"block",sm:"block",md:"flex",lg:"flex"},
                         alignItems: "center",
                         alignSelf: "stretch",
                       }}
@@ -132,6 +133,7 @@ const AssessmentReportContainer = () => {
                       }}
                       avatar={
                         <Avatar
+                        sx={{width:{xs:30,sm:40},height:{xs:30,sm:40}}}
                           alt={expert_group?.name}
                           src={expert_group?.picture || "/"}
                         />
