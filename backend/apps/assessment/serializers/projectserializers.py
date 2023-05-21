@@ -2,6 +2,7 @@ from django.utils.text import slugify
 from rest_framework import serializers
 
 from baseinfo.serializers.commonserializers import AssessmentProfileSimpleSerilizer
+from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerializer
 
 from account.serializers.spaceserializers import SpaceSimpleSerializer
 
@@ -13,10 +14,22 @@ class AssessmentProjectListSerilizer(serializers.ModelSerializer):
     assessment_profile = AssessmentProfileSimpleSerilizer()
     id = serializers.UUIDField(read_only=True)
     color = ColorSerilizer()
+    maturity_level = serializers.SerializerMethodField()
+    maturity_level_number = serializers.SerializerMethodField()
+
+    def get_maturity_level_number(self, project: AssessmentProject):
+        return project.assessment_profile.maturity_levels.count()
+    
+    def get_maturity_level(self, project: AssessmentProject):
+        # if project.maturity_level is None:
+        #     return project.assessment_profile.maturity_levels.values('id', 'title', 'value').order_by('value').first()
+        # else:
+        return MaturityLevelSimpleSerializer(project.maturity_level).data
+    
         
     class Meta:
         model = AssessmentProject
-        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results']
+        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'maturity_level', 'maturity_level_number']
 
 class AssessmentProjecCreateSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)

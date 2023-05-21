@@ -1,8 +1,10 @@
 from statistics import mean
 from assessment.models import AssessmentResult
-from assessment.fixture.common import calculate_staus, ANSWERED_QUESTION_NUMBER_BOUNDARY
+from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY
 from assessment.fixture.dictionary import Dictionary
 from assessment.services import metricstatistic
+
+from baseinfo.services import maturitylevelservices
 
 
 
@@ -23,12 +25,13 @@ def calculate_subjects_info(result: AssessmentResult):
     return subjects_info 
 
 def calculate_subject_status(quality_attribute_values, subject, subject_info):
-        subject_maturity_level_values = []
-        for quality_attribute_value in quality_attribute_values:
-            if quality_attribute_value.quality_attribute.assessment_subject.id == subject.id:
-                subject_maturity_level_values.append(quality_attribute_value.maturity_level_value)
-        if subject_maturity_level_values:
-            subject_info.add("status", calculate_staus(round(mean(subject_maturity_level_values))))
+    subject_maturity_level_values = []
+    for quality_attribute_value in quality_attribute_values:
+        if quality_attribute_value.quality_attribute.assessment_subject.id == subject.id:
+            subject_maturity_level_values.append(quality_attribute_value.maturity_level.value)
+    if subject_maturity_level_values:
+        maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = subject.assessment_profile, value = round(mean(subject_maturity_level_values)))
+        subject_info.add("status", maturity_level.title)
 
 def extract_base_info(subject):
     subject_info = Dictionary()

@@ -2,7 +2,7 @@ import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
-from assessment.models import AssessmentProfile
+from baseinfo.models.profilemodels import AssessmentProfile, MaturityLevel
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
 from assessment.fixture.dictionary import Dictionary
@@ -109,47 +109,54 @@ def init_data():
         
         metric_impacts = []
 
+        maturity_level_0 = baker.make(MaturityLevel, title = 'Elementary', value = 0, profile = profile)
+        maturity_level_1 = baker.make(MaturityLevel, title = 'Weak', value = 1, profile = profile)
+        maturity_level_2 = baker.make(MaturityLevel, title = 'Moderate', value = 2, profile = profile)
+        maturity_level_3 = baker.make(MaturityLevel, title = 'Good', value = 3, profile = profile)
+        maturity_level_4 = baker.make(MaturityLevel, title = 'Great', value = 4, profile = profile)
+        maturity_level_5 = baker.make(MaturityLevel, title = 'Exceptional', value = 5, profile = profile)
+
         #att1
-        metric_impacts.append(baker.make(MetricImpact, level = 1, quality_attribute = atts[0], metric = metrics_list[0]))
-        metric_impacts.append(baker.make(MetricImpact, level = 1, quality_attribute = atts[0], metric = metrics_list[1]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[0], metric = metrics_list[2]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[0], metric = metrics_list[3]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[0], metric = metrics_list[4]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[0], metric = metrics_list[5]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[0], metric = metrics_list[6]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[0], metric = metrics_list[7]))
-        metric_impacts.append(baker.make(MetricImpact, level = 4, quality_attribute = atts[0], metric = metrics_list[8]))
-        metric_impacts.append(baker.make(MetricImpact, level = 4, quality_attribute = atts[0], metric = metrics_list[9]))
-        metric_impacts.append(baker.make(MetricImpact, level = 5, quality_attribute = atts[0], metric = metrics_list[10]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[0], metric = metrics_list[0]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[0], metric = metrics_list[1]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[0], metric = metrics_list[2]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[0], metric = metrics_list[3]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[0], metric = metrics_list[4]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[0], metric = metrics_list[5]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[0], metric = metrics_list[6]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[0], metric = metrics_list[7]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_4, quality_attribute = atts[0], metric = metrics_list[8]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_4, quality_attribute = atts[0], metric = metrics_list[9]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_5, quality_attribute = atts[0], metric = metrics_list[10]))
         #0-10
 
         #att2
         #11-21
-        metric_impacts.append(baker.make(MetricImpact, level = 1, quality_attribute = atts[1], metric = metrics_list[0]))
-        metric_impacts.append(baker.make(MetricImpact, level = 1, quality_attribute = atts[1], metric = metrics_list[1]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[1], metric = metrics_list[2]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[1], metric = metrics_list[3]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[1], metric = metrics_list[4]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[1], metric = metrics_list[5]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[1], metric = metrics_list[6]))
-        metric_impacts.append(baker.make(MetricImpact, level = 4, quality_attribute = atts[1], metric = metrics_list[7]))
-        metric_impacts.append(baker.make(MetricImpact, level = 4, quality_attribute = atts[1], metric = metrics_list[8]))
-        metric_impacts.append(baker.make(MetricImpact, level = 5, quality_attribute = atts[1], metric = metrics_list[9]))
-        metric_impacts.append(baker.make(MetricImpact, level = 5, quality_attribute = atts[1], metric = metrics_list[10]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[1], metric = metrics_list[0]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[1], metric = metrics_list[1]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[1], metric = metrics_list[2]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[1], metric = metrics_list[3]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[1], metric = metrics_list[4]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[1], metric = metrics_list[5]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[1], metric = metrics_list[6]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_4, quality_attribute = atts[1], metric = metrics_list[7]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_4, quality_attribute = atts[1], metric = metrics_list[8]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_5, quality_attribute = atts[1], metric = metrics_list[9]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_5, quality_attribute = atts[1], metric = metrics_list[10]))
 
         #att3
         #22-32
-        metric_impacts.append(baker.make(MetricImpact, level = 1, quality_attribute = atts[2], metric = metrics_list[0]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[2], metric = metrics_list[1]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[2], metric = metrics_list[2]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[2], metric = metrics_list[3]))
-        metric_impacts.append(baker.make(MetricImpact, level = 2, quality_attribute = atts[2], metric = metrics_list[4]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[5]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[6]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[7]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[8]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[9]))
-        metric_impacts.append(baker.make(MetricImpact, level = 3, quality_attribute = atts[2], metric = metrics_list[10]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[2], metric = metrics_list[0]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[2], metric = metrics_list[1]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[2], metric = metrics_list[2]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[2], metric = metrics_list[3]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_2, quality_attribute = atts[2], metric = metrics_list[4]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[5]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[6]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[7]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[8]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[9]))
+        metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[10]))
 
         option_values = []
         option_values.append(baker.make(OptionValue, value = 0, metric_impact = metric_impacts[0], option = answer_templates[0]))

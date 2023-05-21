@@ -2,6 +2,7 @@ from statistics import mean
 from assessment.models import AssessmentProject, AssessmentResult, QualityAttributeValue
 from baseinfo.models.basemodels import QualityAttribute
 from assessment.services.metricstatistic import calculate_answered_metric_by_result
+from baseinfo.services import maturitylevelservices
 
 
 ANSWERED_QUESTION_NUMBER_BOUNDARY = 5
@@ -30,8 +31,9 @@ def calculate_staus(value):
 
 def update_assessment_status(result:AssessmentResult):
     total_answered_metric_number = calculate_answered_metric_by_result(result) 
+    assessment = AssessmentProject.objects.get(id = result.assessment_project.id)      
     if total_answered_metric_number <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
-        status = None
+        assessment.maturity_level = None
     else:
         subjects = result.assessment_project.assessment_profile.assessment_subjects.all()
         atts = []
@@ -44,9 +46,8 @@ def update_assessment_status(result:AssessmentResult):
             att_att_values = QualityAttributeValue.objects.filter(assessment_result = result, quality_attribute = att).all()
             for att_value in att_att_values:
                 att_values.append(att_value)
-        value = round(mean([item.maturity_level_value for item in att_values]))
-        status = calculate_staus(value)
-    assessment = AssessmentProject.objects.get(id = result.assessment_project.id)           
-    assessment.status = status
+        value = round(mean([item.maturity_level.value for item in att_values]))
+        maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = assessment.assessment_profile, value = value)
+        assessment.maturity_level = maturity_level
     assessment.save()
 
