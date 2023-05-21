@@ -43,7 +43,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     def calculate_total_status(self, result: AssessmentResult):
         if result.quality_attribute_values.all():
             assessment = load_model(AssessmentProject, result.assessment_project_id)
-            return assessment.status
+            return assessment.maturity_level.title
         else:
             return "Not Calculated"
         
