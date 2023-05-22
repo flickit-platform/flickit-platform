@@ -129,6 +129,7 @@ class TestAddUserToSpace:
         resp = view(request, space_list["user1"][0].id)
         
         assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["message"] == "This user has successfully joined this space."
         
     def test_add_user_in_space_returns_400(self,init_space):
         
@@ -142,6 +143,18 @@ class TestAddUserToSpace:
         resp = view(request, space_list["user1"][0].id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "Only member users of the space can add users to the space."
+        
+        
+        user = User.objects.get(email = space_list["user1"][2])
+        api = APIRequestFactory()
+        request = api.post(f'/authinfo/spaces/adduser/{ space_list["user1"][0].id }', {'email': space_list["user1"][2] }, format='json')
+        force_authenticate(request, user=user)
+        view = SpaceAccessAPI.as_view()
+        resp = view(request, space_list["user1"][1].id)
+        
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "This user is already a member of this space."
     
     def test_add_user_in_space_returns_401(self):
         api = APIRequestFactory()
