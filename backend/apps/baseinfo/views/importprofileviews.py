@@ -1,16 +1,23 @@
+from os import access
+from django.db.models.fields import return_None
 import requests
 import traceback
+
+from django.http import FileResponse 
+from django.http import HttpResponseForbidden
+
 from django.db.utils import IntegrityError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from assessmentplatform.settings import DSL_PARSER_URL_SERVICE
+from assessmentplatform.settings import BASE_DIR, DSL_PARSER_URL_SERVICE
 
-from baseinfo.services import importprofileservice
+from baseinfo.services import importprofileservice , profileservice
 from baseinfo.serializers.profileserializers import ImportProfileSerializer
-from baseinfo.permissions import ManageExpertGroupPermission
+from baseinfo.permissions import ManageExpertGroupPermission ,ManageProfilePermission
+
 
 class ImportProfileApi(APIView):
     serializer_class = ImportProfileSerializer
@@ -40,3 +47,19 @@ class ImportProfileApi(APIView):
             return Response({'message': refined_message}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'message': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DownloadDslApi(APIView):
+    permission_classes = [IsAuthenticated, ManageProfilePermission]
+    def get(self,request,profile_id):
+        profile = profileservice.load_profile(profile_id)
+        result = importprofileservice.get_dsl_file(profile)
+        if result.success:
+                return FileResponse(result.data["file"] , as_attachment=True,
+                        filename=result.data["filename"])
+        else:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def access_dsl_file(request):
+    return HttpResponseForbidden('Not  to access this file.')

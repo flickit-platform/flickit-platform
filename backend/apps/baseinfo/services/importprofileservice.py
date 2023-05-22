@@ -1,7 +1,10 @@
+import os
+
 from zipfile import ZipFile
 from django.utils.text import slugify 
 from django.db import transaction
 
+from common.restutil import ActionResult
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, MaturityLevel, LevelCompetence
@@ -81,9 +84,9 @@ def __import_profile_base_info(extra_info):
     for tag in tags:
         assessment_profile.tags.add(tag)
     assessment_profile.save()
-
-
-
+    dsl = ProfileDsl.objects.get(id = extra_info['dsl_id'] )
+    dsl.profile = assessment_profile
+    dsl.save()
     return assessment_profile
 
 @transaction.atomic
@@ -168,4 +171,14 @@ def __import_metrics(metricModels, profile):
         metric.save()
             
 
-
+def get_dsl_file(profile):
+    try : 
+        result = {}
+        dsl_file_path = profile.dsl.dsl_file.path
+        result["filename"] =  os.path.basename(dsl_file_path)
+        if os.path.isfile(dsl_file_path):
+            result["file"] = open(dsl_file_path,'rb')
+            return ActionResult(success=True, data=result)
+        return ActionResult(success=False, message='No such file exists in storage')
+    except ProfileDsl.DoesNotExist:
+        return ActionResult(success=False, message='There is no such profile with this id')
