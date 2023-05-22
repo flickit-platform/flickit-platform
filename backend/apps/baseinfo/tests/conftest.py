@@ -1,5 +1,7 @@
 
 import pytest
+import zipfile
+import os
 from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
@@ -8,11 +10,37 @@ import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
-from baseinfo.models.profilemodels import  ProfileTag
+from baseinfo.models.profilemodels import  ProfileTag, ProfileDsl
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
 from assessment.fixture.dictionary import Dictionary
+from django.core.files.uploadedfile import SimpleUploadedFile
 
+
+
+@pytest.fixture(scope="session")
+def tmp_dir(tmpdir_factory):
+    tmp_dir = tmpdir_factory.mktemp("src")
+    return tmp_dir
+
+@pytest.fixture
+def create_dsl_file():
+    def do_create_dsl_file(filename , tmp_dir):
+        zip = zipfile.ZipFile(os.path.join(tmp_dir.dirname, filename), "w", zipfile.ZIP_DEFLATED)
+        zip.close()
+        return os.path.basename(zip.filename)
+    return do_create_dsl_file
+
+@pytest.fixture
+def create_dsl():
+    def do_create_dsl(file_path , profile ,tmp_dir):
+        dsl = ProfileDsl()
+        file = open(os.path.join(tmp_dir.dirname, file_path),'rb')
+        dsl.dsl_file = SimpleUploadedFile(file.name , file.read())
+        dsl.profile = profile
+        dsl.save()
+        return dsl
+    return do_create_dsl
 
 @pytest.fixture
 def create_user():
