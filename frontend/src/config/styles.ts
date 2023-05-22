@@ -140,6 +140,70 @@ export const statusColorMap: Record<NonNullable<TStatus>, string> = {
   "Not Calculated": "#b7b7b7",
 };
 
+export const maturityLevelColorMap: any = {
+  ML2: ["#A91101", "#205017"],
+  ML3: ["#A91101", "#FFBA00", "#205017"],
+  ML4: ["#A91101", "#FF8A0F", "#FFBA00", "#205017"],
+  ML5: ["#A91101", "#EC5800", "#FFBA00", "#9ACD32", "#205017"],
+  ML6: ["#A91101", "#D4360F", "#FF8A0F", "#FFBA00", "#9ACD32", "#205017"],
+  ML7: [
+    "#A91101",
+    "#D4360F",
+    "#FF8A0F",
+    "#FFBA00",
+    "#9ACD32",
+    "#205017",
+    "#00401A",
+  ],
+  ML8: [
+    "#A91101",
+    "#D4360F",
+    "#EC5800",
+    "#FFA91F",
+    "#FFBA00",
+    "#FFBA00",
+    "#205017",
+    "#205017",
+  ],
+  ML9: [
+    "#A91101",
+    "#D4360F",
+    "#EC5800",
+    "#FF8A0F",
+    "#FFBA00",
+    "#9ACD32",
+    "#228B22",
+    "#205017",
+    "#00401A",
+  ],
+  ML10: [
+    "#A91101",
+    "#D4360F",
+    "#EC5800",
+    "#FF8A0F",
+    "#FFA91F",
+    "#FFBA00",
+    "#9ACD32",
+    "#228B22",
+    "#205017",
+    "#00401A",
+  ],
+};
+export const getMaturityLevelColors = (
+  maturity_level_number: number,
+) => {
+switch(maturity_level_number){
+  case 2 : return maturityLevelColorMap.ML2
+  case 3 : return maturityLevelColorMap.ML3
+  case 4 : return maturityLevelColorMap.ML4
+  case 5 : return maturityLevelColorMap.ML5
+  case 6 : return maturityLevelColorMap.ML6
+  case 7 : return maturityLevelColorMap.ML7
+  case 8 : return maturityLevelColorMap.ML8
+  case 9 : return maturityLevelColorMap.ML9
+  case 10 : return maturityLevelColorMap.ML10
+}
+};
 export const getColorOfStatus = (
   status: TStatus,
   fallBackColor: string = "#b7b7b7"

@@ -119,6 +119,11 @@ export interface ISubjectInfo {
   total_answered_metric_number: number;
   total_metric_number: number;
 }
+export interface IMaturityLevel {
+  id: TId;
+  title: string;
+  value: number;
+}
 
 export interface IImage {
   id: TId;
@@ -275,6 +280,8 @@ export interface IAssessment {
   assessment_results: string[];
   assessment_profile: IAssessmentProfileModel;
   total_progress?: ITotalProgress;
+  maturity_level_number:number;
+  maturity_level:IMaturityLevel;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
