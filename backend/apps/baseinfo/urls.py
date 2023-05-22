@@ -45,4 +45,5 @@ urlpatterns += [
     path("profiles/options/select/", profileviews.ProfileListOptionsApi.as_view()),
     path("profiles/update/<str:profile_id>", profileviews.UpdateProfileApi.as_view()),
     path("profiles/get/<str:profile_id>", profileviews.ProfileInitFormApi.as_view()),
+    path("dsl/download/<str:profile_id>/", importprofileviews.DownloadDslApi.as_view()),
 ]
