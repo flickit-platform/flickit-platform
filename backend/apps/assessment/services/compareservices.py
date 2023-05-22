@@ -108,7 +108,7 @@ def extract_subject_report(profile, assessment_projects):
             att_info.add('title', att.title)
             for assessment_project in assessment_projects:
                 att_value = att.quality_attribute_values.filter(assessment_result_id = assessment_project.get_assessment_result().id).first()
-                att_info.add(str(assessment_project.id), att_value.maturity_level_value)
+                att_info.add(str(assessment_project.id), att_value.maturity_level.value)
             attributes_info.append(att_info)
 
         subject_info.add('subject_report_info', subject_report_info)
@@ -141,7 +141,7 @@ def extract_strength_info(assessment_projects, subject):
 
 def extract_subject_strength_list_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values if o['maturity_level_value'] > 2][:2]
+    att_ids = [o['quality_attribute_id'] for o in att_values if o['maturity_level']['value'] > 2][:2]
     return extract_att_titles(att_ids)
 
 def extract_weakness_info(assessment_projects, subject):
@@ -157,7 +157,7 @@ def extract_weakness_info(assessment_projects, subject):
 
 def extract_subject_weakness_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values  if o['maturity_level_value'] < 3][:-3:-1]
+    att_ids = [o['quality_attribute_id'] for o in att_values  if o['maturity_level']['value'] < 3][:-3:-1]
     return extract_att_titles(att_ids)
 
 def extract_att_titles(att_ids):
