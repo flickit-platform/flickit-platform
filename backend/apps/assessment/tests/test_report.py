@@ -96,11 +96,11 @@ class Test_calculate_maturity_level_value:
         
         response = api_client.get('/assessment/reports/' + str(project.id) + "/")
 
-        sorted_att_values = att_values.order_by('-maturity_level_value').all()
-        assert sorted_att_values[0].maturity_level_value == 5
-        assert sorted_att_values[1].maturity_level_value == 5
-        assert sorted_att_values[2].maturity_level_value == 4
-        assert response.data['status'] == "GREAT"
+        sorted_att_values = att_values.order_by('-maturity_level__value').all()
+        assert sorted_att_values[0].maturity_level.value == 4
+        assert sorted_att_values[1].maturity_level.value == 4
+        assert sorted_att_values[2].maturity_level.value == 3
+        assert response.data['maturity_level']['title'] == "Great"
         assert response.data['most_significant_strength_atts'][0] == sorted_att_values[0].quality_attribute.title
 
 @pytest.mark.django_db
@@ -147,13 +147,13 @@ class Test_Report_Subject:
         response = api_client.get('/assessment/reportsubject/?assessment_subject_pk=' + str(subject1.id) + '&assessment_result_pk=' + str(assessment_result_pk))
 
         
-        sorted_att_values = att_values.order_by('-maturity_level_value').all()
+        sorted_att_values = att_values.order_by('-maturity_level__value').all()
 
         # assert len(response.data['questionnaires_info']) == 2
         # assert response.data['questionnaires_info'][0]['metric_number'] == 3
         # assert response.data['questionnaires_info'][1]['answered_metric'] == 3
-        assert sorted_att_values[0].maturity_level_value == 5
-        assert sorted_att_values[1].maturity_level_value == 5
-        assert sorted_att_values[2].maturity_level_value == 4
-        assert response.data['status'] == "GREAT"
+        assert sorted_att_values[0].maturity_level.value == 4
+        assert sorted_att_values[1].maturity_level.value == 4
+        assert sorted_att_values[2].maturity_level.value == 3
+        assert response.data['status'] == "Great"
         # assert response.data['most_significant_strength_atts'][0]['title'] == sorted_att_values[0].quality_attribute.title

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from common.abstractservices import load_model
 
-from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
+from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer, MaturityLevelSimpleSerializer
 from account.serializers.commonserializers import SpaceSerializer
 
 from assessment.serializers.commonserializers import ColorSerilizer
@@ -25,6 +25,8 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     most_significant_strength_atts = serializers.SerializerMethodField()
     most_significant_weaknessness_atts = serializers.SerializerMethodField()
     total_progress = serializers.SerializerMethodField()
+    maturity_level = serializers.SerializerMethodField()
+    maturity_level_number = serializers.SerializerMethodField()
 
     def get_total_progress(self, result: AssessmentResult):
         return metricstatistic.extract_total_progress(result)
@@ -41,10 +43,16 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     def calculate_total_status(self, result: AssessmentResult):
         if result.quality_attribute_values.all():
             assessment = load_model(AssessmentProject, result.assessment_project_id)
-            return assessment.status
+            return assessment.maturity_level.title
         else:
             return "Not Calculated"
+        
+    def get_maturity_level_number(self, result: AssessmentResult):
+        return result.assessment_project.assessment_profile.maturity_levels.count()
+    
+    def get_maturity_level(self, result: AssessmentResult):
+        return MaturityLevelSimpleSerializer(result.assessment_project.maturity_level).data
 
     class Meta:
         model = AssessmentResult
-        fields = ['assessment_project', 'status', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts', 'total_progress']    
+        fields = ['assessment_project', 'status', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts', 'total_progress', 'maturity_level', 'maturity_level_number']    

@@ -5,17 +5,17 @@ from common.restutil import ActionResult, Dictionary
 from common.abstractservices import load_model
 
 from baseinfo.models.basemodels import QualityAttribute
+from baseinfo.services import maturitylevelservices
 
 from assessment.models import AssessmentProject
 from assessment.serializers import projectserializers
 from assessment.fixture.dictionary import Dictionary
-from assessment.fixture.common import calculate_staus
 from assessment.services import metricstatistic, attributesstatistics
 
 # TODO check assessment profile is the same in compare
 def validate_assessment_compare(assessment_projects):
     for project in assessment_projects:
-        if not project.status:
+        if not project.maturity_level:
             error_message = 'The assessment with title {} is not evaluated.'.format(project.title)
             return ActionResult(message = error_message, success=False)
     return ActionResult(success=True)
@@ -31,7 +31,7 @@ def extract_base_info(assessment_project):
     base_info = Dictionary()
     base_info.add('id', assessment_project.id)
     base_info.add('title', assessment_project.title)
-    base_info.add('status', assessment_project.status)
+    base_info.add('status', assessment_project.maturity_level.title)
     base_info.add('profile', assessment_project.assessment_profile.title)
     return ActionResult(success=True, data=base_info)
 
@@ -108,7 +108,7 @@ def extract_subject_report(profile, assessment_projects):
             att_info.add('title', att.title)
             for assessment_project in assessment_projects:
                 att_value = att.quality_attribute_values.filter(assessment_result_id = assessment_project.get_assessment_result().id).first()
-                att_info.add(str(assessment_project.id), att_value.maturity_level_value)
+                att_info.add(str(assessment_project.id), att_value.maturity_level.value)
             attributes_info.append(att_info)
 
         subject_info.add('subject_report_info', subject_report_info)
@@ -141,7 +141,7 @@ def extract_strength_info(assessment_projects, subject):
 
 def extract_subject_strength_list_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values if o['maturity_level_value'] > 2][:2]
+    att_ids = [o['quality_attribute_id'] for o in att_values if o['maturity_level']['value'] > 2][:2]
     return extract_att_titles(att_ids)
 
 def extract_weakness_info(assessment_projects, subject):
@@ -157,7 +157,7 @@ def extract_weakness_info(assessment_projects, subject):
 
 def extract_subject_weakness_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values  if o['maturity_level_value'] < 3][:-3:-1]
+    att_ids = [o['quality_attribute_id'] for o in att_values  if o['maturity_level']['value'] < 3][:-3:-1]
     return extract_att_titles(att_ids)
 
 def extract_att_titles(att_ids):
@@ -184,29 +184,31 @@ def calculate_subject_progress(assessment_project, subject):
 def extract_subject_maturity_level_info(assessment_projects, subject):
     maturity_level_infos = Dictionary()
     maturity_level_infos.add('title', 'Maturity level')
-    maturity_levels_list = []
+    maturity_level_values = []
 
     status_infos = Dictionary()
     status_infos.add('title', 'Status')
     status_list = []
 
     for assessment_project in assessment_projects:
-        maturity_levels_list.append(calculate_subject_maturity_level(assessment_project, subject))
+        maturity_level_values.append(calculate_subject_maturity_level(assessment_project, subject))
     
-    for maturity_level in maturity_levels_list:
-        status_list.append(calculate_staus(maturity_level))
-    maturity_level_infos.add('items', maturity_levels_list)
+    i = 0
+    for maturity_level_value in maturity_level_values:
+        status_list.append(maturitylevelservices.extract_maturity_level_by_value(profile = assessment_projects[i], value = maturity_level_value))
+        i = i + 1
+    maturity_level_infos.add('items', maturity_level_values)
     status_infos.add('items', status_list)
     return maturity_level_infos, status_infos
 
 def calculate_subject_maturity_level(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    return round(mean([item['maturity_level_value'] for item in att_values]))
+    return round(mean([item['maturity_level']['value'] for item in att_values]))
 
 def extract_subject_attributes(assessment_project, subject):
     att_values = assessment_project.get_assessment_result() \
         .quality_attribute_values \
-        .filter(quality_attribute__assessment_subject_id = subject.id).order_by('-maturity_level_value').values()
+        .filter(quality_attribute__assessment_subject_id = subject.id).order_by('-maturity_level__value').values()
     return att_values
 
 

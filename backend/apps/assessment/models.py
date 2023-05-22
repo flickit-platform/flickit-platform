@@ -59,7 +59,7 @@ class QualityAttributeValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4)
     assessment_result = models.ForeignKey(AssessmentResult, on_delete=models.CASCADE, related_name='quality_attribute_values')
     quality_attribute = models.ForeignKey(QualityAttribute, on_delete=models.CASCADE, related_name='quality_attribute_values')
-    maturity_level_value = models.PositiveIntegerField()
+    maturity_level_value = models.PositiveIntegerField(null=True)
     maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='quality_attribute_values', null = True)
 
 

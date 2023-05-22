@@ -26,7 +26,7 @@ class AssessmentCheckReportApi(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, assessment_project_id):
         assessment = load_model(AssessmentProject, assessment_project_id)
-        if assessment.status is None:
+        if assessment.maturity_level is None:
             return Response({'report_available': False}, status=status.HTTP_200_OK)
         else:
             return Response({'report_available': True}, status=status.HTTP_200_OK)
