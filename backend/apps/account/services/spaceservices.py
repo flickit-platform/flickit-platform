@@ -8,6 +8,7 @@ from common.restutil import ActionResult
 from account.services import userservices
 from account.models import UserAccess, User, Space
 
+@transaction.atomic
 def add_user_to_space(space_id,current_user, email):
     user = userservices.load_user_by_email(email)
     space = Space.objects.get(id=space_id)
@@ -15,7 +16,7 @@ def add_user_to_space(space_id,current_user, email):
         return ActionResult(success=False, message='Only member users of the space can add users to the space.')
     try:
         UserAccess.objects.get(space_id = space_id, user = user)
-        return ActionResult(success=False, message='This user is a member in this space.')
+        return ActionResult(success=False, message='This user is already a member of this space.')
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
         return ActionResult(success=True, message='This user has successfully joined this space.')
