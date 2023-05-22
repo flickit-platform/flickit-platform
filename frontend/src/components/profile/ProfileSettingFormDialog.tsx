@@ -22,12 +22,13 @@ interface IProfileSettingFormDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
+  fetchProfile?:any;
 }
 
 const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {},fetchProfile, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId, profileId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
@@ -35,12 +36,10 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const navigate = useNavigate();
-  
   const close = () => {
     abortController.abort();
     closeDialog();
   };
-
   useEffect(() => {
     return () => {
       abortController.abort();
@@ -50,16 +49,16 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     const { dsl_id, tags = [], ...restOfData } = data;
+    console.log(tags)
     const formattedData = {
-      tag_ids: tags.map((t: any) => t.id),
-      expert_group_id: expertGroupId,
+      tags: tags.map((t: any) => t.id),
       ...restOfData,
     };
     setLoading(true);
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile({ data: formattedData, profileId, expertGroupId }, { signal: abortController.signal })
+          ? await service.updateProfile({ data: formattedData, profileId }, { signal: abortController.signal })
           : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
@@ -93,7 +92,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
               })}
               name="tags"
               multiple={true}
-              defaultValue={defaultValues?.profileInfos&&defaultValues.profileInfos[4].item}
+              defaultValue={fetchProfile?.data&&fetchProfile?.data[0].tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />

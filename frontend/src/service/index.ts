@@ -447,15 +447,18 @@ export const createService = (
       return axios.post(`/baseinfo/importprofile/`, data, config);
     },
     updateProfile(
-      args: { profileId?: TId; expertGroupId?: TId; data: any },
+      args: { profileId?: TId; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { expertGroupId, profileId, data } = args || {};
-      return axios.put(
-        `/baseinfo/expertgroup/profiles/${expertGroupId}/${profileId}/`,
-        data,
-        config
-      );
+      const { profileId, data } = args || {};
+      return axios.post(`/baseinfo/profiles/update/${profileId}`, data, config);
+    },
+    fetchProfiledata(
+      args: { profileId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { profileId } = args || {};
+      return axios.get(`baseinfo/profiles/get/${profileId}`, config);
     },
     fetchProfile(
       args: { id: TId },
