@@ -345,7 +345,6 @@ class TestProfileDetailDisplay:
 
 @pytest.mark.django_db
 class Test_Analyse_Profile:
-    @skip("Skip test")
     def test_analyse_profile(self, api_client, authenticate, init_data):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
@@ -360,11 +359,19 @@ class Test_Analyse_Profile:
         base_info = init_data()
         response = api_client.get('/baseinfo/analyzeprofile/' + str(profile.id) + "/")
         analyze_list = response.data
-        assert analyze_list[0]['metrics_number_by_level'][0]['metric_number'] == 2
-        assert analyze_list[0]['metrics_number_by_level'][1]['metric_number'] == 4
-        assert analyze_list[0]['metrics_number_by_level'][2]['metric_number'] == 3
-        assert analyze_list[0]['metrics_number_by_level'][3]['metric_number'] == 2
-        assert analyze_list[0]['metrics_number_by_level'][4]['metric_number'] == 2
+        assert analyze_list[0]['level_analysis'][0]['attribute_metric_number'] == 0
+        assert analyze_list[0]['level_analysis'][1]['attribute_metric_number'] == 2
+        assert analyze_list[0]['level_analysis'][2]['attribute_metric_number'] == 3
+        assert analyze_list[0]['level_analysis'][3]['attribute_metric_number'] == 3
+        assert analyze_list[0]['level_analysis'][4]['attribute_metric_number'] == 2
+        assert analyze_list[0]['level_analysis'][5]['attribute_metric_number'] == 1
+
+        assert analyze_list[1]['level_analysis'][0]['attribute_metric_number'] == 0
+        assert analyze_list[1]['level_analysis'][1]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][2]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][3]['attribute_metric_number'] == 3
+        assert analyze_list[1]['level_analysis'][4]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][5]['attribute_metric_number'] == 2
         assert response.status_code == status.HTTP_200_OK
 
 @pytest.mark.django_db
