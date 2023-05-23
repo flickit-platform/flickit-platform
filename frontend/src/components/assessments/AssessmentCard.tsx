@@ -3,7 +3,12 @@ import { Gauge } from "@common/charts/Gauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "@utils/useMenu";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { createSearchParams, Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  createSearchParams,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -21,6 +26,7 @@ import Button from "@mui/material/Button";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import QueryStatsRounded from "@mui/icons-material/QueryStatsRounded";
 import hasStatus from "@utils/hasStatus";
+import hasMaturityLevel from "@utils/hasMaturityLevel";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
@@ -34,12 +40,14 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { total_progress } = item;
+  const { total_progress, maturity_level_number, maturity_level } = item;
+  const { title, value } = maturity_level;
   const { progress = 0 } = total_progress || {};
   const hasStat = hasStatus(item.status);
+  const hasML= hasMaturityLevel(maturity_level)
   const isComplete = progress === 100;
   const location = useLocation();
-
+  console.log(hasML)
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper
@@ -66,7 +74,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             <Box
               sx={{ textDecoration: "none" }}
               component={Link}
-              to={isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`}
+              to={
+                isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`
+              }
             >
               <Typography
                 variant="h5"
@@ -83,8 +93,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               >
                 {item.title}
               </Typography>
-              <Typography variant="subMedium" color="GrayText" sx={{ padding: "1px 4px", textAlign: "center" }}>
-                <Trans i18nKey="lastUpdated" /> {formatDate(item.last_modification_date)}
+              <Typography
+                variant="subMedium"
+                color="GrayText"
+                sx={{ padding: "1px 4px", textAlign: "center" }}
+              >
+                <Trans i18nKey="lastUpdated" />{" "}
+                {formatDate(item.last_modification_date)}
               </Typography>
             </Box>
           </Grid>
@@ -94,9 +109,15 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasStat ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
-            <Gauge systemStatus={item.status} maxWidth="275px" mt="auto" />
+            <Gauge
+              systemStatus={item.status}
+              maturity_level_number={maturity_level_number}
+              maturity_level={maturity_level}
+              maxWidth="275px"
+              mt="auto"
+            />
           </Grid>
           <Grid item xs={12} sx={{ ...styles.centerCH }} mt={4}>
             <Button
@@ -104,13 +125,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
-                if (!hasStat) {
+                if (!hasML) {
                   e.preventDefault();
                   toast.warn(t("inOrderToViewSomeInsight") as string);
                 }
               }}
               component={Link}
-              to={hasStat ? `${item.id}/insights` : ""}
+              to={hasML ? `${item.id}/insights` : ""}
               variant={isComplete ? "contained" : undefined}
               data-cy="view-insights-btn"
             >
@@ -166,7 +187,10 @@ const Actions = (props: {
   const openEditDialog = (e: any) => {
     setEditLoading(true);
     service
-      .loadAssessment({ rowId: item.id }, { signal: abortController.current.signal })
+      .loadAssessment(
+        { rowId: item.id },
+        { signal: abortController.current.signal }
+      )
       .then(({ data }) => {
         setEditLoading(false);
         dialogProps.openDialog({
