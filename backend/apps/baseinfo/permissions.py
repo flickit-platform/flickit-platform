@@ -37,8 +37,8 @@ class ManageProfilePermission(BasePermission):
         if hasattr(view, 'basename'):
             if view.basename == 'profiles':
                 if request.method == 'DELETE':
-                    expert_group_id = load_model(AssessmentProfile, view.kwargs.get('pk'))
-                    return self.check_current_user_is_member_of_expert_group(current_user, expert_group_id)
+                    profile = load_model(AssessmentProfile, view.kwargs.get('pk'))
+                    return self.check_current_user_is_member_of_expert_group(current_user, profile.expert_group.id)
                 return True
             return False
         else:

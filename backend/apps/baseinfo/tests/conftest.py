@@ -12,7 +12,7 @@ from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
 from baseinfo.models.profilemodels import  ProfileTag, ProfileDsl
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
+from baseinfo.models.metricmodels import Metric, MetricImpact
 from assessment.fixture.dictionary import Dictionary
 from django.core.files.uploadedfile import SimpleUploadedFile
 
