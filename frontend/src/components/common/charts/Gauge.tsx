@@ -35,55 +35,55 @@ const Gauge = (props: IGaugeProps) => {
   const renderSVG = (maturity_level_number: number) => {
     switch (maturity_level_number) {
       case 2:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML2 colorCode={colorCode} value={value} />
         ) : (
           <ML2 colorCode={colorCode} value={-1} />
         );
       case 3:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML3 colorCode={colorCode} value={value} />
         ) : (
           <ML3 colorCode={colorCode} value={-1} />
         );
       case 4:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML4 colorCode={colorCode} value={value} />
         ) : (
           <ML4 colorCode={colorCode} value={-1} />
         );
       case 5:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML5 colorCode={colorCode} value={value} />
         ) : (
           <ML5 colorCode={colorCode} value={-1} />
         );
       case 6:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML6 colorCode={colorCode} value={value} />
         ) : (
           <ML6 colorCode={colorCode} value={-1} />
         );
       case 7:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML7 colorCode={colorCode} value={value} />
         ) : (
           <ML7 colorCode={colorCode} value={-1} />
         );
       case 8:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML8 colorCode={colorCode} value={value} />
         ) : (
           <ML8 colorCode={colorCode} value={-1} />
         );
       case 9:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML9 colorCode={colorCode} value={value} />
         ) : (
           <ML9 colorCode={colorCode} value={-1} />
         );
       case 10:
-        return value ? (
+        return value !== null && value !== undefined ? (
           <ML10 colorCode={colorCode} value={value} />
         ) : (
           <ML10 colorCode={colorCode} value={-1} />
