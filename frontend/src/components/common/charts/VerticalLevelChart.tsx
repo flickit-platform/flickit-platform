@@ -113,7 +113,7 @@ const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) =
         >
           <Typography sx={{ color: cl ? "#3596A1" : "#6035A1" }} variant="h6" textTransform={"uppercase"} lineHeight={"1.3"}>
             <Trans i18nKey={cl ? "cl" : "ml"} />
-            <Typography>{cl || ml || "0"}/{mn?mn:"5"}</Typography>
+            <Typography>{cl || ml || "0"}/{ml?mn?mn:"5":"5"}</Typography>
           </Typography>
         </Box>
       </Box>
@@ -129,7 +129,6 @@ const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) =
           borderRadius: "100px",
         }}
       ></Box>
-      <Typography sx={{ color: "white" }}>{cl || ml || "0"}/5</Typography>
     </Box>
   ) : null;
 };
