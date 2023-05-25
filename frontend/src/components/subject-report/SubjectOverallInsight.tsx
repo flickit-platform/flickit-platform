@@ -42,7 +42,7 @@ const OverallInsightText = (props: any) => {
           <>
             <Trans i18nKey="withConfidence" />{" "}
             <Typography component="span" fontFamily={"Roboto"} fontWeight="bold" sx={{ color: "#3596A1" }} fontSize="1.15rem">
-              <Trans i18nKey={"mlOfmn"} values={{ ml,mn }} />
+              <Trans i18nKey={"clOf"} values={{ cl }} />
             </Typography>{" "}
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography component="span" fontWeight="bold" fontFamily={"Roboto"} sx={{ color: "#6035A1" }} fontSize="1.15rem">

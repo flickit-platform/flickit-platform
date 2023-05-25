@@ -129,7 +129,7 @@ const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) =
           borderRadius: "100px",
         }}
       ></Box>
-      <Typography sx={{ color: "white" }}>{cl || ml || "0"}/</Typography>
+      <Typography sx={{ color: "white" }}>{cl || ml || "0"}/5</Typography>
     </Box>
   ) : null;
 };

@@ -10,7 +10,6 @@ import { getColorOfStatus, styles } from "@styles";
 const SUbjectAttributeCard = (props: any) => {
   const { quality_attribute = {}, maturity_level_value: ml,maturity_level_number:mn, status } = props;
   const { title, description, images = [] } = quality_attribute;
-  console.log(props)
   return (
     <Paper
       elevation={2}
@@ -39,7 +38,7 @@ const SUbjectAttributeCard = (props: any) => {
               <Trans i18nKey={"withConfidence"} />
               <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#3596A1" fontSize="1.12rem">
                 {" "}
-                {ml} of {mn}{" "}
+                1 of 5{" "}
               </Typography>
               <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
               <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#6035A1" fontSize="1.2rem">
@@ -114,7 +113,7 @@ const AttributeStatusBarContainer = (props: any) => {
 
 export const AttributeStatusBar = (props: any) => {
   const { ml, cl, isMl, isBasic,mn } = props;
-  const width = isMl ? (ml ? `${(ml / mn) * 100}%` : "0%") : cl ? `${(cl / mn) * 100}%` : "0%";
+  const width = isMl ? (ml ? `${(ml / mn) * 100}%` : "0%") : cl ? `${(cl / 5) * 100}%` : "0%";
   return (
     <Box
       height={"38px"}
