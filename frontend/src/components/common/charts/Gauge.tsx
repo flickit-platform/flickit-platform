@@ -100,7 +100,7 @@ const Gauge = (props: IGaugeProps) => {
       /> */}
 
       {renderSVG(maturity_level_number)}
-      {value ? (
+      {value !== null && value !== undefined ? (
         <Box
           sx={{ ...styles.centerCVH, bottom: "40%", left: "25%", right: "25%" }}
           position="absolute"
