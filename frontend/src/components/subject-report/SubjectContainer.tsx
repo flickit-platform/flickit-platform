@@ -29,7 +29,8 @@ import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 
 const SubjectContainer = () => {
-  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } = useSubject();
+  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
+    useSubject();
 
   return (
     <QueryData
@@ -38,9 +39,15 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={(data) => {
-        const { progress, title, total_answered_metric, total_metric_number } = data;
+        const {
+          progress,
+          title,
+          total_answered_metric,
+          total_metric_number,
+          results,
+        } = data;
         const isComplete = progress === 100;
-
+        const attributesNumber = results.length;
         return (
           <Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
@@ -73,27 +80,42 @@ const SubjectContainer = () => {
                   }}
                 >
                   <Box>
-                    <SubjectOverallInsight {...subjectQueryData} loading={loading} />
+                    <SubjectOverallInsight
+                      {...subjectQueryData}
+                      loading={loading}
+                    />
                   </Box>
                   <Hidden smDown>
-                    <Box height={"620px"} mb={10} mt={10}>
-                      <Typography>
-                        <Trans
-                          i18nKey="inTheRadarChartBelow"
-                          values={{
-                            title: subjectQueryData?.data?.title || "",
-                          }}
+                    {attributesNumber > 2 && (
+                      <Box height={"620px"} mb={10} mt={10}>
+                        <Typography>
+                          <Trans
+                            i18nKey="inTheRadarChartBelow"
+                            values={{
+                              title: subjectQueryData?.data?.title || "",
+                            }}
+                          />
+                        </Typography>
+
+                        <SubjectRadarChart
+                          {...subjectQueryData}
+                          loading={loading}
                         />
-                      </Typography>
-                      <SubjectRadarChart {...subjectQueryData} loading={loading} />
-                    </Box>
+                      </Box>
+                    )}
                     <Box height={"520px"} mt={10}>
-                      <SubjectBarChart {...subjectQueryData} loading={loading} />
+                      <SubjectBarChart
+                        {...subjectQueryData}
+                        loading={loading}
+                      />
                     </Box>
                   </Hidden>
                 </Box>
                 <Box>
-                  <SubjectAttributeList {...subjectQueryData} loading={loading} />
+                  <SubjectAttributeList
+                    {...subjectQueryData}
+                    loading={loading}
+                  />
                 </Box>
               </Box>
             )}
@@ -111,13 +133,16 @@ const useSubject = () => {
     service: (args, config) => service.fetchResults(args, config),
   });
   const subjectQueryData = useQuery<ISubjectReportModel>({
-    service: (args: { subjectId: string; resultId: string }, config) => service.fetchSubject(args, config),
+    service: (args: { subjectId: string; resultId: string }, config) =>
+      service.fetchSubject(args, config),
     runOnMount: false,
   });
 
   useEffect(() => {
     if (resultsQueryData.loaded) {
-      const result = resultsQueryData.data?.results.find((item: any) => item?.assessment_project == assessmentId);
+      const result = resultsQueryData.data?.results.find(
+        (item: any) => item?.assessment_project == assessmentId
+      );
       const { id: resultId } = result || {};
       subjectQueryData.query({ subjectId, resultId });
     }
@@ -144,7 +169,10 @@ const useSubject = () => {
   };
 };
 
-const SubjectTitle = (props: { data: ISubjectReportModel; loading: boolean }) => {
+const SubjectTitle = (props: {
+  data: ISubjectReportModel;
+  loading: boolean;
+}) => {
   const { data, loading } = props;
   const {
     assessment_profile_description,
@@ -177,15 +205,15 @@ const SubjectTitle = (props: { data: ISubjectReportModel; loading: boolean }) =>
             {
               title: `${assessment_project_title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${assessmentId}/insights`,
-              icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
             {
-              title: (
-                <>
-                  {title || <Trans i18nKey="technicalDueDiligence" />} 
-                </>
+              title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
+              icon: (
+                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),
-              icon: <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
           ]}
         />
@@ -198,7 +226,11 @@ const SubjectTitle = (props: { data: ISubjectReportModel; loading: boolean }) =>
             color: assessment_project_color_code,
           }}
         />
-        {loading ? <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} /> : title || ""}{" "}
+        {loading ? (
+          <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
+        ) : (
+          title || ""
+        )}{" "}
         <Trans i18nKey="insights" />
       </Box>
     </Title>
@@ -232,12 +264,22 @@ const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
             <Typography variant="h4" fontFamily={"Roboto"}>
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
-            <Typography variant="h5" fontFamily={"Roboto"} fontWeight="300" sx={{ mt: 2 }}>
+            <Typography
+              variant="h5"
+              fontFamily={"Roboto"}
+              fontWeight="300"
+              sx={{ mt: 2 }}
+            >
               <Trans i18nKey="completeSomeOfQuestionnaires" />
             </Typography>
           </>
         )}
-        <Button sx={{ mt: 3 }} variant="contained" component={Link} to={`./../../questionnaires?subject_pk=${subjectId}`}>
+        <Button
+          sx={{ mt: 3 }}
+          variant="contained"
+          component={Link}
+          to={`./../../questionnaires?subject_pk=${subjectId}`}
+        >
           {title} <Trans i18nKey="questionnaires" />
         </Button>
       </Paper>

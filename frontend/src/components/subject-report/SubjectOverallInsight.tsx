@@ -32,7 +32,7 @@ const OverallInsightText = (props: any) => {
     most_significant_weaknessness_atts = [],
     results,
   } = data;
-
+  const {maturity_level_number :mn}=results[0]
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
       <Typography fontFamily={"Roboto"} fontWeight="500" fontSize="1.3rem" sx={{ opacity: 0.96 }}>
