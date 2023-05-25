@@ -110,7 +110,7 @@
   "YouHaveFinishedAllQuestionnaires": "Well done. All questionnaires are fully covered.",
   "ToChangeYourInsightTryEditingQuestionnaires": "Try editing answers to make your insights more accurate.",
   "selectAnotherQuestionnaire": "Select another questionnaire",
-  "clOf": "{{cl}} of 5",
+  "mlOfmn": "{{ml}} of {{mn}}",
   "updateAnswer": "update answer",
   "networkError": "Sorry! We can't connect to the server. Please check your internet connection.",
   "subjectStatusIs": "{{title}} status is",

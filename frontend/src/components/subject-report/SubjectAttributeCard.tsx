@@ -8,8 +8,9 @@ import Hidden from "@mui/material/Hidden";
 import { getColorOfStatus, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
-  const { quality_attribute = {}, maturity_level_value: ml, status } = props;
+  const { quality_attribute = {}, maturity_level_value: ml,maturity_level_number:mn, status } = props;
   const { title, description, images = [] } = quality_attribute;
+  console.log(props)
   return (
     <Paper
       elevation={2}
@@ -32,13 +33,13 @@ const SUbjectAttributeCard = (props: any) => {
               {title}
             </Title>
           </Box>
-          <AttributeStatusBarContainer status={status} ml={ml} cl={1} />
+          <AttributeStatusBarContainer status={status} ml={ml} cl={1} mn={mn}/>
           <Box mt={3}>
             <Typography fontSize="1.15rem" fontFamily="Roboto" fontWeight={"bold"}>
               <Trans i18nKey={"withConfidence"} />
               <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#3596A1" fontSize="1.12rem">
                 {" "}
-                1 of 5{" "}
+                {ml} of {mn}{" "}
               </Typography>
               <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
               <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#6035A1" fontSize="1.2rem">
@@ -74,7 +75,7 @@ const SUbjectAttributeCard = (props: any) => {
 };
 
 const AttributeStatusBarContainer = (props: any) => {
-  const { status, ml, cl } = props;
+  const { status, ml, cl ,mn} = props;
   const statusColor = getColorOfStatus(status);
 
   return (
@@ -87,8 +88,8 @@ const AttributeStatusBarContainer = (props: any) => {
     >
       <Box display={"flex"} flex={1}>
         <Box width="100%">
-          {ml && <AttributeStatusBar ml={ml} isMl={true} />}
-          {cl && <AttributeStatusBar cl={cl} />}
+          {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
+          {cl && <AttributeStatusBar cl={cl} mn={mn} />}
         </Box>
       </Box>
       <Box sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }} minWidth={"245px"}>
@@ -112,8 +113,8 @@ const AttributeStatusBarContainer = (props: any) => {
 };
 
 export const AttributeStatusBar = (props: any) => {
-  const { ml, cl, isMl, isBasic } = props;
-  const width = isMl ? (ml ? `${(ml / 5) * 100}%` : "0%") : cl ? `${(cl / 5) * 100}%` : "0%";
+  const { ml, cl, isMl, isBasic,mn } = props;
+  const width = isMl ? (ml ? `${(ml / mn) * 100}%` : "0%") : cl ? `${(cl / mn) * 100}%` : "0%";
   return (
     <Box
       height={"38px"}
