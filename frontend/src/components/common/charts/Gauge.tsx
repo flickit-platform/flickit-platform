@@ -4,7 +4,7 @@ import getStatusText from "@utils/getStatusText";
 import hasStatus from "@utils/hasStatus";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
-import ML2 from "@/assets/svg/ml_3";
+import ML2 from "@/assets/svg/ml_2";
 import ML3 from "@/assets/svg/ml_3";
 import ML4 from "@/assets/svg/ml_4";
 import ML5 from "@/assets/svg/ml_5";
