@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from baseinfo.serializers.commonserializers import QualityAttributeSerilizer
+from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerializer
 
 from assessment.models import AssessmentResult, Color, QualityAttributeValue
 
@@ -22,6 +23,7 @@ class AssessmentResultSerilizer(serializers.ModelSerializer):
 class QualityAttributeValueSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     quality_attribute = QualityAttributeSerilizer()
+    maturity_level = MaturityLevelSimpleSerializer()
     class Meta:
         model = QualityAttributeValue
-        fields = ['id', 'maturity_level_value', 'assessment_result', 'quality_attribute']
+        fields = ['id', 'maturity_level_value', 'assessment_result', 'quality_attribute', 'maturity_level']

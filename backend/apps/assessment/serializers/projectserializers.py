@@ -47,6 +47,8 @@ class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     space = SpaceSimpleSerializer()
     assessment_profile = AssessmentProfileSimpleSerilizer()
     total_progress = serializers.SerializerMethodField()
+    maturity_level = serializers.SerializerMethodField()
+    maturity_level_number = serializers.SerializerMethodField()
 
     def get_maturity_level_number(self, project: AssessmentProject):
         return project.assessment_profile.maturity_levels.count()

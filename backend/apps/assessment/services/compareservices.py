@@ -5,7 +5,10 @@ from common.restutil import ActionResult, Dictionary
 from common.abstractservices import load_model
 
 from baseinfo.models.basemodels import QualityAttribute
+from baseinfo.models.profilemodels import MaturityLevel
 from baseinfo.services import maturitylevelservices
+from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerializer
+from assessment.serializers.commonserializers import QualityAttributeValueSerializer
 
 from assessment.models import AssessmentProject
 from assessment.serializers import projectserializers
@@ -58,7 +61,8 @@ def extract_strength(assessment_projects):
     strength_list = []
     strength_infos.add('title', 'Strengths')
     for assessment_project in assessment_projects:
-        strength_list.append(attributesstatistics.extract_most_significant_strength_atts(assessment_project.get_assessment_result()))
+        strength = attributesstatistics.extract_most_significant_strength_atts(assessment_project.get_assessment_result())
+        strength_list.append(strength)
     strength_infos.add('items', strength_list)
     return strength_infos
 
@@ -67,7 +71,8 @@ def extract_weakness(assessment_projects):
     weakness_list = []
     weakness_infos.add('title', 'Weaknesses')
     for assessment_project in assessment_projects:
-        weakness_list.append(attributesstatistics.extract_most_significant_weaknessness_atts(assessment_project.get_assessment_result()))
+        weak = attributesstatistics.extract_most_significant_weaknessness_atts(assessment_project.get_assessment_result())
+        weakness_list.append(weak)
     weakness_infos.add('items', weakness_list)
     return weakness_infos
 
@@ -141,7 +146,7 @@ def extract_strength_info(assessment_projects, subject):
 
 def extract_subject_strength_list_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values if o['maturity_level']['value'] > 2][:2]
+    att_ids = [o['quality_attribute']['id'] for o in att_values if o['maturity_level']['value'] > 2][:2]
     return extract_att_titles(att_ids)
 
 def extract_weakness_info(assessment_projects, subject):
@@ -157,7 +162,7 @@ def extract_weakness_info(assessment_projects, subject):
 
 def extract_subject_weakness_attributes(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
-    att_ids = [o['quality_attribute_id'] for o in att_values  if o['maturity_level']['value'] < 3][:-3:-1]
+    att_ids = [o['quality_attribute']['id'] for o in att_values  if o['maturity_level']['value'] < 3][:-3:-1]
     return extract_att_titles(att_ids)
 
 def extract_att_titles(att_ids):
@@ -195,7 +200,8 @@ def extract_subject_maturity_level_info(assessment_projects, subject):
     
     i = 0
     for maturity_level_value in maturity_level_values:
-        status_list.append(maturitylevelservices.extract_maturity_level_by_value(profile = assessment_projects[i], value = maturity_level_value))
+        ml = maturitylevelservices.extract_maturity_level_by_value(profile = assessment_projects[i].assessment_profile, value = maturity_level_value)
+        status_list.append(MaturityLevelSimpleSerializer(ml).data)
         i = i + 1
     maturity_level_infos.add('items', maturity_level_values)
     status_infos.add('items', status_list)
@@ -205,11 +211,22 @@ def calculate_subject_maturity_level(assessment_project, subject):
     att_values = extract_subject_attributes(assessment_project, subject)
     return round(mean([item['maturity_level']['value'] for item in att_values]))
 
+# def calculate_subject_maturity_level(assessment_project, subject):
+#     att_values = extract_subject_attributes(assessment_project, subject)
+#     maturity_level_ids = [item['maturity_level_id'] for item in att_values]
+#     maturity_levels = []
+#     for id in maturity_level_ids:
+#         maturity_level = load_model(MaturityLevel, id)
+#         maturity_levels.append(maturity_level.value)  # Access the 'value' attribute
+#     return round(mean(maturity_levels))  # Calculate the mean directly without subscripting
+
+
+
 def extract_subject_attributes(assessment_project, subject):
     att_values = assessment_project.get_assessment_result() \
         .quality_attribute_values \
-        .filter(quality_attribute__assessment_subject_id = subject.id).order_by('-maturity_level__value').values()
-    return att_values
+        .filter(quality_attribute__assessment_subject_id = subject.id).order_by('-maturity_level__value')
+    return QualityAttributeValueSerializer(list(att_values), many = True).data
 
 
 
