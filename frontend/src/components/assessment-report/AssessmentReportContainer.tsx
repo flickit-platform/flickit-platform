@@ -37,7 +37,7 @@ const AssessmentReportContainer = () => {
           most_significant_strength_atts,
           subjects_info = [],
           total_progress,
-          maturity_level,
+          level_value,maturity_level_status,
           maturity_level_number
         } = data || {};
         const colorCode = assessment_project?.color?.color_code || "#101c32";
@@ -159,7 +159,8 @@ const AssessmentReportContainer = () => {
                 <AssessmentOverallStatus
                   status={status}
                   subjects_info={subjects_info}
-                  maturity_level={maturity_level}
+                  level_value={level_value}
+                  maturity_level_status={maturity_level_status}
                   maturity_level_number={maturity_level_number}
                 />
               </Grid>

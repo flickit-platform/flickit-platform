@@ -17,74 +17,74 @@ interface IGaugeProps extends BoxProps {
   systemStatus: TStatus;
   name?: string;
   maturity_level_number: number;
-  maturity_level: IMaturityLevel;
+  maturity_level_status: string;
+  level_value:number;
 }
 
 const Gauge = (props: IGaugeProps) => {
   const {
     systemStatus,
     name = "This system",
-    maturity_level,
+    maturity_level_status,
     maturity_level_number,
+    level_value,
     ...rest
   } = props;
-  const hasStat = hasStatus(systemStatus);
-  const { title, value } = maturity_level;
   const colorPallet = getMaturityLevelColors(maturity_level_number);
-  const colorCode = colorPallet[value];
+  const colorCode = colorPallet[level_value-1];
   const renderSVG = (maturity_level_number: number) => {
     switch (maturity_level_number) {
       case 2:
-        return value !== null && value !== undefined ? (
-          <ML2 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML2 colorCode={colorCode} value={level_value} />
         ) : (
           <ML2 colorCode={colorCode} value={-1} />
         );
       case 3:
-        return value !== null && value !== undefined ? (
-          <ML3 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML3 colorCode={colorCode} value={level_value} />
         ) : (
           <ML3 colorCode={colorCode} value={-1} />
         );
       case 4:
-        return value !== null && value !== undefined ? (
-          <ML4 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML4 colorCode={colorCode} value={level_value} />
         ) : (
           <ML4 colorCode={colorCode} value={-1} />
         );
       case 5:
-        return value !== null && value !== undefined ? (
-          <ML5 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML5 colorCode={colorCode} value={level_value} />
         ) : (
           <ML5 colorCode={colorCode} value={-1} />
         );
       case 6:
-        return value !== null && value !== undefined ? (
-          <ML6 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML6 colorCode={colorCode} value={level_value} />
         ) : (
           <ML6 colorCode={colorCode} value={-1} />
         );
       case 7:
-        return value !== null && value !== undefined ? (
-          <ML7 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML7 colorCode={colorCode} value={level_value} />
         ) : (
           <ML7 colorCode={colorCode} value={-1} />
         );
       case 8:
-        return value !== null && value !== undefined ? (
-          <ML8 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML8 colorCode={colorCode} value={level_value} />
         ) : (
           <ML8 colorCode={colorCode} value={-1} />
         );
       case 9:
-        return value !== null && value !== undefined ? (
-          <ML9 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML9 colorCode={colorCode} value={level_value} />
         ) : (
           <ML9 colorCode={colorCode} value={-1} />
         );
       case 10:
-        return value !== null && value !== undefined ? (
-          <ML10 colorCode={colorCode} value={value} />
+        return level_value !== null && level_value !== undefined ? (
+          <ML10 colorCode={colorCode} value={level_value} />
         ) : (
           <ML10 colorCode={colorCode} value={-1} />
         );
@@ -100,7 +100,7 @@ const Gauge = (props: IGaugeProps) => {
       /> */}
 
       {renderSVG(maturity_level_number)}
-      {value !== null && value !== undefined ? (
+      {level_value !== null && level_value !== undefined ? (
         <Box
           sx={{ ...styles.centerCVH, bottom: "40%", left: "25%", right: "25%" }}
           position="absolute"
@@ -113,7 +113,7 @@ const Gauge = (props: IGaugeProps) => {
             variant="h5"
             color={colorCode}
           >
-            {title}
+            {maturity_level_status}
           </Typography>
           <Typography variant="subtitle2" color="black">
             <Trans i18nKey="shape" />

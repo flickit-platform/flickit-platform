@@ -8,7 +8,7 @@ import Hidden from "@mui/material/Hidden";
 import { getColorOfStatus, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
-  const { quality_attribute = {}, maturity_level_value: ml,maturity_level_number:mn, status } = props;
+  const { quality_attribute = {}, level_value: ml,maturity_level_number:mn, status } = props;
   const { title, description, images = [] } = quality_attribute;
   return (
     <Paper
