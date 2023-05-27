@@ -281,7 +281,9 @@ export interface IAssessment {
   assessment_profile: IAssessmentProfileModel;
   total_progress?: ITotalProgress;
   maturity_level_number:number;
-  maturity_level:IMaturityLevel;
+  level_value: number;
+  maturity_level_status: string;
+  maturity_level:IMaturityLevel
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
