@@ -33,7 +33,10 @@ class AssessmentProjectListSerilizer(serializers.ModelSerializer):
             return None
     
     def get_level_value(self, project: AssessmentProject):
-        return project.maturity_level.value + 1
+        if project.maturity_level is not None:
+            return project.maturity_level.value + 1
+        else:
+            return None
     
         
     class Meta:
