@@ -7,15 +7,23 @@ from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerialize
 class SubjectReportSerializer(serializers.ModelSerializer):
     maturity_level = MaturityLevelSimpleSerializer()
     maturity_level_number = serializers.SerializerMethodField()
+    maturity_level_status = serializers.SerializerMethodField()
+    level_value = serializers.SerializerMethodField()
+    quality_attribute = QualityAttributeSerilizer()
+
     class Meta:
         model = QualityAttributeValue
-        fields = ['id', 'status', 'quality_attribute', 'maturity_level_value', 'maturity_level', 'maturity_level_number']
+        fields = ['id', 'quality_attribute', 'maturity_level', 'maturity_level_number', 'maturity_level_status', 'level_value']
 
-    quality_attribute = QualityAttributeSerilizer()
-    status = serializers.SerializerMethodField()
-
-    def get_status(self, att_value : QualityAttributeValue):
+  
+    
+    def get_maturity_level_status(self, att_value : QualityAttributeValue):
         return att_value.maturity_level.title
+    
+    def get_level_value(self, att_value : QualityAttributeValue):
+        return att_value.maturity_level.value + 1
+
     
     def get_maturity_level_number(self, att_value: QualityAttributeValue):
         return att_value.assessment_result.assessment_project.assessment_profile.maturity_levels.count()
+    

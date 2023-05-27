@@ -19,7 +19,7 @@ class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
 
                 
 class AssessmentReportSerilizer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField(method_name='calculate_total_status')
+    # status = serializers.SerializerMethodField(method_name='calculate_total_status')
     assessment_project = AssessmentProjectReportSerilizer()
     subjects_info = serializers.SerializerMethodField(method_name='calculate_subjects_info')
     most_significant_strength_atts = serializers.SerializerMethodField()
@@ -27,6 +27,8 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     total_progress = serializers.SerializerMethodField()
     maturity_level = serializers.SerializerMethodField()
     maturity_level_number = serializers.SerializerMethodField()
+    maturity_level_status = serializers.SerializerMethodField()
+    level_value = serializers.SerializerMethodField()
 
     def get_total_progress(self, result: AssessmentResult):
         return metricstatistic.extract_total_progress(result)
@@ -40,19 +42,25 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     def get_most_significant_weaknessness_atts(self, result: AssessmentResult):
         return attributesstatistics.extract_most_significant_weaknessness_atts(result)
     
-    def calculate_total_status(self, result: AssessmentResult):
-        if result.quality_attribute_values.all():
-            assessment = load_model(AssessmentProject, result.assessment_project_id)
-            return assessment.maturity_level.title
-        else:
-            return "Not Calculated"
+    # def calculate_total_status(self, result: AssessmentResult):
+    #     if result.quality_attribute_values.all():
+    #         assessment = load_model(AssessmentProject, result.assessment_project_id)
+    #         return assessment.maturity_level.title
+    #     else:
+    #         return "Not Calculated"
         
     def get_maturity_level_number(self, result: AssessmentResult):
         return result.assessment_project.assessment_profile.maturity_levels.count()
     
     def get_maturity_level(self, result: AssessmentResult):
         return MaturityLevelSimpleSerializer(result.assessment_project.maturity_level).data
+    
+    def get_maturity_level_status(self, result: AssessmentResult):
+        return result.assessment_project.maturity_level.title
+    
+    def get_level_value(self, result: AssessmentResult):
+        return result.assessment_project.maturity_level.value + 1
 
     class Meta:
         model = AssessmentResult
-        fields = ['assessment_project', 'status', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts', 'total_progress', 'maturity_level', 'maturity_level_number']    
+        fields = ['assessment_project', 'subjects_info', 'most_significant_strength_atts', 'most_significant_weaknessness_atts', 'total_progress', 'maturity_level', 'maturity_level_number', 'maturity_level_status', 'level_value']    
