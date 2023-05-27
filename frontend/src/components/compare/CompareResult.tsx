@@ -19,7 +19,6 @@ interface ICompareResultProps {
 
 const CompareResult = (props: ICompareResultProps) => {
   const { data } = props;
-
   useEffect(() => {
     setDocumentTitle(`${t("comparisonResultT")} ${data.base_infos.map((bi) => bi.title).join(` & `)}`);
   }, [data.base_infos]);
