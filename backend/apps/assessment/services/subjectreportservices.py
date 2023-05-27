@@ -38,7 +38,7 @@ def calculate_report(assessment_subject_pk, assessment_result_id, quality_attrib
         value = calculate_maturity_level_value(quality_attribute_values)
         maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = assessment_result.assessment_project.assessment_profile, value = value)
         report_details['status'] = maturity_level.title
-        report_details['maturity_level_value'] = maturity_level.value
+        report_details['maturity_level_value'] = maturity_level.value + 1
         report.update(report_details)
     return ActionResult(success=True, data=report)
 
