@@ -5,10 +5,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import Hidden from "@mui/material/Hidden";
-import { getColorOfStatus, styles } from "@styles";
+import { getMaturityLevelColors, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
-  const { quality_attribute = {}, level_value: ml,maturity_level_number:mn, status } = props;
+  const { quality_attribute = {}, level_value: ml,maturity_level_number:mn, status,maturity_level_status } = props;
   const { title, description, images = [] } = quality_attribute;
   return (
     <Paper
@@ -32,7 +32,7 @@ const SUbjectAttributeCard = (props: any) => {
               {title}
             </Title>
           </Box>
-          <AttributeStatusBarContainer status={status} ml={ml} cl={1} mn={mn}/>
+          <AttributeStatusBarContainer status={maturity_level_status} ml={ml} cl={1} mn={mn}/>
           <Box mt={3}>
             <Typography fontSize="1.15rem" fontFamily="Roboto" fontWeight={"bold"}>
               <Trans i18nKey={"withConfidence"} />
@@ -45,7 +45,7 @@ const SUbjectAttributeCard = (props: any) => {
                 {" "}
                 {ml}.{" "}
               </Typography>
-              <Trans i18nKey={"meaning"} /> {status}.
+              <Trans i18nKey={"meaning"} /> {maturity_level_status}.
             </Typography>
           </Box>
           <Box mt={0.6}>
@@ -75,8 +75,8 @@ const SUbjectAttributeCard = (props: any) => {
 
 const AttributeStatusBarContainer = (props: any) => {
   const { status, ml, cl ,mn} = props;
-  const statusColor = getColorOfStatus(status);
-
+  const colorPallet = getMaturityLevelColors(mn);
+  const statusColor = colorPallet[ml-1];
   return (
     <Box
       display={"flex"}
