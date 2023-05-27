@@ -49,7 +49,6 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     const { dsl_id, tags = [], ...restOfData } = data;
-    console.log(tags)
     const formattedData = {
       tags: tags.map((t: any) => t.id),
       ...restOfData,
