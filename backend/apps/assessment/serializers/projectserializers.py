@@ -27,7 +27,10 @@ class AssessmentProjectListSerilizer(serializers.ModelSerializer):
         return MaturityLevelSimpleSerializer(project.maturity_level).data
     
     def get_maturity_level_status(self, project: AssessmentProject):
-        return project.maturity_level.title
+        if project.maturity_level is not None:
+            return project.maturity_level.title
+        else:
+            return None
     
     def get_level_value(self, project: AssessmentProject):
         return project.maturity_level.value + 1
