@@ -35,6 +35,8 @@ def extract_base_info(assessment_project):
     base_info.add('id', assessment_project.id)
     base_info.add('title', assessment_project.title)
     base_info.add('status', assessment_project.maturity_level.title)
+    base_info.add('maturity_level_value', assessment_project.maturity_level.value + 1)
+    base_info.add('maturity_level_number', assessment_project.assessment_profile.maturity_levels.count())
     base_info.add('profile', assessment_project.assessment_profile.title)
     return ActionResult(success=True, data=base_info)
 
