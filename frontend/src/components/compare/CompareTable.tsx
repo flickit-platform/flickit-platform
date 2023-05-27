@@ -14,6 +14,7 @@ const CompareTable = (props: {
   base_infos: ICompareResultBaseInfo[];
 }) => {
   const { data, title, base_infos } = props;
+
   return (
     <>
       <Box>
@@ -36,7 +37,9 @@ const CompareTable = (props: {
                   return (
                     <Grid
                       item
-                      xs={calcGridSizeBasedOnTheLengthOfAssessments(base_infos?.length)}
+                      xs={calcGridSizeBasedOnTheLengthOfAssessments(
+                        base_infos?.length
+                      )}
                       sx={{
                         ...styles.compareResultBorder,
                       }}
@@ -57,7 +60,11 @@ const CompareTable = (props: {
                           >
                             {value.map((text) => (
                               <li>
-                                <Typography sx={{ my: 0.3 }} fontFamily={"Roboto"} fontSize="1.1rem">
+                                <Typography
+                                  sx={{ my: 0.3 }}
+                                  fontFamily={"Roboto"}
+                                  fontSize="1.1rem"
+                                >
                                   {text}
                                 </Typography>
                               </li>
@@ -91,7 +98,11 @@ const renderMap: Record<string, (arg: any) => JSX.Element> = {
     return (
       <Box sx={{ ...styles.centerV }}>
         <Typography {...textStyle}>
-          {progress > 0 && progress < 1 ? <>{progress.toFixed(1)} % </> : <>{progress.toFixed(0)} % </>}
+          {progress > 0 && progress < 1 ? (
+            <>{progress.toFixed(1)} % </>
+          ) : (
+            <>{progress.toFixed(0)} % </>
+          )}
         </Typography>
 
         <Box>
@@ -126,9 +137,24 @@ const renderMap: Record<string, (arg: any) => JSX.Element> = {
 };
 
 const renderCompareItem = (key: string, value: any) => {
-  const component = renderMap[key] || ((text) => <Typography {...textStyle}>{text}</Typography>);
-
-  return component(value);
+  const component =
+    renderMap[key] ||
+    ((text) => <Typography {...textStyle}>{text}</Typography>);
+  const progressComponent = (obj: any) => (
+    <>
+      {(obj?.title !== null || obj?.title !== undefined) && (
+        <Typography {...textStyle}>{obj?.title}</Typography>
+      )}
+      {obj?.progress && (
+        <Typography
+          {...textStyle}
+        >{obj.progress}%</Typography>
+      )}
+    </>
+  );
+  return typeof value !== "object"
+    ? component(value)
+    : progressComponent(value);
 };
 
 export default CompareTable;

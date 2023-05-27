@@ -13,7 +13,11 @@ import { Gauge } from "@common/charts/Gauge";
 import ProgressChip from "@common/ProgressChip";
 import { TId, TQueryFunction } from "@types";
 import IconButton from "@mui/material/IconButton";
-import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "@providers/CompareProvider";
 
 interface IComparePartsItemProps {
   data: any;
@@ -30,10 +34,22 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
       type: data?.id ? "update" : "create",
     },
   });
-
+  console.log(data)
   return (
-    <Box display="flex" flexDirection={"column"} minHeight="264px" height="100%" position="relative">
-      {data?.id && <DeleteAssessmentIconBtn fetchAssessmentsInfo={fetchAssessmentsInfo} index={index} id={data?.id} />}
+    <Box
+      display="flex"
+      flexDirection={"column"}
+      minHeight="264px"
+      height="100%"
+      position="relative"
+    >
+      {data?.id && (
+        <DeleteAssessmentIconBtn
+          fetchAssessmentsInfo={fetchAssessmentsInfo}
+          index={index}
+          id={data?.id}
+        />
+      )}
       <Button
         fullWidth
         color="inherit"
@@ -44,7 +60,9 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
           px: 3.8,
           borderRadius: 2,
           background: "white",
-          border: `1.5px dashed ${disabled ? "#101c324f" : data?.color?.color_code || "#101c32"}`,
+          border: `1.5px dashed ${
+            disabled ? "#101c324f" : data?.color?.color_code || "#101c32"
+          }`,
           ...(data
             ? {
                 display: "flex",
@@ -61,20 +79,29 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
               wrapperProps={{ alignItems: "baseline" }}
               textAlign={"left"}
               sup={data.space.title}
-              toolbar={<ProgressChip progress={data?.total_progress?.progress} size="small" sx={{ ml: 2 }} />}
+              toolbar={
+                <ProgressChip
+                  progress={data?.total_progress?.progress}
+                  size="small"
+                  sx={{ ml: 2 }}
+                />
+              }
               color={data?.color?.color_code}
             >
               {data.title}
             </Title>
             <Box display="flex" justifyContent="center">
-              <Gauge systemStatus={data.status} maxWidth="255px" mt="auto" />
+              <Gauge systemStatus={data.status} maturity_level_number={data?.maturity_level_number} maturity_level_status={data?.maturity_level_status} level_value={data?.level_value}maxWidth="255px" mt="auto" />
             </Box>
           </Box>
         ) : (
           <>
             <AddBoxRoundedIcon sx={{ mb: 0.5 }} fontSize="large" />
             <Typography textTransform={"none"} textAlign="center">
-              <Trans i18nKey="selectAssessmentForComparison" values={{ value: numberMap[index] }} />
+              <Trans
+                i18nKey="selectAssessmentForComparison"
+                values={{ value: numberMap[index] }}
+              />
             </Typography>
           </>
         )}
@@ -86,13 +113,19 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
 
 const numberMap = ["first", "second", "third", "fourth"];
 
-const DeleteAssessmentIconBtn = (props: { id: TId; index: number; fetchAssessmentsInfo: TQueryFunction }) => {
+const DeleteAssessmentIconBtn = (props: {
+  id: TId;
+  index: number;
+  fetchAssessmentsInfo: TQueryFunction;
+}) => {
   const { id, index, fetchAssessmentsInfo } = props;
   const { assessmentIds } = useCompareContext();
   const dispatch = useCompareDispatch();
 
   const handleClick = () => {
-    const newAssessmentIds = assessmentIds.filter((assessmentId) => assessmentId != id);
+    const newAssessmentIds = assessmentIds.filter(
+      (assessmentId) => assessmentId != id
+    );
 
     if (newAssessmentIds.length === 0) {
       dispatch(compareActions.setProfile(null));

@@ -7,9 +7,10 @@ import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
 
-const CompareResultAssessmentsSection = (props: { data: ICompareResultBaseInfo[] }) => {
+const CompareResultAssessmentsSection = (props: {
+  data: ICompareResultBaseInfo[];
+}) => {
   const { data } = props;
-
   return (
     <Box
       sx={{
@@ -44,7 +45,7 @@ const CompareResultAssessmentsSection = (props: { data: ICompareResultBaseInfo[]
                     justifyContent: { xs: "center", lg: "flex-end" },
                   }}
                 >
-                  <Gauge systemStatus={item.status} maxWidth="250px" m="auto" />
+                  <Gauge maturity_level_number={item.maturity_level_number} maturity_level_status={item.status} level_value={item.maturity_level_value} maxWidth="250px" m="auto" />
                 </Box>
                 <Box
                   display="flex"
