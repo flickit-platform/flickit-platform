@@ -106,7 +106,7 @@ const Gauge = (props: IGaugeProps) => {
           position="absolute"
         >
           <Typography variant="subtitle2" color="black">
-            <Trans i18nKey="thisSystemIs" />
+            <Trans i18nKey="thisSystemIsIn" />
           </Typography>
           <Typography
             sx={{ fontWeight: "bold" }}
