@@ -40,11 +40,10 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { total_progress, maturity_level_number, maturity_level } = item;
-  const { title, value } = maturity_level;
+  const { total_progress, maturity_level_number,level_value,maturity_level_status,maturity_level } = item;
+  const {value,title}=maturity_level
   const { progress = 0 } = total_progress || {};
-  const hasStat = hasStatus(item.status);
-  const hasML= hasMaturityLevel(maturity_level)
+  const hasML= hasMaturityLevel(value)
   const isComplete = progress === 100;
   const location = useLocation();
   return (
@@ -113,7 +112,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             <Gauge
               systemStatus={item.status}
               maturity_level_number={maturity_level_number}
-              maturity_level={maturity_level}
+              level_value={maturity_level.value+1}
+              maturity_level_status={maturity_level.title}
               maxWidth="275px"
               mt="auto"
             />

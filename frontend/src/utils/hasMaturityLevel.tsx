@@ -1,7 +1,6 @@
 import { IMaturityLevel } from "@types";
-const hasMaturityLevel = (maturity_level: IMaturityLevel) => {
-  const { title, value } = maturity_level;
-  if (!title || value === null) {
+const hasMaturityLevel = (value: number) => {
+  if (!value===null) {
     return false;
   }
   return true;
