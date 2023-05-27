@@ -56,10 +56,18 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
         return MaturityLevelSimpleSerializer(result.assessment_project.maturity_level).data
     
     def get_maturity_level_status(self, result: AssessmentResult):
-        return result.assessment_project.maturity_level.title
+        if result.quality_attribute_values.all():
+            assessment = load_model(AssessmentProject, result.assessment_project_id)
+            return assessment.maturity_level.title
+        else:
+            return "Not Calculated"
     
     def get_level_value(self, result: AssessmentResult):
-        return result.assessment_project.maturity_level.value + 1
+        if result.quality_attribute_values.all():
+            assessment = load_model(AssessmentProject, result.assessment_project_id)
+            return assessment.maturity_level.value + 1
+        else:
+            return None
 
     class Meta:
         model = AssessmentResult
