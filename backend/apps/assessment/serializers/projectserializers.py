@@ -17,16 +17,25 @@ class AssessmentProjectListSerilizer(serializers.ModelSerializer):
     maturity_level = serializers.SerializerMethodField()
     maturity_level_number = serializers.SerializerMethodField()
 
+    maturity_level_status = serializers.SerializerMethodField()
+    level_value = serializers.SerializerMethodField()
+
     def get_maturity_level_number(self, project: AssessmentProject):
         return project.assessment_profile.maturity_levels.count()
     
     def get_maturity_level(self, project: AssessmentProject):
         return MaturityLevelSimpleSerializer(project.maturity_level).data
     
+    def get_maturity_level_status(self, project: AssessmentProject):
+        return project.maturity_level.title
+    
+    def get_level_value(self, project: AssessmentProject):
+        return project.maturity_level.value + 1
+    
         
     class Meta:
         model = AssessmentProject
-        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'maturity_level', 'maturity_level_number']
+        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'maturity_level', 'maturity_level_number', 'maturity_level_status', 'level_value']
 
 class AssessmentProjecCreateSerilizer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
@@ -49,6 +58,8 @@ class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     total_progress = serializers.SerializerMethodField()
     maturity_level = serializers.SerializerMethodField()
     maturity_level_number = serializers.SerializerMethodField()
+    maturity_level_status = serializers.SerializerMethodField()
+    level_value = serializers.SerializerMethodField()
 
     def get_maturity_level_number(self, project: AssessmentProject):
         return project.assessment_profile.maturity_levels.count()
@@ -56,12 +67,18 @@ class AssessmentProjectCompareSerilizer(serializers.ModelSerializer):
     def get_maturity_level(self, project: AssessmentProject):
         return MaturityLevelSimpleSerializer(project.maturity_level).data
     
+    def get_maturity_level_status(self, project: AssessmentProject):
+        return project.maturity_level.title
+    
+    def get_level_value(self, project: AssessmentProject):
+        return project.maturity_level.value + 1
+    
 
     def get_total_progress(self, project: AssessmentProject):
         return extract_total_progress(project.get_assessment_result())
     class Meta:
         model = AssessmentProject
-        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'space', 'total_progress', 'maturity_level', 'maturity_level_number']
+        fields = ['id', 'code', 'title', 'assessment_profile', 'last_modification_date', 'status', 'color', 'assessment_results', 'space', 'total_progress', 'maturity_level', 'maturity_level_number', 'maturity_level_status', 'level_value']
 
 
 class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
