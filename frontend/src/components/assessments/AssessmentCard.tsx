@@ -47,7 +47,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const hasML= hasMaturityLevel(maturity_level)
   const isComplete = progress === 100;
   const location = useLocation();
-  console.log(hasML)
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper

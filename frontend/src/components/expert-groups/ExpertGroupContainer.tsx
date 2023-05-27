@@ -863,7 +863,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                       {users.map((member: any) => {
                         const { user, id } = member;
                         const name = getUserName(user);
-                        console.log(user.picture);
                         return (
                           <Grid item xs={12} sm={6} md={4} key={id}>
                             <Box
