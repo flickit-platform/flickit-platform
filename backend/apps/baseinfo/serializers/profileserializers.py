@@ -3,6 +3,7 @@ from rest_framework import serializers
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag, MaturityLevel
+from baseinfo.models.basemodels import AssessmentSubject
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
 from ..services import profileservice
@@ -30,6 +31,7 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
     questionnaires = serializers.SerializerMethodField()
     likes_number = serializers.SerializerMethodField()
 
+
     def get_number_of_assessment(self, profile: AssessmentProfile):
         return AssessmentProject.objects.filter(assessment_profile_id = profile.id).count()
 
@@ -46,7 +48,12 @@ class AssessmentProfileSerilizer(serializers.ModelSerializer):
         return profile.questionnaires.all().count()
 
     def get_subjects_with_desc(self, profile: AssessmentProfile):
-        return profile.assessment_subjects.values('id', 'title', 'description')
+        subjects = profile.assessment_subjects.values('id', 'title', 'description')
+        for subject in subjects:
+            subj_qs = AssessmentSubject.objects.get(id = subject['id'])
+            attributes = subj_qs.quality_attributes.values('id', 'title', 'description')
+            subject['attributes'] = attributes
+        return subjects
 
     def get_questionnaires(self, profile: AssessmentProfile):
         return profile.questionnaires.values('id', 'title', 'description')
