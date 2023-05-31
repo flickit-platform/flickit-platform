@@ -1,16 +1,15 @@
 import itertools
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
 
 from common.restutil import ActionResult
 
 from assessment.models import AssessmentProject
 
 from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
+from baseinfo.models.basemodels import QualityAttribute
 from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
 from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
-from baseinfo.models.metricmodels import MetricImpact
 
 def load_profile(profile_id) -> AssessmentProfile:
     try:
@@ -41,6 +40,7 @@ def extract_detail_of_profile(profile, request):
     response['profileInfos'] = extract_profile_report_infos(profile)
     response['subjectsInfos'] = extract_subjects_infos(profile)
     response['questionnaires'] = extract_questionnaires_infos(profile)
+    response['maturity_levels'] = extract_profile_maturity_levels(profile)
     extra_profile_info = AssessmentProfileSerilizer(profile, context={'request': request}).data
     response['is_active'] = extra_profile_info['is_active']
     response['expert_group'] = extra_profile_info['expert_group']
@@ -83,6 +83,20 @@ def extract_subjects_infos(profile):
         subjectsInfos.append(subject_infos)
     return subjectsInfos
 
+def extract_profile_maturity_levels(profile: AssessmentProfile):
+    response = {}
+    maturity_levels = []
+    for ml in profile.maturity_levels.all():
+        maturity_level = {}
+        maturity_level['title'] = ml.title
+        maturity_level['value'] = ml.value
+        maturity_levels.append(maturity_level)
+    
+    response['list'] = maturity_levels
+    response['maturity_level_number'] = profile.maturity_levels.count()
+    
+    return response
+
 def extract_profile_report_infos(profile):
     profileInfos = []
     subjects = profile.assessment_subjects.all()
@@ -109,9 +123,24 @@ def __extract_related_attribute_metrics(att):
     for impact in impacts:
         metric = {}
         metric['title'] = impact.metric.title
-        metric['impact'] = impact.level
-        metric['options'] = __extract_metric_options(impact.metric)
-        questions.append(metric)
+        # metric['maturity_level'] = impact.maturity_level.value
+        # metric['options'] = __extract_metric_options(impact.metric)
+        options = []
+        for at in impact.metric.answer_templates.all():
+            option = {}
+            option['title'] = at.caption
+            option_values = []
+            for ov in at.option_values.all():
+                if ov.metric_impact.quality_attribute == att:
+                    option_value = {}
+                    option_value['value'] = ov.value
+                    option_value['maturity_level'] = ov.metric_impact.maturity_level.value
+                    option_values.append(option_value)
+            option['option_values'] = option_values
+            options.append(option)
+        metric['options'] = options
+        if metric not in questions:
+            questions.append(metric)
     return questions
 
 def __extratc_subject_report_info(subject):
@@ -134,7 +163,7 @@ def __extract_questionnaire_metric_info(questionnaire):
 def __extratc_metric_related_attributes(metric):
     relatedAttributes = []
     for impact in metric.metric_impacts.all():
-        relatedAttributes.append({'title' : impact.quality_attribute.title, 'item': impact.level})
+        relatedAttributes.append({'title' : impact.quality_attribute.title, 'item': impact.maturity_level.value})
     return relatedAttributes
 
 def __extract_metric_options(metric):
@@ -218,30 +247,27 @@ def like_profile(user_id, profile_id):
 
 def analyze(profile_id):
     profile = AssessmentProfile.objects.get(pk=profile_id)
-
-    queryset = MetricImpact.objects.filter(
-        quality_attribute__assessment_subject__assessment_profile=profile
-    ).values('quality_attribute__title', 'level').annotate(
-        metric_number=Count('metric')
-    ).order_by('quality_attribute__title', 'level')
-
-    result = {}
-
-    for obj in queryset:
-        title = obj['quality_attribute__title']
-        level = obj['level']
-        metric_number = obj['metric_number']
-
-        if title not in result:
-            result[title] = {}
-
-        if level not in result[title]:
-            result[title][level] = metric_number
-
     output = []
-    for title, levels in result.items():
-        metrics_number_by_level = [{'level': level, 'metric_number': metric_number} for level, metric_number in levels.items()]
-        output.append({'attributes': title, 'metrics_number_by_level': metrics_number_by_level})
+    attributes = extract_profile_attribute(profile)
+    profile_maturity_levels = profile.maturity_levels.all().order_by('value')
+    for att in attributes:
+        attribute_analyse = {}
+        attribute_analyse['title'] = att['title']
+        level_analysis = []
+        for ml in profile_maturity_levels:
+            attribute_metric_by_level = {}
+            attribute_metric_by_level['level_value'] = ml.value
+            attribute_metric_number_by_level = 0
+            attribute = QualityAttribute.objects.get(id = att['id'])
+            for impact in attribute.metric_impacts.all():
+                if impact.maturity_level.value == ml.value:
+                    attribute_metric_number_by_level = attribute_metric_number_by_level + 1
+            
+            attribute_metric_by_level['attribute_metric_number'] = attribute_metric_number_by_level
+            level_analysis.append(attribute_metric_by_level)
+        attribute_analyse['level_analysis'] = level_analysis
+        output.append(attribute_analyse)
+            
 
     return ActionResult(data=output, success=True)
 
@@ -250,6 +276,7 @@ def extract_profile_attribute(profile):
     attributes = []
     for subject in subjects:
         attributes.append(subject.quality_attributes.values('id', 'title'))
+
     return list(itertools.chain(*attributes))
 
 def get_extrac_profile_data(profile, request):

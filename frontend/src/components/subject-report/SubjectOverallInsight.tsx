@@ -31,7 +31,9 @@ const OverallInsightText = (props: any) => {
     most_significant_strength_atts = [],
     most_significant_weaknessness_atts = [],
     results,
+    maturity_level_status
   } = data;
+  console.log(data)
   const {maturity_level_number :mn}=results[0]
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>

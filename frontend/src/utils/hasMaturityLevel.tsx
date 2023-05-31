@@ -1,8 +1,8 @@
 const hasMaturityLevel = (value: number) => {
-  if (!value===null) {
-    return false;
+  if (value!==null ) {
+    return true;
   }
-  return true;
+  return false;
 };
 
 export default hasMaturityLevel;

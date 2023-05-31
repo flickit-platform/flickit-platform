@@ -218,6 +218,7 @@ export interface IAssessmentReportModel {
   most_significant_weaknessness_atts: string[];
   assessment_project: IAssessmentReport;
   total_progress: ITotalProgress;
+  maturity_level_status:string;
 }
 
 export interface IQuestionnaireModel {

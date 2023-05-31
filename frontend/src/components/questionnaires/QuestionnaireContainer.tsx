@@ -20,21 +20,28 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
-import SupTitleBreadcrumb, { useSupTitleBreadcrumb } from "@common/SupTitleBreadcrumb";
+import SupTitleBreadcrumb, {
+  useSupTitleBreadcrumb,
+} from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import hasStatus from "@utils/hasStatus";
+import hasMaturityLevelStatus from "@/utils/hasMaturityLevelStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "@common/PermissionControl";
 import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-
 const QuestionnaireContainer = () => {
-  const { pageQueryData, questionnaireQueryData, totalProgressQueryData, assessmentQueryData } = useQuestionnaire();
+  const {
+    pageQueryData,
+    questionnaireQueryData,
+    totalProgressQueryData,
+    assessmentQueryData,
+  } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
-
+  console.log(assessmentQueryData);
   return (
     <PermissionControl
       error={[
@@ -47,9 +54,15 @@ const QuestionnaireContainer = () => {
       <Box>
         <QuestionnaireTitle />
         <NotCompletedAlert
-          isCompleted={totalProgressQueryData.data?.total_progress?.progress == 100}
-          hasStatus={hasStatus(assessmentQueryData.data?.status)}
-          loading={totalProgressQueryData.loading || assessmentQueryData.loading}
+          isCompleted={
+            totalProgressQueryData.data?.total_progress?.progress == 100
+          }
+          hasStatus={hasMaturityLevelStatus(
+            assessmentQueryData.data?.maturity_level_status
+          )}
+          loading={
+            totalProgressQueryData.loading || assessmentQueryData.loading
+          }
         />
         <Box
           flexWrap={"wrap"}
@@ -69,7 +82,10 @@ const QuestionnaireContainer = () => {
           color="white"
           position={"relative"}
         >
-          <QuestionnaireList questionnaireQueryData={questionnaireQueryData} pageQueryData={pageQueryData} />
+          <QuestionnaireList
+            questionnaireQueryData={questionnaireQueryData}
+            pageQueryData={pageQueryData}
+          />
         </Box>
       </Box>
     </PermissionControl>
@@ -88,15 +104,18 @@ const useQuestionnaire = () => {
   });
 
   const pageQueryData = useQuery<IQuestionnairesPageDataModel>({
-    service: (args = { assessmentId }, config) => service.fetchQuestionnairesPageData(args, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchQuestionnairesPageData(args, config),
   });
 
   const totalProgressQueryData = useQuery<ITotalProgressModel>({
-    service: (args = { assessmentId }, config) => service.fetchTotalProgress(args, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchTotalProgress(args, config),
   });
 
   const assessmentQueryData = useQuery<IAssessmentReportModel>({
-    service: (args = { assessmentId }, config) => service.fetchAssessment(args, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchAssessment(args, config),
   });
 
   return {
@@ -107,7 +126,11 @@ const useQuestionnaire = () => {
   };
 };
 
-const NotCompletedAlert = (props: { isCompleted: boolean; loading: boolean; hasStatus: boolean }) => {
+const NotCompletedAlert = (props: {
+  isCompleted: boolean;
+  loading: boolean;
+  hasStatus: boolean;
+}) => {
   const { isCompleted, loading, hasStatus } = props;
 
   return (
@@ -174,7 +197,9 @@ const QuestionnaireTitle = () => {
             },
             {
               title: breadcrumbInfo.assessment,
-              icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
           ]}
         />
