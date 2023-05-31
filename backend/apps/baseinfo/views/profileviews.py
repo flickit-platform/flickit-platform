@@ -32,7 +32,7 @@ class AssessmentProfileViewSet(mixins.RetrieveModelMixin,
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        result = profileservice.is_profile_deletable(kwargs['pk'], request.user.id)
+        result = profileservice.is_profile_deletable(kwargs['pk'])
         if result.success:
             return super().destroy(request, *args, ** kwargs)
         else:
