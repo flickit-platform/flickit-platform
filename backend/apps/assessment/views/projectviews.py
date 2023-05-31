@@ -35,7 +35,7 @@ class AssessmentProjectBySpaceViewSet(ModelViewSet):
         return response       
 
     def get_queryset(self):
-        return AssessmentProject.objects.filter(space_id=self.kwargs['space_pk'])
+        return AssessmentProject.objects.filter(space_id=self.kwargs['space_pk']).order_by('-last_modification_date')
 
 class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
     permission_classes=[IsAuthenticated]
