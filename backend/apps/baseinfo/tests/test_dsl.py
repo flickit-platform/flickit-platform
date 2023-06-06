@@ -142,5 +142,6 @@ class TestDownloadDslFile:
         resp = view(request, profile_id = profile.id)
 
         #responses testing
-        assert  resp.status_code == status.HTTP_200_OK   
+        assert  resp.status_code == status.HTTP_200_OK
+        assert  resp.resp.filename == "dsl.zip"
 
