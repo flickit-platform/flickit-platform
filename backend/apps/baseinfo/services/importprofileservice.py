@@ -175,7 +175,7 @@ def get_dsl_file(profile):
     try : 
         result = {}
         dsl_file_path = profile.dsl.dsl_file.path
-        result["filename"] =  os.path.basename(dsl_file_path)
+        result["filename"] =  "assessmentkit.zip"
         if os.path.isfile(dsl_file_path):
             result["file"] = open(dsl_file_path,'rb')
             return ActionResult(success=True, data=result)
