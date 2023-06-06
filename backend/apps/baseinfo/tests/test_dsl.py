@@ -143,5 +143,5 @@ class TestDownloadDslFile:
 
         #responses testing
         assert  resp.status_code == status.HTTP_200_OK
-        assert  resp.filename == "dsl.zip"
+        assert  resp.filename == "assessmentkit.zip"
 
