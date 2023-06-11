@@ -35,7 +35,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 
 const ProfileExpertViewContainer = () => {
-  const { profileQueryProps ,fetchProfile} = useProfile();
+  const { profileQueryProps, fetchProfile } = useProfile();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -70,7 +70,13 @@ const ProfileExpertViewContainer = () => {
                 // sub={data.summary}
                 toolbar={
                   is_expert && (
-                    <IconButton title="Setting" color="primary" onClick={() => dialogProps.openDialog({ type: "update", data })}>
+                    <IconButton
+                      title="Setting"
+                      color="primary"
+                      onClick={() =>
+                        dialogProps.openDialog({ type: "update", data })
+                      }
+                    >
                       <SettingsRoundedIcon />
                     </IconButton>
                   )
@@ -79,14 +85,21 @@ const ProfileExpertViewContainer = () => {
                 {data.title}
               </Title>
               <Box mt={3}>
-                <ProfileSectionGeneralInfo data={data} query={profileQueryProps.query} />
+                <ProfileSectionGeneralInfo
+                  data={data}
+                  query={profileQueryProps.query}
+                />
                 <ProfileSectionsTabs data={data} />
               </Box>
             </Box>
           );
         }}
       />
-      <ProfileSettingFormDialog {...dialogProps} onSubmitForm={profileQueryProps.query} fetchProfile={fetchProfile} />
+      <ProfileSettingFormDialog
+        {...dialogProps}
+        onSubmitForm={profileQueryProps.query}
+        fetchProfile={fetchProfile}
+      />
     </Box>
   );
 };
@@ -136,10 +149,11 @@ const ProfileSectionsTabs = (props: { data: any }) => {
 const ProfileSubjects = (props: { subjects: any[] }) => {
   const { subjects } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
-
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const dialogProps = useDialog();
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   return (
     <Box>
@@ -216,7 +230,11 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                       <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
-                      <Typography variant="body2" fontFamily="Roboto" sx={{ ml: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontFamily="Roboto"
+                        sx={{ ml: 2 }}
+                      >
                         {subject.description}
                       </Typography>
                     </Box>
@@ -225,7 +243,12 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
               </Box>
               <Divider />
               <Box m={1} mt={2}>
-                <Typography variant="h6" fontFamily="Roboto" fontWeight={"bold"} fontSize="1rem">
+                <Typography
+                  variant="h6"
+                  fontFamily="Roboto"
+                  fontWeight={"bold"}
+                  fontSize="1rem"
+                >
                   <Trans i18nKey="attributes" />
                 </Typography>
                 <ListAccordion
@@ -240,7 +263,12 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             flexDirection: isExpanded ? "column" : "row",
                           }}
                         >
-                          <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} minWidth="180px">
+                          <Typography
+                            variant="body1"
+                            fontFamily="Roboto"
+                            fontWeight={"bold"}
+                            minWidth="180px"
+                          >
                             {item.title}
                           </Typography>{" "}
                           <Typography
@@ -248,7 +276,9 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                               opacity: 0.9,
                               marginLeft: isExpanded ? 0 : 5,
                               marginTop: isExpanded ? 2 : 0,
-                              maxWidth: isExpanded ? undefined : { xs: "90px", md: "130px", lg: "320px" },
+                              maxWidth: isExpanded
+                                ? undefined
+                                : { xs: "90px", md: "130px", lg: "320px" },
                               display: { xs: "none", md: "block" },
                               ...(isExpanded ? {} : styles.ellipsis),
                             }}
@@ -258,7 +288,10 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             {item.description}
                           </Typography>
                         </Box>
-                        <ProfileQuestionsList questions={item.questions} index={index} />
+                        <ProfileQuestionsList
+                          questions={item.questions}
+                          index={index}
+                        />
                       </React.Fragment>
                     );
                   }}
@@ -275,10 +308,10 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
 const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
   const { questionnaires } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  const dialogProps = useDialog();
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   return (
     <Box>
@@ -338,18 +371,23 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
               <Box p={1}>
                 <Grid container spacing={3} sx={{ mb: 1 }}>
                   <Grid item xs={12} md={5} lg={4}>
-                    {questionnaire.report_infos.map((info: any, index: number) => {
-                      return (
-                        <InfoItem
-                          key={index}
-                          bg="white"
-                          info={{
-                            ...info,
-                            type: info.title === "Related subjects" ? "array" : info.type,
-                          }}
-                        />
-                      );
-                    })}
+                    {questionnaire.report_infos.map(
+                      (info: any, index: number) => {
+                        return (
+                          <InfoItem
+                            key={index}
+                            bg="white"
+                            info={{
+                              ...info,
+                              type:
+                                info.title === "Related subjects"
+                                  ? "array"
+                                  : info.type,
+                            }}
+                          />
+                        );
+                      }
+                    )}
                   </Grid>
                   <Grid item xs={12} md={7} lg={8}>
                     <Box
@@ -364,7 +402,11 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                       <Typography variant="body2" fontFamily="Roboto">
                         <Trans i18nKey="description" />:
                       </Typography>
-                      <Typography variant="body2" fontFamily="Roboto" sx={{ ml: 2 }}>
+                      <Typography
+                        variant="body2"
+                        fontFamily="Roboto"
+                        sx={{ ml: 2 }}
+                      >
                         {questionnaire.description}
                       </Typography>
                     </Box>
@@ -373,7 +415,12 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
               </Box>
               <Divider />
               <Box m={1} mt={2}>
-                <Typography variant="h6" sx={{ opacity: 0.9 }} fontFamily="Roboto" fontSize=".9rem">
+                <Typography
+                  variant="h6"
+                  sx={{ opacity: 0.9 }}
+                  fontFamily="Roboto"
+                  fontSize=".9rem"
+                >
                   <Trans i18nKey="questions" />
                 </Typography>
                 <Box sx={{ overflowX: "auto" }}>
@@ -386,44 +433,54 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                       paddingRight: 2,
                     }}
                   >
-                    {questionnaire.questions.map((question: any, index: number) => {
-                      return (
-                        <li style={{ marginBottom: "12px",marginLeft:"6px" }} key={index}>
-                          <Box display="flex" justifyContent={"space-between"} py={1}>
-                            <Grid container spacing={2} columns={14}>
-                              <Grid xs={10} md={10} lg={11} item>
-                                <Typography
-                                  // onClick={() => {
-                                  //   dialogProps.openDialog({});
-                                  // }}
-                                  sx={{ cursor: "pointer" }}
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  position="relative"
-                                >
-                                  {index === 0 && (
-                                    <Typography
-                                      sx={{
-                                        position: "absolute",
-                                        top: "-36px",
-                                        pb: "2px",
-                                        color: "#767676",
-                                        fontFamily: "Roboto",
-                                        display: "block",
-                                        fontSize: ".8rem",
-                                        width: "100%",
-                                        borderBottom: (t) => `1px solid ${t.palette.primary.light}`,
-                                      }}
-                                      component="span"
-                                    >
-                                      <Trans i18nKey={"title"} />
-                                    </Typography>
-                                  )}
-                                  {question.title}
-                                </Typography>
-                              </Grid>
-                              {/* <Grid item xs={4} md={4} lg={4}>
+                    {questionnaire.questions.map(
+                      (question: any, index: number) => {
+                        const dialogProps = useDialog();
+                        return (
+                          <li
+                            style={{ marginBottom: "12px", marginLeft: "6px" }}
+                            key={index}
+                          >
+                            <Box
+                              display="flex"
+                              justifyContent={"space-between"}
+                              py={1}
+                            >
+                              <Grid container spacing={2} columns={14}>
+                                <Grid xs={14} md={14} lg={14} item>
+                                  <Typography
+                                    onClick={() => {
+                                      dialogProps.openDialog({});
+                                    }}
+                                    sx={{ cursor: "pointer" }}
+                                    variant="body1"
+                                    fontFamily="Roboto"
+                                    fontWeight={"bold"}
+                                    position="relative"
+                                  >
+                                    {index === 0 && (
+                                      <Typography
+                                        sx={{
+                                          position: "absolute",
+                                          top: "-36px",
+                                          pb: "2px",
+                                          color: "#767676",
+                                          fontFamily: "Roboto",
+                                          display: "block",
+                                          fontSize: ".8rem",
+                                          width: "100%",
+                                          borderBottom: (t) =>
+                                            `1px solid ${t.palette.primary.light}`,
+                                        }}
+                                        component="span"
+                                      >
+                                        <Trans i18nKey={"title"} />
+                                      </Typography>
+                                    )}
+                                    {question.title}
+                                  </Typography>
+                                </Grid>
+                                {/* <Grid item xs={4} md={4} lg={4}>
                                 <Box position={"relative"} minWidth="160px">
                                   {index === 0 && (
                                     <Typography
@@ -448,74 +505,92 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                   </ul>
                                 </Box>
                               </Grid> */}
-                              <Grid item xs={4} md={4} lg={3}>
-                                <Box position={"relative"}>
-                                  {index === 0 && (
-                                    <Typography
-                                      sx={{
-                                        width: "100%",
-                                        position: "absolute",
-                                        top: "-36px",
-                                        pb: "2px",
-                                        color: "#767676",
-                                        fontFamily: "Roboto",
-                                        borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
-                                      }}
-                                      variant="subMedium"
-                                    >
-                                      <Trans i18nKey={"relatedAttributes"} />
-                                      <Box component="span" sx={{ float: "right", mr: 1 }}>
-                                        <Trans i18nKey="impact" />
-                                      </Box>
-                                    </Typography>
-                                  )}
-                                  {question.relatedAttributes.map((att: any, index: number) => {
-                                    return (
-                                      <Box
-                                        key={index}
+
+                                {/* <Grid item xs={4} md={4} lg={3}>
+                                  <Box position={"relative"}>
+                                    {index === 0 && (
+                                      <Typography
                                         sx={{
-                                          background: (t) => t.palette.secondary.main,
-                                          borderRadius: 8,
-                                          color: "white",
-                                          width: "auto",
+                                          width: "100%",
+                                          position: "absolute",
+                                          top: "-36px",
+                                          pb: "2px",
+                                          color: "#767676",
+                                          fontFamily: "Roboto",
+                                          borderBottom: (t) =>
+                                            `1px solid ${t.palette.secondary.dark}`,
                                         }}
+                                        variant="subMedium"
                                       >
-                                        <Box py={0.3} px={2} mb={0.5} mr={0.5}>
-                                          <Typography
-                                            variant="body2"
+                                        <Trans i18nKey={"relatedAttributes"} />
+                                        <Box
+                                          component="span"
+                                          sx={{ float: "right", mr: 1 }}
+                                        >
+                                          <Trans i18nKey="impact" />
+                                        </Box>
+                                      </Typography>
+                                    )}
+                                    {question.relatedAttributes.map(
+                                      (att: any, index: number) => {
+                                        return (
+                                          <Box
+                                            key={index}
                                             sx={{
-                                              display: "flex",
-                                              justifyContent: "space-between",
+                                              background: (t) =>
+                                                t.palette.secondary.main,
+                                              borderRadius: 8,
+                                              color: "white",
+                                              width: "auto",
                                             }}
                                           >
-                                            {att.title}
-                                            <Typography
-                                              component="span"
-                                              sx={{
-                                                fontWeight: "bold",
-                                                color: "white",
-                                                position: "relative",
-                                              }}
+                                            <Box
+                                              py={0.3}
+                                              px={2}
+                                              mb={0.5}
+                                              mr={0.5}
                                             >
-                                              {att.item}
-                                            </Typography>
-                                          </Typography>
-                                        </Box>
-                                      </Box>
-                                    );
-                                  })}
-                                  {/* <ProfileDialog
-                                      {...dialogProps}
-                                      question={question}
-                                    /> */}
-                                </Box>
+                                              <Typography
+                                                variant="body2"
+                                                sx={{
+                                                  display: "flex",
+                                                  justifyContent:
+                                                    "space-between",
+                                                }}
+                                              >
+                                                {att.title}
+                                                <Typography
+                                                  component="span"
+                                                  sx={{
+                                                    fontWeight: "bold",
+                                                    color: "white",
+                                                    position: "relative",
+                                                  }}
+                                                >
+                                                  {att.item}
+                                                </Typography>
+                                              </Typography>
+                                            </Box>
+                                          </Box>
+                                        );
+                                      }
+                                    )}
+                                  
+                                  </Box>
+                                </Grid> */}
+                                <ProfileDialog
+                                  {...dialogProps}
+                                  question={question}
+                                />
                               </Grid>
-                            </Grid>
-                          </Box>
-                          {index !== questionnaire.questions.length - 1 && <Divider sx={{ mt: 3 }} />}
-                        </li>
-                      );
-                    })}
+                            </Box>
+                            {index !== questionnaire.questions.length - 1 && (
+                              <Divider sx={{ mt: 3 }} />
+                            )}
+                          </li>
+                        );
+                      }
+                    )}
                   </Box>
                 </Box>
               </Box>
@@ -548,7 +623,12 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
         >
           {/* <AttributeDetails index={index} /> */}
           {questions.map((question: any, index: number) => {
-            const { title, options = [], relatedAttributes = [], impact } = question || {};
+            const {
+              title,
+              options = [],
+              relatedAttributes = [],
+              impact,
+            } = question || {};
             const hasRelatedAttributes = relatedAttributes.length > 0;
             const hasImpact = impact !== null && impact !== undefined;
             const gridColumns = hasRelatedAttributes || hasImpact ? 15 : 12;
@@ -557,13 +637,22 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
             } else if (title && !questionsRef[title]) {
               questionsRef[title] = true;
             }
-
+            const dialogProps = useDialog();
             return (
               <li style={{ marginBottom: "12px" }} key={index}>
                 <Box display="flex" justifyContent={"space-between"} py={1}>
                   <Grid container spacing={2} columns={12}>
                     <Grid xs={12} item>
-                      <Typography variant="body1" fontFamily="Roboto" fontWeight={"bold"} position="relative">
+                      <Typography
+                        variant="body1"
+                        fontFamily="Roboto"
+                        fontWeight={"bold"}
+                        position="relative"
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => {
+                          dialogProps.openDialog({});
+                        }}
+                      >
                         {index === 0 && (
                           <Typography
                             sx={{
@@ -575,7 +664,8 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
                               fontFamily: "Roboto",
                               fontSize: "0.8rem",
                               width: "100%",
-                              borderBottom: (t) => `1px solid ${t.palette.primary.light}`,
+                              borderBottom: (t) =>
+                                `1px solid ${t.palette.primary.light}`,
                             }}
                             component="span"
                           >
@@ -633,7 +723,7 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
                         </Box>
                       </Grid>
                     )} */}
-                    {hasRelatedAttributes && (
+                    {/* {hasRelatedAttributes && (
                       <Grid item xs={3}>
                         <Box position={"relative"} minWidth="300px">
                           {index === 0 && (
@@ -645,7 +735,8 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
                                 pb: "2px",
                                 color: "#767676",
                                 fontFamily: "Roboto",
-                                borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
+                                borderBottom: (t) =>
+                                  `1px solid ${t.palette.secondary.dark}`,
                               }}
                               variant="subMedium"
                             >
@@ -655,13 +746,20 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
                           <Box>
                             {relatedAttributes.map((att: any) => {
                               return (
-                                <Chip key={att.id} label={att.title} color="secondary" sx={{ mr: 0.5, mb: 0.2 }} size="small" />
+                                <Chip
+                                  key={att.id}
+                                  label={att.title}
+                                  color="secondary"
+                                  sx={{ mr: 0.5, mb: 0.2 }}
+                                  size="small"
+                                />
                               );
                             })}
                           </Box>
                         </Box>
                       </Grid>
-                    )}
+                    )} */}
+                    <ProfileDialog {...dialogProps} question={question} />
                   </Grid>
                 </Box>
                 {index !== questions.length - 1 && <Divider />}
@@ -674,52 +772,256 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
   );
 };
 
-// const ProfileDialog = (props: any) => {
-//   const { question, onClose: closeDialog, ...rest } = props;
-//   const {
-//     title,
-//     options = [],
-//     relatedAttributes = [],
-//     impact,
-//   } = question || {};
-//   console.log(question);
-//   const onSubmit = async (data: any) => {};
-//   const fullScreen = useScreenResize("sm");
-//   return (
-//     <Dialog
-//       {...rest}
-//       onClose={() => {
-//         closeDialog();
-//       }}
-//       fullWidth
-//       maxWidth="lg"
-//       fullScreen={fullScreen}
-//     >
-//       <DialogTitle
-//         textTransform={"uppercase"}
-//         sx={{ ...styles.centerV, px: { xs: 1.5, sm: 3 } }}
-//       >
-//         {title}
-//       </DialogTitle>
-//       <DialogContent
-//         sx={{
-//           display: "flex",
-//           flexDirection: "column",
-//           px: { xs: 1.5, sm: 3 },
-//         }}
-//       >
-//         {options.map((option: any, index: number) => {
-//           console.log(option);
-//         })}
-//       </DialogContent>
-//     </Dialog>
-//   );
-// };
+const ProfileDialog = (props: any) => {
+  const { question, onClose: closeDialog, ...rest } = props;
+  const {
+    title,
+    options = [],
+    relatedAttributes = [],
+    impact,
+    listOfOptions = [],
+  } = question || {};
+  const onSubmit = async (data: any) => {};
+  const fullScreen = useScreenResize("sm");
+  return (
+    <Dialog
+      {...rest}
+      onClose={() => {
+        closeDialog();
+      }}
+      fullWidth
+      maxWidth="lg"
+      fullScreen={fullScreen}
+    >
+      <DialogTitle>
+        <Typography
+          sx={{
+            pb: "2px",
+            color: "#767676",
+            display: "block",
+            fontFamily: "Roboto",
+            fontSize: "0.8rem",
+            width: "100%",
+          }}
+          component="span"
+        >
+          <Trans i18nKey={"title"} />
+          <Typography
+            variant="body1"
+            fontFamily="Roboto"
+            fontWeight={"bold"}
+            sx={{ color: "black" }}
+          >
+            {title}
+          </Typography>
+        </Typography>
+      </DialogTitle>
+      <DialogContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          px: { xs: 1.5, sm: 3 },
+        }}
+      >
+        {options &&
+          options.map((op: any, index: number) => (
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+            >
+              <Grid container spacing={2} columns={12}>
+                <Grid xs={8} item>
+                  <Typography
+                    variant="body1"
+                    fontFamily="Roboto"
+                    fontWeight={"bold"}
+                  >
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          pb: "2px",
+                          mb:2,
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                          width: "100%",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.primary.light}`,
+                        }}
+                        component="span"
+                      >
+                        <Trans i18nKey={"questionOptions"} />
+                      </Typography>
+                    )}
+                    {op.title}
+                  </Typography>
+                </Grid>
+                <Grid xs={2} item>
+                  <Typography
+                    variant="body1"
+                    fontFamily="Roboto"
+                    fontWeight={"bold"}
+                  >
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          pb: "2px",
+                          mb:2,
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                          width: "100%",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.secondary.dark}`,
+                        }}
+                        component="span"
+                      >
+                        <Trans i18nKey={"maturityLevel"} />
+                      </Typography>
+                    )}
+                    {op.option_values[0].maturity_level}
+                  </Typography>
+                </Grid>
+                <Grid xs={2} item>
+                  <Typography
+                    variant="body1"
+                    fontFamily="Roboto"
+                    fontWeight={"bold"}
+                    // position="relative"
+                  >
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          pb: "2px",
+                          mb:2,
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                          width: "100%",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.warning.dark}`,
+                        }}
+                        component="span"
+                      >
+                        <Trans i18nKey={"value"} />
+                      </Typography>
+                    )}
+                    {op.option_values[0].value}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
+        {/* {listOfOptions && relatedAttributes && ( */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 2,
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: "65%" }}>
+              {listOfOptions &&
+                listOfOptions.map((op: any, index: number) => (
+                  <Typography
+                    variant="body1"
+                    fontFamily="Roboto"
+                    fontWeight={"bold"}
+                  >
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          pb: "2px",
+                          mb: 2,
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                          width: "100%",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.primary.light}`,
+                        }}
+                        component="span"
+                      >
+                        <Trans i18nKey={"questionOptions"} />
+                      </Typography>
+                    )}
+                    {op}
+                  </Typography>
+                ))}
+            </Box>
+            <Box sx={{ width: "30%" }}>
+              {relatedAttributes &&
+                relatedAttributes.map((item: any, index: number) => (
+                  <Box>
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          width: "100%",
+                          pb: "2px",
+                          mb: 2,
+                          color: "#767676",
+                          fontFamily: "Roboto",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.secondary.dark}`,
+                        }}
+                        variant="subMedium"
+                      >
+                        <Trans i18nKey={"relatedAttributes"} />
+                        <Box component="span" sx={{ float: "right", mr: 1 }}>
+                          <Trans i18nKey="impact" />
+                        </Box>
+                      </Typography>
+                    )}
+                    <Box
+                      key={index}
+                      sx={{
+                        background: (t) => t.palette.secondary.main,
+                        borderRadius: 8,
+                        color: "white",
+                        width: "auto",
+                      }}
+                    >
+                      <Box py={0.3} px={2} mb={0.5} mr={0.5}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          {item.title}
+                          <Typography
+                            component="span"
+                            sx={{
+                              fontWeight: "bold",
+                              color: "white",
+                            }}
+                          >
+                            {item.item}
+                          </Typography>
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                ))}
+            </Box>
+          </Box>
+        {/* )} */}
+      </DialogContent>
+    </Dialog>
+  );
+};
 const AttributeDetails = (props: { index: number }) => {
   const { index } = props;
   const { queryData } = useProfile();
   const { data, loaded } = queryData;
-  const gridColumns = (loaded && data[index].metrics_number_by_level.length * 3) || 3;
+  const gridColumns =
+    (loaded && data[index].metrics_number_by_level.length * 3) || 3;
 
   return (
     <Box display="flex" justifyContent={"space-between"} marginBottom={5}>
@@ -736,7 +1038,8 @@ const AttributeDetails = (props: { index: number }) => {
                     pb: "2px",
                     color: "#767676",
                     fontFamily: "Roboto",
-                    borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
+                    borderBottom: (t) =>
+                      `1px solid ${t.palette.secondary.dark}`,
                   }}
                   variant="subMedium"
                 >
@@ -788,17 +1091,20 @@ const useProfile = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const profileQueryProps = useQuery({
-    service: (args = { profileId }, config) => service.inspectProfile(args, config),
+    service: (args = { profileId }, config) =>
+      service.inspectProfile(args, config),
   });
   const queryData = useQuery({
-    service: (args = { profileId }, config) => service.analyzeProfile(args, config),
+    service: (args = { profileId }, config) =>
+      service.analyzeProfile(args, config),
     runOnMount: true,
   });
   const fetchProfile = useQuery({
-    service: (args = { profileId }, config) => service.fetchProfiledata(args, config),
+    service: (args = { profileId }, config) =>
+      service.fetchProfiledata(args, config),
     runOnMount: true,
   });
-  return { profileQueryProps, queryData,fetchProfile};
+  return { profileQueryProps, queryData, fetchProfile };
 };
 
 export default ProfileExpertViewContainer;
