@@ -34,7 +34,6 @@ const SpaceSettingContainer = () => {
 
   const { title } = data || {};
   const isOwner = userId == data?.owner?.id;
-
   return (
     <Box maxWidth="1440px" m="auto">
       <Title
@@ -62,7 +61,7 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} />}</Box>
+      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}</Box>
     </Box>
   );
 };
@@ -100,8 +99,8 @@ const EditSpaceButton = (props: any) => {
   );
 };
 
-function SpaceSettings(props: { isOwner: boolean }) {
-  const { isOwner } = props;
+function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
+  const { owner } = props;
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -126,7 +125,7 @@ function SpaceSettings(props: { isOwner: boolean }) {
         </Box>
         <TabPanel value="1">
           {/* <ErrorAccessDenied hasAccess={isOwner}> */}
-          <SpaceMembers />
+          <SpaceMembers owner={owner} />
           {/* </ErrorAccessDenied> */}
         </TabPanel>
       </TabContext>
