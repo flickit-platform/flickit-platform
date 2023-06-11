@@ -58,7 +58,7 @@ const SpaceSettingContainer = () => {
             <Skeleton variant="rounded" width="110px" sx={{ mr: 1 }} />
           ) : (
             title
-          )}
+          )}{" "}
           <Trans i18nKey="setting" />
         </Box>
       </Title>
