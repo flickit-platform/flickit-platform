@@ -34,7 +34,6 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
       type: data?.id ? "update" : "create",
     },
   });
-  console.log(data)
   return (
     <Box
       display="flex"
