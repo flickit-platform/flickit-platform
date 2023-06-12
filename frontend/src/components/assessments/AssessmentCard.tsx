@@ -43,7 +43,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { total_progress, maturity_level_number,level_value,maturity_level_status,maturity_level } = item;
   const { progress = 0 } = total_progress || {};
   const hasML= hasMaturityLevel(level_value)
-  console.log(hasML)
   const isComplete = progress === 100;
   const location = useLocation();
   return (

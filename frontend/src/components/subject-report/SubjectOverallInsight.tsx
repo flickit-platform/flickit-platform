@@ -33,7 +33,6 @@ const OverallInsightText = (props: any) => {
     results,
     maturity_level_status
   } = data;
-  console.log(data)
   const {maturity_level_number :mn}=results[0]
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
