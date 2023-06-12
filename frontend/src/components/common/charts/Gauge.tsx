@@ -6,7 +6,7 @@ import getStatusText from "@utils/getStatusText";
 import hasStatus from "@utils/hasStatus";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
-import React from "react";
+import GaugeComponent5 from "./GaugeComponent5";
 interface IGaugeProps extends BoxProps {
   systemStatus: TStatus;
   name?: string;
@@ -26,128 +26,18 @@ const Gauge = (props: IGaugeProps) => {
   } = props;
   const colorPallet = getMaturityLevelColors(maturity_level_number);
   const colorCode = colorPallet[level_value - 1];
-  const GaugeComponent2 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent2")
+  const GaugeComponent = lazy(
+    () => import(`./GaugeComponent${maturity_level_number}`)
   );
-  const GaugeComponent3 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent3")
-  );
-  const GaugeComponent4 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent4")
-  );
-  const GaugeComponent5 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent5")
-  );
-  const GaugeComponent6 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent6")
-  );
-  const GaugeComponent7 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent7")
-  );
-  const GaugeComponent8 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent8")
-  );
-  const GaugeComponent9 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent9")
-  );
-  const GaugeComponent10 = React.lazy(
-    () => import("@/components/common/charts/GaugeComponent10")
-  );
-  let ComponentToRender;
-  switch (maturity_level_number) {
-    case 2:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent2 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent2 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 3:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent3 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent3 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 4:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent4 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent4 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 5:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent5 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent5 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 6:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent6 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent6 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 7:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent7 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent7 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 8:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent8 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent8 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 9:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent9 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent9 colorCode={colorCode} value={-1} />
-          ));
-      break;
-    case 10:
-      level_value !== null && level_value !== undefined
-        ? (ComponentToRender = (
-            <GaugeComponent10 colorCode={colorCode} value={level_value} />
-          ))
-        : (ComponentToRender = (
-            <GaugeComponent10 colorCode={colorCode} value={-1} />
-          ));
-      break;
-  }
-
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
-      {/* <img
-        width="100%"
-        src={`/assets/svg/ml_${maturity_level_number}.svg`}
-        alt={getStatusText(systemStatus, true) as string}
-      /> */}
-
-      <Suspense fallback={<GettingThingsReadyLoading />}>
-        {ComponentToRender}
+      <Suspense fallback={<GaugeComponent5 colorCode="#000" value={-1} />}>
+        <GaugeComponent
+          colorCode={colorCode}
+          value={
+            level_value !== null && level_value !== undefined ? level_value : -1
+          }
+        />
       </Suspense>
       {level_value !== null && level_value !== undefined ? (
         <Box
