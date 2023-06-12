@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CardHeader,
+  Chip,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
@@ -23,7 +31,8 @@ const ProfileContainer = () => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const profileQueryData = useQuery({
-    service: (args = { id: profileId }, config) => service.fetchProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.fetchProfile(args, config),
   });
 
   return (
@@ -116,7 +125,12 @@ const Profile = (props: any) => {
                   }}
                 >
                   {tags.map((tag: any) => (
-                    <Chip key={tag.id} label={tag.title} size="small" sx={{ mr: 0.4, background: "white" }} />
+                    <Chip
+                      key={tag.id}
+                      label={tag.title}
+                      size="small"
+                      sx={{ mr: 0.4, background: "white" }}
+                    />
                   ))}
                 </Box>
               }
@@ -234,25 +248,41 @@ const Profile = (props: any) => {
                   mt: 2,
                 }}
               >
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>FREE</Typography>
                 </Box>
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>
+                    {subjects_with_desc.length || 0}
+                  </Typography>
                 </Box>
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfQuestionnaires" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>
+                    {questionnaires.length || 0}
+                  </Typography>
                 </Box>
-                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 6 }}
+                  disabled={!is_active}
+                  onClick={dialogProps.openDialog}
+                >
                   <Trans i18nKey="createAssessment" />
                 </Button>
                 <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
@@ -279,6 +309,27 @@ const Profile = (props: any) => {
                   return (
                     <Box component="li" mb={2} key={subject.id}>
                       <b>{subject.title}</b>: {subject.description}
+                      {/* <Typography
+                            variant="subtitle2"
+                            fontWeight="bold"
+                            sx={{ ml: 2, mt: 2 }}
+                          >
+                            <Trans i18nKey="relatedAttributes" />
+                          </Typography> */}
+                      {subject?.attributes &&
+                        subject?.attributes?.map((att: any) => (
+                          <Box sx={{ ml: 4 }} component="li">
+                            <Typography variant="body2" sx={{ my: 2 }}>
+                              <Box component="span" fontWeight="bold">
+                                {att.title}
+                              </Box>
+                              :{" "}
+                              <Box component="span" fontSize={14}>
+                                {att.description}
+                              </Box>
+                            </Typography>
+                          </Box>
+                        ))}
                     </Box>
                   );
                 })}
@@ -309,7 +360,8 @@ const LikeProfile = ({ likes_number }: any) => {
   const { service } = useServiceContext();
   const { profileId } = useParams();
   const likeQueryData = useQuery({
-    service: (args = { id: profileId }, config) => service.likeProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.likeProfile(args, config),
     runOnMount: false,
   });
 
