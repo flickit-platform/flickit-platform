@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact
-from baseinfo.models.profilemodels import AssessmentProfile, ExpertGroup
+from baseinfo.models.assessmentkitmodels import AssessmentKit, ExpertGroup
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,9 +57,9 @@ class MetricSerilizer(serializers.ModelSerializer):
         model = Metric
         fields = ['id', 'title', 'index', 'answer_templates']
 
-class AssessmentProfileSimpleSerilizer(serializers.ModelSerializer):
+class AssessmentKitSimpleSerilizer(serializers.ModelSerializer):
     class Meta:
-        model = AssessmentProfile
+        model = AssessmentKit
         fields = ['id', 'code', 'title', 'summary']
 
 class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.db import models
 
 from baseinfo.models.basemodels import Questionnaire, QualityAttribute
-from baseinfo.models.profilemodels import MaturityLevel
+from baseinfo.models.assessmentkitmodels import MaturityLevel
 
 class MetricImpact(models.Model):
     level = models.PositiveIntegerField(null=True)

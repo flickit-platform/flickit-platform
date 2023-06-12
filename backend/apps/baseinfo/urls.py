@@ -2,19 +2,19 @@ from django.urls import path
 from rest_framework_nested import routers
 
 from baseinfo.views import commonviews
-from baseinfo.views import profileviews, importprofileviews
+from baseinfo.views import assessmentkitviews, importassessmentkitviews
 from baseinfo.views import expertgroupviews
 
 
 
 
 router = routers.DefaultRouter()
-router.register('profiles', profileviews.AssessmentProfileViewSet, basename='profiles')
+router.register('assessmentkits', assessmentkitviews.AssessmentKitViewSet, basename='assessmentkits')
 router.register('questionnaires', commonviews.QuestionnaireViewSet, basename='questionnaires')
 router.register('subjects', commonviews.AssessmentSubjectViewSet, basename='subjects')
 router.register('attributes', commonviews.QualityAttributeViewSet, basename='attributes')
-router.register('dsl', profileviews.UploadProfileApi, basename='dsl')
-router.register('tags', profileviews.ProfileTagViewSet, basename='tags')
+router.register('dsl', assessmentkitviews.UploadAssessmentKitApi, basename='dsl')
+router.register('tags', assessmentkitviews.AssessmentKitTagViewSet, basename='tags')
 router.register('expertgroups', expertgroupviews.ExpertGroupViewSet, basename='expertgroups')
 
 
@@ -31,19 +31,19 @@ questionnaire_by_subject_router.register('questionnaires', commonviews.Questionn
 urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject_router.urls  + expert_group_access_router.urls
 
 urlpatterns += [
-    path("inspectprofile/<str:profile_id>/", profileviews.ProfileDetailDisplayApi.as_view()),
-    path("analyzeprofile/<str:profile_id>/", profileviews.ProfileAnalyzeApi.as_view()),
-    path("expertgroup/profiles/<str:expert_group_id>/", profileviews.ProfileListApi.as_view()),
+    path("inspectassessmentkit/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitDetailDisplayApi.as_view()),
+    path("analyzeassessmentkit/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitAnalyzeApi.as_view()),
+    path("expertgroup/assessmentkits/<str:expert_group_id>/", assessmentkitviews.AssessmentKitListApi.as_view()),
     path("userexpertgroup/", expertgroupviews.UserExpertGroupsApiView.as_view()),
-    path("expertgroup/unpublishedprofiles/<str:expert_group_id>/", profileviews.UnpublishedProfileListApi.as_view()),
+    path("expertgroup/unpublishedassessmentkits/<str:expert_group_id>/", assessmentkitviews.UnpublishedAssessmentKitListApi.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
-    path("importprofile/", importprofileviews.ImportProfileApi.as_view()),
-    path("profiles/archive/<str:profile_id>/", profileviews.ProfileArchiveApi.as_view()),
-    path("profiles/publish/<str:profile_id>/", profileviews.ProfilePublishApi.as_view()),
-    path("profiles/like/<str:profile_id>/", profileviews.ProfileLikeApi.as_view()),
-    path("profiles/options/select/", profileviews.ProfileListOptionsApi.as_view()),
-    path("profiles/update/<str:profile_id>", profileviews.UpdateProfileApi.as_view()),
-    path("profiles/get/<str:profile_id>", profileviews.ProfileInitFormApi.as_view()),
-    path("dsl/download/<str:profile_id>/", importprofileviews.DownloadDslApi.as_view()),
+    path("importassessmentkit/", importassessmentkitviews.ImportAssessmentKitApi.as_view()),
+    path("assessmentkits/archive/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitArchiveApi.as_view()),
+    path("assessmentkits/publish/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitPublishApi.as_view()),
+    path("assessmentkits/like/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
+    path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
+    path("assessmentkits/update/<str:assesssment_kit_id>", assessmentkitviews.UpdateAssessmentKitApi.as_view()),
+    path("assessmentkits/get/<str:assesssment_kit_id>", assessmentkitviews.AssessmentKitInitFormApi.as_view()),
+    path("dsl/download/<str:assesssment_kit_id>/", importassessmentkitviews.DownloadDslApi.as_view()),
 ]

@@ -43,8 +43,8 @@ class AssessmentProjectByCurrentUserViewSet(ModelViewSet):
 
     def get_queryset(self):
         current_user_space_list = self.request.user.spaces.all()
-        profile_id = self.request.query_params.get('profile_id')
-        return assessmentprojectservices.extract_user_assessments(current_user_space_list, profile_id)
+        assesssment_kit_id = self.request.query_params.get('assesssment_kit_id')
+        return assessmentprojectservices.extract_user_assessments(current_user_space_list, assesssment_kit_id)
 
 class AssessmentProjectSelectForCompareView(APIView):
     permission_classes=[IsAuthenticated, IsSpaceMember]

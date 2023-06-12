@@ -19,7 +19,7 @@ and identify areas of improvement.
   
 
 # Features
-- A set of customizable profiles for assessing teams, products, and other aspects related to software applications
+- A set of customizable assessment kits for assessing teams, products, and other aspects related to software applications
 - Ability to create custom assessment criteria based on your specific needs
 - Option to share assessments with team members and stakeholders for collaboration and feedback
 - Option to view assessment results in a graphical representation for easy understanding

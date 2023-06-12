@@ -6,7 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from account.services import userservices
 
-from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
+from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
 from baseinfo.tasks import async_send_invite_for_expert_group
 from baseinfo.services import cryptoservices
 from baseinfo.services.cryptoservices import ValidateTokenException

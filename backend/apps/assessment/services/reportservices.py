@@ -10,7 +10,7 @@ from baseinfo.services import maturitylevelservices
 
 def calculate_subjects_info(result: AssessmentResult):
     subjects_info = []
-    subjects = result.assessment_project.assessment_profile.assessment_subjects.all()
+    subjects = result.assessment_project.assessment_kit.assessment_subjects.all()
     quality_attribute_values = result.quality_attribute_values.all()
     for subject in subjects:
         subject_info = extract_base_info(subject)
@@ -30,7 +30,7 @@ def calculate_subject_status(quality_attribute_values, subject, subject_info):
         if quality_attribute_value.quality_attribute.assessment_subject.id == subject.id:
             subject_maturity_level_values.append(quality_attribute_value.maturity_level.value)
     if subject_maturity_level_values:
-        maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = subject.assessment_profile, value = round(mean(subject_maturity_level_values)))
+        maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = subject.assessment_kit, value = round(mean(subject_maturity_level_values)))
         subject_info.add("status", maturity_level.title)
 
 def extract_base_info(subject):

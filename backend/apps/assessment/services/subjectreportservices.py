@@ -36,7 +36,7 @@ def calculate_report(assessment_subject_pk, assessment_result_id, quality_attrib
     else:
         report_details = extract_report_details(quality_attribute_values)
         value = calculate_maturity_level_value(quality_attribute_values)
-        maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = assessment_result.assessment_project.assessment_profile, value = value)
+        maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_result.assessment_project.assessment_kit, value = value)
         report_details['status'] = maturity_level.title
         report_details['maturity_level_value'] = maturity_level.value + 1
         report.update(report_details)
@@ -46,14 +46,14 @@ def extract_assessment_result(result_id):
     return AssessmentResult.objects.filter(pk=result_id).first()
 
 def extract_questionnaire_from_assessment_result(result, assessment_subject_pk):
-    return result.assessment_project.assessment_profile.questionnaires\
+    return result.assessment_project.assessment_kit.questionnaires\
         .filter(assessment_subjects__id = assessment_subject_pk).all()
 
 def extract_base_info(assessment_result: AssessmentResult, assessment_subject_pk):
     base_info_report = {}
     base_info_report['assessment_project_title'] = assessment_result.assessment_project.title
     base_info_report['assessment_project_id'] = assessment_result.assessment_project_id
-    base_info_report['assessment_profile_description'] = assessment_result.assessment_project.assessment_profile.summary
+    base_info_report['assesssment_kit_description'] = assessment_result.assessment_project.assessment_kit.summary
 
     if assessment_result.assessment_project.color is not None :
         base_info_report['assessment_project_color_code'] = assessment_result.assessment_project.color.color_code   

@@ -210,8 +210,8 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
-    ("BaseInfo", ("baseinfo.AssessmentProfile", "baseinfo.Questionnaire",
-    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric", "baseinfo.ProfileTag")),
+    ("BaseInfo", ("baseinfo.AssessmentKit", "baseinfo.Questionnaire",
+    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric", "baseinfo.AssessmentKitTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
        "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),

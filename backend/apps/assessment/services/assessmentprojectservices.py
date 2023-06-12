@@ -8,11 +8,11 @@ def extract_assessments(assessment_list_ids):
         assessment_lists.append(assessment_project)
     return assessment_lists
 
-def extract_user_assessments(current_user_space_list, profile_id):
+def extract_user_assessments(current_user_space_list, assesssment_kit_id):
     query_set = AssessmentProject.objects.none()
     for space in current_user_space_list:
-        if profile_id is not None:
-            query_set |= AssessmentProject.objects.filter(space_id=space.id, assessment_profile_id=profile_id)
+        if assesssment_kit_id is not None:
+            query_set |= AssessmentProject.objects.filter(space_id=space.id, assessment_assesssment_kit_id=assesssment_kit_id)
         else:
             query_set |= AssessmentProject.objects.filter(space_id=space.id)
     return query_set
