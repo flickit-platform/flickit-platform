@@ -33,7 +33,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
 
 
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        return AssessmentProject.objects.filter(assessment_assesssment_kit_id = assessment_kit.id).count()
+        return AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id).count()
 
     def get_current_user_delete_permission(self, assessment_kit: AssessmentKit):
         return assessmentkitservice.get_current_user_delete_permission(assessment_kit, self.context.get('request', None).user.id)

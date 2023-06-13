@@ -11,9 +11,9 @@ from baseinfo.models.basemodels import QualityAttribute
 from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
 
-def load_assessment_kit(assesssment_kit_id) -> AssessmentKit:
+def load_assessment_kit(assessment_kit_id) -> AssessmentKit:
     try:
-        return AssessmentKit.objects.get(id = assesssment_kit_id)
+        return AssessmentKit.objects.get(id = assessment_kit_id)
     except AssessmentKit.DoesNotExist as e:
         raise AssessmentKit.DoesNotExist
 
@@ -23,14 +23,14 @@ def load_assessment_kit_tag(tag_id) -> AssessmentKitTag:
     except AssessmentKitTag.DoesNotExist:
         raise ObjectDoesNotExist
 
-def is_assessment_kit_deletable(assesssment_kit_id):
-    assessment_kit = load_assessment_kit(assesssment_kit_id)
+def is_assessment_kit_deletable(assessment_kit_id):
+    assessment_kit = load_assessment_kit(assessment_kit_id)
     if is_assessment_kit_used_in_assessments(assessment_kit):
         return ActionResult(success=False, message='Some assessments with this assessment_kit exist')    
     return ActionResult(success=True) 
 
 def is_assessment_kit_used_in_assessments(assessment_kit: AssessmentKit):
-    qs = AssessmentProject.objects.filter(assessment_assesssment_kit_id = assessment_kit.id)
+    qs = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id)
     if qs.count() > 0:
         return True
     return False
@@ -201,7 +201,7 @@ def __extract_asessment_kit_attribute_count(subjects):
 
 
 def get_current_user_delete_permission(assessment_kit: AssessmentKit, current_user_id):
-    number_of_assessment = AssessmentProject.objects.filter(assessment_assesssment_kit_id = assessment_kit.id).count()
+    number_of_assessment = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id).count()
     if number_of_assessment > 0:
         return False
     if assessment_kit.expert_group is not None:
@@ -233,20 +233,20 @@ def publish_assessment_kit(assessment_kit: AssessmentKit):
     return ActionResult(success=True, message='The assessment_kit is published successfully')
 
 @transaction.atomic
-def like_assessment_kit(user_id, assesssment_kit_id):
-    assessment_kit = load_assessment_kit(assesssment_kit_id)
-    assessment_kit_like_user = AssessmentKitLike.objects.filter(user_id = user_id, assesssment_kit_id = assessment_kit.id)
+def like_assessment_kit(user_id, assessment_kit_id):
+    assessment_kit = load_assessment_kit(assessment_kit_id)
+    assessment_kit_like_user = AssessmentKitLike.objects.filter(user_id = user_id, assessment_kit_id = assessment_kit.id)
     if assessment_kit_like_user.count() == 1:
-        assessment_kit.likes.filter(user_id = user_id, assesssment_kit_id = assessment_kit.id).delete()
+        assessment_kit.likes.filter(user_id = user_id, assessment_kit_id = assessment_kit.id).delete()
         assessment_kit.save()
     elif assessment_kit_like_user.count() == 0:
-        assessment_kit_like_create = AssessmentKitLike.objects.create(user_id = user_id, assesssment_kit_id = assessment_kit.id)
+        assessment_kit_like_create = AssessmentKitLike.objects.create(user_id = user_id, assessment_kit_id = assessment_kit.id)
         assessment_kit.likes.add(assessment_kit_like_create)
         assessment_kit.save()
     return assessment_kit
 
-def analyze(assesssment_kit_id):
-    assessment_kit = AssessmentKit.objects.get(pk=assesssment_kit_id)
+def analyze(assessment_kit_id):
+    assessment_kit = AssessmentKit.objects.get(pk=assessment_kit_id)
     output = []
     attributes = extract_asessment_kit_attribute(assessment_kit)
     assessment_kit_maturity_levels = assessment_kit.maturity_levels.all().order_by('value')

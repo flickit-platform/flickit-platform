@@ -42,7 +42,7 @@ class ManageAssessmentKitPermission(BasePermission):
                 return True
             return False
         else:
-            assessment_kit = load_model(AssessmentKit, view.kwargs.get('assesssment_kit_id'))
+            assessment_kit = load_model(AssessmentKit, view.kwargs.get('assessment_kit_id'))
             return self.check_current_user_is_member_of_expert_group(current_user, assessment_kit.expert_group_id)
         
              

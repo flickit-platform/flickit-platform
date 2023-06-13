@@ -51,8 +51,8 @@ class ImportAssessmentKitApi(APIView):
 
 class DownloadDslApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def get(self,request,assesssment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+    def get(self,request,assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = importassessmentkitservice.get_dsl_file(assessment_kit)
         if result.success:
                 return FileResponse(result.data["file"] , as_attachment=True,

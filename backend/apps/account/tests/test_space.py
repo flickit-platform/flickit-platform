@@ -93,7 +93,7 @@ class TestLeaveSpace:
 @pytest.mark.django_db
 class TestCreateSpace:
     def test_if_user_is_anonymous_returns_401(self, create_space):
-        response = create_space({'title': 'a'})
+        response = create_space({'code': 'a', 'title': 'a'})
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 

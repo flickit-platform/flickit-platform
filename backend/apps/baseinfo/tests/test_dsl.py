@@ -36,7 +36,7 @@ class TestDownloadDslFile:
         request = api.get(f'/baseinfo/dsl/download/{assessment_kit.id+10}', {}, format='json')
         force_authenticate(request, user = user1)
         view = importassessmentkitviews.DownloadDslApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id+10)
+        resp = view(request, assessment_kit_id = assessment_kit.id+10)
 
         #responses testing
         assert  resp.status_code == status.HTTP_404_NOT_FOUND
@@ -65,7 +65,7 @@ class TestDownloadDslFile:
         request = api.get(f'/baseinfo/dsl/download/{assessment_kit.id}', {}, format='json')
         force_authenticate(request, user = user1)
         view = importassessmentkitviews.DownloadDslApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
 
         #responses testing
         assert  resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -81,7 +81,7 @@ class TestDownloadDslFile:
         request = api.get(f'/baseinfo/dsl/download/{assessment_kit.id}', {}, format='json')
         force_authenticate(request, user = user1)
         view = importassessmentkitviews.DownloadDslApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         #responses testing
         assert  resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -111,7 +111,7 @@ class TestDownloadDslFile:
         request = api.get(f'/baseinfo/dsl/download/{assessment_kit.id}', {}, format='json')
         force_authenticate(request, user = user2)
         view = importassessmentkitviews.DownloadDslApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
 
         #responses testing
         assert  resp.status_code == status.HTTP_403_FORBIDDEN  
@@ -139,7 +139,7 @@ class TestDownloadDslFile:
         request = api.get(f'/baseinfo/dsl/download/{assessment_kit.id}', {}, format='json')
         force_authenticate(request, user = user1)
         view = importassessmentkitviews.DownloadDslApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
 
         #responses testing
         assert  resp.status_code == status.HTTP_200_OK

@@ -66,7 +66,7 @@ class TestArchiveAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/archive/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert resp.data['message'] == 'The assessment_kit has already been archived'
@@ -88,7 +88,7 @@ class TestArchiveAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/archive/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_403_FORBIDDEN
         assert resp.data['message'] == 'You do not have permission to perform this action.'
@@ -103,7 +103,7 @@ class TestArchiveAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/archive/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data['message'] == 'The assessment_kit is archived successfully'
@@ -121,7 +121,7 @@ class TestPublishAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/publish/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitPublishApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert resp.data['message'] == 'The assessment_kit has already been published'
@@ -142,7 +142,7 @@ class TestPublishAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/publish/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = assessmentkitviews.AssessmentKitPublishApi.as_view()
-        resp = view(request,assesssment_kit_id = assessment_kit.id)
+        resp = view(request,assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_403_FORBIDDEN
         assert resp.data['message'] == 'You do not have permission to perform this action.'    
@@ -158,7 +158,7 @@ class TestPublishAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/publish/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitPublishApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data['message'] == 'The assessment_kit is published successfully'
@@ -175,7 +175,7 @@ class TestLikeAssessmentKits:
         request = api.post(f'/baseinfo/assessmentkits/like/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitLikeApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data["likes"] == 1
@@ -217,22 +217,22 @@ class TestAssessmentKitDetailDisplay:
         request = api.get(f'/baseinfo/inspectassessmentkit/{assessment_kit.id}/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitDetailDisplayApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data['title'] == assessment_kit.title
         assert resp.data['summary'] == assessment_kit.summary
         assert resp.data['about'] == assessment_kit.about
-        assert resp.data['assessmentKitInfos'][0]['title'] == 'Questionnaires count'
-        assert resp.data['assessmentKitInfos'][0]['item'] == 4
-        assert resp.data['assessmentKitInfos'][1]['title'] == 'Attributes count'
-        assert resp.data['assessmentKitInfos'][1]['item'] == 7
-        assert resp.data['assessmentKitInfos'][2]['title'] == 'Total questions count'
-        assert resp.data['assessmentKitInfos'][2]['item'] == 11
-        assert resp.data['assessmentKitInfos'][3]['title'] == 'Subjects'
-        assert len(resp.data['assessmentKitInfos'][3]['item']) == 2
-        assert resp.data['assessmentKitInfos'][4]['title'] == 'Tags'
-        assert len(resp.data['assessmentKitInfos'][4]['item']) == 0
+        assert resp.data['assessmentkitInfos'][0]['title'] == 'Questionnaires count'
+        assert resp.data['assessmentkitInfos'][0]['item'] == 4
+        assert resp.data['assessmentkitInfos'][1]['title'] == 'Attributes count'
+        assert resp.data['assessmentkitInfos'][1]['item'] == 7
+        assert resp.data['assessmentkitInfos'][2]['title'] == 'Total questions count'
+        assert resp.data['assessmentkitInfos'][2]['item'] == 11
+        assert resp.data['assessmentkitInfos'][3]['title'] == 'Subjects'
+        assert len(resp.data['assessmentkitInfos'][3]['item']) == 2
+        assert resp.data['assessmentkitInfos'][4]['title'] == 'Tags'
+        assert len(resp.data['assessmentkitInfos'][4]['item']) == 0
         
 
 @pytest.mark.django_db
@@ -289,7 +289,7 @@ class TestAssessmentKitInitForm:
         request = api.get(f'/baseinfo/assessmentkits/get/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user2)
         view = assessmentkitviews.AssessmentKitInitFormApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_403_FORBIDDEN
 
@@ -316,7 +316,7 @@ class TestAssessmentKitInitForm:
         request = api.get(f'/baseinfo/assessmentkits/get/{ assessment_kit.id }/', {}, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.AssessmentKitInitFormApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         data = [
                     {
@@ -374,13 +374,13 @@ class TestUpdateAssessmentKit:
         request = api.post(f'/baseinfo/assessmentkits/update/{assessment_kit.id}', data, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.UpdateAssessmentKitApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         api1 = APIRequestFactory()
         request1 = api1.post(f'/baseinfo/assessmentkits/update/{ assessment_kit.id }/', {}, format='json')
         view1 = assessmentkitviews.UpdateAssessmentKitApi.as_view()
         force_authenticate(request1, user = user1)
-        resp1= view1(request1, assesssment_kit_id = assessment_kit.id)
+        resp1= view1(request1, assessment_kit_id = assessment_kit.id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert resp.data["message"] ==  "There is no assessment_kit tag with this id."
@@ -419,7 +419,7 @@ class TestUpdateAssessmentKit:
         request = api.post(f'/baseinfo/assessmentkits/update/{assessment_kit.id}', data, format='json')
         force_authenticate(request, user = user2)
         view = assessmentkitviews.UpdateAssessmentKitApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         assert resp.status_code == status.HTTP_403_FORBIDDEN
     
     def test_update_assessment_kit_return_200(self, create_expertgroup, create_tag):
@@ -450,13 +450,13 @@ class TestUpdateAssessmentKit:
         request = api.post(f'/baseinfo/assessmentkits/update/{assessment_kit.id}', data, format='json')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.UpdateAssessmentKitApi.as_view()
-        resp = view(request, assesssment_kit_id = assessment_kit.id)
+        resp = view(request, assessment_kit_id = assessment_kit.id)
         
         api1 = APIRequestFactory()
         request1 = api1.get(f'/baseinfo/assessmentkits/get/{ assessment_kit.id }/', {}, format='json')
         view1 = assessmentkitviews.AssessmentKitInitFormApi.as_view()
         force_authenticate(request1, user = user1)
-        resp1= view1(request1, assesssment_kit_id = assessment_kit.id)
+        resp1= view1(request1, assessment_kit_id = assessment_kit.id)
         
         data =[
                 {

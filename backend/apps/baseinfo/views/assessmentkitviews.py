@@ -41,15 +41,15 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
 
 class AssessmentKitDetailDisplayApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def get(self, request, assesssment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+    def get(self, request, assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         response = assessmentkitservice.extract_detail_of_assessment_kit(assessment_kit, request)
         return Response(response, status = status.HTTP_200_OK)
 
 class AssessmentKitAnalyzeApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def get(self, request, assesssment_kit_id):
-        result = assessmentkitservice.analyze(assesssment_kit_id)
+    def get(self, request, assessment_kit_id):
+        result = assessmentkitservice.analyze(assessment_kit_id)
         return Response(result.data, status = status.HTTP_200_OK)
 
 class AssessmentKitListApi(APIView):
@@ -74,8 +74,8 @@ class AssessmentKitListOptionsApi(APIView):
 
 class AssessmentKitArchiveApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def post(self, request, assesssment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+    def post(self, request, assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = assessmentkitservice.archive_assessment_kit(assessment_kit)
         if not result.success:
             return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST) 
@@ -83,8 +83,8 @@ class AssessmentKitArchiveApi(APIView):
 
 class AssessmentKitPublishApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def post(self, request, assesssment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+    def post(self, request, assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = assessmentkitservice.publish_assessment_kit(assessment_kit)
         if not result.success:
             return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST) 
@@ -103,14 +103,14 @@ class UploadAssessmentKitApi(ModelViewSet):
 
 class AssessmentKitLikeApi(APIView):
     @transaction.atomic
-    def post(self, request, assesssment_kit_id):
-        assessment_kit = assessmentkitservice.like_assessment_kit(request.user.id, assesssment_kit_id)
+    def post(self, request, assessment_kit_id):
+        assessment_kit = assessmentkitservice.like_assessment_kit(request.user.id, assessment_kit_id)
         return Response({'likes': assessment_kit.likes.count()})
 
 class AssessmentKitInitFormApi(APIView):
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def get(self, request, assesssment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+    def get(self, request, assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         data = assessmentkitservice.get_extrac_assessment_kit_data(assessment_kit ,request)
         response = AssessmentKitInitFormSerilizer(data, many = True, context={'request': request}).data      
         return Response(response, status = status.HTTP_200_OK)
@@ -119,10 +119,10 @@ class AssessmentKitInitFormApi(APIView):
 class UpdateAssessmentKitApi(APIView):
     serializer_class = UpdateAssessmentKitSerializer
     permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
-    def post(self, request, assesssment_kit_id):
+    def post(self, request, assessment_kit_id):
         serializer = UpdateAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        assessment_kit = assessmentkitservice.load_assessment_kit(assesssment_kit_id)
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = assessmentkitservice.update_assessment_kit(assessment_kit ,request,**serializer.validated_data)
         if result.success:
             return Response({'message': result.message})

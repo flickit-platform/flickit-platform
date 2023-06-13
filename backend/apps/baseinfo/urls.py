@@ -31,19 +31,19 @@ questionnaire_by_subject_router.register('questionnaires', commonviews.Questionn
 urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject_router.urls  + expert_group_access_router.urls
 
 urlpatterns += [
-    path("inspectassessmentkit/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitDetailDisplayApi.as_view()),
-    path("analyzeassessmentkit/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitAnalyzeApi.as_view()),
+    path("inspectassessmentkit/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitDetailDisplayApi.as_view()),
+    path("analyzeassessmentkit/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitAnalyzeApi.as_view()),
     path("expertgroup/assessmentkits/<str:expert_group_id>/", assessmentkitviews.AssessmentKitListApi.as_view()),
     path("userexpertgroup/", expertgroupviews.UserExpertGroupsApiView.as_view()),
     path("expertgroup/unpublishedassessmentkits/<str:expert_group_id>/", assessmentkitviews.UnpublishedAssessmentKitListApi.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
     path("importassessmentkit/", importassessmentkitviews.ImportAssessmentKitApi.as_view()),
-    path("assessmentkits/archive/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitArchiveApi.as_view()),
-    path("assessmentkits/publish/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitPublishApi.as_view()),
-    path("assessmentkits/like/<str:assesssment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
+    path("assessmentkits/archive/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitArchiveApi.as_view()),
+    path("assessmentkits/publish/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitPublishApi.as_view()),
+    path("assessmentkits/like/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
     path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
-    path("assessmentkits/update/<str:assesssment_kit_id>", assessmentkitviews.UpdateAssessmentKitApi.as_view()),
-    path("assessmentkits/get/<str:assesssment_kit_id>", assessmentkitviews.AssessmentKitInitFormApi.as_view()),
-    path("dsl/download/<str:assesssment_kit_id>/", importassessmentkitviews.DownloadDslApi.as_view()),
+    path("assessmentkits/update/<str:assessment_kit_id>", assessmentkitviews.UpdateAssessmentKitApi.as_view()),
+    path("assessmentkits/get/<str:assessment_kit_id>", assessmentkitviews.AssessmentKitInitFormApi.as_view()),
+    path("dsl/download/<str:assessment_kit_id>/", importassessmentkitviews.DownloadDslApi.as_view()),
 ]
