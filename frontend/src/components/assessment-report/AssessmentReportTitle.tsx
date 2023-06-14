@@ -21,7 +21,12 @@ interface IAssessmentReportTitle {
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   const { data, colorCode } = props;
   const {
-    assessment_project: { title, last_modification_date, assessment_profile, space },
+    assessment_project: {
+      title,
+      last_modification_date,
+      assessment_profile,
+      space,
+    },
   } = data;
   const { title: spaceTitle = "" } = space || {};
   const { spaceId } = useParams();
@@ -48,7 +53,9 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
             },
             {
               title,
-              icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
           ]}
         />
@@ -77,15 +84,18 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           }}
           fontSize="large"
         />
-        <span style={{ opacity: 0.9 }}>{assessment_profile.description || <Trans i18nKey="technicalDueDiligence" />}</span>{" "}
+
         <Box
           sx={{
             display: "inline-block",
-            ml: { xd: 0, md: "8px" },
+            mr: "8px",
           }}
         >
           {title}
         </Box>
+        <span style={{ opacity: 0.9 }}>
+          {assessment_profile.description || <Trans i18nKey="insights" />}
+        </span>
       </Box>
     </Title>
   );
