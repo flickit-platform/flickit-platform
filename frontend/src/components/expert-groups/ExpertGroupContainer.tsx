@@ -274,7 +274,7 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {`${ unpublishedProfiles?.length } ${t(
+                          {`${unpublishedProfiles?.length} ${t(
                             "unpublishedProfiles"
                           ).toLowerCase()}`}
                         </Typography>
@@ -657,7 +657,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const ProfilesList = (props: any) => {
-  const { hasAccess, dialogProps, about ,setUnpublishedProfiles} = props;
+  const { hasAccess, dialogProps, about, setUnpublishedProfiles } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const profileQuery = useQuery({
@@ -724,7 +724,9 @@ const ProfilesList = (props: any) => {
                       key={profile?.id}
                       data={profile}
                       fetchProfiles={profileQuery.query}
-                      fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                      fetchUnpublishedProfiles={
+                        hasAccess && unpublishedProfileQuery.query
+                      }
                       hasAccess={is_expert}
                     />
                   );
@@ -734,58 +736,62 @@ const ProfilesList = (props: any) => {
           }}
         />
         {/* unpublished */}
-        <QueryData
-          {...unpublishedProfileQuery}
-          showEmptyError={false}
-          emptyDataComponent={
-            <Box sx={{ background: "white", borderRadius: 2 }}>
-              <ErrorEmptyData
-                emptyMessage={
-                  <Trans i18nKey="thereIsNoUnpublishedProfileYet" />
-                }
-              />
-            </Box>
-          }
-          renderLoading={() => (
-            <>
-              {forLoopComponent(5, (index) => (
-                <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
-              ))}
-            </>
-          )}
-          isDataEmpty={(data) => {
-            const { results = [], is_expert } = data;
-            const isEmpty = is_expert
-              ? results.length === 0
-              : results.filter((p: any) => !!p?.is_active)?.length === 0;
-            return isEmpty;
-          }}
-          render={(data = {}) => {
-            const { results = [], is_expert } = data;
-            setUnpublishedProfiles(results)
-            return (
+        {hasAccess && (
+          <QueryData
+            {...unpublishedProfileQuery}
+            showEmptyError={false}
+            emptyDataComponent={
+              <Box sx={{ background: "white", borderRadius: 2 }}>
+                <ErrorEmptyData
+                  emptyMessage={
+                    <Trans i18nKey="thereIsNoUnpublishedProfileYet" />
+                  }
+                />
+              </Box>
+            }
+            renderLoading={() => (
               <>
-                {is_expert &&
-                  results.map((profile: any) => {
-                    return (
-                      <ProfileListItem
-                        link={
-                          is_expert
-                            ? `profiles/${profile?.id}`
-                            : `/profiles/${profile?.id}`
-                        }
-                        key={profile?.id}
-                        data={profile}
-                        fetchProfiles={profileQuery.query}
-                        fetchUnpublishedProfiles={unpublishedProfileQuery.query}
-                        hasAccess={is_expert}
-                      />
-                    );
-                  })}
+                {forLoopComponent(5, (index) => (
+                  <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
+                ))}
               </>
-            );
-          }}
-        />
+            )}
+            isDataEmpty={(data) => {
+              const { results = [], is_expert } = data;
+              const isEmpty = is_expert
+                ? results.length === 0
+                : results.filter((p: any) => !!p?.is_active)?.length === 0;
+              return isEmpty;
+            }}
+            render={(data = {}) => {
+              const { results = [], is_expert } = data;
+              setUnpublishedProfiles(results);
+              return (
+                <>
+                  {is_expert &&
+                    results.map((profile: any) => {
+                      return (
+                        <ProfileListItem
+                          link={
+                            is_expert
+                              ? `profiles/${profile?.id}`
+                              : `/profiles/${profile?.id}`
+                          }
+                          key={profile?.id}
+                          data={profile}
+                          fetchProfiles={profileQuery.query}
+                          fetchUnpublishedProfiles={
+                            hasAccess && unpublishedProfileQuery.query
+                          }
+                          hasAccess={hasAccess}
+                        />
+                      );
+                    })}
+                </>
+              );
+            }}
+          />
+        )}
       </Box>
     </>
   );
