@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import { styles } from "@styles";
+import { styles, getMaturityLevelColors } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Grid from "@mui/material/Grid";
@@ -89,6 +89,11 @@ const ProfileExpertViewContainer = () => {
                   data={data}
                   query={profileQueryProps.query}
                 />
+                {data?.maturity_levels?.list[0] && (
+                  <ProfileMaturityLevels
+                    maturity_levels={data?.maturity_levels}
+                  />
+                )}
                 <ProfileSectionsTabs data={data} />
               </Box>
             </Box>
@@ -829,7 +834,7 @@ const ProfileDialog = (props: any) => {
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
               <Grid container spacing={2} columns={12}>
-                <Grid xs={8} item>
+                <Grid xs={4} sm={6} md={8} item>
                   <Typography
                     variant="body1"
                     fontFamily="Roboto"
@@ -839,7 +844,7 @@ const ProfileDialog = (props: any) => {
                       <Typography
                         sx={{
                           pb: "2px",
-                          mb:2,
+                          mb: 2,
                           color: "#767676",
                           display: "block",
                           fontFamily: "Roboto",
@@ -856,7 +861,7 @@ const ProfileDialog = (props: any) => {
                     {op.title}
                   </Typography>
                 </Grid>
-                <Grid xs={2} item>
+                <Grid xs={4}sm={3} md={2} item>
                   <Typography
                     variant="body1"
                     fontFamily="Roboto"
@@ -866,7 +871,7 @@ const ProfileDialog = (props: any) => {
                       <Typography
                         sx={{
                           pb: "2px",
-                          mb:2,
+                          mb: 2,
                           color: "#767676",
                           display: "block",
                           fontFamily: "Roboto",
@@ -880,10 +885,10 @@ const ProfileDialog = (props: any) => {
                         <Trans i18nKey={"maturityLevel"} />
                       </Typography>
                     )}
-                    {op.option_values[0].maturity_level}
+                    {op.option_values[0] && op.option_values[0].maturity_level}
                   </Typography>
                 </Grid>
-                <Grid xs={2} item>
+                <Grid xs={4} sm={3} md={2} item>
                   <Typography
                     variant="body1"
                     fontFamily="Roboto"
@@ -894,7 +899,7 @@ const ProfileDialog = (props: any) => {
                       <Typography
                         sx={{
                           pb: "2px",
-                          mb:2,
+                          mb: 2,
                           color: "#767676",
                           display: "block",
                           fontFamily: "Roboto",
@@ -908,23 +913,23 @@ const ProfileDialog = (props: any) => {
                         <Trans i18nKey={"value"} />
                       </Typography>
                     )}
-                    {op.option_values[0].value}
+                    {op.option_values[0] && op.option_values[0].value}
                   </Typography>
                 </Grid>
               </Grid>
             </Box>
           ))}
-        {/* {listOfOptions && relatedAttributes && ( */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              mb: 2,
-              flexDirection: "row",
-              width: "100%",
-            }}
-          >
-            <Box sx={{ width: "65%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 2,
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Grid container spacing={2} columns={12}>
+            <Grid item xs={6} md={8}>
               {listOfOptions &&
                 listOfOptions.map((op: any, index: number) => (
                   <Typography
@@ -953,8 +958,8 @@ const ProfileDialog = (props: any) => {
                     {op}
                   </Typography>
                 ))}
-            </Box>
-            <Box sx={{ width: "30%" }}>
+            </Grid>
+            <Grid item xs={6} md={4}>
               {relatedAttributes &&
                 relatedAttributes.map((item: any, index: number) => (
                   <Box>
@@ -1009,8 +1014,9 @@ const ProfileDialog = (props: any) => {
                     </Box>
                   </Box>
                 ))}
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
+        </Box>
         {/* )} */}
       </DialogContent>
     </Dialog>
@@ -1084,6 +1090,63 @@ const AttributeDetails = (props: { index: number }) => {
             </Grid>
           ))}
       </Grid>
+    </Box>
+  );
+};
+const ProfileMaturityLevels = (props: any) => {
+  const { maturity_levels } = props;
+  const { list, maturity_level_number } = maturity_levels;
+
+  const colorPallet = getMaturityLevelColors(maturity_level_number);
+  return (
+    <Box mt="32px">
+      <Title size="small" sx={{ opacity: 0.9 }}>
+        <Trans i18nKey="maturityLevels" />
+      </Title>
+      <Box
+        sx={{
+          background: "white",
+          borderRadius: 2,
+          px: 2.5,
+          py: 2,
+          my: 2,
+          width: "100%",
+        }}
+      >
+        <Grid
+          container
+          spacing={2}
+          columns={maturity_level_number}
+          direction="row"
+          alignItems="center"
+        >
+          {list.map((item: any) => {
+            const colorCode = colorPallet[item.value];
+            return (
+              <Grid item xs="auto">
+                <Box
+                  sx={{
+                    border: `2px solid ${colorCode}`,
+                    px: "32px",
+                    py: "6px",
+                    borderRadius: "12px",
+                    background: () => colorCode.replace(/[^,]+(?=\))/, "0.1"),
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    // fontSize="14px"
+                    fontWeight="bold"
+                    sx={{ color: colorCode }}
+                  >
+                    {item.title}
+                  </Typography>
+                </Box>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
     </Box>
   );
 };
