@@ -300,7 +300,7 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             )}
-            <Box mb={8}>
+            <Box my={8}>
               <Title>
                 <Trans i18nKey={"subjects"} />
               </Title>
@@ -309,18 +309,14 @@ const Profile = (props: any) => {
                   return (
                     <Box component="li" mb={2} key={subject.id}>
                       <b>{subject.title}</b>: {subject.description}
-                      {/* <Typography
-                            variant="subtitle2"
-                            fontWeight="bold"
-                            sx={{ ml: 2, mt: 2 }}
-                          >
-                            <Trans i18nKey="relatedAttributes" />
-                          </Typography> */}
+                      <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
+                        <Trans i18nKey="relatedAttributes" />
+                      </Typography>
                       {subject?.attributes &&
                         subject?.attributes?.map((att: any) => (
                           <Box sx={{ ml: 4 }} component="li">
                             <Typography
-                              variant="body2"
+                              // variant="body2"
                               sx={{
                                 my: 2,
                                 textAlign: "justify",
