@@ -319,7 +319,14 @@ const Profile = (props: any) => {
                       {subject?.attributes &&
                         subject?.attributes?.map((att: any) => (
                           <Box sx={{ ml: 4 }} component="li">
-                            <Typography variant="body2" sx={{ my: 2 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                my: 2,
+                                textAlign: "justify",
+                                textJustify: "inter-word",
+                              }}
+                            >
                               <Box component="span" fontWeight="bold">
                                 {att.title}
                               </Box>
