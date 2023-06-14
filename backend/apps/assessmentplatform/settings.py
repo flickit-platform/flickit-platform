@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = False
+DEBUG = os.environ['DEBUG_VALUE'] == 'True'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -180,7 +180,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
-DSL_PARSER_URL_SERVICE = os.environ.get('DSL_PARSER_URL_SERVICE'),
+DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
