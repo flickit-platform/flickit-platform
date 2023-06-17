@@ -25,6 +25,7 @@
   "start": "Start",
   "toAssessSystemNeedToAnswerQuestions": "In order to assess this system, you need to fill some questionnaires.",
   "inOrderToViewSomeInsight": "In order to view some insight, please first fill some questionnaires.",
+  "insights": "Insights",
   "pickupQuestionnaire": "Please pick a questionnaire.",
   "Questionnaires": "Questionnaires",
   "closeQuestionnaires": "close questionnaires",
