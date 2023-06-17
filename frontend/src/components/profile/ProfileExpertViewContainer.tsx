@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import { styles, getMaturityLevelColors } from "@styles";
+import { styles } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Grid from "@mui/material/Grid";
@@ -89,11 +89,6 @@ const ProfileExpertViewContainer = () => {
                   data={data}
                   query={profileQueryProps.query}
                 />
-                {data?.maturity_levels?.list[0] && (
-                  <ProfileMaturityLevels
-                    maturity_levels={data?.maturity_levels}
-                  />
-                )}
                 <ProfileSectionsTabs data={data} />
               </Box>
             </Box>
@@ -795,10 +790,11 @@ const ProfileDialog = (props: any) => {
         closeDialog();
       }}
       fullWidth
-      maxWidth="lg"
+      maxWidth="md"
       fullScreen={fullScreen}
+      px={2}
     >
-      <DialogTitle>
+      <DialogTitle mb={4}>
         <Typography
           sx={{
             pb: "2px",
@@ -861,7 +857,7 @@ const ProfileDialog = (props: any) => {
                     {op.title}
                   </Typography>
                 </Grid>
-                <Grid xs={4}sm={3} md={2} item>
+                <Grid xs={4} sm={3} md={2} item>
                   <Typography
                     variant="body1"
                     fontFamily="Roboto"
@@ -919,7 +915,7 @@ const ProfileDialog = (props: any) => {
               </Grid>
             </Box>
           ))}
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -927,96 +923,104 @@ const ProfileDialog = (props: any) => {
             flexDirection: "row",
             width: "100%",
           }}
+        > */}
+        <Grid
+          container
+          spacing={2}
+          columns={12}
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Grid container spacing={2} columns={12}>
-            <Grid item xs={6} md={8}>
-              {listOfOptions &&
-                listOfOptions.map((op: any, index: number) => (
-                  <Typography
-                    variant="body1"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                  >
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          display: "block",
-                          fontFamily: "Roboto",
-                          fontSize: "0.8rem",
-                          width: "100%",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.primary.light}`,
-                        }}
-                        component="span"
-                      >
-                        <Trans i18nKey={"questionOptions"} />
-                      </Typography>
-                    )}
-                    {op}
-                  </Typography>
-                ))}
-            </Grid>
-            <Grid item xs={6} md={4}>
-              {relatedAttributes &&
-                relatedAttributes.map((item: any, index: number) => (
-                  <Box>
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          width: "100%",
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          fontFamily: "Roboto",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.secondary.dark}`,
-                        }}
-                        variant="subMedium"
-                      >
-                        <Trans i18nKey={"relatedAttributes"} />
-                        <Box component="span" sx={{ float: "right", mr: 1 }}>
-                          <Trans i18nKey="impact" />
-                        </Box>
-                      </Typography>
-                    )}
-                    <Box
-                      key={index}
+          <Grid item xs sx={{ width: { xs: "100%", sm: "60%" } }} mb={2}>
+            {listOfOptions &&
+              listOfOptions.map((op: any, index: number) => (
+                <Typography
+                  variant="body1"
+                  fontFamily="Roboto"
+                  fontWeight={"bold"}
+                >
+                  {index === 0 && (
+                    <Typography
                       sx={{
-                        background: (t) => t.palette.secondary.main,
-                        borderRadius: 8,
-                        color: "white",
-                        width: "auto",
+                        pb: "2px",
+                        mb: 2,
+                        color: "#767676",
+                        display: "block",
+                        fontFamily: "Roboto",
+                        fontSize: "0.8rem",
+                        width: "100%",
+                        borderBottom: (t) =>
+                          `1px solid ${t.palette.primary.light}`,
                       }}
+                      component="span"
                     >
-                      <Box py={0.3} px={2} mb={0.5} mr={0.5}>
+                      <Trans i18nKey={"questionOptions"} />
+                    </Typography>
+                  )}
+                  {op}
+                </Typography>
+              ))}
+          </Grid>
+          <Grid item xs sx={{ width: { xs: "100%", sm: "60%" } }}>
+            {relatedAttributes &&
+              relatedAttributes.map((item: any, index: number) => (
+                <Box>
+                  {index === 0 && (
+                    <Typography
+                      sx={{
+                        width: "100%",
+                        pb: "2px",
+                        mb: 2,
+                        color: "#767676",
+                        fontFamily: "Roboto",
+                        borderBottom: (t) =>
+                          `1px solid ${t.palette.secondary.dark}`,
+                      }}
+                      variant="subMedium"
+                    >
+                      <Trans i18nKey={"relatedAttributes"} />
+                      <Box component="span" sx={{ float: "right", mr: 1 }}>
+                        <Trans i18nKey="impact" />
+                      </Box>
+                    </Typography>
+                  )}
+                  <Box
+                    key={index}
+                    sx={{
+                      background: (t) => t.palette.secondary.main,
+                      borderRadius: 8,
+                      color: "white",
+                      width: { xs: "100%", sm: "60%" },
+                      margin: "0 auto",
+                    }}
+                  >
+                    <Box py={0.3} px={2} mb={0.5} mr={0.5}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {item.title}
                         <Typography
-                          variant="body2"
+                          component="span"
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
+                            fontWeight: "bold",
+                            color: "white",
                           }}
                         >
-                          {item.title}
-                          <Typography
-                            component="span"
-                            sx={{
-                              fontWeight: "bold",
-                              color: "white",
-                            }}
-                          >
-                            {item.item}
-                          </Typography>
+                          {item.item}
                         </Typography>
-                      </Box>
+                      </Typography>
                     </Box>
                   </Box>
-                ))}
-            </Grid>
+                </Box>
+              ))}
           </Grid>
-        </Box>
+        </Grid>
+        {/* </Box> */}
         {/* )} */}
       </DialogContent>
     </Dialog>
@@ -1090,63 +1094,6 @@ const AttributeDetails = (props: { index: number }) => {
             </Grid>
           ))}
       </Grid>
-    </Box>
-  );
-};
-const ProfileMaturityLevels = (props: any) => {
-  const { maturity_levels } = props;
-  const { list, maturity_level_number } = maturity_levels;
-
-  const colorPallet = getMaturityLevelColors(maturity_level_number);
-  return (
-    <Box mt="32px">
-      <Title size="small" sx={{ opacity: 0.9 }}>
-        <Trans i18nKey="maturityLevels" />
-      </Title>
-      <Box
-        sx={{
-          background: "white",
-          borderRadius: 2,
-          px: 2.5,
-          py: 2,
-          my: 2,
-          width: "100%",
-        }}
-      >
-        <Grid
-          container
-          spacing={2}
-          columns={maturity_level_number}
-          direction="row"
-          alignItems="center"
-        >
-          {list.map((item: any) => {
-            const colorCode = colorPallet[item.value];
-            return (
-              <Grid item xs="auto">
-                <Box
-                  sx={{
-                    border: `2px solid ${colorCode}`,
-                    px: "32px",
-                    py: "6px",
-                    borderRadius: "12px",
-                    background: () => colorCode.replace(/[^,]+(?=\))/, "0.1"),
-                    textAlign: "center",
-                  }}
-                >
-                  <Typography
-                    // fontSize="14px"
-                    fontWeight="bold"
-                    sx={{ color: colorCode }}
-                  >
-                    {item.title}
-                  </Typography>
-                </Box>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
     </Box>
   );
 };
