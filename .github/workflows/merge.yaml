@@ -1,20 +1,26 @@
-name: Merge main into stage
+name: Update cms/master
 
 on:
   push:
     branches:
       - main
+      - support_stage
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 
 jobs:
-  merge:
+  update-cms-master:
+    name: Merge master into release after a PR is merged
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Merge main into stage
-      run: |
-        git checkout stage
-        git merge main --no-ff --no-edit
-        git push origin stage
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: merge
+        uses: mtanzi/action-automerge@v1
+        id: merge
+        with:
+          github_token: ${{ secrets.GH_PACKAGES_TOKEN }}
+          source: 'main'
+          target: 'stage'
+          webhook_url: #if present add the Slack webhook
