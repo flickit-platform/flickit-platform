@@ -35,7 +35,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 
 const ProfileExpertViewContainer = () => {
-  const { profileQueryProps, fetchProfilQuery } = useProfile();
+  const { profileQueryProps, fetchProfileQuery } = useProfile();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -98,7 +98,7 @@ const ProfileExpertViewContainer = () => {
       <ProfileSettingFormDialog
         {...dialogProps}
         onSubmitForm={profileQueryProps.query}
-        fetchProfilQuery={fetchProfilQuery}
+        fetchProfileQuery={fetchProfileQuery}
       />
     </Box>
   );
@@ -1109,12 +1109,12 @@ const useProfile = () => {
       service.analyzeProfile(args, config),
     runOnMount: true,
   });
-  const fetchProfilQuery = useQuery({
+  const fetchProfileQuery = useQuery({
     service: (args = { profileId }, config) =>
       service.fetchProfiledata(args, config),
     runOnMount: true,
   });
-  return { profileQueryProps, queryData, fetchProfilQuery };
+  return { profileQueryProps, queryData, fetchProfileQuery };
 };
 
 export default ProfileExpertViewContainer;
