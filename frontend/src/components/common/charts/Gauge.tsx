@@ -27,7 +27,7 @@ const Gauge = (props: IGaugeProps) => {
   const colorPallet = getMaturityLevelColors(maturity_level_number);
   const colorCode = colorPallet[level_value - 1];
   const GaugeComponent = lazy(
-    () => import(`./GaugeComponent${maturity_level_number}.tsx`)
+    () => import(`./GaugeComponent${maturity_level_number}.tsx`) 
   );
   return (
     <Box p={1} position="relative" width="100%" {...rest}>

@@ -71,7 +71,7 @@
   },
   "huskey": {
     "hooks": {
-      "pre-commit": "npm format && git add -A ."
+      "pre-commit": "npm run format && npm run lint && git add -A ."
     }
   }
 }
