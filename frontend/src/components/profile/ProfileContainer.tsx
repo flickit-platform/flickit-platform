@@ -303,7 +303,7 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             )}
-            {maturity_levels && (
+            {maturity_levels[0] && (
               <Box mt={8}>
                 <Title>
                   <Trans i18nKey="maturityLevel" />
