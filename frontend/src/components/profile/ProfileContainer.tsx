@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { styles } from "@styles";
+import { styles, getMaturityLevelColors } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import ProfilesListContainer from "./ProfilesListContainer";
@@ -62,8 +62,11 @@ const Profile = (props: any) => {
     subjects_with_desc = [],
     questionnaires = [],
     is_active,
+    maturity_levels,
   } = data || {};
-
+  const colorPallet = getMaturityLevelColors(
+    maturity_levels ? maturity_levels.length + 1 : 5
+  );
   const dialogProps = useDialog({
     context: {
       type: "create",
@@ -300,6 +303,21 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             )}
+            {maturity_levels && (
+              <Box mt={8}>
+                <Title>
+                  <Trans i18nKey="maturityLevel" />
+                </Title>
+                <Box mt={2} sx={{display:"flex"}}>
+                  {maturity_levels.map((item: any) => {
+                    const colorCode = colorPallet[item.value];
+                    return (
+                      <Box sx={{ background: colorCode ,py:{xs:"4px",md:1},px:{xs:1,md:4},fontWeight:"bold",color:"#fff"}}>{item.title}</Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
             <Box my={8}>
               <Title>
                 <Trans i18nKey={"subjects"} />
@@ -316,7 +334,7 @@ const Profile = (props: any) => {
                         subject?.attributes?.map((att: any) => (
                           <Box sx={{ ml: 4 }} component="li">
                             <Typography
-                              // variant="body2"
+                              variant="body2"
                               sx={{
                                 my: 2,
                                 textAlign: "justify",
