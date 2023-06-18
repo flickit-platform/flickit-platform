@@ -60,7 +60,13 @@ const SpaceContainer = () => {
         renderLoading={() => (
           <Box mt={5}>
             {[1, 2, 3, 4, 5].map((item) => {
-              return <Skeleton key={item} variant="rectangular" sx={{ borderRadius: 2, height: "60px", mb: 1 }} />;
+              return (
+                <Skeleton
+                  key={item}
+                  variant="rectangular"
+                  sx={{ borderRadius: 2, height: "60px", mb: 1 }}
+                />
+              );
             })}
           </Box>
         )}
@@ -75,11 +81,20 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
-          return <SpacesList dialogProps={dialogProps} data={data} fetchSpaces={spacesQueryData.query} />;
+          return (
+            <SpacesList
+              dialogProps={dialogProps}
+              data={data}
+              fetchSpaces={spacesQueryData.query}
+            />
+          );
         }}
       />
 
-      <CreateSpaceDialog {...dialogProps} onSubmitForm={spacesQueryData.query} />
+      <CreateSpaceDialog
+        {...dialogProps}
+        onSubmitForm={spacesQueryData.query}
+      />
     </SpaceLayout>
   );
 };

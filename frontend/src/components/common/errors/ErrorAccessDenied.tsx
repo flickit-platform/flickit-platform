@@ -9,7 +9,9 @@ interface IErrorAccessDeniedProps {
   hasAccess: boolean;
 }
 
-const ErrorAccessDenied = (props: PropsWithChildren<IErrorAccessDeniedProps>) => {
+const ErrorAccessDenied = (
+  props: PropsWithChildren<IErrorAccessDeniedProps>
+) => {
   const { hasAccess, children } = props;
   return hasAccess ? (
     <>{children}</>

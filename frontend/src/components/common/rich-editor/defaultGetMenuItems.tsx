@@ -24,7 +24,9 @@ import FormatAlignJustifyRoundedIcon from "@mui/icons-material/FormatAlignJustif
 import FormatAlignCenterRoundedIcon from "@mui/icons-material/FormatAlignCenterRounded";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 
-const defaultGetMenuItems = (editor: Editor): (IRichEditorMenuItem | { type: "divider" })[] => {
+const defaultGetMenuItems = (
+  editor: Editor
+): (IRichEditorMenuItem | { type: "divider" })[] => {
   return [
     {
       title: "H1",
@@ -69,7 +71,8 @@ const defaultGetMenuItems = (editor: Editor): (IRichEditorMenuItem | { type: "di
     {
       icon: <FormatAlignCenterRoundedIcon fontSize="small" />,
       title: "align-center",
-      action: () => (editor.chain().focus() as any).setTextAlign("center").run(),
+      action: () =>
+        (editor.chain().focus() as any).setTextAlign("center").run(),
       isActive: () => editor.isActive({ textAlign: "center" }),
     },
     {
@@ -81,7 +84,8 @@ const defaultGetMenuItems = (editor: Editor): (IRichEditorMenuItem | { type: "di
     {
       icon: <FormatAlignJustifyRoundedIcon fontSize="small" />,
       title: "align-justify",
-      action: () => (editor.chain().focus() as any).setTextAlign("justify").run(),
+      action: () =>
+        (editor.chain().focus() as any).setTextAlign("justify").run(),
       isActive: () => editor.isActive({ textAlign: "justify" }),
     },
     {
@@ -115,7 +119,9 @@ const defaultGetMenuItems = (editor: Editor): (IRichEditorMenuItem | { type: "di
         },
         title: t("addLink") as string,
       },
-      action: editor.isActive("link") ? () => editor.chain().focus().unsetLink().run() : ({ openDialog }) => openDialog(),
+      action: editor.isActive("link")
+        ? () => editor.chain().focus().unsetLink().run()
+        : ({ openDialog }) => openDialog(),
       isActive: () => editor.isActive("link"),
     },
     {
@@ -169,7 +175,13 @@ const PromptLinkBody = (props: { editor: Editor; closePrompt: () => void }) => {
   return (
     <>
       <DialogContent>
-        <TextField placeholder="https://example.com" fullWidth size="small" inputRef={inputRef} defaultValue="https://" />
+        <TextField
+          placeholder="https://example.com"
+          fullWidth
+          size="small"
+          inputRef={inputRef}
+          defaultValue="https://"
+        />
       </DialogContent>
       <DialogActions sx={{ py: 2, px: 3 }}>
         <Button onClick={closePrompt} size="small">

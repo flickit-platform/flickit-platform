@@ -4,12 +4,20 @@ import Grid from "@mui/material/Grid";
 import ComparePartItem from "./ComparePartItem";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
-import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
-import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "@providers/CompareProvider";
 import AlertTitle from "@mui/material/AlertTitle";
 import Chip from "@mui/material/Chip";
 import { styles } from "@styles";
@@ -39,7 +47,11 @@ const CompareParts = () => {
                   <Grid container spacing={3}>
                     {forLoopComponent(4, (index) => (
                       <Grid item xs={12} md={6} key={index}>
-                        <LoadingSkeleton height={assessmentIds?.length === 0 ? "264px" : "290px"} />
+                        <LoadingSkeleton
+                          height={
+                            assessmentIds?.length === 0 ? "264px" : "290px"
+                          }
+                        />
                       </Grid>
                     ))}
                   </Grid>
@@ -49,7 +61,10 @@ const CompareParts = () => {
             render={(res = []) => {
               return (
                 <>
-                  <CompareButton assessmentIds={assessmentIds as string[]} disabled={assessmentIds?.length <= 1} />
+                  <CompareButton
+                    assessmentIds={assessmentIds as string[]}
+                    disabled={assessmentIds?.length <= 1}
+                  />
                   <Grid container spacing={3}>
                     {forLoopComponent(4, (index) => {
                       const data = res[index];
@@ -58,8 +73,12 @@ const CompareParts = () => {
                           <ComparePartItem
                             data={data}
                             index={index}
-                            disabled={assessmentIds.length >= index ? false : true}
-                            fetchAssessmentsInfo={assessmentsInfoQueryData.query}
+                            disabled={
+                              assessmentIds.length >= index ? false : true
+                            }
+                            fetchAssessmentsInfo={
+                              assessmentsInfoQueryData.query
+                            }
                           />
                         </Grid>
                       );
@@ -97,7 +116,9 @@ const useCompareParts = () => {
 
   useEffect(() => {
     if (assessmentsInfoQueryData.loaded && !contextProfile) {
-      const profile = assessmentsInfoQueryData.data?.find((item: any) => item?.assessment_profile);
+      const profile = assessmentsInfoQueryData.data?.find(
+        (item: any) => item?.assessment_profile
+      );
       if (profile) {
         dispatch(compareActions.setProfile(profile.assessment_profile));
       }
@@ -116,7 +137,10 @@ const useCompareParts = () => {
   return { assessmentIds, assessmentsInfoQueryData };
 };
 
-const CompareButton = (props: { disabled?: boolean; assessmentIds?: string[] }) => {
+const CompareButton = (props: {
+  disabled?: boolean;
+  assessmentIds?: string[];
+}) => {
   const { assessmentIds, disabled = false } = props;
   const navigate = useNavigate();
 
@@ -133,7 +157,13 @@ const CompareButton = (props: { disabled?: boolean; assessmentIds?: string[] }) 
 
   return (
     <>
-      <Button variant="contained" size="large" disabled={disabled} sx={{ ...styles.compareButton }} onClick={handleClick}>
+      <Button
+        variant="contained"
+        size="large"
+        disabled={disabled}
+        sx={{ ...styles.compareButton }}
+        onClick={handleClick}
+      >
         <Trans i18nKey="compare" />
       </Button>
       <Box sx={{ ...styles.compareButtonBg }} />
@@ -152,13 +182,19 @@ const CompareSelectedProfileInfo = () => {
     <AlertBox
       severity="info"
       action={
-        <Button variant="contained" size="small" color="info" onClick={makeNewComparison}>
+        <Button
+          variant="contained"
+          size="small"
+          color="info"
+          onClick={makeNewComparison}
+        >
           <Trans i18nKey="newComparison" />
         </Button>
       }
     >
       <AlertTitle>
-        <Trans i18nKey="assessmentsAreFilteredBy" /> <Chip label={profile.title} />
+        <Trans i18nKey="assessmentsAreFilteredBy" />{" "}
+        <Chip label={profile.title} />
       </AlertTitle>
       <Trans i18nKey="toCompareAssessmentsOfOtherProfiles" />
     </AlertBox>

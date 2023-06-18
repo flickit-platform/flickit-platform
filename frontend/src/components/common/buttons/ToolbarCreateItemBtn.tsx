@@ -25,7 +25,9 @@ export const ToolbarCreateItemBtn = (props: IToolbarCreateItemBtnProps) => {
       sx={{
         mb: "1px",
         minWidth: isSmallScreen ? undefined : minWidth,
-        animation: shouldAnimate ? `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)` : undefined,
+        animation: shouldAnimate
+          ? `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)`
+          : undefined,
         "&:hover": {
           animation: `${animations.noPomp}`,
         },

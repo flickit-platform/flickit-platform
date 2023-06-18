@@ -189,20 +189,27 @@ export const maturityLevelColorMap: any = {
     "#00401A",
   ],
 };
-export const getMaturityLevelColors = (
-  maturity_level_number: number,
-) => {
-switch(maturity_level_number){
-  case 2 : return maturityLevelColorMap.ML2
-  case 3 : return maturityLevelColorMap.ML3
-  case 4 : return maturityLevelColorMap.ML4
-  case 5 : return maturityLevelColorMap.ML5
-  case 6 : return maturityLevelColorMap.ML6
-  case 7 : return maturityLevelColorMap.ML7
-  case 8 : return maturityLevelColorMap.ML8
-  case 9 : return maturityLevelColorMap.ML9
-  case 10 : return maturityLevelColorMap.ML10
-}
+export const getMaturityLevelColors = (maturity_level_number: number) => {
+  switch (maturity_level_number) {
+    case 2:
+      return maturityLevelColorMap.ML2;
+    case 3:
+      return maturityLevelColorMap.ML3;
+    case 4:
+      return maturityLevelColorMap.ML4;
+    case 5:
+      return maturityLevelColorMap.ML5;
+    case 6:
+      return maturityLevelColorMap.ML6;
+    case 7:
+      return maturityLevelColorMap.ML7;
+    case 8:
+      return maturityLevelColorMap.ML8;
+    case 9:
+      return maturityLevelColorMap.ML9;
+    case 10:
+      return maturityLevelColorMap.ML10;
+  }
 };
 export const getColorOfStatus = (
   status: TStatus,

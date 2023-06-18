@@ -268,10 +268,8 @@
   "updateEvidence": "Update evidence",
   "unpublishedProfiles": "Unpublished profiles",
   "leaveSpace": "Leave space",
-  "metrics":"Metrics",
+  "metrics": "Metrics",
   "attribute": "Attribute",
-  "level":"Level",
-  "thisSystemIsIn":"This system is in"
+  "level": "Level",
+  "thisSystemIsIn": "This system is in"
 }
-
-

@@ -25,7 +25,9 @@ interface IUseQueryProps<T, A> {
   /**
    * if true we call the toastError implicitly function by passing the error object. you can pass the function to get the error and do it your self
    */
-  toastError?: boolean | ((err: ICustomError, options?: IToastErrorOptions) => void);
+  toastError?:
+    | boolean
+    | ((err: ICustomError, options?: IToastErrorOptions) => void);
   /**
    * toastError config object
    */
@@ -65,7 +67,9 @@ interface IUseQueryProps<T, A> {
  * - abortController: can be used for service clean up (canceling service call when component unmounts)
  *
  */
-export const useQuery = <T extends any = any, A extends any = any>(props: IUseQueryProps<T, A>) => {
+export const useQuery = <T extends any = any, A extends any = any>(
+  props: IUseQueryProps<T, A>
+) => {
   const {
     initialData,
     service,
@@ -78,7 +82,9 @@ export const useQuery = <T extends any = any, A extends any = any>(props: IUseQu
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(initialLoading);
   const [error, setError] = useState(false);
-  const [errorObject, setErrorObject] = useState<undefined | ICustomError>(undefined);
+  const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
+    undefined
+  );
   const controller = useRef(new AbortController());
 
   useEffect(() => {
@@ -90,7 +96,10 @@ export const useQuery = <T extends any = any, A extends any = any>(props: IUseQu
     };
   }, []);
 
-  const query = async (args?: A | undefined, config: AxiosRequestConfig<any> | undefined = {}) => {
+  const query = async (
+    args?: A | undefined,
+    config: AxiosRequestConfig<any> | undefined = {}
+  ) => {
     setLoading(true);
     setErrorObject(undefined);
 

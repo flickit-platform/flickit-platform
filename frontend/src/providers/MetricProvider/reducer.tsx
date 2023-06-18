@@ -1,7 +1,10 @@
 import { IMetricInfo } from "@types";
 import { METRIC_ACTIONS_TYPE } from "./actions";
 
-const metricReducer = (prevState: any, action: { type: METRIC_ACTIONS_TYPE; payload: any }) => {
+const metricReducer = (
+  prevState: any,
+  action: { type: METRIC_ACTIONS_TYPE; payload: any }
+) => {
   switch (action.type) {
     case METRIC_ACTIONS_TYPE.GO_TO_METRIC:
       return {
@@ -41,7 +44,7 @@ const metricReducer = (prevState: any, action: { type: METRIC_ACTIONS_TYPE; payl
         ...prevState,
         isSubmitting: action.payload,
       };
-      case METRIC_ACTIONS_TYPE.SET_EVIDENCE_DESCRIPTION:
+    case METRIC_ACTIONS_TYPE.SET_EVIDENCE_DESCRIPTION:
       return {
         ...prevState,
         evidences: action.payload,

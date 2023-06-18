@@ -40,9 +40,15 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { total_progress, maturity_level_number,level_value,maturity_level_status,maturity_level } = item;
+  const {
+    total_progress,
+    maturity_level_number,
+    level_value,
+    maturity_level_status,
+    maturity_level,
+  } = item;
   const { progress = 0 } = total_progress || {};
-  const hasML= hasMaturityLevel(level_value)
+  const hasML = hasMaturityLevel(level_value);
   const isComplete = progress === 100;
   const location = useLocation();
   return (

@@ -28,7 +28,13 @@ import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import { toast } from "react-toastify";
 import useDialog from "@utils/useDialog";
-import { Avatar, Collapse, DialogActions, DialogContent, Grid } from "@mui/material";
+import {
+  Avatar,
+  Collapse,
+  DialogActions,
+  DialogContent,
+  Grid,
+} from "@mui/material";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
@@ -98,7 +104,11 @@ export const MetricCard = (props: IMetricCardProps) => {
       >
         <Box>
           <Box>
-            <Typography variant="subLarge" fontFamily={"Roboto"} sx={{ color: "white", opacity: 0.65 }}>
+            <Typography
+              variant="subLarge"
+              fontFamily={"Roboto"}
+              sx={{ color: "white", opacity: 0.65 }}
+            >
               <Trans i18nKey="question" />
             </Typography>
             <Typography
@@ -146,7 +156,8 @@ const AnswerTemplate = (props: {
   metricsInfo: TMetricsInfo;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const { submitOnAnswerSelection, isSubmitting, evidences } = useMetricContext();
+  const { submitOnAnswerSelection, isSubmitting, evidences } =
+    useMetricContext();
   const { metricInfo, metricIndex, metricsInfo, abortController } = props;
   const { answer_templates, answer } = metricInfo;
   const { total_number_of_metrics, resultId } = metricsInfo;
@@ -156,9 +167,13 @@ const AnswerTemplate = (props: {
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastMetric = metricIndex == total_number_of_metrics;
-  const isSelectedValueTheSameAsAnswer = metricInfo?.answer?.value == value?.value;
+  const isSelectedValueTheSameAsAnswer =
+    metricInfo?.answer?.value == value?.value;
   const changeHappened = useRef(false);
-  const onChange = (event: React.MouseEvent<HTMLElement>, v: TAnswer | null) => {
+  const onChange = (
+    event: React.MouseEvent<HTMLElement>,
+    v: TAnswer | null
+  ) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
@@ -187,7 +202,9 @@ const AnswerTemplate = (props: {
         return;
       }
       if (value) {
-        dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS));
+        dispatch(
+          metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS)
+        );
       }
       const newMetricIndex = metricIndex + 1;
       dispatch(metricActions.goToMetric(newMetricIndex));
@@ -221,7 +238,12 @@ const AnswerTemplate = (props: {
           {answer_templates?.map((template) => {
             const { value: templateValue, caption } = template || {};
             return (
-              <Box key={template.value} mb={2} mr={2} sx={{ minWidth: { xs: "180px", sm: "320px" } }}>
+              <Box
+                key={template.value}
+                mb={2}
+                mr={2}
+                sx={{ minWidth: { xs: "180px", sm: "320px" } }}
+              >
                 <ToggleButton
                   data-cy="answer-option"
                   color="success"
@@ -308,7 +330,8 @@ const AnswerTemplate = (props: {
 const AnswerDetails = ({ metricInfo }: any) => {
   const dialogProps = useDialog();
   const evidencesQueryData = useQuery({
-    service: (args = { metricId: metricInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
+    service: (args = { metricId: metricInfo.id, assessmentId }, config) =>
+      service.fetchEvidences(args, config),
     toastError: true,
   });
   const hasSetCollapse = useRef(false);
@@ -339,12 +362,25 @@ const AnswerDetails = ({ metricInfo }: any) => {
         width="100%"
         onClick={() => setCollapse(!collapse)}
       >
-        {!collapse ? <AddRoundedIcon /> : <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />}
+        {!collapse ? (
+          <AddRoundedIcon />
+        ) : (
+          <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />
+        )}
         <Typography ml={1} variant="h6">
           <Trans i18nKey={"evidences"} />
         </Typography>
       </Box>
-      <Collapse in={collapse} sx={{ flex: 1, borderLeft: "1px dashed purple", px: 1, ml: 1.5, width: "100%" }}>
+      <Collapse
+        in={collapse}
+        sx={{
+          flex: 1,
+          borderLeft: "1px dashed purple",
+          px: 1,
+          ml: 1.5,
+          width: "100%",
+        }}
+      >
         <Box
           sx={{
             flex: 1,
@@ -427,7 +463,11 @@ const AnswerDetails = ({ metricInfo }: any) => {
               width: "100%",
             }}
           >
-            <Evidence {...dialogProps} metricInfo={metricInfo} evidencesQueryData={evidencesQueryData} />
+            <Evidence
+              {...dialogProps}
+              metricInfo={metricInfo}
+              evidencesQueryData={evidencesQueryData}
+            />
           </Box>
         </Box>
       </Collapse>
@@ -469,7 +509,10 @@ const Evidence = (props: any) => {
   return (
     <Box display={"flex"} flexDirection={"column"} width="100%">
       <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <form
+          onSubmit={formMethods.handleSubmit(onSubmit)}
+          style={{ flex: 1, display: "flex", flexDirection: "column" }}
+        >
           <Grid container spacing={1} sx={styles.formGrid}>
             <Grid item xs={12}>
               <InputFieldUC
@@ -486,8 +529,15 @@ const Evidence = (props: any) => {
             </Grid>
             <Grid item xs={12}>
               <Box display={"flex"}>
-                <LoadingButton sx={{ ml: "auto" }} type="submit" variant="contained" loading={evidencesQueryData.loading}>
-                  <Trans i18nKey={evidenceId ? "updateEvidence" : "addEvidence"} />
+                <LoadingButton
+                  sx={{ ml: "auto" }}
+                  type="submit"
+                  variant="contained"
+                  loading={evidencesQueryData.loading}
+                >
+                  <Trans
+                    i18nKey={evidenceId ? "updateEvidence" : "addEvidence"}
+                  />
                 </LoadingButton>
               </Box>
             </Grid>
@@ -533,16 +583,27 @@ const EvidenceDetail = (props: any) => {
         <ListItemText sx={{ pr: 2 }} primary={description} />
         <Box display="flex">
           <Box sx={{ ...styles.centerV, mr: 2 }}>
-            <PersonOutlineRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
+            <PersonOutlineRoundedIcon
+              sx={{ mr: 0.7, color: "gray" }}
+              fontSize="small"
+            />
             {created_by.display_name}
           </Box>
           <Box sx={{ ...styles.centerV }}>
-            <AccessTimeRoundedIcon sx={{ mr: 0.7, color: "gray" }} fontSize="small" />
+            <AccessTimeRoundedIcon
+              sx={{ mr: 0.7, color: "gray" }}
+              fontSize="small"
+            />
             {formatDate(last_modification_date)}
           </Box>
         </Box>
         <Box>
-          <Actions fetchEvidences={evidencesQueryData.query} id={id} setEvidenceId={setEvidenceId} description={description} />
+          <Actions
+            fetchEvidences={evidencesQueryData.query}
+            id={id}
+            setEvidenceId={setEvidenceId}
+            description={description}
+          />
         </Box>
       </ListItem>
     </Box>

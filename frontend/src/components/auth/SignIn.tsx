@@ -74,13 +74,30 @@ const SignIn = () => {
         <form onSubmit={formMethods.handleSubmit(onSubmit)}>
           <Grid container spacing={2} sx={styles.formGrid}>
             <Grid item xs={12}>
-              <InputFieldUC autoFocus={true} name="email" required={true} label={<Trans i18nKey="email" />} />
+              <InputFieldUC
+                autoFocus={true}
+                name="email"
+                required={true}
+                label={<Trans i18nKey="email" />}
+              />
             </Grid>
             <Grid item xs={12}>
-              <InputFieldUC name="password" type="password" required={true} label={<Trans i18nKey="password" />} />
+              <InputFieldUC
+                name="password"
+                type="password"
+                required={true}
+                label={<Trans i18nKey="password" />}
+              />
             </Grid>
             <Grid item xs={12} sx={{ mt: { xs: 6, md: 20 } }}>
-              <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={loading} data-cy="btn-sign-in">
+              <LoadingButton
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                loading={loading}
+                data-cy="btn-sign-in"
+              >
                 <Trans i18nKey="signIn" />
               </LoadingButton>
             </Grid>

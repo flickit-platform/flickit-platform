@@ -36,19 +36,25 @@
 //   }
 // }
 
-Cypress.Commands.add("loginByApi", (email = Cypress.env("USER_EMAIL"), password = Cypress.env("USER_PASSWORD")) => {
-  cy.request("POST", `https://flickit.org/authinfo/jwt/create/`, {
-    email,
-    password,
-  }).then((response) => {
-    const {
-      body: { refresh, access },
-    } = response;
-    localStorage.setItem("refreshToken", JSON.stringify(refresh));
-    localStorage.setItem("accessToken", JSON.stringify(access));
-    cy.visit("http://localhost:3000");
-  });
-});
+Cypress.Commands.add(
+  "loginByApi",
+  (
+    email = Cypress.env("USER_EMAIL"),
+    password = Cypress.env("USER_PASSWORD")
+  ) => {
+    cy.request("POST", `https://flickit.org/authinfo/jwt/create/`, {
+      email,
+      password,
+    }).then((response) => {
+      const {
+        body: { refresh, access },
+      } = response;
+      localStorage.setItem("refreshToken", JSON.stringify(refresh));
+      localStorage.setItem("accessToken", JSON.stringify(access));
+      cy.visit("http://localhost:3000");
+    });
+  }
+);
 
 Cypress.Commands.add("ifElementExist", (selector, cb) => {
   cy.get("body").then(($body) => {
@@ -59,9 +65,12 @@ Cypress.Commands.add("ifElementExist", (selector, cb) => {
   });
 });
 
-Cypress.Commands.add("runXTimesEveryYSeconds", (cb, iterationCount, timeBetweenEachIteration = 1000) => {
-  for (let i = 0; i < iterationCount; i++) {
-    cb();
-    cy.wait(timeBetweenEachIteration);
+Cypress.Commands.add(
+  "runXTimesEveryYSeconds",
+  (cb, iterationCount, timeBetweenEachIteration = 1000) => {
+    for (let i = 0; i < iterationCount; i++) {
+      cb();
+      cy.wait(timeBetweenEachIteration);
+    }
   }
-});
+);

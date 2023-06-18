@@ -12,7 +12,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "@common/fields/AutocompleteAsyncField";
 import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
@@ -22,13 +24,20 @@ interface IProfileSettingFormDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchProfileQuery?:any;
+  fetchProfileQuery?: any;
 }
 
 const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {},fetchProfileQuery, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    fetchProfileQuery,
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId, profileId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
@@ -57,8 +66,14 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile({ data: formattedData, profileId }, { signal: abortController.signal })
-          : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
+          ? await service.updateProfile(
+              { data: formattedData, profileId },
+              { signal: abortController.signal }
+            )
+          : await service.createProfile(
+              { data: formattedData },
+              { signal: abortController.signal }
+            );
       setLoading(false);
       onSubmitForm();
       close();
@@ -86,20 +101,31 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
           <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
-                service: (args, config) => service.fetchProfileTags(args, config),
+                service: (args, config) =>
+                  service.fetchProfileTags(args, config),
               })}
               name="tags"
               multiple={true}
-              defaultValue={fetchProfileQuery?.data&&fetchProfileQuery?.data[0].tags}
+              defaultValue={
+                fetchProfileQuery?.data && fetchProfileQuery?.data[0].tags
+              }
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
           </Grid>
           <Grid item xs={12} md={12}>
-            <InputFieldUC name="summary" label={<Trans i18nKey="summary" />} defaultValue={defaultValues.summary || ""} />
+            <InputFieldUC
+              name="summary"
+              label={<Trans i18nKey="summary" />}
+              defaultValue={defaultValues.summary || ""}
+            />
           </Grid>
           <Grid item xs={12} md={12}>
-            <RichEditorField name="about" label={<Trans i18nKey="about" />} defaultValue={defaultValues.about || ""} />
+            <RichEditorField
+              name="about"
+              label={<Trans i18nKey="about" />}
+              defaultValue={defaultValues.about || ""}
+            />
           </Grid>
         </Grid>
         <CEDialogActions

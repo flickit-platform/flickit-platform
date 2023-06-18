@@ -11,15 +11,18 @@ interface IVerticalLevelChartProps extends BoxProps {
   status: TStatus;
   cl: number;
   ml: number;
-  mn:number
+  mn: number;
 }
 
 const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
-  const { loading, title, status, cl, ml,mn, ...rest } = props;
+  const { loading, title, status, cl, ml, mn, ...rest } = props;
   const statusColor = getColorOfStatus(status);
 
   return (
-    <Box {...rest} sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}>
+    <Box
+      {...rest}
+      sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}
+    >
       <Box textAlign={"center"}>
         <Typography textAlign={"center"}>
           {loading ? (
@@ -51,12 +54,22 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
       </Box>
       <Box display="flex" mt={2}>
         {loading ? (
-          <Skeleton variant="rectangular" sx={{ borderRadius: 20, mx: 1 }} width="74px" height="264px" />
+          <Skeleton
+            variant="rectangular"
+            sx={{ borderRadius: 20, mx: 1 }}
+            width="74px"
+            height="264px"
+          />
         ) : (
           <VerticalLevel cl={cl} />
         )}
         {loading ? (
-          <Skeleton variant="rectangular" sx={{ borderRadius: 20, mx: 1 }} width="74px" height="264px" />
+          <Skeleton
+            variant="rectangular"
+            sx={{ borderRadius: 20, mx: 1 }}
+            width="74px"
+            height="264px"
+          />
         ) : (
           <VerticalLevel ml={ml} mn={mn} />
         )}
@@ -74,7 +87,15 @@ const mapToPercent: any = {
   5: "0",
 };
 
-const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) => {
+const VerticalLevel = ({
+  cl,
+  ml,
+  mn,
+}: {
+  cl?: number;
+  ml?: number;
+  mn?: number;
+}) => {
   return cl || ml ? (
     <Box
       sx={{
@@ -111,9 +132,16 @@ const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) =
             width: "100%",
           }}
         >
-          <Typography sx={{ color: cl ? "#3596A1" : "#6035A1" }} variant="h6" textTransform={"uppercase"} lineHeight={"1.3"}>
+          <Typography
+            sx={{ color: cl ? "#3596A1" : "#6035A1" }}
+            variant="h6"
+            textTransform={"uppercase"}
+            lineHeight={"1.3"}
+          >
             <Trans i18nKey={cl ? "cl" : "ml"} />
-            <Typography>{cl || ml || "0"}/{ml?mn?mn:"5":"5"}</Typography>
+            <Typography>
+              {cl || ml || "0"}/{ml ? (mn ? mn : "5") : "5"}
+            </Typography>
           </Typography>
         </Box>
       </Box>
@@ -125,7 +153,9 @@ const VerticalLevel = ({ cl, ml,mn }: { cl?: number; ml?: number,mn?:number }) =
           transition: "transform .3s ease",
           minHeight: "76px",
           height: "100%",
-          transform: `translateY(-${mapToPercent[(cl || ml) as number] || "70"}%)`,
+          transform: `translateY(-${
+            mapToPercent[(cl || ml) as number] || "70"
+          }%)`,
           borderRadius: "100px",
         }}
       ></Box>

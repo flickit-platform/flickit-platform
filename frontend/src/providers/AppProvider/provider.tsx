@@ -1,4 +1,10 @@
-import React, { useReducer, FC, useContext, Dispatch, createContext } from "react";
+import React, {
+  useReducer,
+  FC,
+  useContext,
+  Dispatch,
+  createContext,
+} from "react";
 import appReducer from "./reducer";
 
 interface IAppProviderProps {
@@ -24,7 +30,9 @@ export const AppProvider: FC<IAppProviderProps> = ({ children }) => {
 
   return (
     <AppContext.Provider value={state}>
-      <AppDispatchContext.Provider value={dispatch}>{children}</AppDispatchContext.Provider>
+      <AppDispatchContext.Provider value={dispatch}>
+        {children}
+      </AppDispatchContext.Provider>
     </AppContext.Provider>
   );
 };
@@ -40,7 +48,9 @@ export const useAppContext = () => {
 export const useAppDispatch = () => {
   const context = useContext(AppDispatchContext);
   if (context === undefined) {
-    throw new Error("useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider");
+    throw new Error(
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+    );
   }
   return context;
 };

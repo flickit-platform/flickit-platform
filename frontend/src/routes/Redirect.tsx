@@ -5,7 +5,13 @@ const Redirect = () => {
   const location = useLocation();
   const authContext = useAuthContext();
 
-  return <Navigate to={getWhereToGo(location, authContext)} state={{ from: location }} replace={true} />;
+  return (
+    <Navigate
+      to={getWhereToGo(location, authContext)}
+      state={{ from: location }}
+      replace={true}
+    />
+  );
 };
 
 const getWhereToGo = (location: Location, authContext: IAuthContext) => {

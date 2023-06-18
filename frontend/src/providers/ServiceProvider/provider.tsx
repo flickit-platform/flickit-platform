@@ -18,14 +18,20 @@ export const ServiceContext = React.createContext<IServiceContext>({
 export const ServiceProvider: FC<IServiceProviderProps> = ({ children }) => {
   const { dispatch: authDispatch, accessToken } = useAuthContext();
   const signOut = () => authDispatch(authActions.signOut());
-  const setAccessToken = (token: string) => authDispatch(authActions.setAccessToken(token));
+  const setAccessToken = (token: string) =>
+    authDispatch(authActions.setAccessToken(token));
 
   // we create the service once
-  const service = useMemo(() => createService(signOut, accessToken, setAccessToken), []);
+  const service = useMemo(
+    () => createService(signOut, accessToken, setAccessToken),
+    []
+  );
 
   const [state] = useReducer(serviceReducer, { service });
 
-  return <ServiceContext.Provider value={state}>{children}</ServiceContext.Provider>;
+  return (
+    <ServiceContext.Provider value={state}>{children}</ServiceContext.Provider>
+  );
 };
 
 export const useServiceContext = () => {

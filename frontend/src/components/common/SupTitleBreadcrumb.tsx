@@ -18,7 +18,9 @@ interface ISupTitleBreadcrumbProps {
   }[];
 }
 
-const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) => {
+const SupTitleBreadcrumb = (
+  props: ISupTitleBreadcrumbProps & BreadcrumbsProps
+) => {
   const { routes = [], ...rest } = props;
   return (
     <Breadcrumbs {...rest}>
@@ -40,11 +42,17 @@ const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) 
                 fontWeight: "bold",
                 opacity: 0.8,
                 letterSpacing: "0.085em",
-                color: rest?.color ? rest.color : disabled ? "GrayText" : "primary.dark",
+                color: rest?.color
+                  ? rest.color
+                  : disabled
+                  ? "GrayText"
+                  : "primary.dark",
               }}
             >
               {icon}
-              {title || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
+              {title || (
+                <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />
+              )}
             </MuiLink>
           </Box>
         );
@@ -56,17 +64,24 @@ const SupTitleBreadcrumb = (props: ISupTitleBreadcrumbProps & BreadcrumbsProps) 
 /**
  * fetch the passed arguments ids title
  */
-export const useSupTitleBreadcrumb = (params: Record<string, string | undefined>) => {
+export const useSupTitleBreadcrumb = (
+  params: Record<string, string | undefined>
+) => {
   const { service } = useServiceContext();
 
   const { loading, data } = useQuery({
-    service: (args = params, config) => service.fetchBreadcrumbInfo(args, config),
+    service: (args = params, config) =>
+      service.fetchBreadcrumbInfo(args, config),
   });
 
   return {
     space: !loading ? data?.space_id || "spaces" : data?.space_id,
-    assessment: !loading ? data?.assessment_id || "assessments" : data?.assessment_id,
-    questionnaire: !loading ? data?.questionnaire_id || "questionnaires" : data?.questionnaire_id,
+    assessment: !loading
+      ? data?.assessment_id || "assessments"
+      : data?.assessment_id,
+    questionnaire: !loading
+      ? data?.questionnaire_id || "questionnaires"
+      : data?.questionnaire_id,
   };
 };
 

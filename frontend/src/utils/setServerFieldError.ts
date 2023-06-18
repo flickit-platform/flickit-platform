@@ -14,7 +14,11 @@ const setServerFieldErrors = (e: ICustomError | unknown, formMethods: any) => {
     if (key === "non_field_errors") {
       return;
     }
-    formMethods.setError(key, { message: data[key][0], type: "server" }, index === 0 ? { shouldFocus: true } : undefined);
+    formMethods.setError(
+      key,
+      { message: data[key][0], type: "server" },
+      index === 0 ? { shouldFocus: true } : undefined
+    );
   });
 };
 

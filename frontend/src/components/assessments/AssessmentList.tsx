@@ -16,7 +16,13 @@ const AssessmentsList = (props: IAssessmentListProps) => {
     <Box>
       <Grid container spacing={4}>
         {data.map((item) => {
-          return <AssessmentCard item={{ ...item, space }} {...props} key={item?.id} />;
+          return (
+            <AssessmentCard
+              item={{ ...item, space }}
+              {...props}
+              key={item?.id}
+            />
+          );
         })}
       </Grid>
     </Box>

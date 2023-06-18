@@ -5,21 +5,30 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { styles } from "@styles";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
+import {
+  EAssessmentStatus,
+  metricActions,
+  useMetricContext,
+  useMetricDispatch,
+} from "@providers/MetricProvider";
 import usePopover from "@utils/usePopover";
 import Typography from "@mui/material/Typography";
 import { MetricThumb } from "./MetricThumb";
 import { MetricPopover } from "./MetricPopover";
 
 const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
-  const { assessmentStatus, metricIndex, metricsInfo, isSubmitting } = useMetricContext();
+  const { assessmentStatus, metricIndex, metricsInfo, isSubmitting } =
+    useMetricContext();
   const { total_number_of_metrics, metrics = [] } = metricsInfo;
   const dispatch = useMetricDispatch();
   const { metricIndex: metricParam } = useParams();
   const isFinish = metricParam === "completed";
 
   return (
-    <Box position="relative" sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}>
+    <Box
+      position="relative"
+      sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}
+    >
       <Hidden
         smDown
         mdDown={metrics.length > 20 ? true : false}
@@ -62,7 +71,11 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
         <LinearProgress
           sx={{ flex: 1, borderRadius: 4 }}
           variant="determinate"
-          value={assessmentStatus === EAssessmentStatus.DONE ? 100 : (100 / (total_number_of_metrics + 1)) * metricIndex}
+          value={
+            assessmentStatus === EAssessmentStatus.DONE
+              ? 100
+              : (100 / (total_number_of_metrics + 1)) * metricIndex
+          }
         />
         <Button
           size="small"
@@ -72,7 +85,9 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           to={hasNextQuestion ? `../${metricIndex + 1}` : "../completed"}
           onClick={() => {
             if (!hasNextQuestion) {
-              dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
+              dispatch(
+                metricActions.setAssessmentStatus(EAssessmentStatus.DONE)
+              );
             }
           }}
         >
@@ -97,9 +112,11 @@ export const MetricProgressItem = (props: any) => {
         zIndex: 1,
         height: "20px",
         cursor: metricIndex != metric.index ? "pointer" : "auto",
-        backgroundColor: (t: any) => (metric.answer ? `${t.palette.primary.main}` : "white"),
+        backgroundColor: (t: any) =>
+          metric.answer ? `${t.palette.primary.main}` : "white",
         border: (t: any) => `3px solid white`,
-        outline: (t: any) => `${metric.answer ? t.palette.primary.main : "#a7caed"} solid 5px`,
+        outline: (t: any) =>
+          `${metric.answer ? t.palette.primary.main : "#a7caed"} solid 5px`,
         transition: "background-color .3s ease, transform .2s ease",
         borderRadius: "8px",
         transform: metric.index == metricIndex ? "scale(1.3)" : "scale(.9)",
@@ -130,7 +147,12 @@ export const MetricProgressItem = (props: any) => {
         </Typography>
       </Box>
       <MetricPopover {...popoverProps}>
-        <MetricThumb {...props} onClose={popoverProps.onClose} metricIndex={metric.index} link={to || `${metric.index}`} />
+        <MetricThumb
+          {...props}
+          onClose={popoverProps.onClose}
+          metricIndex={metric.index}
+          link={to || `${metric.index}`}
+        />
       </MetricPopover>
     </Box>
   );

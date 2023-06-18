@@ -24,13 +24,14 @@ interface IProfileListItemProps {
     is_active: boolean;
   };
   fetchProfiles?: TQueryFunction;
-  fetchUnpublishedProfiles?:TQueryFunction;
+  fetchUnpublishedProfiles?: TQueryFunction;
   link?: string;
   hasAccess?: boolean;
 }
 
 const ProfileListItem = (props: IProfileListItemProps) => {
-  const { data, fetchProfiles,fetchUnpublishedProfiles, link, hasAccess } = props;
+  const { data, fetchProfiles, fetchUnpublishedProfiles, link, hasAccess } =
+    props;
   const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
@@ -79,13 +80,26 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           </Typography>
         </Box>
 
-        <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
+        <Box
+          ml="auto"
+          sx={{ ...styles.centerV, color: "#525252" }}
+          alignSelf="stretch"
+        >
           {is_active ? (
-            <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+            <Chip
+              label={<Trans i18nKey="published" />}
+              color="success"
+              size="small"
+            />
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions profile={data} fetchProfiles={fetchProfiles} fetchUnpublishedProfiles={fetchUnpublishedProfiles} hasAccess={hasAccess} />
+          <Actions
+            profile={data}
+            fetchProfiles={fetchProfiles}
+            fetchUnpublishedProfiles={fetchUnpublishedProfiles}
+            hasAccess={hasAccess}
+          />
         </Box>
       </Box>
     </Box>
@@ -93,8 +107,19 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { profile, fetchProfiles,fetchUnpublishedProfiles, dialogProps, setUserInfo, hasAccess } = props;
-  const { id, current_user_delete_permission = false, is_active = false } = profile;
+  const {
+    profile,
+    fetchProfiles,
+    fetchUnpublishedProfiles,
+    dialogProps,
+    setUserInfo,
+    hasAccess,
+  } = props;
+  const {
+    id,
+    current_user_delete_permission = false,
+    is_active = false,
+  } = profile;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const deleteProfileQuery = useQuery({
@@ -113,7 +138,9 @@ const Actions = (props: any) => {
   });
 
   if (!fetchProfiles) {
-    console.warn("fetchProfiles not provided. profile list won't be updated on any action");
+    console.warn(
+      "fetchProfiles not provided. profile list won't be updated on any action"
+    );
   }
 
   // const openEditDialog = (e: any) => {
@@ -135,7 +162,7 @@ const Actions = (props: any) => {
     try {
       await deleteProfileQuery.query();
       await fetchProfiles?.();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      hasAccess && (await fetchUnpublishedProfiles?.());
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -148,7 +175,7 @@ const Actions = (props: any) => {
       const res = await publishProfileQuery.query();
       res.message && toast.success(res.message);
       await fetchProfiles?.();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      hasAccess && (await fetchUnpublishedProfiles?.());
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -160,7 +187,7 @@ const Actions = (props: any) => {
       const res = await unPublishProfileQuery.query();
       res.message && toast.success(res.message);
       await fetchProfiles();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      hasAccess && (await fetchUnpublishedProfiles?.());
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -171,7 +198,12 @@ const Actions = (props: any) => {
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
-      loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
+      loading={
+        deleteProfileQuery.loading ||
+        publishProfileQuery.loading ||
+        unPublishProfileQuery.loading ||
+        editLoading
+      }
       items={[
         is_active
           ? {

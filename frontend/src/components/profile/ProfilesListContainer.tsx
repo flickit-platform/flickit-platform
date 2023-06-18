@@ -23,7 +23,10 @@ const ProfilesListContainer = () => {
               <Grid container spacing={2}>
                 {forLoopComponent(5, (index) => (
                   <Grid item xs={12} md={6} lg={4} key={index}>
-                    <LoadingSkeleton key={index} sx={{ height: "340px", mb: 1 }} />
+                    <LoadingSkeleton
+                      key={index}
+                      sx={{ height: "340px", mb: 1 }}
+                    />
                   </Grid>
                 ))}
               </Grid>
@@ -39,7 +42,11 @@ const ProfilesListContainer = () => {
                   {results.map((profile: any) => {
                     return (
                       <Grid item xs={12} md={6} lg={4} key={profile.id}>
-                        <ProfilesMarketListItem bg1={"#4568dc"} bg2={"#b06ab3"} data={profile} />
+                        <ProfilesMarketListItem
+                          bg1={"#4568dc"}
+                          bg2={"#b06ab3"}
+                          data={profile}
+                        />
                       </Grid>
                     );
                   })}

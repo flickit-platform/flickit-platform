@@ -20,10 +20,12 @@ const ExpertGroupConfirmInvitationContainer = () => {
   const { id } = userInfo;
   const navigate = useNavigate();
   const expertGroupQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) => service.fetchUserExpertGroup(args, config),
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
   });
   const confirmInvitationQueryData = useQuery({
-    service: (args = { token }, config) => service.confirmExpertGroupInvitation(args, config),
+    service: (args = { token }, config) =>
+      service.confirmExpertGroupInvitation(args, config),
     runOnMount: false,
   });
 
@@ -41,7 +43,11 @@ const ExpertGroupConfirmInvitationContainer = () => {
   };
 
   const decline = () => {
-    navigate(userInfo.current_space?.id ? `/${userInfo.current_space?.id}/assessments` : "/spaces");
+    navigate(
+      userInfo.current_space?.id
+        ? `/${userInfo.current_space?.id}/assessments`
+        : "/spaces"
+    );
   };
 
   return (
@@ -70,7 +76,10 @@ const ExpertGroupConfirmInvitationContainer = () => {
               >
                 <Trans i18nKey="acceptInvitation" />
               </LoadingButton>
-              <LoadingButton loading={confirmInvitationQueryData.loading} onClick={decline}>
+              <LoadingButton
+                loading={confirmInvitationQueryData.loading}
+                onClick={decline}
+              >
                 <Trans i18nKey="decline" />
               </LoadingButton>
             </Box>

@@ -1,7 +1,11 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useNavigate, useParams } from "react-router-dom";
-import { EAssessmentStatus, metricActions, useMetricDispatch } from "@providers/MetricProvider";
+import {
+  EAssessmentStatus,
+  metricActions,
+  useMetricDispatch,
+} from "@providers/MetricProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import LoadingSkeletonOfMetrics from "@common/loadings/LoadingSkeletonOfMetrics";
@@ -22,7 +26,9 @@ const MetricsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) => {
     if (
       !props.isReview &&
       metricIndex !== "completed" &&
-      (isNaN(Number(metricIndex)) || Number(metricIndex) === 0 || Number(metricIndex) < 0)
+      (isNaN(Number(metricIndex)) ||
+        Number(metricIndex) === 0 ||
+        Number(metricIndex) < 0)
     ) {
       navigate("./1", { replace: true });
       return;
@@ -43,7 +49,9 @@ const MetricsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) => {
   );
 };
 
-export const MetricsContainerC = (props: PropsWithChildren<{ isReview?: boolean }>) => {
+export const MetricsContainerC = (
+  props: PropsWithChildren<{ isReview?: boolean }>
+) => {
   const { children, isReview = false } = props;
   const { metricsResultQueryData, questionnaireQueryData } = useMetrics();
 
@@ -56,7 +64,10 @@ export const MetricsContainerC = (props: PropsWithChildren<{ isReview?: boolean 
         return (
           <>
             <Box py={1}>
-              <MetricsTitle data={questionnaireData as IQuestionnaireModel} isReview={isReview} />
+              <MetricsTitle
+                data={questionnaireData as IQuestionnaireModel}
+                isReview={isReview}
+              />
             </Box>
             <Box display="flex" justifyContent="center">
               {children}
@@ -74,15 +85,18 @@ const useMetrics = () => {
   const dispatch = useMetricDispatch();
   const { metricIndex, questionnaireId = "", assessmentId = "" } = useParams();
   const questionnaireQueryData = useQuery<IQuestionnaireModel>({
-    service: (args, config) => service.fetchQuestionnaire({ questionnaireId }, config),
+    service: (args, config) =>
+      service.fetchQuestionnaire({ questionnaireId }, config),
   });
   const metricsResultQueryData = useQuery<IMetricsModel>({
-    service: (args, config) => service.fetchMetricsResult({ questionnaireId, assessmentId }, config),
+    service: (args, config) =>
+      service.fetchMetricsResult({ questionnaireId, assessmentId }, config),
   });
 
   useEffect(() => {
     if (metricsResultQueryData.loaded) {
-      const { metrics = [], assessment_result_id } = metricsResultQueryData.data;
+      const { metrics = [], assessment_result_id } =
+        metricsResultQueryData.data;
 
       dispatch(
         metricActions.setMetricsInfo({

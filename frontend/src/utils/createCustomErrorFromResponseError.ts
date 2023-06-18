@@ -31,7 +31,9 @@ const getCustomErrorType = (err: any) => {
     return ECustomErrorType.DEFAULT;
   }
   const errorType =
-    errorToErrorTypeMap[statusText as string] || errorToErrorTypeMap[code as string] || errorToErrorTypeMap[status];
+    errorToErrorTypeMap[statusText as string] ||
+    errorToErrorTypeMap[code as string] ||
+    errorToErrorTypeMap[status];
 
   return errorType;
 };

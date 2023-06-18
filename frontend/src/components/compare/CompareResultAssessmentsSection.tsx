@@ -45,7 +45,13 @@ const CompareResultAssessmentsSection = (props: {
                     justifyContent: { xs: "center", lg: "flex-end" },
                   }}
                 >
-                  <Gauge maturity_level_number={item.maturity_level_number} maturity_level_status={item.status} level_value={item.maturity_level_value} maxWidth="250px" m="auto" />
+                  <Gauge
+                    maturity_level_number={item.maturity_level_number}
+                    maturity_level_status={item.status}
+                    level_value={item.maturity_level_value}
+                    maxWidth="250px"
+                    m="auto"
+                  />
                 </Box>
                 <Box
                   display="flex"

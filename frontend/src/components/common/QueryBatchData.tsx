@@ -15,7 +15,10 @@ interface IQueryData<T> {
   error: boolean;
   loaded: boolean;
   errorObject: ICustomError | undefined;
-  query?: (args?: any, config?: AxiosRequestConfig<any> | undefined) => Promise<any>;
+  query?: (
+    args?: any,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => Promise<any>;
   abortController?: AbortController;
 }
 
@@ -25,7 +28,10 @@ interface IQueryBatchDataProps<T> {
   errorComponent?: JSX.Element;
   render: (data: T[]) => JSX.Element;
   renderLoading?: () => JSX.Element;
-  renderError?: (err: (ICustomError | ICustomError[] | undefined)[] | undefined, errorComponent: JSX.Element) => JSX.Element;
+  renderError?: (
+    err: (ICustomError | ICustomError[] | undefined)[] | undefined,
+    errorComponent: JSX.Element
+  ) => JSX.Element;
   isDataEmpty?: (data?: (T | undefined)[]) => boolean;
   queryBatchData: IQueryData<T>[];
   data?: T[];
@@ -35,7 +41,9 @@ interface IQueryBatchDataProps<T> {
   errorObject?: (ICustomError | undefined)[];
 }
 
-const QueryBatchData = <T extends any = any>(props: IQueryBatchDataProps<T>) => {
+const QueryBatchData = <T extends any = any>(
+  props: IQueryBatchDataProps<T>
+) => {
   const {
     render,
     queryBatchData = [],
@@ -66,7 +74,11 @@ const QueryBatchData = <T extends any = any>(props: IQueryBatchDataProps<T>) => 
   if (isEmpty) {
     return emptyDataComponent;
   }
-  return <>{loaded && data?.length === queryBatchData?.length ? render(data) : null}</>;
+  return (
+    <>
+      {loaded && data?.length === queryBatchData?.length ? render(data) : null}
+    </>
+  );
 };
 
 export const defaultRenderError = (
@@ -91,7 +103,10 @@ export const defaultRenderError = (
       return errorComponent;
     }
   }
-  if (err.type === ECustomErrorType.NOT_FOUND || err.type === ECustomErrorType.ACCESS_DENIED) {
+  if (
+    err.type === ECustomErrorType.NOT_FOUND ||
+    err.type === ECustomErrorType.ACCESS_DENIED
+  ) {
     return <ErrorNotFoundOrAccessDenied />;
   }
   return errorComponent;
@@ -101,7 +116,9 @@ const reduceData = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
   return queryBatchData.map((query) => query.data);
 };
 
-const reduceLoadings = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
+const reduceLoadings = <T extends any = any>(
+  queryBatchData: IQueryData<T>[]
+) => {
   return queryBatchData.reduce((prevQuery, currentQuery) => ({
     ...currentQuery,
     loading: !!(prevQuery.loading || currentQuery.loading),
@@ -124,7 +141,9 @@ const reduceError = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
   })).error;
 };
 
-const reduceErrorObject = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
+const reduceErrorObject = <T extends any = any>(
+  queryBatchData: IQueryData<T>[]
+) => {
   return queryBatchData.map((query) => query.errorObject);
 };
 

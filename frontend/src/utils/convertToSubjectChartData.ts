@@ -5,7 +5,7 @@ const convertToSubjectChartData = (data: any[]) => {
       cl: 1,
       title: item?.quality_attribute?.title,
       id: item?.quality_attribute?.id,
-      mn : item?.maturity_level_number,
+      mn: item?.maturity_level_number,
     };
   });
 };

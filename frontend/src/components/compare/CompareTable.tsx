@@ -145,11 +145,7 @@ const renderCompareItem = (key: string, value: any) => {
       {(obj?.title !== null || obj?.title !== undefined) && (
         <Typography {...textStyle}>{obj?.title}</Typography>
       )}
-      {obj?.progress && (
-        <Typography
-          {...textStyle}
-        >{obj.progress}%</Typography>
-      )}
+      {obj?.progress && <Typography {...textStyle}>{obj.progress}%</Typography>}
     </>
   );
   return typeof value !== "object"

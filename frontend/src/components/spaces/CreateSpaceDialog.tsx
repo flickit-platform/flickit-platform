@@ -24,10 +24,17 @@ interface ICreateSpaceDialogProps extends DialogProps {
 const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { id: spaceId } = data;
-  const defaultValues = type === "update" ? data : { title: "", code: nanoid(5) };
+  const defaultValues =
+    type === "update" ? data : { title: "", code: nanoid(5) };
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
 
@@ -40,7 +47,10 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     setLoading(true);
     try {
       type === "update"
-        ? await service.updateSpace({ spaceId, data }, { signal: abortController.signal })
+        ? await service.updateSpace(
+            { spaceId, data },
+            { signal: abortController.signal }
+          )
         : await service.createSpace(data, { signal: abortController.signal });
 
       setLoading(false);
@@ -67,7 +77,11 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       title={
         <>
           <CreateNewFolderRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? <Trans i18nKey="updateSpace" /> : <Trans i18nKey="createSpace" />}
+          {type === "update" ? (
+            <Trans i18nKey="updateSpace" />
+          ) : (
+            <Trans i18nKey="createSpace" />
+          )}
         </>
       }
     >
@@ -95,7 +109,9 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>

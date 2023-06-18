@@ -1,7 +1,10 @@
 import { AUTH_ACTIONS_TYPE } from "./actions";
 import { IAuthContext } from "./provider";
 
-const authReducer = (prevState: any, action: { type: AUTH_ACTIONS_TYPE; payload: any }): IAuthContext => {
+const authReducer = (
+  prevState: any,
+  action: { type: AUTH_ACTIONS_TYPE; payload: any }
+): IAuthContext => {
   switch (action.type) {
     case AUTH_ACTIONS_TYPE.SIGN_IN:
       return { ...prevState, ...action.payload, isAuthenticatedUser: true };

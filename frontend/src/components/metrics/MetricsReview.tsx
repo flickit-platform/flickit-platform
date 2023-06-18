@@ -22,7 +22,10 @@ const MetricsReview = () => {
 export const Review = ({ metrics = [], isReviewPage }: any) => {
   const navigate = useNavigate();
   return (
-    <Box maxWidth={"1440px"} sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}>
+    <Box
+      maxWidth={"1440px"}
+      sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}
+    >
       {!isReviewPage && (
         <Box
           mb={6}
@@ -61,7 +64,11 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
           <Hidden smDown>
             <Box display="flex" justifyContent={"flex-end"}>
               <Box width="480px" sx={{ minHeight: "310px" }} mt="-64px">
-                <img src={assessmentDoneSvg} alt="assessment done" style={{ width: "100%" }} />
+                <img
+                  src={assessmentDoneSvg}
+                  alt="assessment done"
+                  style={{ width: "100%" }}
+                />
               </Box>
             </Box>
           </Hidden>
@@ -92,19 +99,35 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
               >
                 <Box>
                   <Box>
-                    <Typography textTransform={"capitalize"} variant="subMedium" sx={{ color: "#b3b3b3" }}>
+                    <Typography
+                      textTransform={"capitalize"}
+                      variant="subMedium"
+                      sx={{ color: "#b3b3b3" }}
+                    >
                       <Trans i18nKey={"question"} />
                     </Typography>
-                    <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
+                    <Typography
+                      variant="h6"
+                      fontFamily="Roboto"
+                      fontWeight="bold"
+                    >
                       {metric.title}
                     </Typography>
                   </Box>
                   {metric.answer && (
                     <Box mt={3}>
-                      <Typography variant="subMedium" textTransform="uppercase" sx={{ color: "#b3b3b3" }}>
+                      <Typography
+                        variant="subMedium"
+                        textTransform="uppercase"
+                        sx={{ color: "#b3b3b3" }}
+                      >
                         <Trans i18nKey={"yourAnswer"} />
                       </Typography>
-                      <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
+                      <Typography
+                        variant="h6"
+                        fontFamily="Roboto"
+                        fontWeight="bold"
+                      >
                         {metric.answer.caption}
                       </Typography>
                     </Box>
@@ -115,10 +138,18 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
                       sx={{ mt: 0.2, ml: "auto" }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(isReviewPage ? `./../${metric.index}` : `../${metric.index}`);
+                        navigate(
+                          isReviewPage
+                            ? `./../${metric.index}`
+                            : `../${metric.index}`
+                        );
                       }}
                     >
-                      {metric.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
+                      {metric.answer ? (
+                        <Trans i18nKey="edit" />
+                      ) : (
+                        <Trans i18nKey="submitAnAnswer" />
+                      )}
                     </Button>
                   </Box>
                 </Box>

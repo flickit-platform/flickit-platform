@@ -11,25 +11,41 @@ import AppLayout from "../layouts/AppLayout";
 const SignInScreen = lazy(() => import("../screens/SignInScreen"));
 const SignUpScreen = lazy(() => import("../screens/SignUpScreen"));
 const UserScreen = lazy(() => import("../screens/UserScreen"));
-const ActivationSuccessfulScreen = lazy(() => import("../screens/ActivationSuccessfulScreen"));
+const ActivationSuccessfulScreen = lazy(
+  () => import("../screens/ActivationSuccessfulScreen")
+);
 
 const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
-const ExpertGroupConfirmInvitationScreen = lazy(() => import("../screens/ExpertGroupConfirmInvitationScreen"));
+const ExpertGroupConfirmInvitationScreen = lazy(
+  () => import("../screens/ExpertGroupConfirmInvitationScreen")
+);
 
-const AssessmentReportScreen = lazy(() => import("../screens/AssessmentReportScreen"));
-const SubjectReportScreen = lazy(() => import("../screens/SubjectReportScreen"));
+const AssessmentReportScreen = lazy(
+  () => import("../screens/AssessmentReportScreen")
+);
+const SubjectReportScreen = lazy(
+  () => import("../screens/SubjectReportScreen")
+);
 const SpacesScreen = lazy(() => import("../screens/SpacesScreen"));
 const SpaceSettingScreen = lazy(() => import("../screens/SpaceSettingScreen"));
 const AssessmentsScreen = lazy(() => import("../screens/AssessmentsScreen"));
 const MetricsScreen = lazy(() => import("../screens/MetricsScreen"));
-const MetricsReviewScreen = lazy(() => import("../screens/MetricsReviewScreen"));
+const MetricsReviewScreen = lazy(
+  () => import("../screens/MetricsReviewScreen")
+);
 const MetricScreen = lazy(() => import("../screens/MetricScreen"));
-const QuestionnairesScreen = lazy(() => import("../screens/QuestionnairesScreen"));
+const QuestionnairesScreen = lazy(
+  () => import("../screens/QuestionnairesScreen")
+);
 const CompareScreen = lazy(() => import("../screens/CompareScreen"));
-const CompareResultScreen = lazy(() => import("../screens/CompareResultScreen"));
+const CompareResultScreen = lazy(
+  () => import("../screens/CompareResultScreen")
+);
 
 const ProfilesScreen = lazy(() => import("../screens/ProfilesScreen"));
-const ProfileExpertViewScreen = lazy(() => import("../screens/ProfileExpertViewScreen"));
+const ProfileExpertViewScreen = lazy(
+  () => import("../screens/ProfileExpertViewScreen")
+);
 const ProfileScreen = lazy(() => import("../screens/ProfileScreen"));
 
 /**
@@ -52,7 +68,10 @@ const Routes = () => {
         >
           <Route path="/sign-in" element={<SignInScreen />} />
           <Route path="/sign-up" element={<SignUpScreen />} />
-          <Route path="/account/active/:uid/:token" element={<ActivationSuccessfulScreen />} />
+          <Route
+            path="/account/active/:uid/:token"
+            element={<ActivationSuccessfulScreen />}
+          />
         </Route>
 
         <Route
@@ -64,23 +83,44 @@ const Routes = () => {
         >
           {/* Account related routes */}
           <Route path="/user/:accountTab" element={<UserScreen />} />
-          <Route path="/user/:accountTab/:expertGroupId" element={<ExpertGroupScreen />} />
-          <Route path="/user/:accountTab/:expertGroupId/profiles/:profileId" element={<ProfileExpertViewScreen />} />
-          <Route path="/account/expert-group-invitation/:expertGroupId/:token" element={<ExpertGroupConfirmInvitationScreen />} />
+          <Route
+            path="/user/:accountTab/:expertGroupId"
+            element={<ExpertGroupScreen />}
+          />
+          <Route
+            path="/user/:accountTab/:expertGroupId/profiles/:profileId"
+            element={<ProfileExpertViewScreen />}
+          />
+          <Route
+            path="/account/expert-group-invitation/:expertGroupId/:token"
+            element={<ExpertGroupConfirmInvitationScreen />}
+          />
 
           {/* Spaces and assessments related routes */}
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
-          <Route path="/:spaceId/assessments/:assessmentId/insights" element={<AssessmentReportScreen />} />
-          <Route path="/:spaceId/assessments/:assessmentId/insights/:subjectId" element={<SubjectReportScreen />} />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/insights"
+            element={<AssessmentReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/insights/:subjectId"
+            element={<SubjectReportScreen />}
+          />
           {/* Questionnaires and questions related routes */}
-          <Route path="/:spaceId/assessments/:assessmentId/questionnaires" element={<QuestionnairesScreen />} />
+          <Route
+            path="/:spaceId/assessments/:assessmentId/questionnaires"
+            element={<QuestionnairesScreen />}
+          />
           <Route
             path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId/review"
             element={<MetricsReviewScreen />}
           />
-          <Route path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId" element={<MetricsScreen />}>
+          <Route
+            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId"
+            element={<MetricsScreen />}
+          >
             <Route path="" element={<MetricScreen />} />
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>

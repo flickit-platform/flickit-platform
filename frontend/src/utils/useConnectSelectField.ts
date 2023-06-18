@@ -11,7 +11,11 @@ const useConnectSelectField = (props: {
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
 }) => {
-  const { url, filterOptions = (options) => options, searchParams = {} } = props;
+  const {
+    url,
+    filterOptions = (options) => options,
+    searchParams = {},
+  } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

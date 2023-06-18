@@ -47,7 +47,7 @@ const SubjectBar = (props: any) => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="title" />
-        <YAxis type="number" domain={[0, mn]} tickCount={mn+1} />
+        <YAxis type="number" domain={[0, mn]} tickCount={mn + 1} />
         <Tooltip />
         <Legend />
         <Bar

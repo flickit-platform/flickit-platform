@@ -63,7 +63,12 @@ const UserAccount = () => {
           sub={<Box textTransform={"none"}>{email}</Box>}
           toolbar={
             <>
-              <IconButton sx={{ ml: "auto", mb: 1.2, mr: 1.5 }} onClick={openDialog} color="primary" size="small">
+              <IconButton
+                sx={{ ml: "auto", mb: 1.2, mr: 1.5 }}
+                onClick={openDialog}
+                color="primary"
+                size="small"
+              >
                 <BorderColorRoundedIcon />
               </IconButton>
               <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
@@ -86,7 +91,9 @@ const UserAccount = () => {
                 <Typography variant="subLarge">
                   <Trans i18nKey="linkedin" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{linkedin}</Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  {linkedin}
+                </Typography>
               </Box>
               {is_expert && (
                 <Box mt={2.5}>
@@ -102,7 +109,9 @@ const UserAccount = () => {
                 <Typography variant="subLarge">
                   <Trans i18nKey="bio" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{bio}</Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  {bio}
+                </Typography>
               </Box>
             </Grid>
           </Grid>

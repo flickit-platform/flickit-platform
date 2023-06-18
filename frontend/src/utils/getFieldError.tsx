@@ -39,7 +39,8 @@ const getFieldError = (
 ) => {
   const error = errors?.[name];
   const hasError = !!error?.type;
-  const errorMessage = errorMessagesBaseOnErrorTypes[error?.type as TErrorTypes] || error?.message;
+  const errorMessage =
+    errorMessagesBaseOnErrorTypes[error?.type as TErrorTypes] || error?.message;
 
   return { hasError, errorMessage };
 };

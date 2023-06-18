@@ -15,7 +15,15 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
-  const { name, required, InputLabelProps, type, minLength, helperText, ...rest } = props;
+  const {
+    name,
+    required,
+    InputLabelProps,
+    type,
+    minLength,
+    helperText,
+    ...rest
+  } = props;
   const {
     register,
     formState: { errors },

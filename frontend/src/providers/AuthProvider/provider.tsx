@@ -1,4 +1,10 @@
-import React, { useReducer, FC, useContext, Dispatch, createContext } from "react";
+import React, {
+  useReducer,
+  FC,
+  useContext,
+  Dispatch,
+  createContext,
+} from "react";
 import { IUserInfo } from "@types";
 import authReducer from "./reducer";
 
@@ -53,7 +59,11 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     dispatch: () => {},
   });
 
-  return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => {

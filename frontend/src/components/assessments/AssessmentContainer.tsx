@@ -80,7 +80,12 @@ const AssessmentContainer = () => {
             text="createAssessment"
             disabled={rest.loading}
           />
-          <IconButton size="small" component={Link} to={`/${spaceId}/setting`} sx={{ml:2}}>
+          <IconButton
+            size="small"
+            component={Link}
+            to={`/${spaceId}/setting`}
+            sx={{ ml: 2 }}
+          >
             <SettingsRoundedIcon color="primary" />
           </IconButton>
         </Box>

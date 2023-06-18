@@ -77,7 +77,9 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
+      {items.map(
+        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+      )}
     </DefaultInfoItemComponent>
   ),
 };
@@ -96,7 +98,12 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
+  const {
+    component: Component = DefaultInfoItemComponent,
+    renderMap = defaultRenderMap,
+    useTitleAsFallbackType,
+    bg,
+  } = config;
   const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 

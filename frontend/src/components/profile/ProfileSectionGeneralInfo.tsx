@@ -27,12 +27,14 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   const { profileId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.publishProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.publishProfile(args, config),
     runOnMount: false,
     toastError: true,
   });
   const unPublishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.unPublishProfile(args, config),
+    service: (args = { id: profileId }, config) =>
+      service.unPublishProfile(args, config),
     runOnMount: false,
     toastError: true,
   });
@@ -86,19 +88,36 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
               info={{
                 action: is_expert ? (
                   is_active ? (
-                    <IconButton color="primary" title="Unpublish" onClick={unPublishProfile}>
+                    <IconButton
+                      color="primary"
+                      title="Unpublish"
+                      onClick={unPublishProfile}
+                    >
                       <ArchiveRoundedIcon />
                     </IconButton>
                   ) : (
-                    <IconButton color="primary" title="Publish" onClick={publishProfile}>
+                    <IconButton
+                      color="primary"
+                      title="Publish"
+                      onClick={publishProfile}
+                    >
                       <PublishedWithChangesRoundedIcon />
                     </IconButton>
                   )
                 ) : undefined,
                 item: is_active ? (
-                  <Chip component="span" label={<Trans i18nKey="published" />} color="success" size="small" />
+                  <Chip
+                    component="span"
+                    label={<Trans i18nKey="published" />}
+                    color="success"
+                    size="small"
+                  />
                 ) : (
-                  <Chip component="span" label={<Trans i18nKey="unPublished" />} size="small" />
+                  <Chip
+                    component="span"
+                    label={<Trans i18nKey="unPublished" />}
+                    size="small"
+                  />
                 ),
                 title: "Publish status",
               }}

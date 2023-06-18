@@ -15,7 +15,8 @@ const CompareResultContainer = () => {
   const assessmentIds = searchParams.getAll("assessmentIds");
   const { service } = useServiceContext();
   const compareResultQueryData = useQuery<ICompareResultModel>({
-    service: (args = { assessmentIds }, config) => service.fetchCompareResult(args, config),
+    service: (args = { assessmentIds }, config) =>
+      service.fetchCompareResult(args, config),
     toastError: true,
   });
   const navigate = useNavigate();
@@ -33,7 +34,9 @@ const CompareResultContainer = () => {
                 <Button
                   startIcon={<BorderColorRoundedIcon />}
                   size="small"
-                  onClick={() => navigate({ pathname: "/compare", search: location.search })}
+                  onClick={() =>
+                    navigate({ pathname: "/compare", search: location.search })
+                  }
                 >
                   <Trans i18nKey="editComparisonItems" />
                 </Button>

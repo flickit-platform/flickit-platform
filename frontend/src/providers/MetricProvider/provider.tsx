@@ -1,4 +1,11 @@
-import React, { useReducer, FC, useContext, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useReducer,
+  FC,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import { useParams } from "react-router-dom";
 import { TMetricsInfo } from "@types";
 import { metricActions } from "./actions";
@@ -20,7 +27,7 @@ export interface IMetricContext {
   assessmentStatus: EAssessmentStatus;
   submitOnAnswerSelection: boolean;
   isSubmitting: boolean;
-  evidences:string;
+  evidences: string;
 }
 
 export const MetricContext = React.createContext<IMetricContext>({
@@ -33,7 +40,7 @@ export const MetricContext = React.createContext<IMetricContext>({
   },
   submitOnAnswerSelection: false,
   isSubmitting: false,
-  evidences:"",
+  evidences: "",
 });
 
 const MetricDispatchContext = React.createContext<any>({
@@ -50,12 +57,15 @@ export const MetricProvider: FC<IMetricProviderProps> = ({ children }) => {
     },
     submitOnAnswerSelection: false,
     isSubmitting: false,
-    evidences:"",
+    evidences: "",
   });
   const { subjectId } = useParams();
 
   useEffect(() => {
-    localStorage.setItem(`${subjectId}_metricIndex`, JSON.stringify(state.metricIndex));
+    localStorage.setItem(
+      `${subjectId}_metricIndex`,
+      JSON.stringify(state.metricIndex)
+    );
   }, [state.metricIndex]);
 
   useEffect(() => {
@@ -69,7 +79,9 @@ export const MetricProvider: FC<IMetricProviderProps> = ({ children }) => {
 
   return (
     <MetricContext.Provider value={state}>
-      <MetricDispatchContext.Provider value={dispatch}>{children}</MetricDispatchContext.Provider>
+      <MetricDispatchContext.Provider value={dispatch}>
+        {children}
+      </MetricDispatchContext.Provider>
     </MetricContext.Provider>
   );
 };
@@ -85,7 +97,9 @@ export const useMetricContext = () => {
 export const useMetricDispatch = () => {
   const context = useContext(MetricDispatchContext);
   if (context === undefined) {
-    throw new Error("useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider");
+    throw new Error(
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+    );
   }
   return context;
 };

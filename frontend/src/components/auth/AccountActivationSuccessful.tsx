@@ -34,11 +34,20 @@ const AccountActivationSuccessful = () => {
                 <TaskAltRoundedIcon color="success" sx={{ fontSize: "3rem" }} />
               </Box>
               <Box>
-                <Typography variant="h6" fontFamily="Roboto" sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}>
+                <Typography
+                  variant="h6"
+                  fontFamily="Roboto"
+                  sx={{ my: 3, textAlign: "center", letterSpacing: ".03em" }}
+                >
                   <Trans i18nKey="youHaveVerifiedYourAccount" />
                 </Typography>
                 <Box display="flex" flexDirection={"column"} pt={3}>
-                  <Button variant="contained" component={Link} to="/sign-in" replace={true}>
+                  <Button
+                    variant="contained"
+                    component={Link}
+                    to="/sign-in"
+                    replace={true}
+                  >
                     <Trans i18nKey={"clickHereToSignIn"} />
                   </Button>
                 </Box>

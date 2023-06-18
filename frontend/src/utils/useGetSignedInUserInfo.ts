@@ -10,14 +10,17 @@ import { authActions, useAuthContext } from "@providers/AuthProvider";
  * Checks if any token is available and then checks if the user with the founded token is still authenticated or not.
  *
  */
-const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: true }) => {
+const useGetSignedInUserInfo = (
+  props: { runOnMount: boolean } = { runOnMount: true }
+) => {
   const { runOnMount } = props;
   const location = useLocation();
   const navigate = useNavigate();
   const { service } = useServiceContext();
   const [error, setError] = useState(false);
   const abortController = useRef(new AbortController());
-  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } = useAuthContext();
+  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } =
+    useAuthContext();
 
   const getUser = async (token?: string) => {
     setError(false);

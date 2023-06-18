@@ -39,7 +39,11 @@ const ExpertGroupsContainer = () => {
           }}
         >
           <Box></Box>
-          <Box ml="auto">{is_expert && <CreateExpertGroupButton onSubmitForm={queryData.query} />}</Box>
+          <Box ml="auto">
+            {is_expert && (
+              <CreateExpertGroupButton onSubmitForm={queryData.query} />
+            )}
+          </Box>
         </Box>
       )}
       <QueryData
@@ -71,7 +75,12 @@ const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
 
   return (
     <>
-      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
+      <Button
+        variant="contained"
+        sx={{ ml: "auto" }}
+        size="small"
+        onClick={dialogProps.openDialog}
+      >
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />

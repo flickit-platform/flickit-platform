@@ -29,7 +29,16 @@ interface IMoreActionsProps {
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
-  const { boxProps = {}, openMenu, closeMenu, loading = false, open, anchorEl, items = [], hideInnerIconButton = false } = props;
+  const {
+    boxProps = {},
+    openMenu,
+    closeMenu,
+    loading = false,
+    open,
+    anchorEl,
+    items = [],
+    hideInnerIconButton = false,
+  } = props;
 
   const menuItems = items.filter((item) => !!item) as {
     icon?: JSX.Element;
@@ -49,13 +58,27 @@ const MoreActions = (props: IMoreActionsProps) => {
             !loading && openMenu(e);
           }}
         >
-          {loading ? <CircularProgress size="20px" /> : <MoreVertIcon fontSize="small" />}
+          {loading ? (
+            <CircularProgress size="20px" />
+          ) : (
+            <MoreVertIcon fontSize="small" />
+          )}
         </IconButton>
       )}
 
-      <Menu open={open} onClose={closeMenu} anchorEl={anchorEl} PaperProps={{ sx: { minWidth: "160px" } }}>
+      <Menu
+        open={open}
+        onClose={closeMenu}
+        anchorEl={anchorEl}
+        PaperProps={{ sx: { minWidth: "160px" } }}
+      >
         {menuItems.map((item, index) => {
-          const { onClick = () => {}, icon, text, menuItemProps = {} } = item || {};
+          const {
+            onClick = () => {},
+            icon,
+            text,
+            menuItemProps = {},
+          } = item || {};
           return (
             <MenuItem
               key={index}

@@ -44,11 +44,18 @@ const UserContainer = () => {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box>
-              <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
+              <TabList
+                onChange={handleChange}
+                scrollButtons="auto"
+                variant="scrollable"
+              >
                 <Tab
                   label={
                     <Box sx={{ ...styles.centerV }}>
-                      <AccountBoxRoundedIcon fontSize="small" sx={{ mr: "8px" }} />
+                      <AccountBoxRoundedIcon
+                        fontSize="small"
+                        sx={{ mr: "8px" }}
+                      />
                       <Trans i18nKey="account" />
                     </Box>
                   }

@@ -18,7 +18,13 @@ import { TQueryServiceFunction, useQuery } from "@utils/useQuery";
 import toastError from "@utils/toastError";
 import { t } from "i18next";
 import { ICustomError } from "@utils/CustomError";
-import { Controller, ControllerRenderProps, FieldErrorsImpl, FieldValues, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldErrorsImpl,
+  FieldValues,
+  useFormContext,
+} from "react-hook-form";
 import formatBytes from "@utils/formatBytes";
 import getFieldError from "@utils/getFieldError";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
@@ -53,7 +59,15 @@ const UploadField = (props: IUploadFieldProps) => {
       defaultValue={defaultValue}
       render={({ field, formState }) => {
         const { errors } = formState;
-        return <Uploader fieldProps={field} errors={errors} required={required} defaultValue={defaultValue} {...rest} />;
+        return (
+          <Uploader
+            fieldProps={field}
+            errors={errors}
+            required={required}
+            defaultValue={defaultValue}
+            {...rest}
+          />
+        );
       }}
     />
   );
@@ -94,8 +108,10 @@ const Uploader = (props: IUploadProps) => {
 
   const { service } = useServiceContext();
   const defaultValueQuery = useQuery({
-    service: (args = { url: defaultValue?.replace("http://flickit.org", "") }, config) =>
-      service.fetchImage(args, config),
+    service: (
+      args = { url: defaultValue?.replace("http://flickit.org", "") },
+      config
+    ) => service.fetchImage(args, config),
     runOnMount: false,
   });
 
@@ -116,10 +132,17 @@ const Uploader = (props: IUploadProps) => {
     return [];
   };
 
-  const [myFiles, setMyFiles] = useState<(File | { src: string; name: string; type: string })[]>(setTheState);
+  const [myFiles, setMyFiles] =
+    useState<(File | { src: string; name: string; type: string })[]>(
+      setTheState
+    );
 
   useEffect(() => {
-    if (typeof defaultValue === "string" && defaultValue && shouldFetchFileInfo) {
+    if (
+      typeof defaultValue === "string" &&
+      defaultValue &&
+      shouldFetchFileInfo
+    ) {
       defaultValueQuery.query().then((data) => {
         const myFile = new File([data], "image.jpeg", { type: data.type });
         fieldProps.onChange(myFile);
@@ -137,33 +160,36 @@ const Uploader = (props: IUploadProps) => {
     runOnMount: false,
   });
 
-  const onDrop = useCallback((acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
-    if (acceptedFiles?.[0]) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const binaryStr = reader.result;
-        if (!uploadService) {
-          setMyFiles(acceptedFiles);
-          fieldProps.onChange(acceptedFiles?.[0]);
-          return;
-        }
-        try {
-          const res = await uploadQueryProps.query(binaryStr);
-          setMyFiles(acceptedFiles);
-          fieldProps.onChange(res);
-        } catch (e) {
-          toastError(e as ICustomError);
-          setMyFiles([]);
-          fieldProps.onChange("");
-        }
-      };
+  const onDrop = useCallback(
+    (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
+      if (acceptedFiles?.[0]) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const binaryStr = reader.result;
+          if (!uploadService) {
+            setMyFiles(acceptedFiles);
+            fieldProps.onChange(acceptedFiles?.[0]);
+            return;
+          }
+          try {
+            const res = await uploadQueryProps.query(binaryStr);
+            setMyFiles(acceptedFiles);
+            fieldProps.onChange(res);
+          } catch (e) {
+            toastError(e as ICustomError);
+            setMyFiles([]);
+            fieldProps.onChange("");
+          }
+        };
 
-      reader.readAsArrayBuffer(acceptedFiles[0]);
-    } else if (fileRejections.length > 0) {
-      const errorMessage = fileRejections[0].errors[0]?.message;
-      toastError(errorMessage);
-    }
-  }, []);
+        reader.readAsArrayBuffer(acceptedFiles[0]);
+      } else if (fileRejections.length > 0) {
+        const errorMessage = fileRejections[0].errors[0]?.message;
+        toastError(errorMessage);
+      }
+    },
+    []
+  );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept,
@@ -184,7 +210,9 @@ const Uploader = (props: IUploadProps) => {
 
   const loading = uploadQueryProps.loading || deleteQueryProps.loading;
   const isDownloadable =
-    (!uploadQueryProps.loading && !uploadQueryProps.error && uploadQueryProps.data?.[fieldProps.name]) ||
+    (!uploadQueryProps.loading &&
+      !uploadQueryProps.error &&
+      uploadQueryProps.data?.[fieldProps.name]) ||
     (file as any)?.[fieldProps.name];
   const { errorMessage, hasError } = getFieldError(errors, fieldProps.name);
 
@@ -193,9 +221,11 @@ const Uploader = (props: IUploadProps) => {
       <Box
         sx={{
           minHeight: "40px",
-          border: (t) => `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
+          border: (t) =>
+            `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
-            border: (t) => `1px solid ${hasError ? t.palette.error.dark : "black"} `,
+            border: (t) =>
+              `1px solid ${hasError ? t.palette.error.dark : "black"} `,
           },
           borderRadius: 1,
           cursor: "pointer",
@@ -215,13 +245,19 @@ const Uploader = (props: IUploadProps) => {
               <ListItem
                 disabled={loading}
                 secondaryAction={
-                  <Box p={1} sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}>
+                  <Box
+                    p={1}
+                    sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}
+                  >
                     {isDownloadable && (
                       <IconButton
                         onClick={(e: any) => e.stopPropagation()}
                         sx={{ mr: 0.2 }}
                         component="a"
-                        href={uploadQueryProps.data?.[fieldProps.name] || (file as any)?.[fieldProps.name]}
+                        href={
+                          uploadQueryProps.data?.[fieldProps.name] ||
+                          (file as any)?.[fieldProps.name]
+                        }
                         download={file.name}
                       >
                         <DownloadRoundedIcon fontSize="small" />
@@ -247,7 +283,9 @@ const Uploader = (props: IUploadProps) => {
                             setMyFiles([]);
                             return;
                           }
-                          const id = uploadQueryProps.data?.id || fieldProps.value?.[0]?.id;
+                          const id =
+                            uploadQueryProps.data?.id ||
+                            fieldProps.value?.[0]?.id;
                           if (!id) {
                             toastError(true);
                             return;
@@ -287,7 +325,9 @@ const Uploader = (props: IUploadProps) => {
                         objectFit: "contain",
                       }}
                       component="img"
-                      src={(file as any).src || URL.createObjectURL(file as any)}
+                      src={
+                        (file as any).src || URL.createObjectURL(file as any)
+                      }
                       alt={file.name}
                       title={file.name}
                     />
@@ -297,13 +337,21 @@ const Uploader = (props: IUploadProps) => {
                 </ListItemIcon>
                 <ListItemText
                   title={`${(acceptedFiles[0] || file)?.name} - ${
-                    (acceptedFiles[0] || file)?.size ? formatBytes((acceptedFiles[0] || file)?.size) : ""
+                    (acceptedFiles[0] || file)?.size
+                      ? formatBytes((acceptedFiles[0] || file)?.size)
+                      : ""
                   }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
                   primary={<>{(acceptedFiles[0] || file)?.name}</>}
-                  secondary={<>{(acceptedFiles[0] || file)?.size ? formatBytes((acceptedFiles[0] || file)?.size) : null}</>}
+                  secondary={
+                    <>
+                      {(acceptedFiles[0] || file)?.size
+                        ? formatBytes((acceptedFiles[0] || file)?.size)
+                        : null}
+                    </>
+                  }
                 />
               </ListItem>
             </List>

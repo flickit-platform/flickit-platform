@@ -5,7 +5,9 @@ import defaultGetMenuItems from "./defaultGetMenuItems";
 
 interface IRichEditorMenuBarProps {
   editor: Editor;
-  getMenuItems?: (editor: Editor) => (IRichEditorMenuItem | { type: "divider" })[];
+  getMenuItems?: (
+    editor: Editor
+  ) => (IRichEditorMenuItem | { type: "divider" })[];
 }
 
 const RichEditorMenuBar = (props: IRichEditorMenuBarProps) => {

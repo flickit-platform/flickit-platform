@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types":["cypress","node"],
+    "types": ["cypress", "node"],
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
@@ -28,7 +28,7 @@
       "@styles": ["src/config/styles.ts"],
       "@constants": ["src/config/constants.ts"],
       "@assets": ["src/assets/*"],
-      "@config/*": ["src/config/*"],
+      "@config/*": ["src/config/*"]
     }
   },
   "include": ["src"],

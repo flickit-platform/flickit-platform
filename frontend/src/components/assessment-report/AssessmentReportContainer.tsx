@@ -37,8 +37,9 @@ const AssessmentReportContainer = () => {
           most_significant_strength_atts,
           subjects_info = [],
           total_progress,
-          level_value,maturity_level_status,
-          maturity_level_number
+          level_value,
+          maturity_level_status,
+          maturity_level_number,
         } = data || {};
         const colorCode = assessment_project?.color?.color_code || "#101c32";
         const isComplete = total_progress.progress === 100;
@@ -84,11 +85,16 @@ const AssessmentReportContainer = () => {
                           md: "1.3rem",
                           fontFamily: "Roboto",
                         },
-                        marginBottom:"6px",
+                        marginBottom: "6px",
                         fontWeight: "bold",
                         textDecoration: "none",
                         height: "100%",
-                        display: {xs:"block",sm:"block",md:"flex",lg:"flex"},
+                        display: {
+                          xs: "block",
+                          sm: "block",
+                          md: "flex",
+                          lg: "flex",
+                        },
                         alignItems: "center",
                         alignSelf: "stretch",
                       }}
@@ -135,7 +141,10 @@ const AssessmentReportContainer = () => {
                       }}
                       avatar={
                         <Avatar
-                        sx={{width:{xs:30,sm:40},height:{xs:30,sm:40}}}
+                          sx={{
+                            width: { xs: 30, sm: 40 },
+                            height: { xs: 30, sm: 40 },
+                          }}
                           alt={expert_group?.name}
                           src={expert_group?.picture || "/"}
                         />

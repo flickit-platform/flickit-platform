@@ -7,7 +7,7 @@ const GaugeComponent7 = (props: IDynamicGaugeSVGProps) => {
   const { colorCode, value } = props;
   return (
     <svg
-    width="100%"
+      width="100%"
       height="200"
       viewBox="0 0 201 200"
       fill="none"

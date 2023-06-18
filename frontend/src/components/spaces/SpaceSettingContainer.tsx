@@ -49,7 +49,7 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
-        toolbar={isOwner?<EditSpaceButton fetchSpace={query} />:<div/>}
+        toolbar={isOwner ? <EditSpaceButton fetchSpace={query} /> : <div />}
         backLink={-1}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
@@ -61,7 +61,9 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}</Box>
+      <Box pt={3}>
+        {!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}
+      </Box>
     </Box>
   );
 };
@@ -99,7 +101,7 @@ const EditSpaceButton = (props: any) => {
   );
 };
 
-function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
+function SpaceSettings(props: { isOwner: boolean; owner: any }) {
   const { owner } = props;
   const [value, setValue] = React.useState("1");
 
