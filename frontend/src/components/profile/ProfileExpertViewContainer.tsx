@@ -35,7 +35,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 
 const ProfileExpertViewContainer = () => {
-  const { profileQueryProps,fetchProfileQuery } = useProfile();
+  const { profileQueryProps, fetchProfileQuery } = useProfile();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
