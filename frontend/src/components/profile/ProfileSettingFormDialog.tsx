@@ -22,13 +22,13 @@ interface IProfileSettingFormDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchProfile?:any;
+  fetchProfilQuery?:any;
 }
 
 const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {},fetchProfile, openDialog, ...rest } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {},fetchProfilQuery, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId, profileId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
@@ -91,7 +91,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
               })}
               name="tags"
               multiple={true}
-              defaultValue={fetchProfile?.data&&fetchProfile?.data[0].tags}
+              defaultValue={fetchProfilQuery?.data&&fetchProfilQuery?.data[0].tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
