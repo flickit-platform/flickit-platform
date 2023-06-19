@@ -6,7 +6,7 @@ import getStatusText from "@utils/getStatusText";
 import hasStatus from "@utils/hasStatus";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
-import GaugeComponent5 from "@common/charts/GaugeComponent5";
+import SkeletonGauge from "@common/charts/SkeletonGauge";
 interface IGaugeProps extends BoxProps {
   systemStatus: TStatus;
   name?: string;
@@ -31,7 +31,7 @@ const Gauge = (props: IGaugeProps) => {
   );
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
-      <Suspense fallback={<GaugeComponent5 colorCode="#000" value={-1} />}>
+      <Suspense fallback={<SkeletonGauge />}>
         <GaugeComponent
           colorCode={colorCode}
           value={
