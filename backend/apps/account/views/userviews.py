@@ -35,11 +35,10 @@ class UserActivationView(APIView):
         # web_url = protocol + 'localhost:8000'
         print('protocol:' + protocol)
         print('before call')
-        post_url = 'localhost:8000' + "/authinfo/users/activation/?uid=(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$'"
+        post_url = "localhost:8000/authinfo/users/activation/?uid=(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$'"
         post_data = {'uid': uid, 'token': token}
         result = requests.post(post_url, data = post_data)
         print('after call')
-        print(str(result))
         content = result.text
         if not content:
             return Response({'message': 'The user is activated'}, status=status.HTTP_200_OK)

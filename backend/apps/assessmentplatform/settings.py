@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = False
+DEBUG = os.environ.get('DEBUG')  == 'True'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
