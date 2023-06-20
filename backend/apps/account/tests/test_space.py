@@ -129,7 +129,7 @@ class TestAddUserToSpace:
         
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data["code"] == "user-joined-space"
-        assert resp.data["message"] == "This user has successfully joined this space."
+        assert resp.data["message"] == "This user has successfully joined the space."
         
     def test_add_user_in_space_with_user_is_not_member(self,init_space):
         
@@ -143,8 +143,8 @@ class TestAddUserToSpace:
         resp = view(request, space_list["user1"][0].id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data["code"] == "currentuser-not-member"
-        assert resp.data["message"] == "Only member users of the space can add users to the space."
+        assert resp.data["code"] == "user-not-allowed"
+        assert resp.data["message"] == "Only members of the space are allowed to add new members to it."
         
     def test_add_user_in_space_with_email_is_member(self,init_space):
         space_list = init_space()
