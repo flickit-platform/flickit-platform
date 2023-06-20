@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.exceptions import PermissionDenied
 
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
@@ -60,10 +61,12 @@ class ProfileListApi(APIView):
         return Response({'results' : response}, status = status.HTTP_200_OK)
     
 class UnpublishedProfileListApi(APIView):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated]
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
+        if not expert_group.users.filter(id = request.user.id).exists():
+            raise PermissionDenied
         response = AssessmentProfileSerilizer(expert_group.profiles.filter(is_active=False), many = True, context={'request': request}).data
         return Response({'results' : response}, status = status.HTTP_200_OK)
 
