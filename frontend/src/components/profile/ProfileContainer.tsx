@@ -303,21 +303,6 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             )}
-            {maturity_levels[0] && (
-              <Box mt={8}>
-                <Title>
-                  <Trans i18nKey="maturityLevel" />
-                </Title>
-                <Box mt={2} sx={{display:"flex"}}>
-                  {maturity_levels.map((item: any) => {
-                    const colorCode = colorPallet[item.value];
-                    return (
-                      <Box sx={{ background: colorCode ,py:{xs:"4px",md:1},px:{xs:1,md:4},fontWeight:"bold",color:"#fff"}}>{item.title}</Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            )}
             <Box my={8}>
               <Title>
                 <Trans i18nKey={"subjects"} />
@@ -325,7 +310,7 @@ const Profile = (props: any) => {
               <Box component="ul" mt={3}>
                 {subjects_with_desc.map((subject: any) => {
                   return (
-                    <Box component="li" mb={2} key={subject.id}>
+                    <Box component="li" mb={2} key={subject.id} sx={{fontSize:"1.2rem"}}>
                       <b>{subject.title}</b>: {subject.description}
                       <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
                         <Trans i18nKey="relatedAttributes" />
@@ -370,6 +355,38 @@ const Profile = (props: any) => {
                 })}
               </Box>
             </Box>
+            {maturity_levels[0] && (
+              <Box mt={8}>
+                <Title>
+                  <Trans i18nKey="maturityLevel" />
+                </Title>
+                <Box mt={2} sx={{ display: "flex" }}>
+                  {maturity_levels.map((item: any, index: number) => {
+                    const colorCode = colorPallet[item.value];
+                    return (
+                      <Box
+                        sx={{
+                          background: colorCode,
+                          fontSize:"14px",
+                          py: { xs: "2px", md: 1 },
+                          px: { xs: 1, md: 4 },
+                          fontWeight: "bold",
+                          color: "#fff",
+                          borderRadius:
+                            index === 0
+                              ? "8px 0 0 8px"
+                              : index === maturity_levels.length-1
+                              ? "0 8px 8px 0"
+                              : "0",
+                        }}
+                      >
+                        {item.title}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Box>
