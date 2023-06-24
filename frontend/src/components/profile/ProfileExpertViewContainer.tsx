@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import { styles } from "@styles";
+import { styles,getMaturityLevelColors } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Grid from "@mui/material/Grid";
@@ -95,7 +95,11 @@ const ProfileExpertViewContainer = () => {
           );
         }}
       />
-      <ProfileSettingFormDialog {...dialogProps} onSubmitForm={profileQueryProps.query} fetchProfileQuery={fetchProfileQuery} />
+      <ProfileSettingFormDialog
+        {...dialogProps}
+        onSubmitForm={profileQueryProps.query}
+        fetchProfileQuery={fetchProfileQuery}
+      />
     </Box>
   );
 };
@@ -788,7 +792,7 @@ const ProfileDialog = (props: any) => {
       fullWidth
       maxWidth="md"
       fullScreen={fullScreen}
-      px={2}
+      sx={{ padding: "24px" }}
     >
       <DialogTitle mb={4}>
         <Typography
@@ -928,37 +932,40 @@ const ProfileDialog = (props: any) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Grid item xs sx={{ width: { xs: "100%", sm: "60%" } }} mb={2}>
+          <Grid item xs sx={{ width: { xs: "100%" } }} mb={2}>
             {listOfOptions &&
-              listOfOptions.map((op: any, index: number) => (
-                <Typography
-                  variant="body1"
-                  fontFamily="Roboto"
-                  fontWeight={"bold"}
-                >
-                  {index === 0 && (
-                    <Typography
-                      sx={{
-                        pb: "2px",
-                        mb: 2,
-                        color: "#767676",
-                        display: "block",
-                        fontFamily: "Roboto",
-                        fontSize: "0.8rem",
-                        width: "100%",
-                        borderBottom: (t) =>
-                          `1px solid ${t.palette.primary.light}`,
-                      }}
-                      component="span"
-                    >
-                      <Trans i18nKey={"questionOptions"} />
-                    </Typography>
-                  )}
-                  {op}
-                </Typography>
-              ))}
+              listOfOptions.map((op: any, index: number) => {
+                return (
+                  <Typography
+                    variant="body1"
+                    fontFamily="Roboto"
+                    fontWeight={"bold"}
+                    mb={1}
+                  >
+                    {index === 0 && (
+                      <Typography
+                        sx={{
+                          pb: "2px",
+                          mb: 2,
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                          width: "100%",
+                          borderBottom: (t) =>
+                            `1px solid ${t.palette.primary.light}`,
+                        }}
+                        component="span"
+                      >
+                        <Trans i18nKey={"questionOptions"} />
+                      </Typography>
+                    )}
+                    {op}
+                  </Typography>
+                );
+              })}
           </Grid>
-          <Grid item xs sx={{ width: { xs: "100%", sm: "60%" } }}>
+          <Grid item xs sx={{ width: { xs: "100%" } }}>
             {relatedAttributes &&
               relatedAttributes.map((item: any, index: number) => (
                 <Box>
@@ -984,16 +991,15 @@ const ProfileDialog = (props: any) => {
                   <Box
                     key={index}
                     sx={{
-                      background: (t) => t.palette.secondary.main,
-                      borderRadius: 8,
-                      color: "white",
-                      width: { xs: "100%", sm: "60%" },
+                      width: { xs: "100%" },
                       margin: "0 auto",
                     }}
                   >
                     <Box py={0.3} px={2} mb={0.5} mr={0.5}>
                       <Typography
-                        variant="body2"
+                        variant="body1"
+                        fontFamily="Roboto"
+                        fontWeight={"bold"}
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
@@ -1002,10 +1008,9 @@ const ProfileDialog = (props: any) => {
                         {item.title}
                         <Typography
                           component="span"
-                          sx={{
-                            fontWeight: "bold",
-                            color: "white",
-                          }}
+                          variant="body1"
+                          fontFamily="Roboto"
+                          fontWeight={"bold"}
                         >
                           {item.item}
                         </Typography>

@@ -192,30 +192,33 @@ const ProfileMaturityLevels = (props: any) => {
         direction="row"
         alignItems="center"
       >
-        {list.map((item: any) => {
-          const colorCode = colorPallet[item.value];
+        {list.map((item: any, index: number) => {
+          const colorCode = item?.value ? colorPallet[item?.value - 1] : "#fff";
           return (
-            <Grid item xs="auto">
-              <Box
-                sx={{
-                  border: `2px solid ${colorCode}`,
-                  px: "8px",
-                  py: "2px",
-                  mx: "1px",
-                  borderRadius: "8px",
-                  background: () => colorCode.replace(/[^,]+(?=\))/, "0.1"),
-                  textAlign: "center",
-                }}
+            <Box
+              sx={{
+                border: `2px solid ${colorCode}`,
+                px: "8px",
+                py: "2px",
+                borderRadius:
+                  index === 0
+                    ? "8px 0 0 8px"
+                    : index === list.length - 1
+                    ? "0 8px 8px 0"
+                    : "0",
+                background: colorCode,
+
+                textAlign: "center",
+              }}
+            >
+              <Typography
+                fontSize="12px"
+                fontWeight="bold"
+                sx={{ color: "#fff" }}
               >
-                <Typography
-                  fontSize="12px"
-                  fontWeight="bold"
-                  sx={{ color: colorCode }}
-                >
-                  {item.title}
-                </Typography>
-              </Box>
-            </Grid>
+                {item.title}
+              </Typography>
+            </Box>
           );
         })}
       </Grid>
