@@ -16,28 +16,28 @@ import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import { toast } from "react-toastify";
 
-interface IProfileSectionAuthorInfo {
+interface IAssessmentKitSectionAuthorInfo {
   data: any;
   query: TQueryFunction;
 }
 
-const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
+const AssessmentKitSectionGeneralInfo = (props: IAssessmentKitSectionAuthorInfo) => {
   const { data, query } = props;
   const { is_active, is_expert = true } = data || {};
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.publishProfile(args, config),
+    service: (args = { id: assessmentKitId }, config) => service.publishAssessmentKit(args, config),
     runOnMount: false,
     toastError: true,
   });
   const unPublishQuery = useQuery({
-    service: (args = { id: profileId }, config) => service.unPublishProfile(args, config),
+    service: (args = { id: assessmentKitId }, config) => service.unPublishAssessmentKit(args, config),
     runOnMount: false,
     toastError: true,
   });
 
-  const publishProfile = async () => {
+  const publishAssessmentKit = async () => {
     try {
       const res = await publishQuery.query();
       res.message && toast.success(res.message);
@@ -45,7 +45,7 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
     } catch (e) {}
   };
 
-  const unPublishProfile = async () => {
+  const unPublishAssessmentKit = async () => {
     try {
       const res = await unPublishQuery.query();
       res.message && toast.success(res.message);
@@ -86,11 +86,11 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
               info={{
                 action: is_expert ? (
                   is_active ? (
-                    <IconButton color="primary" title="Unpublish" onClick={unPublishProfile}>
+                    <IconButton color="primary" title="Unpublish" onClick={unPublishAssessmentKit}>
                       <ArchiveRoundedIcon />
                     </IconButton>
                   ) : (
-                    <IconButton color="primary" title="Publish" onClick={publishProfile}>
+                    <IconButton color="primary" title="Publish" onClick={publishAssessmentKit}>
                       <PublishedWithChangesRoundedIcon />
                     </IconButton>
                   )
@@ -145,4 +145,4 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   );
 };
 
-export default ProfileSectionGeneralInfo;
+export default AssessmentKitSectionGeneralInfo;

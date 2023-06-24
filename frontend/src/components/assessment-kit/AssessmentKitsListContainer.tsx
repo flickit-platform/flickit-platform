@@ -5,18 +5,18 @@ import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
-import ProfilesMarketListItem from "./ProfilesMarketListItem";
+import AssessmentKitsMarketListItem from "./AssessmentKitsMarketListItem";
 
-const ProfilesListContainer = () => {
+const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
-  const profilesQueryData = useQuery({
-    service: (args, config) => service.fetchProfiles(args, config),
+  const assessmentKitsQueryData = useQuery({
+    service: (args, config) => service.fetchAssessmentKits(args, config),
   });
 
   return (
     <Box>
       <QueryData
-        {...profilesQueryData}
+        {...assessmentKitsQueryData}
         renderLoading={() => (
           <>
             <Box mt={`2`}>
@@ -36,10 +36,10 @@ const ProfilesListContainer = () => {
             <>
               <Box mt={3}>
                 <Grid container spacing={2}>
-                  {results.map((profile: any) => {
+                  {results.map((assessment_kit: any) => {
                     return (
-                      <Grid item xs={12} md={6} lg={4} key={profile.id}>
-                        <ProfilesMarketListItem bg1={"#4568dc"} bg2={"#b06ab3"} data={profile} />
+                      <Grid item xs={12} md={6} lg={4} key={assessment_kit.id}>
+                        <AssessmentKitsMarketListItem bg1={"#4568dc"} bg2={"#b06ab3"} data={assessment_kit} />
                       </Grid>
                     );
                   })}
@@ -53,4 +53,4 @@ const ProfilesListContainer = () => {
   );
 };
 
-export default ProfilesListContainer;
+export default AssessmentKitsListContainer;

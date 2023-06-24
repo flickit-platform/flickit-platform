@@ -19,14 +19,14 @@ import AutocompleteAsyncField, {
 import UploadField from "@common/fields/UploadField";
 import RichEditorField from "@common/fields/RichEditorField";
 
-interface IProfileCEFromDialogProps extends DialogProps {
+interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
 
-const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
+const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
   const {
@@ -67,18 +67,18 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile(
-              { data: formattedData, profileId: id },
+          ? await service.updateAssessmentKit(
+              { data: formattedData, assessmentKitId: id },
               { signal: abortController.signal }
             )
-          : await service.createProfile(
+          : await service.createAssessmentKit(
               { data: formattedData },
               { signal: abortController.signal }
             );
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && res?.id && navigate(`profiles/${res.id}`);
+      shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -95,9 +95,9 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
           {type === "update" ? (
-            <Trans i18nKey="updateProfile" />
+            <Trans i18nKey="updateAssessmentKit" />
           ) : (
-            <Trans i18nKey="createProfile" />
+            <Trans i18nKey="createAssessmentKit" />
           )}
         </>
       }
@@ -119,10 +119,10 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
             <UploadField
               accept={{ "application/zip": [".zip"] }}
               uploadService={(args, config) =>
-                service.uploadProfileDSL(args, config)
+                service.uploadAssessmentKitDSL(args, config)
               }
               deleteService={(args, config) =>
-                service.deleteProfileDSL(args, config)
+                service.deleteAssessmentKitDSL(args, config)
               }
               name="dsl_id"
               required={true}
@@ -133,7 +133,7 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
                 service: (args, config) =>
-                  service.fetchProfileTags(args, config),
+                  service.fetchAssessmentKitTags(args, config),
               })}
               name="tags"
               multiple={true}
@@ -173,4 +173,4 @@ const ProfileCEFromDialog = (props: IProfileCEFromDialogProps) => {
   );
 };
 
-export default ProfileCEFromDialog;
+export default AssessmentKitCEFromDialog;

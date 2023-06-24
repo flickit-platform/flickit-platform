@@ -108,9 +108,9 @@ const Navbar = () => {
           <ListItemButton
             sx={{ textAlign: "left", borderRadius: 1.5 }}
             component={NavLink}
-            to={`/profiles`}
+            to={`/assessment-kits`}
           >
-            <ListItemText primary={<Trans i18nKey="profiles" />} />
+            <ListItemText primary={<Trans i18nKey="assessmentKits" />} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -193,11 +193,11 @@ const Navbar = () => {
             </Button>
             <Button
               component={NavLink}
-              to={`/profiles`}
+              to={`/assessment-kits`}
               sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
               size="small"
             >
-              <Trans i18nKey="profiles" />
+              <Trans i18nKey="assessmentKits" />
             </Button>
           </Box>
           <Box ml="auto">

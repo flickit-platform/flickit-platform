@@ -24,7 +24,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
     assessment_project: {
       title,
       last_modification_date,
-      assessment_profile,
+      assessment_kit,
       space,
     },
   } = data;
@@ -94,7 +94,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           {title}
         </Box>
         <span style={{ opacity: 0.9 }}>
-          {assessment_profile.description || <Trans i18nKey="insights" />}
+          {assessment_kit.description || <Trans i18nKey="insights" />}
         </span>
       </Box>
     </Title>

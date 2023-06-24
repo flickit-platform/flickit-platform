@@ -47,7 +47,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, profile, ...restOfData } = data;
+    const { space, assessment_kit, ...restOfData } = data;
     setLoading(true);
     try {
       const { data: res } =
@@ -57,7 +57,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 rowId,
                 data: {
                   space: spaceId || space?.id,
-                  assessment_profile: profile?.id,
+                  assessment_kit: assessment_kit?.id,
                   ...restOfData,
                 },
               },
@@ -67,7 +67,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               {
                 data: {
                   space: spaceId || space?.id,
-                  assessment_profile: profile?.id,
+                  assessment_kit: assessment_kit?.id,
                   ...restOfData,
                 },
               },
@@ -76,7 +76,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
-      !!staticData.profile && navigate(`/${res.space}/assessments`);
+      !!staticData.assessment_kit && navigate(`/${res.space}/assessments`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -120,7 +120,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <ProfileField defaultValue={defaultValues?.assessment_profile} staticValue={staticData.profile} />
+            <AssessmentKitField defaultValue={defaultValues?.assessment_kit} staticValue={staticData.assessment_kit} />
           </Grid>
         </Grid>
         <CEDialogActions
@@ -134,10 +134,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   );
 };
 
-const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
+const AssessmentKitField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
-    service: (args, config) => service.fetchProfilesOptions(args, config),
+    service: (args, config) => service.fetchAssessmentKitsOptions(args, config),
   });
 
   return (
@@ -147,7 +147,7 @@ const ProfileField = ({ defaultValue, staticValue }: { defaultValue: any; static
       required={true}
       defaultValue={staticValue ?? defaultValue}
       disabled={!!staticValue}
-      label={<Trans i18nKey="profile" />}
+      label={<Trans i18nKey="assessmentKit" />}
       data-cy="profile"
     />
   );
