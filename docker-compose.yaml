@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   backend:
-    image: ghcr.io/avansoft/flickit-platform:vi0.7.3
+    image: ghcr.io/avansoft/flickit-platform:stage
     ports:
       - 8000:8000
     volumes:
@@ -20,8 +20,11 @@ services:
       - EMAIL_HOST_USER=${EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
       - EMAIL_HOST_PORT=${EMAIL_HOST_PORT}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS}
+      - EMAIL_USE_SSL=${EMAIL_USE_SSL}
       - DOMAIN=${DOMAIN}
       - CELERY_BROKER_URL=redis://redis:6379/1
+
     depends_on:
       - db
 
@@ -49,7 +52,7 @@ services:
     image: redis:alpine
   celery:
     restart: always
-    image: ghcr.io/avansoft/flickit-platform:vi0.7.3
+    image: ghcr.io/avansoft/flickit-platform:stage
     command: celery -A assessmentplatform worker -l info
     volumes:
       - ./backend:/backend
@@ -61,15 +64,22 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - CELERY_BROKER_URL=redis://redis:6379/1
+      - EMAIL_HOST=${EMAIL_HOST}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - EMAIL_HOST_PORT=${EMAIL_HOST_PORT}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS}
+      - EMAIL_USE_SSL=${EMAIL_USE_SSL}
       - DOMAIN=${DOMAIN}
+      - CELERY_BROKER_URL=redis://redis:6379/1
     depends_on:
       - db
       - redis
       - backend
 
   flower:
-    image: ghcr.io/avansoft/flickit-platform:vi0.7.3
+    image: ghcr.io/avansoft/flickit-platform:stage
     command: celery -A assessmentplatform flower
     volumes:
       - ./backend:/backend
@@ -91,8 +101,8 @@ services:
     ports:
       - 5555:5555
 
-frontend:
-    image: ghcr.io/avansoft/flickit-platform-frontend:vi0.7.3
+  frontend:
+    image: ghcr.io/avansoft/flickit-platform-frontend:stage
     ports:
       - "80:80"
     environment:

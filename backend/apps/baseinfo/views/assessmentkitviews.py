@@ -61,7 +61,7 @@ class AssessmentKitListApi(APIView):
         return Response({'results' : response}, status = status.HTTP_200_OK)
     
 class UnpublishedAssessmentKitListApi(APIView):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated]
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
