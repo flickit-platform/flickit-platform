@@ -1,7 +1,8 @@
 
 
 class ActionResult():
-    def __init__(self, message = None, success = None, data = None, **kwargs):
+    def __init__(self,code = None, message = None, success = None, data = None, **kwargs):
+        self.code = code
         self.message = message
         self.success = success
         self.data = data
@@ -21,4 +22,3 @@ class Dictionary(dict):
   def get(self, key):
     return self[key]
     
-
