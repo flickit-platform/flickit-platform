@@ -9,6 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 
 from baseinfo.decorators import is_expert
 from baseinfo.services import assessmentkitservice, expertgroupservice
@@ -64,6 +65,8 @@ class UnpublishedAssessmentKitListApi(APIView):
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)
+        if not expert_group.users.filter(id = request.user.id).exists():
+            raise PermissionDenied
         response = AssessmentKitSerilizer(expert_group.assessmentkits.filter(is_active=False), many = True, context={'request': request}).data
         return Response({'results' : response}, status = status.HTTP_200_OK)
 

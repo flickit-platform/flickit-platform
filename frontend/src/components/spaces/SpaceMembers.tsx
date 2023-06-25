@@ -32,7 +32,8 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 
-export const SpaceMembers = () => {
+export const SpaceMembers = (props: any) => {
+  const { owner } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { dispatch, userInfo } = useAuthContext();
@@ -47,8 +48,10 @@ export const SpaceMembers = () => {
     loading,
     data,
   } = useQuery({
-    service: ({ id = spaceId, value = user_id_ref.current?.value }: any, config) =>
-      service.addMemberToSpace({ spaceId: id, email: value }, config),
+    service: (
+      { id = spaceId, value = user_id_ref.current?.value }: any,
+      config
+    ) => service.addMemberToSpace({ spaceId: id, email: value }, config),
     runOnMount: false,
   });
 
@@ -104,7 +107,9 @@ export const SpaceMembers = () => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (err.data.message === "This user is a member in this space.") {
+                if (
+                  err.data.message === "This user is a member in this space."
+                ) {
                   toastError(err.data.message);
                 } else {
                   dialogProps.openDialog({
@@ -144,7 +149,11 @@ export const SpaceMembers = () => {
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
-                {spaceMembersQueryData?.data?.results?.filter((item: any) => !!item.user)?.length}
+                {
+                  spaceMembersQueryData?.data?.results?.filter(
+                    (item: any) => !!item.user
+                  )?.length
+                }
               </Typography>
             </Box>
           }
@@ -157,7 +166,13 @@ export const SpaceMembers = () => {
             return (
               <>
                 {[1, 2, 3, 4, 5].map((item) => {
-                  return <Skeleton key={item} variant="rectangular" sx={{ borderRadius: 2, height: "50px", mb: 1 }} />;
+                  return (
+                    <Skeleton
+                      key={item}
+                      variant="rectangular"
+                      sx={{ borderRadius: 2, height: "50px", mb: 1 }}
+                    />
+                  );
                 })}
               </>
             );
@@ -165,14 +180,12 @@ export const SpaceMembers = () => {
           render={(data) => {
             const { results } = data;
             const invitees = results.filter((item: any) => !item.user);
-
             return (
               <Box>
                 {results.map((member: any) => {
                   const { user, id } = member;
                   const name = getUserName(user);
-                  const isOwner = userId == user?.id;
-
+                  const isOwner = owner?.id == user?.id;
                   return (
                     user && (
                       <Box
@@ -195,8 +208,20 @@ export const SpaceMembers = () => {
                           <Box ml={2}>{name}</Box>
                         </Box>
                         <Box ml="auto" sx={{ ...styles.centerV }}>
-                          {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
-                          {<Actions isOwner={isOwner} member={member} fetchSpaceMembers={spaceMembersQueryData.query} />}
+                          {isOwner && (
+                            <Chip
+                              label={<Trans i18nKey="owner" />}
+                              size="small"
+                              sx={{ mr: 1.5 }}
+                            />
+                          )}
+                          {
+                            <Actions
+                              isOwner={isOwner}
+                              member={member}
+                              fetchSpaceMembers={spaceMembersQueryData.query}
+                            />
+                          }
                         </Box>
                       </Box>
                     )
@@ -216,7 +241,12 @@ export const SpaceMembers = () => {
                     </Title>
                     <Box mt={1}>
                       {invitees.map((member: any) => {
-                        const { user, id, invite_email, invite_expiration_date } = member;
+                        const {
+                          user,
+                          id,
+                          invite_email,
+                          invite_expiration_date,
+                        } = member;
                         const name = getUserName(user) || invite_email;
                         const isOwner = userId == user?.id;
 
@@ -250,15 +280,28 @@ export const SpaceMembers = () => {
                                     mr: 2,
                                   }}
                                 >
-                                  <EventBusyRoundedIcon fontSize="small" sx={{ mr: 0.5 }} />
-                                  <Typography variant="body2">{formatDate(invite_expiration_date)}</Typography>
+                                  <EventBusyRoundedIcon
+                                    fontSize="small"
+                                    sx={{ mr: 0.5 }}
+                                  />
+                                  <Typography variant="body2">
+                                    {formatDate(invite_expiration_date)}
+                                  </Typography>
                                 </Box>
-                                {isOwner && <Chip label={<Trans i18nKey="owner" />} size="small" sx={{ mr: 1.5 }} />}
+                                {isOwner && (
+                                  <Chip
+                                    label={<Trans i18nKey="owner" />}
+                                    size="small"
+                                    sx={{ mr: 1.5 }}
+                                  />
+                                )}
                                 {
                                   <Actions
                                     isOwner={isOwner}
                                     member={member}
-                                    fetchSpaceMembers={spaceMembersQueryData.query}
+                                    fetchSpaceMembers={
+                                      spaceMembersQueryData.query
+                                    }
                                     isInvitationExpired={true}
                                     isInvitees={true}
                                     email={invite_email}
@@ -277,7 +320,11 @@ export const SpaceMembers = () => {
           }}
         />
       </Box>
-      <InviteSpaceMemberDialog {...dialogProps} spaceMembersQueryData={spaceMembersQueryData} resetForm={resetForm} />
+      <InviteSpaceMemberDialog
+        {...dialogProps}
+        spaceMembersQueryData={spaceMembersQueryData}
+        resetForm={resetForm}
+      />
     </Box>
   );
 };
@@ -299,23 +346,30 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
         variant="contained"
         size="small"
       >
-        {isSmallScreen ? <AddRoundedIcon fontSize="small" /> : <Trans i18nKey={"addMember"} />}
+        {isSmallScreen ? (
+          <AddRoundedIcon fontSize="small" />
+        ) : (
+          <Trans i18nKey={"addMember"} />
+        )}
       </LoadingButton>
     </InputAdornment>
   );
 };
 
 const Actions = (props: any) => {
-  const { member, fetchSpaceMembers, isInvitees, isInvitationExpired, email } = props;
+  const { member, fetchSpaceMembers, isInvitees, isInvitationExpired, email } =
+    props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteSpaceMember, loading } = useQuery({
-    service: (arg, config) => service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
+    service: (arg, config) =>
+      service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
     runOnMount: false,
     toastError: true,
   });
   const inviteMemberQueryData = useQuery({
-    service: (args = { id: spaceId, data: { email } }, config) => service.inviteSpaceMember(args, config),
+    service: (args = { id: spaceId, data: { email } }, config) =>
+      service.inviteSpaceMember(args, config),
     runOnMount: false,
   });
 
@@ -371,7 +425,8 @@ const InviteSpaceMemberDialog = (
   const { spaceId } = useParams();
   const { service } = useServiceContext();
   const { query: inviteMemberQuery, loading } = useQuery({
-    service: (args = { id: spaceId, data: rest.context?.data || {} }, config) => service.inviteSpaceMember(args, config),
+    service: (args = { id: spaceId, data: rest.context?.data || {} }, config) =>
+      service.inviteSpaceMember(args, config),
     runOnMount: false,
   });
 
@@ -388,9 +443,17 @@ const InviteSpaceMemberDialog = (
   };
 
   return (
-    <InviteMemberDialog {...(rest as any)} onInvite={onInvite} loading={loading} maxWidth="sm">
+    <InviteMemberDialog
+      {...(rest as any)}
+      onInvite={onInvite}
+      loading={loading}
+      maxWidth="sm"
+    >
       <Typography>
-        <Trans i18nKey="emailIsNotOnFlickitYet" values={{ email: rest.context?.data?.email || "This user" }} />{" "}
+        <Trans
+          i18nKey="emailIsNotOnFlickitYet"
+          values={{ email: rest.context?.data?.email || "This user" }}
+        />{" "}
         <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />
       </Typography>
     </InviteMemberDialog>

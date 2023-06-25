@@ -19,6 +19,13 @@ class AssessmentKitTagSerializer(serializers.ModelSerializer):
         model = AssessmentKitTag
         fields = ['id', 'code', 'title']
 
+
+class MaturityLevelSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MaturityLevel
+        fields = ['id', 'title', 'value']
+
+
 class AssessmentKitSerilizer(serializers.ModelSerializer):
     tags =  AssessmentKitTagSerializer(many = True)
     expert_group = ExpertGroupSimpleSerilizers()
@@ -30,6 +37,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     subjects_with_desc = serializers.SerializerMethodField()
     questionnaires = serializers.SerializerMethodField()
     likes_number = serializers.SerializerMethodField()
+    maturity_levels = MaturityLevelSimpleSerializer(many = True)
 
 
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
@@ -66,7 +74,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group', 
         'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject', 'number_of_questionaries',
         'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator', 
-        'subjects_with_desc', 'questionnaires']
+        'subjects_with_desc', 'questionnaires', 'maturity_levels']
 
 class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
     class Meta:
@@ -94,11 +102,6 @@ class UpdateAssessmentKitSerializer(serializers.Serializer):
     summary = serializers.CharField(required=False)
     tags = serializers.ListField(child=serializers.IntegerField(),required=False)
 
-
-class MaturityLevelSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MaturityLevel
-        fields = ['id', 'title', 'value']
 
 
 
