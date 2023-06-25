@@ -15,6 +15,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     number_of_assessment_kits = serializers.SerializerMethodField()
     owner = UserSimpleSerializer()
     is_expert = serializers.SerializerMethodField(method_name='check_expert')
+    is_member = serializers.SerializerMethodField(method_name='check_is_member')
 
     def get_number_of_members(self, expert_group: ExpertGroup):
         return expert_group.users.count()
@@ -26,10 +27,14 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         current_user = self.context.get('request', None).user
         return expertgroupservice.is_current_user_expert(expert_group, current_user)
     
+    def check_is_member(self, expert_group: ExpertGroup):
+        current_user = self.context.get('request', None).user
+        return current_user in expert_group.users.all()
+    
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'about', 'bio', 'website', 'picture', 'users',
-        'number_of_members', 'number_of_assessment_kits', 'owner', 'is_expert']
+        'number_of_members', 'number_of_assessment_kits', 'owner', 'is_expert', 'is_member']
 
 
 class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):
