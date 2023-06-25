@@ -5,7 +5,7 @@ from rest_framework.test import APIRequestFactory ,force_authenticate
 
 from baseinfo.views import   expertgroupviews
 from django.contrib.auth.models import Permission
-from baseinfo.models.profilemodels import ExpertGroup
+from baseinfo.models.assessmentkitmodels import ExpertGroup
 
 @pytest.mark.django_db
 class TestCreateExpertGroup:

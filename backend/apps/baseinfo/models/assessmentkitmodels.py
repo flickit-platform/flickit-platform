@@ -29,54 +29,54 @@ class ExpertGroupAccess(models.Model):
         unique_together = ('expert_group', 'user')
     
 
-class AssessmentProfile(models.Model):
+class AssessmentKit(models.Model):
     code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100, unique=True)
     summary = models.TextField()
     about = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='profiles')
+    expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='assessmentkits')
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
     
     class Meta:
-        verbose_name = "Assessment Profile"
-        verbose_name_plural = "Assessment Profiles"
+        verbose_name = "Assessment Kit"
+        verbose_name_plural = "Assessment Kits"
         ordering = ['title']
 
-class ProfileDsl(models.Model):
-    dsl_file = models.FileField(upload_to='profile/dsl', validators=[validate_file_size])
-    profile = models.OneToOneField(AssessmentProfile, on_delete=models.CASCADE, related_name='dsl' , null=True)
+class AssessmentKitDsl(models.Model):
+    dsl_file = models.FileField(upload_to='assessment_kit/dsl', validators=[validate_file_size])
+    assessment_kit = models.OneToOneField(AssessmentKit, on_delete=models.CASCADE, related_name='dsl' , null=True)
 
-class ProfileTag(models.Model):
+class AssessmentKitTag(models.Model):
     code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100, unique=True)
-    profiles = models.ManyToManyField(AssessmentProfile, related_name = 'tags')
+    assessmentkits = models.ManyToManyField(AssessmentKit, related_name = 'tags')
 
     class Meta:
-        verbose_name = 'Profile Tag'
-        verbose_name_plural = "Profile Tags"
+        verbose_name = 'Assessment Kit Tag'
+        verbose_name_plural = "Assessment Kit Tags"
 
     def __str__(self) -> str:
         return self.title
 
-class ProfileLike(models.Model):
+class AssessmentKitLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='likes')
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes')
 
 
 class MaturityLevel(models.Model):
     title = models.CharField(max_length=100)
     value = models.PositiveSmallIntegerField()
-    profile = models.ForeignKey(AssessmentProfile, on_delete=models.CASCADE, related_name='maturity_levels')
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='maturity_levels')
 
     class Meta:
         verbose_name = 'Questionnaire'
         verbose_name_plural = "Questionnaires"
-        unique_together = [('title', 'profile'), ('value', 'profile')]
+        unique_together = [('title', 'assessment_kit'), ('value', 'assessment_kit')]
 
 class LevelCompetence(models.Model):
     maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences')

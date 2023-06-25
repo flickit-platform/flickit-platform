@@ -5,9 +5,9 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls.static import static
 
-from baseinfo.models.profilemodels import ProfileDsl
+from baseinfo.models.assessmentkitmodels import AssessmentKitDsl
 from assessmentplatform import settings
-from baseinfo.views import importprofileviews
+from baseinfo.views import importassessmentkitviews
 
 admin.autodiscover()
 
@@ -21,7 +21,7 @@ schema_view = get_schema_view(
    permission_classes=[permissions.IsAdminUser],
 )
 
-dsl_path = f"{settings.MEDIA_URL} { ProfileDsl._meta.get_field('dsl_file').upload_to }"
+dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
 dsl_path = dsl_path.replace(' ','')
 dsl_path = dsl_path[1:]
 
@@ -32,7 +32,7 @@ urlpatterns = [
    path('baseinfo/', include('baseinfo.urls')),
    path('assessment/', include('assessment.urls')),
    path('authinfo/', include('account.urls')),
-   re_path(dsl_path+"/.*?",importprofileviews.access_dsl_file),
+   re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

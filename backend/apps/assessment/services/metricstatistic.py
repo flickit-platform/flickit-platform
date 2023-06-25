@@ -32,13 +32,13 @@ def calculate_total_metric_number_by_subject(subject: AssessmentSubject):
 
 def calculate_answered_metric_by_result(result:AssessmentResult):
     total_answered_metric_number = 0
-    for questionnaire in Questionnaire.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+    for questionnaire in Questionnaire.objects.filter(assessment_kit_id = result.assessment_project.assessment_kit_id):
         total_answered_metric_number += extract_total_answered_metric_number(result, questionnaire) 
     return total_answered_metric_number
 
 def calculate_total_metric_number_by_result(result:AssessmentResult):
     total_metric_number = 0
-    for questionnaire in Questionnaire.objects.filter(assessment_profile_id = result.assessment_project.assessment_profile_id):
+    for questionnaire in Questionnaire.objects.filter(assessment_kit_id = result.assessment_project.assessment_kit_id):
         metrics = questionnaire.metric_set.all()
         total_metric_number += len(metrics)
     return total_metric_number

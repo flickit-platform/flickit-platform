@@ -14,24 +14,24 @@ from rest_framework.permissions import IsAuthenticated
 
 from assessmentplatform.settings import BASE_DIR, DSL_PARSER_URL_SERVICE
 
-from baseinfo.services import importprofileservice , profileservice
-from baseinfo.serializers.profileserializers import ImportProfileSerializer
-from baseinfo.permissions import ManageExpertGroupPermission ,ManageProfilePermission
+from baseinfo.services import importassessmentkitservice , assessmentkitservice
+from baseinfo.serializers.assessmentkitserializers import ImportAssessmentKitSerializer
+from baseinfo.permissions import ManageExpertGroupPermission ,ManageAssessmentKitPermission
 
 
-class ImportProfileApi(APIView):
-    serializer_class = ImportProfileSerializer
+class ImportAssessmentKitApi(APIView):
+    serializer_class = ImportAssessmentKitSerializer
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
     def post(self, request):
-        serializer = ImportProfileSerializer(data=request.data)
+        serializer = ImportAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        dsl_contents = importprofileservice.extract_dsl_contents(serializer.validated_data['dsl_id'])
+        dsl_contents = importassessmentkitservice.extract_dsl_contents(serializer.validated_data['dsl_id'])
         base_infos_resp = requests.post(DSL_PARSER_URL_SERVICE, json={"dslContent": dsl_contents}).json()
         if base_infos_resp['hasError']:
             return Response({"message": "The uploaded dsl is invalid."}, status = status.HTTP_400_BAD_REQUEST)
         try:
-            assessment_profile = importprofileservice.import_profile(base_infos_resp, **serializer.validated_data)
-            return Response({"message": "The profile imported successfully", "id": assessment_profile.id}, status = status.HTTP_200_OK)
+            assessment_kit = importassessmentkitservice.import_assessment_kit(base_infos_resp, **serializer.validated_data)
+            return Response({"message": "The assessment_kit imported successfully", "id": assessment_kit.id}, status = status.HTTP_200_OK)
         except IntegrityError as e:
             message = traceback.format_exc()
             print(message)
@@ -50,10 +50,10 @@ class ImportProfileApi(APIView):
 
 
 class DownloadDslApi(APIView):
-    permission_classes = [IsAuthenticated, ManageProfilePermission]
-    def get(self,request,profile_id):
-        profile = profileservice.load_profile(profile_id)
-        result = importprofileservice.get_dsl_file(profile)
+    permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
+    def get(self,request,assessment_kit_id):
+        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+        result = importassessmentkitservice.get_dsl_file(assessment_kit)
         if result.success:
                 return FileResponse(result.data["file"] , as_attachment=True,
                         filename=result.data["filename"])

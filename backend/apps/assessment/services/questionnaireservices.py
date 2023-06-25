@@ -14,9 +14,9 @@ def calculate_total_progress(questionnaire_report_info, content):
 
 def extract_questionnaire_report_info(subject_id, assessment_project, result_id):
     if subject_id:
-        questionnaires = assessment_project.assessment_profile.questionnaires.filter(assessment_subjects__id=subject_id)
+        questionnaires = assessment_project.assessment_kit.questionnaires.filter(assessment_subjects__id=subject_id)
     else:
-        questionnaires = assessment_project.assessment_profile.questionnaires.all()
+        questionnaires = assessment_project.assessment_kit.questionnaires.all()
     questionnaire_report_info = __extract_questionnaire_info(result_id, questionnaires)
     return questionnaire_report_info
 

@@ -4,7 +4,7 @@ from rest_framework import serializers
 from account.serializers.userserializers import UserSimpleSerializer, UserSerializer
 from account.services import userservices
 
-from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
+from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
 from baseinfo.services import expertgroupservice
 
 
@@ -12,15 +12,15 @@ from baseinfo.services import expertgroupservice
 class ExpertGroupSerilizer(serializers.ModelSerializer):
     users = UserSimpleSerializer(many=True)
     number_of_members = serializers.SerializerMethodField()
-    number_of_profiles = serializers.SerializerMethodField()
+    number_of_assessment_kits = serializers.SerializerMethodField()
     owner = UserSimpleSerializer()
     is_expert = serializers.SerializerMethodField(method_name='check_expert')
 
     def get_number_of_members(self, expert_group: ExpertGroup):
         return expert_group.users.count()
     
-    def get_number_of_profiles(self, expert_group: ExpertGroup):
-        return expert_group.profiles.filter(is_active = True).count()
+    def get_number_of_assessment_kits(self, expert_group: ExpertGroup):
+        return expert_group.assessmentkits.filter(is_active = True).count()
     
     def check_expert(self, expert_group: ExpertGroup):
         current_user = self.context.get('request', None).user
@@ -29,7 +29,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'about', 'bio', 'website', 'picture', 'users',
-        'number_of_members', 'number_of_profiles', 'owner', 'is_expert']
+        'number_of_members', 'number_of_assessment_kits', 'owner', 'is_expert']
 
 
 class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):

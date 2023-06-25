@@ -76,31 +76,31 @@ def calculate_maturity_level(result, quality_attribute):
         score_level_2 = 0
         score_level_3 = 0
         score_level_4 = 0
-        profile=result.assessment_project.assessment_profile
+        assessment_kit=result.assessment_project.assessment_kit
         for impact_metric_value_level_dict in impact_metric_value_level_list:
             sum_of_values = 0
             for impact, option_value in impact_metric_value_level_dict.items():
                 sum_of_values += option_value.value
             if i == 1 and len(impact_metric_value_level_dict) != 0:
-                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = profile, value=1)
+                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_kit, value=1)
                 impacts = MetricImpact.objects.filter(maturity_level=impact_maturity_level, quality_attribute=quality_attribute.id)
                 score_level_1 = sum_of_values/len(impacts)
                 if score_level_1 >= 0.6:
                     maturity_level_value = 1
             if i == 2 and len(impact_metric_value_level_dict) != 0:
-                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = profile, value=2)
+                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_kit, value=2)
                 impacts = MetricImpact.objects.filter(maturity_level=impact_maturity_level, quality_attribute=quality_attribute.id)
                 score_level_2 = sum_of_values/len(impacts)
                 if score_level_1 >= 0.7 and score_level_2 >= 0.6:
                     maturity_level_value = 2
             if i == 3 and len(impact_metric_value_level_dict) != 0:
-                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = profile, value=3)
+                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_kit, value=3)
                 impacts = MetricImpact.objects.filter(maturity_level=impact_maturity_level, quality_attribute=quality_attribute.id)
                 score_level_3 = sum_of_values/len(impacts)
                 if score_level_1 >= 0.8 and score_level_2 >= 0.7 and score_level_3 >= 0.6:
                     maturity_level_value = 3
             if i == 4 and len(impact_metric_value_level_dict) != 0:
-                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = profile, value=4)
+                impact_maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_kit, value=4)
                 impacts = MetricImpact.objects.filter(maturity_level=impact_maturity_level, quality_attribute=quality_attribute.id)
                 score_level_4 = sum_of_values/len(impacts)
                 if score_level_1 >= 0.9 and score_level_2 >= 0.8 and score_level_3 >= 0.7 and score_level_4 >= 0.6:

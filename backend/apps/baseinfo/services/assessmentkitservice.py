@@ -6,61 +6,61 @@ from common.restutil import ActionResult
 
 from assessment.models import AssessmentProject
 
-from baseinfo.models.profilemodels import ProfileTag, AssessmentProfile, ProfileLike
+from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
 from baseinfo.models.basemodels import QualityAttribute
-from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer
-from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
 
-def load_profile(profile_id) -> AssessmentProfile:
+def load_assessment_kit(assessment_kit_id) -> AssessmentKit:
     try:
-        return AssessmentProfile.objects.get(id = profile_id)
-    except AssessmentProfile.DoesNotExist as e:
-        raise AssessmentProfile.DoesNotExist
+        return AssessmentKit.objects.get(id = assessment_kit_id)
+    except AssessmentKit.DoesNotExist as e:
+        raise AssessmentKit.DoesNotExist
 
-def load_profile_tag(tag_id) -> ProfileTag:
+def load_assessment_kit_tag(tag_id) -> AssessmentKitTag:
     try:
-        return ProfileTag.objects.get(id = tag_id)
-    except ProfileTag.DoesNotExist:
+        return AssessmentKitTag.objects.get(id = tag_id)
+    except AssessmentKitTag.DoesNotExist:
         raise ObjectDoesNotExist
 
-def is_profile_deletable(profile_id):
-    profile = load_profile(profile_id)
-    if is_profile_used_in_assessments(profile):
-        return ActionResult(success=False, message='Some assessments with this profile exist')    
+def is_assessment_kit_deletable(assessment_kit_id):
+    assessment_kit = load_assessment_kit(assessment_kit_id)
+    if is_assessment_kit_used_in_assessments(assessment_kit):
+        return ActionResult(success=False, message='Some assessments with this assessment_kit exist')    
     return ActionResult(success=True) 
 
-def is_profile_used_in_assessments(profile: AssessmentProfile):
-    qs = AssessmentProject.objects.filter(assessment_profile_id = profile.id)
+def is_assessment_kit_used_in_assessments(assessment_kit: AssessmentKit):
+    qs = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id)
     if qs.count() > 0:
         return True
     return False
 
-def extract_detail_of_profile(profile, request):
-    response = extract_profile_basic_infos(profile)
-    response['profileInfos'] = extract_profile_report_infos(profile)
-    response['subjectsInfos'] = extract_subjects_infos(profile)
-    response['questionnaires'] = extract_questionnaires_infos(profile)
-    response['maturity_levels'] = extract_profile_maturity_levels(profile)
-    extra_profile_info = AssessmentProfileSerilizer(profile, context={'request': request}).data
-    response['is_active'] = extra_profile_info['is_active']
-    response['expert_group'] = extra_profile_info['expert_group']
-    response['number_of_assessment'] = extra_profile_info['number_of_assessment']
-    response['current_user_delete_permission'] = extra_profile_info['current_user_delete_permission']
-    response['current_user_is_coordinator'] = extra_profile_info['current_user_is_coordinator']
+def extract_detail_of_assessment_kit(assessment_kit, request):
+    response = extract_asessment_kit_basic_infos(assessment_kit)
+    response['assessmentkitInfos'] = extract_asessment_kit_report_infos(assessment_kit)
+    response['subjectsInfos'] = extract_subjects_infos(assessment_kit)
+    response['questionnaires'] = extract_questionnaires_infos(assessment_kit)
+    response['maturity_levels'] = extract_asessment_kit_maturity_levels(assessment_kit)
+    extra_assessment_kit_info = AssessmentKitSerilizer(assessment_kit, context={'request': request}).data
+    response['is_active'] = extra_assessment_kit_info['is_active']
+    response['expert_group'] = extra_assessment_kit_info['expert_group']
+    response['number_of_assessment'] = extra_assessment_kit_info['number_of_assessment']
+    response['current_user_delete_permission'] = extra_assessment_kit_info['current_user_delete_permission']
+    response['current_user_is_coordinator'] = extra_assessment_kit_info['current_user_is_coordinator']
     return response
 
-def extract_profile_basic_infos(profile: AssessmentProfile):
+def extract_asessment_kit_basic_infos(assessment_kit: AssessmentKit):
     response = {}
-    response['title'] = profile.title
-    response['summary'] = profile.summary
-    response['about'] = profile.about
-    response['last_update'] = profile.last_modification_date
-    response['creation_date'] = profile.creation_time
+    response['title'] = assessment_kit.title
+    response['summary'] = assessment_kit.summary
+    response['about'] = assessment_kit.about
+    response['last_update'] = assessment_kit.last_modification_date
+    response['creation_date'] = assessment_kit.creation_time
     return response
 
-def extract_questionnaires_infos(profile: AssessmentProfile):
+def extract_questionnaires_infos(assessment_kit: AssessmentKit):
     questionnairesInfos = []
-    questionnaires = profile.questionnaires.all()
+    questionnaires = assessment_kit.questionnaires.all()
     for questionnaire in questionnaires:
         questionnaire_infos = {}
         questionnaire_infos['title'] = questionnaire.title
@@ -70,9 +70,9 @@ def extract_questionnaires_infos(profile: AssessmentProfile):
         questionnairesInfos.append(questionnaire_infos)
     return questionnairesInfos
 
-def extract_subjects_infos(profile):
+def extract_subjects_infos(assessment_kit):
     subjectsInfos = []
-    subjects = profile.assessment_subjects.all()
+    subjects = assessment_kit.assessment_subjects.all()
     for subject in subjects:
         attributes_qs = subject.quality_attributes
         subject_infos = {}
@@ -83,29 +83,29 @@ def extract_subjects_infos(profile):
         subjectsInfos.append(subject_infos)
     return subjectsInfos
 
-def extract_profile_maturity_levels(profile: AssessmentProfile):
+def extract_asessment_kit_maturity_levels(assessment_kit: AssessmentKit):
     response = {}
     maturity_levels = []
-    for ml in profile.maturity_levels.all():
+    for ml in assessment_kit.maturity_levels.all():
         maturity_level = {}
         maturity_level['title'] = ml.title
         maturity_level['value'] = ml.value
         maturity_levels.append(maturity_level)
     
     response['list'] = maturity_levels
-    response['maturity_level_number'] = profile.maturity_levels.count()
+    response['maturity_level_number'] = assessment_kit.maturity_levels.count()
     
     return response
 
-def extract_profile_report_infos(profile):
-    profileInfos = []
-    subjects = profile.assessment_subjects.all()
-    profileInfos.append(__extract_profile_questionnaire_count(profile.questionnaires))
-    profileInfos.append(__extract_profile_attribute_count(subjects))
-    profileInfos.append(__extract_profile_metric_count(profile.questionnaires))
-    profileInfos.append(__extract_profile_subjects(subjects))
-    profileInfos.append(__extract_profile_tags(profile.tags.all()))
-    return profileInfos
+def extract_asessment_kit_report_infos(assessment_kit):
+    assessmentkitInfos = []
+    subjects = assessment_kit.assessment_subjects.all()
+    assessmentkitInfos.append(__extract_asessment_kit_questionnaire_count(assessment_kit.questionnaires))
+    assessmentkitInfos.append(__extract_asessment_kit_attribute_count(subjects))
+    assessmentkitInfos.append(__extract_asessment_kit_metric_count(assessment_kit.questionnaires))
+    assessmentkitInfos.append(__extract_asessment_kit_subjects(subjects))
+    assessmentkitInfos.append(__extract_asessment_kit_tags(assessment_kit.tags.all()))
+    return assessmentkitInfos
 
 def __extract_subject_attributes_info(attributes_qs):
     attributes_infos = []
@@ -176,85 +176,85 @@ def __extract_questionnaire_report_info(questionnaire):
     report_infos.append({'title' : 'Related subjects', 'item': [subject.title for subject in questionnaire.assessment_subjects.all()]})
     return report_infos
 
-def __extract_profile_subjects(subjects):
+def __extract_asessment_kit_subjects(subjects):
     subject_titles = [subject.title for subject in subjects]
     return {'title' : 'Subjects', 'item': subject_titles}
 
-def __extract_profile_tags(tags):
+def __extract_asessment_kit_tags(tags):
     tag_titles = [tag.title for tag in tags]
     return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
     
-def __extract_profile_questionnaire_count(questionnaires):
+def __extract_asessment_kit_questionnaire_count(questionnaires):
     return {'title' : 'Questionnaires count', 'item': questionnaires.count()}
 
-def __extract_profile_metric_count(questionnaires):
+def __extract_asessment_kit_metric_count(questionnaires):
     total_metric_count = 0
     for questionnaire in questionnaires.all():
         total_metric_count += questionnaire.metric_set.count()
     return {'title' : 'Total questions count', 'item': total_metric_count}
 
-def __extract_profile_attribute_count(subjects):
+def __extract_asessment_kit_attribute_count(subjects):
     attributes = []
     for subject in subjects:
         attributes.extend(subject.quality_attributes.all())
     return {'title' : 'Attributes count', 'item': len(attributes)}
 
 
-def get_current_user_delete_permission(profile: AssessmentProfile, current_user_id):
-    number_of_assessment = AssessmentProject.objects.filter(assessment_profile_id = profile.id).count()
+def get_current_user_delete_permission(assessment_kit: AssessmentKit, current_user_id):
+    number_of_assessment = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id).count()
     if number_of_assessment > 0:
         return False
-    if profile.expert_group is not None:
-        user = profile.expert_group.users.filter(id = current_user_id)
+    if assessment_kit.expert_group is not None:
+        user = assessment_kit.expert_group.users.filter(id = current_user_id)
         return user.count() > 0
     return True
 
-def get_current_user_is_coordinator(profile: AssessmentProfile, current_user_id):
-    if profile.expert_group is not None:
-        if profile.expert_group.owner is not None:
-            if profile.expert_group.owner.id == current_user_id:
+def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_id):
+    if assessment_kit.expert_group is not None:
+        if assessment_kit.expert_group.owner is not None:
+            if assessment_kit.expert_group.owner.id == current_user_id:
                 return True
     return False
 
 @transaction.atomic
-def archive_profile(profile: AssessmentProfile):
-    if not profile.is_active:
-        return ActionResult(success=False, message='The profile has already been archived')
-    profile.is_active = False
-    profile.save()
-    return ActionResult(success=True, message='The profile is archived successfully')
+def archive_assessment_kit(assessment_kit: AssessmentKit):
+    if not assessment_kit.is_active:
+        return ActionResult(success=False, message='The assessment_kit has already been archived')
+    assessment_kit.is_active = False
+    assessment_kit.save()
+    return ActionResult(success=True, message='The assessment_kit is archived successfully')
 
 @transaction.atomic     
-def publish_profile(profile: AssessmentProfile):
-    if profile.is_active:
-        return ActionResult(success=False, message='The profile has already been published')
-    profile.is_active = True
-    profile.save()
-    return ActionResult(success=True, message='The profile is published successfully')
+def publish_assessment_kit(assessment_kit: AssessmentKit):
+    if assessment_kit.is_active:
+        return ActionResult(success=False, message='The assessment_kit has already been published')
+    assessment_kit.is_active = True
+    assessment_kit.save()
+    return ActionResult(success=True, message='The assessment_kit is published successfully')
 
 @transaction.atomic
-def like_profile(user_id, profile_id):
-    profile = load_profile(profile_id)
-    profile_like_user = ProfileLike.objects.filter(user_id = user_id, profile_id = profile.id)
-    if profile_like_user.count() == 1:
-        profile.likes.filter(user_id = user_id, profile_id = profile.id).delete()
-        profile.save()
-    elif profile_like_user.count() == 0:
-        profile_like_create = ProfileLike.objects.create(user_id = user_id, profile_id = profile.id)
-        profile.likes.add(profile_like_create)
-        profile.save()
-    return profile
+def like_assessment_kit(user_id, assessment_kit_id):
+    assessment_kit = load_assessment_kit(assessment_kit_id)
+    assessment_kit_like_user = AssessmentKitLike.objects.filter(user_id = user_id, assessment_kit_id = assessment_kit.id)
+    if assessment_kit_like_user.count() == 1:
+        assessment_kit.likes.filter(user_id = user_id, assessment_kit_id = assessment_kit.id).delete()
+        assessment_kit.save()
+    elif assessment_kit_like_user.count() == 0:
+        assessment_kit_like_create = AssessmentKitLike.objects.create(user_id = user_id, assessment_kit_id = assessment_kit.id)
+        assessment_kit.likes.add(assessment_kit_like_create)
+        assessment_kit.save()
+    return assessment_kit
 
-def analyze(profile_id):
-    profile = AssessmentProfile.objects.get(pk=profile_id)
+def analyze(assessment_kit_id):
+    assessment_kit = AssessmentKit.objects.get(pk=assessment_kit_id)
     output = []
-    attributes = extract_profile_attribute(profile)
-    profile_maturity_levels = profile.maturity_levels.all().order_by('value')
+    attributes = extract_asessment_kit_attribute(assessment_kit)
+    assessment_kit_maturity_levels = assessment_kit.maturity_levels.all().order_by('value')
     for att in attributes:
         attribute_analyse = {}
         attribute_analyse['title'] = att['title']
         level_analysis = []
-        for ml in profile_maturity_levels:
+        for ml in assessment_kit_maturity_levels:
             attribute_metric_by_level = {}
             attribute_metric_by_level['level_value'] = ml.value
             attribute_metric_number_by_level = 0
@@ -271,38 +271,38 @@ def analyze(profile_id):
 
     return ActionResult(data=output, success=True)
 
-def extract_profile_attribute(profile):
-    subjects = profile.assessment_subjects.all()
+def extract_asessment_kit_attribute(assessment_kit):
+    subjects = assessment_kit.assessment_subjects.all()
     attributes = []
     for subject in subjects:
         attributes.append(subject.quality_attributes.values('id', 'title'))
 
     return list(itertools.chain(*attributes))
 
-def get_extrac_profile_data(profile, request):
+def get_extrac_assessment_kit_data(assessment_kit, request):
     result =[]
     data = {}
-    data["id"] = profile.id
-    data["title"] = profile.title
-    data['summary'] = profile.summary
-    data['about'] = profile.about
-    data["tags"] = profile.tags.all()
+    data["id"] = assessment_kit.id
+    data["title"] = assessment_kit.title
+    data['summary'] = assessment_kit.summary
+    data['about'] = assessment_kit.about
+    data["tags"] = assessment_kit.tags.all()
     result.append(data)
     return result
 
 @transaction.atomic
-def update_profile(profile, request,**kwargs):
+def update_assessment_kit(assessment_kit, request,**kwargs):
     if len(kwargs) == 0 :
         return ActionResult(success=False, message="All fields cannot be empty.")
     try:
         if "tags" in kwargs:
-            profile.tags.clear()
+            assessment_kit.tags.clear()
             for tag in kwargs["tags"]:
-                profile.tags.add(ProfileTag.objects.get(id=tag))
-            profile.save()
+                assessment_kit.tags.add(AssessmentKitTag.objects.get(id=tag))
+            assessment_kit.save()
             kwargs.pop("tags")
-        profile = AssessmentProfile.objects.filter(id=profile.id).update(**kwargs)
-        return ActionResult(success=True, message="Profile edited successfully.")
-    except ProfileTag.DoesNotExist:
-        return ActionResult(success=False, message="There is no profile tag with this id.")
+        assessment_kit = AssessmentKit.objects.filter(id=assessment_kit.id).update(**kwargs)
+        return ActionResult(success=True, message="Assessment Kit edited successfully.")
+    except AssessmentKitTag.DoesNotExist:
+        return ActionResult(success=False, message="There is no assessment_kit tag with this id.")
 

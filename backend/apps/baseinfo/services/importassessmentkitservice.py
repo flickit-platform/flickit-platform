@@ -7,11 +7,11 @@ from django.db import transaction
 from common.restutil import ActionResult
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
-from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, MaturityLevel, LevelCompetence
-from baseinfo.services import profileservice, expertgroupservice
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, MaturityLevel, LevelCompetence
+from baseinfo.services import assessmentkitservice, expertgroupservice
 
 def extract_dsl_contents(dsl_id):
-    dsl = ProfileDsl.objects.get(id = dsl_id)
+    dsl = AssessmentKitDsl.objects.get(id = dsl_id)
     input_zip = ZipFile(dsl.dsl_file)
     all_content = ''
     for name in input_zip.namelist():
@@ -29,86 +29,86 @@ def __trim_content(content):
     return new_content
 
 @transaction.atomic
-def import_profile(descriptive_profile, **kwargs):
-    assessment_profile = __import_profile_base_info(kwargs)
-    __import_maturity_levels(descriptive_profile, assessment_profile)
-    level_models = descriptive_profile['levelModels']
+def import_assessment_kit(descriptive_assessment_kit, **kwargs):
+    assessment_kit = __import_assessment_kit_base_info(kwargs)
+    __import_maturity_levels(descriptive_assessment_kit, assessment_kit)
+    level_models = descriptive_assessment_kit['levelModels']
     for level_model in level_models:
         level_model_competence_dict = level_model['levelCompetence'] 
         if level_model_competence_dict is None:
             continue
         for m_l_title, competence_value in level_model_competence_dict.items():
             level_competence = LevelCompetence()
-            level_competence.maturity_level = extract_maturity_level_by_title(level_model['title'], assessment_profile)
-            level_competence.maturity_level_competence = extract_maturity_level_by_title(m_l_title, assessment_profile)
+            level_competence.maturity_level = extract_maturity_level_by_title(level_model['title'], assessment_kit)
+            level_competence.maturity_level_competence = extract_maturity_level_by_title(m_l_title, assessment_kit)
             level_competence.value = competence_value
             level_competence.save()
-    __import_questionnaires(descriptive_profile['questionnaireModels'], assessment_profile)
-    __import_subjects(descriptive_profile['subjectModels'], assessment_profile)
-    __import_attributes(descriptive_profile['attributeModels'])
-    __import_metrics(descriptive_profile['metricModels'], assessment_profile)
-    return assessment_profile
+    __import_questionnaires(descriptive_assessment_kit['questionnaireModels'], assessment_kit)
+    __import_subjects(descriptive_assessment_kit['subjectModels'], assessment_kit)
+    __import_attributes(descriptive_assessment_kit['attributeModels'])
+    __import_metrics(descriptive_assessment_kit['metricModels'], assessment_kit)
+    return assessment_kit
 
-def __import_maturity_levels(descriptive_profile, assessment_profile):
-    level_models = descriptive_profile['levelModels']
+def __import_maturity_levels(descriptive_assessment_kit, assessment_kit):
+    level_models = descriptive_assessment_kit['levelModels']
     for level_model in level_models:
         maturity_level = MaturityLevel()
         maturity_level.title = level_model['title']
         maturity_level.value = level_model['index']
-        maturity_level.profile = assessment_profile
+        maturity_level.assessment_kit = assessment_kit
         maturity_level.save()
 
-def extract_maturity_level_by_title(title, profile):
-    return MaturityLevel.objects.get(title = title, profile = profile)
+def extract_maturity_level_by_title(title, assessment_kit):
+    return MaturityLevel.objects.get(title = title, assessment_kit = assessment_kit)
 
 def extract_tags(tag_ids):
     tags = []
     if tag_ids:
         for tag_id in tag_ids:
-            tag = profileservice.load_profile_tag(tag_id)
+            tag = assessmentkitservice.load_assessment_kit_tag(tag_id)
             if tag:
                 tags.append(tag)
     return tags
 
 @transaction.atomic
-def __import_profile_base_info(extra_info):
+def __import_assessment_kit_base_info(extra_info):
     tags = extract_tags(extra_info['tag_ids'])
     expert_group = expertgroupservice.load_expert_group(extra_info['expert_group_id'])
-    assessment_profile = AssessmentProfile()
-    assessment_profile.code = slugify(extra_info['title'])
-    assessment_profile.title = extra_info['title']
-    assessment_profile.about = extra_info['about']
-    assessment_profile.summary = extra_info['summary']
-    assessment_profile.expert_group = expert_group
-    assessment_profile.save()
+    assessment_kit = AssessmentKit()
+    assessment_kit.code = slugify(extra_info['title'])
+    assessment_kit.title = extra_info['title']
+    assessment_kit.about = extra_info['about']
+    assessment_kit.summary = extra_info['summary']
+    assessment_kit.expert_group = expert_group
+    assessment_kit.save()
     for tag in tags:
-        assessment_profile.tags.add(tag)
-    assessment_profile.save()
-    dsl = ProfileDsl.objects.get(id = extra_info['dsl_id'] )
-    dsl.profile = assessment_profile
+        assessment_kit.tags.add(tag)
+    assessment_kit.save()
+    dsl = AssessmentKitDsl.objects.get(id = extra_info['dsl_id'] )
+    dsl.assessment_kit = assessment_kit
     dsl.save()
-    return assessment_profile
+    return assessment_kit
 
 @transaction.atomic
-def __import_questionnaires(questionnaire_models, profile):
+def __import_questionnaires(questionnaire_models, assessment_kit):
     for questionnaire_model in questionnaire_models:
         questionnaire = Questionnaire()
         questionnaire.code = questionnaire_model['code']
         questionnaire.title = questionnaire_model['title']
         questionnaire.description = questionnaire_model['description']
         questionnaire.index = questionnaire_model['index']
-        questionnaire.assessment_profile = profile
+        questionnaire.assessment_kit = assessment_kit
         questionnaire.save()
 
 @transaction.atomic
-def __import_subjects(subject_models, profile):
+def __import_subjects(subject_models, assessment_kit):
     for model in subject_models:
         subject = AssessmentSubject()
         subject.code = model['code']
         subject.title = model['title']
         subject.description = model['description']
         subject.index = model['index']
-        subject.assessment_profile = profile
+        subject.assessment_kit = assessment_kit
         questionnaire_codes = model['questionnaireCodes']
         subject.save()
         for questionnaire_code in questionnaire_codes:
@@ -129,7 +129,7 @@ def __import_attributes(attributeModels):
         attribute.save()
 
 @transaction.atomic
-def __import_metrics(metricModels, profile):
+def __import_metrics(metricModels, assessment_kit):
     for model in metricModels:
         metric = Metric()
         metric.title = model['question']
@@ -148,7 +148,7 @@ def __import_metrics(metricModels, profile):
 
         for impact_model in model['metricImpacts']:
             impact = MetricImpact()
-            impact.maturity_level = MaturityLevel.objects.get(profile = profile, title = impact_model['level']['title'])
+            impact.maturity_level = MaturityLevel.objects.get(assessment_kit = assessment_kit, title = impact_model['level']['title'])
             impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
             impact.metric = metric
             impact.weight = impact_model['weight']
@@ -171,14 +171,14 @@ def __import_metrics(metricModels, profile):
         metric.save()
             
 
-def get_dsl_file(profile):
+def get_dsl_file(assessment_kit):
     try : 
         result = {}
-        dsl_file_path = profile.dsl.dsl_file.path
+        dsl_file_path = assessment_kit.dsl.dsl_file.path
         result["filename"] =  "assessmentkit.zip"
         if os.path.isfile(dsl_file_path):
             result["file"] = open(dsl_file_path,'rb')
             return ActionResult(success=True, data=result)
         return ActionResult(success=False, message='No such file exists in storage')
-    except ProfileDsl.DoesNotExist:
-        return ActionResult(success=False, message='There is no such profile with this id')
+    except AssessmentKitDsl.DoesNotExist:
+        return ActionResult(success=False, message='There is no such assessment_kit with this id')

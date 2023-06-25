@@ -1,13 +1,13 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from baseinfo.models.profilemodels import AssessmentProfile, ProfileTag
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric, OptionValue
     
 
-@admin.register(AssessmentProfile)
-class AssessmentProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(AssessmentKit)
+class AssessmentKitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['code', 'title']
     list_display = ['code', 'title']
     list_editable = ['title']
@@ -16,9 +16,9 @@ class AssessmentProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(AssessmentSubject)
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['questionnaires']
-    search_fields = ['code', 'title', 'assessment_profile']
-    fields = ['code', 'title', 'description', 'assessment_profile', 'questionnaires', 'index']
-    list_display = ['code', 'title', 'subject_questionnaires', 'assessment_profile']
+    search_fields = ['code', 'title', 'assessment_kit']
+    fields = ['code', 'title', 'description', 'assessment_kit', 'questionnaires', 'index']
+    list_display = ['code', 'title', 'subject_questionnaires', 'assessment_kit']
     list_editable = ['title']
     list_per_page = 10
 
@@ -28,9 +28,9 @@ class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(Questionnaire)
 class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    search_fields = ['code', 'title', 'assessment_profile']
-    fields = ['code', 'title', 'description', 'assessment_profile', 'index']
-    list_display = ['code', 'title', 'assessment_profile']
+    search_fields = ['code', 'title', 'assessment_kit']
+    fields = ['code', 'title', 'description', 'assessment_kit', 'index']
+    list_display = ['code', 'title', 'assessment_kit']
     list_editable = ['title']
     list_per_page = 10
 
@@ -88,13 +88,13 @@ class QualityAttributeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_per_page = 10
 
 
-@admin.register(ProfileTag)
+@admin.register(AssessmentKitTag)
 class TagAdmin(admin.ModelAdmin):
     fields = ['code', 'title']
     search_fields = ['title', 'code']
-    list_display = ['code', 'title', 'profiles_tag']
+    list_display = ['code', 'title', 'assessment_kits_tag']
     list_editable = ['title']
     list_per_page = 10
 
-    def profiles_tag(self, obj):
-        return "\n".join([profile.title for profile in obj.profiles.all()])
+    def assessment_kits_tag(self, obj):
+        return "\n".join([assessment_kit.title for assessment_kit in obj.assessmentkits.all()])
