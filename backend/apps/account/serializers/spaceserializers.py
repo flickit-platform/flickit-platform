@@ -9,10 +9,8 @@ class InputSpaceAccessSerializer(serializers.Serializer):
     email = serializers.EmailField()
     def validate(self, attrs):
         user = userservices.load_user_by_email(attrs['email'])
-        if user is None:
-            raise serializers.ValidationError({'message': 'No user with the given email was found.'})
-        if not user.is_active:
-            raise serializers.ValidationError({'message': 'User with the given email is not active.'})
+        if user is None  or not user.is_active:
+            raise serializers.ValidationError()
         return attrs
 
 class InviteMemberSerializer(serializers.Serializer):
