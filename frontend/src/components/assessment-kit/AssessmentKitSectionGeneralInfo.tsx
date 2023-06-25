@@ -104,7 +104,7 @@ const AssessmentKitSectionGeneralInfo = (props: IAssessmentKitSectionAuthorInfo)
               }}
             />
           </Box>
-          {data.profileInfos.map((info: any, index: number) => {
+          {data.assessmentkitInfos.map((info: any, index: number) => {
             return (
               <Box my={1.5} key={index}>
                 <InfoItem

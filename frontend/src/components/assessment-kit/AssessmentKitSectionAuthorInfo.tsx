@@ -29,7 +29,7 @@ const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) 
           </Box>
           <Box py={1} ml={1}>
             <Typography fontFamily="Roboto" fontWeight={"bold"}>
-              {data.profileInfos.authorInfos.name}
+              {data.assessmentkitInfos.authorInfos.name}
             </Typography>
             <Box sx={{ ...styles.centerV }}>
               <Typography variant="subSmall" sx={{ mr: 1.5 }}>
@@ -40,7 +40,7 @@ const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) 
           </Box>
         </Box>
         <Box py={1} px={1.5} display="flex">
-          {data.profileInfos.authorInfos.description}
+          {data.assessmentkitInfos.authorInfos.description}
         </Box>
         <Box display="flex">
           <Button sx={{ ml: "auto" }} size="small">

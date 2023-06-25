@@ -217,7 +217,7 @@ const ExpertGroupContainer = () => {
                         color: "inherit",
                       }}
                       component="a"
-                      href="#assessment_kits"
+                      href="#assessment-kits"
                     >
                       <AssignmentRoundedIcon
                         fontSize="small"
@@ -261,7 +261,7 @@ const ExpertGroupContainer = () => {
                           color: "inherit",
                         }}
                         component="a"
-                        href="#assessment_kits"
+                        href="#assessment-kits"
                       >
                         <AssignmentLateRoundedIcon
                           fontSize="small"
@@ -711,6 +711,7 @@ const AssessmentKitsList = (props: any) => {
           )}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
+         
             return (
               <>
                 {results.map((assessment_kit: any) => {
@@ -718,8 +719,8 @@ const AssessmentKitsList = (props: any) => {
                     <AssessmentKitListItem
                       link={
                         is_expert
-                          ? `assessment_kits/${assessment_kit?.id}`
-                          : `/assessment_kits/${assessment_kit?.id}`
+                          ? `assessment-kits/${assessment_kit?.id}`
+                          : `/assessment-kits/${assessment_kit?.id}`
                       }
                       key={assessment_kit?.id}
                       data={assessment_kit}
@@ -774,8 +775,8 @@ const AssessmentKitsList = (props: any) => {
                         <AssessmentKitListItem
                           link={
                             is_expert
-                              ? `assessment_kits/${assessment_kit?.id}`
-                              : `/assessment_kits/${assessment_kit?.id}`
+                              ? `assessment-kits/${assessment_kit?.id}`
+                              : `/assessment-kits/${assessment_kit?.id}`
                           }
                           key={assessment_kit?.id}
                           data={assessment_kit}
