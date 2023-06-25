@@ -37,7 +37,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     website,
     about = "",
     users = [],
-    number_of_profiles,
+    number_of_assessment_kits,
     is_expert,
   } = data || {};
 
@@ -74,7 +74,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           subheader={
             <Box sx={{ ...styles.centerCV, textTransform: "lowercase" }}>
               <Box>
-                <Trans i18nKey="publishedProfiles" />: {number_of_profiles}
+                <Trans i18nKey="publishedAssessmentKits" />: {number_of_assessment_kits}
               </Box>
             </Box>
           }

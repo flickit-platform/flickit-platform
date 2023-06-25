@@ -13,13 +13,13 @@ def add_user_to_space(space_id,current_user, email):
     user = userservices.load_user_by_email(email)
     space = Space.objects.get(id=space_id)
     if current_user not in space.users.all():
-        return ActionResult(success=False , code='user-not-allowed', message='Only members of the space are allowed to add new members to it.')
+        return ActionResult(success=False, message='Only member users of the space can add users to the space.')
     try:
         UserAccess.objects.get(space_id = space_id, user = user)
-        return ActionResult(success=False, code='user-is-member', message='This user is already a member of this space.')
+        return ActionResult(success=False, message='This user is already a member of this space.')
     except UserAccess.DoesNotExist:
         UserAccess.objects.create(space_id = space_id, user = user)
-        return ActionResult(success=True, code='user-joined-space', message='This user has successfully joined the space.')
+        return ActionResult(success=True, message='This user has successfully joined this space.')
     
 @transaction.atomic
 def create_default_space(user:User):

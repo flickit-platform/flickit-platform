@@ -42,8 +42,8 @@ const AssessmentReportContainer = () => {
         } = data || {};
         const colorCode = assessment_project?.color?.color_code || "#101c32";
         const isComplete = total_progress.progress === 100;
-        const { assessment_profile } = assessment_project || {};
-        const { expert_group } = assessment_profile || {};
+        const { assessment_assessment_kit } = assessment_project || {};
+        const { expert_group } = assessment_assessment_kit || {};
 
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
@@ -93,21 +93,21 @@ const AssessmentReportContainer = () => {
                         alignSelf: "stretch",
                       }}
                     >
-                      <Trans i18nKey="theProfileUsedInThisAssessmentIs" />{" "}
+                      <Trans i18nKey="theAssessmentKitUsedInThisAssessmentIs" />{" "}
                       <Box
                         component={Link}
-                        to={`/profiles/${assessment_profile?.id}`}
+                        to={`/assessment-kits/${assessment_assessment_kit?.id}`}
                         sx={{
                           color: (t) => t.palette.primary.dark,
                           textDecoration: "none",
                           ml: 0.5,
                         }}
                       >
-                        {assessment_profile?.title}
+                        {assessment_assessment_kit?.title}
                       </Box>
                     </Typography>
                     <Typography color="GrayText" variant="body2">
-                      {assessment_profile?.summary}
+                      {assessment_assessment_kit?.summary}
                     </Typography>
                   </Box>
                   <Box

@@ -5,11 +5,11 @@ import { styles } from "@styles";
 import Typography from "@mui/material/Typography";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 
-interface IProfileSectionAuthorInfo {
+interface IAssessmentKitSectionAuthorInfo {
   data: any;
 }
 
-const ProfileSectionAuthorInfo = (props: IProfileSectionAuthorInfo) => {
+const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) => {
   const { data } = props;
   return (
     <Box my={3} mx={1.5}>
@@ -44,7 +44,7 @@ const ProfileSectionAuthorInfo = (props: IProfileSectionAuthorInfo) => {
         </Box>
         <Box display="flex">
           <Button sx={{ ml: "auto" }} size="small">
-            <Trans i18nKey={"viewOtherProfilesFromThisAuthor"} />
+            <Trans i18nKey={"viewOtherAssessmentKitsFromThisAuthor"} />
           </Button>
         </Box>
       </Box>
@@ -52,4 +52,4 @@ const ProfileSectionAuthorInfo = (props: IProfileSectionAuthorInfo) => {
   );
 };
 
-export default ProfileSectionAuthorInfo;
+export default AssessmentKitSectionAuthorInfo;

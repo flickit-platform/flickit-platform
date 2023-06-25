@@ -1,8 +1,7 @@
 
 
 class ActionResult():
-    def __init__(self,code = None, message = None, success = None, data = None, **kwargs):
-        self.code = code
+    def __init__(self, message = None, success = None, data = None, **kwargs):
         self.message = message
         self.success = success
         self.data = data

@@ -26,7 +26,7 @@ const CompareParts = () => {
     <Box sx={{ pb: { xs: 6, sm: 0 } }}>
       <PermissionControl error={assessmentsInfoQueryData.errorObject}>
         <Box my={3}>
-          <CompareSelectedProfileInfo />
+          <CompareSelectedAssessmentKitInfo />
         </Box>
         <Box position={"relative"}>
           <QueryData
@@ -84,7 +84,7 @@ const useCompareParts = () => {
     initialLoading: true,
     initialData: [],
   });
-  const { assessmentIds, profile: contextProfile } = useCompareContext();
+  const { assessmentIds, assessment_kit: contextAssessmentKit } = useCompareContext();
   const dispatch = useCompareDispatch();
 
   useEffect(() => {
@@ -96,10 +96,10 @@ const useCompareParts = () => {
   }, [assessmentIds.join()]);
 
   useEffect(() => {
-    if (assessmentsInfoQueryData.loaded && !contextProfile) {
-      const profile = assessmentsInfoQueryData.data?.find((item: any) => item?.assessment_profile);
-      if (profile) {
-        dispatch(compareActions.setProfile(profile.assessment_profile));
+    if (assessmentsInfoQueryData.loaded && !contextAssessmentKit) {
+      const assessment_kit = assessmentsInfoQueryData.data?.find((item: any) => item?.assessment_kit);
+      if (assessment_kit) {
+        dispatch(compareActions.setAssessmentKit(assessment_kit.assessment_kit));
       }
     }
   }, [assessmentsInfoQueryData.loaded]);
@@ -108,7 +108,7 @@ const useCompareParts = () => {
     const assessmentIdsParams = searchParams.getAll("assessmentIds");
     if (assessmentIdsParams.length == 0 && assessmentIds.length > 0) {
       assessmentsInfoQueryData.query({ assessmentIds: [] });
-      dispatch(compareActions.setProfile(null));
+      dispatch(compareActions.setAssessmentKit(null));
       dispatch(compareActions.setAssessmentIds(assessmentIdsParams));
     }
   }, [searchParams]);
@@ -141,14 +141,14 @@ const CompareButton = (props: { disabled?: boolean; assessmentIds?: string[] }) 
   );
 };
 
-const CompareSelectedProfileInfo = () => {
-  const { profile } = useCompareContext();
+const CompareSelectedAssessmentKitInfo = () => {
+  const { assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const makeNewComparison = () => {
     dispatch(compareActions.setAssessmentIds([]));
-    dispatch(compareActions.setProfile(null));
+    dispatch(compareActions.setAssessmentKit(null));
   };
-  return profile ? (
+  return assessment_kit ? (
     <AlertBox
       severity="info"
       action={
@@ -158,9 +158,9 @@ const CompareSelectedProfileInfo = () => {
       }
     >
       <AlertTitle>
-        <Trans i18nKey="assessmentsAreFilteredBy" /> <Chip label={profile.title} />
+        <Trans i18nKey="assessmentsAreFilteredBy" /> <Chip label={assessment_kit.title} />
       </AlertTitle>
-      <Trans i18nKey="toCompareAssessmentsOfOtherProfiles" />
+      <Trans i18nKey="toCompareAssessmentsOfOtherAssessmentKits" />
     </AlertBox>
   ) : (
     <></>

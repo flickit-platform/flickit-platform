@@ -2,7 +2,7 @@ import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/ma
 import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
-import ProfilesListContainer from "./ProfilesListContainer";
+import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
@@ -19,27 +19,27 @@ import { t } from "i18next";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
 
-const ProfileContainer = () => {
+const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
-  const { profileId } = useParams();
-  const profileQueryData = useQuery({
-    service: (args = { id: profileId }, config) => service.fetchProfile(args, config),
+  const { assessmentKitId } = useParams();
+  const assessmentKitQueryData = useQuery({
+    service: (args = { id: assessmentKitId }, config) => service.fetchAssessmentKit(args, config),
   });
 
   return (
     <QueryData
-      {...profileQueryData}
+      {...assessmentKitQueryData}
       render={(data) => {
-        setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
-        return <Profile data={data} query={profileQueryData.query} />;
+        setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+        return <AssessmentKit data={data} query={assessmentKitQueryData.query} />;
       }}
     />
   );
 };
 
-const Profile = (props: any) => {
+const AssessmentKit = (props: any) => {
   const { data, query } = props;
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const {
     title,
     tags = [],
@@ -58,7 +58,7 @@ const Profile = (props: any) => {
   const dialogProps = useDialog({
     context: {
       type: "create",
-      staticData: { profile: { id: profileId, title } },
+      staticData: { assessment_kit: { id: assessmentKitId, title } },
     },
   });
 
@@ -99,8 +99,8 @@ const Profile = (props: any) => {
                   color="white"
                   routes={[
                     {
-                      title: t("profiles") as string,
-                      to: `/profiles`,
+                      title: t("assessmentKits") as string,
+                      to: `/assessment-kits`,
                     },
                   ]}
                 />
@@ -204,7 +204,7 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             </Box>
-            <LikeProfile likes_number={likes_number} />
+            <LikeAssessmentKit likes_number={likes_number} />
           </Box>
         </Box>
       </Box>
@@ -212,7 +212,7 @@ const Profile = (props: any) => {
         {!is_active && (
           <Box my={5}>
             <AlertBox severity="warning">
-              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisProfile" />
+              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisAssessmentKit" />
             </AlertBox>
           </Box>
         )}
@@ -305,11 +305,11 @@ const Profile = (props: any) => {
   );
 };
 
-const LikeProfile = ({ likes_number }: any) => {
+const LikeAssessmentKit = ({ likes_number }: any) => {
   const { service } = useServiceContext();
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const likeQueryData = useQuery({
-    service: (args = { id: profileId }, config) => service.likeProfile(args, config),
+    service: (args = { id: assessmentKitId }, config) => service.likeAssessmentKit(args, config),
     runOnMount: false,
   });
 
@@ -340,4 +340,4 @@ const LikeProfile = ({ likes_number }: any) => {
   );
 };
 
-export default ProfileContainer;
+export default AssessmentKitContainer;

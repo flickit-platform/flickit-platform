@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = os.environ.get('DEBUG')  == 'True'
+DEBUG = False
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -66,13 +66,12 @@ if os.environ.get('GITHUB_WORKFLOW'):
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL'),
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT')
-DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')  == 'True'
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') == 'True'
+EMAIL_HOST = os.environ.get('EMAIL_HOST'),
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER'),
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD'),
+EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT'),
+DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL'),
+EMAIL_USE_TLS=True
 
 DOMAIN = (os.environ.get('DOMAIN')) 
 SITE_NAME = ('Flickit') 
