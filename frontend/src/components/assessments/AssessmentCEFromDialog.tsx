@@ -143,12 +143,12 @@ const AssessmentKitField = ({ defaultValue, staticValue }: { defaultValue: any; 
   return (
     <AutocompleteAsyncField
       {...(staticValue ? ({ loading: false, loaded: true, options: [] } as any) : queryData)}
-      name="profile"
+      name="assessment_kit"
       required={true}
       defaultValue={staticValue ?? defaultValue}
       disabled={!!staticValue}
       label={<Trans i18nKey="assessmentKit" />}
-      data-cy="profile"
+      data-cy="assessment_kit"
     />
   );
 };
