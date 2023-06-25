@@ -24,8 +24,8 @@ class CompareAssessmentView(APIView):
 
         overall_insight_result = compareservices.extract_overall_insight(assessment_projects)
         
-        profile = assessment_projects[0].assessment_profile
-        subjects_report_result = compareservices.extract_subject_report(profile, assessment_projects)
+        assessment_kit = assessment_projects[0].assessment_kit
+        subjects_report_result = compareservices.extract_subject_report(assessment_kit, assessment_projects)
 
         content = Dictionary()
         content.add('base_infos', base_infos)

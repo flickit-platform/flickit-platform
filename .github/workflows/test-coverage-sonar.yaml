@@ -36,10 +36,12 @@ jobs:
     - name: Run migrations
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: python backend/apps/manage.py migrate
     - name: Run tests
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: pytest backend/apps
 
   coverage:
@@ -74,11 +76,13 @@ jobs:
     - name: Run migrations
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: python backend/apps/manage.py migrate
 
     - name: Run tests with coverage
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: |
         coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
         coverage report --fail-under=60       
@@ -131,11 +135,13 @@ jobs:
     - name: Run migrations
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: python backend/apps/manage.py migrate
 
     - name: Run tests with coverage
       env: 
         SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
       run: |
         coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
         coverage report

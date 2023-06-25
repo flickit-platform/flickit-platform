@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from common.abstractservices import load_model
 
-from baseinfo.serializers.profileserializers import AssessmentProfileSerilizer, MaturityLevelSimpleSerializer
+from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer, MaturityLevelSimpleSerializer
 from account.serializers.commonserializers import SpaceSerializer
 
 from assessment.serializers.commonserializers import ColorSerilizer
@@ -12,10 +12,10 @@ from assessment.services import attributesstatistics, reportservices, metricstat
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()
     space = SpaceSerializer()
-    assessment_profile = AssessmentProfileSerilizer()
+    assessment_kit = AssessmentKitSerilizer()
     class Meta:
         model = AssessmentProject
-        fields = ['title', 'last_modification_date', 'color', 'assessment_results', 'space', 'assessment_profile']
+        fields = ['title', 'last_modification_date', 'color', 'assessment_results', 'space', 'assessment_kit']
 
                 
 class AssessmentReportSerilizer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     #         return "Not Calculated"
         
     def get_maturity_level_number(self, result: AssessmentResult):
-        return result.assessment_project.assessment_profile.maturity_levels.count()
+        return result.assessment_project.assessment_kit.maturity_levels.count()
     
     def get_maturity_level(self, result: AssessmentResult):
         return MaturityLevelSimpleSerializer(result.assessment_project.maturity_level).data

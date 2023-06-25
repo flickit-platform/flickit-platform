@@ -1,4 +1,4 @@
-from baseinfo.models.profilemodels import MaturityLevel
+from baseinfo.models.assessmentkitmodels import MaturityLevel
 
-def extract_maturity_level_by_value(profile, value):
-    return MaturityLevel.objects.get(profile = profile, value = value)
+def extract_maturity_level_by_value(assessment_kit, value):
+    return MaturityLevel.objects.get(assessment_kit = assessment_kit, value = value)

@@ -2,7 +2,7 @@ from rest_framework import status
 import pytest
 from model_bakery import baker
 
-from assessment.models import AssessmentProject, AssessmentProfile, AssessmentResult
+from assessment.models import AssessmentProject, AssessmentKit, AssessmentResult
 from account.models import User
 
 @pytest.fixture
@@ -18,8 +18,8 @@ class Test_QuestionaryView:
     def test_questionary_report(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
-        profile = baker.make(AssessmentProfile)
-        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        assessment_kit = baker.make(AssessmentKit)
+        project = baker.make(AssessmentProject, assessment_kit = assessment_kit, space = test_user.current_space)
         AssessmentResult.objects.create(assessment_project_id = project.id)
 
         base_info = init_data()

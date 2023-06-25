@@ -3,7 +3,7 @@
 from functools import wraps
 from django.shortcuts import get_object_or_404
 
-from baseinfo.models.profilemodels import ExpertGroup
+from baseinfo.models.assessmentkitmodels import ExpertGroup
 from baseinfo.services import expertgroupservice
 
 def is_expert(func):

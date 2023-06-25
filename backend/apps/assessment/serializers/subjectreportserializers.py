@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from assessment.models import QualityAttributeValue
 from assessment.serializers.commonserializers import QualityAttributeSerilizer
-from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerializer
+from baseinfo.serializers.assessmentkitserializers import MaturityLevelSimpleSerializer
 
 class SubjectReportSerializer(serializers.ModelSerializer):
     maturity_level = MaturityLevelSimpleSerializer()
@@ -25,5 +25,5 @@ class SubjectReportSerializer(serializers.ModelSerializer):
 
     
     def get_maturity_level_number(self, att_value: QualityAttributeValue):
-        return att_value.assessment_result.assessment_project.assessment_profile.maturity_levels.count()
+        return att_value.assessment_result.assessment_project.assessment_kit.maturity_levels.count()
     

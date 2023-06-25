@@ -35,7 +35,7 @@ def update_assessment_status(result:AssessmentResult):
     if total_answered_metric_number <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
         assessment.maturity_level = None
     else:
-        subjects = result.assessment_project.assessment_profile.assessment_subjects.all()
+        subjects = result.assessment_project.assessment_kit.assessment_subjects.all()
         atts = []
         for sub in subjects:
             sub_attributes = QualityAttribute.objects.filter(assessment_subject = sub).all()
@@ -47,7 +47,7 @@ def update_assessment_status(result:AssessmentResult):
             for att_value in att_att_values:
                 att_values.append(att_value)
         value = round(mean([item.maturity_level.value for item in att_values]))
-        maturity_level = maturitylevelservices.extract_maturity_level_by_value(profile = assessment.assessment_profile, value = value)
+        maturity_level = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment.assessment_kit, value = value)
         assessment.maturity_level = maturity_level
     assessment.save()
 

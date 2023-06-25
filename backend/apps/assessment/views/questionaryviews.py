@@ -15,7 +15,7 @@ class QuestionaryBaseInfoApi(APIView):
     def get(self, request, assessment_project_id):
         assessment_project = load_model(AssessmentProject, assessment_project_id)
         content = {}
-        content['subjects'] = assessment_project.assessment_profile.assessment_subjects.values('id','title')
+        content['subjects'] = assessment_project.assessment_kit.assessment_subjects.values('id','title')
         content['assessment_title'] = assessment_project.title
         return Response(content)
 

@@ -2,7 +2,7 @@ from rest_framework import status
 import pytest
 from model_bakery import baker
 
-from assessment.models import AssessmentProject, AssessmentProfile, QualityAttributeValue, AssessmentResult
+from assessment.models import AssessmentProject, AssessmentKit, QualityAttributeValue, AssessmentResult
 from account.models import User
 
 
@@ -19,8 +19,8 @@ class Test_Add_metric_value:
     def test_add_metric_value(self, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
-        profile = baker.make(AssessmentProfile)
-        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        assessment_kit = baker.make(AssessmentKit)
+        project = baker.make(AssessmentProject, assessment_kit = assessment_kit, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -39,8 +39,8 @@ class Test_Add_metric_value:
     def test_add_metric_value_invalid_metric(self, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
-        profile = baker.make(AssessmentProfile)
-        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        assessment_kit = baker.make(AssessmentKit)
+        project = baker.make(AssessmentProject, assessment_kit = assessment_kit, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -60,8 +60,8 @@ class Test_calculate_maturity_level_value:
     def test_calculate_maturity_level(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
-        profile = baker.make(AssessmentProfile)
-        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        assessment_kit = baker.make(AssessmentKit)
+        project = baker.make(AssessmentProject, assessment_kit = assessment_kit, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']
@@ -108,8 +108,8 @@ class Test_Report_Subject:
     def test_report_subject(self, api_client, authenticate, init_data, add_metric_value):
         authenticate(is_staff=True)
         test_user = User.objects.get(email = 'test@test.com')
-        profile = baker.make(AssessmentProfile)
-        project = baker.make(AssessmentProject, assessment_profile = profile, space = test_user.current_space)
+        assessment_kit = baker.make(AssessmentKit)
+        project = baker.make(AssessmentProject, assessment_kit = assessment_kit, space = test_user.current_space)
         base_info = init_data()
 
         answer_tempaltes = base_info['answer_templates']

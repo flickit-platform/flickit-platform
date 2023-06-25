@@ -5,9 +5,9 @@ from common.restutil import ActionResult, Dictionary
 from common.abstractservices import load_model
 
 from baseinfo.models.basemodels import QualityAttribute
-from baseinfo.models.profilemodels import MaturityLevel
+from baseinfo.models.assessmentkitmodels import MaturityLevel
 from baseinfo.services import maturitylevelservices
-from baseinfo.serializers.profileserializers import MaturityLevelSimpleSerializer
+from baseinfo.serializers.assessmentkitserializers import MaturityLevelSimpleSerializer
 from assessment.serializers.commonserializers import QualityAttributeValueSerializer
 
 from assessment.models import AssessmentProject
@@ -15,7 +15,7 @@ from assessment.serializers import projectserializers
 from assessment.fixture.dictionary import Dictionary
 from assessment.services import metricstatistic, attributesstatistics
 
-# TODO check assessment profile is the same in compare
+# TODO check assessment assessment_kit is the same in compare
 def validate_assessment_compare(assessment_projects):
     for project in assessment_projects:
         if not project.maturity_level:
@@ -36,8 +36,8 @@ def extract_base_info(assessment_project):
     base_info.add('title', assessment_project.title)
     base_info.add('status', assessment_project.maturity_level.title)
     base_info.add('maturity_level_value', assessment_project.maturity_level.value + 1)
-    base_info.add('maturity_level_number', assessment_project.assessment_profile.maturity_levels.count())
-    base_info.add('profile', assessment_project.assessment_profile.title)
+    base_info.add('maturity_level_number', assessment_project.assessment_kit.maturity_levels.count())
+    base_info.add('assessment_kit', assessment_project.assessment_kit.title)
     return ActionResult(success=True, data=base_info)
 
 
@@ -87,9 +87,9 @@ def extract_progress(assessment_projects):
     progress_infos.add('items', progress_list)
     return progress_infos
 
-def extract_subject_report(profile, assessment_projects):
+def extract_subject_report(assessment_kit, assessment_projects):
     subjects_report_infos = []
-    assessment_subjects = profile.assessment_subjects.all()
+    assessment_subjects = assessment_kit.assessment_subjects.all()
     for subject in assessment_subjects:
         subject_info = Dictionary()
         subject_report_info = []
@@ -202,7 +202,7 @@ def extract_subject_maturity_level_info(assessment_projects, subject):
     
     i = 0
     for maturity_level_value in maturity_level_values:
-        ml = maturitylevelservices.extract_maturity_level_by_value(profile = assessment_projects[i].assessment_profile, value = maturity_level_value)
+        ml = maturitylevelservices.extract_maturity_level_by_value(assessment_kit = assessment_projects[i].assessment_kit, value = maturity_level_value)
         status_list.append(MaturityLevelSimpleSerializer(ml).data)
         i = i + 1
     maturity_level_infos.add('items', maturity_level_values)

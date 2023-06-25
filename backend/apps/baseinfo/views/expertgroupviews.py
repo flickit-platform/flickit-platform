@@ -9,7 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from baseinfo.serializers import expertgroupserializers 
 from baseinfo.services import expertgroupservice
-from baseinfo.models.profilemodels import ExpertGroup, ExpertGroupAccess
+from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
 from baseinfo.permissions import ManageExpertGroupPermission
 
 
