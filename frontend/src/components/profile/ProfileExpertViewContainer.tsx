@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
-import { styles,getMaturityLevelColors } from "@styles";
+import { styles, getMaturityLevelColors } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Grid from "@mui/material/Grid";
@@ -792,9 +792,8 @@ const ProfileDialog = (props: any) => {
       fullWidth
       maxWidth="md"
       fullScreen={fullScreen}
-      sx={{ padding: "24px" }}
     >
-      <DialogTitle mb={4}>
+      <DialogTitle mb={4} px="36px" py="36px">
         <Typography
           sx={{
             pb: "2px",
@@ -821,7 +820,8 @@ const ProfileDialog = (props: any) => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          px: { xs: 1.5, sm: 3 },
+          // px: { xs: 1.5, sm: 3 },
+          padding:"36px"
         }}
       >
         {options &&
@@ -940,7 +940,7 @@ const ProfileDialog = (props: any) => {
                     variant="body1"
                     fontFamily="Roboto"
                     fontWeight={"bold"}
-                    mb={1}
+                    mb={2}
                   >
                     {index === 0 && (
                       <Typography
@@ -995,7 +995,7 @@ const ProfileDialog = (props: any) => {
                       margin: "0 auto",
                     }}
                   >
-                    <Box py={0.3} px={2} mb={0.5} mr={0.5}>
+                    <Box py={0.3} px={2} mb={2} mr={0.5}>
                       <Typography
                         variant="body1"
                         fontFamily="Roboto"
@@ -1003,6 +1003,8 @@ const ProfileDialog = (props: any) => {
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
+                          borderBottom: "1px solid rgba(0,0,0,0.05)",
+                          py: "4px",
                         }}
                       >
                         {item.title}

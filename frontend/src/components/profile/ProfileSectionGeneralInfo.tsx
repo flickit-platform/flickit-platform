@@ -197,24 +197,15 @@ const ProfileMaturityLevels = (props: any) => {
           return (
             <Box
               sx={{
-                border: `2px solid ${colorCode}`,
+                borderBottom: `2px solid ${colorCode}`,
                 px: "8px",
                 py: "2px",
-                borderRadius:
-                  index === 0
-                    ? "8px 0 0 8px"
-                    : index === list.length - 1
-                    ? "0 8px 8px 0"
-                    : "0",
-                background: colorCode,
-
                 textAlign: "center",
               }}
             >
               <Typography
                 fontSize="12px"
                 fontWeight="bold"
-                sx={{ color: "#fff" }}
               >
                 {item.title}
               </Typography>
