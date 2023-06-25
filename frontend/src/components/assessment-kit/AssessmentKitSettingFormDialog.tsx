@@ -35,6 +35,7 @@ const AssessmentKitSettingFormDialog = (props: IAssessmentKitSettingFormDialogPr
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
+  fetchProfileQuery?.data&&console.log(fetchProfileQuery?.data[0].tags)
   const navigate = useNavigate();
   const close = () => {
     abortController.abort();

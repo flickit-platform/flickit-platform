@@ -50,10 +50,23 @@ const AssessmentContainer = () => {
             ]}
           />
         }
+        toolbar={
+          <IconButton
+            size="small"
+            component={Link}
+            to={`/${spaceId}/setting`}
+            sx={{ ml: 2 }}
+          >
+            <SettingsRoundedIcon color="primary" />
+          </IconButton>
+        }
       >
-        <DescriptionRoundedIcon sx={{ mr: 1 }} />
-        <Trans i18nKey="assessments" />
+        <Box>
+          <DescriptionRoundedIcon sx={{ mr: 1 }} />
+          <Trans i18nKey="assessments" />
+        </Box>
       </Title>
+
       <Box
         sx={{
           background: "white",
@@ -80,9 +93,6 @@ const AssessmentContainer = () => {
             text="createAssessment"
             disabled={rest.loading}
           />
-          <IconButton size="small" component={Link} to={`/${spaceId}/setting`} sx={{ml:2}}>
-            <SettingsRoundedIcon color="primary" />
-          </IconButton>
         </Box>
       </Box>
       <QueryData
