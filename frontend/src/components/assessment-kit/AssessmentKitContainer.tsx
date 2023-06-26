@@ -1,5 +1,13 @@
-import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/material";
-import { styles } from "@styles";
+import {
+  Avatar,
+  Box,
+  Button,
+  CardHeader,
+  Chip,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { styles, getMaturityLevelColors } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
@@ -23,7 +31,8 @@ const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const assessmentKitQueryData = useQuery({
-    service: (args = { id: assessmentKitId }, config) => service.fetchAssessmentKit(args, config),
+    service: (args = { id: assessmentKitId }, config) =>
+      service.fetchAssessmentKit(args, config),
   });
 
   return (
@@ -31,7 +40,9 @@ const AssessmentKitContainer = () => {
       {...assessmentKitQueryData}
       render={(data) => {
         setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
-        return <AssessmentKit data={data} query={assessmentKitQueryData.query} />;
+        return (
+          <AssessmentKit data={data} query={assessmentKitQueryData.query} />
+        );
       }}
     />
   );
@@ -53,8 +64,12 @@ const AssessmentKit = (props: any) => {
     subjects_with_desc = [],
     questionnaires = [],
     is_active,
+    maturity_levels,
   } = data || {};
 
+  const colorPallet = getMaturityLevelColors(
+    maturity_levels ? maturity_levels.length + 1 : 5
+  );
   const dialogProps = useDialog({
     context: {
       type: "create",
@@ -116,7 +131,12 @@ const AssessmentKit = (props: any) => {
                   }}
                 >
                   {tags.map((tag: any) => (
-                    <Chip key={tag.id} label={tag.title} size="small" sx={{ mr: 0.4, background: "white" }} />
+                    <Chip
+                      key={tag.id}
+                      label={tag.title}
+                      size="small"
+                      sx={{ mr: 0.4, background: "white" }}
+                    />
                   ))}
                 </Box>
               }
@@ -234,25 +254,41 @@ const AssessmentKit = (props: any) => {
                   mt: 2,
                 }}
               >
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>FREE</Typography>
                 </Box>
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>
+                    {subjects_with_desc.length || 0}
+                  </Typography>
                 </Box>
-                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfQuestionnaires" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
+                  <Typography fontWeight={"bold"}>
+                    {questionnaires.length || 0}
+                  </Typography>
                 </Box>
-                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 6 }}
+                  disabled={!is_active}
+                  onClick={dialogProps.openDialog}
+                >
                   <Trans i18nKey="createAssessment" />
                 </Button>
                 <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
@@ -277,7 +313,12 @@ const AssessmentKit = (props: any) => {
               <Box component="ul" mt={3}>
                 {subjects_with_desc.map((subject: any) => {
                   return (
-                    <Box component="li" mb={2} key={subject.id}>
+                    <Box
+                      component="li"
+                      mb={2}
+                      key={subject.id}
+                      sx={{ fontSize: "1.2rem" }}
+                    >
                       <b>{subject.title}</b>: {subject.description}
                     </Box>
                   );
@@ -298,6 +339,38 @@ const AssessmentKit = (props: any) => {
                 })}
               </Box>
             </Box>
+            {maturity_levels[0] && (
+              <Box mt={8}>
+                <Title>
+                  <Trans i18nKey="maturityLevel" />
+                </Title>
+                <Box mt={2} sx={{ display: "flex" }}>
+                  {maturity_levels.map((item: any, index: number) => {
+                    const colorCode = colorPallet[item.value];
+                    return (
+                      <Box
+                        sx={{
+                          background: colorCode,
+                          fontSize: "14px",
+                          py: { xs: "2px", md: 1 },
+                          px: { xs: 1, md: 4 },
+                          fontWeight: "bold",
+                          color: "#fff",
+                          borderRadius:
+                            index === 0
+                              ? "8px 0 0 8px"
+                              : index === maturity_levels.length - 1
+                              ? "0 8px 8px 0"
+                              : "0",
+                        }}
+                      >
+                        {item.title}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Box>
@@ -309,7 +382,8 @@ const LikeAssessmentKit = ({ likes_number }: any) => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const likeQueryData = useQuery({
-    service: (args = { id: assessmentKitId }, config) => service.likeAssessmentKit(args, config),
+    service: (args = { id: assessmentKitId }, config) =>
+      service.likeAssessmentKit(args, config),
     runOnMount: false,
   });
 
