@@ -16,21 +16,21 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import { toast } from "react-toastify";
 import formatDate from "@utils/formatDate";
 
-interface IProfileListItemProps {
+interface IAssessmentKitListItemProps {
   data: {
     id: TId;
     title: string;
     last_modification_date: string;
     is_active: boolean;
   };
-  fetchProfiles?: TQueryFunction;
-  fetchUnpublishedProfiles?:TQueryFunction;
+  fetchAssessmentKits?: TQueryFunction;
+  fetchUnpublishedAssessmentKits?:TQueryFunction;
   link?: string;
   hasAccess?: boolean;
 }
 
-const ProfileListItem = (props: IProfileListItemProps) => {
-  const { data, fetchProfiles,fetchUnpublishedProfiles, link, hasAccess } = props;
+const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
+  const { data, fetchAssessmentKits,fetchUnpublishedAssessmentKits, link, hasAccess } = props;
   const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
@@ -85,7 +85,7 @@ const ProfileListItem = (props: IProfileListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions profile={data} fetchProfiles={fetchProfiles} fetchUnpublishedProfiles={fetchUnpublishedProfiles} hasAccess={hasAccess} />
+          <Actions assessment_kit={data} fetchAssessmentKits={fetchAssessmentKits} fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits} hasAccess={hasAccess} />
         </Box>
       </Box>
     </Box>
@@ -93,27 +93,27 @@ const ProfileListItem = (props: IProfileListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { profile, fetchProfiles,fetchUnpublishedProfiles, dialogProps, setUserInfo, hasAccess } = props;
-  const { id, current_user_delete_permission = false, is_active = false } = profile;
+  const { assessment_kit, fetchAssessmentKits,fetchUnpublishedAssessmentKits, dialogProps, setUserInfo, hasAccess } = props;
+  const { id, current_user_delete_permission = false, is_active = false } = assessment_kit;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
-  const deleteProfileQuery = useQuery({
-    service: (args, config) => service.deleteProfile({ id }, config),
+  const deleteAssessmentKitQuery = useQuery({
+    service: (args, config) => service.deleteAssessmentKit({ id }, config),
     runOnMount: false,
   });
 
-  const publishProfileQuery = useQuery({
-    service: (args, config) => service.publishProfile({ id }, config),
+  const publishAssessmentKitQuery = useQuery({
+    service: (args, config) => service.publishAssessmentKit({ id }, config),
     runOnMount: false,
   });
 
-  const unPublishProfileQuery = useQuery({
-    service: (args, config) => service.unPublishProfile({ id }, config),
+  const unPublishAssessmentKitQuery = useQuery({
+    service: (args, config) => service.unPublishAssessmentKit({ id }, config),
     runOnMount: false,
   });
 
-  if (!fetchProfiles) {
-    console.warn("fetchProfiles not provided. profile list won't be updated on any action");
+  if (!fetchAssessmentKits) {
+    console.warn("fetchAssessmentKits not provided. assessment kit list won't be updated on any action");
   }
 
   // const openEditDialog = (e: any) => {
@@ -133,9 +133,9 @@ const Actions = (props: any) => {
 
   const deleteItem = async (e: any) => {
     try {
-      await deleteProfileQuery.query();
-      await fetchProfiles?.();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      await deleteAssessmentKitQuery.query();
+      await fetchAssessmentKits?.();
+      hasAccess&&await fetchUnpublishedAssessmentKits?.();
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -143,24 +143,24 @@ const Actions = (props: any) => {
     }
   };
 
-  const publishProfile = async (e: any) => {
+  const publishAssessmentKit = async (e: any) => {
     try {
-      const res = await publishProfileQuery.query();
+      const res = await publishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
-      await fetchProfiles?.();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      await fetchAssessmentKits?.();
+      hasAccess&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
   };
 
-  const unPublishProfile = async (e: any) => {
+  const unPublishAssessmentKit = async (e: any) => {
     try {
-      const res = await unPublishProfileQuery.query();
+      const res = await unPublishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
-      await fetchProfiles();
-      hasAccess&&await fetchUnpublishedProfiles?.();
+      await fetchAssessmentKits();
+      hasAccess&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -171,18 +171,18 @@ const Actions = (props: any) => {
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
-      loading={deleteProfileQuery.loading || publishProfileQuery.loading || unPublishProfileQuery.loading || editLoading}
+      loading={deleteAssessmentKitQuery.loading || publishAssessmentKitQuery.loading || unPublishAssessmentKitQuery.loading || editLoading}
       items={[
         is_active
           ? {
               icon: <ArchiveRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="archive" />,
-              onClick: unPublishProfile,
+              onClick: unPublishAssessmentKit,
             }
           : {
               icon: <PublishedWithChangesRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="publish" />,
-              onClick: publishProfile,
+              onClick: publishAssessmentKit,
             },
 
         current_user_delete_permission && {
@@ -195,4 +195,4 @@ const Actions = (props: any) => {
   ) : null;
 };
 
-export default ProfileListItem;
+export default AssessmentKitListItem;

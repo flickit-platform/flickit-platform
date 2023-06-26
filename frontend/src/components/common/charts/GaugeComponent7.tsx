@@ -3,7 +3,7 @@ interface IDynamicGaugeSVGProps {
   colorCode: string;
   value: number;
 }
-const ML7 = (props: IDynamicGaugeSVGProps) => {
+const GaugeComponent7 = (props: IDynamicGaugeSVGProps) => {
   const { colorCode, value } = props;
   return (
     <svg
@@ -52,4 +52,4 @@ const ML7 = (props: IDynamicGaugeSVGProps) => {
   );
 };
 
-export default ML7;
+export default GaugeComponent7;

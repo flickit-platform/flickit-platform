@@ -28,9 +28,9 @@ const QuestionnairesScreen = lazy(() => import("../screens/QuestionnairesScreen"
 const CompareScreen = lazy(() => import("../screens/CompareScreen"));
 const CompareResultScreen = lazy(() => import("../screens/CompareResultScreen"));
 
-const ProfilesScreen = lazy(() => import("../screens/ProfilesScreen"));
-const ProfileExpertViewScreen = lazy(() => import("../screens/ProfileExpertViewScreen"));
-const ProfileScreen = lazy(() => import("../screens/ProfileScreen"));
+const AssessmentKitsScreen = lazy(() => import("../screens/AssessmentKitsScreen"));
+const AssessmentKitExpertViewScreen = lazy(() => import("../screens/AssessmentKitExpertViewScreen"));
+const AssessmentKitScreen = lazy(() => import("../screens/AssessmentKitScreen"));
 
 /**
  * How does it work?
@@ -65,7 +65,7 @@ const Routes = () => {
           {/* Account related routes */}
           <Route path="/user/:accountTab" element={<UserScreen />} />
           <Route path="/user/:accountTab/:expertGroupId" element={<ExpertGroupScreen />} />
-          <Route path="/user/:accountTab/:expertGroupId/profiles/:profileId" element={<ProfileExpertViewScreen />} />
+          <Route path="/user/:accountTab/:expertGroupId/assessment-kits/:assessmentKitId" element={<AssessmentKitExpertViewScreen />} />
           <Route path="/account/expert-group-invitation/:expertGroupId/:token" element={<ExpertGroupConfirmInvitationScreen />} />
 
           {/* Spaces and assessments related routes */}
@@ -85,9 +85,9 @@ const Routes = () => {
             <Route path=":metricIndex" element={<MetricScreen />} />
           </Route>
 
-          {/* Profiles related routes */}
-          <Route path="/profiles" element={<ProfilesScreen />} />
-          <Route path="/profiles/:profileId" element={<ProfileScreen />} />
+          {/* Assessment kits related routes */}
+          <Route path="/assessment-kits" element={<AssessmentKitsScreen />} />
+          <Route path="/assessment-kits/:assessmentKitId" element={<AssessmentKitScreen />} />
 
           {/* Compare routes */}
           <Route path="/compare" element={<CompareScreen />} />

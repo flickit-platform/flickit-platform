@@ -17,25 +17,26 @@ import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
-interface IProfileSettingFormDialogProps extends DialogProps {
+interface IAssessmentKitSettingFormDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchProfileQuery?:any;
+  fetchAssessmentKitQuery?:any;
 }
 
-const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
+const AssessmentKitSettingFormDialog = (props: IAssessmentKitSettingFormDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {},fetchProfileQuery, openDialog, ...rest } = props;
+  const { onClose: closeDialog, onSubmitForm, context = {},fetchAssessmentKitQuery, openDialog, ...rest } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId, assessmentKitId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
-  const navigate = useNavigate();
+  fetchAssessmentKitQuery?.data&&console.log(fetchAssessmentKitQuery?.data[0].tags)
+  const navigate = useNavigate(); 
   const close = () => {
     abortController.abort();
     closeDialog();
@@ -57,8 +58,8 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile({ data: formattedData, assessmentKitId }, { signal: abortController.signal })
-          : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
+          ? await service.updateAssessmentKit({ data: formattedData, assessmentKitId }, { signal: abortController.signal })
+          : await service.createAssessmentKit({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
       close();
@@ -70,7 +71,6 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
       toastError(err);
     }
   };
-
   return (
     <CEDialog
       {...rest}
@@ -87,11 +87,11 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
           <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
-                service: (args, config) => service.fetchProfileTags(args, config),
+                service: (args, config) => service.fetchAssessmentKitTags(args, config),
               })}
               name="tags"
               multiple={true}
-              defaultValue={fetchProfileQuery?.data&&fetchProfileQuery?.data[0].tags}
+              defaultValue={fetchAssessmentKitQuery?.data&&fetchAssessmentKitQuery?.data[0].tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
@@ -115,4 +115,4 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   );
 };
 
-export default ProfileSettingFormDialog;
+export default AssessmentKitSettingFormDialog;

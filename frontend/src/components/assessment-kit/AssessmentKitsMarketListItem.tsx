@@ -6,7 +6,7 @@ import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 
-const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
+const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   return (
     <Box
       sx={{
@@ -77,7 +77,7 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         }
         toolbarProps={{ alignSelf: "flex-start", p: 1 }}
       >
-        <Box component={Link} to={`/profiles/${data.id}`} sx={{ textDecoration: "none", color: "white" }}>
+        <Box component={Link} to={`/assessment-kits/${data.id}`} sx={{ textDecoration: "none", color: "white" }}>
           {data.title}
         </Box>
       </Title>
@@ -132,4 +132,4 @@ const ProfilesMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   );
 };
 
-export default ProfilesMarketListItem;
+export default AssessmentKitsMarketListItem;

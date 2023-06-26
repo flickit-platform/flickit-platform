@@ -29,7 +29,7 @@ import { IDialogProps, TQueryFunction } from "@types";
 import getUserName from "@utils/getUserName";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
-import ProfileListItem from "../profile/ProfileListItem";
+import AssessmentKitListItem from "../assessment-kit/AssessmentKitListItem";
 import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
@@ -37,7 +37,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import ProfileCEFromDialog from "../profile/ProfileCEFromDialog";
+import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
 import { toast } from "react-toastify";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
@@ -69,10 +69,10 @@ const ExpertGroupContainer = () => {
   });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
-  const createProfileDialogProps = useDialog({
+  const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [unpublishedProfiles, setUnpublishedProfiles] = useState<any>({});
+  const [unpublishedAssessmentKits, setUnpublishedAssessmentKits] = useState<any>({});
   return (
     <QueryData
       {...queryData}
@@ -83,12 +83,12 @@ const ExpertGroupContainer = () => {
           website,
           about = "",
           number_of_members,
-          number_of_profiles,
+          number_of_assessment_kits,
           users = [],
           bio,
           owner,
           is_expert,
-          profiles = [],
+          assessment_kits = [],
         } = data || {};
         const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
@@ -134,11 +134,11 @@ const ExpertGroupContainer = () => {
                   </>
                 )}
                 <Box mt={5}>
-                  <ProfilesList
-                    setUnpublishedProfiles={setUnpublishedProfiles}
+                  <AssessmentKitsList
+                    setUnpublishedAssessmentKits={setUnpublishedAssessmentKits}
                     queryData={queryData}
                     hasAccess={hasAccess}
-                    dialogProps={createProfileDialogProps}
+                    dialogProps={createAssessmentKitDialogProps}
                   />
                 </Box>
                 <Box mt={5}>
@@ -217,7 +217,7 @@ const ExpertGroupContainer = () => {
                         color: "inherit",
                       }}
                       component="a"
-                      href="#profiles"
+                      href="#assessment_kits"
                     >
                       <AssignmentRoundedIcon
                         fontSize="small"
@@ -230,8 +230,8 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {`${number_of_profiles} ${t(
-                          "publishedProfiles"
+                        {`${number_of_assessment_kits} ${t(
+                          "publishedAssessmentKits"
                         ).toLowerCase()}`}
                       </Typography>
                       {hasAccess && (
@@ -240,7 +240,7 @@ const ExpertGroupContainer = () => {
                             size="small"
                             color="primary"
                             onClick={() => {
-                              createProfileDialogProps.openDialog({
+                              createAssessmentKitDialogProps.openDialog({
                                 type: "create",
                                 data: { expertGroupId },
                               });
@@ -261,7 +261,7 @@ const ExpertGroupContainer = () => {
                           color: "inherit",
                         }}
                         component="a"
-                        href="#profiles"
+                        href="#assessment_kits"
                       >
                         <AssignmentLateRoundedIcon
                           fontSize="small"
@@ -274,8 +274,8 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {`${ unpublishedProfiles?.length } ${t(
-                            "unpublishedProfiles"
+                          {`${unpublishedAssessmentKits?.length} ${t(
+                            "unpublishedAssessmentKits"
                           ).toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -656,42 +656,42 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
   );
 };
 
-const ProfilesList = (props: any) => {
-  const { hasAccess, dialogProps, about ,setUnpublishedProfiles} = props;
+const AssessmentKitsList = (props: any) => {
+  const { hasAccess, dialogProps, about, setUnpublishedAssessmentKits } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
-  const profileQuery = useQuery({
+  const assessmentKitQuery = useQuery({
     service: (args = { id: expertGroupId }, config) =>
-      service.fetchExpertGroupProfiles(args, config),
+      service.fetchExpertGroupAssessmentKits(args, config),
   });
-  const unpublishedProfileQuery = useQuery({
+  const unpublishedAssessmentKitQuery = useQuery({
     service: (args = { id: expertGroupId }, config) =>
-      service.fetchExpertGroupUnpublishedProfiles(args, config),
+      service.fetchExpertGroupUnpublishedAssessmentKits(args, config),
   });
   return (
     <>
       <Title
-        inPageLink="profiles"
+        inPageLink="assessment_kits"
         size="small"
         toolbar={
           hasAccess && (
-            <CreateProfileButton
-              onSubmitForm={profileQuery.query}
+            <CreateAssessmentKitButton
+              onSubmitForm={assessmentKitQuery.query}
               dialogProps={dialogProps}
             />
           )
         }
       >
-        <Trans i18nKey={"profiles"} />
+        <Trans i18nKey={"assessmentKits"} />
       </Title>
       <Box mt={2}>
         {/* published */}
         <QueryData
-          {...profileQuery}
+          {...assessmentKitQuery}
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
-                emptyMessage={<Trans i18nKey="thereIsNoPublishedProfileYet" />}
+                emptyMessage={<Trans i18nKey="thereIsNoPublishedAssessmentKitYet" />}
               />
             </Box>
           }
@@ -713,18 +713,20 @@ const ProfilesList = (props: any) => {
             const { results = [], is_expert } = data;
             return (
               <>
-                {results.map((profile: any) => {
+                {results.map((assessment_kit: any) => {
                   return (
-                    <ProfileListItem
+                    <AssessmentKitListItem
                       link={
                         is_expert
-                          ? `profiles/${profile?.id}`
-                          : `/profiles/${profile?.id}`
+                          ? `assessment_kits/${assessment_kit?.id}`
+                          : `/assessment_kits/${assessment_kit?.id}`
                       }
-                      key={profile?.id}
-                      data={profile}
-                      fetchProfiles={profileQuery.query}
-                      fetchUnpublishedProfiles={unpublishedProfileQuery.query}
+                      key={assessment_kit?.id}
+                      data={assessment_kit}
+                      fetchAssessmentKits={assessmentKitQuery.query}
+                      fetchUnpublishedAssessmentKits={
+                        hasAccess && unpublishedAssessmentKitQuery.query
+                      }
                       hasAccess={is_expert}
                     />
                   );
@@ -734,64 +736,68 @@ const ProfilesList = (props: any) => {
           }}
         />
         {/* unpublished */}
-        <QueryData
-          {...unpublishedProfileQuery}
-          showEmptyError={false}
-          emptyDataComponent={
-            <Box sx={{ background: "white", borderRadius: 2 }}>
-              <ErrorEmptyData
-                emptyMessage={
-                  <Trans i18nKey="thereIsNoUnpublishedProfileYet" />
-                }
-              />
-            </Box>
-          }
-          renderLoading={() => (
-            <>
-              {forLoopComponent(5, (index) => (
-                <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
-              ))}
-            </>
-          )}
-          isDataEmpty={(data) => {
-            const { results = [], is_expert } = data;
-            const isEmpty = is_expert
-              ? results.length === 0
-              : results.filter((p: any) => !!p?.is_active)?.length === 0;
-            return isEmpty;
-          }}
-          render={(data = {}) => {
-            const { results = [], is_expert } = data;
-            setUnpublishedProfiles(results)
-            return (
+        {hasAccess && (
+          <QueryData
+            {...unpublishedAssessmentKitQuery}
+            showEmptyError={false}
+            emptyDataComponent={
+              <Box sx={{ background: "white", borderRadius: 2 }}>
+                <ErrorEmptyData
+                  emptyMessage={
+                    <Trans i18nKey="thereIsNoUnpublishedAssessmentKitYet" />
+                  }
+                />
+              </Box>
+            }
+            renderLoading={() => (
               <>
-                {is_expert &&
-                  results.map((profile: any) => {
-                    return (
-                      <ProfileListItem
-                        link={
-                          is_expert
-                            ? `profiles/${profile?.id}`
-                            : `/profiles/${profile?.id}`
-                        }
-                        key={profile?.id}
-                        data={profile}
-                        fetchProfiles={profileQuery.query}
-                        fetchUnpublishedProfiles={unpublishedProfileQuery.query}
-                        hasAccess={is_expert}
-                      />
-                    );
-                  })}
+                {forLoopComponent(5, (index) => (
+                  <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
+                ))}
               </>
-            );
-          }}
-        />
+            )}
+            isDataEmpty={(data) => {
+              const { results = [], is_expert } = data;
+              const isEmpty = is_expert
+                ? results.length === 0
+                : results.filter((p: any) => !!p?.is_active)?.length === 0;
+              return isEmpty;
+            }}
+            render={(data = {}) => {
+              const { results = [], is_expert } = data;
+              setUnpublishedAssessmentKits(results);
+              return (
+                <>
+                  {is_expert &&
+                    results.map((assessment_kit: any) => {
+                      return (
+                        <AssessmentKitListItem
+                          link={
+                            is_expert
+                              ? `assessment_kits/${assessment_kit?.id}`
+                              : `/assessment_kits/${assessment_kit?.id}`
+                          }
+                          key={assessment_kit?.id}
+                          data={assessment_kit}
+                          fetchAssessmentKits={assessmentKitQuery.query}
+                          fetchUnpublishedAssessmentKits={
+                            hasAccess && unpublishedAssessmentKitQuery.query
+                          }
+                          hasAccess={hasAccess}
+                        />
+                      );
+                    })}
+                </>
+              );
+            }}
+          />
+        )}
       </Box>
     </>
   );
 };
 
-const CreateProfileButton = (props: {
+const CreateAssessmentKitButton = (props: {
   onSubmitForm: TQueryFunction;
   dialogProps: IDialogProps;
 }) => {
@@ -800,9 +806,9 @@ const CreateProfileButton = (props: {
   return (
     <>
       <Button variant="contained" size="small" onClick={dialogProps.openDialog}>
-        <Trans i18nKey="createProfile" />
+        <Trans i18nKey="createAssessmentKit" />
       </Button>
-      <ProfileCEFromDialog {...dialogProps} onSubmitForm={onSubmitForm} />
+      <AssessmentKitCEFromDialog {...dialogProps} onSubmitForm={onSubmitForm} />
     </>
   );
 };

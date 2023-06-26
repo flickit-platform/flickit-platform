@@ -22,6 +22,7 @@ const AutocompleteAsyncField = <T extends any = any>(props: IAutocompleteAsyncFi
   const { name, rules = {}, multiple, defaultValue = multiple ? undefined : null, required = false, ...rest } = props;
   const { control, setValue } = useFormContext();
   const { options } = rest;
+  console.log(defaultValue)
   return (
     <Controller
       name={name}
