@@ -27,7 +27,7 @@ import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-
+import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 const drawerWidth = 240;
 
 const Navbar = () => {
@@ -196,6 +196,11 @@ const Navbar = () => {
               to={`/assessment-kits`}
               sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
               size="small"
+              startIcon={
+                <AssessmentRoundedIcon
+                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                />
+              }
             >
               <Trans i18nKey="assessmentKits" />
             </Button>
