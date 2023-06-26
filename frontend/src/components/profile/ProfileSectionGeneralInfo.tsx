@@ -24,16 +24,16 @@ interface IProfileSectionAuthorInfo {
 const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
   const { data, query } = props;
   const { is_active, is_expert = true } = data || {};
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
-    service: (args = { id: profileId }, config) =>
+    service: (args = { id: assessmentKitId }, config) =>
       service.publishProfile(args, config),
     runOnMount: false,
     toastError: true,
   });
   const unPublishQuery = useQuery({
-    service: (args = { id: profileId }, config) =>
+    service: (args = { id: assessmentKitId }, config) =>
       service.unPublishProfile(args, config),
     runOnMount: false,
     toastError: true,
@@ -123,7 +123,7 @@ const ProfileSectionGeneralInfo = (props: IProfileSectionAuthorInfo) => {
               }}
             />
           </Box>
-          {data.profileInfos.map((info: any, index: number) => {
+          {data.assessmentKitInfos.map((info: any, index: number) => {
             return (
               <Box my={1.5} key={index}>
                 <InfoItem

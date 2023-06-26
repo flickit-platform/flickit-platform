@@ -30,7 +30,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
   const { service } = useServiceContext();
   const { onClose: closeDialog, onSubmitForm, context = {},fetchProfileQuery, openDialog, ...rest } = props;
   const { type, data = {} } = context;
-  const { expertGroupId: fallbackExpertGroupId, profileId } = useParams();
+  const { expertGroupId: fallbackExpertGroupId, assessmentKitId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
@@ -57,12 +57,12 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateProfile({ data: formattedData, profileId }, { signal: abortController.signal })
+          ? await service.updateProfile({ data: formattedData, assessmentKitId }, { signal: abortController.signal })
           : await service.createProfile({ data: formattedData }, { signal: abortController.signal });
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && res?.id && navigate(`profiles/${res.id}`);
+      shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -78,7 +78,7 @@ const ProfileSettingFormDialog = (props: IProfileSettingFormDialogProps) => {
       title={
         <>
           <SettingsRoundedIcon sx={{ mr: 1 }} />
-          {<Trans i18nKey="profileSetting" />}
+          {<Trans i18nKey="assessmentKitSetting" />}
         </>
       }
     >
