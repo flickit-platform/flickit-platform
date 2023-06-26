@@ -372,18 +372,18 @@ export const createService = (
         withCredentials: true,
       });
     },
-    fetchProfiles(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
+    fetchAssessmentKits(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
       const { query } = args || {};
       const params = query ? { query } : {};
-      return axios.get(`/baseinfo/profiles/`, { params, ...config });
+      return axios.get(`/baseinfo/assessmentkits/`, { params, ...config });
     },
-    fetchProfilesOptions(
+    fetchAssessmentKitsOptions(
       args: any,
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       const { query } = args || {};
       const params = query ? { query } : {};
-      return axios.get(`/baseinfo/profiles/options/select/`, {
+      return axios.get(`/baseinfo/assessmentkits/options/select/`, {
         params,
         ...config,
       });
@@ -420,7 +420,7 @@ export const createService = (
         config
       );
     },
-    uploadProfileDSL(file: any, config: AxiosRequestConfig<any> | undefined) {
+    uploadAssessmentKitDSL(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(
         `/baseinfo/dsl/`,
         { dsl_file: file },
@@ -432,54 +432,54 @@ export const createService = (
         }
       );
     },
-    deleteProfileDSL(
+    deleteAssessmentKitDSL(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
       return axios.delete(`/baseinfo/dsl/${id}/`, config);
     },
-    createProfile(
+    createAssessmentKit(
       args: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { data } = args || {};
-      return axios.post(`/baseinfo/importprofile/`, data, config);
+      return axios.post(`/baseinfo/importassessmentkit/`, data, config);
     },
-    updateProfile(
-      args: { profileId?: TId; data: any },
+    updateAssessmentKit(
+      args: { assessmentKitId?: TId; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { profileId, data } = args || {};
-      return axios.post(`/baseinfo/profiles/update/${profileId}`, data, config);
+      const { assessmentKitId, data } = args || {};
+      return axios.post(`/baseinfo/assessmentkits/update/${assessmentKitId}`, data, config);
     },
-    fetchProfiledata(
-      args: { profileId: TId },
+    fetchAssessmentKitdata(
+      args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { profileId } = args || {};
-      return axios.get(`baseinfo/profiles/get/${profileId}`, config);
+      const { assessmentKitId } = args || {};
+      return axios.get(`baseinfo/assessmentkits/get/${assessmentKitId}`, config);
     },
-    fetchProfile(
+    fetchAssessmentKit(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/profiles/${id}/`, config);
+      return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
     },
-    fetchProfileTags(args: any, config: AxiosRequestConfig<any> | undefined) {
+    fetchAssessmentKitTags(args: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/baseinfo/tags/`, config);
     },
-    deleteProfile(
+    deleteAssessmentKit(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.delete(`/baseinfo/importprofile/${id}/`, config);
+      return axios.delete(`/baseinfo/importassessmentkit/${id}/`, config);
     },
-    uploadProfilePhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
+    uploadAssessmentKitPhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(
-        `/baseinfo/profiles/1/images/`,
+        `/baseinfo/assessmentkits/1/images/`,
         { image: file },
         {
           ...config,
@@ -489,18 +489,18 @@ export const createService = (
         }
       );
     },
-    deleteProfilePhoto(
+    deleteAssessmentKitPhoto(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.delete(`/baseinfo/profiles/1/images/${args?.id}/`, config);
+      return axios.delete(`/baseinfo/assessmentkits/1/images/${args?.id}/`, config);
     },
-    inspectProfile(
-      args: { profileId: TId },
+    inspectAssessmentKit(
+      args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { profileId } = args || {};
-      return axios.get(`/baseinfo/inspectprofile/${profileId}/`, config);
+      const { assessmentKitId } = args || {};
+      return axios.get(`/baseinfo/inspectassessmentkit/${assessmentKitId}/`, config);
     },
     fetchUserExpertGroups(
       args: any,
@@ -535,36 +535,36 @@ export const createService = (
         config
       );
     },
-    fetchExpertGroupProfiles(
+    fetchExpertGroupAssessmentKits(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.get(`/baseinfo/expertgroup/profiles/${id}/`, config);
+      return axios.get(`/baseinfo/expertgroup/assessmentkits/${id}/`, config);
     },
-    fetchExpertGroupUnpublishedProfiles(
+    fetchExpertGroupUnpublishedAssessmentKits(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
       return axios.get(
-        `/baseinfo/expertgroup/unpublishedprofiles/${id}/`,
+        `/baseinfo/expertgroup/unpublishedassessmentkits/${id}/`,
         config
       );
     },
-    publishProfile(
+    publishAssessmentKit(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.post(`/baseinfo/profiles/publish/${id}/`, config);
+      return axios.post(`/baseinfo/assessmentkits/publish/${id}/`, config);
     },
-    unPublishProfile(
+    unPublishAssessmentKit(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.post(`/baseinfo/profiles/archive/${id}/`, config);
+      return axios.post(`/baseinfo/assessmentkits/archive/${id}/`, config);
     },
     addMemberToExpertGroup(
       args: { id: TId; email: string },
@@ -639,13 +639,13 @@ export const createService = (
         ...(config || {}),
       });
     },
-    likeProfile(
+    likeAssessmentKit(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
 
-      return axios.post(`/baseinfo/profiles/like/${id}/`, {
+      return axios.post(`/baseinfo/assessmentkits/like/${id}/`, {
         ...(config || {}),
       });
     },
@@ -709,13 +709,13 @@ export const createService = (
         ...(config || {}),
       });
     },
-    analyzeProfile(
-      args: { profileId: TId },
+    analyzeAssessmentKit(
+      args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { profileId } = args || {};
+      const { assessmentKitId } = args || {};
 
-      return axios.get(`/baseinfo/analyzeprofile/${profileId}/`, {
+      return axios.get(`/baseinfo/analyzeassessmentkit/${assessmentKitId}/`, {
         ...(config || {}),
       });
     },

@@ -1,6 +1,6 @@
 import React, { useReducer, FC, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import { IProfile, TId } from "@types";
+import { IAssessmentKit, TId } from "@types";
 import compareReducer from "./reducer";
 
 interface ICompareProviderProps {
@@ -9,7 +9,7 @@ interface ICompareProviderProps {
 
 export interface ICompareContext {
   assessmentIds: TId[];
-  profile: null | IProfile;
+  assessment_kit: null | IAssessmentKit;
 }
 export interface ICompareDispatchContext {
   dispatch: React.Dispatch<any>;
@@ -17,7 +17,7 @@ export interface ICompareDispatchContext {
 
 export const CompareContext = React.createContext<ICompareContext>({
   assessmentIds: [],
-  profile: null,
+  assessment_kit: null,
 });
 
 const CompareDispatchContext = React.createContext<any>({
@@ -29,7 +29,7 @@ export const CompareProvider: FC<ICompareProviderProps> = ({ children }) => {
   const assessmentIdsParams = searchParams.getAll("assessmentIds");
   const [state, dispatch] = useReducer(compareReducer, {
     assessmentIds: assessmentIdsParams,
-    profile: null,
+    assessment_kit: null,
   });
 
   return (

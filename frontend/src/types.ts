@@ -132,7 +132,7 @@ export interface IImage {
 
 export type TImages = IImage[];
 
-export interface IAssessmentProfileModel {
+export interface IAssessmentKitModel {
   code: string;
   description: string;
   id: TId;
@@ -148,7 +148,7 @@ export interface IAssessmentProfileModel {
   >;
 }
 
-export interface IProfile {
+export interface IAssessmentKit {
   code: string;
   description: string;
   id: TId;
@@ -190,8 +190,8 @@ export interface ISpaceModel {
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
 export interface IAssessmentReport {
-  assessment_profile: Omit<
-    IAssessmentProfileModel,
+  assessment_kit: Omit<
+    IAssessmentKitModel,
     "metric_categories" | "images" | "assessment_subjects"
   >;
   assessment_results: string[];
@@ -279,7 +279,7 @@ export interface IAssessment {
   code: string;
   color: IColorModel;
   assessment_results: string[];
-  assessment_profile: IAssessmentProfileModel;
+  assessment_kit: IAssessmentKitModel;
   total_progress?: ITotalProgress;
   maturity_level_number:number;
   level_value: number;
@@ -331,7 +331,7 @@ export interface IQuestionnairesModel extends ITotalProgress {
 }
 
 export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
-  assessment_profile_description: string;
+  assessment_kit_description: string;
   assessment_project_color_code: string;
   assessment_project_id: string;
   assessment_project_space_id: TId;
@@ -398,7 +398,7 @@ export interface ICompareResultBaseInfo {
   id: TId;
   title: string;
   status: TStatus;
-  profile: string;
+  assessment_kit: string;
 }
 export type TCompareResultBaseInfos = ICompareResultBaseInfo[];
 

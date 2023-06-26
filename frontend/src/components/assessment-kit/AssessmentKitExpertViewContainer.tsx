@@ -19,13 +19,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
-import ProfileSectionGeneralInfo from "./ProfileSectionGeneralInfo";
+import AssessmentKitSectionGeneralInfo from "./AssessmentKitSectionGeneralInfo";
 import ListAccordion from "@common/lists/ListAccordion";
 import InfoItem from "@common/InfoItem";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-import ProfileSettingFormDialog from "./ProfileSettingFormDialog";
+import AssessmentKitSettingFormDialog from "./AssessmentKitSettingFormDialog";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useAuthContext } from "@providers/AuthProvider";
@@ -34,8 +34,8 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 
-const ProfileExpertViewContainer = () => {
-  const { profileQueryProps ,fetchProfileQuery} = useProfile();
+const AssessmentKitExpertViewContainer = () => {
+  const { assessmentKitQueryProps ,fetchAssessmentKitQuery} = useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -44,10 +44,10 @@ const ProfileExpertViewContainer = () => {
   return (
     <Box>
       <QueryData
-        {...profileQueryProps}
+        {...assessmentKitQueryProps}
         render={(data = {}) => {
           const { is_expert = true, expert_group } = data;
-          setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
+          setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
 
           return (
             <Box>
@@ -79,19 +79,19 @@ const ProfileExpertViewContainer = () => {
                 {data.title}
               </Title>
               <Box mt={3}>
-                <ProfileSectionGeneralInfo data={data} query={profileQueryProps.query} />
-                <ProfileSectionsTabs data={data} />
+                <AssessmentKitSectionGeneralInfo data={data} query={assessmentKitQueryProps.query} />
+                <AssessmentKitSectionsTabs data={data} />
               </Box>
             </Box>
           );
         }}
       />
-      <ProfileSettingFormDialog {...dialogProps} onSubmitForm={profileQueryProps.query} fetchProfileQuery={fetchProfileQuery} />
+      <AssessmentKitSettingFormDialog {...dialogProps} onSubmitForm={assessmentKitQueryProps.query} fetchAssessmentKitQuery={fetchAssessmentKitQuery} />
     </Box>
   );
 };
 
-const ProfileSectionsTabs = (props: { data: any }) => {
+const AssessmentKitSectionsTabs = (props: { data: any }) => {
   const { data } = props;
 
   const [value, setValue] = useState("subjects");
@@ -123,17 +123,17 @@ const ProfileSectionsTabs = (props: { data: any }) => {
           </TabList>
         </Box>
         <TabPanel value="subjects" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
-          <ProfileSubjects subjects={data.subjectsInfos} />
+          <AssessmentKitSubjects subjects={data.subjectsInfos} />
         </TabPanel>
         <TabPanel value="questionnaires" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
-          <ProfileQuestionnaires questionnaires={data.questionnaires} />
+          <AssessmentKitQuestionnaires questionnaires={data.questionnaires} />
         </TabPanel>
       </TabContext>
     </Box>
   );
 };
 
-const ProfileSubjects = (props: { subjects: any[] }) => {
+const AssessmentKitSubjects = (props: { subjects: any[] }) => {
   const { subjects } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
@@ -258,7 +258,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
                             {item.description}
                           </Typography>
                         </Box>
-                        <ProfileQuestionsList questions={item.questions} index={index} />
+                        <AssessmentKitQuestionsList questions={item.questions} index={index} />
                       </React.Fragment>
                     );
                   }}
@@ -272,7 +272,7 @@ const ProfileSubjects = (props: { subjects: any[] }) => {
   );
 };
 
-const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
+const AssessmentKitQuestionnaires = (props: { questionnaires: any[] }) => {
   const { questionnaires } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const dialogProps = useDialog();
@@ -504,7 +504,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
                                       </Box>
                                     );
                                   })}
-                                  {/* <ProfileDialog
+                                  {/* <AssessmentKitDialog
                                       {...dialogProps}
                                       question={question}
                                     /> */}
@@ -527,7 +527,7 @@ const ProfileQuestionnaires = (props: { questionnaires: any[] }) => {
   );
 };
 
-const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
+const AssessmentKitQuestionsList = (props: { questions: any[]; index: number }) => {
   const { questions, index } = props;
   const questionsRef = {} as Record<string, boolean>;
   return (
@@ -674,7 +674,7 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
   );
 };
 
-// const ProfileDialog = (props: any) => {
+// const AssessmentKitDialog = (props: any) => {
 //   const { question, onClose: closeDialog, ...rest } = props;
 //   const {
 //     title,
@@ -717,7 +717,7 @@ const ProfileQuestionsList = (props: { questions: any[]; index: number }) => {
 // };
 const AttributeDetails = (props: { index: number }) => {
   const { index } = props;
-  const { queryData } = useProfile();
+  const { queryData } = useAssessmentKit();
   const { data, loaded } = queryData;
   const gridColumns = (loaded && data[index].metrics_number_by_level.length * 3) || 3;
 
@@ -784,21 +784,21 @@ const AttributeDetails = (props: { index: number }) => {
     </Box>
   );
 };
-const useProfile = () => {
+const useAssessmentKit = () => {
   const { service } = useServiceContext();
-  const { profileId } = useParams();
-  const profileQueryProps = useQuery({
-    service: (args = { profileId }, config) => service.inspectProfile(args, config),
+  const { assessmentKitId } = useParams();
+  const assessmentKitQueryProps = useQuery({
+    service: (args = { assessmentKitId }, config) => service.inspectAssessmentKit(args, config),
   });
   const queryData = useQuery({
-    service: (args = { profileId }, config) => service.analyzeProfile(args, config),
+    service: (args = { assessmentKitId }, config) => service.analyzeAssessmentKit(args, config),
     runOnMount: true,
   });
-  const fetchProfileQuery = useQuery({
-    service: (args = { profileId }, config) => service.fetchProfiledata(args, config),
+  const fetchAssessmentKitQuery = useQuery({
+    service: (args = { assessmentKitId }, config) => service.fetchAssessmentKitdata(args, config),
     runOnMount: true,
   });
-  return { profileQueryProps, queryData,fetchProfileQuery};
+  return { assessmentKitQueryProps, queryData,fetchAssessmentKitQuery};
 };
 
-export default ProfileExpertViewContainer;
+export default AssessmentKitExpertViewContainer;

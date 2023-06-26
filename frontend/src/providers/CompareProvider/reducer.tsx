@@ -10,10 +10,10 @@ const appReducer = (
         ...prevState,
         assessmentIds: action.payload,
       };
-    case COMPARE_ACTIONS_TYPE.SET_PROFILE:
+    case COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_KIT:
       return {
         ...prevState,
-        profile: action.payload,
+        assessment_kit: action.payload,
       };
     default:
       return prevState;

@@ -175,7 +175,7 @@ const SubjectTitle = (props: {
 }) => {
   const { data, loading } = props;
   const {
-    assessment_profile_description,
+    assessment_kit_description,
     assessment_project_title,
     assessment_project_color_code,
     assessment_project_space_title,

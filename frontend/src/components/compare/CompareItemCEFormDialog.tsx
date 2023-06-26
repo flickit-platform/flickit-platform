@@ -65,7 +65,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { type, data } = context || {};
   const defaultValues = type === "update" ? data || {} : {};
   const formMethods = useForm({ shouldUnregister: true });
-  const { assessmentIds, profile } = useCompareContext();
+  const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
 
   const onSubmit = (data: any) => {
@@ -85,7 +85,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
           <SelectFieldUC
             {...useConnectSelectField({
               url: `/assessment/currentuserprojects/`,
-              searchParams: { profile_id: profile?.id },
+              searchParams: { assessment_kit_id: assessment_kit?.id },
               filterOptions: (options) =>
                 options.filter(
                   (option) => (!assessmentIds.includes(option?.id) || option?.id == defaultValues?.id) && hasStatus(option.status)
@@ -108,7 +108,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                         {option.title}
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
-                        <Chip label={option.assessment_profile.title} size="small" />
+                        <Chip label={option.assessment_kit.title} size="small" />
                       </Box>
                     </>
                   )}

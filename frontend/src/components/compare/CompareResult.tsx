@@ -83,11 +83,11 @@ const CompareResult = (props: ICompareResultProps) => {
 const CompareResultCommonBaseInfo = (props: { data: ICompareResultModel }) => {
   const { data } = props;
   const { base_infos, subjects } = data;
-  const profile = base_infos[0].profile;
+  const assessmentKit = base_infos[0].assessment_kit;
   return (
     <AlertBox severity="info" sx={{ mb: 3 }}>
       <Trans i18nKey={"allOfTheSelectedAssessmentsUse"} />
-      <Chip sx={{ mx: 0.6 }} label={profile} /> <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
+      <Chip sx={{ mx: 0.6 }} label={assessmentKit} /> <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
       {subjects.map((subject) => (
         <MuiLink href={`#${subject.title}`} sx={{ mx: 0.6 }}>
           {subject.title}

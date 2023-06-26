@@ -1,16 +1,8 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid,
-  Typography,
-} from "@mui/material";
-import { styles, getMaturityLevelColors } from "@styles";
+import { Avatar, Box, Button, CardHeader, Chip, Grid, Typography } from "@mui/material";
+import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
-import ProfilesListContainer from "./ProfilesListContainer";
+import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
@@ -27,28 +19,27 @@ import { t } from "i18next";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
 
-const ProfileContainer = () => {
+const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
-  const { profileId } = useParams();
-  const profileQueryData = useQuery({
-    service: (args = { id: profileId }, config) =>
-      service.fetchProfile(args, config),
+  const { assessmentKitId } = useParams();
+  const assessmentKitQueryData = useQuery({
+    service: (args = { id: assessmentKitId }, config) => service.fetchAssessmentKit(args, config),
   });
 
   return (
-    <QueryData
-      {...profileQueryData}
+<QueryData
+      {...assessmentKitQueryData}
       render={(data) => {
-        setDocumentTitle(`${t("profile")}: ${data.title || ""}`);
-        return <Profile data={data} query={profileQueryData.query} />;
+        setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+        return <AssessmentKit data={data} query={assessmentKitQueryData.query} />;
       }}
     />
   );
 };
 
-const Profile = (props: any) => {
+const AssessmentKit = (props: any) => {
   const { data, query } = props;
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const {
     title,
     tags = [],
@@ -62,15 +53,12 @@ const Profile = (props: any) => {
     subjects_with_desc = [],
     questionnaires = [],
     is_active,
-    maturity_levels,
   } = data || {};
-  const colorPallet = getMaturityLevelColors(
-    maturity_levels ? maturity_levels.length + 1 : 5
-  );
+
   const dialogProps = useDialog({
     context: {
       type: "create",
-      staticData: { profile: { id: profileId, title } },
+      staticData: { assessment_kit: { id: assessmentKitId, title } },
     },
   });
 
@@ -111,8 +99,8 @@ const Profile = (props: any) => {
                   color="white"
                   routes={[
                     {
-                      title: t("profiles") as string,
-                      to: `/profiles`,
+                      title: t("assessmentKits") as string,
+                      to: `/assessment-kits`,
                     },
                   ]}
                 />
@@ -128,12 +116,7 @@ const Profile = (props: any) => {
                   }}
                 >
                   {tags.map((tag: any) => (
-                    <Chip
-                      key={tag.id}
-                      label={tag.title}
-                      size="small"
-                      sx={{ mr: 0.4, background: "white" }}
-                    />
+                    <Chip key={tag.id} label={tag.title} size="small" sx={{ mr: 0.4, background: "white" }} />
                   ))}
                 </Box>
               }
@@ -221,7 +204,7 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             </Box>
-            <LikeProfile likes_number={likes_number} />
+            <LikeAssessmentKit likes_number={likes_number} />
           </Box>
         </Box>
       </Box>
@@ -229,7 +212,7 @@ const Profile = (props: any) => {
         {!is_active && (
           <Box my={5}>
             <AlertBox severity="warning">
-              <Trans i18nKey="sorryYouCanCreateAssessmentWithThisProfile" />
+             <Trans i18nKey="sorryYouCanCreateAssessmentWithThisAssessmentKit" />
             </AlertBox>
           </Box>
         )}
@@ -251,41 +234,25 @@ const Profile = (props: any) => {
                   mt: 2,
                 }}
               >
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>FREE</Typography>
                 </Box>
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>
-                    {subjects_with_desc.length || 0}
-                  </Typography>
+                  <Typography fontWeight={"bold"}>{subjects_with_desc.length || 0}</Typography>
                 </Box>
-                <Box
-                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
-                >
+                <Box sx={{ ...styles.centerV, justifyContent: "space-between" }}>
                   <Typography variant="body2">
                     <Trans i18nKey="numberOfQuestionnaires" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>
-                    {questionnaires.length || 0}
-                  </Typography>
+                  <Typography fontWeight={"bold"}>{questionnaires.length || 0}</Typography>
                 </Box>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 6 }}
-                  disabled={!is_active}
-                  onClick={dialogProps.openDialog}
-                >
+                <Button fullWidth variant="contained" sx={{ mt: 6 }} disabled={!is_active} onClick={dialogProps.openDialog}>
                   <Trans i18nKey="createAssessment" />
                 </Button>
                 <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
@@ -303,39 +270,15 @@ const Profile = (props: any) => {
                 </Box>
               </Box>
             )}
-            <Box my={8}>
+            <Box mb={8}>
               <Title>
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
                 {subjects_with_desc.map((subject: any) => {
                   return (
-                    <Box component="li" mb={2} key={subject.id} sx={{fontSize:"1.2rem"}}>
+                    <Box component="li" mb={2} key={subject.id}>
                       <b>{subject.title}</b>: {subject.description}
-                      <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
-                        <Trans i18nKey="relatedAttributes" />
-                      </Typography>
-                      {subject?.attributes &&
-                        subject?.attributes?.map((att: any) => (
-                          <Box sx={{ ml: 4 }} component="li">
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                my: 2,
-                                textAlign: "justify",
-                                textJustify: "inter-word",
-                              }}
-                            >
-                              <Box component="span" fontWeight="bold">
-                                {att.title}
-                              </Box>
-                              :{" "}
-                              <Box component="span" fontSize={14}>
-                                {att.description}
-                              </Box>
-                            </Typography>
-                          </Box>
-                        ))}
                     </Box>
                   );
                 })}
@@ -355,38 +298,6 @@ const Profile = (props: any) => {
                 })}
               </Box>
             </Box>
-            {maturity_levels[0] && (
-              <Box mt={8}>
-                <Title>
-                  <Trans i18nKey="maturityLevel" />
-                </Title>
-                <Box mt={2} sx={{ display: "flex" }}>
-                  {maturity_levels.map((item: any, index: number) => {
-                    const colorCode = colorPallet[item.value];
-                    return (
-                      <Box
-                        sx={{
-                          background: colorCode,
-                          fontSize:"14px",
-                          py: { xs: "2px", md: 1 },
-                          px: { xs: 1, md: 4 },
-                          fontWeight: "bold",
-                          color: "#fff",
-                          borderRadius:
-                            index === 0
-                              ? "8px 0 0 8px"
-                              : index === maturity_levels.length-1
-                              ? "0 8px 8px 0"
-                              : "0",
-                        }}
-                      >
-                        {item.title}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            )}
           </Grid>
         </Grid>
       </Box>
@@ -394,12 +305,11 @@ const Profile = (props: any) => {
   );
 };
 
-const LikeProfile = ({ likes_number }: any) => {
+const LikeAssessmentKit = ({ likes_number }: any) => {
   const { service } = useServiceContext();
-  const { profileId } = useParams();
+  const { assessmentKitId } = useParams();
   const likeQueryData = useQuery({
-    service: (args = { id: profileId }, config) =>
-      service.likeProfile(args, config),
+    service: (args = { id: assessmentKitId }, config) => service.likeAssessmentKit(args, config),
     runOnMount: false,
   });
 
@@ -430,4 +340,4 @@ const LikeProfile = ({ likes_number }: any) => {
   );
 };
 
-export default ProfileContainer;
+export default AssessmentKitContainer;

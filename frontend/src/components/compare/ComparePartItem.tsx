@@ -34,7 +34,6 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
       type: data?.id ? "update" : "create",
     },
   });
-  console.log(data)
   return (
     <Box
       display="flex"
@@ -128,7 +127,7 @@ const DeleteAssessmentIconBtn = (props: {
     );
 
     if (newAssessmentIds.length === 0) {
-      dispatch(compareActions.setProfile(null));
+      dispatch(compareActions.setAssessmentKit(null));
     }
     dispatch(compareActions.setAssessmentIds(newAssessmentIds));
   };
