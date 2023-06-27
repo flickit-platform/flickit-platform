@@ -46,7 +46,7 @@ def import_assessment_kit(descriptive_assessment_kit, **kwargs):
     __import_questionnaires(descriptive_assessment_kit['questionnaireModels'], assessment_kit)
     __import_subjects(descriptive_assessment_kit['subjectModels'], assessment_kit)
     __import_attributes(descriptive_assessment_kit['attributeModels'])
-    __import_metrics(descriptive_assessment_kit['metricModels'], assessment_kit)
+    __import_metrics(descriptive_assessment_kit['questionModels'], assessment_kit)
     return assessment_kit
 
 def __import_maturity_levels(descriptive_assessment_kit, assessment_kit):
