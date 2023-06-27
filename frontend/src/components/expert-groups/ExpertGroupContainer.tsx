@@ -88,6 +88,7 @@ const ExpertGroupContainer = () => {
           bio,
           owner,
           is_expert,
+          is_member,
           assessment_kits = [],
         } = data || {};
         const hasAccess = is_expert;
@@ -139,6 +140,7 @@ const ExpertGroupContainer = () => {
                     queryData={queryData}
                     hasAccess={hasAccess}
                     dialogProps={createAssessmentKitDialogProps}
+                    is_member={is_member}
                   />
                 </Box>
                 <Box mt={5}>
@@ -657,7 +659,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const AssessmentKitsList = (props: any) => {
-  const { hasAccess, dialogProps, about, setUnpublishedAssessmentKits } = props;
+  const { hasAccess, dialogProps, about, setUnpublishedAssessmentKits,is_member } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const assessmentKitQuery = useQuery({
@@ -711,7 +713,6 @@ const AssessmentKitsList = (props: any) => {
           )}
           render={(data = {}) => {
             const { results = [], is_expert } = data;
-         
             return (
               <>
                 {results.map((assessment_kit: any) => {
@@ -782,7 +783,7 @@ const AssessmentKitsList = (props: any) => {
                           data={assessment_kit}
                           fetchAssessmentKits={assessmentKitQuery.query}
                           fetchUnpublishedAssessmentKits={
-                            hasAccess && unpublishedAssessmentKitQuery.query
+                            is_member && unpublishedAssessmentKitQuery.query
                           }
                           hasAccess={hasAccess}
                         />
