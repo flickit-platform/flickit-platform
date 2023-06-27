@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
-from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact
+from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact, OptionValue
 from baseinfo.models.profilemodels import AssessmentProfile, ExpertGroup
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
@@ -66,3 +66,20 @@ class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'bio', 'about']
+
+class LoadQualityAttributeSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = QualityAttribute
+        fields = ['id', 'code', 'title', 'description', 'assessment_subject', 'index', 'weight']
+
+
+class OptionValueSerilizers(serializers.ModelSerializer):
+    class Meta:
+        model = OptionValue
+        fields = ['id', 'option_id', 'value', 'metric_impact_id']
+        
+
+
+class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.Serializer):
+    assessmentSubjectIds = serializers.ListField(child=serializers.IntegerField())
+    qualityAttributeIds = serializers.ListField(child=serializers.IntegerField())

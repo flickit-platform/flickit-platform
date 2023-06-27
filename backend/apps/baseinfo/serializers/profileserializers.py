@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from assessment.models import AssessmentProject
 
-from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag, MaturityLevel
-from baseinfo.models.basemodels import AssessmentSubject
+from baseinfo.models.profilemodels import AssessmentProfile, ProfileDsl, ProfileTag, MaturityLevel , LevelCompetence
+from baseinfo.models.basemodels import AssessmentSubject 
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
 from ..services import profileservice
@@ -102,6 +102,11 @@ class UpdateProfileSerializer(serializers.Serializer):
     summary = serializers.CharField(required=False)
     tags = serializers.ListField(child=serializers.IntegerField(),required=False)
 
-
+class LevelCompetenceSerilizer(serializers.ModelSerializer):
+        # maturity_level_id = MaturityLevelSimpleSerializer(many = True)
+        # maturity_level_competence = MaturityLevelSimpleSerializer(many = True)
+        class Meta:
+            model = LevelCompetence
+            fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
 
 

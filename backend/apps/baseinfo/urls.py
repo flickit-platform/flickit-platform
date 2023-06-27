@@ -46,4 +46,12 @@ urlpatterns += [
     path("profiles/update/<str:profile_id>", profileviews.UpdateProfileApi.as_view()),
     path("profiles/get/<str:profile_id>", profileviews.ProfileInitFormApi.as_view()),
     path("dsl/download/<str:profile_id>/", importprofileviews.DownloadDslApi.as_view()),
+    path("assessmentsubject/assessmentkite/<str:profile_id>",commonviews.LoadAssessmentSubjectApi.as_view()),
+    path("optionvalue/answertemplate/<str:answer_tamplate_id>",commonviews.LoadOptionValueApi.as_view()),
+    path("levelcompetence/maturitylevel/<str:maturity_level_id>",profileviews.LoadLevelCompetenceApi.as_view()),
+    path("maturitylevel/assessmentkit/<str:profile_id>",profileviews.LoadMaturityLevelApi.as_view()),
+    path("metric/qualityattribute/<str:quality_attribute_id>",commonviews.LoadMetricApi.as_view()),
+    path("qualityattribute/assessmentsubject/<str:assessment_subject_id>",commonviews.LoadQualityAttributeApi.as_view()),
+    path("qualityattribute/assessmentsubject/assessmentkite/<str:profile_id>",commonviews.LoadAssessmentSubjectAndQualityAttributeApi.as_view()),
+
 ]

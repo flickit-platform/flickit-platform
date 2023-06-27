@@ -14,8 +14,11 @@ from rest_framework.permissions import IsAuthenticated
 from baseinfo.decorators import is_expert
 from baseinfo.services import profileservice, expertgroupservice
 from baseinfo.serializers.profileserializers import *
-from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile
+from baseinfo.models.profilemodels import ProfileDsl, ProfileTag, AssessmentProfile , LevelCompetence
 from baseinfo.permissions import ManageExpertGroupPermission, ManageProfilePermission
+from baseinfo.serializers import commonserializers
+from baseinfo.services import commonservice, profileservice
+
 
 class AssessmentProfileViewSet(mixins.RetrieveModelMixin,
                    mixins.DestroyModelMixin,
@@ -125,9 +128,21 @@ class UpdateProfileApi(APIView):
     def post(self, request, profile_id):
         serializer = UpdateProfileSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        profile = profileservice.load_profile(profile_id)
+        
         result = profileservice.update_profile(profile ,request,**serializer.validated_data)
         if result.success:
             return Response({'message': result.message})
         else:
             return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
+
+class LoadLevelCompetenceApi(APIView):
+    def get(self,request,maturity_level_id):
+        maturity_level = commonservice.load_maturity_level(maturity_level_id)
+        response = LevelCompetenceSerilizer(LevelCompetence.objects.filter(maturity_level=maturity_level_id), many = True, context={'request': request}).data
+        return Response(response, status = status.HTTP_200_OK) 
+
+class LoadMaturityLevelApi(APIView):
+    def get(self,request,profile_id):
+        profile = profileservice.load_profile(profile_id)
+        response = MaturityLevelSimpleSerializer(MaturityLevel.objects.filter(profile=profile_id), many = True, context={'request': request}).data
+        return Response(response, status = status.HTTP_200_OK) 
