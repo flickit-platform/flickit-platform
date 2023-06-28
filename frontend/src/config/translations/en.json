@@ -270,7 +270,8 @@
   "metrics":"Metrics",
   "attribute": "Attribute",
   "level":"Level",
-  "thisSystemIsIn":"This system is in"
+  "thisSystemIsIn":"This system is in",
+  "numberOfImpactfulQuestions":"Number Of Impactful Questions"
 }
 
 

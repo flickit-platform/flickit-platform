@@ -34,7 +34,8 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 const AssessmentKitExpertViewContainer = () => {
-  const { assessmentKitQueryProps, fetchAssessmentKitQuery } = useAssessmentKit();
+  const { assessmentKitQueryProps, fetchAssessmentKitQuery } =
+    useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -102,6 +103,8 @@ const AssessmentKitExpertViewContainer = () => {
 };
 const AssessmentKitSectionsTabs = (props: { data: any }) => {
   const { data } = props;
+  const { maturity_levels } = data;
+  const { analyzeAssessmentKitQuery } = useAssessmentKit();
   const [value, setValue] = useState("subjects");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -127,6 +130,14 @@ const AssessmentKitSectionsTabs = (props: { data: any }) => {
               }
               value="questionnaires"
             />
+                <Tab
+              label={
+                <Box sx={{ ...styles.centerV }}>
+                  <Trans i18nKey="attributes" />
+                </Box>
+              }
+              value="attributes"
+            />
           </TabList>
         </Box>
         <TabPanel value="subjects" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
@@ -134,6 +145,19 @@ const AssessmentKitSectionsTabs = (props: { data: any }) => {
         </TabPanel>
         <TabPanel value="questionnaires" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
           <AssessmentKitQuestionnaires questionnaires={data.questionnaires} />
+        </TabPanel>
+        <TabPanel value="attributes" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
+          <QueryData
+            {...analyzeAssessmentKitQuery}
+            render={(data = {}) => {
+              return (
+                <AttributeDetails
+                  data={data}
+                  maturity_levels={maturity_levels}
+                />
+              );
+            }}
+          />
         </TabPanel>
       </TabContext>
     </Box>
@@ -590,7 +614,10 @@ const AssessmentKitQuestionnaires = (props: { questionnaires: any[] }) => {
     </Box>
   );
 };
-const AssessmentKitQuestionsList = (props: { questions: any[]; index: number }) => {
+const AssessmentKitQuestionsList = (props: {
+  questions: any[];
+  index: number;
+}) => {
   const { questions, index } = props;
   const questionsRef = {} as Record<string, boolean>;
   return (
@@ -1015,72 +1042,145 @@ const AssessmentKitDialog = (props: any) => {
     </Dialog>
   );
 };
-const AttributeDetails = (props: { index: number }) => {
-  const { index } = props;
-  const { queryData } = useAssessmentKit();
-  const { data, loaded } = queryData;
-  const gridColumns =
-    (loaded && data[index].metrics_number_by_level.length * 3) || 3;
+const AttributeDetails = (props: any) => {
+  const { analyzeAssessmentKitQuery } = useAssessmentKit();
+  const { data, maturity_levels } = props;
+  const { list, maturity_level_number } = maturity_levels;
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+  const colorPallet = getMaturityLevelColors(maturity_level_number);
   return (
-    <Box display="flex" justifyContent={"space-between"} marginBottom={5}>
-      <Grid container spacing={2} columns={15}>
-        {loaded &&
-          data[index].metrics_number_by_level.map((item: any) => (
-            <Grid item xs={3}>
-              <Box position={"relative"}>
-                <Typography
-                  sx={{
-                    width: "100%",
-                    position: "absolute",
-                    top: "-36px",
-                    pb: "2px",
-                    color: "#767676",
-                    fontFamily: "Roboto",
-                    borderBottom: (t) =>
-                      `1px solid ${t.palette.secondary.dark}`,
-                  }}
-                  variant="subMedium"
-                >
-                  <Trans i18nKey={"level"} />
-                  <Box component="span" sx={{ float: "right", mr: 1 }}>
-                    <Trans i18nKey="metrics" />
-                  </Box>
-                </Typography>
-                <Box
-                  sx={{
-                    background: (t) => t.palette.secondary.main,
-                    borderRadius: 8,
-                    color: "white",
-                    width: "auto",
-                  }}
-                >
-                  <Box py={0.3} px={2} mb={0.5} mr={0.5}>
-                    <Typography
-                      variant="body2"
+    <Box>
+      {data.map((att: any, index: number) => {
+        const isExpanded = expanded === att.title;
+        return (
+          <Accordion
+            key={index}
+            expanded={isExpanded}
+            onChange={handleChange(att.title)}
+            sx={{
+              mb: 1,
+              borderRadius: 2,
+              background: "white",
+              boxShadow: "none",
+              border: "none,",
+              "&::before": {
+                display: "none",
+              },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: "#287c71" }} />}
+              aria-controls="panel1bh-content"
+              id="panel1bh-header"
+            >
+              <Typography
+                sx={{
+                  flex: 1,
+                  fontFamily: "Roboto",
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  opacity: 1,
+                }}
+                variant="h6"
+              >
+                {att.title}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography
+                sx={{
+                  pb: "2px",
+                  color: "#767676",
+                  display: "block",
+                  fontFamily: "Roboto",
+                  fontSize: "0.8rem",
+                  borderBottom: (t) => `1px solid ${t.palette.primary.light}`,
+                }}
+                component="span"
+              >
+                <Trans i18nKey={"numberOfImpactfulQuestions"} />
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mt: 2,
+                  flexWrap: "wrap",
+                  flexDirection: { xs: "column", sm: "row" },
+                }}
+              >
+                {att?.level_analysis.map((item: any, index: number) => {
+                  const colorCode = colorPallet[item?.level_value];
+                  {
+                    /* {`${list[item?.level_value]?.title} (${
+                         item.level_value + 1
+                       })`} */
+                  }
+                  return (
+                    <Box
+                      key={index}
                       sx={{
-                        fontWeight: "bold",
+                        background: colorCode,
+                        border:`1px solid ${colorCode}`,
+                        borderRadius: 8,
+                        color: "white",
+                        width: "auto",
                         display: "flex",
                         justifyContent: "space-between",
+                        alignItems: "center",
+                        px: "16px",
+                        py: "6px",
+                        mb: 1,
                       }}
                     >
-                      {item.level}
-                      <Typography
-                        component="span"
+                      <Box
                         sx={{
-                          fontWeight: "bold",
-                          color: "white",
-                          position: "relative",
+                          mr: { xs: "8px", sm: "32px", md: "64px", lg: "64px" },
                         }}
                       >
-                        {item.metric_number}
-                      </Typography>
-                    </Typography>
-                  </Box>
-                </Box>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          sx={{
+                            color: "white",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {list[item?.level_value]?.title}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          ml: { xs: "8px", sm: "16px", md: "32px", lg: "64px" },
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          sx={{
+                            color: "white",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {item?.attribute_metric_number}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  );
+                })}
               </Box>
-            </Grid>
-          ))}
-      </Grid>
+            </AccordionDetails>
+          </Accordion>
+        );
+      })}
     </Box>
   );
 };
@@ -1091,7 +1191,7 @@ const useAssessmentKit = () => {
     service: (args = { assessmentKitId }, config) =>
       service.inspectAssessmentKit(args, config),
   });
-  const queryData = useQuery({
+  const analyzeAssessmentKitQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.analyzeAssessmentKit(args, config),
     runOnMount: true,
@@ -1101,6 +1201,10 @@ const useAssessmentKit = () => {
       service.fetchAssessmentKitdata(args, config),
     runOnMount: true,
   });
-  return { assessmentKitQueryProps, queryData, fetchAssessmentKitQuery };
+  return {
+    assessmentKitQueryProps,
+    analyzeAssessmentKitQuery,
+    fetchAssessmentKitQuery,
+  };
 };
 export default AssessmentKitExpertViewContainer;
