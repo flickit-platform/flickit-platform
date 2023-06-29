@@ -320,6 +320,30 @@ const AssessmentKit = (props: any) => {
                       sx={{ fontSize: "1.2rem" }}
                     >
                       <b>{subject.title}</b>: {subject.description}
+                      <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
+                        <Trans i18nKey="relatedAttributes" />
+                      </Typography>
+                      {subject?.attributes &&
+                        subject?.attributes?.map((att: any) => (
+                          <Box sx={{ ml: 4 }} component="li">
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                my: 2,
+                                textAlign: "justify",
+                                textJustify: "inter-word",
+                              }}
+                            >
+                              <Box component="span" fontWeight="bold">
+                                {att.title}
+                              </Box>
+                              :{" "}
+                              <Box component="span" fontSize={14}>
+                                {att.description}
+                              </Box>
+                            </Typography>
+                          </Box>
+                        ))}
                     </Box>
                   );
                 })}
