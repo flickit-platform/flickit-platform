@@ -12,7 +12,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "@common/fields/AutocompleteAsyncField";
 import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
@@ -22,21 +24,30 @@ interface IAssessmentKitSettingFormDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchAssessmentKitQuery?:any;
+  fetchAssessmentKitQuery?: any;
+  tags?:any;
 }
 
-const AssessmentKitSettingFormDialog = (props: IAssessmentKitSettingFormDialogProps) => {
+const AssessmentKitSettingFormDialog = (
+  props: IAssessmentKitSettingFormDialogProps
+) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {},fetchAssessmentKitQuery, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    tags,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId, assessmentKitId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
   const defaultValues = type === "update" ? data : {};
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
-  fetchAssessmentKitQuery?.data&&console.log(fetchAssessmentKitQuery?.data[0].tags)
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const close = () => {
     abortController.abort();
     closeDialog();
@@ -58,8 +69,14 @@ const AssessmentKitSettingFormDialog = (props: IAssessmentKitSettingFormDialogPr
     try {
       const { data: res } =
         type === "update"
-          ? await service.updateAssessmentKit({ data: formattedData, assessmentKitId }, { signal: abortController.signal })
-          : await service.createAssessmentKit({ data: formattedData }, { signal: abortController.signal });
+          ? await service.updateAssessmentKit(
+              { data: formattedData, assessmentKitId },
+              { signal: abortController.signal }
+            )
+          : await service.createAssessmentKit(
+              { data: formattedData },
+              { signal: abortController.signal }
+            );
       setLoading(false);
       onSubmitForm();
       close();
@@ -87,20 +104,29 @@ const AssessmentKitSettingFormDialog = (props: IAssessmentKitSettingFormDialogPr
           <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
-                service: (args, config) => service.fetchAssessmentKitTags(args, config),
+                service: (args, config) =>
+                  service.fetchAssessmentKitTags(args, config),
               })}
               name="tags"
               multiple={true}
-              defaultValue={fetchAssessmentKitQuery?.data&&fetchAssessmentKitQuery?.data[0].tags}
+              defaultValue={tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
           </Grid>
           <Grid item xs={12} md={12}>
-            <InputFieldUC name="summary" label={<Trans i18nKey="summary" />} defaultValue={defaultValues.summary || ""} />
+            <InputFieldUC
+              name="summary"
+              label={<Trans i18nKey="summary" />}
+              defaultValue={defaultValues.summary || ""}
+            />
           </Grid>
           <Grid item xs={12} md={12}>
-            <RichEditorField name="about" label={<Trans i18nKey="about" />} defaultValue={defaultValues.about || ""} />
+            <RichEditorField
+              name="about"
+              label={<Trans i18nKey="about" />}
+              defaultValue={defaultValues.about || ""}
+            />
           </Grid>
         </Grid>
         <CEDialogActions

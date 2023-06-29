@@ -41,7 +41,6 @@ const QuestionnaireContainer = () => {
     assessmentQueryData,
   } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
-  console.log(assessmentQueryData);
   return (
     <PermissionControl
       error={[
