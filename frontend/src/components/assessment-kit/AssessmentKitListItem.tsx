@@ -27,10 +27,11 @@ interface IAssessmentKitListItemProps {
   fetchUnpublishedAssessmentKits?:TQueryFunction;
   link?: string;
   hasAccess?: boolean;
+  is_member?: boolean;
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
-  const { data, fetchAssessmentKits,fetchUnpublishedAssessmentKits, link, hasAccess } = props;
+  const { data, fetchAssessmentKits,fetchUnpublishedAssessmentKits, link, hasAccess,is_member } = props;
   const { id, title, last_modification_date, is_active } = data || {};
   return (
     <Box
@@ -85,7 +86,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions assessment_kit={data} fetchAssessmentKits={fetchAssessmentKits} fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits} hasAccess={hasAccess} />
+          <Actions assessment_kit={data} fetchAssessmentKits={fetchAssessmentKits} fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits} hasAccess={hasAccess} is_member={is_member} />
         </Box>
       </Box>
     </Box>
@@ -93,7 +94,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { assessment_kit, fetchAssessmentKits,fetchUnpublishedAssessmentKits, dialogProps, setUserInfo, hasAccess } = props;
+  const { assessment_kit, fetchAssessmentKits,fetchUnpublishedAssessmentKits, dialogProps, setUserInfo, hasAccess ,is_member} = props;
   const { id, current_user_delete_permission = false, is_active = false } = assessment_kit;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
@@ -135,7 +136,7 @@ const Actions = (props: any) => {
     try {
       await deleteAssessmentKitQuery.query();
       await fetchAssessmentKits?.();
-      hasAccess&&await fetchUnpublishedAssessmentKits?.();
+      is_member&&await fetchUnpublishedAssessmentKits?.();
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -148,7 +149,7 @@ const Actions = (props: any) => {
       const res = await publishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await fetchAssessmentKits?.();
-      hasAccess&&await fetchUnpublishedAssessmentKits?.();
+      is_member&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -160,7 +161,7 @@ const Actions = (props: any) => {
       const res = await unPublishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await fetchAssessmentKits();
-      hasAccess&&await fetchUnpublishedAssessmentKits?.();
+      is_member&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
