@@ -4,6 +4,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
+import QueryBatchData from "@common/QueryBatchData";
 import Title from "@common/Title";
 import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
@@ -42,61 +43,64 @@ const AssessmentKitExpertViewContainer = () => {
   const { expertGroupId } = useParams();
   return (
     <Box>
-      <QueryData
-        {...assessmentKitQueryProps}
-        render={(data = {}) => {
+      <QueryBatchData
+        queryBatchData={[assessmentKitQueryProps, fetchAssessmentKitQuery]}
+        render={([data = {}, assessmentKitData]) => {
           const { is_expert = true, expert_group } = data;
           setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
           return (
-            <Box>
-              <Title
-                backLink={-1}
-                sup={
-                  <SupTitleBreadcrumb
-                    routes={[
-                      {
-                        title: t("expertGroups") as string,
-                        to: `/user/expert-groups`,
-                      },
-                      {
-                        title: expert_group?.name,
-                        to: `/user/expert-groups/${expertGroupId}`,
-                      },
-                    ]}
+            <>
+              <Box>
+                <Title
+                  backLink={-1}
+                  sup={
+                    <SupTitleBreadcrumb
+                      routes={[
+                        {
+                          title: t("expertGroups") as string,
+                          to: `/user/expert-groups`,
+                        },
+                        {
+                          title: expert_group?.name,
+                          to: `/user/expert-groups/${expertGroupId}`,
+                        },
+                      ]}
+                    />
+                  }
+                  // sub={data.summary}
+                  toolbar={
+                    is_expert && (
+                      <IconButton
+                        title="Setting"
+                        color="primary"
+                        onClick={() =>
+                          dialogProps.openDialog({ type: "update", data })
+                        }
+                      >
+                        <SettingsRoundedIcon />
+                      </IconButton>
+                    )
+                  }
+                >
+                  {data.title}
+                </Title>
+                <Box mt={3}>
+                  <AssessmentKitSectionGeneralInfo
+                    data={data}
+                    query={assessmentKitQueryProps.query}
                   />
-                }
-                // sub={data.summary}
-                toolbar={
-                  is_expert && (
-                    <IconButton
-                      title="Setting"
-                      color="primary"
-                      onClick={() =>
-                        dialogProps.openDialog({ type: "update", data })
-                      }
-                    >
-                      <SettingsRoundedIcon />
-                    </IconButton>
-                  )
-                }
-              >
-                {data.title}
-              </Title>
-              <Box mt={3}>
-                <AssessmentKitSectionGeneralInfo
-                  data={data}
-                  query={assessmentKitQueryProps.query}
-                />
-                <AssessmentKitSectionsTabs data={data} />
+                  <AssessmentKitSectionsTabs data={data} />
+                </Box>
               </Box>
-            </Box>
+              <AssessmentKitSettingFormDialog
+                {...dialogProps}
+                onSubmitForm={assessmentKitQueryProps.query}
+                fetchAssessmentKitQuery={fetchAssessmentKitQuery}
+                tags={assessmentKitData[0]?.tags}
+              />
+            </>
           );
         }}
-      />
-      <AssessmentKitSettingFormDialog
-        {...dialogProps}
-        onSubmitForm={assessmentKitQueryProps.query}
-        fetchAssessmentKitQuery={fetchAssessmentKitQuery}
       />
     </Box>
   );
