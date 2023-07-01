@@ -738,7 +738,7 @@ const AssessmentKitsList = (props: any) => {
           }}
         />
         {/* unpublished */}
-        {hasAccess && (
+        {is_member && (
           <QueryData
             {...unpublishedAssessmentKitQuery}
             showEmptyError={false}
@@ -770,7 +770,7 @@ const AssessmentKitsList = (props: any) => {
               setUnpublishedAssessmentKits(results);
               return (
                 <>
-                  {is_expert &&
+                  {is_member &&
                     results.map((assessment_kit: any) => {
                       return (
                         <AssessmentKitListItem
@@ -786,6 +786,7 @@ const AssessmentKitsList = (props: any) => {
                             is_member && unpublishedAssessmentKitQuery.query
                           }
                           hasAccess={hasAccess}
+                          is_member={is_member}
                         />
                       );
                     })}
