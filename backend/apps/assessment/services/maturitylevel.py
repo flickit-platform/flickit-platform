@@ -28,10 +28,8 @@ def calculate_maturity_level(result, quality_attribute):
             is_in_impact_level4 = False
             for impact in impacts:
                 impact_option_values = impact.option_values.all()
-                # answer_value = next((x for x in list(impact_option_values) if metric_value.answer is not None and x.option.id == metric_value.answer.id), None)
-                # # for impact_op_value in impact_option_values:
-                # #     if impact_op_value.option is not None and 
-                answer_value = next((x for x in list(impact_option_values) if x.option.id == metric_value.answer.id), None)
+                # answer_value = next((x for x in list(impact_option_values) if x.option.id == metric_value.answer.id), None)
+                answer_value = next((x for x in list(impact_option_values) if metric_value.answer is not None and x.option.id == metric_value.answer.id), None)
                 if impact.maturity_level.value == 1 and metric_value.answer is not None:
                     if answer_value is None:   
                         effectivr_answer_value = OptionValue.objects.get(metric_impact = impact, value = 1)
