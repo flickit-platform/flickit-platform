@@ -297,12 +297,44 @@ const AssessmentKit = (props: any) => {
           </Grid>
           <Grid item xs={12} sm={8} md={9}>
             {about && (
-              <Box mt={8}>
+              <Box mb={8}>
                 <Title>
                   <Trans i18nKey="about" />
                 </Title>
                 <Box mt={2}>
                   <RichEditor content={about} />
+                </Box>
+              </Box>
+            )}
+            {maturity_levels[0] && (
+              <Box mb={8}>
+                <Title>
+                  <Trans i18nKey="maturityLevels" />
+                </Title>
+                <Box mt={2} sx={{ display: "flex" }}>
+                  {maturity_levels.map((item: any, index: number) => {
+                    const colorCode = colorPallet[item.value];
+                    return (
+                      <Box
+                        sx={{
+                          background: colorCode,
+                          fontSize: "14px",
+                          py: { xs: "2px", md: 1 },
+                          px: { xs: 1, md: 4 },
+                          fontWeight: "bold",
+                          color: "#fff",
+                          borderRadius:
+                            index === 0
+                              ? "8px 0 0 8px"
+                              : index === maturity_levels.length - 1
+                              ? "0 8px 8px 0"
+                              : "0",
+                        }}
+                      >
+                        {item.title}
+                      </Box>
+                    );
+                  })}
                 </Box>
               </Box>
             )}
@@ -363,38 +395,6 @@ const AssessmentKit = (props: any) => {
                 })}
               </Box>
             </Box>
-            {maturity_levels[0] && (
-              <Box mt={8}>
-                <Title>
-                  <Trans i18nKey="maturityLevel" />
-                </Title>
-                <Box mt={2} sx={{ display: "flex" }}>
-                  {maturity_levels.map((item: any, index: number) => {
-                    const colorCode = colorPallet[item.value];
-                    return (
-                      <Box
-                        sx={{
-                          background: colorCode,
-                          fontSize: "14px",
-                          py: { xs: "2px", md: 1 },
-                          px: { xs: 1, md: 4 },
-                          fontWeight: "bold",
-                          color: "#fff",
-                          borderRadius:
-                            index === 0
-                              ? "8px 0 0 8px"
-                              : index === maturity_levels.length - 1
-                              ? "0 8px 8px 0"
-                              : "0",
-                        }}
-                      >
-                        {item.title}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            )}
           </Grid>
         </Grid>
       </Box>
