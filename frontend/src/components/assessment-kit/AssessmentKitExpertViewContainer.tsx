@@ -45,7 +45,7 @@ const AssessmentKitExpertViewContainer = () => {
     <Box>
       <QueryBatchData
         queryBatchData={[assessmentKitQueryProps, fetchAssessmentKitQuery]}
-        render={([data = {}, ana]) => {
+        render={([data = {}, assessmentKitData]) => {
           const { is_expert = true, expert_group } = data;
           setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
           return (
@@ -96,7 +96,7 @@ const AssessmentKitExpertViewContainer = () => {
                 {...dialogProps}
                 onSubmitForm={assessmentKitQueryProps.query}
                 fetchAssessmentKitQuery={fetchAssessmentKitQuery}
-                tags={ana[0]?.tags}
+                tags={assessmentKitData[0]?.tags}
               />
             </>
           );
