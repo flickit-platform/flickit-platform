@@ -12,6 +12,7 @@ RUN echo -e "http://nl.alpinelinux.org/alpine/v3.13/main\nhttp://nl.alpinelinux.
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.13/main" > /etc/apk/repositories
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    apk add mailcap && \
     apk add --update --no-cache postgresql-client && \
     apk add --update --no-cache --virtual .tmp-deps \
         build-base postgresql-dev musl-dev linux-headers && \
