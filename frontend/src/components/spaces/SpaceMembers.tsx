@@ -108,9 +108,7 @@ export const SpaceMembers = (props: any) => {
               } catch (e) {
                 const err = e as ICustomError;
                 if (
-                  err.data.code === "user-is-member" ||
-                  err.data.code === "user-not-exist" ||
-                  err.data.code === "user-not-allowed"
+                  err.data.code === "user-is-member" 
                 ) {
                   toastError(err.data.message);
                 } else {
