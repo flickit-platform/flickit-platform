@@ -18,7 +18,7 @@ schema_view = get_schema_view(
       description="Test description",
    ),
    public=True,
-   permission_classes=[permissions.IsAdminUser],
+   permission_classes=[permissions.AllowAny],
 )
 
 dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"

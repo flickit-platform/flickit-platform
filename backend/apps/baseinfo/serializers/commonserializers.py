@@ -73,15 +73,14 @@ class OptionValueSerilizers(serializers.ModelSerializer):
         fields = ['id', 'option_id', 'value', 'metric_impact_id']     
 
 
-class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    quality_attributes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    class Meta:
-        model = AssessmentSubject
-        fields = ['id','quality_attributes']
-        
-
 class LoadQualityAttributeSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QualityAttribute
-        fields = ['id', 'code', 'title', 'description', 'assessment_subject', 'index', 'weight']
+        fields = ['id',  'weight']
+
+class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    quality_attributes = LoadQualityAttributeSerilizer(many=True)
+    class Meta:
+        model = AssessmentSubject
+        fields = ['id','quality_attributes']

@@ -289,3 +289,13 @@ OIDC_AUTH = {
 }
 
 LOGIN_REDIRECT_URL = '/baseinfo/'
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}

@@ -45,7 +45,3 @@ def get_quality_attribute_with_assessment_subject(assessment_subject_id):
     result = QualityAttribute.objects.filter(assessment_subject=assessment_subject_id)
     return result
 
-def get_assessment_subject_and_quality_attribute_with_assessment_kit(assessment_kit_id):
-    assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
-    result = AssessmentSubject.objects.filter(assessment_kit=assessment_kit_id)
-    return result

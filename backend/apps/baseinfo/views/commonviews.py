@@ -53,7 +53,7 @@ class LoadOptionValueInternalApi(APIView):
 class LoadAssessmentSubjectInternalApi(APIView):
     def get(self,request,assessment_kit_id):
         assessment_subject = commonservice.get_assessment_subject_with_assessment_kit(assessment_kit_id)
-        response = commonserializers.AssessmentSubjectSerilizer(assessment_subject, many = True).data
+        response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject, many = True).data
         return Response(response, status = status.HTTP_200_OK)
 
 class LoadMetricInternalApi(APIView):
@@ -68,8 +68,3 @@ class LoadQualityAttributeInternalApi(APIView):
         response = commonserializers.LoadQualityAttributeSerilizer(quality_attribute, many = True).data
         return Response(response, status = status.HTTP_200_OK)    
 
-class LoadAssessmentSubjectAndQualityAttributeInternalApi(APIView):
-    def get(self,request,assessment_kit_id):
-        assessment_subject = commonservice.get_assessment_subject_and_quality_attribute_with_assessment_kit(assessment_kit_id)
-        response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject, many = True).data
-        return Response(response, status = status.HTTP_200_OK)
