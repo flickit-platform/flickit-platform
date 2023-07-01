@@ -25,7 +25,7 @@ jobs:
         run: docker push ghcr.io/avansoft/flickit-platform-frontend:stage
 
   darkube_deploy:
-    needs: build
+    needs: push-docker-image
     container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     runs-on: ubuntu-latest
     steps:
