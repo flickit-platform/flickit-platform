@@ -123,6 +123,7 @@
   "previousQuestion": "Previous question",
   "overallInsightsOf": "Overall insights of",
   "maturityLevel": "Maturity Level",
+  "maturityLevels": "Maturity Levels",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",
   "submitAnswerAutomatically": "Submit answer automatically",
@@ -270,7 +271,8 @@
   "metrics":"Metrics",
   "attribute": "Attribute",
   "level":"Level",
-  "thisSystemIsIn":"This system is in"
+  "thisSystemIsIn":"This system is in",
+  "numberOfImpactfulQuestions":"Number Of Impactful Questions"
 }
 
 

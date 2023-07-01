@@ -297,7 +297,7 @@ const AssessmentKit = (props: any) => {
           </Grid>
           <Grid item xs={12} sm={8} md={9}>
             {about && (
-              <Box mt={8}>
+              <Box mb={8}>
                 <Title>
                   <Trans i18nKey="about" />
                 </Title>
@@ -306,43 +306,10 @@ const AssessmentKit = (props: any) => {
                 </Box>
               </Box>
             )}
-            <Box mb={8}>
-              <Title>
-                <Trans i18nKey={"subjects"} />
-              </Title>
-              <Box component="ul" mt={3}>
-                {subjects_with_desc.map((subject: any) => {
-                  return (
-                    <Box
-                      component="li"
-                      mb={2}
-                      key={subject.id}
-                      sx={{ fontSize: "1.2rem" }}
-                    >
-                      <b>{subject.title}</b>: {subject.description}
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-            <Box mb={8}>
-              <Title>
-                <Trans i18nKey="questionnaires" />
-              </Title>
-              <Box component="ul" mt={3}>
-                {questionnaires.map((questionnaire: any) => {
-                  return (
-                    <Box component="li" mb={2} key={questionnaire.id}>
-                      <b>{questionnaire.title}</b>: {questionnaire.description}
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
             {maturity_levels[0] && (
-              <Box mt={8}>
+              <Box mb={8}>
                 <Title>
-                  <Trans i18nKey="maturityLevel" />
+                  <Trans i18nKey="maturityLevels" />
                 </Title>
                 <Box mt={2} sx={{ display: "flex" }}>
                   {maturity_levels.map((item: any, index: number) => {
@@ -371,6 +338,63 @@ const AssessmentKit = (props: any) => {
                 </Box>
               </Box>
             )}
+            <Box mb={8}>
+              <Title>
+                <Trans i18nKey={"subjects"} />
+              </Title>
+              <Box component="ul" mt={3}>
+                {subjects_with_desc.map((subject: any) => {
+                  return (
+                    <Box
+                      component="li"
+                      mb={2}
+                      key={subject.id}
+                      sx={{ fontSize: "1.2rem" }}
+                    >
+                      <b>{subject.title}</b>: {subject.description}
+                      <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
+                        <Trans i18nKey="relatedAttributes" />
+                      </Typography>
+                      {subject?.attributes &&
+                        subject?.attributes?.map((att: any) => (
+                          <Box sx={{ ml: 4 }} component="li">
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                my: 2,
+                                textAlign: "justify",
+                                textJustify: "inter-word",
+                              }}
+                            >
+                              <Box component="span" fontWeight="bold">
+                                {att.title}
+                              </Box>
+                              :{" "}
+                              <Box component="span" fontSize={14}>
+                                {att.description}
+                              </Box>
+                            </Typography>
+                          </Box>
+                        ))}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+            <Box mb={8}>
+              <Title>
+                <Trans i18nKey="questionnaires" />
+              </Title>
+              <Box component="ul" mt={3}>
+                {questionnaires.map((questionnaire: any) => {
+                  return (
+                    <Box component="li" mb={2} key={questionnaire.id}>
+                      <b>{questionnaire.title}</b>: {questionnaire.description}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </Box>

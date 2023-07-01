@@ -187,7 +187,7 @@ const AssessmentKitMaturityLevels = (props: any) => {
         alignItems="center"
       >
         {list.map((item: any, index: number) => {
-          const colorCode = item?.value ? colorPallet[item?.value - 1] : "#fff";
+          const colorCode = colorPallet[item?.value];
            return (
              <Box
                sx={{
