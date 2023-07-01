@@ -130,7 +130,7 @@ const AssessmentKitSectionsTabs = (props: { data: any }) => {
               }
               value="questionnaires"
             />
-                <Tab
+            <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
                   <Trans i18nKey="attributes" />
@@ -1125,7 +1125,7 @@ const AttributeDetails = (props: any) => {
                       key={index}
                       sx={{
                         background: colorCode,
-                        border:`1px solid ${colorCode}`,
+                        border: `1px solid ${colorCode}`,
                         borderRadius: 8,
                         color: "white",
                         width: "auto",
@@ -1146,7 +1146,9 @@ const AttributeDetails = (props: any) => {
                           variant="body2"
                           fontWeight="bold"
                           sx={{
-                            color: "white",
+                            color: (t) => {
+                              return t.palette.getContrastText(colorCode);
+                            },
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -1164,10 +1166,12 @@ const AttributeDetails = (props: any) => {
                           variant="body2"
                           fontWeight="bold"
                           sx={{
-                            color: "white",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                            color: (t) => {
+                              return t.palette.getContrastText(colorCode);
+                            },
                           }}
                         >
                           {item?.attribute_metric_number}
