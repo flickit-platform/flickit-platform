@@ -35,19 +35,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Installation ##
 
-Clone the project:
+Clone the docker-compose project:
 
-    $ git clone https://github.com/avansoft/flickit-platform.git
+    $ git clone https://github.com/avansoft/flickit-docker-compose.git
 
-Rename .env.sample to .env and change the properties based on your requirements
+Change the properties of .env based on your requirements
 
 Start application with docker-compose
 
-    $ docker-compose up --build
-
-Access application through 
-
-    $ http://localhost:3000
+    $ docker-compose up
 
 # Screenshots
 
