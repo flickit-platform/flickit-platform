@@ -132,7 +132,7 @@ def __import_attributes(attributeModels):
 def __import_metrics(metricModels, assessment_kit):
     for model in metricModels:
         metric = Metric()
-        metric.title = model['question']
+        metric.title = model['title']
         metric.index = model['index']
         metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
         metric.save()
@@ -146,7 +146,7 @@ def __import_metrics(metricModels, assessment_kit):
             answer.save()
             metric.answer_templates.add(answer)
 
-        for impact_model in model['metricImpacts']:
+        for impact_model in model['questionImpacts']:
             impact = MetricImpact()
             impact.maturity_level = MaturityLevel.objects.get(assessment_kit = assessment_kit, title = impact_model['level']['title'])
             impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
