@@ -84,3 +84,9 @@ class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.ModelSeriali
     class Meta:
         model = AssessmentSubject
         fields = ['id','quality_attributes']
+        
+
+class LoadMetricImpactSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = MetricImpact
+        fields = '__all__'

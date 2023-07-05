@@ -8,7 +8,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
 from rest_framework.exceptions import PermissionDenied
 
 from baseinfo.decorators import is_expert
@@ -134,13 +135,15 @@ class UpdateAssessmentKitApi(APIView):
 
 
 class LoadLevelCompetenceInternalApi(APIView):
+    permission_classes = [AllowAny]
     def get(self,request,maturity_level_id):
         level_competence = assessmentkitservice.get_level_competence_with_maturity_level(maturity_level_id)
         response = LevelCompetenceSerilizer(level_competence, many = True).data
-        return Response(response, status = status.HTTP_200_OK) 
+        return Response({'items' :response}, status = status.HTTP_200_OK)  
 
 class LoadMaturityLevelInternalApi(APIView):
+    permission_classes = [AllowAny]
     def get(self,request,assessment_kit_id):
         maturity_level = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
         response = MaturityLevelSimpleSerializer(maturity_level, many = True).data
-        return Response(response, status = status.HTTP_200_OK)
+        return Response({'items' :response}, status = status.HTTP_200_OK)  

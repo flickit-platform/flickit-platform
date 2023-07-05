@@ -1,4 +1,4 @@
-from baseinfo.models.metricmodels import AnswerTemplate ,OptionValue, Metric
+from baseinfo.models.metricmodels import AnswerTemplate ,OptionValue, Metric , MetricImpact
 from baseinfo.models.assessmentkitmodels import MaturityLevel 
 from baseinfo.models.basemodels import AssessmentSubject , QualityAttribute
 
@@ -18,6 +18,13 @@ def load_quality_attribute(quality_attribute_id) -> QualityAttribute:
     except QualityAttribute.DoesNotExist as e:
         raise QualityAttribute.DoesNotExist
     
+def load_metric_impact(metric_impact_id) -> MetricImpact:
+    try:
+        return MetricImpact.objects.get(id = metric_impact_id)
+    except MetricImpact.DoesNotExist as e:
+        raise MetricImpact.DoesNotExist
+    
+
 def load_assessment_subject(assessment_subject_id) -> AssessmentSubject:
     try:
         return AssessmentSubject.objects.get(id = assessment_subject_id)
@@ -43,5 +50,10 @@ def get_metric_with_quality_attribute(quality_attribute_id):
 def get_quality_attribute_with_assessment_subject(assessment_subject_id):
     assessment_subject = load_assessment_subject(assessment_subject_id)
     result = QualityAttribute.objects.filter(assessment_subject=assessment_subject_id)
+    return result
+
+def get_metric_impact_with_id(metric_impact_id):
+    metric_impact = load_metric_impact
+    result = MetricImpact.objects.filter(id = metric_impact_id)
     return result
 
