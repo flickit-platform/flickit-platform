@@ -23,3 +23,15 @@ jobs:
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
         run: docker push ghcr.io/avansoft/flickit-platform:stage
+
+  darkube_deploy:
+    needs: push-docker-image
+    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run script
+        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "stage" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        env:
+          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND }}
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND }}    
+    
