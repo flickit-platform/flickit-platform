@@ -233,16 +233,11 @@ def publish_assessment_kit(assessment_kit: AssessmentKit):
     return ActionResult(success=True, message='The assessment_kit is published successfully')
 
 @transaction.atomic
-def like_assessment_kit(user_id, assessment_kit_id):
+def like_assessment_kit(user, assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    assessment_kit_like_user = AssessmentKitLike.objects.filter(user_id = user_id, assessment_kit_id = assessment_kit.id)
-    if assessment_kit_like_user.count() == 1:
-        assessment_kit.likes.filter(user_id = user_id, assessment_kit_id = assessment_kit.id).delete()
-        assessment_kit.save()
-    elif assessment_kit_like_user.count() == 0:
-        assessment_kit_like_create = AssessmentKitLike.objects.create(user_id = user_id, assessment_kit_id = assessment_kit.id)
-        assessment_kit.likes.add(assessment_kit_like_create)
-        assessment_kit.save()
+    assessment_kit_like_user = AssessmentKitLike.objects.filter(user = user.id, assessment_kit_id = assessment_kit.id).delete()
+    if assessment_kit_like_user[0] == 0:
+        AssessmentKitLike.objects.create(user = user , assessment_kit = assessment_kit)
     return assessment_kit
 
 def analyze(assessment_kit_id):
