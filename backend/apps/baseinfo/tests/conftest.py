@@ -10,9 +10,9 @@ import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
-from baseinfo.models.assessmentkitmodels import  AssessmentKitTag, AssessmentKitDsl
+from baseinfo.models.assessmentkitmodels import  AssessmentKitTag, AssessmentKitDsl, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact
+from baseinfo.models.metricmodels import Metric, MetricImpact , OptionValue , AnswerTemplate
 from assessment.fixture.dictionary import Dictionary
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -91,6 +91,8 @@ def create_tag():
 def init_data():
     def do_init_data():
         assessment_kit = AssessmentKit.objects.filter(title="p1").first()
+        if assessment_kit == None:
+            assessment_kit = baker.make(AssessmentKit)
         questionnaire_list = []
         questionnaire_list.append(baker.make(Questionnaire, assessment_kit = assessment_kit, index = 1, title = 'c1'))
         questionnaire_list.append(baker.make(Questionnaire, assessment_kit = assessment_kit, index = 2, title = 'c2'))
@@ -120,13 +122,13 @@ def init_data():
 
 
         atts = []
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject1))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject1))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject1))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject2))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject2))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject2))
-        atts.append(baker.make(QualityAttribute, assessment_subject = subject2))     
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject1 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject1 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject1 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject2 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject2 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject2 , weight = 1))
+        atts.append(baker.make(QualityAttribute, assessment_subject = subject2 , weight = 1))     
 
 
 
@@ -138,7 +140,12 @@ def init_data():
         maturity_level_3 = baker.make(MaturityLevel, title = 'Good', value = 3, assessment_kit = assessment_kit)
         maturity_level_4 = baker.make(MaturityLevel, title = 'Great', value = 4, assessment_kit = assessment_kit)
         maturity_level_5 = baker.make(MaturityLevel, title = 'Exceptional', value = 5, assessment_kit = assessment_kit)
-
+        maturity_level = [maturity_level_0, maturity_level_1, maturity_level_2, maturity_level_3, maturity_level_4, maturity_level_5]
+        
+        level_competences = []
+        level_competences.append(baker.make(LevelCompetence,maturity_level = maturity_level_0 , value = 50 , maturity_level_competence = maturity_level_1 ))
+        level_competences.append(baker.make(LevelCompetence,maturity_level = maturity_level_1 , value = 50 , maturity_level_competence = maturity_level_2 ))
+        
         #att1
         metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[0], metric = metrics_list[0]))
         metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_1, quality_attribute = atts[0], metric = metrics_list[1]))
@@ -180,15 +187,29 @@ def init_data():
         metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[8]))
         metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[9]))
         metric_impacts.append(baker.make(MetricImpact, maturity_level = maturity_level_3, quality_attribute = atts[2], metric = metrics_list[10]))
-    
+
+        answer_template = []
+        answer_template.append(baker.make(AnswerTemplate, caption = "test", value = 1 , index = 1, metric = metrics_list[0]))
+        answer_template.append(baker.make(AnswerTemplate, caption = "test", value = 1 , index = 1, metric = metrics_list[1]))
+
+        option_value = []
+        option_value.append(baker.make(OptionValue, option = answer_template[0], value = 0.5 , metric_impact = metric_impacts[0]))
+        option_value.append(baker.make(OptionValue, option = answer_template[1], value = 0.5 , metric_impact = metric_impacts[1]))
+
+        
         base_info = Dictionary()
+        base_info.add("assessment_kit",assessment_kit) 
         base_info.add("questionnaires", questionnaire_list)
+        base_info.add("metric_impacts", metric_impacts)
         base_info.add("metrics", metrics_list)
         base_info.add("subject1", subject1)
         base_info.add("subject2", subject2)
         base_info.add("subject2", subject2)
         base_info.add("attributes", atts)
-         
+        base_info.add("answer_template", answer_template)
+        base_info.add("maturity_levels",maturity_level)
+        base_info.add("option_value", option_value)
+        base_info.add("level_competences", level_competences)
         return base_info
         
     return do_init_data

@@ -53,7 +53,7 @@ def get_quality_attribute_with_assessment_subject(assessment_subject_id):
     return result
 
 def get_metric_impact_with_id(metric_impact_id):
-    metric_impact = load_metric_impact
+    metric_impact = load_metric_impact(metric_impact_id)
     result = MetricImpact.objects.filter(id = metric_impact_id)
     return result
 
