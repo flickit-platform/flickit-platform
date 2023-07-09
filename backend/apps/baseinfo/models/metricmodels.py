@@ -34,6 +34,7 @@ class Metric(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
     quality_attributes = models.ManyToManyField(QualityAttribute, through=MetricImpact)
     index = models.IntegerField(null=True)
+    may_not_be_applicable = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Metric'
