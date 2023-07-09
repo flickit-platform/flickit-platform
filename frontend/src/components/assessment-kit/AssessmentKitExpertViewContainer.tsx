@@ -95,7 +95,7 @@ const AssessmentKitExpertViewContainer = () => {
               <AssessmentKitSettingFormDialog
                 {...dialogProps}
                 onSubmitForm={assessmentKitQueryProps.query}
-                fetchAssessmentKitQuery={fetchAssessmentKitQuery}
+                fetchAssessmentKitQuery={fetchAssessmentKitQuery.query}
                 tags={assessmentKitData[0]?.tags}
               />
             </>

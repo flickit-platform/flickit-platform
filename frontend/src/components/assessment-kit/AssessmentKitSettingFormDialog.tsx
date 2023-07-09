@@ -24,8 +24,8 @@ interface IAssessmentKitSettingFormDialogProps extends DialogProps {
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchAssessmentKitQuery?: any;
-  tags?:any;
+  fetchAssessmentKitQuery: () => void;
+  tags?: any;
 }
 
 const AssessmentKitSettingFormDialog = (
@@ -39,6 +39,7 @@ const AssessmentKitSettingFormDialog = (
     context = {},
     openDialog,
     tags,
+    fetchAssessmentKitQuery,
     ...rest
   } = props;
   const { type, data = {} } = context;
@@ -79,6 +80,7 @@ const AssessmentKitSettingFormDialog = (
             );
       setLoading(false);
       onSubmitForm();
+      fetchAssessmentKitQuery()
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e) {
