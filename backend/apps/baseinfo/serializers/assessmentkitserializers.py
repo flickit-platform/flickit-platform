@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from assessment.models import AssessmentProject
 
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, MaturityLevel
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
@@ -104,4 +104,9 @@ class UpdateAssessmentKitSerializer(serializers.Serializer):
 
 
 
+
+class LevelCompetenceSerilizer(serializers.ModelSerializer):
+        class Meta:
+            model = LevelCompetence
+            fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
 
