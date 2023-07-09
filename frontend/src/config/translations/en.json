@@ -272,7 +272,8 @@
   "attribute": "Attribute",
   "level":"Level",
   "thisSystemIsIn":"This system is in",
-  "numberOfImpactfulQuestions":"Number Of Impactful Questions"
+  "numberOfImpactfulQuestions":"Number Of Impactful Questions",
+  "numberOfMaturityLevels":"Number Of Maturity Levels"
 }
 
 

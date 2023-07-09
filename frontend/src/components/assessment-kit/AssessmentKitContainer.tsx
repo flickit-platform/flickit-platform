@@ -68,7 +68,7 @@ const AssessmentKit = (props: any) => {
   } = data || {};
 
   const colorPallet = getMaturityLevelColors(
-    maturity_levels ? maturity_levels.length + 1 : 5
+    maturity_levels ? maturity_levels.length : 5
   );
   const dialogProps = useDialog({
     context: {
@@ -280,6 +280,16 @@ const AssessmentKit = (props: any) => {
                   </Typography>
                   <Typography fontWeight={"bold"}>
                     {questionnaires.length || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{ ...styles.centerV, justifyContent: "space-between" }}
+                >
+                  <Typography variant="body2">
+                    <Trans i18nKey="numberOfMaturityLevels" />:
+                  </Typography>
+                  <Typography fontWeight={"bold"}>
+                    {maturity_levels.length || 0}
                   </Typography>
                 </Box>
                 <Button
