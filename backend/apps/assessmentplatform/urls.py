@@ -18,7 +18,7 @@ schema_view = get_schema_view(
       description="Test description",
    ),
    public=True,
-   permission_classes=[permissions.IsAdminUser],
+   permission_classes=[permissions.AllowAny],
 )
 
 dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
@@ -32,6 +32,7 @@ urlpatterns = [
    path('baseinfo/', include('baseinfo.urls')),
    path('assessment/', include('assessment.urls')),
    path('authinfo/', include('account.urls')),
+   path('api/internal/',include('baseinfo.urls_internal')),
    re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
 ]
 
