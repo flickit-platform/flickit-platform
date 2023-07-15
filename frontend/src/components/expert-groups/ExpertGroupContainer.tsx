@@ -72,7 +72,8 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [unpublishedAssessmentKits, setUnpublishedAssessmentKits] = useState<any>({});
+  const [unpublishedAssessmentKits, setUnpublishedAssessmentKits] =
+    useState<any>({});
   return (
     <QueryData
       {...queryData}
@@ -659,7 +660,13 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const AssessmentKitsList = (props: any) => {
-  const { hasAccess, dialogProps, about, setUnpublishedAssessmentKits,is_member } = props;
+  const {
+    hasAccess,
+    dialogProps,
+    about,
+    setUnpublishedAssessmentKits,
+    is_member,
+  } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const assessmentKitQuery = useQuery({
@@ -693,7 +700,9 @@ const AssessmentKitsList = (props: any) => {
           emptyDataComponent={
             <Box sx={{ background: "white", borderRadius: 2 }}>
               <ErrorEmptyData
-                emptyMessage={<Trans i18nKey="thereIsNoPublishedAssessmentKitYet" />}
+                emptyMessage={
+                  <Trans i18nKey="thereIsNoPublishedAssessmentKitYet" />
+                }
               />
             </Box>
           }
@@ -727,9 +736,10 @@ const AssessmentKitsList = (props: any) => {
                       data={assessment_kit}
                       fetchAssessmentKits={assessmentKitQuery.query}
                       fetchUnpublishedAssessmentKits={
-                        hasAccess && unpublishedAssessmentKitQuery.query
+                        is_member && unpublishedAssessmentKitQuery.query
                       }
                       hasAccess={is_expert}
+                      is_member={is_member}
                     />
                   );
                 })}
