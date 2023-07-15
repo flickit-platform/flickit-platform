@@ -9,6 +9,7 @@ def extract_metrics(questionnaire, metric_values):
         metric.add('id', item.id)
         metric.add('title', item.title)
         metric.add('index', item.index)
+        metric.add('may_not_be_applicable', item.may_not_be_applicable)
         answer_templates = []
         for answer in item.answer_templates.all():
             answer_template = Dictionary()
