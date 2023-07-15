@@ -10,21 +10,25 @@ import { AppProvider } from "./providers/AppProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import "react-toastify/dist/ReactToastify.css";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./components/auth/Keyckoak";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <Suspense fallback="loading...">
-        <AppProvider>
-          <AuthProvider>
-            <ServiceProvider>
-              <CssBaseline />
-              <ToastContainer {...toastDefaultConfig} />
-              <App />
-            </ServiceProvider>
-          </AuthProvider>
-        </AppProvider>
+        <ReactKeycloakProvider authClient={keycloak}>
+          <AppProvider>
+            <AuthProvider>
+              <ServiceProvider>
+                <CssBaseline />
+                <ToastContainer {...toastDefaultConfig} />
+                <App />
+              </ServiceProvider>
+            </AuthProvider>
+          </AppProvider>
+        </ReactKeycloakProvider>
       </Suspense>
     </BrowserRouter>
   </ThemeProvider>

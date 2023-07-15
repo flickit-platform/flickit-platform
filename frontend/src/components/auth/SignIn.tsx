@@ -16,7 +16,7 @@ import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import Title from "@common/Title";
 import useGetSignedInUserInfo from "@utils/useGetSignedInUserInfo";
-
+import { useKeycloak } from "@react-keycloak/web";
 const SignIn = () => {
   const { dispatch, isAuthenticatedUser, redirectRoute } = useAuthContext();
   const { service } = useServiceContext();
@@ -27,6 +27,7 @@ const SignIn = () => {
   const { getUser } = useGetSignedInUserInfo({ runOnMount: false });
 
   const formMethods = useForm({ shouldUnregister: true });
+  const { keycloak, initialized } = useKeycloak();
 
   useEffect(() => {
     if (isAuthenticatedUser) {
@@ -38,30 +39,31 @@ const SignIn = () => {
   }, []);
 
   const onSubmit = async (data: any) => {
-    setLoading(true);
-    try {
-      const { data: res } = await service.signIn(data, {
-        signal: abortController.current.signal,
-      });
-      const us = await getUser(res.access);
-      if (us) {
-        setLoading(false);
-        dispatch(authActions.signIn(res));
-        redirectRoute && navigate(redirectRoute);
-        dispatch(authActions.setRedirectRoute(""));
-      }
-    } catch (e) {
-      const err = e as ICustomError;
-      setLoading(false);
-      if (err?.data?.detail) {
-        formMethods.setError("email", { type: "value" });
-        formMethods.setError("password", {
-          type: "value",
-          message: err?.data?.detail,
-        });
-      }
-      toastError(err, { filterIfHasData: false });
-    }
+    // setLoading(true);
+    // try {
+    //   const { data: res } = await service.signIn(data, {
+    //     signal: abortController.current.signal,
+    //   });
+    //   const us = await getUser(res.access);
+    //   if (us) {
+    //     setLoading(false);
+    //     dispatch(authActions.signIn(res));
+    //     redirectRoute && navigate(redirectRoute);
+    //     dispatch(authActions.setRedirectRoute(""));
+    //   }
+    // } catch (e) {
+    //   const err = e as ICustomError;
+    //   setLoading(false);
+    //   if (err?.data?.detail) {
+    //     formMethods.setError("email", { type: "value" });
+    //     formMethods.setError("password", {
+    //       type: "value",
+    //       message: err?.data?.detail,
+    //     });
+    //   }
+    //   toastError(err, { filterIfHasData: false });
+    // }
+    keycloak.login()
   };
 
   return !isAuthenticatedUser ? (
