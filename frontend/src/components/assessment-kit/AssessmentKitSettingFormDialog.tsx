@@ -19,13 +19,20 @@ import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
+interface IfetchAssessmentKitData {
+  about?: string;
+  id?: number;
+  summary?: string;
+  tags?: [];
+  title?: string;
+}
 interface IAssessmentKitSettingFormDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
   fetchAssessmentKitQuery: () => void;
-  fetchAssessmentKitData?: any;
+  fetchAssessmentKitData?: IfetchAssessmentKitData;
 }
 
 const AssessmentKitSettingFormDialog = (
@@ -90,7 +97,6 @@ const AssessmentKitSettingFormDialog = (
       toastError(err);
     }
   };
-  console.log(fetchAssessmentKitData);
   return (
     <CEDialog
       {...rest}
@@ -112,7 +118,7 @@ const AssessmentKitSettingFormDialog = (
               })}
               name="tags"
               multiple={true}
-              defaultValue={fetchAssessmentKitData.tags}
+              defaultValue={fetchAssessmentKitData?.tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
             />
@@ -121,21 +127,21 @@ const AssessmentKitSettingFormDialog = (
             <InputFieldUC
               name="title"
               label={<Trans i18nKey="title" />}
-              defaultValue={fetchAssessmentKitData.title || ""}
+              defaultValue={fetchAssessmentKitData?.title || ""}
             />
           </Grid>
           <Grid item xs={12} md={12}>
             <InputFieldUC
               name="summary"
               label={<Trans i18nKey="summary" />}
-              defaultValue={fetchAssessmentKitData.summary || ""}
+              defaultValue={fetchAssessmentKitData?.summary || ""}
             />
           </Grid>
           <Grid item xs={12} md={12}>
             <RichEditorField
               name="about"
               label={<Trans i18nKey="about" />}
-              defaultValue={fetchAssessmentKitData.about || ""}
+              defaultValue={fetchAssessmentKitData?.about || ""}
             />
           </Grid>
         </Grid>
