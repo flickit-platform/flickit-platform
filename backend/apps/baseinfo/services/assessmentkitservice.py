@@ -235,8 +235,8 @@ def publish_assessment_kit(assessment_kit: AssessmentKit):
 @transaction.atomic
 def like_assessment_kit(user, assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    assessment_kit_like_user = AssessmentKitLike.objects.filter(user = user.id, assessment_kit_id = assessment_kit.id).delete()
-    if assessment_kit_like_user[0] == 0:
+    deleted_rows_number = AssessmentKitLike.objects.filter(user = user.id, assessment_kit_id = assessment_kit.id).delete()[0]
+    if deleted_rows_number == 0:
         AssessmentKitLike.objects.create(user = user , assessment_kit = assessment_kit)
     return assessment_kit
 
