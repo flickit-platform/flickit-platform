@@ -191,6 +191,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
 
+PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
+
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
     import imp
