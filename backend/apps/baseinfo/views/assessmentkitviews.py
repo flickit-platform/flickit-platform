@@ -108,7 +108,7 @@ class UploadAssessmentKitApi(ModelViewSet):
 class AssessmentKitLikeApi(APIView):
     @transaction.atomic
     def post(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.like_assessment_kit(request.user.id, assessment_kit_id)
+        assessment_kit = assessmentkitservice.like_assessment_kit(request.user, assessment_kit_id)
         return Response({'likes': assessment_kit.likes.count()})
 
 class AssessmentKitInitFormApi(APIView):
