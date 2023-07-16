@@ -111,19 +111,6 @@ const AssessmentKitSettingFormDialog = (
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12} md={12}>
-            <AutocompleteAsyncField
-              {...useConnectAutocompleteField({
-                service: (args, config) =>
-                  service.fetchAssessmentKitTags(args, config),
-              })}
-              name="tags"
-              multiple={true}
-              defaultValue={fetchAssessmentKitData?.tags}
-              searchOnType={false}
-              label={<Trans i18nKey="tags" />}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
             <InputFieldUC
               name="title"
               label={<Trans i18nKey="title" />}
@@ -142,6 +129,19 @@ const AssessmentKitSettingFormDialog = (
               name="about"
               label={<Trans i18nKey="about" />}
               defaultValue={fetchAssessmentKitData?.about || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <AutocompleteAsyncField
+              {...useConnectAutocompleteField({
+                service: (args, config) =>
+                  service.fetchAssessmentKitTags(args, config),
+              })}
+              name="tags"
+              multiple={true}
+              defaultValue={fetchAssessmentKitData?.tags}
+              searchOnType={false}
+              label={<Trans i18nKey="tags" />}
             />
           </Grid>
         </Grid>
