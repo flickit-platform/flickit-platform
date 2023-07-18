@@ -123,12 +123,12 @@ const defaultRenderOption = (option: any) => {
         alignItems: "center",
       }}
     >
-      {option.color_code ? <ColorOption value={option.color_code} /> : null}
+      {option.code ? <ColorOption value={option.code} /> : null}
       <Box
         sx={{
-          background: option.color_code && option.color_code,
+          background: option.code && option.code,
           width: "100%",
-          color: option.color_code && option.color_code,
+          color: option.code && option.code,
         }}
       >
         {option.title}
