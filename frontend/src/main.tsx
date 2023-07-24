@@ -14,11 +14,22 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./components/auth/Keyckoak";
 import App from "./App";
 
+const eventLogger = (event: any, error: any) => {
+  console.log("onKeycloakEvent", event, error);
+};
+
+const tokenLogger = (tokens: any) => {
+  console.log("onKeycloakTokens", tokens);
+};
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <Suspense fallback="loading...">
-        <ReactKeycloakProvider authClient={keycloak}>
+        <ReactKeycloakProvider
+          authClient={keycloak}
+          onEvent={eventLogger}
+          onTokens={tokenLogger}
+        >
           <AppProvider>
             <AuthProvider>
               <ServiceProvider>

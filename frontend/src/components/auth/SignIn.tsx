@@ -25,10 +25,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const abortController = useRef(new AbortController());
   const { getUser } = useGetSignedInUserInfo({ runOnMount: false });
-
-  const formMethods = useForm({ shouldUnregister: true });
   const { keycloak, initialized } = useKeycloak();
-
+  const formMethods = useForm({ shouldUnregister: true });
   useEffect(() => {
     if (isAuthenticatedUser) {
       navigate("/", { replace: true });
@@ -39,39 +37,43 @@ const SignIn = () => {
   }, []);
 
   const onSubmit = async (data: any) => {
-    // setLoading(true);
-    // try {
-    //   const { data: res } = await service.signIn(data, {
-    //     signal: abortController.current.signal,
-    //   });
-    //   const us = await getUser(res.access);
-    //   if (us) {
-    //     setLoading(false);
-    //     dispatch(authActions.signIn(res));
-    //     redirectRoute && navigate(redirectRoute);
-    //     dispatch(authActions.setRedirectRoute(""));
-    //   }
-    // } catch (e) {
-    //   const err = e as ICustomError;
-    //   setLoading(false);
-    //   if (err?.data?.detail) {
-    //     formMethods.setError("email", { type: "value" });
-    //     formMethods.setError("password", {
-    //       type: "value",
-    //       message: err?.data?.detail,
-    //     });
-    //   }
-    //   toastError(err, { filterIfHasData: false });
-    // }
-    if (keycloak.authenticated) {
-      console.log(keycloak.authenticated);
-      keycloak.logout();
-    } else {
-      console.log(keycloak.authenticated);
-      keycloak.login();
+    setLoading(true);
+    try {
+      const { data: res } = await service.signIn(data, {
+        signal: abortController.current.signal,
+      });
+      const us = await getUser(res.access);
+      if (us) {
+        setLoading(false);
+        dispatch(authActions.signIn(res));
+        redirectRoute && navigate(redirectRoute);
+        dispatch(authActions.setRedirectRoute(""));
+      }
+    } catch (e) {
+      const err = e as ICustomError;
+      setLoading(false);
+      if (err?.data?.detail) {
+        formMethods.setError("email", { type: "value" });
+        formMethods.setError("password", {
+          type: "value",
+          message: err?.data?.detail,
+        });
+      }
+      toastError(err, { filterIfHasData: false });
     }
   };
-
+  // if(keycloak.authenticated){
+  //   console.log(keycloak.token)
+  // }
+  // if (!keycloak.authenticated) {
+  //   return (
+  //     <div>
+  //       <h1>Not Authenticated</h1>
+  //       <button onClick={() => keycloak.login()}>Login</button>
+  //     </div>
+  //   );
+  // }
+  console.log(keycloak);
   return !isAuthenticatedUser ? (
     <Paper sx={styles.cards.auth}>
       <Title alignSelf={"stretch"} borderBottom>
