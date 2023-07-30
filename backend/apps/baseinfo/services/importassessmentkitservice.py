@@ -6,7 +6,7 @@ from django.db import transaction
 
 from common.restutil import ActionResult
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact, AnswerTemplate, OptionValue
+from baseinfo.models.questionmodels import Question, QuestionImpact, AnswerTemplate, OptionValue
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, MaturityLevel, LevelCompetence
 from baseinfo.services import assessmentkitservice, expertgroupservice
 
@@ -46,7 +46,7 @@ def import_assessment_kit(descriptive_assessment_kit, **kwargs):
     __import_questionnaires(descriptive_assessment_kit['questionnaireModels'], assessment_kit)
     __import_subjects(descriptive_assessment_kit['subjectModels'], assessment_kit)
     __import_attributes(descriptive_assessment_kit['attributeModels'])
-    __import_metrics(descriptive_assessment_kit['questionModels'], assessment_kit)
+    __import_questions(descriptive_assessment_kit['questionModels'], assessment_kit)
     return assessment_kit
 
 def __import_maturity_levels(descriptive_assessment_kit, assessment_kit):
@@ -129,39 +129,39 @@ def __import_attributes(attributeModels):
         attribute.save()
 
 @transaction.atomic
-def __import_metrics(metricModels, assessment_kit):
-    for model in metricModels:
-        metric = Metric()
-        metric.title = model['title']
-        metric.index = model['index']
-        metric.may_not_be_applicable = model['mayNotBeApplicable']
-        metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
-        metric.save()
+def __import_questions(questionModels, assessment_kit):
+    for model in questionModels:
+        question = Question()
+        question.title = model['title']
+        question.index = model['index']
+        question.may_not_be_applicable = model['mayNotBeApplicable']
+        question.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
+        question.save()
         
         for answer_model in model['answers']:
             answer = AnswerTemplate()
             answer.caption = answer_model['caption']
             answer.value = answer_model['value']
             answer.index = answer_model['index']
-            answer.metric = metric
+            answer.question = question
             answer.save()
-            metric.answer_templates.add(answer)
+            question.answer_templates.add(answer)
 
         for impact_model in model['questionImpacts']:
-            impact = MetricImpact()
+            impact = QuestionImpact()
             impact.maturity_level = MaturityLevel.objects.get(assessment_kit = assessment_kit, title = impact_model['level']['title'])
             impact.quality_attribute = QualityAttribute.objects.filter(code = impact_model['attributeCode']).first()
-            impact.metric = metric
+            impact.question = question
             impact.weight = impact_model['weight']
             impact.save()
 
             option_values_map = impact_model['optionValues']
             for option_number, option_value in option_values_map.items():
                 option_value_model = OptionValue()
-                for option in metric.answer_templates.all():
+                for option in question.answer_templates.all():
                     if option.index == int(option_number):
                         option_value_model.option = option
-                        option_value_model.metric_impact = impact
+                        option_value_model.question_impact = impact
                         option_value_model.value = option_value
                 option_value_model.save()
                 impact.option_values.add(option_value_model)
@@ -169,7 +169,7 @@ def __import_metrics(metricModels, assessment_kit):
             impact.save()
 
         
-        metric.save()
+        question.save()
             
 
 def get_dsl_file(assessment_kit):

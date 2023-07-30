@@ -21,9 +21,9 @@ def init_quality_attribute_value(result_id):
         except QualityAttributeValue.DoesNotExist:
             QualityAttributeValue.objects.create(assessment_result_id = result_id, quality_attribute_id = att.id, maturity_level = maturity_level)
 
-def save_qauality_att_value(metric_impacts, assessment_result):
+def save_qauality_att_value(question_impacts, assessment_result):
     quality_attributes = []
-    for mi in metric_impacts:
+    for mi in question_impacts:
         quality_attributes.append(mi.quality_attribute)
     for quality_attribute in quality_attributes:
         maturity_level_value = calculate_maturity_level(assessment_result, quality_attribute)

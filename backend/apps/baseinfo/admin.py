@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import AnswerTemplate, MetricImpact, Metric, OptionValue
+from baseinfo.models.questionmodels import AnswerTemplate, QuestionImpact, Question, OptionValue
     
 
 @admin.register(AssessmentKit)
@@ -35,10 +35,10 @@ class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_per_page = 10
 
 
-@admin.register(MetricImpact)
-class MetricImpactAdmin(admin.ModelAdmin):
+@admin.register(QuestionImpact)
+class QuestionImpactAdmin(admin.ModelAdmin):
     fields= ['level', 'quality_attribute']
-    list_display = ['level', 'quality_attribute', 'option_values', 'metric']
+    list_display = ['level', 'quality_attribute', 'option_values', 'question']
     autocomplete_fields= ['quality_attribute']
     extra = 0
 
@@ -55,8 +55,8 @@ class MetricImpactAdmin(admin.ModelAdmin):
 #     return "\n".join([option_value.value for option_value in obj.option_values.all()])
 
 
-class MetricImpactFormInline(admin.TabularInline):
-     model = MetricImpact
+class QuestionImpactFormInline(admin.TabularInline):
+     model = QuestionImpact
      fields= ['level', 'quality_attribute']
      list_display = ['level', 'quality_attribute']
      autocomplete_fields= ['quality_attribute']
@@ -67,16 +67,16 @@ class AnswerTemplateFormInline(admin.TabularInline):
      fields= ['caption', 'value', 'index']
      extra = 0
 
-@admin.register(Metric)
-class MetricAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(Question)
+class QuestionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['questionnaire']
     search_fields = ['title']
     list_filter = ['questionnaire', 'last_modification_date']
-    list_display = ['title', 'questionnaire', 'quality_attributes_metric']
+    list_display = ['title', 'questionnaire', 'quality_attributes_question']
     list_per_page = 10
-    inlines = [MetricImpactFormInline, AnswerTemplateFormInline]
+    inlines = [QuestionImpactFormInline, AnswerTemplateFormInline]
 
-    def quality_attributes_metric(self, obj):
+    def quality_attributes_question(self, obj):
         return "\n".join([att.title for att in obj.quality_attributes.all()])
 
 @admin.register(QualityAttribute)
