@@ -33,9 +33,8 @@ urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject
 urlpatterns += [
     path("inspectassessmentkit/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitDetailDisplayApi.as_view()),
     path("analyzeassessmentkit/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitAnalyzeApi.as_view()),
-    path("expertgroup/assessmentkits/<str:expert_group_id>/", assessmentkitviews.AssessmentKitListApi.as_view()),
+    path("expertgroup/<str:expert_group_id>/assessmentkits/", assessmentkitviews.AssessmentKitListApi.as_view()),
     path("userexpertgroup/", expertgroupviews.UserExpertGroupsApiView.as_view()),
-    path("expertgroup/unpublishedassessmentkits/<str:expert_group_id>/", assessmentkitviews.UnpublishedAssessmentKitListApi.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
     path("importassessmentkit/", importassessmentkitviews.ImportAssessmentKitApi.as_view()),

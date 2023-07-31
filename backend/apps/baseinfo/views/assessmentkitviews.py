@@ -56,21 +56,19 @@ class AssessmentKitAnalyzeApi(APIView):
         return Response(result.data, status = status.HTTP_200_OK)
 
 class AssessmentKitListApi(APIView):
-    @is_expert
-    def get(self, request, expert_group_id):
-        expert_group = expertgroupservice.load_expert_group(expert_group_id)
-        response = AssessmentKitSerilizer(expert_group.assessmentkits.filter(is_active=True), many = True, context={'request': request}).data
-        return Response({'results' : response}, status = status.HTTP_200_OK)
-    
-class UnpublishedAssessmentKitListApi(APIView):
     permission_classes = [IsAuthenticated]
-    @is_expert
     def get(self, request, expert_group_id):
-        expert_group = expertgroupservice.load_expert_group(expert_group_id)
-        if not expert_group.users.filter(id = request.user.id).exists():
-            raise PermissionDenied
-        response = AssessmentKitSerilizer(expert_group.assessmentkits.filter(is_active=False), many = True, context={'request': request}).data
-        return Response({'results' : response}, status = status.HTTP_200_OK)
+        results = assessmentkitservice.get_list_assessmnet_kit_for_expert_group(request.user, expert_group_id)
+        if len(results) == 2:
+            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            unpublished = LodeAssessmentKitForExpertGroupSerilizer(results["unpublished"], many = True).data
+            return Response({'results' : [{"published" :published},{"unpublished" :unpublished}]}, status = status.HTTP_200_OK)
+        else:
+            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            return Response({'results' : [{"published" :published}]}, status = status.HTTP_200_OK)
+
+    
+
 
 class AssessmentKitListOptionsApi(APIView):
     def get(self, request):
