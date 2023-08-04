@@ -16,7 +16,7 @@ const getWhereToGo = (location: Location, authContext: IAuthContext) => {
 
   if (shouldNavigateToLoginPage) {
     // If user is not signed in and not on
-    return "/sign-in";
+    // return "/sign-in";
   }
   // Will redirect user to the page which user wanted to visit while he wasn't sign in
   if (redirectRoute) {

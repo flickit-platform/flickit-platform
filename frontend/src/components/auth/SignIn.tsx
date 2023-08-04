@@ -29,7 +29,7 @@ const SignIn = () => {
   const formMethods = useForm({ shouldUnregister: true });
   useEffect(() => {
     if (isAuthenticatedUser) {
-      navigate("/", { replace: true });
+      // navigate("/", { replace: true });
     }
     return () => {
       abortController.current.abort();
@@ -46,7 +46,7 @@ const SignIn = () => {
       if (us) {
         setLoading(false);
         dispatch(authActions.signIn(res));
-        redirectRoute && navigate(redirectRoute);
+        // redirectRoute && navigate(redirectRoute);
         dispatch(authActions.setRedirectRoute(""));
       }
     } catch (e) {
@@ -62,18 +62,8 @@ const SignIn = () => {
       toastError(err, { filterIfHasData: false });
     }
   };
-  // if(keycloak.authenticated){
-  //   console.log(keycloak.token)
-  // }
-  // if (!keycloak.authenticated) {
-  //   return (
-  //     <div>
-  //       <h1>Not Authenticated</h1>
-  //       <button onClick={() => keycloak.login()}>Login</button>
-  //     </div>
-  //   );
-  // }
-  console.log(keycloak);
+
+
   return !isAuthenticatedUser ? (
     <Paper sx={styles.cards.auth}>
       <Title alignSelf={"stretch"} borderBottom>

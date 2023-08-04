@@ -51,7 +51,7 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
         if (location.pathname == "/sign-up") {
           navigate("/sign-up");
         } else {
-          navigate("/sign-in");
+          // navigate("/sign-in");
         }
       } else if (err?.action && err?.action !== "signOut") {
         setError(true);

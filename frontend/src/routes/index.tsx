@@ -46,7 +46,7 @@ const Routes = () => {
         <Route
           element={
             <AuthLayout>
-              <AuthRoutes />
+              <PrivateRoutes />
             </AuthLayout>
           }
         >

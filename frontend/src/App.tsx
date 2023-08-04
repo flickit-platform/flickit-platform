@@ -12,6 +12,7 @@ function App() {
 
   return error ? (
     <Box sx={{ ...styles.centerVH }} height="100vh">
+
       <ErrorDataLoading />
     </Box>
   ) : (

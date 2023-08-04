@@ -1,15 +1,25 @@
 import { PropsWithChildren } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "@providers/AuthProvider";
-
+import { useKeycloak } from "@react-keycloak/web";
+import { authActions, useAuthContext } from "@providers/AuthProvider";
 const PrivateRoutes = (props: PropsWithChildren<{}>) => {
-  const { isAuthenticatedUser } = useAuthContext();
-
-  if (!isAuthenticatedUser) {
-    return <Navigate to="/sign-in" />;
+  // const { isAuthenticatedUser } = useAuthContext();
+  const { dispatch } = useAuthContext();
+  const { keycloak, initialized } = useKeycloak();
+  if (keycloak.authenticated) {
+    console.log(keycloak.token);
+    dispatch(authActions.signIn());
   }
+  if (!keycloak.authenticated) {
+    keycloak.login();
 
-  return <Outlet />;
+    return <></>;
+  } else {
+    return <Outlet />;
+  }
+  // if (!isAuthenticatedUser) {
+  //   return <Navigate to="/sign-in" />;
+  // }
 };
 
 export default PrivateRoutes;
