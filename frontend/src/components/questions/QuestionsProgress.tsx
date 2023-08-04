@@ -5,26 +5,26 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { styles } from "@styles";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
+import { EAssessmentStatus, questionActions, useQuestionContext, useQuestionDispatch } from "@/providers/QuestionProvider";
 import usePopover from "@utils/usePopover";
 import Typography from "@mui/material/Typography";
-import { MetricThumb } from "./MetricThumb";
-import { MetricPopover } from "./MetricPopover";
+import { QuestionThumb } from "./QuestionThumb";
+import { QuestionPopover } from "./QuestionPopover";
 
-const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
-  const { assessmentStatus, metricIndex, metricsInfo, isSubmitting } = useMetricContext();
-  const { total_number_of_metrics, metrics = [] } = metricsInfo;
-  const dispatch = useMetricDispatch();
-  const { metricIndex: metricParam } = useParams();
-  const isFinish = metricParam === "completed";
+const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
+  const { assessmentStatus, questionIndex, questionsInfo, isSubmitting } = useQuestionContext();
+  const { total_number_of_questions, questions = [] } = questionsInfo;
+  const dispatch = useQuestionDispatch();
+  const { questionIndex: questionParam } = useParams();
+  const isFinish = questionParam === "completed";
 
   return (
     <Box position="relative" sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}>
       <Hidden
         smDown
-        mdDown={metrics.length > 20 ? true : false}
-        lgDown={metrics.length > 23 ? true : false}
-        xlDown={metrics.length > 32 ? true : false}
+        mdDown={questions.length > 20 ? true : false}
+        lgDown={questions.length > 23 ? true : false}
+        xlDown={questions.length > 32 ? true : false}
       >
         <Box
           position={"absolute"}
@@ -36,14 +36,14 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           height="100%"
           justifyContent="space-evenly"
         >
-          {metrics.map((metric) => {
+          {questions.map((question) => {
             return (
-              <MetricProgressItem
+              <QuestionProgressItem
                 isSubmitting={isSubmitting}
-                key={metric.id}
-                metric={metric}
-                metricsInfo={metricsInfo}
-                to={`./../${metric.index}`}
+                key={question.id}
+                question={question}
+                questionsInfo={questionsInfo}
+                to={`./../${question.index}`}
               />
             );
           })}
@@ -55,24 +55,24 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           disabled={!hasPreviousQuestion || isSubmitting}
           sx={{ minWidth: 0, width: "56px", mr: "1px" }}
           component={Link}
-          to={`../${metricIndex - 1}`}
+          to={`../${questionIndex - 1}`}
         >
           <Trans i18nKey={isFinish ? "edit" : "prev"} />
         </Button>
         <LinearProgress
           sx={{ flex: 1, borderRadius: 4 }}
           variant="determinate"
-          value={assessmentStatus === EAssessmentStatus.DONE ? 100 : (100 / (total_number_of_metrics + 1)) * metricIndex}
+          value={assessmentStatus === EAssessmentStatus.DONE ? 100 : (100 / (total_number_of_questions + 1)) * questionIndex}
         />
         <Button
           size="small"
           disabled={isFinish || isSubmitting}
           sx={{ minWidth: 0, width: "56px", ml: "1px" }}
           component={Link}
-          to={hasNextQuestion ? `../${metricIndex + 1}` : "../completed"}
+          to={hasNextQuestion ? `../${questionIndex + 1}` : "../completed"}
           onClick={() => {
             if (!hasNextQuestion) {
-              dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
+              dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
             }
           }}
         >
@@ -83,11 +83,11 @@ const MetricsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
   );
 };
 
-export const MetricProgressItem = (props: any) => {
-  const { metricsInfo, metric, to } = props;
-  const { total_number_of_metrics } = metricsInfo;
+export const QuestionProgressItem = (props: any) => {
+  const { questionsInfo, question, to } = props;
+  const { total_number_of_questions } = questionsInfo;
 
-  const { metricIndex } = useParams();
+  const { questionIndex } = useParams();
   const { handleClick, ...popoverProps } = usePopover();
 
   return (
@@ -96,13 +96,13 @@ export const MetricProgressItem = (props: any) => {
         width: "20px",
         zIndex: 1,
         height: "20px",
-        cursor: metricIndex != metric.index ? "pointer" : "auto",
-        backgroundColor: (t: any) => (metric.answer ? `${t.palette.primary.main}` : "white"),
+        cursor: questionIndex != question.index ? "pointer" : "auto",
+        backgroundColor: (t: any) => (question.answer ? `${t.palette.primary.main}` : "white"),
         border: (t: any) => `3px solid white`,
-        outline: (t: any) => `${metric.answer ? t.palette.primary.main : "#a7caed"} solid 5px`,
+        outline: (t: any) => `${question.answer ? t.palette.primary.main : "#a7caed"} solid 5px`,
         transition: "background-color .3s ease, transform .2s ease",
         borderRadius: "8px",
-        transform: metric.index == metricIndex ? "scale(1.3)" : "scale(.9)",
+        transform: question.index == questionIndex ? "scale(1.3)" : "scale(.9)",
         "&:hover p.i-p-i-n": {
           opacity: 1,
         },
@@ -111,29 +111,29 @@ export const MetricProgressItem = (props: any) => {
       <Box
         sx={{ zIndex: 1, width: "100%", height: "100%" }}
         onClick={(e: any) => {
-          metricIndex != metric.index && handleClick(e);
+          questionIndex != question.index && handleClick(e);
         }}
       >
         <Typography
           sx={{
-            fontSize: metric.index == metricIndex ? ".75rem" : ".7rem",
+            fontSize: question.index == questionIndex ? ".75rem" : ".7rem",
             textAlign: "center",
             lineHeight: "13px",
             fontFamily: "Roboto",
-            opacity: metric.index == metricIndex ? 1 : 0.6,
-            color: metric.answer ? `white` : "gray",
+            opacity: question.index == questionIndex ? 1 : 0.6,
+            color: question.answer ? `white` : "gray",
             transition: "opacity .1s ease",
           }}
           className="i-p-i-n"
         >
-          {metric.index}
+          {question.index}
         </Typography>
       </Box>
-      <MetricPopover {...popoverProps}>
-        <MetricThumb {...props} onClose={popoverProps.onClose} metricIndex={metric.index} link={to || `${metric.index}`} />
-      </MetricPopover>
+      <QuestionPopover {...popoverProps}>
+        <QuestionThumb {...props} onClose={popoverProps.onClose} questionIndex={question.index} link={to || `${question.index}`} />
+      </QuestionPopover>
     </Box>
   );
 };
 
-export { MetricsProgress };
+export { QuestionsProgress };

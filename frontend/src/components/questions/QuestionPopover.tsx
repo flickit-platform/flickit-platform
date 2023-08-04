@@ -1,9 +1,9 @@
 import Popover, { PopoverProps } from "@mui/material/Popover";
 import { PropsWithChildren } from "react";
 
-interface IMetricPopoverProps extends PopoverProps {}
+interface IQuestionPopoverProps extends PopoverProps {}
 
-const MetricPopover = (props: PropsWithChildren<IMetricPopoverProps>) => {
+const QuestionPopover = (props: PropsWithChildren<IQuestionPopoverProps>) => {
   const { children, ...rest } = props;
   return (
     <div>
@@ -24,4 +24,4 @@ const MetricPopover = (props: PropsWithChildren<IMetricPopoverProps>) => {
   );
 };
 
-export { MetricPopover };
+export { QuestionPopover };

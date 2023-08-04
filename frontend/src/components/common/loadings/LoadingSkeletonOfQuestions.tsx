@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { styles } from "@styles";
 
-const LoadingSkeletonOfMetrics = () => {
+const LoadingSkeletonOfQuestions = () => {
   return (
     <Box py={3}>
       <Box sx={{ ...styles.centerV }} justifyContent={"space-between"} height="60px">
@@ -22,4 +22,4 @@ const LoadingSkeletonOfMetrics = () => {
   );
 };
 
-export default LoadingSkeletonOfMetrics;
+export default LoadingSkeletonOfQuestions;

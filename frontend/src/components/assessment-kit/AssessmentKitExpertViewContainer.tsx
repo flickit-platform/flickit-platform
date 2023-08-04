@@ -1178,7 +1178,7 @@ const AttributeDetails = (props: any) => {
                             },
                           }}
                         >
-                          {item?.attribute_metric_number}
+                          {item?.attribute_question_number}
                         </Typography>
                       </Box>
                     </Box>
