@@ -59,7 +59,7 @@ def create_assessment_kit():
 @pytest.fixture
 def create_expertgroup():
     def do_create_expertgroup(expertgroup ,user):
-        expert_group = baker.make(expertgroup)
+        expert_group = baker.make(expertgroup,owner=user)
         expert_group.users.add(user)
         return expert_group
     return do_create_expertgroup
