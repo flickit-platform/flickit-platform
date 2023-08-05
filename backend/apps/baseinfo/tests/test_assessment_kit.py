@@ -6,7 +6,7 @@ from model_bakery import baker
 from baseinfo.views import assessmentkitviews
 from baseinfo.models.assessmentkitmodels import ExpertGroup
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact
+from baseinfo.models.questionmodels import Question, QuestionImpact
 from assessment.models import AssessmentKit, AssessmentProject
 from baseinfo.models.assessmentkitmodels import ExpertGroup ,AssessmentKitLike 
 from account.models import User
@@ -251,19 +251,19 @@ class Test_Analyse_AssessmentKit:
         base_info = init_data()
         response = api_client.get('/baseinfo/analyzeassessmentkit/' + str(assessment_kit.id) + "/")
         analyze_list = response.data
-        assert analyze_list[0]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[0]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][2]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][5]['attribute_metric_number'] == 1
+        assert analyze_list[0]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[0]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][2]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][5]['attribute_question_number'] == 1
 
-        assert analyze_list[1]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[1]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][2]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[1]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][5]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[1]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][2]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[1]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][5]['attribute_question_number'] == 2
         assert response.status_code == status.HTTP_200_OK
 
 @pytest.mark.django_db

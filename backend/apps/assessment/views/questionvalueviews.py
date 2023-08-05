@@ -10,25 +10,25 @@ from common.abstractservices import load_model
 from account.permission.spaceperm import IsSpaceMember
 from baseinfo.models.basemodels import Questionnaire
 
-from assessment.models import MetricValue, AssessmentProject
-from assessment.serializers.metricvalueserializers import AddMetricValueSerializer, MetricValueSerializer
-from assessment.services import metricstatistic, metricservices
+from assessment.models import QuestionValue, AssessmentProject
+from assessment.serializers.questionvalueserializers import AddQuestionValueSerializer, QuestionValueSerializer
+from assessment.services import questionstatistic, questionservices
 
 
-class MetricValueViewSet(ModelViewSet):
+class QuestionValueViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend,SearchFilter]
-    search_field = ['metric__questionnaire']
+    search_field = ['question__questionnaire']
     permission_classes = [IsAuthenticated, IsSpaceMember]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return AddMetricValueSerializer
-        return MetricValueSerializer
+            return AddQuestionValueSerializer
+        return QuestionValueSerializer
     
     def get_queryset(self):
-        query_set = MetricValue.objects.filter(assessment_result_id = self.kwargs['assessment_result_pk']).select_related('metric')
+        query_set = QuestionValue.objects.filter(assessment_result_id = self.kwargs['assessment_result_pk']).select_related('question')
         if('questionnaire_pk' in self.request.query_params):
-            return query_set.filter(metric__questionnaire_id = self.request.query_params.get('questionnaire_pk'))
+            return query_set.filter(question__questionnaire_id = self.request.query_params.get('questionnaire_pk'))
         return query_set
 
     def get_serializer_context(self):
@@ -40,18 +40,18 @@ class TotalProgressView(APIView):
     def get (self, request, assessment_project_id):
         assessment_project = AssessmentProject.objects.get(id = assessment_project_id)
         content = {}
-        content['total_progress'] = metricstatistic.extract_total_progress(assessment_project.get_assessment_result())
+        content['total_progress'] = questionstatistic.extract_total_progress(assessment_project.get_assessment_result())
         content['assessment_project_title'] = assessment_project.title
         return Response(content)
 
-class MetricValueListView(APIView):
+class QuestionValueListView(APIView):
     permission_classes = [IsAuthenticated, IsSpaceMember]
     def get (self, request, assessment_project_id, questionnaire_id):
         questionnaire = load_model(Questionnaire, questionnaire_id)
         assessment = load_model(AssessmentProject, assessment_project_id)
         content = {}
-        metric_values = assessment.get_assessment_result().metric_values.all()
-        metrics = metricservices.extract_metrics(questionnaire, metric_values)
-        content['metrics'] = metrics
+        question_values = assessment.get_assessment_result().question_values.all()
+        questions = questionservices.extract_questions(questionnaire, question_values)
+        content['questions'] = questions
         content['assessment_result_id'] = assessment.get_assessment_result().id
         return Response(content)

@@ -4,27 +4,27 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 
-export const MetricThumb = (props: any) => {
-  const { metricsInfo, metric = {}, metricIndex, onClose = () => {}, link, isSubmitting } = props;
-  const { total_number_of_metrics } = metricsInfo;
+export const QuestionThumb = (props: any) => {
+  const { questionsInfo, question = {}, questionIndex, onClose = () => {}, link, isSubmitting } = props;
+  const { total_number_of_questions } = questionsInfo;
 
   const navigate = useNavigate();
   return (
     <Box py={2.5} px={2.5} minWidth="284px" maxWidth="600px">
       <Box>
         <Typography textTransform={"capitalize"} variant="subMedium">
-          <Trans i18nKey={"question"} /> {metricIndex}/{total_number_of_metrics}
+          <Trans i18nKey={"question"} /> {questionIndex}/{total_number_of_questions}
         </Typography>
         <Typography variant="h6" fontFamily={"Roboto"}>
-          {metric?.title}
+          {question?.title}
         </Typography>
       </Box>
-      {metric.answer && (
+      {question.answer && (
         <Box mt={3}>
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
           </Typography>
-          <Typography variant="h6">{metric.answer.caption}</Typography>
+          <Typography variant="h6">{question.answer.caption}</Typography>
         </Box>
       )}
       <Box display="flex">
@@ -37,7 +37,7 @@ export const MetricThumb = (props: any) => {
             onClose();
           }}
         >
-          {metric.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
+          {question.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
         </Button>
       </Box>
     </Box>

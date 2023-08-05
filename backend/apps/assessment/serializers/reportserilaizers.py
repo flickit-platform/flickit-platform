@@ -7,7 +7,7 @@ from account.serializers.commonserializers import SpaceSerializer
 
 from assessment.serializers.commonserializers import ColorSerilizer
 from assessment.models import AssessmentProject, AssessmentResult
-from assessment.services import attributesstatistics, reportservices, metricstatistic
+from assessment.services import attributesstatistics, reportservices, questionstatistic
 
 class AssessmentProjectReportSerilizer(serializers.ModelSerializer):
     color = ColorSerilizer()
@@ -31,7 +31,7 @@ class AssessmentReportSerilizer(serializers.ModelSerializer):
     level_value = serializers.SerializerMethodField()
 
     def get_total_progress(self, result: AssessmentResult):
-        return metricstatistic.extract_total_progress(result)
+        return questionstatistic.extract_total_progress(result)
         
     def calculate_subjects_info(self, result: AssessmentResult):
         return reportservices.calculate_subjects_info(result)

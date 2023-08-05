@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from baseinfo.services import commonservice , assessmentkitservice
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import Metric, OptionValue
+from baseinfo.models.questionmodels import Question, OptionValue
 from baseinfo.serializers import commonserializers
 
 class QuestionnaireViewSet(ModelViewSet):
@@ -17,10 +17,10 @@ class QuestionnaireViewSet(ModelViewSet):
         return Questionnaire.objects.all()
 
 
-class MetricViewSet(ModelViewSet):
-    serializer_class = commonserializers.MetricSerilizer
+class QuestionViewSet(ModelViewSet):
+    serializer_class = commonserializers.QuestionSerilizer
     def get_queryset(self):
-        return Metric.objects.filter(questionnaire_id=self.kwargs['questionnaire_pk']).order_by('index')
+        return Question.objects.filter(questionnaire_id=self.kwargs['questionnaire_pk']).order_by('index')
 
 
 class QuestionnaireBySubjectViewSet(ModelViewSet):
@@ -62,12 +62,12 @@ class LoadAssessmentSubjectInternalApi(APIView):
         response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)  
 
-class LoadMetricInternalApi(APIView):
+class LoadQuestionInternalApi(APIView):
     permission_classes = [AllowAny]
-    @swagger_auto_schema(responses={200: commonserializers.SimpleMetricSerializers(many=True)})
+    @swagger_auto_schema(responses={200: commonserializers.SimpleQuestionSerializers(many=True)})
     def get(self,request,quality_attribute_id):
-        metric = commonservice.get_metric_with_quality_attribute(quality_attribute_id)
-        response = commonserializers.SimpleMetricSerializers(metric, many = True).data
+        question = commonservice.get_question_with_quality_attribute(quality_attribute_id)
+        response = commonserializers.SimpleQuestionSerializers(question, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)   
 
 class LoadQualityAttributeInternalApi(APIView):
@@ -78,10 +78,10 @@ class LoadQualityAttributeInternalApi(APIView):
         response = commonserializers.LoadQualityAttributeSerilizer(quality_attribute, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)    
 
-class LoadMetricImpactInternalApi(APIView):
+class LoadQuestionImpactInternalApi(APIView):
     permission_classes = [AllowAny]
-    @swagger_auto_schema(responses={200: commonserializers.LoadMetricImpactSerilizer(many=True)})
-    def get(self,request,metric_impact_id):
-        metric_impact = commonservice.get_metric_impact_with_id(metric_impact_id)
-        response = commonserializers.LoadMetricImpactSerilizer(metric_impact, many = True).data
+    @swagger_auto_schema(responses={200: commonserializers.LoadQuestionImpactSerilizer(many=True)})
+    def get(self,request,question_impact_id):
+        question_impact = commonservice.get_question_impact_with_id(question_impact_id)
+        response = commonserializers.LoadQuestionImpactSerilizer(question_impact, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)    

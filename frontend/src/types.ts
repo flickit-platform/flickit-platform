@@ -40,18 +40,18 @@ export interface IAnswerTemplate {
 }
 
 export type TAnswerTemplates = IAnswerTemplate[];
-export interface IMetricInfo {
+export interface IQuestionInfo {
   id: TId;
   index: number;
   answer: null | TAnswer;
   title: string;
-  metricResultId?: string | number;
+  questionResultId?: string | number;
   answer_templates: TAnswerTemplates;
 }
-export type TMetricsInfo = {
-  total_number_of_metrics: number;
+export type TQuestionsInfo = {
+  total_number_of_questions: number;
   resultId: TId | undefined;
-  metrics?: IMetricInfo[];
+  questions?: IQuestionInfo[];
 };
 
 export type TAnswer = {
@@ -66,7 +66,7 @@ export type TEvidences = {
   description: string;
   id: TId;
   last_modification_date: TimeRanges;
-  metric_value_id: string;
+  question_value_id: string;
 };
 export type TStatus =
   | "WEAK"
@@ -116,8 +116,8 @@ export interface ISubjectInfo {
   progress: number;
   status: TStatus;
   title: string;
-  total_answered_metric_number: number;
-  total_metric_number: number;
+  total_answered_question_number: number;
+  total_question_number: number;
 }
 export interface IMaturityLevel {
   id: TId;
@@ -138,11 +138,11 @@ export interface IAssessmentKitModel {
   id: TId;
   title: string;
   images: TImages;
-  metric_categories: IQuestionnaireModel[];
+  question_categories: IQuestionnaireModel[];
   assessment_subjects: Omit<
     ISubjectInfo,
-    | "total_answered_metric_number"
-    | "total_metric_number"
+    | "total_answered_question_number"
+    | "total_question_number"
     | "progress"
     | "status"
   >;
@@ -192,7 +192,7 @@ export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
 export interface IAssessmentReport {
   assessment_kit: Omit<
     IAssessmentKitModel,
-    "metric_categories" | "images" | "assessment_subjects"
+    "question_categories" | "images" | "assessment_subjects"
   >;
   assessment_results: string[];
   color: IColorModel;
@@ -203,8 +203,8 @@ export interface IAssessmentReport {
 
 export interface ITotalProgress {
   progress: number;
-  total_answered_metric_number: number;
-  total_metric_number: number;
+  total_answered_question_number: number;
+  total_question_number: number;
 }
 
 export interface ITotalProgressModel {
@@ -227,7 +227,7 @@ export interface IQuestionnaireModel {
   title: string;
 }
 
-export interface IMetric {
+export interface IQuestion {
   id: TId;
   index: number;
   title: string;
@@ -235,18 +235,18 @@ export interface IMetric {
   answer: TAnswer;
 }
 
-export interface IMetricsModel {
-  metrics: IMetric[];
+export interface IQuestionsModel {
+  questions: IQuestion[];
   assessment_result_id: string;
 }
 
-export interface IMetricImpact {
+export interface IQuestionImpact {
   id: TId;
   level: number;
   quality_attribute: number;
 }
 
-export type TMetricImpacts = IMetricImpact[];
+export type TQuestionImpacts = IQuestionImpact[];
 
 export interface IQualityAttribute {
   code: string;
@@ -256,20 +256,20 @@ export interface IQualityAttribute {
   title: string;
 }
 
-export interface IMetricResult {
+export interface IQuestionResult {
   id: TId;
   index: number;
   title: string;
-  metric_impacts: TMetricImpacts;
+  question_impacts: TQuestionImpacts;
   quality_attributes: IQualityAttribute[];
 }
 
-export interface IMetricsResult extends IAssessmentResult {
+export interface IQuestionsResult extends IAssessmentResult {
   answer: TAnswer;
-  metric: IMetricResult;
+  question: IQuestionResult;
 }
 
-export interface IMetricsResultsModel extends IDefaultModel<IMetricsResult> {}
+export interface IQuestionsResultsModel extends IDefaultModel<IQuestionsResult> {}
 
 export interface IAssessment {
   id: TId;
@@ -307,21 +307,21 @@ export interface ISubjectReport {
 }
 
 export interface IQuestionnaire {
-  answered_metric: number;
+  answered_question: number;
   id: TId;
-  metric_number: number;
+  question_number: number;
   progress: number;
   title: string;
   last_updated?: string;
 }
 
 export interface IQuestionnairesInfo {
-  answered_metric: number;
+  answered_question: number;
   id: TId;
-  metric_number: number;
+  question_number: number;
   progress: number;
   last_updated?: string;
-  current_metric_index: number;
+  current_question_index: number;
   title: string;
   subject: { id: TId; title: string }[];
 }
@@ -341,9 +341,9 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   progress: number;
   status: TStatus;
   title: string;
-  total_answered_metric: number;
-  total_metric_number: number;
-  metric_categories_info: IQuestionnaire[];
+  total_answered_question: number;
+  total_question_number: number;
+  question_categories_info: IQuestionnaire[];
   most_significant_strength_atts: IQualityAttribute[];
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;

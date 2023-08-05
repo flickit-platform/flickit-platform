@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
-from baseinfo.models.metricmodels import AnswerTemplate, Metric, MetricImpact, OptionValue
+from baseinfo.models.questionmodels import AnswerTemplate, Question, QuestionImpact, OptionValue
 from baseinfo.models.assessmentkitmodels import AssessmentKit, ExpertGroup
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
@@ -17,8 +17,8 @@ class QuestionnaireBySubjectSerilizer(serializers.ModelSerializer):
     total_question = serializers.SerializerMethodField()
 
     def get_total_question(self, questionnaire:Questionnaire):
-        metrics = Questionnaire.objects.get(pk = questionnaire.id).metric_set.all()
-        return len(metrics)
+        questions = Questionnaire.objects.get(pk = questionnaire.id).question_set.all()
+        return len(questions)
 
 
 class AssessmentSubjectSerilizer(serializers.ModelSerializer):
@@ -27,9 +27,9 @@ class AssessmentSubjectSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'description', 'index']
 
 
-class MetricImpactSerilizer(serializers.ModelSerializer):
+class QuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
-        model = MetricImpact
+        model = QuestionImpact
         fields = ['id', 'level', 'quality_attribute']
 
 
@@ -44,17 +44,17 @@ class AnswerTemplateSerializer(serializers.ModelSerializer):
         model = AnswerTemplate
         fields = ['id', 'caption', 'value', 'index']
 
-class SimpleMetricSerializers(serializers.ModelSerializer):
+class SimpleQuestionSerializers(serializers.ModelSerializer):
     quality_attributes = QualityAttributeSerilizer(many=True)
-    metric_impacts = MetricImpactSerilizer(many=True)
+    question_impacts = QuestionImpactSerilizer(many=True)
     class Meta:
-        model = Metric
-        fields = ['id', 'title', 'index', 'quality_attributes', 'metric_impacts']
+        model = Question
+        fields = ['id', 'title', 'index', 'quality_attributes', 'question_impacts']
 
-class MetricSerilizer(serializers.ModelSerializer):
+class QuestionSerilizer(serializers.ModelSerializer):
     answer_templates = AnswerTemplateSerializer(many=True)
     class Meta:
-        model = Metric
+        model = Question
         fields = ['id', 'title', 'index', 'answer_templates']
 
 class AssessmentKitSimpleSerilizer(serializers.ModelSerializer):
@@ -70,7 +70,7 @@ class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
 class OptionValueSerilizers(serializers.ModelSerializer):
     class Meta:
         model = OptionValue
-        fields = ['id', 'option_id', 'value', 'metric_impact_id']     
+        fields = ['id', 'option_id', 'value', 'question_impact_id']     
 
 
 class LoadQualityAttributeSerilizer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.ModelSeriali
         fields = ['id','quality_attributes']
         
 
-class LoadMetricImpactSerilizer(serializers.ModelSerializer):
+class LoadQuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
-        model = MetricImpact
+        model = QuestionImpact
         fields = '__all__'

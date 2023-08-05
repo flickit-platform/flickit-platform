@@ -61,8 +61,8 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const { total_metric_number = 0, total_answered_metric_number = 0 } = data || {};
-              return <QANumberIndicator color="white" q={total_metric_number} a={total_answered_metric_number} variant="h6" />;
+              const { total_question_number = 0, total_answered_question_number = 0 } = data || {};
+              return <QANumberIndicator color="white" q={total_question_number} a={total_answered_question_number} variant="h6" />;
             }}
           />
         </Box>

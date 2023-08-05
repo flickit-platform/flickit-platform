@@ -27,7 +27,7 @@ class TestLoadOptionValuesWithAnswerTamplate:
         assert  data[0]['id'] == option_value.id
         assert  data[0]['option_id'] == answer_tamplate_id
         assert  data[0]['value'] == option_value.value
-        assert  data[0]['metric_impact_id'] == option_value.metric_impact.id
+        assert  data[0]['question_impact_id'] == option_value.question_impact.id
         
     def test_load_option_values_when_answer_tamplate_not_exist(self):
         #init data
@@ -148,8 +148,8 @@ class TestLoadLevelWithAssessmentKit:
 
         
 @pytest.mark.django_db
-class TestLoadMetricsWithQualityAttribute:
-    def test_load_metrics_when_quality_attribute_exist(self,init_data):
+class TestLoadQuestionsWithQualityAttribute:
+    def test_load_questions_when_quality_attribute_exist(self,init_data):
         #init data
         base_info = init_data()
         
@@ -157,23 +157,23 @@ class TestLoadMetricsWithQualityAttribute:
         quality_attribute_id = base_info['attributes'][0].id
         api = APIRequestFactory()
         request = api.get(f'/api/internal/quality-attribute/{quality_attribute_id}/question/', {}, format='json')
-        view = commonviews.LoadMetricInternalApi.as_view()
+        view = commonviews.LoadQuestionInternalApi.as_view()
         resp = view(request,quality_attribute_id)
         
         assert  resp.status_code == status.HTTP_200_OK
-        metrics = base_info['metrics']
+        questions = base_info['questions']
         data = resp.data["items"]
-        assert data[0]["id"] == metrics[0].id
+        assert data[0]["id"] == questions[0].id
         
         
-    def test_load_metrics_when_quality_attribute_not_exist(self):
+    def test_load_questions_when_quality_attribute_not_exist(self):
         #init data
         
         #create request and send request
         quality_attribute_id = 1000
         api = APIRequestFactory()
         request = api.get(f'/api/internal/quality-attribute/{quality_attribute_id}/question/', {}, format='json')
-        view = commonviews.LoadMetricInternalApi.as_view()
+        view = commonviews.LoadQuestionInternalApi.as_view()
         resp = view(request,quality_attribute_id)
         
         assert  resp.status_code == status.HTTP_404_NOT_FOUND
@@ -213,32 +213,32 @@ class TestLoadQualityAttributesWithAssessmentSubject:
         
         
 @pytest.mark.django_db
-class TestLoadMetricImpactWithMetricImpactId:
-    def test_load_metric_impact_when_metric_impact_id_exist(self,init_data):
+class TestLoadQuestionImpactWithQuestionImpactId:
+    def test_load_question_impact_when_question_impact_id_exist(self,init_data):
         #init data
         base_info = init_data()
         
         #create request and send request
-        metric_impact_id = base_info['metric_impacts'][0].id
+        question_impact_id = base_info['question_impacts'][0].id
         api = APIRequestFactory()
-        request = api.get(f'/api/internal/questionimpact/{metric_impact_id}/', {}, format='json')
-        view = commonviews.LoadMetricImpactInternalApi.as_view()
-        resp = view(request,metric_impact_id)
+        request = api.get(f'/api/internal/questionimpact/{question_impact_id}/', {}, format='json')
+        view = commonviews.LoadQuestionImpactInternalApi.as_view()
+        resp = view(request,question_impact_id)
         
         assert  resp.status_code == status.HTTP_200_OK
-        metric_impacts = base_info['metric_impacts']
+        question_impacts = base_info['question_impacts']
         data = resp.data["items"]
-        assert data[0]["id"] == metric_impacts[0].id
+        assert data[0]["id"] == question_impacts[0].id
         
-    def test_load_metric_impact_when_metric_impact_id_not_exist(self):
+    def test_load_question_impact_when_question_impact_id_not_exist(self):
         #init data
         
         #create request and send request
-        metric_impact_id = -1
+        question_impact_id = -1
         api = APIRequestFactory()
-        request = api.get(f'/api/internal/questionimpact/{metric_impact_id}/', {}, format='json')
-        view = commonviews.LoadMetricImpactInternalApi.as_view()
-        resp = view(request,metric_impact_id)
+        request = api.get(f'/api/internal/questionimpact/{question_impact_id}/', {}, format='json')
+        view = commonviews.LoadQuestionImpactInternalApi.as_view()
+        resp = view(request,question_impact_id)
         
         assert  resp.status_code == status.HTTP_404_NOT_FOUND
         assert  resp.data["message"] == "Object does not exists"

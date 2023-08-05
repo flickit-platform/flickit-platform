@@ -4,42 +4,42 @@ import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Hidden from "@mui/material/Hidden";
 import Box from "@mui/material/Box";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
-import { MetricCard } from "./MetricCard";
+import { EAssessmentStatus, questionActions, useQuestionContext, useQuestionDispatch } from "@providers/QuestionProvider";
+import { QuestionCard } from "./QuestionCard";
 import { Trans } from "react-i18next";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
-import { Review } from "./MetricsReview";
+import { Review } from "./QuestionsReview";
 import { TransitionGroup } from "react-transition-group";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import MetricNextPrev from "./MetricNextPrev";
-import { MetricsProgress } from "./MetricsProgress";
+import QuestionNextPrev from "./QuestionNextPrev";
+import { QuestionsProgress } from "./QuestionsProgress";
 import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
 
-export const MetricContainer = () => {
+export const QuestionContainer = () => {
   const {
-    hasAnyMetric,
-    metricInfo,
+    hasAnyQuestion,
+    questionInfo,
     hasNextQuestion,
     hasPreviousQuestion,
     container,
     assessmentStatus,
-    metricsInfo,
+    questionsInfo,
     loaded,
-    metricIndex,
-  } = useMetric();
+    questionIndex,
+  } = useQuestion();
 
   return loaded ? (
-    hasAnyMetric ? (
+    hasAnyQuestion ? (
       <Box minWidth="100vw" overflow="hidden">
-        {metricsInfo.metrics?.[metricIndex - 1] && (
-          <MetricsProgress hasNextQuestion={hasNextQuestion} hasPreviousQuestion={hasPreviousQuestion} />
+        {questionsInfo.questions?.[questionIndex - 1] && (
+          <QuestionsProgress hasNextQuestion={hasNextQuestion} hasPreviousQuestion={hasPreviousQuestion} />
         )}
         {assessmentStatus === EAssessmentStatus.DONE ? (
-          <Review metrics={metricsInfo.metrics} />
+          <Review questions={questionsInfo.questions} />
         ) : (
           <Box position="relative" sx={{ ...styles.centerVH, px: { xs: 0, sm: 5, md: 6 } }}>
-            {metricsInfo.metrics?.[metricIndex - 1] ? (
+            {questionsInfo.questions?.[questionIndex - 1] ? (
               <>
                 <Box
                   display="flex"
@@ -51,11 +51,11 @@ export const MetricContainer = () => {
                   maxWidth={"1376px"}
                 >
                   <TransitionGroup>
-                    <Collapse key={metricsInfo.metrics[metricIndex - 1].index as any}>
-                      <MetricCard
-                        metricsInfo={metricsInfo}
-                        metricInfo={metricInfo}
-                        key={metricsInfo.metrics[metricIndex - 1].index}
+                    <Collapse key={questionsInfo.questions[questionIndex - 1].index as any}>
+                      <QuestionCard
+                        questionsInfo={questionsInfo}
+                        questionInfo={questionInfo}
+                        key={questionsInfo.questions[questionIndex - 1].index}
                       />
                     </Collapse>
                   </TransitionGroup>
@@ -76,8 +76,8 @@ export const MetricContainer = () => {
 };
 
 export const SubmitOnSelectCheckBox = () => {
-  const { submitOnAnswerSelection } = useMetricContext();
-  const dispatch = useMetricDispatch();
+  const { submitOnAnswerSelection } = useQuestionContext();
+  const dispatch = useQuestionDispatch();
   const isSmallerScreen = useScreenResize("sm");
 
   return (
@@ -88,7 +88,7 @@ export const SubmitOnSelectCheckBox = () => {
         <Checkbox
           checked={submitOnAnswerSelection}
           onChange={(e) => {
-            dispatch(metricActions.setSubmitOnAnswerSelection(e.target.checked || false));
+            dispatch(questionActions.setSubmitOnAnswerSelection(e.target.checked || false));
           }}
         />
       }
@@ -97,29 +97,29 @@ export const SubmitOnSelectCheckBox = () => {
   );
 };
 
-const findMetric = (metrics: any[] = [], metricIndex: string | undefined | number) => {
-  return metricIndex ? metrics.find((metric) => metric.index == Number(metricIndex)) : undefined;
+const findQuestion = (questions: any[] = [], questionIndex: string | undefined | number) => {
+  return questionIndex ? questions.find((question) => question.index == Number(questionIndex)) : undefined;
 };
 
-const useMetric = () => {
-  const { metricIndex, metricsInfo, assessmentStatus, isSubmitting } = useMetricContext();
-  const loaded = !!metricsInfo?.metrics;
-  const hasAnyMetric = loaded ? (metricsInfo?.metrics as any).length > 0 : false;
-  const hasAnyQuestion = loaded ? (metricsInfo?.metrics as any).length > 0 : false;
-  const metricInfo = findMetric(metricsInfo.metrics, metricIndex);
-  const hasNextQuestion = hasAnyQuestion && metricIndex < metricsInfo.total_number_of_metrics;
-  const hasPreviousQuestion = hasAnyQuestion && metricIndex > 1;
+const useQuestion = () => {
+  const { questionIndex, questionsInfo, assessmentStatus, isSubmitting } = useQuestionContext();
+  const loaded = !!questionsInfo?.questions;
+  const hasAnyQuestions = loaded ? (questionsInfo?.questions as any).length > 0 : false;
+  const hasAnyQuestion = loaded ? (questionsInfo?.questions as any).length > 0 : false;
+  const questionInfo = findQuestion(questionsInfo.questions, questionIndex);
+  const hasNextQuestion = hasAnyQuestion && questionIndex < questionsInfo.total_number_of_questions;
+  const hasPreviousQuestion = hasAnyQuestion && questionIndex > 1;
   const container = useRef(null);
 
   return {
-    hasAnyMetric,
-    metricInfo,
+    hasAnyQuestion,
+    questionInfo,
     hasNextQuestion,
     hasPreviousQuestion,
     container,
     assessmentStatus,
-    metricsInfo,
-    metricIndex,
+    questionsInfo,
+    questionIndex,
     isSubmitting,
     loaded,
   };

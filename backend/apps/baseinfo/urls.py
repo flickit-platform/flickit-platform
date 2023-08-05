@@ -19,7 +19,7 @@ router.register('expertgroups', expertgroupviews.ExpertGroupViewSet, basename='e
 
 
 questionnaire_router = routers.NestedDefaultRouter(router, 'questionnaires', lookup='questionnaire')
-questionnaire_router.register('metrics', commonviews.MetricViewSet, basename='questionnaire-metrics')
+questionnaire_router.register('questions', commonviews.QuestionViewSet, basename='questionnaire-questions')
 
 expert_group_access_router = routers.NestedDefaultRouter(router, 'expertgroups', lookup='expertgroup')
 expert_group_access_router.register('expertgroupaccess', expertgroupviews.ExpertGroupAccessViewSet, basename='expertgroup-user-access')

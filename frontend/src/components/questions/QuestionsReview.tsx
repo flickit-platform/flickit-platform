@@ -5,21 +5,21 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import Title from "@common/Title";
-import { useMetricContext } from "@providers/MetricProvider";
+import { useQuestionContext } from "@/providers/QuestionProvider";
 import assessmentDoneSvg from "@assets/svg/assessmentDone.svg";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
 
-const MetricsReview = () => {
-  const { metricIndex, metricsInfo, assessmentStatus } = useMetricContext();
+const QuestionsReview = () => {
+  const { questionIndex, questionsInfo, assessmentStatus } = useQuestionContext();
   return (
     <Box width="100%">
-      <Review metrics={metricsInfo.metrics} isReviewPage={true} />
+      <Review questions={questionsInfo.questions} isReviewPage={true} />
     </Box>
   );
 };
 
-export const Review = ({ metrics = [], isReviewPage }: any) => {
+export const Review = ({ questions = [], isReviewPage }: any) => {
   const navigate = useNavigate();
   return (
     <Box maxWidth={"1440px"} sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}>
@@ -74,10 +74,10 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
           </Title>
         )}
         <Box mt={2}>
-          {metrics.map((metric: any) => {
+          {questions.map((question: any) => {
             return (
               <Paper
-                key={metric.id}
+                key={question.id}
                 sx={{
                   p: 3,
                   backgroundColor: "#273248",
@@ -96,16 +96,16 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
                       <Trans i18nKey={"question"} />
                     </Typography>
                     <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
-                      {metric.title}
+                      {question.title}
                     </Typography>
                   </Box>
-                  {metric.answer && (
+                  {question.answer && (
                     <Box mt={3}>
                       <Typography variant="subMedium" textTransform="uppercase" sx={{ color: "#b3b3b3" }}>
                         <Trans i18nKey={"yourAnswer"} />
                       </Typography>
                       <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
-                        {metric.answer.caption}
+                        {question.answer.caption}
                       </Typography>
                     </Box>
                   )}
@@ -115,10 +115,10 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
                       sx={{ mt: 0.2, ml: "auto" }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(isReviewPage ? `./../${metric.index}` : `../${metric.index}`);
+                        navigate(isReviewPage ? `./../${question.index}` : `../${question.index}`);
                       }}
                     >
-                      {metric.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
+                      {question.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
                     </Button>
                   </Box>
                 </Box>
@@ -131,4 +131,4 @@ export const Review = ({ metrics = [], isReviewPage }: any) => {
   );
 };
 
-export default MetricsReview;
+export default QuestionsReview;
