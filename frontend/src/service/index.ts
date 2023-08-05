@@ -280,7 +280,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.post(
-        `/assessment/results/${resultId || ""}/metricvalues/`,
+        `/assessment/results/${resultId || ""}/questionvalues/`,
         data,
         {
           ...config,
@@ -291,16 +291,16 @@ export const createService = (
         }
       );
     },
-    fetchMetrics(
+    fetchQuestions(
       { questionnaireId }: { questionnaireId: string | undefined },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/baseinfo/questionnaires/${questionnaireId}/metrics/`,
+        `/baseinfo/questionnaires/${questionnaireId}/questions/`,
         config
       );
     },
-    fetchMetricsResult(
+    fetchQuestionsResult(
       {
         questionnaireId,
         assessmentId,
@@ -332,7 +332,7 @@ export const createService = (
       }: { resultId: string; questionnaireId: string },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      return axios.get(`/assessment/results/${resultId}/metricvalues/`, {
+      return axios.get(`/assessment/results/${resultId}/questionvalues/`, {
         ...config,
         params: {
           questionnaire_pk: questionnaireId,
@@ -661,15 +661,15 @@ export const createService = (
       });
     },
     addEvidence(
-      args: { description: string; metricId: TId; assessmentId: TId; id?: TId },
+      args: { description: string; questionId: TId; assessmentId: TId; id?: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { description, metricId, assessmentId, id } = args || {};
+      const { description, questionId, assessmentId, id } = args || {};
       return id
         ? axios.put(`/assessment/updateevidence/${id}/`, {
             description,
           })
-        : axios.post(`/assessment/addevidence/${metricId}/${assessmentId}`, {
+        : axios.post(`/assessment/addevidence/${questionId}/${assessmentId}`, {
             description,
           });
     },
@@ -690,12 +690,12 @@ export const createService = (
       });
     },
     fetchEvidences(
-      args: { metricId: TId; assessmentId: TId },
+      args: { questionId: TId; assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { metricId, assessmentId } = args || {};
+      const { questionId, assessmentId } = args || {};
 
-      return axios.get(`/assessment/evidences/${metricId}/${assessmentId}/`, {
+      return axios.get(`/assessment/evidences/${questionId}/${assessmentId}/`, {
         ...(config || {}),
       });
     },

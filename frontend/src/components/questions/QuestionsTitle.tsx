@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import Title from "@common/Title";
-import { EAssessmentStatus, useMetricContext } from "@providers/MetricProvider";
+import { EAssessmentStatus, useQuestionContext } from "@/providers/QuestionProvider";
 import AssignmentTurnedInRoundedIcon from "@mui/icons-material/AssignmentTurnedInRounded";
 import GradingRoundedIcon from "@mui/icons-material/GradingRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
@@ -16,16 +16,16 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 
-const MetricsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) => {
+const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) => {
   const { data, isReview } = props;
   const { title } = data || {};
   const {
-    metricsInfo: { total_number_of_metrics },
+    questionsInfo: { total_number_of_questions },
     assessmentStatus,
     isSubmitting,
-  } = useMetricContext();
-  const { spaceId, assessmentId, metricIndex, questionnaireId } = useParams();
-  const isComplete = metricIndex === "completed";
+  } = useQuestionContext();
+  const { spaceId, assessmentId, questionIndex, questionnaireId } = useParams();
+  const isComplete = questionIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
   const breadcrumbInfo = useSupTitleBreadcrumb({
     spaceId,
@@ -122,7 +122,7 @@ const MetricsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) 
               ) : (
                 <Typography display="inline-block" variant="h5" fontWeight={"bold"} sx={{ opacity: 0.6, ml: { xs: 0, sm: 1 } }}>
                   {" "}
-                  <Trans i18nKey="question" /> {metricIndex}/{total_number_of_metrics}
+                  <Trans i18nKey="question" /> {questionIndex}/{total_number_of_questions}
                 </Typography>
               )}
             </Box>
@@ -133,4 +133,4 @@ const MetricsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) 
   );
 };
 
-export default MetricsTitle;
+export default QuestionsTitle;
