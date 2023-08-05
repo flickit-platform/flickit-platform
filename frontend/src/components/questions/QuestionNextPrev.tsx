@@ -4,20 +4,20 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
-import { EAssessmentStatus, metricActions, useMetricContext, useMetricDispatch } from "@providers/MetricProvider";
-import { MetricThumb } from "./MetricThumb";
+import { EAssessmentStatus, questionActions, useQuestionContext, useQuestionDispatch } from "@/providers/QuestionProvider";
+import { QuestionThumb } from "./QuestionThumb";
 
-interface IMetricNextPrevProps {
+interface IQuestionNextPrevProps {
   hasNextQuestion?: boolean;
   isNext?: boolean;
 }
 
-const MetricNextPrev = (props: IMetricNextPrevProps) => {
+const QuestionNextPrev = (props: IQuestionNextPrevProps) => {
   const { isNext, hasNextQuestion } = props;
-  const { metricsInfo, metricIndex, isSubmitting } = useMetricContext();
-  const nextMetric = isNext ? Number(metricIndex) + 1 : Number(metricIndex) - 1;
-  const metric = metricsInfo?.metrics?.find((metric) => metric.index == nextMetric);
-  const dispatch = useMetricDispatch();
+  const { questionsInfo, questionIndex, isSubmitting } = useQuestionContext();
+  const nextQuestion = isNext ? Number(questionIndex) + 1 : Number(questionIndex) - 1;
+  const question = questionsInfo?.questions?.find((question) => question.index == nextQuestion);
+  const dispatch = useQuestionDispatch();
 
   return (
     <Paper
@@ -55,10 +55,10 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
         color="#ffffff96"
         onClick={() => {
           if (!isSubmitting && isNext && !hasNextQuestion) {
-            dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
+            dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
           }
         }}
-        to={isSubmitting ? "" : isNext ? (hasNextQuestion ? `../${metricIndex + 1}` : "../completed") : `../${metricIndex - 1}`}
+        to={isSubmitting ? "" : isNext ? (hasNextQuestion ? `../${questionIndex + 1}` : "../completed") : `../${questionIndex - 1}`}
       >
         <Typography
           sx={{
@@ -88,11 +88,11 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
       >
         <Box sx={{ direction: "ltr" }}>
           {(!isNext || hasNextQuestion) && (
-            <MetricThumb
-              metric={metric}
-              metricsInfo={metricsInfo}
-              metricIndex={nextMetric}
-              link={`../${nextMetric}`}
+            <QuestionThumb
+              question={question}
+              questionsInfo={questionsInfo}
+              questionIndex={nextQuestion}
+              link={`../${nextQuestion}`}
               isSubmitting={isSubmitting}
             />
           )}
@@ -102,4 +102,4 @@ const MetricNextPrev = (props: IMetricNextPrevProps) => {
   );
 };
 
-export default MetricNextPrev;
+export default QuestionNextPrev;
