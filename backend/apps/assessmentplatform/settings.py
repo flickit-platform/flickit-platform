@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 
-__version__ = "0.7.0-SNAPSHOT"
+__version__ = "0.10.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -66,11 +66,11 @@ if os.environ.get('GITHUB_WORKFLOW'):
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL'),
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('EMAIL_HOST'),
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER'),
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD'),
-EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT'),
-DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL'),
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT')
+DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')  == 'True'
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') == 'True'
 
@@ -182,12 +182,16 @@ REST_FRAMEWORK = {
 }
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
+ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
+
+PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
@@ -289,3 +293,13 @@ OIDC_AUTH = {
 }
 
 LOGIN_REDIRECT_URL = '/baseinfo/'
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}

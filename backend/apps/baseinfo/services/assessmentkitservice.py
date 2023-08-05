@@ -9,7 +9,7 @@ from assessment.models import AssessmentProject
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
 from baseinfo.models.basemodels import QualityAttribute
 from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag , MaturityLevel ,LevelCompetence
 
 def load_assessment_kit(assessment_kit_id) -> AssessmentKit:
     try:
@@ -22,6 +22,15 @@ def load_assessment_kit_tag(tag_id) -> AssessmentKitTag:
         return AssessmentKitTag.objects.get(id = tag_id)
     except AssessmentKitTag.DoesNotExist:
         raise ObjectDoesNotExist
+
+
+def load_maturity_level(maturity_level_id) -> MaturityLevel:
+    try:
+        return MaturityLevel.objects.get(id = maturity_level_id)
+    except MaturityLevel.DoesNotExist as e:
+        raise MaturityLevel.DoesNotExist
+    
+
 
 def is_assessment_kit_deletable(assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
@@ -233,16 +242,11 @@ def publish_assessment_kit(assessment_kit: AssessmentKit):
     return ActionResult(success=True, message='The assessment_kit is published successfully')
 
 @transaction.atomic
-def like_assessment_kit(user_id, assessment_kit_id):
+def like_assessment_kit(user, assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    assessment_kit_like_user = AssessmentKitLike.objects.filter(user_id = user_id, assessment_kit_id = assessment_kit.id)
-    if assessment_kit_like_user.count() == 1:
-        assessment_kit.likes.filter(user_id = user_id, assessment_kit_id = assessment_kit.id).delete()
-        assessment_kit.save()
-    elif assessment_kit_like_user.count() == 0:
-        assessment_kit_like_create = AssessmentKitLike.objects.create(user_id = user_id, assessment_kit_id = assessment_kit.id)
-        assessment_kit.likes.add(assessment_kit_like_create)
-        assessment_kit.save()
+    deleted_rows_number = AssessmentKitLike.objects.filter(user = user.id, assessment_kit_id = assessment_kit.id).delete()[0]
+    if deleted_rows_number == 0:
+        AssessmentKitLike.objects.create(user = user , assessment_kit = assessment_kit)
     return assessment_kit
 
 def analyze(assessment_kit_id):
@@ -306,3 +310,13 @@ def update_assessment_kit(assessment_kit, request,**kwargs):
     except AssessmentKitTag.DoesNotExist:
         return ActionResult(success=False, message="There is no assessment_kit tag with this id.")
 
+
+def get_level_competence_with_maturity_level(maturity_level_id):
+     load_maturity = load_maturity_level(maturity_level_id)
+     result = LevelCompetence.objects.filter(maturity_level=maturity_level_id)
+     return result
+
+def get_maturity_level_with_assessment_kit(assessment_kit_id):
+    assessment_kit = load_assessment_kit(assessment_kit_id)
+    result = MaturityLevel.objects.filter(assessment_kit = assessment_kit_id)
+    return result

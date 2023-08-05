@@ -12,7 +12,6 @@ router.register('reportsubject', SubjectReportViewSet, basename='reportsubject')
 router.register('projects', projectviews.AssessmentProjectViewSet, basename='projects')
 router.register('currentuserprojects', projectviews.AssessmentProjectByCurrentUserViewSet, basename='currentuserprojects')
 router.register('results', commonviews.AssessmentResultRegisterViewSet, basename='results')
-router.register('colors', commonviews.ColorViewSet, basename='colors')
 
 
 metric_value_router = routers.NestedDefaultRouter(router, 'results', lookup='assessment_result')
@@ -33,4 +32,6 @@ urlpatterns += [
     path("updateevidence/<str:pk>/", evidenceviews.EvidenceUpdateAPI.as_view()),
     path("deleteevidence/<str:pk>/", evidenceviews.EvidenceDeleteAPI.as_view()),
     path("evidences/<str:metric_id>/<str:assessment_id>/", evidenceviews.EvidenceListApi.as_view()),
+    path("colors/",commonviews.ColorApi.as_view())
+    
 ]

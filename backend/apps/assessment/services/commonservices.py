@@ -1,3 +1,7 @@
+import requests
+import json
+
+from assessmentplatform.settings import ASSESSMENT_URL
 from account.models import Space
 from baseinfo.models.basemodels import Questionnaire
 from assessment.models import AssessmentProject
@@ -17,3 +21,9 @@ def loadBreadcrumbInfo(data):
             model_class = MODEL_MAP[key]
             content[key] = load_model(model_class, id_value).title
     return content
+
+def load_color():
+    response = requests.get(ASSESSMENT_URL+'assessment-core/api/assessment-colors').json()
+    response['results'] = response.pop('items')
+    return response
+    

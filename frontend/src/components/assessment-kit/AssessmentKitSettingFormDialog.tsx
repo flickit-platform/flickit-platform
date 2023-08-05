@@ -19,13 +19,20 @@ import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
+interface IfetchAssessmentKitData {
+  about?: string;
+  id?: number;
+  summary?: string;
+  tags?: [];
+  title?: string;
+}
 interface IAssessmentKitSettingFormDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
-  fetchAssessmentKitQuery?: any;
-  tags?:any;
+  fetchAssessmentKitQuery: () => void;
+  fetchAssessmentKitData?: IfetchAssessmentKitData;
 }
 
 const AssessmentKitSettingFormDialog = (
@@ -38,7 +45,8 @@ const AssessmentKitSettingFormDialog = (
     onSubmitForm,
     context = {},
     openDialog,
-    tags,
+    fetchAssessmentKitData,
+    fetchAssessmentKitQuery,
     ...rest
   } = props;
   const { type, data = {} } = context;
@@ -79,6 +87,7 @@ const AssessmentKitSettingFormDialog = (
             );
       setLoading(false);
       onSubmitForm();
+      fetchAssessmentKitQuery();
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e) {
@@ -102,6 +111,27 @@ const AssessmentKitSettingFormDialog = (
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
           <Grid item xs={12} md={12}>
+            <InputFieldUC
+              name="title"
+              label={<Trans i18nKey="title" />}
+              defaultValue={fetchAssessmentKitData?.title || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <InputFieldUC
+              name="summary"
+              label={<Trans i18nKey="summary" />}
+              defaultValue={fetchAssessmentKitData?.summary || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <RichEditorField
+              name="about"
+              label={<Trans i18nKey="about" />}
+              defaultValue={fetchAssessmentKitData?.about || ""}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
             <AutocompleteAsyncField
               {...useConnectAutocompleteField({
                 service: (args, config) =>
@@ -109,23 +139,9 @@ const AssessmentKitSettingFormDialog = (
               })}
               name="tags"
               multiple={true}
-              defaultValue={tags}
+              defaultValue={fetchAssessmentKitData?.tags}
               searchOnType={false}
               label={<Trans i18nKey="tags" />}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <InputFieldUC
-              name="summary"
-              label={<Trans i18nKey="summary" />}
-              defaultValue={defaultValues.summary || ""}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <RichEditorField
-              name="about"
-              label={<Trans i18nKey="about" />}
-              defaultValue={defaultValues.about || ""}
             />
           </Grid>
         </Grid>

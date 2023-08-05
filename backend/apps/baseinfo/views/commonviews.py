@@ -1,7 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from drf_yasg.utils import swagger_auto_schema
 
+from baseinfo.services import commonservice , assessmentkitservice
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
-from baseinfo.models.metricmodels import Metric
+from baseinfo.models.metricmodels import Metric, OptionValue
 from baseinfo.serializers import commonserializers
 
 class QuestionnaireViewSet(ModelViewSet):
@@ -40,4 +46,42 @@ class QualityAttributeViewSet(ModelViewSet):
             return QualityAttribute.objects.all().order_by('index')
             
 
+class LoadOptionValueInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: commonserializers.OptionValueSerilizers(many=True)})
+    def get(self,request,answer_tamplate_id):
+        option_value = commonservice.get_option_value_with_answer_tamplate(answer_tamplate_id)
+        response = commonserializers.OptionValueSerilizers(option_value, many = True, ).data
+        return Response({'items' :response}, status = status.HTTP_200_OK)  
 
+class LoadAssessmentSubjectInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(many=True)})
+    def get(self,request,assessment_kit_id):
+        assessment_subject = commonservice.get_assessment_subject_with_assessment_kit(assessment_kit_id)
+        response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject, many = True).data
+        return Response({'items' :response}, status = status.HTTP_200_OK)  
+
+class LoadMetricInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: commonserializers.SimpleMetricSerializers(many=True)})
+    def get(self,request,quality_attribute_id):
+        metric = commonservice.get_metric_with_quality_attribute(quality_attribute_id)
+        response = commonserializers.SimpleMetricSerializers(metric, many = True).data
+        return Response({'items' :response}, status = status.HTTP_200_OK)   
+
+class LoadQualityAttributeInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: commonserializers.LoadQualityAttributeSerilizer(many=True)})
+    def get(self,request,assessment_subject_id):
+        quality_attribute = commonservice.get_quality_attribute_with_assessment_subject(assessment_subject_id)
+        response = commonserializers.LoadQualityAttributeSerilizer(quality_attribute, many = True).data
+        return Response({'items' :response}, status = status.HTTP_200_OK)    
+
+class LoadMetricImpactInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: commonserializers.LoadMetricImpactSerilizer(many=True)})
+    def get(self,request,metric_impact_id):
+        metric_impact = commonservice.get_metric_impact_with_id(metric_impact_id)
+        response = commonserializers.LoadMetricImpactSerilizer(metric_impact, many = True).data
+        return Response({'items' :response}, status = status.HTTP_200_OK)    

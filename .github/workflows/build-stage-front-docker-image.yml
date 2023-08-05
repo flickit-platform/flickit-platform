@@ -32,6 +32,6 @@ jobs:
       - name: Run script
         run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "stage" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND }}    
+          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND_STAGE }}
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND_STAGE }}    
     
