@@ -16,12 +16,12 @@ from assessmentplatform.settings import BASE_DIR, DSL_PARSER_URL_SERVICE
 
 from baseinfo.services import importassessmentkitservice , assessmentkitservice
 from baseinfo.serializers.assessmentkitserializers import ImportAssessmentKitSerializer
-from baseinfo.permissions import ManageExpertGroupPermission ,ManageAssessmentKitPermission
+from baseinfo.permissions import ManageExpertGroupPermission ,ManageAssessmentKitPermission , CoordinatorPermission
 
 
 class ImportAssessmentKitApi(APIView):
     serializer_class = ImportAssessmentKitSerializer
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, CoordinatorPermission]
     def post(self, request):
         serializer = ImportAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

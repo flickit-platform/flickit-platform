@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from baseinfo.serializers import expertgroupserializers 
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
-from baseinfo.permissions import ManageExpertGroupPermission
+from baseinfo.permissions import ManageExpertGroupPermission , CoordinatorPermission
 
 
 class ExpertGroupViewSet(mixins.CreateModelMixin,
@@ -18,6 +18,7 @@ class ExpertGroupViewSet(mixins.CreateModelMixin,
                    mixins.UpdateModelMixin,
                    GenericViewSet):
     permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return expertgroupserializers.ExpertGroupCreateSerilizers
