@@ -110,3 +110,7 @@ class LevelCompetenceSerilizer(serializers.ModelSerializer):
             model = LevelCompetence
             fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
 
+class LodeAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentKit
+        fields = ['id', 'title', 'last_modification_date']
