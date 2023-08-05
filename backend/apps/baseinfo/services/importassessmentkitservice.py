@@ -129,14 +129,15 @@ def __import_attributes(attributeModels):
         attribute.save()
 
 @transaction.atomic
-def __import_questions(questionModels, assessment_kit):
-    for model in questionModels:
-        question = Question()
-        question.title = model['title']
-        question.index = model['index']
-        question.may_not_be_applicable = model['mayNotBeApplicable']
-        question.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
-        question.save()
+def __import_metrics(metricModels, assessment_kit):
+    for model in metricModels:
+        metric = Metric()
+        metric.title = model['title']
+        metric.index = model['index']
+        if "mayNotBeApplicable" in model:
+            metric.may_not_be_applicable = model['mayNotBeApplicable']
+        metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
+        metric.save()
         
         for answer_model in model['answers']:
             answer = AnswerTemplate()
