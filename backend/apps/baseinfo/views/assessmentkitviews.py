@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
@@ -108,7 +109,7 @@ class UploadAssessmentKitApi(ModelViewSet):
 class AssessmentKitLikeApi(APIView):
     @transaction.atomic
     def post(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.like_assessment_kit(request.user.id, assessment_kit_id)
+        assessment_kit = assessmentkitservice.like_assessment_kit(request.user, assessment_kit_id)
         return Response({'likes': assessment_kit.likes.count()})
 
 class AssessmentKitInitFormApi(APIView):
@@ -136,6 +137,7 @@ class UpdateAssessmentKitApi(APIView):
 
 class LoadLevelCompetenceInternalApi(APIView):
     permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: LevelCompetenceSerilizer(many=True)})
     def get(self,request,maturity_level_id):
         level_competence = assessmentkitservice.get_level_competence_with_maturity_level(maturity_level_id)
         response = LevelCompetenceSerilizer(level_competence, many = True).data
@@ -143,6 +145,7 @@ class LoadLevelCompetenceInternalApi(APIView):
 
 class LoadMaturityLevelInternalApi(APIView):
     permission_classes = [AllowAny]
+    @swagger_auto_schema(responses={200: MaturityLevelSimpleSerializer(many=True)})
     def get(self,request,assessment_kit_id):
         maturity_level = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
         response = MaturityLevelSimpleSerializer(maturity_level, many = True).data

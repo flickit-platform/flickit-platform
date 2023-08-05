@@ -182,12 +182,16 @@ REST_FRAMEWORK = {
 }
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
+ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
+ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
+
+PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):

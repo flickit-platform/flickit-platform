@@ -134,6 +134,8 @@ def __import_metrics(metricModels, assessment_kit):
         metric = Metric()
         metric.title = model['title']
         metric.index = model['index']
+        if "mayNotBeApplicable" in model:
+            metric.may_not_be_applicable = model['mayNotBeApplicable']
         metric.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
         metric.save()
         
