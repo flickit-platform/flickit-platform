@@ -14,13 +14,13 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import {
   EAssessmentStatus,
-  metricActions,
-  useMetricContext,
-  useMetricDispatch,
+  questionActions,
+  useQuestionContext,
+  useQuestionDispatch,
   setEvidenceDescription,
-} from "@providers/MetricProvider";
+} from "@/providers/QuestionProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { IMetricInfo, TAnswer, TMetricsInfo } from "@types";
+import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -50,17 +50,17 @@ import { useQuery } from "@utils/useQuery";
 import formatDate from "@utils/formatDate";
 import useMenu from "@/utils/useMenu";
 import MoreActions from "../common/MoreActions";
-import { SubmitOnSelectCheckBox } from "./MetricContainer";
+import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
-interface IMetricCardProps {
-  metricInfo: IMetricInfo;
-  metricsInfo: TMetricsInfo;
+interface IQuestionCardProps {
+  questionInfo: IQuestionInfo;
+  questionsInfo: TQuestionsInfo;
 }
 
-export const MetricCard = (props: IMetricCardProps) => {
-  const { metricInfo, metricsInfo } = props;
-  const { title, answer_templates, index = 0, answer } = metricInfo;
-  const { metricIndex } = useMetricContext();
+export const QuestionCard = (props: IQuestionCardProps) => {
+  const { questionInfo, questionsInfo } = props;
+  const { title, answer_templates, index = 0, answer } = questionInfo;
+  const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export const MetricCard = (props: IMetricCardProps) => {
   }, []);
 
   useEffect(() => {
-    setDocumentTitle(`${t("question")} ${metricIndex}: ${title}`);
+    setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
   }, [title]);
 
   return (
@@ -116,9 +116,9 @@ export const MetricCard = (props: IMetricCardProps) => {
           </Box>
           <AnswerTemplate
             abortController={abortController}
-            metricInfo={metricInfo}
-            metricIndex={metricIndex}
-            metricsInfo={metricsInfo}
+            questionInfo={questionInfo}
+            questionIndex={questionIndex}
+            questionsInfo={questionsInfo}
           />
         </Box>
       </Paper>
@@ -133,7 +133,7 @@ export const MetricCard = (props: IMetricCardProps) => {
             alignItems: { xs: "stretch", md: "flex-end" },
           }}
         >
-          <AnswerDetails metricInfo={metricInfo} />
+          <AnswerDetails questionInfo={questionInfo} />
         </Box>
       </Box>
     </Box>
@@ -141,22 +141,22 @@ export const MetricCard = (props: IMetricCardProps) => {
 };
 
 const AnswerTemplate = (props: {
-  metricInfo: IMetricInfo;
-  metricIndex: number;
-  metricsInfo: TMetricsInfo;
+  questionInfo: IQuestionInfo;
+  questionIndex: number;
+  questionsInfo: TQuestionsInfo;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const { submitOnAnswerSelection, isSubmitting, evidences } = useMetricContext();
-  const { metricInfo, metricIndex, metricsInfo, abortController } = props;
-  const { answer_templates, answer } = metricInfo;
-  const { total_number_of_metrics, resultId } = metricsInfo;
+  const { submitOnAnswerSelection, isSubmitting, evidences } = useQuestionContext();
+  const { questionInfo, questionIndex, questionsInfo, abortController } = props;
+  const { answer_templates, answer } = questionInfo;
+  const { total_number_of_questions, resultId } = questionsInfo;
   const { service } = useServiceContext();
-  const dispatch = useMetricDispatch();
+  const dispatch = useQuestionDispatch();
   const { questionnaireId = "" } = useParams();
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
-  const isLastMetric = metricIndex == total_number_of_metrics;
-  const isSelectedValueTheSameAsAnswer = metricInfo?.answer?.value == value?.value;
+  const isLastQuestion = questionIndex == total_number_of_questions;
+  const isSelectedValueTheSameAsAnswer = questionInfo?.answer?.value == value?.value;
   const changeHappened = useRef(false);
   const onChange = (event: React.MouseEvent<HTMLElement>, v: TAnswer | null) => {
     if (isSelectedValueTheSameAsAnswer) {
@@ -166,36 +166,36 @@ const AnswerTemplate = (props: {
   };
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
-    dispatch(metricActions.setIsSubmitting(true));
+    dispatch(questionActions.setIsSubmitting(true));
     try {
       const res = await service.submitAnswer(
         {
           resultId,
           questionnaireId,
           data: {
-            metric_id: metricInfo?.id,
+            question_id: questionInfo?.id,
             answer: value?.id || null,
           },
         },
         { signal: abortController.current.signal }
       );
-      dispatch(metricActions.setIsSubmitting(false));
-      dispatch(metricActions.setMetricInfo({ ...metricInfo, answer: value }));
-      if (isLastMetric) {
-        dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.DONE));
+      dispatch(questionActions.setIsSubmitting(false));
+      dispatch(questionActions.setQuestionInfo({ ...questionInfo, answer: value }));
+      if (isLastQuestion) {
+        dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
         navigate(`../completed`, { replace: true });
         return;
       }
       if (value) {
-        dispatch(metricActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS));
+        dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS));
       }
-      const newMetricIndex = metricIndex + 1;
-      dispatch(metricActions.goToMetric(newMetricIndex));
-      navigate(`../${newMetricIndex}`, {
+      const newQuestionIndex = questionIndex + 1;
+      dispatch(questionActions.goToQuestion(newQuestionIndex));
+      navigate(`../${newQuestionIndex}`, {
         replace: true,
       });
     } catch (e) {
-      dispatch(metricActions.setIsSubmitting(false));
+      dispatch(questionActions.setIsSubmitting(false));
       const err = e as ICustomError;
       toastError(err);
     }
@@ -305,10 +305,10 @@ const AnswerTemplate = (props: {
   );
 };
 
-const AnswerDetails = ({ metricInfo }: any) => {
+const AnswerDetails = ({ questionInfo }: any) => {
   const dialogProps = useDialog();
   const evidencesQueryData = useQuery({
-    service: (args = { metricId: metricInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
+    service: (args = { questionId: questionInfo.id, assessmentId }, config) => service.fetchEvidences(args, config),
     toastError: true,
   });
   const hasSetCollapse = useRef(false);
@@ -427,7 +427,7 @@ const AnswerDetails = ({ metricInfo }: any) => {
               width: "100%",
             }}
           >
-            <Evidence {...dialogProps} metricInfo={metricInfo} evidencesQueryData={evidencesQueryData} />
+            <Evidence {...dialogProps} questionInfo={questionInfo} evidencesQueryData={evidencesQueryData} />
           </Box>
         </Box>
       </Collapse>
@@ -438,7 +438,7 @@ const AnswerDetails = ({ metricInfo }: any) => {
 const Evidence = (props: any) => {
   const { service } = useServiceContext();
   const { onClose: closeDialog, openDialog, ...rest } = props;
-  const { metricInfo, evidencesQueryData } = props;
+  const { questionInfo, evidencesQueryData } = props;
   const { assessmentId = "" } = useParams();
   const [evidenceId, setEvidenceId] = useState(null);
   const formMethods = useForm({ shouldUnregister: true });
@@ -452,7 +452,7 @@ const Evidence = (props: any) => {
     try {
       await addEvidence.query({
         description: data.evidence,
-        metricId: metricInfo.id,
+        questionId: questionInfo.id,
         assessmentId,
         id: evidenceId,
       });
@@ -503,7 +503,7 @@ const Evidence = (props: any) => {
                   item={item}
                   setEvidenceId={setEvidenceId}
                   evidencesQueryData={evidencesQueryData}
-                  metricInfo={metricInfo}
+                  questionInfo={questionInfo}
                   assessmentId={assessmentId}
                 />
               ));

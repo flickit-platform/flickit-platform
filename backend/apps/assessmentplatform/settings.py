@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 
-__version__ = "0.7.0-SNAPSHOT"
+__version__ = "0.10.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -20,7 +20,7 @@ ALLOWED_HOSTS.extend(
 
 TIME_ZONE = "UTC"
 
-USE_TZ = True
+USE_TZ = False
 
 LANGUAGE_CODE = "en"
 
@@ -216,7 +216,7 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
     ("BaseInfo", ("baseinfo.AssessmentKit", "baseinfo.Questionnaire",
-    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Metric", "baseinfo.AssessmentKitTag")),
+    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Question", "baseinfo.AssessmentKitTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
        "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),

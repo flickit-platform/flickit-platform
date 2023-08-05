@@ -6,7 +6,7 @@ from model_bakery import baker
 from baseinfo.views import assessmentkitviews
 from baseinfo.models.assessmentkitmodels import ExpertGroup
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
-from baseinfo.models.metricmodels import Metric, MetricImpact
+from baseinfo.models.questionmodels import Question, QuestionImpact
 from assessment.models import AssessmentKit, AssessmentProject
 from baseinfo.models.assessmentkitmodels import ExpertGroup ,AssessmentKitLike 
 from account.models import User
@@ -350,19 +350,19 @@ class Test_Analyse_AssessmentKit:
         
         assert response.status_code == status.HTTP_200_OK
         analyze_list = response.data
-        assert analyze_list[0]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[0]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][2]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][5]['attribute_metric_number'] == 1
+        assert analyze_list[0]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[0]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][2]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][5]['attribute_question_number'] == 1
 
-        assert analyze_list[1]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[1]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][2]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[1]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][5]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[1]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][2]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[1]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][5]['attribute_question_number'] == 2
     
     
     def test_analyse_assessment_kit_when_user_is_member(self, api_client, init_data, create_user, create_expertgroup):
@@ -384,19 +384,19 @@ class Test_Analyse_AssessmentKit:
         
         assert response.status_code == status.HTTP_200_OK
         analyze_list = response.data
-        assert analyze_list[0]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[0]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][2]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[0]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[0]['level_analysis'][5]['attribute_metric_number'] == 1
+        assert analyze_list[0]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[0]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][2]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[0]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[0]['level_analysis'][5]['attribute_question_number'] == 1
 
-        assert analyze_list[1]['level_analysis'][0]['attribute_metric_number'] == 0
-        assert analyze_list[1]['level_analysis'][1]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][2]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][3]['attribute_metric_number'] == 3
-        assert analyze_list[1]['level_analysis'][4]['attribute_metric_number'] == 2
-        assert analyze_list[1]['level_analysis'][5]['attribute_metric_number'] == 2
+        assert analyze_list[1]['level_analysis'][0]['attribute_question_number'] == 0
+        assert analyze_list[1]['level_analysis'][1]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][2]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][3]['attribute_question_number'] == 3
+        assert analyze_list[1]['level_analysis'][4]['attribute_question_number'] == 2
+        assert analyze_list[1]['level_analysis'][5]['attribute_question_number'] == 2
     
     
     def test_analyse_assessment_kit_when_user_not_member(self, api_client, init_data, create_user, create_expertgroup):
@@ -699,7 +699,7 @@ class TestExpertGroupeListAssessmentKit:
         api = APIRequestFactory()
         request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
         force_authenticate(request, user = user2)
-        view = assessmentkitviews.AssessmentKitListApi.as_view()
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
         resp = view(request, expert_group.id)
         
         results = resp.data["results"][0]
@@ -727,7 +727,7 @@ class TestExpertGroupeListAssessmentKit:
         api = APIRequestFactory()
         request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
         force_authenticate(request, user = user1)
-        view = assessmentkitviews.AssessmentKitListApi.as_view()
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
         resp = view(request, expert_group.id)
         
         results = resp.data["results"]

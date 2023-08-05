@@ -2,7 +2,7 @@ from statistics import mean
 from assessment.models import AssessmentResult
 from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY
 from assessment.fixture.dictionary import Dictionary
-from assessment.services import metricstatistic
+from assessment.services import questionstatistic
 
 from baseinfo.services import maturitylevelservices
 
@@ -16,7 +16,7 @@ def calculate_subjects_info(result: AssessmentResult):
         subject_info = extract_base_info(subject)
         calculate_progress_param(result, subject, subject_info)
 
-        if subject_info['total_answered_metric_number'] <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
+        if subject_info['total_answered_question_number'] <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
             subject_info.add("status", "Not Calculated")
         else:
             calculate_subject_status(quality_attribute_values, subject, subject_info)
@@ -41,13 +41,13 @@ def extract_base_info(subject):
     return subject_info
 
 def calculate_progress_param(result, subject, subject_info):
-    total_metric_number = metricstatistic.calculate_total_metric_number_by_subject(subject)
-    total_answered_metric_number = metricstatistic.calculate_answered_metric_by_subject(result, subject)
+    total_question_number = questionstatistic.calculate_total_question_number_by_subject(subject)
+    total_answered_question_number = questionstatistic.calculate_answered_question_by_subject(result, subject)
     
-    if total_metric_number != 0:
-        subject_info.add("progress", ((total_answered_metric_number / total_metric_number) * 100))
+    if total_question_number != 0:
+        subject_info.add("progress", ((total_answered_question_number / total_question_number) * 100))
     else:
         subject_info.add("progress", 0)
-    subject_info.add("total_metric_number", total_metric_number)
-    subject_info.add("total_answered_metric_number", total_answered_metric_number) 
+    subject_info.add("total_question_number", total_question_number)
+    subject_info.add("total_answered_question_number", total_answered_question_number) 
 

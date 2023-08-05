@@ -20,15 +20,15 @@ class EvidenceCreateSerializer(serializers.ModelSerializer):
 
 class AddEvidenceApi(APIView):
     @transaction.atomic
-    def post(self, request, metric_id, assessment_id):
+    def post(self, request, question_id, assessment_id):
         evidence_relation = None
         try:
-            evidence_relation = EvidenceRelation.objects.get(metric_id = metric_id, assessment_id = assessment_id)
+            evidence_relation = EvidenceRelation.objects.get(question_id = question_id, assessment_id = assessment_id)
         except EvidenceRelation.DoesNotExist:
-            evidence_relation = EvidenceRelation.objects.create(metric_id = metric_id, assessment_id = assessment_id)
+            evidence_relation = EvidenceRelation.objects.create(question_id = question_id, assessment_id = assessment_id)
 
         evidence_relation.assessment_id = assessment_id
-        evidence_relation.metric_id = metric_id
+        evidence_relation.question_id = question_id
         evidence_relation.save()
 
         evidence = Evidence()
@@ -59,11 +59,11 @@ class EvidenceDeleteAPI(APIView):
         return Response({'message': 'Evidence deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
 class EvidenceListApi(APIView):
-    def get (self, request, metric_id, assessment_id):
+    def get (self, request, question_id, assessment_id):
         content = {}
         content['evidences'] = []
         try:
-            evidence_relation = EvidenceRelation.objects.get(assessment_id = assessment_id, metric_id = metric_id)
+            evidence_relation = EvidenceRelation.objects.get(assessment_id = assessment_id, question_id = question_id)
         except EvidenceRelation.DoesNotExist:
             return Response(content)
         
