@@ -13,7 +13,7 @@ from assessment.serializers.commonserializers import QualityAttributeValueSerial
 from assessment.models import AssessmentProject
 from assessment.serializers import projectserializers
 from assessment.fixture.dictionary import Dictionary
-from assessment.services import metricstatistic, attributesstatistics
+from assessment.services import questionstatistic, attributesstatistics
 
 # TODO check assessment assessment_kit is the same in compare
 def validate_assessment_compare(assessment_projects):
@@ -83,7 +83,7 @@ def extract_progress(assessment_projects):
     progress_list = []
     progress_infos.add('title', 'Progress')
     for assessment_project in assessment_projects:
-        progress_list.append(metricstatistic.extract_total_progress(assessment_project.get_assessment_result()))
+        progress_list.append(questionstatistic.extract_total_progress(assessment_project.get_assessment_result()))
     progress_infos.add('items', progress_list)
     return progress_infos
 
@@ -186,7 +186,7 @@ def extract_subject_progress_info(assessment_projects, subject):
     return progress_infos
 
 def calculate_subject_progress(assessment_project, subject):
-    return metricstatistic.extract_subject_total_progress(assessment_project.get_assessment_result(), subject)
+    return questionstatistic.extract_subject_total_progress(assessment_project.get_assessment_result(), subject)
 
 def extract_subject_maturity_level_info(assessment_projects, subject):
     maturity_level_infos = Dictionary()

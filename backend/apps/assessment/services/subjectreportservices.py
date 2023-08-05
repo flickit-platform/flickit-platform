@@ -8,7 +8,7 @@ from baseinfo.services import maturitylevelservices
 from assessment.models import AssessmentResult
 from assessment.services.questionnairereport import QuestionnaireReportInfo
 from assessment.fixture.common import ANSWERED_QUESTION_NUMBER_BOUNDARY
-from assessment.services import metricstatistic
+from assessment.services import questionstatistic
 
 def calculate_report(assessment_subject_pk, assessment_result_id, quality_attribute_values):
     report = {}
@@ -20,16 +20,16 @@ def calculate_report(assessment_subject_pk, assessment_result_id, quality_attrib
     report.update(base_info_report)
 
     questionnaire_report_info = extract_questionnaire_info(questionnaires, assessment_result.id)
-    report['total_metric_number'] = questionnaire_report_info.total_metric_number
-    report['total_answered_metric'] = questionnaire_report_info.total_answered_metric
-    if questionnaire_report_info.total_metric_number != 0:
-        report['progress'] = int((report['total_answered_metric'] / report['total_metric_number']) * 100)
+    report['total_question_number'] = questionnaire_report_info.total_question_number
+    report['total_answered_question'] = questionnaire_report_info.total_answered_question
+    if questionnaire_report_info.total_question_number != 0:
+        report['progress'] = int((report['total_answered_question'] / report['total_question_number']) * 100)
     else:
         report['progress'] = 0
   
-    report['total_progress'] = metricstatistic.extract_total_progress(assessment_result)
+    report['total_progress'] = questionstatistic.extract_total_progress(assessment_result)
     
-    if questionnaire_report_info.total_answered_metric <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
+    if questionnaire_report_info.total_answered_question <= ANSWERED_QUESTION_NUMBER_BOUNDARY:
         report['status'] = 'Not Calculated'
         report['no_insight_yet_message'] = 'To view insights, you need to answer more questions'
         report['results'] = None
