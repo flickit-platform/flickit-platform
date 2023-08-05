@@ -6,7 +6,7 @@ from baseinfo.serializers.assessmentkitserializers import MaturityLevelSimpleSer
 
 from account.serializers.spaceserializers import SpaceSimpleSerializer
 
-from assessment.services.metricstatistic import extract_total_progress
+from assessment.services.questionstatistic import extract_total_progress
 from assessment.models import AssessmentProject, AssessmentResult
 from assessment.serializers.commonserializers import ColorSerilizer
 

@@ -75,7 +75,7 @@ def extract_questionnaires_infos(assessment_kit: AssessmentKit):
         questionnaire_infos['title'] = questionnaire.title
         questionnaire_infos['description'] = questionnaire.description
         questionnaire_infos['report_infos'] = __extract_questionnaire_report_info(questionnaire)
-        questionnaire_infos['questions'] = __extract_questionnaire_metric_info(questionnaire) 
+        questionnaire_infos['questions'] = __extract_questionnaire_question_info(questionnaire) 
         questionnairesInfos.append(questionnaire_infos)
     return questionnairesInfos
 
@@ -111,7 +111,7 @@ def extract_asessment_kit_report_infos(assessment_kit):
     subjects = assessment_kit.assessment_subjects.all()
     assessmentkitInfos.append(__extract_asessment_kit_questionnaire_count(assessment_kit.questionnaires))
     assessmentkitInfos.append(__extract_asessment_kit_attribute_count(subjects))
-    assessmentkitInfos.append(__extract_asessment_kit_metric_count(assessment_kit.questionnaires))
+    assessmentkitInfos.append(__extract_asessment_kit_question_count(assessment_kit.questionnaires))
     assessmentkitInfos.append(__extract_asessment_kit_subjects(subjects))
     assessmentkitInfos.append(__extract_asessment_kit_tags(assessment_kit.tags.all()))
     return assessmentkitInfos
@@ -122,34 +122,34 @@ def __extract_subject_attributes_info(attributes_qs):
         att_info = {}
         att_info['title'] = att.title
         att_info['description'] = att.description
-        att_info['questions'] = __extract_related_attribute_metrics(att)
+        att_info['questions'] = __extract_related_attribute_questions(att)
         attributes_infos.append(att_info)
     return attributes_infos
 
-def __extract_related_attribute_metrics(att):
-    impacts = att.metric_impacts.all()
+def __extract_related_attribute_questions(att):
+    impacts = att.question_impacts.all()
     questions = []
     for impact in impacts:
-        metric = {}
-        metric['title'] = impact.metric.title
-        # metric['maturity_level'] = impact.maturity_level.value
-        # metric['options'] = __extract_metric_options(impact.metric)
+        question = {}
+        question['title'] = impact.question.title
+        # question['maturity_level'] = impact.maturity_level.value
+        # question['options'] = __extract_question_options(impact.question)
         options = []
-        for at in impact.metric.answer_templates.all():
+        for at in impact.question.answer_templates.all():
             option = {}
             option['title'] = at.caption
             option_values = []
             for ov in at.option_values.all():
-                if ov.metric_impact.quality_attribute == att:
+                if ov.question_impact.quality_attribute == att:
                     option_value = {}
                     option_value['value'] = ov.value
-                    option_value['maturity_level'] = ov.metric_impact.maturity_level.value
+                    option_value['maturity_level'] = ov.question_impact.maturity_level.value
                     option_values.append(option_value)
             option['option_values'] = option_values
             options.append(option)
-        metric['options'] = options
-        if metric not in questions:
-            questions.append(metric)
+        question['options'] = options
+        if question not in questions:
+            questions.append(question)
     return questions
 
 def __extratc_subject_report_info(subject):
@@ -158,29 +158,29 @@ def __extratc_subject_report_info(subject):
     report_infos.append({'title' : 'Index of the {}'.format(subject.title), 'item': subject.index})
     return report_infos
 
-def __extract_questionnaire_metric_info(questionnaire):
+def __extract_questionnaire_question_info(questionnaire):
     questions = []
-    for metric in questionnaire.metric_set.all():
+    for question in questionnaire.question_set.all():
         info = {}
-        info['title'] = metric.title
-        info['inedx'] = metric.index
-        info['listOfOptions'] = __extract_metric_options(metric)
-        info['relatedAttributes'] = __extratc_metric_related_attributes(metric)
+        info['title'] = question.title
+        info['inedx'] = question.index
+        info['listOfOptions'] = __extract_question_options(question)
+        info['relatedAttributes'] = __extratc_question_related_attributes(question)
         questions.append(info)
     return questions
 
-def __extratc_metric_related_attributes(metric):
+def __extratc_question_related_attributes(question):
     relatedAttributes = []
-    for impact in metric.metric_impacts.all():
+    for impact in question.question_impacts.all():
         relatedAttributes.append({'title' : impact.quality_attribute.title, 'item': impact.maturity_level.value})
     return relatedAttributes
 
-def __extract_metric_options(metric):
-    return [answer.caption for answer in metric.answer_templates.all()]
+def __extract_question_options(question):
+    return [answer.caption for answer in question.answer_templates.all()]
 
 def __extract_questionnaire_report_info(questionnaire):
     report_infos = []
-    report_infos.append({'title' : 'Number of questions', 'item': questionnaire.metric_set.count()})
+    report_infos.append({'title' : 'Number of questions', 'item': questionnaire.question_set.count()})
     report_infos.append({'title' : 'Questionnaire index', 'item': questionnaire.index})
     report_infos.append({'title' : 'Related subjects', 'item': [subject.title for subject in questionnaire.assessment_subjects.all()]})
     return report_infos
@@ -196,11 +196,11 @@ def __extract_asessment_kit_tags(tags):
 def __extract_asessment_kit_questionnaire_count(questionnaires):
     return {'title' : 'Questionnaires count', 'item': questionnaires.count()}
 
-def __extract_asessment_kit_metric_count(questionnaires):
-    total_metric_count = 0
+def __extract_asessment_kit_question_count(questionnaires):
+    total_question_count = 0
     for questionnaire in questionnaires.all():
-        total_metric_count += questionnaire.metric_set.count()
-    return {'title' : 'Total questions count', 'item': total_metric_count}
+        total_question_count += questionnaire.question_set.count()
+    return {'title' : 'Total questions count', 'item': total_question_count}
 
 def __extract_asessment_kit_attribute_count(subjects):
     attributes = []
@@ -259,16 +259,16 @@ def analyze(assessment_kit_id):
         attribute_analyse['title'] = att['title']
         level_analysis = []
         for ml in assessment_kit_maturity_levels:
-            attribute_metric_by_level = {}
-            attribute_metric_by_level['level_value'] = ml.value
-            attribute_metric_number_by_level = 0
+            attribute_question_by_level = {}
+            attribute_question_by_level['level_value'] = ml.value
+            attribute_question_number_by_level = 0
             attribute = QualityAttribute.objects.get(id = att['id'])
-            for impact in attribute.metric_impacts.all():
+            for impact in attribute.question_impacts.all():
                 if impact.maturity_level.value == ml.value:
-                    attribute_metric_number_by_level = attribute_metric_number_by_level + 1
+                    attribute_question_number_by_level = attribute_question_number_by_level + 1
             
-            attribute_metric_by_level['attribute_metric_number'] = attribute_metric_number_by_level
-            level_analysis.append(attribute_metric_by_level)
+            attribute_question_by_level['attribute_question_number'] = attribute_question_number_by_level
+            level_analysis.append(attribute_question_by_level)
         attribute_analyse['level_analysis'] = level_analysis
         output.append(attribute_analyse)
             

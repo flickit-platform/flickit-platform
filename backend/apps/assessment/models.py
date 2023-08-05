@@ -2,8 +2,8 @@ from uuid import uuid4
 from django.db import models
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
-from baseinfo.models.metricmodels import Metric
-from baseinfo.models.metricmodels import AnswerTemplate
+from baseinfo.models.questionmodels import Question
+from baseinfo.models.questionmodels import AnswerTemplate
 from baseinfo.models.basemodels import QualityAttribute
 from account.models import Space, User
 
@@ -63,16 +63,16 @@ class QualityAttributeValue(models.Model):
     maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='quality_attribute_values', null = True)
 
 
-class MetricValue(models.Model):
+class QuestionValue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4)
-    assessment_result = models.ForeignKey(AssessmentResult, on_delete=models.CASCADE, related_name='metric_values')
-    metric = models.ForeignKey(Metric, on_delete=models.CASCADE, related_name='metric_values')
+    assessment_result = models.ForeignKey(AssessmentResult, on_delete=models.CASCADE, related_name='question_values')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question_values')
     answer = models.ForeignKey(AnswerTemplate, on_delete=models.CASCADE, null=True)
 
 
 class EvidenceRelation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4)
-    metric = models.ForeignKey(Metric, on_delete=models.CASCADE, related_name='evidences')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='evidences')
     assessment = models.ForeignKey(AssessmentProject, on_delete=models.CASCADE, related_name='evidences')
     
 
