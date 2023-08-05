@@ -55,7 +55,20 @@ class AssessmentKitAnalyzeApi(APIView):
         result = assessmentkitservice.analyze(assessment_kit_id)
         return Response(result.data, status = status.HTTP_200_OK)
 
+class AssessmentKitListForExpertGroupApi(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, expert_group_id):
+        results = assessmentkitservice.get_list_assessmnet_kit_for_expert_group(request.user, expert_group_id)
+        if len(results) == 2:
+            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            unpublished = LodeAssessmentKitForExpertGroupSerilizer(results["unpublished"], many = True).data
+            return Response({'results' : [{"published" :published},{"unpublished" :unpublished}]}, status = status.HTTP_200_OK)
+        else:
+            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            return Response({'results' : [{"published" :published}]}, status = status.HTTP_200_OK)
+        
 class AssessmentKitListApi(APIView):
+    permission_classes = [IsAuthenticated]
     @is_expert
     def get(self, request, expert_group_id):
         expert_group = expertgroupservice.load_expert_group(expert_group_id)

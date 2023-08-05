@@ -475,3 +475,75 @@ class TestUpdateAssessmentKit:
             ]
         assert resp.status_code == status.HTTP_200_OK
         assert resp1.data == data
+
+
+@pytest.mark.django_db
+class TestExpertGroupeListAssessmentKit:
+    def test_get_list_assessment_kit_when_user_unauthorized(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        
+        api = APIRequestFactory()
+        request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
+        resp = view(request, expert_group.id)
+
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+    
+    def test_get_list_assessment_kit_when_user_not_member_expert_group(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit1 = baker.make(AssessmentKit)
+        assessment_kit1.expert_group = expert_group
+        assessment_kit1.is_active = True
+        assessment_kit1.save()
+        assessment_kit2 = baker.make(AssessmentKit)
+        assessment_kit2.expert_group = expert_group
+        assessment_kit2.is_active = False
+        assessment_kit2.save()
+        
+
+        api = APIRequestFactory()
+        request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
+        force_authenticate(request, user = user2)
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
+        resp = view(request, expert_group.id)
+        
+        results = resp.data["results"][0]
+        assert resp.status_code == status.HTTP_200_OK
+        assert results["published"][0]["id"] == assessment_kit1.id
+        assert ("unpublished" in results) == False
+        
+    
+    
+    def test_get_list_assessment_kit_when_user_member_expert_group(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit1 = baker.make(AssessmentKit)
+        assessment_kit1.expert_group = expert_group
+        assessment_kit1.is_active = True
+        assessment_kit1.save()
+        assessment_kit2 = baker.make(AssessmentKit)
+        assessment_kit2.expert_group = expert_group
+        assessment_kit2.is_active = False
+        assessment_kit2.save()
+        
+        api = APIRequestFactory()
+        request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
+        force_authenticate(request, user = user1)
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
+        resp = view(request, expert_group.id)
+        
+        results = resp.data["results"]
+        assert resp.status_code == status.HTTP_200_OK
+        assert results[0]["published"][0]["id"] == assessment_kit1.id
+        assert results[1]["unpublished"][0]["id"] == assessment_kit2.id
