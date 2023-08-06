@@ -49,7 +49,7 @@ class TestCreateExpertGroup:
 class TestAddUserInExpertGroup:
     def test_add_user_in_expertgroup_when_user_unauthorized(self):
         api = APIRequestFactory()
-        request = api.post('baseinfo/expertgroups/3', {}, format='json')
+        request = api.post('baseinfo/addexpertgroup/3', {}, format='json')
         view = expertgroupviews.AddUserToExpertGroupApi.as_view()
         resp = view(request)
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
@@ -59,7 +59,7 @@ class TestAddUserInExpertGroup:
         user2 = create_user(email = "test2@test.com" )
         user3 = create_user(email = "test3@test.com" )
         permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
+        user2.user_permissions.add(permission)
         expert_group = create_expertgroup(ExpertGroup, user1)
         
         api = APIRequestFactory()
@@ -67,13 +67,13 @@ class TestAddUserInExpertGroup:
         force_authenticate(request, user = user2)
         view = expertgroupviews.AddUserToExpertGroupApi.as_view()
         resp = view(request, expert_group_id = expert_group.id)
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
         
         expert_group.users.add(user2)
         request = api.post(f'baseinfo/addexpertgroup/{expert_group.id}', {'email': 'test3@test.com'}, format='json')
         force_authenticate(request, user = user2)
         view = expertgroupviews.AddUserToExpertGroupApi.as_view()
         resp = view(request, expert_group_id = expert_group.id)
-
 
         assert resp.status_code == status.HTTP_403_FORBIDDEN
 

@@ -67,7 +67,7 @@ class ExpertGroupAccessViewSet(mixins.RetrieveModelMixin,
 
 class AddUserToExpertGroupApi(APIView):
     serializer_class = expertgroupserializers.ExpertGroupGiveAccessSerializer
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+    permission_classes = [IsAuthenticated, CoordinatorPermission]
     def post(self, request, expert_group_id):
         serializer = expertgroupserializers.ExpertGroupGiveAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
