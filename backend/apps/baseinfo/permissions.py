@@ -49,7 +49,6 @@ class ManageAssessmentKitPermission(BasePermission):
             return self.check_current_user_is_member_of_expert_group(current_user, assessment_kit.expert_group_id)
         
 
-
     def check_current_user_is_member_of_expert_group(self, current_user, expert_group_id):
         expert_group = load_model(ExpertGroup, expert_group_id)
         return current_user.has_perm('baseinfo.manage_expert_group') and expert_group.users.filter(id = current_user.id).exists()
@@ -63,7 +62,10 @@ class CoordinatorPermission(BasePermission):
                 if request.method == 'DELETE':
                     assessment_kit = load_model(AssessmentKit, view.kwargs.get('pk'))
                     return self.check_current_user_is_owner_of_expert_group(current_user, assessment_kit.expert_group.id)
-                
+        if 'addexpertgroup' in request.build_absolute_uri():
+            expert_group_id = view.kwargs.get('expert_group_id')
+            return self.check_current_user_is_owner_of_expert_group(current_user, expert_group_id) 
+
         assessment_kit = load_model(AssessmentKit, view.kwargs.get('assessment_kit_id'))
         return self.check_current_user_is_owner_of_expert_group(current_user, assessment_kit.expert_group_id)
         
