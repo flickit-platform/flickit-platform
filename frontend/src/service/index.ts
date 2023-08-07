@@ -475,7 +475,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args || {};
-      return axios.delete(`/baseinfo/importassessmentkit/${id}/`, config);
+      return axios.delete(`/baseinfo/assessmentkits/${id}/`, config);
     },
     uploadAssessmentKitPhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.post(

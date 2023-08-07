@@ -60,6 +60,8 @@ class LoadAssessmentSubjectInternalApi(APIView):
     @swagger_auto_schema(responses={200: commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(many=True)})
     def get(self,request,assessment_kit_id):
         assessment_subject = commonservice.get_assessment_subject_with_assessment_kit(assessment_kit_id)
+        if assessment_subject == False:
+            return Response({ "code": "NOT_FOUND",'message' :"'assessment_kit_id' does not exist"}, status = status.HTTP_400_BAD_REQUEST)
         response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)  
 
