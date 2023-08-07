@@ -4,6 +4,7 @@ import json
 from rest_framework import status
 from rest_framework.test import APIRequestFactory 
 from baseinfo.views import assessmentkitviews , commonviews
+from baseinfo.models.questionmodels import Question
 
 
 @pytest.mark.django_db
@@ -242,3 +243,35 @@ class TestLoadQuestionImpactWithQuestionImpactId:
         
         assert  resp.status_code == status.HTTP_404_NOT_FOUND
         assert  resp.data["message"] == "Object does not exists"
+
+
+@pytest.mark.django_db
+class TestLoadQuestionsWithAssessmentKitId:
+    def test_load_questions_when_assessment_kit_when_assessment_kit_exist(self,init_data):
+        #init data
+        base_info = init_data()
+        
+        #create request and send request
+        assessment_kit_id = base_info['assessment_kit'].id
+        api = APIRequestFactory()
+        request = api.get(f'/api/internal/v1/assessment-kits/{assessment_kit_id}/questions/', {}, format='json')
+        view = commonviews.LoadQuestionsInternalApi.as_view()
+        resp = view(request,assessment_kit_id)
+        count = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).count()
+        #responses testing
+        assert  resp.status_code == status.HTTP_200_OK 
+        assert  resp.data["count"] == count
+        assert  "next" in resp.data
+        assert  "previous" in resp.data
+
+    
+    def test_load_questions_when_assessment_kit_when_assessment_kit_not_exist(self):
+        api = APIRequestFactory()
+        request = api.get(f'/api/internal/v1/assessment-kits/1000/questions/', {}, format='json')
+        view = commonviews.LoadQuestionsInternalApi.as_view()
+        resp = view(request,1000)
+        
+        assert  resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert  resp.data["message"] == "'assessment_kit_id' does not exist"
+        assert  resp.data["code"] == "NOT_FOUND"
+    

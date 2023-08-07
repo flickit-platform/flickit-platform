@@ -90,3 +90,14 @@ class LoadQuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact
         fields = '__all__'
+
+class SimpleLoadQuestionImpactSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionImpact
+        fields = ['id','weight','maturity_level_id','quality_attribute_id']
+
+class SimpleLoadQuestionsSerilizer(serializers.ModelSerializer):
+    question_impacts = SimpleLoadQuestionImpactSerilizer(many=True)
+    class Meta:
+        model = Question
+        fields = ['id','question_impacts']
