@@ -24,15 +24,24 @@ interface IAssessmentKitListItemProps {
     is_active: boolean;
   };
   fetchAssessmentKits?: TQueryFunction;
-  fetchUnpublishedAssessmentKits?:TQueryFunction;
+  fetchUnpublishedAssessmentKits?: TQueryFunction;
   link?: string;
   hasAccess?: boolean;
   is_member?: boolean;
+  is_active?: boolean;
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
-  const { data, fetchAssessmentKits,fetchUnpublishedAssessmentKits, link, hasAccess,is_member } = props;
-  const { id, title, last_modification_date, is_active } = data || {};
+  const {
+    data,
+    fetchAssessmentKits,
+    fetchUnpublishedAssessmentKits,
+    link,
+    hasAccess,
+    is_member,
+    is_active,
+  } = props;
+  const { id, title, last_modification_date } = data || {};
   return (
     <Box
       sx={{
@@ -80,13 +89,28 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           </Typography>
         </Box>
 
-        <Box ml="auto" sx={{ ...styles.centerV, color: "#525252" }} alignSelf="stretch">
+        <Box
+          ml="auto"
+          sx={{ ...styles.centerV, color: "#525252" }}
+          alignSelf="stretch"
+        >
           {is_active ? (
-            <Chip label={<Trans i18nKey="published" />} color="success" size="small" />
+            <Chip
+              label={<Trans i18nKey="published" />}
+              color="success"
+              size="small"
+            />
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Actions assessment_kit={data} fetchAssessmentKits={fetchAssessmentKits} fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits} hasAccess={hasAccess} is_member={is_member} />
+          <Actions
+            assessment_kit={data}
+            fetchAssessmentKits={fetchAssessmentKits}
+            fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits}
+            hasAccess={hasAccess}
+            is_member={is_member}
+            is_active={is_active}
+          />
         </Box>
       </Box>
     </Box>
@@ -94,8 +118,20 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { assessment_kit, fetchAssessmentKits,fetchUnpublishedAssessmentKits, dialogProps, setUserInfo, hasAccess ,is_member} = props;
-  const { id, current_user_delete_permission = false, is_active = false } = assessment_kit;
+  const {
+    assessment_kit,
+    fetchAssessmentKits,
+    fetchUnpublishedAssessmentKits,
+    dialogProps,
+    setUserInfo,
+    hasAccess,
+    is_member,
+    is_active
+  } = props;
+  const {
+    id,
+    current_user_delete_permission = false,
+  } = assessment_kit;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const deleteAssessmentKitQuery = useQuery({
@@ -114,7 +150,9 @@ const Actions = (props: any) => {
   });
 
   if (!fetchAssessmentKits) {
-    console.warn("fetchAssessmentKits not provided. assessment kit list won't be updated on any action");
+    console.warn(
+      "fetchAssessmentKits not provided. assessment kit list won't be updated on any action"
+    );
   }
 
   // const openEditDialog = (e: any) => {
@@ -136,7 +174,7 @@ const Actions = (props: any) => {
     try {
       await deleteAssessmentKitQuery.query();
       await fetchAssessmentKits?.();
-      is_member&&await fetchUnpublishedAssessmentKits?.();
+      is_member && (await fetchUnpublishedAssessmentKits?.());
       // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -149,7 +187,6 @@ const Actions = (props: any) => {
       const res = await publishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await fetchAssessmentKits?.();
-      is_member&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -161,18 +198,21 @@ const Actions = (props: any) => {
       const res = await unPublishAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await fetchAssessmentKits();
-      is_member&&await fetchUnpublishedAssessmentKits?.();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
   };
-
   return hasAccess ? (
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
-      loading={deleteAssessmentKitQuery.loading || publishAssessmentKitQuery.loading || unPublishAssessmentKitQuery.loading || editLoading}
+      loading={
+        deleteAssessmentKitQuery.loading ||
+        publishAssessmentKitQuery.loading ||
+        unPublishAssessmentKitQuery.loading ||
+        editLoading
+      }
       items={[
         is_active
           ? {

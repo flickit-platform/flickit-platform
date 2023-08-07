@@ -12,7 +12,6 @@ const AssessmentKitsListContainer = () => {
   const assessmentKitsQueryData = useQuery({
     service: (args, config) => service.fetchAssessmentKits(args, config),
   });
-
   return (
     <Box>
       <QueryData
