@@ -68,10 +68,10 @@ class AssessmentKitListForExpertGroupApi(APIView):
         if len(results) == 2:
             published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
             unpublished = LodeAssessmentKitForExpertGroupSerilizer(results["unpublished"], many = True).data
-            return Response({'results' : [{"published" :published},{"unpublished" :unpublished}]}, status = status.HTTP_200_OK)
+            return Response({'results' : {"published" :published,"unpublished" :unpublished}}, status = status.HTTP_200_OK)
         else:
             published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
-            return Response({'results' : [{"published" :published}]}, status = status.HTTP_200_OK)
+            return Response({'results' : {"published" :published}}, status = status.HTTP_200_OK)
         
 class AssessmentKitListApi(APIView):
     permission_classes = [IsAuthenticated]

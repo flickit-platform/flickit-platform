@@ -701,8 +701,7 @@ class TestExpertGroupeListAssessmentKit:
         force_authenticate(request, user = user2)
         view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
         resp = view(request, expert_group.id)
-        
-        results = resp.data["results"][0]
+        results = resp.data["results"]
         assert resp.status_code == status.HTTP_200_OK
         assert results["published"][0]["id"] == assessment_kit1.id
         assert ("unpublished" in results) == False
@@ -732,8 +731,8 @@ class TestExpertGroupeListAssessmentKit:
         
         results = resp.data["results"]
         assert resp.status_code == status.HTTP_200_OK
-        assert results[0]["published"][0]["id"] == assessment_kit1.id
-        assert results[1]["unpublished"][0]["id"] == assessment_kit2.id
+        assert results["published"][0]["id"] == assessment_kit1.id
+        assert results["unpublished"][0]["id"] == assessment_kit2.id
 
 
 @pytest.mark.django_db
