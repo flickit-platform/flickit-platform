@@ -706,10 +706,8 @@ const AssessmentKitsList = (props: any) => {
             </Box>
           }
           isDataEmpty={(data) => {
-            const { results = [] } = data;
-            const isEmpty = is_expert
-              ? results.length === 0
-              : results.filter((p: any) => !!p?.is_active)?.length === 0;
+            const { results } = data;
+            const isEmpty = results
             return isEmpty;
           }}
           renderLoading={() => (
@@ -720,8 +718,8 @@ const AssessmentKitsList = (props: any) => {
             </>
           )}
           render={(data = {}) => {
-            const { results = [] } = data;
-            setAssessmentKitsCounts({published:results?.published.length,unpublished:results?.unpublished.length});
+            const { results } = data;
+            setAssessmentKitsCounts({published:results?.published.length,unpublished:is_member&&results?.unpublished.length});
             return (
               <>
                 {results?.published.map((assessment_kit: any) => {
