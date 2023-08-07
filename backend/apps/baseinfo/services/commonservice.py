@@ -60,3 +60,10 @@ def get_question_impact_with_id(question_impact_id):
     result = QuestionImpact.objects.filter(id = question_impact_id)
     return result
 
+def get_questions_with_assessmnet_kit_id(assessment_kit_id):
+    try:
+        AssessmentKit.objects.get(id = assessment_kit_id)
+    except AssessmentKit.DoesNotExist as e:
+        return False
+    result = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).order_by("id")
+    return result

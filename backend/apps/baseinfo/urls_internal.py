@@ -11,4 +11,5 @@ urlpatterns = [
     path("quality-attribute/<str:quality_attribute_id>/question/",commonviews.LoadQuestionInternalApi.as_view()),
     path("assessment-subject/<str:assessment_subject_id>/quality-attributes/",commonviews.LoadQualityAttributeInternalApi.as_view()),
     path("questionimpact/<str:question_impact_id>/",commonviews.LoadQuestionImpactInternalApi.as_view()),
+    path("v1/assessment-kits/<str:assessment_kit_id>/questions/", commonviews.LoadQuestionsInternalApi.as_view()),
 ]
