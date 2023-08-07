@@ -72,10 +72,7 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({
-    published: 0,
-    unpublished: 0,
-  });
+  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({});
   return (
     <QueryData
       {...queryData}
@@ -96,6 +93,9 @@ const ExpertGroupContainer = () => {
         } = data || {};
         const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
+        if (assessmentKitsCounts?.published) {
+          console.log(assessmentKitsCounts?.published.length);
+        }
 
         return (
           <Box>
@@ -236,9 +236,10 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {`${assessmentKitsCounts.published} ${t(
-                          "publishedAssessmentKits"
-                        ).toLowerCase()}`}
+                        {assessmentKitsCounts?.published &&
+                          `${assessmentKitsCounts?.published.length} ${t(
+                            "publishedAssessmentKits"
+                          ).toLowerCase()}`}
                       </Typography>
                       {hasAccess && (
                         <Box ml="auto">
@@ -280,9 +281,10 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {`${assessmentKitsCounts.unpublished} ${t(
-                            "unpublishedAssessmentKits"
-                          ).toLowerCase()}`}
+                          {assessmentKitsCounts?.unpublished &&
+                            `${assessmentKitsCounts?.unpublished.length} ${t(
+                              "unpublishedAssessmentKits"
+                            ).toLowerCase()}`}
                         </Typography>
                       </Box>
                     )}
@@ -707,7 +709,7 @@ const AssessmentKitsList = (props: any) => {
           }
           isDataEmpty={(data) => {
             const { results } = data;
-            const isEmpty = results
+            const isEmpty = results;
             return isEmpty;
           }}
           renderLoading={() => (
@@ -719,7 +721,9 @@ const AssessmentKitsList = (props: any) => {
           )}
           render={(data = {}) => {
             const { results } = data;
-            setAssessmentKitsCounts({published:results?.published.length,unpublished:is_member&&results?.unpublished.length});
+            if (results) {
+              setAssessmentKitsCounts(results);
+            }
             return (
               <>
                 {results?.published.map((assessment_kit: any) => {
