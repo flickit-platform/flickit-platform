@@ -19,7 +19,18 @@ class AssessmentKitTagSerializer(serializers.ModelSerializer):
         model = AssessmentKitTag
         fields = ['id', 'code', 'title']
 
+class SimpleLevelCompetenceSerilizer(serializers.ModelSerializer):
+        maturity_level_id = serializers.IntegerField(source='maturity_level_competence_id')
+        class Meta:
+            model   = LevelCompetence
+            fields = ['id', 'value' , 'maturity_level_id']
 
+class SimpleMaturityLevelSimpleSerializer(serializers.ModelSerializer):
+    level_competences = SimpleLevelCompetenceSerilizer(many = True)
+    class Meta:
+        model = MaturityLevel
+        fields = ['id','value','level_competences']
+        
 class MaturityLevelSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaturityLevel
