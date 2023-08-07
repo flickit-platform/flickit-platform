@@ -72,8 +72,10 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [unpublishedAssessmentKits, setUnpublishedAssessmentKits] =
-    useState<any>({});
+  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({
+    published: 0,
+    unpublished: 0,
+  });
   return (
     <QueryData
       {...queryData}
@@ -137,11 +139,12 @@ const ExpertGroupContainer = () => {
                 )}
                 <Box mt={5}>
                   <AssessmentKitsList
-                    setUnpublishedAssessmentKits={setUnpublishedAssessmentKits}
                     queryData={queryData}
                     hasAccess={hasAccess}
                     dialogProps={createAssessmentKitDialogProps}
                     is_member={is_member}
+                    is_expert={is_expert}
+                    setAssessmentKitsCounts={setAssessmentKitsCounts}
                   />
                 </Box>
                 <Box mt={5}>
@@ -233,7 +236,7 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {`${number_of_assessment_kits} ${t(
+                        {`${assessmentKitsCounts.published} ${t(
                           "publishedAssessmentKits"
                         ).toLowerCase()}`}
                       </Typography>
@@ -277,7 +280,7 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {`${unpublishedAssessmentKits?.length} ${t(
+                          {`${assessmentKitsCounts.unpublished} ${t(
                             "unpublishedAssessmentKits"
                           ).toLowerCase()}`}
                         </Typography>
@@ -664,18 +667,15 @@ const AssessmentKitsList = (props: any) => {
     hasAccess,
     dialogProps,
     about,
-    setUnpublishedAssessmentKits,
+    setAssessmentKitsCounts,
     is_member,
+    is_expert,
   } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
   const assessmentKitQuery = useQuery({
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupAssessmentKits(args, config),
-  });
-  const unpublishedAssessmentKitQuery = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
-      service.fetchExpertGroupUnpublishedAssessmentKits(args, config),
   });
   return (
     <>
@@ -694,7 +694,6 @@ const AssessmentKitsList = (props: any) => {
         <Trans i18nKey={"assessmentKits"} />
       </Title>
       <Box mt={2}>
-        {/* published */}
         <QueryData
           {...assessmentKitQuery}
           emptyDataComponent={
@@ -707,7 +706,7 @@ const AssessmentKitsList = (props: any) => {
             </Box>
           }
           isDataEmpty={(data) => {
-            const { results = [], is_expert } = data;
+            const { results = [] } = data;
             const isEmpty = is_expert
               ? results.length === 0
               : results.filter((p: any) => !!p?.is_active)?.length === 0;
@@ -721,10 +720,11 @@ const AssessmentKitsList = (props: any) => {
             </>
           )}
           render={(data = {}) => {
-            const { results = [], is_expert } = data;
+            const { results = [] } = data;
+            setAssessmentKitsCounts({published:results?.published.length,unpublished:results?.unpublished.length});
             return (
               <>
-                {results.map((assessment_kit: any) => {
+                {results?.published.map((assessment_kit: any) => {
                   return (
                     <AssessmentKitListItem
                       link={
@@ -735,76 +735,34 @@ const AssessmentKitsList = (props: any) => {
                       key={assessment_kit?.id}
                       data={assessment_kit}
                       fetchAssessmentKits={assessmentKitQuery.query}
-                      fetchUnpublishedAssessmentKits={
-                        is_member && unpublishedAssessmentKitQuery.query
-                      }
                       hasAccess={is_expert}
                       is_member={is_member}
+                      is_active={true}
                     />
                   );
                 })}
+                {is_member &&
+                  results?.unpublished.map((assessment_kit: any) => {
+                    return (
+                      <AssessmentKitListItem
+                        link={
+                          is_expert
+                            ? `assessment-kits/${assessment_kit?.id}`
+                            : `/assessment-kits/${assessment_kit?.id}`
+                        }
+                        key={assessment_kit?.id}
+                        data={assessment_kit}
+                        fetchAssessmentKits={assessmentKitQuery.query}
+                        hasAccess={is_expert}
+                        is_member={is_member}
+                        is_active={false}
+                      />
+                    );
+                  })}
               </>
             );
           }}
         />
-        {/* unpublished */}
-        {is_member && (
-          <QueryData
-            {...unpublishedAssessmentKitQuery}
-            showEmptyError={false}
-            emptyDataComponent={
-              <Box sx={{ background: "white", borderRadius: 2 }}>
-                <ErrorEmptyData
-                  emptyMessage={
-                    <Trans i18nKey="thereIsNoUnpublishedAssessmentKitYet" />
-                  }
-                />
-              </Box>
-            }
-            renderLoading={() => (
-              <>
-                {forLoopComponent(5, (index) => (
-                  <LoadingSkeleton key={index} sx={{ height: "60px", mb: 1 }} />
-                ))}
-              </>
-            )}
-            isDataEmpty={(data) => {
-              const { results = [], is_expert } = data;
-              const isEmpty = is_expert
-                ? results.length === 0
-                : results.filter((p: any) => !!p?.is_active)?.length === 0;
-              return isEmpty;
-            }}
-            render={(data = {}) => {
-              const { results = [], is_expert } = data;
-              setUnpublishedAssessmentKits(results);
-              return (
-                <>
-                  {is_member &&
-                    results.map((assessment_kit: any) => {
-                      return (
-                        <AssessmentKitListItem
-                          link={
-                            is_expert
-                              ? `assessment-kits/${assessment_kit?.id}`
-                              : `/assessment-kits/${assessment_kit?.id}`
-                          }
-                          key={assessment_kit?.id}
-                          data={assessment_kit}
-                          fetchAssessmentKits={assessmentKitQuery.query}
-                          fetchUnpublishedAssessmentKits={
-                            is_member && unpublishedAssessmentKitQuery.query
-                          }
-                          hasAccess={hasAccess}
-                          is_member={is_member}
-                        />
-                      );
-                    })}
-                </>
-              );
-            }}
-          />
-        )}
       </Box>
     </>
   );
