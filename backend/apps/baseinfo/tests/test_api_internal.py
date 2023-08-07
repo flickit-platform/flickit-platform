@@ -54,7 +54,7 @@ class TestLoadAssessmentSubjectsWithAssessmentKit:
         #create request and send request
         assessment_kit_id = base_info['assessment_kit'].id
         api = APIRequestFactory()
-        request = api.get(f'/api/internal/assessment-kit/{assessment_kit_id}/assessment-subjects/', {}, format='json')
+        request = api.get(f'/api/internal/v1/assessment-kits/{assessment_kit_id}/subjects/', {}, format='json')
         view = commonviews.LoadAssessmentSubjectInternalApi.as_view()
         resp = view(request,assessment_kit_id)
 
@@ -78,8 +78,9 @@ class TestLoadAssessmentSubjectsWithAssessmentKit:
         resp = view(request,assessment_kit_id)
 
         #responses testing
-        assert  resp.status_code == status.HTTP_404_NOT_FOUND
-        assert  resp.data["message"] == "Object does not exists"
+        assert  resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert  resp.data["message"] == "'assessment_kit_id' does not exist"
+        assert  resp.data["code"] == "NOT_FOUND"
         
 
 @pytest.mark.django_db
