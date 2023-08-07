@@ -1,5 +1,5 @@
 from baseinfo.models.questionmodels import AnswerTemplate ,OptionValue, Question , QuestionImpact
-from baseinfo.models.assessmentkitmodels import MaturityLevel 
+from baseinfo.models.assessmentkitmodels import MaturityLevel , AssessmentKit
 from baseinfo.models.basemodels import AssessmentSubject , QualityAttribute
 
 from baseinfo.services import assessmentkitservice
@@ -38,7 +38,10 @@ def get_option_value_with_answer_tamplate(answer_tamplate_id):
     return result
 
 def get_assessment_subject_with_assessment_kit(assessment_kit_id):
-    assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    try:
+        AssessmentKit.objects.get(id = assessment_kit_id)
+    except AssessmentKit.DoesNotExist as e:
+        return False
     result = AssessmentSubject.objects.filter(assessment_kit=assessment_kit_id)
     return result
 
