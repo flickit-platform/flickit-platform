@@ -137,7 +137,7 @@ const Actions = (props: any) => {
       await deleteAssessmentKitQuery.query();
       await fetchAssessmentKits?.();
       is_member&&await fetchUnpublishedAssessmentKits?.();
-      await setUserInfo();
+      // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
