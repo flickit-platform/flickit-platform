@@ -23,7 +23,7 @@ class ManageExpertGroupPermission(BasePermission):
         else:
             if 'importassessmentkit' in request.build_absolute_uri():
                  expert_group_id = request.data['expert_group_id']
-                 return self.check_current_user_is_member_of_expert_group(current_user, expert_group_id)
+                 return self.check_current_user_is_owner_of_expert_group(current_user, expert_group_id)
             return self.check_current_user_is_member_of_expert_group(current_user, view.kwargs.get('expert_group_id'))       
 
     def check_current_user_is_member_of_expert_group(self, current_user, expert_group_id):
@@ -65,7 +65,9 @@ class CoordinatorPermission(BasePermission):
         if 'addexpertgroup' in request.build_absolute_uri():
             expert_group_id = view.kwargs.get('expert_group_id')
             return self.check_current_user_is_owner_of_expert_group(current_user, expert_group_id) 
-
+        if 'importassessmentkit' in request.build_absolute_uri():
+                expert_group_id = request.data['expert_group_id']
+                return self.check_current_user_is_owner_of_expert_group(current_user, expert_group_id)
         assessment_kit = load_model(AssessmentKit, view.kwargs.get('assessment_kit_id'))
         return self.check_current_user_is_owner_of_expert_group(current_user, assessment_kit.expert_group_id)
         
