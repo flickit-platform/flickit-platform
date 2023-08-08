@@ -129,5 +129,5 @@ class LoadAnswerOptionWithlistQuestionInternalApi(APIView):
             request.GET.getlist('questionIds')
             response = commonserializers.LoadAnswerOptionWithlistQuestionInternalSerilizer(questions, many = True).data
             return Response({'items' :response}, status = status.HTTP_200_OK)    
-        return Response({'items' :{}},status=status.HTTP_200_OK)
+        return Response({'items' :[]},status=status.HTTP_200_OK)
         
