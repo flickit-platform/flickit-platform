@@ -675,7 +675,7 @@ class TestExpertGroupeListAssessmentKit:
         
         api = APIRequestFactory()
         request = api.get(f'expertgroup/{expert_group.id}/assessmentkits/', format='json')
-        view = assessmentkitviews.AssessmentKitListApi.as_view()
+        view = assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()
         resp = view(request, expert_group.id)
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
