@@ -101,3 +101,16 @@ class SimpleLoadQuestionsSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id','question_impacts']
+
+class SimpleLoadOptionValueSerilizer(serializers.ModelSerializer):
+    value = serializers.DecimalField(max_digits=3, decimal_places=2)
+    question_impact = SimpleLoadQuestionImpactSerilizer()
+    class Meta:
+        model = OptionValue
+        fields = ['id','value','question_impact']
+
+class LoadAnswerOptionWithlistQuestionInternalSerilizer(serializers.ModelSerializer):
+    answer_option_impacts = SimpleLoadOptionValueSerilizer(many=True,source="option_values")
+    class Meta:
+        model = AnswerTemplate
+        fields = ['id','question_id','answer_option_impacts']

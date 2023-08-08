@@ -46,8 +46,7 @@ class Test_QuestionaryView:
         response = api_client.get('/assessment/questionaries/' + str(project.id) + "/")
     
         assert response.status_code == status.HTTP_200_OK
-        print(str(response.data))
-        print(len(response.data['questionaries_info']))
+
 
         newlist = sorted(base_info['questionnaires'], key=lambda x: x.index, reverse=True)
 

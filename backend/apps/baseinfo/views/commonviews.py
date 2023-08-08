@@ -1,3 +1,4 @@
+from django.db.models.functions import TruncTime
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,6 +6,8 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.pagination import PageNumberPagination
+from baseinfo import services
+from drf_yasg import openapi
 
 from baseinfo.services import commonservice , assessmentkitservice
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
@@ -115,3 +118,16 @@ class LoadQuestionsInternalApi(APIView):
         paginated_queryset = paginator.paginate_queryset(question, request)
         response =commonserializers.SimpleLoadQuestionsSerilizer(paginated_queryset, many = True).data
         return paginator.get_paginated_response(response)
+
+test_param = openapi.Parameter('questionIds', openapi.IN_QUERY, description="test manual param", type=openapi.TYPE_ARRAY,items=openapi.Items(type=openapi.TYPE_NUMBER))
+class LoadAnswerOptionWithlistQuestionInternalApi(APIView):
+    permission_classes = [AllowAny]
+    @swagger_auto_schema( manual_parameters=[test_param],responses={200: commonserializers.LoadAnswerOptionWithlistQuestionInternalSerilizer(many=True)})
+    def get(self,request):
+        if "questionIds" in request.query_params:
+            questions = commonservice.get_answer_option_whit_questions_id(request.query_params['questionIds'])
+            request.GET.getlist('questionIds')
+            response = commonserializers.LoadAnswerOptionWithlistQuestionInternalSerilizer(questions, many = True).data
+            return Response({'items' :response}, status = status.HTTP_200_OK)    
+        return Response({'items' :[]},status=status.HTTP_200_OK)
+        
