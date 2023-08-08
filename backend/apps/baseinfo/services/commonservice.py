@@ -67,3 +67,9 @@ def get_questions_with_assessmnet_kit_id(assessment_kit_id):
         return False
     result = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).order_by("id")
     return result
+
+def get_answer_option_whit_questions_id(questions):
+    question_list = questions.split(',')
+    question_list = [int(x)  for x in question_list if x.isdigit()]
+    result = AnswerTemplate.objects.filter(question__pk__in =question_list)
+    return result

@@ -4,7 +4,7 @@ import json
 from rest_framework import status
 from rest_framework.test import APIRequestFactory 
 from baseinfo.views import assessmentkitviews , commonviews
-from baseinfo.models.questionmodels import Question
+from baseinfo.models.questionmodels import Question ,AnswerTemplate
 
 
 @pytest.mark.django_db
@@ -277,3 +277,51 @@ class TestLoadQuestionsWithAssessmentKitId:
         assert  resp.data["message"] == "'assessment_kit_id' does not exist"
         assert  resp.data["code"] == "NOT_FOUND"
     
+
+@pytest.mark.django_db
+class TestLoadAnswerOptionWithlistQuestionsIds:
+    def test_load_answer_option_with_list_when_questions_ids_exist(self,init_data):
+        base_info = init_data()
+        questions = base_info['questions']
+        
+        api = APIRequestFactory()
+        query_parms=""
+        query_parms += str(questions[0].id)+','
+        query_parms += str(questions[1].id)+','
+        query_parms += str(questions[2].id)+','
+        
+        question_list = query_parms.split(',')
+        question_list = [int(x)  for x in question_list if x.isdigit()]
+        count = AnswerTemplate.objects.filter(question__pk__in =question_list).count()
+        
+        request = api.get(f'/api/internal/v1/answer-options/?questionIds={query_parms}', {}, format='json')
+        view = commonviews.LoadAnswerOptionWithlistQuestionInternalApi.as_view()
+        resp = view(request)
+        assert  resp.status_code == status.HTTP_200_OK
+        assert  "items" in resp.data
+        assert  questions[0].id == resp.data["items"][0]["question_id"]
+        assert  count == len(resp.data["items"])
+        
+    def test_load_answer_option_with_list_when_questions_ids_not_exist(self,init_data):
+        base_info = init_data()
+        questions = base_info['questions']
+        api = APIRequestFactory()
+        request = api.get(f'/api/internal/v1/answer-options/?questionIds=1100,100,a,x,2,,,', {}, format='json')
+        view = commonviews.LoadAnswerOptionWithlistQuestionInternalApi.as_view()
+        resp = view(request)
+        assert  resp.status_code == status.HTTP_200_OK
+        assert  "items" in resp.data
+        assert  0 == len(resp.data["items"])
+
+    def test_load_answer_option_with_list_when_questions_ids_not_query_parms(self,init_data):
+        base_info = init_data()
+        questions = base_info['questions']
+        
+        api = APIRequestFactory()
+
+        request = api.get(f'/api/internal/v1/answer-options/', {}, format='json')
+        view = commonviews.LoadAnswerOptionWithlistQuestionInternalApi.as_view()
+        resp = view(request)
+        assert  resp.status_code == status.HTTP_200_OK
+        assert  "items" in resp.data
+        assert  0 == len(resp.data["items"])
