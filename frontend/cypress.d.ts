@@ -1,6 +1,6 @@
 import { mount } from "cypress/react";
 
-// Augment the Cypress namespace to include type definitions for
+// Augment the Cypress namespace to include type de finitions for
 // your custom command.
 // Alternatively, can be defined in cypress/support/component.d.ts
 // with a <reference path="./component" /> at the top of your spec.
