@@ -30,9 +30,9 @@ jobs:
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }} ./frontend
+        run: docker build -t ghcr.io/alialibalaei/flickit-platform-frontend:${{ steps.TAG.outputs.tag }} ./frontend
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }}
+        run: docker push ghcr.io/alialibalaei/flickit-platform-frontend:${{ steps.TAG.outputs.tag }}
   darkube_deploy:
     needs: push-docker-image
     container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
