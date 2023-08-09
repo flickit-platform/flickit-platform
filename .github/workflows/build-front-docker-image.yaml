@@ -10,7 +10,7 @@ jobs:
   push-docker-image:
     runs-on: ubuntu-latest
     outputs:
-      TAG: ${{ steps.vars.outputs.test }}
+      TAG: ${{ steps.TAG.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
       - name: Set output
@@ -43,5 +43,5 @@ jobs:
         env:
           DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND }}
           DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND }}
-          TAG: ${{needs.push-docker-image.outputs.TAG.tag}}  
+          TAG: ${{needs.push-docker-image.outputs.TAG}}  
     
