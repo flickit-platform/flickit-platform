@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - backend/**
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
