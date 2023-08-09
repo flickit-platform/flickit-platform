@@ -2,7 +2,7 @@
   "name": "Flickit",
   "private": true,
   "version": "0.6.0",
-  "type": "module",
+  "type": "module", 
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
