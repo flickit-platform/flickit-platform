@@ -15,7 +15,6 @@ import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import { toast } from "react-toastify";
 import formatDate from "@utils/formatDate";
-
 interface IAssessmentKitListItemProps {
   data: {
     id: TId;
@@ -32,15 +31,8 @@ interface IAssessmentKitListItemProps {
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
-  const {
-    data,
-    fetchAssessmentKits,
-    fetchUnpublishedAssessmentKits,
-    link,
-    hasAccess,
-    is_member,
-    is_active,
-  } = props;
+  const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
+    props;
   const { id, title, last_modification_date } = data || {};
   return (
     <Box
@@ -124,12 +116,9 @@ const Actions = (props: any) => {
     setUserInfo,
     hasAccess,
     is_member,
-    is_active
+    is_active,
   } = props;
-  const {
-    id,
-    current_user_delete_permission = false,
-  } = assessment_kit;
+  const { id } = assessment_kit;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);
   const deleteAssessmentKitQuery = useQuery({
@@ -222,8 +211,7 @@ const Actions = (props: any) => {
               text: <Trans i18nKey="publish" />,
               onClick: publishAssessmentKit,
             },
-
-        is_member && {
+        {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,
           onClick: deleteItem,
