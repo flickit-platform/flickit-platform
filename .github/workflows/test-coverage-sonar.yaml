@@ -1,9 +1,10 @@
 name: Python application
 
+
 on:
   push:
     paths:
-    - backend/**
+      - backend/**
     branches: ['*']
   pull_request:
     paths:
