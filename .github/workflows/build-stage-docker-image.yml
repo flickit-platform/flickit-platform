@@ -24,7 +24,7 @@ jobs:
           username: avansoft
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/avansoft/flickit-platform:latest
+        run: docker push ghcr.io/alialibalaei/flickit-platform:latest
 
   darkube_deploy:
     needs: push-docker-image
