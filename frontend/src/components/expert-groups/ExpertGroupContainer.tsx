@@ -91,11 +91,9 @@ const ExpertGroupContainer = () => {
           is_member,
           assessment_kits = [],
         } = data || {};
+        const is_owner = data?.owner?.id === userInfo.id;
         const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
-        if (assessmentKitsCounts?.published) {
-          console.log(assessmentKitsCounts?.published.length);
-        }
 
         return (
           <Box>
@@ -140,7 +138,7 @@ const ExpertGroupContainer = () => {
                 <Box mt={5}>
                   <AssessmentKitsList
                     queryData={queryData}
-                    hasAccess={hasAccess}
+                    hasAccess={is_owner}
                     dialogProps={createAssessmentKitDialogProps}
                     is_member={is_member}
                     is_expert={is_expert}
@@ -150,7 +148,7 @@ const ExpertGroupContainer = () => {
                 <Box mt={5}>
                   <ExpertGroupMembersDetail
                     queryData={expertGroupMembersQueryData}
-                    hasAccess={hasAccess}
+                    hasAccess={is_owner}
                   />
                 </Box>
               </Grid>
@@ -241,7 +239,7 @@ const ExpertGroupContainer = () => {
                             "publishedAssessmentKits"
                           ).toLowerCase()}`}
                       </Typography>
-                      {hasAccess && (
+                      {is_owner && (
                         <Box ml="auto">
                           <IconButton
                             size="small"
@@ -258,7 +256,7 @@ const ExpertGroupContainer = () => {
                         </Box>
                       )}
                     </Box>
-                    {is_expert && (
+                    {is_member && (
                       <Box
                         sx={{
                           ...styles.centerV,
@@ -288,13 +286,17 @@ const ExpertGroupContainer = () => {
                         </Typography>
                       </Box>
                     )}
-                    <Divider sx={{ mt: 2, mb: 2 }} />
                   </Box>
-                  {/* --------------------------- */}
-                  <ExpertGroupMembers
-                    {...expertGroupMembersQueryData}
-                    hasAccess={hasAccess}
-                  />
+
+                  {is_owner && (
+                    <Box>
+                      <Divider sx={{ mt: 2, mb: 2 }} />
+                      <ExpertGroupMembers
+                        {...expertGroupMembersQueryData}
+                        hasAccess={hasAccess}
+                      />
+                    </Box>
+                  )}
                 </Box>
               </Grid>
             </Grid>
@@ -737,7 +739,7 @@ const AssessmentKitsList = (props: any) => {
                       key={assessment_kit?.id}
                       data={assessment_kit}
                       fetchAssessmentKits={assessmentKitQuery.query}
-                      hasAccess={is_expert}
+                      hasAccess={hasAccess}
                       is_member={is_member}
                       is_active={true}
                     />
@@ -755,7 +757,7 @@ const AssessmentKitsList = (props: any) => {
                         key={assessment_kit?.id}
                         data={assessment_kit}
                         fetchAssessmentKits={assessmentKitQuery.query}
-                        hasAccess={is_expert}
+                        hasAccess={hasAccess}
                         is_member={is_member}
                         is_active={false}
                       />
