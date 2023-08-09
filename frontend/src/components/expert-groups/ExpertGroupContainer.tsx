@@ -94,7 +94,6 @@ const ExpertGroupContainer = () => {
         const is_owner = data?.owner?.id === userInfo.id;
         const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
-
         return (
           <Box>
             <Title
@@ -112,8 +111,10 @@ const ExpertGroupContainer = () => {
                 />
               }
               toolbar={
-                hasAccess && (
+                is_owner ? (
                   <EditExpertGroupButton fetchExpertGroup={queryData.query} />
+                ) : (
+                  <></>
                 )
               }
             >
