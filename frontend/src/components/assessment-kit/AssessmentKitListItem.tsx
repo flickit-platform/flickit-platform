@@ -106,7 +106,6 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           <Actions
             assessment_kit={data}
             fetchAssessmentKits={fetchAssessmentKits}
-            fetchUnpublishedAssessmentKits={fetchUnpublishedAssessmentKits}
             hasAccess={hasAccess}
             is_member={is_member}
             is_active={is_active}
@@ -121,7 +120,6 @@ const Actions = (props: any) => {
   const {
     assessment_kit,
     fetchAssessmentKits,
-    fetchUnpublishedAssessmentKits,
     dialogProps,
     setUserInfo,
     hasAccess,
@@ -174,7 +172,6 @@ const Actions = (props: any) => {
     try {
       await deleteAssessmentKitQuery.query();
       await fetchAssessmentKits?.();
-      is_member && (await fetchUnpublishedAssessmentKits?.());
       // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
@@ -226,7 +223,7 @@ const Actions = (props: any) => {
               onClick: publishAssessmentKit,
             },
 
-        current_user_delete_permission && {
+        is_member && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,
           onClick: deleteItem,
