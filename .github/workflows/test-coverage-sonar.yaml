@@ -3,13 +3,15 @@ name: Python application
 on:
   push:
     branches: ['*']
-    paths:
-      - backend/**
   pull_request:
     branches:
       - main
+      - stage
     paths:
       - backend/**
+
+
+      
 
 jobs:
   build-test:
