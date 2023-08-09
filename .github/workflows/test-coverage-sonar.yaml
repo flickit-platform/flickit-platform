@@ -2,16 +2,15 @@ name: Python application
 
 on:
   push:
+    paths:
+    - backend/**
     branches: ['*']
-      paths:
-        - backend/**
   pull_request:
+    paths:
+      - backend/**
     branches:
       - main
       - stage
-      paths:
-        - backend/**
-
 
       
 
