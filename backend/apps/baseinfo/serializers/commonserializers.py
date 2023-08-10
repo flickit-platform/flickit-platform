@@ -109,7 +109,7 @@ class SimpleLoadOptionValueSerilizer(serializers.ModelSerializer):
         model = OptionValue
         fields = ['id','value','question_impact']
 
-class LoadAnswerOptionWithlistQuestionInternalSerilizer(serializers.ModelSerializer):
+class LoadAnswerOptionWithlistidSerilizer(serializers.ModelSerializer):
     answer_option_impacts = SimpleLoadOptionValueSerilizer(many=True,source="option_values")
     class Meta:
         model = AnswerTemplate
