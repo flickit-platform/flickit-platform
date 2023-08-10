@@ -119,15 +119,15 @@ class LoadQuestionsInternalApi(APIView):
         response =commonserializers.SimpleLoadQuestionsSerilizer(paginated_queryset, many = True).data
         return paginator.get_paginated_response(response)
 
-test_param = openapi.Parameter('questionIds', openapi.IN_QUERY, description="test manual param", type=openapi.TYPE_ARRAY,items=openapi.Items(type=openapi.TYPE_NUMBER))
-class LoadAnswerOptionWithlistQuestionInternalApi(APIView):
+
+test_param = openapi.Parameter('ids', openapi.IN_QUERY, description="test manual param", type=openapi.TYPE_ARRAY,items=openapi.Items(type=openapi.TYPE_NUMBER))
+class LoadAnswerOptionWithlistIdInternalApi(APIView):
     permission_classes = [AllowAny]
-    @swagger_auto_schema( manual_parameters=[test_param],responses={200: commonserializers.LoadAnswerOptionWithlistQuestionInternalSerilizer(many=True)})
+    @swagger_auto_schema( manual_parameters=[test_param],responses={200: commonserializers.LoadAnswerOptionWithlistidSerilizer(many=True)})
     def get(self,request):
-        if "questionIds" in request.query_params:
-            questions = commonservice.get_answer_option_whit_questions_id(request.query_params['questionIds'])
-            request.GET.getlist('questionIds')
-            response = commonserializers.LoadAnswerOptionWithlistQuestionInternalSerilizer(questions, many = True).data
+        if "ids" in request.query_params:
+            answers_option = commonservice.get_answer_option_whit_id(request.query_params['ids'])
+            response = commonserializers.LoadAnswerOptionWithlistidSerilizer(answers_option, many = True).data
             return Response({'items' :response}, status = status.HTTP_200_OK)    
         return Response({'items' :[]},status=status.HTTP_200_OK)
         

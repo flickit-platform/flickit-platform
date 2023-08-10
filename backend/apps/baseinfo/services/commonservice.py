@@ -68,8 +68,8 @@ def get_questions_with_assessmnet_kit_id(assessment_kit_id):
     result = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).order_by("id")
     return result
 
-def get_answer_option_whit_questions_id(questions):
-    question_list = questions.split(',')
-    question_list = [int(x)  for x in question_list if x.isdigit()]
-    result = AnswerTemplate.objects.filter(question__pk__in =question_list)
+def get_answer_option_whit_id(answer_option_ids):
+    answer_option_list = answer_option_ids.split(',')
+    answer_option_list = [int(x)  for x in answer_option_list if x.isdigit()]
+    result = AnswerTemplate.objects.filter(id__in =answer_option_list)
     return result
