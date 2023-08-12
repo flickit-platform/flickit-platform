@@ -733,7 +733,7 @@ const AssessmentKitsList = (props: any) => {
                   return (
                     <AssessmentKitListItem
                       link={
-                        is_expert
+                        is_member
                           ? `assessment-kits/${assessment_kit?.id}`
                           : `/assessment-kits/${assessment_kit?.id}`
                       }
@@ -751,7 +751,7 @@ const AssessmentKitsList = (props: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
-                          is_expert
+                          is_member
                             ? `assessment-kits/${assessment_kit?.id}`
                             : `/assessment-kits/${assessment_kit?.id}`
                         }
