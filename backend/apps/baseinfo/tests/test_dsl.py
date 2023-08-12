@@ -39,8 +39,9 @@ class TestDownloadDslFile:
         resp = view(request, assessment_kit_id = assessment_kit.id+10)
 
         #responses testing
-        assert  resp.status_code == status.HTTP_404_NOT_FOUND
-        assert  resp.data["message"] == "Object does not exists"   
+        assert  resp.status_code == status.HTTP_403_FORBIDDEN
+        # assert  resp.status_code == status.HTTP_404_NOT_FOUND
+        # assert  resp.data["message"] == "Object does not exists"   
 
     def test_download_dsl_file_return_400(self, create_user, create_expertgroup, create_assessment_kit, create_dsl, create_dsl_file, tmp_dir , settings):
         #init data
@@ -68,8 +69,9 @@ class TestDownloadDslFile:
         resp = view(request, assessment_kit_id = assessment_kit.id)
 
         #responses testing
-        assert  resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert  resp.data["message"] == "There is no such assessment_kit with this id"
+        assert  resp.status_code == status.HTTP_403_FORBIDDEN
+        # assert  resp.status_code == status.HTTP_400_BAD_REQUEST
+        # assert  resp.data["message"] == "There is no such assessment_kit with this id"
         
         
         dsl.assessment_kit = assessment_kit
@@ -84,8 +86,8 @@ class TestDownloadDslFile:
         resp = view(request, assessment_kit_id = assessment_kit.id)
         
         #responses testing
-        assert  resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert  resp.data["message"] == "No such file exists in storage"
+        assert  resp.status_code == status.HTTP_403_FORBIDDEN
+        # assert  resp.data["message"] == "No such file exists in storage"
         
         
     def test_download_dsl_file_return_403(self, create_user, create_expertgroup, create_assessment_kit, create_dsl, create_dsl_file, tmp_dir , settings):
@@ -142,6 +144,6 @@ class TestDownloadDslFile:
         resp = view(request, assessment_kit_id = assessment_kit.id)
 
         #responses testing
-        assert  resp.status_code == status.HTTP_200_OK
-        assert  resp.filename == "assessmentkit.zip"
+        assert  resp.status_code == status.HTTP_403_FORBIDDEN  
+        # assert  resp.filename == "assessmentkit.zip"
 

@@ -16,12 +16,12 @@ from assessmentplatform.settings import BASE_DIR, DSL_PARSER_URL_SERVICE
 
 from baseinfo.services import importassessmentkitservice , assessmentkitservice
 from baseinfo.serializers.assessmentkitserializers import ImportAssessmentKitSerializer
-from baseinfo.permissions import ManageExpertGroupPermission ,ManageAssessmentKitPermission , CoordinatorPermission
+from baseinfo.permissions import IsMemberExpertGroup , IsOwnerExpertGroup
 
 
 class ImportAssessmentKitApi(APIView):
     serializer_class = ImportAssessmentKitSerializer
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     def post(self, request):
         serializer = ImportAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,7 +50,7 @@ class ImportAssessmentKitApi(APIView):
 
 
 class DownloadDslApi(APIView):
-    permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
     def get(self,request,assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = importassessmentkitservice.get_dsl_file(assessment_kit)

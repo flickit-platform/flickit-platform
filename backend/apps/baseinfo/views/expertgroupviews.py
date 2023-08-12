@@ -10,14 +10,23 @@ from rest_framework.viewsets import GenericViewSet
 from baseinfo.serializers import expertgroupserializers 
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
-from baseinfo.permissions import ManageExpertGroupPermission , CoordinatorPermission
+from baseinfo.permissions import  IsOwnerExpertGroup , Manage_expert_group
 
 
 class ExpertGroupViewSet(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin,
                    GenericViewSet):
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [IsAuthenticated]
+        elif self.request.method == "POST":
+            permission_classes = [IsAuthenticated, Manage_expert_group]
+        else:
+            permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+        return [permission() for permission in permission_classes]
+
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
@@ -41,9 +50,15 @@ class ExpertGroupAccessViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
     serializer_class = expertgroupserializers.ExpertGroupAccessSerializer
-    permission_classes = [IsAuthenticated, ManageExpertGroupPermission]
-
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+        return [permission() for permission in permission_classes]
+    
     def get_queryset(self):
+        
         return ExpertGroupAccess.objects.filter(expert_group_id = self.kwargs['expertgroup_pk']).select_related('user')
 
     def get_serializer_context(self):
@@ -67,7 +82,7 @@ class ExpertGroupAccessViewSet(mixins.RetrieveModelMixin,
 
 class AddUserToExpertGroupApi(APIView):
     serializer_class = expertgroupserializers.ExpertGroupGiveAccessSerializer
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     def post(self, request, expert_group_id):
         serializer = expertgroupserializers.ExpertGroupGiveAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
