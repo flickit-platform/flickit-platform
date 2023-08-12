@@ -37,7 +37,7 @@ class ExpertGroupPermission(BasePermission):
         
     def check_current_user_is_owner_of_expert_group(self, current_user, expert_group_id):
         expert_group = load_model(ExpertGroup, expert_group_id)
-        return current_user.has_perm('baseinfo.manage_expert_group') and  expert_group.owner_id == current_user.id
+        return  expert_group.owner_id == current_user.id
     
     request_url = {
         "importassessmentkit" : get_expert_group_id_in_basename_expert_groups_id,
