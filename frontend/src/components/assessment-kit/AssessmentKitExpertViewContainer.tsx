@@ -46,7 +46,8 @@ const AssessmentKitExpertViewContainer = () => {
       <QueryBatchData
         queryBatchData={[assessmentKitQueryProps, fetchAssessmentKitQuery]}
         render={([data = {}, assessmentKitData]) => {
-          const { is_expert = true, expert_group } = data;
+          const { is_expert = true, expert_group,current_user_is_coordinator } = data;
+          console.log(data)
           setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
           return (
             <>
@@ -69,7 +70,7 @@ const AssessmentKitExpertViewContainer = () => {
                   }
                   // sub={data.summary}
                   toolbar={
-                    is_expert && (
+                    current_user_is_coordinator && (
                       <IconButton
                         title="Setting"
                         color="primary"
