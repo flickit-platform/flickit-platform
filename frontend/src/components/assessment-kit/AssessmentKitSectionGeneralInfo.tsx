@@ -21,7 +21,7 @@ interface IAssessmentKitSectionAuthorInfo {
 }
 const AssessmentKitSectionGeneralInfo = (props: IAssessmentKitSectionAuthorInfo) => {
   const { data, query } = props;
-  const { is_active, is_expert = true } = data || {};
+  const { is_active, is_expert = true,current_user_is_coordinator } = data || {};
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const publishQuery = useQuery({
@@ -81,7 +81,7 @@ const AssessmentKitSectionGeneralInfo = (props: IAssessmentKitSectionAuthorInfo)
             <InfoItem
               bg="white"
               info={{
-                action: is_expert ? (
+                action: current_user_is_coordinator ? (
                   is_active ? (
                     <IconButton
                       color="primary"
