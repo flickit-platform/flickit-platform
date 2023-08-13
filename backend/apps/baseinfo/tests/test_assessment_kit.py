@@ -461,13 +461,6 @@ class TestAssessmentKitInitForm:
         
         assert resp.status_code == status.HTTP_403_FORBIDDEN
         
-        expert_group.users.add(user2)
-        request = api.get(f'/baseinfo/assessmentkits/get/{ assessment_kit.id }/', {}, format='json')
-        force_authenticate(request, user = user2)
-        view = assessmentkitviews.AssessmentKitInitFormApi.as_view()
-        resp = view(request, assessment_kit_id = assessment_kit.id)
-        
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
 
   
     def test_get_data_assessment_kit_return_200(self, create_expertgroup, create_tag):

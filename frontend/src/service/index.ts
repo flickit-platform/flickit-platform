@@ -451,14 +451,14 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId, data } = args || {};
-      return axios.post(`/baseinfo/assessmentkits/update/${assessmentKitId}`, data, config);
+      return axios.post(`/baseinfo/assessmentkits/update/${assessmentKitId}/`, data, config);
     },
     fetchAssessmentKitdata(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId } = args || {};
-      return axios.get(`/baseinfo/assessmentkits/get/${assessmentKitId}`, config);
+      return axios.get(`/baseinfo/assessmentkits/get/${assessmentKitId}/`, config);
     },
     fetchAssessmentKit(
       args: { id: TId },

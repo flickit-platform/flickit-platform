@@ -17,7 +17,7 @@ from baseinfo.decorators import is_expert
 from baseinfo.services import assessmentkitservice, expertgroupservice, commonservice
 from baseinfo.serializers.assessmentkitserializers import *
 from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitTag, AssessmentKit
-from baseinfo.permissions import ManageExpertGroupPermission, ManageAssessmentKitPermission , CoordinatorPermission
+from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup 
 
 class AssessmentKitViewSet(mixins.RetrieveModelMixin,
                    mixins.DestroyModelMixin,
@@ -31,7 +31,7 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
         if self.request.method == 'GET':
             permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [IsAuthenticated, CoordinatorPermission]
+            permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -49,14 +49,14 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
         
 
 class AssessmentKitDetailDisplayApi(APIView):
-    permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
     def get(self, request, assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         response = assessmentkitservice.extract_detail_of_assessment_kit(assessment_kit, request)
         return Response(response, status = status.HTTP_200_OK)
 
 class AssessmentKitAnalyzeApi(APIView):
-    permission_classes = [IsAuthenticated, ManageAssessmentKitPermission]
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
     def get(self, request, assessment_kit_id):
         result = assessmentkitservice.analyze(assessment_kit_id)
         return Response(result.data, status = status.HTTP_200_OK)
@@ -74,16 +74,13 @@ class AssessmentKitListForExpertGroupApi(APIView):
             return Response({'results' : {"published" :published}}, status = status.HTTP_200_OK)
         
 
-    
-
-
 class AssessmentKitListOptionsApi(APIView):
     def get(self, request):
         assessment_kit_options =  AssessmentKit.objects.filter(is_active = True).values('id', 'title')
         return Response({'results': assessment_kit_options})
 
 class AssessmentKitArchiveApi(APIView):
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     def post(self, request, assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = assessmentkitservice.archive_assessment_kit(assessment_kit)
@@ -92,7 +89,7 @@ class AssessmentKitArchiveApi(APIView):
         return Response({'message': result.message})
 
 class AssessmentKitPublishApi(APIView):
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     def post(self, request, assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = assessmentkitservice.publish_assessment_kit(assessment_kit)
@@ -118,7 +115,7 @@ class AssessmentKitLikeApi(APIView):
         return Response({'likes': assessment_kit.likes.count()})
 
 class AssessmentKitInitFormApi(APIView):
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
     def get(self, request, assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         data = assessmentkitservice.get_extrac_assessment_kit_data(assessment_kit ,request)
@@ -128,7 +125,7 @@ class AssessmentKitInitFormApi(APIView):
 
 class UpdateAssessmentKitApi(APIView):
     serializer_class = UpdateAssessmentKitSerializer
-    permission_classes = [IsAuthenticated, CoordinatorPermission]
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     def post(self, request, assessment_kit_id):
         serializer = UpdateAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

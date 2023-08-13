@@ -89,9 +89,10 @@ const ExpertGroupContainer = () => {
           owner,
           is_expert,
           is_member,
+          is_owner,
           assessment_kits = [],
         } = data || {};
-        const is_owner = data?.owner?.id === userInfo.id;
+        // const is_owner = data?.owner?.id === userInfo.id;
         const hasAccess = is_expert;
         setDocTitle(`${t("expertGroup")}: ${name || ""}`);
         return (
@@ -733,7 +734,7 @@ const AssessmentKitsList = (props: any) => {
                   return (
                     <AssessmentKitListItem
                       link={
-                        is_expert
+                        is_member
                           ? `assessment-kits/${assessment_kit?.id}`
                           : `/assessment-kits/${assessment_kit?.id}`
                       }
@@ -751,7 +752,7 @@ const AssessmentKitsList = (props: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
-                          is_expert
+                          is_member
                             ? `assessment-kits/${assessment_kit?.id}`
                             : `/assessment-kits/${assessment_kit?.id}`
                         }
