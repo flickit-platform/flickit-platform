@@ -5,23 +5,23 @@ on:
     tags:
       - '*'
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
 
 jobs:
   push-docker-image:
     runs-on: ubuntu-latest
+    outputs:
+      TAG: ${{ steps.TAG.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
       - name: Set output
-        id: vars
+        id: TAG
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
       - name: Check output
         env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.TAG.outputs.tag }}
         run: |
           echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
+          echo ${{ steps.TAG.outputs.tag }}
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -30,17 +30,19 @@ jobs:
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/avansoft/flickit-platform-frontend:${{ steps.vars.outputs.tag }} ./frontend
+        run: docker build -t ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }} ./frontend
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/avansoft/flickit-platform-frontend:${{ steps.vars.outputs.tag }}
+        run: docker push ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }}
+
   darkube_deploy:
     needs: push-docker-image
     container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${{ needs.push-docker-image.steps.vars.outputs.tag }}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref master --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
           DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND }}    
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND }}
+          TAG: ${{needs.push-docker-image.outputs.TAG}}  
     

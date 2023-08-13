@@ -1,16 +1,27 @@
-name: Python application
+name: Python-test
 
 on:
   push:
+    paths:
+      - backend/**
     branches: ['*']
   pull_request:
+    paths:
+      - backend/**
     branches:
       - main
       - stage
 
 jobs:
-  build-test:
-
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build
+        run: docker build -t backend ./backend
+  
+  test:
+    needs: build
     runs-on: ubuntu-latest
 
     services:
@@ -45,69 +56,9 @@ jobs:
         DEBUG_VALUE: False
       run: pytest backend/apps
 
-  coverage:
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
-    - name: Install coverage
-      run: |
-        pip install coverage
-    - name: Run migrations
-      env: 
-        SECRET_KEY: test-secret-key
-        DEBUG_VALUE: False
-      run: python backend/apps/manage.py migrate
-
-    - name: Run tests with coverage
-      env: 
-        SECRET_KEY: test-secret-key
-        DEBUG_VALUE: False
-      run: |
-        coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
-        coverage report --fail-under=60       
-  lint:
-    if: false
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8
-      
-    - name: Run Flake8
-      run: flake8 backend/apps --exclude=tests,*/migrations/*,assessmentplatform/settings.py
 
   sonarcloud:
+    needs: test
     runs-on: ubuntu-latest
     services:
       postgres:
