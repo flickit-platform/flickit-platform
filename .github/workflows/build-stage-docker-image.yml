@@ -1,11 +1,11 @@
 name: Build and Push Backend Docker Image and Deploy
 
 on:
-  workflow_run:
-    workflows:
-      - Python-test
-    types: [completed]
-    branches: [main]
+  push:
+    branches:
+      - main
+    paths:
+      - backend/**
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
