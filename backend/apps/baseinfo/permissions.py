@@ -23,6 +23,9 @@ class ExpertGroupPermission(BasePermission):
     def get_expert_group_id_in_basename_expert_groups_id(self, view):
         return  view.kwargs.get('expert_group_id')
     
+    def get_expert_group_id_in_body_request(self, view):
+        return view.request.data['expert_group_id']
+    
     def check_basename(self,url ):
         url_parts = urlsplit(url)
         path = url_parts.path
@@ -40,7 +43,7 @@ class ExpertGroupPermission(BasePermission):
         return  expert_group.owner_id == current_user.id
     
     request_url = {
-        "importassessmentkit" : get_expert_group_id_in_basename_expert_groups_id,
+        "importassessmentkit" : get_expert_group_id_in_body_request,
         "addexpertgroup" : get_expert_group_id_in_basename_expert_groups_id,
         "analyzeassessmentkit":get_expert_group_id_with_assessment_kit_id,
         "inspectassessmentkit":get_expert_group_id_with_assessment_kit_id,
