@@ -3,14 +3,7 @@ name: Python-test
 on:
   push:
     paths:
-      - backend/**
-    branches: ['*']
-  pull_request:
-    paths:
-      - backend/**
-    branches:
-      - main
-      - stage
+    branches: ['main']
 
 jobs:
   build:
