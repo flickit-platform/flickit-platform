@@ -1,3 +1,4 @@
+boto3==1.26.68
 Django==4.1
 djangorestframework==3.13.1
 djoser==2.1.0
@@ -6,6 +7,7 @@ drf_nested_routers==0.93.4
 psycopg2==2.9.3
 django-filter==22.1
 django-import-export==2.8.0
+django-storages==1.13.2
 django-templated-mail==1.1.1
 uWSGI>=2.0.19.1,<2.1
 celery==5.2.7
