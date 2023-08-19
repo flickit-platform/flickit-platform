@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'assessment',
     'assessmentplatform',
     'drf_yasg',
+    'storages',
 ]
 
 MIDDLEWARE = (
@@ -303,3 +304,14 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+DEFAULT_FILE_STORAGE = 'assessmentplatform.custom_storage.MediaStorage'
+STATICFILES_STORAGE = 'assessmentplatform.custom_storage.StaticStorage'
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_ACCESS_KEY')
+AWS_S3_ENDPOINT_URL = os.environ.get('MINIO_API')
+AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL')  == 'True'
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('MINIO_DOMAIN')
+AWS_S3_URL_PROTOCOL = os.environ.get('MINIO_URL_PROTOCOL')
