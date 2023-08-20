@@ -13,9 +13,9 @@ from baseinfo.views import importassessmentkitviews
 admin.autodiscover()
 
 
-dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
-dsl_path = dsl_path.replace(' ','')
-dsl_path = dsl_path[1:]
+# dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
+# dsl_path = dsl_path.replace(' ','')
+# dsl_path = dsl_path[1:]
 
 urlpatterns = [
    path("admin/", admin.site.urls),
@@ -24,7 +24,7 @@ urlpatterns = [
    path('assessment/', include('assessment.urls')),
    path('authinfo/', include('account.urls')),
    path('api/internal/',include('baseinfo.urls_internal')),
-   re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
+   # re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
 ]
 
 if settings.PRODUCTION_STATE == False:
@@ -40,5 +40,5 @@ if settings.PRODUCTION_STATE == False:
    urlpatterns.append(path('swagger/', login_required(schema_view.with_ui('swagger', cache_timeout=0),login_url="/admin/login/"),name='schema-swagger-ui'))
    
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
