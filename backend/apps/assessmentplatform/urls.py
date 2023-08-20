@@ -13,9 +13,9 @@ from baseinfo.views import importassessmentkitviews
 admin.autodiscover()
 
 
-dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
-dsl_path = dsl_path.replace(' ','')
-dsl_path = dsl_path[1:]
+# dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
+# dsl_path = dsl_path.replace(' ','')
+# dsl_path = dsl_path[1:]
 
 urlpatterns = [
    path("admin/", admin.site.urls),
