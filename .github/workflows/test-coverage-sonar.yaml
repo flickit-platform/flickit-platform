@@ -2,7 +2,11 @@ name: Python-test
 
 on:
   push:
-    branches: ['main']
+    branches: ['*']
+  pull_request:
+    branches:
+      - main
+      - stage
 
 jobs:
   build:
