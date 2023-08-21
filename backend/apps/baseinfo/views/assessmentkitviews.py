@@ -11,10 +11,8 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from rest_framework.exceptions import PermissionDenied
 
-from baseinfo.decorators import is_expert
-from baseinfo.services import assessmentkitservice, expertgroupservice, commonservice
+from baseinfo.services import assessmentkitservice
 from baseinfo.serializers.assessmentkitserializers import *
 from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitTag, AssessmentKit
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup 
@@ -64,13 +62,13 @@ class AssessmentKitAnalyzeApi(APIView):
 class AssessmentKitListForExpertGroupApi(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, expert_group_id):
-        results = assessmentkitservice.get_list_assessmnet_kit_for_expert_group(request.user, expert_group_id)
+        results = assessmentkitservice.get_list_assessment_kit_for_expert_group(request.user, expert_group_id)
         if len(results) == 2:
-            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
-            unpublished = LodeAssessmentKitForExpertGroupSerilizer(results["unpublished"], many = True).data
+            published = LoadAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            unpublished = LoadAssessmentKitForExpertGroupSerilizer(results["unpublished"], many = True).data
             return Response({'results' : {"published" :published,"unpublished" :unpublished}}, status = status.HTTP_200_OK)
         else:
-            published = LodeAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
+            published = LoadAssessmentKitForExpertGroupSerilizer(results["published"], many = True).data
             return Response({'results' : {"published" :published}}, status = status.HTTP_200_OK)
         
 
@@ -154,3 +152,11 @@ class LoadMaturityLevelInternalApi(APIView):
             return Response({ "code": "NOT_FOUND",'message' :"'assessment_kit_id' does not exist"}, status = status.HTTP_400_BAD_REQUEST)
         response = SimpleMaturityLevelSimpleSerializer(maturity_level, many = True).data
         return Response({'items' :response}, status = status.HTTP_200_OK)  
+
+class LoadAssessmentKitInfoEditableApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+    @swagger_auto_schema(responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
+    def get(self,request,assessment_kit_id):
+        assessment_kit = assessmentkitservice.get_assessment_kit_info_editable(assessment_kit_id)
+        response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit ,many = True).data
+        return Response(response[0], status=status.HTTP_200_OK)

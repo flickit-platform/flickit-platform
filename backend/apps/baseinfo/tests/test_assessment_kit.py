@@ -795,3 +795,85 @@ class TestViewAssessmentKit:
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data["id"] == assessment_kit.id
         assert resp.data["current_user_is_coordinator"] == True
+
+
+@pytest.mark.django_db
+class TestLoadAssessmentKitInfoEditableApi:
+    def test_get_assessment_kit_info_editable_when_user_expert_groups_is_member(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group.users.add(user2)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.is_active = True
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
+        force_authenticate(request, user = user1)
+        view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["id"] == assessment_kit_id
+        assert resp.data["title"] == assessment_kit.title
+        assert resp.data["about"] == assessment_kit.about
+        assert resp.data["summary"] == assessment_kit.summary
+        assert "tags" in resp.data
+        assert resp.data["price"] == 0
+        assert resp.data["is_active"] == assessment_kit.is_active
+
+
+    def test_get_assessment_kit_info_editable_when_user_expert_groups_not_member(self, create_user,create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.is_active = True
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
+        force_authenticate(request, user = user2)
+        view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+        assert resp.data['message'] == 'You do not have permission to perform this action.'  
+
+    
+    def test_get_assessment_kit_info_editable_when_user_unauthorized(self, create_user,create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.is_active = True
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
+        view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+    
+    def test_get_assessment_kit_info_editable_when_assessment_kit_id_not_exsist(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.is_active = True
+        assessment_kit.save()
+        assessment_kit_id = 100
+        
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
+        force_authenticate(request, user = user1)
+        view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['code'] == "NOT_FOUND"
+        assert resp.data['message'] == "'assessment_kit_id' does not exist" 
