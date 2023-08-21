@@ -333,6 +333,6 @@ def get_list_assessment_kit_for_expert_group(user,expert_group_id):
         results['unpublished'] = expert_group.assessmentkits.filter(is_active=False)
     return results
 
-def get_assessment_kit_info_editable(assessment_kit_id):
+def get_assessment_kit(assessment_kit_id):
     result = AssessmentKit.objects.filter(id=assessment_kit_id)
     return result
