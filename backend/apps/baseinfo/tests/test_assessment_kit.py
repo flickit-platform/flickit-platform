@@ -811,7 +811,7 @@ class TestLoadAssessmentKitInfoEditableApi:
         assessment_kit_id = assessment_kit.id
         api = APIRequestFactory()
         request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
-        force_authenticate(request, user = user1)
+        force_authenticate(request, user = user2)
         view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id)
         
@@ -872,6 +872,79 @@ class TestLoadAssessmentKitInfoEditableApi:
         request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/info/')
         force_authenticate(request, user = user1)
         view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['code'] == "NOT_FOUND"
+        assert resp.data['message'] == "'assessment_kit_id' does not exist" 
+
+@pytest.mark.django_db
+class TestLoadAssessmentKitInfoStatisticalApi:
+    
+    def test_get_assessment_kit_info_Statistical_when_user_expert_groups_is_member(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group.users.add(user2)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/stats/')
+        force_authenticate(request, user = user2)
+        view = assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["expert_group"]["id"] == expert_group.id
+
+    def test_get_assessment_kit_info_Statistical_when_user_expert_groups_not_member(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/stats/')
+        force_authenticate(request, user = user2)
+        view = assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+        assert resp.data['message'] == 'You do not have permission to perform this action.'  
+
+    def test_get_assessment_kit_info_Statistical_when_user_unauthorized(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        assessment_kit_id = assessment_kit.id
+
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/stats/')
+        view = assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_get_assessment_kit_info_Statistical_when_assessment_kit_id_not_exsist(self, create_user, create_expertgroup):
+        user1 = create_user(email = "test@test.com" )
+        user2 = create_user(email = "test2@test.com" )
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit = baker.make(AssessmentKit)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        assessment_kit_id = 1000
+
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/stats/')
+        force_authenticate(request, user = user2)
+        view = assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id)
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST

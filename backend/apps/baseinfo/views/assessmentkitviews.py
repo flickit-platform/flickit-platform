@@ -157,6 +157,14 @@ class LoadAssessmentKitInfoEditableApi(APIView):
     permission_classes = [IsAuthenticated, IsMemberExpertGroup]
     @swagger_auto_schema(responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
     def get(self,request,assessment_kit_id):
-        assessment_kit = assessmentkitservice.get_assessment_kit_info_editable(assessment_kit_id)
+        assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit ,many = True).data
+        return Response(response[0], status=status.HTTP_200_OK)
+
+class LoadAssessmentKitInfoStatisticalApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+    @swagger_auto_schema(responses={200: LoadAssessmentKitInfoStatisticalSerilizer(many=True)})
+    def get(self,request,assessment_kit_id):
+        assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
+        response = LoadAssessmentKitInfoStatisticalSerilizer(assessment_kit ,many = True).data
         return Response(response[0], status=status.HTTP_200_OK)

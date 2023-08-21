@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from assessment.models import AssessmentProject
 
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, MaturityLevel, LevelCompetence
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 
@@ -139,3 +139,38 @@ class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'summary','is_active','price', 'about', 'tags']
+
+class SimpleExpertGroupDataForAssessmentKitSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = ExpertGroup
+            fields = ['id', 'name']
+
+class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = AssessmentSubject
+            fields = ['title']
+
+class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
+    last_update_time = serializers.DateTimeField(source='last_modification_date')
+    questionnaires_count = serializers.IntegerField(source='questionnaires.count')
+    attributes_count = serializers.SerializerMethodField()
+    questions_count = serializers.SerializerMethodField()
+    maturity_levels_count = serializers.IntegerField(source='maturity_levels.count')
+    likes_count = serializers.IntegerField(source='likes.count')
+    assessments_count = serializers.IntegerField(source='assessment_projects.count')
+    subjects = SimpleAssessmentSubjectDataForAssessmentKitSerializer(source ='assessment_subjects' ,many = True)
+    expert_group =SimpleExpertGroupDataForAssessmentKitSerializer()
+    
+    
+    def get_attributes_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.assessment_subjects.values('quality_attributes').count()
+    
+    def get_questions_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.questionnaires.values('question').count()
+    
+    def get_questions_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.questionnaires.values('question').count()
+    
+    class Meta:
+        model = AssessmentKit
+        fields = ['creation_time', 'last_update_time', 'questionnaires_count' , 'attributes_count', 'questions_count', 'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects' ,'expert_group']
