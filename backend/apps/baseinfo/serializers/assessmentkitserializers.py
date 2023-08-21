@@ -121,7 +121,21 @@ class LevelCompetenceSerilizer(serializers.ModelSerializer):
             model = LevelCompetence
             fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
 
-class LodeAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
+class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'last_modification_date']
+        
+
+class SimpleAssessmentKitTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentKitTag
+        fields = ['id', 'title']
+class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
+    tags =  SimpleAssessmentKitTagSerializer(many = True )
+    price = serializers.SerializerMethodField('price_value')
+    def price_value(self,AssessmentKit):
+        return 0
+    class Meta:
+        model = AssessmentKit
+        fields = ['id', 'title', 'summary','is_active','price', 'about', 'tags']
