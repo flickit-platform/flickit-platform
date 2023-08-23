@@ -336,3 +336,25 @@ def get_list_assessment_kit_for_expert_group(user,expert_group_id):
 def get_assessment_kit(assessment_kit_id):
     result = AssessmentKit.objects.filter(id=assessment_kit_id)
     return result
+
+
+@transaction.atomic
+def update_assessment_kit_info(assessment_kit_id, **kwargs):
+    assessment_kit = AssessmentKit.objects.get(id=assessment_kit_id)
+    if len(kwargs) == 0 :
+            return  ActionResult(success=True)
+
+    if "tags" in kwargs:
+        if len(kwargs["tags"]) == AssessmentKitTag.objects.filter(id__in=kwargs["tags"]).count():
+            assessment_kit.tags.clear()
+            for tag in kwargs["tags"]:
+                assessment_kit.tags.add(AssessmentKitTag.objects.get(id=tag))
+                assessment_kit.save()
+            kwargs.pop("tags")
+        else:
+            return ActionResult(success=False, message="'tag_id' does not exists.")
+    if "price" in kwargs:
+        kwargs.pop("price")
+    assessment_kit = AssessmentKit.objects.filter(id=assessment_kit_id).update(**kwargs)
+    return  ActionResult(success=True)
+    
