@@ -154,17 +154,21 @@ class LoadMaturityLevelInternalApi(APIView):
         return Response({'items' :response}, status = status.HTTP_200_OK)  
 
 class LoadAssessmentKitInfoEditableApi(APIView):
-    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
     def get(self,request,assessment_kit_id):
+        if ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists() == False:
+            return Response({"code": "NOT_FOUND",'message' :"'assessment_kit_id' does not exist"},status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit ,many = True).data
         return Response(response[0], status=status.HTTP_200_OK)
 
 class LoadAssessmentKitInfoStatisticalApi(APIView):
-    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(responses={200: LoadAssessmentKitInfoStatisticalSerilizer(many=True)})
     def get(self,request,assessment_kit_id):
+        if ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists() == False:
+            return Response({"code": "NOT_FOUND",'message' :"'assessment_kit_id' does not exist"},status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitInfoStatisticalSerilizer(assessment_kit ,many = True).data
         return Response(response[0], status=status.HTTP_200_OK)

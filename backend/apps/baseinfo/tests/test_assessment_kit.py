@@ -840,8 +840,9 @@ class TestLoadAssessmentKitInfoEditableApi:
         view = assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id)
         
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
-        assert resp.data['message'] == 'You do not have permission to perform this action.'  
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['code'] == "NOT_FOUND"
+        assert resp.data['message'] == "'assessment_kit_id' does not exist"
 
     
     def test_get_assessment_kit_info_editable_when_user_unauthorized(self, create_user,create_expertgroup):
@@ -914,8 +915,9 @@ class TestLoadAssessmentKitInfoStatisticalApi:
         view = assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id)
         
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
-        assert resp.data['message'] == 'You do not have permission to perform this action.'  
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['code'] == "NOT_FOUND"
+        assert resp.data['message'] == "'assessment_kit_id' does not exist"
 
     def test_get_assessment_kit_info_Statistical_when_user_unauthorized(self, create_user, create_expertgroup):
         user1 = create_user(email = "test@test.com" )
