@@ -168,3 +168,18 @@ class LoadAssessmentKitInfoStatisticalApi(APIView):
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitInfoStatisticalSerilizer(assessment_kit ,many = True).data
         return Response(response[0], status=status.HTTP_200_OK)
+
+class EditAssessmentKitInfoApi(APIView):
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+    serializer_class = EditAssessmentKitInfoSerializer
+    @swagger_auto_schema(request_body=EditAssessmentKitInfoSerializer(),responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
+    def patch(self,request,assessment_kit_id):
+        serializer = EditAssessmentKitInfoSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True )
+        result = assessmentkitservice.update_assessment_kit_info(assessment_kit_id,**serializer.validated_data)
+        if result.success:
+            assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
+            response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit ,many = True).data
+            return Response(response[0], status=status.HTTP_200_OK)
+        else:
+            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)

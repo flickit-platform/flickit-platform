@@ -5,7 +5,7 @@ from assessment.models import AssessmentProject
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
-
+from rest_framework.validators import UniqueValidator
 from ..services import assessmentkitservice
 
 
@@ -174,3 +174,11 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['creation_time', 'last_update_time', 'questionnaires_count' , 'attributes_count', 'questions_count', 'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects' ,'expert_group']
+
+class EditAssessmentKitInfoSerializer(serializers.Serializer):
+    title = serializers.CharField(required=False, min_length=3, max_length=50, validators=[UniqueValidator(queryset=AssessmentKit.objects.all())])
+    about = serializers.CharField(required=False , min_length=3, max_length=1000)
+    summary = serializers.CharField(required=False , min_length=3, max_length=200)
+    tags = serializers.ListField(child=serializers.IntegerField(),required=False)
+    is_active = serializers.BooleanField(required=False)
+    price = serializers.IntegerField(required=False)

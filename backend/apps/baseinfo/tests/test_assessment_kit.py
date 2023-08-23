@@ -949,4 +949,195 @@ class TestLoadAssessmentKitInfoStatisticalApi:
         
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert resp.data['code'] == "NOT_FOUND"
-        assert resp.data['message'] == "'assessment_kit_id' does not exist" 
+        assert resp.data['message'] == "'assessment_kit_id' does not exist"
+
+
+@pytest.mark.django_db
+class TestEditAssessmentKitInfoApi:
+    def test_edit_assessment_kit_when_user_is_owner(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        assessment_kit.code = "tu1"
+        assessment_kit.title = "title user1"
+        assessment_kit.about = "about user 1"
+        assessment_kit.summary = "summary user1"
+        assessment_kit.tags.add(tag1)
+        assessment_kit.tags.add(tag2)
+        assessment_kit.save()
+
+        data ={
+            "tags" : [tag2.id],
+            "title" : "test2",
+            "summary" : "test2",
+            "about":"<p>test2</p>",
+            "is_active": True,
+            "price": 0,
+            }
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user1)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+
+        assessment_kit.refresh_from_db()
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["id"] == assessment_kit.id
+        assert resp.data["title"] == assessment_kit.title
+        assert resp.data["summary"] == assessment_kit.summary
+        assert resp.data["about"] == assessment_kit.about
+        assert resp.data["is_active"] == assessment_kit.is_active
+        assert resp.data["price"] == 0
+        assert resp.data["tags"][0]["id"] == tag2.id
+        assert user1 == expert_group.owner
+    
+    def test_edit_assessment_kit_when_user_is_member_expert_groups(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        user2 = create_user(email = "test2@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group.users.add(user2)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', {}, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user2)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+        assert resp.data['message'] == 'You do not have permission to perform this action.'
+
+    def test_edit_assessment_kit_when_user_not_member_expert_groups(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        user2 = create_user(email = "test2@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', {}, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user2)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+        assert resp.data['message'] == 'You do not have permission to perform this action.'
+
+    def test_edit_assessment_kit_when_user_is_member_not_valid_field(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        
+        # tag id not exist
+        data = {
+            "tags":[1,100]
+        }
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user1)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['message'] == "'tag_id' does not exists."
+
+        # assessment kit id not exist
+        assessment_kit_id= 1000
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit_id}/', data, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user1)
+        resp= view(request, assessment_kit_id = assessment_kit_id)
+        
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data['code'] == "NOT_FOUND"
+        assert resp.data['message'] == "'assessment_kit_id' does not exist"
+        
+    def test_edit_assessment_kit_when_user_unauthorized(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit.expert_group = expert_group
+        assessment_kit.save()
+        
+
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', {}, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_edit_assessment_kit_when_user_is_member_expert_groups_no_editing(self, create_user, create_expertgroup, create_tag):
+        user1 = create_user(email = "test@test.com")
+        permission = Permission.objects.get(name='Manage Expert Groups')
+        user1.user_permissions.add(permission)
+        assessment_kit = baker.make(AssessmentKit)
+        expert_group = create_expertgroup(ExpertGroup, user1)
+        assessment_kit.expert_group = expert_group
+        tag1 = create_tag(code = "tc1" , title = "devops")
+        tag2 = create_tag(code = "tc2" , title = "team")
+        assessment_kit.code = "tu1"
+        assessment_kit.title = "title user1"
+        assessment_kit.about = "about user 1"
+        assessment_kit.summary = "summary user1"
+        assessment_kit.tags.add(tag1)
+        assessment_kit.tags.add(tag2)
+        assessment_kit.save()
+        
+        # empty data
+        data = {}
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user1)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+
+        assessment_kit.refresh_from_db()
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["id"] == assessment_kit.id
+        assert resp.data["title"] == assessment_kit.title
+        assert resp.data["summary"] == assessment_kit.summary
+        assert resp.data["about"] == assessment_kit.about
+        assert resp.data["is_active"] == assessment_kit.is_active
+        assert resp.data["price"] == 0
+        assert resp.data["tags"][0]["id"] == tag1.id
+        assert user1 == expert_group.owner
+        # field not exist
+        data = {"test":"test"}
+        api = APIRequestFactory()
+        request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
+        view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
+        force_authenticate(request, user = user1)
+        resp= view(request, assessment_kit_id = assessment_kit.id)
+        
+
+        assessment_kit.refresh_from_db()
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["id"] == assessment_kit.id
+        assert resp.data["title"] == assessment_kit.title
+        assert resp.data["summary"] == assessment_kit.summary
+        assert resp.data["about"] == assessment_kit.about
+        assert resp.data["is_active"] == assessment_kit.is_active
+        assert resp.data["price"] == 0
+        assert resp.data["tags"][0]["id"] == tag1.id
+        assert user1 == expert_group.owner
