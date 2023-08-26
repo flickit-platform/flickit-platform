@@ -974,6 +974,7 @@ class TestEditAssessmentKitInfoApi:
         assessment_kit.save()
 
         data ={
+            "data" :{
             "tags" : [tag2.id],
             "title" : "test2",
             "summary" : "test2",
@@ -981,6 +982,7 @@ class TestEditAssessmentKitInfoApi:
             "is_active": True,
             "price": 0,
             }
+        }
         api = APIRequestFactory()
         request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
         view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
@@ -1049,7 +1051,9 @@ class TestEditAssessmentKitInfoApi:
         
         # tag id not exist
         data = {
+            "data":{
             "tags":[1,100]
+            }
         }
         api = APIRequestFactory()
         request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
@@ -1125,7 +1129,11 @@ class TestEditAssessmentKitInfoApi:
         assert resp.data["tags"][0]["id"] == tag1.id
         assert user1 == expert_group.owner
         # field not exist
-        data = {"test":"test"}
+        data = {
+            "data":{
+                "test":"test"
+            }
+            }
         api = APIRequestFactory()
         request = api.patch(f'/api/v1/assessment-kits/{assessment_kit.id}/', data, format='json')
         view = assessmentkitviews.EditAssessmentKitInfoApi.as_view()
