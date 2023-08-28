@@ -83,6 +83,38 @@ const AssessmentKitSectionGeneralInfo = (
       query();
     } catch (e) {}
   };
+
+  const abortController = useRef(new AbortController());
+  const [show, setShow] = useState<boolean>(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const handleMouseOver = () => {
+    current_user_is_coordinator && setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
+  const [titleText, setTitleText] = useState<String>(data);
+  const handleCancel = () => {
+    setShow(false);
+    setTitleText(data);
+  };
+  const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
+    event.preventDefault();
+    try {
+      const { data: res } = await service.updateAssessmentKitStats(
+        {
+          assessmentKitId: assessmentKitId || "",
+          data: { tags: data?.tags?.map((t: any) => t.id) },
+        },
+        { signal: abortController.current.signal }
+      );
+      if (res) {
+        fetchAssessmentKitInfoQuery.query();
+      }
+    } catch {}
+  };
   return (
     <>
       <QueryBatchData
@@ -137,12 +169,141 @@ const AssessmentKitSectionGeneralInfo = (
                       FREE
                     </Typography>
                   </Box>
-                  <OnHoverAutocompleteAsyncField
+                  {/* <OnHoverAutocompleteAsyncField
                     data={info?.tags}
                     title={<Trans i18nKey="tags" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     current_user_is_coordinator={current_user_is_coordinator}
-                  />
+                  /> */}
+
+                  <Box
+                    my={1.5}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="body2" mr={4}>
+                      <Trans i18nKey="tags" />
+                    </Typography>
+                    {current_user_is_coordinator && show ? (
+                      <FormProviderWithForm formMethods={formMethods}>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <AutocompleteAsyncField
+                            {...useConnectAutocompleteField({
+                              service: (args, config) =>
+                                service.fetchAssessmentKitTags(args, config),
+                            })}
+                            name="tags"
+                            multiple={true}
+                            defaultValue={info?.tags}
+                            searchOnType={false}
+                            label={""}
+                            sx={{ width: "100%" }}
+                          />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              height: "100%",
+                            }}
+                          >
+                            <IconButton
+                              edge="end"
+                              sx={{
+                                background: "#1976d299",
+                                borderRadius: "3px",
+                                height: "36px",
+                                marginBottom: "2px",
+                                marginRight: "3px",
+                              }}
+                              onClick={formMethods.handleSubmit(onSubmit)}
+                            >
+                              <CheckCircleOutlineRoundedIcon
+                                sx={{ color: "#fff" }}
+                              />
+                            </IconButton>
+                            <IconButton
+                              edge="end"
+                              sx={{
+                                background: "#1976d299",
+                                borderRadius: "4px",
+                                height: "36px",
+                                marginBottom: "2px",
+                              }}
+                              onClick={handleCancel}
+                            >
+                              <CancelRoundedIcon sx={{ color: "#fff" }} />
+                            </IconButton>
+                          </Box>
+                        </Box>
+                      </FormProviderWithForm>
+                    ) : (
+                      <Box
+                        sx={{
+                          height: "38px",
+                          borderRadius: "4px",
+                          paddingLeft: "8px;",
+                          paddingRight: "12px;",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          "&:hover": { border: "1px solid #1976d299" },
+                        }}
+                        onClick={() => setShow(!show)}
+                        onMouseOver={handleMouseOver}
+                        onMouseOut={handleMouseOut}
+                      >
+                        <Box sx={{ display: "flex" }}>
+                          {info?.tags.map((tag: any, index: number) => {
+                            return (
+                              <Box
+                                sx={{
+                                  background: "#00000014",
+                                  fontFamily: "Roboto",
+                                  fontSize: "0.875rem",
+                                  borderRadius: "8px",
+                                  fontWeight: "700",
+                                }}
+                                mr={1}
+                                px={1}
+                              >
+                                <Typography variant="body2" fontWeight="700">
+                                  {tag.title}
+                                </Typography>
+                              </Box>
+                            );
+                          })}
+                        </Box>
+                        {isHovering && (
+                          <IconButton
+                            title="Edit"
+                            edge="end"
+                            sx={{
+                              background: "#1976d299",
+                              borderRadius: "3px",
+                              height: "36px",
+                            }}
+                            onClick={() => setShow(!show)}
+                          >
+                            <EditRoundedIcon sx={{ color: "#fff" }} />
+                          </IconButton>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+
                   <OnHoverRichEditor
                     data={info?.about}
                     title={<Trans i18nKey="about" />}
@@ -226,7 +387,7 @@ const AssessmentKitSectionGeneralInfo = (
                       bg="white"
                       info={{
                         item: stats?.maturity_levels_count,
-                        title: t("maturityLevels"),
+                        title: t("maturitylevels"),
                       }}
                     />
                   </Box>
@@ -530,7 +691,6 @@ const OnHoverRichEditor = (props: any) => {
   const formMethods = useForm({ shouldUnregister: true });
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
-    console.log(data);
     try {
       const { data: res } = await service.updateAssessmentKitStats(
         { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
@@ -671,18 +831,19 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
   const formMethods = useForm({ shouldUnregister: true });
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
-    console.log(data);
     try {
       const { data: res } = await service.updateAssessmentKitStats(
-        { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
+        { assessmentKitId: assessmentKitId || "", data: { tags: data.about } },
         { signal: abortController.current.signal }
       );
       if (res) {
+        handleCancel()
         infoQuery();
       }
     } catch {}
   };
-  const display=false
+  const display = false;
+
   return (
     <>
       <Box
@@ -696,7 +857,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
         <Typography variant="body2" mr={4}>
           {title}
         </Typography>
-        {display&&current_user_is_coordinator && show ? (
+        {current_user_is_coordinator && show ? (
           <FormProviderWithForm formMethods={formMethods}>
             <Box
               sx={{
@@ -713,14 +874,15 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                 })}
                 name="tags"
                 multiple={true}
-                defaultValue={data.tags}
+                defaultValue={data}
                 searchOnType={false}
-                label={<Trans i18nKey="tags" />}
+                label={""}
+                sx={{ width: "100%" }}
               />
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100%",
@@ -733,6 +895,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                     borderRadius: "3px",
                     height: "36px",
                     marginBottom: "2px",
+                    marginRight: "3px",
                   }}
                   onClick={formMethods.handleSubmit(onSubmit)}
                 >
@@ -770,7 +933,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
           >
-            <Box sx={{display:"flex"}}>
+            <Box sx={{ display: "flex" }}>
               {data.map((tag: any, index: number) => {
                 return (
                   <Box

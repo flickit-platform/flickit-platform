@@ -80,19 +80,19 @@ const AssessmentKitExpertViewContainer = () => {
                     />
                   }
                   // sub={data.summary}
-                  toolbar={
-                    current_user_is_coordinator && (
-                      <IconButton
-                        title="Setting"
-                        color="primary"
-                        onClick={() =>
-                          dialogProps.openDialog({ type: "update", data })
-                        }
-                      >
-                        <SettingsRoundedIcon />
-                      </IconButton>
-                    )
-                  }
+                  // toolbar={
+                  //   current_user_is_coordinator && (
+                  //     <IconButton
+                  //       title="Setting"
+                  //       color="primary"
+                  //       onClick={() =>
+                  //         dialogProps.openDialog({ type: "update", data })
+                  //       }
+                  //     >
+                  //       <SettingsRoundedIcon />
+                  //     </IconButton>
+                  //   )
+                  // }
                 >
                   {data.title}
                 </Title>
