@@ -16,14 +16,22 @@ const RichEditorField = (props: any) => {
       shouldUnregister={true}
       defaultValue={defaultValue}
       render={({ field, fieldState, formState }) => {
-        return <RichEditorFieldBase {...rest} name={name} required={required} field={field} defaultValue={defaultValue} />;
+        return (
+          <RichEditorFieldBase
+            {...rest}
+            name={name}
+            required={required}
+            field={field}
+            defaultValue={defaultValue}
+          />
+        );
       }}
     />
   );
 };
 
 const RichEditorFieldBase = (props: any) => {
-  const { defaultValue, name, field, required, label } = props;
+  const { defaultValue, name, field, required, label, disable_label } = props;
   const [shrink, setShrink] = useState(() => (defaultValue ? true : false));
   const [focus, setFocus] = useState(false);
 
@@ -31,7 +39,7 @@ const RichEditorFieldBase = (props: any) => {
     formState: { errors },
   } = useFormContext();
   const { hasError, errorMessage } = getFieldError(errors, name);
-
+  const show_label = disable_label ? false : true;
   return (
     <FormControl
       fullWidth
@@ -58,14 +66,16 @@ const RichEditorFieldBase = (props: any) => {
       }}
       error={hasError}
     >
-      <InputLabel
-        className={focus ? "Mui-focused" : ""}
-        shrink={shrink}
-        sx={{ background: "white", px: 0.2 }}
-        required={required}
-      >
-        {label}
-      </InputLabel>
+      {show_label && (
+        <InputLabel
+          className={focus ? "Mui-focused" : ""}
+          shrink={shrink}
+          sx={{ background: "white", px: 0.2 }}
+          required={required}
+        >
+          {label}
+        </InputLabel>
+      )}
       <RichEditor
         isEditable={true}
         className={
