@@ -372,7 +372,10 @@ export const createService = (
         withCredentials: true,
       });
     },
-    fetchAssessmentKits(args: any, config: AxiosRequestConfig<any> | undefined = {}) {
+    fetchAssessmentKits(
+      args: any,
+      config: AxiosRequestConfig<any> | undefined = {}
+    ) {
       const { query } = args || {};
       const params = query ? { query } : {};
       return axios.get(`/baseinfo/assessmentkits/`, { params, ...config });
@@ -420,7 +423,10 @@ export const createService = (
         config
       );
     },
-    uploadAssessmentKitDSL(file: any, config: AxiosRequestConfig<any> | undefined) {
+    uploadAssessmentKitDSL(
+      file: any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       return axios.post(
         `/baseinfo/dsl/`,
         { dsl_file: file },
@@ -451,14 +457,21 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId, data } = args || {};
-      return axios.post(`/baseinfo/assessmentkits/update/${assessmentKitId}/`, data, config);
+      return axios.post(
+        `/baseinfo/assessmentkits/update/${assessmentKitId}/`,
+        data,
+        config
+      );
     },
     fetchAssessmentKitdata(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId } = args || {};
-      return axios.get(`/baseinfo/assessmentkits/get/${assessmentKitId}/`, config);
+      return axios.get(
+        `/baseinfo/assessmentkits/get/${assessmentKitId}/`,
+        config
+      );
     },
     fetchAssessmentKit(
       args: { id: TId },
@@ -467,7 +480,40 @@ export const createService = (
       const { id } = args || {};
       return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
     },
-    fetchAssessmentKitTags(args: any, config: AxiosRequestConfig<any> | undefined) {
+    fetchAssessmentKitInfo(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args || {};
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/info/`,
+        config
+      );
+    },
+    fetchAssessmentKitStats(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args || {};
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/stats/`,
+        config
+      );
+    },
+    updateAssessmentKitStats(
+      args: { assessmentKitId: TId; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, data } = args || {};
+      return axios.patch(`/api/v1/assessment-kits/${assessmentKitId}/`, {
+        data,
+        config,
+      });
+    },
+    fetchAssessmentKitTags(
+      args: any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       return axios.get(`/baseinfo/tags/`, config);
     },
     deleteAssessmentKit(
@@ -477,7 +523,10 @@ export const createService = (
       const { id } = args || {};
       return axios.delete(`/baseinfo/assessmentkits/${id}/`, config);
     },
-    uploadAssessmentKitPhoto(file: any, config: AxiosRequestConfig<any> | undefined) {
+    uploadAssessmentKitPhoto(
+      file: any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       return axios.post(
         `/baseinfo/assessmentkits/1/images/`,
         { image: file },
@@ -493,14 +542,20 @@ export const createService = (
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.delete(`/baseinfo/assessmentkits/1/images/${args?.id}/`, config);
+      return axios.delete(
+        `/baseinfo/assessmentkits/1/images/${args?.id}/`,
+        config
+      );
     },
     inspectAssessmentKit(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId } = args || {};
-      return axios.get(`/baseinfo/inspectassessmentkit/${assessmentKitId}/`, config);
+      return axios.get(
+        `/baseinfo/inspectassessmentkit/${assessmentKitId}/`,
+        config
+      );
     },
     fetchUserExpertGroups(
       args: any,
@@ -661,7 +716,12 @@ export const createService = (
       });
     },
     addEvidence(
-      args: { description: string; questionId: TId; assessmentId: TId; id?: TId },
+      args: {
+        description: string;
+        questionId: TId;
+        assessmentId: TId;
+        id?: TId;
+      },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { description, questionId, assessmentId, id } = args || {};
