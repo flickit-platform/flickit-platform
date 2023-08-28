@@ -35,8 +35,10 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 const AssessmentKitExpertViewContainer = () => {
-  const { assessmentKitQueryProps, fetchAssessmentKitQuery } =
-    useAssessmentKit();
+  const {
+    assessmentKitQueryProps,
+    fetchAssessmentKitQuery,
+  } = useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -44,10 +46,19 @@ const AssessmentKitExpertViewContainer = () => {
   return (
     <Box>
       <QueryBatchData
-        queryBatchData={[assessmentKitQueryProps, fetchAssessmentKitQuery]}
-        render={([data = {}, assessmentKitData]) => {
-          const { is_expert = true, expert_group,current_user_is_coordinator } = data;
-          console.log(data)
+        queryBatchData={[
+          assessmentKitQueryProps,
+          fetchAssessmentKitQuery,
+        ]}
+        render={([
+          data = {},
+          assessmentKitData = {}
+        ]) => {
+          const {
+            is_expert = true,
+            expert_group,
+            current_user_is_coordinator,
+          } = data;
           setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
           return (
             <>
@@ -1210,6 +1221,7 @@ const useAssessmentKit = () => {
       service.fetchAssessmentKitdata(args, config),
     runOnMount: true,
   });
+
   return {
     assessmentKitQueryProps,
     analyzeAssessmentKitQuery,
