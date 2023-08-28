@@ -156,6 +156,10 @@ def __import_questions(questionModels, assessment_kit):
             impact.question = question
             impact.weight = impact_model['weight']
             impact.save()
+            subject = impact.quality_attribute.assessment_subject
+            questionnaire = impact.question.questionnaire
+            subject.questionnaires.add(questionnaire)
+            
 
             option_values_map = impact_model['optionValues']
             for option_number, option_value in option_values_map.items():
