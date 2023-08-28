@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from assessment.models import AssessmentProject
 
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, MaturityLevel, LevelCompetence
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
-
+from rest_framework.validators import UniqueValidator
 from ..services import assessmentkitservice
 
 
@@ -121,7 +121,64 @@ class LevelCompetenceSerilizer(serializers.ModelSerializer):
             model = LevelCompetence
             fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
 
-class LodeAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
+class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'last_modification_date']
+        
+
+class SimpleAssessmentKitTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentKitTag
+        fields = ['id', 'title']
+class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
+    tags =  SimpleAssessmentKitTagSerializer(many = True )
+    price = serializers.SerializerMethodField('price_value')
+    def price_value(self,AssessmentKit):
+        return 0
+    class Meta:
+        model = AssessmentKit
+        fields = ['id', 'title', 'summary','is_active','price', 'about', 'tags']
+
+class SimpleExpertGroupDataForAssessmentKitSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = ExpertGroup
+            fields = ['id', 'name']
+
+class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = AssessmentSubject
+            fields = ['title']
+
+class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
+    last_update_time = serializers.DateTimeField(source='last_modification_date')
+    questionnaires_count = serializers.IntegerField(source='questionnaires.count')
+    attributes_count = serializers.SerializerMethodField()
+    questions_count = serializers.SerializerMethodField()
+    maturity_levels_count = serializers.IntegerField(source='maturity_levels.count')
+    likes_count = serializers.IntegerField(source='likes.count')
+    assessments_count = serializers.IntegerField(source='assessment_projects.count')
+    subjects = SimpleAssessmentSubjectDataForAssessmentKitSerializer(source ='assessment_subjects' ,many = True)
+    expert_group =SimpleExpertGroupDataForAssessmentKitSerializer()
+    
+    
+    def get_attributes_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.assessment_subjects.values('quality_attributes').count()
+    
+    def get_questions_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.questionnaires.values('question').count()
+    
+    def get_questions_count(self,assessment_kit:AssessmentKit):
+        return assessment_kit.questionnaires.values('question').count()
+    
+    class Meta:
+        model = AssessmentKit
+        fields = ['creation_time', 'last_update_time', 'questionnaires_count' , 'attributes_count', 'questions_count', 'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects' ,'expert_group']
+
+class EditAssessmentKitInfoSerializer(serializers.Serializer):
+    title = serializers.CharField(required=False, min_length=3, max_length=50, validators=[UniqueValidator(queryset=AssessmentKit.objects.all())])
+    about = serializers.CharField(required=False , min_length=3, max_length=1000)
+    summary = serializers.CharField(required=False , min_length=3, max_length=200)
+    tags = serializers.ListField(child=serializers.IntegerField(),required=False)
+    is_active = serializers.BooleanField(required=False)
+    price = serializers.IntegerField(required=False)

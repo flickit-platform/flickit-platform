@@ -111,10 +111,11 @@ def __import_subjects(subject_models, assessment_kit):
         subject.assessment_kit = assessment_kit
         questionnaire_codes = model['questionnaireCodes']
         subject.save()
-        for questionnaire_code in questionnaire_codes:
-            questionnaire = Questionnaire.objects.filter(code = questionnaire_code).first()
-            subject.questionnaires.add(questionnaire)
-            subject.save()
+        if questionnaire_codes !=None:
+            for questionnaire_code in questionnaire_codes:
+                questionnaire = Questionnaire.objects.filter(code = questionnaire_code).first()
+                subject.questionnaires.add(questionnaire)
+                subject.save()
         
 @transaction.atomic
 def __import_attributes(attributeModels):

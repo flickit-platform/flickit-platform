@@ -1,5 +1,8 @@
 from urllib.parse import urlsplit
 from rest_framework.permissions import BasePermission
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKit
 from common.abstractservices import load_model
@@ -10,6 +13,13 @@ class ExpertGroupPermission(BasePermission):
         assessment_kit = load_model(AssessmentKit, view.kwargs.get('pk'))
         return assessment_kit.expert_group_id
     
+    def get_expert_group_id_with_assessment_kit_id_with_error(self,view):
+        try:
+            assessment_kit = AssessmentKit.objects.get(id = view.kwargs.get('assessment_kit_id'))
+        except AssessmentKit.DoesNotExist as e:
+            raise ValidationError({"code": "NOT_FOUND",'message' :"'assessment_kit_id' does not exist"})
+        return assessment_kit.expert_group_id
+
     def get_expert_group_id_with_assessment_kit_id(self,view):
         assessment_kit = load_model(AssessmentKit, view.kwargs.get('assessment_kit_id'))
         return assessment_kit.expert_group_id
@@ -32,6 +42,9 @@ class ExpertGroupPermission(BasePermission):
         paths = path.split("/")
         if paths[1] == "baseinfo" and paths[2] in self.request_url :
             return paths[2]
+
+        elif paths[1] == "api" and paths[3] in self.request_url :
+            return paths[3]
         return None
     
     def check_current_user_is_member_of_expert_group(self, current_user, expert_group_id):
@@ -48,6 +61,7 @@ class ExpertGroupPermission(BasePermission):
         "analyzeassessmentkit":get_expert_group_id_with_assessment_kit_id,
         "inspectassessmentkit":get_expert_group_id_with_assessment_kit_id,
         "assessmentkits":get_expert_group_id_with_assessment_kit_id,
+        "assessment-kits":get_expert_group_id_with_assessment_kit_id_with_error,
     }
     basename_url = {
         "expertgroups" : get_expert_group_id_in_basename_expert_groups,
