@@ -7,6 +7,8 @@ import InfoItem from "@common/InfoItem";
 import formatDate from "@utils/formatDate";
 import { t } from "i18next";
 import Title from "@common/Title";
+import toastError from "@utils/toastError";
+import { ICustomError } from "@utils/CustomError";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { TQueryFunction } from "@types";
@@ -27,6 +29,8 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import QueryBatchData from "@common/QueryBatchData";
 import RichEditorField from "@common/fields/RichEditorField";
+import setServerFieldErrors from "@utils/setServerFieldError";
+import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
@@ -135,6 +139,7 @@ const AssessmentKitSectionGeneralInfo = (
                   }}
                 >
                   <OnHoverInput
+                    formMethods={formMethods}
                     data={info?.title}
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
@@ -142,6 +147,7 @@ const AssessmentKitSectionGeneralInfo = (
                     current_user_is_coordinator={current_user_is_coordinator}
                   />
                   <OnHoverInput
+                    formMethods={formMethods}
                     data={info?.summary}
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
@@ -206,6 +212,7 @@ const AssessmentKitSectionGeneralInfo = (
                             multiple={true}
                             defaultValue={info?.tags}
                             searchOnType={false}
+                            required={true}
                             label={""}
                             sx={{ width: "100%" }}
                           />
@@ -425,11 +432,22 @@ const OnHoverInput = (props: any) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, title, current_user_is_coordinator, infoQuery, type } = props;
+  const {
+    data,
+    title,
+    current_user_is_coordinator,
+    infoQuery,
+    type,
+    formMethods,
+  } = props;
+  const [has_error, setHasError] = useState<boolean>(false);
+  const [error, setError] = useState<any>({});
   const [inputData, setInputData] = useState<String>(data);
   const handleCancel = () => {
     setShow(false);
     setInputData(data);
+    setError({});
+    setHasError(false);
   };
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
@@ -449,7 +467,12 @@ const OnHoverInput = (props: any) => {
       const res = await updateAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-    } catch (e) {}
+    } catch (e) {
+      const err = e as ICustomError;
+      setError(err);
+      setHasError(true);
+      console.log(e)
+    }
   };
   return (
     <>
@@ -466,8 +489,11 @@ const OnHoverInput = (props: any) => {
         </Typography>
 
         {current_user_is_coordinator && show ? (
-          <>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", width: "100% " }}
+          >
             <OutlinedInput
+              error={has_error}
               fullWidth
               name={title}
               defaultValue={data || ""}
@@ -513,7 +539,12 @@ const OnHoverInput = (props: any) => {
                 </InputAdornment>
               }
             />
-          </>
+            {has_error && (
+              <Typography color="#ba000d" variant="caption">
+                {error?.data?.[type]}
+              </Typography>
+            )}
+          </Box>
         ) : (
           <Box
             sx={{
@@ -682,9 +713,13 @@ const OnHoverRichEditor = (props: any) => {
   };
   const { data, title, infoQuery, current_user_is_coordinator } = props;
   const [titleText, setTitleText] = useState<String>(data);
+  const [has_error, setHasError] = useState<boolean>(false);
+  const [error, setError] = useState<any>({});
   const handleCancel = () => {
     setShow(false);
     setTitleText(data);
+    setError({});
+    setHasError(false);
   };
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
@@ -699,7 +734,11 @@ const OnHoverRichEditor = (props: any) => {
       if (res) {
         infoQuery();
       }
-    } catch {}
+    } catch (e) {
+      const err = e as ICustomError;
+      setError(err);
+      setHasError(true);
+    }
   };
   return (
     <>
@@ -765,6 +804,11 @@ const OnHoverRichEditor = (props: any) => {
                   <CancelRoundedIcon sx={{ color: "#fff" }} />
                 </IconButton>
               </Box>
+              {has_error && (
+                <Typography color="#ba000d" variant="caption">
+                  {error?.data?.about}
+                </Typography>
+              )}
             </Box>
           </FormProviderWithForm>
         ) : (
@@ -837,7 +881,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
         { signal: abortController.current.signal }
       );
       if (res) {
-        handleCancel()
+        handleCancel();
         infoQuery();
       }
     } catch {}
