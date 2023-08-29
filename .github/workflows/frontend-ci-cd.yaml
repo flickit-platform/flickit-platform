@@ -39,6 +39,7 @@ jobs:
 
 
   Frontend_Push_Latest_Image:
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     needs: Sonar
     runs-on: ubuntu-latest
     steps:
