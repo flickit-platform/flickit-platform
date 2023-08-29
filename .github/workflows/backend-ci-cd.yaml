@@ -1,11 +1,11 @@
-name: CI/CD Frontend
+name: CI/CD Backend
 
 on:
   push:
     branches:
       - '*'
     paths:
-      - frontend/**
+      - backend/**
     tags:
       - '*'
 
@@ -13,22 +13,65 @@ on:
     branches:
       - '*'
     paths:
-      - frontend/**
-
+      - backend/**
 
 
 jobs:
-  Build_Frontend:
+  Build_Backend:
     runs-on: ubuntu-latest
     steps:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+        filters: |
+          src:
+            - 'backend/**'
+      - if: steps.changes.outputs.src == 'true'
+        run : 
       - uses: actions/checkout@v2
       - name: build
-        run: docker build -t frontend ./frontend
+        run: docker build -t backend ./backend
 
+
+  Backend_Test:
+    needs: Build_Backend
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+    - name: Run migrations
+      env: 
+        SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
+      run: python backend/apps/manage.py migrate
+    - name: Run tests
+      env: 
+        SECRET_KEY: test-secret-key
+        DEBUG_VALUE: False
+      run: pytest backend/apps
 
 
   Sonar:
-    needs: [Build_Frontend]
+    needs: [Backend_Test]
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -76,13 +119,13 @@ jobs:
         COVERAGE_REPORT_PATH: 'coverage.xml'
 
 
-  Frontend_Push_Latest_Image:
+  Backend_Push_Latest_Image:
     needs: Sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/avansoft/flickit-platform-frontend:latest ./frontend
+        run: docker build -t ghcr.io/avansoft/flickit-platform:latest ./backend
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -90,21 +133,22 @@ jobs:
           username: avansoft
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/avansoft/flickit-platform-frontend:latest
+        run: docker push ghcr.io/avansoft/flickit-platform:latest
 
-  Frontend_Deploy_Latest:
-    needs: Frontend_Push_Latest_Image
+  Backend_Deploy_Latest:
+    needs: Backend_Push_Latest_Image
     container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     runs-on: ubuntu-latest
     steps:
       - name: Run script
         run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "latest" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND_STAGE }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND_STAGE }}
+          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND_STAGE }}
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}    
 
 
-  Frontend_Push_Image:
+
+  Backend_Push_Image:
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
     needs: Sonar
     runs-on: ubuntu-latest
@@ -129,18 +173,20 @@ jobs:
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }} ./frontend
+        run: docker build -t ghcr.io/avansoft/flickit-platform:${{ steps.TAG.outputs.tag }} ./backend
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/avansoft/flickit-platform-frontend:${{ steps.TAG.outputs.tag }}
+        run: docker push ghcr.io/avansoft/flickit-platform:${{ steps.TAG.outputs.tag }}
 
-  Frontend_Deploy:
-    needs: Frontend_Push_Image
+  Backend_Deploy:
+    needs: Backend_Push_Image
     container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref master --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_FRONTEND }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_FRONTEND }}
-          TAG: ${{needs.Frontend_Push_Image.outputs.TAG}}  
+          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND }}
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND }}
+          TAG: ${{needs.Backend_Push_Image.outputs.TAG}}
+
+  
