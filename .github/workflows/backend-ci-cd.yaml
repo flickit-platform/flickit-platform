@@ -4,16 +4,16 @@ on:
   push:
     branches:
       - '*'
-    paths:
-      - backend/**
+    paths-ignore:
+      - frontend/**
     tags:
       - '*'
 
   pull_request:
     branches:
       - '*'
-    paths:
-      - backend/**
+    paths-ignore:
+      - frontend/**
 
 
 jobs:
@@ -112,6 +112,7 @@ jobs:
 
 
   Backend_Push_Latest_Image:
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     needs: Sonar
     runs-on: ubuntu-latest
     steps:
