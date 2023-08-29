@@ -20,14 +20,6 @@ jobs:
   Build_Backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-        filters: |
-          src:
-            - 'backend/**'
-      - if: steps.changes.outputs.src == 'true'
-        run : 
       - uses: actions/checkout@v2
       - name: build
         run: docker build -t backend ./backend
