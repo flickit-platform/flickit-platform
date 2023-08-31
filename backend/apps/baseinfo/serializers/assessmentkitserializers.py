@@ -3,7 +3,7 @@ from rest_framework import serializers
 from assessment.models import AssessmentProject
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, MaturityLevel, LevelCompetence
-from baseinfo.models.basemodels import AssessmentSubject
+from baseinfo.models.basemodels import AssessmentSubject, Questionnaire
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from rest_framework.validators import UniqueValidator
 from ..services import assessmentkitservice
@@ -30,7 +30,7 @@ class SimpleMaturityLevelSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaturityLevel
         fields = ['id','value','level_competences']
-        
+
 class MaturityLevelSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaturityLevel
@@ -79,12 +79,12 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
 
     def get_likes_number(self, assessment_kit: AssessmentKit):
         return assessment_kit.likes.count()
-    
+
     class Meta:
         model = AssessmentKit
-        fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group', 
+        fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group',
         'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject', 'number_of_questionaries',
-        'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator', 
+        'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator',
         'subjects_with_desc', 'questionnaires', 'maturity_levels']
 
 class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
@@ -125,7 +125,7 @@ class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'last_modification_date']
-        
+
 
 class SimpleAssessmentKitTagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -160,17 +160,17 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     assessments_count = serializers.IntegerField(source='assessment_projects.count')
     subjects = SimpleAssessmentSubjectDataForAssessmentKitSerializer(source ='assessment_subjects' ,many = True)
     expert_group =SimpleExpertGroupDataForAssessmentKitSerializer()
-    
-    
+
+
     def get_attributes_count(self,assessment_kit:AssessmentKit):
         return assessment_kit.assessment_subjects.values('quality_attributes').count()
-    
+
     def get_questions_count(self,assessment_kit:AssessmentKit):
         return assessment_kit.questionnaires.values('question').count()
-    
+
     def get_questions_count(self,assessment_kit:AssessmentKit):
         return assessment_kit.questionnaires.values('question').count()
-    
+
     class Meta:
         model = AssessmentKit
         fields = ['creation_time', 'last_update_time', 'questionnaires_count' , 'attributes_count', 'questions_count', 'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects' ,'expert_group']
@@ -182,3 +182,45 @@ class EditAssessmentKitInfoSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField(),required=False)
     is_active = serializers.BooleanField(required=False)
     price = serializers.IntegerField(required=False)
+
+
+class SimpleAssessmentSubjectsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentSubject
+        fields = ['id', 'title', 'index']
+
+
+class SimpleQuestionnairesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Questionnaire
+        fields = ['id', 'title', 'index']
+
+
+class SimpleLoadLevelCompetenceSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(source="maturity_level_competence.title")
+    maturity_level_id = serializers.IntegerField(source='maturity_level_competence_id')
+
+    class Meta:
+        model = LevelCompetence
+        fields = ['title', 'value', 'maturity_level_id']
+
+
+class SimpleMaturityLevelSerializer(serializers.ModelSerializer):
+    index = serializers.IntegerField(source='value')
+    competences = SimpleLoadLevelCompetenceSerializer(source='level_competences', many=True)
+
+    class Meta:
+        model = MaturityLevel
+        fields = ['id', 'title', 'index', 'competences']
+
+
+class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
+
+    subjects = SimpleAssessmentSubjectsSerializer(source='assessment_subjects', many=True)
+    questionnaires = SimpleQuestionnairesSerializer(many=True)
+    maturity_levels = SimpleMaturityLevelSerializer(many=True)
+
+    class Meta:
+        model = AssessmentKit
+        fields = ['subjects', 'questionnaires', 'maturity_levels']
