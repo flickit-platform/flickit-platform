@@ -1151,3 +1151,55 @@ class TestEditAssessmentKitInfoApi:
         assert resp.data["price"] == 0
         assert resp.data["tags"][0]["id"] == tag1.id
         assert user1 == expert_group.owner
+
+@pytest.mark.django_db
+class TestLoadMaturityLevelsApi:
+    def test_get_maturity_levels_with_assessment_kit_id_when_uesr_login(self, create_user, init_data):
+        user1 = create_user(email = "test@test.com")
+        #init data
+        base_info = init_data()
+        
+        #create request and send request
+        assessment_kit_id = base_info['assessment_kit'].id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/maturity-levels/', {}, format='json')
+        force_authenticate(request, user = user1)
+        view = assessmentkitviews.LoadMaturityLevelApi.as_view()
+        resp = view(request,assessment_kit_id)
+        
+        assert  resp.status_code == status.HTTP_200_OK
+        maturity_levels = base_info['maturity_levels']
+        data = resp.data["items"]
+        assert data[0]["id"] == maturity_levels[0].id
+
+    def test_get_maturity_levels_when_assessment_kit_id_not_exist(self, create_user, init_data):
+        user1 = create_user(email = "test@test.com")
+        #init data
+        base_info = init_data()
+        
+        #create request and send request
+        assessment_kit_id = 1000
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/maturity-levels/', {}, format='json')
+        force_authenticate(request, user = user1)
+        view = assessmentkitviews.LoadMaturityLevelApi.as_view()
+        resp = view(request,assessment_kit_id)
+        
+        assert  resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert  resp.data["message"] == "'assessment_kit_id' does not exist"
+        assert  resp.data["code"] == "NOT_FOUND"
+
+
+    def test_get_maturity_levels_when_user_unauthorized(self, create_user, init_data):
+        user1 = create_user(email = "test@test.com")
+        #init data
+        base_info = init_data()
+        
+        #create request and send request
+        assessment_kit_id = base_info['assessment_kit'].id
+        api = APIRequestFactory()
+        request = api.get(f'/api/v1/assessment-kits/{assessment_kit_id}/maturity-levels/', {}, format='json')
+        view = assessmentkitviews.LoadMaturityLevelApi.as_view()
+        resp = view(request,assessment_kit_id)
+        
+        assert  resp.status_code == status.HTTP_401_UNAUTHORIZED
