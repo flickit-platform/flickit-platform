@@ -169,3 +169,16 @@ class LoadAssessmentSubjectDetailsApi(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         response = commonserializers.LoadAssessmentSubjectsSerializer(subject).data
         return Response(response, status=status.HTTP_200_OK)
+
+
+class LoadQualityAttributesDetailsApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+
+    @swagger_auto_schema(responses={200: commonserializers.LoadQualityAttributesDetailsSerializer(many=True)})
+    def get(self, request, assessment_kit_id, attribute_id):
+        attribute = commonservice.check_attributes_in_assessment_kit(assessment_kit_id, attribute_id)
+        if not attribute:
+            return Response({"code": "NOT_FOUND", 'message': "'attribute_id' does not exist"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        response = commonserializers.LoadQualityAttributesDetailsSerializer(attribute).data
+        return Response(response, status=status.HTTP_200_OK)

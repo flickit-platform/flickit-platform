@@ -9,4 +9,5 @@ urlpatterns = [
         path("assessment-kits/<str:assessment_kit_id>/maturity-levels/",assessmentkitviews.LoadMaturityLevelApi.as_view()),
         path("assessment-kits/<str:assessment_kit_id>/details/", assessmentkitviews.LoadAssessmentKitDetailsApi.as_view()),
         path("assessment-kits/<str:assessment_kit_id>/details/subjects/<str:subject_id>/", commonviews.LoadAssessmentSubjectDetailsApi.as_view()),
+        path("assessment-kits/<str:assessment_kit_id>/details/attributes/<str:attribute_id>/", commonviews.LoadQualityAttributesDetailsApi.as_view()),
             ]
