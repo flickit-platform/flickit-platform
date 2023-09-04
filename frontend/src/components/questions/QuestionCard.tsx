@@ -116,7 +116,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               letterSpacing=".05em"
               sx={{
                 pt: 0.5,
-                pb: 5,
                 fontSize: { xs: "1.4rem", sm: "2rem" },
                 fontFamily: { xs: "Roboto", lg: "Roboto" },
               }}
@@ -129,6 +128,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               ))}
             </Typography>
           </Box>
+          <QuestionGuide />
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -662,4 +662,78 @@ const Actions = (props: any) => {
   );
 };
 
+const QuestionGuide = (props: any) => {
+  const hasSetCollapse = useRef(false);
+  const [collapse, setCollapse] = useState<boolean>(false);
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  return (
+    // useEffect(() => {
+    //   if (!hasSetCollapse.current && evidencesQueryData.loaded) {
+    //     if (evidencesQueryData.data?.evidences?.length > 0) {
+    //       setCollapse(true);
+    //       hasSetCollapse.current = true;
+    //     }
+    //   }
+    // }, [evidencesQueryData.loaded]);
+    <Box mb={4}>
+      <Box mt={1} width="100%">
+        <Title
+          sup={<Trans i18nKey="whyDoWeAskThis" />}
+          size="small"
+          sx={{ cursor: "pointer",userSelect:"none" }}
+          onClick={() => setCollapse(!collapse)}
+          mb={1}
+        ></Title>
+        {/* <Box
+          mt={2}
+          display={"flex"}
+          sx={{ cursor: "pointer" }}
+          alignItems="center"
+          position={"relative"}
+          width="100%"
+        >
+          {!collapse ? (
+            <AddRoundedIcon />
+          ) : (
+            <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />
+          )}
+        </Box> */}
+        <Collapse
+          in={collapse}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              mr: { xs: 0, md: 4 },
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              border: "1px dashed #ffffff99",
+              borderRadius: "8px",
+            }}
+          >
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              sx={{
+                p: 2,
+                width: "100%",
+              }}
+            >
+              <Typography variant="body2">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
+                minus, accusamus eligendi officiis itaque laborum commodi odit
+                culpa nemo at optio quasi obcaecati fugiat suscipit aut, quas
+                dolorum reprehenderit vel?
+              </Typography>
+            </Box>
+          </Box>
+        </Collapse>
+      </Box>
+    </Box>
+  );
+};
 type TAnswerTemplate = { caption: string; value: number }[];

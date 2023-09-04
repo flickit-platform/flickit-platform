@@ -277,7 +277,8 @@
   "numberOfImpactfulQuestions":"Number Of Impactful Questions",
   "numberOfMaturityLevels":"Number of maturity levels",
   "totalQuestionsCount":"Total questions count",
-  "status":"Status"
+  "status":"Status",
+  "whyDoWeAskThis":"Why do we ask this?"
 }
 
 
