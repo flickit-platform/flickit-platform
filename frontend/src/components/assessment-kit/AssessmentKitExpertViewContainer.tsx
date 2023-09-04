@@ -1066,72 +1066,71 @@ const AssessmentKitDialog = (props: any) => {
 };
 const MaturityLevelsDetails = (props: any) => {
   const { maturity_levels } = props;
-  console.log(maturity_levels);
-  const maturity_level_number = maturity_levels.length;
-  const colorPallet = getMaturityLevelColors(maturity_level_number);
+  const colorPallet = getMaturityLevelColors(maturity_levels?maturity_levels.length:5);
   return (
     <Box sx={{ background: "#fff", px: 4, py: 4, borderRadius: "8px" }}>
       <Typography fontWeight={900} fontSize="24px" mb={8}>
         <Trans i18nKey="maturityLevels" />
       </Typography>
-      {maturity_levels
-        .map((maturity_level: any, key: number) => {
-          const { title, competences, index } = maturity_level;
-          return (
-            <Box
-              sx={{
-                transform: "skew(-30deg);",
-                background: colorPallet[index],
-                borderRadius: "8px",
-                py: "4px",
-                pl: "16px",
-                margin: "16px",
-                width: `${90 - 10 * index}%`,
-              }}
-              key={key}
-            >
-              <Typography
-                sx={{ transform: "skew(30deg);" }}
-                fontSize="24px"
-                fontWeight={900}
-                color="#fff"
-              >
-                {index}.{title}
-              </Typography>
+      {maturity_levels &&
+        maturity_levels
+          .map((maturity_level: any, key: number) => {
+            const { title, competences, index } = maturity_level;
+            return (
               <Box
                 sx={{
-                  display: "flex",
-                  ml: "64px",
-                  flexWrap: "wrap",
-                  alignItems: "center",
+                  transform: "skew(-30deg);",
+                  background: colorPallet[index],
+                  borderRadius: "8px",
+                  py: "4px",
+                  pl: "16px",
+                  margin: "16px",
+                  width: `${90 - 10 * index}%`,
                 }}
+                key={key}
               >
                 <Typography
-                  sx={{ transform: "skew(30deg)" }}
-                  fontSize="14px"
-                  color="#fff"
+                  sx={{ transform: "skew(30deg);" }}
+                  fontSize="24px"
                   fontWeight={900}
-                  mr={"4px"}
+                  color="#fff"
                 >
-                  <Trans i18nKey="competences" />: 
+                  {index}.{title}
                 </Typography>
-                {competences.map((comp: any, key: number) => {
-                  const { title, value } = comp;
-                  return (
-                    <Typography
-                      sx={{ transform: "skew(30deg)" }}
-                      fontSize="12px"
-                      color="#fff"
-                    >
-                      {title}:{value}%{competences.length - 1 !== key && ", "}
-                    </Typography>
-                  );
-                })}
+                <Box
+                  sx={{
+                    display: "flex",
+                    ml: "64px",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{ transform: "skew(30deg)" }}
+                    fontSize="14px"
+                    color="#fff"
+                    fontWeight={900}
+                    mr={"4px"}
+                  >
+                    <Trans i18nKey="competences" />:
+                  </Typography>
+                  {competences.map((comp: any, key: number) => {
+                    const { title, value } = comp;
+                    return (
+                      <Typography
+                        sx={{ transform: "skew(30deg)" }}
+                        fontSize="12px"
+                        color="#fff"
+                      >
+                        {title}:{value}%{competences.length - 1 !== key && ", "}
+                      </Typography>
+                    );
+                  })}
+                </Box>
               </Box>
-            </Box>
-          );
-        })
-        .reverse()}
+            );
+          })
+          .reverse()}
     </Box>
   );
 };

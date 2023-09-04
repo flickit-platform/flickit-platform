@@ -471,7 +471,6 @@ const OnHoverInput = (props: any) => {
       const err = e as ICustomError;
       setError(err);
       setHasError(true);
-      console.log(e)
     }
   };
   return (
