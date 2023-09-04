@@ -3,6 +3,7 @@ from rest_framework import serializers
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.models.questionmodels import AnswerTemplate, Question, QuestionImpact, OptionValue
 from baseinfo.models.assessmentkitmodels import AssessmentKit, ExpertGroup, MaturityLevel
+from baseinfo.services import commonservice
 
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
@@ -156,3 +157,17 @@ class LoadAssessmentSubjectsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentSubject
         fields = ['questions_count', 'description', 'attributes']
+
+
+class LoadQualityAttributesDetailsSerializer(serializers.ModelSerializer):
+
+    questions_count = serializers.IntegerField(source="question_set.count")
+    questions_on_levels = serializers.SerializerMethodField()
+
+    def get_questions_on_levels(self, attribute: QualityAttribute):
+        maturity_levels = MaturityLevel.objects.filter(question_impacts__quality_attribute=attribute.id).order_by('value').distinct()
+        return commonservice.get_maturity_level_details(maturity_levels, attribute.id)
+
+    class Meta:
+        model = QualityAttribute
+        fields = ['id', 'index', 'title', 'questions_count', 'weight', 'description', 'questions_on_levels']
