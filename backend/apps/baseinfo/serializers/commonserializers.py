@@ -152,7 +152,7 @@ class LoadAssessmentSubjectsSerializer(serializers.ModelSerializer):
         return SimpleLoadAttributesForAssessmentSubjectSerializer(subjects, many=True).data
 
     def get_questions_count(self, subject: AssessmentSubject):
-        return subject.questionnaires.all().values('question').count()
+        return Question.objects.filter(quality_attributes__assessment_subject=subject.id).distinct().count()
 
     class Meta:
         model = AssessmentSubject

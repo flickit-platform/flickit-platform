@@ -14,8 +14,15 @@ def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
 
 
 def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
-    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(assessment_subjects__quality_attributes=attribute_id).exists():
+    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(
+            assessment_subjects__quality_attributes=attribute_id).exists():
         return QualityAttribute.objects.get(id=attribute_id)
+    return False
+
+
+def check_maturity_level_in_assessment_kit(assessment_kit_id, attribute_id, maturity_level_id):
+    if MaturityLevel.objects.filter(id=maturity_level_id).filter(question_impacts__quality_attribute=attribute_id).exists():
+        return MaturityLevel.objects.get(id=maturity_level_id)
     return False
 
 
@@ -103,11 +110,44 @@ def get_maturity_level_details(maturity_levels, quality_attributes_id):
         data_level['id'] = level.id
         data_level['title'] = level.title
         data_level['index'] = level.value
-        questions_count = Question.objects.filter(quality_attributes=quality_attributes_id).filter(question_impacts__maturity_level=level.id).count()
+        questions_count = QuestionImpact.objects.filter(maturity_level=level.id).filter(quality_attribute=quality_attributes_id).distinct().values('question__id').count()
         data_level['questions_count'] = questions_count
         data.append(data_level)
     return data
 
 
+def get_questions_in_maturity_level(maturity_level, quality_attributes_id):
+    data_questions = list()
+    data = get_maturity_level_details([maturity_level], quality_attributes_id)[0]
+    questions_impact = QuestionImpact.objects.filter(
+        quality_attribute=quality_attributes_id).filter(maturity_level=maturity_level.id)
+    questions = questions_impact.values("question__id", "question__title", "question__index",
+                                        "question__may_not_be_applicable", "question__questionnaire__title", "weight")
+    options = list(
+        questions_impact.values("question__id", "option_values__value", "option_values__option__index",
+                                "option_values__option__caption"))
+    for question in questions:
+        ids = 0
+        data_question = dict()
+        options_list = list()
+        data_question["index"] = question["question__index"]
+        data_question["title"] = question["question__title"]
+        data_question["may_not_be_applicable"] = question["question__may_not_be_applicable"]
+        data_question["weight"] = question["weight"]
+        data_question["questionnaire"] = question["question__questionnaire__title"]
+        for i in range(len(options)):
+            option_values = {}
+            if options[i]["question__id"] == question["question__id"]:
+                option_values["index"] = options[i]["option_values__option__index"]
+                option_values["title"] = options[i]["option_values__option__caption"]
+                option_values["value"] = options[i]["option_values__value"]
+                options_list.append(option_values)
+            else:
+                ids = i
+                break
+        options = options[ids:]
+        data_question["option"] = options_list
+        data_questions.append(data_question)
 
-
+    data["questions"] = data_questions
+    return data
