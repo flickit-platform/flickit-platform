@@ -124,7 +124,7 @@
   "overallInsightsOf": "Overall insights of",
   "maturityLevel": "Maturity Level",
   "maturityLevels": "Maturity Levels",
-  "maturitylevels":"maturity levels",
+  "maturitylevels": "maturity levels",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",
   "submitAnswerAutomatically": "Submit answer automatically",
@@ -175,7 +175,7 @@
   "and": "and",
   "attributes": "Attributes",
   "subjectAttributes": "{{subject}} attributes",
-  "attributesCount":"Attributes count",
+  "attributesCount": "Attributes count",
   "editComparisonItems": "Edit comparison items",
   "comparisonResult": "Comparison result",
   "oneFileOnly": "You can only upload one file at a time.",
@@ -219,7 +219,7 @@
   "summary": "Summary",
   "creationDate": "Creation date",
   "numberOfQuestionnaires": "Number of questionnaires",
-  "questionnairesCount":"Questionnaires count",
+  "questionnairesCount": "Questionnaires count",
   "price": "Price",
   "pricing": "Pricing",
   "useIt": "Use it?",
@@ -272,13 +272,12 @@
   "unpublishedAssessmentKits": "Unpublished assessment kits",
   "leaveSpace": "Leave space",
   "attribute": "Attribute",
-  "level":"Level",
-  "thisSystemIsIn":"This system is in",
-  "numberOfImpactfulQuestions":"Number Of Impactful Questions",
-  "numberOfMaturityLevels":"Number of maturity levels",
-  "totalQuestionsCount":"Total questions count",
-  "status":"Status",
-  "hint":"hint"
+  "level": "Level",
+  "thisSystemIsIn": "This system is in",
+  "numberOfImpactfulQuestions": "Number Of Impactful Questions",
+  "numberOfMaturityLevels": "Number of maturity levels",
+  "totalQuestionsCount": "Total questions count",
+  "status": "Status",
+  "hint": "hint",
+  "competences": "Competences"
 }
-
-
