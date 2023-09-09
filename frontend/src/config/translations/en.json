@@ -272,6 +272,7 @@
   "unpublishedAssessmentKits": "Unpublished assessment kits",
   "leaveSpace": "Leave space",
   "attribute": "Attribute",
+<<<<<<< HEAD
   "level": "Level",
   "thisSystemIsIn": "This system is in",
   "numberOfImpactfulQuestions": "Number Of Impactful Questions",
@@ -281,3 +282,15 @@
   "competences": "Competences",
   "hint": "hint"
 }
+=======
+  "level":"Level",
+  "thisSystemIsIn":"This system is in",
+  "numberOfImpactfulQuestions":"Number Of Impactful Questions",
+  "numberOfMaturityLevels":"Number of maturity levels",
+  "totalQuestionsCount":"Total questions count",
+  "status":"Status",
+  "competences": "Competences"
+}
+
+
+>>>>>>> main
