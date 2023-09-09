@@ -278,7 +278,7 @@
   "numberOfMaturityLevels":"Number of maturity levels",
   "totalQuestionsCount":"Total questions count",
   "status":"Status",
-  "whyDoWeAskThis":"Why do we ask this?"
+  "hint":"hint"
 }
 
 

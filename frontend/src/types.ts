@@ -47,6 +47,7 @@ export interface IQuestionInfo {
   title: string;
   questionResultId?: string | number;
   answer_templates: TAnswerTemplates;
+  description?: string;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
@@ -218,7 +219,7 @@ export interface IAssessmentReportModel {
   most_significant_weaknessness_atts: string[];
   assessment_project: IAssessmentReport;
   total_progress: ITotalProgress;
-  maturity_level_status:string;
+  maturity_level_status: string;
 }
 
 export interface IQuestionnaireModel {
@@ -269,7 +270,8 @@ export interface IQuestionsResult extends IAssessmentResult {
   question: IQuestionResult;
 }
 
-export interface IQuestionsResultsModel extends IDefaultModel<IQuestionsResult> {}
+export interface IQuestionsResultsModel
+  extends IDefaultModel<IQuestionsResult> {}
 
 export interface IAssessment {
   id: TId;
@@ -281,10 +283,10 @@ export interface IAssessment {
   assessment_results: string[];
   assessment_kit: IAssessmentKitModel;
   total_progress?: ITotalProgress;
-  maturity_level_number:number;
+  maturity_level_number: number;
   level_value: number;
   maturity_level_status: string;
-  maturity_level:IMaturityLevel
+  maturity_level: IMaturityLevel;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
