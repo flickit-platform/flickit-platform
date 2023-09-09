@@ -276,7 +276,8 @@
   "numberOfMaturityLevels":"Number of maturity levels",
   "totalQuestionsCount":"Total questions count",
   "status":"Status",
-  "competences": "Competences"
+  "competences": "Competences",
+  "hint":"hint"
 }
 
 

@@ -58,6 +58,7 @@ import useMenu from "@/utils/useMenu";
 import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -65,7 +66,13 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const { title, answer_templates, index = 0, answer } = questionInfo;
+  const {
+    title,
+    answer_templates,
+    index = 0,
+    answer,
+    description,
+  } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
 
@@ -116,7 +123,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               letterSpacing=".05em"
               sx={{
                 pt: 0.5,
-                pb: 5,
                 fontSize: { xs: "1.4rem", sm: "2rem" },
                 fontFamily: { xs: "Roboto", lg: "Roboto" },
               }}
@@ -129,7 +135,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               ))}
             </Typography>
           </Box>
-          <QuestionGuide />
+          {description && <QuestionGuide description={description} />}
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -234,7 +240,7 @@ const AnswerTemplate = (props: {
 
   return (
     <>
-      <Box display={"flex"} justifyContent="flex-start">
+      <Box display={"flex"} justifyContent="flex-start" mt={4}>
         <Box
           display={"flex"}
           sx={{
@@ -668,42 +674,29 @@ const QuestionGuide = (props: any) => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
-
+  const { description } = props;
   return (
-    // useEffect(() => {
-    //   if (!hasSetCollapse.current && evidencesQueryData.loaded) {
-    //     if (evidencesQueryData.data?.evidences?.length > 0) {
-    //       setCollapse(true);
-    //       hasSetCollapse.current = true;
-    //     }
-    //   }
-    // }, [evidencesQueryData.loaded]);
-    <Box mb={4}>
+    <Box>
       <Box mt={1} width="100%">
         <Title
-          sup={<Trans i18nKey="whyDoWeAskThis" />}
+          sup={
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <InfoRoundedIcon sx={{ mr: "4px" }} />
+              <Trans i18nKey="hint" />
+            </Box>
+          }
           size="small"
-          sx={{ cursor: "pointer",userSelect:"none" }}
+          sx={{ cursor: "pointer", userSelect: "none" }}
           onClick={() => setCollapse(!collapse)}
           mb={1}
         ></Title>
-        {/* <Box
-          mt={2}
-          display={"flex"}
-          sx={{ cursor: "pointer" }}
-          alignItems="center"
-          position={"relative"}
-          width="100%"
-        >
-          {!collapse ? (
-            <AddRoundedIcon />
-          ) : (
-            <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />
-          )}
-        </Box> */}
-        <Collapse
-          in={collapse}
-        >
+        <Collapse in={collapse}>
           <Box
             sx={{
               flex: 1,
@@ -725,10 +718,24 @@ const QuestionGuide = (props: any) => {
               }}
             >
               <Typography variant="body2">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
-                minus, accusamus eligendi officiis itaque laborum commodi odit
-                culpa nemo at optio quasi obcaecati fugiat suscipit aut, quas
-                dolorum reprehenderit vel?
+                {description.startsWith("\n")
+                  ? description
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : description
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
               </Typography>
             </Box>
           </Box>
