@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path ,re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -24,7 +24,7 @@ urlpatterns = [
    path('assessment/', include('assessment.urls')),
    path('authinfo/', include('account.urls')),
    path('api/internal/',include('baseinfo.urls_internal')),
-   path('api/v1/',include('baseinfo.url.url_v1')),
+   path('api/v1/assessment-kits/',include('baseinfo.url.urls_assessmentkit')),
    # re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
 ]
 

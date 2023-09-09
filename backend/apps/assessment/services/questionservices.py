@@ -8,7 +8,6 @@ def extract_questions(questionnaire, question_values):
         question = Dictionary()
         question.add('id', item.id)
         question.add('title', item.title)
-        question.add('description', item.description)
         question.add('index', item.index)
         question.add('may_not_be_applicable', item.may_not_be_applicable)
         answer_templates = []

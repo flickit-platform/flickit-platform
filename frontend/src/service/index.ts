@@ -779,16 +779,6 @@ export const createService = (
         ...(config || {}),
       });
     },
-    fetchAssessmentKitDetails(
-      args: { assessmentKitId: TId },
-      config: AxiosRequestConfig<any> | undefined
-    ) {
-      const { assessmentKitId } = args || {};
-
-      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/details/`, {
-        ...(config || {}),
-      });
-    },
   };
 
   return service;
