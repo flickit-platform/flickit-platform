@@ -58,6 +58,7 @@ import useMenu from "@/utils/useMenu";
 import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -65,7 +66,13 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const { title, answer_templates, index = 0, answer } = questionInfo;
+  const {
+    title,
+    answer_templates,
+    index = 0,
+    answer,
+    description,
+  } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
 
@@ -116,7 +123,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               letterSpacing=".05em"
               sx={{
                 pt: 0.5,
-                pb: 5,
                 fontSize: { xs: "1.4rem", sm: "2rem" },
                 fontFamily: { xs: "Roboto", lg: "Roboto" },
               }}
@@ -129,6 +135,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               ))}
             </Typography>
           </Box>
+          {description && <QuestionGuide description={description} />}
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -233,7 +240,7 @@ const AnswerTemplate = (props: {
 
   return (
     <>
-      <Box display={"flex"} justifyContent="flex-start">
+      <Box display={"flex"} justifyContent="flex-start" mt={4}>
         <Box
           display={"flex"}
           sx={{
@@ -662,4 +669,79 @@ const Actions = (props: any) => {
   );
 };
 
+const QuestionGuide = (props: any) => {
+  const hasSetCollapse = useRef(false);
+  const [collapse, setCollapse] = useState<boolean>(false);
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+  const { description } = props;
+  return (
+    <Box>
+      <Box mt={1} width="100%">
+        <Title
+          sup={
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <InfoRoundedIcon sx={{ mr: "4px" }} />
+              <Trans i18nKey="hint" />
+            </Box>
+          }
+          size="small"
+          sx={{ cursor: "pointer", userSelect: "none" }}
+          onClick={() => setCollapse(!collapse)}
+          mb={1}
+        ></Title>
+        <Collapse in={collapse}>
+          <Box
+            sx={{
+              flex: 1,
+              mr: { xs: 0, md: 4 },
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              border: "1px dashed #ffffff99",
+              borderRadius: "8px",
+            }}
+          >
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              sx={{
+                p: 2,
+                width: "100%",
+              }}
+            >
+              <Typography variant="body2">
+                {description.startsWith("\n")
+                  ? description
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : description
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
+              </Typography>
+            </Box>
+          </Box>
+        </Collapse>
+      </Box>
+    </Box>
+  );
+};
 type TAnswerTemplate = { caption: string; value: number }[];

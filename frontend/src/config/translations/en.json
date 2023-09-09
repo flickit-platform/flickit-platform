@@ -240,8 +240,6 @@
   "assessmentKitSetting": "Assessment kit setting",
   "emailIsNotOnFlickitYet": "{{email}} is not on Flickit yet.",
   "wouldYouLikeToInviteThemToJoin": "Would you like to invite them to join?",
-  "tryIt": "Try it",
-  "updateAccount": "Update Account",
   "color": "Color",
   "space": "Space",
   "groupSummary": "Group summary",
@@ -278,7 +276,8 @@
   "numberOfMaturityLevels":"Number of maturity levels",
   "totalQuestionsCount":"Total questions count",
   "status":"Status",
-  "competences": "Competences"
+  "competences": "Competences",
+  "hint":"hint"
 }
 
 
