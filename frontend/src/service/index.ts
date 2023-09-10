@@ -789,6 +789,45 @@ export const createService = (
         ...(config || {}),
       });
     },
+    fetchAssessmentKitSubjectDetails(
+      args: { assessmentKitId: TId; subjectId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, subjectId } = args || {};
+
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/details/subjects/${subjectId}/`,
+        {
+          ...(config || {}),
+        }
+      );
+    },
+    fetchAssessmentKitSubjectAttributesDetails(
+      args: { assessmentKitId: TId; attributeId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, attributeId } = args || {};
+
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/`,
+        {
+          ...(config || {}),
+        }
+      );
+    },
+    fetchMaturityLevelQuestions(
+      args: { assessmentKitId: TId; attributeId: TId; maturityLevelId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, attributeId, maturityLevelId } = args || {};
+
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/maturity-levels/${maturityLevelId}/`,
+        {
+          ...(config || {}),
+        }
+      );
+    },
   };
 
   return service;

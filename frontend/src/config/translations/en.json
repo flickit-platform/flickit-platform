@@ -277,7 +277,9 @@
   "totalQuestionsCount":"Total questions count",
   "status":"Status",
   "competences": "Competences",
-  "hint":"hint"
+  "hint":"hint",
+  "questionsCount":"Questions count",
+  "weight":"Weight"
 }
 
 
