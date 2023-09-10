@@ -37,6 +37,7 @@ import AutocompleteAsyncField, {
 import RichEditor from "@common/rich-editor/RichEditor";
 interface IAssessmentKitSectionAuthorInfo {
   data: any;
+  query: any;
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo
