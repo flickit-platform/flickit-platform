@@ -37,7 +37,6 @@ import AutocompleteAsyncField, {
 import RichEditor from "@common/rich-editor/RichEditor";
 interface IAssessmentKitSectionAuthorInfo {
   data: any;
-  query: any;
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo
@@ -164,11 +163,7 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      mr={4}
-                      sx={{ minWidth: "64px !important" }}
-                    >
+                    <Typography variant="body2" mr={4}sx={{ minWidth: "64px !important" }}>
                       <Trans i18nKey="price" />
                     </Typography>
                     <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
@@ -190,11 +185,7 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      mr={4}
-                      sx={{ minWidth: "64px !important" }}
-                    >
+                    <Typography variant="body2" mr={4}sx={{ minWidth: "64px !important" }}>
                       <Trans i18nKey="tags" />
                     </Typography>
                     {current_user_is_coordinator && show ? (
@@ -506,7 +497,7 @@ const OnHoverInput = (props: any) => {
               required={true}
               multiline={true}
               sx={{
-                height: "38px",
+                minHeight: "38px",
                 borderRadius: "4px",
                 paddingRight: "12px;",
                 fontFamily: "Roboto",
@@ -552,7 +543,7 @@ const OnHoverInput = (props: any) => {
         ) : (
           <Box
             sx={{
-              height: "38px",
+              minHeight: "38px",  
               borderRadius: "4px",
               paddingLeft: "8px;",
               paddingRight: "12px;",

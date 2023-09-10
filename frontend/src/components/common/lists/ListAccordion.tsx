@@ -18,7 +18,7 @@ const ListAccordion = (props: IListAccordion) => {
       component="ul"
       sx={{
         paddingInlineStart: { xs: "0", md: "30px" },
-        listStyle: { xs: "none", md: "disc" },
+        listStyle: { xs: "none", md: "none" },
       }}
     >
       {items.map((item: any, index: number) => {

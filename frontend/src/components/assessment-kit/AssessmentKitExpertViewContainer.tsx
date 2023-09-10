@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import TabList from "@mui/lab/TabList";
 import { styles, getMaturityLevelColors } from "@styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
+import Tabs from "@mui/material/Tabs";
 import Grid from "@mui/material/Grid";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -35,17 +36,31 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 const AssessmentKitExpertViewContainer = () => {
-  const { assessmentKitQueryProps, fetchAssessmentKitQuery } =
+  const { assessmentKitQueryProps, fetchAssessmentKitDetailsQuery } =
     useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
+  const [details, setDetails] = useState();
+  const [loaded, setLoaded] = React.useState<boolean | false>(false);
+  const fetch2 = async () => {
+    try {
+      const data = await fetchAssessmentKitDetailsQuery.query();
+      setDetails(data);
+      setLoaded(true);
+    } catch (e) {}
+  };
+  useEffect(() => {
+    if (!loaded) {
+      fetch2();
+    }
+  }, [loaded]);
   return (
     <Box>
       <QueryBatchData
-        queryBatchData={[assessmentKitQueryProps, fetchAssessmentKitQuery]}
-        render={([data = {}, assessmentKitData = {}]) => {
+        queryBatchData={[assessmentKitQueryProps]}
+        render={([data = {}]) => {
           const {
             is_expert = true,
             expert_group,
@@ -89,19 +104,16 @@ const AssessmentKitExpertViewContainer = () => {
                   {data.title}
                 </Title>
                 <Box mt={3}>
-                  <AssessmentKitSectionGeneralInfo
-                    data={data}
-                    query={assessmentKitQueryProps.query}
-                  />
-                  <AssessmentKitSectionsTabs data={data} />
+                  <AssessmentKitSectionGeneralInfo data={data} />
+                  <AssessmentKitSectionsTabs details={details} />
                 </Box>
               </Box>
-              <AssessmentKitSettingFormDialog
+              {/* <AssessmentKitSettingFormDialog
                 {...dialogProps}
                 onSubmitForm={assessmentKitQueryProps.query}
                 fetchAssessmentKitQuery={fetchAssessmentKitQuery.query}
                 fetchAssessmentKitData={assessmentKitData[0]}
-              />
+              /> */}
             </>
           );
         }}
@@ -109,87 +121,98 @@ const AssessmentKitExpertViewContainer = () => {
     </Box>
   );
 };
-const AssessmentKitSectionsTabs = (props: { data: any }) => {
-  const { data } = props;
-  const { maturity_levels } = data;
+const AssessmentKitSectionsTabs = (props: { details: any }) => {
   const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
   const [value, setValue] = useState("maturityLevels");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  const { details } = props;
   return (
     <Box mt={6}>
-      <QueryData
-        {...fetchAssessmentKitDetailsQuery}
-        render={(details = {}) => {
-          return (
-            <TabContext value={value}>
-              <Box>
-                <TabList onChange={handleTabChange}>
-                  <Tab
-                    label={
-                      <Box sx={{ ...styles.centerV }}>
-                        <Trans i18nKey="maturityLevels" />
-                      </Box>
-                    }
-                    value="maturityLevels"
-                  />
-                  <Tab
-                    label={
-                      <Box sx={{ ...styles.centerV }}>
-                        <Trans i18nKey="subjects" />
-                      </Box>
-                    }
-                    value="subjects"
-                  />
-                  <Tab
-                    label={
-                      <Box sx={{ ...styles.centerV }}>
-                        <Trans i18nKey="questionnaires" />
-                      </Box>
-                    }
-                    value="questionnaires"
-                  />
-                </TabList>
-              </Box>
-              <TabPanel value="subjects" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
-                <AssessmentKitSubjects
-                  details={details.subjects}
-                  subjects={data.subjectsInfos}
-                />
-              </TabPanel>
-              <TabPanel
-                value="questionnaires"
-                sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
-              >
-                <AssessmentKitQuestionnaires
-                  questionnaires={data.questionnaires}
-                  details={details.questionnaires}
-                />
-              </TabPanel>
-              <TabPanel
+      {details && (
+        <TabContext value={value}>
+          <Box>
+            <TabList onChange={handleTabChange}>
+              <Tab
+                label={
+                  <Box sx={{ ...styles.centerV }}>
+                    <Trans i18nKey="maturityLevels" />
+                  </Box>
+                }
                 value="maturityLevels"
-                sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
-              >
-                <MaturityLevelsDetails
-                  maturity_levels={details?.maturity_levels}
-                />
-              </TabPanel>
-            </TabContext>
-          );
-        }}
-      />
+              />
+              <Tab
+                label={
+                  <Box sx={{ ...styles.centerV }}>
+                    <Trans i18nKey="subjects" />
+                  </Box>
+                }
+                value="subjects"
+              />
+              <Tab
+                label={
+                  <Box sx={{ ...styles.centerV }}>
+                    <Trans i18nKey="questionnaires" />
+                  </Box>
+                }
+                value="questionnaires"
+              />
+            </TabList>
+          </Box>
+          <TabPanel value="subjects" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
+            <AssessmentKitSubjects details={details.subjects} />
+          </TabPanel>
+          <TabPanel
+            value="questionnaires"
+            sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
+          >
+            <AssessmentKitQuestionnaires details={details.questionnaires} />
+          </TabPanel>
+          <TabPanel
+            value="maturityLevels"
+            sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
+          >
+            <MaturityLevelsDetails maturity_levels={details?.maturity_levels} />
+          </TabPanel>
+        </TabContext>
+      )}
     </Box>
   );
 };
-const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
-  const { subjects, details } = props;
+const AssessmentKitSubjects = (props: { details: any[] }) => {
+  const { details } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] = useState<any>();
+  const [subjectId, setSubjectId] = useState<any>();
   const dialogProps = useDialog();
+  const {
+    fetchAssessmentKitSubjectDetailsQuery,
+    fetchAssessmentKitSubjectAttributesDetailsQuery,
+  } = useAssessmentKit();
+  const { assessmentKitId } = useParams();
   const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
+    (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      if (isExpanded) {
+        setSubjectId(panel?.id);
+      }
+      setExpanded(isExpanded ? panel?.title : false);
     };
+  useEffect(() => {
+    if (subjectId) {
+      fetchAssessmentKitSubjectDetail();
+    }
+  }, [subjectId]);
+  const fetchAssessmentKitSubjectDetail = async () => {
+    try {
+      const data = await fetchAssessmentKitSubjectDetailsQuery.query({
+        assessmentKitId: assessmentKitId,
+        subjectId: subjectId,
+      });
+      setAssessmentKitSubjectDetails(data);
+    } catch (e) {}
+  };
+
   return (
     <Box>
       {details.map((subject, index) => {
@@ -198,7 +221,7 @@ const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
           <Accordion
             key={index}
             expanded={isExpanded}
-            onChange={handleChange(subject.title)}
+            onChange={handleChange(subject)}
             sx={{
               mb: 1,
               borderRadius: 2,
@@ -244,13 +267,36 @@ const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
                 {subject.description}
               </Typography> */}
             </AccordionSummary>
-            {/* <AccordionDetails>
+            <AccordionDetails>
               <Box p={1}>
                 <Grid container spacing={2} sx={{ mb: 1 }}>
-                  <Grid item xs={12} sm={5} md={4} lg={3}>
+                  {/* <Grid item xs={12} sm={5} md={4} lg={3}>
                     {subject.report_infos.map((info: any, index: number) => {
                       return <InfoItem info={info} bg="white" key={index} />;
                     })}
+                  </Grid> */}
+                  <Grid item xs={12} sm={7} md={8} lg={9}>
+                    <Box
+                      display="flex"
+                      sx={{
+                        background: "white",
+                        py: 0.6,
+                        px: 1,
+                        borderRadius: 1,
+                      }}
+                    >
+                      <Typography variant="body2" fontFamily="Roboto">
+                        <Trans i18nKey="questionsCount" />:
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontFamily="Roboto"
+                        sx={{ ml: 2 }}
+                        fontWeight="bold"
+                      >
+                        {assessmentKitSubjectDetails?.questions_count}
+                      </Typography>
+                    </Box>
                   </Grid>
                   <Grid item xs={12} sm={7} md={8} lg={9}>
                     <Box
@@ -269,8 +315,9 @@ const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
                         variant="body2"
                         fontFamily="Roboto"
                         sx={{ ml: 2 }}
+                        fontWeight="bold"
                       >
-                        {subject.description}
+                        {assessmentKitSubjectDetails?.description}
                       </Typography>
                     </Box>
                   </Grid>
@@ -286,27 +333,28 @@ const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
                 >
                   <Trans i18nKey="attributes" />
                 </Typography>
-                <ListAccordion
-                  items={subject.attributes_infos}
-                  renderItem={(item, index, isExpanded) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: isExpanded ? "stretch" : "center",
-                            flexDirection: isExpanded ? "column" : "row",
-                          }}
-                        >
-                          <Typography
-                            variant="body1"
-                            fontFamily="Roboto"
-                            fontWeight={"bold"}
-                            minWidth="180px"
+                {assessmentKitSubjectDetails && (
+                  <ListAccordion
+                    items={assessmentKitSubjectDetails.attributes}
+                    renderItem={(item, index, isExpanded) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: isExpanded ? "stretch" : "center",
+                              flexDirection: isExpanded ? "column" : "row",
+                            }}
                           >
-                            {item.title}
-                          </Typography>{" "}
-                          <Typography
+                            <Typography
+                              variant="body1"
+                              fontFamily="Roboto"
+                              fontWeight={"bold"}
+                              minWidth="180px"
+                            >
+                              {item.index}.{item.title}
+                            </Typography>
+                            {/* <Typography
                             sx={{
                               opacity: 0.9,
                               marginLeft: isExpanded ? 0 : 5,
@@ -321,29 +369,27 @@ const AssessmentKitSubjects = (props: { subjects: any[]; details: any[] }) => {
                             fontFamily="Roboto"
                           >
                             {item.description}
-                          </Typography>
-                        </Box>
-                        <AssessmentKitQuestionsList
-                          questions={item.questions}
-                          index={index}
-                        />
-                      </React.Fragment>
-                    );
-                  }}
-                />
+                          </Typography> */}
+                          </Box>
+                          <AssessmentKitQuestionsList
+                            isExpanded={isExpanded}
+                            attributeId={item.id}
+                          />
+                        </React.Fragment>
+                      );
+                    }}
+                  />
+                )}
               </Box>
-            </AccordionDetails> */}
+            </AccordionDetails>
           </Accordion>
         );
       })}
     </Box>
   );
 };
-const AssessmentKitQuestionnaires = (props: {
-  questionnaires: any[];
-  details: any[];
-}) => {
-  const { questionnaires, details } = props;
+const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
+  const { details } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -637,18 +683,208 @@ const AssessmentKitQuestionnaires = (props: {
   );
 };
 const AssessmentKitQuestionsList = (props: {
-  questions: any[];
-  index: number;
+  attributeId: number;
+  isExpanded: boolean;
 }) => {
-  const { questions, index } = props;
+  const { attributeId, isExpanded } = props;
   const questionsRef = {} as Record<string, boolean>;
+  const {
+    fetchAssessmentKitSubjectAttributesDetailsQuery,
+    fetchMaturityLevelQuestionsQuery,
+  } = useAssessmentKit();
+  const { assessmentKitId } = useParams();
+  const [attributesDetails, setAttributesDetails] = useState<any>();
+  const [maturityLevelQuestions, setMaturityLevelQuestions] = useState<any>();
+
+  const fetchAttributesDetails = async () => {
+    try {
+      const data = await fetchAssessmentKitSubjectAttributesDetailsQuery.query({
+        assessmentKitId: assessmentKitId,
+        attributeId: attributeId,
+      });
+      setAttributesDetails(data);
+    } catch (e) {}
+  };
+  const fetchMaturityLevelQuestions = async () => {
+    try {
+      const data = await fetchMaturityLevelQuestionsQuery.query({
+        assessmentKitId: assessmentKitId,
+        attributeId: attributeId,
+        maturityLevelId: value,
+      });
+      setMaturityLevelQuestions(data);
+    } catch (e) {}
+  };
+  useEffect(() => {
+    if (isExpanded && attributeId) {
+      fetchAttributesDetails();
+    }
+  }, [isExpanded]);
+  const [value, setValue] = useState("");
+  const [selectedTabIndex, setSelectedTabIndex] = useState("");
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+    setSelectedTabIndex(attributesDetails?.questions_on_levels.findIndex((obj:any) => obj.id === newValue))
+  };
+  const colorPallet = getMaturityLevelColors(
+    attributesDetails?.questions_on_levels
+      ? attributesDetails?.questions_on_levels.length
+      : 5
+  );
+  // useEffect(() => {
+  //   if (value) {
+  //     fetchMaturityLevelQuestions();
+  //   }
+  // }, [value]);
   return (
     <Box m={1} mt={5}>
+      <Grid item xs={12} sm={7} md={8} lg={9}>
+        <Box
+          display="flex"
+          sx={{
+            background: "white",
+            py: 0.6,
+            px: 1,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="body2" fontFamily="Roboto">
+            <Trans i18nKey="questionsCount" />:
+          </Typography>
+          <Typography
+            variant="body2"
+            fontFamily="Roboto"
+            sx={{ ml: 2 }}
+            fontWeight="bold"
+          >
+            {attributesDetails?.questions_count}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={7} md={8} lg={9}>
+        <Box
+          display="flex"
+          sx={{
+            background: "white",
+            py: 0.6,
+            px: 1,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="body2" fontFamily="Roboto">
+            <Trans i18nKey="weight" />:
+          </Typography>
+          <Typography
+            variant="body2"
+            fontFamily="Roboto"
+            sx={{ ml: 2 }}
+            fontWeight="bold"
+          >
+            {attributesDetails?.weight}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={7} md={8} lg={9}>
+        <Box
+          display="flex"
+          sx={{
+            background: "white",
+            py: 0.6,
+            px: 1,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="body2" fontFamily="Roboto">
+            <Trans i18nKey="description" />:
+          </Typography>
+          <Typography
+            variant="body2"
+            fontFamily="Roboto"
+            sx={{ ml: 2 }}
+            fontWeight="bold"
+          >
+            {attributesDetails?.description}
+          </Typography>
+        </Box>
+      </Grid>
+      <Box mt={4}>
+        <TabContext value={value}>
+          <Box>
+            <Tabs
+              value={value}
+              onChange={handleTabChange}
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: `${colorPallet[selectedTabIndex?selectedTabIndex:0]} !important`,
+                },
+              }}
+            >
+              {attributesDetails?.questions_on_levels.map(
+                (item: any, index: number) => {
+                  return (
+                    <Tab
+                      sx={{
+                        "&.Mui-selected": {
+                          color: `${colorPallet[index]}  !important`,
+                          background: `transparent  !important`,
+                        },
+                        "&:hover": {
+                          backgroundColor: "#e1dede !important",
+                          color: `${colorPallet[index]} !important`,
+                        },
+                        background: `${colorPallet[index]}  !important`,
+                        color: "#fff !important",
+                      }}
+                      label={
+                        <Box sx={{ ...styles.centerV }}>
+                          {item.title}|{item.questions_count}
+                        </Box>
+                      }
+                      value={item.id}
+                    />
+                  );
+                }
+              )}
+            </Tabs>
+          </Box>
+          {/* <TabPanel value={value} sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
+            <Box>
+              <Grid item xs={12} sm={7} md={8} lg={9}>
+                <Box
+                  display="flex"
+                  sx={{
+                    background: "white",
+                    py: 0.6,
+                    px: 1,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography variant="body2" fontFamily="Roboto">
+                    <Trans i18nKey="questionsCount" />:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontFamily="Roboto"
+                    sx={{ ml: 2 }}
+                    fontWeight="bold"
+                  >
+                    {data2?.questions_count}
+                  </Typography>
+                </Box>
+              </Grid>
+              {data2 &&
+                data2.questions.map((question: any, index: number) => {
+                  return <Box>ss</Box>;
+                })}
+            </Box>
+          </TabPanel> */}
+        </TabContext>
+      </Box>
       {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
         <Trans i18nKey="questions" />
         <span style={{ float: "right" }}>{questions.length}</span>
       </Typography> */}
-      <Box sx={{ overflowX: "auto" }}>
+      {/* <Box sx={{ overflowX: "auto" }}>
         <Box
           sx={{
             minWidth: "580px",
@@ -658,7 +894,7 @@ const AssessmentKitQuestionsList = (props: {
           }}
           component="ol"
         >
-          {/* <AttributeDetails index={index} /> */}
+          <AttributeDetails index={index} />
           {questions.map((question: any, index: number) => {
             const {
               title,
@@ -711,8 +947,8 @@ const AssessmentKitQuestionsList = (props: {
                         )}
                         {title}
                       </Typography>
-                    </Grid>
-                    {/* <Grid item xs={5}>
+                    </Grid> */}
+      {/* <Grid item xs={5}>
                       <Box position={"relative"} minWidth="160px">
                         {index === 0 && (
                           <Typography
@@ -737,7 +973,7 @@ const AssessmentKitQuestionsList = (props: {
                         </ul>
                       </Box>
                     </Grid> */}
-                    {/* {hasImpact && (
+      {/* {hasImpact && (
                       <Grid item xs={2}>
                         <Box position={"relative"}>
                           {index === 0 && (
@@ -760,7 +996,7 @@ const AssessmentKitQuestionsList = (props: {
                         </Box>
                       </Grid>
                     )} */}
-                    {/* {hasRelatedAttributes && (
+      {/* {hasRelatedAttributes && (
                       <Grid item xs={3}>
                         <Box position={"relative"} minWidth="300px">
                           {index === 0 && (
@@ -796,7 +1032,7 @@ const AssessmentKitQuestionsList = (props: {
                         </Box>
                       </Grid>
                     )} */}
-                    <AssessmentKitDialog {...dialogProps} question={question} />
+      {/* <AssessmentKitDialog {...dialogProps} question={question} />
                   </Grid>
                 </Box>
                 {index !== questions.length - 1 && <Divider />}
@@ -804,7 +1040,7 @@ const AssessmentKitQuestionsList = (props: {
             );
           })}
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
@@ -1066,7 +1302,9 @@ const AssessmentKitDialog = (props: any) => {
 };
 const MaturityLevelsDetails = (props: any) => {
   const { maturity_levels } = props;
-  const colorPallet = getMaturityLevelColors(maturity_levels?maturity_levels.length:5);
+  const colorPallet = getMaturityLevelColors(
+    maturity_levels ? maturity_levels.length : 5
+  );
   return (
     <Box sx={{ background: "#fff", px: 4, py: 4, borderRadius: "8px" }}>
       <Typography fontWeight={900} fontSize="24px" mb={8}>
@@ -1137,31 +1375,50 @@ const MaturityLevelsDetails = (props: any) => {
 const useAssessmentKit = () => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
+  const subjectId = 1;
   const assessmentKitQueryProps = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.inspectAssessmentKit(args, config),
   });
-  const analyzeAssessmentKitQuery = useQuery({
-    service: (args = { assessmentKitId }, config) =>
-      service.analyzeAssessmentKit(args, config),
-    runOnMount: true,
-  });
-  const fetchAssessmentKitQuery = useQuery({
-    service: (args = { assessmentKitId }, config) =>
-      service.fetchAssessmentKitdata(args, config),
-    runOnMount: true,
-  });
+  // const analyzeAssessmentKitQuery = useQuery({
+  //   service: (args = { assessmentKitId }, config) =>
+  //     service.analyzeAssessmentKit(args, config),
+  //   runOnMount: true,
+  // });
+  // const fetchAssessmentKitQuery = useQuery({
+  //   service: (args = { assessmentKitId }, config) =>
+  //     service.fetchAssessmentKitdata(args, config),
+  //   runOnMount: true,
+  // });
   const fetchAssessmentKitDetailsQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.fetchAssessmentKitDetails(args, config),
     runOnMount: true,
   });
+  const fetchAssessmentKitSubjectDetailsQuery = useQuery({
+    service: (args, config) =>
+      service.fetchAssessmentKitSubjectDetails(args, config),
+    runOnMount: false,
+  });
+  const fetchAssessmentKitSubjectAttributesDetailsQuery = useQuery({
+    service: (args, config) =>
+      service.fetchAssessmentKitSubjectAttributesDetails(args, config),
+    runOnMount: false,
+  });
+  const fetchMaturityLevelQuestionsQuery = useQuery({
+    service: (args, config) =>
+      service.fetchMaturityLevelQuestions(args, config),
+    runOnMount: false,
+  });
 
   return {
     assessmentKitQueryProps,
-    analyzeAssessmentKitQuery,
-    fetchAssessmentKitQuery,
+    // analyzeAssessmentKitQuery,
+    // fetchAssessmentKitQuery,
     fetchAssessmentKitDetailsQuery,
+    fetchAssessmentKitSubjectDetailsQuery,
+    fetchAssessmentKitSubjectAttributesDetailsQuery,
+    fetchMaturityLevelQuestionsQuery,
   };
 };
 export default AssessmentKitExpertViewContainer;
