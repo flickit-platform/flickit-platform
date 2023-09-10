@@ -192,8 +192,7 @@ class LoadMaturityLevelsDetailsApi(APIView):
         if not attribute:
             return Response({"code": "NOT_FOUND", 'message': "'attribute_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
-        maturity_level = commonservice.check_maturity_level_in_assessment_kit(assessment_kit_id, attribute_id,
-                                                                              maturity_level_id)
+        maturity_level = commonservice.check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id)
         if not maturity_level:
             return Response({"code": "NOT_FOUND", 'message': "'level_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)

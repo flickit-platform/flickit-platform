@@ -20,8 +20,8 @@ def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
     return False
 
 
-def check_maturity_level_in_assessment_kit(assessment_kit_id, attribute_id, maturity_level_id):
-    if MaturityLevel.objects.filter(id=maturity_level_id).filter(question_impacts__quality_attribute=attribute_id).exists():
+def check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id):
+    if MaturityLevel.objects.filter(assessment_kit=assessment_kit_id).filter(id=maturity_level_id).exists():
         return MaturityLevel.objects.get(id=maturity_level_id)
     return False
 
