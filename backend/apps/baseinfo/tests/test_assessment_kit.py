@@ -1498,9 +1498,13 @@ class TestLoadMaturityLevelsDetailsApi:
         view = commonviews.LoadMaturityLevelsDetailsApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id, attribute_id=attribute_id, maturity_level_id=level_id)
 
+        questions_count = QuestionImpact.objects.filter(maturity_level=level_id).filter(
+            quality_attribute=attribute_id).distinct().values('question__id').count()
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data["id"] == level_id
         assert resp.data["title"] == level.title
+        assert resp.data["index"] == level.value
+        assert resp.data["questions_count"] == questions_count
 
     def test_get_maturity_levels_details_when_not_member_expert_group(self, create_user, init_data):
         user1 = create_user(email="test@test.com")
