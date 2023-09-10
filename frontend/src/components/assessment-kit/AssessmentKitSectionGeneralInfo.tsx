@@ -37,17 +37,12 @@ import AutocompleteAsyncField, {
 import RichEditor from "@common/rich-editor/RichEditor";
 interface IAssessmentKitSectionAuthorInfo {
   data: any;
-  query: TQueryFunction;
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo
 ) => {
-  const { data, query } = props;
-  const {
-    is_active,
-    is_expert = true,
-    current_user_is_coordinator,
-  } = data || {};
+  const { data } = props;
+  const { current_user_is_coordinator } = data || {};
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -73,20 +68,20 @@ const AssessmentKitSectionGeneralInfo = (
     runOnMount: false,
     toastError: true,
   });
-  const publishAssessmentKit = async () => {
-    try {
-      const res = await publishQuery.query();
-      res.message && toast.success(res.message);
-      query();
-    } catch (e) {}
-  };
-  const unPublishAssessmentKit = async () => {
-    try {
-      const res = await unPublishQuery.query();
-      res.message && toast.success(res.message);
-      query();
-    } catch (e) {}
-  };
+  // const publishAssessmentKit = async () => {
+  //   try {
+  //     const res = await publishQuery.query();
+  //     res.message && toast.success(res.message);
+  //     query();
+  //   } catch (e) {}
+  // };
+  // const unPublishAssessmentKit = async () => {
+  //   try {
+  //     const res = await unPublishQuery.query();
+  //     res.message && toast.success(res.message);
+  //     query();
+  //   } catch (e) {}
+  // };
 
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
@@ -168,10 +163,14 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="body2" mr={4}>
+                    <Typography
+                      variant="body2"
+                      mr={4}
+                      sx={{ minWidth: "64px !important" }}
+                    >
                       <Trans i18nKey="price" />
                     </Typography>
-                    <Typography variant="body2" fontWeight="700" mr={4}>
+                    <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
                       FREE
                     </Typography>
                   </Box>
@@ -190,7 +189,11 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="body2" mr={4}>
+                    <Typography
+                      variant="body2"
+                      mr={4}
+                      sx={{ minWidth: "64px !important" }}
+                    >
                       <Trans i18nKey="tags" />
                     </Typography>
                     {current_user_is_coordinator && show ? (
@@ -482,8 +485,9 @@ const OnHoverInput = (props: any) => {
           justifyContent: "space-between",
           alignItems: "center",
         }}
+        width="100%"
       >
-        <Typography variant="body2" mr={4}>
+        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
           {title}
         </Typography>
 
@@ -626,7 +630,7 @@ const OnHoverStatus = (props: any) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="body2" mr={4}>
+        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
           {title}
         </Typography>
         <Box
@@ -749,7 +753,7 @@ const OnHoverRichEditor = (props: any) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="body2" mr={4}>
+        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
           {title}
         </Typography>
         {current_user_is_coordinator && show ? (
@@ -813,7 +817,7 @@ const OnHoverRichEditor = (props: any) => {
         ) : (
           <Box
             sx={{
-              height: "38px",
+              // height: "38px",
               borderRadius: "4px",
               paddingLeft: "8px;",
               paddingRight: "12px;",
