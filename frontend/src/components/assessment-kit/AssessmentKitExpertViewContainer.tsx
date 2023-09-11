@@ -36,13 +36,14 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 const AssessmentKitExpertViewContainer = () => {
-  const { assessmentKitQueryProps, fetchAssessmentKitDetailsQuery } =
-    useAssessmentKit();
+  const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState();
+  const [expertGroup, setExpertGroup] = useState<any>();
+  const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
   const fetch2 = async () => {
     try {
@@ -56,9 +57,13 @@ const AssessmentKitExpertViewContainer = () => {
       fetch2();
     }
   }, [loaded]);
+  useEffect(() => {
+    setDocumentTitle(`${t("assessmentKit")}: ${assessmentKitTitle || ""}`);
+  }, [assessmentKitTitle]);
+
   return (
     <Box>
-      <QueryBatchData
+      {/* <QueryBatchData
         queryBatchData={[assessmentKitQueryProps]}
         render={([data = {}]) => {
           const {
@@ -66,58 +71,61 @@ const AssessmentKitExpertViewContainer = () => {
             expert_group,
             current_user_is_coordinator,
           } = data;
-          setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+
           return (
-            <>
-              <Box>
-                <Title
-                  backLink={-1}
-                  sup={
-                    <SupTitleBreadcrumb
-                      routes={[
-                        {
-                          title: t("expertGroups") as string,
-                          to: `/user/expert-groups`,
-                        },
-                        {
-                          title: expert_group?.name,
-                          to: `/user/expert-groups/${expertGroupId}`,
-                        },
-                      ]}
-                    />
-                  }
-                  // sub={data.summary}
-                  // toolbar={
-                  //   current_user_is_coordinator && (
-                  //     <IconButton
-                  //       title="Setting"
-                  //       color="primary"
-                  //       onClick={() =>
-                  //         dialogProps.openDialog({ type: "update", data })
-                  //       }
-                  //     >
-                  //       <SettingsRoundedIcon />
-                  //     </IconButton>
-                  //   )
-                  // }
-                >
-                  {data.title}
-                </Title>
-                <Box mt={3}>
-                  <AssessmentKitSectionGeneralInfo data={data} />
-                  <AssessmentKitSectionsTabs details={details} />
-                </Box>
-              </Box>
-              {/* <AssessmentKitSettingFormDialog
+            <> */}
+      <Box>
+        <Title
+          backLink={-1}
+          sup={
+            <SupTitleBreadcrumb
+              routes={[
+                {
+                  title: t("expertGroups") as string,
+                  to: `/user/expert-groups`,
+                },
+                {
+                  title: expertGroup?.name,
+                  to: `/user/expert-groups/${expertGroupId}`,
+                },
+              ]}
+            />
+          }
+          // sub={data.summary}
+          // toolbar={
+          //   current_user_is_coordinator && (
+          //     <IconButton
+          //       title="Setting"
+          //       color="primary"
+          //       onClick={() =>
+          //         dialogProps.openDialog({ type: "update", data })
+          //       }
+          //     >
+          //       <SettingsRoundedIcon />
+          //     </IconButton>
+          //   )
+          // }
+        >
+          {assessmentKitTitle}
+        </Title>
+        <Box mt={3}>
+          <AssessmentKitSectionGeneralInfo
+            setExpertGroup={setExpertGroup}
+            setAssessmentKitTitle={setAssessmentKitTitle}
+          />
+          <AssessmentKitSectionsTabs details={details} />
+        </Box>
+      </Box>
+      {/* <AssessmentKitSettingFormDialog
                 {...dialogProps}
                 onSubmitForm={assessmentKitQueryProps.query}
                 fetchAssessmentKitQuery={fetchAssessmentKitQuery.query}
                 fetchAssessmentKitData={assessmentKitData[0]}
               /> */}
-            </>
+      {/* </>
           );
         }}
-      />
+      /> */}
     </Box>
   );
 };
@@ -183,7 +191,8 @@ const AssessmentKitSectionsTabs = (props: { details: any }) => {
 const AssessmentKitSubjects = (props: { details: any[] }) => {
   const { details } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] = useState<any>();
+  const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] =
+    useState<any>();
   const [subjectId, setSubjectId] = useState<any>();
   const dialogProps = useDialog();
   const {
@@ -724,7 +733,11 @@ const AssessmentKitQuestionsList = (props: {
   const [selectedTabIndex, setSelectedTabIndex] = useState("");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
-    setSelectedTabIndex(attributesDetails?.questions_on_levels.findIndex((obj:any) => obj.id === newValue))
+    setSelectedTabIndex(
+      attributesDetails?.questions_on_levels.findIndex(
+        (obj: any) => obj.id === newValue
+      )
+    );
   };
   const colorPallet = getMaturityLevelColors(
     attributesDetails?.questions_on_levels
@@ -815,7 +828,9 @@ const AssessmentKitQuestionsList = (props: {
               onChange={handleTabChange}
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: `${colorPallet[selectedTabIndex?selectedTabIndex:0]} !important`,
+                  backgroundColor: `${
+                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                  } !important`,
                 },
               }}
             >
@@ -1376,10 +1391,10 @@ const useAssessmentKit = () => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const subjectId = 1;
-  const assessmentKitQueryProps = useQuery({
-    service: (args = { assessmentKitId }, config) =>
-      service.inspectAssessmentKit(args, config),
-  });
+  // const assessmentKitQueryProps = useQuery({
+  //   service: (args = { assessmentKitId }, config) =>
+  //     service.inspectAssessmentKit(args, config),
+  // });
   // const analyzeAssessmentKitQuery = useQuery({
   //   service: (args = { assessmentKitId }, config) =>
   //     service.analyzeAssessmentKit(args, config),
@@ -1412,7 +1427,7 @@ const useAssessmentKit = () => {
   });
 
   return {
-    assessmentKitQueryProps,
+    // assessmentKitQueryProps,
     // analyzeAssessmentKitQuery,
     // fetchAssessmentKitQuery,
     fetchAssessmentKitDetailsQuery,
