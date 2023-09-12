@@ -1371,68 +1371,71 @@ const SubjectQuestionList = (props: any) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderBottom: "1px solid #4979D1",
-                  pb: "8px",
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "bold",
-                    opacity: 0.6,
-                    ml: "4px",
-                  }}
-                >
-                  <Trans i18nKey="options" />
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "bold",
-                    opacity: 0.6,
-                    ml: "4px",
-                  }}
-                >
-                  <Trans i18nKey="value" />
-                </Typography>
-              </Box>
-              {question.option.map((item: any) => (
+              <Box sx={{maxWidth:"max-content"}}>
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    px: "16px",
-                    my: "16px",
+                    borderBottom: "1px solid #4979D1",
+                    pb: "8px",
                   }}
                 >
                   <Typography
-                    variant="subtitle2"
+                    variant="body2"
                     sx={{
                       fontFamily: "Roboto",
                       fontWeight: "bold",
+                      opacity: 0.6,
+                      ml: "4px",
                     }}
                   >
-                    {item.index}.{item.title}
+                    <Trans i18nKey="options" />
                   </Typography>
                   <Typography
-                    variant="subtitle2"
+                    variant="body2"
                     sx={{
                       fontFamily: "Roboto",
                       fontWeight: "bold",
+                      opacity: 0.6,
+                      ml: "4px",
                     }}
                   >
-                    {item.value}
+                    <Trans i18nKey="value" />
                   </Typography>
                 </Box>
-              ))}
+                {question.option.map((item: any) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      px: "16px",
+                      my: "16px",
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        fontFamily: "Roboto",
+                        fontWeight: "bold",
+                        mr:"64px"
+                      }}
+                    >
+                      {item.index}.{item.title}
+                    </Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        fontFamily: "Roboto",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {item.value}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
             </AccordionDetails>
           </Accordion>
         );
