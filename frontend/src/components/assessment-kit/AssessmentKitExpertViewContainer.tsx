@@ -1462,12 +1462,12 @@ const MaturityLevelsDetails = (props: any) => {
               <Box
                 sx={{
                   transform: "skew(-30deg);",
-                  background: colorPallet[index],
+                  background: colorPallet[key],
                   borderRadius: "8px",
                   py: "4px",
                   pl: "16px",
                   margin: "16px",
-                  width: `${90 - 10 * index}%`,
+                  width: `${90 - 10 * key}%`,
                 }}
                 key={key}
               >
