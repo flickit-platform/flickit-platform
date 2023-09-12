@@ -36,13 +36,13 @@ import AutocompleteAsyncField, {
 } from "@common/fields/AutocompleteAsyncField";
 import RichEditor from "@common/rich-editor/RichEditor";
 interface IAssessmentKitSectionAuthorInfo {
-  data: any;
+  setExpertGroup: any;
+  setAssessmentKitTitle: any;
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo
 ) => {
-  const { data } = props;
-  const { current_user_is_coordinator } = data || {};
+  const { setExpertGroup, setAssessmentKitTitle } = props;
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -86,18 +86,15 @@ const AssessmentKitSectionGeneralInfo = (
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
+  const handleMouseOver = (current_user_is_coordinator: boolean) => {
     current_user_is_coordinator && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-
-  const [titleText, setTitleText] = useState<String>(data);
   const handleCancel = () => {
     setShow(false);
-    setTitleText(data);
   };
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
@@ -122,6 +119,8 @@ const AssessmentKitSectionGeneralInfo = (
           fetchAssessmentKitStatsQuery,
         ]}
         render={([info = {}, stats = {}]) => {
+          setExpertGroup(stats?.expert_group);
+          setAssessmentKitTitle(info?.title);
           return (
             <Grid container spacing={4}>
               <Grid item xs={12} md={7}>
@@ -139,7 +138,7 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
-                    current_user_is_coordinator={current_user_is_coordinator}
+                    current_user_is_coordinator={info?.current_user_is_coordinator}
                   />
                   <OnHoverInput
                     formMethods={formMethods}
@@ -147,13 +146,13 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
-                    current_user_is_coordinator={current_user_is_coordinator}
+                    current_user_is_coordinator={info?.current_user_is_coordinator}
                   />
                   <OnHoverStatus
                     data={info?.is_active}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={current_user_is_coordinator}
+                    current_user_is_coordinator={info?.current_user_is_coordinator}
                   />
                   <Box
                     sx={{
@@ -163,7 +162,11 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="body2" mr={4}sx={{ minWidth: "64px !important" }}>
+                    <Typography
+                      variant="body2"
+                      mr={4}
+                      sx={{ minWidth: "64px !important" }}
+                    >
                       <Trans i18nKey="price" />
                     </Typography>
                     <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
@@ -185,10 +188,14 @@ const AssessmentKitSectionGeneralInfo = (
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="body2" mr={4}sx={{ minWidth: "64px !important" }}>
+                    <Typography
+                      variant="body2"
+                      mr={4}
+                      sx={{ minWidth: "64px !important" }}
+                    >
                       <Trans i18nKey="tags" />
                     </Typography>
-                    {current_user_is_coordinator && show ? (
+                    {info?.current_user_is_coordinator && show ? (
                       <FormProviderWithForm formMethods={formMethods}>
                         <Box
                           sx={{
@@ -264,7 +271,9 @@ const AssessmentKitSectionGeneralInfo = (
                           "&:hover": { border: "1px solid #1976d299" },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={handleMouseOver}
+                        onMouseOver={() =>
+                          handleMouseOver(info?.current_user_is_coordinator)
+                        }
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
@@ -310,7 +319,7 @@ const AssessmentKitSectionGeneralInfo = (
                     data={info?.about}
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={current_user_is_coordinator}
+                    current_user_is_coordinator={info?.current_user_is_coordinator}
                   />
                 </Box>
               </Grid>
@@ -398,13 +407,13 @@ const AssessmentKitSectionGeneralInfo = (
                     <Box sx={{ display: "flex" }} mr={4}>
                       <FavoriteRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.assessments_count}
+                        {stats?.likes_count}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <ShoppingCartRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.likes_count}
+                        {stats?.assessments_count}
                       </Typography>
                     </Box>
                   </Box>
@@ -543,7 +552,7 @@ const OnHoverInput = (props: any) => {
         ) : (
           <Box
             sx={{
-              minHeight: "38px",  
+              minHeight: "38px",
               borderRadius: "4px",
               paddingLeft: "8px;",
               paddingRight: "12px;",

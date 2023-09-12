@@ -184,7 +184,7 @@ class LoadAssessmentKitInfoEditableApi(APIView):
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
-        response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit, many=True).data
+        response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit, many=True, context={'request': request}).data
         return Response(response[0], status=status.HTTP_200_OK)
 
 
@@ -215,7 +215,7 @@ class EditAssessmentKitInfoApi(APIView):
             if not result.success:
                 return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
-        response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit, many=True).data
+        response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit, many=True, context={'request': request}).data
         return Response(response[0], status=status.HTTP_200_OK)
 
 
