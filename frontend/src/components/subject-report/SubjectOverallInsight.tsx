@@ -27,7 +27,7 @@ const OverallInsightText = (props: any) => {
     title,
     status,
     cl = 1,
-    level_value: ml,
+    maturity_level_value: ml,
     most_significant_strength_atts = [],
     most_significant_weaknessness_atts = [],
     results,
