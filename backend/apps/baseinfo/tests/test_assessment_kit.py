@@ -1637,7 +1637,7 @@ class TestLoadQuestionnairesDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1659,7 +1659,7 @@ class TestLoadQuestionnairesDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1679,7 +1679,7 @@ class TestLoadQuestionnairesDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1702,7 +1702,7 @@ class TestLoadQuestionnairesDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1720,7 +1720,7 @@ class TestLoadQuestionnairesDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}/',
             {},
             format='json')
         view = commonviews.LoadQuestionnairesDetailsApi.as_view()
@@ -1744,7 +1744,7 @@ class TestLoadQuestionDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1766,7 +1766,7 @@ class TestLoadQuestionDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1787,7 +1787,7 @@ class TestLoadQuestionDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1809,7 +1809,7 @@ class TestLoadQuestionDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}/',
             {},
             format='json')
         force_authenticate(request, user=user1)
@@ -1826,7 +1826,7 @@ class TestLoadQuestionDetailsApi:
         # create request and send request
         api = APIRequestFactory()
         request = api.get(
-            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}/',
             {},
             format='json')
         view = commonviews.LoadQuestionDetailsApi.as_view()
