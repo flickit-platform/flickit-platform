@@ -45,16 +45,14 @@ const AssessmentKitExpertViewContainer = () => {
   const [expertGroup, setExpertGroup] = useState<any>();
   const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
-  const fetch2 = async () => {
-    try {
-      const data = await fetchAssessmentKitDetailsQuery.query();
-      setDetails(data);
-      setLoaded(true);
-    } catch (e) {}
+  const AssessmentKitDetails = async () => {
+    const data = await fetchAssessmentKitDetailsQuery.query();
+    setDetails(data);
+    setLoaded(true);
   };
   useEffect(() => {
     if (!loaded) {
-      fetch2();
+      AssessmentKitDetails();
     }
   }, [loaded]);
   useEffect(() => {
@@ -63,17 +61,6 @@ const AssessmentKitExpertViewContainer = () => {
 
   return (
     <Box>
-      {/* <QueryBatchData
-        queryBatchData={[assessmentKitQueryProps]}
-        render={([data = {}]) => {
-          const {
-            is_expert = true,
-            expert_group,
-            current_user_is_coordinator,
-          } = data;
-
-          return (
-            <> */}
       <Box>
         <Title
           backLink={-1}
@@ -91,20 +78,6 @@ const AssessmentKitExpertViewContainer = () => {
               ]}
             />
           }
-          // sub={data.summary}
-          // toolbar={
-          //   current_user_is_coordinator && (
-          //     <IconButton
-          //       title="Setting"
-          //       color="primary"
-          //       onClick={() =>
-          //         dialogProps.openDialog({ type: "update", data })
-          //       }
-          //     >
-          //       <SettingsRoundedIcon />
-          //     </IconButton>
-          //   )
-          // }
         >
           {assessmentKitTitle}
         </Title>
@@ -116,16 +89,6 @@ const AssessmentKitExpertViewContainer = () => {
           <AssessmentKitSectionsTabs details={details} />
         </Box>
       </Box>
-      {/* <AssessmentKitSettingFormDialog
-                {...dialogProps}
-                onSubmitForm={assessmentKitQueryProps.query}
-                fetchAssessmentKitQuery={fetchAssessmentKitQuery.query}
-                fetchAssessmentKitData={assessmentKitData[0]}
-              /> */}
-      {/* </>
-          );
-        }}
-      /> */}
     </Box>
   );
 };
@@ -361,7 +324,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                               fontWeight={"bold"}
                               minWidth="180px"
                             >
-                              {item.index}.{item.title}
+                              {index + 1}.{item.title}
                             </Typography>
                             {/* <Typography
                             sx={{
@@ -744,11 +707,11 @@ const AssessmentKitQuestionsList = (props: {
       ? attributesDetails?.questions_on_levels.length
       : 5
   );
-  // useEffect(() => {
-  //   if (value) {
-  //     fetchMaturityLevelQuestions();
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (value) {
+      fetchMaturityLevelQuestions();
+    }
+  }, [value]);
   return (
     <Box m={1} mt={5}>
       <Grid item xs={12} sm={7} md={8} lg={9}>
@@ -862,37 +825,14 @@ const AssessmentKitQuestionsList = (props: {
               )}
             </Tabs>
           </Box>
-          {/* <TabPanel value={value} sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
-            <Box>
-              <Grid item xs={12} sm={7} md={8} lg={9}>
-                <Box
-                  display="flex"
-                  sx={{
-                    background: "white",
-                    py: 0.6,
-                    px: 1,
-                    borderRadius: 1,
-                  }}
-                >
-                  <Typography variant="body2" fontFamily="Roboto">
-                    <Trans i18nKey="questionsCount" />:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontFamily="Roboto"
-                    sx={{ ml: 2 }}
-                    fontWeight="bold"
-                  >
-                    {data2?.questions_count}
-                  </Typography>
-                </Box>
-              </Grid>
-              {data2 &&
-                data2.questions.map((question: any, index: number) => {
-                  return <Box>ss</Box>;
-                })}
-            </Box>
-          </TabPanel> */}
+          <TabPanel value={value} sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
+            {maturityLevelQuestions && (
+              <SubjectQuestionList
+                questions={maturityLevelQuestions?.questions}
+                questions_count={maturityLevelQuestions?.questions_count}
+              />
+            )}
+          </TabPanel>
         </TabContext>
       </Box>
       {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
@@ -1315,6 +1255,192 @@ const AssessmentKitDialog = (props: any) => {
     </Dialog>
   );
 };
+const SubjectQuestionList = (props: any) => {
+  const { questions, questions_count } = props;
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const handleChange =
+    (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      if (isExpanded) {
+      }
+      setExpanded(isExpanded ? panel?.title : false);
+    };
+  return (
+    <Box>
+      {questions[0] && (
+        <Box m={1} mt={2}>
+          <Typography
+            variant="h6"
+            fontFamily="Roboto"
+            fontWeight={"bold"}
+            fontSize="1rem"
+          >
+            <Trans i18nKey="questions" />
+          </Typography>
+        </Box>
+      )}
+      {questions.map((question: any, index: number) => {
+        const isExpanded = expanded === question.title;
+        return (
+          <Accordion
+            key={index}
+            expanded={isExpanded}
+            onChange={handleChange(question)}
+            sx={{
+              mt: 2,
+              mb: 1,
+              pl: 2,
+              borderRadius: 2,
+              background: "white",
+              boxShadow: "none",
+              border: "none,",
+              "&::before": {
+                display: "none",
+              },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: "#287c71" }} />}
+              aria-controls="panel1bh-content"
+              id="panel1bh-header"
+            >
+              <Typography
+                sx={{
+                  flex: 1,
+                  fontFamily: "Roboto",
+                  fontWeight: "bold",
+                  opacity: 1,
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+                variant="body2"
+              >
+                {index + 1}.{question.title}
+                {question.may_not_be_applicable && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "8px",
+                      background: "#1976D2",
+                      color: "#fff",
+                      fontSize: "12px",
+                      px: "12px",
+                      mx: "4px",
+                      height: "24px",
+                    }}
+                  >
+                    <Trans i18nKey="na" />
+                  </Box>
+                )}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "8px",
+                    background: "#273248",
+                    color: "#fff",
+                    fontSize: "12px",
+                    px: "12px",
+                    mx: "4px",
+                    height: "24px",
+                  }}
+                >
+                  {question.questionnaire}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "8px",
+                    background: "#7954B3",
+                    color: "#fff",
+                    fontSize: "12px",
+                    px: "12px",
+                    mx: "4px",
+                    height: "24px",
+                  }}
+                >
+                  <Trans
+                    i18nKey="weightValue"
+                    values={{ weight: question.weight }}
+                  />
+                </Box>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderBottom: "1px solid #4979D1",
+                  pb: "8px",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "bold",
+                    opacity: 0.6,
+                    ml: "4px",
+                  }}
+                >
+                  <Trans i18nKey="options" />
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "bold",
+                    opacity: 0.6,
+                    ml: "4px",
+                  }}
+                >
+                  <Trans i18nKey="value" />
+                </Typography>
+              </Box>
+              {question.option.map((item: any) => (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    px: "16px",
+                    my: "16px",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.index}.{item.title}
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.value}
+                  </Typography>
+                </Box>
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        );
+      })}
+    </Box>
+  );
+};
+
 const MaturityLevelsDetails = (props: any) => {
   const { maturity_levels } = props;
   const colorPallet = getMaturityLevelColors(
@@ -1408,7 +1534,7 @@ const useAssessmentKit = () => {
   const fetchAssessmentKitDetailsQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.fetchAssessmentKitDetails(args, config),
-    runOnMount: true,
+    runOnMount: false,
   });
   const fetchAssessmentKitSubjectDetailsQuery = useQuery({
     service: (args, config) =>
