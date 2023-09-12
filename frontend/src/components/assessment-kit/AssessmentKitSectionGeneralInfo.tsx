@@ -407,13 +407,13 @@ const AssessmentKitSectionGeneralInfo = (
                     <Box sx={{ display: "flex" }} mr={4}>
                       <FavoriteRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.assessments_count}
+                        {stats?.likes_count}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <ShoppingCartRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.likes_count}
+                        {stats?.assessments_count}
                       </Typography>
                     </Box>
                   </Box>
