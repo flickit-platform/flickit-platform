@@ -8,7 +8,13 @@ import Hidden from "@mui/material/Hidden";
 import { getMaturityLevelColors, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
-  const { quality_attribute = {}, level_value: ml,maturity_level_number:mn, status,maturity_level_status } = props;
+  const {
+    quality_attribute = {},
+    level_value: ml,
+    maturity_level_number: mn,
+    status,
+    maturity_level_status,
+  } = props;
   const { title, description, images = [] } = quality_attribute;
   return (
     <Paper
@@ -32,16 +38,37 @@ const SUbjectAttributeCard = (props: any) => {
               {title}
             </Title>
           </Box>
-          <AttributeStatusBarContainer status={maturity_level_status} ml={ml} cl={1} mn={mn}/>
+          <AttributeStatusBarContainer
+            status={maturity_level_status}
+            ml={ml}
+            cl={1}
+            mn={mn}
+          />
           <Box mt={3}>
-            <Typography fontSize="1.15rem" fontFamily="Roboto" fontWeight={"bold"}>
+            <Typography
+              fontSize="1.15rem"
+              fontFamily="Roboto"
+              fontWeight={"bold"}
+            >
               <Trans i18nKey={"withConfidence"} />
-              <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#3596A1" fontSize="1.12rem">
+              <Typography
+                component="span"
+                fontFamily="Roboto"
+                fontWeight={"bold"}
+                color="#3596A1"
+                fontSize="1.12rem"
+              >
                 {" "}
                 1 of 5{" "}
               </Typography>
               <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
-              <Typography component="span" fontFamily="Roboto" fontWeight={"bold"} color="#6035A1" fontSize="1.2rem">
+              <Typography
+                component="span"
+                fontFamily="Roboto"
+                fontWeight={"bold"}
+                color="#6035A1"
+                fontSize="1.2rem"
+              >
                 {" "}
                 {ml}.{" "}
               </Typography>
@@ -74,9 +101,9 @@ const SUbjectAttributeCard = (props: any) => {
 };
 
 const AttributeStatusBarContainer = (props: any) => {
-  const { status, ml, cl ,mn} = props;
+  const { status, ml, cl, mn } = props;
   const colorPallet = getMaturityLevelColors(mn);
-  const statusColor = colorPallet[ml-1];
+  const statusColor = colorPallet[ml - 1];
   return (
     <Box
       display={"flex"}
@@ -91,7 +118,10 @@ const AttributeStatusBarContainer = (props: any) => {
           {cl && <AttributeStatusBar cl={cl} mn={mn} />}
         </Box>
       </Box>
-      <Box sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }} minWidth={"245px"}>
+      <Box
+        sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }}
+        minWidth={"245px"}
+      >
         <Typography
           variant="h4"
           fontWeight={"bold"}
@@ -112,8 +142,14 @@ const AttributeStatusBarContainer = (props: any) => {
 };
 
 export const AttributeStatusBar = (props: any) => {
-  const { ml, cl, isMl, isBasic,mn } = props;
-  const width = isMl ? (ml ? `${(ml / mn) * 100}%` : "0%") : cl ? `${(cl / 5) * 100}%` : "0%";
+  const { ml, cl, isMl, isBasic, mn } = props;
+  const width = isMl
+    ? ml
+      ? `${(ml / mn) * 100}%`
+      : "0%"
+    : cl
+    ? `${(cl / 5) * 100}%`
+    : "0%";
   return (
     <Box
       height={"38px"}
@@ -151,8 +187,11 @@ export const AttributeStatusBar = (props: any) => {
       >
         <Trans i18nKey={isMl ? "maturityLevel" : "confidenceLevel"} />
       </Typography>
-      <Typography sx={{ position: "absolute", zIndex: 1, right: "12px" }} variant="h6">
-        {isMl ? ml : cl}/5
+      <Typography
+        sx={{ position: "absolute", zIndex: 1, right: "12px" }}
+        variant="h6"
+      >
+        {isMl ? `${ml} / ${mn}` : `${cl} / 5`}
       </Typography>
     </Box>
   );
