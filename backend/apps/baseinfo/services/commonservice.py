@@ -1,6 +1,9 @@
+from django.db.models import F
+
 from baseinfo.models.questionmodels import AnswerTemplate, OptionValue, Question, QuestionImpact
 from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
-from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
+from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
+from baseinfo.serializers import commonserializers
 
 from baseinfo.services import assessmentkitservice
 
@@ -23,6 +26,18 @@ def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
 def check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id):
     if MaturityLevel.objects.filter(assessment_kit=assessment_kit_id).filter(id=maturity_level_id).exists():
         return MaturityLevel.objects.get(id=maturity_level_id)
+    return False
+
+
+def check_questionnaire_in_assessment_kit(assessment_kit_id, questionnaire_id):
+    if Questionnaire.objects.filter(assessment_kit=assessment_kit_id).filter(id=questionnaire_id).exists():
+        return Questionnaire.objects.get(id=questionnaire_id)
+    return False
+
+
+def check_question_in_assessment_kit(assessment_kit_id, question_id):
+    if Question.objects.filter(id=question_id).filter(questionnaire__assessment_kit=assessment_kit_id).exists():
+        return Question.objects.get(id=question_id)
     return False
 
 
@@ -110,7 +125,8 @@ def get_maturity_level_details(maturity_levels, quality_attributes_id):
         data_level['id'] = level.id
         data_level['title'] = level.title
         data_level['index'] = level.value
-        questions_count = QuestionImpact.objects.filter(maturity_level=level.id).filter(quality_attribute=quality_attributes_id).distinct().values('question__id').count()
+        questions_count = QuestionImpact.objects.filter(maturity_level=level.id).filter(
+            quality_attribute=quality_attributes_id).distinct().values('question__id').count()
         data_level['questions_count'] = questions_count
         data.append(data_level)
     return data
@@ -150,4 +166,31 @@ def get_questions_in_maturity_level(maturity_level, quality_attributes_id):
         data_questions.append(data_question)
 
     data["questions"] = data_questions
+    return data
+
+
+def get_question_impacts_for_questionnaire(question_id, attributes):
+    data = list()
+    for attribute in attributes:
+        data_attribute_list = dict()
+        data_attribute = dict()
+        data_attribute['id'] = attribute.id
+        data_attribute['title'] = attribute.title
+        affected_levels = list()
+        impacts = attribute.question_impacts.filter(question=question_id)
+        for impact in impacts:
+            affected_level_data = dict()
+            maturity_level_data = dict()
+            maturity_level_data["id"] = impact.maturity_level.id
+            maturity_level_data["index"] = impact.maturity_level.value
+            maturity_level_data["title"] = impact.maturity_level.title
+            affected_level_data["maturity_level"] = maturity_level_data
+            affected_level_data["weight"] = impact.weight
+            option_values_data = commonserializers.LoadOptionDetailsSerializer(impact.option_values, many=True).data
+
+            affected_level_data["option_values"] = option_values_data
+            affected_levels.append(affected_level_data)
+        data_attribute["affected_levels"] = affected_levels
+        data_attribute_list["attribute"] = data_attribute
+        data.append(data_attribute_list)
     return data

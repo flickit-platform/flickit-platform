@@ -1395,7 +1395,8 @@ class TestLoadQualityAttributesDetailsApi:
         assert resp.data["description"] == attribute.description
         assert resp.data["questions_count"] == attribute.question_set.count()
         counter = len(resp.data["questions_on_levels"])
-        levels = MaturityLevel.objects.filter(assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by('value')
+        levels = MaturityLevel.objects.filter(assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by(
+            'value')
         assert counter == levels.count()
         for level_counter in range(counter):
             assert levels[level_counter].id == resp.data["questions_on_levels"][level_counter]["id"]
@@ -1617,5 +1618,218 @@ class TestLoadMaturityLevelsDetailsApi:
             format='json')
         view = commonviews.LoadMaturityLevelsDetailsApi.as_view()
         resp = view(request, assessment_kit_id=assessment_kit_id, attribute_id=attribute_id, maturity_level_id=level_id)
+
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+class TestLoadQuestionnairesDetailsApi:
+    def test_get_questionnaires_details_when_user_is_member_expert_group(self, create_user, init_data):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        questionnaire = base_info['questionnaires'][0]
+        questionnaire_id = questionnaire.id
+        expert_group = base_info['assessment_kit'].expert_group
+        expert_group.users.add(user1)
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionnairesDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, questionnaire_id=questionnaire_id)
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["questions_count"] == Question.objects.filter(questionnaire=questionnaire_id).count()
+        assert resp.data["description"] == questionnaire.description
+
+
+    def test_get_questionnaires_details_when_user_not_member_expert_group(self, create_user, init_data):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        questionnaire = base_info['questionnaires'][0]
+        questionnaire_id = questionnaire.id
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionnairesDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, questionnaire_id=questionnaire_id)
+
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_questionnaires_details_when_assessment_kit_not_exist(self, create_user, init_data):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = 1000
+        questionnaire = base_info['questionnaires'][0]
+        questionnaire_id = questionnaire.id
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionnairesDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, questionnaire_id=questionnaire_id)
+
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "'assessment_kit_id' does not exist"
+        assert resp.data["code"] == "NOT_FOUND"
+
+    def test_get_questionnaires_details_when_questionnaires_not_exist(self, init_data, create_user):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        questionnaire_id = 1000
+        expert_group = base_info['assessment_kit'].expert_group
+        expert_group.users.add(user1)
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionnairesDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, questionnaire_id=questionnaire_id)
+
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "'questionnaire_id' does not exist"
+        assert resp.data["code"] == "NOT_FOUND"
+
+    def test_get_questionnaires_details_when_user_unauthorized(self):
+        assessment_kit_id = 1000
+        questionnaire_id = 1000
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questionnaires/{questionnaire_id}',
+            {},
+            format='json')
+        view = commonviews.LoadQuestionnairesDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, questionnaire_id=questionnaire_id)
+
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+class TestLoadQuestionDetailsApi:
+    def test_get_question_details_when_user_is_member_expert_group(self, init_data, create_user):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        question = base_info['questions'][0]
+        question_id = question.id
+        expert_group = base_info['assessment_kit'].expert_group
+        expert_group.users.add(user1)
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, question_id=question_id)
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert 'options' in resp.data
+        assert 'attribute_impacts' in resp.data
+
+    def test_get_question_details_when_user_not_member_expert_group(self, init_data, create_user):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        question = base_info['questions'][0]
+        question_id = question.id
+
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, question_id=question_id)
+
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_question_details_when_assessment_kit_not_exist(self, init_data, create_user):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = 1000
+        question = base_info['questions'][0]
+        question_id = question.id
+        expert_group = base_info['assessment_kit'].expert_group
+        expert_group.users.add(user1)
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, question_id=question_id)
+
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "'assessment_kit_id' does not exist"
+        assert resp.data["code"] == "NOT_FOUND"
+
+    def test_get_question_details_when_question_not_exist(self, init_data, create_user):
+        user1 = create_user(email="test@test.com")
+        # init data
+        base_info = init_data()
+        assessment_kit_id = base_info['assessment_kit'].id
+        question_id = 1000
+        expert_group = base_info['assessment_kit'].expert_group
+        expert_group.users.add(user1)
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            {},
+            format='json')
+        force_authenticate(request, user=user1)
+        view = commonviews.LoadQuestionDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, question_id=question_id)
+
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        assert resp.data["message"] == "'question_id' does not exist"
+        assert resp.data["code"] == "NOT_FOUND"
+
+    def test_get_question_details_when_user_unauthorized(self):
+        assessment_kit_id = 1000
+        question_id = 1000
+        # create request and send request
+        api = APIRequestFactory()
+        request = api.get(
+            f'/api/v1/assessment-kits/{assessment_kit_id}/details/questions/{question_id}',
+            {},
+            format='json')
+        view = commonviews.LoadQuestionDetailsApi.as_view()
+        resp = view(request, assessment_kit_id=assessment_kit_id, question_id=question_id)
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED

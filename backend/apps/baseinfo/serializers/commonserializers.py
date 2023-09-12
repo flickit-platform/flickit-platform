@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import F, Prefetch
 
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.models.questionmodels import AnswerTemplate, Question, QuestionImpact, OptionValue
@@ -160,14 +161,64 @@ class LoadAssessmentSubjectsSerializer(serializers.ModelSerializer):
 
 
 class LoadQualityAttributesDetailsSerializer(serializers.ModelSerializer):
-
-    questions_count = serializers.IntegerField(source="question_set.count")
+    questions_count = serializers.SerializerMethodField()
     questions_on_levels = serializers.SerializerMethodField()
 
+    def get_questions_count(self, attribute: QualityAttribute):
+        return Question.objects.filter(question_impacts__quality_attribute=attribute.id).distinct().count()
+
     def get_questions_on_levels(self, attribute: QualityAttribute):
-        maturity_levels = MaturityLevel.objects.filter(assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by('value')
+        maturity_levels = MaturityLevel.objects.filter(
+            assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by('value')
         return commonservice.get_maturity_level_details(maturity_levels, attribute.id)
 
     class Meta:
         model = QualityAttribute
         fields = ['id', 'index', 'title', 'questions_count', 'weight', 'description', 'questions_on_levels']
+
+
+class LoadQuestionDetailsDetailsSerializer(serializers.ModelSerializer):
+    options = serializers.SerializerMethodField()
+    attribute_impacts = serializers.SerializerMethodField()
+
+    def get_options(self, question: Question):
+        return question.answer_templates.values('index', title=F('caption'))
+
+    def get_attribute_impacts(self, question: Question):
+        attribute = QualityAttribute.objects.prefetch_related(Prefetch('question_impacts'),
+                                                              Prefetch('question_impacts__option_values'),
+                                                              Prefetch('question_impacts__quality_attribute')).filter(
+            question_impacts__question=question.id).distinct()
+        return commonservice.get_question_impacts_for_questionnaire(question.id, attribute)
+
+    class Meta:
+        model = Question
+        fields = ['options', 'attribute_impacts']
+
+
+class SimpleLoadQuestionForQuestionnairesDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['id', 'title', 'index', 'may_not_be_applicable']
+
+
+class LoadQuestionnairesDetailsSerializer(serializers.ModelSerializer):
+    questions_count = serializers.IntegerField(source='question_set.count')
+    related_subject = serializers.SerializerMethodField()
+    questions = SimpleLoadQuestionForQuestionnairesDetailsSerializer(source='question_set', many=True)
+
+    def get_related_subject(self, questionnaire: Questionnaire):
+        return questionnaire.assessment_subjects.values_list('title', flat=True)
+
+    class Meta:
+        model = Questionnaire
+        fields = ['questions_count', 'related_subject', 'description', 'questions']
+
+
+class LoadOptionDetailsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='option.id')
+    index = serializers.IntegerField(source='option.index')
+
+    class Meta:
+        model = OptionValue
+        fields = ['id', 'index', 'value']
