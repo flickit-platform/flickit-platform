@@ -168,7 +168,7 @@ class LoadMaturityLevelInternalApi(APIView):
     @swagger_auto_schema(responses={200: SimpleMaturityLevelSimpleSerializer(many=True)})
     def get(self, request, assessment_kit_id):
         maturity_level = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
-        if maturity_level == False:
+        if not maturity_level:
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
         response = SimpleMaturityLevelSimpleSerializer(maturity_level, many=True).data
@@ -180,7 +180,7 @@ class LoadAssessmentKitInfoEditableApi(APIView):
 
     @swagger_auto_schema(responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
     def get(self, request, assessment_kit_id):
-        if ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists() == False:
+        if not ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists():
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
@@ -193,7 +193,7 @@ class LoadAssessmentKitInfoStatisticalApi(APIView):
 
     @swagger_auto_schema(responses={200: LoadAssessmentKitInfoStatisticalSerilizer(many=True)})
     def get(self, request, assessment_kit_id):
-        if ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists() == False:
+        if not ExpertGroup.objects.filter(assessmentkits=assessment_kit_id).filter(users=request.user.id).exists():
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
@@ -212,7 +212,7 @@ class EditAssessmentKitInfoApi(APIView):
             serializer = EditAssessmentKitInfoSerializer(data=request.data["data"], context={'request': request})
             serializer.is_valid(raise_exception=True)
             result = assessmentkitservice.update_assessment_kit_info(assessment_kit_id, **serializer.validated_data)
-            if result.success == False:
+            if not result.success:
                 return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitInfoEditableSerilizer(assessment_kit, many=True).data
@@ -225,7 +225,7 @@ class LoadMaturityLevelApi(APIView):
     @swagger_auto_schema(responses={200: SimpleMaturityLevelSimpleSerializer(many=True)})
     def get(self, request, assessment_kit_id):
         maturity_level = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
-        if maturity_level == False:
+        if not maturity_level:
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
         response = SimpleMaturityLevelSimpleSerializer(maturity_level, many=True).data

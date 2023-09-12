@@ -198,3 +198,27 @@ class LoadMaturityLevelsDetailsApi(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         response = commonservice.get_questions_in_maturity_level(maturity_level, attribute_id)
         return Response(response, status=status.HTTP_200_OK)
+
+
+class LoadQuestionnairesDetailsApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+
+    def get(self, request, assessment_kit_id, questionnaire_id):
+        questionnaire = commonservice.check_questionnaire_in_assessment_kit(assessment_kit_id, questionnaire_id)
+        if not questionnaire:
+            return Response({"code": "NOT_FOUND", 'message': "'questionnaire_id' does not exist"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        response = commonserializers.LoadQuestionnairesDetailsSerializer(questionnaire).data
+        return Response(response, status=status.HTTP_200_OK)
+
+
+class LoadQuestionDetailsApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+
+    def get(self, request, assessment_kit_id, question_id):
+        question = commonservice.check_question_in_assessment_kit(assessment_kit_id, question_id)
+        if not question:
+            return Response({"code": "NOT_FOUND", 'message': "'question_id' does not exist"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        response = commonserializers.LoadQuestionDetailsDetailsSerializer(question).data
+        return Response(response, status=status.HTTP_200_OK)
