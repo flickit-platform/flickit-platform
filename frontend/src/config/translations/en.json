@@ -283,5 +283,8 @@
   "options": "Options",
   "value": "Value",
   "weightValue": " W:{{weight}}",
-  "na":"NA"
+  "na": "NA",
+  "affectedQualityAttribute": "Affected Quality Attribute",
+  "affectedLevel": "Affected Level",
+  "optionValue":"Option {{index}}"
 }

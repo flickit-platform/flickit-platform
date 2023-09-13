@@ -815,6 +815,33 @@ export const createService = (
         }
       );
     },
+    fetchAssessmentKitQuestionnaires(
+      args: { assessmentKitId: TId; questionnaireId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, questionnaireId } = args || {};
+
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/details/questionnaires/${questionnaireId}`,
+        {
+          ...(config || {}),
+        }
+      );
+    },
+    fetchAssessmentKitQuestionnairesQuestions(
+      args: { assessmentKitId: TId; questionId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, questionId } = args || {};
+
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/details/questions/${questionId}`,
+        {
+          ...(config || {}),
+        }
+      );
+    },
+
     fetchMaturityLevelQuestions(
       args: { assessmentKitId: TId; attributeId: TId; maturityLevelId: TId },
       config: AxiosRequestConfig<any> | undefined
