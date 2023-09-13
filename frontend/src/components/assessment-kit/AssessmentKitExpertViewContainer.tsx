@@ -1475,7 +1475,7 @@ const QuestionnairesQuestionList = (props: any) => {
                           >
                             <Trans
                               i18nKey="optionValue"
-                              values={{ index: index }}
+                              values={{ index: index+1 }}
                             />
                           </Typography>
                         )
