@@ -286,5 +286,6 @@
   "na": "NA",
   "affectedQualityAttribute": "Affected Quality Attribute",
   "affectedLevel": "Affected Level",
-  "optionValue":"Option {{index}}"
+  "optionValue":"Option {{index}}",
+  "relatedSubjects": "Related subjects"
 }
