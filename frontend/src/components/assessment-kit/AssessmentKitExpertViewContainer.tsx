@@ -453,10 +453,11 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     py: 0.6,
                     px: 1,
                     borderRadius: 1,
+                    my:"16px"
                   }}
                 >
                   <Typography variant="body2" fontFamily="Roboto">
-                    <Trans i18nKey="questionsCount" />:
+                    <Trans i18nKey="relatedSubjects" />:
                   </Typography>
                   {questionnaireDetails?.related_subject.map(
                     (subject: string, index: number) => (
@@ -481,6 +482,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     py: 0.6,
                     px: 1,
                     borderRadius: 1,
+                    my:"16px"
                   }}
                 >
                   <Typography variant="body2" fontFamily="Roboto">
@@ -1401,205 +1403,210 @@ const QuestionnairesQuestionList = (props: any) => {
                 )}
               </Typography>
             </AccordionSummary>
-            {questionsDetails&&
-            <AccordionDetails>
-           
-              <Box
-                sx={{ maxWidth: "max-content", display: "flex", mb: 4, ml: 2 }}
-              >
-                {questionsDetails?.options.map((option: any) => (
-                  <Typography sx={{ mx: 2 }} variant="body2">
-                    {option.index}.{" "}{option.title}
-                  </Typography>
-                ))}
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Box sx={{ width: "90%" }}>
-                  <Box sx={{ display: "flex" }}>
-                    <Typography
-                      sx={{
-                        width: "40%",
-                        pb: "4px",
-                        color: "#767676",
-                        display: "block",
-                        fontFamily: "Roboto",
-                        fontSize: "0.8rem",
-                      }}
-                    >
-                      <Trans i18nKey="affectedQualityAttribute" />
+            {questionsDetails && (
+              <AccordionDetails>
+                <Box
+                  sx={{
+                    maxWidth: "max-content",
+                    display: "flex",
+                    mb: 4,
+                    ml: 2,
+                  }}
+                >
+                  {questionsDetails?.options.map((option: any) => (
+                    <Typography sx={{ mx: 2 }} variant="body2">
+                      {option.index}. {option.title}
                     </Typography>
-                    <Typography
-                      sx={{
-                        width: "20%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pb: "4px",
-                        color: "#767676",
-                        fontFamily: "Roboto",
-                        fontSize: "0.8rem",
-                      }}
-                    >
-                      <Trans i18nKey="affectedLevel" />
-                    </Typography>
-                    <Typography
-                      sx={{
-                        width: "10%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pb: "4px",
-                        color: "#767676",
-                        fontFamily: "Roboto",
-                        fontSize: "0.8rem",
-                      }}
-                    >
-                      <Trans i18nKey="weight" />
-                    </Typography>
-                    <Box
-                      sx={{
-                        width: "30%",
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      {questionsDetails?.options.map(
-                        (option: any, index: number) => (
-                          <Typography
-                            sx={{
-                              color: "#767676",
-                              fontFamily: "Roboto",
-                              fontSize: "0.8rem",
-                              pb: "4px",
-                            }}
-                          >
-                            <Trans
-                              i18nKey="optionValue"
-                              values={{ index: index }}
-                            />
-                          </Typography>
-                        )
+                  ))}
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Box sx={{ width: "90%" }}>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography
+                        sx={{
+                          width: "40%",
+                          pb: "4px",
+                          color: "#767676",
+                          display: "block",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        <Trans i18nKey="affectedQualityAttribute" />
+                      </Typography>
+                      <Typography
+                        sx={{
+                          width: "20%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          pb: "4px",
+                          color: "#767676",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        <Trans i18nKey="affectedLevel" />
+                      </Typography>
+                      <Typography
+                        sx={{
+                          width: "10%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          pb: "4px",
+                          color: "#767676",
+                          fontFamily: "Roboto",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        <Trans i18nKey="weight" />
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: "30%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {questionsDetails?.options.map(
+                          (option: any, index: number) => (
+                            <Typography
+                              sx={{
+                                color: "#767676",
+                                fontFamily: "Roboto",
+                                fontSize: "0.8rem",
+                                pb: "4px",
+                              }}
+                            >
+                              <Trans
+                                i18nKey="optionValue"
+                                values={{ index: index + 1 }}
+                              />
+                            </Typography>
+                          )
+                        )}
+                      </Box>
+                    </Box>
+                    <Divider sx={{ background: "#7A589B" }} />
+                    <Box>
+                      {questionsDetails?.attribute_impacts.map(
+                        (attributes: any, index: number) => {
+                          return (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                borderTop: `${
+                                  index !== 0 && "1px solid #D3D3D3"
+                                }`,
+                                py: 1,
+                              }}
+                            >
+                              <Typography
+                                sx={{ width: "40%", py: 1 }}
+                                variant="body1"
+                                fontFamily="Roboto"
+                                fontWeight={"bold"}
+                              >
+                                {attributes.attribute.title}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "20%",
+                                }}
+                              >
+                                {attributes.attribute?.affected_levels.map(
+                                  (affectedLevel: any) => {
+                                    return (
+                                      <Typography
+                                        variant="body1"
+                                        fontFamily="Roboto"
+                                        fontWeight={"bold"}
+                                        sx={{ py: 1 }}
+                                      >
+                                        {affectedLevel.maturity_level.title} |{" "}
+                                        {affectedLevel.maturity_level.index}
+                                      </Typography>
+                                    );
+                                  }
+                                )}
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "10%",
+                                }}
+                              >
+                                {attributes.attribute?.affected_levels.map(
+                                  (affectedLevel: any) => {
+                                    return (
+                                      <Typography
+                                        variant="body1"
+                                        fontFamily="Roboto"
+                                        fontWeight={"bold"}
+                                        sx={{ py: 1 }}
+                                      >
+                                        {affectedLevel.weight}
+                                      </Typography>
+                                    );
+                                  }
+                                )}
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "30%",
+                                }}
+                              >
+                                {attributes.attribute?.affected_levels.map(
+                                  (affectedLevel: any) => {
+                                    return (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                        }}
+                                      >
+                                        {affectedLevel.option_values.map(
+                                          (option: any) => {
+                                            return (
+                                              <Typography
+                                                variant="body1"
+                                                fontFamily="Roboto"
+                                                fontWeight={"bold"}
+                                                sx={{ py: 1 }}
+                                              >
+                                                {formatNumber(option.value)}
+                                              </Typography>
+                                            );
+                                          }
+                                        )}
+                                      </Box>
+                                    );
+                                  }
+                                )}
+                              </Box>
+                            </Box>
+                          );
+                        }
                       )}
                     </Box>
                   </Box>
-                  <Divider sx={{ background: "#7A589B" }} />
-                  <Box>
-                    {questionsDetails?.attribute_impacts.map(
-                      (attributes: any, index: number) => {
-                        return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              borderTop: `${
-                                index !== 0 && "1px solid #D3D3D3"
-                              }`,
-                              py: 1,
-                            }}
-                          >
-                            <Typography
-                              sx={{ width: "40%", py: 1 }}
-                              variant="body1"
-                              fontFamily="Roboto"
-                              fontWeight={"bold"}
-                            >
-                              {attributes.attribute.title}
-                            </Typography>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "20%",
-                              }}
-                            >
-                              {attributes.attribute?.affected_levels.map(
-                                (affectedLevel: any) => {
-                                  return (
-                                    <Typography
-                                      variant="body1"
-                                      fontFamily="Roboto"
-                                      fontWeight={"bold"}
-                                      sx={{ py: 1 }}
-                                    >
-                                      {affectedLevel.maturity_level.title}{" "}|{" "}
-                                      {affectedLevel.maturity_level.index}
-                                    </Typography>
-                                  );
-                                }
-                              )}
-                            </Box>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "10%",
-                              }}
-                            >
-                              {attributes.attribute?.affected_levels.map(
-                                (affectedLevel: any) => {
-                                  return (
-                                    <Typography
-                                      variant="body1"
-                                      fontFamily="Roboto"
-                                      fontWeight={"bold"}
-                                      sx={{ py: 1 }}
-                                    >
-                                      {affectedLevel.weight}
-                                    </Typography>
-                                  );
-                                }
-                              )}
-                            </Box>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "30%",
-                              }}
-                            >
-                              {attributes.attribute?.affected_levels.map(
-                                (affectedLevel: any) => {
-                                  return (
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        width: "100%",
-                                      }}
-                                    >
-                                      {affectedLevel.option_values.map(
-                                        (option: any) => {
-                                          return (
-                                            <Typography
-                                              variant="body1"
-                                              fontFamily="Roboto"
-                                              fontWeight={"bold"}
-                                              sx={{ py: 1 }}
-                                            >
-                                              {formatNumber(option.value)}
-                                            </Typography>
-                                          );
-                                        }
-                                      )}
-                                    </Box>
-                                  );
-                                }
-                              )}
-                            </Box>
-                          </Box>
-                        );
-                      }
-                    )}
-                  </Box>
                 </Box>
-              </Box>
-            </AccordionDetails>}
+              </AccordionDetails>
+            )}
           </Accordion>
         );
       })}
