@@ -42,6 +42,7 @@ const DefaultInfoItemComponent = (
         py: 0.6,
         px: 1,
         borderRadius: 1,
+        alignItems: "baseline",
       }}
       justifyContent="space-between"
     >
@@ -71,13 +72,29 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
       {items.map((item) => (
-        <Chip size="small" label={item} sx={{ ml: 0.3 }} component="span" />
+        <Chip
+          size="small"
+          label={item}
+          sx={{ ml: 0.3, mt: 0.5 }}
+          component="span"
+        />
       ))}
     </DefaultInfoItemComponent>
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "start",
+          flexWrap: "wrap",
+          ml: 4,
+        }}
+      >
+        {items.map(
+          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+        )}
+      </Box>
     </DefaultInfoItemComponent>
   ),
 };
@@ -96,7 +113,12 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
+  const {
+    component: Component = DefaultInfoItemComponent,
+    renderMap = defaultRenderMap,
+    useTitleAsFallbackType,
+    bg,
+  } = config;
   const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 
