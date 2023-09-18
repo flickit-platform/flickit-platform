@@ -22,7 +22,7 @@ type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   "serviceQueryData" | "field"
 >;
 
-interface IAutocompleteAsyncFieldProps<T>
+interface IAutocompleteAsyncFieldProps
   extends TUnionAutocompleteAndAutocompleteAsyncFieldBase {
   rules?: Omit<
     RegisterOptions<any, any>,
@@ -30,8 +30,8 @@ interface IAutocompleteAsyncFieldProps<T>
   >;
 }
 
-const AutocompleteAsyncField = <T extends any = any>(
-  props: IAutocompleteAsyncFieldProps<T> & Omit<TQueryProps, "data">
+const AutocompleteAsyncField = (
+  props: IAutocompleteAsyncFieldProps & Omit<TQueryProps, "data">
 ) => {
   const {
     name,
@@ -39,7 +39,7 @@ const AutocompleteAsyncField = <T extends any = any>(
     multiple,
     defaultValue = multiple ? undefined : null,
     required = false,
-    editable,
+    editable = false,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -60,7 +60,7 @@ const AutocompleteAsyncField = <T extends any = any>(
             required={required}
             field={field}
             defaultValue={defaultValue}
-            editable={editable ? editable : false}
+            editable={editable}
           />
         );
       }}
@@ -172,9 +172,9 @@ const AutocompleteBaseField = (
         error
           ? [{}]
           : editable
-          ? (options.filter(
+          ? options.filter(
               (obj1: any) => !value.some((obj2: any) => obj2.id === obj1.id)
-            ))
+            )
           : options
       }
       autoComplete
