@@ -222,6 +222,7 @@ const AssessmentKitSectionGeneralInfo = (
                             searchOnType={false}
                             required={true}
                             label={""}
+                            editable={true}
                             sx={{ width: "100%" }}
                           />
                           <Box
