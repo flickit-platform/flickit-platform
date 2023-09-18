@@ -15,7 +15,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "@common/fields/AutocompleteAsyncField";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -27,7 +29,13 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {}, staticData = {} } = context;
   const { id: rowId } = data;
   const defaultValues = type === "update" ? data : {};
@@ -47,7 +55,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, assessment_kit, ...restOfData } = data;
+    const { space, assessment_kit, title, color, ...restOfData } = data;
     setLoading(true);
     try {
       const { data: res } =
@@ -66,9 +74,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           : await service.createAssessment(
               {
                 data: {
-                  space: spaceId || space?.id,
-                  assessment_kit: assessment_kit?.id,
-                  ...restOfData,
+                  space_id: spaceId || space?.id,
+                  assessment_kit_id: assessment_kit?.id,
+                  title: title,
+                  color_id: color,
                 },
               },
               { signal: abortController.signal }
@@ -76,7 +85,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
-      !!staticData.assessment_kit && navigate(`/${res.space}/assessments`);
+      !!staticData.assessment_kit &&
+        navigate(`/${spaceId || space?.id}/assessments`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -92,7 +102,11 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? <Trans i18nKey="updateAssessment" /> : <Trans i18nKey="createAssessment" />}
+          {type === "update" ? (
+            <Trans i18nKey="updateAssessment" />
+          ) : (
+            <Trans i18nKey="createAssessment" />
+          )}
         </>
       }
     >
@@ -120,21 +134,32 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <AssessmentKitField defaultValue={defaultValues?.assessment_kit} staticValue={staticData.assessment_kit} />
+            <AssessmentKitField
+              defaultValue={defaultValues?.assessment_kit}
+              staticValue={staticData.assessment_kit}
+            />
           </Grid>
         </Grid>
         <CEDialogActions
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>
   );
 };
 
-const AssessmentKitField = ({ defaultValue, staticValue }: { defaultValue: any; staticValue: any }) => {
+const AssessmentKitField = ({
+  defaultValue,
+  staticValue,
+}: {
+  defaultValue: any;
+  staticValue: any;
+}) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchAssessmentKitsOptions(args, config),
@@ -142,7 +167,9 @@ const AssessmentKitField = ({ defaultValue, staticValue }: { defaultValue: any; 
 
   return (
     <AutocompleteAsyncField
-      {...(staticValue ? ({ loading: false, loaded: true, options: [] } as any) : queryData)}
+      {...(staticValue
+        ? ({ loading: false, loaded: true, options: [] } as any)
+        : queryData)}
       name="assessment_kit"
       required={true}
       defaultValue={staticValue ?? defaultValue}

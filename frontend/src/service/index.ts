@@ -194,7 +194,7 @@ export const createService = (
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/assessment/projects/`, data, config);
+      return axios.post(`/api/v1/assessment/`, data, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
