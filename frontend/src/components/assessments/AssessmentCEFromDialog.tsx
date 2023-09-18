@@ -58,30 +58,29 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     const { space, assessment_kit, title, color, ...restOfData } = data;
     setLoading(true);
     try {
-      const { data: res } =
-        type === "update"
-          ? await service.updateAssessment(
-              {
-                rowId,
-                data: {
-                  space: spaceId || space?.id,
-                  assessment_kit: assessment_kit?.id,
-                  ...restOfData,
-                },
+      type === "update"
+        ? await service.updateAssessment(
+            {
+              rowId,
+              data: {
+                space: spaceId || space?.id,
+                assessment_kit: assessment_kit?.id,
+                ...restOfData,
               },
-              { signal: abortController.signal }
-            )
-          : await service.createAssessment(
-              {
-                data: {
-                  space_id: spaceId || space?.id,
-                  assessment_kit_id: assessment_kit?.id,
-                  title: title,
-                  color_id: color,
-                },
+            },
+            { signal: abortController.signal }
+          )
+        : await service.createAssessment(
+            {
+              data: {
+                space_id: spaceId || space?.id,
+                assessment_kit_id: assessment_kit?.id,
+                title: title,
+                color_id: color,
               },
-              { signal: abortController.signal }
-            );
+            },
+            { signal: abortController.signal }
+          );
       setLoading(false);
       onSubmitForm();
       close();
