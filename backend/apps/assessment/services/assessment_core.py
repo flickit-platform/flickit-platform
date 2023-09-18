@@ -1,5 +1,4 @@
 import requests
-from rest_framework import status
 
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit
@@ -11,7 +10,7 @@ def create_assessment(user, data):
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'space_id' does not exist"}
         return result
-    if not AssessmentKit.objects.filter(id=data["assessment_kit_id"]).exists():
+    if not AssessmentKit.objects.filter(id=data["assessment_kit_id"]).filter(is_active=True).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'assessment_kit_id' does not exist"}
         return result
