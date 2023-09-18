@@ -168,15 +168,17 @@ const AutocompleteBaseField = (
       size="small"
       autoHighlight
       getOptionLabel={getOptionLabel}
-      options={
-        error
-          ? [{}]
-          : editable
-          ? options.filter(
-              (obj1: any) => !value.some((obj2: any) => obj2.id === obj1.id)
-            )
-          : options
-      }
+      options={(() => {
+        if (error) {
+          return [{}];
+        } else if (editable) {
+          return options.filter(
+            (option: any) => !value.some((selectedOpts: any) => selectedOpts.id === option.id)
+          );
+        } else {
+          return options;
+        }
+      })()}
       autoComplete
       disablePortal={false}
       includeInputInList
