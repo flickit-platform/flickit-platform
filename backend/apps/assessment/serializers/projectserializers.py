@@ -105,3 +105,9 @@ class AssessmentProjectSimpleSerilizer(serializers.ModelSerializer):
         model = AssessmentProject
         fields = ['id', 'code', 'title', 'assessment_kit', 'last_modification_date', 'status', 'color', 'space', 'maturity_level', 'maturity_level_number']
 
+
+class AssessmentProjectSerializer(serializers.Serializer):
+    space_id = serializers.IntegerField(required=True)
+    assessment_kit_id = serializers.IntegerField(required=True)
+    title = serializers.CharField(required=True)
+    color_id = serializers.IntegerField(required=False)
