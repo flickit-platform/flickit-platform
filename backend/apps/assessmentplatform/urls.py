@@ -25,7 +25,8 @@ urlpatterns = [
    path('authinfo/', include('account.urls')),
    path('api/internal/',include('baseinfo.urls_internal')),
    path('api/v1/assessment-kits/',include('baseinfo.url.url_v1')),
-   path('api/v1/assessment/',include('assessment.url.url_v1')),
+   path('api/v1/assessments/',include('assessment.url.url_v1')),
+   path('api/v1/spaces/',include('account.url.url_v1')),
 
 
    # re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),

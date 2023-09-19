@@ -76,3 +76,11 @@ class AssessmentProjectApi(APIView):
         if result["body"].status_code == status.HTTP_201_CREATED:
             return Response({"assessment_id": result["body"].json()['id']}, status=result["body"].status_code)
         return Response(result["body"].json(), status=result["body"].status_code)
+
+
+class LoadAssessmentListApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, space_id):
+        result = assessment_core.get_assessment_list(space_id, request)
+        return Response(result["body"], result["status_code"])
