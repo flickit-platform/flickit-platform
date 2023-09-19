@@ -138,7 +138,9 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
-                    current_user_is_coordinator={info?.current_user_is_coordinator}
+                    current_user_is_coordinator={
+                      info?.current_user_is_coordinator
+                    }
                   />
                   <OnHoverInput
                     formMethods={formMethods}
@@ -146,13 +148,17 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
-                    current_user_is_coordinator={info?.current_user_is_coordinator}
+                    current_user_is_coordinator={
+                      info?.current_user_is_coordinator
+                    }
                   />
                   <OnHoverStatus
                     data={info?.is_active}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={info?.current_user_is_coordinator}
+                    current_user_is_coordinator={
+                      info?.current_user_is_coordinator
+                    }
                   />
                   <Box
                     sx={{
@@ -216,6 +222,7 @@ const AssessmentKitSectionGeneralInfo = (
                             searchOnType={false}
                             required={true}
                             label={""}
+                            editable={true}
                             sx={{ width: "100%" }}
                           />
                           <Box
@@ -319,7 +326,9 @@ const AssessmentKitSectionGeneralInfo = (
                     data={info?.about}
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={info?.current_user_is_coordinator}
+                    current_user_is_coordinator={
+                      info?.current_user_is_coordinator
+                    }
                   />
                 </Box>
               </Grid>
@@ -359,10 +368,9 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.subjects.map(
-                          (sub: any) => sub?.title + " "
-                        ),
+                        item: stats?.subjects.map((sub: any) => sub?.title),
                         title: t("subjects"),
+                        type: "array",
                       }}
                     />
                   </Box>
