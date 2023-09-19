@@ -43,13 +43,11 @@ def get_assessment_list(space_id, request):
 
     if "size" in request.query_params:
         size = request.query_params["size"]
-        if isinstance(size, int):
-            params["size"] = size
+        params["size"] = size
 
     if "page" in request.query_params:
         page = request.query_params["page"]
-        if isinstance(page, int):
-            params["page"] = page
+        params["page"] = page
 
     response = requests.get(ASSESSMENT_URL + 'assessment-core/api/assessments', params=params)
     if response.status_code == status.HTTP_200_OK:
