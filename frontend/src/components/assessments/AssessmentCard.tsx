@@ -41,9 +41,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
   const { result_maturity_level, is_calculate_valid, assessment_kit } = item;
-  // const { progress = 0 } = total_progress || {};
   const hasML = hasMaturityLevel(result_maturity_level?.value);
-  // const isComplete = progress === 100;
   const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
   return (
@@ -56,7 +54,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           px: 2,
           borderRadius: "16px",
           ...styles.centerCH,
-          minHeight: "320px",
+          minHeight: "300px",
           height: "100%",
           justifyContent: "space-between",
           ":hover": {
@@ -88,6 +86,10 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   pb: 0,
                   textAlign: "center",
                   color: item.color?.code || "#101c32",
+                  maxWidth:"320px",
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}
                 data-cy="assessment-card-title"
               >
@@ -120,7 +122,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               mt="auto"
             />
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={4}>
+          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
             <Button
               startIcon={<QueryStatsRounded />}
               fullWidth
@@ -153,7 +155,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               sx={{
                 backgroundColor: "#2e7d72",
                 // background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
-                background: `linear-gradient(135deg, #2e7d72 90%, #01221e 90%)`,
+                background: `#2e7d72`,
               }}
               data-cy="questionnaires-btn"
             >
