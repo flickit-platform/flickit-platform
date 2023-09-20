@@ -185,16 +185,23 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/useraccess/`, config);
     },
     fetchAssessments(
-      { spaceId }: { spaceId: string | undefined },
+      {
+        spaceId,
+        size,
+        page,
+      }: { spaceId: string | undefined; size: number; page: number },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/authinfo/spaces/${spaceId}/assessments/`, config);
+      return axios.get(`api/v1/spaces/${spaceId}/assessments/`, {
+        ...(config || {}),
+        params: { page: page, size: size },
+      });
     },
     createAssessment(
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/api/v1/assessment/`, data, config);
+      return axios.post(`/api/v1/assessments/`, data, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },

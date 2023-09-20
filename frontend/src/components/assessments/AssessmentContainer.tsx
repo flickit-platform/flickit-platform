@@ -23,14 +23,31 @@ import { styles } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
+  const { userInfo } = useAuthContext();
+  const { current_space } = userInfo;
   const { fetchAssessments, ...rest } = useFetchAssessments();
-  const { data, error, errorObject, requested_space } = rest;
+  const {
+    data,
+    error,
+    errorObject,
+    requested_space,
+    page,
+    size,
+    total,
+    setPageNum,
+    pageNum,
+  } = rest;
   const isEmpty = data.length == 0;
   const { spaceId } = useParams();
-
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPageNum(value);
+  };
+  const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
     (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
       errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
@@ -43,7 +60,7 @@ const AssessmentContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                title: requested_space,
+                title: current_space?.title || "",
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
@@ -110,12 +127,33 @@ const AssessmentContainer = () => {
         }
         render={(data) => {
           return (
-            <AssessmentsList
-              {...rest}
-              data={data}
-              space={{ id: spaceId, title: requested_space }}
-              dialogProps={dialogProps}
-            />
+            <>
+              <AssessmentsList
+                {...rest}
+                data={data}
+                space={{ id: spaceId, title: requested_space }}
+                dialogProps={dialogProps}
+              />
+              {pageCount > 1 && (
+                <Stack
+                  spacing={2}
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Pagination
+                    variant="outlined"
+                    color="primary"
+                    count={pageCount}
+                    page={pageNum}
+                    onChange={handleChange}
+                  />
+                </Stack>
+              )}
+            </>
           );
         }}
       />
@@ -131,6 +169,7 @@ const useFetchAssessments = () => {
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined
   );
@@ -140,17 +179,17 @@ const useFetchAssessments = () => {
 
   useEffect(() => {
     fetchAssessments();
-    return () => {
-      abortController.current.abort();
-    };
-  }, []);
+    // return () => {
+    //   abortController.current.abort();
+    // };
+  }, [pageNum]);
 
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);
     try {
       const { data: res } = await service.fetchAssessments(
-        { spaceId },
+        { spaceId, size: 4, page: pageNum - 1 },
         { signal: abortController.current.signal }
       );
       if (res) {
@@ -188,12 +227,17 @@ const useFetchAssessments = () => {
   };
 
   return {
-    data: data.results || [],
+    data: data.items || [],
+    page: data.page || 0,
+    size: data.size || 0,
+    total: data.total || 0,
     requested_space: data.requested_space,
     loading,
     loaded: !!data,
     error,
     errorObject,
+    setPageNum,
+    pageNum,
     fetchAssessments,
     deleteAssessment,
   };

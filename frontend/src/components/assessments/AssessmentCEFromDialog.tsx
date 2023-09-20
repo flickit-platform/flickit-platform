@@ -47,7 +47,6 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     abortController.abort();
     closeDialog();
   };
-
   useEffect(() => {
     return () => {
       abortController.abort();
