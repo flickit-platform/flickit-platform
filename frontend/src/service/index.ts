@@ -192,7 +192,7 @@ export const createService = (
       }: { spaceId: string | undefined; size: number; page: number },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`api/v1/spaces/${spaceId}/assessments/`, {
+      return axios.get(`/api/v1/spaces/${spaceId}/assessments/`, {
         ...(config || {}),
         params: { page: page, size: size },
       });

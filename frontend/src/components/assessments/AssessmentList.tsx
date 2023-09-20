@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { Box, Grid } from "@mui/material";
 import AssessmentCard from "./AssessmentCard";
 import { IAssessment, TId, TQueryFunction } from "@types";
 import { TDialogProps } from "@utils/useDialog";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import { size } from "lodash";
 interface IAssessmentListProps {
   data: IAssessment[];
   space: any;
