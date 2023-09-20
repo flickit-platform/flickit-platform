@@ -29,6 +29,7 @@ import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
+  const { spaceId } = useParams();
   const { current_space } = userInfo;
   const { fetchAssessments, ...rest } = useFetchAssessments();
   const {
@@ -43,7 +44,6 @@ const AssessmentContainer = () => {
     pageNum,
   } = rest;
   const isEmpty = data.length == 0;
-  const { spaceId } = useParams();
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPageNum(value);
   };
@@ -94,14 +94,13 @@ const AssessmentContainer = () => {
           my: 3,
         }}
       >
-        <Box></Box>
         <Box ml="auto">
           <ToolbarCreateItemBtn
             data-cy="create-assessment-btn"
             onClick={() =>
               dialogProps.openDialog({
                 type: "create",
-                data: { space: { id: spaceId, title: requested_space } },
+                data: { space: { id: spaceId, title: current_space?.title } },
               })
             }
             icon={<NoteAddRoundedIcon />}
@@ -138,7 +137,7 @@ const AssessmentContainer = () => {
                 <Stack
                   spacing={2}
                   sx={{
-                    mt: 2,
+                    mt: 3,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",

@@ -92,7 +92,6 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       toastError(err);
     }
   };
-
   return (
     <CEDialog
       {...rest}
