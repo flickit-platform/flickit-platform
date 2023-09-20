@@ -40,10 +40,11 @@ interface IAssessmentCardProps {
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { total_progress, maturity_level_number,level_value,maturity_level_status,maturity_level } = item;
-  const { progress = 0 } = total_progress || {};
-  const hasML= hasMaturityLevel(level_value)
-  const isComplete = progress === 100;
+  const { result_maturity_level, is_calculate_valid, assessment_kit } = item;
+  // const { progress = 0 } = total_progress || {};
+  const hasML = hasMaturityLevel(result_maturity_level?.value);
+  // const isComplete = progress === 100;
+  const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
@@ -72,7 +73,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               sx={{ textDecoration: "none" }}
               component={Link}
               to={
-                isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`
+                is_calculate_valid
+                  ? `${item.id}/insights`
+                  : `${item.id}/questionnaires`
               }
             >
               <Typography
@@ -84,7 +87,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   fontWeight: "bold",
                   pb: 0,
                   textAlign: "center",
-                  color: item.color?.color_code || "#101c32",
+                  color: item.color?.code || "#101c32",
                 }}
                 data-cy="assessment-card-title"
               >
@@ -96,7 +99,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(item.last_modification_date)}
+                {formatDate(item.last_modification_time)}
               </Typography>
             </Box>
           </Grid>
@@ -110,9 +113,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           >
             <Gauge
               systemStatus={item.status}
-              maturity_level_number={maturity_level_number}
-              level_value={level_value}
-              maturity_level_status={maturity_level_status}
+              maturity_level_number={maturity_levels_count}
+              level_value={result_maturity_level?.value}
+              maturity_level_status={result_maturity_level?.title}
               maxWidth="275px"
               mt="auto"
             />
@@ -130,7 +133,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               }}
               component={Link}
               to={hasML ? `${item.id}/insights` : ""}
-              variant={isComplete ? "contained" : undefined}
+              variant={is_calculate_valid ? "contained" : undefined}
               data-cy="view-insights-btn"
             >
               <Trans i18nKey="insights" />
@@ -149,7 +152,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               to={`${item.id}/questionnaires`}
               sx={{
                 backgroundColor: "#2e7d72",
-                background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+                // background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+                background: `linear-gradient(135deg, #2e7d72 90%, #01221e 90%)`,
               }}
               data-cy="questionnaires-btn"
             >
