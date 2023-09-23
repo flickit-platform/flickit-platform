@@ -100,7 +100,9 @@ const AssessmentContainer = () => {
             onClick={() =>
               dialogProps.openDialog({
                 type: "create",
-                data: { space: { id: spaceId, title: current_space?.title } },
+                data: {
+                  space: { id: spaceId, title: current_space?.title },
+                },
               })
             }
             icon={<NoteAddRoundedIcon />}
@@ -130,7 +132,7 @@ const AssessmentContainer = () => {
               <AssessmentsList
                 {...rest}
                 data={data}
-                space={{ id: spaceId, title: requested_space }}
+                space={{ id: spaceId, title: current_space?.title }}
                 dialogProps={dialogProps}
               />
               {pageCount > 1 && (

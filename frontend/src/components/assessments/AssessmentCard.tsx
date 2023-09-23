@@ -68,7 +68,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
-              sx={{ textDecoration: "none" }}
+              sx={{ textDecoration: "none"}}
               component={Link}
               to={
                 is_calculate_valid
@@ -86,10 +86,11 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   pb: 0,
                   textAlign: "center",
                   color: item.color?.code || "#101c32",
-                  maxWidth:"320px",
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
+                  maxWidth: "320px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  margin:"0 auto" 
                 }}
                 data-cy="assessment-card-title"
               >
@@ -114,7 +115,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
             <Gauge
-              systemStatus={item.status}
+              systemStatus={item?.status}
               maturity_level_number={maturity_levels_count}
               level_value={result_maturity_level?.value}
               maturity_level_status={result_maturity_level?.title}
