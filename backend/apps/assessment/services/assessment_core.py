@@ -20,8 +20,7 @@ def create_assessment(user, data):
     body["spaceId"] = data["space_id"]
     body["title"] = data["title"]
     body["assessmentKitId"] = data["assessment_kit_id"]
-    if "color_id" in data:
-        body["colorId"] = data["color_id"]
+    body["colorId"] = data["color_id"]
     response = requests.post(ASSESSMENT_URL + 'assessment-core/api/assessments', json=body)
     result["Success"] = True
     result["body"] = response
