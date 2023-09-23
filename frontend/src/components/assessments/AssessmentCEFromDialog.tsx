@@ -125,6 +125,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               name="color"
               defaultValue={defaultValues?.color?.id || ""}
               label={<Trans i18nKey="color" />}
+              required={true}
             />
           </Grid>
           <Grid item xs={12}>
