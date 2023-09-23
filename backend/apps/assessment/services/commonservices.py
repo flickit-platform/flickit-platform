@@ -26,6 +26,6 @@ def loadBreadcrumbInfo(data):
 
 def load_color():
     response = requests.get(ASSESSMENT_URL + 'assessment-core/api/assessment-colors').json()
-    response['results'] = response.pop('items')
+    response['default_color'] = response.pop('defaultColor')
     return response
 
