@@ -148,6 +148,10 @@ export interface IAssessmentKitModel {
     | "status"
   >;
 }
+export interface IAssessmentKitList {
+  id: TId;
+  maturity_levels_count: number;
+}
 
 export interface IAssessmentKit {
   code: string;
@@ -169,6 +173,10 @@ export interface IColorModel {
   color_code: string;
   id: TId;
   title: string;
+}
+export interface IColor {
+  code: string;
+  id: TId;
 }
 
 export interface IOwnerModel {
@@ -275,18 +283,16 @@ export interface IQuestionsResultsModel
 
 export interface IAssessment {
   id: TId;
-  last_modification_date: string;
+  last_modification_time: string;
   status: TStatus;
   title: string;
-  code: string;
-  color: IColorModel;
+  // code: string;
+  color: IColor;
+  is_calculate_valid: boolean;
   assessment_results: string[];
-  assessment_kit: IAssessmentKitModel;
-  total_progress?: ITotalProgress;
-  maturity_level_number: number;
-  level_value: number;
-  maturity_level_status: string;
-  maturity_level: IMaturityLevel;
+  assessment_kit: IAssessmentKitList;
+  // total_progress?: ITotalProgress;
+  result_maturity_level: IMaturityLevel;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {

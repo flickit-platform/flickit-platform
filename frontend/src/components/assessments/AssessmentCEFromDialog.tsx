@@ -47,7 +47,6 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     abortController.abort();
     closeDialog();
   };
-
   useEffect(() => {
     return () => {
       abortController.abort();
@@ -93,7 +92,6 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       toastError(err);
     }
   };
-
   return (
     <CEDialog
       {...rest}
