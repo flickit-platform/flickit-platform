@@ -36,7 +36,6 @@ const AssessmentContainer = () => {
     data,
     error,
     errorObject,
-    requested_space,
     page,
     size,
     total,
