@@ -77,3 +77,15 @@ class AnswerQuestionApi(APIView):
         result = assessment_core.question_answering(request=request, assessments_details=assessments_details["body"],
                                                     serializer_data=serializer_data.validated_data)
         return Response(result["body"], result["status_code"])
+
+
+class MaturityLevelCalculateApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(responses={200: ""})
+    def post(self, request, assessment_id):
+        assessments_details = assessment_core.load_assessment_details_with_id(assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.get_maturity_level_calculate(request, assessments_details["body"])
+        return Response(result["body"], result["status_code"])
