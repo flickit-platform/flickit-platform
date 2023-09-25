@@ -11,8 +11,13 @@ const useConnectSelectField = (props: {
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
 }) => {
-  const { url, filterOptions = (options) => options, searchParams = {} } = props;
+  const {
+    url,
+    filterOptions = (options) => options,
+    searchParams = {},
+  } = props;
   const [options, setOptions] = useState<any[]>([]);
+  const [defaultOption, setDefaultOption] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -31,14 +36,27 @@ const useConnectSelectField = (props: {
     setLoading(true);
     try {
       const {
-        data: { results },
+        data: { results, colors, default_color },
       } = await service.fetchOptions({ url }, { signal, params: searchParams });
-
       if (results && Array.isArray(results)) {
         setOptions(filterOptions(results));
         setError(false);
       } else {
         setOptions([]);
+        setError(true);
+      }
+      if (colors && Array.isArray(colors)) {
+        setOptions(filterOptions(colors));
+        setError(false);
+      } else {
+        setOptions([]);
+        setError(true);
+      }
+      if (default_color) {
+        setDefaultOption(default_color);
+        setError(false);
+      } else {
+        setDefaultOption({});
         setError(true);
       }
 
@@ -51,7 +69,7 @@ const useConnectSelectField = (props: {
     }
   };
 
-  return { options, loading, error, fetchOptions };
+  return { options, loading, error, fetchOptions, defaultOption };
 };
 
 export default useConnectSelectField;
