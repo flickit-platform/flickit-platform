@@ -62,7 +62,7 @@ def get_assessment_list(space_id, request):
             row_data["color"] = item["color"]
             row_data["is_calculate_valid"] = item["isCalculateValid"]
             if item["maturityLevelId"] is not None:
-                level = MaturityLevel.objects.get(id=item["maturityLevelId"]).value()
+                level = MaturityLevel.objects.get(id=item["maturityLevelId"])
                 row_data["result_maturity_level"] = {"id": level.id,
                                                      "title": level.title,
                                                      "value": level.value
