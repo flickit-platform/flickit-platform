@@ -27,6 +27,7 @@ urlpatterns = [
    path('api/v1/assessment-kits/',include('baseinfo.url.url_v1')),
    path('api/v1/assessments/',include('assessment.url.url_v1')),
    path('api/v1/spaces/',include('account.url.url_v1')),
+   path('api/v1/assessment-colors/',include('assessment.url.url_assessment_colors')),
 
 
    # re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
