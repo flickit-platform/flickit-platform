@@ -3,6 +3,8 @@ from rest_framework import status
 
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
+from baseinfo.models.basemodels import Questionnaire
+from baseinfo.models.questionmodels import Question, AnswerTemplate
 
 
 def create_assessment(user, data):
@@ -80,3 +82,62 @@ def get_assessment_list(space_id, request):
     result["Success"] = False
     result["body"] = response.json()
     result["status_code"] = response.status_code
+
+
+def load_assessment_details_with_id(assessment_id):
+    result = dict()
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}')
+    if response.status_code == status.HTTP_200_OK:
+        result["Success"] = True
+        result["body"] = response.json()
+        result["status_code"] = response.status_code
+        return result
+    result["Success"] = False
+    result["body"] = response.json()
+    result["status_code"] = response.status_code
+    return result
+
+
+def question_answering(request, assessments_details, serializer_data):
+    data = {"assessmentId": assessments_details["assessmentId"],
+            "questionnaireId": serializer_data["questionnaire_id"],
+            "questionId": serializer_data["question_id"],
+            "answerOptionId": serializer_data["answer_option_id"],
+            }
+    result = dict()
+    if not request.user.spaces.filter(id=assessments_details["spaceId"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "no assessment found by this 'assessmentId'"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(assessment_kit=assessments_details["kitId"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    if not Question.objects.filter(id=serializer_data["question_id"]).filter(questionnaire=serializer_data["questionnaire_id"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    if not AnswerTemplate.objects.filter(id=serializer_data["answer_option_id"]).filter(question=serializer_data["question_id"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'answer_option_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    response = requests.put(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answer-question',
+                            json=data)
+    if response.status_code == status.HTTP_201_CREATED:
+        result["Success"] = True
+        result["body"] = response.json()
+        result["status_code"] = response.status_code
+        return result
+
+    result["Success"] = False
+    result["body"] = response.json()
+    result["status_code"] = response.status_code
+    return result
