@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.db.models import F
 from rest_framework import serializers
 
 from baseinfo.models.questionmodels import Question
@@ -76,3 +77,11 @@ class AnswerQuestionSerializer(serializers.Serializer):
     answer_option_id = serializers.IntegerField(required=True)
 
 
+class LoadQuestionnaireAnswerSerializer(serializers.ModelSerializer):
+    answer_option = serializers.SerializerMethodField()
+
+    def get_answer_option(self, question: Question):
+        return question.answer_templates.values("id", "index", title=F("caption"))
+    class Meta:
+        model = Question
+        fields = ["id", "index", "title", "answer_option", "may_not_be_applicable"]
