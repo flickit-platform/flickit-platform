@@ -69,7 +69,7 @@ class AnswerQuestionApi(APIView):
 
     @swagger_auto_schema(request_body=serializer_class, responses={201: ""})
     def put(self, request, assessment_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(assessment_id)
+        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         serializer_data = self.serializer_class(data=request.data)
@@ -84,7 +84,7 @@ class MaturityLevelCalculateApi(APIView):
 
     @swagger_auto_schema(responses={200: ""})
     def post(self, request, assessment_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(assessment_id)
+        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_maturity_level_calculate(request, assessments_details["body"])
@@ -96,7 +96,7 @@ class LoadQuestionnaireAnswerApi(APIView):
 
     @swagger_auto_schema(responses={200: ""})
     def get(self, request, assessment_id, questionnaire_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(assessment_id)
+        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_questionnaire_answer(request, assessments_details["body"], questionnaire_id)

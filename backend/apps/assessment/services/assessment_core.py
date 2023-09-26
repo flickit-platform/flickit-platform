@@ -85,10 +85,16 @@ def get_assessment_list(space_id, request):
     result["status_code"] = response.status_code
 
 
-def load_assessment_details_with_id(assessment_id):
+def load_assessment_details_with_id(request,assessment_id):
     result = dict()
     response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}')
     if response.status_code == status.HTTP_200_OK:
+        data = response.json()
+        if not request.user.spaces.filter(id=data["spaceId"]).exists():
+            result["Success"] = False
+            result["body"] = {"code": "no assessment found by this 'assessmentId'"}
+            result["status_code"] = status.HTTP_400_BAD_REQUEST
+            return result
         result["Success"] = True
         result["body"] = response.json()
         result["status_code"] = response.status_code
@@ -99,19 +105,13 @@ def load_assessment_details_with_id(assessment_id):
     return result
 
 
-def question_answering(request, assessments_details, serializer_data):
+def question_answering(assessments_details, serializer_data):
     data = {"assessmentId": assessments_details["assessmentId"],
             "questionnaireId": serializer_data["questionnaire_id"],
             "questionId": serializer_data["question_id"],
             "answerOptionId": serializer_data["answer_option_id"],
             }
     result = dict()
-    if not request.user.spaces.filter(id=assessments_details["spaceId"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "no assessment found by this 'assessmentId'"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-
     if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
             assessment_kit=assessments_details["kitId"]).exists():
         result["Success"] = False
@@ -148,13 +148,8 @@ def question_answering(request, assessments_details, serializer_data):
     return result
 
 
-def get_maturity_level_calculate(request, assessments_details):
+def get_maturity_level_calculate(assessments_details):
     result = dict()
-    if not request.user.spaces.filter(id=assessments_details["spaceId"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "no assessment found by this 'assessmentId'"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/calculate')
     if response.status_code == status.HTTP_200_OK:
@@ -179,12 +174,6 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
               'size': 50,
     }
     result = dict()
-    if not request.user.spaces.filter(id=assessments_details["spaceId"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "no assessment found by this 'assessmentId'"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-
     if not Questionnaire.objects.filter(id=questionnaire_id).filter(
             assessment_kit=assessments_details["kitId"]).exists():
         result["Success"] = False
@@ -210,7 +199,6 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
             questions_id.append(item["questionId"])
         questions = Question.objects.filter(id__in=questions_id)
         items = LoadQuestionnaireAnswerSerializer(questions, many=True).data
-        data = dict()
         for i in range(len(items)):
             response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
             answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_option"]))[0]
