@@ -1,6 +1,7 @@
 from django.utils.text import slugify
 from rest_framework import serializers
 
+from baseinfo.models.basemodels import Questionnaire
 from baseinfo.serializers.commonserializers import AssessmentKitSimpleSerilizer
 from baseinfo.serializers.assessmentkitserializers import MaturityLevelSimpleSerializer
 
@@ -119,3 +120,16 @@ class AssessmentProjectSerializer(serializers.Serializer):
     assessment_kit_id = serializers.IntegerField(required=True)
     title = serializers.CharField(required=True)
     color_id = serializers.IntegerField(required=True)
+
+
+class LoadQuestionnairesSerializer(serializers.ModelSerializer):
+    subjects = serializers.SerializerMethodField()
+    questions_count = serializers.IntegerField(source="question_set.count")
+
+    def get_subjects(self, questionnaire: Questionnaire):
+        return questionnaire.assessment_subjects.values('id', 'title')
+
+    class Meta:
+        model = Questionnaire
+        fields = ['id', 'index', 'title', 'questions_count', 'subjects']
+
