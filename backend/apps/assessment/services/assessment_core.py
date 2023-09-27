@@ -30,14 +30,17 @@ def create_assessment(user, data):
     return result
 
 
-def get_assessment_list(space_id, request):
+def get_assessment_list(request):
     result = dict()
-    params = {'spaceId': space_id,
-              'page': 0,
-              'size': 10,
-              }
+    params = dict()
+    if "space_id" in request.query_params:
+        space_id = request.query_params["space_id"]
+        params["spaceIds"] = [space_id]
+    else:
+        space_ids = list(request.user.spaces.values_list("id",flat=True))
+        params["spaceIds"] = space_ids
 
-    if not request.user.spaces.filter(id=space_id).exists():
+    if not request.user.spaces.filter(id__in=params["spaceIds"]).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'space_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -51,6 +54,9 @@ def get_assessment_list(space_id, request):
         page = request.query_params["page"]
         params["page"] = page
 
+    if "kit_id" in request.query_params:
+        kit_id = request.query_params["kit_id"]
+        params["kitId"] = kit_id
     response = requests.get(ASSESSMENT_URL + 'assessment-core/api/assessments', params=params)
     if response.status_code == status.HTTP_200_OK:
         data = response.json()
@@ -59,21 +65,25 @@ def get_assessment_list(space_id, request):
             row_data = dict()
             row_data["id"] = item["id"]
             row_data["title"] = item["title"]
+            row_data["space_id"] = item["spaceId"]
             row_data["last_modification_time"] = item["lastModificationTime"]
             row_data["color"] = item["color"]
             row_data["is_calculate_valid"] = item["isCalculateValid"]
-            if item["maturityLevelId"] is not None:
-                level = MaturityLevel.objects.get(id=item["maturityLevelId"])
-                row_data["result_maturity_level"] = {"id": level.id,
-                                                     "title": level.title,
-                                                     "value": level.value
-                                                     }
-            else:
-                row_data["result_maturity_level"] = None
             assessment_kit = AssessmentKit.objects.get(id=item["assessmentKitId"])
             row_data["assessment_kit"] = {"id": assessment_kit.id,
                                           "maturity_levels_count": assessment_kit.maturity_levels.count()
                                           }
+            if item["maturityLevelId"] is not None:
+                level = MaturityLevel.objects.get(id=item["maturityLevelId"])
+                maturity_levels_id = list(assessment_kit.maturity_levels.values_list("id", flat=True))
+                row_data["result_maturity_level"] = {"id": level.id,
+                                                     "title": level.title,
+                                                     "index": maturity_levels_id.index(item["maturityLevelId"])+1,
+                                                     "value": level.value
+                                                     }
+            else:
+                row_data["result_maturity_level"] = None
+
             items.append(row_data)
         data["items"] = items
         result["Success"] = True
@@ -83,6 +93,7 @@ def get_assessment_list(space_id, request):
     result["Success"] = False
     result["body"] = response.json()
     result["status_code"] = response.status_code
+    return result
 
 
 def load_assessment_details_with_id(request, assessment_id):
@@ -156,7 +167,11 @@ def get_maturity_level_calculate(assessments_details):
     if response.status_code == status.HTTP_200_OK:
         data = response.json()
         data["maturity_level"] = data.pop("maturityLevel")
-        data["maturity_level"]["index"] = data["maturity_level"].pop("level")
+        level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
+        maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        data["maturity_level"]["title"] = level.title
+        data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"])+1
+        data["maturity_level"]["value"] = data["maturity_level"].pop("level")
         data["maturity_level"].pop("levelCompetences")
         result["Success"] = True
         result["body"] = data
