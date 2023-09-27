@@ -87,7 +87,7 @@ class MaturityLevelCalculateApi(APIView):
         assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_maturity_level_calculate(request, assessments_details["body"])
+        result = assessment_core.get_maturity_level_calculate(assessments_details["body"])
         return Response(result["body"], result["status_code"])
 
 

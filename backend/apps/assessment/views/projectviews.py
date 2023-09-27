@@ -77,10 +77,6 @@ class AssessmentProjectApi(APIView):
             return Response({"assessment_id": result["body"].json()['id']}, status=result["body"].status_code)
         return Response(result["body"].json(), status=result["body"].status_code)
 
-
-class LoadAssessmentListApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, space_id):
-        result = assessment_core.get_assessment_list(space_id, request)
+    def get(self, request):
+        result = assessment_core.get_assessment_list(request)
         return Response(result["body"], result["status_code"])
