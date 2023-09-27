@@ -74,14 +74,15 @@ class AddQuestionValueSerializer(serializers.ModelSerializer):
 class AnswerQuestionSerializer(serializers.Serializer):
     questionnaire_id = serializers.IntegerField(required=True)
     question_id = serializers.IntegerField(required=True)
-    answer_option_id = serializers.IntegerField(required=True)
+    answer_option_id = serializers.IntegerField(required=True,  allow_null=True)
 
 
 class LoadQuestionnaireAnswerSerializer(serializers.ModelSerializer):
-    answer_option = serializers.SerializerMethodField()
+    answer_options = serializers.SerializerMethodField()
 
-    def get_answer_option(self, question: Question):
-        return question.answer_templates.values("id", "index", title=F("caption"))
+    def get_answer_options(self, question: Question):
+        return question.answer_templates.values("id", "index", "caption")
+
     class Meta:
         model = Question
-        fields = ["id", "index", "title", "answer_option", "may_not_be_applicable"]
+        fields = ["id", "index", "title", "answer_options", "may_not_be_applicable"]

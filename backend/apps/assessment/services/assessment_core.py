@@ -85,7 +85,7 @@ def get_assessment_list(space_id, request):
     result["status_code"] = response.status_code
 
 
-def load_assessment_details_with_id(request,assessment_id):
+def load_assessment_details_with_id(request, assessment_id):
     result = dict()
     response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}')
     if response.status_code == status.HTTP_200_OK:
@@ -126,12 +126,13 @@ def question_answering(assessments_details, serializer_data):
         result["status_code"] = status.HTTP_400_BAD_REQUEST
         return result
 
-    if not AnswerTemplate.objects.filter(id=serializer_data["answer_option_id"]).filter(
-            question=serializer_data["question_id"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'answer_option_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
+    if serializer_data["answer_option_id"] is not None:
+        if not AnswerTemplate.objects.filter(id=serializer_data["answer_option_id"]).filter(
+                question=serializer_data["question_id"]).exists():
+            result["Success"] = False
+            result["body"] = {"code": "NOT_FOUND", "message": "'answer_option_id' does not exist"}
+            result["status_code"] = status.HTTP_400_BAD_REQUEST
+            return result
 
     response = requests.put(
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answer-question',
@@ -172,7 +173,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
     params = {"questionnaireId": questionnaire_id,
               'page': 0,
               'size': 50,
-    }
+              }
     result = dict()
     if not Questionnaire.objects.filter(id=questionnaire_id).filter(
             assessment_kit=assessments_details["kitId"]).exists():
@@ -190,7 +191,8 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         params["page"] = page
 
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answers', params=params)
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answers',
+        params=params)
 
     if response.status_code == status.HTTP_200_OK:
         response_body = response.json()
@@ -201,9 +203,13 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         items = LoadQuestionnaireAnswerSerializer(questions, many=True).data
         for i in range(len(items)):
             response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
-            answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_option"]))[0]
-            items[i]["may_not_be_applicable"] = response_item["isNotApplicable"]
-            items[i]["answer"] = answer
+            if response_item["answerOptionId"] is not None:
+                answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
+                    0].copy()
+                items[i]["answer"] = answer
+            else:
+                items[i]["answer"] = None
+            items[i]["is_not_applicable"] = response_item["isNotApplicable"]
 
         response_body["items"] = items
         result["Success"] = True
