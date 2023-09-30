@@ -38,7 +38,7 @@ def get_assessment_list(request):
         space_id = request.query_params["space_id"]
         params["spaceIds"] = [space_id]
     else:
-        space_ids = list(request.user.spaces.values_list("id",flat=True))
+        space_ids = list(request.user.spaces.values_list("id", flat=True))
         params["spaceIds"] = space_ids
 
     if not request.user.spaces.filter(id__in=params["spaceIds"]).exists():
@@ -79,7 +79,7 @@ def get_assessment_list(request):
                 maturity_levels_id = list(assessment_kit.maturity_levels.values_list("id", flat=True))
                 row_data["result_maturity_level"] = {"id": level.id,
                                                      "title": level.title,
-                                                     "index": maturity_levels_id.index(item["maturityLevelId"])+1,
+                                                     "index": maturity_levels_id.index(item["maturityLevelId"]) + 1,
                                                      "value": level.value
                                                      }
             else:
@@ -171,7 +171,7 @@ def get_maturity_level_calculate(assessments_details):
         level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
         maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
-        data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"])+1
+        data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
         data["maturity_level"]["value"] = data["maturity_level"].pop("level")
         data["maturity_level"].pop("levelCompetences")
         result["Success"] = True
@@ -197,7 +197,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
         return result
-
+    questionnaire = Questionnaire.objects.get(id=questionnaire_id)
     if "size" in request.query_params:
         size = request.query_params["size"]
         params["size"] = size
@@ -215,19 +215,23 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         questions_id = list()
         for item in response_body["items"]:
             questions_id.append(item["questionId"])
-        questions = Question.objects.filter(id__in=questions_id)
+        questions = questionnaire.question_set
         items = LoadQuestionnaireAnswerSerializer(questions, many=True).data
         for i in range(len(items)):
-            response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
-            if response_item["answerOptionId"] is not None:
-                answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
-                    0].copy()
-                items[i]["answer"] = answer
+            if items[i]["id"] in questions_id:
+                response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
+                if response_item["answerOptionId"] is not None:
+                    answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
+                        0].copy()
+                    items[i]["answer"] = answer
+                else:
+                    items[i]["answer"] = None
+                items[i]["is_not_applicable"] = response_item["isNotApplicable"]
             else:
                 items[i]["answer"] = None
-            items[i]["is_not_applicable"] = response_item["isNotApplicable"]
+                items[i]["is_not_applicable"] = False
 
-        response_body["items"] = items
+        response_body = {"items":items}
         result["Success"] = True
         result["body"] = response_body
         result["status_code"] = response.status_code
@@ -244,7 +248,7 @@ def get_questionnaires_in_assessment(assessments_details):
     questionnaire_data = LoadQuestionnairesSerializer(questionnaire_query, many=True).data
 
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/questionnaires/progress',)
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/questionnaires/progress', )
     response_body = response.json()
     answer_dict = dict()
     for item in response_body["items"]:
@@ -253,7 +257,8 @@ def get_questionnaires_in_assessment(assessments_details):
     for i in range(len(questionnaire_data)):
         if questionnaire_data[i]["id"] in answer_dict:
             questionnaire_data[i]["answers_count"] = answer_dict[questionnaire_data[i]["id"]]
-            questionnaire_data[i]["progress"] = int(questionnaire_data[i]["answers_count"]/questionnaire_data[i]["questions_count"]*100)
+            questionnaire_data[i]["progress"] = int(
+                questionnaire_data[i]["answers_count"] / questionnaire_data[i]["questions_count"] * 100)
 
 
         else:
