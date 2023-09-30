@@ -77,18 +77,17 @@ const useQuestions = () => {
     service: (args, config) => service.fetchQuestionnaire({ questionnaireId }, config),
   });
   const questionsResultQueryData = useQuery<IQuestionsModel>({
-    service: (args, config) => service.fetchQuestionsResult({ questionnaireId, assessmentId }, config),
+    service: (args, config) => service.fetchQuestionsResult({ questionnaireId, assessmentId,page:0,size:50 }, config),
   });
 
   useEffect(() => {
     if (questionsResultQueryData.loaded) {
-      const { questions = [], assessment_result_id } = questionsResultQueryData.data;
-
+      const { items = [] } = questionsResultQueryData.data;
       dispatch(
         questionActions.setQuestionsInfo({
-          total_number_of_questions: questions.length,
-          resultId: assessment_result_id,
-          questions,
+          total_number_of_questions: items.length,
+          resultId: "",
+          questions:items,
         })
       );
     }
