@@ -172,7 +172,7 @@ const AnswerTemplate = (props: {
     useQuestionContext();
   const { questionInfo, questionIndex, questionsInfo, abortController } = props;
   const { answer_options, answer } = questionInfo;
-  const { total_number_of_questions, resultId } = questionsInfo;
+  const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
   const { assessmentId = "", questionnaireId } = useParams();
