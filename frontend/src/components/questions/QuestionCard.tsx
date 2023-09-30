@@ -68,7 +68,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
   const {
     title,
-    answer_templates,
+    answer_options,
     index = 0,
     answer,
     description,
@@ -171,7 +171,7 @@ const AnswerTemplate = (props: {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
   const { questionInfo, questionIndex, questionsInfo, abortController } = props;
-  const { answer_templates, answer } = questionInfo;
+  const { answer_options, answer } = questionInfo;
   const { total_number_of_questions, resultId } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
@@ -180,7 +180,7 @@ const AnswerTemplate = (props: {
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
   const isSelectedValueTheSameAsAnswer =
-    questionInfo?.answer?.value == value?.value;
+    questionInfo?.answer?.index == value?.index;
   const changeHappened = useRef(false);
   const onChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -189,7 +189,8 @@ const AnswerTemplate = (props: {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
-    setValue((prevValue) => (prevValue?.value === v?.value ? null : v));
+    console.log(v);
+    setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
@@ -237,7 +238,6 @@ const AnswerTemplate = (props: {
       submitQuestion();
     }
   }, [value]);
-
   return (
     <>
       <Box display={"flex"} justifyContent="flex-start" mt={4}>
@@ -249,11 +249,11 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {answer_templates?.map((template) => {
-            const { value: templateValue, caption } = template || {};
+          {answer_options?.map((option: any) => {
+            const { index: templateValue, caption } = option || {};
             return (
               <Box
-                key={template.value}
+                key={option.value}
                 mb={2}
                 mr={2}
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
@@ -263,8 +263,8 @@ const AnswerTemplate = (props: {
                   color="success"
                   fullWidth
                   size="large"
-                  value={template}
-                  selected={templateValue === value?.value}
+                  value={option}
+                  selected={templateValue === value?.index}
                   onChange={onChange}
                   disabled={isSubmitting}
                   sx={{
@@ -294,7 +294,7 @@ const AnswerTemplate = (props: {
                 >
                   <Checkbox
                     disableRipple={true}
-                    checked={templateValue === value?.value}
+                    checked={templateValue === value?.index}
                     disabled
                     sx={{
                       position: "absoulte",

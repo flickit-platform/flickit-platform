@@ -46,18 +46,18 @@ export interface IQuestionInfo {
   answer: null | TAnswer;
   title: string;
   questionResultId?: string | number;
-  answer_templates: TAnswerTemplates;
+  answer_options?: TAnswerTemplates;
   description?: string;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
-  questions?: IQuestionInfo[];
+  questions: IQuestionInfo[];
 };
 
 export type TAnswer = {
   id: TId;
-  value: string | number;
+  index: string | number;
   caption: string;
   evidences: TEvidences;
 };
@@ -246,7 +246,7 @@ export interface IQuestion {
 }
 
 export interface IQuestionsModel {
-  questions: IQuestion[];
+  items: IQuestion[];
   assessment_result_id: string;
 }
 

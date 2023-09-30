@@ -28,7 +28,6 @@ export const QuestionContainer = () => {
     loaded,
     questionIndex,
   } = useQuestion();
-
   return loaded ? (
     hasAnyQuestion ? (
       <Box minWidth="100vw" overflow="hidden">

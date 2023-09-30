@@ -319,12 +319,25 @@ export const createService = (
       {
         questionnaireId,
         assessmentId,
-      }: { questionnaireId: TId; assessmentId: TId },
+        page,
+        size,
+      }: {
+        questionnaireId: TId;
+        assessmentId: TId;
+        size: number;
+        page: number;
+      },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/assessment/result/${assessmentId}/${questionnaireId}/`,
-        config
+        `/api/v1/assessments/${assessmentId}/${questionnaireId}/`,
+        {
+          ...(config || {}),
+          params: {
+            page: page,
+            size: size,
+          },
+        }
       );
     },
     fetchTotalProgress(
