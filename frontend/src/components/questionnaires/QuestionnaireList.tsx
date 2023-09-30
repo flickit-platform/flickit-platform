@@ -3,7 +3,13 @@ import { QuestionnaireCard } from "./QuestionnaireCard";
 import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import { IQuestionnairesModel, IQuestionnairesPageDataModel, TId, TQueryProps, TQueryFunction } from "@types";
+import {
+  IQuestionnairesModel,
+  IQuestionnairesPageDataModel,
+  TId,
+  TQueryProps,
+  TQueryFunction,
+} from "@types";
 import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
 import Box from "@mui/material/Box";
 import QANumberIndicator from "@common/QANumberIndicator";
@@ -14,18 +20,17 @@ import { useSearchParams } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
-  questionnaireQueryData: TQueryProps<IQuestionnairesModel>;
-  pageQueryData: TQueryProps<IQuestionnairesPageDataModel>;
+  questionnaireQueryData: any;
 }
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {
-  const { questionnaireQueryData, pageQueryData } = props;
+  const { questionnaireQueryData } = props;
   const { query: fetchQuestionnaires } = questionnaireQueryData;
 
   return (
     <>
       <Box display={"flex"} justifyContent="space-between">
-        <QueryData
+        {/* <QueryData
           {...(pageQueryData || {})}
           errorComponent={<></>}
           renderLoading={() => {
@@ -41,9 +46,9 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             const { subjects = [] } = data;
             return <FilterBySubject fetchQuestionnaires={fetchQuestionnaires} subjects={subjects} />;
           }}
-        />
+        /> */}
 
-        <Box
+        {/* <Box
           minWidth="130px"
           display="flex"
           justifyContent={"flex-end"}
@@ -61,11 +66,21 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const { total_question_number = 0, total_answered_question_number = 0 } = data || {};
-              return <QANumberIndicator color="white" q={total_question_number} a={total_answered_question_number} variant="h6" />;
+              const {
+                total_question_number = 0,
+                total_answered_question_number = 0,
+              } = data || {};
+              return (
+                <QANumberIndicator
+                  color="white"
+                  q={total_question_number}
+                  a={total_answered_question_number}
+                  variant="h6"
+                />
+              );
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
       <Box>
         <Divider sx={{ borderColor: "white", opacity: 0.4, mt: 1, mb: 1 }} />
@@ -75,10 +90,10 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             isDataEmpty={(data) => data.questionaries_info?.length === 0}
             renderLoading={() => <LoadingSkeletonOfQuestionnaires />}
             render={(data) => {
-              const { questionaries_info = [] } = data;
+              const { items } = data;
               return (
                 <Grid container spacing={2}>
-                  {questionaries_info.map((data) => {
+                  {items.map((data:any) => {
                     return (
                       <Grid item xl={4} md={6} sm={12} xs={12} key={data.id}>
                         <QuestionnaireCard data={data} />
@@ -95,11 +110,15 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
   );
 };
 
-const FilterBySubject = (props: { subjects: { id: TId; title: string }[]; fetchQuestionnaires: TQueryFunction }) => {
+const FilterBySubject = (props: {
+  subjects: { id: TId; title: string }[];
+  fetchQuestionnaires: TQueryFunction;
+}) => {
   const { subjects, fetchQuestionnaires } = props;
   const [searchParams, setSearchParams] = useSearchParams();
   const subjectIdParam = searchParams.get("subject_pk");
-  const [activeFilterSubjectId, setActiveFilterSubjectId] = useState(subjectIdParam);
+  const [activeFilterSubjectId, setActiveFilterSubjectId] =
+    useState(subjectIdParam);
 
   const handleClick = (subjectId: TId) => {
     if (activeFilterSubjectId == subjectId) {
@@ -141,7 +160,11 @@ const FilterBySubject = (props: { subjects: { id: TId; title: string }[]; fetchQ
   );
 };
 
-const FilterButton = (props: { subject: { id: TId; title: string }; handleClick: (subjectId: TId) => void; active: boolean }) => {
+const FilterButton = (props: {
+  subject: { id: TId; title: string };
+  handleClick: (subjectId: TId) => void;
+  active: boolean;
+}) => {
   const { subject, handleClick, active } = props;
   const { title, id } = subject;
 
