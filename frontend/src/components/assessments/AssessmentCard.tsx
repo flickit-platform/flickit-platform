@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Gauge } from "@common/charts/Gauge";
+import LoadingGauge from "@common/charts/LoadingGauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "@utils/useMenu";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -30,7 +31,8 @@ import hasMaturityLevel from "@utils/hasMaturityLevel";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
-
+import QueryData from "../common/QueryData";
+import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
   item: IAssessment & { space: any };
   dialogProps: TDialogProps;
@@ -38,12 +40,44 @@ interface IAssessmentCardProps {
 }
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
+  const [calculateResault, setCalculateResault] = useState<any>();
+  const [show, setShow] = useState<boolean | false>(false);
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { result_maturity_level, is_calculate_valid, assessment_kit } = item;
+  const { result_maturity_level, is_calculate_valid, assessment_kit, id } =
+    item;
   const hasML = hasMaturityLevel(result_maturity_level?.value);
   const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
+  const { service } = useServiceContext();
+  const calculateMaturityLevelQuery = useQuery({
+    service: (args = { assessmentId: id }, config) =>
+      service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+
+  const fetchAssessments = async () => {
+    try {
+      setShow(is_calculate_valid);
+      if (!is_calculate_valid) {
+        const data = await calculateMaturityLevelQuery.query();
+        setCalculateResault(data);
+        if (data.maturity_level?.id) {
+          setShow(true);
+        }
+      }
+      
+    } catch (e) {
+      // const err = e as ICustomError;
+      // toastError(err, { filterByStatus: [404] });
+      // setLoading(false);
+      // setError(true);
+      // setErrorObject(err);
+    }
+  };
+  useEffect(() => {
+    fetchAssessments();
+  }, [is_calculate_valid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper
@@ -68,7 +102,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
-              sx={{ textDecoration: "none"}}
+              sx={{ textDecoration: "none" }}
               component={Link}
               to={
                 is_calculate_valid
@@ -90,7 +124,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  margin:"0 auto" 
+                  margin: "0 auto",
                 }}
                 data-cy="assessment-card-title"
               >
@@ -114,14 +148,26 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             component={Link}
             to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
-            <Gauge
-              systemStatus={item?.status}
-              maturity_level_number={maturity_levels_count}
-              level_value={result_maturity_level?.value}
-              maturity_level_status={result_maturity_level?.title}
-              maxWidth="275px"
-              mt="auto"
-            />
+            {show ? (
+              <Gauge
+                systemStatus={item?.status}
+                maturity_level_number={maturity_levels_count}
+                level_value={
+                  calculateResault?.maturity_level
+                    ? calculateResault?.maturity_level?.index
+                    : result_maturity_level?.index 
+                }
+                maturity_level_status={
+                  calculateResault?.maturity_level
+                    ? calculateResault?.maturity_level?.title
+                    : result_maturity_level?.title
+                }
+                maxWidth="275px"
+                mt="auto"
+              />
+            ) : (
+              <LoadingGauge />
+            )}
           </Grid>
           <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
             <Button
@@ -136,7 +182,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               }}
               component={Link}
               to={hasML ? `${item.id}/insights` : ""}
-              variant={is_calculate_valid ? "contained" : undefined}
+              // variant={is_calculate_valid ? "contained" : undefined}
               data-cy="view-insights-btn"
             >
               <Trans i18nKey="insights" />

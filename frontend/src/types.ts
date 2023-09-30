@@ -124,6 +124,7 @@ export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
+  index?:number
 }
 
 export interface IImage {
