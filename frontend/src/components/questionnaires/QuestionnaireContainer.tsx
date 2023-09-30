@@ -34,34 +34,19 @@ import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 const QuestionnaireContainer = () => {
-  const {
-    pageQueryData,
-    questionnaireQueryData,
-    totalProgressQueryData,
-    assessmentQueryData,
-  } = useQuestionnaire();
+  const { questionnaireQueryData } = useQuestionnaire();
   const progress = questionnaireQueryData.data?.progress || 0;
   return (
-    <PermissionControl
-      error={[
-        pageQueryData.errorObject,
-        questionnaireQueryData.errorObject,
-        totalProgressQueryData.errorObject,
-        assessmentQueryData.errorObject,
-      ]}
-    >
+    <PermissionControl error={[questionnaireQueryData.errorObject]}>
       <Box>
         <QuestionnaireTitle />
         <NotCompletedAlert
-          isCompleted={
-            totalProgressQueryData.data?.total_progress?.progress == 100
-          }
-          hasStatus={hasMaturityLevelStatus(
-            assessmentQueryData.data?.maturity_level_status
-          )}
-          loading={
-            totalProgressQueryData.loading || assessmentQueryData.loading
-          }
+          isCompleted={progress == 100}
+          hasStatus={false}
+          // hasMaturityLevelStatus(
+          //   assessmentQueryData.data?.maturity_level_status
+          // )
+          loading={questionnaireQueryData.loading}
         />
         <Box
           flexWrap={"wrap"}
@@ -83,7 +68,6 @@ const QuestionnaireContainer = () => {
         >
           <QuestionnaireList
             questionnaireQueryData={questionnaireQueryData}
-            pageQueryData={pageQueryData}
           />
         </Box>
       </Box>
@@ -102,26 +86,8 @@ const useQuestionnaire = () => {
       service.fetchQuestionnaires({ assessmentId, ...(args || {}) }, config),
   });
 
-  const pageQueryData = useQuery<IQuestionnairesPageDataModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchQuestionnairesPageData(args, config),
-  });
-
-  const totalProgressQueryData = useQuery<ITotalProgressModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchTotalProgress(args, config),
-  });
-
-  const assessmentQueryData = useQuery<IAssessmentReportModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchAssessment(args, config),
-  });
-
   return {
-    pageQueryData,
     questionnaireQueryData,
-    totalProgressQueryData,
-    assessmentQueryData,
   };
 };
 

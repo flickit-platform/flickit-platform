@@ -254,9 +254,9 @@ export const createService = (
     ) {
       const { subject_pk, assessmentId } = args || {};
       const params = subject_pk ? { subject_pk: subject_pk } : {};
-      return axios.get(`/assessment/questionaries/${assessmentId}/`, {
+      return axios.get(`/api/v1/assessments/${assessmentId}/questionnaires/`, {
         ...config,
-        params,
+        // params,
       });
     },
     fetchQuestionnaire(

@@ -325,14 +325,14 @@ export interface IQuestionnaire {
 }
 
 export interface IQuestionnairesInfo {
-  answered_question: number;
+  answers_count: number;
   id: TId;
-  question_number: number;
+  questions_count: number;
   progress: number;
   last_updated?: string;
   current_question_index: number;
   title: string;
-  subject: { id: TId; title: string }[];
+  subjects: { id: TId; title: string }[];
 }
 export interface IQuestionnairesModel extends ITotalProgress {
   assessment_title: string;
