@@ -51,7 +51,7 @@ export interface IQuestionInfo {
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
-  resultId: TId ;
+  resultId: TId | undefined;
   questions: IQuestionInfo[];
 };
 
