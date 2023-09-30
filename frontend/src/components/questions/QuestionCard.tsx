@@ -172,10 +172,10 @@ const AnswerTemplate = (props: {
     useQuestionContext();
   const { questionInfo, questionIndex, questionsInfo, abortController } = props;
   const { answer_options, answer } = questionInfo;
-  const { total_number_of_questions, resultId } = questionsInfo;
+  const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
-  const { questionnaireId = "" } = useParams();
+  const { assessmentId = "", questionnaireId } = useParams();
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
@@ -198,11 +198,11 @@ const AnswerTemplate = (props: {
     try {
       const res = await service.submitAnswer(
         {
-          resultId,
-          questionnaireId,
+          assessmentId,
           data: {
+            questionnaire_id: questionnaireId,
             question_id: questionInfo?.id,
-            answer: value?.id || null,
+            answer_option_id: value?.id || null,
           },
         },
         { signal: abortController.current.signal }

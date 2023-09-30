@@ -287,23 +287,13 @@ export const createService = (
       return axios.get(`/assessment/results/`, config);
     },
     submitAnswer(
-      {
-        resultId,
-        questionnaireId,
-        data,
-      }: { resultId: TId | undefined; questionnaireId: string; data: any },
+      { assessmentId, data }: { assessmentId: TId | undefined; data: any },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      return axios.post(
-        `/assessment/results/${resultId || ""}/questionvalues/`,
+      return axios.put(
+        `/api/v1/assessments/${assessmentId || ""}/answer-question/`,
         data,
-        {
-          ...config,
-          params: {
-            questionnaire_pk: questionnaireId,
-            ...(config.params || {}),
-          },
-        }
+        { ...config }
       );
     },
     fetchQuestions(
