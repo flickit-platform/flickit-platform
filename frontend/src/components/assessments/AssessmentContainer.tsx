@@ -189,7 +189,7 @@ const useFetchAssessments = () => {
     setErrorObject(undefined);
     try {
       const { data: res } = await service.fetchAssessments(
-        { spaceId, size: 4, page: pageNum - 1 },
+        { spaceId:spaceId, size: 4, page: pageNum - 1 },
         { signal: abortController.current.signal }
       );
       if (res) {

@@ -1,0 +1,85 @@
+.path1 {
+  fill: rgba(0, 0, 0, 0.1);
+  animation: fillAnimation1 2s linear infinite;
+}
+
+.path2 {
+  fill: rgba(0, 0, 0, 0.1);
+  animation: fillAnimation2 2s 0.4s linear infinite;
+}
+
+.path3 {
+  fill: rgba(0, 0, 0, 0.1);
+  animation: fillAnimation3 2s 0.8s linear infinite;
+}
+
+.path4 {
+  fill: rgba(0, 0, 0, 0.1);
+  animation: fillAnimation4 2s 1.2s linear infinite;
+}
+
+.path5 {
+  fill: rgba(0, 0, 0, 0.1);
+  animation: fillAnimation5 2s 1.6s linear infinite;
+}
+
+@keyframes fillAnimation1 {
+  0% {
+    fill: #862123;
+  }
+  20%,
+  80% {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    fill: #862123;
+  }
+}
+@keyframes fillAnimation2 {
+  0% {
+    fill: #be5823;
+  }
+  20%,
+  80% {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    fill: #be5823;
+  }
+}
+@keyframes fillAnimation3 {
+  0% {
+    fill: #f4b942;
+  }
+  20%,
+  80% {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    fill: #f4b942;
+  }
+}
+@keyframes fillAnimation4 {
+  0% {
+    fill: #9bb763;
+  }
+  20%,
+  80% {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    fill: #9bb763;
+  }
+}
+@keyframes fillAnimation5 {
+  0% {
+    fill: #347444;
+  }
+  20%,
+  80% {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    fill: #347444;
+  }
+}

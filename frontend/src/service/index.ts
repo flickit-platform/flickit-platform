@@ -189,12 +189,20 @@ export const createService = (
         spaceId,
         size,
         page,
-      }: { spaceId: string | undefined; size: number; page: number },
+      }: {
+        spaceId: string | undefined;
+        size: number;
+        page: number;
+      },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/spaces/${spaceId}/assessments/`, {
+      return axios.get(`/api/v1/assessments/`, {
         ...(config || {}),
-        params: { page: page, size: size },
+        params: {
+          page: page,
+          size: size,
+          space_id: spaceId,
+        },
       });
     },
     createAssessment(
@@ -324,6 +332,15 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/assessment/progress/${assessmentId}/`, config);
+    },
+    calculateMaturityLevel(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/calculate/`,
+        config
+      );
     },
     fetchQuestionnairesPageData(
       { assessmentId }: { assessmentId: TId },
