@@ -226,6 +226,7 @@ class LoadQuestionDetailsApi(APIView):
 
 class LoadQuestionsOfSubjectInternalApi(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, subject_id):
         result = commonservice.get_questions_of_a_assessment_subject_id(subject_id)
         return Response(result["body"], result["status_code"])
