@@ -201,8 +201,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               to={`${item.id}/questionnaires`}
               sx={{
                 backgroundColor: "#2e7d72",
-                // background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
-                background: `#2e7d72`,
+                background: `#01221e`,
               }}
               data-cy="questionnaires-btn"
             >

@@ -21,10 +21,11 @@ import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: any;
+  assessmentTotalProgress: any;
 }
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {
-  const { questionnaireQueryData } = props;
+  const { questionnaireQueryData, assessmentTotalProgress } = props;
   const { query: fetchQuestionnaires } = questionnaireQueryData;
 
   return (
@@ -48,7 +49,7 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
           }}
         /> */}
 
-        {/* <Box
+        <Box
           minWidth="130px"
           display="flex"
           justifyContent={"flex-end"}
@@ -62,25 +63,22 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
           }}
         >
           <QueryData
-            {...(questionnaireQueryData || {})}
+            {...(assessmentTotalProgress || {})}
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const {
-                total_question_number = 0,
-                total_answered_question_number = 0,
-              } = data || {};
+              const { question_count = 0, answers_count = 0 } = data || {};
               return (
                 <QANumberIndicator
                   color="white"
-                  q={total_question_number}
-                  a={total_answered_question_number}
+                  q={question_count}
+                  a={answers_count}
                   variant="h6"
                 />
               );
             }}
           />
-        </Box> */}
+        </Box>
       </Box>
       <Box>
         <Divider sx={{ borderColor: "white", opacity: 0.4, mt: 1, mb: 1 }} />
@@ -93,7 +91,7 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
               const { items } = data;
               return (
                 <Grid container spacing={2}>
-                  {items.map((data:any) => {
+                  {items.map((data: any) => {
                     return (
                       <Grid item xl={4} md={6} sm={12} xs={12} key={data.id}>
                         <QuestionnaireCard data={data} />

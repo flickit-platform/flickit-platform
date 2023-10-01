@@ -34,8 +34,14 @@ import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 const QuestionnaireContainer = () => {
-  const { questionnaireQueryData } = useQuestionnaire();
-  const progress = questionnaireQueryData.data?.progress || 0;
+  const { questionnaireQueryData, assessmentTotalProgress } =
+    useQuestionnaire();
+
+  const progress =
+    ((assessmentTotalProgress?.data?.answers_count || 0) /
+      (assessmentTotalProgress?.data?.question_count || 1)) *
+    100;
+
   return (
     <PermissionControl error={[questionnaireQueryData.errorObject]}>
       <Box>
@@ -67,6 +73,7 @@ const QuestionnaireContainer = () => {
           position={"relative"}
         >
           <QuestionnaireList
+            assessmentTotalProgress={assessmentTotalProgress}
             questionnaireQueryData={questionnaireQueryData}
           />
         </Box>
@@ -85,9 +92,16 @@ const useQuestionnaire = () => {
     service: (args = { subject_pk: subjectIdParam }, config) =>
       service.fetchQuestionnaires({ assessmentId, ...(args || {}) }, config),
   });
-
+  const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
+    service: (args, config) =>
+      service.fetchAssessmentTotalProgress(
+        { assessmentId, ...(args || {}) },
+        config
+      ),
+  });
   return {
     questionnaireQueryData,
+    assessmentTotalProgress,
   };
 };
 
