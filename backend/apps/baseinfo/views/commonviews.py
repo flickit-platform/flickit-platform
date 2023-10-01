@@ -222,3 +222,10 @@ class LoadQuestionDetailsApi(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         response = commonserializers.LoadQuestionDetailsDetailsSerializer(question).data
         return Response(response, status=status.HTTP_200_OK)
+
+
+class LoadQuestionsOfSubjectInternalApi(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, subject_id):
+        result = commonservice.get_questions_of_a_assessment_subject_id(subject_id)
+        return Response(result["body"], result["status_code"])

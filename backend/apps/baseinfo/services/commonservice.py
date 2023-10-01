@@ -1,4 +1,5 @@
 from django.db.models import F
+from rest_framework import status
 
 from baseinfo.models.questionmodels import AnswerTemplate, OptionValue, Question, QuestionImpact
 from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
@@ -194,3 +195,19 @@ def get_question_impacts_for_questionnaire(question_id, attributes):
         data_attribute_list["attribute"] = data_attribute
         data.append(data_attribute_list)
     return data
+
+
+def get_questions_of_a_assessment_subject_id(subject_id):
+    result = dict()
+    try:
+        AssessmentSubject.objects.get(id=subject_id)
+    except AssessmentKit.DoesNotExist as e:
+        result["Success"] = True
+        result["body"] = {"message": "SUBJECT_ID_DOES_NOT_EXISTS"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+
+    question_ids = Question.objects.filter(quality_attributes__assessment_subject=subject_id).distinct().order_by("id").values("id")
+    result["Success"] = True
+    result["body"] = {"items": question_ids}
+    result["status_code"] = status.HTTP_200_OK
+    return result
