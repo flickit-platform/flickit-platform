@@ -5,7 +5,7 @@ from assessment.serializers.projectserializers import LoadQuestionnairesSerializ
 from assessment.serializers.questionvalueserializers import LoadQuestionnaireAnswerSerializer
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
-from baseinfo.models.basemodels import Questionnaire
+from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, AnswerTemplate
 
 
@@ -284,6 +284,70 @@ def get_assessment_progress(assessments_details):
         result["Success"] = True
         result["body"] = response_body
         result["status_code"] = response.status_code
+        return result
+
+    result["Success"] = False
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result
+
+
+def get_subject_report(assessments_details, subject_id):
+    result = dict()
+
+    if not AssessmentSubject.objects.filter(id=subject_id).filter(
+            assessment_kit=assessments_details["kitId"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report/subjects/{subject_id}', )
+    response_body = response.json()
+
+    if response.status_code == status.HTTP_200_OK:
+        subject_dict = dict()
+        attribute_list = list()
+        subject = AssessmentSubject.objects.get(id=response_body["subject"]["id"])
+        subject_dict["id"] = subject.id
+        subject_dict["title"] = subject.title
+        maturity_level = MaturityLevel.objects.get(id=response_body["subject"]["maturityLevelId"])
+        subject_dict["maturity_level"] = {
+            "id": maturity_level.id,
+            "title": maturity_level.title,
+            "value": maturity_level.value,
+        }
+        subject_dict["is_calculate_valid"] = response_body["subject"]["isCalculateValid"]
+        for item in response_body["attributes"]:
+            attributes_dict = dict()
+            attribute = QualityAttribute.objects.get(id=item["id"])
+            attributes_dict["id"] = attribute.id
+            attributes_dict["title"] = attribute.title
+            maturity_level = MaturityLevel.objects.get(id=item["maturityLevelId"])
+            attributes_dict["maturity_level"] = {
+                "id": maturity_level.id,
+                "title": maturity_level.title,
+                "value": maturity_level.value,
+            }
+            attribute_list.append(attributes_dict)
+        attribute_top_weaknesses_id = list()
+        for item in response_body["topWeaknesses"]:
+            attribute_top_weaknesses_id.append(item["id"])
+        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id", "title")
+
+        attribute_top_strengths_id = list()
+        for item in response_body["topStrengths"]:
+            attribute_top_strengths_id.append(item["id"])
+        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id", "title")
+
+        result["Success"] = True
+        result["body"] = {"subject": subject_dict,
+                          "attributes": attribute_list,
+                          "top_strengths": attributes_top_strengths,
+                          "top_weaknesses": attributes_top_weaknesses,
+                          }
+        result["status_code"] = status.HTTP_200_OK
         return result
 
     result["Success"] = False
