@@ -221,8 +221,9 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
             if items[i]["id"] in questions_id:
                 response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
                 if response_item["answerOptionId"] is not None:
-                    answer = list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
-                        0].copy()
+                    answer = \
+                        list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
+                            0].copy()
                     items[i]["answer"] = answer
                 else:
                     items[i]["answer"] = None
@@ -231,7 +232,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
                 items[i]["answer"] = None
                 items[i]["is_not_applicable"] = False
 
-        response_body = {"items":items}
+        response_body = {"items": items}
         result["Success"] = True
         result["body"] = response_body
         result["status_code"] = response.status_code
@@ -268,4 +269,24 @@ def get_questionnaires_in_assessment(assessments_details):
     result["Success"] = True
     result["body"] = {"items": questionnaire_data}
     result["status_code"] = status.HTTP_200_OK
+    return result
+
+
+def get_assessment_progress(assessments_details):
+    result = dict()
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/progress', )
+    response_body = response.json()
+    if response.status_code == status.HTTP_200_OK:
+        question_count = Question.objects.filter(questionnaire__assessment_kit=assessments_details["kitId"]).count()
+        response_body["question_count"] = question_count
+        response_body["answers_count"] = response_body.pop("allAnswersCount")
+        result["Success"] = True
+        result["body"] = response_body
+        result["status_code"] = response.status_code
+        return result
+
+    result["Success"] = False
+    result["body"] = response_body
+    result["status_code"] = response.status_code
     return result

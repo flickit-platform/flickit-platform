@@ -7,7 +7,7 @@ from rest_framework import status
 
 from common.abstractservices import load_model
 from account.permission.spaceperm import IsSpaceMember
-
+from assessment.services import assessment_core
 from assessment.models import AssessmentResult, AssessmentProject
 from assessment.serializers.reportserilaizers import AssessmentReportSerilizer
 
@@ -31,3 +31,13 @@ class AssessmentCheckReportApi(APIView):
         else:
             return Response({'report_available': True}, status=status.HTTP_200_OK)
         
+
+class AssessmentProgressApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_id):
+        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.get_assessment_progress(assessments_details["body"])
+        return Response(result["body"], result["status_code"])
