@@ -8,5 +8,6 @@ urlpatterns = [
     path("<uuid:assessment_id>/questionnaires/", questionaryviews.LoadQuestionnairesWithAssessmentApi.as_view()),
     path("<uuid:assessment_id>/progress/", reportviews.AssessmentProgressApi.as_view()),
     path("<uuid:assessment_id>/report/subjects/<int:subject_id>/", reportviews.AssessmentSubjectReportApi.as_view()),
+    path("<uuid:assessment_id>/subjects/<int:subject_id>/progress/", reportviews.SubjectProgressApi.as_view())
 
 ]
