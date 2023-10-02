@@ -7,6 +7,7 @@ from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, AnswerTemplate
+from baseinfo.serializers.assessmentkitserializers import LoadAssessmentKitDetailsForReportSerializer
 
 
 def create_assessment(user, data):
@@ -376,6 +377,66 @@ def get_subject_progress(assessments_details, subject_id):
         result["Success"] = True
         result["body"] = response_body
         result["status_code"] = status.HTTP_200_OK
+        return result
+
+    result["Success"] = False
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result
+
+
+def get_assessment_report(assessments_details):
+    result = dict()
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report')
+    response_body = response.json()
+    if response.status_code == status.HTTP_200_OK:
+        assessment_dict = dict()
+        assessment_dict["id"] = response_body["assessment"]["id"]
+        assessment_dict["title"] = response_body["assessment"]["title"]
+        assessment_kit_details = LoadAssessmentKitDetailsForReportSerializer(AssessmentKit.objects.get(id=assessments_details["kitId"])).data
+        assessment_dict["assessment_kit"] = assessment_kit_details
+        assessment_dict["last_modification_time"] = response_body["assessment"]["lastModificationTime"]
+        assessment_dict["is_calculate_valid"] = response_body["assessment"]["isCalculateValid"]
+        maturity_level = MaturityLevel.objects.get(id=response_body["assessment"]["maturityLevelId"])
+        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        assessment_dict["assessment_kit"]["maturity_level"] = {"id": maturity_level.id,
+                                                               "title": maturity_level.title,
+                                                               "value": maturity_level.value,
+                                                               "index": maturity_levels_id.index(maturity_level.id) + 1
+                                                               }
+        assessment_dict["color"] = response_body["assessment"]["color"]
+
+        subject_list = list()
+        for item in response_body["subjects"]:
+            subject = AssessmentSubject.objects.get(id=item['id'])
+            level = MaturityLevel.objects.get(id=item['maturityLevelId'])
+            subject_list.append({"id": subject.id,
+                                 "title": subject.title,
+                                 "description": subject.description,
+                                 "maturity_level": {
+                                     "id": level.id,
+                                     "title": level.title,
+                                 }
+                                 })
+
+        attribute_top_weaknesses_id = list()
+        for item in response_body["topWeaknesses"]:
+            attribute_top_weaknesses_id.append(item["id"])
+        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id", "title")
+
+        attribute_top_strengths_id = list()
+        for item in response_body["topStrengths"]:
+            attribute_top_strengths_id.append(item["id"])
+        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id", "title")
+
+        result["Success"] = True
+        result["body"] = {"assessment": assessment_dict,
+                          "subjects": subject_list,
+                          "top_strengths": attributes_top_strengths,
+                          "top_weaknesses": attributes_top_weaknesses,
+                          }
+        result["status_code"] = response.status_code
         return result
 
     result["Success"] = False
