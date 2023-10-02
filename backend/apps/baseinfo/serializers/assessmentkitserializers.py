@@ -249,3 +249,16 @@ class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['subjects', 'questionnaires', 'maturity_levels']
+
+
+class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
+    maturity_level_count = serializers.IntegerField(source="maturity_levels.count")
+    expert_group = serializers.SerializerMethodField()
+
+    def get_expert_group(self, assessment_kit: AssessmentKit):
+        expert_group = assessment_kit.expert_group
+        return {"id": expert_group.id, "name": expert_group.name}
+
+    class Meta:
+        model = AssessmentKit
+        fields = ['id', 'title', 'about', 'maturity_level_count', 'expert_group']
