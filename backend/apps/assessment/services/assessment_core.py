@@ -314,10 +314,15 @@ def get_subject_report(assessments_details, subject_id):
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title
         maturity_level = MaturityLevel.objects.get(id=response_body["subject"]["maturityLevelId"])
+        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        maturity_levels_count = len(maturity_levels_id)
         subject_dict["maturity_level"] = {
             "id": maturity_level.id,
             "title": maturity_level.title,
             "value": maturity_level.value,
+            "index": maturity_levels_id.index(maturity_level.id) + 1,
+            "maturity_levels_count": maturity_levels_count
+
         }
         subject_dict["is_calculate_valid"] = response_body["subject"]["isCalculateValid"]
         for item in response_body["attributes"]:
@@ -325,11 +330,13 @@ def get_subject_report(assessments_details, subject_id):
             attribute = QualityAttribute.objects.get(id=item["id"])
             attributes_dict["id"] = attribute.id
             attributes_dict["title"] = attribute.title
+            attributes_dict["description"] = attribute.description
             maturity_level = MaturityLevel.objects.get(id=item["maturityLevelId"])
             attributes_dict["maturity_level"] = {
                 "id": maturity_level.id,
                 "title": maturity_level.title,
                 "value": maturity_level.value,
+                "index": maturity_levels_id.index(maturity_level.id) + 1,
             }
             attribute_list.append(attributes_dict)
         attribute_top_weaknesses_id = list()
