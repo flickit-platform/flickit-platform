@@ -29,10 +29,8 @@ const SubjectBarChart = (props: any) => {
 
 const SubjectBar = (props: any) => {
   const { data: res = {}, loaded } = props;
-  const { results = [] } = res;
-  const { maturity_level_number: mn } = results[0];
   const data = useMemo(() => {
-    return convertToSubjectChartData(results);
+    return convertToSubjectChartData(res);
   }, [loaded]);
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -47,7 +45,7 @@ const SubjectBar = (props: any) => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="title" />
-        <YAxis type="number" domain={[0, mn]} tickCount={mn+1} />
+        <YAxis type="number" domain={[0, 5]} tickCount={5+1} />
         <Tooltip />
         <Legend />
         <Bar

@@ -189,7 +189,6 @@ const AnswerTemplate = (props: {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
-    console.log(v);
     setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
   // first checking if evidences have been submited or not

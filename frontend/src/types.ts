@@ -359,6 +359,10 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
   total_progress: ITotalProgress;
+  attributes:any;
+  subject:any;
+  top_strengths:any;
+  top_weaknesses:any;
 }
 
 export type TQueryFunction<T extends any = any, A extends any = any> = (

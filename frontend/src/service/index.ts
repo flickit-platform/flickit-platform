@@ -236,18 +236,24 @@ export const createService = (
       return axios.get(`/assessment/reports/${assessmentId}/`, config);
     },
     fetchSubject(
-      { subjectId, resultId }: { subjectId: string; resultId: string },
+      { subjectId, assessmentId }: { subjectId: string; assessmentId: string },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      return axios.get(`/assessment/reportsubject/`, {
-        ...config,
-        params: {
-          assessment_subject_pk: subjectId,
-          assessment_result_pk: resultId,
-          ...(config.params || {}),
-        },
-      });
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/report/subjects/${subjectId}/`,
+        config
+      );
     },
+    fetchSubjectProgress(
+      { subjectId, assessmentId }: { subjectId: string; assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined = {}
+    ) {
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/subjects/${subjectId}/progress/`,
+        config
+      );
+    },
+
     fetchQuestionnaires(
       args: { subject_pk?: TId | null; assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
