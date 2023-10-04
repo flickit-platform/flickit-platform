@@ -261,4 +261,4 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssessmentKit
-        fields = ['id', 'title', 'about', 'maturity_level_count', 'expert_group']
+        fields = ['id', 'title', 'summary', 'maturity_level_count', 'expert_group']
