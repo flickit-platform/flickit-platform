@@ -7,8 +7,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from assessment.models import Evidence, EvidenceRelation
 from account.serializers.commonserializers import UserSimpleSerializer
-from assessment.serializers import commonserializers
-from assessment.services import assessment_core
+from assessment.serializers import evidence_serializers
+from assessment.services import evidence_services
 
 
 class EvidenceSerializer(serializers.ModelSerializer):
@@ -80,14 +80,14 @@ class EvidenceListApi(APIView):
 
 class EvidencesApi(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = commonserializers.AddEvidenceSerializer
+    serializer_class = evidence_serializers.AddEvidenceSerializer
 
     @swagger_auto_schema(request_body=serializer_class, responses={201: ""})
     def post(self, request):
         serializer_data = self.serializer_class(data=request.data)
         serializer_data.is_valid(raise_exception=True)
-        assessments_details = assessment_core.load_assessment_details_with_id(request, serializer_data.validated_data['assessment_id'])
+        assessments_details = evidence_services.load_assessment_details_with_id(request, serializer_data.validated_data['assessment_id'])
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.add_evidences(assessments_details["body"], serializer_data.validated_data, request.user.id)
+        result = evidence_services.add_evidences(assessments_details["body"], serializer_data.validated_data, request.user.id)
         return Response(result["body"], result["status_code"])
