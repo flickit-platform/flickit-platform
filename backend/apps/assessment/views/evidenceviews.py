@@ -2,9 +2,13 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from assessment.models import Evidence, EvidenceRelation
 from account.serializers.commonserializers import UserSimpleSerializer
+from assessment.serializers import commonserializers
+from assessment.services import assessment_core
 
 
 class EvidenceSerializer(serializers.ModelSerializer):
@@ -72,3 +76,18 @@ class EvidenceListApi(APIView):
         evidence_qs = Evidence.objects.filter(evidence_relation_id = evidence_relation.id).order_by('-creation_time')
         content['evidences'] = EvidenceSerializer(list(evidence_qs), many=True).data
         return Response(content)
+
+
+class EvidencesApi(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = commonserializers.AddEvidenceSerializer
+
+    @swagger_auto_schema(request_body=serializer_class, responses={201: ""})
+    def post(self, request):
+        serializer_data = self.serializer_class(data=request.data)
+        serializer_data.is_valid(raise_exception=True)
+        assessments_details = assessment_core.load_assessment_details_with_id(request, serializer_data.validated_data['assessment_id'])
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.add_evidences(assessments_details["body"], serializer_data.validated_data, request.user.id)
+        return Response(result["body"], result["status_code"])

@@ -27,3 +27,9 @@ class QualityAttributeValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualityAttributeValue
         fields = ['id', 'maturity_level_value', 'assessment_result', 'quality_attribute', 'maturity_level']
+
+
+class AddEvidenceSerializer(serializers.Serializer):
+    assessment_id = serializers.UUIDField(required=True)
+    question_id = serializers.IntegerField(required=True)
+    description = serializers.CharField(required=True, min_length=3, max_length=1000)
