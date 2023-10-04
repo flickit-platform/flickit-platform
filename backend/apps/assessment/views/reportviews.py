@@ -6,7 +6,7 @@ from rest_framework import status
 
 from common.abstractservices import load_model
 from account.permission.spaceperm import IsSpaceMember
-from assessment.services import assessment_core
+from assessment.services import assessment_core, assessment_core_services
 from assessment.models import AssessmentResult, AssessmentProject
 from assessment.serializers.reportserilaizers import AssessmentReportSerilizer
 
@@ -37,7 +37,7 @@ class AssessmentProgressApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_assessment_progress(assessments_details["body"])
@@ -48,7 +48,7 @@ class AssessmentSubjectReportApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id, subject_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_subject_report(assessments_details["body"], subject_id)
@@ -59,7 +59,7 @@ class SubjectProgressApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id, subject_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_subject_progress(assessments_details["body"], subject_id)
@@ -70,7 +70,7 @@ class AssessmentReportApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id):
-        assessments_details = assessment_core.load_assessment_details_with_id(request, assessment_id)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.get_assessment_report(assessments_details["body"])

@@ -8,7 +8,7 @@ from rest_framework import status
 from assessment.models import Evidence, EvidenceRelation
 from account.serializers.commonserializers import UserSimpleSerializer
 from assessment.serializers import evidence_serializers
-from assessment.services import evidence_services
+from assessment.services import evidence_services, assessment_core_services
 
 
 class EvidenceSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class EvidencesApi(APIView):
     def post(self, request):
         serializer_data = self.serializer_class(data=request.data)
         serializer_data.is_valid(raise_exception=True)
-        assessments_details = evidence_services.load_assessment_details_with_id(request, serializer_data.validated_data['assessment_id'])
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, serializer_data.validated_data['assessment_id'])
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = evidence_services.add_evidences(assessments_details["body"], serializer_data.validated_data, request.user.id)
