@@ -48,12 +48,12 @@ export const AssessmentMostSignificantAttributes = (props: IAssessmentMostSignif
           {isEmpty ? (
             <ErrorEmptyData p={2} hideMessage={true} />
           ) : (
-            most_significant_items.map((item, index) => {
+            most_significant_items.map((item:any, index:number) => {
               return (
                 <Box sx={{ ...styles.centerV }} mb={1} key={index}>
                   <CircleRoundedIcon fontSize="inherit" sx={{ opacity: 0.5, fontSize: "8px" }} />
                   <Typography textTransform={"uppercase"} fontWeight="bold" sx={{ ml: 1 }}>
-                    {item}
+                    {item?.title}
                   </Typography>
                 </Box>
               );

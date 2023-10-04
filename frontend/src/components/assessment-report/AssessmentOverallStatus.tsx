@@ -12,9 +12,8 @@ import hasStatus from "@utils/hasStatus";
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects_info: ISubjectInfo[];
-  maturity_level_number: number;
-  level_value: number;
-  maturity_level_status: string;
+  maturity_level: IMaturityLevel;
+  maturity_level_count: number;
 }
 
 export const AssessmentOverallStatus = (
@@ -23,9 +22,8 @@ export const AssessmentOverallStatus = (
   const {
     status,
     subjects_info = [],
-    maturity_level_number,
-    level_value,
-    maturity_level_status,
+    maturity_level,
+    maturity_level_count,
   } = props;
 
   return (
@@ -76,9 +74,9 @@ export const AssessmentOverallStatus = (
                 mx: { xs: "auto", lg: undefined },
                 maxWidth: { xs: "310px", lg: "680px" },
               }}
-              level_value={level_value}
-              maturity_level_status={maturity_level_status}
-              maturity_level_number={maturity_level_number}
+              level_value={maturity_level?.index || 0}
+              maturity_level_status={maturity_level?.title}
+              maturity_level_number={maturity_level_count}
               systemStatus={ESystemStatus[status as ESystemStatus]}
               width="100%"
             />

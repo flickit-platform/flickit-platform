@@ -115,7 +115,7 @@ export interface ISubjectInfo {
   id: TId;
   image: string | null;
   progress: number;
-  status: TStatus;
+  status: string;
   title: string;
   total_answered_question_number: number;
   total_question_number: number;

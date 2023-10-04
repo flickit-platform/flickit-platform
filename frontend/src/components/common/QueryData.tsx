@@ -7,6 +7,7 @@ import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 import GettingThingsReadyLoading from "./loadings/GettingThingsReadyLoading";
+import ErrorRecalculating from './errors/ErrorRecalculating'
 
 interface IQueryDataProps<T> {
   loadingComponent?: JSX.Element;
@@ -127,6 +128,9 @@ export const defaultRenderError = (err: ICustomError | undefined, errorComponent
   }
   if (err.type === ECustomErrorType.NOT_FOUND || err.type === ECustomErrorType.ACCESS_DENIED) {
     return <ErrorNotFoundOrAccessDenied />;
+  }
+  if (err?.data?.code == "CALCULATE_NOT_VALID") {
+    return <ErrorRecalculating />;
   }
   return errorComponent;
 };

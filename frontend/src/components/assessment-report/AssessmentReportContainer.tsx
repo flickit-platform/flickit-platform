@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryData from "@common/QueryData";
@@ -21,34 +22,42 @@ const AssessmentReportContainer = () => {
   const queryData = useQuery<IAssessmentReportModel>({
     service: (args, config) =>
       service.fetchAssessment({ assessmentId }, config),
-    toastError: true,
+    toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
+  const calculateMaturityLevelQuery = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+  const calculate = async () => {
+    try {
+      await calculateMaturityLevelQuery.query();
+      await queryData.query();
+    } catch (e) {}
+  };
+  useEffect(() => {
+    if (queryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+      calculate();
+    }
+  }, [queryData.errorObject]);
 
   return (
     <QueryData
       {...queryData}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
       render={(data) => {
-        const {
-          assessment_project,
-          status,
-          most_significant_weaknessness_atts,
-          most_significant_strength_atts,
-          subjects_info = [],
-          total_progress,
-          level_value,maturity_level_status,
-          maturity_level_number
-        } = data || {};
-        const colorCode = assessment_project?.color?.color_code || "#101c32";
-        const isComplete = total_progress.progress === 100;
-        const { assessment_kit } = assessment_project || {};
+        const { status, assessment, subjects, top_strengths, top_weaknesses } =
+          data || {};
+        const colorCode = assessment?.color?.code || "#101c32";
+        // const isComplete = total_progress.progress === 100;
+        const { assessment_kit } = assessment || {};
         const { expert_group } = assessment_kit || {};
 
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
             <AssessmentReportTitle data={data} colorCode={colorCode} />
-            {!isComplete && (
+            {/* {!isComplete && (
               <Box mt={3}>
                 <QuestionnairesNotCompleteAlert
                   progress={total_progress.progress}
@@ -57,7 +66,7 @@ const AssessmentReportContainer = () => {
                   a={total_progress.total_answered_question_number}
                 />
               </Box>
-            )}
+            )} */}
             <Box mt={3}>
               <Paper elevation={2} sx={{ borderRadius: 3, height: "100%" }}>
                 <Box
@@ -84,11 +93,16 @@ const AssessmentReportContainer = () => {
                           md: "1.3rem",
                           fontFamily: "Roboto",
                         },
-                        marginBottom:"6px",
+                        marginBottom: "6px",
                         fontWeight: "bold",
                         textDecoration: "none",
                         height: "100%",
-                        display: {xs:"block",sm:"block",md:"flex",lg:"flex"},
+                        display: {
+                          xs: "block",
+                          sm: "block",
+                          md: "flex",
+                          lg: "flex",
+                        },
                         alignItems: "center",
                         alignSelf: "stretch",
                       }}
@@ -107,7 +121,7 @@ const AssessmentReportContainer = () => {
                       </Box>
                     </Typography>
                     <Typography color="GrayText" variant="body2">
-                      {assessment_kit?.summary}
+                      {assessment_kit?.about}
                     </Typography>
                   </Box>
                   <Box
@@ -135,7 +149,10 @@ const AssessmentReportContainer = () => {
                       }}
                       avatar={
                         <Avatar
-                        sx={{width:{xs:30,sm:40},height:{xs:30,sm:40}}}
+                          sx={{
+                            width: { xs: 30, sm: 40 },
+                            height: { xs: 30, sm: 40 },
+                          }}
                           alt={expert_group?.name}
                           src={expert_group?.picture || "/"}
                         />
@@ -158,27 +175,26 @@ const AssessmentReportContainer = () => {
               <Grid item lg={8} md={14} sm={14} xs={14}>
                 <AssessmentOverallStatus
                   status={status}
-                  subjects_info={subjects_info}
-                  level_value={level_value}
-                  maturity_level_status={maturity_level_status}
-                  maturity_level_number={maturity_level_number}
+                  subjects_info={subjects}
+                  maturity_level={assessment_kit?.maturity_level}
+                  maturity_level_count={assessment_kit?.maturity_level_count}
                 />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
                 <AssessmentMostSignificantAttributes
                   isWeakness={false}
-                  most_significant_items={most_significant_strength_atts}
+                  most_significant_items={top_strengths}
                 />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>
                 <AssessmentMostSignificantAttributes
                   isWeakness={true}
-                  most_significant_items={most_significant_weaknessness_atts}
+                  most_significant_items={top_weaknesses}
                 />
               </Grid>
               <Grid item sm={14} xs={14} id="subjects">
                 <AssessmentSubjectList
-                  subjects={subjects_info}
+                  subjects={subjects}
                   colorCode={colorCode}
                 />
               </Grid>
