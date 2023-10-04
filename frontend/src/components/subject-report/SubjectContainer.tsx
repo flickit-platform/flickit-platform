@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
-import QueryData from "@common/QueryData";
 import Title from "@common/Title";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -21,43 +20,54 @@ import { IAssessmentResultModel, ISubjectReportModel } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
-import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import SupTitleBreadcrumb, {
+  useSupTitleBreadcrumb,
+} from "@common/SupTitleBreadcrumb";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
+import QueryBatchData from "@common/QueryBatchData";
 
 const SubjectContainer = () => {
-  const { noStatus, loading, loaded, hasError, subjectQueryData, subjectId } =
-    useSubject();
+  const {
+    loading,
+    loaded,
+    hasError,
+    subjectQueryData,
+    subjectId,
+    subjectProgressQueryData,
+  } = useSubject();
 
   return (
-    <QueryData
-      {...subjectQueryData}
+    <QueryBatchData
+      queryBatchData={[subjectQueryData, subjectProgressQueryData]}
       error={hasError}
       loading={loading}
       loaded={loaded}
-      render={(data) => {
+      render={([data = {}, subjectProgress = {}]) => {
         const {
-          progress,
           title,
-          total_answered_question,
-          total_question_number,
-          results,
+          attributes,
+          subject,
         } = data;
-        const isComplete = progress === 100;
-        const attributesNumber = results.length;
+        const { question_count, answers_count } = subjectProgress;
+        const isComplete = question_count === answers_count;
+        const progress = ((answers_count || 0) / (question_count || 1)) * 100;
+
+        const attributesNumber = attributes.length;
+
         return (
           <Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
-            {!isComplete && loaded && !noStatus && (
+            {!isComplete && loaded && (
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
                   subjectName={title}
                   to={`./../../questionnaires?subject_pk=${subjectId}`}
-                  q={total_question_number}
-                  a={total_answered_question}
+                  q={question_count}
+                  a={answers_count}
                   progress={progress}
                 />
               </Box>
@@ -66,8 +76,11 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : noStatus ? (
-              <NoInsightYetMessage {...subjectQueryData} />
+            ) : !loaded ? null : !subject?.is_calculate_valid ? (
+              <NoInsightYetMessage
+                title={title}
+                no_insight_yet_message={!subject?.is_calculate_valid}
+              />
             ) : (
               <Box sx={{ px: 0.5 }}>
                 <Box
@@ -92,7 +105,7 @@ const SubjectContainer = () => {
                           <Trans
                             i18nKey="inTheRadarChartBelow"
                             values={{
-                              title: subjectQueryData?.data?.title || "",
+                              title: title || "",
                             }}
                           />
                         </Typography>
@@ -128,23 +141,44 @@ const SubjectContainer = () => {
 
 const useSubject = () => {
   const { service } = useServiceContext();
-  const { subjectId = "", assessmentId = "" } = useParams();
+  const { subjectId = "", assessmentId } = useParams();
   const resultsQueryData = useQuery<IAssessmentResultModel>({
     service: (args, config) => service.fetchResults(args, config),
   });
   const subjectQueryData = useQuery<ISubjectReportModel>({
-    service: (args: { subjectId: string; resultId: string }, config) =>
+    service: (args: { subjectId: string; assessmentId: string }, config) =>
       service.fetchSubject(args, config),
     runOnMount: false,
   });
-
+  const subjectProgressQueryData = useQuery<any>({
+    service: (args: { subjectId: string; assessmentId: string }, config) =>
+      service.fetchSubjectProgress(args, config),
+    runOnMount: false,
+  });
+  const calculateMaturityLevelQuery = useQuery({
+    service: (args = { assessmentId: assessmentId }, config) =>
+      service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+  const calculate = async () => {
+    try {
+      await calculateMaturityLevelQuery.query();
+      await subjectQueryData.query({ subjectId, assessmentId });
+      await subjectProgressQueryData.query({ subjectId, assessmentId });
+    } catch (e) {}
+  };
+  useEffect(() => {
+    if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+      calculate();
+    }
+  }, [subjectQueryData.errorObject]);
   useEffect(() => {
     if (resultsQueryData.loaded) {
       const result = resultsQueryData.data?.results.find(
         (item: any) => item?.assessment_project == assessmentId
       );
-      const { id: resultId } = result || {};
-      subjectQueryData.query({ subjectId, resultId });
+      subjectQueryData.query({ subjectId, assessmentId });
+      subjectProgressQueryData.query({ subjectId, assessmentId });
     }
   }, [resultsQueryData.loading]);
 
@@ -152,10 +186,10 @@ const useSubject = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const hasError = subjectQueryData.error || resultsQueryData.error;
+  const hasError = subjectQueryData.error || subjectProgressQueryData.error;
 
-  const loading = subjectQueryData.loading || resultsQueryData.loading;
-  const loaded = subjectQueryData.loaded;
+  const loading = subjectQueryData.loading || subjectProgressQueryData.loading;
+  const loaded = subjectQueryData.loaded || subjectProgressQueryData.loaded;
 
   const noStatus = !hasStatus(subjectQueryData.data?.status);
 
@@ -166,6 +200,7 @@ const useSubject = () => {
     hasError,
     subjectId,
     subjectQueryData,
+    subjectProgressQueryData,
   };
 };
 
@@ -174,19 +209,17 @@ const SubjectTitle = (props: {
   loading: boolean;
 }) => {
   const { data, loading } = props;
-  const {
-    assessment_kit_description,
-    assessment_project_title,
-    assessment_project_color_code,
-    assessment_project_space_title,
-    title,
-  } = data || {};
+  const { subject } = data || {};
+  const { title } = subject;
   const { spaceId, assessmentId } = useParams();
 
   useEffect(() => {
     setDocumentTitle(`${title} ${t("insight")}`);
   }, [title]);
-
+  const breadcrumbInfo = useSupTitleBreadcrumb({
+    spaceId,
+    assessmentId,
+  });
   return (
     <Title
       letterSpacing=".08em"
@@ -198,12 +231,12 @@ const SubjectTitle = (props: {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: assessment_project_space_title,
+              title: breadcrumbInfo?.space,
               to: `/${spaceId}/assessments`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title: `${assessment_project_title} ${t("insights")}`,
+              title: `${breadcrumbInfo?.assessment} ${t("insights")}`,
               to: `/${spaceId}/assessments/${assessmentId}/insights`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
@@ -223,7 +256,7 @@ const SubjectTitle = (props: {
         <QueryStatsRoundedIcon
           sx={{
             mr: 1,
-            color: assessment_project_color_code,
+            color: "rgba(0, 0, 0, 0.87)",
           }}
         />
         {loading ? (
@@ -237,11 +270,12 @@ const SubjectTitle = (props: {
   );
 };
 
-const NoInsightYetMessage = (props: { data: ISubjectReportModel }) => {
-  const { data } = props;
-  const { no_insight_yet_message, title } = data || {};
+const NoInsightYetMessage = (props: {
+  title: string;
+  no_insight_yet_message: boolean;
+}) => {
   const { subjectId } = useParams();
-
+  const { title, no_insight_yet_message } = props;
   return (
     <Box mt={2}>
       <Paper

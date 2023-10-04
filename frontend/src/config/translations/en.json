@@ -288,5 +288,7 @@
   "affectedLevel": "Affected Level",
   "optionValue":"Option {{index}}",
   "relatedSubjects": "Related subjects",
-  "loading":"Loading ..."
+  "loading":"Loading ...",
+  "insightsAreRecalculating":"Insights are recalculating",
+  "pleaseWait":"Please wait ..."
 }
