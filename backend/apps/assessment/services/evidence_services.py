@@ -32,7 +32,6 @@ def add_evidences(assessments_details, validated_data, user_id):
 
 def get_list_evidences(assessments_details, question_id, request):
     result = dict()
-    params = dict()
     if not Question.objects.filter(id=question_id).filter(
             questionnaire__assessment_kit=assessments_details["kitId"]).exists():
         result["Success"] = False
@@ -51,7 +50,7 @@ def get_list_evidences(assessments_details, question_id, request):
         params["page"] = page
 
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/evidences', params=params)
+        ASSESSMENT_URL + 'assessment-core/api/evidences', params=params)
     response_body = response.json()
     users_id = list()
     if response.status_code == status.HTTP_200_OK:
