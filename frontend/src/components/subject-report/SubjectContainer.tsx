@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
-import QueryData from "@common/QueryData";
 import Title from "@common/Title";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -33,7 +32,6 @@ import QueryBatchData from "@common/QueryBatchData";
 
 const SubjectContainer = () => {
   const {
-    noStatus,
     loading,
     loaded,
     hasError,
@@ -50,14 +48,9 @@ const SubjectContainer = () => {
       loaded={loaded}
       render={([data = {}, subjectProgress = {}]) => {
         const {
-          // progress,
           title,
-          total_answered_question,
-          total_question_number,
           attributes,
           subject,
-          top_strengths,
-          top_weaknesses,
         } = data;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
@@ -184,7 +177,6 @@ const useSubject = () => {
       const result = resultsQueryData.data?.results.find(
         (item: any) => item?.assessment_project == assessmentId
       );
-      const { id: resultId } = result || {};
       subjectQueryData.query({ subjectId, assessmentId });
       subjectProgressQueryData.query({ subjectId, assessmentId });
     }

@@ -1,8 +1,6 @@
 import Box from "@mui/material/Box";
-import Title from "@common/Title";
-import QueryData from "@common/QueryData";
+import Title from "@common/Title"; 
 import { Trans } from "react-i18next";
-import Skeleton from "@mui/material/Skeleton";
 import SubjectAttributeCard from "./SubjectAttributeCard";
 
 export const SubjectAttributeList = (props: any) => {
@@ -15,12 +13,6 @@ export const SubjectAttributeList = (props: any) => {
         {subject?.title} <Trans i18nKey="attributes" />
       </Title>
       <Box mt={3}>
-        {/* renderLoading={() => {
-            return [1, 2, 3, 4, 5].map((item) => {
-              return <Skeleton key={item} variant="rectangular" height="260px" sx={{ mb: 2, borderRadius: 2 }} />;
-            });
-          }} */}
-
         {attributes.map((result: any = {}) => {
           return (
             <SubjectAttributeCard

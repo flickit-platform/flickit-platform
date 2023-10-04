@@ -4,7 +4,6 @@ import Title from "@common/Title";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import Hidden from "@mui/material/Hidden";
 import { getMaturityLevelColors, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {

@@ -147,7 +147,7 @@ const reduceError = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
 };
 
 const reduceErrorObject = <T extends any = any>(
-  queryBatchData: IQueryData<T>[]
+  queryBatchData: IQueryData<any>[]
 ) => {
   return queryBatchData.map((query) => query.errorObject);
 };
