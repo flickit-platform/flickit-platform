@@ -91,3 +91,14 @@ class EvidencesApi(APIView):
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = evidence_services.add_evidences(assessments_details["body"], serializer_data.validated_data, request.user.id)
         return Response(result["body"], result["status_code"])
+
+
+class ListEvidencesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_id, question_id):
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = evidence_services.get_list_evidences(assessments_details["body"], question_id, request)
+        return Response(result["body"], result["status_code"])
