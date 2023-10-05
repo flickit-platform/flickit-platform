@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryData from "@common/QueryData";
+import QueryBatchData from "@common/QueryBatchData";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
@@ -30,6 +31,13 @@ const AssessmentReportContainer = () => {
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
+  const assessmentTotalProgress = useQuery({
+    service: (args, config) =>
+      service.fetchAssessmentTotalProgress(
+        { assessmentId, ...(args || {}) },
+        config
+      ),
+  });
   const calculate = async () => {
     try {
       await calculateMaturityLevelQuery.query();
@@ -43,30 +51,33 @@ const AssessmentReportContainer = () => {
   }, [queryData.errorObject]);
 
   return (
-    <QueryData
-      {...queryData}
+    <QueryBatchData
+      queryBatchData={[queryData, assessmentTotalProgress]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={(data) => {
+      render={([data = {}, progress = {}]) => {
         const { status, assessment, subjects, top_strengths, top_weaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
-        // const isComplete = total_progress.progress === 100;
         const { assessment_kit } = assessment || {};
         const { expert_group } = assessment_kit || {};
+        const { question_count, answers_count } = progress;
+        const isComplete = question_count === answers_count;
+        const total_progress =
+          ((answers_count || 0) / (question_count || 1)) * 100;
 
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
             <AssessmentReportTitle data={data} colorCode={colorCode} />
-            {/* {!isComplete && (
+            {!isComplete && (
               <Box mt={3}>
                 <QuestionnairesNotCompleteAlert
-                  progress={total_progress.progress}
+                  progress={total_progress}
                   to="./../questionnaires"
-                  q={total_progress.total_question_number}
-                  a={total_progress.total_answered_question_number}
+                  q={question_count}
+                  a={answers_count}
                 />
               </Box>
-            )} */}
+            )}
             <Box mt={3}>
               <Paper elevation={2} sx={{ borderRadius: 3, height: "100%" }}>
                 <Box
@@ -121,7 +132,7 @@ const AssessmentReportContainer = () => {
                       </Box>
                     </Typography>
                     <Typography color="GrayText" variant="body2">
-                      {assessment_kit?.about}
+                      {assessment_kit?.summary}
                     </Typography>
                   </Box>
                   <Box

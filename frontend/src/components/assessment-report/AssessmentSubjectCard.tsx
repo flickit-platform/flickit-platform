@@ -4,13 +4,15 @@ import Box from "@mui/material/Box";
 import BgLines1 from "@assets/svg/bgLines1.svg";
 import SubjectProgress from "@common/progress/SubjectProgress";
 import { Trans } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getMaturityLevelColors, styles } from "@styles";
 import { ISubjectInfo, IMaturityLevel } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
-
+import { useQuery } from "@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useEffect, useState } from "react";
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
@@ -20,12 +22,36 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   const {
     title,
     maturity_level,
-    progress = 0,
     id,
     image,
     colorCode,
     description = "",
   } = props;
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+  const [progress, setProgress] = useState<number>(0);
+  const [inProgress, setInProgress] = useState<boolean>(false);
+  const subjectProgressQueryData = useQuery<any>({
+    service: (args = { subjectId: id, assessmentId }, config) =>
+      service.fetchSubjectProgress(args, config),
+    runOnMount: false,
+  });
+  const fetchProgress = async () => {
+    try {
+      setInProgress(true)
+      const data = await subjectProgressQueryData.query();
+      console.log(data)
+      const total_progress =
+        ((data?.answers_count || 0) / (data?.question_count || 1)) *
+        100;
+      setProgress(total_progress);
+      setInProgress(false)
+    } catch (e) {}
+  };
+  useEffect(() => {
+    fetchProgress();
+  }, []);
+  console.log(progress)
   return (
     <Paper
       sx={{
@@ -71,7 +97,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           description={description}
         />
 
-        <SubjectProgress progress={progress} colorCode={colorCode} />
+        <SubjectProgress inProgress={inProgress} progress={progress} colorCode={colorCode} />
 
         <SubjectStatus title={title} maturity_level={maturity_level} />
         <Box mt="auto">

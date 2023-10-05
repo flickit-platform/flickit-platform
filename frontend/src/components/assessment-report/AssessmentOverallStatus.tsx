@@ -4,11 +4,9 @@ import Paper from "@mui/material/Paper";
 import { ESystemStatus, ISubjectInfo, TStatus, IMaturityLevel } from "@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { getColorOfStatus, styles } from "@styles";
+import { getMaturityLevelColors, styles } from "@styles";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
-import hasStatus from "@utils/hasStatus";
-
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects_info: ISubjectInfo[];
@@ -25,7 +23,7 @@ export const AssessmentOverallStatus = (
     maturity_level,
     maturity_level_count,
   } = props;
-
+  const colorPallet = getMaturityLevelColors(maturity_level_count || 0);
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
       <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
@@ -54,12 +52,9 @@ export const AssessmentOverallStatus = (
                     </span>{" "}
                     <Trans i18nKey={"statusIs"} />{" "}
                     <b
-                      // style={{
-                      //   color: getColorOfStatus(subject.status, "#747373"),
-                      // }}
                       data-cy={"status"}
                     >
-                      {subject.status || "NOT EVALUATED"}
+                      {subject?.maturity_level?.title || "NOT EVALUATED"}
                     </b>
                   </Typography>
                 );
