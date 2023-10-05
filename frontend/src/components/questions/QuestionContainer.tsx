@@ -39,7 +39,7 @@ export const QuestionContainer = () => {
         ) : (
           <Box position="relative" sx={{ ...styles.centerVH, px: { xs: 0, sm: 5, md: 6 } }}>
             {questionsInfo.questions?.[questionIndex - 1] ? (
-              <>
+              <Box>
                 <Box
                   display="flex"
                   flexDirection={"column"}
@@ -59,7 +59,7 @@ export const QuestionContainer = () => {
                     </Collapse>
                   </TransitionGroup>
                 </Box>
-              </>
+              </Box>
             ) : (
               <Box mt={6}>
                 <ErrorNotFoundOrAccessDenied />

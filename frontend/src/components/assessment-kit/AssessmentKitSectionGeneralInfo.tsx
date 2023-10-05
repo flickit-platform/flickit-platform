@@ -112,7 +112,7 @@ const AssessmentKitSectionGeneralInfo = (
     } catch {}
   };
   return (
-    <>
+    <Box>
       <QueryBatchData
         queryBatchData={[
           fetchAssessmentKitInfoQuery,
@@ -423,7 +423,7 @@ const AssessmentKitSectionGeneralInfo = (
           );
         }}
       />
-    </>
+    </Box>
   );
 };
 const OnHoverInput = (props: any) => {
@@ -444,7 +444,7 @@ const OnHoverInput = (props: any) => {
     type,
     formMethods,
   } = props;
-  const [has_error, setHasError] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const [inputData, setInputData] = useState<String>(data);
   const handleCancel = () => {
@@ -478,7 +478,7 @@ const OnHoverInput = (props: any) => {
     }
   };
   return (
-    <>
+    <Box>
       <Box
         my={1.5}
         sx={{
@@ -497,7 +497,7 @@ const OnHoverInput = (props: any) => {
             sx={{ display: "flex", flexDirection: "column", width: "100% " }}
           >
             <OutlinedInput
-              error={has_error}
+              error={hasError}
               fullWidth
               name={title}
               defaultValue={data || ""}
@@ -543,7 +543,7 @@ const OnHoverInput = (props: any) => {
                 </InputAdornment>
               }
             />
-            {has_error && (
+            {hasError && (
               <Typography color="#ba000d" variant="caption">
                 {error?.data?.[type]}
               </Typography>
@@ -586,7 +586,7 @@ const OnHoverInput = (props: any) => {
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 
@@ -622,7 +622,7 @@ const OnHoverStatus = (props: any) => {
     } catch (e) {}
   };
   return (
-    <>
+    <Box>
       <Box
         my={1.5}
         sx={{
@@ -700,7 +700,7 @@ const OnHoverStatus = (props: any) => {
           )}
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 
@@ -717,7 +717,7 @@ const OnHoverRichEditor = (props: any) => {
   };
   const { data, title, infoQuery, current_user_is_coordinator } = props;
   const [titleText, setTitleText] = useState<String>(data);
-  const [has_error, setHasError] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const handleCancel = () => {
     setShow(false);
@@ -745,7 +745,7 @@ const OnHoverRichEditor = (props: any) => {
     }
   };
   return (
-    <>
+    <Box>
       <Box
         my={1.5}
         sx={{
@@ -769,7 +769,7 @@ const OnHoverRichEditor = (props: any) => {
             >
               <RichEditorField
                 name="about"
-                label={<></>}
+                label={<Box></Box>}
                 disable_label={true}
                 required={true}
                 defaultValue={data || ""}
@@ -808,7 +808,7 @@ const OnHoverRichEditor = (props: any) => {
                   <CancelRoundedIcon sx={{ color: "#fff" }} />
                 </IconButton>
               </Box>
-              {has_error && (
+              {hasError && (
                 <Typography color="#ba000d" variant="caption">
                   {error?.data?.about}
                 </Typography>
@@ -854,7 +854,7 @@ const OnHoverRichEditor = (props: any) => {
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 const OnHoverAutocompleteAsyncField = (props: any) => {
@@ -893,7 +893,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
   const display = false;
 
   return (
-    <>
+    <Box>
       <Box
         my={1.5}
         sx={{
@@ -1019,7 +1019,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 export default AssessmentKitSectionGeneralInfo;

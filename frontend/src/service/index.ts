@@ -233,7 +233,7 @@ export const createService = (
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/assessment/reports/${assessmentId}/`, config);
+      return axios.get(`/api/v1/assessments/${assessmentId}/report/`, config);
     },
     fetchSubject(
       { subjectId, assessmentId }: { subjectId: string; assessmentId: string },

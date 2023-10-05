@@ -5,7 +5,6 @@ import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import { IAssessmentReportModel } from "@types";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
@@ -14,16 +13,16 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 interface IAssessmentReportTitle {
-  data: IAssessmentReportModel;
+  data: any;
   colorCode: string;
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   const { data, colorCode } = props;
   const {
-    assessment_project: {
+    assessment: {
       title,
-      last_modification_date,
+      last_modification_time,
       assessment_kit,
       space,
     },
@@ -63,7 +62,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
       toolbar={
         <Box sx={{ mt: { xs: 1.5, md: 0 } }}>
           <Typography variant="subLarge" sx={{ opacity: 0.6, ml: "auto" }}>
-            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_date)}
+            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_time)}
           </Typography>
         </Box>
       }

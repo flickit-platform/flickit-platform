@@ -5,7 +5,6 @@ import Title from "@common/Title";
 import { AssessmentSubjectCard } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
 import { ISubjectInfo } from "@types";
-
 interface IAssessmentSubjectListProps {
   subjects: ISubjectInfo[];
   colorCode: string;
