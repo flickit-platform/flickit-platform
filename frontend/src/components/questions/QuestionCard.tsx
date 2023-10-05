@@ -4,10 +4,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
 import Typography from "@mui/material/Typography";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
-import Button from "@mui/material/Button";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -17,7 +16,6 @@ import {
   questionActions,
   useQuestionContext,
   useQuestionDispatch,
-  setEvidenceDescription,
 } from "@/providers/QuestionProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
@@ -26,29 +24,19 @@ import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
-import { toast } from "react-toastify";
 import useDialog from "@utils/useDialog";
 import {
-  Avatar,
   Collapse,
-  DialogActions,
-  DialogContent,
   Grid,
 } from "@mui/material";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
-import useScreenResize from "@utils/useScreenResize";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
@@ -68,9 +56,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
   const {
     title,
-    answer_options,
-    index = 0,
-    answer,
     description,
   } = questionInfo;
   const { questionIndex } = useQuestionContext();
@@ -343,8 +328,10 @@ const AnswerTemplate = (props: {
 const AnswerDetails = ({ questionInfo }: any) => {
   const dialogProps = useDialog();
   const evidencesQueryData = useQuery({
-    service: (args = { questionId: questionInfo.id, assessmentId }, config) =>
-      service.fetchEvidences(args, config),
+    service: (
+      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
+      config
+    ) => service.fetchEvidences(args, config),
     toastError: true,
   });
   const hasSetCollapse = useRef(false);
@@ -354,7 +341,7 @@ const AnswerDetails = ({ questionInfo }: any) => {
 
   useEffect(() => {
     if (!hasSetCollapse.current && evidencesQueryData.loaded) {
-      if (evidencesQueryData.data?.evidences?.length > 0) {
+      if (evidencesQueryData.data?.items?.length > 0) {
         setCollapse(true);
         hasSetCollapse.current = true;
       }
@@ -560,8 +547,8 @@ const Evidence = (props: any) => {
           <QueryData
             {...evidencesQueryData}
             render={(data) => {
-              const { evidences } = data;
-              return evidences.map((item: any, index: number) => (
+              const { items } = data;
+              return items.map((item: any, index: number) => (
                 <EvidenceDetail
                   item={item}
                   setEvidenceId={setEvidenceId}
