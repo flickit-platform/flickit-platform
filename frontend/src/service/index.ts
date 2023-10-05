@@ -768,7 +768,9 @@ export const createService = (
         ? axios.put(`/assessment/updateevidence/${id}/`, {
             description,
           })
-        : axios.post(`/assessment/addevidence/${questionId}/${assessmentId}`, {
+        : axios.post(`/api/v1/evidences/`, {
+            assessment_id: assessmentId,
+            question_id: questionId,
             description,
           });
     },
@@ -789,14 +791,21 @@ export const createService = (
       });
     },
     fetchEvidences(
-      args: { questionId: TId; assessmentId: TId },
+      args: { questionId: TId; assessmentId: TId; page: number; size: number },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { questionId, assessmentId } = args || {};
+      const { questionId, assessmentId, page, size } = args || {};
 
-      return axios.get(`/assessment/evidences/${questionId}/${assessmentId}/`, {
-        ...(config || {}),
-      });
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/questions/${questionId}/evidences`,
+        {
+          ...(config || {}),
+          params: {
+            page,
+            size,
+          },
+        }
+      );
     },
     leaveSpace(
       args: { spaceId: TId },
