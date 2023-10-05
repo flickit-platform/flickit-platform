@@ -23,7 +23,6 @@ export const AssessmentOverallStatus = (
     maturity_level,
     maturity_level_count,
   } = props;
-  const colorPallet = getMaturityLevelColors(maturity_level_count || 0);
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
       <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
@@ -54,7 +53,7 @@ export const AssessmentOverallStatus = (
                     <b
                       data-cy={"status"}
                     >
-                      {subject?.maturity_level?.title || "NOT EVALUATED"}
+                      {subject?.maturity_level?.title ?? "NOT EVALUATED"}
                     </b>
                   </Typography>
                 );
@@ -69,7 +68,7 @@ export const AssessmentOverallStatus = (
                 mx: { xs: "auto", lg: undefined },
                 maxWidth: { xs: "310px", lg: "680px" },
               }}
-              level_value={maturity_level?.index || 0}
+              level_value={maturity_level?.index ?? 0}
               maturity_level_status={maturity_level?.title}
               maturity_level_number={maturity_level_count}
               systemStatus={ESystemStatus[status as ESystemStatus]}

@@ -23,7 +23,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
     title,
     maturity_level,
     id,
-    image,
     colorCode,
     description = "",
   } = props;
@@ -42,7 +41,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
       const data = await subjectProgressQueryData.query();
       console.log(data)
       const total_progress =
-        ((data?.answers_count || 0) / (data?.question_count || 1)) *
+        ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) *
         100;
       setProgress(total_progress);
       setInProgress(false)
@@ -124,7 +123,7 @@ const SubjectStatus = (
   props: Pick<IAssessmentSubjectCardProps, "title" | "maturity_level">
 ) => {
   const { title, maturity_level } = props;
-  const colorPallet = getMaturityLevelColors(maturity_level?.index || 0);
+  const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   return (
     <Box mt={8} mb={16} sx={{ ...styles.centerCH }} minHeight={"80px"}>

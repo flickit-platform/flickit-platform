@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import QueryData from "@common/QueryData";
 import QueryBatchData from "@common/QueryBatchData";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";

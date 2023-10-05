@@ -5,7 +5,6 @@ import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import { IAssessmentReportModel } from "@types";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
