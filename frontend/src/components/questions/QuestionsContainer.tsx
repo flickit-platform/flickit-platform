@@ -37,9 +37,9 @@ const QuestionsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) =>
   }, [questionIndex]);
 
   return (
-    <>
+    <Box>
       <QuestionsContainerC {...props} />
-    </>
+    </Box>
   );
 };
 
@@ -54,14 +54,14 @@ export const QuestionsContainerC = (props: PropsWithChildren<{ isReview?: boolea
       renderLoading={() => <LoadingSkeletonOfQuestions />}
       render={([_, questionnaireData]) => {
         return (
-          <>
+          <Box>
             <Box py={1}>
               <QuestionsTitle data={questionnaireData as IQuestionnaireModel} isReview={isReview} />
             </Box>
             <Box display="flex" justifyContent="center">
               {children}
             </Box>
-          </>
+          </Box>
         );
       }}
     />
