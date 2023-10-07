@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Hidden from "@mui/material/Hidden";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
@@ -16,7 +16,7 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { IAssessmentResultModel, ISubjectReportModel } from "@types";
+import { ISubjectReportModel } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
@@ -47,11 +47,7 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}]) => {
-        const {
-          title,
-          attributes,
-          subject,
-        } = data;
+        const { title, attributes, subject } = data;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
@@ -170,9 +166,8 @@ const useSubject = () => {
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
-      subjectQueryData.query({ subjectId, assessmentId });
-      subjectProgressQueryData.query({ subjectId, assessmentId });
-    
+    subjectQueryData.query({ subjectId, assessmentId });
+    subjectProgressQueryData.query({ subjectId, assessmentId });
   }, []);
 
   useEffect(() => {
