@@ -4,10 +4,7 @@ import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 import {
-  IQuestionnairesModel,
-  IQuestionnairesPageDataModel,
   TId,
-  TQueryProps,
   TQueryFunction,
 } from "@types";
 import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
@@ -17,7 +14,6 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { styles } from "@styles";
 import { useSearchParams } from "react-router-dom";
-import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: any;

@@ -36,7 +36,6 @@ const AssessmentContainer = () => {
     data,
     error,
     errorObject,
-    page,
     size,
     total,
     setPageNum,
@@ -179,9 +178,6 @@ const useFetchAssessments = () => {
 
   useEffect(() => {
     fetchAssessments();
-    // return () => {
-    //   abortController.current.abort();
-    // };
   }, [pageNum]);
 
   const fetchAssessments = async () => {

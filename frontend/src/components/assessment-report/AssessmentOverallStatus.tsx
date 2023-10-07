@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { ESystemStatus, ISubjectInfo, TStatus, IMaturityLevel } from "@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { getMaturityLevelColors, styles } from "@styles";
+import { styles } from "@styles";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
 interface IAssessmentOverallStatusProps {

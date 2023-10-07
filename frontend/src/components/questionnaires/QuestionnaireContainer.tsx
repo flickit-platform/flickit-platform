@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
@@ -7,26 +6,16 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import {
-  IAssessmentReportModel,
-  IQuestionnairesModel,
-  IQuestionnairesPageDataModel,
-  ITotalProgressModel,
-  TQueryProps,
-} from "@types";
+import { IQuestionnairesModel } from "@types";
 import Title from "@common/Title";
-import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import SupTitleBreadcrumb, {
   useSupTitleBreadcrumb,
 } from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import hasStatus from "@utils/hasStatus";
-import hasMaturityLevelStatus from "@/utils/hasMaturityLevelStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "@common/PermissionControl";
@@ -49,9 +38,6 @@ const QuestionnaireContainer = () => {
         <NotCompletedAlert
           isCompleted={progress == 100}
           hasStatus={false}
-          // hasMaturityLevelStatus(
-          //   assessmentQueryData.data?.maturity_level_status
-          // )
           loading={questionnaireQueryData.loading}
         />
         <Box

@@ -142,9 +142,6 @@ const SubjectContainer = () => {
 const useSubject = () => {
   const { service } = useServiceContext();
   const { subjectId = "", assessmentId } = useParams();
-  const resultsQueryData = useQuery<IAssessmentResultModel>({
-    service: (args, config) => service.fetchResults(args, config),
-  });
   const subjectQueryData = useQuery<ISubjectReportModel>({
     service: (args: { subjectId: string; assessmentId: string }, config) =>
       service.fetchSubject(args, config),
@@ -156,7 +153,7 @@ const useSubject = () => {
     runOnMount: false,
   });
   const calculateMaturityLevelQuery = useQuery({
-    service: (args = { assessmentId: assessmentId }, config) =>
+    service: (args = { assessmentId }, config) =>
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
@@ -173,14 +170,10 @@ const useSubject = () => {
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
-    if (resultsQueryData.loaded) {
-      const result = resultsQueryData.data?.results.find(
-        (item: any) => item?.assessment_project == assessmentId
-      );
       subjectQueryData.query({ subjectId, assessmentId });
       subjectProgressQueryData.query({ subjectId, assessmentId });
-    }
-  }, [resultsQueryData.loading]);
+    
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
