@@ -113,7 +113,6 @@ export const defaultRenderError = (
   if (err?.data?.code == "CALCULATE_NOT_VALID") {
     return <ErrorRecalculating />;
   }
-  console.log("asqar", err?.data.code);
   return errorComponent;
 };
 

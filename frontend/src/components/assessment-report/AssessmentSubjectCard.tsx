@@ -39,7 +39,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
     try {
       setInProgress(true)
       const data = await subjectProgressQueryData.query();
-      console.log(data)
       const total_progress =
         ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) *
         100;
