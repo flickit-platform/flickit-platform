@@ -795,10 +795,12 @@ export const createService = (
       const { questionId, assessmentId, page, size } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessments/${assessmentId}/questions/${questionId}/evidences`,
+        `/api/v1/evidences/`,
         {
           ...(config ?? {}),
           params: {
+            question_id: questionId,
+            assessment_id: assessmentId,
             page,
             size,
           },
