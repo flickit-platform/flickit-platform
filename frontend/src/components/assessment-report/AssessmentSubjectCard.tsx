@@ -19,13 +19,7 @@ interface IAssessmentSubjectCardProps extends ISubjectInfo {
 }
 
 export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
-  const {
-    title,
-    maturity_level,
-    id,
-    colorCode,
-    description = "",
-  } = props;
+  const { title, maturity_level, id, colorCode, description = "" } = props;
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
@@ -37,13 +31,12 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   });
   const fetchProgress = async () => {
     try {
-      setInProgress(true)
+      setInProgress(true);
       const data = await subjectProgressQueryData.query();
       const total_progress =
-        ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) *
-        100;
+        ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) * 100;
       setProgress(total_progress);
-      setInProgress(false)
+      setInProgress(false);
     } catch (e) {}
   };
   useEffect(() => {
@@ -94,7 +87,11 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           description={description}
         />
 
-        <SubjectProgress inProgress={inProgress} progress={progress} colorCode={colorCode} />
+        <SubjectProgress
+          inProgress={inProgress}
+          progress={progress}
+          colorCode={colorCode}
+        />
 
         <SubjectStatus title={title} maturity_level={maturity_level} />
         <Box mt="auto">
@@ -190,7 +187,7 @@ const ReadMoreAboutSubject = (
         className="subj_desc"
         sx={{
           transition: "opacity .2s .4s ease, z-index .2s .4s ease",
-          backgroundColor: "#000000e3",
+          backgroundColor: "#000000cc",
           opacity: 0,
           zIndex: -1,
           px: 2,
@@ -201,6 +198,7 @@ const ReadMoreAboutSubject = (
           transform: "translateX(-50%)",
           width: "calc(100% - 25px)",
           textAlign: "center",
+          color:"#F4F4F8"
         }}
       >
         <Typography>{description}</Typography>
