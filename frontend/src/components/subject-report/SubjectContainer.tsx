@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Hidden from "@mui/material/Hidden";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
@@ -16,7 +16,7 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { IAssessmentResultModel, ISubjectReportModel } from "@types";
+import { ISubjectReportModel } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
@@ -47,11 +47,7 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}]) => {
-        const {
-          title,
-          attributes,
-          subject,
-        } = data;
+        const { title, attributes, subject } = data;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
@@ -142,9 +138,6 @@ const SubjectContainer = () => {
 const useSubject = () => {
   const { service } = useServiceContext();
   const { subjectId = "", assessmentId } = useParams();
-  const resultsQueryData = useQuery<IAssessmentResultModel>({
-    service: (args, config) => service.fetchResults(args, config),
-  });
   const subjectQueryData = useQuery<ISubjectReportModel>({
     service: (args: { subjectId: string; assessmentId: string }, config) =>
       service.fetchSubject(args, config),
@@ -156,7 +149,7 @@ const useSubject = () => {
     runOnMount: false,
   });
   const calculateMaturityLevelQuery = useQuery({
-    service: (args = { assessmentId: assessmentId }, config) =>
+    service: (args = { assessmentId }, config) =>
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
@@ -173,14 +166,9 @@ const useSubject = () => {
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
-    if (resultsQueryData.loaded) {
-      const result = resultsQueryData.data?.results.find(
-        (item: any) => item?.assessment_project == assessmentId
-      );
-      subjectQueryData.query({ subjectId, assessmentId });
-      subjectProgressQueryData.query({ subjectId, assessmentId });
-    }
-  }, [resultsQueryData.loading]);
+    subjectQueryData.query({ subjectId, assessmentId });
+    subjectProgressQueryData.query({ subjectId, assessmentId });
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);

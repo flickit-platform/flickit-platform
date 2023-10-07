@@ -50,7 +50,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   useEffect(() => {
     fetchProgress();
   }, []);
-  console.log(progress)
   return (
     <Paper
       sx={{
@@ -106,7 +105,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
             fullWidth
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
-            state={{ status }}
             startIcon={
               progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />
             }

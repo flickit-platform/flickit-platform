@@ -70,14 +70,22 @@ const DefaultInfoItemComponent = (
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item) => (
-        <Chip size="small" label={item} sx={{ ml: 0.3 }} component="span" />
+      {items.map((item, index) => (
+        <Chip
+          key={index}
+          size="small"
+          label={item}
+          sx={{ ml: 0.3 }}
+          component="span"
+        />
       ))}
     </DefaultInfoItemComponent>
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item, index) => `${item}${index === items.length - 1 ? "" : ","} `)}
+      {items.map(
+        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+      )}
     </DefaultInfoItemComponent>
   ),
 };
@@ -96,7 +104,12 @@ const renderInfo = (
     bg?: "white";
   } = {}
 ) => {
-  const { component: Component = DefaultInfoItemComponent, renderMap = defaultRenderMap, useTitleAsFallbackType, bg } = config;
+  const {
+    component: Component = DefaultInfoItemComponent,
+    renderMap = defaultRenderMap,
+    useTitleAsFallbackType,
+    bg,
+  } = config;
   const { title, item, type, action } = info;
   const key = useTitleAsFallbackType ? type || title : type;
 

@@ -31,7 +31,6 @@ import hasMaturityLevel from "@utils/hasMaturityLevel";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
-import QueryData from "../common/QueryData";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
   item: IAssessment & { space: any };
@@ -41,7 +40,7 @@ interface IAssessmentCardProps {
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
-  const [show, setShow] = useState<boolean | false>(false);
+  const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
   const { result_maturity_level, is_calculate_valid, assessment_kit, id } =
