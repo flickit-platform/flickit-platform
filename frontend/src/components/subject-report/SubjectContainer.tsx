@@ -47,20 +47,19 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}]) => {
-        const { title, attributes, subject } = data;
+        const { attributes, subject } = data;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
 
         const attributesNumber = attributes.length;
-
         return (
           <Box>
             <SubjectTitle {...subjectQueryData} loading={loading} />
             {!isComplete && loaded && (
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
-                  subjectName={title}
+                  subjectName={subject?.title}
                   to={`./../../questionnaires?subject_pk=${subjectId}`}
                   q={question_count}
                   a={answers_count}
@@ -74,7 +73,7 @@ const SubjectContainer = () => {
               </Box>
             ) : !loaded ? null : !subject?.is_calculate_valid ? (
               <NoInsightYetMessage
-                title={title}
+                title={subject?.title}
                 no_insight_yet_message={!subject?.is_calculate_valid}
               />
             ) : (
@@ -101,7 +100,7 @@ const SubjectContainer = () => {
                           <Trans
                             i18nKey="inTheRadarChartBelow"
                             values={{
-                              title: title || "",
+                              title: subject?.title || "",
                             }}
                           />
                         </Typography>
