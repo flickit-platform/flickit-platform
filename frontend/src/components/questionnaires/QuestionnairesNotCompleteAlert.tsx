@@ -11,7 +11,6 @@ type TQuestionnairesNotCompleteAlertProps = {
   progress?: number;
   q?: number;
   a?: number;
-  title?:string;
 };
 
 const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertProps) => {
