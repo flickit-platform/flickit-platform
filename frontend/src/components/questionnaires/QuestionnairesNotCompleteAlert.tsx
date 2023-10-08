@@ -11,6 +11,7 @@ type TQuestionnairesNotCompleteAlertProps = {
   progress?: number;
   q?: number;
   a?: number;
+  title?:string;
 };
 
 const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertProps) => {
@@ -42,7 +43,7 @@ const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertPr
               to={to}
             >
               {subjectName} <Trans i18nKey="questionnaires" />{" "}
-              {q && a && (
+              {q && (
                 <QANumberIndicator
                   q={q}
                   a={a}
