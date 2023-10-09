@@ -103,7 +103,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
         <SubjectProgress
           inProgress={inProgress}
           progress={progress}
-          colorCode={colorCode}
         />
 
         <SubjectStatus title={title} maturity_level={maturity_level} />
