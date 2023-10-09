@@ -6,7 +6,6 @@ from baseinfo.models.questionmodels import Question
 from account.models import User
 
 
-
 def add_evidences(assessments_details, validated_data, user_id):
     result = dict()
     if not Question.objects.filter(id=validated_data["question_id"]).filter(
@@ -21,7 +20,7 @@ def add_evidences(assessments_details, validated_data, user_id):
             "questionId": validated_data["question_id"],
             }
     response = requests.post(
-        ASSESSMENT_URL + f'assessment-core/api/evidences', json=data)
+        ASSESSMENT_URL + 'assessment-core/api/evidences', json=data)
     response_body = response.json()
 
     result["Success"] = True
@@ -61,7 +60,8 @@ def get_list_evidences(assessments_details, question_id, request):
             for i in range(len(response_body["items"])):
                 user = users.get(id=response_body["items"][i].pop("createdById"))
                 response_body["items"][i]["created_by"] = {"id": user.id, "display_name": user.display_name}
-                response_body["items"][i]["last_modification_date"] = response_body["items"][i].pop("lastModificationTime")
+                response_body["items"][i]["last_modification_date"] = response_body["items"][i].pop(
+                    "lastModificationTime")
 
     result["Success"] = True
     result["body"] = response_body

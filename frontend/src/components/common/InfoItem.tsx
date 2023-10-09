@@ -18,7 +18,6 @@ interface IInfoItems {
 
 const InfoItem = (props: IInfoItems) => {
   const { info, renderMap, component, bg } = props;
-  
 
   return renderInfo(info, { component, renderMap, bg });
 };
@@ -43,6 +42,7 @@ const DefaultInfoItemComponent = (
         py: 0.6,
         px: 1,
         borderRadius: 1,
+        alignItems: "baseline",
       }}
       justifyContent="space-between"
     >
@@ -71,12 +71,11 @@ const DefaultInfoItemComponent = (
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item, index) => (
+      {items.map((item) => (
         <Chip
-          key={index}
           size="small"
           label={item}
-          sx={{ ml: 0.3 }}
+          sx={{ ml: 0.3, mt: 0.5 }}
           component="span"
         />
       ))}
@@ -84,9 +83,18 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map(
-        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
-      )}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "start",
+          flexWrap: "wrap",
+          ml: 4,
+        }}
+      >
+        {items.map(
+          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+        )}
+      </Box>
     </DefaultInfoItemComponent>
   ),
 };
