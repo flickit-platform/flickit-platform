@@ -18,7 +18,6 @@ interface IInfoItems {
 
 const InfoItem = (props: IInfoItems) => {
   const { info, renderMap, component, bg } = props;
-  
 
   return renderInfo(info, { component, renderMap, bg });
 };
@@ -72,20 +71,11 @@ const DefaultInfoItemComponent = (
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-<<<<<<< HEAD
-      {items.map((item, index) => (
-        <Chip
-          key={index}
-          size="small"
-          label={item}
-          sx={{ ml: 0.3 }}
-=======
       {items.map((item) => (
         <Chip
           size="small"
           label={item}
           sx={{ ml: 0.3, mt: 0.5 }}
->>>>>>> 0bc81e32210cd6ceb3c606f930e05400fac8f900
           component="span"
         />
       ))}
@@ -93,11 +83,6 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-<<<<<<< HEAD
-      {items.map(
-        (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
-      )}
-=======
       <Box
         sx={{
           display: "flex",
@@ -110,7 +95,6 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
           (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
         )}
       </Box>
->>>>>>> 0bc81e32210cd6ceb3c606f930e05400fac8f900
     </DefaultInfoItemComponent>
   ),
 };
