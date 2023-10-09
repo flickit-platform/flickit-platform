@@ -197,7 +197,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         questions_id = list()
         for item in response_body["items"]:
             questions_id.append(item["questionId"])
-        questions = questionnaire.question_set
+        questions = questionnaire.question_set.order_by("index")
         items = LoadQuestionnaireAnswerSerializer(questions, many=True).data
         for i in range(len(items)):
             if items[i]["id"] in questions_id:
