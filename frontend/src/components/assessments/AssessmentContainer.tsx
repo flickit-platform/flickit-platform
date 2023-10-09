@@ -8,7 +8,7 @@ import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
 import { Box, Typography } from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
 import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
@@ -29,21 +29,14 @@ import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
-  const { spaceId } = useParams();
+  const { spaceId, page } = useParams();
+  const navigate = useNavigate();
   const { current_space } = userInfo;
   const { fetchAssessments, ...rest } = useFetchAssessments();
-  const {
-    data,
-    error,
-    errorObject,
-    size,
-    total,
-    setPageNum,
-    pageNum,
-  } = rest;
+  const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPageNum(value);
+    navigate(`/${spaceId}/assessments/${value}`);
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
@@ -147,7 +140,7 @@ const AssessmentContainer = () => {
                     variant="outlined"
                     color="primary"
                     count={pageCount}
-                    page={pageNum}
+                    page={Number(page)}
                     onChange={handleChange}
                   />
                 </Stack>
@@ -168,24 +161,22 @@ const useFetchAssessments = () => {
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [pageNum, setPageNum] = useState(1);
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined
   );
-  const { spaceId } = useParams();
+  const { spaceId, page } = useParams();
   const { service } = useServiceContext();
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
     fetchAssessments();
-  }, [pageNum]);
-
+  }, [page]);
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);
     try {
       const { data: res } = await service.fetchAssessments(
-        { spaceId:spaceId, size: 4, page: pageNum - 1 },
+        { spaceId: spaceId, size: 4, page: parseInt(page ?? "1", 10) - 1 },
         { signal: abortController.current.signal }
       );
       if (res) {
@@ -232,8 +223,6 @@ const useFetchAssessments = () => {
     loaded: !!data,
     error,
     errorObject,
-    setPageNum,
-    pageNum,
     fetchAssessments,
     deleteAssessment,
   };

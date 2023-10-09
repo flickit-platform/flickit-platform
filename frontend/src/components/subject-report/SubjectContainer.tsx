@@ -198,7 +198,7 @@ const SubjectTitle = (props: {
   const { data, loading } = props;
   const { subject } = data || {};
   const { title } = subject;
-  const { spaceId, assessmentId } = useParams();
+  const { spaceId, assessmentId,page } = useParams();
 
   useEffect(() => {
     setDocumentTitle(`${title} ${t("insight")}`);
@@ -219,12 +219,12 @@ const SubjectTitle = (props: {
           routes={[
             {
               title: breadcrumbInfo?.space,
-              to: `/${spaceId}/assessments`,
+              to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${breadcrumbInfo?.assessment} ${t("insights")}`,
-              to: `/${spaceId}/assessments/${assessmentId}/insights`,
+              to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

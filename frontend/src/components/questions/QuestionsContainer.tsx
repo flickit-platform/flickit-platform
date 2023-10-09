@@ -1,7 +1,11 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useNavigate, useParams } from "react-router-dom";
-import { EAssessmentStatus, questionActions, useQuestionDispatch } from "@/providers/QuestionProvider";
+import {
+  EAssessmentStatus,
+  questionActions,
+  useQuestionDispatch,
+} from "@/providers/QuestionProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import LoadingSkeletonOfQuestions from "@common/loadings/LoadingSkeletonOfQuestions";
@@ -9,7 +13,9 @@ import QuestionsTitle from "./QuestionsTitle";
 import QueryBatchData from "@common/QueryBatchData";
 import { IQuestionnaireModel, IQuestionsModel, TId } from "@types";
 
-const QuestionsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) => {
+const QuestionsContainer = (
+  props: PropsWithChildren<{ isReview?: boolean }>
+) => {
   const { questionIndex } = useParams();
   const dispatch = useQuestionDispatch();
   const navigate = useNavigate();
@@ -22,7 +28,9 @@ const QuestionsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) =>
     if (
       !props.isReview &&
       questionIndex !== "completed" &&
-      (isNaN(Number(questionIndex)) || Number(questionIndex) === 0 || Number(questionIndex) < 0)
+      (isNaN(Number(questionIndex)) ||
+        Number(questionIndex) === 0 ||
+        Number(questionIndex) < 0)
     ) {
       navigate("./1", { replace: true });
       return;
@@ -43,7 +51,9 @@ const QuestionsContainer = (props: PropsWithChildren<{ isReview?: boolean }>) =>
   );
 };
 
-export const QuestionsContainerC = (props: PropsWithChildren<{ isReview?: boolean }>) => {
+export const QuestionsContainerC = (
+  props: PropsWithChildren<{ isReview?: boolean }>
+) => {
   const { children, isReview = false } = props;
   const { questionsResultQueryData, questionnaireQueryData } = useQuestions();
 
@@ -52,11 +62,15 @@ export const QuestionsContainerC = (props: PropsWithChildren<{ isReview?: boolea
       queryBatchData={[questionsResultQueryData, questionnaireQueryData]}
       loaded={questionnaireQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
-      render={([_, questionnaireData]) => {
+      render={([data, questionnaireData]) => {
+        console.log(data)
         return (
           <Box>
             <Box py={1}>
-              <QuestionsTitle data={questionnaireData as IQuestionnaireModel} isReview={isReview} />
+              <QuestionsTitle
+                data={questionnaireData as IQuestionnaireModel}
+                isReview={isReview}
+              />
             </Box>
             <Box display="flex" justifyContent="center">
               {children}
@@ -72,12 +86,20 @@ const useQuestions = () => {
   const { service } = useServiceContext();
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const dispatch = useQuestionDispatch();
-  const { questionIndex, questionnaireId = "", assessmentId = "" } = useParams();
+  const {
+    questionnaireId = "",
+    assessmentId = "",
+  } = useParams();
   const questionnaireQueryData = useQuery<IQuestionnaireModel>({
-    service: (args, config) => service.fetchQuestionnaire({ questionnaireId }, config),
+    service: (args, config) =>
+      service.fetchQuestionnaire({ questionnaireId }, config),
   });
   const questionsResultQueryData = useQuery<IQuestionsModel>({
-    service: (args, config) => service.fetchQuestionsResult({ questionnaireId, assessmentId,page:0,size:50 }, config),
+    service: (args, config) =>
+      service.fetchQuestionsResult(
+        { questionnaireId, assessmentId, page: 0, size: 50 },
+        config
+      ),
   });
 
   useEffect(() => {
@@ -87,7 +109,7 @@ const useQuestions = () => {
         questionActions.setQuestionsInfo({
           total_number_of_questions: items.length,
           resultId: "",
-          questions:items,
+          questions: items,
         })
       );
     }

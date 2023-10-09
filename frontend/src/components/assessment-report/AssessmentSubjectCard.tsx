@@ -42,11 +42,24 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   useEffect(() => {
     fetchProgress();
   }, []);
+  function hexToRGBA(hex:string, alpha:number) {
+    // Remove the '#' if it's there
+    hex = hex.replace(/^#/, '');
+
+    // Parse the hex value to separate R, G, and B values
+    let bigint = parseInt(hex, 16);
+    let r = (bigint >> 16) & 255;
+    let g = (bigint >> 8) & 255;
+    let b = bigint & 255;
+
+    // Return the RGBA value
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
   return (
     <Paper
       sx={{
         borderRadius: 3,
-        backgroundColor: colorCode,
+        backgroundColor: hexToRGBA(colorCode, 0.1),
         backgroundImage: `url(${BgLines1})`,
         backgroundPosition: "30% 30%",
         backgroundSize: "cover",
@@ -66,7 +79,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
         justifyContent="center"
         sx={{
           textAlign: "center",
-          color: (t) => t.palette.getContrastText(colorCode),
+          color: "#000000de",
           px: { xs: 2, sm: 5 },
           py: { xs: 3, sm: 5 },
           height: "100%",
@@ -90,7 +103,6 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
         <SubjectProgress
           inProgress={inProgress}
           progress={progress}
-          colorCode={colorCode}
         />
 
         <SubjectStatus title={title} maturity_level={maturity_level} />
@@ -157,7 +169,7 @@ const ReadMoreAboutSubject = (
     "title" | "colorCode" | "description"
   >
 ) => {
-  const { title, colorCode, description } = props;
+  const { title, description } = props;
   return (
     <Box
       sx={{
@@ -173,9 +185,7 @@ const ReadMoreAboutSubject = (
         sx={{
           opacity: 0.7,
           letterSpacing: ".14em",
-          color: (t) => {
-            return t.palette.getContrastText(colorCode);
-          },
+          color: "#000000de",
           textDecoration: "underline",
           cursor: "pointer",
         }}

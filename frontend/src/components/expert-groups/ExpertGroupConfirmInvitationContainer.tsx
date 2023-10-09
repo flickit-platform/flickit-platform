@@ -41,7 +41,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
   };
 
   const decline = () => {
-    navigate(userInfo.current_space?.id ? `/${userInfo.current_space?.id}/assessments` : "/spaces");
+    navigate(userInfo.current_space?.id ? `/${userInfo.current_space?.id}/assessments/1` : "/spaces");
   };
 
   return (

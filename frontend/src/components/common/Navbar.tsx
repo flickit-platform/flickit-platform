@@ -49,7 +49,7 @@ const Navbar = () => {
         variant="h6"
         sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
         component={NavLink}
-        to={current_space?.id ? `/${current_space?.id}/assessments` : `/spaces`}
+        to={current_space?.id ? `/${current_space?.id}/assessments/1` : `/spaces`}
       >
         <NavLogo />
       </Typography>
@@ -69,7 +69,7 @@ const Navbar = () => {
             <ListItemButton
               sx={{ textAlign: "left", borderRadius: 1.5 }}
               component={NavLink}
-              to={`/${current_space?.id}/assessments`}
+              to={`/${current_space?.id}/assessments/1`}
             >
               <ListItemText
                 primary={
@@ -156,7 +156,7 @@ const Navbar = () => {
             }}
             to={
               current_space?.id
-                ? `/${current_space?.id}/assessments`
+                ? `/${current_space?.id}/assessments/1`
                 : `/spaces`
             }
           >
@@ -246,7 +246,7 @@ const NavLogo = () => {
       width="100%"
       height="100%"
       viewBox="0 0 787 250"
-      enable-background="new 0 0 787 250"
+     enableBackground="new 0 0 787 250"
       xmlSpace="preserve"
     >
       <g>
@@ -309,8 +309,8 @@ const NavLogo = () => {
           <stop offset="1" style={{ stopColor: "#5AD0AF" }} />
         </linearGradient>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           fill="url(#SVGID_3_)"
           d="M194.392,72.245
 		c-4.542-10.081-12.551-16.546-22.875-17.813L60.089,54.63c49.596,6.273,109.876,23.398,109.876,23.398l0,0
@@ -380,7 +380,7 @@ const SpacesButton = ({ currentSpace }: any) => {
         data-cy="spaces"
         onClick={() =>
           currentSpace?.id
-            ? navigate(`/${currentSpace?.id}/assessments`)
+            ? navigate(`/${currentSpace?.id}/assessments/1`)
             : navigate("/spaces")
         }
         sx={{
@@ -453,7 +453,7 @@ const SpacesButton = ({ currentSpace }: any) => {
               component={NavLink}
               to={
                 currentSpace?.id
-                  ? `/${currentSpace?.id}/assessments`
+                  ? `/${currentSpace?.id}/assessments/1`
                   : `/spaces`
               }
               onClick={handleClose}

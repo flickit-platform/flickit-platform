@@ -5,7 +5,6 @@ import { Trans } from "react-i18next";
 
 interface ISubjectProgressProps {
   progress: number;
-  colorCode: string;
   inProgress?: boolean;
 }
 
@@ -15,7 +14,7 @@ const progressToLabelMap: Record<number, string> = {
 };
 
 const SubjectProgress = (props: ISubjectProgressProps) => {
-  const { progress, colorCode, inProgress } = props;
+  const { progress, inProgress } = props;
 
   return (
     <Box mt={9} mb={4}>
@@ -37,9 +36,7 @@ const SubjectProgress = (props: ISubjectProgressProps) => {
               opacity: 0.7,
               fontFamily: "Oswald",
               fontWeight: 400,
-              color: colorCode
-                ? (t) => t.palette.getContrastText(colorCode)
-                : "white",
+              color: "#000000de",
             }}
             variant="h6"
             textTransform={"uppercase"}
