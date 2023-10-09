@@ -3,7 +3,12 @@ import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import throttle from "lodash/throttle";
 import TextField from "@mui/material/TextField";
 import { TQueryServiceFunction, useQuery } from "@utils/useQuery";
-import { Controller, ControllerRenderProps, RegisterOptions, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  ControllerRenderProps,
+  RegisterOptions,
+  useFormContext,
+} from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
@@ -12,14 +17,31 @@ import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
 
-type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<IAutocompleteAsyncFieldBase, "serviceQueryData" | "field">;
+type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
+  IAutocompleteAsyncFieldBase,
+  "serviceQueryData" | "field"
+>;
 
-interface IAutocompleteAsyncFieldProps<T> extends TUnionAutocompleteAndAutocompleteAsyncFieldBase {
-  rules?: Omit<RegisterOptions<any, any>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
+interface IAutocompleteAsyncFieldProps
+  extends TUnionAutocompleteAndAutocompleteAsyncFieldBase {
+  rules?: Omit<
+    RegisterOptions<any, any>,
+    "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
+  >;
 }
 
-const AutocompleteAsyncField = <T extends any = any>(props: IAutocompleteAsyncFieldProps<T> & Omit<TQueryProps, "data">) => {
-  const { name, rules = {}, multiple, defaultValue = multiple ? undefined : null, required = false, ...rest } = props;
+const AutocompleteAsyncField = (
+  props: IAutocompleteAsyncFieldProps & Omit<TQueryProps, "data">
+) => {
+  const {
+    name,
+    rules = {},
+    multiple,
+    defaultValue = multiple ? undefined : null,
+    required = false,
+    editable = false,
+    ...rest
+  } = props;
   const { control, setValue } = useFormContext();
   const { options } = rest;
   return (
@@ -38,6 +60,7 @@ const AutocompleteAsyncField = <T extends any = any>(props: IAutocompleteAsyncFi
             required={required}
             field={field}
             defaultValue={defaultValue}
+            editable={editable}
           />
         );
       }}
@@ -45,7 +68,8 @@ const AutocompleteAsyncField = <T extends any = any>(props: IAutocompleteAsyncFi
   );
 };
 
-interface IAutocompleteAsyncFieldBase extends Omit<AutocompleteProps<any, any, any, any>, "renderInput"> {
+interface IAutocompleteAsyncFieldBase
+  extends Omit<AutocompleteProps<any, any, any, any>, "renderInput"> {
   field: ControllerRenderProps<any, any>;
   formatRequest?: (request: any) => any;
   name: string;
@@ -54,17 +78,24 @@ interface IAutocompleteAsyncFieldBase extends Omit<AutocompleteProps<any, any, a
   filterSelectedOption?: (options: readonly any[], value: any) => any[];
   required?: boolean;
   searchOnType?: boolean;
+  editable?: boolean;
 }
 
-const AutocompleteBaseField = (props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">) => {
+const AutocompleteBaseField = (
+  props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">
+) => {
   const {
+    editable,
     field,
     formatRequest = (request) => request,
     helperText,
     label,
-    getOptionLabel = (option) => (typeof option === "string" ? option : option?.title || null),
+    getOptionLabel = (option) =>
+      typeof option === "string" ? option : option?.title || null,
     filterSelectedOption = (options: readonly any[], value: any): any[] =>
-      value ? options.filter((option) => option?.id != value?.id) : (options as any[]),
+      value
+        ? options.filter((option) => option?.id != value?.id)
+        : (options as any[]),
     renderOption,
     noOptionsText,
     required,
@@ -87,7 +118,9 @@ const AutocompleteBaseField = (props: IAutocompleteAsyncFieldBase & Omit<TQueryP
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
-  const [inputValue, setInputValue] = useState(() => getOptionLabel(defaultValue) || "");
+  const [inputValue, setInputValue] = useState(
+    () => getOptionLabel(defaultValue) || ""
+  );
   const [options, setOptions] = useState<any[]>([]);
   const fetch = useMemo(
     () =>
@@ -129,11 +162,23 @@ const AutocompleteBaseField = (props: IAutocompleteAsyncFieldBase & Omit<TQueryP
       value={value || (multiple ? undefined : null)}
       multiple={multiple}
       loading={loading}
-      loadingText={options.length > 5 ? <LoadingComponent options={options} /> : undefined}
+      loadingText={
+        options.length > 5 ? <LoadingComponent options={options} /> : undefined
+      }
       size="small"
       autoHighlight
       getOptionLabel={getOptionLabel}
-      options={error ? [{}] : options}
+      options={(() => {
+        if (error) {
+          return [{}];
+        } else if (editable) {
+          return options.filter(
+            (option: any) => !value.some((selectedOpts: any) => selectedOpts.id === option.id)
+          );
+        } else {
+          return options;
+        }
+      })()}
       autoComplete
       disablePortal={false}
       includeInputInList
@@ -183,7 +228,12 @@ const LoadingComponent = ({ options }: { options: readonly any[] }) => {
   return (
     <Box display="flex" flexDirection="column" m={-1}>
       {forLoopComponent(options.length, (index) => (
-        <LoadingSkeleton width="100%" height="36px" sx={{ my: 0.3, borderRadius: 1 }} key={index} />
+        <LoadingSkeleton
+          width="100%"
+          height="36px"
+          sx={{ my: 0.3, borderRadius: 1 }}
+          key={index}
+        />
       ))}
     </Box>
   );

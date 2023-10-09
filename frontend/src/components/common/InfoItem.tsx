@@ -43,6 +43,7 @@ const DefaultInfoItemComponent = (
         py: 0.6,
         px: 1,
         borderRadius: 1,
+        alignItems: "baseline",
       }}
       justifyContent="space-between"
     >
@@ -71,12 +72,20 @@ const DefaultInfoItemComponent = (
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
+<<<<<<< HEAD
       {items.map((item, index) => (
         <Chip
           key={index}
           size="small"
           label={item}
           sx={{ ml: 0.3 }}
+=======
+      {items.map((item) => (
+        <Chip
+          size="small"
+          label={item}
+          sx={{ ml: 0.3, mt: 0.5 }}
+>>>>>>> 0bc81e32210cd6ceb3c606f930e05400fac8f900
           component="span"
         />
       ))}
@@ -84,9 +93,24 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   ),
   array: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
+<<<<<<< HEAD
       {items.map(
         (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
       )}
+=======
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "start",
+          flexWrap: "wrap",
+          ml: 4,
+        }}
+      >
+        {items.map(
+          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+        )}
+      </Box>
+>>>>>>> 0bc81e32210cd6ceb3c606f930e05400fac8f900
     </DefaultInfoItemComponent>
   ),
 };
