@@ -18,6 +18,7 @@ interface IInfoItems {
 
 const InfoItem = (props: IInfoItems) => {
   const { info, renderMap, component, bg } = props;
+  
 
   return renderInfo(info, { component, renderMap, bg });
 };
