@@ -139,7 +139,7 @@ const NotCompletedAlert = (props: {
 };
 
 const QuestionnaireTitle = () => {
-  const { spaceId, assessmentId } = useParams();
+  const { spaceId, assessmentId,page } = useParams();
   const breadcrumbInfo = useSupTitleBreadcrumb({
     spaceId,
     assessmentId,
@@ -157,7 +157,7 @@ const QuestionnaireTitle = () => {
           routes={[
             {
               title: breadcrumbInfo.space,
-              to: `/${spaceId}/assessments`,
+              to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {

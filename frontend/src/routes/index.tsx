@@ -71,16 +71,16 @@ const Routes = () => {
           {/* Spaces and assessments related routes */}
           <Route path="/spaces" element={<SpacesScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
-          <Route path="/:spaceId/assessments" element={<AssessmentsScreen />} />
-          <Route path="/:spaceId/assessments/:assessmentId/insights" element={<AssessmentReportScreen />} />
-          <Route path="/:spaceId/assessments/:assessmentId/insights/:subjectId" element={<SubjectReportScreen />} />
+          <Route path="/:spaceId/assessments/:page" element={<AssessmentsScreen />} />
+          <Route path="/:spaceId/assessments/:page/:assessmentId/insights" element={<AssessmentReportScreen />} />
+          <Route path="/:spaceId/assessments/:page/:assessmentId/insights/:subjectId" element={<SubjectReportScreen />} />
           {/* Questionnaires and questions related routes */}
-          <Route path="/:spaceId/assessments/:assessmentId/questionnaires" element={<QuestionnairesScreen />} />
+          <Route path="/:spaceId/assessments/:page/:assessmentId/questionnaires" element={<QuestionnairesScreen />} />
           <Route
-            path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId/review"
+            path="/:spaceId/assessments/:page/:assessmentId/questionnaires/:questionnaireId/review"
             element={<QuestionsReviewScreen />}
           />
-          <Route path="/:spaceId/assessments/:assessmentId/questionnaires/:questionnaireId" element={<QuestionsScreen />}>
+          <Route path="/:spaceId/assessments/:page/:assessmentId/questionnaires/:questionnaireId" element={<QuestionsScreen />}>
             <Route path="" element={<QuestionScreen />} />
             <Route path=":questionIndex" element={<QuestionScreen />} />
           </Route>

@@ -24,7 +24,7 @@ const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }
     assessmentStatus,
     isSubmitting,
   } = useQuestionContext();
-  const { spaceId, assessmentId, questionIndex, questionnaireId } = useParams();
+  const { spaceId, assessmentId, questionIndex, questionnaireId,page } = useParams();
   const isComplete = questionIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
   const breadcrumbInfo = useSupTitleBreadcrumb({
@@ -75,17 +75,17 @@ const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }
             routes={[
               {
                 title: breadcrumbInfo?.space,
-                to: `/${spaceId}/assessments`,
+                to: `/${spaceId}/assessments/${page}`,
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
                 title: `${breadcrumbInfo?.assessment} ${t("questionnaires")}`,
-                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
+                to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
                 icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
                 title: breadcrumbInfo?.questionnaire,
-                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
+                to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
                 icon: <QuizRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
             ]}

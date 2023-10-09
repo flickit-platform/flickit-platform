@@ -28,7 +28,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
     },
   } = data;
   const { title: spaceTitle = "" } = space || {};
-  const { spaceId } = useParams();
+  const { spaceId,page } = useParams();
 
   useEffect(() => {
     setDocumentTitle(`${title} ${t("overallInsightsT")}`);
@@ -47,7 +47,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           routes={[
             {
               title: spaceTitle,
-              to: `/${spaceId}/assessments/`,
+              to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
