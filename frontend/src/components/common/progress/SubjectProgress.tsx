@@ -5,7 +5,6 @@ import { Trans } from "react-i18next";
 
 interface ISubjectProgressProps {
   progress: number;
-  colorCode: string;
   inProgress?: boolean;
 }
 
