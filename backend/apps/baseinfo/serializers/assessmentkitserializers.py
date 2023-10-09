@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from assessment.models import AssessmentProject
+from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, \
     MaturityLevel, LevelCompetence
@@ -58,7 +59,8 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     maturity_levels = MaturityLevelSimpleSerializer(many=True)
 
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        return AssessmentProject.objects.filter(assessment_kit_id=assessment_kit.id).count()
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, total_count=True)
+        return assessment_count_data["totalCount"]
 
     def get_current_user_delete_permission(self, assessment_kit: AssessmentKit):
         return assessmentkitservice.get_current_user_delete_permission(assessment_kit,
@@ -182,7 +184,7 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     questions_count = serializers.SerializerMethodField()
     maturity_levels_count = serializers.IntegerField(source='maturity_levels.count')
     likes_count = serializers.IntegerField(source='likes.count')
-    assessments_count = serializers.IntegerField(source='assessment_projects.count')
+    assessments_count = serializers.SerializerMethodField()
     subjects = SimpleAssessmentSubjectDataForAssessmentKitSerializer(source='assessment_subjects', many=True)
     expert_group = SimpleExpertGroupDataForAssessmentKitSerializer()
 
@@ -192,8 +194,9 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     def get_questions_count(self, assessment_kit: AssessmentKit):
         return assessment_kit.questionnaires.values('question').count()
 
-    def get_questions_count(self, assessment_kit: AssessmentKit):
-        return assessment_kit.questionnaires.values('question').count()
+    def get_assessments_count(self, assessment_kit: AssessmentKit):
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, total_count=True)
+        return assessment_count_data["totalCount"]
 
     class Meta:
         model = AssessmentKit

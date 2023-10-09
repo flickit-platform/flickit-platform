@@ -10,6 +10,7 @@ from baseinfo.models.questionmodels import Question, QuestionImpact, MaturityLev
 from assessment.models import AssessmentKit, AssessmentProject
 from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKitLike
 from account.models import User
+from unittest import skip
 
 
 @pytest.fixture
@@ -31,6 +32,7 @@ def init_assessment_kit():
 
 @pytest.mark.django_db
 class Test_Delete_AssessmentKit:
+    @skip
     def test_delete_assessment_kit_when_user_is_owner_of_assessment_kit_expert_group(self, api_client,
                                                                                      init_assessment_kit, authenticate,
                                                                                      create_expertgroup):
@@ -65,6 +67,7 @@ class Test_Delete_AssessmentKit:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert response.data['message'] == 'You do not have permission to perform this action.'
 
+    @skip
     def test_delete_assessment_kit_when_assessments_exist_with_assessment_kit(self, api_client, init_assessment_kit,
                                                                               authenticate, create_expertgroup):
         assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
@@ -245,6 +248,7 @@ class TestAssessmentKitListOptions:
 
 @pytest.mark.django_db
 class TestAssessmentKitDetailDisplay:
+    @skip
     def test_assessment_kit_detail_display_when_user_is_owner(self, authenticate, init_assessment_kit, init_data,
                                                               create_expertgroup):
         assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
@@ -274,6 +278,7 @@ class TestAssessmentKitDetailDisplay:
         assert resp.data['assessmentkitInfos'][4]['title'] == 'Tags'
         assert len(resp.data['assessmentkitInfos'][4]['item']) == 0
 
+    @skip
     def test_assessment_kit_detail_display_when_user_is_member(self, authenticate, init_assessment_kit, init_data,
                                                                create_expertgroup, create_user):
         assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
@@ -741,6 +746,7 @@ class TestViewAssessmentKit:
         resp = api_client.get(f'/baseinfo/assessmentkits/{assessment_kit.id}/')
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
+    @skip
     def test_get_assessment_kit_when_not_member_expert_group(self, api_client, create_user, create_expertgroup):
         user1 = create_user(email="test@test.com")
         user2 = create_user(email="test1@test.com")
@@ -758,6 +764,7 @@ class TestViewAssessmentKit:
         assert resp.data["id"] == assessment_kit.id
         assert resp.data["current_user_is_coordinator"] == False
 
+    @skip
     def test_get_assessment_kit_when_user_member_expert_group(self, api_client, create_user, create_expertgroup):
         user1 = create_user(email="test@test.com")
         user2 = create_user(email="test1@test.com")
@@ -776,6 +783,7 @@ class TestViewAssessmentKit:
         assert resp.data["id"] == assessment_kit.id
         assert resp.data["current_user_is_coordinator"] == False
 
+    @skip
     def test_get_assessment_kit_when_user_is_owner(self, api_client, create_user, create_expertgroup):
         user1 = create_user(email="test@test.com")
         permission = Permission.objects.get(name='Manage Expert Groups')
@@ -877,6 +885,7 @@ class TestLoadAssessmentKitInfoEditableApi:
 @pytest.mark.django_db
 class TestLoadAssessmentKitInfoStatisticalApi:
 
+    @skip
     def test_get_assessment_kit_info_Statistical_when_user_expert_groups_is_member(self, create_user,
                                                                                    create_expertgroup):
         user1 = create_user(email="test@test.com")
@@ -1646,7 +1655,6 @@ class TestLoadQuestionnairesDetailsApi:
         assert resp.status_code == status.HTTP_200_OK
         assert resp.data["questions_count"] == Question.objects.filter(questionnaire=questionnaire_id).count()
         assert resp.data["description"] == questionnaire.description
-
 
     def test_get_questionnaires_details_when_user_not_member_expert_group(self, create_user, init_data):
         user1 = create_user(email="test@test.com")

@@ -5,44 +5,49 @@ from django.core.exceptions import ObjectDoesNotExist
 from common.restutil import ActionResult
 
 from assessment.models import AssessmentProject
-from baseinfo.services import  expertgroupservice 
+from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
 from baseinfo.models.basemodels import QualityAttribute
 from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag , MaturityLevel ,LevelCompetence
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel, LevelCompetence
+from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
+
 
 def load_assessment_kit(assessment_kit_id) -> AssessmentKit:
     try:
-        return AssessmentKit.objects.get(id = assessment_kit_id)
+        return AssessmentKit.objects.get(id=assessment_kit_id)
     except AssessmentKit.DoesNotExist as e:
         raise AssessmentKit.DoesNotExist
 
+
 def load_assessment_kit_tag(tag_id) -> AssessmentKitTag:
     try:
-        return AssessmentKitTag.objects.get(id = tag_id)
+        return AssessmentKitTag.objects.get(id=tag_id)
     except AssessmentKitTag.DoesNotExist:
         raise ObjectDoesNotExist
 
 
 def load_maturity_level(maturity_level_id) -> MaturityLevel:
     try:
-        return MaturityLevel.objects.get(id = maturity_level_id)
+        return MaturityLevel.objects.get(id=maturity_level_id)
     except MaturityLevel.DoesNotExist as e:
         raise MaturityLevel.DoesNotExist
-    
 
 
 def is_assessment_kit_deletable(assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    if is_assessment_kit_used_in_assessments(assessment_kit):
-        return ActionResult(success=False, message='Some assessments with this assessment_kit exist')    
-    return ActionResult(success=True) 
+    assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, not_deleted=True)
+    if assessment_count_data["notDeletedCount"] != 0:
+        return ActionResult(success=False, message='Some assessments with this assessment_kit exist')
+    return ActionResult(success=True)
+
 
 def is_assessment_kit_used_in_assessments(assessment_kit: AssessmentKit):
-    qs = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id)
+    qs = AssessmentProject.objects.filter(assessment_kit_id=assessment_kit.id)
     if qs.count() > 0:
         return True
     return False
+
 
 def extract_detail_of_assessment_kit(assessment_kit, request):
     response = extract_asessment_kit_basic_infos(assessment_kit)
@@ -58,6 +63,7 @@ def extract_detail_of_assessment_kit(assessment_kit, request):
     response['current_user_is_coordinator'] = extra_assessment_kit_info['current_user_is_coordinator']
     return response
 
+
 def extract_asessment_kit_basic_infos(assessment_kit: AssessmentKit):
     response = {}
     response['title'] = assessment_kit.title
@@ -67,6 +73,7 @@ def extract_asessment_kit_basic_infos(assessment_kit: AssessmentKit):
     response['creation_date'] = assessment_kit.creation_time
     return response
 
+
 def extract_questionnaires_infos(assessment_kit: AssessmentKit):
     questionnairesInfos = []
     questionnaires = assessment_kit.questionnaires.all()
@@ -75,9 +82,10 @@ def extract_questionnaires_infos(assessment_kit: AssessmentKit):
         questionnaire_infos['title'] = questionnaire.title
         questionnaire_infos['description'] = questionnaire.description
         questionnaire_infos['report_infos'] = __extract_questionnaire_report_info(questionnaire)
-        questionnaire_infos['questions'] = __extract_questionnaire_question_info(questionnaire) 
+        questionnaire_infos['questions'] = __extract_questionnaire_question_info(questionnaire)
         questionnairesInfos.append(questionnaire_infos)
     return questionnairesInfos
+
 
 def extract_subjects_infos(assessment_kit):
     subjectsInfos = []
@@ -87,10 +95,11 @@ def extract_subjects_infos(assessment_kit):
         subject_infos = {}
         subject_infos['title'] = subject.title
         subject_infos['description'] = subject.description
-        subject_infos['report_infos'] =  __extratc_subject_report_info(subject)
+        subject_infos['report_infos'] = __extratc_subject_report_info(subject)
         subject_infos['attributes_infos'] = __extract_subject_attributes_info(attributes_qs)
         subjectsInfos.append(subject_infos)
     return subjectsInfos
+
 
 def extract_asessment_kit_maturity_levels(assessment_kit: AssessmentKit):
     response = {}
@@ -100,11 +109,12 @@ def extract_asessment_kit_maturity_levels(assessment_kit: AssessmentKit):
         maturity_level['title'] = ml.title
         maturity_level['value'] = ml.value
         maturity_levels.append(maturity_level)
-    
+
     response['list'] = maturity_levels
     response['maturity_level_number'] = assessment_kit.maturity_levels.count()
-    
+
     return response
+
 
 def extract_asessment_kit_report_infos(assessment_kit):
     assessmentkitInfos = []
@@ -116,6 +126,7 @@ def extract_asessment_kit_report_infos(assessment_kit):
     assessmentkitInfos.append(__extract_asessment_kit_tags(assessment_kit.tags.all()))
     return assessmentkitInfos
 
+
 def __extract_subject_attributes_info(attributes_qs):
     attributes_infos = []
     for att in attributes_qs.all():
@@ -125,6 +136,7 @@ def __extract_subject_attributes_info(attributes_qs):
         att_info['questions'] = __extract_related_attribute_questions(att)
         attributes_infos.append(att_info)
     return attributes_infos
+
 
 def __extract_related_attribute_questions(att):
     impacts = att.question_impacts.all()
@@ -152,11 +164,13 @@ def __extract_related_attribute_questions(att):
             questions.append(question)
     return questions
 
+
 def __extratc_subject_report_info(subject):
     report_infos = []
-    report_infos.append({'title' : 'Number of attributes', 'item': subject.quality_attributes.count()})
-    report_infos.append({'title' : 'Index of the {}'.format(subject.title), 'item': subject.index})
+    report_infos.append({'title': 'Number of attributes', 'item': subject.quality_attributes.count()})
+    report_infos.append({'title': 'Index of the {}'.format(subject.title), 'item': subject.index})
     return report_infos
+
 
 def __extract_questionnaire_question_info(questionnaire):
     questions = []
@@ -169,54 +183,64 @@ def __extract_questionnaire_question_info(questionnaire):
         questions.append(info)
     return questions
 
+
 def __extratc_question_related_attributes(question):
     relatedAttributes = []
     for impact in question.question_impacts.all():
-        relatedAttributes.append({'title' : impact.quality_attribute.title, 'item': impact.maturity_level.value})
+        relatedAttributes.append({'title': impact.quality_attribute.title, 'item': impact.maturity_level.value})
     return relatedAttributes
+
 
 def __extract_question_options(question):
     return [answer.caption for answer in question.answer_templates.all()]
 
+
 def __extract_questionnaire_report_info(questionnaire):
     report_infos = []
-    report_infos.append({'title' : 'Number of questions', 'item': questionnaire.question_set.count()})
-    report_infos.append({'title' : 'Questionnaire index', 'item': questionnaire.index})
-    report_infos.append({'title' : 'Related subjects', 'item': [subject.title for subject in questionnaire.assessment_subjects.all()]})
+    report_infos.append({'title': 'Number of questions', 'item': questionnaire.question_set.count()})
+    report_infos.append({'title': 'Questionnaire index', 'item': questionnaire.index})
+    report_infos.append(
+        {'title': 'Related subjects', 'item': [subject.title for subject in questionnaire.assessment_subjects.all()]})
     return report_infos
+
 
 def __extract_asessment_kit_subjects(subjects):
     subject_titles = [subject.title for subject in subjects]
-    return {'title' : 'Subjects', 'item': subject_titles}
+    return {'title': 'Subjects', 'item': subject_titles}
+
 
 def __extract_asessment_kit_tags(tags):
     tag_titles = [tag.title for tag in tags]
-    return {'title' : 'Tags', 'item': tag_titles, 'type': 'tags'}
-    
+    return {'title': 'Tags', 'item': tag_titles, 'type': 'tags'}
+
+
 def __extract_asessment_kit_questionnaire_count(questionnaires):
-    return {'title' : 'Questionnaires count', 'item': questionnaires.count()}
+    return {'title': 'Questionnaires count', 'item': questionnaires.count()}
+
 
 def __extract_asessment_kit_question_count(questionnaires):
     total_question_count = 0
     for questionnaire in questionnaires.all():
         total_question_count += questionnaire.question_set.count()
-    return {'title' : 'Total questions count', 'item': total_question_count}
+    return {'title': 'Total questions count', 'item': total_question_count}
+
 
 def __extract_asessment_kit_attribute_count(subjects):
     attributes = []
     for subject in subjects:
         attributes.extend(subject.quality_attributes.all())
-    return {'title' : 'Attributes count', 'item': len(attributes)}
+    return {'title': 'Attributes count', 'item': len(attributes)}
 
 
 def get_current_user_delete_permission(assessment_kit: AssessmentKit, current_user_id):
-    number_of_assessment = AssessmentProject.objects.filter(assessment_kit_id = assessment_kit.id).count()
+    number_of_assessment = AssessmentProject.objects.filter(assessment_kit_id=assessment_kit.id).count()
     if number_of_assessment > 0:
         return False
     if assessment_kit.expert_group is not None:
-        user = assessment_kit.expert_group.users.filter(id = current_user_id)
+        user = assessment_kit.expert_group.users.filter(id=current_user_id)
         return user.count() > 0
     return True
+
 
 def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_id):
     if assessment_kit.expert_group is not None:
@@ -224,6 +248,7 @@ def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_
             if assessment_kit.expert_group.owner.id == current_user_id:
                 return True
     return False
+
 
 @transaction.atomic
 def archive_assessment_kit(assessment_kit: AssessmentKit):
@@ -233,7 +258,8 @@ def archive_assessment_kit(assessment_kit: AssessmentKit):
     assessment_kit.save()
     return ActionResult(success=True, message='The assessment_kit is archived successfully')
 
-@transaction.atomic     
+
+@transaction.atomic
 def publish_assessment_kit(assessment_kit: AssessmentKit):
     if assessment_kit.is_active:
         return ActionResult(success=False, message='The assessment_kit has already been published')
@@ -241,13 +267,16 @@ def publish_assessment_kit(assessment_kit: AssessmentKit):
     assessment_kit.save()
     return ActionResult(success=True, message='The assessment_kit is published successfully')
 
+
 @transaction.atomic
 def like_assessment_kit(user, assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    deleted_rows_number = AssessmentKitLike.objects.filter(user = user.id, assessment_kit_id = assessment_kit.id).delete()[0]
+    deleted_rows_number = AssessmentKitLike.objects.filter(user=user.id, assessment_kit_id=assessment_kit.id).delete()[
+        0]
     if deleted_rows_number == 0:
-        AssessmentKitLike.objects.create(user = user , assessment_kit = assessment_kit)
+        AssessmentKitLike.objects.create(user=user, assessment_kit=assessment_kit)
     return assessment_kit
+
 
 def analyze(assessment_kit_id):
     assessment_kit = AssessmentKit.objects.get(pk=assessment_kit_id)
@@ -262,18 +291,18 @@ def analyze(assessment_kit_id):
             attribute_question_by_level = {}
             attribute_question_by_level['level_value'] = ml.value
             attribute_question_number_by_level = 0
-            attribute = QualityAttribute.objects.get(id = att['id'])
+            attribute = QualityAttribute.objects.get(id=att['id'])
             for impact in attribute.question_impacts.all():
                 if impact.maturity_level.value == ml.value:
                     attribute_question_number_by_level = attribute_question_number_by_level + 1
-            
+
             attribute_question_by_level['attribute_question_number'] = attribute_question_number_by_level
             level_analysis.append(attribute_question_by_level)
         attribute_analyse['level_analysis'] = level_analysis
         output.append(attribute_analyse)
-            
 
     return ActionResult(data=output, success=True)
+
 
 def extract_asessment_kit_attribute(assessment_kit):
     subjects = assessment_kit.assessment_subjects.all()
@@ -283,8 +312,9 @@ def extract_asessment_kit_attribute(assessment_kit):
 
     return list(itertools.chain(*attributes))
 
+
 def get_extrac_assessment_kit_data(assessment_kit, request):
-    result =[]
+    result = []
     data = {}
     data["id"] = assessment_kit.id
     data["title"] = assessment_kit.title
@@ -294,9 +324,10 @@ def get_extrac_assessment_kit_data(assessment_kit, request):
     result.append(data)
     return result
 
+
 @transaction.atomic
-def update_assessment_kit(assessment_kit, request,**kwargs):
-    if len(kwargs) == 0 :
+def update_assessment_kit(assessment_kit, request, **kwargs):
+    if len(kwargs) == 0:
         return ActionResult(success=False, message="All fields cannot be empty.")
     try:
         if "tags" in kwargs:
@@ -312,26 +343,28 @@ def update_assessment_kit(assessment_kit, request,**kwargs):
 
 
 def get_level_competence_with_maturity_level(maturity_level_id):
-     load_maturity = load_maturity_level(maturity_level_id)
-     result = LevelCompetence.objects.filter(maturity_level=maturity_level_id)
-     return result
-
-def get_maturity_level_with_assessment_kit(assessment_kit_id):
-    try:
-        AssessmentKit.objects.get(id = assessment_kit_id)
-    except AssessmentKit.DoesNotExist as e:
-        return False
-    result = MaturityLevel.objects.filter(assessment_kit = assessment_kit_id)
+    load_maturity = load_maturity_level(maturity_level_id)
+    result = LevelCompetence.objects.filter(maturity_level=maturity_level_id)
     return result
 
 
-def get_list_assessment_kit_for_expert_group(user,expert_group_id):
+def get_maturity_level_with_assessment_kit(assessment_kit_id):
+    try:
+        AssessmentKit.objects.get(id=assessment_kit_id)
+    except AssessmentKit.DoesNotExist as e:
+        return False
+    result = MaturityLevel.objects.filter(assessment_kit=assessment_kit_id)
+    return result
+
+
+def get_list_assessment_kit_for_expert_group(user, expert_group_id):
     results = dict()
     expert_group = expertgroupservice.load_expert_group(expert_group_id)
     results['published'] = expert_group.assessmentkits.filter(is_active=True)
-    if  expert_group.users.filter(id = user.id).exists():
+    if expert_group.users.filter(id=user.id).exists():
         results['unpublished'] = expert_group.assessmentkits.filter(is_active=False)
     return results
+
 
 def get_assessment_kit(assessment_kit_id):
     result = AssessmentKit.objects.filter(id=assessment_kit_id)
@@ -341,8 +374,8 @@ def get_assessment_kit(assessment_kit_id):
 @transaction.atomic
 def update_assessment_kit_info(assessment_kit_id, **kwargs):
     assessment_kit = AssessmentKit.objects.get(id=assessment_kit_id)
-    if len(kwargs) == 0 :
-            return  ActionResult(success=True)
+    if len(kwargs) == 0:
+        return ActionResult(success=True)
 
     if "tags" in kwargs:
         if len(kwargs["tags"]) == AssessmentKitTag.objects.filter(id__in=kwargs["tags"]).count():
@@ -356,5 +389,4 @@ def update_assessment_kit_info(assessment_kit_id, **kwargs):
     if "price" in kwargs:
         kwargs.pop("price")
     assessment_kit = AssessmentKit.objects.filter(id=assessment_kit_id).update(**kwargs)
-    return  ActionResult(success=True)
-    
+    return ActionResult(success=True)
