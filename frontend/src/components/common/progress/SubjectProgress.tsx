@@ -37,9 +37,7 @@ const SubjectProgress = (props: ISubjectProgressProps) => {
               opacity: 0.7,
               fontFamily: "Oswald",
               fontWeight: 400,
-              color: colorCode
-                ? (t) => t.palette.getContrastText(colorCode)
-                : "white",
+              color: "#000000de",
             }}
             variant="h6"
             textTransform={"uppercase"}
