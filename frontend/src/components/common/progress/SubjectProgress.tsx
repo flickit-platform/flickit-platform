@@ -15,7 +15,7 @@ const progressToLabelMap: Record<number, string> = {
 };
 
 const SubjectProgress = (props: ISubjectProgressProps) => {
-  const { progress, colorCode, inProgress } = props;
+  const { progress, inProgress } = props;
 
   return (
     <Box mt={9} mb={4}>

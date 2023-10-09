@@ -170,7 +170,7 @@ const ReadMoreAboutSubject = (
     "title" | "colorCode" | "description"
   >
 ) => {
-  const { title, colorCode, description } = props;
+  const { title, description } = props;
   return (
     <Box
       sx={{

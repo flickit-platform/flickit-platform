@@ -87,7 +87,6 @@ const useQuestions = () => {
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const dispatch = useQuestionDispatch();
   const {
-    questionIndex,
     questionnaireId = "",
     assessmentId = "",
   } = useParams();
