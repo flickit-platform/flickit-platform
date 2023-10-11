@@ -1,6 +1,7 @@
 import requests
 from rest_framework import status
 
+from account.models import Space
 from assessment.serializers.projectserializers import LoadQuestionnairesSerializer
 from assessment.serializers.questionvalueserializers import LoadQuestionnaireAnswerSerializer
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
@@ -96,7 +97,6 @@ def get_assessment_list(request):
     result["body"] = response.json()
     result["status_code"] = response.status_code
     return result
-
 
 
 def question_answering(assessments_details, serializer_data):
@@ -323,12 +323,14 @@ def get_subject_report(assessments_details, subject_id):
         attribute_top_weaknesses_id = list()
         for item in response_body["topWeaknesses"]:
             attribute_top_weaknesses_id.append(item["id"])
-        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id", "title")
+        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id",
+                                                                                                               "title")
 
         attribute_top_strengths_id = list()
         for item in response_body["topStrengths"]:
             attribute_top_strengths_id.append(item["id"])
-        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id", "title")
+        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id",
+                                                                                                             "title")
 
         result["Success"] = True
         result["body"] = {"subject": subject_dict,
@@ -382,7 +384,8 @@ def get_assessment_report(assessments_details):
         assessment_dict = dict()
         assessment_dict["id"] = response_body["assessment"]["id"]
         assessment_dict["title"] = response_body["assessment"]["title"]
-        assessment_kit_details = LoadAssessmentKitDetailsForReportSerializer(AssessmentKit.objects.get(id=assessments_details["kitId"])).data
+        assessment_kit_details = LoadAssessmentKitDetailsForReportSerializer(
+            AssessmentKit.objects.get(id=assessments_details["kitId"])).data
         assessment_dict["assessment_kit"] = assessment_kit_details
         assessment_dict["last_modification_time"] = response_body["assessment"]["lastModificationTime"]
         assessment_dict["is_calculate_valid"] = response_body["assessment"]["isCalculateValid"]
@@ -411,12 +414,14 @@ def get_assessment_report(assessments_details):
         attribute_top_weaknesses_id = list()
         for item in response_body["topWeaknesses"]:
             attribute_top_weaknesses_id.append(item["id"])
-        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id", "title")
+        attributes_top_weaknesses = QualityAttribute.objects.filter(id__in=attribute_top_weaknesses_id).values("id",
+                                                                                                               "title")
 
         attribute_top_strengths_id = list()
         for item in response_body["topStrengths"]:
             attribute_top_strengths_id.append(item["id"])
-        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id", "title")
+        attributes_top_strengths = QualityAttribute.objects.filter(id__in=attribute_top_strengths_id).values("id",
+                                                                                                             "title")
 
         result["Success"] = True
         result["body"] = {"assessment": assessment_dict,
@@ -433,4 +438,17 @@ def get_assessment_report(assessments_details):
     return result
 
 
-
+def get_path_info(assessments_details):
+    result = dict()
+    assessments = {"id": assessments_details["assessmentId"],
+                   "title": assessments_details["assessmentTitle"]
+                   }
+    space_object = Space.objects.get(id=assessments_details["spaceId"])
+    space = {"id": assessments_details["spaceId"],
+             "title": space_object.title
+             }
+    result["body"] = {"assessments": assessments,
+                      "space": space
+                      }
+    result["status_code"] = status.HTTP_200_OK
+    return result
