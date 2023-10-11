@@ -15,20 +15,16 @@ import { t } from "i18next";
 interface IAssessmentReportTitle {
   data: any;
   colorCode: string;
+  pathInfo: any;
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
-  const { data, colorCode } = props;
+  const { data, colorCode, pathInfo } = props;
   const {
-    assessment: {
-      title,
-      last_modification_time,
-      assessment_kit,
-      space,
-    },
+    assessment: { title, last_modification_time, assessment_kit },
   } = data;
-  const { title: spaceTitle = "" } = space || {};
-  const { spaceId,page } = useParams();
+  const { spaceId, page } = useParams();
+  const {space,assessment}=pathInfo
 
   useEffect(() => {
     setDocumentTitle(`${title} ${t("overallInsightsT")}`);
@@ -46,12 +42,12 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: spaceTitle,
+              title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title,
+              title:assessment?.title,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

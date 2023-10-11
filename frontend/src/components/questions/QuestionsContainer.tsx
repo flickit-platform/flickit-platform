@@ -55,21 +55,21 @@ export const QuestionsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
   const { children, isReview = false } = props;
-  const { questionsResultQueryData, questionnaireQueryData } = useQuestions();
+  const { questionsResultQueryData, questionnaireQueryData ,fetchPathInfo} = useQuestions();
 
   return (
     <QueryBatchData<IQuestionsModel | IQuestionnaireModel>
-      queryBatchData={[questionsResultQueryData, questionnaireQueryData]}
+      queryBatchData={[questionsResultQueryData, questionnaireQueryData,fetchPathInfo]}
       loaded={questionnaireQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
-      render={([data, questionnaireData]) => {
-        console.log(data)
+      render={([data, questionnaireData,pathInfo={}]) => {
         return (
           <Box>
             <Box py={1}>
               <QuestionsTitle
                 data={questionnaireData as IQuestionnaireModel}
                 isReview={isReview}
+                pathInfo={pathInfo}
               />
             </Box>
             <Box display="flex" justifyContent="center">
@@ -101,6 +101,11 @@ const useQuestions = () => {
         config
       ),
   });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+    runOnMount: true,
+  });
 
   useEffect(() => {
     if (questionsResultQueryData.loaded) {
@@ -118,6 +123,7 @@ const useQuestions = () => {
   return {
     questionsResultQueryData,
     questionnaireQueryData,
+    fetchPathInfo
   };
 };
 

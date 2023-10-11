@@ -38,15 +38,20 @@ const SubjectContainer = () => {
     subjectQueryData,
     subjectId,
     subjectProgressQueryData,
+    fetchPathInfo,
   } = useSubject();
 
   return (
     <QueryBatchData
-      queryBatchData={[subjectQueryData, subjectProgressQueryData]}
+      queryBatchData={[
+        subjectQueryData,
+        subjectProgressQueryData,
+        fetchPathInfo,
+      ]}
       error={hasError}
       loading={loading}
       loaded={loaded}
-      render={([data = {}, subjectProgress = {}]) => {
+      render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
         const { attributes, subject } = data;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
@@ -55,7 +60,11 @@ const SubjectContainer = () => {
         const attributesNumber = attributes.length;
         return (
           <Box>
-            <SubjectTitle {...subjectQueryData} loading={loading} />
+            <SubjectTitle
+              {...subjectQueryData}
+              loading={loading}
+              pathInfo={pathInfo}
+            />
             {!isComplete && loaded && (
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
@@ -152,6 +161,11 @@ const useSubject = () => {
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+    runOnMount: true,
+  });
   const calculate = async () => {
     try {
       await calculateMaturityLevelQuery.query();
@@ -188,25 +202,24 @@ const useSubject = () => {
     subjectId,
     subjectQueryData,
     subjectProgressQueryData,
+    fetchPathInfo,
   };
 };
 
 const SubjectTitle = (props: {
   data: ISubjectReportModel;
   loading: boolean;
+  pathInfo: any;
 }) => {
-  const { data, loading } = props;
+  const { data, loading, pathInfo } = props;
   const { subject } = data || {};
   const { title } = subject;
-  const { spaceId, assessmentId,page } = useParams();
+  const { spaceId, assessmentId, page } = useParams();
+  const { space, assessment } = pathInfo;
 
   useEffect(() => {
     setDocumentTitle(`${title} ${t("insight")}`);
   }, [title]);
-  const breadcrumbInfo = useSupTitleBreadcrumb({
-    spaceId,
-    assessmentId,
-  });
   return (
     <Title
       letterSpacing=".08em"
@@ -218,12 +231,12 @@ const SubjectTitle = (props: {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: breadcrumbInfo?.space,
+              title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title: `${breadcrumbInfo?.assessment} ${t("insights")}`,
+              title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />

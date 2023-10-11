@@ -40,14 +40,20 @@ const SubjectBar = (props: any) => {
           top: 20,
           right: 30,
           left: 20,
-          bottom: 5,
+          bottom: 150,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="title" />
-        <YAxis type="number" domain={[0, 5]} tickCount={5+1} />
+        <XAxis
+          dataKey="title"
+          interval={0}
+          angle={-90}
+          textAnchor="end"
+          tick={<CustomAxisTick />}
+        />
+        <YAxis type="number" domain={[0, 5]} tickCount={5 + 1} />
         <Tooltip />
-        <Legend />
+        <Legend  layout="horizontal" wrapperStyle={{ position: 'absolute', bottom: '8px', left: '0%' }} />
         <Bar
           dataKey="ml"
           name={t("maturityLevel") as string}
@@ -60,3 +66,21 @@ const SubjectBar = (props: any) => {
 };
 
 export default SubjectBarChart;
+const CustomAxisTick = (props: any) => {
+  const { x, y, payload } = props;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#666"
+        transform="rotate(-45)"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
