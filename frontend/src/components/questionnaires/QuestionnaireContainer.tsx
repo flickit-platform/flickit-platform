@@ -22,8 +22,9 @@ import PermissionControl from "@common/PermissionControl";
 import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
+import QueryData from "../common/QueryData";
 const QuestionnaireContainer = () => {
-  const { questionnaireQueryData, assessmentTotalProgress } =
+  const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
     useQuestionnaire();
 
   const progress =
@@ -34,7 +35,14 @@ const QuestionnaireContainer = () => {
   return (
     <PermissionControl error={[questionnaireQueryData.errorObject]}>
       <Box>
-        <QuestionnaireTitle />
+        <QueryData
+          {...fetchPathInfo}
+          loading={false}
+          render={(pathInfo = {}) => {
+            return <QuestionnaireTitle pathInfo={pathInfo} />;
+          }}
+        />
+
         <NotCompletedAlert
           isCompleted={progress == 100}
           hasStatus={false}
@@ -85,9 +93,15 @@ const useQuestionnaire = () => {
         config
       ),
   });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+    runOnMount: true,
+  });
   return {
     questionnaireQueryData,
     assessmentTotalProgress,
+    fetchPathInfo,
   };
 };
 
@@ -138,16 +152,14 @@ const NotCompletedAlert = (props: {
   );
 };
 
-const QuestionnaireTitle = () => {
-  const { spaceId, assessmentId,page } = useParams();
-  const breadcrumbInfo = useSupTitleBreadcrumb({
-    spaceId,
-    assessmentId,
-  });
+const QuestionnaireTitle = (props: any) => {
+  const { pathInfo } = props;
+  const { spaceId, assessmentId, page } = useParams();
+  const { space, assessment } = pathInfo;
 
   useEffect(() => {
-    setDocumentTitle(`${breadcrumbInfo.assessment} ${t("questionnaires")}`);
-  }, [breadcrumbInfo?.assessment]);
+    setDocumentTitle(`${assessment?.title} ${t("questionnaires")}`);
+  }, [assessment]);
 
   return (
     <Title
@@ -156,12 +168,12 @@ const QuestionnaireTitle = () => {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: breadcrumbInfo.space,
+              title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title: breadcrumbInfo.assessment,
+              title: assessment?.title,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),

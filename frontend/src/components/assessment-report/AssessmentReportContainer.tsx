@@ -37,6 +37,11 @@ const AssessmentReportContainer = () => {
         config
       ),
   });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+    runOnMount: true,
+  });
   const calculate = async () => {
     try {
       await calculateMaturityLevelQuery.query();
@@ -51,9 +56,9 @@ const AssessmentReportContainer = () => {
 
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress]}
+      queryBatchData={[queryData, assessmentTotalProgress,fetchPathInfo]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress = {}]) => {
+      render={([data = {}, progress = {},pathInfo={}]) => {
         const { status, assessment, subjects, top_strengths, top_weaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
@@ -66,7 +71,7 @@ const AssessmentReportContainer = () => {
 
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
-            <AssessmentReportTitle data={data} colorCode={colorCode} />
+            <AssessmentReportTitle data={data} colorCode={colorCode} pathInfo={pathInfo} />
             {!isComplete && (
               <Box mt={3}>
                 <QuestionnairesNotCompleteAlert
