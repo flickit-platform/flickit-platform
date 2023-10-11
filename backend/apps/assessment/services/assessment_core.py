@@ -440,14 +440,14 @@ def get_assessment_report(assessments_details):
 
 def get_path_info(assessments_details):
     result = dict()
-    assessments = {"id": assessments_details["assessmentId"],
-                   "title": assessments_details["assessmentTitle"]
-                   }
+    assessment = {"id": assessments_details["assessmentId"],
+                  "title": assessments_details["assessmentTitle"]
+                  }
     space_object = Space.objects.get(id=assessments_details["spaceId"])
     space = {"id": assessments_details["spaceId"],
              "title": space_object.title
              }
-    result["body"] = {"assessments": assessments,
+    result["body"] = {"assessment": assessment,
                       "space": space
                       }
     result["status_code"] = status.HTTP_200_OK
