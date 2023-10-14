@@ -28,7 +28,7 @@ export const QuestionContext = React.createContext<IQuestionContext>({
   assessmentStatus: EAssessmentStatus.NOT_STARTED,
   questionsInfo: {
     total_number_of_questions: 0,
-    questions: undefined,
+    questions: [],
     resultId: undefined,
   },
   submitOnAnswerSelection: false,

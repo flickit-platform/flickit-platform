@@ -8,7 +8,7 @@ import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
 import { Box, Typography } from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
 import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
@@ -23,14 +23,22 @@ import { styles } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
+  const { userInfo } = useAuthContext();
+  const { spaceId, page } = useParams();
+  const navigate = useNavigate();
+  const { current_space } = userInfo;
   const { fetchAssessments, ...rest } = useFetchAssessments();
-  const { data, error, errorObject, requested_space } = rest;
+  const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
-  const { spaceId } = useParams();
-
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    navigate(`/${spaceId}/assessments/${value}`);
+  };
+  const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
     (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
       errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
@@ -43,7 +51,7 @@ const AssessmentContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                title: requested_space,
+                title: current_space?.title || "",
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
@@ -77,14 +85,15 @@ const AssessmentContainer = () => {
           my: 3,
         }}
       >
-        <Box></Box>
         <Box ml="auto">
           <ToolbarCreateItemBtn
             data-cy="create-assessment-btn"
             onClick={() =>
               dialogProps.openDialog({
                 type: "create",
-                data: { space: { id: spaceId, title: requested_space } },
+                data: {
+                  space: { id: spaceId, title: current_space?.title },
+                },
               })
             }
             icon={<NoteAddRoundedIcon />}
@@ -110,12 +119,33 @@ const AssessmentContainer = () => {
         }
         render={(data) => {
           return (
-            <AssessmentsList
-              {...rest}
-              data={data}
-              space={{ id: spaceId, title: requested_space }}
-              dialogProps={dialogProps}
-            />
+            <>
+              <AssessmentsList
+                {...rest}
+                data={data}
+                space={{ id: spaceId, title: current_space?.title }}
+                dialogProps={dialogProps}
+              />
+              {pageCount > 1 && (
+                <Stack
+                  spacing={2}
+                  sx={{
+                    mt: 3,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Pagination
+                    variant="outlined"
+                    color="primary"
+                    count={pageCount}
+                    page={Number(page)}
+                    onChange={handleChange}
+                  />
+                </Stack>
+              )}
+            </>
           );
         }}
       />
@@ -134,23 +164,19 @@ const useFetchAssessments = () => {
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined
   );
-  const { spaceId } = useParams();
+  const { spaceId, page } = useParams();
   const { service } = useServiceContext();
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
     fetchAssessments();
-    return () => {
-      abortController.current.abort();
-    };
-  }, []);
-
+  }, [page]);
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);
     try {
       const { data: res } = await service.fetchAssessments(
-        { spaceId },
+        { spaceId: spaceId, size: 4, page: parseInt(page ?? "1", 10) - 1 },
         { signal: abortController.current.signal }
       );
       if (res) {
@@ -188,7 +214,10 @@ const useFetchAssessments = () => {
   };
 
   return {
-    data: data.results || [],
+    data: data.items || [],
+    page: data.page || 0,
+    size: data.size || 0,
+    total: data.total || 0,
     requested_space: data.requested_space,
     loading,
     loaded: !!data,

@@ -287,5 +287,8 @@
   "affectedQualityAttribute": "Affected Quality Attribute",
   "affectedLevel": "Affected Level",
   "optionValue":"Option {{index}}",
-  "relatedSubjects": "Related subjects"
+  "relatedSubjects": "Related subjects",
+  "loading":"Loading ...",
+  "insightsAreRecalculating":"Insights are recalculating",
+  "pleaseWait":"Please wait ..."
 }

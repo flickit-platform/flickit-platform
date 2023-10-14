@@ -42,7 +42,7 @@ const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertPr
               to={to}
             >
               {subjectName} <Trans i18nKey="questionnaires" />{" "}
-              {q && a && (
+              {q && (
                 <QANumberIndicator
                   q={q}
                   a={a}

@@ -4,27 +4,62 @@ import Box from "@mui/material/Box";
 import BgLines1 from "@assets/svg/bgLines1.svg";
 import SubjectProgress from "@common/progress/SubjectProgress";
 import { Trans } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
-import { getColorOfStatus, styles } from "@styles";
-import { ISubjectInfo } from "@types";
+import { getMaturityLevelColors, styles } from "@styles";
+import { ISubjectInfo, IMaturityLevel } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
-import { BASE_URL } from "@config/constants";
-import getStatusText from "@utils/getStatusText";
-import hasStatus from "@utils/hasStatus";
-
+import { useQuery } from "@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useEffect, useState } from "react";
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
+  maturity_level?: IMaturityLevel;
 }
 
 export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
-  const { title, progress = 0, status, id, image, colorCode, description = "" } = props;
+  const { title, maturity_level, id, colorCode, description = "" } = props;
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+  const [progress, setProgress] = useState<number>(0);
+  const [inProgress, setInProgress] = useState<boolean>(false);
+  const subjectProgressQueryData = useQuery<any>({
+    service: (args = { subjectId: id, assessmentId }, config) =>
+      service.fetchSubjectProgress(args, config),
+    runOnMount: false,
+  });
+  const fetchProgress = async () => {
+    try {
+      setInProgress(true);
+      const data = await subjectProgressQueryData.query();
+      const total_progress =
+        ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) * 100;
+      setProgress(total_progress);
+      setInProgress(false);
+    } catch (e) {}
+  };
+  useEffect(() => {
+    fetchProgress();
+  }, []);
+  function hexToRGBA(hex:string, alpha:number) {
+    // Remove the '#' if it's there
+    hex = hex.replace(/^#/, '');
+
+    // Parse the hex value to separate R, G, and B values
+    let bigint = parseInt(hex, 16);
+    let r = (bigint >> 16) & 255;
+    let g = (bigint >> 8) & 255;
+    let b = bigint & 255;
+
+    // Return the RGBA value
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
   return (
     <Paper
       sx={{
         borderRadius: 3,
-        backgroundColor: colorCode,
+        backgroundColor: hexToRGBA(colorCode, 0.1),
         backgroundImage: `url(${BgLines1})`,
         backgroundPosition: "30% 30%",
         backgroundSize: "cover",
@@ -44,30 +79,33 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
         justifyContent="center"
         sx={{
           textAlign: "center",
-          color: (t) => t.palette.getContrastText(colorCode),
+          color: "#000000de",
           px: { xs: 2, sm: 5 },
           py: { xs: 3, sm: 5 },
           height: "100%",
         }}
       >
-        <Typography variant="h4" textTransform={"uppercase"} letterSpacing={".13em"} fontFamily="Oswald" fontWeight={500}>
+        <Typography
+          variant="h4"
+          textTransform={"uppercase"}
+          letterSpacing={".13em"}
+          fontFamily="Oswald"
+          fontWeight={500}
+        >
           {title}
         </Typography>
-        <ReadMoreAboutSubject colorCode={colorCode} title={title} description={description} />
-        {/* <Box
-          mt={2}
-          sx={{
-            filter: (t) => {
-              const shouldInvert = t.palette.getContrastText(colorCode) === "rgba(0, 0, 0, 0.87)";
-              return shouldInvert ? "invert(.93)" : undefined;
-            },
-          }}
-        >
-          <img src={`${BASE_URL}${image}`} alt={title} width={"90px"} style={{ filter: "drop-shadow(1px 4px 4px #00000050)" }} />
-        </Box> */}
-        <SubjectProgress progress={progress} colorCode={colorCode} />
+        <ReadMoreAboutSubject
+          colorCode={colorCode}
+          title={title}
+          description={description}
+        />
 
-        <SubjectStatus title={title} status={status} />
+        <SubjectProgress
+          inProgress={inProgress}
+          progress={progress}
+        />
+
+        <SubjectStatus title={title} maturity_level={maturity_level} />
         <Box mt="auto">
           <Button
             variant="contained"
@@ -75,8 +113,9 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
             fullWidth
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
-            state={{ status }}
-            startIcon={progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />}
+            startIcon={
+              progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />
+            }
           >
             <Trans i18nKey={"viewInsights"} />
           </Button>
@@ -86,27 +125,37 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   );
 };
 
-const SubjectStatus = (props: Pick<IAssessmentSubjectCardProps, "title" | "status">) => {
-  const { title, status } = props;
-  const hasStats = hasStatus(status);
+const SubjectStatus = (
+  props: Pick<IAssessmentSubjectCardProps, "title" | "maturity_level">
+) => {
+  const { title, maturity_level } = props;
+  const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
+  const hasStats = maturity_level?.index ? true : false;
   return (
     <Box mt={8} mb={16} sx={{ ...styles.centerCH }} minHeight={"80px"}>
       {
         <>
           <Typography textAlign={"center"}>
-            <Trans i18nKey="subjectStatusIs" values={{ title }} /> {hasStats && <Trans i18nKey="evaluatedAs" />}
+            <Trans i18nKey="subjectStatusIs" values={{ title }} />{" "}
+            {hasStats && <Trans i18nKey="evaluatedAs" />}
           </Typography>
           <Typography
             variant={hasStats ? "h3" : "h4"}
             letterSpacing=".17em"
             sx={{
               fontWeight: "500",
-              borderBottom: hasStats ? `3px solid ${getColorOfStatus(status)}` : undefined,
+              borderBottom: colorPallet
+                ? `3px solid ${colorPallet}`
+                : undefined,
               pl: 1,
               pr: 1,
             }}
           >
-            {getStatusText(status)}
+            {maturity_level?.title ? (
+              maturity_level?.title
+            ) : (
+              <Trans i18nKey="notEvaluated" />
+            )}
           </Typography>
         </>
       }
@@ -114,8 +163,13 @@ const SubjectStatus = (props: Pick<IAssessmentSubjectCardProps, "title" | "statu
   );
 };
 
-const ReadMoreAboutSubject = (props: Pick<IAssessmentSubjectCardProps, "title" | "colorCode" | "description">) => {
-  const { title, colorCode, description } = props;
+const ReadMoreAboutSubject = (
+  props: Pick<
+    IAssessmentSubjectCardProps,
+    "title" | "colorCode" | "description"
+  >
+) => {
+  const { title, description } = props;
   return (
     <Box
       sx={{
@@ -131,9 +185,7 @@ const ReadMoreAboutSubject = (props: Pick<IAssessmentSubjectCardProps, "title" |
         sx={{
           opacity: 0.7,
           letterSpacing: ".14em",
-          color: (t) => {
-            return t.palette.getContrastText(colorCode);
-          },
+          color: "#000000de",
           textDecoration: "underline",
           cursor: "pointer",
         }}
@@ -145,7 +197,7 @@ const ReadMoreAboutSubject = (props: Pick<IAssessmentSubjectCardProps, "title" |
         className="subj_desc"
         sx={{
           transition: "opacity .2s .4s ease, z-index .2s .4s ease",
-          backgroundColor: "#000000e3",
+          backgroundColor: "#000000cc",
           opacity: 0,
           zIndex: -1,
           px: 2,
@@ -156,6 +208,7 @@ const ReadMoreAboutSubject = (props: Pick<IAssessmentSubjectCardProps, "title" |
           transform: "translateX(-50%)",
           width: "calc(100% - 25px)",
           textAlign: "center",
+          color:"#F4F4F8"
         }}
       >
         <Typography>{description}</Typography>

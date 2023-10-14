@@ -1,11 +1,11 @@
-const convertToSubjectChartData = (data: any[]) => {
-  return data.map((item) => {
+const convertToSubjectChartData = (data: any) => {
+  return data?.attributes?.map((item:any) => {
     return {
-      ml: item?.level_value,
+      ml: item?.maturity_level?.value,
       cl: 1,
-      title: item?.quality_attribute?.title,
-      id: item?.quality_attribute?.id,
-      mn : item?.maturity_level_number,
+      title: item?.title,
+      id: item?.id,
+      mn : data?.subject?.maturity_level?.maturity_levels_count,
     };
   });
 };

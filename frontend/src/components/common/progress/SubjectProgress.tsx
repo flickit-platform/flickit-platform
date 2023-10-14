@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 
 interface ISubjectProgressProps {
   progress: number;
-  colorCode: string;
+  inProgress?: boolean;
 }
 
 const progressToLabelMap: Record<number, string> = {
@@ -14,24 +14,37 @@ const progressToLabelMap: Record<number, string> = {
 };
 
 const SubjectProgress = (props: ISubjectProgressProps) => {
-  const { progress, colorCode } = props;
+  const { progress, inProgress } = props;
 
   return (
     <Box mt={9} mb={4}>
-      <LinearProgress sx={{ borderRadius: 3 }} value={progress} variant="determinate" color="inherit" />
-      <Typography
-        sx={{
-          mt: 1,
-          opacity: 0.7,
-          fontFamily: "Oswald",
-          fontWeight: 400,
-          color: colorCode ? (t) => t.palette.getContrastText(colorCode) : "white",
-        }}
-        variant="h6"
-        textTransform={"uppercase"}
-      >
-        <Trans i18nKey={progressToLabelMap[progress] || "inprogress"} />
-      </Typography>
+      {inProgress ? (
+        <Box>
+          <LinearProgress sx={{ borderRadius: 3 }} color="inherit" />
+        </Box>
+      ) : (
+        <Box>
+          <LinearProgress
+            sx={{ borderRadius: 3 }}
+            value={progress}
+            variant="determinate"
+            color="inherit"
+          />
+          <Typography
+            sx={{
+              mt: 1,
+              opacity: 0.7,
+              fontFamily: "Oswald",
+              fontWeight: 400,
+              color: "#000000de",
+            }}
+            variant="h6"
+            textTransform={"uppercase"}
+          >
+            <Trans i18nKey={progressToLabelMap[progress] || "inprogress"} />
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

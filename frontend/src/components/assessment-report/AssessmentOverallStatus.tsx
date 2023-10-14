@@ -4,17 +4,14 @@ import Paper from "@mui/material/Paper";
 import { ESystemStatus, ISubjectInfo, TStatus, IMaturityLevel } from "@types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { getColorOfStatus, styles } from "@styles";
+import { styles } from "@styles";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
-import hasStatus from "@utils/hasStatus";
-
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects_info: ISubjectInfo[];
-  maturity_level_number: number;
-  level_value: number;
-  maturity_level_status: string;
+  maturity_level: IMaturityLevel;
+  maturity_level_count: number;
 }
 
 export const AssessmentOverallStatus = (
@@ -23,11 +20,9 @@ export const AssessmentOverallStatus = (
   const {
     status,
     subjects_info = [],
-    maturity_level_number,
-    level_value,
-    maturity_level_status,
+    maturity_level,
+    maturity_level_count,
   } = props;
-
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
       <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
@@ -56,12 +51,9 @@ export const AssessmentOverallStatus = (
                     </span>{" "}
                     <Trans i18nKey={"statusIs"} />{" "}
                     <b
-                      // style={{
-                      //   color: getColorOfStatus(subject.status, "#747373"),
-                      // }}
                       data-cy={"status"}
                     >
-                      {subject.status || "NOT EVALUATED"}
+                      {subject?.maturity_level?.title ?? "NOT EVALUATED"}
                     </b>
                   </Typography>
                 );
@@ -76,9 +68,9 @@ export const AssessmentOverallStatus = (
                 mx: { xs: "auto", lg: undefined },
                 maxWidth: { xs: "310px", lg: "680px" },
               }}
-              level_value={level_value}
-              maturity_level_status={maturity_level_status}
-              maturity_level_number={maturity_level_number}
+              level_value={maturity_level?.index ?? 0}
+              maturity_level_status={maturity_level?.title}
+              maturity_level_number={maturity_level_count}
               systemStatus={ESystemStatus[status as ESystemStatus]}
               width="100%"
             />

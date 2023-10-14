@@ -116,7 +116,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
         dispatch(authActions.setUserInfo(data));
-        navigate(`/${id}/assessments`);
+        navigate(`/${id}/assessments/1`);
       })
       .catch((e) => {});
   };
@@ -140,7 +140,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             component={Link}
             variant="h6"
             fontFamily={"Roboto"}
-            to={`/${id}/assessments`}
+            to={`/${id}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{

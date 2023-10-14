@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { getColorOfStatus, styles } from "@styles";
+import { getMaturityLevelColors, styles } from "@styles";
 import Skeleton from "@mui/material/Skeleton";
 import { TStatus } from "@types";
 
@@ -16,7 +16,7 @@ interface IVerticalLevelChartProps extends BoxProps {
 
 const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
   const { loading, title, status, cl, ml,mn, ...rest } = props;
-  const statusColor = getColorOfStatus(status);
+  const colorPallet = getMaturityLevelColors(mn);
 
   return (
     <Box {...rest} sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}>
@@ -38,8 +38,8 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
         <Typography
           sx={{
             display: "inline-block",
-            color: statusColor,
-            borderBottom: loading ? undefined : `2px solid ${statusColor}`,
+            color: colorPallet[ml-1],
+            borderBottom: loading ? undefined : `2px solid ${colorPallet[ml-1]}`,
           }}
           variant="h3"
           fontFamily={"Oswald"}

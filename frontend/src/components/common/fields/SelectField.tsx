@@ -19,13 +19,11 @@ interface ISelectFieldUC extends ISelectField {}
 
 const SelectFieldUC = (props: ISelectFieldUC) => {
   const { name, ...rest } = props;
-
   const {
     register,
     formState: { errors },
   } = useFormContext();
   const { hasError, errorMessage } = getFieldError(errors, name);
-
   return (
     <SelectField
       {...rest}
@@ -50,6 +48,7 @@ interface ISelectField extends SelectProps {
   error?: boolean;
   fetchOptions?: any;
   register?: UseFormRegister<any>;
+  defaultOption?: any;
 }
 
 export const SelectField = (props: ISelectField) => {
@@ -69,6 +68,7 @@ export const SelectField = (props: ISelectField) => {
     fetchOptions,
     error,
     register,
+    defaultOption,
     ...rest
   } = props;
 
@@ -87,7 +87,7 @@ export const SelectField = (props: ISelectField) => {
       <Select
         {...rest}
         {...(register ? register(name, { required }) : {})}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue?defaultValue:defaultOption.id}
         labelId={`select_label_id_${name}`}
         sx={{
           ...(rest?.sx || {}),

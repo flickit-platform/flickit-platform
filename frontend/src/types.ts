@@ -46,18 +46,18 @@ export interface IQuestionInfo {
   answer: null | TAnswer;
   title: string;
   questionResultId?: string | number;
-  answer_templates: TAnswerTemplates;
+  answer_options?: TAnswerTemplates;
   description?: string;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
-  questions?: IQuestionInfo[];
+  questions: IQuestionInfo[];
 };
 
 export type TAnswer = {
   id: TId;
-  value: string | number;
+  index: string | number;
   caption: string;
   evidences: TEvidences;
 };
@@ -115,15 +115,17 @@ export interface ISubjectInfo {
   id: TId;
   image: string | null;
   progress: number;
-  status: TStatus;
+  status: string;
   title: string;
   total_answered_question_number: number;
   total_question_number: number;
+  maturity_level?:IMaturityLevel
 }
 export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
+  index?:number
 }
 
 export interface IImage {
@@ -148,6 +150,10 @@ export interface IAssessmentKitModel {
     | "status"
   >;
 }
+export interface IAssessmentKitList {
+  id: TId;
+  maturity_levels_count: number;
+}
 
 export interface IAssessmentKit {
   code: string;
@@ -169,6 +175,10 @@ export interface IColorModel {
   color_code: string;
   id: TId;
   title: string;
+}
+export interface IColor {
+  code: string;
+  id: TId;
 }
 
 export interface IOwnerModel {
@@ -206,6 +216,8 @@ export interface ITotalProgress {
   progress: number;
   total_answered_question_number: number;
   total_question_number: number;
+  answers_count?:number;
+  question_count?:number;
 }
 
 export interface ITotalProgressModel {
@@ -237,7 +249,7 @@ export interface IQuestion {
 }
 
 export interface IQuestionsModel {
-  questions: IQuestion[];
+  items: IQuestion[];
   assessment_result_id: string;
 }
 
@@ -275,18 +287,16 @@ export interface IQuestionsResultsModel
 
 export interface IAssessment {
   id: TId;
-  last_modification_date: string;
+  last_modification_time: string;
   status: TStatus;
   title: string;
-  code: string;
-  color: IColorModel;
+  // code: string;
+  color: IColor;
+  is_calculate_valid: boolean;
   assessment_results: string[];
-  assessment_kit: IAssessmentKitModel;
-  total_progress?: ITotalProgress;
-  maturity_level_number: number;
-  level_value: number;
-  maturity_level_status: string;
-  maturity_level: IMaturityLevel;
+  assessment_kit: IAssessmentKitList;
+  // total_progress?: ITotalProgress;
+  result_maturity_level: IMaturityLevel;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
@@ -318,14 +328,14 @@ export interface IQuestionnaire {
 }
 
 export interface IQuestionnairesInfo {
-  answered_question: number;
+  answers_count: number;
   id: TId;
-  question_number: number;
+  questions_count: number;
   progress: number;
   last_updated?: string;
   current_question_index: number;
   title: string;
-  subject: { id: TId; title: string }[];
+  subjects: { id: TId; title: string }[];
 }
 export interface IQuestionnairesModel extends ITotalProgress {
   assessment_title: string;
@@ -350,6 +360,10 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
   total_progress: ITotalProgress;
+  attributes:any;
+  subject:any;
+  top_strengths:any;
+  top_weaknesses:any;
 }
 
 export type TQueryFunction<T extends any = any, A extends any = any> = (

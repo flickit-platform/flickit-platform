@@ -4,10 +4,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
 import Typography from "@mui/material/Typography";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
-import Button from "@mui/material/Button";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -17,7 +16,6 @@ import {
   questionActions,
   useQuestionContext,
   useQuestionDispatch,
-  setEvidenceDescription,
 } from "@/providers/QuestionProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
@@ -26,29 +24,19 @@ import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
-import { toast } from "react-toastify";
 import useDialog from "@utils/useDialog";
 import {
-  Avatar,
   Collapse,
-  DialogActions,
-  DialogContent,
   Grid,
 } from "@mui/material";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
-import useScreenResize from "@utils/useScreenResize";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
@@ -68,9 +56,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
   const {
     title,
-    answer_templates,
-    index = 0,
-    answer,
     description,
   } = questionInfo;
   const { questionIndex } = useQuestionContext();
@@ -171,16 +156,16 @@ const AnswerTemplate = (props: {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
   const { questionInfo, questionIndex, questionsInfo, abortController } = props;
-  const { answer_templates, answer } = questionInfo;
-  const { total_number_of_questions, resultId } = questionsInfo;
+  const { answer_options, answer } = questionInfo;
+  const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
-  const { questionnaireId = "" } = useParams();
+  const { assessmentId = "", questionnaireId } = useParams();
   const [value, setValue] = useState<TAnswer | null>(answer);
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
   const isSelectedValueTheSameAsAnswer =
-    questionInfo?.answer?.value == value?.value;
+    questionInfo?.answer?.index == value?.index;
   const changeHappened = useRef(false);
   const onChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -189,7 +174,7 @@ const AnswerTemplate = (props: {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
-    setValue((prevValue) => (prevValue?.value === v?.value ? null : v));
+    setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
@@ -197,11 +182,11 @@ const AnswerTemplate = (props: {
     try {
       const res = await service.submitAnswer(
         {
-          resultId,
-          questionnaireId,
+          assessmentId,
           data: {
+            questionnaire_id: questionnaireId,
             question_id: questionInfo?.id,
-            answer: value?.id || null,
+            answer_option_id: value?.id || null,
           },
         },
         { signal: abortController.current.signal }
@@ -237,7 +222,6 @@ const AnswerTemplate = (props: {
       submitQuestion();
     }
   }, [value]);
-
   return (
     <>
       <Box display={"flex"} justifyContent="flex-start" mt={4}>
@@ -249,11 +233,11 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {answer_templates?.map((template) => {
-            const { value: templateValue, caption } = template || {};
+          {answer_options?.map((option: any) => {
+            const { index: templateValue, caption } = option || {};
             return (
               <Box
-                key={template.value}
+                key={option.value}
                 mb={2}
                 mr={2}
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
@@ -263,8 +247,8 @@ const AnswerTemplate = (props: {
                   color="success"
                   fullWidth
                   size="large"
-                  value={template}
-                  selected={templateValue === value?.value}
+                  value={option}
+                  selected={templateValue === value?.index}
                   onChange={onChange}
                   disabled={isSubmitting}
                   sx={{
@@ -294,7 +278,7 @@ const AnswerTemplate = (props: {
                 >
                   <Checkbox
                     disableRipple={true}
-                    checked={templateValue === value?.value}
+                    checked={templateValue === value?.index}
                     disabled
                     sx={{
                       position: "absoulte",
@@ -344,8 +328,10 @@ const AnswerTemplate = (props: {
 const AnswerDetails = ({ questionInfo }: any) => {
   const dialogProps = useDialog();
   const evidencesQueryData = useQuery({
-    service: (args = { questionId: questionInfo.id, assessmentId }, config) =>
-      service.fetchEvidences(args, config),
+    service: (
+      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
+      config
+    ) => service.fetchEvidences(args, config),
     toastError: true,
   });
   const hasSetCollapse = useRef(false);
@@ -355,7 +341,7 @@ const AnswerDetails = ({ questionInfo }: any) => {
 
   useEffect(() => {
     if (!hasSetCollapse.current && evidencesQueryData.loaded) {
-      if (evidencesQueryData.data?.evidences?.length > 0) {
+      if (evidencesQueryData.data?.items?.length > 0) {
         setCollapse(true);
         hasSetCollapse.current = true;
       }
@@ -561,8 +547,8 @@ const Evidence = (props: any) => {
           <QueryData
             {...evidencesQueryData}
             render={(data) => {
-              const { evidences } = data;
-              return evidences.map((item: any, index: number) => (
+              const { items } = data;
+              return items.map((item: any, index: number) => (
                 <EvidenceDetail
                   item={item}
                   setEvidenceId={setEvidenceId}
@@ -611,14 +597,14 @@ const EvidenceDetail = (props: any) => {
             {formatDate(last_modification_date)}
           </Box>
         </Box>
-        <Box>
+        {/* <Box>
           <Actions
             fetchEvidences={evidencesQueryData.query}
             id={id}
             setEvidenceId={setEvidenceId}
             description={description}
           />
-        </Box>
+        </Box> */}
       </ListItem>
     </Box>
   );

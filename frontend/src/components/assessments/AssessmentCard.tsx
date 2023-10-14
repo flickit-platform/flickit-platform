@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Gauge } from "@common/charts/Gauge";
+import LoadingGauge from "@common/charts/LoadingGauge";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useMenu from "@utils/useMenu";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -30,7 +31,7 @@ import hasMaturityLevel from "@utils/hasMaturityLevel";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
-
+import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
   item: IAssessment & { space: any };
   dialogProps: TDialogProps;
@@ -38,13 +39,44 @@ interface IAssessmentCardProps {
 }
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
+  const [calculateResault, setCalculateResault] = useState<any>();
+  const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { total_progress, maturity_level_number,level_value,maturity_level_status,maturity_level } = item;
-  const { progress = 0 } = total_progress || {};
-  const hasML= hasMaturityLevel(level_value)
-  const isComplete = progress === 100;
+  const { result_maturity_level, is_calculate_valid, assessment_kit, id } =
+    item;
+  const hasML = hasMaturityLevel(result_maturity_level?.value);
+  const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
+  const { service } = useServiceContext();
+  const calculateMaturityLevelQuery = useQuery({
+    service: (args = { assessmentId: id }, config) =>
+      service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+
+  const fetchAssessments = async () => {
+    try {
+      setShow(is_calculate_valid);
+      if (!is_calculate_valid) {
+        const data = await calculateMaturityLevelQuery.query();
+        setCalculateResault(data);
+        if (data.maturity_level?.id) {
+          setShow(true);
+        }
+      }
+      
+    } catch (e) {
+      // const err = e as ICustomError;
+      // toastError(err, { filterByStatus: [404] });
+      // setLoading(false);
+      // setError(true);
+      // setErrorObject(err);
+    }
+  };
+  useEffect(() => {
+    fetchAssessments();
+  }, [is_calculate_valid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper
@@ -55,7 +87,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           px: 2,
           borderRadius: "16px",
           ...styles.centerCH,
-          minHeight: "320px",
+          minHeight: "300px",
           height: "100%",
           justifyContent: "space-between",
           ":hover": {
@@ -65,14 +97,16 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         elevation={4}
         data-cy="assessment-card"
       >
-        <Actions {...props} abortController={abortController} />
+        {/* <Actions {...props} abortController={abortController} /> */}
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
               sx={{ textDecoration: "none" }}
               component={Link}
               to={
-                isComplete ? `${item.id}/insights` : `${item.id}/questionnaires`
+                is_calculate_valid
+                  ? `${item.id}/insights`
+                  : `${item.id}/questionnaires`
               }
             >
               <Typography
@@ -84,7 +118,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   fontWeight: "bold",
                   pb: 0,
                   textAlign: "center",
-                  color: item.color?.color_code || "#101c32",
+                  color: item.color?.code || "#101c32",
+                  maxWidth: "320px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  margin: "0 auto",
                 }}
                 data-cy="assessment-card-title"
               >
@@ -96,7 +135,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(item.last_modification_date)}
+                {formatDate(item.last_modification_time)}
               </Typography>
             </Box>
           </Grid>
@@ -108,16 +147,28 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             component={Link}
             to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
-            <Gauge
-              systemStatus={item.status}
-              maturity_level_number={maturity_level_number}
-              level_value={level_value}
-              maturity_level_status={maturity_level_status}
-              maxWidth="275px"
-              mt="auto"
-            />
+            {show ? (
+              <Gauge
+                systemStatus={item?.status}
+                maturity_level_number={maturity_levels_count}
+                level_value={
+                  calculateResault?.maturity_level
+                    ? calculateResault?.maturity_level?.index
+                    : result_maturity_level?.index 
+                }
+                maturity_level_status={
+                  calculateResault?.maturity_level
+                    ? calculateResault?.maturity_level?.title
+                    : result_maturity_level?.title
+                }
+                maxWidth="275px"
+                mt="auto"
+              />
+            ) : (
+              <LoadingGauge />
+            )}
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={4}>
+          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
             <Button
               startIcon={<QueryStatsRounded />}
               fullWidth
@@ -130,7 +181,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               }}
               component={Link}
               to={hasML ? `${item.id}/insights` : ""}
-              variant={isComplete ? "contained" : undefined}
+              // variant={is_calculate_valid ? "contained" : undefined}
               data-cy="view-insights-btn"
             >
               <Trans i18nKey="insights" />
@@ -149,7 +200,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               to={`${item.id}/questionnaires`}
               sx={{
                 backgroundColor: "#2e7d72",
-                background: `linear-gradient(135deg, #2e7d72 ${progress}%, #01221e ${progress}%)`,
+                background: `#01221e`,
               }}
               data-cy="questionnaires-btn"
             >

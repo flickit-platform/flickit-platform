@@ -16,22 +16,18 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 
-const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }) => {
-  const { data, isReview } = props;
+const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean,pathInfo:any }) => {
+  const { data, isReview,pathInfo } = props;
   const { title } = data || {};
   const {
     questionsInfo: { total_number_of_questions },
     assessmentStatus,
     isSubmitting,
   } = useQuestionContext();
-  const { spaceId, assessmentId, questionIndex, questionnaireId } = useParams();
+  const { spaceId, assessmentId, questionIndex, questionnaireId,page } = useParams();
   const isComplete = questionIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
-  const breadcrumbInfo = useSupTitleBreadcrumb({
-    spaceId,
-    assessmentId,
-    questionnaireId,
-  });
+  const{space,assessment}=pathInfo
 
   useEffect(() => {
     if (isComplete) {
@@ -74,18 +70,18 @@ const QuestionsTitle = (props: { data: IQuestionnaireModel; isReview?: boolean }
           <SupTitleBreadcrumb
             routes={[
               {
-                title: breadcrumbInfo?.space,
-                to: `/${spaceId}/assessments`,
+                title: space?.title,
+                to: `/${spaceId}/assessments/${page}`,
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
-                title: `${breadcrumbInfo?.assessment} ${t("questionnaires")}`,
-                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
+                title: `${assessment?.title} ${t("questionnaires")}`,
+                to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
                 icon: <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
-                title: breadcrumbInfo?.questionnaire,
-                to: `/${spaceId}/assessments/${assessmentId}/questionnaires`,
+                title,
+                to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
                 icon: <QuizRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
             ]}

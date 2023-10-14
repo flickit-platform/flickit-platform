@@ -4,18 +4,10 @@ import Title from "@common/Title";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import Hidden from "@mui/material/Hidden";
 import { getMaturityLevelColors, styles } from "@styles";
 
 const SUbjectAttributeCard = (props: any) => {
-  const {
-    quality_attribute = {},
-    level_value: ml,
-    maturity_level_number: mn,
-    status,
-    maturity_level_status,
-  } = props;
-  const { title, description, images = [] } = quality_attribute;
+  const { title, description, maturity_level, maturity_levels_count } = props;
   return (
     <Paper
       elevation={2}
@@ -39,10 +31,10 @@ const SUbjectAttributeCard = (props: any) => {
             </Title>
           </Box>
           <AttributeStatusBarContainer
-            status={maturity_level_status}
-            ml={ml}
+            status={maturity_level?.title}
+            ml={maturity_level?.index}
             cl={1}
-            mn={mn}
+            mn={maturity_levels_count}
           />
           <Box mt={3}>
             <Typography
@@ -70,9 +62,9 @@ const SUbjectAttributeCard = (props: any) => {
                 fontSize="1.2rem"
               >
                 {" "}
-                {ml}.{" "}
+                {maturity_level?.index}.{" "}
               </Typography>
-              <Trans i18nKey={"meaning"} /> {maturity_level_status}.
+              <Trans i18nKey={"meaning"} /> {maturity_level?.title}.
             </Typography>
           </Box>
           <Box mt={0.6}>
@@ -81,20 +73,6 @@ const SUbjectAttributeCard = (props: any) => {
             </Typography>
           </Box>
         </Grid>
-        <Hidden smDown>
-          {images?.[0] && (
-            <Grid item md={1} xs={0}>
-              {/* <Box sx={{ ...styles.centerVH }} height="100%" width="100%">
-                <img
-                  src={images[0].image}
-                  alt={title}
-                  width="100%"
-                  style={{ maxHeight: "270px" }}
-                />
-              </Box> */}
-            </Grid>
-          )}
-        </Hidden>
       </Grid>
     </Paper>
   );

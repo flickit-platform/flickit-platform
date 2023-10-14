@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
@@ -7,61 +6,47 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import {
-  IAssessmentReportModel,
-  IQuestionnairesModel,
-  IQuestionnairesPageDataModel,
-  ITotalProgressModel,
-  TQueryProps,
-} from "@types";
+import { IQuestionnairesModel } from "@types";
 import Title from "@common/Title";
-import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import Skeleton from "@mui/material/Skeleton";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import SupTitleBreadcrumb, {
   useSupTitleBreadcrumb,
 } from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import hasStatus from "@utils/hasStatus";
-import hasMaturityLevelStatus from "@/utils/hasMaturityLevelStatus";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "@common/PermissionControl";
 import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
+import QueryData from "../common/QueryData";
 const QuestionnaireContainer = () => {
-  const {
-    pageQueryData,
-    questionnaireQueryData,
-    totalProgressQueryData,
-    assessmentQueryData,
-  } = useQuestionnaire();
-  const progress = questionnaireQueryData.data?.progress || 0;
+  const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
+    useQuestionnaire();
+
+  const progress =
+    ((assessmentTotalProgress?.data?.answers_count || 0) /
+      (assessmentTotalProgress?.data?.question_count || 1)) *
+    100;
+
   return (
-    <PermissionControl
-      error={[
-        pageQueryData.errorObject,
-        questionnaireQueryData.errorObject,
-        totalProgressQueryData.errorObject,
-        assessmentQueryData.errorObject,
-      ]}
-    >
+    <PermissionControl error={[questionnaireQueryData.errorObject]}>
       <Box>
-        <QuestionnaireTitle />
+        <QueryData
+          {...fetchPathInfo}
+          loading={false}
+          render={(pathInfo = {}) => {
+            return <QuestionnaireTitle pathInfo={pathInfo} />;
+          }}
+        />
+
         <NotCompletedAlert
-          isCompleted={
-            totalProgressQueryData.data?.total_progress?.progress == 100
-          }
-          hasStatus={hasMaturityLevelStatus(
-            assessmentQueryData.data?.maturity_level_status
-          )}
-          loading={
-            totalProgressQueryData.loading || assessmentQueryData.loading
-          }
+          isCompleted={progress == 100}
+          hasStatus={false}
+          loading={questionnaireQueryData.loading}
         />
         <Box
           flexWrap={"wrap"}
@@ -82,8 +67,8 @@ const QuestionnaireContainer = () => {
           position={"relative"}
         >
           <QuestionnaireList
+            assessmentTotalProgress={assessmentTotalProgress}
             questionnaireQueryData={questionnaireQueryData}
-            pageQueryData={pageQueryData}
           />
         </Box>
       </Box>
@@ -101,27 +86,22 @@ const useQuestionnaire = () => {
     service: (args = { subject_pk: subjectIdParam }, config) =>
       service.fetchQuestionnaires({ assessmentId, ...(args || {}) }, config),
   });
-
-  const pageQueryData = useQuery<IQuestionnairesPageDataModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchQuestionnairesPageData(args, config),
+  const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
+    service: (args, config) =>
+      service.fetchAssessmentTotalProgress(
+        { assessmentId, ...(args || {}) },
+        config
+      ),
   });
-
-  const totalProgressQueryData = useQuery<ITotalProgressModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchTotalProgress(args, config),
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+    runOnMount: true,
   });
-
-  const assessmentQueryData = useQuery<IAssessmentReportModel>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchAssessment(args, config),
-  });
-
   return {
-    pageQueryData,
     questionnaireQueryData,
-    totalProgressQueryData,
-    assessmentQueryData,
+    assessmentTotalProgress,
+    fetchPathInfo,
   };
 };
 
@@ -172,16 +152,14 @@ const NotCompletedAlert = (props: {
   );
 };
 
-const QuestionnaireTitle = () => {
-  const { spaceId, assessmentId } = useParams();
-  const breadcrumbInfo = useSupTitleBreadcrumb({
-    spaceId,
-    assessmentId,
-  });
+const QuestionnaireTitle = (props: any) => {
+  const { pathInfo } = props;
+  const { spaceId, assessmentId, page } = useParams();
+  const { space, assessment } = pathInfo;
 
   useEffect(() => {
-    setDocumentTitle(`${breadcrumbInfo.assessment} ${t("questionnaires")}`);
-  }, [breadcrumbInfo?.assessment]);
+    setDocumentTitle(`${assessment?.title} ${t("questionnaires")}`);
+  }, [assessment]);
 
   return (
     <Title
@@ -190,12 +168,12 @@ const QuestionnaireTitle = () => {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: breadcrumbInfo.space,
-              to: `/${spaceId}/assessments`,
+              title: space?.title,
+              to: `/${spaceId}/assessments/${page}`,
               icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
-              title: breadcrumbInfo.assessment,
+              title: assessment?.title,
               icon: (
                 <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
               ),
