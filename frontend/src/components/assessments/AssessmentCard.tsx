@@ -97,7 +97,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         elevation={4}
         data-cy="assessment-card"
       >
-        <Actions {...props} abortController={abortController} />
+        {/* <Actions {...props} abortController={abortController} /> */}
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
