@@ -54,7 +54,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, assessment_kit, title, color, ...restOfData } = data;
+    const { space, assessment_kit, title, color } = data;
     setLoading(true);
     try {
       type === "update"
