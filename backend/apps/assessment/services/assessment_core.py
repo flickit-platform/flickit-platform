@@ -68,12 +68,16 @@ def get_assessment_list(request):
             row_data = dict()
             row_data["id"] = item["id"]
             row_data["title"] = item["title"]
-            row_data["space_id"] = item["spaceId"]
+            space = Space.objects.get(id=item["spaceId"])
+            row_data["space"] = {"id": space.id,
+                                 "title": space.title
+                                 }
             row_data["last_modification_time"] = item["lastModificationTime"]
             row_data["color"] = item["color"]
             row_data["is_calculate_valid"] = item["isCalculateValid"]
             assessment_kit = AssessmentKit.objects.get(id=item["assessmentKitId"])
             row_data["assessment_kit"] = {"id": assessment_kit.id,
+                                          "title": assessment_kit.title,
                                           "maturity_levels_count": assessment_kit.maturity_levels.count()
                                           }
             if item["maturityLevelId"] is not None:
