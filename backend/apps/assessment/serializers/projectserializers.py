@@ -133,3 +133,7 @@ class LoadQuestionnairesSerializer(serializers.ModelSerializer):
         model = Questionnaire
         fields = ['id', 'index', 'title', 'questions_count', 'subjects']
 
+
+class EditAssessmentSerializer(serializers.Serializer):
+    title = serializers.CharField(required=True)
+    color_id = serializers.IntegerField(required=True)
