@@ -94,3 +94,11 @@ class AssessmentApi(APIView):
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = assessment_core.edit_assessment(assessments_details["body"], serializer.validated_data)
         return Response(result["body"], result["status_code"])
+
+    @swagger_auto_schema(responses={204: ""})
+    def delete(self, request, assessment_id):
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.delete_assessment(assessments_details["body"])
+        return Response(status=result["status_code"])
