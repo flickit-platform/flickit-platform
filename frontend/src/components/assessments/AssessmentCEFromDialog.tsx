@@ -37,7 +37,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     ...rest
   } = props;
   const { type, data = {}, staticData = {} } = context;
-  const { id: rowId } = data;
+  const { id: assessmentId } = data;
   const defaultValues = type === "update" ? data : {};
   const { spaceId } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
@@ -54,17 +54,16 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, assessment_kit, title, color, ...restOfData } = data;
+    const { space, assessment_kit, title, color } = data;
     setLoading(true);
     try {
       type === "update"
         ? await service.updateAssessment(
             {
-              rowId,
+              id: assessmentId,
               data: {
-                space: spaceId || space?.id,
-                assessment_kit: assessment_kit?.id,
-                ...restOfData,
+                title,
+                color_id: color,
               },
             },
             { signal: abortController.signal }
@@ -137,10 +136,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <AssessmentKitField
-              defaultValue={defaultValues?.assessment_kit}
-              staticValue={staticData.assessment_kit}
-            />
+            <AssessmentKitField defaultValue={defaultValues?.assessment_kit} />
           </Grid>
         </Grid>
         <CEDialogActions
@@ -156,13 +152,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   );
 };
 
-const AssessmentKitField = ({
-  defaultValue,
-  staticValue,
-}: {
-  defaultValue: any;
-  staticValue: any;
-}) => {
+const AssessmentKitField = ({ defaultValue }: { defaultValue: any }) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchAssessmentKitsOptions(args, config),
@@ -170,13 +160,13 @@ const AssessmentKitField = ({
 
   return (
     <AutocompleteAsyncField
-      {...(staticValue
+      {...(defaultValue
         ? ({ loading: false, loaded: true, options: [] } as any)
         : queryData)}
       name="assessment_kit"
       required={true}
-      defaultValue={staticValue ?? defaultValue}
-      disabled={!!staticValue}
+      defaultValue={defaultValue}
+      disabled={!!defaultValue}
       label={<Trans i18nKey="assessmentKit" />}
       data-cy="assessment_kit"
     />
