@@ -9,7 +9,6 @@ import {
   Link,
   useLocation,
   useNavigate,
-  useParams,
 } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
@@ -224,7 +223,6 @@ const Actions = (props: {
     item,
     dialogProps,
   } = props;
-  const [editLoading, setEditLoading] = React.useState(false);
   const navigate = useNavigate();
   const deleteItem = async (e: any) => {
     try {
@@ -253,7 +251,6 @@ const Actions = (props: {
   return (
     <MoreActions
       {...useMenu()}
-      loading={editLoading}
       boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
       items={
         hasStatus(item.status)
