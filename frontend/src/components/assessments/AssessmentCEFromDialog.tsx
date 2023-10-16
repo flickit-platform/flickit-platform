@@ -37,8 +37,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     ...rest
   } = props;
   const { type, data = {}, staticData = {} } = context;
-  const { items } = data;
-  const defaultValues = type === "update" ? items[0] : {};
+  const { id: assessmentId } = data;
+  const defaultValues = type === "update" ? data : {};
   const { spaceId } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
@@ -60,7 +60,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       type === "update"
         ? await service.updateAssessment(
             {
-              id:items[0]?.id,
+              id: assessmentId,
               data: {
                 title,
                 color_id: color,

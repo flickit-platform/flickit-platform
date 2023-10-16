@@ -219,11 +219,13 @@ const Actions = (props: {
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const { deleteAssessment, item, dialogProps, abortController } = props;
+  const {
+    deleteAssessment,
+    item,
+    dialogProps,
+  } = props;
   const [editLoading, setEditLoading] = React.useState(false);
-  const { service } = useServiceContext();
   const navigate = useNavigate();
-
   const deleteItem = async (e: any) => {
     try {
       await deleteAssessment(item.id);
@@ -232,26 +234,11 @@ const Actions = (props: {
       toastError(err);
     }
   };
-  const { spaceId } = useParams();
   const openEditDialog = (e: any) => {
-    setEditLoading(true);
-    service
-      .fetchAssessments(
-        { page: 0, size: 1, spaceId: spaceId, assessmentKitId: item.id },
-        { signal: abortController.current.signal }
-      )
-      .then(({ data }) => {
-        setEditLoading(false);
-        dialogProps.openDialog({
-          data: { ...data, space: item.space },
-          type: "update",
-        });
-      })
-      .catch((e) => {
-        setEditLoading(false);
-        const err = e as ICustomError;
-        toastError(err);
-      });
+    dialogProps.openDialog({
+      data: { ...item, space: item.space },
+      type: "update",
+    });
   };
 
   const addToCompare = (e: any) => {

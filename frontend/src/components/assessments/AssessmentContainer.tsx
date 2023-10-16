@@ -8,11 +8,11 @@ import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
 import { Box, Typography } from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
 import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
-import { ECustomErrorType } from "@types";
+import { ECustomErrorType, IAssessment } from "@types";
 import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
@@ -32,7 +32,7 @@ const AssessmentContainer = () => {
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
   const { current_space } = userInfo;
-  const { fetchAssessments,...rest } = useFetchAssessments();
+  const { fetchAssessments, ...rest } = useFetchAssessments();
   const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
