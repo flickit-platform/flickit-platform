@@ -32,7 +32,7 @@ const AssessmentContainer = () => {
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
   const { current_space } = userInfo;
-  const { fetchAssessments, ...rest } = useFetchAssessments();
+  const { fetchAssessments,...rest } = useFetchAssessments();
   const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {

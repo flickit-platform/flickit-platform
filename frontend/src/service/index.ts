@@ -198,10 +198,12 @@ export const createService = (
     fetchAssessments(
       {
         spaceId,
+        assessmentKitId,
         size,
         page,
       }: {
         spaceId: string | undefined;
+        assessmentKitId?: TId;
         size: number;
         page: number;
       },
@@ -213,6 +215,7 @@ export const createService = (
           page: page,
           size: size,
           space_id: spaceId,
+          ...(assessmentKitId && { assessment_kit_id: assessmentKitId }),
         },
       });
     },
@@ -229,10 +232,10 @@ export const createService = (
       return axios.get(`/assessment/projects/${rowId}/`, config);
     },
     updateAssessment(
-      { rowId, data }: { rowId: any; data: any },
+      { id, data }: { id: any; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/assessment/projects/${rowId}/`, data, config);
+      return axios.put(`/api/v1/assessments/${id}/`, data, config);
     },
     deleteAssessment(
       { id }: { id: any },

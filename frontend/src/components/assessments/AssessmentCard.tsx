@@ -9,6 +9,7 @@ import {
   Link,
   useLocation,
   useNavigate,
+  useParams,
 } from "react-router-dom";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
@@ -65,7 +66,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           setShow(true);
         }
       }
-      
     } catch (e) {
       // const err = e as ICustomError;
       // toastError(err, { filterByStatus: [404] });
@@ -97,7 +97,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         elevation={4}
         data-cy="assessment-card"
       >
-        {/* <Actions {...props} abortController={abortController} /> */}
+        <Actions {...props} abortController={abortController} />
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
@@ -154,7 +154,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 level_value={
                   calculateResault?.maturity_level
                     ? calculateResault?.maturity_level?.index
-                    : result_maturity_level?.index 
+                    : result_maturity_level?.index
                 }
                 maturity_level_status={
                   calculateResault?.maturity_level
@@ -232,12 +232,12 @@ const Actions = (props: {
       toastError(err);
     }
   };
-
+  const { spaceId } = useParams();
   const openEditDialog = (e: any) => {
     setEditLoading(true);
     service
-      .loadAssessment(
-        { rowId: item.id },
+      .fetchAssessments(
+        { page: 0, size: 1, spaceId: spaceId, assessmentKitId: item.id },
         { signal: abortController.current.signal }
       )
       .then(({ data }) => {
