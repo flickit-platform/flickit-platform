@@ -452,3 +452,17 @@ def get_path_info(assessments_details):
                       }
     result["status_code"] = status.HTTP_200_OK
     return result
+
+
+def edit_assessment(assessments_details, request_body):
+    result = dict()
+    data_json = {"title": request_body["title"],
+                 "colorId": request_body["color_id"]
+                 }
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}', json=data_json)
+    response_body = response.json()
+    result["Success"] = True
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result

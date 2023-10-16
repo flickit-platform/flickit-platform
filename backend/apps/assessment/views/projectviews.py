@@ -13,7 +13,7 @@ from account.permission.spaceperm import ASSESSMENT_LIST_IDS_PARAM_NAME
 
 from assessment.models import AssessmentProject
 from assessment.serializers import projectserializers
-from assessment.services import assessmentprojectservices, compareservices, assessment_core
+from assessment.services import assessmentprojectservices, compareservices, assessment_core, assessment_core_services
 
 
 class AssessmentProjectViewSet(ModelViewSet):
@@ -79,4 +79,18 @@ class AssessmentProjectApi(APIView):
 
     def get(self, request):
         result = assessment_core.get_assessment_list(request)
+        return Response(result["body"], result["status_code"])
+
+
+class AssessmentApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=projectserializers.EditAssessmentSerializer(), responses={201: ""})
+    def put(self, request, assessment_id):
+        serializer = projectserializers.EditAssessmentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.edit_assessment(assessments_details["body"], serializer.validated_data)
         return Response(result["body"], result["status_code"])
