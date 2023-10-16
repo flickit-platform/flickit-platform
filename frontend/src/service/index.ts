@@ -241,7 +241,7 @@ export const createService = (
       { id }: { id: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.delete(`/assessment/projects/${id}/`, config);
+      return axios.delete(`/api/v1/assessments/${id}/`, config);
     },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },

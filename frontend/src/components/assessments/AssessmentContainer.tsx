@@ -12,7 +12,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
 import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
-import { ECustomErrorType, IAssessment } from "@types";
+import { ECustomErrorType } from "@types";
 import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
