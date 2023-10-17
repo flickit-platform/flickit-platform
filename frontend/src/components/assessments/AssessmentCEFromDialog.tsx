@@ -83,7 +83,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       onSubmitForm();
       close();
       !!staticData.assessment_kit &&
-        navigate(`/${spaceId || space?.id}/assessments`);
+        navigate(`/${spaceId || space?.id}/assessments/1`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -136,7 +136,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <SpaceField defaultValue={defaultValues?.space || data?.space} />
           </Grid>
           <Grid item xs={12}>
-            <AssessmentKitField defaultValue={defaultValues?.assessment_kit} />
+            <AssessmentKitField
+              staticData={staticData?.assessment_kit}
+              defaultValue={defaultValues?.assessment_kit}
+            />
           </Grid>
         </Grid>
         <CEDialogActions
@@ -152,7 +155,13 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   );
 };
 
-const AssessmentKitField = ({ defaultValue }: { defaultValue: any }) => {
+const AssessmentKitField = ({
+  defaultValue,
+  staticData,
+}: {
+  defaultValue: any;
+  staticData: any;
+}) => {
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchAssessmentKitsOptions(args, config),
@@ -165,8 +174,8 @@ const AssessmentKitField = ({ defaultValue }: { defaultValue: any }) => {
         : queryData)}
       name="assessment_kit"
       required={true}
-      defaultValue={defaultValue}
-      disabled={!!defaultValue}
+      defaultValue={staticData ?? defaultValue}
+      disabled={!!staticData || !!defaultValue}
       label={<Trans i18nKey="assessmentKit" />}
       data-cy="assessment_kit"
     />
