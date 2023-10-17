@@ -67,3 +67,20 @@ def get_list_evidences(assessments_details, question_id, request):
     result["body"] = response_body
     result["status_code"] = response.status_code
     return result
+
+
+def edit_evidence(validated_data, evidence_id):
+    result = dict()
+    data = {
+            "description": validated_data["description"]
+            }
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}', json=data)
+    response_body = response.json()
+
+    result["Success"] = True
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result
+
+

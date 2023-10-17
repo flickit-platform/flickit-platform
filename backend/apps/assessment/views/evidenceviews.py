@@ -115,3 +115,14 @@ class EvidencesApi(APIView):
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = evidence_services.get_list_evidences(assessments_details["body"], question_id, request)
         return Response(result["body"], result["status_code"])
+
+
+class EvidenceApi(APIView):
+    @swagger_auto_schema(request_body=evidence_serializers.EditEvidenceSerializer(), responses={201: ""})
+    def put(self, request, evidence_id):
+        serializer_data = evidence_serializers.EditEvidenceSerializer(data=request.data)
+        serializer_data.is_valid(raise_exception=True)
+        result = evidence_services.edit_evidence(serializer_data.validated_data, evidence_id)
+        return Response(result["body"], result["status_code"])
+
+
