@@ -84,3 +84,14 @@ def edit_evidence(validated_data, evidence_id):
     return result
 
 
+def delete_evidence(evidence_id):
+    result = dict()
+
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}')
+
+    result["Success"] = True
+    result["body"] = None
+    result["status_code"] = response.status_code
+    return result
+

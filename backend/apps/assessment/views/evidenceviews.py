@@ -125,4 +125,7 @@ class EvidenceApi(APIView):
         result = evidence_services.edit_evidence(serializer_data.validated_data, evidence_id)
         return Response(result["body"], result["status_code"])
 
+    def delete(self, request, evidence_id):
+        result = evidence_services.delete_evidence(evidence_id)
+        return Response(status=result["status_code"])
 
