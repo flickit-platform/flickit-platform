@@ -109,6 +109,10 @@ def question_answering(assessments_details, serializer_data):
             "questionId": serializer_data["question_id"],
             "answerOptionId": serializer_data["answer_option_id"],
             }
+
+    if "is_not_applicable" in serializer_data:
+        data["isNotApplicable"] = serializer_data["is_not_applicable"]
+
     result = dict()
     if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
             assessment_kit=assessments_details["kitId"]).exists():

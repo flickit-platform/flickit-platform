@@ -64,7 +64,6 @@ class AddQuestionValueSerializer(serializers.ModelSerializer):
             question_value.question_id = question_id
             question_value.save()
             self.instance = question_value
-            # self.instance = QuestionValue.objects.create(assessment_result_id=assessment_result_id, **self.validated_data)
 
     class Meta:
         model = QuestionValue
@@ -75,6 +74,7 @@ class AnswerQuestionSerializer(serializers.Serializer):
     questionnaire_id = serializers.IntegerField(required=True)
     question_id = serializers.IntegerField(required=True)
     answer_option_id = serializers.IntegerField(required=True,  allow_null=True)
+    is_not_applicable = serializers.BooleanField(required=False)
 
 
 class LoadQuestionnaireAnswerSerializer(serializers.ModelSerializer):
