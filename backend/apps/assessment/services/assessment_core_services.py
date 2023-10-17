@@ -24,8 +24,9 @@ def load_assessment_details_with_id(request, assessment_id):
     return result
 
 
-def get_assessment_kit_assessment_count(assessment_kit_id, total_count=False, not_deleted=False, deleted=False):
+def get_assessment_kit_assessment_count(assessment_kit_id=None, space_id=None, total_count=False, not_deleted=False, deleted=False):
     params = {"assessmentKitId": assessment_kit_id,
+              "spaceId": space_id,
               "deleted": deleted,
               "total": total_count,
               "notDeleted": not_deleted

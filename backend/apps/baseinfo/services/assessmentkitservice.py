@@ -36,7 +36,7 @@ def load_maturity_level(maturity_level_id) -> MaturityLevel:
 
 def is_assessment_kit_deletable(assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
-    assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, not_deleted=True)
+    assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, not_deleted=True)
     if assessment_count_data["notDeletedCount"] != 0:
         return ActionResult(success=False, message='Some assessments with this assessment_kit exist')
     return ActionResult(success=True)

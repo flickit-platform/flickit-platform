@@ -59,7 +59,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     maturity_levels = MaturityLevelSimpleSerializer(many=True)
 
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, total_count=True)
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, total_count=True)
         return assessment_count_data["totalCount"]
 
     def get_current_user_delete_permission(self, assessment_kit: AssessmentKit):
@@ -195,7 +195,7 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
         return assessment_kit.questionnaires.values('question').count()
 
     def get_assessments_count(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit.id, total_count=True)
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, total_count=True)
         return assessment_count_data["totalCount"]
 
     class Meta:
