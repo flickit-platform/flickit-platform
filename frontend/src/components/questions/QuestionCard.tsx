@@ -56,7 +56,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
   const {
     title,
-    description,
+    hint,
   } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
@@ -120,7 +120,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               ))}
             </Typography>
           </Box>
-          {description && <QuestionGuide description={description} />}
+          {hint && <QuestionGuide hint={hint} />}
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -660,7 +660,7 @@ const QuestionGuide = (props: any) => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
-  const { description } = props;
+  const { hint } = props;
   return (
     <Box>
       <Box mt={1} width="100%">
@@ -704,8 +704,8 @@ const QuestionGuide = (props: any) => {
               }}
             >
               <Typography variant="body2">
-                {description.startsWith("\n")
-                  ? description
+                {hint.startsWith("\n")
+                  ? hint
                       .substring(1)
                       .split("\n")
                       .map((line: string, index: number) => (
@@ -714,7 +714,7 @@ const QuestionGuide = (props: any) => {
                           <br />
                         </React.Fragment>
                       ))
-                  : description
+                  : hint
                       .split("\n")
                       .map((line: string, index: number) => (
                         <React.Fragment key={index}>

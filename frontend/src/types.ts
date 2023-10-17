@@ -47,7 +47,7 @@ export interface IQuestionInfo {
   title: string;
   questionResultId?: string | number;
   answer_options?: TAnswerTemplates;
-  description?: string;
+  hint?: string;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
