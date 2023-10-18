@@ -791,7 +791,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.delete(`/assessment/deleteevidence/${id}/`, config);
+      return axios.delete(`/api/v1/evidences/${id}/`, config);
     },
     updateEvidence(
       args: { description: string; id: TId },
