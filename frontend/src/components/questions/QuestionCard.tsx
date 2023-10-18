@@ -4,7 +4,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
 import Typography from "@mui/material/Typography";
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
@@ -25,10 +25,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import {
-  Collapse,
-  Grid,
-} from "@mui/material";
+import { Collapse, Grid } from "@mui/material";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
@@ -54,10 +51,7 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const {
-    title,
-    hint,
-  } = questionInfo;
+  const { title, hint } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
 
@@ -525,6 +519,7 @@ const Evidence = (props: any) => {
                 label={<Trans i18nKey="evidence" />}
                 required={true}
                 placeholder="Please write your evidence"
+                isFocused={evidenceId ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
@@ -714,14 +709,12 @@ const QuestionGuide = (props: any) => {
                           <br />
                         </React.Fragment>
                       ))
-                  : hint
-                      .split("\n")
-                      .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))}
+                  : hint.split("\n").map((line: string, index: number) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
               </Typography>
             </Box>
           </Box>

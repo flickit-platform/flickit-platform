@@ -777,7 +777,7 @@ export const createService = (
     ) {
       const { description, questionId, assessmentId, id } = args ?? {};
       return id
-        ? axios.put(`/assessment/updateevidence/${id}/`, {
+        ? axios.put(`/api/v1/evidences/${id}/`, {
             description,
           })
         : axios.post(`/api/v1/evidences/`, {
