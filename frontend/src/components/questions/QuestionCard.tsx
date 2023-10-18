@@ -597,14 +597,14 @@ const EvidenceDetail = (props: any) => {
             {formatDate(last_modification_date)}
           </Box>
         </Box>
-        {/* <Box>
+        <Box>
           <Actions
             fetchEvidences={evidencesQueryData.query}
             id={id}
             setEvidenceId={setEvidenceId}
             description={description}
           />
-        </Box> */}
+        </Box>
       </ListItem>
     </Box>
   );
