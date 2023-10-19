@@ -57,7 +57,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
     questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
-  const [notApplicable, setNotApplicable] = useState<boolean | false>(false);
+  const [notApplicable, setNotApplicable] = useState<boolean>(false);
   useEffect(() => {
     return () => {
       abortController.current.abort();
