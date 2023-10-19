@@ -11,7 +11,8 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
 
 const QuestionsReview = () => {
-  const { questionIndex, questionsInfo, assessmentStatus } = useQuestionContext();
+  const { questionIndex, questionsInfo, assessmentStatus } =
+    useQuestionContext();
   return (
     <Box width="100%">
       <Review questions={questionsInfo.questions} isReviewPage={true} />
@@ -22,7 +23,10 @@ const QuestionsReview = () => {
 export const Review = ({ questions = [], isReviewPage }: any) => {
   const navigate = useNavigate();
   return (
-    <Box maxWidth={"1440px"} sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}>
+    <Box
+      maxWidth={"1440px"}
+      sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}
+    >
       {!isReviewPage && (
         <Box
           mb={6}
@@ -61,7 +65,11 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
           <Hidden smDown>
             <Box display="flex" justifyContent={"flex-end"}>
               <Box width="480px" sx={{ minHeight: "310px" }} mt="-64px">
-                <img src={assessmentDoneSvg} alt="assessment done" style={{ width: "100%" }} />
+                <img
+                  src={assessmentDoneSvg}
+                  alt="assessment done"
+                  style={{ width: "100%" }}
+                />
               </Box>
             </Box>
           </Hidden>
@@ -92,33 +100,76 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               >
                 <Box>
                   <Box>
-                    <Typography textTransform={"capitalize"} variant="subMedium" sx={{ color: "#b3b3b3" }}>
+                    <Typography
+                      textTransform={"capitalize"}
+                      variant="subMedium"
+                      sx={{ color: "#b3b3b3" }}
+                    >
                       <Trans i18nKey={"question"} />
                     </Typography>
-                    <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
+                    <Typography
+                      variant="h6"
+                      fontFamily="Roboto"
+                      fontWeight="bold"
+                    >
                       {question.title}
                     </Typography>
                   </Box>
                   {question.answer && (
                     <Box mt={3}>
-                      <Typography variant="subMedium" textTransform="uppercase" sx={{ color: "#b3b3b3" }}>
+                      <Typography
+                        variant="subMedium"
+                        textTransform="uppercase"
+                        sx={{ color: "#b3b3b3" }}
+                      >
                         <Trans i18nKey={"yourAnswer"} />
                       </Typography>
-                      <Typography variant="h6" fontFamily="Roboto" fontWeight="bold">
+                      <Typography
+                        variant="h6"
+                        fontFamily="Roboto"
+                        fontWeight="bold"
+                      >
                         {question.answer.caption}
                       </Typography>
                     </Box>
                   )}
+                  {question.is_not_applicable && (
+                    <Box mt={3}>
+                      <Typography
+                        variant="subMedium"
+                        textTransform="uppercase"
+                        sx={{ color: "#b3b3b3" }}
+                      >
+                        <Trans i18nKey={"yourAnswer"} />
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        fontFamily="Roboto"
+                        fontWeight="bold"
+                      >
+                       <Trans i18nKey={"markedAsNotApplicable"} />
+                      </Typography>
+                    </Box>
+                  )}
+
                   <Box display="flex" mt={2}>
                     <Button
                       variant="contained"
                       sx={{ mt: 0.2, ml: "auto" }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(isReviewPage ? `./../${question.index}` : `../${question.index}`);
+                        navigate(
+                          isReviewPage
+                            ? `./../${question.index}`
+                            : `../${question.index}`
+                        );
                       }}
                     >
-                      {question.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
+                      {question.answer || question.is_not_applicable ? (
+                        <Trans i18nKey="edit" />
+                      ) : (
+                        <Trans i18nKey="submitAnAnswer" />
+                      )}
                     </Button>
                   </Box>
                 </Box>

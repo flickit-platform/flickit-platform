@@ -290,5 +290,7 @@
   "relatedSubjects": "Related subjects",
   "loading":"Loading ...",
   "insightsAreRecalculating":"Insights are recalculating",
-  "pleaseWait":"Please wait ..."
+  "pleaseWait":"Please wait ...",
+  "theOptionSelectionIsDisabled":"The option selection is disabled as long as the question is marked as not applicable",
+  "markedAsNotApplicable":"Marked as not applicable"
 }

@@ -5,21 +5,30 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { styles } from "@styles";
-import { EAssessmentStatus, questionActions, useQuestionContext, useQuestionDispatch } from "@/providers/QuestionProvider";
+import {
+  EAssessmentStatus,
+  questionActions,
+  useQuestionContext,
+  useQuestionDispatch,
+} from "@/providers/QuestionProvider";
 import usePopover from "@utils/usePopover";
 import Typography from "@mui/material/Typography";
 import { QuestionThumb } from "./QuestionThumb";
 import { QuestionPopover } from "./QuestionPopover";
 
 const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
-  const { assessmentStatus, questionIndex, questionsInfo, isSubmitting } = useQuestionContext();
+  const { assessmentStatus, questionIndex, questionsInfo, isSubmitting } =
+    useQuestionContext();
   const { total_number_of_questions, questions = [] } = questionsInfo;
   const dispatch = useQuestionDispatch();
   const { questionIndex: questionParam } = useParams();
   const isFinish = questionParam === "completed";
 
   return (
-    <Box position="relative" sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}>
+    <Box
+      position="relative"
+      sx={{ mt: { xs: 1, sm: 3 }, mx: { xs: 0, sm: "24px" } }}
+    >
       <Hidden
         smDown
         mdDown={questions.length > 20 ? true : false}
@@ -62,7 +71,11 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
         <LinearProgress
           sx={{ flex: 1, borderRadius: 4 }}
           variant="determinate"
-          value={assessmentStatus === EAssessmentStatus.DONE ? 100 : (100 / (total_number_of_questions + 1)) * questionIndex}
+          value={
+            assessmentStatus === EAssessmentStatus.DONE
+              ? 100
+              : (100 / (total_number_of_questions + 1)) * questionIndex
+          }
         />
         <Button
           size="small"
@@ -72,7 +85,9 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           to={hasNextQuestion ? `../${questionIndex + 1}` : "../completed"}
           onClick={() => {
             if (!hasNextQuestion) {
-              dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
+              dispatch(
+                questionActions.setAssessmentStatus(EAssessmentStatus.DONE)
+              );
             }
           }}
         >
@@ -89,7 +104,6 @@ export const QuestionProgressItem = (props: any) => {
 
   const { questionIndex } = useParams();
   const { handleClick, ...popoverProps } = usePopover();
-
   return (
     <Box
       sx={{
@@ -97,9 +111,17 @@ export const QuestionProgressItem = (props: any) => {
         zIndex: 1,
         height: "20px",
         cursor: questionIndex != question.index ? "pointer" : "auto",
-        backgroundColor: (t: any) => (question.answer ? `${t.palette.primary.main}` : "white"),
+        backgroundColor: (t: any) =>
+          question.answer || question.is_not_applicable
+            ? `${t.palette.primary.main}`
+            : "white",
         border: (t: any) => `3px solid white`,
-        outline: (t: any) => `${question.answer ? t.palette.primary.main : "#a7caed"} solid 5px`,
+        outline: (t: any) =>
+          `${
+            question.answer || question.is_not_applicable
+              ? t.palette.primary.main
+              : "#a7caed"
+          } solid 5px`,
         transition: "background-color .3s ease, transform .2s ease",
         borderRadius: "8px",
         transform: question.index == questionIndex ? "scale(1.3)" : "scale(.9)",
@@ -121,7 +143,8 @@ export const QuestionProgressItem = (props: any) => {
             lineHeight: "13px",
             fontFamily: "Roboto",
             opacity: question.index == questionIndex ? 1 : 0.6,
-            color: question.answer ? `white` : "gray",
+            color:
+              question.answer || question.is_not_applicable ? `white` : "gray",
             transition: "opacity .1s ease",
           }}
           className="i-p-i-n"
@@ -130,7 +153,12 @@ export const QuestionProgressItem = (props: any) => {
         </Typography>
       </Box>
       <QuestionPopover {...popoverProps}>
-        <QuestionThumb {...props} onClose={popoverProps.onClose} questionIndex={question.index} link={to || `${question.index}`} />
+        <QuestionThumb
+          {...props}
+          onClose={popoverProps.onClose}
+          questionIndex={question.index}
+          link={to || `${question.index}`}
+        />
       </QuestionPopover>
     </Box>
   );

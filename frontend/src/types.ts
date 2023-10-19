@@ -48,6 +48,8 @@ export interface IQuestionInfo {
   questionResultId?: string | number;
   answer_options?: TAnswerTemplates;
   hint?: string;
+  may_not_be_applicable: boolean;
+  is_not_applicable:boolean;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
@@ -119,13 +121,13 @@ export interface ISubjectInfo {
   title: string;
   total_answered_question_number: number;
   total_question_number: number;
-  maturity_level?:IMaturityLevel
+  maturity_level?: IMaturityLevel;
 }
 export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
-  index?:number
+  index?: number;
 }
 
 export interface IImage {
@@ -216,8 +218,8 @@ export interface ITotalProgress {
   progress: number;
   total_answered_question_number: number;
   total_question_number: number;
-  answers_count?:number;
-  question_count?:number;
+  answers_count?: number;
+  question_count?: number;
 }
 
 export interface ITotalProgressModel {
@@ -360,10 +362,10 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
   most_significant_weaknessness_atts: IQualityAttribute[];
   no_insight_yet_message?: string;
   total_progress: ITotalProgress;
-  attributes:any;
-  subject:any;
-  top_strengths:any;
-  top_weaknesses:any;
+  attributes: any;
+  subject: any;
+  top_strengths: any;
+  top_weaknesses: any;
 }
 
 export type TQueryFunction<T extends any = any, A extends any = any> = (
