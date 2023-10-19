@@ -11,6 +11,7 @@ import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   EAssessmentStatus,
   questionActions,
@@ -44,6 +45,7 @@ import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -51,10 +53,11 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const { title, hint } = questionInfo;
+  const { title, hint, may_not_be_applicable, is_not_applicable } =
+    questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
-
+  const [notApplicable, setNotApplicable] = useState<boolean>(false);
   useEffect(() => {
     return () => {
       abortController.current.abort();
@@ -63,6 +66,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
 
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
+    setNotApplicable(is_not_applicable ?? false);
   }, [title]);
 
   return (
@@ -71,7 +75,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         sx={{
           px: { xs: 2.5, sm: 4, md: 5 },
           py: { xs: 3, sm: 5 },
-          backgroundColor: "#273248",
+          backgroundColor: `${notApplicable ? "#000000cc" : "#273248"}`,
           flex: 1,
           backgroundImage: `url(${QASvg})`,
           color: "white",
@@ -120,6 +124,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             questionInfo={questionInfo}
             questionIndex={questionIndex}
             questionsInfo={questionsInfo}
+            setNotApplicable={setNotApplicable}
+            notApplicable={notApplicable}
+            may_not_be_applicable={may_not_be_applicable ?? false}
           />
         </Box>
       </Paper>
@@ -146,10 +153,21 @@ const AnswerTemplate = (props: {
   questionIndex: number;
   questionsInfo: TQuestionsInfo;
   abortController: React.MutableRefObject<AbortController>;
+  setNotApplicable: any;
+  notApplicable: boolean;
+  may_not_be_applicable: boolean;
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
-  const { questionInfo, questionIndex, questionsInfo, abortController } = props;
+  const {
+    questionInfo,
+    questionIndex,
+    questionsInfo,
+    abortController,
+    setNotApplicable,
+    notApplicable,
+    may_not_be_applicable,
+  } = props;
   const { answer_options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
@@ -170,6 +188,11 @@ const AnswerTemplate = (props: {
     }
     setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
+  useEffect(() => {
+    if (notApplicable) {
+      setValue(null);
+    }
+  }, [notApplicable]);
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
     dispatch(questionActions.setIsSubmitting(true));
@@ -181,13 +204,18 @@ const AnswerTemplate = (props: {
             questionnaire_id: questionnaireId,
             question_id: questionInfo?.id,
             answer_option_id: value?.id || null,
+            is_not_applicable: notApplicable,
           },
         },
         { signal: abortController.current.signal }
       );
       dispatch(questionActions.setIsSubmitting(false));
       dispatch(
-        questionActions.setQuestionInfo({ ...questionInfo, answer: value })
+        questionActions.setQuestionInfo({
+          ...questionInfo,
+          answer: value,
+          is_not_applicable: notApplicable,
+        })
       );
       if (isLastQuestion) {
         dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
@@ -244,7 +272,7 @@ const AnswerTemplate = (props: {
                   value={option}
                   selected={templateValue === value?.index}
                   onChange={onChange}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || notApplicable}
                   sx={{
                     color: "white",
                     p: { xs: 0.6, sm: 1 },
@@ -283,7 +311,9 @@ const AnswerTemplate = (props: {
                       opacity: 0.8,
                       "& svg": { fontSize: { xs: "2.1rem", sm: "2.5rem" } },
                       "&.Mui-checked": { color: "white", opacity: 1 },
-                      "&.Mui-disabled": { color: "white" },
+                      "&.Mui-disabled": {
+                        color: notApplicable ? "gray" : "white",
+                      },
                     }}
                   />
                   {caption}
@@ -293,13 +323,27 @@ const AnswerTemplate = (props: {
           })}
         </Box>
       </Box>
+      {notApplicable && (
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <WarningAmberRoundedIcon color="error" />
+          <Typography
+            variant="subtitle2"
+            color="error"
+            sx={{ ml: "4px", mt: "4px" }}
+          >
+            <Trans i18nKey={"theOptionSelectionIsDisabled"} />
+          </Typography>
+        </Box>
+      )}
       <Box
         sx={{
           mt: { xs: 4, md: 1 },
           mr: { xs: 0, md: 2 },
           display: "flex",
-          flexDirection: "column",
-          ml: "auto",
+          flexDirection: "row-reverse",
+          // ml: "auto",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <LoadingButton
@@ -308,12 +352,33 @@ const AnswerTemplate = (props: {
           loading={isSubmitting}
           sx={{
             fontSize: "1.2rem",
-            ml: "auto",
+            // ml: "auto",
           }}
           onClick={submitQuestion}
         >
           <Trans i18nKey={"nextQuestion"} />
         </LoadingButton>
+        {may_not_be_applicable && (
+          <FormControlLabel
+            sx={{ color: "#0288d1" }}
+            data-cy="automatic-submit-check"
+            control={
+              <Checkbox
+                checked={notApplicable}
+                onChange={(e) => {
+                  setNotApplicable(e.target.checked || false);
+                }}
+                sx={{
+                  color: "#0288d1",
+                  "&.Mui-checked": {
+                    color: "#0288d1",
+                  },
+                }}
+              />
+            }
+            label={<Trans i18nKey={"notApplicable"} />}
+          />
+        )}
       </Box>
     </>
   );

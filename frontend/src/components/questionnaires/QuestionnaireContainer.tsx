@@ -123,7 +123,6 @@ const NotCompletedAlert = (props: {
             <Button
               variant="contained"
               color="info"
-              disabled={!hasStatus}
               component={Link}
               to="./../insights"
               startIcon={<AnalyticsRoundedIcon />}

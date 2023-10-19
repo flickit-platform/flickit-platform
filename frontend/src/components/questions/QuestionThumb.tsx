@@ -5,7 +5,14 @@ import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 
 export const QuestionThumb = (props: any) => {
-  const { questionsInfo, question = {}, questionIndex, onClose = () => {}, link, isSubmitting } = props;
+  const {
+    questionsInfo,
+    question = {},
+    questionIndex,
+    onClose = () => {},
+    link,
+    isSubmitting,
+  } = props;
   const { total_number_of_questions } = questionsInfo;
 
   const navigate = useNavigate();
@@ -13,7 +20,8 @@ export const QuestionThumb = (props: any) => {
     <Box py={2.5} px={2.5} minWidth="284px" maxWidth="600px">
       <Box>
         <Typography textTransform={"capitalize"} variant="subMedium">
-          <Trans i18nKey={"question"} /> {questionIndex}/{total_number_of_questions}
+          <Trans i18nKey={"question"} /> {questionIndex}/
+          {total_number_of_questions}
         </Typography>
         <Typography variant="h6" fontFamily={"Roboto"}>
           {question?.title}
@@ -27,6 +35,16 @@ export const QuestionThumb = (props: any) => {
           <Typography variant="h6">{question.answer.caption}</Typography>
         </Box>
       )}
+      {question.is_not_applicable && (
+        <Box mt={3}>
+          <Typography variant="subMedium" textTransform="uppercase">
+            <Trans i18nKey={"yourAnswer"} />
+          </Typography>
+          <Typography variant="h6">
+            <Trans i18nKey={"markedAsNotApplicable"} />
+          </Typography>
+        </Box>
+      )}
       <Box display="flex">
         <Button
           sx={{ mt: 1, ml: "auto" }}
@@ -37,7 +55,11 @@ export const QuestionThumb = (props: any) => {
             onClose();
           }}
         >
-          {question.answer ? <Trans i18nKey="edit" /> : <Trans i18nKey="submitAnAnswer" />}
+          {question.answer || question.is_not_applicable ? (
+            <Trans i18nKey="edit" />
+          ) : (
+            <Trans i18nKey="submitAnAnswer" />
+          )}
         </Button>
       </Box>
     </Box>
