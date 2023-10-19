@@ -66,7 +66,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
 
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
-    setNotApplicable(is_not_applicable);
+    setNotApplicable(is_not_applicable ?? false);
   }, [title]);
 
   return (
@@ -126,7 +126,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             questionsInfo={questionsInfo}
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
-            may_not_be_applicable={may_not_be_applicable}
+            may_not_be_applicable={may_not_be_applicable ?? false}
           />
         </Box>
       </Paper>

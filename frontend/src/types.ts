@@ -48,8 +48,8 @@ export interface IQuestionInfo {
   questionResultId?: string | number;
   answer_options?: TAnswerTemplates;
   hint?: string;
-  may_not_be_applicable: boolean;
-  is_not_applicable:boolean;
+  may_not_be_applicable?: boolean;
+  is_not_applicable?:boolean;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
