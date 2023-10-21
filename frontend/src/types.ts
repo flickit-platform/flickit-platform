@@ -87,7 +87,7 @@ export interface IUserInfo {
   id: TId;
   display_name: string;
   email: string;
-  current_space: ISpaceInfo | null;
+  // current_space: ISpaceInfo | null;
   is_expert?: boolean;
   bio?: string;
   picture?: null | string;

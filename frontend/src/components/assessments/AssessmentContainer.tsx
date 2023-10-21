@@ -28,10 +28,9 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
-  const { userInfo } = useAuthContext();
+  const {currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
-  const { current_space } = userInfo;
   const { fetchAssessments, ...rest } = useFetchAssessments();
   const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
@@ -51,7 +50,7 @@ const AssessmentContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                title: current_space?.title || "",
+                title: currentSpace?.title || "",
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
@@ -92,7 +91,7 @@ const AssessmentContainer = () => {
               dialogProps.openDialog({
                 type: "create",
                 data: {
-                  space: { id: spaceId, title: current_space?.title },
+                  space: { id: spaceId, title: currentSpace?.title },
                 },
               })
             }
@@ -123,7 +122,7 @@ const AssessmentContainer = () => {
               <AssessmentsList
                 {...rest}
                 data={data}
-                space={{ id: spaceId, title: current_space?.title }}
+                space={{ id: spaceId, title: currentSpace?.title }}
                 dialogProps={dialogProps}
               />
               {pageCount > 1 && (
@@ -170,7 +169,7 @@ const useFetchAssessments = () => {
 
   useEffect(() => {
     fetchAssessments();
-  }, [page]);
+  }, [page,spaceId]);
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);

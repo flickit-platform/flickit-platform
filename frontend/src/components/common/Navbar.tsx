@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Trans } from "react-i18next";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "@styles";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
@@ -18,8 +18,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
@@ -27,19 +25,44 @@ import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
+import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
+import QueryData from "@common/QueryData";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import { ISpacesModel } from "@types";
 const drawerWidth = 240;
 
 const Navbar = () => {
-  const { userInfo } = useAuthContext();
-  const { current_space } = userInfo;
-
+  const { userInfo, dispatch } = useAuthContext();
+  const { spaceId } = useParams();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  const { service } = useServiceContext();
+  const spacesQueryData = useQuery<ISpacesModel>({
+    service: (args, config) => service.fetchSpaces(args, config),
+    toastError: true,
+  });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ spaceId, ...(args || {}) }, config),
+    runOnMount: true,
+  });
+  const fetchSpaceInfo = async () => {
+    try {
+      const res = await fetchPathInfo.query();
+      dispatch(authActions.setCurrentSpace(res?.space));
+    } catch (e) {
+      // const err = e as ICustomError;
+      // toastError(err);
+    }
+  };
+  useEffect(() => {
+    if (spaceId) {
+      fetchSpaceInfo();
+    }
+  }, [spaceId]);
   const drawer = (
     <Box
       onClick={handleDrawerToggle}
@@ -49,7 +72,7 @@ const Navbar = () => {
         variant="h6"
         sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
         component={NavLink}
-        to={current_space?.id ? `/${current_space?.id}/assessments/1` : `/spaces`}
+        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces`}
       >
         <NavLogo />
       </Typography>
@@ -64,36 +87,51 @@ const Navbar = () => {
             <ListItemText primary={<Trans i18nKey="spaces" />} />
           </ListItemButton>
         </ListItem>
-        {current_space?.id && (
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "left", borderRadius: 1.5 }}
-              component={NavLink}
-              to={`/${current_space?.id}/assessments/1`}
-            >
-              <ListItemText
-                primary={
-                  <>
-                    <Trans i18nKey="assessments" />
-                    {current_space?.title && (
-                      <Typography
-                        variant="caption"
-                        textTransform={"none"}
-                        sx={{
-                          pl: 0.5,
-                          ml: 0.5,
-                          lineHeight: "1",
-                          borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
-                        }}
-                      >
-                        {current_space?.title}
-                      </Typography>
-                    )}
-                  </>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
+        {spaceId && (
+          <QueryData
+            {...spacesQueryData}
+            render={(data) => {
+              const { results } = data;
+              return (
+                <Box>
+                  {results.slice(0, 5).map((space: any) => {
+                    return (
+                      <ListItem disablePadding key={space?.id}>
+                        <ListItemButton
+                          sx={{ textAlign: "left", borderRadius: 1.5 }}
+                          component={NavLink}
+                          to={`/${space?.id}/assessments/1`}
+                        >
+                          <ListItemText
+                            primary={
+                              <>
+                                {space?.title && (
+                                  <Typography
+                                    variant="caption"
+                                    textTransform={"none"}
+                                    sx={{
+                                      pl: 0.5,
+                                      ml: 0.5,
+                                      lineHeight: "1",
+                                      borderLeft: (t) =>
+                                        `1px solid ${t.palette.grey[300]}`,
+                                    }}
+                                  >
+                                    {space?.title}
+                                  </Typography>
+                                )}
+                              </>
+                            }
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
+                  <Divider />
+                </Box>
+              );
+            }}
+          />
         )}
         {/* <ListItem disablePadding>
           <ListItemButton
@@ -154,16 +192,12 @@ const Navbar = () => {
                 width: "110px",
               },
             }}
-            to={
-              current_space?.id
-                ? `/${current_space?.id}/assessments/1`
-                : `/spaces`
-            }
+            to={`/spaces`}
           >
             <NavLogo />
           </Typography>
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
-            <SpacesButton currentSpace={current_space} />
+            <SpacesButton />
             {/* {current_space?.id && (
               <Button
                 component={NavLink}
@@ -246,7 +280,7 @@ const NavLogo = () => {
       width="100%"
       height="100%"
       viewBox="0 0 787 250"
-     enableBackground="new 0 0 787 250"
+      enableBackground="new 0 0 787 250"
       xmlSpace="preserve"
     >
       <g>
@@ -363,26 +397,34 @@ const NavLogo = () => {
   );
 };
 
-const SpacesButton = ({ currentSpace }: any) => {
+const SpacesButton = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { dispatch } = useAuthContext();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClickMenueItem = (space: any) => {
+    dispatch(authActions.setCurrentSpace(space));
+    setAnchorEl(null);
+  };
+
   const navigate = useNavigate();
+  const { service } = useServiceContext();
+
+  const spacesQueryData = useQuery<ISpacesModel>({
+    service: (args, config) => service.fetchSpaces(args, config),
+    toastError: true,
+  });
 
   return (
     <>
       <Button
         data-cy="spaces"
-        onClick={() =>
-          currentSpace?.id
-            ? navigate(`/${currentSpace?.id}/assessments/1`)
-            : navigate("/spaces")
-        }
+        onClick={() => navigate("/spaces")}
         sx={{
           ...styles.activeNavbarLink,
           ml: 0.1,
@@ -417,20 +459,6 @@ const SpacesButton = ({ currentSpace }: any) => {
         }
       >
         <Trans i18nKey={"spaces"} />
-        {currentSpace?.title && (
-          <Typography
-            variant="caption"
-            textTransform={"none"}
-            sx={{
-              pl: 0.5,
-              ml: 0.5,
-              lineHeight: "1",
-              borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
-            }}
-          >
-            {currentSpace?.title}
-          </Typography>
-        )}
       </Button>
 
       <Menu
@@ -440,36 +468,43 @@ const SpacesButton = ({ currentSpace }: any) => {
         onClose={handleClose}
         PaperProps={{ sx: { minWidth: "260px" } }}
       >
-        {currentSpace?.id && (
-          <Box>
-            <Typography
-              variant="subMedium"
-              sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}
-            >
-              <Trans i18nKey={"currentSpace"} />
-            </Typography>
-            <MenuItem
-              dense
-              component={NavLink}
-              to={
-                currentSpace?.id
-                  ? `/${currentSpace?.id}/assessments/1`
-                  : `/spaces`
-              }
-              onClick={handleClose}
-            >
-              {currentSpace?.title}
-            </MenuItem>
-            <Divider />
-          </Box>
-        )}
+        <QueryData
+          {...spacesQueryData}
+          render={(data) => {
+            const { results } = data;
+            return (
+              <Box>
+                <Typography
+                  variant="subMedium"
+                  sx={{ px: 1.2, py: 0.3, opacity: 0.8 }}
+                >
+                  <Trans i18nKey={"recentSpaces"} />
+                </Typography>
+                {results.slice(0, 5).map((space: any) => {
+                  return (
+                    <MenuItem
+                      key={space?.id}
+                      dense
+                      component={NavLink}
+                      to={`/${space?.id}/assessments/1`}
+                      onClick={() => handleClickMenueItem(space)}
+                    >
+                      {space?.title}
+                    </MenuItem>
+                  );
+                })}
+                <Divider />
+              </Box>
+            );
+          }}
+        />
         <MenuItem
           dense
           onClick={handleClose}
           component={NavLink}
           to={`/spaces`}
         >
-          <Trans i18nKey={"allSpaces"} />
+          <Trans i18nKey={"spaceDirectory"} />
         </MenuItem>
       </Menu>
     </>
