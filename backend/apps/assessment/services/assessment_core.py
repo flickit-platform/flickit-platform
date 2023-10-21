@@ -446,7 +446,7 @@ def get_assessment_report(assessments_details):
     return result
 
 
-def get_path_info(assessments_details):
+def get_path_info_with_assessment_id(assessments_details):
     result = dict()
     assessment = {"id": assessments_details["assessmentId"],
                   "title": assessments_details["assessmentTitle"]
@@ -483,4 +483,20 @@ def delete_assessment(assessments_details):
     result["Success"] = True
     result["body"] = None
     result["status_code"] = response.status_code
+
+def get_path_info_with_space_id(space_id):
+    result = dict()
+    if not Space.objects.filter(id=space_id).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'space_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+    space_object = Space.objects.get(id=space_id)
+    space = {"id": space_object.id,
+             "title": space_object.title
+             }
+    result["body"] = {
+                      "space": space
+                      }
+    result["status_code"] = status.HTTP_200_OK
     return result

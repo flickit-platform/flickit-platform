@@ -31,12 +31,18 @@ class PathInfoApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if "assessment_id" not in request.query_params:
-            return Response({"code": "INVALID_INPUT", "message": "'assessment_id' may not be empty"},
+        if "assessment_id" in request.query_params:
+            assessment_id = request.query_params["assessment_id"]
+            assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+            if not assessments_details["Success"]:
+                return Response(assessments_details["body"], assessments_details["status_code"])
+            result = assessment_core.get_path_info_with_assessment_id(assessments_details["body"])
+        elif "space_id" in request.query_params:
+            space_id = request.query_params["space_id"]
+            result = assessment_core.get_path_info_with_space_id(space_id)
+        else:
+            return Response({"code": "INVALID_INPUT", "message": "'assessment_id' or 'space_id' may not be empty"},
                             status.HTTP_400_BAD_REQUEST)
-        assessment_id = request.query_params["assessment_id"]
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_path_info(assessments_details["body"])
         return Response(result["body"], result["status_code"])
+
+
