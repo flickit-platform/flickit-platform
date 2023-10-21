@@ -12,7 +12,7 @@ const getWhereToGo = (location: Location, authContext: IAuthContext) => {
   const { isAuthenticatedUser, userInfo, redirectRoute } = authContext;
   const isRoot = location.pathname === "/";
   const shouldNavigateToLoginPage = !isAuthenticatedUser && isRoot;
-  const spaceId = userInfo.current_space?.id;
+  // const spaceId = userInfo.current_space?.id;
 
   if (shouldNavigateToLoginPage) {
     // If user is not signed in and not on
@@ -24,7 +24,7 @@ const getWhereToGo = (location: Location, authContext: IAuthContext) => {
   }
   if (isRoot) {
     // If user has current space navigate to it otherwise navigate to spaces
-    return spaceId ? `/${spaceId}/assessments/1` : "/spaces";
+    return "/spaces";
   }
   return location.pathname;
 };

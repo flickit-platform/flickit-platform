@@ -16,10 +16,7 @@ const authReducer = (prevState: any, action: { type: AUTH_ACTIONS_TYPE; payload:
     case AUTH_ACTIONS_TYPE.SET_USER_INFO_LOADING:
       return { ...prevState, loadingUserInfo: action.payload };
     case AUTH_ACTIONS_TYPE.SET_CURRENT_SPACE:
-      return {
-        ...prevState,
-        userInfo: { ...prevState.userInfo, current_space: action.payload },
-      };
+      return { ...prevState, currentSpace: action.payload };
     default:
       return prevState;
   }

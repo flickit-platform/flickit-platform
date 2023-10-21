@@ -36,7 +36,6 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   useEffect(() => {
     if (isFocused && inputRef.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
-      console.log(inputRef?.current)
     }
   }, [isFocused]);
   return (

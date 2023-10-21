@@ -185,15 +185,17 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/useraccess/`, config);
     },
     fetchPathInfo(
-      { assessmentId }: { assessmentId: string },
+      { assessmentId, spaceId }: { assessmentId?: string; spaceId?: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/path-info?assessment_id=${assessmentId}`, {
-        ...(config ?? {}),
-        // params: {
-        //   assessmentId,
-        // },
-      });
+      return axios.get(
+        `/api/v1/path-info?${
+          assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}`,
+        {
+          ...(config ?? {}),
+        }
+      );
     },
     fetchAssessments(
       {

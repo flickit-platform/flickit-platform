@@ -1,4 +1,10 @@
-import React, { useReducer, FC, useContext, Dispatch, createContext } from "react";
+import React, {
+  useReducer,
+  FC,
+  useContext,
+  Dispatch,
+  createContext,
+} from "react";
 import { IUserInfo } from "@types";
 import authReducer from "./reducer";
 
@@ -12,6 +18,7 @@ export interface IAuthContext {
   accessToken: string;
   loadingUserInfo: boolean;
   redirectRoute: string;
+  currentSpace:any;
   dispatch: Dispatch<any>;
 }
 
@@ -19,7 +26,7 @@ export const defaultUserInfo = {
   display_name: "",
   id: "",
   email: "",
-  current_space: null,
+  // current_space: null,
 };
 
 const getAccessTokenFormStorage = () => {
@@ -36,6 +43,7 @@ export const AuthContext = createContext<IAuthContext>({
   accessToken: getAccessTokenFormStorage(),
   loadingUserInfo: true,
   userInfo: defaultUserInfo,
+  currentSpace: {},
   redirectRoute: "",
   dispatch: () => {},
 });
@@ -49,11 +57,16 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     accessToken: getAccessTokenFormStorage(),
     loadingUserInfo: true,
     userInfo: defaultUserInfo,
+    currentSpace:{},
     redirectRoute: "",
     dispatch: () => {},
   });
 
-  return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => {

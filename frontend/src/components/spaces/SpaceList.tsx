@@ -30,8 +30,8 @@ const SpacesList = (props: ISpaceListProps) => {
   const { dialogProps, data, fetchSpaces } = props;
   const { service } = useServiceContext();
   const { dispatch } = useAuthContext();
-  const { userInfo } = useAuthContext();
-  const { id: userId, current_space } = userInfo;
+  const { userInfo,currentSpace } = useAuthContext();
+  const { id: userId } = userInfo;
 
   const setUserInfo = (signal: AbortSignal) => {
     service
@@ -59,13 +59,13 @@ const SpacesList = (props: ISpaceListProps) => {
     <Box sx={{ overflowX: "auto", py: 1 }}>
       <Box minWidth="440px">
         {results.map((item: any) => {
-          const isActiveSpace = current_space?.id == item?.id;
+          // const isActiveSpace = current_space?.id == item?.id;
           const isOwner = userId == item?.owner.id;
           return (
             <SpaceCard
               key={item?.id}
               item={item}
-              isActiveSpace={isActiveSpace}
+              isActiveSpace={false}
               isOwner={isOwner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
@@ -111,7 +111,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
-    await setCurrentSpace();
+    // await setCurrentSpace();
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
