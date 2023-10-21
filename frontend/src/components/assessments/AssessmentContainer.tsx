@@ -28,7 +28,7 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
-  const { userInfo,currentSpace } = useAuthContext();
+  const {currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
   const { fetchAssessments, ...rest } = useFetchAssessments();

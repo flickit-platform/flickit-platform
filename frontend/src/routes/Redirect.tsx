@@ -9,10 +9,9 @@ const Redirect = () => {
 };
 
 const getWhereToGo = (location: Location, authContext: IAuthContext) => {
-  const { isAuthenticatedUser, userInfo, redirectRoute } = authContext;
+  const { isAuthenticatedUser, redirectRoute } = authContext;
   const isRoot = location.pathname === "/";
   const shouldNavigateToLoginPage = !isAuthenticatedUser && isRoot;
-  // const spaceId = userInfo.current_space?.id;
 
   if (shouldNavigateToLoginPage) {
     // If user is not signed in and not on

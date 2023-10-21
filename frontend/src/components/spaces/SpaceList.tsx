@@ -30,7 +30,7 @@ const SpacesList = (props: ISpaceListProps) => {
   const { dialogProps, data, fetchSpaces } = props;
   const { service } = useServiceContext();
   const { dispatch } = useAuthContext();
-  const { userInfo,currentSpace } = useAuthContext();
+  const { userInfo } = useAuthContext();
   const { id: userId } = userInfo;
 
   const setUserInfo = (signal: AbortSignal) => {
@@ -59,7 +59,6 @@ const SpacesList = (props: ISpaceListProps) => {
     <Box sx={{ overflowX: "auto", py: 1 }}>
       <Box minWidth="440px">
         {results.map((item: any) => {
-          // const isActiveSpace = current_space?.id == item?.id;
           const isOwner = userId == item?.owner.id;
           return (
             <SpaceCard
@@ -100,7 +99,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const navigate = useNavigate();
   const {
     loading,
-    query: setCurrentSpace,
     abortController,
   } = useQuery({
     service: (args, config) => service.setCurrentSpace({ spaceId: id }, config),
@@ -111,7 +109,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
-    // await setCurrentSpace();
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
@@ -198,7 +195,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
             />
           </Box>
         )}
-        {/* {isOwner && ( */}
         <>
           <Box sx={{ ...styles.centerV }}>
             <IconButton size="small" component={Link} to={`/${id}/setting`}>
@@ -215,7 +211,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
             is_default_space_for_current_user={is_default_space_for_current_user}
           />
         </>
-        {/* )} */}
       </Box>
     </Box>
   );
@@ -301,13 +296,6 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="leaveSpace" />,
           onClick: leaveSpace,
         },
-        // !isActiveSpace
-        //   ? {
-        //       icon: <DeleteRoundedIcon fontSize="small" />,
-        //       text: <Trans i18nKey="delete" />,
-        //       onClick: deleteItem,
-        //     }
-        //   : undefined,
       ]}
     />
   );

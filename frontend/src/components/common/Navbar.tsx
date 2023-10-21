@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Trans } from "react-i18next";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "@styles";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
@@ -18,8 +18,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
@@ -28,7 +26,6 @@ import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
-import { useParams } from "react-router-dom";
 import QueryData from "@common/QueryData";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -99,7 +96,7 @@ const Navbar = () => {
                 <Box>
                   {results.slice(0, 5).map((space: any) => {
                     return (
-                      <ListItem disablePadding>
+                      <ListItem disablePadding key={space?.id}>
                         <ListItemButton
                           sx={{ textAlign: "left", borderRadius: 1.5 }}
                           component={NavLink}
@@ -462,20 +459,6 @@ const SpacesButton = () => {
         }
       >
         <Trans i18nKey={"spaces"} />
-        {/* {currentSpace?.title && (
-          <Typography
-            variant="caption"
-            textTransform={"none"}
-            sx={{
-              pl: 0.5,
-              ml: 0.5,
-              lineHeight: "1",
-              borderLeft: (t) => `1px solid ${t.palette.grey[300]}`,
-            }}
-          >
-            {currentSpace?.title}
-          </Typography>
-        )} */}
       </Button>
 
       <Menu
@@ -500,6 +483,7 @@ const SpacesButton = () => {
                 {results.slice(0, 5).map((space: any) => {
                   return (
                     <MenuItem
+                      key={space?.id}
                       dense
                       component={NavLink}
                       to={`/${space?.id}/assessments/1`}
