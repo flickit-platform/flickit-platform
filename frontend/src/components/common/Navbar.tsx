@@ -47,7 +47,7 @@ const Navbar = () => {
   const fetchPathInfo = useQuery({
     service: (args, config) =>
       service.fetchPathInfo({ spaceId, ...(args || {}) }, config),
-    runOnMount: true,
+    runOnMount: false,
   });
   const fetchSpaceInfo = async () => {
     try {
@@ -61,6 +61,7 @@ const Navbar = () => {
   useEffect(() => {
     if (spaceId) {
       fetchSpaceInfo();
+
     }
   }, [spaceId]);
   const drawer = (
@@ -466,7 +467,7 @@ const SpacesButton = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{ sx: { minWidth: "260px" } }}
+        PaperProps={{ sx: { left:"165px !important",minWidth: "260px" } }}
       >
         <QueryData
           {...spacesQueryData}

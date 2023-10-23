@@ -64,9 +64,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
       abortController.current.abort();
     };
   }, []);
-  const is_farsi = languageDetector(
-    " می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید پیاده‌سازی کنیم به صورتی که لیست  پاسخ سوالات را از سرویس assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن را غنی‌تر کرده و در اختیار فرانت قرار دهد. "
-  );
+  const is_farsi = languageDetector(title);
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
@@ -126,19 +124,17 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     }
               }
             >
-              {/* {title.split("\n").map((line, index) => (
+              {title.split("\n").map((line, index) => (
                 <React.Fragment key={index}>
                   {line}
                   <br />
                 </React.Fragment>
-              ))} */}
-              می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید
-              پیاده‌سازی کنیم به صورتی که لیست پاسخ سوالات را از سرویس
-              assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن را غنی‌تر
-              کرده و در اختیار فرانت قرار دهد.
+              ))}
             </Typography>
           </Box>
-          {hint && <QuestionGuide hint={hint} />}
+          <Box sx={{ direction: `${is_farsi ? "rtl" : "ltr"}` }}>
+            {hint && <QuestionGuide hint={hint} />}
+          </Box>
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -182,18 +178,13 @@ const AnswerTemplate = (props: {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
   const {
-   
     questionInfo,
-   
-    questionIndex,
-   
     questionsInfo,
-   
+    questionIndex,
     abortController,
     setNotApplicable,
     notApplicable,
     may_not_be_applicable,
- ,
     is_farsi,
   } = props;
   const { answer_options, answer } = questionInfo;
@@ -351,8 +342,7 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {/* {caption} */}
-                  بله
+                  {caption}
                 </ToggleButton>
               </Box>
             );
@@ -761,6 +751,7 @@ const QuestionGuide = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const { hint } = props;
+  const is_farsi = languageDetector(hint);
   return (
     <Box>
       <Box mt={1} width="100%">
@@ -793,6 +784,7 @@ const QuestionGuide = (props: any) => {
               width: "100%",
               border: "1px dashed #ffffff99",
               borderRadius: "8px",
+              direction: `${is_farsi ? "rtl" : "ltr"}`,
             }}
           >
             <Box
