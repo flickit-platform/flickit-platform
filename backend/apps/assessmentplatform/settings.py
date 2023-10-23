@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 
-__version__ = "1.2.0"
+__version__ = "1.3.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
