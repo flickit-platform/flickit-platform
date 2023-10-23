@@ -35,6 +35,7 @@ import Dialog from "@mui/material/Dialog";
 import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
+import languageDetector from "@utils/languageDetector";
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
   const dialogProps = useDialog();
@@ -457,7 +458,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     py: 0.6,
                     px: 1,
                     borderRadius: 1,
-                    my:"16px"
+                    my: "16px",
                   }}
                 >
                   <Typography variant="body2" fontFamily="Roboto">
@@ -486,7 +487,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     py: 0.6,
                     px: 1,
                     borderRadius: 1,
-                    my:"16px"
+                    my: "16px",
                   }}
                 >
                   <Typography variant="body2" fontFamily="Roboto">
@@ -1138,6 +1139,7 @@ const SubjectQuestionList = (props: any) => {
         </Box>
       )}
       {questions.map((question: any, index: number) => {
+        const is_farsi = languageDetector(question.title);
         const isExpanded = expanded === question.title;
         return (
           <Accordion
@@ -1165,11 +1167,12 @@ const SubjectQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Roboto",
+                  fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
                   flexWrap: "wrap",
+                  direction: `${is_farsi ? "rtl" : "ltr"}`,
                 }}
                 variant="body2"
               >
@@ -1352,6 +1355,7 @@ const QuestionnairesQuestionList = (props: any) => {
 
       {questions?.map((question: any, index: number) => {
         const isExpanded = expanded === question.title;
+        const is_farsi = languageDetector(question.title);
         return (
           <Accordion
             key={index}
@@ -1378,11 +1382,12 @@ const QuestionnairesQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Roboto",
+                  fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
                   flexWrap: "wrap",
+                  direction: `${is_farsi ? "rtl" : "ltr"}`,
                 }}
                 variant="body2"
               >
@@ -1414,11 +1419,19 @@ const QuestionnairesQuestionList = (props: any) => {
                     maxWidth: "max-content",
                     display: "flex",
                     mb: 4,
-                    ml: 2,
+                    ml: `${is_farsi ? "auto" : "2"}`,
+                    direction: `${is_farsi ? "rtl" : "ltr"}`,
                   }}
                 >
                   {questionsDetails?.options.map((option: any) => (
-                    <Typography sx={{ mx: 2 }} variant="body2">
+                    <Typography
+                      key={option.index}
+                      sx={{
+                        mx: 2,
+                        fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
+                      }}
+                      variant="body2"
+                    >
                       {option.index}. {option.title}
                     </Typography>
                   ))}
@@ -1588,9 +1601,10 @@ const QuestionnairesQuestionList = (props: any) => {
                                             return (
                                               <Typography
                                                 variant="body1"
-                                                fontFamily="Roboto"
                                                 fontWeight={"bold"}
-                                                sx={{ py: 1 }}
+                                                sx={{
+                                                  py: 1,
+                                                }}
                                               >
                                                 {formatNumber(option.value)}
                                               </Typography>

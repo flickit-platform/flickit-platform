@@ -9,7 +9,7 @@ import { useQuestionContext } from "@/providers/QuestionProvider";
 import assessmentDoneSvg from "@assets/svg/assessmentDone.svg";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
-
+import languageDetector from "@utils/languageDetector";
 const QuestionsReview = () => {
   const { questionIndex, questionsInfo, assessmentStatus } =
     useQuestionContext();
@@ -22,10 +22,15 @@ const QuestionsReview = () => {
 
 export const Review = ({ questions = [], isReviewPage }: any) => {
   const navigate = useNavigate();
+
   return (
     <Box
       maxWidth={"1440px"}
-      sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}
+      sx={{
+        px: { xs: 1, sm: 2, md: 6 },
+        my: { xs: 1, md: 3 },
+        mx: "auto",
+      }}
     >
       {!isReviewPage && (
         <Box
@@ -83,6 +88,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
         )}
         <Box mt={2}>
           {questions.map((question: any) => {
+              const is_farsi = languageDetector(question.title);
             return (
               <Paper
                 key={question.id}
@@ -95,6 +101,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   overflow: "hidden",
                   mb: 2,
                   borderRadius: "8px",
+                  direction: `${is_farsi ? "rtl" : "ltr"}`,
                 }}
                 elevation={3}
               >
@@ -109,8 +116,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily="Roboto"
+                      fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
                       fontWeight="bold"
+                      letterSpacing={is_farsi ? "0" : ".05em"}
                     >
                       {question.title}
                     </Typography>
@@ -126,8 +134,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily="Roboto"
+                        fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
                         fontWeight="bold"
+                        letterSpacing={is_farsi ? "0" : ".05em"}
                       >
                         {question.answer.caption}
                       </Typography>
@@ -147,7 +156,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         fontFamily="Roboto"
                         fontWeight="bold"
                       >
-                       <Trans i18nKey={"markedAsNotApplicable"} />
+                        <Trans i18nKey={"markedAsNotApplicable"} />
                       </Typography>
                     </Box>
                   )}
@@ -155,7 +164,11 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   <Box display="flex" mt={2}>
                     <Button
                       variant="contained"
-                      sx={{ mt: 0.2, ml: "auto" }}
+                      sx={{
+                        mt: 0.2,
+                        ml: `${is_farsi ? "0" : "auto"}`,
+                        mr: `${is_farsi ? "auto" : "0"}`,
+                      }}
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(
