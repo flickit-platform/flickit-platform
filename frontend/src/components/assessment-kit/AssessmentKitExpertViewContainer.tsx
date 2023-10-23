@@ -1425,9 +1425,9 @@ const QuestionnairesQuestionList = (props: any) => {
                 >
                   {questionsDetails?.options.map((option: any) => (
                     <Typography
+                      key={option.index}
                       sx={{
                         mx: 2,
-                    
                         fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
                       }}
                       variant="body2"
