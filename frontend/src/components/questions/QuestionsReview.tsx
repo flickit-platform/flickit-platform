@@ -9,8 +9,10 @@ import { useQuestionContext } from "@/providers/QuestionProvider";
 import assessmentDoneSvg from "@assets/svg/assessmentDone.svg";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
-
+import languageDetector from "@utils/languageDetector";
 const QuestionsReview = () => {
+  const { questionIndex, questionsInfo, assessmentStatus } =
+    useQuestionContext();
   const { questionIndex, questionsInfo, assessmentStatus } =
     useQuestionContext();
   return (
@@ -22,10 +24,18 @@ const QuestionsReview = () => {
 
 export const Review = ({ questions = [], isReviewPage }: any) => {
   const navigate = useNavigate();
+  const is_farsi = languageDetector(
+    " می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید پیاده‌سازی کنیم به صورتی که لیست  پاسخ سوالات را از سرویس assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن را غنی‌تر کرده و در اختیار فرانت قرار دهد. "
+  );
   return (
     <Box
       maxWidth={"1440px"}
-      sx={{ px: { xs: 1, sm: 2, md: 6 }, my: { xs: 1, md: 3 }, mx: "auto" }}
+      sx={{
+        px: { xs: 1, sm: 2, md: 6 },
+        my: { xs: 1, md: 3 },
+        mx: "auto",
+        direction: `${is_farsi ? "rtl" : "ltr"}`,
+      }}
     >
       {!isReviewPage && (
         <Box
@@ -70,6 +80,11 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   alt="assessment done"
                   style={{ width: "100%" }}
                 />
+                <img
+                  src={assessmentDoneSvg}
+                  alt="assessment done"
+                  style={{ width: "100%" }}
+                />
               </Box>
             </Box>
           </Hidden>
@@ -105,14 +120,24 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       variant="subMedium"
                       sx={{ color: "#b3b3b3" }}
                     >
+                    <Typography
+                      textTransform={"capitalize"}
+                      variant="subMedium"
+                      sx={{ color: "#b3b3b3" }}
+                    >
                       <Trans i18nKey={"question"} />
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily="Roboto"
+                      fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
                       fontWeight="bold"
+                      letterSpacing={is_farsi ? "0" : ".05em"}
                     >
-                      {question.title}
+                      {/* {question.title} */}
+                      می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید
+                      پیاده‌سازی کنیم به صورتی که لیست پاسخ سوالات را از سرویس
+                      assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن
+                      را غنی‌تر کرده و در اختیار فرانت قرار دهد.
                     </Typography>
                   </Box>
                   {question.answer && (
@@ -122,14 +147,21 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         textTransform="uppercase"
                         sx={{ color: "#b3b3b3" }}
                       >
+                      <Typography
+                        variant="subMedium"
+                        textTransform="uppercase"
+                        sx={{ color: "#b3b3b3" }}
+                      >
                         <Trans i18nKey={"yourAnswer"} />
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily="Roboto"
+                        fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
                         fontWeight="bold"
+                        letterSpacing={is_farsi ? "0" : ".05em"}
                       >
-                        {question.answer.caption}
+                        {/* {question.answer.caption} */}
+                        بله
                       </Typography>
                     </Box>
                   )}
@@ -155,9 +187,14 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   <Box display="flex" mt={2}>
                     <Button
                       variant="contained"
-                      sx={{ mt: 0.2, ml: "auto" }}
+                      sx={{ mt: 0.2, ml: `${is_farsi ? "0" : "auto"}`,mr:`${is_farsi ? "auto" : "0"}` }}
                       onClick={(e) => {
                         e.stopPropagation();
+                        navigate(
+                          isReviewPage
+                            ? `./../${question.index}`
+                            : `../${question.index}`
+                        );
                         navigate(
                           isReviewPage
                             ? `./../${question.index}`

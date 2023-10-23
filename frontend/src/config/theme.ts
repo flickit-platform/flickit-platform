@@ -59,7 +59,7 @@ export const theme = createTheme({
   palette,
   typography: {
     subSmall: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif"',
+      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
       fontSize: "0.665rem",
       lineHeight: 1.57,
@@ -68,7 +68,7 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subMedium: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif"',
+      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: 1.57,
@@ -76,7 +76,7 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subLarge: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif"',
+      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
       fontSize: "0.8rem",
       lineHeight: 1.57,
@@ -84,22 +84,22 @@ export const theme = createTheme({
       color: "GrayText",
     },
     button: {
-      fontFamily: "'Oswald','Roboto'",
+      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       letterSpacing: ".1em",
     },
     h3: {
-      fontFamily: "'Oswald','Roboto'",
+      fontFamily: "'Oswald','Roboto','Vazirmatn'",
     },
     h4: {
-      fontFamily: "'Oswald','Roboto'",
+      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       opacity: 0.9,
     },
     h5: {
-      fontFamily: "'Oswald','Roboto'",
+      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       opacity: 0.85,
     },
     h6: {
-      fontFamily: "'Oswald','Roboto'",
+      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
@@ -156,6 +156,7 @@ export const theme = createTheme({
         },
       },
     },
+    
     //@ts-expect-error
     MuiTabPanel: {
       styleOverrides: {

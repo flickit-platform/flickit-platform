@@ -45,6 +45,7 @@ import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import languageDetector from "@utils/languageDetector";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -63,7 +64,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
       abortController.current.abort();
     };
   }, []);
-
+  const is_farsi = languageDetector(
+    " می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید پیاده‌سازی کنیم به صورتی که لیست  پاسخ سوالات را از سرویس assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن را غنی‌تر کرده و در اختیار فرانت قرار دهد. "
+  );
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
@@ -97,25 +100,42 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             <Typography
               variant="subLarge"
               fontFamily={"Roboto"}
-              sx={{ color: "white", opacity: 0.65 }}
+              sx={
+                is_farsi
+                  ? { color: "white", opacity: 0.65, direction: "rtl" }
+                  : { color: "white", opacity: 0.65 }
+              }
             >
               <Trans i18nKey="question" />
             </Typography>
             <Typography
               variant="h4"
-              letterSpacing=".05em"
-              sx={{
-                pt: 0.5,
-                fontSize: { xs: "1.4rem", sm: "2rem" },
-                fontFamily: { xs: "Roboto", lg: "Roboto" },
-              }}
+              letterSpacing={is_farsi ? "0" : ".05em"}
+              sx={
+                is_farsi
+                  ? {
+                      pt: 0.5,
+                      fontSize: { xs: "1.4rem", sm: "2rem" },
+                      fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
+                      direction: "rtl",
+                    }
+                  : {
+                      pt: 0.5,
+                      fontSize: { xs: "1.4rem", sm: "2rem" },
+                      fontFamily: { xs: "Roboto", lg: "Roboto" },
+                    }
+              }
             >
-              {title.split("\n").map((line, index) => (
+              {/* {title.split("\n").map((line, index) => (
                 <React.Fragment key={index}>
                   {line}
                   <br />
                 </React.Fragment>
-              ))}
+              ))} */}
+              می‌خواهیم به صورتی که در ادامه مستند آمده، یک سرویس جدید
+              پیاده‌سازی کنیم به صورتی که لیست پاسخ سوالات را از سرویس
+              assessment-core دریافت کرده و در صورت نیاز، آبجکت‌های آن را غنی‌تر
+              کرده و در اختیار فرانت قرار دهد.
             </Typography>
           </Box>
           {hint && <QuestionGuide hint={hint} />}
@@ -124,6 +144,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             questionInfo={questionInfo}
             questionIndex={questionIndex}
             questionsInfo={questionsInfo}
+            is_farsi={is_farsi}
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
             may_not_be_applicable={may_not_be_applicable ?? false}
@@ -156,17 +177,24 @@ const AnswerTemplate = (props: {
   setNotApplicable: any;
   notApplicable: boolean;
   may_not_be_applicable: boolean;
+  is_farsi: boolean | undefined;
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
   const {
+   
     questionInfo,
+   
     questionIndex,
+   
     questionsInfo,
+   
     abortController,
     setNotApplicable,
     notApplicable,
     may_not_be_applicable,
+ ,
+    is_farsi,
   } = props;
   const { answer_options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
@@ -246,7 +274,12 @@ const AnswerTemplate = (props: {
   }, [value]);
   return (
     <>
-      <Box display={"flex"} justifyContent="flex-start" mt={4}>
+      <Box
+        display={"flex"}
+        justifyContent="flex-start"
+        mt={4}
+        sx={is_farsi ? { direction: "rtl" } : {}}
+      >
         <Box
           display={"flex"}
           sx={{
@@ -274,11 +307,12 @@ const AnswerTemplate = (props: {
                   onChange={onChange}
                   disabled={isSubmitting || notApplicable}
                   sx={{
+                    letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                     color: "white",
                     p: { xs: 0.6, sm: 1 },
                     textAlign: "left",
                     fontSize: { xs: "1.15rem", sm: "1.3rem" },
-                    fontFamily: { xs: "Roboto", sm: "Roboto" },
+                    fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
                     justifyContent: "flex-start",
                     boxShadow: "0 0 2px white",
                     borderWidth: "2px",
@@ -308,6 +342,7 @@ const AnswerTemplate = (props: {
                       color: "white",
                       p: 0,
                       mr: "8px",
+                      ml: "8px",
                       opacity: 0.8,
                       "& svg": { fontSize: { xs: "2.1rem", sm: "2.5rem" } },
                       "&.Mui-checked": { color: "white", opacity: 1 },
@@ -316,7 +351,8 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {caption}
+                  {/* {caption} */}
+                  بله
                 </ToggleButton>
               </Box>
             );
@@ -350,10 +386,14 @@ const AnswerTemplate = (props: {
           variant="contained"
           color={"info"}
           loading={isSubmitting}
-          sx={{
-            fontSize: "1.2rem",
-            // ml: "auto",
-          }}
+          sx={
+            is_farsi
+              ? {
+                  fontSize: "1.2rem",
+                  mr: "auto",
+                }
+              : { fontSize: "1.2rem", ml: "auto" }
+          }
           onClick={submitQuestion}
         >
           <Trans i18nKey={"nextQuestion"} />
