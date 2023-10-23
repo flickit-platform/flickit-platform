@@ -342,7 +342,7 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {caption}
+                  {templateValue}.{" "}{caption}
                 </ToggleButton>
               </Box>
             );

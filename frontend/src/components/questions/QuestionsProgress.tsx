@@ -34,6 +34,7 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
         mdDown={questions.length > 20 ? true : false}
         lgDown={questions.length > 23 ? true : false}
         xlDown={questions.length > 32 ? true : false}
+        xlUp={questions.length > 40 ? true : false}
       >
         <Box
           position={"absolute"}
