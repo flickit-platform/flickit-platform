@@ -82,7 +82,7 @@ class LoadQuestionnaireAnswerSerializer(serializers.ModelSerializer):
     hint = serializers.SerializerMethodField()
 
     def get_answer_options(self, question: Question):
-        return question.answer_templates.values("id", "index", "caption")
+        return question.answer_templates.values("id", "index", "caption").order_by("index")
 
     def get_hint(self, question: Question):
         return question.description
