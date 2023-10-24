@@ -16,9 +16,11 @@ def extract_dsl_contents(dsl_id):
     input_zip = ZipFile(dsl.dsl_file)
     all_content = ''
     for name in input_zip.namelist():
-        content = input_zip.read(name).decode()
-        trim_content = __trim_content(content)
-        all_content = all_content + '\n' + trim_content
+        if name.endswith('.ak'):
+            content = input_zip.read(name).decode()
+            file_base_name = os.path.basename(name)
+            trim_content = __trim_content(content)
+            all_content = all_content + "\n" + rf"\\ BEGIN FILE {file_base_name}" + trim_content
     return all_content
 
 
@@ -28,6 +30,8 @@ def __trim_content(content):
         if not line.strip().startswith('import'):
             # line = line.replace('.', '')
             new_content = new_content + '\n' + line
+        else:
+            new_content = new_content + "\n" + r"\\" + line
     return new_content
 
 
