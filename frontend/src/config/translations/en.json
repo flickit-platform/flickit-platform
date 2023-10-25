@@ -294,5 +294,8 @@
   "insightsAreRecalculating":"Insights are recalculating",
   "pleaseWait":"Please wait ...",
   "theOptionSelectionIsDisabled":"The option selection is disabled as long as the question is marked as not applicable",
-  "markedAsNotApplicable":"Marked as not applicable"
+  "markedAsNotApplicable":"Marked as not applicable",
+  "theAchivedScores":"The achieved scores from questions of each maturity level of this attribute",
+  "noQuestionOnLevel":"No questions on this level",
+  "theHighestLevelAchived":"The highest level achieved so far"
 }
