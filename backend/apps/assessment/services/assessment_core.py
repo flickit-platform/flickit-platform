@@ -299,6 +299,7 @@ def get_subject_report(assessments_details, subject_id):
     if response.status_code == status.HTTP_200_OK:
         subject_dict = dict()
         attribute_list = list()
+        levels = MaturityLevel.objects.filter(assessment_kit=assessments_details["kitId"]).values('id', 'title', 'value')
         subject = AssessmentSubject.objects.get(id=response_body["subject"]["id"])
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title
@@ -327,7 +328,14 @@ def get_subject_report(assessments_details, subject_id):
                 "value": maturity_level.value,
                 "index": maturity_levels_id.index(maturity_level.id) + 1,
             }
+
+            maturity_scores = list()
+            for i in range(len(levels)):
+                levels[i]["index"] = maturity_levels_id.index(maturity_level.id) + 1
+                maturity_scores.append({"maturity_level": levels[i], "score": item["maturityScores"][i]["score"]})
+            attributes_dict["maturity_scores"] = maturity_scores
             attribute_list.append(attributes_dict)
+
         attribute_top_weaknesses_id = list()
         for item in response_body["topWeaknesses"]:
             attribute_top_weaknesses_id.append(item["id"])
@@ -498,7 +506,7 @@ def get_path_info_with_space_id(space_id):
              "title": space_object.title
              }
     result["body"] = {
-                      "space": space
-                      }
+        "space": space
+    }
     result["status_code"] = status.HTTP_200_OK
     return result
