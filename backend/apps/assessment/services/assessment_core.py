@@ -331,7 +331,7 @@ def get_subject_report(assessments_details, subject_id):
 
             maturity_scores = list()
             for i in range(len(levels)):
-                levels[i]["index"] = maturity_levels_id.index(maturity_level.id) + 1
+                levels[i]["index"] = maturity_levels_id.index(levels[i]["id"]) + 1
                 maturity_scores.append({"maturity_level": levels[i], "score": item["maturityScores"][i]["score"]})
             attributes_dict["maturity_scores"] = maturity_scores
             attribute_list.append(attributes_dict)
