@@ -20,7 +20,7 @@ def extract_dsl_contents(dsl_id):
             content = input_zip.read(name).decode()
             file_base_name = os.path.basename(name)
             trim_content = __trim_content(content)
-            all_content = all_content + "\n" + rf"\\ BEGIN FILE {file_base_name}" + trim_content
+            all_content = all_content + "\n" + rf"// BEGIN FILE {file_base_name}" + trim_content
     return all_content
 
 
@@ -31,7 +31,7 @@ def __trim_content(content):
             # line = line.replace('.', '')
             new_content = new_content + '\n' + line
         else:
-            new_content = new_content + "\n" + r"\\" + line
+            new_content = new_content + "\n" + r"//" + line
     return new_content
 
 
