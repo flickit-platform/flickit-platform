@@ -9,7 +9,7 @@ export const setAssessmentIds = (payload: TId[]) => {
   return { payload, type: COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_IDS };
 };
 
-export const setAssessmentKit = (payload: IAssessmentKit | null) => {
+export const setAssessmentKit = (payload: IAssessmentKit[] ) => {
   return { payload, type: COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_KIT };
 };
 

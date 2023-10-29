@@ -36,28 +36,32 @@ const useConnectSelectField = (props: {
     setLoading(true);
     try {
       const {
-        data: { results, colors, default_color },
+        data: { items, colors, default_color },
       } = await service.fetchOptions({ url }, { signal, params: searchParams });
-      if (results && Array.isArray(results)) {
-        setOptions(filterOptions(results));
-        setError(false);
-      } else {
-        setOptions([]);
-        setError(true);
+      if (items) {
+        if (Array.isArray(items)) {
+          setOptions(items);
+          setError(false);
+        } else {
+          setOptions([]);
+          setError(true);
+        }
       }
-      if (colors && Array.isArray(colors)) {
-        setOptions(filterOptions(colors));
-        setError(false);
-      } else {
-        setOptions([]);
-        setError(true);
-      }
-      if (default_color) {
-        setDefaultOption(default_color);
-        setError(false);
-      } else {
-        setDefaultOption({});
-        setError(true);
+      if (colors && default_color) {
+        if (Array.isArray(colors)) {
+          setOptions(filterOptions(colors));
+          setError(false);
+        } else {
+          setOptions([]);
+          setError(true);
+        }
+        if (default_color) {
+          setDefaultOption(default_color);
+          setError(false);
+        } else {
+          setDefaultOption({});
+          setError(true);
+        }
       }
 
       setLoading(false);
@@ -68,7 +72,6 @@ const useConnectSelectField = (props: {
       setError(true);
     }
   };
-
   return { options, loading, error, fetchOptions, defaultOption };
 };
 

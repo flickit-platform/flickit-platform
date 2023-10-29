@@ -30,6 +30,7 @@ import QueryData from "@common/QueryData";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { ISpacesModel } from "@types";
+import CompareRoundedIcon from '@mui/icons-material/CompareRounded';
 const drawerWidth = 240;
 
 const Navbar = () => {
@@ -134,7 +135,7 @@ const Navbar = () => {
             }}
           />
         )}
-        {/* <ListItem disablePadding>
+        <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "left", borderRadius: 1.5 }}
             component={NavLink}
@@ -142,7 +143,7 @@ const Navbar = () => {
           >
             <ListItemText primary={<Trans i18nKey="compare" />} />
           </ListItemButton>
-        </ListItem> */}
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "left", borderRadius: 1.5 }}
@@ -213,7 +214,7 @@ const Navbar = () => {
                 <Trans i18nKey="assessments" />
               </Button>
             )} */}
-            {/* <Button
+            <Button
               component={NavLink}
               to={`/compare`}
               startIcon={
@@ -225,7 +226,7 @@ const Navbar = () => {
               size="small"
             >
               <Trans i18nKey="compare" />
-            </Button> */}
+            </Button>
             <Button
               component={NavLink}
               to={`/assessment-kits`}

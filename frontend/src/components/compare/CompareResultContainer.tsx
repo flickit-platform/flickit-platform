@@ -33,7 +33,7 @@ const CompareResultContainer = () => {
                 <Button
                   startIcon={<BorderColorRoundedIcon />}
                   size="small"
-                  onClick={() => navigate({ pathname: "/compare", search: location.search })}
+                  // onClick={() => navigate({ pathname: "/compare", search: location.search })}
                 >
                   <Trans i18nKey="editComparisonItems" />
                 </Button>
