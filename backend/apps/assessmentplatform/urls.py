@@ -20,7 +20,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('authinfo/', include('djoser.urls')),
     path('baseinfo/', include('baseinfo.urls')),
-    path('assessment/', include('assessment.urls')),
     path('authinfo/', include('account.urls')),
     path('api/internal/', include('baseinfo.urls_internal')),
     path('api/v1/assessment-kits/', include('baseinfo.url.url_v1')),

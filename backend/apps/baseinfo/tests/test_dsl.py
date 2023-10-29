@@ -3,8 +3,7 @@ import os
 import zipfile
 import io
 import filecmp
-from assessment.models import AssessmentKit, AssessmentProject
-from baseinfo.models.assessmentkitmodels import ExpertGroup ,AssessmentKitLike 
+from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKit
 from account.models import User
 from rest_framework.test import APIRequestFactory ,force_authenticate
 from django.contrib.auth.models import Permission

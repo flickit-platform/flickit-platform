@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from common.restutil import ActionResult
 
-from assessment.models import AssessmentProject
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
 from baseinfo.models.basemodels import QualityAttribute
@@ -41,12 +40,6 @@ def is_assessment_kit_deletable(assessment_kit_id):
         return ActionResult(success=False, message='Some assessments with this assessment_kit exist')
     return ActionResult(success=True)
 
-
-def is_assessment_kit_used_in_assessments(assessment_kit: AssessmentKit):
-    qs = AssessmentProject.objects.filter(assessment_kit_id=assessment_kit.id)
-    if qs.count() > 0:
-        return True
-    return False
 
 
 def extract_detail_of_assessment_kit(assessment_kit, request):
@@ -230,16 +223,6 @@ def __extract_asessment_kit_attribute_count(subjects):
     for subject in subjects:
         attributes.extend(subject.quality_attributes.all())
     return {'title': 'Attributes count', 'item': len(attributes)}
-
-
-def get_current_user_delete_permission(assessment_kit: AssessmentKit, current_user_id):
-    number_of_assessment = AssessmentProject.objects.filter(assessment_kit_id=assessment_kit.id).count()
-    if number_of_assessment > 0:
-        return False
-    if assessment_kit.expert_group is not None:
-        user = assessment_kit.expert_group.users.filter(id=current_user_id)
-        return user.count() > 0
-    return True
 
 
 def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_id):

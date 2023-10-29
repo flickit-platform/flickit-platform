@@ -7,9 +7,6 @@ from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.serializers import commonserializers
 
-from baseinfo.services import assessmentkitservice
-
-from django.core.exceptions import ObjectDoesNotExist
 
 
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):

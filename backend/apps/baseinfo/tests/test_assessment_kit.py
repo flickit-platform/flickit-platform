@@ -4,11 +4,8 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 import pytest
 from model_bakery import baker
 from baseinfo.views import assessmentkitviews, commonviews
-from baseinfo.models.assessmentkitmodels import ExpertGroup
-from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, QuestionImpact, MaturityLevel
-from assessment.models import AssessmentKit, AssessmentProject
-from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKitLike
+from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKitLike, AssessmentKit
 from account.models import User
 from unittest import skip
 
@@ -71,7 +68,7 @@ class Test_Delete_AssessmentKit:
     def test_delete_assessment_kit_when_assessments_exist_with_assessment_kit(self, api_client, init_assessment_kit,
                                                                               authenticate, create_expertgroup):
         assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        baker.make(AssessmentProject, assessment_kit=assessment_kit)
+        # baker.make(AssessmentProject, assessment_kit=assessment_kit)
 
         response = api_client.delete('/baseinfo/assessmentkits/' + str(assessment_kit.id) + "/")
         assert response.status_code == status.HTTP_400_BAD_REQUEST
