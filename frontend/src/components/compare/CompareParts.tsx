@@ -20,16 +20,17 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 
 const CompareParts = () => {
-  const { assessmentIds, assessmentsInfoQueryData } = useCompareParts();
-
+  // const { assessmentIds, assessmentsInfoQueryData } = useCompareParts();
+  const{assessment_kit}=useCompareContext()
+  console.log(assessment_kit)
   return (
     <Box sx={{ pb: { xs: 6, sm: 0 } }}>
-      <PermissionControl error={assessmentsInfoQueryData.errorObject}>
+      {/* <PermissionControl error={assessmentsInfoQueryData.errorObject}> */}
         <Box my={3}>
           <CompareSelectedAssessmentKitInfo />
         </Box>
         <Box position={"relative"}>
-          <QueryData
+          {/* <QueryData
             {...assessmentsInfoQueryData}
             isDataEmpty={() => false}
             renderLoading={() => {
@@ -47,88 +48,86 @@ const CompareParts = () => {
               );
             }}
             render={(res = []) => {
-              return (
+              return ( */}
                 <>
-                  <CompareButton assessmentIds={assessmentIds as string[]} disabled={assessmentIds?.length <= 1} />
+                  <CompareButton disabled={assessment_kit&&assessment_kit?.length <= 1} />
                   <Grid container spacing={3}>
                     {forLoopComponent(4, (index) => {
-                      const data = res[index];
                       return (
                         <Grid item xs={12} md={6} key={index}>
                           <ComparePartItem
-                            data={data}
+                            data={assessment_kit&&assessment_kit[index]}
                             index={index}
-                            disabled={assessmentIds.length >= index ? false : true}
-                            fetchAssessmentsInfo={assessmentsInfoQueryData.query}
+                            disabled={assessment_kit&&assessment_kit.length >= index ? false : true}
                           />
                         </Grid>
                       );
                     })}
                   </Grid>
                 </>
-              );
+              {/* );
             }}
-          />
+          /> */}
         </Box>
-      </PermissionControl>
+      {/* </PermissionControl> */}
     </Box>
   );
 };
 
-const useCompareParts = () => {
-  const { service } = useServiceContext();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const assessmentsInfoQueryData = useQuery({
-    service: (args, config) => service.fetchAssessmentsInfo(args, config),
-    runOnMount: false,
-    initialLoading: true,
-    initialData: [],
-  });
-  const { assessmentIds, assessment_kit: contextAssessmentKit } = useCompareContext();
-  const dispatch = useCompareDispatch();
+// const useCompareParts = () => {
+//   const { service } = useServiceContext();
+//   const [searchParams, setSearchParams] = useSearchParams();
+//   const assessmentsInfoQueryData = useQuery({
+//     service: (args, config) => service.fetchAssessmentsInfo(args, config),
+//     runOnMount: false,
+//     initialLoading: true,
+//     initialData: [],
+//   });
+//   const { assessmentIds, assessment_kit: contextAssessmentKit } = useCompareContext();
+//   const dispatch = useCompareDispatch();
 
-  useEffect(() => {
-    assessmentsInfoQueryData.query({ assessmentIds });
-    setSearchParams(createSearchParams({ assessmentIds } as any), {
-      replace: true,
-    });
-    setDocumentTitle(`${t("compare")} ${assessmentIds.length} ${t("items")}`);
-  }, [assessmentIds.join()]);
+//   useEffect(() => {
+//     assessmentsInfoQueryData.query({ assessmentIds });
+//     setSearchParams(createSearchParams({ assessmentIds } as any), {
+//       replace: true,
+//     });
+//     setDocumentTitle(`${t("compare")} ${assessmentIds.length} ${t("items")}`);
+//   }, [assessmentIds.join()]);
 
-  useEffect(() => {
-    if (assessmentsInfoQueryData.loaded && !contextAssessmentKit) {
-      const assessment_kit = assessmentsInfoQueryData.data?.find((item: any) => item?.assessment_kit);
-      if (assessment_kit) {
-        dispatch(compareActions.setAssessmentKit(assessment_kit.assessment_kit));
-      }
-    }
-  }, [assessmentsInfoQueryData.loaded]);
+//   useEffect(() => {
+//     if (assessmentsInfoQueryData.loaded && !contextAssessmentKit) {
+//       const assessment_kit = assessmentsInfoQueryData.data?.find((item: any) => item?.assessment_kit);
+//       if (assessment_kit) {
+//         dispatch(compareActions.setAssessmentKit(assessment_kit.assessment_kit));
+//       }
+//     }
+//   }, [assessmentsInfoQueryData.loaded]);
 
-  useEffect(() => {
-    const assessmentIdsParams = searchParams.getAll("assessmentIds");
-    if (assessmentIdsParams.length == 0 && assessmentIds.length > 0) {
-      assessmentsInfoQueryData.query({ assessmentIds: [] });
-      dispatch(compareActions.setAssessmentKit(null));
-      dispatch(compareActions.setAssessmentIds(assessmentIdsParams));
-    }
-  }, [searchParams]);
+//   useEffect(() => {
+//     const assessmentIdsParams = searchParams.getAll("assessmentIds");
+//     if (assessmentIdsParams.length == 0 && assessmentIds.length > 0) {
+//       assessmentsInfoQueryData.query({ assessmentIds: [] });
+//       dispatch(compareActions.setAssessmentKit(null));
+//       dispatch(compareActions.setAssessmentIds(assessmentIdsParams));
+//     }
+//   }, [searchParams]);
 
-  return { assessmentIds, assessmentsInfoQueryData };
-};
+//   return { assessmentIds, assessmentsInfoQueryData };
+// };
 
-const CompareButton = (props: { disabled?: boolean; assessmentIds?: string[] }) => {
-  const { assessmentIds, disabled = false } = props;
+const CompareButton = (props: { disabled?: boolean; }) => {
+  const {  disabled = false } = props;
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (assessmentIds) {
-      navigate({
-        pathname: "result",
-        search: createSearchParams({
-          assessmentIds,
-        }).toString(),
-      });
-    }
+    // if (assessmentIds) {
+    //   navigate({
+    //     pathname: "result",
+    //     search: createSearchParams({
+    //       assessmentIds,
+    //     }).toString(),
+    //   });
+    // }
   };
 
   return (
@@ -146,7 +145,7 @@ const CompareSelectedAssessmentKitInfo = () => {
   const dispatch = useCompareDispatch();
   const makeNewComparison = () => {
     dispatch(compareActions.setAssessmentIds([]));
-    dispatch(compareActions.setAssessmentKit(null));
+    dispatch(compareActions.setAssessmentKit([]));
   };
   return assessment_kit ? (
     <AlertBox
@@ -157,9 +156,9 @@ const CompareSelectedAssessmentKitInfo = () => {
         </Button>
       }
     >
-      <AlertTitle>
+      {/* <AlertTitle>
         <Trans i18nKey="assessmentsAreFilteredBy" /> <Chip label={assessment_kit.title} />
-      </AlertTitle>
+      </AlertTitle> */}
       <Trans i18nKey="toCompareAssessmentsOfOtherAssessmentKits" />
     </AlertBox>
   ) : (

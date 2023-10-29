@@ -23,11 +23,11 @@ interface IComparePartsItemProps {
   data: any;
   index: number;
   disabled: boolean;
-  fetchAssessmentsInfo: TQueryFunction;
+  // fetchAssessmentsInfo: TQueryFunction;
 }
 
 const ComparePartItem = (props: IComparePartsItemProps) => {
-  const { data, index, disabled, fetchAssessmentsInfo } = props;
+  const { data, index, disabled, } = props;
   const dialogProps = useDialog({
     context: {
       data,
@@ -44,7 +44,7 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
     >
       {data?.id && (
         <DeleteAssessmentIconBtn
-          fetchAssessmentsInfo={fetchAssessmentsInfo}
+          // fetchAssessmentsInfo={fetchAssessmentsInfo}
           index={index}
           id={data?.id}
         />
@@ -60,7 +60,7 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
           borderRadius: 2,
           background: "white",
           border: `1.5px dashed ${
-            disabled ? "#101c324f" : data?.color?.color_code || "#101c32"
+            disabled ? "#101c324f" : data?.color?.code || "#101c32"
           }`,
           ...(data
             ? {
@@ -78,19 +78,12 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
               wrapperProps={{ alignItems: "baseline" }}
               textAlign={"left"}
               sup={data.space.title}
-              toolbar={
-                <ProgressChip
-                  progress={data?.total_progress?.progress}
-                  size="small"
-                  sx={{ ml: 2 }}
-                />
-              }
-              color={data?.color?.color_code}
+              color={data?.color?.code}
             >
               {data.title}
             </Title>
             <Box display="flex" justifyContent="center">
-              <Gauge systemStatus={data.status} maturity_level_number={data?.maturity_level_number} maturity_level_status={data?.maturity_level_status} level_value={data?.level_value}maxWidth="255px" mt="auto" />
+              <Gauge systemStatus={data?.result_maturity_level.title} maturity_level_number={data?.assessment_kit.maturity_levels_count} maturity_level_status={data?.result_maturity_level.title} level_value={data?.result_maturity_level.index}maxWidth="255px" mt="auto" />
             </Box>
           </Box>
         ) : (
@@ -118,14 +111,15 @@ const DeleteAssessmentIconBtn = (props: {
   fetchAssessmentsInfo: TQueryFunction;
 }) => {
   const { id, index, fetchAssessmentsInfo } = props;
-  const { assessmentIds } = useCompareContext();
+  const { assessmentIds,assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
+  const filteredData = assessment_kit.filter(item => item.id !== id);
 
   const handleClick = () => {
     const newAssessmentIds = assessmentIds.filter(
       (assessmentId) => assessmentId != id
     );
-
+    dispatch(compareActions.setAssessmentKit(filteredData));
     if (newAssessmentIds.length === 0) {
       dispatch(compareActions.setAssessmentKit(null));
     }

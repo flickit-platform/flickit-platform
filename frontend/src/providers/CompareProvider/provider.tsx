@@ -9,7 +9,7 @@ interface ICompareProviderProps {
 
 export interface ICompareContext {
   assessmentIds: TId[];
-  assessment_kit: null | IAssessmentKit;
+  assessment_kit: IAssessmentKit[];
 }
 export interface ICompareDispatchContext {
   dispatch: React.Dispatch<any>;
@@ -17,7 +17,7 @@ export interface ICompareDispatchContext {
 
 export const CompareContext = React.createContext<ICompareContext>({
   assessmentIds: [],
-  assessment_kit: null,
+  assessment_kit: [],
 });
 
 const CompareDispatchContext = React.createContext<any>({
@@ -29,12 +29,14 @@ export const CompareProvider: FC<ICompareProviderProps> = ({ children }) => {
   const assessmentIdsParams = searchParams.getAll("assessmentIds");
   const [state, dispatch] = useReducer(compareReducer, {
     assessmentIds: assessmentIdsParams,
-    assessment_kit: null,
+    assessment_kit: [],
   });
 
   return (
     <CompareContext.Provider value={state}>
-      <CompareDispatchContext.Provider value={dispatch}>{children}</CompareDispatchContext.Provider>
+      <CompareDispatchContext.Provider value={dispatch}>
+        {children}
+      </CompareDispatchContext.Provider>
     </CompareContext.Provider>
   );
 };
@@ -50,7 +52,9 @@ export const useCompareContext = () => {
 export const useCompareDispatch = () => {
   const context = useContext(CompareDispatchContext);
   if (context === undefined) {
-    throw new Error("useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider");
+    throw new Error(
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+    );
   }
   return context;
 };

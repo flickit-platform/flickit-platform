@@ -49,7 +49,7 @@ export interface IQuestionInfo {
   answer_options?: TAnswerTemplates;
   hint?: string;
   may_not_be_applicable?: boolean;
-  is_not_applicable?:boolean;
+  is_not_applicable?: boolean;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
@@ -162,6 +162,7 @@ export interface IAssessmentKit {
   description: string;
   id: TId;
   title: string;
+  assessment_kit?: IAssessmentKit;
 }
 
 export interface IAssessmentResult {

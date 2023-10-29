@@ -49,6 +49,7 @@ interface ISelectField extends SelectProps {
   fetchOptions?: any;
   register?: UseFormRegister<any>;
   defaultOption?: any;
+  selectedOptions?: any;
 }
 
 export const SelectField = (props: ISelectField) => {
@@ -69,12 +70,17 @@ export const SelectField = (props: ISelectField) => {
     error,
     register,
     defaultOption,
+    selectedOptions,
     ...rest
   } = props;
 
-  const selectOptions = nullable
-    ? [{ id: "", title: "---" }, ...options]
-    : options;
+  let selectOptions;
+  if (selectedOptions.length > 0) {
+    const filteredData = options.filter((item:any) => !selectedOptions.some((excludeItem:any) => excludeItem.id === item.id));
+    selectOptions = [{ id: "", title: "---" }, ...filteredData];
+  } else {
+    selectOptions = nullable ? [{ id: "", title: "---" }, ...options] : options;
+  }
   return (
     <FormControl fullWidth error={error} size={size} variant="outlined">
       <InputLabel
@@ -87,7 +93,7 @@ export const SelectField = (props: ISelectField) => {
       <Select
         {...rest}
         {...(register ? register(name, { required }) : {})}
-        defaultValue={defaultValue?defaultValue:defaultOption.id}
+        defaultValue={defaultValue ? defaultValue : defaultOption.id}
         labelId={`select_label_id_${name}`}
         sx={{
           ...(rest?.sx || {}),

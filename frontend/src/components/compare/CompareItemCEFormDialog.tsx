@@ -13,11 +13,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Title from "@common/Title";
-import { compareActions, useCompareContext, useCompareDispatch } from "@providers/CompareProvider";
+import {
+  compareActions,
+  useCompareContext,
+  useCompareDispatch,
+} from "@providers/CompareProvider";
 import hasStatus from "@utils/hasStatus";
 import AlertBox from "@common/AlertBox";
 
-interface ICompareItemCEFormDialog extends Omit<ICompareItemCEForm, "closeDialog"> {}
+interface ICompareItemCEFormDialog
+  extends Omit<ICompareItemCEForm, "closeDialog"> {}
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
   const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
@@ -67,12 +72,19 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const formMethods = useForm({ shouldUnregister: true });
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
-
   const onSubmit = (data: any) => {
     try {
-      const newAssessmentIds = addToAssessmentIds(data.assessmentId, assessmentIds, index);
-      dispatch(compareActions.setAssessmentIds(newAssessmentIds));
-      closeDialog();
+      if (data?.assessment?.id) {
+        const newAssessmentIds = addToAssessmentIds(
+          data.assessmentIds?.id,
+          assessmentIds,
+          index
+        );
+        dispatch(
+          compareActions.setAssessmentKit([...assessment_kit, data?.assessment])
+        );
+        closeDialog();
+      }
     } catch (e) {
       closeDialog();
     }
@@ -84,31 +96,41 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
         <Grid item xs={12}>
           <SelectFieldUC
             {...useConnectSelectField({
-              url: `/assessment/currentuserprojects/`,
-              searchParams: { assessment_kit_id: assessment_kit?.id },
-              filterOptions: (options) =>
-                options.filter(
-                  (option) => (!assessmentIds.includes(option?.id) || option?.id == defaultValues?.id) && hasStatus(option.status)
-                ),
+              url: "/api/v1/assessments/",
+              searchParams: {
+                kit_id: assessment_kit && assessment_kit[0]?.assessment_kit?.id,
+              },
             })}
             required={true}
             autoFocus={true}
-            name="assessmentId"
-            defaultValue={defaultValues.id || ""}
+            name="assessment"
+            defaultValue={defaultValues || ""}
             label={<Trans i18nKey="assessment" />}
             size="medium"
+            selectedOptions={assessment_kit}
             renderOption={(option = {}) => {
               return (
-                <MenuItem value={option.id} key={option.id} sx={{ display: "flex", alignItems: "center" }}>
+                <MenuItem
+                  value={option}
+                  key={option.id}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
                   {option.id === "" ? (
                     option.title
                   ) : (
                     <>
-                      <Title size="small" sup={option.space.title} color={option?.color?.color_code || "#101c32"}>
+                      <Title
+                        size="small"
+                        sup={option?.space?.title}
+                        color={option?.color?.code || "#101c32"}
+                      >
                         {option.title}
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
-                        <Chip label={option.assessment_kit.title} size="small" />
+                        <Chip
+                          label={option?.assessment_kit?.title}
+                          size="small"
+                        />
                       </Box>
                     </>
                   )}
@@ -129,7 +151,11 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   );
 };
 
-const addToAssessmentIds = (assessmentId: TId, assessmentIds: TId[], index: number) => {
+const addToAssessmentIds = (
+  assessmentId: TId,
+  assessmentIds: TId[],
+  index: number
+) => {
   const newAssessmentIds: TId[] = assessmentIds;
   if (assessmentIds[index] && assessmentIds[index] == assessmentId) {
     return assessmentIds;
