@@ -48,7 +48,6 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     tags = AssessmentKitTagSerializer(many=True)
     expert_group = ExpertGroupSimpleSerilizers()
     number_of_assessment = serializers.SerializerMethodField()
-    current_user_delete_permission = serializers.SerializerMethodField()
     current_user_is_coordinator = serializers.SerializerMethodField()
     number_of_subject = serializers.SerializerMethodField()
     number_of_questionaries = serializers.SerializerMethodField()
@@ -60,10 +59,6 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
         assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, total_count=True)
         return assessment_count_data["totalCount"]
-
-    def get_current_user_delete_permission(self, assessment_kit: AssessmentKit):
-        return assessmentkitservice.get_current_user_delete_permission(assessment_kit,
-                                                                       self.context.get('request', None).user.id)
 
     def get_current_user_is_coordinator(self, assessment_kit: AssessmentKit):
         return assessmentkitservice.get_current_user_is_coordinator(assessment_kit,
@@ -94,7 +89,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group',
                   'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject',
                   'number_of_questionaries',
-                  'number_of_assessment', 'current_user_delete_permission', 'is_active', 'current_user_is_coordinator',
+                  'number_of_assessment', 'is_active', 'current_user_is_coordinator',
                   'subjects_with_desc', 'questionnaires', 'maturity_levels']
 
 
