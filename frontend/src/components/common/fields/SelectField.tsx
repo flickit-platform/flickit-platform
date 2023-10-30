@@ -70,7 +70,7 @@ export const SelectField = (props: ISelectField) => {
     error,
     register,
     defaultOption,
-    selectedOptions,
+    selectedOptions=[],
     ...rest
   } = props;
 
@@ -78,6 +78,7 @@ export const SelectField = (props: ISelectField) => {
   if (selectedOptions.length > 0) {
     const filteredData = options.filter((item:any) => !selectedOptions.some((excludeItem:any) => excludeItem.id === item.id));
     selectOptions = [{ id: "", title: "---" }, ...filteredData];
+
   } else {
     selectOptions = nullable ? [{ id: "", title: "---" }, ...options] : options;
   }
