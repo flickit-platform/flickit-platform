@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
@@ -36,8 +36,12 @@ import { DialogActions, DialogContent } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import useScreenResize from "@utils/useScreenResize";
 import languageDetector from "@utils/languageDetector";
+import toastError from "@utils/toastError";
+import { ICustomError } from "@utils/CustomError";
+import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 const AssessmentKitExpertViewContainer = () => {
-  const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
+  const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
+    useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
@@ -46,10 +50,26 @@ const AssessmentKitExpertViewContainer = () => {
   const [expertGroup, setExpertGroup] = useState<any>();
   const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
+
   const AssessmentKitDetails = async () => {
     const data = await fetchAssessmentKitDetailsQuery.query();
     setDetails(data);
     setLoaded(true);
+  };
+  const handleDownload = async () => {
+    try {
+      const response = await fetchAssessmentKitDownloadUrlQuery.query();
+      const fileUrl = response.url;
+      const a = document.createElement('a');
+      a.href = fileUrl;
+      a.download = 'file_name.zip';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
   useEffect(() => {
     if (!loaded) {
@@ -82,6 +102,19 @@ const AssessmentKitExpertViewContainer = () => {
                 },
               ]}
             />
+          }
+          toolbar={
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ ml: 2 }}
+              onClick={handleDownload}
+            >
+              <Typography mr={1} variant="button">
+                <Trans i18nKey="download" />
+              </Typography>
+              <CloudDownloadRoundedIcon />
+            </Button>
           }
         >
           {assessmentKitTitle}
@@ -1751,6 +1784,11 @@ const useAssessmentKit = () => {
       service.fetchAssessmentKitQuestionnairesQuestions(args, config),
     runOnMount: false,
   });
+  const fetchAssessmentKitDownloadUrlQuery = useQuery({
+    service: (args = { assessmentKitId }, config) =>
+      service.fetchAssessmentKitDownloadUrl(args, config),
+    runOnMount: false,
+  });
 
   return {
     // assessmentKitQueryProps,
@@ -1762,6 +1800,7 @@ const useAssessmentKit = () => {
     fetchMaturityLevelQuestionsQuery,
     fetchAssessmentKitQuestionnairesQuery,
     fetchAssessmentKitQuestionnairesQuestionsQuery,
+    fetchAssessmentKitDownloadUrlQuery,
   };
 };
 export default AssessmentKitExpertViewContainer;
