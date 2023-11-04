@@ -13,4 +13,5 @@ urlpatterns = [
         path("<str:assessment_kit_id>/details/attributes/<str:attribute_id>/maturity-levels/<str:maturity_level_id>/", commonviews.LoadMaturityLevelsDetailsApi.as_view() ),
         path("<str:assessment_kit_id>/details/questionnaires/<str:questionnaire_id>/", commonviews.LoadQuestionnairesDetailsApi.as_view()),
         path("<str:assessment_kit_id>/details/questions/<str:question_id>/", commonviews.LoadQuestionDetailsApi.as_view()),
+        path("<str:assessment_kit_id>/file/", assessmentkitviews.LoadAssessmentKitFileApi.as_view()),
             ]
