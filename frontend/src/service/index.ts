@@ -902,6 +902,16 @@ export const createService = (
         }
       );
     },
+    fetchAssessmentKitDownloadUrl(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args ?? {};
+
+      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/file/`, {
+        ...(config ?? {}),
+      });
+    },
 
     fetchMaturityLevelQuestions(
       args: { assessmentKitId: TId; attributeId: TId; maturityLevelId: TId },

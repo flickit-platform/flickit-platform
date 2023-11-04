@@ -297,5 +297,6 @@
   "markedAsNotApplicable":"Marked as not applicable",
   "theAchivedScores":"The achieved scores from questions of each maturity level of this attribute",
   "noQuestionOnLevel":"No questions on this level",
-  "theHighestLevelAchived":"The highest level achieved so far"
+  "theHighestLevelAchived":"The highest level achieved so far",
+  "download":"Download"
 }
