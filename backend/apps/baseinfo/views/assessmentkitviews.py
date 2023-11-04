@@ -240,3 +240,10 @@ class LoadAssessmentKitDetailsApi(APIView):
         assessment_kit = assessmentkitservice.get_assessment_kit(assessment_kit_id)
         response = LoadAssessmentKitDetailsSerializer(assessment_kit, many=True).data
         return Response(response[0], status=status.HTTP_200_OK)
+
+
+class LoadAssessmentKitFileApi(APIView):
+    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+    def get(self, request, assessment_kit_id):
+        file_address = assessmentkitservice.get_assessment_kit_file_address(assessment_kit_id)
+        return Response({"url": file_address}, status=status.HTTP_200_OK)
