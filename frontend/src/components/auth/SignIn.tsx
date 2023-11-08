@@ -16,7 +16,7 @@ import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import Title from "@common/Title";
 import useGetSignedInUserInfo from "@utils/useGetSignedInUserInfo";
-
+import keycloakService from "@/service/keyCloakService";
 const SignIn = () => {
   const { dispatch, isAuthenticatedUser, redirectRoute } = useAuthContext();
   const { service } = useServiceContext();
@@ -29,7 +29,12 @@ const SignIn = () => {
   const formMethods = useForm({ shouldUnregister: true });
 
   useEffect(() => {
-    if (isAuthenticatedUser) {
+    if (!keycloakService.isLoggedIn()) {
+      keycloakService.doLogin();
+    } else if (keycloakService.isLoggedIn()) {
+      const token = keycloakService.getTokenParsed();
+      dispatch(authActions.signIn(token ?? undefined));
+      dispatch(authActions.setRedirectRoute(""));
       navigate("/", { replace: true });
     }
     return () => {
@@ -37,72 +42,72 @@ const SignIn = () => {
     };
   }, []);
 
-  const onSubmit = async (data: any) => {
-    setLoading(true);
-    try {
-      const { data: res } = await service.signIn(data, {
-        signal: abortController.current.signal,
-      });
-      const us = await getUser(res.access);
-      if (us) {
-        setLoading(false);
-        dispatch(authActions.signIn(res));
-        redirectRoute && navigate(redirectRoute);
-        dispatch(authActions.setRedirectRoute(""));
-      }
-    } catch (e) {
-      const err = e as ICustomError;
-      setLoading(false);
-      if (err?.data?.detail) {
-        formMethods.setError("email", { type: "value" });
-        formMethods.setError("password", {
-          type: "value",
-          message: err?.data?.detail,
-        });
-      }
-      toastError(err, { filterIfHasData: false });
-    }
-  };
+  // const onSubmit = async (data: any) => {
+  //   setLoading(true);
+  //   try {
+  //     const { data: res } = await service.signIn(data, {
+  //       signal: abortController.current.signal,
+  //     });
+  //     const us = await getUser(res.access);
+  //     if (us) {
+  //       setLoading(false);
+  //       dispatch(authActions.signIn(res));
+  //       redirectRoute && navigate(redirectRoute);
+  //       dispatch(authActions.setRedirectRoute(""));
+  //     }
+  //   } catch (e) {
+  //     const err = e as ICustomError;
+  //     setLoading(false);
+  //     if (err?.data?.detail) {
+  //       formMethods.setError("email", { type: "value" });
+  //       formMethods.setError("password", {
+  //         type: "value",
+  //         message: err?.data?.detail,
+  //       });
+  //     }
+  //     toastError(err, { filterIfHasData: false });
+  //   }
+  // };
 
-  return !isAuthenticatedUser ? (
-    <Paper sx={styles.cards.auth}>
-      <Title alignSelf={"stretch"} borderBottom>
-        <Trans i18nKey="signInScreenTitle" />
-      </Title>
+  // return !isAuthenticatedUser ? (
+  //   <Paper sx={styles.cards.auth}>
+  //     <Title alignSelf={"stretch"} borderBottom>
+  //       <Trans i18nKey="signInScreenTitle" />
+  //     </Title>
 
-      <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-          <Grid container spacing={2} sx={styles.formGrid}>
-            <Grid item xs={12}>
-              <InputFieldUC autoFocus={true} name="email" required={true} label={<Trans i18nKey="email" />} />
-            </Grid>
-            <Grid item xs={12}>
-              <InputFieldUC name="password" type="password" required={true} label={<Trans i18nKey="password" />} />
-            </Grid>
-            <Grid item xs={12} sx={{ mt: { xs: 6, md: 20 } }}>
-              <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={loading} data-cy="btn-sign-in">
-                <Trans i18nKey="signIn" />
-              </LoadingButton>
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-          </Grid>
-          <Box pt={1}>
-            <Trans i18nKey="dontHaveAccount" />{" "}
-            <Button
-              data-cy="btn-sign-up"
-              onClick={() => {
-                navigate("/sign-up");
-              }}
-            >
-              <Trans i18nKey="signUp" />
-            </Button>
-          </Box>
-        </form>
-      </FormProvider>
-    </Paper>
-  ) : null;
+  //     <FormProvider {...formMethods}>
+  //       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+  //         <Grid container spacing={2} sx={styles.formGrid}>
+  //           <Grid item xs={12}>
+  //             <InputFieldUC autoFocus={true} name="email" required={true} label={<Trans i18nKey="email" />} />
+  //           </Grid>
+  //           <Grid item xs={12}>
+  //             <InputFieldUC name="password" type="password" required={true} label={<Trans i18nKey="password" />} />
+  //           </Grid>
+  //           <Grid item xs={12} sx={{ mt: { xs: 6, md: 20 } }}>
+  //             <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={loading} data-cy="btn-sign-in">
+  //               <Trans i18nKey="signIn" />
+  //             </LoadingButton>
+  //           </Grid>
+  //           <Grid item xs={12}>
+  //             <Divider />
+  //           </Grid>
+  //         </Grid>
+  //         <Box pt={1}>
+  //           <Trans i18nKey="dontHaveAccount" />{" "}
+  //           <Button
+  //             data-cy="btn-sign-up"
+  //             onClick={() => {
+  //               navigate("/sign-up");
+  //             }}
+  //           >
+  //             <Trans i18nKey="signUp" />
+  //           </Button>
+  //         </Box>
+  //       </form>
+  //     </FormProvider>
+  //   </Paper>
+  // ) : null;
 };
 
 export default SignIn;
