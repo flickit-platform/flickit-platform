@@ -53,7 +53,7 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
       }
     >
       <AlertBox severity="info">
-        <Trans i18nKey="onlyAssessmentsWithEvaluatedStatus" />
+        <Trans i18nKey="youCanOnlyHaveAccessToTheAssessmentsThatAreInYourSpaces" />
       </AlertBox>
       <CompareItemCEForm {...props} closeDialog={closeDialog} />
     </CEDialog>

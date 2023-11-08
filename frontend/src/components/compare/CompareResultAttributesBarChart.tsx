@@ -1,14 +1,30 @@
-import { Bar, XAxis, YAxis, Legend, Tooltip, BarChart, CartesianGrid, ResponsiveContainer } from "recharts";
+import {
+  Bar,
+  XAxis,
+  YAxis,
+  Legend,
+  Tooltip,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 import { ICompareResultBaseInfo, TCompareResultAttributeInfo } from "@types";
+import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
+import { t } from "i18next";
+import convertToAttributesChartData from "@utils/convertToAttributesChartData";
+import processData from "@utils/convertToAttributesChartData";
 
 const CompareResultSubjectAttributesBarChart = (props: {
-  data: TCompareResultAttributeInfo[];
-  base_infos: ICompareResultBaseInfo[];
+  data?: any;
+  base_infos: any;
 }) => {
-  const { data, base_infos } = props;
+  const { data } = props;
+  const res = useMemo(() => {
+    return convertToAttributesChartData(data);
+  }, [data]);
 
   return (
     <Box>
@@ -27,23 +43,32 @@ const CompareResultSubjectAttributesBarChart = (props: {
         <Box height="420px" minWidth="740px">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={data}
+              data={res.reverse()}
               margin={{
                 top: 20,
                 right: 30,
                 left: 20,
-                bottom: 5,
+                bottom: 120,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="title" />
+              <XAxis
+                interval={0}
+                angle={-90}
+                textAnchor="end"
+                dataKey="title"
+                tick={<CustomAxisTick />}
+              />
               <YAxis type="number" domain={[0, 5]} tickCount={6} />
               <Tooltip />
-              <Legend />
-              {base_infos.map((assessment, index) => {
-                const title = assessment.title;
-                return title ? <Bar dataKey={assessment.id} name={title} fill={barColors[index]} maxBarSize={20} /> : null;
-              })}
+              {/* <Legend /> */}
+
+              <Bar
+                dataKey={"ml"}
+                name={"Maturity Level"}
+                fill={barColors[1]}
+                maxBarSize={40}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Box>
@@ -55,3 +80,22 @@ const CompareResultSubjectAttributesBarChart = (props: {
 const barColors = ["#A3C7D6", "#9F73AB", "#624F82", "#3F3B6C"];
 
 export default CompareResultSubjectAttributesBarChart;
+
+const CustomAxisTick = (props: any) => {
+  const { x, y, payload } = props;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#666"
+        transform="rotate(-45)"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
