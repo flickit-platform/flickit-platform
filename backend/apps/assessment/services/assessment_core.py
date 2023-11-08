@@ -1,4 +1,5 @@
 import requests
+from operator import itemgetter
 from rest_framework import status
 
 from account.models import Space
@@ -420,12 +421,15 @@ def get_assessment_report(assessments_details):
             level = MaturityLevel.objects.get(id=item['maturityLevelId'])
             subject_list.append({"id": subject.id,
                                  "title": subject.title,
+                                 "index": subject.index,
                                  "description": subject.description,
                                  "maturity_level": {
                                      "id": level.id,
                                      "title": level.title,
                                  }
                                  })
+        subject_list = sorted(subject_list, key=itemgetter('index'))
+
 
         attribute_top_weaknesses_id = list()
         for item in response_body["topWeaknesses"]:
