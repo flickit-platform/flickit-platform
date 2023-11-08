@@ -1,87 +1,165 @@
+import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "@types";
+import {
+  ICompareResultBaseInfo,
+  ITotalProgress,
+  TStatus,
+  ISubjectReportModel,
+  TId,
+} from "@types";
 import Title from "@common/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
 import { getColorOfStatus, styles } from "@styles";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
+import { useServiceContext } from "@providers/ServiceProvider";
+import { useQuery } from "@utils/useQuery";
+import { useSearchParams } from "react-router-dom";
+import QueryData from "@common/QueryData";
+import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
 const CompareTable = (props: {
-  data: { title: string; items: (string | string[])[] }[];
   title: string;
-  base_infos: ICompareResultBaseInfo[];
+  base_infos?: ICompareResultBaseInfo[];
+  subjectId?: string;
+  data?: any;
 }) => {
-  const { data, title, base_infos } = props;
-
+  const { data, subjectId } = props;
+  const { service } = useServiceContext();
+  const [searchParams] = useSearchParams();
+  const assessmentIds = searchParams.getAll("assessmentIds");
+  const [accumulatedData, setAccumulatedData] = useState<any>([]);
   return (
     <>
-      <Box>
-        {data.map((part) => {
-          return (
-            <Box borderBottom={"1px dashed #e7e7e7"} py={1}>
-              <Box mb={0.5} mt={1}>
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                    fontFamily: "Roboto",
-                    opacity: 0.7,
+      {subjectId && data ? (
+        <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            {assessmentIds.map((assessment: any, index: number) => {
+              const subjectQueryData = useQuery<ISubjectReportModel>({
+                service: (
+                  args: { subjectId: string; assessmentId: string },
+                  config
+                ) =>
+                  service.fetchSubject(
+                    { subjectId: subjectId, assessmentId: assessment },
+                    config
+                  ),
+              });
+
+              return (
+                <Box sx={{ px: 3 }}>
+                  <QueryData
+                    {...subjectQueryData}
+                    loading={false}
+                    render={(res) => {
+
+                      return <MostSignificanComp setAccumulatedData={setAccumulatedData} data={data} res={res} index={index} />;
+                    }}
+                  />
+                </Box>
+              );
+            })}
+          </Box>
+          <CompareResultSubjectAttributesBarChart data={accumulatedData} base_infos={data} />
+        </Box>
+      ) : (
+        <Box>
+          <Box borderBottom={"1px dashed #e7e7e7"} py={1}>
+            <Box mb={0.5} mt={1}>
+              <Title
+                size="small"
+                sx={{
+                  opacity: 0.8,
+                  fontSize: { xs: "1.4rem", lg: "1.1rem" },
+                }}
+              >
+                <Trans i18nKey={"mostSignificantStrengths"} />
+              </Title>
+            </Box>
+            <Grid container spacing={2} sx={{ py: 1.8 }}>
+              <Box
+                sx={{
+                  opacity: 0.96,
+                  height: "100%",
+                  mt: 2,
+                }}
+              >
+                <ul
+                  style={{
+                    marginBlockStart: 0,
+                    marginBlockEnd: 0,
+                    paddingInlineStart: "24px",
                   }}
                 >
-                  {part.title}
-                </Typography>
-              </Box>
-              <Grid container spacing={2} sx={{ py: 1.8 }}>
-                {part.items.map((value) => {
-                  return (
-                    <Grid
-                      item
-                      xs={calcGridSizeBasedOnTheLengthOfAssessments(
-                        base_infos?.length
-                      )}
-                      sx={{
-                        ...styles.compareResultBorder,
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          opacity: 0.96,
-                          height: "100%",
-                        }}
+                  {data?.top_strengths.map((strength: any, index: number) => (
+                    <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                      <CircleRoundedIcon
+                        fontSize="inherit"
+                        sx={{ opacity: 0.5, fontSize: "8px" }}
+                      />
+                      <Typography
+                        textTransform={"uppercase"}
+                        fontWeight="bold"
+                        sx={{ ml: 1 }}
                       >
-                        {Array.isArray(value) ? (
-                          <ul
-                            style={{
-                              marginBlockStart: 0,
-                              marginBlockEnd: 0,
-                              paddingInlineStart: "24px",
-                            }}
-                          >
-                            {value.map((text) => (
-                              <li>
-                                <Typography
-                                  sx={{ my: 0.3 }}
-                                  fontFamily={"Roboto"}
-                                  fontSize="1.1rem"
-                                >
-                                  {text}
-                                </Typography>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          renderCompareItem(part.title, value)
-                        )}
-                      </Box>
-                    </Grid>
-                  );
-                })}
-              </Grid>
+                        {strength?.title}
+                      </Typography>
+                    </Box>
+                  ))}
+                </ul>
+              </Box>
+            </Grid>
+          </Box>
+          <Box borderBottom={"1px dashed #e7e7e7"} py={1}>
+            <Box mb={0.5} mt={1}>
+              <Title
+                size="small"
+                sx={{
+                  opacity: 0.8,
+                  fontSize: { xs: "1.4rem", lg: "1.1rem" },
+                }}
+              >
+                <Trans i18nKey={"mostSignificantWeaknesses"} />
+              </Title>
             </Box>
-          );
-        })}
-      </Box>
+            <Grid container spacing={2} sx={{ py: 1.8 }}>
+              <Box
+                sx={{
+                  opacity: 0.96,
+                  height: "100%",
+                  mt: 2,
+                }}
+              >
+                <ul
+                  style={{
+                    marginBlockStart: 0,
+                    marginBlockEnd: 0,
+                    paddingInlineStart: "24px",
+                  }}
+                >
+                  {data?.top_weaknesses.map((weakness: any, index: number) => (
+                    <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                      <CircleRoundedIcon
+                        fontSize="inherit"
+                        sx={{ opacity: 0.5, fontSize: "8px" }}
+                      />
+                      <Typography
+                        textTransform={"uppercase"}
+                        fontWeight="bold"
+                        sx={{ ml: 1 }}
+                      >
+                        {weakness?.title}
+                      </Typography>
+                    </Box>
+                  ))}
+                </ul>
+              </Box>
+            </Grid>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };
@@ -145,11 +223,7 @@ const renderCompareItem = (key: string, value: any) => {
       {(obj?.title !== null || obj?.title !== undefined) && (
         <Typography {...textStyle}>{obj?.title}</Typography>
       )}
-      {obj?.progress && (
-        <Typography
-          {...textStyle}
-        >{obj.progress}%</Typography>
-      )}
+      {obj?.progress && <Typography {...textStyle}>{obj.progress}%</Typography>}
     </>
   );
   return typeof value !== "object"
@@ -157,4 +231,109 @@ const renderCompareItem = (key: string, value: any) => {
     : progressComponent(value);
 };
 
+const MostSignificanComp = (props: any) => {
+  const { data, index, res,setAccumulatedData } = props;
+
+  useEffect(() => {
+    setAccumulatedData((prevData:any) => [...prevData, res]);
+  }, []);
+
+  return (
+    <Box>
+      <Title sx={{ my: 1 }}>{data[index]?.assessment?.title}</Title>
+      <Box py={1} ml={4} borderBottom={"1px dashed #e7e7e7"}>
+        <Box mb={0.5} mt={1}>
+          <Title
+            size="small"
+            sx={{
+              opacity: 0.8,
+              fontSize: { xs: "1.4rem", lg: "1.1rem" },
+            }}
+          >
+            <Trans i18nKey={"mostSignificantStrengths"} />
+          </Title>
+        </Box>
+        <Grid container spacing={2} sx={{ py: 1.8 }}>
+          <Box
+            sx={{
+              opacity: 0.96,
+              height: "100%",
+              mt: 2,
+            }}
+          >
+            <ul
+              style={{
+                marginBlockStart: 0,
+                marginBlockEnd: 0,
+                paddingInlineStart: "24px",
+              }}
+            >
+              {res?.top_strengths.map((strength: any, index: number) => (
+                <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                  <CircleRoundedIcon
+                    fontSize="inherit"
+                    sx={{ opacity: 0.5, fontSize: "8px" }}
+                  />
+                  <Typography
+                    textTransform={"uppercase"}
+                    fontWeight="bold"
+                    sx={{ ml: 1 }}
+                  >
+                    {strength?.title}
+                  </Typography>
+                </Box>
+              ))}
+            </ul>
+          </Box>
+        </Grid>
+      </Box>
+      <Box py={1} ml={4}>
+        <Box mb={0.5} mt={1}>
+          <Title
+            size="small"
+            sx={{
+              opacity: 0.8,
+              fontSize: { xs: "1.4rem", lg: "1.1rem" },
+            }}
+          >
+            <Trans i18nKey={"mostSignificantWeaknesses"} />
+          </Title>
+        </Box>
+        <Grid container spacing={2} sx={{ py: 1.8 }}>
+          <Box
+            sx={{
+              opacity: 0.96,
+              height: "100%",
+              mt: 2,
+            }}
+          >
+            <ul
+              style={{
+                marginBlockStart: 0,
+                marginBlockEnd: 0,
+                paddingInlineStart: "24px",
+              }}
+            >
+              {res?.top_weaknesses.map((weakness: any, index: number) => (
+                <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                  <CircleRoundedIcon
+                    fontSize="inherit"
+                    sx={{ opacity: 0.5, fontSize: "8px" }}
+                  />
+                  <Typography
+                    textTransform={"uppercase"}
+                    fontWeight="bold"
+                    sx={{ ml: 1 }}
+                  >
+                    {weakness?.title}
+                  </Typography>
+                </Box>
+              ))}
+            </ul>
+          </Box>
+        </Grid>
+      </Box>
+    </Box>
+  );
+};
 export default CompareTable;

@@ -37,7 +37,7 @@ const CompareResultAssessmentsSection = (props: {
                   ...styles.centerCH,
                 }}
               >
-                <Title>{item.title}</Title>
+                <Title>{item.assessment.title}</Title>
                 <Box
                   sx={{
                     ...styles.centerV,
@@ -45,7 +45,19 @@ const CompareResultAssessmentsSection = (props: {
                     justifyContent: { xs: "center", lg: "flex-end" },
                   }}
                 >
-                  <Gauge maturity_level_number={item.maturity_level_number} maturity_level_status={item.status} level_value={item.maturity_level_value} maxWidth="250px" m="auto" />
+                  <Gauge
+                    maturity_level_number={
+                      item.assessment.assessment_kit.maturity_level_count
+                    }
+                    maturity_level_status={
+                      item.assessment.assessment_kit.maturity_level.title
+                    }
+                    level_value={
+                      item.assessment.assessment_kit.maturity_level.index
+                    }
+                    maxWidth="250px"
+                    m="auto"
+                  />
                 </Box>
                 <Box
                   display="flex"
