@@ -7,7 +7,7 @@ from common.restutil import ActionResult
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
 from baseinfo.models.basemodels import QualityAttribute
-from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer
+from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer, SimpleLevelCompetenceSerilizer
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel, LevelCompetence
 from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
@@ -378,3 +378,17 @@ def update_assessment_kit_info(assessment_kit_id, **kwargs):
 def get_assessment_kit_file_address(assessment_kit_id):
     kit = AssessmentKit.objects.get(id=assessment_kit_id)
     return kit.dsl.dsl_file.url
+
+
+def get_maturity_level_for_internal(maturity_levels):
+    level_ids = list(maturity_levels.values_list("id", flat=True))
+    levels_list = list()
+    for level in maturity_levels:
+        level_competences = SimpleLevelCompetenceSerilizer(level.level_competences, many=True).data
+        levels_list.append({"id": level.id,
+                            "value": level.value,
+                            "index": level_ids.index(level.id) + 1,
+                            "level_competences": level_competences,
+                            })
+    return levels_list
+
