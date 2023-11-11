@@ -167,11 +167,11 @@ class LoadMaturityLevelInternalApi(APIView):
 
     @swagger_auto_schema(responses={200: SimpleMaturityLevelSimpleSerializer(many=True)})
     def get(self, request, assessment_kit_id):
-        maturity_level = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
-        if not maturity_level:
+        maturity_levels = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
+        if not maturity_levels:
             return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
                             status=status.HTTP_400_BAD_REQUEST)
-        response = SimpleMaturityLevelSimpleSerializer(maturity_level, many=True).data
+        response = assessmentkitservice.get_maturity_level_for_internal(maturity_levels)
         return Response({'items': response}, status=status.HTTP_200_OK)
 
 
