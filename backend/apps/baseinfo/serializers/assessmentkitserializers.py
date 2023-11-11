@@ -54,10 +54,11 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     subjects_with_desc = serializers.SerializerMethodField()
     questionnaires = serializers.SerializerMethodField()
     likes_number = serializers.SerializerMethodField()
-    maturity_levels = MaturityLevelSimpleSerializer(many=True)
+    maturity_levels = serializers.SerializerMethodField()
 
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, total_count=True)
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
+                                                                    total_count=True)
         return assessment_count_data["totalCount"]
 
     def get_current_user_is_coordinator(self, assessment_kit: AssessmentKit):
@@ -83,6 +84,13 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
 
     def get_likes_number(self, assessment_kit: AssessmentKit):
         return assessment_kit.likes.count()
+
+    def get_maturity_levels(self, assessment_kit: AssessmentKit):
+        levels = MaturityLevel.objects.filter(assessment_kit=assessment_kit.id).values('id', 'title',
+                                                                                       'value')
+        for i in range(len(levels)):
+            levels[i]["index"] = i + 1
+        return levels
 
     class Meta:
         model = AssessmentKit
@@ -189,7 +197,8 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
         return assessment_kit.questionnaires.values('question').count()
 
     def get_assessments_count(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, total_count=True)
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
+                                                                    total_count=True)
         return assessment_count_data["totalCount"]
 
     class Meta:
