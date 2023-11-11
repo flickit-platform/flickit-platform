@@ -10,6 +10,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
+import { theme } from "@config/theme";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -253,6 +254,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
           <MaturityLevelDetailsBar
             text={text}
             score={maturity_score?.score}
+            highestIndex={
+              is_passed && maturity_score?.maturity_level?.index == totalml
+            }
             is_passed={is_passed}
           />
         </Box>
@@ -277,16 +281,18 @@ const MaturityLevelDetailsContainer = (props: any) => {
   );
 };
 export const MaturityLevelDetailsBar = (props: any) => {
-  const { score, is_passed, text } = props;
+  const { score, is_passed, text, highestIndex } = props;
   const width = `${score != null ? score : 100}%`;
+  console.log(score);
   const bg_color = is_passed ? "#1769aa" : "#545252";
+  const color = is_passed ? "#d1e6f8" : "#808080";
   return (
     <Box
       height={"38px"}
       width="100%"
       sx={{
         my: 0.5,
-        background: "gray",
+        background: color,
         borderTopRightRadius: "8px",
         borderBottomRightRadius: "8px",
         position: "relative",
@@ -311,6 +317,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
           left: "12px",
           opacity: 0.8,
           letterSpacing: { xs: ".09em", sm: ".15em" },
+          color: theme.palette.getContrastText(color),
         }}
         textTransform="uppercase"
         variant="h6"
@@ -318,7 +325,12 @@ export const MaturityLevelDetailsBar = (props: any) => {
         {text}
       </Typography>
       <Typography
-        sx={{ position: "absolute", zIndex: 1, right: "12px" }}
+        sx={{
+          position: "absolute",
+          zIndex: 1,
+          right: "12px",
+          color: theme.palette.getContrastText(color),
+        }}
         variant="h6"
       >
         {score != null && Math.ceil(score)}
