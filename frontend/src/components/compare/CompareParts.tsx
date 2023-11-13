@@ -70,7 +70,6 @@ const CompareButton = (props: { disabled?: boolean }) => {
   const { assessment_kit } = useCompareContext();
   const handleClick = () => {
     const id = assessment_kit.map((item: any) => item.id);
-    console.log(id);
     if (assessment_kit) {
       navigate({
         pathname: "result",

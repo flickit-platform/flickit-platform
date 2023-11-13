@@ -18,6 +18,9 @@ import AutocompleteAsyncField, {
 } from "@common/fields/AutocompleteAsyncField";
 import UploadField from "@common/fields/UploadField";
 import RichEditorField from "@common/fields/RichEditorField";
+import { Box, Button, Typography, Alert } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Divider from "@mui/material/Divider";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -28,6 +31,8 @@ interface IAssessmentKitCEFromDialogProps extends DialogProps {
 
 const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
+  const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
+  const [syntaxErrorObject, setSyntaxErrorObjectg] = useState<any>();
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -81,6 +86,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e) {
       const err = e as ICustomError;
+      if (err.message == "SYNTAX_ERROR") {
+        setSyntaxErrorObjectg(err?.errors);
+        setShowErrorLog(true);
+      }
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
@@ -90,7 +99,116 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       };
     }
   };
+  const formContent = (
+    <FormProviderWithForm formMethods={formMethods}>
+      <Grid container spacing={2} sx={styles.formGrid}>
+        <Grid item xs={12} md={5}>
+          <InputFieldUC
+            name="title"
+            label={<Trans i18nKey="title" />}
+            required
+            defaultValue={defaultValues.title || ""}
+          />
+        </Grid>
+        <Grid item xs={12} md={7}>
+          <UploadField
+            accept={{ "application/zip": [".zip"] }}
+            uploadService={(args, config) =>
+              service.uploadAssessmentKitDSL(args, config)
+            }
+            deleteService={(args, config) =>
+              service.deleteAssessmentKitDSL(args, config)
+            }
+            name="dsl_id"
+            required={true}
+            label={<Trans i18nKey="dsl" />}
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <AutocompleteAsyncField
+            {...useConnectAutocompleteField({
+              service: (args, config) =>
+                service.fetchAssessmentKitTags(args, config),
+            })}
+            name="tags"
+            multiple={true}
+            searchOnType={false}
+            required={true}
+            label={<Trans i18nKey="tags" />}
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <InputFieldUC
+            name="summary"
+            label={<Trans i18nKey="summary" />}
+            required={true}
+            defaultValue={defaultValues.summary || ""}
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <RichEditorField
+            name="about"
+            label={<Trans i18nKey="about" />}
+            required={true}
+            defaultValue={defaultValues.about || ""}
+          />
+        </Grid>
+      </Grid>
+      <CEDialogActions
+        closeDialog={close}
+        loading={loading}
+        type={type}
+        hasViewBtn={true}
+        onSubmit={(...args) =>
+          formMethods.handleSubmit((data) => onSubmit(data, ...args))
+        }
+      />
+    </FormProviderWithForm>
+  );
 
+  const syntaxErrorContent = (
+    <Box>
+      <Typography ml={1} variant="h6">
+        <Trans i18nKey="youveGotSyntaxErrorsInYourDslFile" />
+      </Typography>
+      <Divider />
+      <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
+        {syntaxErrorObject&&syntaxErrorObject.map((e: any, index: number) => {
+          return (
+            <Box sx={{ ml: 1 }}>
+              <Alert severity="error" sx={{ my: 2 }}>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="subtitle2" color="error">
+                    <Trans
+                      i18nKey="errorAtLine"
+                      values={{
+                        message: e.message,
+                        fileName: e.fileName,
+                        line: e.line,
+                        column: e.column,
+                      }}
+                    />
+                  </Typography>
+                </Box>
+              </Alert>
+            </Box>
+          );
+        })}
+      </Box>
+      <Grid mt={4} container spacing={2} justifyContent="flex-end">
+        <Grid item>
+          <Button onClick={close} data-cy="cancel">
+            <Trans i18nKey="cancel" />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={() => setShowErrorLog(false)}>
+            <Trans i18nKey="Back" />
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
+  );
   return (
     <CEDialog
       {...rest}
@@ -106,73 +224,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         </>
       }
     >
-      <FormProviderWithForm formMethods={formMethods}>
-        <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} md={5}>
-            <InputFieldUC
-              name="title"
-              label={<Trans i18nKey="title" />}
-              required
-              defaultValue={defaultValues.title || ""}
-            />
-          </Grid>
-          {/* <Grid item xs={12} md={5}>
-            <InputFieldUC name="code" label={<Trans i18nKey="code" />} required defaultValue={defaultValues.code || ""} />
-          </Grid> */}
-          <Grid item xs={12} md={7}>
-            <UploadField
-              accept={{ "application/zip": [".zip"] }}
-              uploadService={(args, config) =>
-                service.uploadAssessmentKitDSL(args, config)
-              }
-              deleteService={(args, config) =>
-                service.deleteAssessmentKitDSL(args, config)
-              }
-              name="dsl_id"
-              required={true}
-              label={<Trans i18nKey="dsl" />}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <AutocompleteAsyncField
-              {...useConnectAutocompleteField({
-                service: (args, config) =>
-                  service.fetchAssessmentKitTags(args, config),
-              })}
-              name="tags"
-              multiple={true}
-              searchOnType={false}
-              required={true}
-              label={<Trans i18nKey="tags" />}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <InputFieldUC
-              name="summary"
-              label={<Trans i18nKey="summary" />}
-              required={true}
-              defaultValue={defaultValues.summary || ""}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <RichEditorField
-              name="about"
-              label={<Trans i18nKey="about" />}
-              required={true}
-              defaultValue={defaultValues.about || ""}
-            />
-          </Grid>
-        </Grid>
-        <CEDialogActions
-          closeDialog={close}
-          loading={loading}
-          type={type}
-          hasViewBtn={true}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
-        />
-      </FormProviderWithForm>
+      {!showErrorLog ? formContent : syntaxErrorContent}
     </CEDialog>
   );
 };

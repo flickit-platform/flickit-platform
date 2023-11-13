@@ -323,7 +323,7 @@ const AssessmentKit = (props: any) => {
                 </Title>
                 <Box mt={2} sx={{ display: "flex" }}>
                   {maturity_levels.map((item: any, index: number) => {
-                    const colorCode = colorPallet[item.value];
+                    const colorCode = colorPallet[item.index-1];
                     return (
                       <Box
                         sx={{
