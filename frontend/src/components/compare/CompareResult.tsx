@@ -61,7 +61,7 @@ const CompareResult = (props: ICompareResultProps) => {
                   mt: 1,
                 }}
               >
-                <CompareTable title="generalSpecification" data={data[0]} />
+                <CompareTable title="generalSpecification" data={data} />
               </Box>
             </Box>
           </Box>

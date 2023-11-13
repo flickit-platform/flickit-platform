@@ -5,8 +5,6 @@ interface IDynamicGaugeSVGProps {
 }
 const GaugeComponent7 = (props: IDynamicGaugeSVGProps) => {
   const { colorCode, value } = props;
-  console.log(value);
-  console.log(colorCode);
   return (
     <svg
       width="100%"

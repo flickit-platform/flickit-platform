@@ -54,110 +54,140 @@ const CompareTable = (props: {
                     {...subjectQueryData}
                     loading={false}
                     render={(res) => {
-
-                      return <MostSignificanComp setAccumulatedData={setAccumulatedData} data={data} res={res} index={index} />;
+                      return (
+                        <MostSignificanComp
+                          setAccumulatedData={setAccumulatedData}
+                          data={data}
+                          res={res}
+                          index={index}
+                        />
+                      );
                     }}
                   />
                 </Box>
               );
             })}
           </Box>
-          <CompareResultSubjectAttributesBarChart data={accumulatedData} base_infos={data} />
+          <CompareResultSubjectAttributesBarChart
+            data={accumulatedData}
+            base_infos={data}
+          />
         </Box>
       ) : (
-        <Box>
-          <Box borderBottom={"1px dashed #e7e7e7"} py={1}>
-            <Box mb={0.5} mt={1}>
-              <Title
-                size="small"
-                sx={{
-                  opacity: 0.8,
-                  fontSize: { xs: "1.4rem", lg: "1.1rem" },
-                }}
-              >
-                <Trans i18nKey={"mostSignificantStrengths"} />
-              </Title>
-            </Box>
-            <Grid container spacing={2} sx={{ py: 1.8 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }} mb={6}>
+          {data.map((item: any, index: number) => {
+            return (
               <Box
+                borderRight={
+                  index != data.length - 1 ? "1px solid #e7e7e7" : ""
+                }
+                px={2}
+                width={`${100 / data.length}%`}
                 sx={{
-                  opacity: 0.96,
-                  height: "100%",
-                  mt: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
                 }}
               >
-                <ul
-                  style={{
-                    marginBlockStart: 0,
-                    marginBlockEnd: 0,
-                    paddingInlineStart: "24px",
-                  }}
-                >
-                  {data?.top_strengths.map((strength: any, index: number) => (
-                    <Box sx={{ ...styles.centerV }} mb={1} key={index}>
-                      <CircleRoundedIcon
-                        fontSize="inherit"
-                        sx={{ opacity: 0.5, fontSize: "8px" }}
-                      />
-                      <Typography
-                        textTransform={"uppercase"}
-                        fontWeight="bold"
-                        sx={{ ml: 1 }}
+                <Box py={1}  height={"50%"} >
+                  <Box mb={0.5} mt={1}>
+                    <Title
+                      size="small"
+                      sx={{
+                        opacity: 0.8,
+                        fontSize: { xs: "1.4rem", lg: "1.1rem" },
+                      }}
+                    >
+                      <Trans i18nKey={"mostSignificantStrengths"} />
+                    </Title>
+                  </Box>
+                  <Grid container spacing={2} sx={{ py: 1.8 }}>
+                    <Box
+                      sx={{
+                        opacity: 0.96,
+                        height: "100%",
+                        mt: 2,
+                      }}
+                    >
+                      <ul
+                        style={{
+                          marginBlockStart: 0,
+                          marginBlockEnd: 0,
+                          paddingInlineStart: "24px",
+                        }}
                       >
-                        {strength?.title}
-                      </Typography>
+                        {item?.top_strengths.map(
+                          (strength: any, index: number) => (
+                            <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                              <CircleRoundedIcon
+                                fontSize="inherit"
+                                sx={{ opacity: 0.5, fontSize: "8px" }}
+                              />
+                              <Typography
+                                textTransform={"uppercase"}
+                                fontWeight="bold"
+                                sx={{ ml: 1 }}
+                              >
+                                {strength?.title}
+                              </Typography>
+                            </Box>
+                          )
+                        )}
+                      </ul>
                     </Box>
-                  ))}
-                </ul>
-              </Box>
-            </Grid>
-          </Box>
-          <Box borderBottom={"1px dashed #e7e7e7"} py={1}>
-            <Box mb={0.5} mt={1}>
-              <Title
-                size="small"
-                sx={{
-                  opacity: 0.8,
-                  fontSize: { xs: "1.4rem", lg: "1.1rem" },
-                }}
-              >
-                <Trans i18nKey={"mostSignificantWeaknesses"} />
-              </Title>
-            </Box>
-            <Grid container spacing={2} sx={{ py: 1.8 }}>
-              <Box
-                sx={{
-                  opacity: 0.96,
-                  height: "100%",
-                  mt: 2,
-                }}
-              >
-                <ul
-                  style={{
-                    marginBlockStart: 0,
-                    marginBlockEnd: 0,
-                    paddingInlineStart: "24px",
-                  }}
-                >
-                  {data?.top_weaknesses.map((weakness: any, index: number) => (
-                    <Box sx={{ ...styles.centerV }} mb={1} key={index}>
-                      <CircleRoundedIcon
-                        fontSize="inherit"
-                        sx={{ opacity: 0.5, fontSize: "8px" }}
-                      />
-                      <Typography
-                        textTransform={"uppercase"}
-                        fontWeight="bold"
-                        sx={{ ml: 1 }}
+                  </Grid>
+                </Box>
+                <Box py={1}height={"50%"}>
+                  <Box mb={0.5} mt={1}>
+                    <Title
+                      size="small"
+                      sx={{
+                        opacity: 0.8,
+                        fontSize: { xs: "1.4rem", lg: "1.1rem" },
+                      }}
+                    >
+                      <Trans i18nKey={"mostSignificantWeaknesses"} />
+                    </Title>
+                  </Box>
+                  <Grid container spacing={2} sx={{ py: 1.8 }}>
+                    <Box
+                      sx={{
+                        opacity: 0.96,
+                        height: "100%",
+                        mt: 2,
+                      }}
+                    >
+                      <ul
+                        style={{
+                          marginBlockStart: 0,
+                          marginBlockEnd: 0,
+                          paddingInlineStart: "24px",
+                        }}
                       >
-                        {weakness?.title}
-                      </Typography>
+                        {item?.top_weaknesses.map(
+                          (weakness: any, index: number) => (
+                            <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                              <CircleRoundedIcon
+                                fontSize="inherit"
+                                sx={{ opacity: 0.5, fontSize: "8px" }}
+                              />
+                              <Typography
+                                textTransform={"uppercase"}
+                                fontWeight="bold"
+                                sx={{ ml: 1 }}
+                              >
+                                {weakness?.title}
+                              </Typography>
+                            </Box>
+                          )
+                        )}
+                      </ul>
                     </Box>
-                  ))}
-                </ul>
+                  </Grid>
+                </Box>
               </Box>
-            </Grid>
-          </Box>
+            );
+          })}
         </Box>
       )}
     </>
@@ -232,16 +262,17 @@ const renderCompareItem = (key: string, value: any) => {
 };
 
 const MostSignificanComp = (props: any) => {
-  const { data, index, res,setAccumulatedData } = props;
+  const { data, index, res, setAccumulatedData } = props;
 
   useEffect(() => {
-    setAccumulatedData((prevData:any) => [...prevData, res]);
+    setAccumulatedData((prevData: any) => [...prevData, res]);
   }, []);
 
   return (
-    <Box>
+    <Box height={"100%"} mb={8}>
       <Title sx={{ my: 1 }}>{data[index]?.assessment?.title}</Title>
-      <Box py={1} ml={4} borderBottom={"1px dashed #e7e7e7"}>
+      <Box py={1} ml={4} borderBottom={"1px dashed #e7e7e7"} height={"50%"}>
+        
         <Box mb={0.5} mt={1}>
           <Title
             size="small"
@@ -250,6 +281,7 @@ const MostSignificanComp = (props: any) => {
               fontSize: { xs: "1.4rem", lg: "1.1rem" },
             }}
           >
+            
             <Trans i18nKey={"mostSignificantStrengths"} />
           </Title>
         </Box>
@@ -287,7 +319,7 @@ const MostSignificanComp = (props: any) => {
           </Box>
         </Grid>
       </Box>
-      <Box py={1} ml={4}>
+      <Box py={1} ml={4} height={"50%"}>
         <Box mb={0.5} mt={1}>
           <Title
             size="small"
