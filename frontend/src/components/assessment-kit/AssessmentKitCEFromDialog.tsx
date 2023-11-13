@@ -50,6 +50,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const navigate = useNavigate();
   const close = () => {
     abortController.abort();
+    setShowErrorLog(false);
     closeDialog();
   };
 
@@ -84,16 +85,20 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       onSubmitForm();
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
-    } catch (e) {
+    } catch (e: any) {
       const err = e as ICustomError;
-      if (err.message == "SYNTAX_ERROR") {
-        setSyntaxErrorObjectg(err?.errors);
+      if (e?.status == 422) {
+        setSyntaxErrorObjectg(e.data?.errors);
         setShowErrorLog(true);
+      }
+
+      if (e?.status !== 422) {
+        toastError(err);
       }
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
-      toastError(err);
+
       return () => {
         abortController.abort();
       };
@@ -173,27 +178,28 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       </Typography>
       <Divider />
       <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
-        {syntaxErrorObject&&syntaxErrorObject.map((e: any, index: number) => {
-          return (
-            <Box sx={{ ml: 1 }}>
-              <Alert severity="error" sx={{ my: 2 }}>
-                <Box sx={{ display: "flex" }}>
-                  <Typography variant="subtitle2" color="error">
-                    <Trans
-                      i18nKey="errorAtLine"
-                      values={{
-                        message: e.message,
-                        fileName: e.fileName,
-                        line: e.line,
-                        column: e.column,
-                      }}
-                    />
-                  </Typography>
-                </Box>
-              </Alert>
-            </Box>
-          );
-        })}
+        {syntaxErrorObject &&
+          syntaxErrorObject.map((e: any, index: number) => {
+            return (
+              <Box sx={{ ml: 1 }}>
+                <Alert severity="error" sx={{ my: 2 }}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography variant="subtitle2" color="error">
+                      <Trans
+                        i18nKey="errorAtLine"
+                        values={{
+                          message: e.message,
+                          fileName: e.fileName,
+                          line: e.line,
+                          column: e.column,
+                        }}
+                      />
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            );
+          })}
       </Box>
       <Grid mt={4} container spacing={2} justifyContent="flex-end">
         <Grid item>
