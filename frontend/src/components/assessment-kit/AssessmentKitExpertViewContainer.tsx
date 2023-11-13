@@ -103,19 +103,19 @@ const AssessmentKitExpertViewContainer = () => {
               ]}
             />
           }
-          toolbar={
-            <Button
-              variant="contained"
-              size="small"
-              sx={{ ml: 2 }}
-              onClick={handleDownload}
-            >
-              <Typography mr={1} variant="button">
-                <Trans i18nKey="download" />
-              </Typography>
-              <CloudDownloadRoundedIcon />
-            </Button>
-          }
+          // toolbar={
+          //   <Button
+          //     variant="contained"
+          //     size="small"
+          //     sx={{ ml: 2 }}
+          //     onClick={handleDownload}
+          //   >
+          //     <Typography mr={1} variant="button">
+          //       <Trans i18nKey="download" />
+          //     </Typography>
+          //     <CloudDownloadRoundedIcon />
+          //   </Button>
+          // }
         >
           {assessmentKitTitle}
         </Title>
