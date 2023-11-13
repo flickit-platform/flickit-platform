@@ -50,6 +50,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const navigate = useNavigate();
   const close = () => {
     abortController.abort();
+    setShowErrorLog(false);
     closeDialog();
   };
 
@@ -87,7 +88,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     } catch (e:any) {
       const err = e as ICustomError;
       if (e?.status == 422) {
-        setSyntaxErrorObjectg(err?.errors);
+        setSyntaxErrorObjectg(e?.data?.errors);
         setShowErrorLog(true);
       }
       if (e?.status !== 422) {
