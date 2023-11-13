@@ -3,7 +3,7 @@ from django.db.models.fields import return_None
 import requests
 import traceback
 
-from django.http import FileResponse 
+from django.http import FileResponse
 from django.http import HttpResponseForbidden
 
 from django.db.utils import IntegrityError
@@ -14,28 +14,34 @@ from rest_framework.permissions import IsAuthenticated
 
 from assessmentplatform.settings import BASE_DIR, DSL_PARSER_URL_SERVICE
 
-from baseinfo.services import importassessmentkitservice , assessmentkitservice
+from baseinfo.services import importassessmentkitservice, assessmentkitservice
 from baseinfo.serializers.assessmentkitserializers import ImportAssessmentKitSerializer
-from baseinfo.permissions import IsMemberExpertGroup , IsOwnerExpertGroup
+from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 
 class ImportAssessmentKitApi(APIView):
     serializer_class = ImportAssessmentKitSerializer
     permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+
     def post(self, request):
         serializer = ImportAssessmentKitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         dsl_contents = importassessmentkitservice.extract_dsl_contents(serializer.validated_data['dsl_id'])
-        base_infos_resp = requests.post(DSL_PARSER_URL_SERVICE, json={"dslContent": dsl_contents}).json()
-        if base_infos_resp['hasError']:
-            return Response({"message": "The uploaded dsl is invalid."}, status = status.HTTP_400_BAD_REQUEST)
+        response = requests.post(DSL_PARSER_URL_SERVICE, json={"dslContent": dsl_contents})
+        base_info_resp = response.json()
+        if response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
+            return Response(data=base_info_resp, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if base_info_resp['hasError']:
+            return Response({"message": "The uploaded dsl is invalid."}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            assessment_kit = importassessmentkitservice.import_assessment_kit(base_infos_resp, **serializer.validated_data)
-            return Response({"message": "The assessment_kit imported successfully", "id": assessment_kit.id}, status = status.HTTP_200_OK)
+            assessment_kit = importassessmentkitservice.import_assessment_kit(base_info_resp,
+                                                                              **serializer.validated_data)
+            return Response({"message": "The assessment_kit imported successfully", "id": assessment_kit.id},
+                            status=status.HTTP_200_OK)
         except IntegrityError as e:
             message = traceback.format_exc()
             print(message)
-            return self.handle_integrity_error(e)           
+            return self.handle_integrity_error(e)
 
     def handle_integrity_error(self, integrity_error):
         error_message = str(integrity_error)
@@ -51,12 +57,13 @@ class ImportAssessmentKitApi(APIView):
 
 class DownloadDslApi(APIView):
     permission_classes = [IsAuthenticated, IsMemberExpertGroup]
-    def get(self,request,assessment_kit_id):
+
+    def get(self, request, assessment_kit_id):
         assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
         result = importassessmentkitservice.get_dsl_file(assessment_kit)
         if result.success:
-                return FileResponse(result.data["file"] , as_attachment=True,
-                        filename=result.data["filename"])
+            return FileResponse(result.data["file"], as_attachment=True,
+                                filename=result.data["filename"])
         else:
             return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
 
