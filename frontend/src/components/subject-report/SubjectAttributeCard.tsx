@@ -283,7 +283,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
 export const MaturityLevelDetailsBar = (props: any) => {
   const { score, is_passed, text, highestIndex } = props;
   const width = `${score != null ? score : 100}%`;
-  console.log(score);
   const bg_color = is_passed ? "#1769aa" : "#545252";
   const color = is_passed ? "#d1e6f8" : "#808080";
   return (

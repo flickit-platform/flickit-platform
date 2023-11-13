@@ -218,11 +218,7 @@ const Actions = (props: {
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
-  const {
-    deleteAssessment,
-    item,
-    dialogProps,
-  } = props;
+  const { deleteAssessment, item, dialogProps } = props;
   const navigate = useNavigate();
   const deleteItem = async (e: any) => {
     try {
