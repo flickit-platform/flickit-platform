@@ -84,16 +84,19 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       onSubmitForm();
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
-    } catch (e) {
+    } catch (e:any) {
       const err = e as ICustomError;
-      if (err.message == "SYNTAX_ERROR") {
+      if (e?.status == 422) {
         setSyntaxErrorObjectg(err?.errors);
         setShowErrorLog(true);
+      }
+      if (e?.status !== 422) {
+        toastError(err);
       }
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
-      toastError(err);
+
       return () => {
         abortController.abort();
       };
