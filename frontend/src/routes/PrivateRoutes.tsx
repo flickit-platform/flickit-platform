@@ -1,15 +1,20 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "@providers/AuthProvider";
-import keycloakService from "@/service/keyCloakService";
-const PrivateRoutes = (props: PropsWithChildren<{}>) => {
-  const { isAuthenticatedUser } = useAuthContext();
-
-  if (!keycloakService.isLoggedIn()) {
-    return <Navigate to="/sign-in" />;
+import { authActions, useAuthContext } from "@providers/AuthProvider";
+import axios from "axios";
+import keycloakService from "@/service//keycloakService";
+const PrivateRoutes = (props: PropsWithChildren<{}>) => { 
+  const isAuthenticated = keycloakService.isLoggedIn();
+  if (isAuthenticated) {
+    const accessToken = keycloakService.getToken();
+    axios.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    localStorage.setItem("accessToken", JSON.stringify(accessToken));
   }
-
-  return <Outlet />;
+  return isAuthenticated ? <Outlet /> : <Login />;
 };
 
 export default PrivateRoutes;
+const Login = () => {
+  keycloakService.doLogin();
+  return <></>;
+};

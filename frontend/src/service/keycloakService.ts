@@ -17,7 +17,6 @@ const initKeycloak = (onAuthenticatedCallback: () => void) => {
     })
     .then((authenticated) => {
       if (!authenticated) {
-        console.log("user is not authenticated..!");
       }
       onAuthenticatedCallback();
     })
@@ -28,7 +27,8 @@ const doLogin = _kc.login;
 
 const doLogout = _kc.logout;
 
-const getToken = (): string | null => _kc?.token ?? null;
+const getToken = (): string => _kc?.token ?? "";
+
 
 const getTokenParsed = (): Record<string, any> | null =>
   _kc?.tokenParsed ?? null;
@@ -38,12 +38,6 @@ const isLoggedIn = (): boolean => !!_kc.token;
 const updateToken = (successCallback: () => void) =>
   _kc.updateToken(5).then(successCallback).catch(doLogin);
 
-const getUsername = (): string | undefined =>
-  _kc.tokenParsed?.preferred_username;
-
-const hasRole = (roles: string[]): boolean =>
-  roles.some((role) => _kc.hasRealmRole(role));
-
 const keycloakService = {
   initKeycloak,
   doLogin,
@@ -52,8 +46,6 @@ const keycloakService = {
   getToken,
   getTokenParsed,
   updateToken,
-  getUsername,
-  hasRole,
 };
 
 export default keycloakService;

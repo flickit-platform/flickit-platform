@@ -43,7 +43,7 @@ const Routes = () => {
       <RrdRoutes>
         {/* Handles redirecting users to where they wanted to go before login  */}
         <Route path="/" element={<Redirect />} />
-        <Route
+        {/* <Route
           element={
             <AuthLayout>
               <AuthRoutes />
@@ -53,7 +53,7 @@ const Routes = () => {
           <Route path="/sign-in" element={<SignInScreen />} />
           <Route path="/sign-up" element={<SignUpScreen />} />
           <Route path="/account/active/:uid/:token" element={<ActivationSuccessfulScreen />} />
-        </Route>
+        </Route> */}
 
         <Route
           element={

@@ -16,7 +16,7 @@ import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import Title from "@common/Title";
 import useGetSignedInUserInfo from "@utils/useGetSignedInUserInfo";
-import keycloakService from "@/service/keyCloakService";
+import keycloakService from "@/service/keycloakService";
 const SignIn = () => {
   const { dispatch, isAuthenticatedUser, redirectRoute } = useAuthContext();
   const { service } = useServiceContext();

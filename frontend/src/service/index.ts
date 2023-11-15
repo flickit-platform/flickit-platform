@@ -3,6 +3,7 @@ import createCustomErrorFromResponseError from "@utils/createCustomErrorFromResp
 import { t } from "i18next";
 import { ECustomErrorType, TId } from "@types";
 import { BASE_URL } from "@constants";
+import keycloakService from "./keycloakService";
 
 declare module "axios" {
   interface AxiosRequestConfig {
@@ -51,11 +52,11 @@ export const createService = (
         if (refreshToken) {
           // checks if any refresh token is available (we save the refresh token inside local storage which is not safe!!!)
           // remember that we are on the auth failed request this might be because of access token expiration so we try the refresh it using our refresh token
-          const newAccessToken = await fetchNewAccessToken(refreshToken);
+          const newAccessToken = keycloakService.updateToken(refreshToken);
           if (newAccessToken) {
             setAccessToken(newAccessToken);
-            axios.defaults.headers["Authorization"] = `JWT ${newAccessToken}`;
-            prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
+            // axios.defaults.headers/["Authorization"] = `JWT ${newAccessToken}`;
+            // prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
             // if we got the new access token we set it then we try to call the last request again which failed because of the access token expiration with new token
             const result = await axios.request(prevRequest);
 
@@ -77,7 +78,7 @@ export const createService = (
     const { config } = res;
     // We intercept the response and if the url is jwt/create we set the access token received in response on headers
     if (config?.url === "authinfo/jwt/create/" && res.data?.access) {
-      axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
+      // axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
     }
     return res;
   };
@@ -85,7 +86,7 @@ export const createService = (
   axios.interceptors.request.use((req: AxiosRequestConfig = {}) => {
     // We check the request headers and if there is no header and we have the access token we set it on the request
     if (!req.headers?.["Authorization"] && accessToken) {
-      (req as any).headers["Authorization"] = `JWT ${accessToken}`;
+      // (req as any).headers["Authorization"] = `JWT ${accessToken}`;
     }
     return req as any;
   });
