@@ -31,6 +31,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { ISpacesModel } from "@types";
 import CompareRoundedIcon from '@mui/icons-material/CompareRounded';
+import keycloakService from "@/service//keycloakService";
 const drawerWidth = 240;
 
 const Navbar = () => {
@@ -581,8 +582,9 @@ const AccountDropDownButton = ({ userInfo }: any) => {
         <MenuItem
           dense
           onClick={() => {
-            dispatch(authActions.setUserInfo());
-            dispatch(authActions.signOut());
+            keycloakService.doLogout();
+            // dispatch(authActions.setUserInfo());
+            // dispatch(authActions.signOut());
           }}
         >
           <ListItemIcon>

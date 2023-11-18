@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthContext } from "@providers/AuthProvider";
-
+import keycloakService from "@/service/keycloakService";
 const AuthRoutes = (props: PropsWithChildren<{}>) => {
   const { isAuthenticatedUser } = useAuthContext();
 
-  if (isAuthenticatedUser) {
+  if (keycloakService.isLoggedIn()) {
     return <Navigate to={"/"} />;
   }
 

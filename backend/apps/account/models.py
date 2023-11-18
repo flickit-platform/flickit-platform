@@ -3,21 +3,23 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 from common.validators import validate_file_size
 
+from uuid import uuid4
+
 class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, display_name, **extra_fields):
         if not email:
             raise ValueError('Email must be provided')
-        if not password:
-            raise ValueError('password is not provided')
-        
+
         user = self.model(
             email = self.normalize_email(email),
             display_name = display_name,
             **extra_fields
         )
 
-        user.set_password(password)
+        if password is None:
+            user.set_unusable_password()
+
         user.save(using=self._db)
         return user
 
@@ -48,6 +50,7 @@ class Space(models.Model):
     is_default_space = models.BooleanField(default=False)
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid4)
     email = models.EmailField(unique=True, max_length=254, error_messages={'unique':"A user with this email address already exists."})
     is_active = models.BooleanField(default=True)
     display_name = models.CharField(max_length=255)
