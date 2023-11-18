@@ -60,9 +60,9 @@ const AssessmentKitExpertViewContainer = () => {
     try {
       const response = await fetchAssessmentKitDownloadUrlQuery.query();
       const fileUrl = response.url;
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = fileUrl;
-      a.download = 'file_name.zip';
+      a.download = "file_name.zip";
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -103,19 +103,19 @@ const AssessmentKitExpertViewContainer = () => {
               ]}
             />
           }
-          // toolbar={
-          //   <Button
-          //     variant="contained"
-          //     size="small"
-          //     sx={{ ml: 2 }}
-          //     onClick={handleDownload}
-          //   >
-          //     <Typography mr={1} variant="button">
-          //       <Trans i18nKey="download" />
-          //     </Typography>
-          //     <CloudDownloadRoundedIcon />
-          //   </Button>
-          // }
+          toolbar={
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ ml: 2 }}
+              onClick={handleDownload}
+            >
+              <Typography mr={1} variant="button">
+                <Trans i18nKey="download" />
+              </Typography>
+              <CloudDownloadRoundedIcon />
+            </Button>
+          }
         >
           {assessmentKitTitle}
         </Title>
