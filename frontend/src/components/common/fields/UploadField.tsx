@@ -141,14 +141,13 @@ const Uploader = (props: IUploadProps) => {
     if (acceptedFiles?.[0]) {
       const reader = new FileReader();
       reader.onload = async () => {
-        const binaryStr = reader.result;
         if (!uploadService) {
           setMyFiles(acceptedFiles);
           fieldProps.onChange(acceptedFiles?.[0]);
           return;
         }
         try {
-          const res = await uploadQueryProps.query(binaryStr);
+          const res = await uploadQueryProps.query(acceptedFiles?.[0]);
           setMyFiles(acceptedFiles);
           fieldProps.onChange(res);
         } catch (e) {
