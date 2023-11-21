@@ -1,7 +1,13 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
-import React, { ReactNode, useState, useRef,useEffect } from "react";
+import React, {
+  ReactNode,
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent,
+} from "react";
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 
@@ -26,7 +32,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     isFocused,
     ...rest
   } = props;
-  const inputRef = useRef<HTMLInputElement | null>(null); 
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
     formState: { errors },
@@ -38,6 +44,15 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
     }
   }, [isFocused]);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const farsiPattern =
+      /[\u0600-\u06FF\uFB50-\uFBFF\u0590-\u05FF\u2000-\u206F]/;
+    const firstCharacter = event.target.value.charAt(0);
+    event.target.dir = farsiPattern.test(firstCharacter) ? "rtl" : "ltr";
+    event.target.style.fontFamily = farsiPattern.test(firstCharacter)
+      ? 'VazirMatn'
+      : 'Roboto';
+  };
   return (
     <TextField
       {...rest}
@@ -46,7 +61,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       fullWidth
       size="small"
       variant="outlined"
-      inputRef={inputRef} 
+      inputRef={inputRef}
+      onChange={handleInputChange}
       InputLabelProps={{ ...InputLabelProps, required }}
       InputProps={
         type === "password"
