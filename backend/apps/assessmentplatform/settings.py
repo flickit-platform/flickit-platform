@@ -169,7 +169,8 @@ OPTIONAL_APPS = (
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -201,6 +202,19 @@ MINIO_STATIC_BUCKET_NAME = os.environ.get('MINIO_STATIC_BUCKET')
 MINIO_QUERYSTRING_EXPIRE_MEDIA = os.environ.get('MINIO_QUERYSTRING_EXPIRE_MEDIA')
 MINIO_URL= os.environ.get('MINIO_URL')
 
+# AUTHENTICATION_BACKENDS = (
+#     'baseinfo.oidcbackend.MyOIDCAB',
+#     # ...
+# )
+OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT')
+OIDC_RP_CLIENT_ID = os.environ.get('OIDC_RP_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = os.environ.get('OIDC_RP_CLIENT_SECRET')
+OIDC_RP_SIGN_ALGO = os.environ.get('OIDC_RP_SIGN_ALGO')
+OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL')
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT')
+OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT')
+OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT')
+OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
 
@@ -233,75 +247,8 @@ ADMIN_MENU_ORDER = (
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
 )
 
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('JWT',),
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
-# }
-#
-# DJOSER = {
-#     'ACTIVATION_URL': 'activate/{uid}/{token}',
-#     'SEND_ACTIVATION_EMAIL': True,
-#     'SERIALIZERS': {
-#         'user': 'account.serializers.userserializers.UserSerializer',
-#         'user_create': 'account.serializers.userserializers.UserCreateSerializer',
-#         'current_user': 'account.serializers.userserializers.UserCustomSerializer',
-#     },
-#     'EMAIL': {
-#             'activation': 'account.views.userviews.CustomActivationEmail'
-#     },
-# }
-
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
-
-# CLEINT_ID = 'myapp'
-# OIDC_AUTH = {
-#     # Specify OpenID Connect endpoint. Configuration will be
-#     # automatically done based on the discovery document found
-#     # at <endpoint>/.well-known/openid-configuration
-#     'OIDC_ENDPOINT': 'http://localhost:8080',
-#     'USERINFO_ENDPOINT': 'http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo',
-#
-#     # The Claims Options can now be defined by a static string.
-#     # ref: https://docs.authlib.org/en/latest/jose/jwt.html#jwt-payload-claims-validation
-#     # The old OIDC_AUDIENCES option is removed in favor of this new option.
-#     # `aud` is only required, when you set it as an essential claim.
-#     'OIDC_CLAIMS_OPTIONS': {
-#         'aud': {
-#             'values': ['myapp'],
-#             'essential': True,
-#         }
-#     },
-#
-#     # (Optional) Function that resolves id_token into user.
-#     # This function receives a request and an id_token dict and expects to
-#     # return a User object. The default implementation tries to find the user
-#     # based on username (natural key) taken from the 'sub'-claim of the
-#     # id_token.
-#     'OIDC_RESOLVE_USER_FUNCTION': 'baseinfo.authentication.get_user_by_email',
-#
-#     # (Optional) Number of seconds in the past valid tokens can be
-#     # issued (default 600)
-#     'OIDC_LEEWAY': 600,
-#
-#     # (Optional) Time before signing keys will be refreshed (default 24 hrs)
-#     'OIDC_JWKS_EXPIRATION_TIME': 24 * 60 * 60,
-#
-#     # (Optional) Time before bearer token validity is verified again (default 10 minutes)
-#     'OIDC_BEARER_TOKEN_EXPIRATION_TIME': 10 * 60,
-#
-#     # (Optional) Token prefix in JWT authorization header (default 'JWT')
-#     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-#
-#     # (Optional) Token prefix in Bearer authorization header (default 'Bearer')
-#     'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
-#
-#     # (Optional) Which Django cache to use
-#     'OIDC_CACHE_NAME': 'default',
-#
-#     # (Optional) A cache key prefix when storing and retrieving cached values
-#     'OIDC_CACHE_PREFIX': 'oidc_auth.',
-# }
 
 LOGIN_REDIRECT_URL = '/baseinfo/'
 
