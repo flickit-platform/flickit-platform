@@ -170,7 +170,6 @@ REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -206,14 +205,14 @@ MINIO_URL= os.environ.get('MINIO_URL')
 #     'baseinfo.oidcbackend.MyOIDCAB',
 #     # ...
 # )
-OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT')
+OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
 OIDC_RP_CLIENT_ID = os.environ.get('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = os.environ.get('OIDC_RP_CLIENT_SECRET')
-OIDC_RP_SIGN_ALGO = os.environ.get('OIDC_RP_SIGN_ALGO')
-OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL')
-OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT')
-OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT')
-OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT')
+OIDC_RP_SIGN_ALGO = os.environ.get('OIDC_RP_SIGN_ALGO', 'RS256')
+OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL', default=False)
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/auth')
+OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/token')
+OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/userinfo')
 OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
