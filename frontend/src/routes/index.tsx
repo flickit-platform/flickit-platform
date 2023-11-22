@@ -8,10 +8,10 @@ import AuthRoutes from "./AuthRoutes";
 import AuthLayout from "../layouts/AuthLayout";
 import AppLayout from "../layouts/AppLayout";
 
-const SignInScreen = lazy(() => import("../screens/SignInScreen"));
-const SignUpScreen = lazy(() => import("../screens/SignUpScreen"));
+// const SignInScreen = lazy(() => import("../screens/SignInScreen"));
+// const SignUpScreen = lazy(() => import("../screens/SignUpScreen"));
 const UserScreen = lazy(() => import("../screens/UserScreen"));
-const ActivationSuccessfulScreen = lazy(() => import("../screens/ActivationSuccessfulScreen"));
+// const ActivationSuccessfulScreen = lazy(() => import("../screens/ActivationSuccessfulScreen"));
 
 const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
 const ExpertGroupConfirmInvitationScreen = lazy(() => import("../screens/ExpertGroupConfirmInvitationScreen"));

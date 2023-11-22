@@ -5,7 +5,9 @@ import useDocumentTitle from "@utils/useDocumentTitle";
 const SignInScreen = () => {
   useDocumentTitle(t("signIn") as string);
 
-  return <SignIn />;
+  return;
+  // <SignIn />
+  <></>;
 };
 
 export default SignInScreen;
