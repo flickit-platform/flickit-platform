@@ -27,6 +27,7 @@ class AnswerTemplate(models.Model):
         unique_together = [('index', 'question')]  
 
 class Question(models.Model):
+    code = models.CharField(max_length=50)
     title = models.TextField()
     description = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -39,6 +40,6 @@ class Question(models.Model):
     class Meta:
         verbose_name = 'Question'
         verbose_name_plural = "Questions"
-
+        unique_together = [('code', 'questionnaire')]
     def __str__(self) -> str:
         return self.title
