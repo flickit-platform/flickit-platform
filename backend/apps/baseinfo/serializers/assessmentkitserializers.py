@@ -268,3 +268,7 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'summary', 'maturity_level_count', 'expert_group']
+
+
+class AssessmentKitUpdateSerializer(serializers.Serializer):
+    dsl_id = serializers.IntegerField()
