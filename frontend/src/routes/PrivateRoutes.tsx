@@ -1,6 +1,5 @@
-import { PropsWithChildren, useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { authActions, useAuthContext } from "@providers/AuthProvider";
+import { PropsWithChildren } from "react";
+import {  Outlet } from "react-router-dom";
 import axios from "axios";
 import keycloakService from "@/service//keycloakService";
 const PrivateRoutes = (props: PropsWithChildren<{}>) => { 
