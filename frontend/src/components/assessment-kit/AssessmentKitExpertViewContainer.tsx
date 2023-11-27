@@ -133,7 +133,7 @@ const AssessmentKitExpertViewContainer = () => {
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
-          <UpdateAssessmentKitDialog {...dialogProps} />
+          <UpdateAssessmentKitDialog  {...dialogProps} />
           <AssessmentKitSectionsTabs details={details} />
         </Box>
       </Box>
@@ -903,7 +903,7 @@ const AssessmentKitQuestionsList = (props: {
   );
 };
 const UpdateAssessmentKitDialog = (props: any) => {
-  const { onClose: closeDialog, onSubmitForm, ...rest } = props;
+  const { onClose: closeDialog, ...rest } = props;
   const [loading, setLoading] = useState(false);
 
   const { service } = useServiceContext();
@@ -928,29 +928,25 @@ const UpdateAssessmentKitDialog = (props: any) => {
       dsl_id: dsl_id.id,
       ...restOfData,
     };
-    console.log(formattedData);
     setLoading(true);
     try {
       const { data: res } = await service.updateAssessmentKitDSL(
         { data: formattedData, assessmentKitId: assessmentKitId },
         { signal: abortController.signal }
       );
-      console.log(res);
       setLoading(false);
-      onSubmitForm();
       close();
     } catch (e: any) {
-      console.log(e);
       const err = e as ICustomError;
       if (e?.status == 422) {
         setSyntaxErrorObject(e?.data?.errors);
         setShowErrorLog(true);
       }
       if (e?.status !== 422) {
-        toastError(err);
+        toastError(err.message);
       }
       setLoading(false);
-      setServerFieldErrors(err, formMethods);
+      // setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
       return () => {
         abortController.abort();
@@ -960,26 +956,23 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
       <Typography variant="body1">
-        Please note that there are some limitations in place for modifying the
-        content of the kit, and right now there is no support for some changes.
-        The unsupported cases include:
+        <Trans i18nKey="pleaseNoteThatThereAreSomeLimitations" />
       </Typography>
       <Box sx={{ ml: 4, my: 2 }}>
         <Typography component="li" variant="body1" fontWeight={"bold"}>
-          Deleting an subject or adding a new one
+          <Trans i18nKey="deletingAnSubjectOrAddingANewOne" />
         </Typography>
         <Typography component="li" variant="body1" fontWeight={"bold"}>
-          Deleting an attribute or adding a new one
+          <Trans i18nKey="deletingAnAttributeOrAddingANewOne" />
         </Typography>
         <Typography component="li" variant="body1" fontWeight={"bold"}>
-          Deleting a questionnaire
+          <Trans i18nKey="deletingAQuestionnaire" />
         </Typography>
         <Typography component="li" variant="body1" fontWeight={"bold"}>
-          Deleting question from a pre-existing questionnaire or adding a new
-          one
+          <Trans i18nKey="deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne" />
         </Typography>
         <Typography component="li" variant="body1" fontWeight={"bold"}>
-          Any changes in the number of options for a pre-existing question
+          <Trans i18nKey="anyChangesInTheNumberOfOptionsForAPreExistingQuestion" />
         </Typography>
       </Box>
       <Grid container spacing={2} sx={styles.formGrid}>
