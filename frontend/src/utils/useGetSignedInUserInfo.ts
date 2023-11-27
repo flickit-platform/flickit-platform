@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
-
+import keycloakService from "@/service//keycloakService";
 /**
  * Checks if any token is available and then checks if the user with the founded token is still authenticated or not.
  *
@@ -23,13 +23,14 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
     setError(false);
     dispatch(authActions.setUserInfoLoading(true));
     try {
+      const accessToken = keycloakService.getToken();
       const { data } = await service.getSignedInUser(undefined, {
         signal: abortController.current.signal,
         //@ts-expect-error
-        headers: token
+        headers: accessToken
           ? {
               ...axios.defaults.headers,
-              Authorization: `JWT ${token}`,
+              Authorization: `Bearer ${accessToken}`,
             }
           : axios.defaults.headers,
       });
@@ -47,15 +48,15 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
       dispatch(authActions.setUserInfoLoading(false));
       dispatch(authActions.setUserInfo());
 
-      if (err?.type === ECustomErrorType.UNAUTHORIZED) {
-        if (location.pathname == "/sign-up") {
-          navigate("/sign-up");
-        } else {
-          navigate("/sign-in");
-        }
-      } else if (err?.action && err?.action !== "signOut") {
-        setError(true);
-      }
+      // if (err?.type === ECustomErrorType.UNAUTHORIZED) {
+      //   if (location.pathname == "/sign-up") {
+      //     navigate("/sign-up");
+      //   } else {
+      //     navigate("/sign-in");
+      //   }
+      // } else if (err?.action && err?.action !== "signOut") {
+      //   setError(true);
+      // }
 
       return false;
     }
