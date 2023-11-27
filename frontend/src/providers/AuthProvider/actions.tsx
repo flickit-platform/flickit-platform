@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ISpaceInfo, IUserInfo } from "@types";
 import { defaultUserInfo } from "./provider";
-import keycloakService from "@/service//keycloakService";
 export enum AUTH_ACTIONS_TYPE {
   SIGN_IN = "SIGN_IN",
   SIGN_UP = "SIGN_UP",
@@ -20,7 +19,6 @@ interface ISignInPayload {
 
 export const signIn = (payload: ISignInPayload = {}) => {
   if (payload.refresh && payload.access) {
-    // axios.defaults.headers["Authorization"] = `JWT ${payload.access}`;
     localStorage.setItem("refreshToken", JSON.stringify(payload.refresh));
     localStorage.setItem("accessToken", JSON.stringify(payload.access));
   }
