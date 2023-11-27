@@ -55,8 +55,6 @@ export const createService = (
           const newAccessToken = keycloakService.updateToken(refreshToken);
           if (newAccessToken) {
             setAccessToken(newAccessToken);
-            // axios.defaults.headers/["Authorization"] = `JWT ${newAccessToken}`;
-            // prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
             // if we got the new access token we set it then we try to call the last request again which failed because of the access token expiration with new token
             const result = await axios.request(prevRequest);
 
@@ -74,14 +72,6 @@ export const createService = (
     throw Error;
   };
 
-  const fulfillResponseInterceptor = (res: AxiosResponse<any, any>) => {
-    const { config } = res;
-    // We intercept the response and if the url is jwt/create we set the access token received in response on headers
-    if (config?.url === "authinfo/jwt/create/" && res.data?.access) {
-      // axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
-    }
-    return res;
-  };
 
   axios.interceptors.request.use((req: AxiosRequestConfig = {}) => {
     // We check the request headers and if there is no header and we have the access token we set it on the request
@@ -91,10 +81,7 @@ export const createService = (
     return req as any;
   });
 
-  axios.interceptors.response.use(
-    (res) => fulfillResponseInterceptor(res),
-    (err) => rejectResponseInterceptor(err)
-  );
+
 
   const service = {
     activateUser(

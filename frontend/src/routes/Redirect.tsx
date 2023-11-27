@@ -15,7 +15,7 @@ const Redirect = () => {
 };
 
 const getWhereToGo = (location: Location, authContext: IAuthContext) => {
-  const { isAuthenticatedUser, redirectRoute } = authContext;
+  const { redirectRoute } = authContext;
   const isRoot = location.pathname === "/";
   // Will redirect user to the page which user wanted to visit while he wasn't sign in
   if (redirectRoute) {
