@@ -10,7 +10,7 @@ def dsl_parser_upload_dsl(dsl_contents):
     result = {"Success": True, "body": response.json(), "status_code": response.status_code}
     if response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
         result["Success"] = False
-    if result["body"]['hasError']:
+    elif result["body"]['hasError']:
         result["body"] = {"message": "The uploaded dsl is invalid."}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
     return result
