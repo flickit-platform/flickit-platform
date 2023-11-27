@@ -565,8 +565,6 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           dense
           onClick={() => {
             keycloakService.doLogout();
-            // dispatch(authActions.setUserInfo());
-            // dispatch(authActions.signOut());
           }}
         >
           <ListItemIcon>
