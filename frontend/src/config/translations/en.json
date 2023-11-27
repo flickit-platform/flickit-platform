@@ -299,7 +299,8 @@
   "theAchivedScores": "The achieved scores from questions of each maturity level of this attribute",
   "noQuestionOnLevel": "No questions on this level",
   "theHighestLevelAchived": "The highest level achieved so far",
-  "download": "Download",
+  "downloadDSL": "Download DSL",
+  "updateDSL":"Update DSL",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
   "errorAtLine": " {{message}} at {{fileName}} in line: {{line}} column: {{column}}"
 }
