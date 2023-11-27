@@ -3,10 +3,7 @@ import { Box, Button, Typography, Alert } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import QueryData from "@common/QueryData";
-import QueryBatchData from "@common/QueryBatchData";
 import Title from "@common/Title";
-import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -22,15 +19,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
 import AssessmentKitSectionGeneralInfo from "./AssessmentKitSectionGeneralInfo";
 import ListAccordion from "@common/lists/ListAccordion";
-import { DialogProps } from "@mui/material/Dialog";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-import AssessmentKitSettingFormDialog from "./AssessmentKitSettingFormDialog";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useAuthContext } from "@providers/AuthProvider";
-import useScreenResize from "@utils/useScreenResize";
 import languageDetector from "@utils/languageDetector";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
@@ -140,9 +133,7 @@ const AssessmentKitExpertViewContainer = () => {
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
-          <UpdateAssessmentKitDialog
-            {...dialogProps}
-          />
+          <UpdateAssessmentKitDialog {...dialogProps} />
           <AssessmentKitSectionsTabs details={details} />
         </Box>
       </Box>
@@ -916,11 +907,10 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const { service } = useServiceContext();
-  const fullScreen = useScreenResize("sm");
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
-  const [syntaxErrorObject, setSyntaxErrorObjectg] = useState<any>();
+  const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
   const close = () => {
     abortController.abort();
@@ -953,7 +943,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
       console.log(e);
       const err = e as ICustomError;
       if (e?.status == 422) {
-        setSyntaxErrorObjectg(e?.data?.errors);
+        setSyntaxErrorObject(e?.data?.errors);
         setShowErrorLog(true);
       }
       if (e?.status !== 422) {
@@ -1025,9 +1015,9 @@ const UpdateAssessmentKitDialog = (props: any) => {
       <Divider />
       <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
         {syntaxErrorObject &&
-          syntaxErrorObject.map((e: any, index: number) => {
+          syntaxErrorObject.map((e: any) => {
             return (
-              <Box sx={{ ml: 1 }} key={index}>
+              <Box sx={{ ml: 1 }}>
                 <Alert severity="error" sx={{ my: 2 }}>
                   <Box sx={{ display: "flex" }}>
                     <Typography variant="subtitle2" color="error">
