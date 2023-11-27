@@ -109,6 +109,7 @@ def question_answering(assessments_details, serializer_data):
             "questionnaireId": serializer_data["questionnaire_id"],
             "questionId": serializer_data["question_id"],
             "answerOptionId": serializer_data["answer_option_id"],
+            "confidenceLevelId": serializer_data["confidence_level_id"],
             }
 
     if "is_not_applicable" in serializer_data:

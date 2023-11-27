@@ -516,6 +516,17 @@ export const createService = (
         config
       );
     },
+    updateAssessmentKitDSL(
+      args: { assessmentKitId?: TId; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, data } = args ?? {};
+      return axios.put(
+        `/api/v1/assessment-kits/${assessmentKitId}/update-by-dsl/`,
+        data,
+        config
+      );
+    },
     fetchAssessmentKitdata(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
