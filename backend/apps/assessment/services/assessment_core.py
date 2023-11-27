@@ -212,6 +212,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         for i in range(len(items)):
             if items[i]["id"] in questions_id:
                 response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
+                items[i]["confidence_level"] = response_item["confidenceLevel"]
                 if response_item["answerOptionId"] is not None:
                     answer = \
                         list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
@@ -223,6 +224,8 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
             else:
                 items[i]["answer"] = None
                 items[i]["is_not_applicable"] = False
+                items[i]["confidence_level"] = None
+
 
         response_body = {"items": items}
         result["Success"] = True
