@@ -15,6 +15,7 @@ const initKeycloak = (onAuthenticatedCallback: () => void) => {
     })
     .then((authenticated) => {
       if (!authenticated) {
+        _kc.login;
       }
       onAuthenticatedCallback();
     })
