@@ -300,7 +300,13 @@
   "noQuestionOnLevel": "No questions on this level",
   "theHighestLevelAchived": "The highest level achieved so far",
   "downloadDSL": "Download DSL",
-  "updateDSL":"Update DSL",
+  "updateDSL": "Update DSL",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
-  "errorAtLine": " {{message}} at {{fileName}} in line: {{line}} column: {{column}}"
+  "errorAtLine": "{{message}} at {{fileName}} in line: {{line}} column: {{column}}",
+  "pleaseNoteThatThereAreSomeLimitations": "Please note that there are some limitations in place for modifying the content of the kit, and right now there is no support for some changes.The unsupported cases include:",
+  "deletingAnSubjectOrAddingANewOne": "Deleting an subject or adding a new one",
+  "deletingAnAttributeOrAddingANewOne":"Deleting an attribute or adding a new one",
+  "deletingAQuestionnaire":"Deleting a questionnaire",
+  "deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne":" Deleting question from a pre-existing questionnaire or adding a newone",
+  "anyChangesInTheNumberOfOptionsForAPreExistingQuestion":"Any changes in the number of options for a pre-existing question"
 }
