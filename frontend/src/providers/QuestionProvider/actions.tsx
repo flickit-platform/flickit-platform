@@ -7,6 +7,7 @@ export enum QUESTION_ACTIONS_TYPE {
   SET_QUESTION_INFO = "SET_QUESTION_INFO",
   SET_ASSESSMENT_STATUS = "SET_ASSESSMENT_STATUS",
   SET_SUBMIT_ON_ANSWER_SELECTION = "SET_SUBMIT_ON_ANSWER_SELECTION",
+  SET_SELCTED_CONFIDENCE_LEVEL = "SET_SELCTED_CONFIDENCE_LEVEL",
   SET_IS_SUBMITTING = "SET_IS_SUBMITTING",
   SET_EVIDENCE_DESCRIPTION="SET_EVIDENCE_DESCRIPTION"
 }
@@ -36,6 +37,9 @@ export const setAssessmentStatus = function (payload: EAssessmentStatus) {
 export const setSubmitOnAnswerSelection = function (payload: boolean) {
   return { payload, type: QUESTION_ACTIONS_TYPE.SET_SUBMIT_ON_ANSWER_SELECTION };
 };
+export const setSelectedConfidenceLevel = function (payload: any) {
+  return { payload, type: QUESTION_ACTIONS_TYPE.SET_SELCTED_CONFIDENCE_LEVEL };
+};
 
 export const setIsSubmitting = function (payload: boolean) {
   return { payload, type: QUESTION_ACTIONS_TYPE.SET_IS_SUBMITTING };
@@ -50,6 +54,7 @@ export const questionActions = {
   setQuestionInfo,
   setAssessmentStatus,
   setSubmitOnAnswerSelection,
+  setSelectedConfidenceLevel,
   setIsSubmitting,
   setEvidenceDescription
 };
