@@ -164,7 +164,7 @@ def get_maturity_level_calculate(assessments_details):
         maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
         data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
-        data["maturity_level"]["value"] = data["maturity_level"].pop("level")
+        data["maturity_level"]["value"] = data["maturity_level"].pop("value")
         data["maturity_level"].pop("levelCompetences")
         result["Success"] = True
         result["body"] = data
