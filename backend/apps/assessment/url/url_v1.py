@@ -1,5 +1,5 @@
 from django.urls import path
-from assessment.views import projectviews, questionvalueviews, questionaryviews, reportviews
+from assessment.views import projectviews, questionvalueviews, questionaryviews, reportviews, confidence_levels_views
 urlpatterns = [
     path("", projectviews.AssessmentProjectApi.as_view()),
     path("<uuid:assessment_id>/answer-question/", questionvalueviews.AnswerQuestionApi.as_view()),
@@ -11,5 +11,6 @@ urlpatterns = [
     path("<uuid:assessment_id>/subjects/<int:subject_id>/progress/", reportviews.SubjectProgressApi.as_view()),
     path("<uuid:assessment_id>/report/", reportviews.AssessmentReportApi.as_view()),
     path("<uuid:assessment_id>/", projectviews.AssessmentApi.as_view()),
+    path("<uuid:assessment_id>/calculate-confidence", confidence_levels_views.CalculateConfidenceApi.as_view()),
 
 ]
