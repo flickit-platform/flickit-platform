@@ -319,7 +319,9 @@ def get_subject_report(assessments_details, subject_id):
             "maturity_levels_count": maturity_levels_count
 
         }
+        subject_dict["confidence_value"] = response_body["subject"]["confidenceValue"]
         subject_dict["is_calculate_valid"] = response_body["subject"]["isCalculateValid"]
+        subject_dict["is_confidence_valid"] = response_body["subject"]["isConfidenceValid"]
         for item in response_body["attributes"]:
             attributes_dict = dict()
             attribute = QualityAttribute.objects.get(id=item["id"])
