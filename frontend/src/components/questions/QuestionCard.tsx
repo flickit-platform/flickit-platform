@@ -62,6 +62,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
+  const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
   useEffect(() => {
     return () => {
@@ -78,13 +79,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
       service.fetchConfidenceLevelsList(args, config),
     toastError: true,
   });
-  // const labels: { [index: string]: string } = {
-  //   1: "Completely unsure",
-  //   2: "Fairly unsure ",
-  //   3: "Somewhat unsure",
-  //   4: "Fairly sure",
-  //   5: "Completely sure",
-  // };
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
   return (
@@ -160,7 +154,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             is_farsi={is_farsi}
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
-            may_not_be_applicable={may_not_be_applicable ?? false}
+            may_not_be_applicable={true}
+            setDisabledConfidence={setDisabledConfidence}
+            selcetedConfidenceLevel={selcetedConfidenceLevel}
           />
         </Box>
       </Paper>
@@ -184,19 +180,18 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           >
             <QueryData
               {...ConfidenceListQueryData}
+              loading={false}
+              error={false}
               render={(data) => {
                 const labels = data.confidenceLevels;
-                // dispatch(
-                //   questionActions.setSelectedConfidenceLevel(
-                //     data?.defaultConfidenceLevel?.id
-                //   )
-                // );
                 return (
-                  <Box   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}>
-                    {selcetedConfidenceLevel !== null ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {selcetedConfidenceLevel !== null && !disabledConfidence ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography sx={{ display: "flex" }}>
                           <Trans i18nKey={"youSelected"} />
@@ -211,15 +206,21 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         </Typography>
                       </Box>
                     ) : (
-                      <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography>
-                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                      <Box sx={{ mr: 2, color: `${disabledConfidence?"#fff":"#d32f2f"}` }}>
+                        <Typography >
+                          {disabledConfidence ? (
+                            <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          ) : (
+                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
+                          )}
                         </Typography>
                       </Box>
                     )}
                     <Rating
-                      // disabled
-                      value={selcetedConfidenceLevel}
+                      disabled={disabledConfidence}
+                      value={
+                        !disabledConfidence ? selcetedConfidenceLevel : null
+                      }
                       size="medium"
                       onChange={(event, newValue) => {
                         dispatch(
@@ -274,6 +275,8 @@ const AnswerTemplate = (props: {
   notApplicable: boolean;
   may_not_be_applicable: boolean;
   is_farsi: boolean | undefined;
+  setDisabledConfidence: any;
+  selcetedConfidenceLevel: any;
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
@@ -286,6 +289,8 @@ const AnswerTemplate = (props: {
     notApplicable,
     may_not_be_applicable,
     is_farsi,
+    setDisabledConfidence,
+    selcetedConfidenceLevel,
   } = props;
   const { answer_options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
@@ -304,6 +309,11 @@ const AnswerTemplate = (props: {
   ) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
+    }
+    if (value?.index !== v?.index) {
+      setDisabledConfidence(false);
+    } else {
+      setDisabledConfidence(true);
     }
     setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
@@ -324,6 +334,10 @@ const AnswerTemplate = (props: {
             question_id: questionInfo?.id,
             answer_option_id: value?.id || null,
             is_not_applicable: notApplicable,
+            confidence_level_id:
+              value?.id || submitOnAnswerSelection
+                ? selcetedConfidenceLevel
+                : null,
           },
         },
         { signal: abortController.current.signal }
@@ -334,6 +348,7 @@ const AnswerTemplate = (props: {
           ...questionInfo,
           answer: value,
           is_not_applicable: notApplicable,
+          confidence_level: selcetedConfidenceLevel ?? null,
         })
       );
       if (isLastQuestion) {
@@ -363,6 +378,14 @@ const AnswerTemplate = (props: {
       submitQuestion();
     }
   }, [value]);
+  const notApplicableonChanhe = (e: any) => {
+    setNotApplicable(e.target.checked || false);
+    if (e.target.checked) {
+      setDisabledConfidence(false);
+    } else {
+      setDisabledConfidence(true);
+    }
+  };
   return (
     <>
       <Box
@@ -476,6 +499,7 @@ const AnswerTemplate = (props: {
           variant="contained"
           color={"info"}
           loading={isSubmitting}
+          disabled={(value || notApplicable) && !selcetedConfidenceLevel}
           sx={
             is_farsi
               ? {
@@ -495,9 +519,7 @@ const AnswerTemplate = (props: {
             control={
               <Checkbox
                 checked={notApplicable}
-                onChange={(e) => {
-                  setNotApplicable(e.target.checked || false);
-                }}
+                onChange={(e) => notApplicableonChanhe(e)}
                 sx={{
                   color: "#0288d1",
                   "&.Mui-checked": {

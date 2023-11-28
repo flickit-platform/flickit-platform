@@ -37,7 +37,7 @@ export const setAssessmentStatus = function (payload: EAssessmentStatus) {
 export const setSubmitOnAnswerSelection = function (payload: boolean) {
   return { payload, type: QUESTION_ACTIONS_TYPE.SET_SUBMIT_ON_ANSWER_SELECTION };
 };
-export const setSelectedConfidenceLevel = function (payload: number) {
+export const setSelectedConfidenceLevel = function (payload: any) {
   return { payload, type: QUESTION_ACTIONS_TYPE.SET_SELCTED_CONFIDENCE_LEVEL };
 };
 

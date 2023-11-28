@@ -304,6 +304,7 @@
   "youSelected":"You selected ",
   "asYourConfidenceLevel":" as your confidence level",
   "selcetYourConfidenceLevel":"Selcet your confidence level",
+  "toContinueToSubmitAnAnswer":"To continue to submit an answer, select your confidence level",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
   "errorAtLine": "{{message}} at {{fileName}} in line: {{line}} column: {{column}}",
   "yourConfidence":"Your confidence",

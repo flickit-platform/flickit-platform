@@ -50,6 +50,7 @@ export interface IQuestionInfo {
   hint?: string;
   may_not_be_applicable?: boolean;
   is_not_applicable?: boolean;
+  confidence_level?:any;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
