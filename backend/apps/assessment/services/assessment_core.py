@@ -419,6 +419,7 @@ def get_assessment_report(assessments_details):
                                                                "value": maturity_level.value,
                                                                "index": maturity_levels_id.index(maturity_level.id) + 1
                                                                }
+        assessment_dict["confidence_value"] = response_body["assessment"]["confidenceValue"]
         assessment_dict["color"] = response_body["assessment"]["color"]
 
         subject_list = list()
