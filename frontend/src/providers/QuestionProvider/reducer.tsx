@@ -36,6 +36,12 @@ const questionReducer = (prevState: any, action: { type: QUESTION_ACTIONS_TYPE; 
         ...prevState,
         submitOnAnswerSelection: action.payload,
       };
+      case QUESTION_ACTIONS_TYPE.SET_SELCTED_CONFIDENCE_LEVEL:
+        return {
+          ...prevState,
+          selcetedConfidenceLevel: action.payload,
+        };
+      
     case QUESTION_ACTIONS_TYPE.SET_IS_SUBMITTING:
       return {
         ...prevState,

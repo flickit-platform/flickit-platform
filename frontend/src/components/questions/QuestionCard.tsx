@@ -47,6 +47,9 @@ import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import languageDetector from "@utils/languageDetector";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
+import Rating from "@mui/material/Rating";
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
+import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -59,6 +62,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
+  const { service } = useServiceContext();
   useEffect(() => {
     return () => {
       abortController.current.abort();
@@ -69,7 +73,20 @@ export const QuestionCard = (props: IQuestionCardProps) => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
   }, [title]);
-
+  const ConfidenceListQueryData = useQuery({
+    service: (args = {}, config) =>
+      service.fetchConfidenceLevelsList(args, config),
+    toastError: true,
+  });
+  // const labels: { [index: string]: string } = {
+  //   1: "Completely unsure",
+  //   2: "Fairly unsure ",
+  //   3: "Somewhat unsure",
+  //   4: "Fairly sure",
+  //   5: "Completely sure",
+  // };
+  const { selcetedConfidenceLevel } = useQuestionContext();
+  const dispatch = useQuestionDispatch();
   return (
     <Box>
       <Paper
@@ -87,9 +104,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           overflow: "hidden",
           my: { xs: 2, md: 5 },
           mx: { xs: 2, sm: "auto" },
-          mb: { xs: 0.5, sm: 1, md: 1 },
+          mb: "0 !important",
           maxWidth: "1376px",
-          borderRadius: "8px",
+          borderRadius: "8px 8px 0 0",
         }}
         elevation={3}
       >
@@ -148,7 +165,90 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         </Box>
       </Paper>
       <Box sx={{ px: { xs: 2, sm: 0 } }}>
-        <SubmitOnSelectCheckBox />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            background: `${notApplicable ? "#273248" : "#000000cc"}`,
+            borderRadius: " 0 0 8px 8px ",
+            px: { xs: 1.75, sm: 2, md: 2.5 },
+            py: { xs: 1.5, sm: 2.5 },
+          }}
+        >
+          <SubmitOnSelectCheckBox />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <QueryData
+              {...ConfidenceListQueryData}
+              render={(data) => {
+                const labels = data.confidenceLevels;
+                // dispatch(
+                //   questionActions.setSelectedConfidenceLevel(
+                //     data?.defaultConfidenceLevel?.id
+                //   )
+                // );
+                return (
+                  <Box   sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}>
+                    {selcetedConfidenceLevel !== null ? (
+                      <Box sx={{ mr: 2, color: "#fff" }}>
+                        <Typography sx={{ display: "flex" }}>
+                          <Trans i18nKey={"youSelected"} />
+                          <Typography
+                            fontWeight={900}
+                            sx={{ borderBottom: "1px solid", mx: 1 }}
+                          >
+                            {labels[selcetedConfidenceLevel - 1].title}
+                          </Typography>
+
+                          <Trans i18nKey={"asYourConfidenceLevel"} />
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Box sx={{ mr: 2, color: "#fff" }}>
+                        <Typography>
+                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                        </Typography>
+                      </Box>
+                    )}
+                    <Rating
+                      // disabled
+                      value={selcetedConfidenceLevel}
+                      size="medium"
+                      onChange={(event, newValue) => {
+                        dispatch(
+                          questionActions.setSelectedConfidenceLevel(
+                            newValue ?? data?.defaultConfidenceLevel?.id
+                          )
+                        );
+                      }}
+                      icon={
+                        <RadioButtonCheckedRoundedIcon
+                          sx={{ mx: 0.25, color: "#42a5f5" }}
+                          fontSize="inherit"
+                        />
+                      }
+                      emptyIcon={
+                        <RadioButtonUncheckedRoundedIcon
+                          style={{ opacity: 0.55 }}
+                          sx={{ mx: 0.25, color: "#fff" }}
+                          fontSize="inherit"
+                        />
+                      }
+                    />
+                  </Box>
+                );
+              }}
+            />
+          </Box>
+        </Box>
+
         <Box
           display={"flex"}
           justifyContent="space-between"
@@ -342,7 +442,7 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {templateValue}.{" "}{caption}
+                  {templateValue}. {caption}
                 </ToggleButton>
               </Box>
             );
@@ -594,7 +694,6 @@ const Evidence = (props: any) => {
       formMethods.reset();
     }
   };
-
   return (
     <Box display={"flex"} flexDirection={"column"} width="100%">
       <FormProvider {...formMethods}>

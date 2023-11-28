@@ -831,6 +831,14 @@ export const createService = (
         },
       });
     },
+    fetchConfidenceLevelsList(
+      args:{},
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/confidence-levels/`, {
+        ...(config ?? {}),
+      });
+    },
     leaveSpace(
       args: { spaceId: TId },
       config: AxiosRequestConfig<any> | undefined
