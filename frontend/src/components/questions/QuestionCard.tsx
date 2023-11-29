@@ -78,7 +78,11 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
-    dispatch(questionActions.setSelectedConfidenceLevel(confidence_level?.id));
+    if (confidence_level) {
+      dispatch(
+        questionActions.setSelectedConfidenceLevel(confidence_level?.id ?? null)
+      );
+    }
   }, [title]);
   const ConfidenceListQueryData = useQuery({
     service: (args = {}, config) =>
@@ -190,6 +194,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               error={false}
               render={(data) => {
                 const labels = data.confidenceLevels;
+                console.log(selcetedConfidenceLevel);
                 return (
                   <Box
                     sx={{
@@ -197,9 +202,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       alignItems: "center",
                     }}
                   >
-                    {questionInfo.confidence_level ||
-                    (selcetedConfidenceLevel !== null &&
-                      !disabledConfidence) ? (
+                    {selcetedConfidenceLevel !== null  ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography sx={{ display: "flex" }}>
                           <Trans i18nKey={"youSelected"} />
@@ -207,9 +210,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
                           >
-                            {questionInfo.confidence_level.title
-                              ? questionInfo.confidence_level.title
-                              : labels[selcetedConfidenceLevel - 1].title}
+                            {labels[selcetedConfidenceLevel - 1]?.title}
                           </Typography>
 
                           <Trans i18nKey={"asYourConfidenceLevel"} />
@@ -234,14 +235,14 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     <Rating
                       disabled={disabledConfidence}
                       value={
-                        !disabledConfidence ? selcetedConfidenceLevel : null
+                        selcetedConfidenceLevel !== null
+                          ? selcetedConfidenceLevel
+                          : null
                       }
                       size="medium"
                       onChange={(event, newValue) => {
                         dispatch(
-                          questionActions.setSelectedConfidenceLevel(
-                            newValue ?? data?.defaultConfidenceLevel?.id
-                          )
+                          questionActions.setSelectedConfidenceLevel(newValue)
                         );
                       }}
                       icon={
@@ -307,7 +308,7 @@ const AnswerTemplate = (props: {
     setDisabledConfidence,
     selcetedConfidenceLevel,
   } = props;
-  const { answer_options, answer, confidence_level } = questionInfo;
+  const { answer_options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
