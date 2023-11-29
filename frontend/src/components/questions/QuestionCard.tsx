@@ -81,6 +81,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   });
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
+  console.log(questionInfo.confidence_level.id);
   return (
     <Box>
       <Paper
@@ -154,7 +155,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             is_farsi={is_farsi}
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
-            may_not_be_applicable={true}
+            may_not_be_applicable={may_not_be_applicable ?? false}
             setDisabledConfidence={setDisabledConfidence}
             selcetedConfidenceLevel={selcetedConfidenceLevel}
           />
@@ -191,7 +192,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       alignItems: "center",
                     }}
                   >
-                    {selcetedConfidenceLevel !== null && !disabledConfidence ? (
+                    {questionInfo.confidence_level||selcetedConfidenceLevel !== null && !disabledConfidence ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography sx={{ display: "flex" }}>
                           <Trans i18nKey={"youSelected"} />
@@ -199,15 +200,22 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
                           >
-                            {labels[selcetedConfidenceLevel - 1].title}
+                            {questionInfo.confidence_level.title
+                              ? questionInfo.confidence_level.title
+                              : labels[selcetedConfidenceLevel - 1].title}
                           </Typography>
 
                           <Trans i18nKey={"asYourConfidenceLevel"} />
                         </Typography>
                       </Box>
                     ) : (
-                      <Box sx={{ mr: 2, color: `${disabledConfidence?"#fff":"#d32f2f"}` }}>
-                        <Typography >
+                      <Box
+                        sx={{
+                          mr: 2,
+                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
+                        }}
+                      >
+                        <Typography>
                           {disabledConfidence ? (
                             <Trans i18nKey={"selcetYourConfidenceLevel"} />
                           ) : (
@@ -219,7 +227,11 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     <Rating
                       disabled={disabledConfidence}
                       value={
-                        !disabledConfidence ? selcetedConfidenceLevel : null
+                        !disabledConfidence
+                          ? questionInfo.confidence_level.id
+                            ? questionInfo.confidence_level.id
+                            : selcetedConfidenceLevel
+                          : null
                       }
                       size="medium"
                       onChange={(event, newValue) => {
@@ -292,7 +304,7 @@ const AnswerTemplate = (props: {
     setDisabledConfidence,
     selcetedConfidenceLevel,
   } = props;
-  const { answer_options, answer } = questionInfo;
+  const { answer_options, answer,confidence_level } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
@@ -322,6 +334,11 @@ const AnswerTemplate = (props: {
       setValue(null);
     }
   }, [notApplicable]);
+  useEffect(() => {
+    if (answer) {
+      setDisabledConfidence(false);
+    }
+  }, [answer]);
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
     dispatch(questionActions.setIsSubmitting(true));
