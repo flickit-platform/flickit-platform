@@ -56,7 +56,7 @@ const SUbjectAttributeCard = (props: any) => {
               <AttributeStatusBarContainer
                 status={maturity_level?.title}
                 ml={maturity_level?.index}
-                cl={1}
+                cl={32}
                 mn={maturity_levels_count}
               />
               <Box mt={3}>
@@ -179,7 +179,7 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${(cl / 5) * 100}%`
+    ? `${cl}%`
     : "0%";
   return (
     <Box
@@ -222,7 +222,7 @@ export const AttributeStatusBar = (props: any) => {
         sx={{ position: "absolute", zIndex: 1, right: "12px" }}
         variant="h6"
       >
-        {isMl ? `${ml} / ${mn}` : `${cl} / 5`}
+        {isMl ? `${ml} / ${mn}` : `${cl}%`}
       </Typography>
     </Box>
   );

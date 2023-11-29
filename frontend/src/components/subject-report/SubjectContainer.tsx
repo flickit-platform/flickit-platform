@@ -80,10 +80,10 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : !subject?.is_calculate_valid ? (
+            ) : !loaded ? null : !subject?.is_calculate_valid||!subject?.is_confidence_valid ? (
               <NoInsightYetMessage
                 title={subject?.title}
-                no_insight_yet_message={!subject?.is_calculate_valid}
+                no_insight_yet_message={!subject?.is_calculate_valid||!subject?.is_confidence_valid}
               />
             ) : (
               <Box sx={{ px: 0.5 }}>
@@ -161,6 +161,11 @@ const useSubject = () => {
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
+  const calculateConfidenceLevelQuery = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.calculateConfidenceLevel(args, config),
+    runOnMount: false,
+  });
   const fetchPathInfo = useQuery({
     service: (args, config) =>
       service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
@@ -173,9 +178,19 @@ const useSubject = () => {
       await subjectProgressQueryData.query({ subjectId, assessmentId });
     } catch (e) {}
   };
+  const calculateConfidence = async () => {
+    try {
+      await calculateConfidenceLevelQuery.query();
+      await subjectQueryData.query({ subjectId, assessmentId });
+      await subjectProgressQueryData.query({ subjectId, assessmentId });
+    } catch (e) {}
+  };
   useEffect(() => {
     if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
+    }
+    if(subjectQueryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"){
+      calculateConfidence()
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
