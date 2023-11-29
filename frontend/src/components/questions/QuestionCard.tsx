@@ -57,8 +57,13 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const { title, hint, may_not_be_applicable, is_not_applicable } =
-    questionInfo;
+  const {
+    title,
+    hint,
+    may_not_be_applicable,
+    is_not_applicable,
+    confidence_level,
+  } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
@@ -73,6 +78,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
+    dispatch(questionActions.setSelectedConfidenceLevel(confidence_level?.id));
   }, [title]);
   const ConfidenceListQueryData = useQuery({
     service: (args = {}, config) =>
@@ -81,7 +87,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   });
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
-  console.log(questionInfo.confidence_level.id);
   return (
     <Box>
       <Paper
@@ -192,7 +197,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       alignItems: "center",
                     }}
                   >
-                    {questionInfo.confidence_level||selcetedConfidenceLevel !== null && !disabledConfidence ? (
+                    {questionInfo.confidence_level ||
+                    (selcetedConfidenceLevel !== null &&
+                      !disabledConfidence) ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography sx={{ display: "flex" }}>
                           <Trans i18nKey={"youSelected"} />
@@ -227,11 +234,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     <Rating
                       disabled={disabledConfidence}
                       value={
-                        !disabledConfidence
-                          ? questionInfo.confidence_level.id
-                            ? questionInfo.confidence_level.id
-                            : selcetedConfidenceLevel
-                          : null
+                        !disabledConfidence ? selcetedConfidenceLevel : null
                       }
                       size="medium"
                       onChange={(event, newValue) => {
@@ -304,7 +307,7 @@ const AnswerTemplate = (props: {
     setDisabledConfidence,
     selcetedConfidenceLevel,
   } = props;
-  const { answer_options, answer,confidence_level } = questionInfo;
+  const { answer_options, answer, confidence_level } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();

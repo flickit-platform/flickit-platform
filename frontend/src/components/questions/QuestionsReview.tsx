@@ -91,7 +91,6 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
         )}
         <Box mt={2}>
           {questions.map((question: any) => {
-            console.log(question.confidence_level);
             const is_farsi = languageDetector(question.title);
             return (
               <Paper
