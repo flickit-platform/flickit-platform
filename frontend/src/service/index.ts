@@ -371,6 +371,15 @@ export const createService = (
         config
       );
     },
+    calculateConfidenceLevel(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/calculate-confidence/`,
+        config
+      );
+    },
     fetchQuestionnairesPageData(
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -832,7 +841,7 @@ export const createService = (
       });
     },
     fetchConfidenceLevelsList(
-      args:{},
+      args: {},
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/confidence-levels/`, {

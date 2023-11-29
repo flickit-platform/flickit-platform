@@ -5,7 +5,7 @@ import { ECustomErrorType } from "@types";
 import { ICustomError } from "@utils/CustomError";
 import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
-import ErrorRecalculating from './errors/ErrorRecalculating'
+import ErrorRecalculating from "./errors/ErrorRecalculating";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 import GettingThingsReadyLoading from "./loadings/GettingThingsReadyLoading";
 import { AxiosRequestConfig } from "axios";
@@ -111,6 +111,9 @@ export const defaultRenderError = (
     return <ErrorNotFoundOrAccessDenied />;
   }
   if (err?.data?.code == "CALCULATE_NOT_VALID") {
+    return <ErrorRecalculating />;
+  }
+  if (err?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
     return <ErrorRecalculating />;
   }
   return errorComponent;
