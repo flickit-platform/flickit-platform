@@ -35,6 +35,7 @@ import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
 import RichEditor from "@common/rich-editor/RichEditor";
+import languageDetector from "@/utils/languageDetector";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -454,7 +455,7 @@ const OnHoverInput = (props: any) => {
   } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
-  const [inputData, setInputData] = useState<String>(data);
+  const [inputData, setInputData] = useState<string>(data);
   const handleCancel = () => {
     setShow(false);
     setInputData(data);
@@ -485,6 +486,12 @@ const OnHoverInput = (props: any) => {
       setHasError(true);
     }
   };
+  const inputProps: React.HTMLProps<HTMLInputElement> = {
+    style: {
+      textAlign: languageDetector(inputData) ? "right" : "left",
+    },
+  };
+
   return (
     <Box>
       <Box
@@ -505,6 +512,7 @@ const OnHoverInput = (props: any) => {
             sx={{ display: "flex", flexDirection: "column", width: "100% " }}
           >
             <OutlinedInput
+              inputProps={inputProps}
               error={hasError}
               fullWidth
               name={title}
