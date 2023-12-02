@@ -342,6 +342,7 @@ def get_subject_report(assessments_details, subject_id):
                 levels[i]["index"] = maturity_levels_id.index(levels[i]["id"]) + 1
                 maturity_scores.append({"maturity_level": levels[i], "score": item["maturityScores"][i]["score"]})
             attributes_dict["maturity_scores"] = maturity_scores
+            attributes_dict["confidence_level"] = item["confidenceValue"]
             attribute_list.append(attributes_dict)
         attribute_list = sorted(attribute_list, key=itemgetter('index'))
 
