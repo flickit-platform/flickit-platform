@@ -313,5 +313,6 @@
   "deletingAnAttributeOrAddingANewOne":"Deleting an attribute or adding a new one",
   "deletingAQuestionnaire":"Deleting a questionnaire",
   "deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne":" Deleting question from a pre-existing questionnaire or adding a newone",
-  "anyChangesInTheNumberOfOptionsForAPreExistingQuestion":"Any changes in the number of options for a pre-existing question"
+  "anyChangesInTheNumberOfOptionsForAPreExistingQuestion":"Any changes in the number of options for a pre-existing question",
+  "unsupportedDslContentChange":"Unsupported dsl content change"
 }

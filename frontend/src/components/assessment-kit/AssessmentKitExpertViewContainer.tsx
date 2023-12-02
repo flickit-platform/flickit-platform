@@ -133,7 +133,7 @@ const AssessmentKitExpertViewContainer = () => {
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
-          <UpdateAssessmentKitDialog  {...dialogProps} />
+          <UpdateAssessmentKitDialog {...dialogProps} />
           <AssessmentKitSectionsTabs details={details} />
         </Box>
       </Box>
@@ -911,6 +911,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
+  const [updateErrorObject, setUpdateErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
   const close = () => {
     abortController.abort();
@@ -942,6 +943,11 @@ const UpdateAssessmentKitDialog = (props: any) => {
         setSyntaxErrorObject(e?.data?.errors);
         setShowErrorLog(true);
       }
+      if (e?.data?.code === "UNSUPPORTED_DSL_CONTENT_CHANGE") {
+        setUpdateErrorObject(e?.data?.messages);
+        setShowErrorLog(true);
+      }
+
       if (e?.status !== 422) {
         toastError(err.message);
       }
@@ -1002,9 +1008,16 @@ const UpdateAssessmentKitDialog = (props: any) => {
   );
   const syntaxErrorContent = (
     <Box>
-      <Typography ml={1} variant="h6">
-        <Trans i18nKey="youveGotSyntaxErrorsInYourDslFile" />
-      </Typography>
+      {syntaxErrorObject && (
+        <Typography ml={1} variant="h6">
+          <Trans i18nKey="youveGotSyntaxErrorsInYourDslFile" />
+        </Typography>
+      )}
+      {updateErrorObject && (
+        <Typography ml={1} variant="h6">
+          <Trans i18nKey="unsupportedDslContentChange" />
+        </Typography>
+      )}
       <Divider />
       <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
         {syntaxErrorObject &&
@@ -1023,6 +1036,20 @@ const UpdateAssessmentKitDialog = (props: any) => {
                           column: e.column,
                         }}
                       />
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            );
+          })}
+        {updateErrorObject &&
+          updateErrorObject.map((e: any) => {
+            return (
+              <Box sx={{ ml: 1 }}>
+                <Alert severity="error" sx={{ my: 2 }}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography variant="subtitle2" color="error">
+                      {e}
                     </Typography>
                   </Box>
                 </Alert>
