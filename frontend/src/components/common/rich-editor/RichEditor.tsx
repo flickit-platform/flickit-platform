@@ -4,8 +4,9 @@ import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 import RichEditorMenuBar from "./RichEditorMenuBar";
 import Link from "@tiptap/extension-link";
-import { useRef } from "react";
+import { useRef, ChangeEvent, useState } from "react";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
+import languageDetector from "@/utils/languageDetector";
 
 interface IRichEditorProps {
   defaultValue?: string;
@@ -27,7 +28,7 @@ const RichEditor = (props: IRichEditorProps) => {
     field,
     boxProps = {},
   } = props;
-
+  const [isFarsi, setIsFarsi] = useState<boolean>(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -43,6 +44,8 @@ const RichEditor = (props: IRichEditorProps) => {
       }
       if (props.editor.getText()) {
         field.onChange(props.editor.getHTML());
+
+        setIsFarsi(languageDetector(props.editor.getText()));
       }
     },
     onCreate(props) {
@@ -73,7 +76,15 @@ const RichEditor = (props: IRichEditorProps) => {
     editable: isEditable,
     ...editorProps,
   });
-
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const farsiPattern =
+      /[\u0600-\u06FF\uFB50-\uFBFF\u0590-\u05FF\u2000-\u206F]/;
+    const firstCharacter = event.target.value.charAt(0);
+    event.target.dir = farsiPattern.test(firstCharacter) ? "rtl" : "ltr";
+    event.target.style.fontFamily = farsiPattern.test(firstCharacter)
+      ? "VazirMatn"
+      : "Roboto";
+  };
   return (
     <Box
       {...boxProps}
@@ -82,6 +93,8 @@ const RichEditor = (props: IRichEditorProps) => {
         isEditable
           ? {
               ...(boxProps.sx || {}),
+              direction: `${isFarsi ? "rtl" : "ltr"}`,
+              fontFamily: `  ${isFarsi ? "VazirMatn" : "Roboto"}`,
               position: "relative",
               marginTop: "0px !important",
               width: "100%",
