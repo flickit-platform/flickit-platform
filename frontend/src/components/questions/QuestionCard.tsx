@@ -194,7 +194,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               error={false}
               render={(data) => {
                 const labels = data.confidenceLevels;
-                console.log(selcetedConfidenceLevel);
                 return (
                   <Box
                     sx={{
