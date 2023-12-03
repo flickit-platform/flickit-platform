@@ -35,7 +35,7 @@ import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
 import RichEditor from "@common/rich-editor/RichEditor";
-import languageDetector from "@/utils/languageDetector";
+import firstCharDetector from "@/utils/firstCharDetector";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -488,7 +488,7 @@ const OnHoverInput = (props: any) => {
   };
   const inputProps: React.HTMLProps<HTMLInputElement> = {
     style: {
-      textAlign: languageDetector(inputData) ? "right" : "left",
+      textAlign: firstCharDetector(inputData) ? "right" : "left",
     },
   };
 

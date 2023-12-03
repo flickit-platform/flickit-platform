@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
-import languageDetector from "@/utils/languageDetector";
+import firstCharDetector from "@/utils/firstCharDetector";
 
 const InputField = () => {
   return <TextField />;
@@ -47,7 +47,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   }, [isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (type !== "password") {
-      const isFarsi = languageDetector(event.target.value);
+      const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
       event.target.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
     }

@@ -6,7 +6,7 @@ import RichEditorMenuBar from "./RichEditorMenuBar";
 import Link from "@tiptap/extension-link";
 import { useRef, ChangeEvent, useState } from "react";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
-import languageDetector from "@/utils/languageDetector";
+import firstCharDetector from "@/utils/firstCharDetector";
 
 interface IRichEditorProps {
   defaultValue?: string;
@@ -45,7 +45,7 @@ const RichEditor = (props: IRichEditorProps) => {
       if (props.editor.getText()) {
         field.onChange(props.editor.getHTML());
 
-        setIsFarsi(languageDetector(props.editor.getText()));
+        setIsFarsi(firstCharDetector(props.editor.getText()));
       }
     },
     onCreate(props) {
