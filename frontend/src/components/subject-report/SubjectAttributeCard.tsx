@@ -19,9 +19,8 @@ const SUbjectAttributeCard = (props: any) => {
     maturity_level,
     maturity_levels_count,
     maturity_scores,
-    confidence_level,
+    confidence_value,
   } = props;
-  console.log(Math.ceil(confidence_level));
   return (
     <Paper
       elevation={2}
@@ -58,7 +57,7 @@ const SUbjectAttributeCard = (props: any) => {
               <AttributeStatusBarContainer
                 status={maturity_level?.title}
                 ml={maturity_level?.index}
-                cl={Math.ceil(confidence_level)}
+                cl={Math.ceil(confidence_value)}
                 mn={maturity_levels_count}
               />
               <Box mt={3}>
@@ -137,7 +136,6 @@ const AttributeStatusBarContainer = (props: any) => {
   const { status, ml, cl, mn } = props;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[ml - 1];
-  console.log(cl)
   return (
     <Box
       display={"flex"}
