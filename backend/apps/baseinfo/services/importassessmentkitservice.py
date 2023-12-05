@@ -143,6 +143,7 @@ def __import_attributes(attributeModels , assessment_kit):
         attribute.index = model['index']
         attribute.weight = model['weight']
         attribute.assessment_subject = AssessmentSubject.objects.filter(code=model['subjectCode']).filter(assessment_kit=assessment_kit.id).first()
+        attribute.assessment_kit = assessment_kit
         attribute.save()
 
 

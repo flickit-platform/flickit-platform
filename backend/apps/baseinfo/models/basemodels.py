@@ -45,6 +45,7 @@ class QualityAttribute(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE, related_name='quality_attributes')
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='quality_attributes')
     index = models.PositiveIntegerField(null=True)
     weight = models.PositiveIntegerField(default=1)
 
