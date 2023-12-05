@@ -1,9 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import createCustomErrorFromResponseError from "@utils/createCustomErrorFromResponseError";
+import axios, { AxiosRequestConfig } from "axios";
 import { t } from "i18next";
-import { ECustomErrorType, TId } from "@types";
+import { TId } from "@types";
 import { BASE_URL } from "@constants";
-import keycloakService from "./keycloakService";
 
 declare module "axios" {
   interface AxiosRequestConfig {
@@ -20,69 +18,6 @@ export const createService = (
   axios.defaults.withCredentials = true;
   axios.defaults.timeoutErrorMessage = t("checkNetworkConnection") as string;
 
-  const rejectResponseInterceptor = async (err: any = {}) => {
-    if (err._isCustomError) {
-      // if its our generated error don't do the process again and throw the error
-      throw err;
-    }
-
-    const { response = {}, config = {} } = err;
-    const { status } = response;
-    const { isRefreshTokenReq } = config;
-    const prevRequest = config;
-    const Error = createCustomErrorFromResponseError(err);
-
-    if (status) {
-      // checks if the error is about authentication
-      if (status === 401 && !prevRequest.sent) {
-        if (isRefreshTokenReq) {
-          // if the request is refresh token request (which we fire in order to refresh the access token when its expired)
-          // This means refreshing token failed and refresh token is expired or not valid any more so we should sign the user out
-          signOut();
-          Error.action = "signOut";
-          Error.type = ECustomErrorType.INVALID_TOKEN;
-          throw Error;
-        }
-
-        prevRequest.sent = true;
-
-        const lRefreshToken = localStorage.getItem("refreshToken");
-        const refreshToken = lRefreshToken && JSON.parse(lRefreshToken);
-
-        if (refreshToken) {
-          // checks if any refresh token is available (we save the refresh token inside local storage which is not safe!!!)
-          // remember that we are on the auth failed request this might be because of access token expiration so we try the refresh it using our refresh token
-          const newAccessToken = keycloakService.updateToken(refreshToken);
-          if (newAccessToken) {
-            setAccessToken(newAccessToken);
-            // axios.defaults.headers/["Authorization"] = `JWT ${newAccessToken}`;
-            // prevRequest.headers["Authorization"] = `JWT ${newAccessToken}`;
-            // if we got the new access token we set it then we try to call the last request again which failed because of the access token expiration with new token
-            const result = await axios.request(prevRequest);
-
-            return result;
-          } else {
-            throw Error;
-          }
-        } else {
-          signOut();
-          Error.action = "signOut";
-          Error.type = ECustomErrorType.INVALID_TOKEN;
-        }
-      }
-    }
-    throw Error;
-  };
-
-  const fulfillResponseInterceptor = (res: AxiosResponse<any, any>) => {
-    const { config } = res;
-    // We intercept the response and if the url is jwt/create we set the access token received in response on headers
-    if (config?.url === "authinfo/jwt/create/" && res.data?.access) {
-      // axios.defaults.headers["Authorization"] = `JWT ${res.data?.access}`;
-    }
-    return res;
-  };
-
   axios.interceptors.request.use((req: AxiosRequestConfig = {}) => {
     // We check the request headers and if there is no header and we have the access token we set it on the request
     if (!req.headers?.["Authorization"] && accessToken) {
@@ -90,11 +25,6 @@ export const createService = (
     }
     return req as any;
   });
-
-  axios.interceptors.response.use(
-    (res) => fulfillResponseInterceptor(res),
-    (err) => rejectResponseInterceptor(err)
-  );
 
   const service = {
     activateUser(

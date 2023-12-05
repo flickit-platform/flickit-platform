@@ -1,6 +1,10 @@
 import Keycloak, { KeycloakInstance } from "keycloak-js";
-
-const _kc: KeycloakInstance = new Keycloak("/keycloak.json");
+import { BASE_URL } from "@constants";
+const _kc: KeycloakInstance = new Keycloak({
+  url: BASE_URL,
+  realm: "flickit",
+  clientId: "flickit-frontend",
+});
 
 /**
  * Initializes Keycloak instance and calls the provided callback function if successfully authenticated.
@@ -15,6 +19,7 @@ const initKeycloak = (onAuthenticatedCallback: () => void) => {
     })
     .then((authenticated) => {
       if (!authenticated) {
+        doLogin();
       }
       onAuthenticatedCallback();
     })
