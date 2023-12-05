@@ -85,7 +85,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       onSubmitForm();
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
-    } catch (e:any) {
+    } catch (e: any) {
       const err = e as ICustomError;
       if (e?.status == 422) {
         setSyntaxErrorObjectg(e?.data?.errors);
@@ -177,27 +177,37 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       </Typography>
       <Divider />
       <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
-        {syntaxErrorObject&&syntaxErrorObject.map((e: any, index: number) => {
-          return (
-            <Box sx={{ ml: 1 }}>
-              <Alert severity="error" sx={{ my: 2 }}>
-                <Box sx={{ display: "flex" }}>
-                  <Typography variant="subtitle2" color="error">
+        {syntaxErrorObject &&
+          syntaxErrorObject.map((e: any, index: number) => {
+            return (
+              <Box sx={{ ml: 1 }}>
+                <Alert severity="error" sx={{ my: 2 }}>
+                  <Box sx={{ display: "flex",flexDirection:"column" }}>
+                    <Typography variant="subtitle2" color="error">
+                      <Trans
+                        i18nKey="errorAtLine"
+                        values={{
+                          message: e.message,
+                          fileName: e.fileName,
+                          line: e.line,
+                          column: e.column,
+                        }}
+                      />
+                    </Typography>
+                    <Typography variant="subtitle2" color="error">
                     <Trans
-                      i18nKey="errorAtLine"
-                      values={{
-                        message: e.message,
-                        fileName: e.fileName,
-                        line: e.line,
-                        column: e.column,
-                      }}
-                    />
-                  </Typography>
-                </Box>
-              </Alert>
-            </Box>
-          );
-        })}
+                        i18nKey="errorLine"
+                        values={{
+                          errorLine: e.errorLine,
+
+                        }}
+                      />
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            );
+          })}
       </Box>
       <Grid mt={4} container spacing={2} justifyContent="flex-end">
         <Grid item>
