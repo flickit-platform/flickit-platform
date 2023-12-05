@@ -7,7 +7,7 @@ interface IDynamicGaugeSVGProps {
 }
 const GaugeComponent3 = (props: IDynamicGaugeSVGProps) => {
   const { colorCode, value, confidence_value, show_confidence } = props;
-  const progress = Math.ceil((confidence_value ?? 0 / 100) * 60);
+  const progress = Math.ceil(((confidence_value ?? 0) / 100) * 60);
   return (
     <svg
       width="100%"
