@@ -104,16 +104,23 @@ const VerticalLevel = ({
       <Box
         sx={{
           width: "24px",
-
           position: "relative",
         }}
       >
-        <Box sx={{ position: "absolute", top: "0px", left: "0px" }}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "152px",
+            left: "32px",
+            transform: "rotate(-90deg)",
+            transformOrigin: "bottom left",
+          }}
+        >
           <Typography
             sx={{
               color: cl ? "#3596A1" : "#6035A1",
-              writingMode: "sideways-lr",
-              mt: 2,
+
+              whiteSpace: "nowrap",
             }}
             variant="h6"
             textTransform={"uppercase"}

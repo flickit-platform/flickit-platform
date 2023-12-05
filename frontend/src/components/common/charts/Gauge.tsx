@@ -13,6 +13,8 @@ interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;
   level_value: number;
+  confidence_value?: number | null;
+  show_confidence?: boolean;
 }
 
 const Gauge = (props: IGaugeProps) => {
@@ -22,6 +24,8 @@ const Gauge = (props: IGaugeProps) => {
     maturity_level_status,
     maturity_level_number,
     level_value,
+    confidence_value,
+    show_confidence,
     ...rest
   } = props;
   const colorPallet = getMaturityLevelColors(maturity_level_number);
@@ -29,10 +33,14 @@ const Gauge = (props: IGaugeProps) => {
   const GaugeComponent = lazy(
     () => import(`./GaugeComponent${maturity_level_number}.tsx`)
   );
+  const confidenceValue = confidence_value ? confidence_value : 0;
+
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
       <Suspense fallback={<SkeletonGauge />}>
         <GaugeComponent
+          confidence_value={confidence_value}
+          show_confidence={show_confidence}
           colorCode={colorCode}
           value={
             level_value !== null && level_value !== undefined ? level_value : -1
@@ -41,12 +49,19 @@ const Gauge = (props: IGaugeProps) => {
       </Suspense>
       {level_value !== null && level_value !== undefined ? (
         <Box
-          sx={{ ...styles.centerCVH, bottom: "40%", left: "25%", right: "25%" }}
+          sx={{
+            ...styles.centerCVH,
+            bottom: `${show_confidence ? "45%" : "40%"}`,
+            left: "25%",
+            right: "25%",
+          }}
           position="absolute"
         >
-          <Typography variant="subtitle2" color="black">
-            <Trans i18nKey="thisSystemIsIn" />
-          </Typography>
+          {!show_confidence && (
+            <Typography variant="subtitle2" color="black">
+              <Trans i18nKey="thisSystemIsIn" />
+            </Typography>
+          )}
           <Typography
             sx={{ fontWeight: "bold" }}
             variant="h5"
@@ -54,9 +69,21 @@ const Gauge = (props: IGaugeProps) => {
           >
             {maturity_level_status}
           </Typography>
-          <Typography variant="subtitle2" color="black">
-            <Trans i18nKey="shape" />
-          </Typography>
+          {!show_confidence && (
+            <Typography variant="subtitle2" color="black">
+              <Trans i18nKey="shape" />
+            </Typography>
+          )}
+          {show_confidence && (
+            <Typography variant="subtitle2" color="#3596A1" mt={1}>
+              <Trans
+                i18nKey="withPercentConfidence"
+                values={{
+                  percent: Math.ceil(confidenceValue),
+                }}
+              />
+            </Typography>
+          )}
         </Box>
       ) : (
         <Box
