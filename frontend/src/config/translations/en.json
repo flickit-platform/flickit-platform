@@ -307,6 +307,7 @@
   "toContinueToSubmitAnAnswer":"To continue to submit an answer, select your confidence level",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
   "errorAtLine": "{{message}} at {{fileName}} in line: {{line}} column: {{column}}",
+  "errorLine":"Error line: {{errorLine}}",
   "overalConfidence":"Overal confidence",
   "yourConfidence":"Your confidence",
   "pleaseNoteThatThereAreSomeLimitations": "Please note that there are some limitations in place for modifying the content of the kit, and right now there is no support for some changes.The unsupported cases include:",

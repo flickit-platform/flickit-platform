@@ -1025,7 +1025,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
             return (
               <Box sx={{ ml: 1 }}>
                 <Alert severity="error" sx={{ my: 2 }}>
-                  <Box sx={{ display: "flex" }}>
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="subtitle2" color="error">
                       <Trans
                         i18nKey="errorAtLine"
@@ -1034,6 +1034,14 @@ const UpdateAssessmentKitDialog = (props: any) => {
                           fileName: e.fileName,
                           line: e.line,
                           column: e.column,
+                        }}
+                      />
+                    </Typography>
+                    <Typography variant="subtitle2" color="error">
+                      <Trans
+                        i18nKey="errorLine"
+                        values={{
+                          errorLine: e.errorLine,
                         }}
                       />
                     </Typography>
