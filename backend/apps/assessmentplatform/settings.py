@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = os.environ.get('DEBUG')  == 'True'
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -54,12 +54,12 @@ DATABASES = {
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
@@ -70,12 +70,12 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT')
-DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')  == 'True'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') == 'True'
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') == 'True'
 
-DOMAIN = (os.environ.get('DOMAIN')) 
-SITE_NAME = ('Flickit') 
+DOMAIN = (os.environ.get('DOMAIN'))
+SITE_NAME = ('Flickit')
 EXPIRATION_DAYS = 7
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -124,7 +124,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'import_export',
-    #'djoser',
+    # 'djoser',
     'account',
     'baseinfo',
     'assessment',
@@ -179,14 +179,13 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'PAGE_SIZE':200,
+    'PAGE_SIZE': 200,
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
 ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
-
 
 DEFAULT_FILE_STORAGE = 'assessmentplatform.custom_storage.MediaStorage'
 STATICFILES_STORAGE = 'assessmentplatform.custom_storage.StaticStorage'
@@ -195,24 +194,24 @@ AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_ACCESS_KEY')
 AWS_S3_ENDPOINT_URL = os.environ.get('MINIO_API')
-AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL')  == 'True'
+AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL') == 'True'
 MINIO_MEDIA_BUCKET_NAME = os.environ.get('MINIO_MEDIA_BUCKET')
 MINIO_STATIC_BUCKET_NAME = os.environ.get('MINIO_STATIC_BUCKET')
 MINIO_QUERYSTRING_EXPIRE_MEDIA = os.environ.get('MINIO_QUERYSTRING_EXPIRE_MEDIA')
-MINIO_URL= os.environ.get('MINIO_URL')
+MINIO_URL = os.environ.get('MINIO_URL')
 
-# AUTHENTICATION_BACKENDS = (
-#     'baseinfo.oidcbackend.MyOIDCAB',
-#     # ...
-# )
-OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
+OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
+                                       default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
 OIDC_RP_CLIENT_ID = os.environ.get('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = os.environ.get('OIDC_RP_CLIENT_SECRET')
 OIDC_RP_SIGN_ALGO = os.environ.get('OIDC_RP_SIGN_ALGO', 'RS256')
-OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL', default=False)
-OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/auth')
-OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/token')
-OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT', default='http://localhost:8080/realms/flickit/protocol/openid-connect/userinfo')
+OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL') == 'True'
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT',
+                                                default='http://localhost:8080/realms/flickit/protocol/openid-connect/auth')
+OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT',
+                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/token')
+OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT',
+                                       default='http://localhost:8080/realms/flickit/protocol/openid-connect/userinfo')
 OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
@@ -228,7 +227,6 @@ if os.path.exists(f):
     sys.modules[module_name] = module
     exec(open(f, "rb").read())
 
-
 AUTH_USER_MODEL = 'account.User'
 
 ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
@@ -240,9 +238,10 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
     ("BaseInfo", ("baseinfo.AssessmentKit", "baseinfo.Questionnaire",
-    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Question", "baseinfo.AssessmentKitTag")),
+                  "baseinfo.AssessmentSubject", "baseinfo.QualityAttribute", "baseinfo.Question",
+                  "baseinfo.AssessmentKitTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
-       "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
+                 "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
 )
 
@@ -260,4 +259,3 @@ SWAGGER_SETTINGS = {
         }
     }
 }
-
