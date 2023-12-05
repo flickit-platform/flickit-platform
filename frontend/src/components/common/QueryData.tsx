@@ -132,6 +132,9 @@ export const defaultRenderError = (err: ICustomError | undefined, errorComponent
   if (err?.data?.code == "CALCULATE_NOT_VALID") {
     return <ErrorRecalculating />;
   }
+  if (err?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+    return <ErrorRecalculating />;
+  }
   return errorComponent;
 };
 

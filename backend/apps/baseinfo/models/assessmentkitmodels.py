@@ -69,14 +69,16 @@ class AssessmentKitLike(models.Model):
 
 
 class MaturityLevel(models.Model):
+    code = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
     value = models.PositiveSmallIntegerField()
+    index = models.PositiveSmallIntegerField()
     assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='maturity_levels')
 
     class Meta:
         verbose_name = 'Questionnaire'
         verbose_name_plural = "Questionnaires"
-        unique_together = [('title', 'assessment_kit'), ('value', 'assessment_kit')]
+        unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('value', 'assessment_kit'), ('index', 'assessment_kit')]
 
 class LevelCompetence(models.Model):
     maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences')

@@ -30,6 +30,11 @@ const AssessmentReportContainer = () => {
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
+  const calculateConfidenceLevelQuery = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.calculateConfidenceLevel(args, config),
+    runOnMount: false,
+  });
   const assessmentTotalProgress = useQuery({
     service: (args, config) =>
       service.fetchAssessmentTotalProgress(
@@ -48,30 +53,44 @@ const AssessmentReportContainer = () => {
       await queryData.query();
     } catch (e) {}
   };
+  const calculateConfidenceLevel = async () => {
+    try {
+      await calculateConfidenceLevelQuery.query();
+      await queryData.query();
+    } catch (e) {}
+  };
   useEffect(() => {
     if (queryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
+    }
+    if (
+      queryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"
+    ) {
+      calculateConfidenceLevel();
     }
   }, [queryData.errorObject]);
 
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress,fetchPathInfo]}
+      queryBatchData={[queryData, assessmentTotalProgress, fetchPathInfo]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress = {},pathInfo={}]) => {
+      render={([data = {}, progress = {}, pathInfo = {}]) => {
         const { status, assessment, subjects, top_strengths, top_weaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
-        const { assessment_kit } = assessment || {};
+        const { assessment_kit ,confidence_value} = assessment || {};
         const { expert_group } = assessment_kit || {};
         const { question_count, answers_count } = progress;
         const isComplete = question_count === answers_count;
         const total_progress =
           ((answers_count || 0) / (question_count || 1)) * 100;
-
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
-            <AssessmentReportTitle data={data} colorCode={colorCode} pathInfo={pathInfo} />
+            <AssessmentReportTitle
+              data={data}
+              colorCode={colorCode}
+              pathInfo={pathInfo}
+            />
             {!isComplete && (
               <Box mt={3}>
                 <QuestionnairesNotCompleteAlert
@@ -193,6 +212,7 @@ const AssessmentReportContainer = () => {
                   subjects_info={subjects}
                   maturity_level={assessment_kit?.maturity_level}
                   maturity_level_count={assessment_kit?.maturity_level_count}
+                  confidence_value={confidence_value}
                 />
               </Grid>
               <Grid item lg={3} md={7} sm={14} xs={14}>

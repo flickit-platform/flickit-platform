@@ -19,6 +19,7 @@ const SUbjectAttributeCard = (props: any) => {
     maturity_level,
     maturity_levels_count,
     maturity_scores,
+    confidence_value,
   } = props;
   return (
     <Paper
@@ -56,7 +57,7 @@ const SUbjectAttributeCard = (props: any) => {
               <AttributeStatusBarContainer
                 status={maturity_level?.title}
                 ml={maturity_level?.index}
-                cl={1}
+                cl={Math.ceil(confidence_value)}
                 mn={maturity_levels_count}
               />
               <Box mt={3}>
@@ -146,7 +147,7 @@ const AttributeStatusBarContainer = (props: any) => {
       <Box display={"flex"} flex={1}>
         <Box width="100%">
           {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
-          {cl && <AttributeStatusBar cl={cl} mn={mn} />}
+          {(cl==0||cl) && <AttributeStatusBar cl={cl} mn={mn} />}
         </Box>
       </Box>
       <Box
@@ -179,7 +180,7 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${(cl / 5) * 100}%`
+    ? `${cl}%`
     : "0%";
   return (
     <Box
@@ -222,7 +223,7 @@ export const AttributeStatusBar = (props: any) => {
         sx={{ position: "absolute", zIndex: 1, right: "12px" }}
         variant="h6"
       >
-        {isMl ? `${ml} / ${mn}` : `${cl} / 5`}
+        {isMl ? `${ml} / ${mn}` : `${cl !== null ? cl : "--"}%`}
       </Typography>
     </Box>
   );

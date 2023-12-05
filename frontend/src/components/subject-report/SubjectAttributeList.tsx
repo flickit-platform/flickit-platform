@@ -6,7 +6,6 @@ import SubjectAttributeCard from "./SubjectAttributeCard";
 export const SubjectAttributeList = (props: any) => {
   const { data } = props;
   const { subject,attributes} = data;
-
   return (
     <Box mt={15} id="attributes">
       <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="attributes">

@@ -1,4 +1,11 @@
-import React, { useReducer, FC, useContext, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useReducer,
+  FC,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import { useParams } from "react-router-dom";
 import { TQuestionsInfo } from "@types";
 import { questionActions } from "./actions";
@@ -20,7 +27,8 @@ export interface IQuestionContext {
   assessmentStatus: EAssessmentStatus;
   submitOnAnswerSelection: boolean;
   isSubmitting: boolean;
-  evidences:string;
+  evidences: string;
+  selcetedConfidenceLevel: any;
 }
 
 export const QuestionContext = React.createContext<IQuestionContext>({
@@ -32,8 +40,9 @@ export const QuestionContext = React.createContext<IQuestionContext>({
     resultId: undefined,
   },
   submitOnAnswerSelection: false,
+  selcetedConfidenceLevel: null,
   isSubmitting: false,
-  evidences:"",
+  evidences: "",
 });
 
 const QuestionDispatchContext = React.createContext<any>({
@@ -49,13 +58,17 @@ export const QuestionProvider: FC<IQuestionProviderProps> = ({ children }) => {
       assessmentStatus: EAssessmentStatus.NOT_STARTED,
     },
     submitOnAnswerSelection: false,
+    selcetedConfidenceLevel: null,
     isSubmitting: false,
-    evidences:"",
+    evidences: "",
   });
   const { subjectId } = useParams();
 
   useEffect(() => {
-    localStorage.setItem(`${subjectId}_questionIndex`, JSON.stringify(state.questionIndex));
+    localStorage.setItem(
+      `${subjectId}_questionIndex`,
+      JSON.stringify(state.questionIndex)
+    );
   }, [state.questionIndex]);
 
   useEffect(() => {
@@ -69,7 +82,9 @@ export const QuestionProvider: FC<IQuestionProviderProps> = ({ children }) => {
 
   return (
     <QuestionContext.Provider value={state}>
-      <QuestionDispatchContext.Provider value={dispatch}>{children}</QuestionDispatchContext.Provider>
+      <QuestionDispatchContext.Provider value={dispatch}>
+        {children}
+      </QuestionDispatchContext.Provider>
     </QuestionContext.Provider>
   );
 };
@@ -77,7 +92,9 @@ export const QuestionProvider: FC<IQuestionProviderProps> = ({ children }) => {
 export const useQuestionContext = () => {
   const context = useContext(QuestionContext);
   if (context === undefined) {
-    throw new Error("useQuestionContext must be used within a QuestionProvider");
+    throw new Error(
+      "useQuestionContext must be used within a QuestionProvider"
+    );
   }
   return context;
 };
@@ -85,7 +102,9 @@ export const useQuestionContext = () => {
 export const useQuestionDispatch = () => {
   const context = useContext(QuestionDispatchContext);
   if (context === undefined) {
-    throw new Error("useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider");
+    throw new Error(
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+    );
   }
   return context;
 };

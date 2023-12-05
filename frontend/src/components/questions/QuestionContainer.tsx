@@ -81,7 +81,7 @@ export const SubmitOnSelectCheckBox = () => {
 
   return (
     <FormControlLabel
-      sx={{ mr: 0 }}
+      sx={{ mr: 0 , color:"#fff"}}
       data-cy="automatic-submit-check"
       control={
         <Checkbox

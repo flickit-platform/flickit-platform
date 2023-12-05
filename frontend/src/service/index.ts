@@ -372,6 +372,15 @@ export const createService = (
         config
       );
     },
+    calculateConfidenceLevel(
+      { assessmentId }: { assessmentId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/calculate-confidence/`,
+        config
+      );
+    },
     fetchQuestionnairesPageData(
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -513,6 +522,17 @@ export const createService = (
       const { assessmentKitId, data } = args ?? {};
       return axios.post(
         `/baseinfo/assessmentkits/update/${assessmentKitId}/`,
+        data,
+        config
+      );
+    },
+    updateAssessmentKitDSL(
+      args: { assessmentKitId?: TId; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, data } = args ?? {};
+      return axios.put(
+        `/api/v1/assessment-kits/${assessmentKitId}/update-by-dsl/`,
         data,
         config
       );
@@ -819,6 +839,14 @@ export const createService = (
           page,
           size,
         },
+      });
+    },
+    fetchConfidenceLevelsList(
+      args: {},
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/confidence-levels/`, {
+        ...(config ?? {}),
       });
     },
     leaveSpace(

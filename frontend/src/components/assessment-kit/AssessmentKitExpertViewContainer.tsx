@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Button } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import { Box, Button, Typography, Alert } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import QueryData from "@common/QueryData";
-import QueryBatchData from "@common/QueryBatchData";
 import Title from "@common/Title";
-import Chip from "@mui/material/Chip";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -18,27 +15,25 @@ import Grid from "@mui/material/Grid";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
 import AssessmentKitSectionGeneralInfo from "./AssessmentKitSectionGeneralInfo";
 import ListAccordion from "@common/lists/ListAccordion";
-import InfoItem from "@common/InfoItem";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
-import AssessmentKitSettingFormDialog from "./AssessmentKitSettingFormDialog";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { useAuthContext } from "@providers/AuthProvider";
-import Dialog from "@mui/material/Dialog";
-import { DialogActions, DialogContent } from "@mui/material";
-import DialogTitle from "@mui/material/DialogTitle";
-import useScreenResize from "@utils/useScreenResize";
 import languageDetector from "@utils/languageDetector";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
+import { useForm } from "react-hook-form";
+import UploadField from "@common/fields/UploadField";
+import FormProviderWithForm from "@common/FormProviderWithForm";
+import setServerFieldErrors from "@utils/setServerFieldError";
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
@@ -79,7 +74,6 @@ const AssessmentKitExpertViewContainer = () => {
   useEffect(() => {
     setDocumentTitle(`${t("assessmentKit")}: ${assessmentKitTitle || ""}`);
   }, [assessmentKitTitle]);
-
   return (
     <Box>
       <Box>
@@ -104,17 +98,32 @@ const AssessmentKitExpertViewContainer = () => {
             />
           }
           toolbar={
-            <Button
-              variant="contained"
-              size="small"
-              sx={{ ml: 2 }}
-              onClick={handleDownload}
-            >
-              <Typography mr={1} variant="button">
-                <Trans i18nKey="download" />
-              </Typography>
-              <CloudDownloadRoundedIcon />
-            </Button>
+            <Box>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={() => {
+                  dialogProps.openDialog({});
+                }}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="updateDSL" />
+                </Typography>
+                <CloudUploadRoundedIcon />
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={handleDownload}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="downloadDSL" />
+                </Typography>
+                <CloudDownloadRoundedIcon />
+              </Button>
+            </Box>
           }
         >
           {assessmentKitTitle}
@@ -124,6 +133,7 @@ const AssessmentKitExpertViewContainer = () => {
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
+          <UpdateAssessmentKitDialog {...dialogProps} />
           <AssessmentKitSectionsTabs details={details} />
         </Box>
       </Box>
@@ -892,260 +902,196 @@ const AssessmentKitQuestionsList = (props: {
     </Box>
   );
 };
-const AssessmentKitDialog = (props: any) => {
-  const { question, onClose: closeDialog, ...rest } = props;
-  const {
-    title,
-    options = [],
-    relatedAttributes = [],
-    impact,
-    listOfOptions = [],
-  } = question || {};
-  const onSubmit = async (data: any) => {};
-  const fullScreen = useScreenResize("sm");
-  return (
-    <Dialog
-      {...rest}
-      onClose={() => {
-        closeDialog();
-      }}
-      fullWidth
-      maxWidth="md"
-      fullScreen={fullScreen}
-    >
-      <DialogTitle mb={4} px="36px" py="36px">
-        <Typography
-          sx={{
-            pb: "2px",
-            color: "#767676",
-            display: "block",
-            fontFamily: "Roboto",
-            fontSize: "0.8rem",
-            width: "100%",
-          }}
-          component="span"
-        >
-          <Trans i18nKey={"title"} />
-          <Typography
-            variant="body1"
-            fontFamily="Roboto"
-            fontWeight={"bold"}
-            sx={{ color: "black" }}
-          >
-            {title}
-          </Typography>
+const UpdateAssessmentKitDialog = (props: any) => {
+  const { onClose: closeDialog, ...rest } = props;
+  const [loading, setLoading] = useState(false);
+
+  const { service } = useServiceContext();
+  const formMethods = useForm({ shouldUnregister: true });
+  const abortController = useMemo(() => new AbortController(), [rest.open]);
+  const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
+  const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
+  const [updateErrorObject, setUpdateErrorObject] = useState<any>();
+  const { assessmentKitId } = useParams();
+  const close = () => {
+    abortController.abort();
+    closeDialog();
+  };
+  useEffect(() => {
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+  const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
+    event.preventDefault();
+    const { dsl_id, ...restOfData } = data;
+    const formattedData = {
+      dsl_id: dsl_id.id,
+      ...restOfData,
+    };
+    setLoading(true);
+    try {
+      const { data: res } = await service.updateAssessmentKitDSL(
+        { data: formattedData, assessmentKitId: assessmentKitId },
+        { signal: abortController.signal }
+      );
+      setLoading(false);
+      close();
+    } catch (e: any) {
+      const err = e as ICustomError;
+      if (e?.status == 422) {
+        setSyntaxErrorObject(e?.data?.errors);
+        setShowErrorLog(true);
+      }
+      if (e?.data?.code === "UNSUPPORTED_DSL_CONTENT_CHANGE") {
+        setUpdateErrorObject(e?.data?.messages);
+        setShowErrorLog(true);
+      }
+
+      if (e?.status !== 422) {
+        toastError(err.message);
+      }
+      setLoading(false);
+      // setServerFieldErrors(err, formMethods);
+      formMethods.clearErrors();
+      return () => {
+        abortController.abort();
+      };
+    }
+  };
+  const formContent = (
+    <FormProviderWithForm formMethods={formMethods}>
+      <Typography variant="body1">
+        <Trans i18nKey="pleaseNoteThatThereAreSomeLimitations" />
+      </Typography>
+      <Box sx={{ ml: 4, my: 2 }}>
+        <Typography component="li" variant="body1" fontWeight={"bold"}>
+          <Trans i18nKey="deletingAnSubjectOrAddingANewOne" />
         </Typography>
-      </DialogTitle>
-      <DialogContent
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "36px",
-        }}
-      >
-        {options &&
-          options.map((op: any, index: number) => (
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-            >
-              <Grid container spacing={2} columns={12}>
-                <Grid xs={4} sm={6} md={8} item>
-                  <Typography
-                    variant="body1"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                  >
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          display: "block",
-                          fontFamily: "Roboto",
-                          fontSize: "0.8rem",
-                          width: "100%",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.primary.light}`,
+        <Typography component="li" variant="body1" fontWeight={"bold"}>
+          <Trans i18nKey="deletingAnAttributeOrAddingANewOne" />
+        </Typography>
+        <Typography component="li" variant="body1" fontWeight={"bold"}>
+          <Trans i18nKey="deletingAQuestionnaire" />
+        </Typography>
+        <Typography component="li" variant="body1" fontWeight={"bold"}>
+          <Trans i18nKey="deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne" />
+        </Typography>
+        <Typography component="li" variant="body1" fontWeight={"bold"}>
+          <Trans i18nKey="anyChangesInTheNumberOfOptionsForAPreExistingQuestion" />
+        </Typography>
+      </Box>
+      <Grid container spacing={2} sx={styles.formGrid}>
+        <Box width="100%" ml={2}>
+          <UploadField
+            accept={{ "application/zip": [".zip"] }}
+            uploadService={(args, config) =>
+              service.uploadAssessmentKitDSL(args, config)
+            }
+            deleteService={(args, config) =>
+              service.deleteAssessmentKitDSL(args, config)
+            }
+            name="dsl_id"
+            required={true}
+            label={<Trans i18nKey="dsl" />}
+          />
+        </Box>
+      </Grid>
+      <CEDialogActions
+        closeDialog={close}
+        loading={loading}
+        type="submit"
+        submitButtonLabel={t("saveChanges") as string}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+      />
+    </FormProviderWithForm>
+  );
+  const syntaxErrorContent = (
+    <Box>
+      {syntaxErrorObject && (
+        <Typography ml={1} variant="h6">
+          <Trans i18nKey="youveGotSyntaxErrorsInYourDslFile" />
+        </Typography>
+      )}
+      {updateErrorObject && (
+        <Typography ml={1} variant="h6">
+          <Trans i18nKey="unsupportedDslContentChange" />
+        </Typography>
+      )}
+      <Divider />
+      <Box mt={4} sx={{ maxHeight: "260px", overflow: "scroll" }}>
+        {syntaxErrorObject &&
+          syntaxErrorObject.map((e: any) => {
+            return (
+              <Box sx={{ ml: 1 }}>
+                <Alert severity="error" sx={{ my: 2 }}>
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="subtitle2" color="error">
+                      <Trans
+                        i18nKey="errorAtLine"
+                        values={{
+                          message: e.message,
+                          fileName: e.fileName,
+                          line: e.line,
+                          column: e.column,
                         }}
-                        component="span"
-                      >
-                        <Trans i18nKey={"questionOptions"} />
-                      </Typography>
-                    )}
-                    {op.title}
-                  </Typography>
-                </Grid>
-                <Grid xs={4} sm={3} md={2} item>
-                  <Typography
-                    variant="body1"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                  >
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          display: "block",
-                          fontFamily: "Roboto",
-                          fontSize: "0.8rem",
-                          width: "100%",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.secondary.dark}`,
-                        }}
-                        component="span"
-                      >
-                        <Trans i18nKey={"maturityLevel"} />
-                      </Typography>
-                    )}
-                    {op.option_values[0] && op.option_values[0].maturity_level}
-                  </Typography>
-                </Grid>
-                <Grid xs={4} sm={3} md={2} item>
-                  <Typography
-                    variant="body1"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                    // position="relative"
-                  >
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          display: "block",
-                          fontFamily: "Roboto",
-                          fontSize: "0.8rem",
-                          width: "100%",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.warning.dark}`,
-                        }}
-                        component="span"
-                      >
-                        <Trans i18nKey={"value"} />
-                      </Typography>
-                    )}
-                    {op.option_values[0] && op.option_values[0].value}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
-          ))}
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mb: 2,
-            flexDirection: "row",
-            width: "100%",
-          }}
-        > */}
-        <Grid
-          container
-          spacing={2}
-          columns={12}
-          direction="column"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Grid item xs sx={{ width: { xs: "100%" } }} mb={2}>
-            {listOfOptions &&
-              listOfOptions.map((op: any, index: number) => {
-                return (
-                  <Typography
-                    variant="body1"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                    mb={2}
-                  >
-                    {index === 0 && (
-                      <Typography
-                        sx={{
-                          pb: "2px",
-                          mb: 2,
-                          color: "#767676",
-                          display: "block",
-                          fontFamily: "Roboto",
-                          fontSize: "0.8rem",
-                          width: "100%",
-                          borderBottom: (t) =>
-                            `1px solid ${t.palette.primary.light}`,
-                        }}
-                        component="span"
-                      >
-                        <Trans i18nKey={"questionOptions"} />
-                      </Typography>
-                    )}
-                    {op}
-                  </Typography>
-                );
-              })}
-          </Grid>
-          <Grid item xs sx={{ width: { xs: "100%" } }}>
-            {relatedAttributes &&
-              relatedAttributes.map((item: any, index: number) => (
-                <Box>
-                  {index === 0 && (
-                    <Typography
-                      sx={{
-                        width: "100%",
-                        pb: "2px",
-                        mb: 2,
-                        color: "#767676",
-                        fontFamily: "Roboto",
-                        borderBottom: (t) =>
-                          `1px solid ${t.palette.secondary.dark}`,
-                      }}
-                      variant="subMedium"
-                    >
-                      <Trans i18nKey={"relatedAttributes"} />
-                      <Box component="span" sx={{ float: "right", mr: 1 }}>
-                        <Trans i18nKey="impact" />
-                      </Box>
+                      />
                     </Typography>
-                  )}
-                  <Box
-                    key={index}
-                    sx={{
-                      width: { xs: "100%" },
-                      margin: "0 auto",
-                    }}
-                  >
-                    <Box py={0.3} px={2} mb={2} mr={0.5}>
-                      <Typography
-                        variant="body1"
-                        fontFamily="Roboto"
-                        fontWeight={"bold"}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          borderBottom: "1px solid rgba(0,0,0,0.05)",
-                          py: "4px",
+                    <Typography variant="subtitle2" color="error">
+                      <Trans
+                        i18nKey="errorLine"
+                        values={{
+                          errorLine: e.errorLine,
                         }}
-                      >
-                        {item.title}
-                        <Typography
-                          component="span"
-                          variant="body1"
-                          fontFamily="Roboto"
-                          fontWeight={"bold"}
-                        >
-                          {item.item}
-                        </Typography>
-                      </Typography>
-                    </Box>
+                      />
+                    </Typography>
                   </Box>
-                </Box>
-              ))}
-          </Grid>
+                </Alert>
+              </Box>
+            );
+          })}
+        {updateErrorObject &&
+          updateErrorObject.map((e: any) => {
+            return (
+              <Box sx={{ ml: 1 }}>
+                <Alert severity="error" sx={{ my: 2 }}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography variant="subtitle2" color="error">
+                      {e}
+                    </Typography>
+                  </Box>
+                </Alert>
+              </Box>
+            );
+          })}
+      </Box>
+      <Grid mt={4} container spacing={2} justifyContent="flex-end">
+        <Grid item>
+          <Button onClick={close} data-cy="cancel">
+            <Trans i18nKey="cancel" />
+          </Button>
         </Grid>
-        {/* </Box> */}
-        {/* )} */}
-      </DialogContent>
-    </Dialog>
+        <Grid item>
+          <Button variant="contained" onClick={() => setShowErrorLog(false)}>
+            <Trans i18nKey="Back" />
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+  return (
+    <CEDialog
+      {...rest}
+      closeDialog={close}
+      title={
+        <>
+          <CloudUploadRoundedIcon sx={{ mr: 1 }} />
+          {<Trans i18nKey="updateDSL" />}
+        </>
+      }
+    >
+      {!showErrorLog ? formContent : syntaxErrorContent}
+    </CEDialog>
   );
 };
 const SubjectQuestionList = (props: any) => {

@@ -10,6 +10,9 @@ import assessmentDoneSvg from "@assets/svg/assessmentDone.svg";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
 import languageDetector from "@utils/languageDetector";
+import Rating from "@mui/material/Rating";
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
+import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 const QuestionsReview = () => {
   const { questionIndex, questionsInfo, assessmentStatus } =
     useQuestionContext();
@@ -88,7 +91,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
         )}
         <Box mt={2}>
           {questions.map((question: any) => {
-              const is_farsi = languageDetector(question.title);
+            const is_farsi = languageDetector(question.title);
             return (
               <Paper
                 key={question.id}
@@ -158,6 +161,49 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       >
                         <Trans i18nKey={"markedAsNotApplicable"} />
                       </Typography>
+                    </Box>
+                  )}
+                  {question.confidence_level && (
+                    <Box mt={3}>
+                      <Typography
+                        variant="subMedium"
+                        textTransform="uppercase"
+                        sx={{ color: "#b3b3b3" }}
+                      >
+                        <Trans i18nKey={"yourConfidence"} />
+                      </Typography>
+                      <Box sx={{ display: "flex", mt: 1 }}>
+                        <Box sx={{ mr: 1, color: "#fff" }}>
+                          <Typography sx={{ display: "flex" }}>
+                            <Typography
+                              variant="h6"
+                              fontFamily="Roboto"
+                              fontWeight="bold"
+                            >
+                              {question.confidence_level.title}
+                            </Typography>
+                          </Typography>
+                        </Box>
+                        <Rating
+                          sx={{ alignItems: "center" }}
+                          value={question.confidence_level?.id}
+                          size="medium"
+                          readOnly
+                          icon={
+                            <RadioButtonCheckedRoundedIcon
+                              sx={{ mx: 0.25, color: "#42a5f5" }}
+                              fontSize="inherit"
+                            />
+                          }
+                          emptyIcon={
+                            <RadioButtonUncheckedRoundedIcon
+                              style={{ opacity: 0.55 }}
+                              sx={{ mx: 0.25, color: "#fff" }}
+                              fontSize="inherit"
+                            />
+                          }
+                        />
+                      </Box>
                     </Box>
                   )}
 

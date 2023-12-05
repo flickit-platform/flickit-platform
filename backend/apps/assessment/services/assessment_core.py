@@ -109,6 +109,7 @@ def question_answering(assessments_details, serializer_data):
             "questionnaireId": serializer_data["questionnaire_id"],
             "questionId": serializer_data["question_id"],
             "answerOptionId": serializer_data["answer_option_id"],
+            "confidenceLevelId": serializer_data["confidence_level_id"],
             }
 
     if "is_not_applicable" in serializer_data:
@@ -163,7 +164,7 @@ def get_maturity_level_calculate(assessments_details):
         maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
         data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
-        data["maturity_level"]["value"] = data["maturity_level"].pop("level")
+        data["maturity_level"]["value"] = data["maturity_level"].pop("value")
         data["maturity_level"].pop("levelCompetences")
         result["Success"] = True
         result["body"] = data
@@ -211,6 +212,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
         for i in range(len(items)):
             if items[i]["id"] in questions_id:
                 response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
+                items[i]["confidence_level"] = response_item["confidenceLevel"]
                 if response_item["answerOptionId"] is not None:
                     answer = \
                         list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
@@ -222,6 +224,8 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
             else:
                 items[i]["answer"] = None
                 items[i]["is_not_applicable"] = False
+                items[i]["confidence_level"] = None
+
 
         response_body = {"items": items}
         result["Success"] = True
@@ -315,7 +319,9 @@ def get_subject_report(assessments_details, subject_id):
             "maturity_levels_count": maturity_levels_count
 
         }
+        subject_dict["confidence_value"] = response_body["subject"]["confidenceValue"]
         subject_dict["is_calculate_valid"] = response_body["subject"]["isCalculateValid"]
+        subject_dict["is_confidence_valid"] = response_body["subject"]["isConfidenceValid"]
         for item in response_body["attributes"]:
             attributes_dict = dict()
             attribute = QualityAttribute.objects.get(id=item["id"])
@@ -336,6 +342,7 @@ def get_subject_report(assessments_details, subject_id):
                 levels[i]["index"] = maturity_levels_id.index(levels[i]["id"]) + 1
                 maturity_scores.append({"maturity_level": levels[i], "score": item["maturityScores"][i]["score"]})
             attributes_dict["maturity_scores"] = maturity_scores
+            attributes_dict["confidence_value"] = item["confidenceValue"]
             attribute_list.append(attributes_dict)
         attribute_list = sorted(attribute_list, key=itemgetter('index'))
 
@@ -415,6 +422,7 @@ def get_assessment_report(assessments_details):
                                                                "value": maturity_level.value,
                                                                "index": maturity_levels_id.index(maturity_level.id) + 1
                                                                }
+        assessment_dict["confidence_value"] = response_body["assessment"]["confidenceValue"]
         assessment_dict["color"] = response_body["assessment"]["color"]
 
         subject_list = list()

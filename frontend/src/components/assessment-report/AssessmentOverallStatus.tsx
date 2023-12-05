@@ -12,6 +12,7 @@ interface IAssessmentOverallStatusProps {
   subjects_info: ISubjectInfo[];
   maturity_level: IMaturityLevel;
   maturity_level_count: number;
+  confidence_value?: number;
 }
 
 export const AssessmentOverallStatus = (
@@ -22,6 +23,7 @@ export const AssessmentOverallStatus = (
     subjects_info = [],
     maturity_level,
     maturity_level_count,
+    confidence_value,
   } = props;
   return (
     <Paper elevation={3} sx={{ borderRadius: 3, height: "100%" }}>
@@ -50,9 +52,7 @@ export const AssessmentOverallStatus = (
                       {subject.title}
                     </span>{" "}
                     <Trans i18nKey={"statusIs"} />{" "}
-                    <b
-                      data-cy={"status"}
-                    >
+                    <b data-cy={"status"}>
                       {subject?.maturity_level?.title ?? "NOT EVALUATED"}
                     </b>
                   </Typography>
@@ -72,6 +72,8 @@ export const AssessmentOverallStatus = (
               maturity_level_status={maturity_level?.title}
               maturity_level_number={maturity_level_count}
               systemStatus={ESystemStatus[status as ESystemStatus]}
+              confidence_value={confidence_value}
+              show_confidence={true}
               width="100%"
             />
           </Grid>

@@ -47,6 +47,9 @@ import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import languageDetector from "@utils/languageDetector";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
+import Rating from "@mui/material/Rating";
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
+import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -54,11 +57,18 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const { title, hint, may_not_be_applicable, is_not_applicable } =
-    questionInfo;
+  const {
+    title,
+    hint,
+    may_not_be_applicable,
+    is_not_applicable,
+    confidence_level,
+  } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
+  const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
+  const { service } = useServiceContext();
   useEffect(() => {
     return () => {
       abortController.current.abort();
@@ -68,8 +78,19 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
+    if (confidence_level) {
+      dispatch(
+        questionActions.setSelectedConfidenceLevel(confidence_level?.id ?? null)
+      );
+    }
   }, [title]);
-
+  const ConfidenceListQueryData = useQuery({
+    service: (args = {}, config) =>
+      service.fetchConfidenceLevelsList(args, config),
+    toastError: true,
+  });
+  const { selcetedConfidenceLevel } = useQuestionContext();
+  const dispatch = useQuestionDispatch();
   return (
     <Box>
       <Paper
@@ -87,9 +108,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           overflow: "hidden",
           my: { xs: 2, md: 5 },
           mx: { xs: 2, sm: "auto" },
-          mb: { xs: 0.5, sm: 1, md: 1 },
+          mb: "0 !important",
           maxWidth: "1376px",
-          borderRadius: "8px",
+          borderRadius: "8px 8px 0 0",
         }}
         elevation={3}
       >
@@ -144,11 +165,106 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
             may_not_be_applicable={may_not_be_applicable ?? false}
+            setDisabledConfidence={setDisabledConfidence}
+            selcetedConfidenceLevel={selcetedConfidenceLevel}
           />
         </Box>
       </Paper>
       <Box sx={{ px: { xs: 2, sm: 0 } }}>
-        <SubmitOnSelectCheckBox />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            background: `${notApplicable ? "#273248" : "#000000cc"}`,
+            borderRadius: " 0 0 8px 8px ",
+            px: { xs: 1.75, sm: 2, md: 2.5 },
+            py: { xs: 1.5, sm: 2.5 },
+          }}
+        >
+          <SubmitOnSelectCheckBox />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <QueryData
+              {...ConfidenceListQueryData}
+              loading={false}
+              error={false}
+              render={(data) => {
+                const labels = data.confidenceLevels;
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {selcetedConfidenceLevel !== null  ? (
+                      <Box sx={{ mr: 2, color: "#fff" }}>
+                        <Typography sx={{ display: "flex" }}>
+                          <Trans i18nKey={"youSelected"} />
+                          <Typography
+                            fontWeight={900}
+                            sx={{ borderBottom: "1px solid", mx: 1 }}
+                          >
+                            {labels[selcetedConfidenceLevel - 1]?.title}
+                          </Typography>
+
+                          <Trans i18nKey={"asYourConfidenceLevel"} />
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          mr: 2,
+                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
+                        }}
+                      >
+                        <Typography>
+                          {disabledConfidence ? (
+                            <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          ) : (
+                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
+                          )}
+                        </Typography>
+                      </Box>
+                    )}
+                    <Rating
+                      disabled={disabledConfidence}
+                      value={
+                        selcetedConfidenceLevel !== null
+                          ? selcetedConfidenceLevel
+                          : null
+                      }
+                      size="medium"
+                      onChange={(event, newValue) => {
+                        dispatch(
+                          questionActions.setSelectedConfidenceLevel(newValue)
+                        );
+                      }}
+                      icon={
+                        <RadioButtonCheckedRoundedIcon
+                          sx={{ mx: 0.25, color: "#42a5f5" }}
+                          fontSize="inherit"
+                        />
+                      }
+                      emptyIcon={
+                        <RadioButtonUncheckedRoundedIcon
+                          style={{ opacity: 0.55 }}
+                          sx={{ mx: 0.25, color: "#fff" }}
+                          fontSize="inherit"
+                        />
+                      }
+                    />
+                  </Box>
+                );
+              }}
+            />
+          </Box>
+        </Box>
+
         <Box
           display={"flex"}
           justifyContent="space-between"
@@ -174,6 +290,8 @@ const AnswerTemplate = (props: {
   notApplicable: boolean;
   may_not_be_applicable: boolean;
   is_farsi: boolean | undefined;
+  setDisabledConfidence: any;
+  selcetedConfidenceLevel: any;
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
@@ -186,6 +304,8 @@ const AnswerTemplate = (props: {
     notApplicable,
     may_not_be_applicable,
     is_farsi,
+    setDisabledConfidence,
+    selcetedConfidenceLevel,
   } = props;
   const { answer_options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
@@ -205,6 +325,11 @@ const AnswerTemplate = (props: {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
     }
+    if (value?.index !== v?.index) {
+      setDisabledConfidence(false);
+    } else {
+      setDisabledConfidence(true);
+    }
     setValue((prevValue) => (prevValue?.index === v?.index ? null : v));
   };
   useEffect(() => {
@@ -212,6 +337,11 @@ const AnswerTemplate = (props: {
       setValue(null);
     }
   }, [notApplicable]);
+  useEffect(() => {
+    if (answer) {
+      setDisabledConfidence(false);
+    }
+  }, [answer]);
   // first checking if evidences have been submited or not
   const submitQuestion = async () => {
     dispatch(questionActions.setIsSubmitting(true));
@@ -224,6 +354,10 @@ const AnswerTemplate = (props: {
             question_id: questionInfo?.id,
             answer_option_id: value?.id || null,
             is_not_applicable: notApplicable,
+            confidence_level_id:
+              value?.id || submitOnAnswerSelection
+                ? selcetedConfidenceLevel
+                : null,
           },
         },
         { signal: abortController.current.signal }
@@ -234,6 +368,7 @@ const AnswerTemplate = (props: {
           ...questionInfo,
           answer: value,
           is_not_applicable: notApplicable,
+          confidence_level: selcetedConfidenceLevel ?? null,
         })
       );
       if (isLastQuestion) {
@@ -263,6 +398,14 @@ const AnswerTemplate = (props: {
       submitQuestion();
     }
   }, [value]);
+  const notApplicableonChanhe = (e: any) => {
+    setNotApplicable(e.target.checked || false);
+    if (e.target.checked) {
+      setDisabledConfidence(false);
+    } else {
+      setDisabledConfidence(true);
+    }
+  };
   return (
     <>
       <Box
@@ -342,7 +485,7 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {templateValue}.{" "}{caption}
+                  {templateValue}. {caption}
                 </ToggleButton>
               </Box>
             );
@@ -376,6 +519,7 @@ const AnswerTemplate = (props: {
           variant="contained"
           color={"info"}
           loading={isSubmitting}
+          disabled={(value || notApplicable) && !selcetedConfidenceLevel}
           sx={
             is_farsi
               ? {
@@ -395,9 +539,7 @@ const AnswerTemplate = (props: {
             control={
               <Checkbox
                 checked={notApplicable}
-                onChange={(e) => {
-                  setNotApplicable(e.target.checked || false);
-                }}
+                onChange={(e) => notApplicableonChanhe(e)}
                 sx={{
                   color: "#0288d1",
                   "&.Mui-checked": {
@@ -594,7 +736,6 @@ const Evidence = (props: any) => {
       formMethods.reset();
     }
   };
-
   return (
     <Box display={"flex"} flexDirection={"column"} width="100%">
       <FormProvider {...formMethods}>

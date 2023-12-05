@@ -52,7 +52,7 @@ def import_assessment_kit(descriptive_assessment_kit, **kwargs):
             level_competence.save()
     __import_questionnaires(descriptive_assessment_kit['questionnaireModels'], assessment_kit)
     __import_subjects(descriptive_assessment_kit['subjectModels'], assessment_kit)
-    __import_attributes(descriptive_assessment_kit['attributeModels'])
+    __import_attributes(descriptive_assessment_kit['attributeModels'], assessment_kit)
     __import_questions(descriptive_assessment_kit['questionModels'], assessment_kit)
     return assessment_kit
 
@@ -61,8 +61,10 @@ def __import_maturity_levels(descriptive_assessment_kit, assessment_kit):
     level_models = descriptive_assessment_kit['levelModels']
     for level_model in level_models:
         maturity_level = MaturityLevel()
+        maturity_level.code = level_model['code']
         maturity_level.title = level_model['title']
-        maturity_level.value = level_model['index']
+        maturity_level.value = level_model['value']
+        maturity_level.index = level_model['index']
         maturity_level.assessment_kit = assessment_kit
         maturity_level.save()
 
@@ -126,13 +128,13 @@ def __import_subjects(subject_models, assessment_kit):
         subject.save()
         if questionnaire_codes != None:
             for questionnaire_code in questionnaire_codes:
-                questionnaire = Questionnaire.objects.filter(code=questionnaire_code).first()
+                questionnaire = Questionnaire.objects.filter(code=questionnaire_code).filter(assessment_kit=assessment_kit.id).first()
                 subject.questionnaires.add(questionnaire)
                 subject.save()
 
 
 @transaction.atomic
-def __import_attributes(attributeModels):
+def __import_attributes(attributeModels , assessment_kit):
     for model in attributeModels:
         attribute = QualityAttribute()
         attribute.code = model['code']
@@ -140,7 +142,8 @@ def __import_attributes(attributeModels):
         attribute.description = model['description']
         attribute.index = model['index']
         attribute.weight = model['weight']
-        attribute.assessment_subject = AssessmentSubject.objects.filter(code=model['subjectCode']).first()
+        attribute.assessment_subject = AssessmentSubject.objects.filter(code=model['subjectCode']).filter(assessment_kit=assessment_kit.id).first()
+        attribute.assessment_kit = assessment_kit
         attribute.save()
 
 
@@ -148,12 +151,13 @@ def __import_attributes(attributeModels):
 def __import_questions(questionModels, assessment_kit):
     for model in questionModels:
         question = Question()
+        question.code = model['code']
         question.title = model['title']
         question.index = model['index']
         question.description = model['description']
         if "mayNotBeApplicable" in model:
             question.may_not_be_applicable = model['mayNotBeApplicable']
-        question.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).first()
+        question.questionnaire = Questionnaire.objects.filter(code=model['questionnaireCode']).filter(assessment_kit=assessment_kit.id).first()
         question.save()
 
         for answer_model in model['answers']:
@@ -169,7 +173,7 @@ def __import_questions(questionModels, assessment_kit):
             impact = QuestionImpact()
             impact.maturity_level = MaturityLevel.objects.get(assessment_kit=assessment_kit,
                                                               title=impact_model['level']['title'])
-            impact.quality_attribute = QualityAttribute.objects.filter(code=impact_model['attributeCode']).first()
+            impact.quality_attribute = QualityAttribute.objects.filter(code=impact_model['attributeCode']).filter(assessment_subject__assessment_kit=assessment_kit.id).first()
             impact.question = question
             impact.weight = impact_model['weight']
             impact.save()
