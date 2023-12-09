@@ -18,7 +18,8 @@ import {
   useCompareContext,
   useCompareDispatch,
 } from "@providers/CompareProvider";
-import hasStatus from "@utils/hasStatus";
+import { useQuery } from "@utils/useQuery";
+import { useServiceContext } from "@providers/ServiceProvider";
 import AlertBox from "@common/AlertBox";
 
 interface ICompareItemCEFormDialog
@@ -72,9 +73,28 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const formMethods = useForm({ shouldUnregister: true });
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
+  const { service } = useServiceContext();
+  const calculateMaturityLevelQuery = useQuery<any>({
+    service: (args, config) => service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+  const calculateConfidenceLevelQuery = useQuery({
+    service: (args, config) => service.calculateConfidenceLevel(args, config),
+    runOnMount: false,
+  });
   const onSubmit = (data: any) => {
     try {
       if (data?.assessment?.id) {
+        if (!data?.assessment?.is_calculate_valid) {
+          calculateMaturityLevelQuery.query({
+            assessmentId: data?.assessment?.id,
+          });
+        }
+        if (!data?.assessment?.is_confidence_valid) {
+          calculateConfidenceLevelQuery.query({
+            assessmentId: data?.assessment?.id,
+          });
+        }
         const newAssessmentIds = addToAssessmentIds(
           data.assessmentIds?.id,
           assessmentIds,

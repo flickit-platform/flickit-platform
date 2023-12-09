@@ -86,6 +86,12 @@ export const SubmitOnSelectCheckBox = () => {
       control={
         <Checkbox
           checked={submitOnAnswerSelection}
+          sx={{
+            color: "#fff",
+            "&.Mui-checked": {
+              color: "#fff",
+            },
+          }}
           onChange={(e) => {
             dispatch(questionActions.setSubmitOnAnswerSelection(e.target.checked || false));
           }}
