@@ -76,6 +76,7 @@ def get_assessment_list(request):
             row_data["last_modification_time"] = item["lastModificationTime"]
             row_data["color"] = item["color"]
             row_data["is_calculate_valid"] = item["isCalculateValid"]
+            row_data["is_confidence_valid"] = item["isConfidenceValid"]
             assessment_kit = AssessmentKit.objects.get(id=item["assessmentKitId"])
             row_data["assessment_kit"] = {"id": assessment_kit.id,
                                           "title": assessment_kit.title,
