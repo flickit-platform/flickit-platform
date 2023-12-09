@@ -44,10 +44,10 @@ const CompareResultContainer = () => {
         e.data.code == "CALCULATE_NOT_VALID" ||
         e.data.code == "CONFIDENCE_CALCULATION_NOT_VALID"
       ) {
-        const MaturityLevelres = await calculateMaturityLevelQuery.query({
+        await calculateMaturityLevelQuery.query({
           assessmentId: id,
         });
-        const ConfidenceLevelres = await calculateConfidenceLevelQuery.query({
+        await calculateConfidenceLevelQuery.query({
           assessmentId: id,
         });
         const res = await compareResultQueryData.query({
