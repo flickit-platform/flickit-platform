@@ -15,6 +15,7 @@ const _kc: KeycloakInstance = new Keycloak({
  *
  * @param onAuthenticatedCallback
  */
+
 const initKeycloak = (onAuthenticatedCallback: () => void) => {
   _kc
     .init({
