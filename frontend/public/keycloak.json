@@ -1,6 +1,6 @@
 {
   "realm": "flickit",
-  "auth-server-url": "https://accounts-test.flickit.org/",
+  "auth-server-url": "https://test.flickit.org/accounts",
   "ssl-required": "",
   "public-client": true,
   "resource": "flickit-frontend",
