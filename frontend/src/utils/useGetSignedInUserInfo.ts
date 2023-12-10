@@ -1,35 +1,38 @@
 import axios from "axios";
-import { ECustomErrorType } from "@types";
 import { ICustomError } from "./CustomError";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
-
+import keycloakService from "@/service//keycloakService";
+import toastError from "@utils/toastError";
 /**
  * Checks if any token is available and then checks if the user with the founded token is still authenticated or not.
  *
  */
-const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: true }) => {
+const useGetSignedInUserInfo = (
+  props: { runOnMount: boolean } = { runOnMount: true }
+) => {
   const { runOnMount } = props;
   const location = useLocation();
-  const navigate = useNavigate();
   const { service } = useServiceContext();
   const [error, setError] = useState(false);
   const abortController = useRef(new AbortController());
-  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } = useAuthContext();
+  const { dispatch, isAuthenticatedUser, userInfo, loadingUserInfo } =
+    useAuthContext();
 
   const getUser = async (token?: string) => {
     setError(false);
     dispatch(authActions.setUserInfoLoading(true));
     try {
+      const accessToken = keycloakService.getToken();
       const { data } = await service.getSignedInUser(undefined, {
         signal: abortController.current.signal,
         //@ts-expect-error
-        headers: token
+        headers: accessToken
           ? {
               ...axios.defaults.headers,
-              Authorization: `JWT ${token}`,
+              Authorization: `Bearer ${accessToken}`,
             }
           : axios.defaults.headers,
       });
@@ -46,17 +49,8 @@ const useGetSignedInUserInfo = (props: { runOnMount: boolean } = { runOnMount: t
 
       dispatch(authActions.setUserInfoLoading(false));
       dispatch(authActions.setUserInfo());
-
-      if (err?.type === ECustomErrorType.UNAUTHORIZED) {
-        if (location.pathname == "/sign-up") {
-          navigate("/sign-up");
-        } else {
-          navigate("/sign-in");
-        }
-      } else if (err?.action && err?.action !== "signOut") {
-        setError(true);
-      }
-
+      setError(true);
+      toastError(err);
       return false;
     }
   };

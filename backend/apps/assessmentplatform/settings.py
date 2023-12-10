@@ -26,7 +26,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = (("en", _("English")),)
 
-DEBUG = os.environ.get('DEBUG')  == 'True'
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -54,12 +54,12 @@ DATABASES = {
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
@@ -70,12 +70,12 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_HOST_PORT')
-DEFAULT_FROM_EMAIL =  os.environ.get('DEFAULT_FROM_EMAIL')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')  == 'True'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') == 'True'
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') == 'True'
 
-DOMAIN = (os.environ.get('DOMAIN')) 
-SITE_NAME = ('Flickit') 
+DOMAIN = (os.environ.get('DOMAIN'))
+SITE_NAME = ('Flickit')
 EXPIRATION_DAYS = 7
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -112,6 +112,7 @@ TEMPLATES = [
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
+    "mozilla_django_oidc",
     "django.contrib.contenttypes",
     "django.contrib.redirects",
     "django.contrib.sessions",
@@ -123,7 +124,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'import_export',
-    'djoser',
+    # 'djoser',
     'account',
     'baseinfo',
     'assessment',
@@ -168,7 +169,7 @@ OPTIONAL_APPS = (
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -178,14 +179,13 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'PAGE_SIZE':200,
+    'PAGE_SIZE': 200,
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
 DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
 ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
-
 
 DEFAULT_FILE_STORAGE = 'assessmentplatform.custom_storage.MediaStorage'
 STATICFILES_STORAGE = 'assessmentplatform.custom_storage.StaticStorage'
@@ -194,12 +194,25 @@ AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_ACCESS_KEY')
 AWS_S3_ENDPOINT_URL = os.environ.get('MINIO_API')
-AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL')  == 'True'
+AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL') == 'True'
 MINIO_MEDIA_BUCKET_NAME = os.environ.get('MINIO_MEDIA_BUCKET')
 MINIO_STATIC_BUCKET_NAME = os.environ.get('MINIO_STATIC_BUCKET')
 MINIO_QUERYSTRING_EXPIRE_MEDIA = os.environ.get('MINIO_QUERYSTRING_EXPIRE_MEDIA')
-MINIO_URL= os.environ.get('MINIO_URL')
+MINIO_URL = os.environ.get('MINIO_URL')
 
+OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
+                                       default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
+OIDC_RP_CLIENT_ID = os.environ.get('OIDC_RP_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = os.environ.get('OIDC_RP_CLIENT_SECRET')
+OIDC_RP_SIGN_ALGO = os.environ.get('OIDC_RP_SIGN_ALGO', 'RS256')
+OIDC_VERIFY_SSL = os.environ.get('OIDC_VERIFY_SSL') == 'True'
+OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get('OIDC_OP_AUTHORIZATION_ENDPOINT',
+                                                default='http://localhost:8080/realms/flickit/protocol/openid-connect/auth')
+OIDC_OP_TOKEN_ENDPOINT = os.environ.get('OIDC_OP_TOKEN_ENDPOINT',
+                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/token')
+OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT',
+                                       default='http://localhost:8080/realms/flickit/protocol/openid-connect/userinfo')
+OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
 
@@ -214,7 +227,6 @@ if os.path.exists(f):
     sys.modules[module_name] = module
     exec(open(f, "rb").read())
 
-
 AUTH_USER_MODEL = 'account.User'
 
 ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
@@ -226,81 +238,15 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 ADMIN_MENU_ORDER = (
     ("Users", ('account.User', "auth.Group",)),
     ("BaseInfo", ("baseinfo.AssessmentKit", "baseinfo.Questionnaire",
-    "baseinfo.AssessmentSubject" , "baseinfo.QualityAttribute", "baseinfo.Question", "baseinfo.AssessmentKitTag")),
+                  "baseinfo.AssessmentSubject", "baseinfo.QualityAttribute", "baseinfo.Question",
+                  "baseinfo.AssessmentKitTag")),
     ("Content", ("pages.Page", "blog.BlogPost",
-       "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
+                 "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
 )
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
-}
-
-DJOSER = {
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {
-        'user': 'account.serializers.userserializers.UserSerializer',
-        'user_create': 'account.serializers.userserializers.UserCreateSerializer',
-        'current_user': 'account.serializers.userserializers.UserCustomSerializer',
-    },
-    'EMAIL': {
-            'activation': 'account.views.userviews.CustomActivationEmail'
-    },
-}
-
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 ACCOUNTS_VERIFICATION_REQUIRED = True
-
-CLEINT_ID = 'myapp'
-OIDC_AUTH = {
-    # Specify OpenID Connect endpoint. Configuration will be
-    # automatically done based on the discovery document found
-    # at <endpoint>/.well-known/openid-configuration
-    'OIDC_ENDPOINT': 'http://localhost:8080',
-    'USERINFO_ENDPOINT': 'http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo',
-
-    # The Claims Options can now be defined by a static string.
-    # ref: https://docs.authlib.org/en/latest/jose/jwt.html#jwt-payload-claims-validation
-    # The old OIDC_AUDIENCES option is removed in favor of this new option.
-    # `aud` is only required, when you set it as an essential claim.
-    'OIDC_CLAIMS_OPTIONS': {
-        'aud': {
-            'values': ['myapp'],
-            'essential': True,
-        }
-    },
-
-    # (Optional) Function that resolves id_token into user.
-    # This function receives a request and an id_token dict and expects to
-    # return a User object. The default implementation tries to find the user
-    # based on username (natural key) taken from the 'sub'-claim of the
-    # id_token.
-    'OIDC_RESOLVE_USER_FUNCTION': 'baseinfo.authentication.get_user_by_email',
-
-    # (Optional) Number of seconds in the past valid tokens can be
-    # issued (default 600)
-    'OIDC_LEEWAY': 600,
-
-    # (Optional) Time before signing keys will be refreshed (default 24 hrs)
-    'OIDC_JWKS_EXPIRATION_TIME': 24 * 60 * 60,
-
-    # (Optional) Time before bearer token validity is verified again (default 10 minutes)
-    'OIDC_BEARER_TOKEN_EXPIRATION_TIME': 10 * 60,
-
-    # (Optional) Token prefix in JWT authorization header (default 'JWT')
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
-
-    # (Optional) Token prefix in Bearer authorization header (default 'Bearer')
-    'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
-
-    # (Optional) Which Django cache to use
-    'OIDC_CACHE_NAME': 'default',
-
-    # (Optional) A cache key prefix when storing and retrieving cached values
-    'OIDC_CACHE_PREFIX': 'oidc_auth.',
-}
 
 LOGIN_REDIRECT_URL = '/baseinfo/'
 
@@ -313,4 +259,3 @@ SWAGGER_SETTINGS = {
         }
     }
 }
-

@@ -31,6 +31,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { ISpacesModel } from "@types";
 import CompareRoundedIcon from '@mui/icons-material/CompareRounded';
+import keycloakService from "@/service//keycloakService";
 const drawerWidth = 240;
 
 const Navbar = () => {
@@ -55,8 +56,6 @@ const Navbar = () => {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
     } catch (e) {
-      // const err = e as ICustomError;
-      // toastError(err);
     }
   };
   useEffect(() => {
@@ -200,20 +199,6 @@ const Navbar = () => {
           </Typography>
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <SpacesButton />
-            {/* {current_space?.id && (
-              <Button
-                component={NavLink}
-                to={`/${current_space?.id}/assessments`}
-                sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
-                startIcon={
-                  <DescriptionRoundedIcon
-                    sx={{ opacity: 0.8, fontSize: "18px !important" }}
-                  />
-                }
-              >
-                <Trans i18nKey="assessments" />
-              </Button>
-            )} */}
             <Button
               component={NavLink}
               to={`/compare`}
@@ -522,8 +507,6 @@ const AccountDropDownButton = ({ userInfo }: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const navigate = useNavigate();
-  const { dispatch } = useAuthContext();
 
   return (
     <>
@@ -581,8 +564,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
         <MenuItem
           dense
           onClick={() => {
-            dispatch(authActions.setUserInfo());
-            dispatch(authActions.signOut());
+            keycloakService.doLogout();
           }}
         >
           <ListItemIcon>

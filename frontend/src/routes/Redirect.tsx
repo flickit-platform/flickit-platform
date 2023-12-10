@@ -5,18 +5,18 @@ const Redirect = () => {
   const location = useLocation();
   const authContext = useAuthContext();
 
-  return <Navigate to={getWhereToGo(location, authContext)} state={{ from: location }} replace={true} />;
+  return (
+    <Navigate
+      to={getWhereToGo(location, authContext)}
+      state={{ from: location }}
+      replace={true}
+    />
+  );
 };
 
 const getWhereToGo = (location: Location, authContext: IAuthContext) => {
-  const { isAuthenticatedUser, redirectRoute } = authContext;
+  const { redirectRoute } = authContext;
   const isRoot = location.pathname === "/";
-  const shouldNavigateToLoginPage = !isAuthenticatedUser && isRoot;
-
-  if (shouldNavigateToLoginPage) {
-    // If user is not signed in and not on
-    return "/sign-in";
-  }
   // Will redirect user to the page which user wanted to visit while he wasn't sign in
   if (redirectRoute) {
     return redirectRoute;

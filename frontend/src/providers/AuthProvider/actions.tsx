@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ISpaceInfo, IUserInfo } from "@types";
 import { defaultUserInfo } from "./provider";
-
 export enum AUTH_ACTIONS_TYPE {
   SIGN_IN = "SIGN_IN",
   SIGN_UP = "SIGN_UP",
@@ -20,14 +19,13 @@ interface ISignInPayload {
 
 export const signIn = (payload: ISignInPayload = {}) => {
   if (payload.refresh && payload.access) {
-    axios.defaults.headers["Authorization"] = `JWT ${payload.access}`;
     localStorage.setItem("refreshToken", JSON.stringify(payload.refresh));
     localStorage.setItem("accessToken", JSON.stringify(payload.access));
   }
   return { type: AUTH_ACTIONS_TYPE.SIGN_IN, payload };
 };
 
-export const setAccessToken = (payload: string) => {
+export const setAccessToken = (payload: string | null) => {
   if (payload) {
     localStorage.setItem("accessToken", JSON.stringify(payload));
   } else {
