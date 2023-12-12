@@ -15,7 +15,7 @@ def add_evidences(assessments_details, validated_data, user_id):
         result["status_code"] = status.HTTP_400_BAD_REQUEST
         return result
     data = {"description": validated_data["description"],
-            "createdById": user_id,
+            "createdById": str(user_id),
             "assessmentId": assessments_details["assessmentId"],
             "questionId": validated_data["question_id"],
             }
