@@ -60,11 +60,12 @@ const AssessmentReportContainer = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (queryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+    if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
     if (
-      queryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"
+      queryData.errorObject?.response?.data?.code ==
+      "CONFIDENCE_CALCULATION_NOT_VALID"
     ) {
       calculateConfidenceLevel();
     }
@@ -78,7 +79,7 @@ const AssessmentReportContainer = () => {
         const { status, assessment, subjects, top_strengths, top_weaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
-        const { assessment_kit ,confidence_value} = assessment || {};
+        const { assessment_kit, confidence_value } = assessment || {};
         const { expert_group } = assessment_kit || {};
         const { question_count, answers_count } = progress;
         const isComplete = question_count === answers_count;

@@ -27,6 +27,7 @@ export interface ICustomError {
    */
   data: any;
   errors?: any;
+  response?:any;
   /**
    * Config for toast
    */
