@@ -2,6 +2,7 @@
 .git
 .gitignore
 .dockerignore
+.env.local
 
 # Build dependencies
 dist
