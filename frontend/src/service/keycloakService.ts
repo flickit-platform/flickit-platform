@@ -1,14 +1,9 @@
 import Keycloak, { KeycloakInstance } from "keycloak-js";
-import {
-  KEYCLOACK_URL,
-  KEYCLOACK_REALM,
-  KEYCLOACK_CLIENT_ID,
-} from "@constants";
 // const _kc: KeycloakInstance = new Keycloak("/keycloak.json");
 const _kc: KeycloakInstance = new Keycloak({
-  url: KEYCLOACK_URL,
-  realm: KEYCLOACK_REALM ?? "flickit",
-  clientId: KEYCLOACK_CLIENT_ID ?? "flickit-frontend",
+  url: import.meta.env.VITE_KEYCLOACK_URL,
+  realm: import.meta.env.VITE_KEYCLOACK_REALM,
+  clientId: import.meta.env.VITE_KEYCLOACK_CLIENT_ID,
 });
 /**
  * Initializes Keycloak instance and calls the provided callback function if successfully authenticated.
