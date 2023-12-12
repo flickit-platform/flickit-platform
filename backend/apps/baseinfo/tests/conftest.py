@@ -114,10 +114,10 @@ def init_data():
         if assessment_kit == None:
             assessment_kit = baker.make(AssessmentKit)
         questionnaire_list = []
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, title='c1'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, title='c2'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, title='c3'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=4, title='c4'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, code='c1',title='c1'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, code='c2',title='c2'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, code='c3',title='c3'))
+        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=4, code='c4',title='c4'))
 
         questions_list = []
         questions_list.append(baker.make(Question, questionnaire=questionnaire_list[0], index=1))
@@ -135,28 +135,28 @@ def init_data():
         questions_list.append(baker.make(Question, questionnaire=questionnaire_list[3], index=1))
         questions_list.append(baker.make(Question, questionnaire=questionnaire_list[3], index=2))
 
-        subject1 = baker.make(AssessmentSubject, assessment_kit=assessment_kit,
+        subject1 = baker.make(AssessmentSubject, assessment_kit=assessment_kit, title='s1', code='s1', index=1,
                               questionnaires=[questionnaire_list[0], questionnaire_list[1]])
-        subject2 = baker.make(AssessmentSubject, assessment_kit=assessment_kit,
+        subject2 = baker.make(AssessmentSubject, assessment_kit=assessment_kit, title='s2', code='s2', index=2,
                               questionnaires=[questionnaire_list[2], questionnaire_list[3]])
 
         atts = []
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, assessment_subject=subject2, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a1', code='a1', index=1, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a2', code='a2', index=2, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a3', code='a3', index=3, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a4', code='a4', index=4, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a5', code='a5', index=5, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a6', code='a6', index=6, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
+        atts.append(baker.make(QualityAttribute, title='a7', code='a7', index=7, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
 
         question_impacts = []
 
-        maturity_level_0 = baker.make(MaturityLevel, title='Elementary', value=0, assessment_kit=assessment_kit)
-        maturity_level_1 = baker.make(MaturityLevel, title='Weak', value=1, assessment_kit=assessment_kit)
-        maturity_level_2 = baker.make(MaturityLevel, title='Moderate', value=2, assessment_kit=assessment_kit)
-        maturity_level_3 = baker.make(MaturityLevel, title='Good', value=3, assessment_kit=assessment_kit)
-        maturity_level_4 = baker.make(MaturityLevel, title='Great', value=4, assessment_kit=assessment_kit)
-        maturity_level_5 = baker.make(MaturityLevel, title='Exceptional', value=5, assessment_kit=assessment_kit)
+        maturity_level_0 = baker.make(MaturityLevel, code="l0", title='Elementary', value=0, assessment_kit=assessment_kit, index=1)
+        maturity_level_1 = baker.make(MaturityLevel, code="l1", title='Weak', value=1, assessment_kit=assessment_kit, index=2)
+        maturity_level_2 = baker.make(MaturityLevel, code="l2", title='Moderate', value=2, assessment_kit=assessment_kit, index=3)
+        maturity_level_3 = baker.make(MaturityLevel, code="l3", title='Good', value=3, assessment_kit=assessment_kit, index=4)
+        maturity_level_4 = baker.make(MaturityLevel, code="l4", title='Great', value=4, assessment_kit=assessment_kit, index=5)
+        maturity_level_5 = baker.make(MaturityLevel, code="l5", title='Exceptional', value=5, assessment_kit=assessment_kit, index=6)
         maturity_level = [maturity_level_0, maturity_level_1, maturity_level_2, maturity_level_3, maturity_level_4,
                           maturity_level_5]
 
