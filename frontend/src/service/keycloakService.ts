@@ -25,7 +25,7 @@ const initKeycloak = (onAuthenticatedCallback: () => void) => {
     })
     .catch(console.error);
 };
-
+const isTokenExpired = _kc.isTokenExpired;
 const doLogin = _kc.login;
 
 const doLogout = _kc.logout;
@@ -38,7 +38,7 @@ const getTokenParsed = (): Record<string, any> | null =>
 const isLoggedIn = (): boolean => !!_kc.token;
 
 const updateToken = (successCallback: () => void) =>
-  _kc.updateToken(5).then(successCallback).catch(doLogin);
+  _kc.updateToken(30).then(successCallback).catch(doLogin);
 
 const keycloakService = {
   initKeycloak,
@@ -48,6 +48,8 @@ const keycloakService = {
   getToken,
   getTokenParsed,
   updateToken,
+  isTokenExpired,
+  _kc,
 };
 
 export default keycloakService;

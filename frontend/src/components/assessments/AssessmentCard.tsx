@@ -43,8 +43,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { result_maturity_level, is_calculate_valid, assessment_kit, id } =
-    item;
+  const {
+    result_maturity_level,
+    is_calculate_valid,
+    is_confidence_valid,
+    assessment_kit,
+    id,
+  } = item;
   const hasML = hasMaturityLevel(result_maturity_level?.value);
   const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
@@ -52,6 +57,11 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId: id }, config) =>
       service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+  const calculateConfidenceLevelQuery = useQuery({
+    service: (args = { assessmentId: id }, config) =>
+      service.calculateConfidenceLevel(args, config),
     runOnMount: false,
   });
 
@@ -65,6 +75,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           setShow(true);
         }
       }
+      // if (!is_confidence_valid) {
+      //   await calculateConfidenceLevelQuery.query();
+      // }
     } catch (e) {
       // const err = e as ICustomError;
       // toastError(err, { filterByStatus: [404] });

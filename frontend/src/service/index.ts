@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { t } from "i18next";
 import { TId } from "@types";
 import { BASE_URL } from "@constants";
-
+import keycloakService from "@/service//keycloakService";
 declare module "axios" {
   interface AxiosRequestConfig {
     isRefreshTokenReq?: boolean;
@@ -18,12 +18,24 @@ export const createService = (
   axios.defaults.withCredentials = true;
   axios.defaults.timeoutErrorMessage = t("checkNetworkConnection") as string;
 
-  axios.interceptors.request.use((req: AxiosRequestConfig = {}) => {
-    // We check the request headers and if there is no header and we have the access token we set it on the request
-    if (!req.headers?.["Authorization"] && accessToken) {
-      // (req as any).headers["Authorization"] = `JWT ${accessToken}`;
+  axios.interceptors.request.use(async (req: any) => {
+    const accessToken = keycloakService.getToken();
+    if (keycloakService._kc.isTokenExpired() && accessToken) {
+      try {
+        await keycloakService._kc.updateToken(-1);
+        const newAccessToken = keycloakService.getToken();
+        (req as any).headers["Authorization"] = `Bearer ${newAccessToken}`;
+        localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
+      } catch (error) {
+        console.error("Failed to update token:", error);
+        keycloakService.doLogin();
+      }
     }
-    return req as any;
+    if (!req.headers?.["Authorization"] && accessToken) {
+      (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+
+    return req;
   });
 
   const service = {

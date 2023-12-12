@@ -297,6 +297,7 @@ export interface IAssessment {
   // code: string;
   color: IColor;
   is_calculate_valid: boolean;
+  is_confidence_valid?:boolean;
   assessment_results: string[];
   assessment_kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;

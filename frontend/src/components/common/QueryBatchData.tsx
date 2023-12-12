@@ -83,11 +83,24 @@ const QueryBatchData = <T extends any = any>(
 };
 
 export const defaultRenderError = (
-  err: ICustomError | (ICustomError | ICustomError[] | undefined)[] | undefined,
+  err:
+    | ICustomError
+    | (ICustomError | any | ICustomError[] | undefined)[]
+    | undefined,
   errorComponent: JSX.Element = <ErrorDataLoading />
 ): any => {
   if (!err) {
     return errorComponent;
+  }
+  if (Array.isArray(err)) {
+    for (let index = 0; index < err.length; index++) {
+      if (err[index]?.response?.data?.code == "CALCULATE_NOT_VALID") {
+        return <ErrorRecalculating />;
+      }
+      if (err[index]?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+        return <ErrorRecalculating />;
+      }
+    }
   }
   if (Array.isArray(err)) {
     if (err.length === 0) {
@@ -104,6 +117,7 @@ export const defaultRenderError = (
       return errorComponent;
     }
   }
+
   if (
     err.type === ECustomErrorType.NOT_FOUND ||
     err.type === ECustomErrorType.ACCESS_DENIED
@@ -116,6 +130,7 @@ export const defaultRenderError = (
   if (err?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
     return <ErrorRecalculating />;
   }
+
   return errorComponent;
 };
 
