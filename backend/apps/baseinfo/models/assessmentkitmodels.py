@@ -38,6 +38,7 @@ class AssessmentKit(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='assessmentkits')
     is_active = models.BooleanField(default=False)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
