@@ -124,7 +124,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'import_export',
-    # 'djoser',
+    'djoser',
     'account',
     'baseinfo',
     'assessment',
@@ -258,4 +258,17 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     }
+}
+
+DJOSER = {
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user': 'account.serializers.userserializers.UserSerializer',
+        'user_create': 'account.serializers.userserializers.UserCreateSerializer',
+        'current_user': 'account.serializers.userserializers.UserCustomSerializer',
+    },
+    'EMAIL': {
+            'activation': 'account.views.userviews.CustomActivationEmail'
+    },
 }
