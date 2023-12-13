@@ -93,6 +93,7 @@ def __import_assessment_kit_base_info(extra_info):
     assessment_kit.about = extra_info['about']
     assessment_kit.summary = extra_info['summary']
     assessment_kit.expert_group = expert_group
+    assessment_kit.is_private = extra_info['is_private']
     assessment_kit.save()
     for tag in tags:
         assessment_kit.tags.add(tag)
