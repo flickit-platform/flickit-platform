@@ -20,7 +20,10 @@ export const createService = (
 
   axios.interceptors.request.use(async (req: any) => {
     const accessToken = keycloakService.getToken();
-    if (keycloakService._kc.isTokenExpired() && accessToken) {
+    (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
+    localStorage.setItem("accessToken", JSON.stringify(accessToken));
+    if (keycloakService._kc.isTokenExpired(5) && accessToken) {
+      console.log(keycloakService._kc.isTokenExpired(20));
       try {
         await keycloakService._kc.updateToken(-1);
         const newAccessToken = keycloakService.getToken();
