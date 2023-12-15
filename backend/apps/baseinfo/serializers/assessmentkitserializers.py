@@ -164,7 +164,7 @@ class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = AssessmentKit
-        fields = ['id', 'title', 'summary', 'is_active', 'price', 'about', 'tags', 'current_user_is_coordinator']
+        fields = ['id', 'title', 'summary', 'is_active', 'is_private', 'price', 'about', 'tags', 'current_user_is_coordinator']
 
 
 class SimpleExpertGroupDataForAssessmentKitSerializer(serializers.ModelSerializer):
