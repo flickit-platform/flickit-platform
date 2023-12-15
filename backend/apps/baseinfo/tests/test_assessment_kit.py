@@ -824,6 +824,7 @@ class TestLoadAssessmentKitInfoEditableApi:
         assert "tags" in resp.data
         assert resp.data["price"] == 0
         assert resp.data["is_active"] == assessment_kit.is_active
+        assert resp.data["is_private"] == assessment_kit.is_private
 
     def test_get_assessment_kit_info_editable_when_user_expert_groups_not_member(self, create_user, create_expertgroup):
         user1 = create_user(email="test@test.com")
