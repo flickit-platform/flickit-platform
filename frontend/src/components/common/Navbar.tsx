@@ -30,7 +30,7 @@ import QueryData from "@common/QueryData";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { ISpacesModel } from "@types";
-import CompareRoundedIcon from '@mui/icons-material/CompareRounded';
+import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import keycloakService from "@/service//keycloakService";
 const drawerWidth = 240;
 
@@ -55,13 +55,11 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {
-    }
+    } catch (e) {}
   };
   useEffect(() => {
     if (spaceId) {
       fetchSpaceInfo();
-
     }
   }, [spaceId]);
   const drawer = (
@@ -453,7 +451,7 @@ const SpacesButton = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{ sx: { left:"165px !important",minWidth: "260px" } }}
+        PaperProps={{ sx: { left: "165px !important", minWidth: "260px" } }}
       >
         <QueryData
           {...spacesQueryData}
@@ -522,7 +520,11 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
         }
       >
-        <Avatar sx={{ width: 26, height: 26, mr: 1.3 }} />{" "}
+        <Avatar
+          sx={{ width: 26, height: 26, mr: 1.3 }}
+          alt={userInfo.display_name}
+          src={userInfo.picture || ""}
+        />
         {userInfo.display_name}
       </Button>
 
