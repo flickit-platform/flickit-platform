@@ -21,6 +21,7 @@ import RichEditorField from "@common/fields/RichEditorField";
 import { Box, Button, Typography, Alert } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
+import { keyframes } from "@emotion/react";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -33,6 +34,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObjectg] = useState<any>();
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -65,6 +67,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     const { dsl_id, tags = [], ...restOfData } = data;
     const formattedData = {
       dsl_id: dsl_id.id,
+      is_private: isPrivate,
       tag_ids: tags.map((t: any) => t.id),
       expert_group_id: expertGroupId,
       ...restOfData,
@@ -106,15 +109,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
       <Grid container spacing={2} sx={styles.formGrid}>
-        <Grid item xs={12} md={5}>
-          <InputFieldUC
-            name="title"
-            label={<Trans i18nKey="title" />}
-            required
-            defaultValue={defaultValues.title || ""}
-          />
-        </Grid>
-        <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={12}>
           <UploadField
             accept={{ "application/zip": [".zip"] }}
             uploadService={(args, config) =>
@@ -126,6 +121,21 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             name="dsl_id"
             required={true}
             label={<Trans i18nKey="dsl" />}
+          />
+        </Grid>
+   
+        <Grid item xs={12} sm={8} md={8}>
+          <InputFieldUC
+            name="title"
+            label={<Trans i18nKey="title" />}
+            required
+            defaultValue={defaultValues.title || ""}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          <IsPrivateSwitch
+            setIsPrivate={setIsPrivate}
+            isPrivate={isPrivate}
           />
         </Grid>
         <Grid item xs={12} md={12}>
@@ -182,7 +192,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             return (
               <Box sx={{ ml: 1 }}>
                 <Alert severity="error" sx={{ my: 2 }}>
-                  <Box sx={{ display: "flex",flexDirection:"column" }}>
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="subtitle2" color="error">
                       <Trans
                         i18nKey="errorAtLine"
@@ -195,11 +205,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                       />
                     </Typography>
                     <Typography variant="subtitle2" color="error">
-                    <Trans
+                      <Trans
                         i18nKey="errorLine"
                         values={{
                           errorLine: e.errorLine,
-
                         }}
                       />
                     </Typography>
@@ -244,3 +253,95 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
 };
 
 export default AssessmentKitCEFromDialog;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const IsPrivateSwitch = (props: any) => {
+  const { isPrivate, setIsPrivate } = props;
+  const handleToggle = (status: boolean) => {
+    setIsPrivate(status);
+  };
+  return (
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            background: "#00000014",
+            borderRadius: "8px",
+            justifyContent: "space-between",
+            p: "2px",
+            gap: "4px  ",
+            height: "40px",
+            width: "100%",
+          }}
+        >
+          <Box
+            onClick={() => handleToggle(true)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: isPrivate ? "#7954B3;" : "transparent",
+              color: isPrivate ? "#fff" : "#000",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"14px"}
+            >
+              <Trans i18nKey="private" />
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => handleToggle(false)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: !isPrivate ? "gray" : "transparent",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              color: !isPrivate ? "#fff" : "#000",
+              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"14px"}
+            >
+              <Trans i18nKey="public" />
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
