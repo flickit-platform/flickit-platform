@@ -317,5 +317,11 @@
   "deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne":" Deleting question from a pre-existing questionnaire or adding a newone",
   "anyChangesInTheNumberOfOptionsForAPreExistingQuestion":"Any changes in the number of options for a pre-existing question",
   "unsupportedDslContentChange":"Unsupported dsl content change",
-  "withPercentConfidence":"With {{percent}}% confidence"
+  "withPercentConfidence":"With {{percent}}% confidence",
+  "assessmentKitPermissons":"Assessment kit permissions",
+  "addNewUser":"Add new user",
+  "users":"Users",
+  "visibility":"Visibility",
+  "public":"Public",
+  "private":"Private"
 }
