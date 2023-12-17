@@ -14,9 +14,13 @@ import TabContext from "@mui/lab/TabContext";
 import { Trans } from "react-i18next";
 const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
+  const [value, setValue] = useState("public");
   const assessmentKitsQueryData = useQuery({
     service: (args, config) => service.fetchAssessmentKits(args, config),
   });
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   return (
     <Box>
       <QueryData
@@ -39,13 +43,6 @@ const AssessmentKitsListContainer = () => {
         )}
         render={(data) => {
           const { privateKits = [], publicKits = [] } = data;
-          const [value, setValue] = useState("public");
-          const handleTabChange = (
-            event: React.SyntheticEvent,
-            newValue: string
-          ) => {
-            setValue(newValue);
-          };
 
           return (
             <>

@@ -1,11 +1,9 @@
 import {
   Avatar,
   Box,
-  Button,
   CardHeader,
   Chip,
   Divider,
-  Grid,
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -13,7 +11,6 @@ import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
-import formatDate from "@utils/formatDate";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   console.log(data);
@@ -89,6 +86,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             {data.tags.map((tag: any) => {
               return (
                 <Chip
+                  key={tag.id}
                   label={tag?.title}
                   size="small"
                   sx={{ m: 0.2, background: "#bdbdbd36" }}

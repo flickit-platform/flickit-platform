@@ -11,9 +11,6 @@ import { useQuery } from "@utils/useQuery";
 import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
-import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
-import { toast } from "react-toastify";
 import formatDate from "@utils/formatDate";
 interface IAssessmentKitListItemProps {
   data: {
@@ -135,15 +132,15 @@ const Actions = (props: any) => {
     runOnMount: false,
   });
 
-  const publishAssessmentKitQuery = useQuery({
-    service: (args, config) => service.publishAssessmentKit({ id }, config),
-    runOnMount: false,
-  });
+  // const publishAssessmentKitQuery = useQuery({
+  //   service: (args, config) => service.publishAssessmentKit({ id }, config),
+  //   runOnMount: false,
+  // });
 
-  const unPublishAssessmentKitQuery = useQuery({
-    service: (args, config) => service.unPublishAssessmentKit({ id }, config),
-    runOnMount: false,
-  });
+  // const unPublishAssessmentKitQuery = useQuery({
+  //   service: (args, config) => service.unPublishAssessmentKit({ id }, config),
+  //   runOnMount: false,
+  // });
 
   if (!fetchAssessmentKits) {
     console.warn(
@@ -177,49 +174,49 @@ const Actions = (props: any) => {
     }
   };
 
-  const publishAssessmentKit = async (e: any) => {
-    try {
-      const res = await publishAssessmentKitQuery.query();
-      res.message && toast.success(res.message);
-      await fetchAssessmentKits?.();
-    } catch (e) {
-      const err = e as ICustomError;
-      toastError(err);
-    }
-  };
+  // const publishAssessmentKit = async (e: any) => {
+  //   try {
+  //     const res = await publishAssessmentKitQuery.query();
+  //     res.message && toast.success(res.message);
+  //     await fetchAssessmentKits?.();
+  //   } catch (e) {
+  //     const err = e as ICustomError;
+  //     toastError(err);
+  //   }
+  // };
 
-  const unPublishAssessmentKit = async (e: any) => {
-    try {
-      const res = await unPublishAssessmentKitQuery.query();
-      res.message && toast.success(res.message);
-      await fetchAssessmentKits();
-    } catch (e) {
-      const err = e as ICustomError;
-      toastError(err);
-    }
-  };
+  // const unPublishAssessmentKit = async (e: any) => {
+  //   try {
+  //     const res = await unPublishAssessmentKitQuery.query();
+  //     res.message && toast.success(res.message);
+  //     await fetchAssessmentKits();
+  //   } catch (e) {
+  //     const err = e as ICustomError;
+  //     toastError(err);
+  //   }
+  // };
   return hasAccess ? (
     <MoreActions
       {...useMenu()}
       boxProps={{ ml: 0.4 }}
       loading={
         deleteAssessmentKitQuery.loading ||
-        publishAssessmentKitQuery.loading ||
-        unPublishAssessmentKitQuery.loading ||
+        // publishAssessmentKitQuery.loading ||
+        // unPublishAssessmentKitQuery.loading ||
         editLoading
       }
       items={[
-        is_active
-          ? {
-              icon: <ArchiveRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="archive" />,
-              onClick: unPublishAssessmentKit,
-            }
-          : {
-              icon: <PublishedWithChangesRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="publish" />,
-              onClick: publishAssessmentKit,
-            },
+        // is_active
+        //   ? {
+        //       icon: <ArchiveRoundedIcon fontSize="small" />,
+        //       text: <Trans i18nKey="archive" />,
+        //       onClick: unPublishAssessmentKit,
+        //     }
+        //   : {
+        //       icon: <PublishedWithChangesRoundedIcon fontSize="small" />,
+        //       text: <Trans i18nKey="publish" />,
+        //       onClick: publishAssessmentKit,
+        //     },
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="delete" />,
