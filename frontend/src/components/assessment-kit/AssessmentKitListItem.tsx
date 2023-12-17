@@ -21,6 +21,7 @@ interface IAssessmentKitListItemProps {
     title: string;
     last_modification_date: string;
     is_active: boolean;
+    is_private?: boolean;
   };
   fetchAssessmentKits?: TQueryFunction;
   fetchUnpublishedAssessmentKits?: TQueryFunction;
@@ -33,7 +34,7 @@ interface IAssessmentKitListItemProps {
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
   const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
     props;
-  const { id, title, last_modification_date } = data || {};
+  const { id, title, last_modification_date, is_private } = data || {};
   return (
     <Box
       sx={{
@@ -86,6 +87,13 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           sx={{ ...styles.centerV, color: "#525252" }}
           alignSelf="stretch"
         >
+          {is_private && (
+            <Chip
+              label={<Trans i18nKey="private" />}
+              size="small"
+              sx={{ mr: 1, background: "#7954B3", color: "#fff" }}
+            />
+          )}
           {is_active ? (
             <Chip
               label={<Trans i18nKey="published" />}
@@ -95,6 +103,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
+
           <Actions
             assessment_kit={data}
             fetchAssessmentKits={fetchAssessmentKits}
