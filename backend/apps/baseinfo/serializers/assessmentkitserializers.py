@@ -97,7 +97,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group',
                   'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject',
                   'number_of_questionaries',
-                  'number_of_assessment', 'is_active', 'current_user_is_coordinator',
+                  'number_of_assessment', 'is_active', 'is_private', 'current_user_is_coordinator',
                   'subjects_with_desc', 'questionnaires', 'maturity_levels']
 
 
