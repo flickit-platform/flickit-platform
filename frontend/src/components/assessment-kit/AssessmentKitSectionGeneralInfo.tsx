@@ -1,26 +1,19 @@
-import { Box, Button, Chip, Divider, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { Trans } from "react-i18next";
-import { styles, getMaturityLevelColors } from "@styles";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import InfoItem from "@common/InfoItem";
 import formatDate from "@utils/formatDate";
 import { t } from "i18next";
-import Title from "@common/Title";
-import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
-import { TQueryFunction } from "@types";
 import { useParams } from "react-router";
-import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import { InputFieldUC } from "@common/fields/InputField";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -29,13 +22,11 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import QueryBatchData from "@common/QueryBatchData";
 import RichEditorField from "@common/fields/RichEditorField";
-import setServerFieldErrors from "@utils/setServerFieldError";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
-import RichEditor from "@common/rich-editor/RichEditor";
 import firstCharDetector from "@/utils/firstCharDetector";
+import { keyframes } from "@emotion/react";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -156,6 +147,14 @@ const AssessmentKitSectionGeneralInfo = (
                   <OnHoverStatus
                     data={info?.is_active}
                     title={<Trans i18nKey="status" />}
+                    infoQuery={fetchAssessmentKitInfoQuery.query}
+                    current_user_is_coordinator={
+                      info?.current_user_is_coordinator
+                    }
+                  />
+                  <OnHoverVisibilityStatus
+                    data={info?.is_private}
+                    title={<Trans i18nKey="visibility" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     current_user_is_coordinator={
                       info?.current_user_is_coordinator
@@ -607,18 +606,18 @@ const OnHoverInput = (props: any) => {
 };
 
 const OnHoverStatus = (props: any) => {
-  const [show, setShow] = useState<boolean>(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
-    current_user_is_coordinator && setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
   const { data, title, infoQuery, current_user_is_coordinator } = props;
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
+  const [selected, setSelected] = useState<boolean>(data);
+  const handleToggle = async(status: boolean) => {
+    if (current_user_is_coordinator) {
+      setSelected(status);
+      if (status !== data) {
+        await updateAssessmentKit();
+      }
+    }
+  };
   const updateAssessmentKitQuery = useQuery({
     service: (
       args = {
@@ -643,7 +642,6 @@ const OnHoverStatus = (props: any) => {
         my={1.5}
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
@@ -652,74 +650,175 @@ const OnHoverStatus = (props: any) => {
         </Typography>
         <Box
           sx={{
-            height: "38px",
-            borderRadius: "4px",
-            paddingLeft: "8px;",
-            paddingRight: "12px;",
-            width: "100%",
             display: "flex",
+            background: "#00000014",
+            borderRadius: "8px",
             justifyContent: "space-between",
-            alignItems: "center",
-            "&:hover": { border: "1px solid #1976d299" },
+            width: "fit-content",
+            p: "2px",
+            gap: "4px  ",
+            ml: 0.5,
           }}
-          onClick={() => setShow(!show)}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-          // #00000014
         >
-          {data ? (
-            <Box
-              sx={{
-                background: "#2e7d32",
-                fontFamily: "Roboto",
-                fontSize: "0.875rem",
-                borderRadius: "8px",
-                color: "#fff",
-                fontWeight: "700",
-              }}
-              px={1}
+          <Box
+            onClick={() => handleToggle(true)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: selected ? "#2e7d32" : "transparent",
+              color: selected ? "#fff" : "#000",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              width: "100px",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"12px"}
             >
               <Trans i18nKey="published" />
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                background: "#00000014",
-                fontFamily: "Roboto",
-                fontSize: "0.875rem",
-                borderRadius: "8px",
-                fontWeight: "700",
-              }}
-              px={1}
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => handleToggle(false)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: !selected ? "gray" : "transparent",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              color: !selected ? "#fff" : "#000",
+              width: "100px",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"12px"}
             >
               <Trans i18nKey="unpublished" />
-            </Box>
-          )}
-          {isHovering && (
-            <IconButton
-              aria-label="toggle password visibility"
-              edge="end"
-              sx={{
-                background: "#1976d299",
-                borderRadius: "3px",
-                height: "36px",
-              }}
-              title={data ? "Archive" : "Publish"}
-              onClick={updateAssessmentKit}
-            >
-              {data ? (
-                <ArchiveRoundedIcon sx={{ color: "#fff" }} />
-              ) : (
-                <PublishedWithChangesRoundedIcon sx={{ color: "#fff" }} />
-              )}
-            </IconButton>
-          )}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
   );
 };
-
+const OnHoverVisibilityStatus = (props: any) => {
+  const { data, title, infoQuery, current_user_is_coordinator } = props;
+  const { assessmentKitId } = useParams();
+  const { service } = useServiceContext();
+  const [selected, setSelected] = useState<boolean>(data);
+  const handleToggle = (status: boolean) => {
+    if (current_user_is_coordinator) {
+      setSelected(status);
+      if (status !== data) updateAssessmentKit();
+    }
+  };
+  const updateAssessmentKitQuery = useQuery({
+    service: (
+      args = {
+        assessmentKitId: assessmentKitId,
+        data: { is_private: data ? false : true },
+      },
+      config
+    ) => service.updateAssessmentKitStats(args, config),
+    runOnMount: false,
+    toastError: true,
+  });
+  const updateAssessmentKit = async () => {
+    try {
+      const res = await updateAssessmentKitQuery.query();
+      res.message && toast.success(res.message);
+      await infoQuery();
+    } catch (e) {}
+  };
+  return (
+    <Box>
+      <Box
+        my={1.5}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
+          {title}
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            background: "#00000014",
+            borderRadius: "8px",
+            justifyContent: "space-between",
+            width: "fit-content",
+            p: "2px",
+            gap: "4px  ",
+            ml: 0.5,
+          }}
+        >
+          <Box
+            onClick={() => handleToggle(true)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: selected ? "#7954B3;" : "transparent",
+              color: selected ? "#fff" : "#000",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              width: "100px",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"12px"}
+            >
+              <Trans i18nKey="private" />
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => handleToggle(false)}
+            sx={{
+              padding: 0.5,
+              backgroundColor: !selected ? "gray" : "transparent",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              animation: `${fadeIn} 0.5s ease`,
+              borderRadius: "6px",
+              color: !selected ? "#fff" : "#000",
+              width: "100px",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight="700"
+              textTransform={"uppercase"}
+              sx={{ userSelect: "none" }}
+              fontSize={"12px"}
+            >
+              <Trans i18nKey="public" />
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 const OnHoverRichEditor = (props: any) => {
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
@@ -1039,3 +1138,12 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
   );
 };
 export default AssessmentKitSectionGeneralInfo;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
