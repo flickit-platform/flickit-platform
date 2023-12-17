@@ -1,35 +1,45 @@
-import { Avatar, Box, Button, CardHeader, Chip, Divider, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardHeader,
+  Chip,
+  Divider,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
-import formatDate from "@utils/formatDate";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
+  console.log(data);
   return (
     <Box
       sx={{
         minHeight: "280px",
         position: "relative",
-        background: `linear-gradient(165deg, ${bg1}, ${bg2})`,
+        // background: "#e7ecef",
+        // background: "#dee2e6",
+        background: "#E5E5E5",
         borderRadius: 2,
         p: 4,
-        color: "white",
-        boxShadow: 10,
+        color: "#000000de",
+        boxShadow: 4,
         mt: 2,
         height: "calc(100% - 16px)",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           top: 0,
           left: "50%",
           transform: "translate(-50%,-95%)",
-          background: bg1,
+          background:
+            "radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)",
           width: "44px",
           height: "16px",
           borderRadius: "100%",
@@ -43,21 +53,24 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             top: 0,
             left: "50%",
             transform: "translate(-50%,85%)",
-            background: "white",
+            background: "#bdbdbd",
             width: "12px",
             height: "12px",
             borderRadius: "100%",
           }}
         ></Box>
-      </Box>
+      </Box> */}
       <Title
         size="small"
-        toolbar={
-          <Box sx={{ ...styles.centerV }}>
-            <ThumbUpOffAltRoundedIcon fontSize="inherit" sx={{ mr: 0.5, pb: 0.2 }} />
-            {data.likes_number || 0}
-          </Box>
-        }
+        // toolbar={
+        //   <Box sx={{ ...styles.centerV }}>
+        //     <ThumbUpOffAltRoundedIcon
+        //       fontSize="inherit"
+        //       sx={{ mr: 0.5, pb: 0.2 }}
+        //     />
+        //     {data.likes_number || 0}
+        //   </Box>
+        // }
         sub={
           <Box
             sx={{
@@ -71,13 +84,28 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             }}
           >
             {data.tags.map((tag: any) => {
-              return <Chip label={tag?.title} size="small" sx={{ m: 0.2, background: "white" }} />;
+              return (
+                <Chip
+                  key={tag.id}
+                  label={tag?.title}
+                  size="small"
+                  sx={{ m: 0.2, background: "#bdbdbd36" }}
+                />
+              );
             })}
           </Box>
         }
         toolbarProps={{ alignSelf: "flex-start", p: 1 }}
       >
-        <Box component={Link} to={`/assessment-kits/${data.id}`} sx={{ textDecoration: "none", color: "white" }}>
+        <Box
+          component={Link}
+          to={`/assessment-kits/${data.id}`}
+          sx={{
+            textDecoration: "none",
+            color: "#000000de",
+            whiteSpace: "nowrap",
+          }}
+        >
           {data.title}
         </Box>
       </Title>
@@ -95,7 +123,12 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
           }}
           avatar={<Avatar alt={data.expert_group?.name} src={"/"} />}
           title={
-            <Box component={"b"} fontSize=".95rem" textTransform={"capitalize"}>
+            <Box
+              component={"b"}
+              fontSize=".95rem"
+              textTransform={"capitalize"}
+              color={"#000000de"}
+            >
               {data.expert_group?.name}
             </Box>
           }
@@ -103,15 +136,12 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       </Box>
       <Divider color="white" sx={{ opacity: 0.3 }} />
       <Box mt={2} sx={{ ...styles.centerV }}>
-        {/* <Button size="small" variant="contained">
-          <Trans i18nKey="createAssessment" />
-        </Button> */}
         <Box>
           <Box
             sx={{
               py: 0.3,
               px: 0.8,
-              background: "white",
+              background: "#bdbdbd36",
               color: "gray",
               fontSize: ".8rem",
               borderRadius: 1,
@@ -124,6 +154,50 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             </Box>
           </Box>
         </Box>
+        <Box>
+          <Box
+            sx={{
+              py: 0.3,
+              px: 0.8,
+              background: "#bdbdbd36",
+              color: "gray",
+              fontSize: ".8rem",
+              borderRadius: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              m: 0.2,
+            }}
+          >
+            <Box component="span" color="black" textTransform="lowercase">
+              <ThumbUpOffAltRoundedIcon
+                fontSize="inherit"
+                sx={{ mr: 0.5, pt: 0.2 }}
+              />
+              {data.likes_number || 0}
+            </Box>
+          </Box>
+        </Box>
+        {(data.id == 373 || data.id == 326) && (
+          <Box>
+            <Box
+              sx={{
+                py: 0.3,
+                px: 0.8,
+                background: "#7954B3",
+                color: "#fff",
+                fontSize: ".8rem",
+                borderRadius: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                m: 0.2,
+              }}
+            >
+              <Trans i18nKey="private" />
+            </Box>
+          </Box>
+        )}
         <Typography fontWeight={"bold"} sx={{ ml: "auto" }}>
           {data.price || "FREE"}
         </Typography>
