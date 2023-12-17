@@ -323,5 +323,6 @@
   "users":"Users",
   "visibility":"Visibility",
   "public":"Public",
-  "private":"Private"
+  "private":"Private",
+  "managePermissions":"Manage permissions"
 }
