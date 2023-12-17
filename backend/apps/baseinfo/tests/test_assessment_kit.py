@@ -985,6 +985,7 @@ class TestEditAssessmentKitInfoApi:
                 "summary": "test2",
                 "about": "<p>test2</p>",
                 "is_active": True,
+                "is_private": False,
                 "price": 0,
             }
         }
@@ -1001,6 +1002,7 @@ class TestEditAssessmentKitInfoApi:
         assert resp.data["summary"] == assessment_kit.summary
         assert resp.data["about"] == assessment_kit.about
         assert resp.data["is_active"] == assessment_kit.is_active
+        assert resp.data["is_private"] == assessment_kit.is_private
         assert resp.data["price"] == 0
         assert resp.data["tags"][0]["id"] == tag2.id
         assert user1 == expert_group.owner
