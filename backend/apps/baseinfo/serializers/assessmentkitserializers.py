@@ -141,7 +141,7 @@ class LevelCompetenceSerilizer(serializers.ModelSerializer):
 class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
-        fields = ['id', 'title', 'last_modification_date']
+        fields = ['id', 'title', "is_private", 'last_modification_date']
 
 
 class SimpleAssessmentKitTagSerializer(serializers.ModelSerializer):
