@@ -12,7 +12,6 @@ const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
 const ExpertGroupConfirmInvitationScreen = lazy(
   () => import("../screens/ExpertGroupConfirmInvitationScreen")
 );
-
 const AssessmentReportScreen = lazy(
   () => import("../screens/AssessmentReportScreen")
 );
@@ -34,7 +33,6 @@ const CompareScreen = lazy(() => import("../screens/CompareScreen"));
 const CompareResultScreen = lazy(
   () => import("../screens/CompareResultScreen")
 );
-
 const AssessmentKitsScreen = lazy(
   () => import("../screens/AssessmentKitsScreen")
 );
@@ -44,7 +42,9 @@ const AssessmentKitExpertViewScreen = lazy(
 const AssessmentKitScreen = lazy(
   () => import("../screens/AssessmentKitScreen")
 );
-
+const AssessmentKitPermissionsScreen = lazy(
+  () => import("../screens/AssessmentKitPermissionsScreen")
+);
 /**
  * How does it work?
  * We have two separate routes for users, for unauthorized users we have AuthRoutes and for authenticated users we use PrivateRoutes
@@ -73,6 +73,10 @@ const Routes = () => {
           <Route
             path="/user/:accountTab/:expertGroupId/assessment-kits/:assessmentKitId"
             element={<AssessmentKitExpertViewScreen />}
+          />
+          <Route
+            path="/user/:accountTab/:expertGroupId/assessment-kits/:assessmentKitId/permissions"
+            element={<AssessmentKitPermissionsScreen />}
           />
           <Route
             path="/account/expert-group-invitation/:expertGroupId/:token"
