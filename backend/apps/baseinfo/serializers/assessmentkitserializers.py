@@ -214,6 +214,7 @@ class EditAssessmentKitInfoSerializer(serializers.Serializer):
     summary = serializers.CharField(required=False, min_length=3, max_length=200)
     tags = serializers.ListField(child=serializers.IntegerField(), required=False)
     is_active = serializers.BooleanField(required=False)
+    is_private = serializers.BooleanField(required=False)
     price = serializers.IntegerField(required=False)
 
 
