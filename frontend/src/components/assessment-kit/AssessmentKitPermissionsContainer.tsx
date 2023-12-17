@@ -168,12 +168,12 @@ const AddMember = (props: any) => {
 
   const addMember = async () => {
     try {
-      const res = await addMemberQueryData.query({
-        id: expertGroupId,
-        email: inputRef.current?.value,
-      });
-      res?.message && toast.success(res.message);
-      query();
+      // const res = await addMemberQueryData.query({
+      //   id: expertGroupId,
+      //   email: inputRef.current?.value,
+      // });
+      // res?.message && toast.success(res.message);
+      // query();
     } catch (e) {
       const error = e as ICustomError;
       if ("message" in error.data || {}) {
