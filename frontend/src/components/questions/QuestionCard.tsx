@@ -201,7 +201,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       alignItems: "center",
                     }}
                   >
-                    {selcetedConfidenceLevel !== null  ? (
+                    {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography sx={{ display: "flex" }}>
                           <Trans i18nKey={"youSelected"} />
@@ -394,7 +394,12 @@ const AnswerTemplate = (props: {
   };
 
   useEffect(() => {
-    if (submitOnAnswerSelection && value && changeHappened.current) {
+    if (
+      submitOnAnswerSelection &&
+      value &&
+      changeHappened.current &&
+      selcetedConfidenceLevel
+    ) {
       submitQuestion();
     }
   }, [value]);
