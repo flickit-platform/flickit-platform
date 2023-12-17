@@ -1,26 +1,19 @@
-import { Box, Button, Chip, Divider, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { Trans } from "react-i18next";
-import { styles, getMaturityLevelColors } from "@styles";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import InfoItem from "@common/InfoItem";
 import formatDate from "@utils/formatDate";
 import { t } from "i18next";
-import Title from "@common/Title";
-import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
-import { TQueryFunction } from "@types";
 import { useParams } from "react-router";
-import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
-import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import { InputFieldUC } from "@common/fields/InputField";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -29,12 +22,9 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import QueryBatchData from "@common/QueryBatchData";
 import RichEditorField from "@common/fields/RichEditorField";
-import setServerFieldErrors from "@utils/setServerFieldError";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
-import RichEditor from "@common/rich-editor/RichEditor";
 import firstCharDetector from "@/utils/firstCharDetector";
 import { keyframes } from "@emotion/react";
 interface IAssessmentKitSectionAuthorInfo {
