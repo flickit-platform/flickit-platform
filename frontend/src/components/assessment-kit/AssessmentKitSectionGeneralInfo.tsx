@@ -22,11 +22,14 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import QueryBatchData from "@common/QueryBatchData";
 import RichEditorField from "@common/fields/RichEditorField";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import Tooltip from "@mui/material/Tooltip";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
 import firstCharDetector from "@/utils/firstCharDetector";
 import { keyframes } from "@emotion/react";
+import { Link } from "react-router-dom";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -610,7 +613,7 @@ const OnHoverStatus = (props: any) => {
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const [selected, setSelected] = useState<boolean>(data);
-  const handleToggle = async(status: boolean) => {
+  const handleToggle = async (status: boolean) => {
     if (current_user_is_coordinator) {
       setSelected(status);
       if (status !== data) {
@@ -715,7 +718,7 @@ const OnHoverStatus = (props: any) => {
 };
 const OnHoverVisibilityStatus = (props: any) => {
   const { data, title, infoQuery, current_user_is_coordinator } = props;
-  const { assessmentKitId } = useParams();
+  const { assessmentKitId, expertGroupId } = useParams();
   const { service } = useServiceContext();
   const [selected, setSelected] = useState<boolean>(data);
   const handleToggle = (status: boolean) => {
@@ -757,63 +760,85 @@ const OnHoverVisibilityStatus = (props: any) => {
         <Box
           sx={{
             display: "flex",
-            background: "#00000014",
-            borderRadius: "8px",
             justifyContent: "space-between",
-            width: "fit-content",
-            p: "2px",
-            gap: "4px  ",
-            ml: 0.5,
+            width: "100%",
           }}
         >
           <Box
-            onClick={() => handleToggle(true)}
             sx={{
-              padding: 0.5,
-              backgroundColor: selected ? "#7954B3;" : "transparent",
-              color: selected ? "#fff" : "#000",
-              cursor: "pointer",
-              transition: "background-color 0.3s ease",
-              animation: `${fadeIn} 0.5s ease`,
-              borderRadius: "6px",
-              width: "100px",
-              textAlign: "center",
+              display: "flex",
+              background: "#00000014",
+              borderRadius: "8px",
+              justifyContent: "space-between",
+              width: "fit-content",
+              p: "2px",
+              gap: "4px  ",
+              ml: 0.5,
             }}
           >
-            <Typography
-              variant="body2"
-              fontWeight="700"
-              textTransform={"uppercase"}
-              sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+            <Box
+              onClick={() => handleToggle(true)}
+              sx={{
+                padding: 0.5,
+                backgroundColor: selected ? "#7954B3;" : "transparent",
+                color: selected ? "#fff" : "#000",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+                animation: `${fadeIn} 0.5s ease`,
+                borderRadius: "6px",
+                width: "100px",
+                textAlign: "center",
+              }}
             >
-              <Trans i18nKey="private" />
-            </Typography>
-          </Box>
-          <Box
-            onClick={() => handleToggle(false)}
-            sx={{
-              padding: 0.5,
-              backgroundColor: !selected ? "gray" : "transparent",
-              cursor: "pointer",
-              transition: "background-color 0.3s ease",
-              animation: `${fadeIn} 0.5s ease`,
-              borderRadius: "6px",
-              color: !selected ? "#fff" : "#000",
-              width: "100px",
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              variant="body2"
-              fontWeight="700"
-              textTransform={"uppercase"}
-              sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              <Typography
+                variant="body2"
+                fontWeight="700"
+                textTransform={"uppercase"}
+                sx={{ userSelect: "none" }}
+                fontSize={"12px"}
+              >
+                <Trans i18nKey="private" />
+              </Typography>
+            </Box>
+            <Box
+              onClick={() => handleToggle(false)}
+              sx={{
+                padding: 0.5,
+                backgroundColor: !selected ? "gray" : "transparent",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+                animation: `${fadeIn} 0.5s ease`,
+                borderRadius: "6px",
+                color: !selected ? "#fff" : "#000",
+                width: "100px",
+                textAlign: "center",
+              }}
             >
-              <Trans i18nKey="public" />
-            </Typography>
+              <Typography
+                variant="body2"
+                fontWeight="700"
+                textTransform={"uppercase"}
+                sx={{ userSelect: "none" }}
+                fontSize={"12px"}
+              >
+                <Trans i18nKey="public" />
+              </Typography>
+            </Box>
           </Box>
+          {current_user_is_coordinator && (
+            <Box>
+              <Tooltip title={<Trans i18nKey="managePermissions" />}>
+                <IconButton
+                  sx={{ width: "20px", height: "20px" }}
+                  color="primary"
+                  component={Link}
+                  to={`/user/expert-groups/${expertGroupId}/assessment-kits/${assessmentKitId}/permissions`}
+                >
+                  <SettingsRoundedIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
