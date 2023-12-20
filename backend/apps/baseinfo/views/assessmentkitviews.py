@@ -21,9 +21,14 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
                            mixins.DestroyModelMixin,
                            mixins.ListModelMixin,
                            GenericViewSet):
-    serializer_class = AssessmentKitSerilizer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title']
+    filterset_fields = ['is_private']
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AssessmentKitListSerializer
+        return AssessmentKitSerilizer
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -244,6 +249,7 @@ class LoadAssessmentKitDetailsApi(APIView):
 
 class LoadAssessmentKitFileApi(APIView):
     permission_classes = [IsAuthenticated, IsMemberExpertGroup]
+
     def get(self, request, assessment_kit_id):
         file_address = assessmentkitservice.get_assessment_kit_file_address(assessment_kit_id)
         return Response({"url": file_address}, status=status.HTTP_200_OK)

@@ -7,6 +7,8 @@ from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl,
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire
 from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from rest_framework.validators import UniqueValidator
+
+from .expertgroupserializers import ExpertGroupAvatarSerializer
 from ..services import assessmentkitservice
 
 
@@ -164,7 +166,8 @@ class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = AssessmentKit
-        fields = ['id', 'title', 'summary', 'is_active', 'is_private', 'price', 'about', 'tags', 'current_user_is_coordinator']
+        fields = ['id', 'title', 'summary', 'is_active', 'is_private', 'price', 'about', 'tags',
+                  'current_user_is_coordinator']
 
 
 class SimpleExpertGroupDataForAssessmentKitSerializer(serializers.ModelSerializer):
@@ -273,3 +276,23 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
 
 class AssessmentKitUpdateSerializer(serializers.Serializer):
     dsl_id = serializers.IntegerField()
+
+
+class AssessmentKitListSerializer(serializers.ModelSerializer):
+    tags = AssessmentKitTagSerializer(many=True)
+    expert_group = ExpertGroupAvatarSerializer()
+    number_of_assessment = serializers.SerializerMethodField()
+    likes_number = serializers.SerializerMethodField()
+
+    def get_number_of_assessment(self, assessment_kit: AssessmentKit):
+        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
+                                                                    total_count=True)
+        return assessment_count_data["totalCount"]
+
+    def get_likes_number(self, assessment_kit: AssessmentKit):
+        return assessment_kit.likes.count()
+
+    class Meta:
+        model = AssessmentKit
+        fields = ['id', 'title', 'summary', 'tags', 'expert_group', 'likes_number', 'number_of_assessment',
+                  'is_private']
