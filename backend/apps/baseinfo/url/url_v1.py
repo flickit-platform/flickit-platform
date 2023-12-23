@@ -1,6 +1,6 @@
 from django.urls import path
 
-from baseinfo.views import assessmentkitviews, commonviews, update_assessment_kit_views
+from baseinfo.views import assessmentkitviews, commonviews, update_assessment_kit_views, user_access_views
 
 urlpatterns = [
         path("<str:assessment_kit_id>/info/",assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()),
@@ -15,4 +15,5 @@ urlpatterns = [
         path("<str:assessment_kit_id>/details/questions/<str:question_id>/", commonviews.LoadQuestionDetailsApi.as_view()),
         path("<str:assessment_kit_id>/file/", assessmentkitviews.LoadAssessmentKitFileApi.as_view()),
         path("<str:assessment_kit_id>/update-by-dsl/", update_assessment_kit_views.AssessmentKitUpdateApi.as_view()),
+        path("<str:assessment_kit_id>/users/", user_access_views.AssessmentKitUsersListApi.as_view()),
             ]
