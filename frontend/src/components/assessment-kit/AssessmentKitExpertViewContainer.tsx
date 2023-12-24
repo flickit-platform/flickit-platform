@@ -913,7 +913,11 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [updateErrorObject, setUpdateErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
+  console.log(syntaxErrorObject,updateErrorObject)
   const close = () => {
+    setSyntaxErrorObject(null)
+    setUpdateErrorObject(null)
+    setShowErrorLog(false);
     abortController.abort();
     closeDialog();
   };
@@ -939,16 +943,19 @@ const UpdateAssessmentKitDialog = (props: any) => {
       close();
     } catch (e: any) {
       const err = e as ICustomError;
-      if (e?.status == 422) {
-        setSyntaxErrorObject(e?.data?.errors);
+      console.log(e);
+      if (e?.response?.status == 422) {
+        setSyntaxErrorObject(e?.response?.data?.errors);
+        setUpdateErrorObject(null)
         setShowErrorLog(true);
       }
-      if (e?.data?.code === "UNSUPPORTED_DSL_CONTENT_CHANGE") {
-        setUpdateErrorObject(e?.data?.messages);
+      if (e?.response?.data?.code === "UNSUPPORTED_DSL_CONTENT_CHANGE") {
+        setUpdateErrorObject(e?.response?.data?.messages);
+        setSyntaxErrorObject(null)
         setShowErrorLog(true);
       }
 
-      if (e?.status !== 422) {
+      if (e?.response?.status !== 422) {
         toastError(err.message);
       }
       setLoading(false);

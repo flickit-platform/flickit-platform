@@ -33,7 +33,7 @@ interface IAssessmentKitCEFromDialogProps extends DialogProps {
 const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
-  const [syntaxErrorObject, setSyntaxErrorObjectg] = useState<any>();
+  const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const { service } = useServiceContext();
   const {
@@ -51,8 +51,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const navigate = useNavigate();
   const close = () => {
-    abortController.abort();
     setShowErrorLog(false);
+    setSyntaxErrorObject(null);
+    abortController.abort();
     closeDialog();
   };
 
@@ -90,11 +91,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      if (e?.status == 422) {
-        setSyntaxErrorObjectg(e?.data?.errors);
+      if (e?.response?.status == 422) {
+        setSyntaxErrorObject(e?.response?.data?.errors);
         setShowErrorLog(true);
       }
-      if (e?.status !== 422) {
+      if (e?.response?.status !== 422) {
         toastError(err);
       }
       setLoading(false);
@@ -123,7 +124,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             label={<Trans i18nKey="dsl" />}
           />
         </Grid>
-   
+
         <Grid item xs={12} sm={8} md={8}>
           <InputFieldUC
             name="title"
@@ -133,10 +134,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           />
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
-          <IsPrivateSwitch
-            setIsPrivate={setIsPrivate}
-            isPrivate={isPrivate}
-          />
+          <IsPrivateSwitch setIsPrivate={setIsPrivate} isPrivate={isPrivate} />
         </Grid>
         <Grid item xs={12} md={12}>
           <AutocompleteAsyncField
