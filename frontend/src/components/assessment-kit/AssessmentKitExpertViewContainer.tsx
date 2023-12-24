@@ -913,7 +913,6 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [updateErrorObject, setUpdateErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
-  console.log(syntaxErrorObject,updateErrorObject)
   const close = () => {
     setSyntaxErrorObject(null)
     setUpdateErrorObject(null)
@@ -943,7 +942,6 @@ const UpdateAssessmentKitDialog = (props: any) => {
       close();
     } catch (e: any) {
       const err = e as ICustomError;
-      console.log(e);
       if (e?.response?.status == 422) {
         setSyntaxErrorObject(e?.response?.data?.errors);
         setUpdateErrorObject(null)

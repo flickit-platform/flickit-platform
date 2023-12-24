@@ -23,7 +23,6 @@ export const createService = (
     (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
     localStorage.setItem("accessToken", JSON.stringify(accessToken));
     if (keycloakService._kc.isTokenExpired(5) && accessToken) {
-      console.log(keycloakService._kc.isTokenExpired(20));
       try {
         await keycloakService._kc.updateToken(-1);
         const newAccessToken = keycloakService.getToken();
@@ -384,8 +383,8 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      const { query } = args ?? {};
-      const params = query ? { query } : {};
+      const { query, is_private } = args ?? {};
+      const params = query ? { query } : { is_private };
       return axios.get(`/baseinfo/assessmentkits/`, { params, ...config });
     },
     fetchAssessmentKitsOptions(

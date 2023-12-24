@@ -30,6 +30,7 @@ import AutocompleteAsyncField, {
 import firstCharDetector from "@/utils/firstCharDetector";
 import { keyframes } from "@emotion/react";
 import { Link } from "react-router-dom";
+import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -113,6 +114,13 @@ const AssessmentKitSectionGeneralInfo = (
           fetchAssessmentKitInfoQuery,
           fetchAssessmentKitStatsQuery,
         ]}
+        loadingComponent={
+          <LoadingSkeleton
+            width="58%"
+            height="360px"
+            sx={{ mt: 1, borderRadius: 2 }}
+          />
+        }
         render={([info = {}, stats = {}]) => {
           setExpertGroup(stats?.expert_group);
           setAssessmentKitTitle(info?.title);
@@ -760,7 +768,7 @@ const OnHoverVisibilityStatus = (props: any) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            // justifyContent: "space-between",
             width: "100%",
           }}
         >
@@ -825,8 +833,8 @@ const OnHoverVisibilityStatus = (props: any) => {
               </Typography>
             </Box>
           </Box>
-          {current_user_is_coordinator && (
-            <Box>
+          {current_user_is_coordinator && selected && (
+            <Box sx={{ ml: 1 }}>
               <Tooltip title={<Trans i18nKey="managePermissions" />}>
                 <IconButton
                   sx={{ width: "20px", height: "20px" }}
