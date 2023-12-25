@@ -20,3 +20,11 @@ def add_user_in_assessment_kit(assessment_kit_id, authorization_header, request_
         return {"Success": True, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
+
+def delete_user_in_assessment_kit(assessment_kit_id, authorization_header, user_id):
+    response = requests.delete(ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/users/{user_id}',
+                               headers={"Authorization": authorization_header}
+                               )
+    if response.status_code == status.HTTP_200_OK:
+        return {"Success": True, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
