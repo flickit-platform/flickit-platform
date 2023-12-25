@@ -39,3 +39,9 @@ def check_email_exists(email):
     if response.status_code == status.HTTP_200_OK:
         return {"Success": True, "body": response.json(), "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def get_assessment_kit_info_minimal(assessment_kit_id):
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/min-info',
+                            )
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
