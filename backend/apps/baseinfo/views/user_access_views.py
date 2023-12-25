@@ -30,3 +30,16 @@ class AssessmentKitUsersAccessApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class DeleteUserAccessToAssessmentKitApi(APIView):
+
+    def delete(self, request, assessment_kit_id, user_id):
+        result = user_access_services.delete_user_in_assessment_kit(assessment_kit_id=assessment_kit_id,
+                                                                    authorization_header=request.headers[
+                                                                        'Authorization'],
+                                                                    user_id=user_id,
+                                                                    )
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

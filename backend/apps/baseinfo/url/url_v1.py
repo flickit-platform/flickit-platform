@@ -16,4 +16,5 @@ urlpatterns = [
         path("<str:assessment_kit_id>/file/", assessmentkitviews.LoadAssessmentKitFileApi.as_view()),
         path("<str:assessment_kit_id>/update-by-dsl/", update_assessment_kit_views.AssessmentKitUpdateApi.as_view()),
         path("<str:assessment_kit_id>/users/", user_access_views.AssessmentKitUsersAccessApi.as_view()),
+        path("<str:assessment_kit_id>/users/<uuid:user_id>/", user_access_views.DeleteUserAccessToAssessmentKitApi.as_view()),
             ]
