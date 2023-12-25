@@ -355,7 +355,7 @@ const AnswerTemplate = (props: {
             answer_option_id: value?.id || null,
             is_not_applicable: notApplicable,
             confidence_level_id:
-              value?.id || submitOnAnswerSelection
+              value?.id || submitOnAnswerSelection||notApplicable
                 ? selcetedConfidenceLevel
                 : null,
           },
