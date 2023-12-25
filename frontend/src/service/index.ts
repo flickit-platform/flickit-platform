@@ -498,6 +498,33 @@ export const createService = (
       const { id } = args ?? {};
       return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
     },
+    assessmentKitUsersList(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args ?? {};
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/users/`,
+        config
+      );
+    },
+    assessmentKitMinInfo(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args ?? {};
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/min-info/`,
+        config
+      );
+    },
+    fetchAssessmentKitUsersList(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args ?? {};
+      return axios.get(`/api/v1/assessment-kits/${id}/users/`, config);
+    },
     fetchAssessmentKitInfo(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -645,6 +672,27 @@ export const createService = (
     ) {
       const { id, email } = args ?? {};
       return axios.post(`/baseinfo/addexpertgroup/${id}/`, { email }, config);
+    },
+    addMemberToKitPermission(
+      args: { assessmentKitId: TId; email: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, email } = args ?? {};
+      return axios.post(
+        `/api/v1/assessment-kits/${assessmentKitId}/users/`,
+        { email },
+        config
+      );
+    },
+    deleteMemberToKitPermission(
+      args: { assessmentKitId: TId; userId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId, userId } = args ?? {};
+      return axios.delete(
+        `/api/v1/assessment-kits/${assessmentKitId}/users/${userId}/`,
+        config
+      );
     },
     createExpertGroup(
       args: { data: any },
