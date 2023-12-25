@@ -79,15 +79,18 @@ export const QuestionCard = (props: IQuestionCardProps) => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
     if (confidence_level) {
+      console.log(confidence_level);
       dispatch(
-        questionActions.setSelectedConfidenceLevel(confidence_level?.id ?? null)
+        questionActions.setSelectedConfidenceLevel(
+          confidence_level?.id ? confidence_level?.id : confidence_level ?? null
+        )
       );
     }
-  }, [title]);
+  }, [title, confidence_level]);
   const ConfidenceListQueryData = useQuery({
     service: (args = {}, config) =>
       service.fetchConfidenceLevelsList(args, config),
-    toastError: true,
+    toastError: false,
   });
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
@@ -355,7 +358,7 @@ const AnswerTemplate = (props: {
             answer_option_id: value?.id || null,
             is_not_applicable: notApplicable,
             confidence_level_id:
-              value?.id || submitOnAnswerSelection||notApplicable
+              value?.id || submitOnAnswerSelection || notApplicable
                 ? selcetedConfidenceLevel
                 : null,
           },
