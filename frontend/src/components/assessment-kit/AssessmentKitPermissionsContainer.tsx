@@ -59,8 +59,6 @@ const AssessmentKitPermisson = (props: any) => {
   const { data, query, info } = props;
   const { items } = data;
   const { id, title, expertGroup } = info;
-  console.log(info);
-  console.log(data);
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const deleteMemberToKitPermissionQueryData = useQuery({
@@ -202,11 +200,11 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.data || {}) {
-        if (Array.isArray(error.data.message)) {
-          toastError(error.data?.message[0]);
-        } else if (error.data?.message) {
-          toastError(error.data?.message);
+      if ("message" in error.response.data || {}) {
+        if (Array.isArray(error.response.data.messagee)) {
+          toastError(error.response.data.message[0]);
+        } else if (error.response.data.message) {
+          toastError(error.response.data.message);
         }
       }
     }
