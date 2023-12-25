@@ -33,6 +33,7 @@ class AssessmentKitUsersAccessApi(APIView):
 
 
 class DeleteUserAccessToAssessmentKitApi(APIView):
+    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
 
     def delete(self, request, assessment_kit_id, user_id):
         result = user_access_services.delete_user_in_assessment_kit(assessment_kit_id=assessment_kit_id,
@@ -42,4 +43,12 @@ class DeleteUserAccessToAssessmentKitApi(APIView):
                                                                     )
         if result["Success"]:
             return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class LoadAssessmentKitMinimalInfoApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_kit_id):
+        result = user_access_services.get_assessment_kit_info_minimal(assessment_kit_id=assessment_kit_id)
         return Response(data=result["body"], status=result["status_code"])
