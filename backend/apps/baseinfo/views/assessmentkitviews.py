@@ -23,7 +23,7 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
                            GenericViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title']
-    filterset_fields = ['is_private']
+    # filterset_fields = ['is_private']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -39,7 +39,21 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
 
     def get_queryset(self):
         if self.action == 'list':
-            return AssessmentKit.objects.filter(is_active=True)
+            if "is_private" in self.request.query_params:
+
+                if self.request.query_params["is_private"].lower() == "true":
+                    return (AssessmentKit.objects.filter(is_active=True)
+                            .filter(is_private=True)
+                            .filter(users=self.request.user))
+
+                elif self.request.query_params["is_private"].lower() == "false":
+                    return (AssessmentKit.objects.filter(is_active=True)
+                            .filter(is_private=False))
+
+            return (AssessmentKit.objects.filter(is_active=True)
+                    .filter(is_private=True)
+                    .filter(users=self.request.user)) | (AssessmentKit.objects.filter(is_active=True)
+                                                         .filter(is_private=False))
         return AssessmentKit.objects.all()
 
     @transaction.atomic
