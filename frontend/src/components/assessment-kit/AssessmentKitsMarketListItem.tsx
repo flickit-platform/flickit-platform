@@ -13,7 +13,6 @@ import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
-  console.log(data);
   return (
     <Box
       sx={{
@@ -178,8 +177,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             </Box>
           </Box>
         </Box>
-        {(data.id == 373 || data.id == 326) && (
-          <Box>
+          {/* <Box>
             <Box
               sx={{
                 py: 0.3,
@@ -196,8 +194,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             >
               <Trans i18nKey="private" />
             </Box>
-          </Box>
-        )}
+          </Box> */}
         <Typography fontWeight={"bold"} sx={{ ml: "auto" }}>
           {data.price || "FREE"}
         </Typography>

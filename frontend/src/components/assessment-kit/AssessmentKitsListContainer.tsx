@@ -15,110 +15,135 @@ import { Trans } from "react-i18next";
 const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
   const [value, setValue] = useState("public");
-  const assessmentKitsQueryData = useQuery({
-    service: (args, config) => service.fetchAssessmentKits(args, config),
+  const publicAssessmentKitsQueryData = useQuery({
+    service: (args = { is_private: false  }, config) =>
+      service.fetchAssessmentKits(args, config),
+  });
+  const privateAssessmentKitsQueryData = useQuery({
+    service: (args = { is_private: true  }, config) =>
+      service.fetchAssessmentKits(args, config),
   });
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
   return (
     <Box>
-      <QueryData
-        {...assessmentKitsQueryData}
-        renderLoading={() => (
-          <>
-            <Box mt={`2`}>
-              <Grid container spacing={2}>
-                {forLoopComponent(5, (index) => (
-                  <Grid item xs={12} md={6} lg={4} key={index}>
-                    <LoadingSkeleton
-                      key={index}
-                      sx={{ height: "340px", mb: 1 }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          </>
-        )}
-        render={(data) => {
-          const { privateKits = [], publicKits = [] } = data;
-
-          return (
-            <>
-              <TabContext value={value}>
-                <Box>
-                  <TabList onChange={handleTabChange}>
-                    <Tab
-                      label={
-                        <Box sx={{ ...styles.centerV }}>
-                          <Trans i18nKey="public" />
-                        </Box>
-                      }
-                      value="public"
-                    />
-                    <Tab
-                      label={
-                        <Box sx={{ ...styles.centerV }}>
-                          <Trans i18nKey="private" />
-                        </Box>
-                      }
-                      value="private"
-                    />
-                  </TabList>
+      <TabContext value={value}>
+        <Box>
+          <TabList onChange={handleTabChange}>
+            <Tab
+              label={
+                <Box sx={{ ...styles.centerV }}>
+                  <Trans i18nKey="public" />
                 </Box>
-
-                <TabPanel value="public">
-                  <Box mt={3}>
-                    <Grid container spacing={2}>
-                      {publicKits.map((assessment_kit: any) => {
-                        return (
-                          <Grid
-                            item
-                            xs={12}
-                            md={4}
-                            lg={3}
-                            key={assessment_kit.id}
-                          >
-                            <AssessmentKitsMarketListItem
-                              bg1={"#4568dc"}
-                              bg2={"#b06ab3"}
-                              data={assessment_kit}
-                            />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </Box>
-                </TabPanel>
-                <TabPanel value="private">
-                  <Box mt={3}>
-                    <Grid container spacing={2}>
-                      {privateKits.map((assessment_kit: any) => {
-                        return (
-                          <Grid
-                            item
-                            xs={12}
-                            md={4}
-                            lg={3}
-                            key={assessment_kit.id}
-                          >
-                            <AssessmentKitsMarketListItem
-                              bg1={"#4568dc"}
-                              bg2={"#b06ab3"}
-                              data={assessment_kit}
-                            />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </Box>
-                </TabPanel>
-              </TabContext>
-            </>
-          );
-        }}
-      />
+              }
+              value="public"
+            />
+            <Tab
+              label={
+                <Box sx={{ ...styles.centerV }}>
+                  <Trans i18nKey="private" />
+                </Box>
+              }
+              value="private"
+            />
+          </TabList>
+        </Box>
+        <TabPanel value="public">
+          <QueryData
+            {...publicAssessmentKitsQueryData}
+            renderLoading={() => (
+              <>
+                <Box mt={`2`}>
+                  <Grid container spacing={2}>
+                    {forLoopComponent(5, (index) => (
+                      <Grid item xs={12} md={6} lg={4} key={index}>
+                        <LoadingSkeleton
+                          key={index}
+                          sx={{ height: "340px", mb: 1 }}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              </>
+            )}
+            render={(data) => {
+              const { results = [] } = data;
+              return (
+                <Box mt={3}>
+                  <Grid container spacing={2}>
+                    {results.map((assessment_kit: any) => {
+                      return (
+                        <Grid
+                          item
+                          xs={12}
+                          md={4}
+                          lg={3}
+                          key={assessment_kit.id}
+                        >
+                          <AssessmentKitsMarketListItem
+                            bg1={"#4568dc"}
+                            bg2={"#b06ab3"}
+                            data={assessment_kit}
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Box>
+              );
+            }}
+          />
+        </TabPanel>
+        <TabPanel value="private">
+          <QueryData
+            {...privateAssessmentKitsQueryData}
+            renderLoading={() => (
+              <>
+                <Box mt={`2`}>
+                  <Grid container spacing={2}>
+                    {forLoopComponent(5, (index) => (
+                      <Grid item xs={12} md={6} lg={4} key={index}>
+                        <LoadingSkeleton
+                          key={index}
+                          sx={{ height: "340px", mb: 1 }}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              </>
+            )}
+            render={(data) => {
+              const { results = [] } = data;
+              return (
+                <Box mt={3}>
+                  <Grid container spacing={2}>
+                    {results.map((assessment_kit: any) => {
+                      return (
+                        <Grid
+                          item
+                          xs={12}
+                          md={4}
+                          lg={3}
+                          key={assessment_kit.id}
+                        >
+                          <AssessmentKitsMarketListItem
+                            bg1={"#4568dc"}
+                            bg2={"#b06ab3"}
+                            data={assessment_kit}
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Box>
+              );
+            }}
+          />
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 };
