@@ -20,3 +20,7 @@ def add_user_in_assessment_kit(assessment_kit_id, authorization_header, request_
         return {"Success": True, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
+
+def check_email_exists(email):
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/users/emails/{email}')
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
