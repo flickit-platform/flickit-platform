@@ -10,7 +10,7 @@ import {
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import Title from "@common/Title";
 import { useServiceContext } from "@providers/ServiceProvider";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
 import { Trans } from "react-i18next";
@@ -26,15 +26,15 @@ const AssessmentKitPermissionsContainer = () => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const assessmentKitUsersListQueryData = useQuery({
-    service: (args = { id: assessmentKitId }, config) =>
-      service.fetchAssessmentKit(args, config),
+    service: (args = { assessmentKitId: assessmentKitId }, config) =>
+      service.assessmentKitUsersList(args, config),
   });
 
   return (
     <QueryData
       {...assessmentKitUsersListQueryData}
       render={(data) => {
-        setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+        // setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
         return (
           <AssessmentKitPermisson
             data={data}
@@ -48,7 +48,7 @@ const AssessmentKitPermissionsContainer = () => {
 
 const AssessmentKitPermisson = (props: any) => {
   const { data, query } = props;
-  const { items, kit, expertGroup } = data;
+  const { items } = data;
   const { service } = useServiceContext();
   const queryData = useQuery({
     service: (args = { id: "expertGroupId" }, config) =>
@@ -58,7 +58,7 @@ const AssessmentKitPermisson = (props: any) => {
 
   return (
     <Box>
-      <Title
+      {/* <Title
         inPageLink="assessmentKitPermissons"
         size="small"
         sup={
@@ -85,7 +85,7 @@ const AssessmentKitPermisson = (props: any) => {
         }
       >
         <Trans i18nKey={"assessmentKitPermissons"} />
-      </Title>
+      </Title> */}
       <Box mt={2} p={3} sx={{ borderRadius: 2, background: "white" }}>
         <Box>
           <Title

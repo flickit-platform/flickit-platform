@@ -499,6 +499,17 @@ export const createService = (
       const { id } = args ?? {};
       return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
     },
+    assessmentKitUsersList(
+      args: { assessmentKitId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentKitId } = args ?? {};
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/users/`,
+        config
+      );
+    },
+
     fetchAssessmentKitUsersList(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
