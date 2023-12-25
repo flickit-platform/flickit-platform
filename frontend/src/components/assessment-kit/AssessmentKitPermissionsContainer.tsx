@@ -12,7 +12,7 @@ import Title from "@common/Title";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import QueryData from "@common/QueryData";
+import QueryBatchData from "@common/QueryBatchData";
 import { Trans } from "react-i18next";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
@@ -29,16 +29,25 @@ const AssessmentKitPermissionsContainer = () => {
     service: (args = { assessmentKitId: assessmentKitId }, config) =>
       service.assessmentKitUsersList(args, config),
   });
-
+  const assessmentKitMinInfoQueryData = useQuery({
+    service: (args = { assessmentKitId: assessmentKitId }, config) =>
+      service.assessmentKitMinInfo(args, config),
+  });
   return (
-    <QueryData
-      {...assessmentKitUsersListQueryData}
-      render={(data) => {
-        // setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+    <QueryBatchData
+      queryBatchData={[
+        assessmentKitUsersListQueryData,
+        assessmentKitMinInfoQueryData,
+      ]}
+      render={([data = {}, info = {}]) => {
+        setDocumentTitle(
+          `${t("assessmentKit")}: ${info?.expertGroup?.title || ""}`
+        );
         return (
           <AssessmentKitPermisson
             data={data}
-            query={assessmentKitUsersListQueryData.query}
+            query={assessmentKitUsersListQueryData}
+            info={info}
           />
         );
       }}
@@ -47,18 +56,28 @@ const AssessmentKitPermissionsContainer = () => {
 };
 
 const AssessmentKitPermisson = (props: any) => {
-  const { data, query } = props;
+  const { data, query, info } = props;
   const { items } = data;
+  const { id, title, expertGroup } = info;
+  console.log(info);
+  console.log(data);
   const { service } = useServiceContext();
-  const queryData = useQuery({
-    service: (args = { id: "expertGroupId" }, config) =>
-      service.fetchUserExpertGroup(args, config),
+  const { assessmentKitId } = useParams();
+  const deleteMemberToKitPermissionQueryData = useQuery({
+    service: (args, config) =>
+      service.deleteMemberToKitPermission(args, config),
     runOnMount: false,
   });
-
+  const deleteMember = async (id: any) => {
+    await deleteMemberToKitPermissionQueryData.query({
+      assessmentKitId: assessmentKitId,
+      userId: id,
+    });
+    await query.query();
+  };
   return (
     <Box>
-      {/* <Title
+      <Title
         inPageLink="assessmentKitPermissons"
         size="small"
         sup={
@@ -73,19 +92,22 @@ const AssessmentKitPermisson = (props: any) => {
                 to: `/user/expert-groups/${expertGroup.id} `,
               },
               {
-                title: kit.title,
-                to: `/user/expert-groups/${expertGroup.id}/assessment-kits/${kit.id}`,
+                title: title,
+                to: `/user/expert-groups/${expertGroup.id}/assessment-kits/${id}`,
               },
               {
                 title: "permissions",
-                to: `/user/expert-groups/${expertGroup.id}/assessment-kits/${kit.id}/permissions`,
+                to: `/user/expert-groups/${expertGroup.id}/assessment-kits/${id}/permissions`,
               },
             ]}
           />
         }
       >
-        <Trans i18nKey={"assessmentKitPermissons"} />
-      </Title> */}
+        <Trans
+          i18nKey={"assessmentKitPermissons"}
+          values={{ assessmentKit: title }}
+        />
+      </Title>
       <Box mt={2} p={3} sx={{ borderRadius: 2, background: "white" }}>
         <Box>
           <Title
@@ -100,9 +122,9 @@ const AssessmentKitPermisson = (props: any) => {
           >
             <Trans i18nKey="addNewUser" />
           </Title>
-          <AddMember queryData={queryData} />
+          <AddMember queryData={query} />
         </Box>
-        <Box>
+        <Box sx={{ mt: 4 }}>
           <Title
             size="small"
             mb={2}
@@ -119,6 +141,7 @@ const AssessmentKitPermisson = (props: any) => {
             {items.map((user: any, index: number) => {
               return (
                 <Box key={index}>
+                  <Divider />
                   <Box
                     sx={{
                       display: "flex",
@@ -131,7 +154,7 @@ const AssessmentKitPermisson = (props: any) => {
                       <Box mr={8}>{user?.name}</Box>
                       <Box>{user?.email}</Box>
                     </Box>
-                    <Box
+                    <LoadingButton
                       sx={{
                         background: "#862123",
                         py: 0.5,
@@ -139,13 +162,16 @@ const AssessmentKitPermisson = (props: any) => {
                         borderRadius: "4px",
                         color: "#fff",
                       }}
+                      variant="contained"
+                      color="error"
+                      onClick={() => deleteMember(user.id)}
+                      loading={deleteMemberToKitPermissionQueryData.loading}
                     >
                       <Typography variant="button">
                         <Trans i18nKey="remove" />
                       </Typography>
-                    </Box>
+                    </LoadingButton>
                   </Box>
-                  <Divider />
                 </Box>
               );
             })}
@@ -160,20 +186,20 @@ const AddMember = (props: any) => {
   const { query } = queryData;
   const inputRef = useRef<HTMLInputElement>(null);
   const { service } = useServiceContext();
-  const { expertGroupId } = useParams();
+  const { assessmentKitId } = useParams();
   const addMemberQueryData = useQuery({
-    service: (args, config) => service.addMemberToExpertGroup(args, config),
+    service: (args, config) => service.addMemberToKitPermission(args, config),
     runOnMount: false,
   });
 
   const addMember = async () => {
     try {
-      // const res = await addMemberQueryData.query({
-      //   id: expertGroupId,
-      //   email: inputRef.current?.value,
-      // });
-      // res?.message && toast.success(res.message);
-      // query();
+      const res = await addMemberQueryData.query({
+        assessmentKitId: assessmentKitId,
+        email: inputRef.current?.value,
+      });
+      res?.message && toast.success(res.message);
+      query();
     } catch (e) {
       const error = e as ICustomError;
       if ("message" in error.data || {}) {

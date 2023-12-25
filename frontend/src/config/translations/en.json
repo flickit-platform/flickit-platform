@@ -318,7 +318,7 @@
   "anyChangesInTheNumberOfOptionsForAPreExistingQuestion":"Any changes in the number of options for a pre-existing question",
   "unsupportedDslContentChange":"Unsupported dsl content change",
   "withPercentConfidence":"With {{percent}}% confidence",
-  "assessmentKitPermissons":"Assessment kit permissions",
+  "assessmentKitPermissons":"{{assessmentKit}} permissions",
   "addNewUser":"Add new user",
   "users":"Users",
   "visibility":"Visibility",
