@@ -10,6 +10,7 @@ urlpatterns = [
     path("<uuid:assessment_id>/report/subjects/<int:subject_id>/", reportviews.AssessmentSubjectReportApi.as_view()),
     path("<uuid:assessment_id>/subjects/<int:subject_id>/progress/", reportviews.SubjectProgressApi.as_view()),
     path("<uuid:assessment_id>/report/", reportviews.AssessmentReportApi.as_view()),
+    path("<uuid:assessment_id>/report/attributes/<int:attribute_id>/", reportviews.AssessmentAttributesReportApi.as_view()),
     path("<uuid:assessment_id>/", projectviews.AssessmentApi.as_view()),
     path("<uuid:assessment_id>/calculate-confidence/", confidence_levels_views.CalculateConfidenceApi.as_view()),
 
