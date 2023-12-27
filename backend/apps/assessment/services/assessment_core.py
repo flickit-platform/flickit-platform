@@ -227,7 +227,6 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
                 items[i]["is_not_applicable"] = False
                 items[i]["confidence_level"] = None
 
-
         response_body = {"items": items}
         result["Success"] = True
         result["body"] = response_body
@@ -305,7 +304,8 @@ def get_subject_report(assessments_details, subject_id):
     if response.status_code == status.HTTP_200_OK:
         subject_dict = dict()
         attribute_list = list()
-        levels = MaturityLevel.objects.filter(assessment_kit=assessments_details["kitId"]).values('id', 'title', 'value')
+        levels = MaturityLevel.objects.filter(assessment_kit=assessments_details["kitId"]).values('id', 'title',
+                                                                                                  'value')
         subject = AssessmentSubject.objects.get(id=response_body["subject"]["id"])
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title
@@ -441,7 +441,6 @@ def get_assessment_report(assessments_details):
                                  })
         subject_list = sorted(subject_list, key=itemgetter('index'))
 
-
         attribute_top_weaknesses_id = list()
         for item in response_body["topWeaknesses"]:
             attribute_top_weaknesses_id.append(item["id"])
@@ -524,4 +523,16 @@ def get_path_info_with_space_id(space_id):
         "space": space
     }
     result["status_code"] = status.HTTP_200_OK
+    return result
+
+
+def get_assessment_attribute_report(assessments_details, attribute_id, query_params, authorization_header):
+    result = dict()
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report/attributes/{attribute_id}',
+        params=query_params
+        , headers={"Authorization": authorization_header})
+    result["Success"] = True
+    result["body"] = response.json()
+    result["status_code"] = response.status_code
     return result
