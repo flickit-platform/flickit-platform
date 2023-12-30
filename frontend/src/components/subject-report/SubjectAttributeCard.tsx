@@ -11,7 +11,11 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Divider from "@mui/material/Divider";
 import { theme } from "@config/theme";
-
+import { useEffect, useState } from "react";
+import QueryData from "@common/QueryData";
+import { useQuery } from "@utils/useQuery";
+import { useParams } from "react-router-dom";
+import { useServiceContext } from "@providers/ServiceProvider";
 const SUbjectAttributeCard = (props: any) => {
   const {
     title,
@@ -20,7 +24,9 @@ const SUbjectAttributeCard = (props: any) => {
     maturity_levels_count,
     maturity_scores,
     confidence_value,
+    id,
   } = props;
+  const [expanded, setExpanded] = useState<string | false>(false);
   return (
     <Paper
       elevation={2}
@@ -74,9 +80,9 @@ const SUbjectAttributeCard = (props: any) => {
                     fontWeight={"bold"}
                     color="#3596A1"
                     fontSize="1.12rem"
+                    mx={1}
                   >
-                    {" "}
-                    1 of 5{" "}
+                    {Math.ceil(confidence_value)}%
                   </Typography>
                   <Trans
                     i18nKey={"wasEstimate"}
@@ -121,6 +127,9 @@ const SUbjectAttributeCard = (props: any) => {
                     maturity_score={item}
                     totalml={maturity_level?.index}
                     mn={maturity_levels_count}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
+                    attributeId={id}
                   />
                 );
               })
@@ -147,7 +156,7 @@ const AttributeStatusBarContainer = (props: any) => {
       <Box display={"flex"} flex={1}>
         <Box width="100%">
           {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
-          {(cl==0||cl) && <AttributeStatusBar cl={cl} mn={mn} />}
+          {(cl == 0 || cl) && <AttributeStatusBar cl={cl} mn={mn} />}
         </Box>
       </Box>
       <Box
@@ -230,10 +239,30 @@ export const AttributeStatusBar = (props: any) => {
 };
 
 const MaturityLevelDetailsContainer = (props: any) => {
-  const { maturity_score, totalml, mn } = props;
+  const { maturity_score, totalml, mn, expanded, setExpanded, attributeId } =
+    props;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[maturity_score?.maturity_level?.index - 1];
   const is_passed = maturity_score?.maturity_level?.index <= totalml;
+  const { service } = useServiceContext();
+  const { assessmentId } = useParams();
+  const fetchAffectedQuestionsOnAttributeQueryData = useQuery({
+    service: (
+      args = { assessmentId, attributeId: attributeId, levelId: expanded },
+      config
+    ) => service.fetchAffectedQuestionsOnAttribute(args, config),
+    runOnMount: false,
+  });
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+  useEffect(() => {
+    if (expanded === maturity_score?.maturity_level?.id) {
+      fetchAffectedQuestionsOnAttributeQueryData.query();
+    }
+  }, [expanded]);
 
   let text;
   if (maturity_score?.score == null) {
@@ -250,34 +279,251 @@ const MaturityLevelDetailsContainer = (props: any) => {
         flexDirection: { xs: "column", sm: "row" },
       }}
     >
-      <Box display={"flex"} flex={1}>
-        <Box width="100%">
-          <MaturityLevelDetailsBar
-            text={text}
-            score={maturity_score?.score}
-            highestIndex={
-              is_passed && maturity_score?.maturity_level?.index == totalml
-            }
-            is_passed={is_passed}
-          />
-        </Box>
-      </Box>
-      <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
-        <Typography
-          variant="h4"
-          fontWeight={"bold"}
-          letterSpacing=".15em"
-          sx={{
-            borderLeft: `2px solid ${is_passed ? statusColor : "#808080"}`,
-            pl: 1,
-            ml: { xs: -2, sm: 0 },
-            pr: { xs: 0, sm: 1 },
-            color: is_passed ? statusColor : "#808080",
-          }}
+      <Accordion
+        expanded={expanded === maturity_score?.maturity_level?.id}
+        onChange={handleChange(maturity_score?.maturity_level?.id)}
+        sx={{ width: "100%", boxShadow: "none !important" }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+          sx={{ padding: "0 !important" }}
         >
-          {maturity_score?.maturity_level?.title}
-        </Typography>
-      </Box>
+          <Box display={"flex"} flex={1}>
+            <Box width="100%">
+              <MaturityLevelDetailsBar
+                text={text}
+                score={maturity_score?.score}
+                highestIndex={
+                  is_passed && maturity_score?.maturity_level?.index == totalml
+                }
+                is_passed={is_passed}
+              />
+            </Box>
+          </Box>
+          <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
+            <Typography
+              variant="h4"
+              fontWeight={"bold"}
+              letterSpacing=".15em"
+              sx={{
+                borderLeft: `2px solid ${is_passed ? statusColor : "#808080"}`,
+                pl: 1,
+                ml: { xs: -2, sm: 0 },
+                pr: { xs: 0, sm: 1 },
+                color: is_passed ? statusColor : "#808080",
+              }}
+            >
+              {maturity_score?.maturity_level?.title}
+            </Typography>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails>
+          <QueryData
+            {...fetchAffectedQuestionsOnAttributeQueryData}
+            render={(data) => {
+              const { result } = data;
+              const { gainedScore, totalScore, questionScores } = result;
+              return (
+                <>
+                  <Typography variant="body2" display={"flex"}>
+                    Total score:
+                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                      {totalScore}
+                    </Typography>
+                  </Typography>
+                  <Typography mt={2} variant="body2" display={"flex"}>
+                    Gained score:
+                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                      {gainedScore}
+                    </Typography>
+                  </Typography>
+                  <Divider sx={{ my: 2 }} />
+                  {questionScores.map((question: any) => {
+                    const {
+                      questionnaireTitle,
+                      questionIndex,
+                      questionTitle,
+                      questionWeight,
+                      answerOptionIndex,
+                      answerOptionTitle,
+                      answerIsNotApplicable,
+                      answerScore,
+                      weightedScore,
+                    } = question;
+                    return (
+                      <Box mt={2}>
+                        <Typography
+                          display={"flex"}
+                          variant="body2"
+                          fontWeight={"bold"}
+                        >
+                          {questionIndex}.
+                          <Typography variant="body2" fontWeight={"bold"}>
+                            {questionTitle}
+                          </Typography>
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            width: "60%",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              mt: 4,
+                              ml: 4,
+                            }}
+                          >
+                            <Box sx={{ display: "flex", flexDirection: "row" }}>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  sx={{
+                                    pb: "4px",
+                                    color: "#767676",
+                                    display: "block",
+                                    fontFamily: "Roboto",
+                                    fontSize: "0.8rem",
+                                  }}
+                                  textAlign={"center"}
+                                >
+                                  Questionaires
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  sx={{
+                                    pb: "4px",
+                                    color: "#767676",
+                                    display: "block",
+                                    fontFamily: "Roboto",
+                                    fontSize: "0.8rem",
+                                  }}
+                                  textAlign={"center"}
+                                >
+                                  Weight
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  sx={{
+                                    pb: "4px",
+                                    color: "#767676",
+                                    display: "block",
+                                    fontFamily: "Roboto",
+                                    fontSize: "0.8rem",
+                                  }}
+                                  textAlign={"center"}
+                                >
+                                  Answer
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  sx={{
+                                    pb: "4px",
+                                    color: "#767676",
+                                    display: "block",
+                                    fontFamily: "Roboto",
+                                    fontSize: "0.8rem",
+                                  }}
+                                  textAlign={"center"}
+                                >
+                                  Score
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  sx={{
+                                    pb: "4px",
+                                    color: "#767676",
+                                    display: "block",
+                                    fontFamily: "Roboto",
+                                    fontSize: "0.8rem",
+                                  }}
+                                  textAlign={"center"}
+                                >
+                                  Weighted score
+                                </Typography>
+                              </Box>
+                            </Box>
+                            <Divider sx={{ my: 1 }} />
+                            <Box sx={{ display: "flex", flexDirection: "row" }}>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  textAlign={"center"}
+                                >
+                                  {questionnaireTitle}
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  textAlign={"center"}
+                                >
+                                  {questionWeight}
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  textAlign={"center"}
+                                >
+                                  {answerIsNotApplicable
+                                    ? "NA"
+                                    : answerOptionTitle !== null
+                                    ? `${answerOptionIndex}.${answerOptionTitle}`
+                                    : "---"}
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  textAlign={"center"}
+                                >
+                                  {answerIsNotApplicable ? "---" : answerScore}
+                                </Typography>
+                              </Box>
+                              <Box sx={{ width: "20%" }}>
+                                <Typography
+                                  variant="body1"
+                                  fontFamily="Roboto"
+                                  fontWeight={"bold"}
+                                  textAlign={"center"}
+                                >
+                                  {answerIsNotApplicable
+                                    ? "---"
+                                    : weightedScore}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Divider
+                          sx={{ my: 4, background: "#7A589B", opacity: "40%" }}
+                        />
+                      </Box>
+                    );
+                  })}
+                </>
+              );
+            }}
+          />
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 };
