@@ -6,7 +6,7 @@ from baseinfo.models.questionmodels import Question
 from account.models import User
 
 
-def add_evidences(assessments_details, validated_data, user_id):
+def add_evidences(assessments_details, validated_data, user_id, authorization_header):
     result = dict()
     if not Question.objects.filter(id=validated_data["question_id"]).filter(
             questionnaire__assessment_kit=assessments_details["kitId"]).exists():
@@ -20,7 +20,7 @@ def add_evidences(assessments_details, validated_data, user_id):
             "questionId": validated_data["question_id"],
             }
     response = requests.post(
-        ASSESSMENT_URL + 'assessment-core/api/evidences', json=data)
+        ASSESSMENT_URL + 'assessment-core/api/evidences', json=data, headers={"Authorization": authorization_header})
     response_body = response.json()
 
     result["Success"] = True
@@ -69,13 +69,15 @@ def get_list_evidences(assessments_details, question_id, request):
     return result
 
 
-def edit_evidence(validated_data, evidence_id):
+def edit_evidence(validated_data, evidence_id, authorization_header):
     result = dict()
     data = {
-            "description": validated_data["description"]
-            }
+        "description": validated_data["description"]
+    }
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}', json=data)
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}', json=data,
+        headers={"Authorization": authorization_header}
+    )
     response_body = response.json()
 
     result["Success"] = True
@@ -94,4 +96,3 @@ def delete_evidence(evidence_id):
     result["body"] = None
     result["status_code"] = response.status_code
     return result
-

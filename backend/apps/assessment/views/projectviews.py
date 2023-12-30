@@ -13,7 +13,7 @@ class AssessmentProjectApi(APIView):
     def post(self, request):
         serializer = projectserializers.AssessmentProjectSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = assessment_core.create_assessment(request.user, serializer.validated_data)
+        result = assessment_core.create_assessment(request.user, serializer.validated_data, authorization_header=request.headers['Authorization'])
         if not result["Success"]:
             return Response(result["body"],
                             status=status.HTTP_400_BAD_REQUEST)
@@ -36,7 +36,8 @@ class AssessmentApi(APIView):
         assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.edit_assessment(assessments_details["body"], serializer.validated_data)
+        result = assessment_core.edit_assessment(assessments_details["body"], serializer.validated_data,
+                                                 authorization_header=request.headers['Authorization'])
         return Response(result["body"], result["status_code"])
 
     @swagger_auto_schema(responses={204: ""})

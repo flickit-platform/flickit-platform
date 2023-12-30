@@ -12,7 +12,7 @@ from baseinfo.models.questionmodels import Question, AnswerTemplate
 from baseinfo.serializers.assessmentkitserializers import LoadAssessmentKitDetailsForReportSerializer
 
 
-def create_assessment(user, data):
+def create_assessment(user, data, authorization_header):
     result = dict()
     if not user.spaces.filter(id=data["space_id"]).exists():
         result["Success"] = False
@@ -28,7 +28,7 @@ def create_assessment(user, data):
     body["title"] = data["title"]
     body["assessmentKitId"] = data["assessment_kit_id"]
     body["colorId"] = data["color_id"]
-    response = requests.post(ASSESSMENT_URL + 'assessment-core/api/assessments', json=body)
+    response = requests.post(ASSESSMENT_URL + 'assessment-core/api/assessments', json=body, headers={"Authorization": authorization_header})
     result["Success"] = True
     result["body"] = response
     return result
@@ -105,7 +105,7 @@ def get_assessment_list(request):
     return result
 
 
-def question_answering(assessments_details, serializer_data):
+def question_answering(assessments_details, serializer_data, authorization_header):
     data = {"assessmentId": assessments_details["assessmentId"],
             "questionnaireId": serializer_data["questionnaire_id"],
             "questionId": serializer_data["question_id"],
@@ -141,7 +141,9 @@ def question_answering(assessments_details, serializer_data):
 
     response = requests.put(
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answer-question',
-        json=data)
+        json=data,
+        headers={"Authorization": authorization_header},
+    )
     if response.status_code == status.HTTP_201_CREATED:
         result["Success"] = True
         result["body"] = response.json()
@@ -484,13 +486,14 @@ def get_path_info_with_assessment_id(assessments_details):
     return result
 
 
-def edit_assessment(assessments_details, request_body):
+def edit_assessment(assessments_details, request_body, authorization_header):
     result = dict()
     data_json = {"title": request_body["title"],
                  "colorId": request_body["color_id"]
                  }
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}', json=data_json)
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}', json=data_json,
+        headers={"Authorization": authorization_header})
     response_body = response.json()
     result["Success"] = True
     result["body"] = response_body
