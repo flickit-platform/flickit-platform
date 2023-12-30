@@ -498,6 +498,21 @@ export const createService = (
       const { id } = args ?? {};
       return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
     },
+    fetchAffectedQuestionsOnAttribute(
+      args: { assessmentId: TId; attributeId: TId; levelId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, attributeId, levelId } = args ?? {};
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/report/attributes/${attributeId}/`,
+        {
+          ...(config ?? {}),
+          params: {
+            maturityLevelId: levelId,
+          },
+        }
+      );
+    },
     assessmentKitUsersList(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
