@@ -23,7 +23,9 @@ class EvidencesApi(APIView):
         if not assessments_details["Success"]:
             return Response(assessments_details["body"], assessments_details["status_code"])
         result = evidence_services.add_evidences(assessments_details["body"], serializer_data.validated_data,
-                                                 request.user.id)
+                                                 request.user.id,
+                                                 authorization_header=request.headers['Authorization'],
+                                                 )
         return Response(result["body"], result["status_code"])
 
     def get(self, request):
@@ -47,7 +49,9 @@ class EvidenceApi(APIView):
     def put(self, request, evidence_id):
         serializer_data = evidence_serializers.EditEvidenceSerializer(data=request.data)
         serializer_data.is_valid(raise_exception=True)
-        result = evidence_services.edit_evidence(serializer_data.validated_data, evidence_id)
+        result = evidence_services.edit_evidence(serializer_data.validated_data, evidence_id,
+                                                 authorization_header=request.headers['Authorization'],
+                                                 )
         return Response(result["body"], result["status_code"])
 
     def delete(self, request, evidence_id):
