@@ -79,7 +79,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
     setNotApplicable(is_not_applicable ?? false);
     if (confidence_level) {
-      console.log(confidence_level);
       dispatch(
         questionActions.setSelectedConfidenceLevel(
           confidence_level?.id ? confidence_level?.id : confidence_level ?? null
