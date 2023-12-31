@@ -108,9 +108,9 @@ export const SpaceMembers = (props: any) => {
               } catch (e) {
                 const err = e as ICustomError;
                 if (
-                  err.data.code === "user-is-member" 
+                  err.response.data.code === "user-is-member" 
                 ) {
-                  toastError(err.data.message);
+                  toastError(err.response.data.message);
                 } else {
                   dialogProps.openDialog({
                     type: "invite",
