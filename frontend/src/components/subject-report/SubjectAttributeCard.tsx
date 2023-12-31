@@ -16,6 +16,8 @@ import QueryData from "@common/QueryData";
 import { useQuery } from "@utils/useQuery";
 import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
 const SUbjectAttributeCard = (props: any) => {
   const {
     title,
@@ -271,6 +273,20 @@ const MaturityLevelDetailsContainer = (props: any) => {
   if (is_passed && maturity_score?.maturity_level?.index == totalml) {
     text = <Trans i18nKey="theHighestLevelAchived" />;
   }
+
+  const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip
+      placement="bottom"
+      {...props}
+      classes={{ popper: className }}
+    />
+  ))({
+    [`& .${tooltipClasses.tooltip}`]: {
+      maxWidth: 600,
+      marginLeft:"36px",
+      fontSize:"14px"
+    },
+  });
   return (
     <Box
       display={"flex"}
@@ -323,199 +339,261 @@ const MaturityLevelDetailsContainer = (props: any) => {
           <QueryData
             {...fetchAffectedQuestionsOnAttributeQueryData}
             render={(data) => {
-              const { result } = data;
-              const { gainedScore, totalScore, questionScores } = result;
+              const {
+                maxPossibleScore,
+                gainedScore,
+                gainedScorePercentage,
+                questionsCount,
+                questionnaires,
+              } = data;
               return (
                 <>
                   <Typography variant="body2" display={"flex"}>
-                    Total score:
+                    Max possible score:
                     <Typography variant="body2" fontWeight={"bold"} ml={2}>
-                      {totalScore}
+                      {maxPossibleScore}
                     </Typography>
                   </Typography>
                   <Typography mt={2} variant="body2" display={"flex"}>
                     Gained score:
-                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                    <Typography
+                      variant="body2"
+                      display={"flex"}
+                      fontWeight={"bold"}
+                      ml={2}
+                    >
                       {gainedScore}
+                      <Typography variant="body2" fontWeight={"bold"} ml={0.5}>
+                        ({Math.ceil(gainedScorePercentage * 100)} %)
+                      </Typography>
+                    </Typography>
+                  </Typography>
+                  <Typography mt={2} variant="body2" display={"flex"}>
+                    Questions count:
+                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                      {questionsCount}
                     </Typography>
                   </Typography>
                   <Divider sx={{ my: 2 }} />
-                  {questionScores.map((question: any) => {
-                    const {
-                      questionnaireTitle,
-                      questionIndex,
-                      questionTitle,
-                      questionWeight,
-                      answerOptionIndex,
-                      answerOptionTitle,
-                      answerIsNotApplicable,
-                      answerScore,
-                      weightedScore,
-                    } = question;
+                  {questionnaires.map((questionnaire: any) => {
+                    const { title, questionScores } = questionnaire;
+
                     return (
-                      <Box mt={2}>
-                        <Typography
-                          display={"flex"}
-                          variant="body2"
-                          fontWeight={"bold"}
-                        >
-                          {questionIndex}.
-                          <Typography variant="body2" fontWeight={"bold"}>
-                            {questionTitle}
+                      <>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            fontWeight={"bold"}
+                            sx={{ opacity: "0.8",ml:1 }}
+                          >
+                            {title}
                           </Typography>
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            width: "60%",
-                            flexDirection: "column",
-                          }}
-                        >
+                        </Box>
+
+                        <Box mt={2}>
                           <Box
                             sx={{
                               display: "flex",
+                              width: "80%",
                               flexDirection: "column",
-                              mt: 4,
-                              ml: 4,
                             }}
                           >
-                            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  sx={{
-                                    pb: "4px",
-                                    color: "#767676",
-                                    display: "block",
-                                    fontFamily: "Roboto",
-                                    fontSize: "0.8rem",
-                                  }}
-                                  textAlign={"center"}
-                                >
-                                  Questionaires
-                                </Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                ml: 4,
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                }}
+                              >
+                                <Box sx={{ width: "40%" }}>
+                                  <Typography
+                                    sx={{
+                                      pb: "4px",
+                                      color: "#767676",
+                                      display: "block",
+                                      fontFamily: "Roboto",
+                                      fontSize: "0.8rem",
+                                    }}
+                                    textAlign={"center"}
+                                  >
+                                    Questions
+                                  </Typography>
+                                </Box>
+                                <Box sx={{ width: "10%" }}>
+                                  <Typography
+                                    sx={{
+                                      pb: "4px",
+                                      color: "#767676",
+                                      display: "block",
+                                      fontFamily: "Roboto",
+                                      fontSize: "0.8rem",
+                                    }}
+                                    textAlign={"center"}
+                                  >
+                                    Weight
+                                  </Typography>
+                                </Box>
+                                <Box sx={{ width: "25%" }}>
+                                  <Typography
+                                    sx={{
+                                      pb: "4px",
+                                      color: "#767676",
+                                      display: "block",
+                                      fontFamily: "Roboto",
+                                      fontSize: "0.8rem",
+                                    }}
+                                    textAlign={"center"}
+                                  >
+                                    Answer
+                                  </Typography>
+                                </Box>
+                                <Box sx={{ width: "10%" }}>
+                                  <Typography
+                                    sx={{
+                                      pb: "4px",
+                                      color: "#767676",
+                                      display: "block",
+                                      fontFamily: "Roboto",
+                                      fontSize: "0.8rem",
+                                    }}
+                                    textAlign={"center"}
+                                  >
+                                    Score
+                                  </Typography>
+                                </Box>
+                                <Box sx={{ width: "15%" }}>
+                                  <Typography
+                                    sx={{
+                                      pb: "4px",
+                                      color: "#767676",
+                                      display: "block",
+                                      fontFamily: "Roboto",
+                                      fontSize: "0.8rem",
+                                    }}
+                                    textAlign={"center"}
+                                  >
+                                    Weighted score
+                                  </Typography>
+                                </Box>
                               </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  sx={{
-                                    pb: "4px",
-                                    color: "#767676",
-                                    display: "block",
-                                    fontFamily: "Roboto",
-                                    fontSize: "0.8rem",
-                                  }}
-                                  textAlign={"center"}
-                                >
-                                  Weight
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  sx={{
-                                    pb: "4px",
-                                    color: "#767676",
-                                    display: "block",
-                                    fontFamily: "Roboto",
-                                    fontSize: "0.8rem",
-                                  }}
-                                  textAlign={"center"}
-                                >
-                                  Answer
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  sx={{
-                                    pb: "4px",
-                                    color: "#767676",
-                                    display: "block",
-                                    fontFamily: "Roboto",
-                                    fontSize: "0.8rem",
-                                  }}
-                                  textAlign={"center"}
-                                >
-                                  Score
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  sx={{
-                                    pb: "4px",
-                                    color: "#767676",
-                                    display: "block",
-                                    fontFamily: "Roboto",
-                                    fontSize: "0.8rem",
-                                  }}
-                                  textAlign={"center"}
-                                >
-                                  Weighted score
-                                </Typography>
-                              </Box>
-                            </Box>
-                            <Divider sx={{ my: 1 }} />
-                            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  textAlign={"center"}
-                                >
-                                  {questionnaireTitle}
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  textAlign={"center"}
-                                >
-                                  {questionWeight}
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  textAlign={"center"}
-                                >
-                                  {answerIsNotApplicable
-                                    ? "NA"
-                                    : answerOptionTitle !== null
-                                    ? `${answerOptionIndex}.${answerOptionTitle}`
-                                    : "---"}
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  textAlign={"center"}
-                                >
-                                  {answerIsNotApplicable ? "---" : answerScore}
-                                </Typography>
-                              </Box>
-                              <Box sx={{ width: "20%" }}>
-                                <Typography
-                                  variant="body1"
-                                  fontFamily="Roboto"
-                                  fontWeight={"bold"}
-                                  textAlign={"center"}
-                                >
-                                  {answerIsNotApplicable
-                                    ? "---"
-                                    : weightedScore}
-                                </Typography>
-                              </Box>
+                              <Divider sx={{ my: 1 }} />
+                              {questionScores.map((question: any) => {
+                                const {
+                                  questionIndex,
+                                  questionTitle,
+                                  questionWeight,
+                                  answerOptionIndex,
+                                  answerOptionTitle,
+                                  answerIsNotApplicable,
+                                  answerScore,
+                                  weightedScore,
+                                } = question;
+                                return (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                      my: 1,
+                                    }}
+                                  >
+                                    <CustomWidthTooltip
+                                      title={`${questionIndex}.${questionTitle}`}
+                                    >
+                                      <Box sx={{ width: "40%" }}>
+                                        <Typography
+                                          variant="body1"
+                                          fontFamily="Roboto"
+                                          fontWeight={"bold"}
+                                          textAlign={"left"}
+                                          sx={{
+                                            whiteSpace: "nowrap",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                          }}
+                                        >
+                                          {questionIndex}.{questionTitle}
+                                        </Typography>
+                                      </Box>
+                                    </CustomWidthTooltip>
+                                    <Box sx={{ width: "10%" }}>
+                                      <Typography
+                                        variant="body1"
+                                        fontFamily="Roboto"
+                                        fontWeight={"bold"}
+                                        textAlign={"center"}
+                                      >
+                                        {questionWeight}
+                                      </Typography>
+                                    </Box>
+                                    <Tooltip
+                                      title={
+                                        answerIsNotApplicable
+                                          ? "NA"
+                                          : answerOptionTitle !== null
+                                          ? `${answerOptionIndex}.${answerOptionTitle}`
+                                          : "---"
+                                      }
+                                    >
+                                    
+                                      <Box sx={{ width: "25%" }}>
+                                        <Typography
+                                          variant="body1"
+                                          fontFamily="Roboto"
+                                          fontWeight={"bold"}
+                                          textAlign={"center"}
+                                        >
+                                          {answerIsNotApplicable
+                                            ? "NA"
+                                            : answerOptionTitle !== null
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"}
+                                        </Typography>
+                                      </Box>
+                                    </Tooltip>
+                                    <Box sx={{ width: "10%" }}>
+                                      <Typography
+                                        variant="body1"
+                                        fontFamily="Roboto"
+                                        fontWeight={"bold"}
+                                        textAlign={"center"}
+                                      >
+                                        {answerIsNotApplicable
+                                          ? "---"
+                                          : answerScore}
+                                      </Typography>
+                                    </Box>
+                                    <Box sx={{ width: "15%" }}>
+                                      <Typography
+                                        variant="body1"
+                                        fontFamily="Roboto"
+                                        fontWeight={"bold"}
+                                        textAlign={"center"}
+                                      >
+                                        {answerIsNotApplicable
+                                          ? "---"
+                                          : weightedScore}
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                );
+                              })}
                             </Box>
                           </Box>
+                          <Divider
+                            sx={{
+                              my: 4,
+                              background: "#7A589B",
+                              opacity: "40%",
+                            }}
+                          />
                         </Box>
-                        <Divider
-                          sx={{ my: 4, background: "#7A589B", opacity: "40%" }}
-                        />
-                      </Box>
+                      </>
                     );
                   })}
                 </>
