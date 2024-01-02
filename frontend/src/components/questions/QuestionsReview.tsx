@@ -123,7 +123,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       fontWeight="bold"
                       letterSpacing={is_farsi ? "0" : ".05em"}
                     >
-                      {question.title}
+                     {question.index}.{question.title}
                     </Typography>
                   </Box>
                   {question.answer && (
@@ -141,7 +141,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >
-                        {question.answer.caption}
+                       {question.answer.index}.{question.answer.caption}
                       </Typography>
                     </Box>
                   )}
