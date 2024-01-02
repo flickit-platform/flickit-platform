@@ -39,7 +39,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     formState: { errors },
   } = useFormContext();
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
-  const { hasError, errorMessage } = getFieldError(errors, name);
+  const { hasError, errorMessage } = getFieldError(errors, name, minLength);
   useEffect(() => {
     if (isFocused && inputRef.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
@@ -55,6 +55,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef?.current?.focus();
     }
   };
+
   return (
     <TextField
       {...rest}
