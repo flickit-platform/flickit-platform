@@ -737,7 +737,7 @@ const Evidence = (props: any) => {
       await await evidencesQueryData.query();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err);
+      toastError(err.response.data.description[0]);
     } finally {
       setEvidenceId(null);
       formMethods.reset();
@@ -756,6 +756,7 @@ const Evidence = (props: any) => {
                 multiline
                 minRows={3}
                 maxRows={8}
+                minLength={3}
                 autoFocus={true}
                 defaultValue={""}
                 name="evidence"
