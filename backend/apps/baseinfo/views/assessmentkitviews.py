@@ -23,6 +23,7 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
                            GenericViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title']
+
     # filterset_fields = ['is_private']
 
     def get_serializer_class(self):
@@ -178,19 +179,6 @@ class LoadLevelCompetenceInternalApi(APIView):
     def get(self, request, maturity_level_id):
         level_competence = assessmentkitservice.get_level_competence_with_maturity_level(maturity_level_id)
         response = LevelCompetenceSerilizer(level_competence, many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
-class LoadMaturityLevelInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: SimpleMaturityLevelSimpleSerializer(many=True)})
-    def get(self, request, assessment_kit_id):
-        maturity_levels = assessmentkitservice.get_maturity_level_with_assessment_kit(assessment_kit_id)
-        if not maturity_levels:
-            return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        response = assessmentkitservice.get_maturity_level_for_internal(maturity_levels)
         return Response({'items': response}, status=status.HTTP_200_OK)
 
 
