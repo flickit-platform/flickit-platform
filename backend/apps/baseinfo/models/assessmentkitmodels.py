@@ -41,8 +41,9 @@ class AssessmentKit(models.Model):
     is_active = models.BooleanField(default=False, db_column="published")
     is_private = models.BooleanField(default=False)
     users = models.ManyToManyField(User, through='AssessmentKitAccess', related_name='assessment_kit')
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_kit_owner')
-    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_kit_owner',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     def __str__(self) -> str:
         return self.title

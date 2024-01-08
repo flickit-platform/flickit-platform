@@ -33,8 +33,9 @@ class AssessmentSubject(models.Model):
     questionnaires = models.ManyToManyField(Questionnaire, related_name='assessment_subjects')
     index = models.PositiveIntegerField()
     weight = models.PositiveIntegerField(default=1, null=False)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_subjects')
-    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_subjects',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     class Meta:
         db_table = 'fak_subject'
