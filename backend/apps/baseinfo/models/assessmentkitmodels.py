@@ -38,14 +38,18 @@ class AssessmentKit(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='assessmentkits')
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False, db_column="published")
     is_private = models.BooleanField(default=False)
     users = models.ManyToManyField(User, through='AssessmentKitAccess', related_name='assessment_kit')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_kit_owner',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     def __str__(self) -> str:
         return self.title
 
     class Meta:
+        db_table = 'fak_assessment_kit'
         verbose_name = "Assessment Kit"
         verbose_name_plural = "Assessment Kits"
         ordering = ['title']
