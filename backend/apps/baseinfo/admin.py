@@ -4,7 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.questionmodels import AnswerTemplate, QuestionImpact, Question, OptionValue
-    
+
 
 @admin.register(AssessmentKit)
 class AssessmentKitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -12,6 +12,7 @@ class AssessmentKitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['code', 'title']
     list_editable = ['title']
     list_per_page = 10
+
 
 @admin.register(AssessmentSubject)
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -37,13 +38,15 @@ class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(QuestionImpact)
 class QuestionImpactAdmin(admin.ModelAdmin):
-    fields= ['level', 'quality_attribute']
+    fields = ['level', 'quality_attribute']
     list_display = ['level', 'quality_attribute', 'option_values', 'question']
-    autocomplete_fields= ['quality_attribute']
+    autocomplete_fields = ['quality_attribute']
     extra = 0
 
     def option_values(self, obj):
-        return "\n".join(['(' + str(option_value.option.index) + ', ' + str(option_value.value) + ')' for option_value in obj.option_values.all()])
+        return "\n".join(
+            ['(' + str(option_value.option.index) + ', ' + str(option_value.value) + ')' for option_value in
+             obj.option_values.all()])
 
 
 # class OptionValueFormInline(admin.TabularInline):
@@ -56,16 +59,18 @@ class QuestionImpactAdmin(admin.ModelAdmin):
 
 
 class QuestionImpactFormInline(admin.TabularInline):
-     model = QuestionImpact
-     fields= ['level', 'quality_attribute']
-     list_display = ['level', 'quality_attribute']
-     autocomplete_fields= ['quality_attribute']
-     extra = 0
+    model = QuestionImpact
+    fields = ['level', 'quality_attribute']
+    list_display = ['level', 'quality_attribute']
+    autocomplete_fields = ['quality_attribute']
+    extra = 0
+
 
 class AnswerTemplateFormInline(admin.TabularInline):
-     model = AnswerTemplate
-     fields= ['caption', 'value', 'index']
-     extra = 0
+    model = AnswerTemplate
+    fields = ['caption', 'index']
+    extra = 0
+
 
 @admin.register(Question)
 class QuestionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -78,6 +83,7 @@ class QuestionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     def quality_attributes_question(self, obj):
         return "\n".join([att.title for att in obj.quality_attributes.all()])
+
 
 @admin.register(QualityAttribute)
 class QualityAttributeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
