@@ -167,7 +167,6 @@ def __import_questions(questionModels, assessment_kit):
         for answer_model in model['answers']:
             answer = AnswerTemplate()
             answer.caption = answer_model['caption']
-            answer.value = answer_model['value']
             answer.index = answer_model['index']
             answer.question = question
             answer.save()

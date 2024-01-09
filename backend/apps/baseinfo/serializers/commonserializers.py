@@ -48,7 +48,7 @@ class AnswerTemplateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnswerTemplate
-        fields = ['id', 'caption', 'value', 'index']
+        fields = ['id', 'caption', 'index']
 
 
 class SimpleQuestionSerializers(serializers.ModelSerializer):

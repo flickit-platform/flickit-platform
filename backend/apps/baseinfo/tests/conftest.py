@@ -111,43 +111,44 @@ def create_tag():
 def init_data():
     def do_init_data():
         assessment_kit = AssessmentKit.objects.filter(title="p1").first()
-        if assessment_kit == None:
+        if assessment_kit is None:
             assessment_kit = baker.make(AssessmentKit)
-        questionnaire_list = []
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, code='c1',title='c1'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, code='c2',title='c2'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, code='c3',title='c3'))
-        questionnaire_list.append(baker.make(Questionnaire, assessment_kit=assessment_kit, index=4, code='c4',title='c4'))
+        questionnaire_list = [baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, code='c1', title='c1'),
+                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, code='c2', title='c2'),
+                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, code='c3', title='c3'),
+                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=4, code='c4', title='c4')]
 
-        questions_list = []
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[0], index=1))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[0], index=2))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[0], index=3))
-
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[1], index=1))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[1], index=2))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[1], index=3))
-
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[2], index=1))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[2], index=2))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[2], index=3))
-
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[3], index=1))
-        questions_list.append(baker.make(Question, questionnaire=questionnaire_list[3], index=2))
+        questions_list = [baker.make(Question, questionnaire=questionnaire_list[0], index=1),
+                          baker.make(Question, questionnaire=questionnaire_list[0], index=2),
+                          baker.make(Question, questionnaire=questionnaire_list[0], index=3),
+                          baker.make(Question, questionnaire=questionnaire_list[1], index=1),
+                          baker.make(Question, questionnaire=questionnaire_list[1], index=2),
+                          baker.make(Question, questionnaire=questionnaire_list[1], index=3),
+                          baker.make(Question, questionnaire=questionnaire_list[2], index=1),
+                          baker.make(Question, questionnaire=questionnaire_list[2], index=2),
+                          baker.make(Question, questionnaire=questionnaire_list[2], index=3),
+                          baker.make(Question, questionnaire=questionnaire_list[3], index=1),
+                          baker.make(Question, questionnaire=questionnaire_list[3], index=2)]
 
         subject1 = baker.make(AssessmentSubject, assessment_kit=assessment_kit, title='s1', code='s1', index=1,
                               questionnaires=[questionnaire_list[0], questionnaire_list[1]])
         subject2 = baker.make(AssessmentSubject, assessment_kit=assessment_kit, title='s2', code='s2', index=2,
                               questionnaires=[questionnaire_list[2], questionnaire_list[3]])
 
-        atts = []
-        atts.append(baker.make(QualityAttribute, title='a1', code='a1', index=1, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a2', code='a2', index=2, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a3', code='a3', index=3, assessment_kit=assessment_kit, assessment_subject=subject1, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a4', code='a4', index=4, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a5', code='a5', index=5, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a6', code='a6', index=6, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
-        atts.append(baker.make(QualityAttribute, title='a7', code='a7', index=7, assessment_kit=assessment_kit, assessment_subject=subject2, weight=1))
+        atts = [baker.make(QualityAttribute, title='a1', code='a1', index=1, assessment_kit=assessment_kit,
+                           assessment_subject=subject1, weight=1),
+                baker.make(QualityAttribute, title='a2', code='a2', index=2, assessment_kit=assessment_kit,
+                           assessment_subject=subject1, weight=1),
+                baker.make(QualityAttribute, title='a3', code='a3', index=3, assessment_kit=assessment_kit,
+                           assessment_subject=subject1, weight=1),
+                baker.make(QualityAttribute, title='a4', code='a4', index=4, assessment_kit=assessment_kit,
+                           assessment_subject=subject2, weight=1),
+                baker.make(QualityAttribute, title='a5', code='a5', index=5, assessment_kit=assessment_kit,
+                           assessment_subject=subject2, weight=1),
+                baker.make(QualityAttribute, title='a6', code='a6', index=6, assessment_kit=assessment_kit,
+                           assessment_subject=subject2, weight=1),
+                baker.make(QualityAttribute, title='a7', code='a7', index=7, assessment_kit=assessment_kit,
+                           assessment_subject=subject2, weight=1)]
 
         question_impacts = []
 
@@ -160,11 +161,10 @@ def init_data():
         maturity_level = [maturity_level_0, maturity_level_1, maturity_level_2, maturity_level_3, maturity_level_4,
                           maturity_level_5]
 
-        level_competences = []
-        level_competences.append(baker.make(LevelCompetence, maturity_level=maturity_level_0, value=50,
-                                            maturity_level_competence=maturity_level_1))
-        level_competences.append(baker.make(LevelCompetence, maturity_level=maturity_level_1, value=50,
-                                            maturity_level_competence=maturity_level_2))
+        level_competences = [baker.make(LevelCompetence, maturity_level=maturity_level_0, value=50,
+                                        maturity_level_competence=maturity_level_1),
+                             baker.make(LevelCompetence, maturity_level=maturity_level_1, value=50,
+                                        maturity_level_competence=maturity_level_2)]
 
         # att1
         question_impacts.append(baker.make(QuestionImpact, maturity_level=maturity_level_1, quality_attribute=atts[0],
@@ -241,15 +241,12 @@ def init_data():
         question_impacts.append(baker.make(QuestionImpact, maturity_level=maturity_level_3, quality_attribute=atts[2],
                                            question=questions_list[10]))
 
-        answer_template = []
-        answer_template.append(baker.make(AnswerTemplate, caption="test", value=1, index=1, question=questions_list[0]))
-        answer_template.append(baker.make(AnswerTemplate, caption="test", value=1, index=1, question=questions_list[1]))
+        answer_template = [baker.make(AnswerTemplate, caption="test", index=1, question=questions_list[0]),
+                           baker.make(AnswerTemplate, caption="test", index=1, question=questions_list[1])]
 
-        option_value = []
-        option_value.append(
-            baker.make(OptionValue, option=answer_template[0], value=0.5, question_impact=question_impacts[0]))
-        option_value.append(
-            baker.make(OptionValue, option=answer_template[1], value=0.5, question_impact=question_impacts[1]))
+        option_value = [
+            baker.make(OptionValue, option=answer_template[0], value=0.5, question_impact=question_impacts[0]),
+            baker.make(OptionValue, option=answer_template[1], value=0.5, question_impact=question_impacts[1])]
 
         base_info = Dictionary()
         base_info.add("assessment_kit", assessment_kit)
