@@ -101,6 +101,7 @@ class MaturityLevel(models.Model):
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     class Meta:
+        db_table = 'fak_maturity_level'
         verbose_name = 'MaturityLevel'
         verbose_name_plural = "MaturityLevels"
         unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('value', 'assessment_kit'),
@@ -108,6 +109,16 @@ class MaturityLevel(models.Model):
 
 
 class LevelCompetence(models.Model):
-    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences')
-    value = models.PositiveIntegerField(null=True)
-    maturity_level_competence = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, null=True)
+    maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='level_competences',
+                                       db_column='affected_level_id')
+    value = models.PositiveIntegerField()
+    maturity_level_competence = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE,
+                                                  db_column='effective_level_id')
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='level_competences',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
+
+    class Meta:
+        db_table = 'fak_level_competence'
