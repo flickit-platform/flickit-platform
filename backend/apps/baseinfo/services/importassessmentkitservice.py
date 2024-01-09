@@ -127,7 +127,7 @@ def __import_subjects(subject_models, assessment_kit):
         subject.assessment_kit = assessment_kit
         questionnaire_codes = model['questionnaireCodes']
         subject.save()
-        if questionnaire_codes != None:
+        if questionnaire_codes is not None:
             for questionnaire_code in questionnaire_codes:
                 questionnaire = Questionnaire.objects.filter(code=questionnaire_code).filter(assessment_kit=assessment_kit.id).first()
                 subject.questionnaires.add(questionnaire)
@@ -178,7 +178,10 @@ def __import_questions(questionModels, assessment_kit):
                                                               title=impact_model['level']['title'])
             impact.quality_attribute = QualityAttribute.objects.filter(code=impact_model['attributeCode']).filter(assessment_subject__assessment_kit=assessment_kit.id).first()
             impact.question = question
-            impact.weight = impact_model['weight']
+            if impact_model['weight'] is None:
+                impact.weight = 1
+            else:
+                impact.weight = impact_model['weight']
             impact.save()
             subject = impact.quality_attribute.assessment_subject
             questionnaire = impact.question.questionnaire

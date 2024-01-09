@@ -34,7 +34,7 @@ class AssessmentSubjectSerilizer(serializers.ModelSerializer):
 class QuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact
-        fields = ['id', 'level', 'quality_attribute']
+        fields = ['id', 'quality_attribute']
 
 
 class QualityAttributeSerilizer(serializers.ModelSerializer):

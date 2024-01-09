@@ -6,12 +6,20 @@ from account.models import User
 
 
 class QuestionImpact(models.Model):
-    level = models.PositiveIntegerField(null=True)
     maturity_level = models.ForeignKey(MaturityLevel, on_delete=models.CASCADE, related_name='question_impacts',
                                        null=True)
     question = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='question_impacts')
-    quality_attribute = models.ForeignKey('QualityAttribute', on_delete=models.CASCADE, related_name='question_impacts')
-    weight = models.PositiveIntegerField(default=1)
+    quality_attribute = models.ForeignKey('QualityAttribute', on_delete=models.CASCADE, related_name='question_impacts',
+                                          db_column='attribute_id')
+    weight = models.PositiveIntegerField()
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_impacts',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
+
+    class Meta:
+        db_table = 'fak_question_impact'
 
 
 class OptionValue(models.Model):

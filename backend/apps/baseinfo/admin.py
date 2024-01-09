@@ -39,7 +39,7 @@ class QuestionnaireAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(QuestionImpact)
 class QuestionImpactAdmin(admin.ModelAdmin):
     fields = ['level', 'quality_attribute']
-    list_display = ['level', 'quality_attribute', 'option_values', 'question']
+    list_display = ['quality_attribute', 'option_values', 'question']
     autocomplete_fields = ['quality_attribute']
     extra = 0
 
@@ -60,8 +60,8 @@ class QuestionImpactAdmin(admin.ModelAdmin):
 
 class QuestionImpactFormInline(admin.TabularInline):
     model = QuestionImpact
-    fields = ['level', 'quality_attribute']
-    list_display = ['level', 'quality_attribute']
+    fields = ['quality_attribute']
+    list_display = ['quality_attribute']
     autocomplete_fields = ['quality_attribute']
     extra = 0
 
