@@ -92,11 +92,17 @@ class MaturityLevel(models.Model):
     title = models.CharField(max_length=100)
     value = models.PositiveSmallIntegerField()
     index = models.PositiveSmallIntegerField()
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='maturity_levels')
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='maturity_levels',
+                                       db_column='kit_id')
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='maturity_levels',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     class Meta:
-        verbose_name = 'Questionnaire'
-        verbose_name_plural = "Questionnaires"
+        verbose_name = 'MaturityLevel'
+        verbose_name_plural = "MaturityLevels"
         unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('value', 'assessment_kit'),
                            ('index', 'assessment_kit')]
 
