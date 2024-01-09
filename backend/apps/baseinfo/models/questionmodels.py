@@ -18,6 +18,15 @@ class OptionValue(models.Model):
     option = models.ForeignKey('AnswerTemplate', on_delete=models.CASCADE, related_name='option_values')
     value = models.DecimalField(max_digits=3, decimal_places=2)
     question_impact = models.ForeignKey(QuestionImpact, on_delete=models.CASCADE, related_name='option_values')
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='OptionValue',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
+
+
+class Meta:
+    db_table = 'fak_answer_option_impact'
 
 
 class AnswerTemplate(models.Model):
