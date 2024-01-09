@@ -19,7 +19,7 @@ class OptionValue(models.Model):
     value = models.DecimalField(max_digits=3, decimal_places=2)
     question_impact = models.ForeignKey(QuestionImpact, on_delete=models.CASCADE, related_name='option_values')
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='OptionValue',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
@@ -35,7 +35,7 @@ class AnswerTemplate(models.Model):
     value = models.PositiveSmallIntegerField()
     index = models.PositiveIntegerField()
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answer_templates',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
@@ -50,15 +50,19 @@ class AnswerTemplate(models.Model):
 class Question(models.Model):
     code = models.CharField(max_length=50)
     title = models.TextField()
-    description = models.TextField(null=True)
+    description = models.TextField(null=True, db_column="hint")
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
     quality_attributes = models.ManyToManyField(QualityAttribute, through=QuestionImpact)
-    index = models.IntegerField(null=True)
+    index = models.IntegerField()
     may_not_be_applicable = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     class Meta:
+        db_table = 'fak_question'
         verbose_name = 'Question'
         verbose_name_plural = "Questions"
         unique_together = [('code', 'questionnaire')]
