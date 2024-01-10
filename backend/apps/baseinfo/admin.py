@@ -18,7 +18,7 @@ class AssessmentKitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['questionnaires']
     search_fields = ['code', 'title', 'assessment_kit']
-    fields = ['code', 'title', 'description', 'assessment_kit', 'questionnaires', 'index']
+    fields = ['code', 'title', 'description', 'assessment_kit', 'questionnaire', 'index']
     list_display = ['code', 'title', 'subject_questionnaires', 'assessment_kit']
     list_editable = ['title']
     list_per_page = 10
@@ -60,8 +60,8 @@ class QuestionImpactAdmin(admin.ModelAdmin):
 
 class QuestionImpactFormInline(admin.TabularInline):
     model = QuestionImpact
-    fields = ['quality_attribute']
-    list_display = ['quality_attribute']
+    fields = ['level', 'quality_attribute']
+    list_display = ['level', 'quality_attribute']
     autocomplete_fields = ['quality_attribute']
     extra = 0
 
