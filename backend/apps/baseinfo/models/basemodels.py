@@ -17,7 +17,6 @@ class Questionnaire(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
-
     class Meta:
         db_table = 'fak_questionnaire'
         verbose_name = 'Questionnaire'
@@ -36,7 +35,8 @@ class AssessmentSubject(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='assessment_subjects',
                                        db_column="kit_id")
-    questionnaires = models.ManyToManyField(Questionnaire, related_name='assessment_subjects')
+    questionnaires = models.ManyToManyField(Questionnaire, related_name='assessment_subjects',
+                                            through='QuestionnaireSubject')
     index = models.PositiveIntegerField()
     weight = models.PositiveIntegerField(default=1, null=False)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_subjects',
@@ -46,6 +46,17 @@ class AssessmentSubject(models.Model):
     class Meta:
         db_table = 'fak_subject'
         unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('index', 'assessment_kit')]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class QuestionnaireSubject(models.Model):
+    subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'fak_subject_questionnaire'
 
     def __str__(self) -> str:
         return self.title
