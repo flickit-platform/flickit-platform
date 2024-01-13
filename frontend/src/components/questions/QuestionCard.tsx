@@ -807,7 +807,7 @@ const Evidence = (props: any) => {
 const EvidenceDetail = (props: any) => {
   const { item, evidencesQueryData, setEvidenceId } = props;
   const { description, last_modification_date, created_by, id } = item;
-
+  const is_farsi = languageDetector(description);
   return (
     <Box display="flex" flexDirection="column" width="100%">
       <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
@@ -819,7 +819,10 @@ const EvidenceDetail = (props: any) => {
         >
           <AssignmentRoundedIcon />
         </ListItemIcon>
-        <ListItemText sx={{ pr: 2 }} primary={description} />
+        <ListItemText
+          sx={{ direction: `${is_farsi ? "rtl" : "ltr"}`, pr: 2 }}
+          primary={description}
+        />
         <Box display="flex">
           <Box sx={{ ...styles.centerV, mr: 2 }}>
             <PersonOutlineRoundedIcon
