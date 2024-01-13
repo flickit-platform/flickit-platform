@@ -70,6 +70,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         //     {data.likes_number || 0}
         //   </Box>
         // }
+        sx={{ width: "100%" }}
         sub={
           <Box
             sx={{
@@ -80,6 +81,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
               textTransform: "none",
               opacity: 0.9,
               minHeight: "27px",
+              width: "100%",
             }}
           >
             {data.tags.map((tag: any) => {
@@ -102,7 +104,9 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
           sx={{
             textDecoration: "none",
             color: "#000000de",
-            whiteSpace: "nowrap",
+            width: "100%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           }}
         >
           {data.title}
@@ -177,7 +181,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             </Box>
           </Box>
         </Box>
-          {/* <Box>
+        {/* <Box>
             <Box
               sx={{
                 py: 0.3,
