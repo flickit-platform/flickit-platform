@@ -50,6 +50,7 @@ import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
+import firstCharDetector from "@/utils/firstCharDetector";
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -807,45 +808,70 @@ const Evidence = (props: any) => {
 const EvidenceDetail = (props: any) => {
   const { item, evidencesQueryData, setEvidenceId } = props;
   const { description, last_modification_date, created_by, id } = item;
-  const is_farsi = languageDetector(description);
+  const is_farsi = firstCharDetector(description);
   return (
     <Box display="flex" flexDirection="column" width="100%">
-      <ListItem sx={{ px: 0.5, borderBottom: "1px solid #e9e8e8", mb: 1 }}>
-        <ListItemIcon
+      <ListItem
+        sx={{
+          px: 0.5,
+          borderBottom: "1px solid #e9e8e8",
+          mb: 1,
+          flexDirection: "column",
+        }}
+      >
+        <Box
           sx={{
-            minWidth: "45px",
-            display: { xs: "none", sm: "inline-flex" },
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
           }}
         >
-          <AssignmentRoundedIcon />
-        </ListItemIcon>
-        <ListItemText
-          sx={{ direction: `${is_farsi ? "rtl" : "ltr"}`, pr: 2 }}
-          primary={description}
-        />
-        <Box display="flex">
-          <Box sx={{ ...styles.centerV, mr: 2 }}>
+          <ListItemText
+            sx={{
+              direction: `${is_farsi ? "rtl" : "ltr"}`,
+              textAlign: `${is_farsi ? "right" : "left"}`,
+              px: 4,
+              whiteSpace: "pre-line",
+            }}
+            primary={description}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: `${is_farsi ? "row-reverse" : "row"}`,
+            justifyContent: "flex-end",
+            alignItems: "center",
+            width: "100%",
+            mr: 4,
+          }}
+        >
+          <Box sx={{ display: "contents" }}>
             <PersonOutlineRoundedIcon
               sx={{ mr: 0.7, color: "gray" }}
               fontSize="small"
             />
-            {created_by.display_name}
+            <Typography fontSize="12px" variant="overline">
+              {created_by.display_name}
+            </Typography>
           </Box>
-          <Box sx={{ ...styles.centerV }}>
+          <Box sx={{ display: "contents" }}>
             <AccessTimeRoundedIcon
               sx={{ mr: 0.7, color: "gray" }}
               fontSize="small"
             />
-            {formatDate(last_modification_date)}
+            <Typography fontSize="12px" variant="overline">
+              {formatDate(last_modification_date)}
+            </Typography>
           </Box>
-        </Box>
-        <Box>
-          <Actions
-            fetchEvidences={evidencesQueryData.query}
-            id={id}
-            setEvidenceId={setEvidenceId}
-            description={description}
-          />
+          <Box>
+            <Actions
+              fetchEvidences={evidencesQueryData.query}
+              id={id}
+              setEvidenceId={setEvidenceId}
+              description={description}
+            />
+          </Box>
         </Box>
       </ListItem>
     </Box>
