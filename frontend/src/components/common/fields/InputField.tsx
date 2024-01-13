@@ -45,6 +45,15 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
     }
   }, [isFocused]);
+  useEffect(() => {
+    if (inputRef.current&&isFocused) {
+      const inputValue = inputRef.current?.value;
+      const isFarsi = firstCharDetector(inputValue);
+      inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      inputRef?.current?.focus();
+    }
+  }, [inputRef.current?.value]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
