@@ -32,15 +32,13 @@ class OptionValue(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
-
-class Meta:
-    db_table = 'fak_answer_option_impact'
+    class Meta:
+        db_table = 'fak_answer_option_impact'
 
 
 class AnswerTemplate(models.Model):
     question = models.ForeignKey('Question', on_delete=models.CASCADE, related_name='answer_templates')
     caption = models.CharField(max_length=255, db_column="title")
-    value = models.PositiveSmallIntegerField()
     index = models.PositiveIntegerField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
