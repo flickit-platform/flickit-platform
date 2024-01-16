@@ -1,8 +1,10 @@
 from django.urls import path
 
 from baseinfo.views import assessmentkitviews, commonviews, update_assessment_kit_views, user_access_views
+from baseinfo.views import importassessmentkitviews
 
 urlpatterns = [
+        path("upload-dsl/", importassessmentkitviews.ImportDslFileView.as_view()),
         path("<str:assessment_kit_id>/info/",assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()),
         path("<str:assessment_kit_id>/stats/",assessmentkitviews.LoadAssessmentKitInfoStatisticalApi.as_view()),
         path("<str:assessment_kit_id>/",assessmentkitviews.EditAssessmentKitInfoApi.as_view()),
@@ -18,4 +20,6 @@ urlpatterns = [
         path("<str:assessment_kit_id>/users/", user_access_views.AssessmentKitUsersAccessApi.as_view()),
         path("<str:assessment_kit_id>/users/<uuid:user_id>/", user_access_views.DeleteUserAccessToAssessmentKitApi.as_view()),
         path("<str:assessment_kit_id>/min-info/", user_access_views.LoadAssessmentKitMinimalInfoApi.as_view()),
+
+
             ]

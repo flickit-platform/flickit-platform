@@ -296,3 +296,8 @@ class AssessmentKitListSerializer(serializers.ModelSerializer):
         model = AssessmentKit
         fields = ['id', 'title', 'summary', 'tags', 'expert_group', 'likes_number', 'number_of_assessment',
                   'is_private']
+
+
+class DslSerializer(serializers.Serializer):
+    expert_group_id = serializers.IntegerField()
+    dsl_file = serializers.FileField()

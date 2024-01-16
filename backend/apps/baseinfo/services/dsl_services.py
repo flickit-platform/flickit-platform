@@ -1,0 +1,14 @@
+import requests
+from assessmentplatform.settings import DSL_PARSER_URL_SERVICE, ASSESSMENT_URL
+from baseinfo.models.assessmentkitmodels import ExpertGroup
+from rest_framework import status
+
+
+def upload_dsl_assessment(data, request):
+    if ExpertGroup.objects.get(id=data['expert_group_id']).owner_id != request.user.id:
+        return {"Success": False, "body": {'message': 'You do not have permission to perform this action.'},
+                "status_code": status.HTTP_403_FORBIDDEN}
+    response = requests.post(ASSESSMENT_URL + f'assessment-core/api/assessment-kits/upload-dsl',
+                             files={"expertGroupId": (None, data['expert_group_id']), "dslFile": data['dsl_file']},
+                             headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
