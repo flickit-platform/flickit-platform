@@ -18,10 +18,15 @@ import { TQueryServiceFunction, useQuery } from "@utils/useQuery";
 import toastError from "@utils/toastError";
 import { t } from "i18next";
 import { ICustomError } from "@utils/CustomError";
-import { Controller, ControllerRenderProps, FieldErrorsImpl, FieldValues, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldErrorsImpl,
+  FieldValues,
+  useFormContext,
+} from "react-hook-form";
 import formatBytes from "@utils/formatBytes";
 import getFieldError from "@utils/getFieldError";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { Trans } from "react-i18next";
 import getFileNameFromSrc from "@utils/getFileNameFromSrc";
 import { useServiceContext } from "@/providers/ServiceProvider";
@@ -38,6 +43,9 @@ interface IUploadFieldProps {
   hideDropText?: boolean;
   shouldFetchFileInfo?: boolean;
   defaultValueType?: string;
+  param?: string;
+  setSyntaxErrorObject?: any;
+  setShowErrorLog?: any;
 }
 
 const UploadField = (props: IUploadFieldProps) => {
@@ -53,7 +61,15 @@ const UploadField = (props: IUploadFieldProps) => {
       defaultValue={defaultValue}
       render={({ field, formState }) => {
         const { errors } = formState;
-        return <Uploader fieldProps={field} errors={errors} required={required} defaultValue={defaultValue} {...rest} />;
+        return (
+          <Uploader
+            fieldProps={field}
+            errors={errors}
+            required={required}
+            defaultValue={defaultValue}
+            {...rest}
+          />
+        );
       }}
     />
   );
@@ -74,6 +90,9 @@ interface IUploadProps {
   hideDropText?: boolean;
   shouldFetchFileInfo?: boolean;
   defaultValueType?: string;
+  param?: string;
+  setSyntaxErrorObject?: any;
+  setShowErrorLog?: any;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -90,12 +109,17 @@ const Uploader = (props: IUploadProps) => {
     shouldFetchFileInfo = false,
     defaultValue = [],
     defaultValueType,
+    param,
+    setSyntaxErrorObject,
+    setShowErrorLog,
   } = props;
 
   const { service } = useServiceContext();
   const defaultValueQuery = useQuery({
-    service: (args = { url: defaultValue?.replace("http://flickit.org", "") }, config) =>
-      service.fetchImage(args, config),
+    service: (
+      args = { url: defaultValue?.replace("https://flickit.org", "") },
+      config
+    ) => service.fetchImage(args, config),
     runOnMount: false,
   });
 
@@ -116,10 +140,17 @@ const Uploader = (props: IUploadProps) => {
     return [];
   };
 
-  const [myFiles, setMyFiles] = useState<(File | { src: string; name: string; type: string })[]>(setTheState);
+  const [myFiles, setMyFiles] =
+    useState<(File | { src: string; name: string; type: string })[]>(
+      setTheState
+    );
 
   useEffect(() => {
-    if (typeof defaultValue === "string" && defaultValue && shouldFetchFileInfo) {
+    if (
+      typeof defaultValue === "string" &&
+      defaultValue &&
+      shouldFetchFileInfo
+    ) {
       defaultValueQuery.query().then((data) => {
         const myFile = new File([data], "image.jpeg", { type: data.type });
         fieldProps.onChange(myFile);
@@ -137,32 +168,45 @@ const Uploader = (props: IUploadProps) => {
     runOnMount: false,
   });
 
-  const onDrop = useCallback((acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
-    if (acceptedFiles?.[0]) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        if (!uploadService) {
-          setMyFiles(acceptedFiles);
-          fieldProps.onChange(acceptedFiles?.[0]);
-          return;
-        }
-        try {
-          const res = await uploadQueryProps.query(acceptedFiles?.[0]);
-          setMyFiles(acceptedFiles);
-          fieldProps.onChange(res);
-        } catch (e) {
-          toastError(e as ICustomError);
-          setMyFiles([]);
-          fieldProps.onChange("");
-        }
-      };
+  const onDrop = useCallback(
+    (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
+      if (acceptedFiles?.[0]) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          if (!uploadService) {
+            setMyFiles(acceptedFiles);
+            fieldProps.onChange(acceptedFiles?.[0]);
+            return;
+          }
+          try {
+            const res = await uploadQueryProps.query({
+              file: acceptedFiles?.[0],
+              expert_group_id: param,
+            });
+            setMyFiles(acceptedFiles);
+            fieldProps.onChange(res);
+          } catch (e: any) {
+            if (e.response.status === 422) {
+              const responseObject = JSON.parse(e.response.data.message);
+              setSyntaxErrorObject(responseObject.errors);
+              setShowErrorLog(true);
+            }
+            if (e.response.status !== 422) {
+              toastError(e as ICustomError);
+              setMyFiles([]);
+              fieldProps.onChange("");
+            }
+          }
+        };
 
-      reader.readAsArrayBuffer(acceptedFiles[0]);
-    } else if (fileRejections.length > 0) {
-      const errorMessage = fileRejections[0].errors[0]?.message;
-      toastError(errorMessage);
-    }
-  }, []);
+        reader.readAsArrayBuffer(acceptedFiles[0]);
+      } else if (fileRejections.length > 0) {
+        const errorMessage = fileRejections[0].errors[0]?.message;
+        toastError(errorMessage);
+      }
+    },
+    []
+  );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept,
@@ -182,9 +226,6 @@ const Uploader = (props: IUploadProps) => {
   const file = myFiles?.[0] || fieldProps.value?.[0];
 
   const loading = uploadQueryProps.loading || deleteQueryProps.loading;
-  const isDownloadable =
-    (!uploadQueryProps.loading && !uploadQueryProps.error && uploadQueryProps.data?.[fieldProps.name]) ||
-    (file as any)?.[fieldProps.name];
   const { errorMessage, hasError } = getFieldError(errors, fieldProps.name);
 
   return (
@@ -192,9 +233,11 @@ const Uploader = (props: IUploadProps) => {
       <Box
         sx={{
           minHeight: "40px",
-          border: (t) => `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
+          border: (t) =>
+            `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
-            border: (t) => `1px solid ${hasError ? t.palette.error.dark : "black"} `,
+            border: (t) =>
+              `1px solid ${hasError ? t.palette.error.dark : "black"} `,
           },
           borderRadius: 1,
           cursor: "pointer",
@@ -214,18 +257,10 @@ const Uploader = (props: IUploadProps) => {
               <ListItem
                 disabled={loading}
                 secondaryAction={
-                  <Box p={1} sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}>
-                    {isDownloadable && (
-                      <IconButton
-                        onClick={(e: any) => e.stopPropagation()}
-                        sx={{ mr: 0.2 }}
-                        component="a"
-                        href={uploadQueryProps.data?.[fieldProps.name] || (file as any)?.[fieldProps.name]}
-                        download={file.name}
-                      >
-                        <DownloadRoundedIcon fontSize="small" />
-                      </IconButton>
-                    )}
+                  <Box
+                    p={1}
+                    sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}
+                  >
                     {loading && (
                       <IconButton edge="end">
                         <CircularProgress size="20px" />
@@ -246,7 +281,9 @@ const Uploader = (props: IUploadProps) => {
                             setMyFiles([]);
                             return;
                           }
-                          const id = uploadQueryProps.data?.id || fieldProps.value?.[0]?.id;
+                          const id =
+                            uploadQueryProps.data?.id ||
+                            fieldProps.value?.[0]?.id;
                           if (!id) {
                             toastError(true);
                             return;
@@ -286,7 +323,9 @@ const Uploader = (props: IUploadProps) => {
                         objectFit: "contain",
                       }}
                       component="img"
-                      src={(file as any).src || URL.createObjectURL(file as any)}
+                      src={
+                        (file as any).src || URL.createObjectURL(file as any)
+                      }
                       alt={file.name}
                       title={file.name}
                     />
@@ -296,13 +335,21 @@ const Uploader = (props: IUploadProps) => {
                 </ListItemIcon>
                 <ListItemText
                   title={`${(acceptedFiles[0] || file)?.name} - ${
-                    (acceptedFiles[0] || file)?.size ? formatBytes((acceptedFiles[0] || file)?.size) : ""
+                    (acceptedFiles[0] || file)?.size
+                      ? formatBytes((acceptedFiles[0] || file)?.size)
+                      : ""
                   }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
                   primary={<>{(acceptedFiles[0] || file)?.name}</>}
-                  secondary={<>{(acceptedFiles[0] || file)?.size ? formatBytes((acceptedFiles[0] || file)?.size) : null}</>}
+                  secondary={
+                    <>
+                      {(acceptedFiles[0] || file)?.size
+                        ? formatBytes((acceptedFiles[0] || file)?.size)
+                        : null}
+                    </>
+                  }
                 />
               </ListItem>
             </List>

@@ -329,5 +329,6 @@
   "gainedScore": "Gained score",
   "maxPossibleScore":"Max possible score",
   "score":"Score",
-  "weightedScore":"Weighted score"
+  "weightedScore":"Weighted score",
+  "back":"Back"
 }

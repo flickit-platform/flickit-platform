@@ -35,6 +35,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -53,6 +54,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const close = () => {
     setShowErrorLog(false);
     setSyntaxErrorObject(null);
+    setActiveStep(0);
     abortController.abort();
     closeDialog();
   };
@@ -67,10 +69,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     event.preventDefault();
     const { dsl_id, tags = [], ...restOfData } = data;
     const formattedData = {
-      dsl_id: dsl_id.id,
-      is_private: isPrivate,
-      tag_ids: tags.map((t: any) => t.id),
-      expert_group_id: expertGroupId,
+      kitDslId: dsl_id.kitDslId,
+      isPrivate: isPrivate,
+      tagIds: tags.map((t: any) => t.id),
+      expertGroupId: expertGroupId,
       ...restOfData,
     };
     setLoading(true);
@@ -91,15 +93,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      if (e?.response?.status == 422) {
-        setSyntaxErrorObject(e?.response?.data?.errors);
-        setShowErrorLog(true);
-      }
-      if (e?.response?.status !== 422) {
-        toastError(err);
-      }
+      toastError(err.response.data.message);
       setLoading(false);
-      setServerFieldErrors(err, formMethods);
+      setServerFieldErrors(err.response.data.message, formMethods);
       formMethods.clearErrors();
 
       return () => {
@@ -107,25 +103,48 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       };
     }
   };
+  const handleNext = () => {
+    if (activeStep < 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
       <Grid container spacing={2} sx={styles.formGrid}>
-        <Grid item xs={12} md={12}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          sx={{ display: `${activeStep === 0 ? "" : "none"}` }}
+        >
           <UploadField
             accept={{ "application/zip": [".zip"] }}
             uploadService={(args, config) =>
-              service.uploadAssessmentKitDSL(args, config)
+              service.uploadAssessmentKitDSLFile(args, config)
             }
             deleteService={(args, config) =>
               service.deleteAssessmentKitDSL(args, config)
             }
             name="dsl_id"
+            param={expertGroupId}
             required={true}
             label={<Trans i18nKey="dsl" />}
+            setShowErrorLog={setShowErrorLog}
+            setSyntaxErrorObject={setSyntaxErrorObject}
           />
         </Grid>
-
-        <Grid item xs={12} sm={8} md={8}>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={8}
+          sx={{ display: `${activeStep === 0 ? "none" : ""}` }}
+        >
           <InputFieldUC
             name="title"
             label={<Trans i18nKey="title" />}
@@ -133,10 +152,21 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             defaultValue={defaultValues.title || ""}
           />
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          md={4}
+          sx={{ display: `${activeStep === 0 ? "none" : ""}` }}
+        >
           <IsPrivateSwitch setIsPrivate={setIsPrivate} isPrivate={isPrivate} />
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          sx={{ display: `${activeStep === 0 ? "none" : ""}` }}
+        >
           <AutocompleteAsyncField
             {...useConnectAutocompleteField({
               service: (args, config) =>
@@ -149,7 +179,12 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             label={<Trans i18nKey="tags" />}
           />
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          sx={{ display: `${activeStep === 0 ? "none" : ""}` }}
+        >
           <InputFieldUC
             name="summary"
             label={<Trans i18nKey="summary" />}
@@ -157,7 +192,12 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             defaultValue={defaultValues.summary || ""}
           />
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          sx={{ display: `${activeStep === 0 ? "none" : ""}` }}
+        >
           <RichEditorField
             name="about"
             label={<Trans i18nKey="about" />}
@@ -166,18 +206,40 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           />
         </Grid>
       </Grid>
-      <CEDialogActions
-        closeDialog={close}
-        loading={loading}
-        type={type}
-        hasViewBtn={true}
-        onSubmit={(...args) =>
-          formMethods.handleSubmit((data) => onSubmit(data, ...args))
-        }
-      />
+      <Box sx={{ display: `${activeStep === 0 ? "none" : ""}` }}>
+        <CEDialogActions
+          closeDialog={close}
+          loading={loading}
+          type={type}
+          hasBackBtn={true}
+          onBack={handleBack}
+          hasViewBtn={true}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
+        />
+      </Box>
+      <Box
+        sx={{
+          justifyContent: "flex-end",
+          mt: 4,
+          display: `${activeStep === 0 ? "flex" : "none"}`,
+        }}
+      >
+        <Button onClick={close}>
+          <Trans i18nKey="cancel" />
+        </Button>
+        <Button
+          sx={{ ml: 2 }}
+          variant="contained"
+          onClick={handleNext}
+          disabled={!formMethods.formState.dirtyFields.dsl_id}
+        >
+          <Trans i18nKey="next" />
+        </Button>
+      </Box>
     </FormProviderWithForm>
   );
-
   const syntaxErrorContent = (
     <Box>
       <Typography ml={1} variant="h6">

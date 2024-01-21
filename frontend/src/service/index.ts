@@ -445,6 +445,22 @@ export const createService = (
         }
       );
     },
+    uploadAssessmentKitDSLFile(
+      args: { file: any; expert_group_id?: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { file, expert_group_id } = args ?? {};
+      return axios.post(
+        `/api/v1/assessment-kits/upload-dsl/`,
+        { dsl_file: file, expert_group_id: expert_group_id },
+        {
+          ...config,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    },
     deleteAssessmentKitDSL(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -457,7 +473,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { data } = args ?? {};
-      return axios.post(`/baseinfo/importassessmentkit/`, data, config);
+      return axios.post(`/api/v1/assessment-kits/create-by-dsl/`, data, config);
     },
     updateAssessmentKit(
       args: { assessmentKitId?: TId; data: any },

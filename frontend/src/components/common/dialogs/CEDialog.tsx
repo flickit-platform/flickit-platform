@@ -22,11 +22,19 @@ export const CEDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   const fullScreen = useScreenResize("sm");
 
   return (
-    <Dialog onClose={closeDialog} fullWidth maxWidth="md" fullScreen={fullScreen} {...rest}>
+    <Dialog
+      onClose={closeDialog}
+      fullWidth
+      maxWidth="md"
+      fullScreen={fullScreen}
+      {...rest}
+    >
       <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
         {title}
       </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>{children}</DialogContent>
+      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
+        {children}
+      </DialogContent>
     </Dialog>
   );
 };
@@ -41,6 +49,8 @@ interface ICEDialogActionsProps extends DialogActionsProps {
   hasViewBtn?: boolean;
   hideSubmitButton?: boolean;
   onSubmit?: (e: any, shouldView?: boolean) => any;
+  onBack?: () => void;
+  hasBackBtn?: boolean;
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -50,6 +60,8 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     closeDialog,
     onClose = closeDialog,
     onSubmit,
+    onBack,
+    hasBackBtn,
     hasViewBtn,
     hideSubmitButton = false,
     submitButtonLabel = type === "update" ? t("update") : t("create"),
@@ -71,6 +83,13 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             <Trans i18nKey="cancel" />
           </Button>
         </Grid>
+        {hasBackBtn && (
+          <Grid item>
+            <Button data-cy="back" variant="contained" onClick={onBack}>
+              <Trans i18nKey="back" />
+            </Button>
+          </Grid>
+        )}
         {!hideSubmitButton && (
           <Grid item>
             <LoadingButton
@@ -100,7 +119,9 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
                 onSubmit?.(e, true)();
               }}
             >
-              {submitAndViewButtonLabel || <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />}
+              {submitAndViewButtonLabel ?? (
+                <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
+              )}
             </LoadingButton>
           </Grid>
         )}
