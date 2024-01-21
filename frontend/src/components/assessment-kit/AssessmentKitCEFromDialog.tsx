@@ -233,7 +233,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           sx={{ ml: 2 }}
           variant="contained"
           onClick={handleNext}
-          disabled={formMethods.formState.dirtyFields.dsl_id ? false : true}
+          disabled={!formMethods.formState.dirtyFields.dsl_id}
         >
           <Trans i18nKey="next" />
         </Button>

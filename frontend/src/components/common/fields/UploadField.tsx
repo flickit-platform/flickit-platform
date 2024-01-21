@@ -118,7 +118,7 @@ const Uploader = (props: IUploadProps) => {
   const { service } = useServiceContext();
   const defaultValueQuery = useQuery({
     service: (
-      args = { url: defaultValue?.replace("http://flickit.org", "") },
+      args = { url: defaultValue?.replace("https://flickit.org", "") },
       config
     ) => service.fetchImage(args, config),
     runOnMount: false,
@@ -267,20 +267,6 @@ const Uploader = (props: IUploadProps) => {
                     p={1}
                     sx={{ backgroundColor: "#ffffffc9", borderRadius: 1 }}
                   >
-                    {isDownloadable && (
-                      <IconButton
-                        onClick={(e: any) => e.stopPropagation()}
-                        sx={{ mr: 0.2 }}
-                        component="a"
-                        href={
-                          uploadQueryProps.data?.[fieldProps.name] ||
-                          (file as any)?.[fieldProps.name]
-                        }
-                        download={file.name}
-                      >
-                        <DownloadRoundedIcon fontSize="small" />
-                      </IconButton>
-                    )}
                     {loading && (
                       <IconButton edge="end">
                         <CircularProgress size="20px" />

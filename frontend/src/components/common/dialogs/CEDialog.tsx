@@ -119,7 +119,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
                 onSubmit?.(e, true)();
               }}
             >
-              {submitAndViewButtonLabel || (
+              {submitAndViewButtonLabel ?? (
                 <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
               )}
             </LoadingButton>
