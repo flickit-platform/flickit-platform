@@ -27,7 +27,6 @@ import {
 } from "react-hook-form";
 import formatBytes from "@utils/formatBytes";
 import getFieldError from "@utils/getFieldError";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { Trans } from "react-i18next";
 import getFileNameFromSrc from "@utils/getFileNameFromSrc";
 import { useServiceContext } from "@/providers/ServiceProvider";
@@ -227,11 +226,6 @@ const Uploader = (props: IUploadProps) => {
   const file = myFiles?.[0] || fieldProps.value?.[0];
 
   const loading = uploadQueryProps.loading || deleteQueryProps.loading;
-  const isDownloadable =
-    (!uploadQueryProps.loading &&
-      !uploadQueryProps.error &&
-      uploadQueryProps.data?.[fieldProps.name]) ||
-    (file as any)?.[fieldProps.name];
   const { errorMessage, hasError } = getFieldError(errors, fieldProps.name);
 
   return (
