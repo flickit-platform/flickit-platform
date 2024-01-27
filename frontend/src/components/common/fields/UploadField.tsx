@@ -272,31 +272,31 @@ const Uploader = (props: IUploadProps) => {
                         aria-label="delete"
                         onClick={async (e) => {
                           e.stopPropagation();
-                          if (!deleteService) {
+                          // if (!deleteService) {
                             setMyFiles([]);
                             fieldProps.onChange("");
                             return;
-                          }
-                          if (uploadQueryProps.error) {
-                            setMyFiles([]);
-                            return;
-                          }
-                          const id =
-                            uploadQueryProps.data?.id ||
-                            fieldProps.value?.[0]?.id;
-                          if (!id) {
-                            toastError(true);
-                            return;
-                          }
-                          try {
-                            await deleteQueryProps.query({
-                              id,
-                            });
-                            setMyFiles([]);
-                            fieldProps.onChange("");
-                          } catch (e) {
-                            toastError(e as ICustomError);
-                          }
+                          // }  
+                          // if (uploadQueryProps.error) {
+                          //   setMyFiles([]);
+                          //   return;
+                          // }
+                          // const id =
+                          //   uploadQueryProps.data?.id ||
+                          //   fieldProps.value?.[0]?.id;
+                          // if (!id) {
+                          //   toastError(true);
+                          //   return;
+                          // }
+                          // try {
+                          //   await deleteQueryProps.query({
+                          //     id,
+                          //   });
+                          //   setMyFiles([]);
+                          //   fieldProps.onChange("");
+                          // } catch (e) {
+                          //   toastError(e as ICustomError);
+                          // }
                         }}
                       >
                         <DeleteRoundedIcon fontSize="small" />
