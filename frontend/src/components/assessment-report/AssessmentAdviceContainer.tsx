@@ -1,4 +1,5 @@
 import Title from "@common/Title";
+import { useState } from "react";
 import { Trans } from "react-i18next";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import AdviceSlider from "../common/AdviceSlider";
@@ -8,9 +9,10 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 const AssessmentAdviceContainer = () => {
+  const [expanded, setExpanded] = useState<string | false>(false);
   return (
     <div>
-      <Title
+      {/* <Title
         wrapperProps={{
           sx: {
             flexDirection: { xs: "column", md: "row" },
@@ -33,320 +35,448 @@ const AssessmentAdviceContainer = () => {
         }
       >
         Advice
-      </Title>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          width: "70%",
-          margin: "0 auto",
-        }}
-      >
+      </Title> */}
+      {expanded && (
         <Box
           sx={{
-            background: "#1CC2C4",
-            py: 4,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: "70%",
+            margin: "0 auto",
+          }}
+        >
+          <Box
+            sx={{
+              background: "#1CC2C4",
+              py: 4,
+              textAlign: "center",
+              color: "#fff",
+              fontSize: "32px",
+              fontWeight: "700",
+              borderRadius: "32px 32px 0 0",
+            }}
+          >
+            Set Your goals
+          </Box>
+          <Box
+            sx={{
+              background: "#EDF4FC",
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                color: "#6C7B8E",
+                fontSize: "16px",
+                fontWeight: "500",
+                display: "flex",
+                textAlign: "center",
+                width: "50%",
+                py: 2,
+              }}
+            >
+              Which attributes you want to change? The Advisor will try to
+              provide most accurate advice based on your choices
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                width: "50%",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                my: 4,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Team</Box>
+                <Divider sx={{ my: 2 }} />
+                <Box>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Team spirit"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Agile work frame"
+                    />
+                  </FormGroup>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Software</Box>
+                <Divider sx={{ my: 2 }} />
+                <Box>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Usability"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Reliability"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Security"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#0A2342",
+                            "&.Mui-checked": {
+                              color: "#1CC2C4",
+                            },
+                          }}
+                        />
+                      }
+                      label="Maintainability"
+                    />
+                  </FormGroup>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{ borderRadius: "0 0 32px 32px", background: "#fff", py: 8 }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                px: 8,
+                width: "100%",
+                margin: "0 auto",
+              }}
+            >
+              <Box sx={{ display: "contents" }}>
+                <Box
+                  sx={{
+                    px: "10px",
+                    color: "#D81E5B",
+                    background: "#FDF1F5",
+                    fontSize: "11px",
+                    border: "1px solid #D81E5B",
+                    borderRadius: "8px",
+                  }}
+                >
+                  software
+                </Box>
+                <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
+                  Usablity
+                </Box>
+              </Box>
+              <AdviceSlider defaultValue={1} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "center",
+                }}
+              >
+                <Box
+                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
+                >
+                  from
+                </Box>
+                <Box
+                  sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
+                >
+                  Moderate
+                </Box>
+                <Box
+                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
+                >
+                  to
+                </Box>
+                <Box
+                  sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
+                >
+                  Good
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                px: 8,
+                width: "100%",
+                margin: "0 auto",
+              }}
+            >
+              <Box sx={{ display: "contents" }}>
+                <Box
+                  sx={{
+                    px: "10px",
+                    color: "#D81E5B",
+                    background: "#FDF1F5",
+                    fontSize: "11px",
+                    border: "1px solid #D81E5B",
+                    borderRadius: "8px",
+                  }}
+                >
+                  software
+                </Box>
+                <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
+                  Usablity
+                </Box>
+              </Box>
+              <AdviceSlider defaultValue={3} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "center",
+                }}
+              >
+                <Box
+                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
+                >
+                  from
+                </Box>
+                <Box
+                  sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
+                >
+                  Moderate
+                </Box>
+                <Box
+                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
+                >
+                  to
+                </Box>
+                <Box
+                  sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
+                >
+                  Good
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ mt: "64px", display: "flex", justifyContent: "center" }}>
+              <Button
+                sx={{
+                  color: "#1CC2C4",
+                  px: 2,
+                  py: 1,
+                  borderRadius: "16px",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  width: "fit-content",
+                  mr: 2,
+                }}
+                onClick={() => setExpanded(false)}
+              >
+                cancel
+              </Button>
+              <Button
+                sx={{
+                  background: "#1CC2C4",
+                  color: "#EDFCFC",
+                  px: 2,
+                  py: 1,
+                  borderRadius: "16px",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  width: "fit-content",
+                }}
+              >
+                Set these parameters
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      <Box mt={6}>
+        <Box
+          sx={{
+            fontSize: "64px",
+            fontWeight: "700",
+            color: "#1CC2C4",
+            textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
             textAlign: "center",
-            color: "#fff",
+          }}
+        >
+          Advisor
+        </Box>
+        <Box
+          sx={{
+            fontSize: "16px",
+            fontWeight: "400",
+            color: "#0A2342",
+            px: 16,
+            margin: "0 auto",
+            mb: 16,
+          }}
+        >
+          The Advisor service provides you some tips help you to improve your
+          software score in diffrent subjects and attributes. It considers your
+          priorities you tell itand tries to Give Advices with most
+          effectiveness and least efforts to fullfill. some advices affect more
+          than attributes and subject. you can always change your preferences
+          and goals via setting new parameteres for advisor. There are many
+          factors determining the situation whetere an advice worths its costs
+          and efforts or not for you. we are always here to to see if you have
+          any further question but the final decision is yours! Make it wise.
+        </Box>
+        <Box
+          sx={{
             fontSize: "32px",
             fontWeight: "700",
-            borderRadius: "32px 32px 0 0",
+            color: "#0A2342",
+            textShadow: "0px 0px 11.2px rgba(10, 35, 66, 0.30)",
+            textAlign: "center",
+            mb: 6,
           }}
         >
-          Set Your goals
-        </Box>
-        <Box
-          sx={{
-            background: "#EDF4FC",
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            sx={{
-              color: "#6C7B8E",
-              fontSize: "16px",
-              fontWeight: "500",
-              display: "flex",
-              textAlign: "center",
-              width: "50%",
-              py: 2,
-            }}
-          >
-            Which attributes you want to change? The Advisor will try to provide
-            most accurate advice based on your choices
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              width: "50%",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              my: 4,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Team</Box>
-              <Divider sx={{ my: 2 }} />
-              <Box>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Team spirit"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Agile work frame"
-                  />
-                </FormGroup>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Software</Box>
-              <Divider sx={{ my: 2 }} />
-              <Box>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Usability"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Reliability"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Security"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#0A2342",
-                          "&.Mui-checked": {
-                            color: "#1CC2C4",
-                          },
-                        }}
-                      />
-                    }
-                    label="Maintainability"
-                  />
-                </FormGroup>
-              </Box>
-            </Box>
-          </Box>
+          Advices list
         </Box>
 
-        <Box sx={{ borderRadius: "0 0 32px 32px", background: "#fff", py: 8 }}>
+        {/* list header */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
+        >
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              px: 8,
-              width: "100%",
-              margin: "0 auto",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
+              width: "5%",
             }}
           >
-            <Box sx={{ display: "contents" }}>
-              <Box
-                sx={{
-                  px: "10px",
-                  color: "#D81E5B",
-                  background: "#FDF1F5",
-                  fontSize: "11px",
-                  border: "1px solid #D81E5B",
-                  borderRadius: "8px",
-                }}
-              >
-                software
-              </Box>
-              <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
-                Usablity
-              </Box>
-            </Box>
-            <AdviceSlider defaultValue={1} />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-              }}
-            >
-              <Box
-                sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-              >
-                from
-              </Box>
-              <Box
-                sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
-              >
-                Moderate
-              </Box>
-              <Box
-                sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-              >
-                to
-              </Box>
-              <Box
-                sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
-              >
-                Good
-              </Box>
-            </Box>
+            Number
           </Box>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              px: 8,
-              width: "100%",
-              margin: "0 auto",
+              width: "40%",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
             }}
           >
-            <Box sx={{ display: "contents" }}>
-              <Box
-                sx={{
-                  px: "10px",
-                  color: "#D81E5B",
-                  background: "#FDF1F5",
-                  fontSize: "11px",
-                  border: "1px solid #D81E5B",
-                  borderRadius: "8px",
-                }}
-              >
-                software
-              </Box>
-              <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
-                Usablity
-              </Box>
-            </Box>
-            <AdviceSlider defaultValue={3} />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-              }}
-            >
-              <Box
-                sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-              >
-                from
-              </Box>
-              <Box
-                sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
-              >
-                Moderate
-              </Box>
-              <Box
-                sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-              >
-                to
-              </Box>
-              <Box
-                sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
-              >
-                Good
-              </Box>
-            </Box>
+            Question
           </Box>
-          <Box sx={{ mt: "64px", display: "flex", justifyContent: "center" }}>
-            <Button
-              sx={{
-                color: "#1CC2C4",
-                px: 2,
-                py: 1,
-                borderRadius: "16px",
-                fontSize: "16px",
-                fontWeight: "700",
-                width: "fit-content",
-                mr:2
-              }}
-            >
-              cancel
-            </Button>
-            <Button
-              sx={{
-                background: "#1CC2C4",
-                color: "#EDFCFC",
-                px: 2,
-                py: 1,
-                borderRadius: "16px",
-                fontSize: "16px",
-                fontWeight: "700",
-                width: "fit-content",
-              }}
-            >
-              Set these parameters
-            </Button>
+          <Box
+            sx={{
+              width: "10%",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
+            }}
+          >
+            What is now
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
+            }}
+          >
+            What should be
+          </Box>
+          <Box
+            sx={{
+              width: "15%",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
+            }}
+          >
+            Targeted attributes
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              fontSize: "16px",
+              color: "#9DA7B3",
+              fontWeight: "700",
+              textAlign: "center",
+            }}
+          >
+            Questionnaire
           </Box>
         </Box>
-      </Box>
-      <Box mt={6}>
+        {/* list item */}
+
         <Box
           sx={{
             display: "flex",
@@ -354,31 +484,49 @@ const AssessmentAdviceContainer = () => {
             alignItems: "center",
           }}
         >
-          <Box sx={{ fontSize: "64px", color: "#1CC2C4", fontWeight: "700" }}>
+          <Box
+            sx={{
+              fontSize: "64px",
+              color: "#1CC2C4",
+              fontWeight: "700",
+              width: "5%",
+            }}
+          >
             1
           </Box>
           <Box
             sx={{
-              width: "15%",
+              width: "40%",
               color: "#0A2342",
               fontSize: "16px",
               fontWeight: "700",
             }}
           >
-            Invest in team training and education
-          </Box>{" "}
+            Have suitable architectural styles and patterns (such as
+            microservices, service-oriented, message-based, actor model, event
+            sourcing, etc.) been chosen for your software?
+          </Box>
           <Box
             sx={{
-              width: "40%",
+              width: "10%",
               color: "#0A2342",
               fontSize: "14px",
               fontWeight: "300",
+              textAlign: "center",
             }}
           >
-            Your team should be aware of the latest technologies, tools, and
-            standards for software development. They should also learn how to
-            write secure, clean, and maintainable code. This can improve the
-            quality and performance of your software.
+            opt2 : 20-40 %
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt3: 60 - 70%
           </Box>
           <Box
             sx={{
@@ -428,48 +576,20 @@ const AssessmentAdviceContainer = () => {
               maintainability
             </Box>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box>
-              <svg
-                width="23"
-                height="14"
-                viewBox="0 0 23 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18.925 1.00004L11.165 8.76004L3.405 1.00004C2.625 0.220039 1.365 0.220039 0.585 1.00004C-0.195 1.78004 -0.195 3.04004 0.585 3.82004L9.765 13C10.545 13.78 11.805 13.78 12.585 13L21.765 3.82004C22.545 3.04004 22.545 1.78004 21.765 1.00004C20.985 0.240039 19.705 0.220039 18.925 1.00004Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
-            <Box sx={{ ml: 2 }}>
-              <svg
-                width="37"
-                height="36"
-                viewBox="0 0 37 36"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.3"
-                  d="M9.34998 6H27.35V31.5H9.34998V6Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M16.85 27H13.85V10.5H16.85V27ZM22.85 27H19.85V10.5H22.85V27ZM6.34998 4.5H30.35V7.5H6.34998V4.5Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 7.5L21.35 3H15.35L10.85 7.5H25.85Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 33H10.85C9.19998 33 7.84998 31.65 7.84998 30V4.5H28.85V30C28.85 31.65 27.5 33 25.85 33ZM10.85 7.5V30H25.85V7.5H10.85Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#1CC2C4",
+              fontSize: "14px",
+              fontWeight: "500",
+              textDecoration: "underline",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            Code Quality
+            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
           </Box>
         </Box>
         <Divider />
@@ -480,31 +600,48 @@ const AssessmentAdviceContainer = () => {
             alignItems: "center",
           }}
         >
-          <Box sx={{ fontSize: "64px", color: "#1CC2C4", fontWeight: "700" }}>
+          <Box
+            sx={{
+              fontSize: "64px",
+              color: "#1CC2C4",
+              fontWeight: "700",
+              width: "5%",
+            }}
+          >
             2
           </Box>
           <Box
             sx={{
-              width: "15%",
+              width: "40%",
               color: "#0A2342",
               fontSize: "16px",
               fontWeight: "700",
             }}
           >
-            Invest in team training and education
-          </Box>{" "}
+            Have the functionalities of the system been properly divided among
+            the components?
+          </Box>
           <Box
             sx={{
-              width: "40%",
+              width: "10%",
               color: "#0A2342",
               fontSize: "14px",
               fontWeight: "300",
+              textAlign: "center",
             }}
           >
-            Your team should be aware of the latest technologies, tools, and
-            standards for software development. They should also learn how to
-            write secure, clean, and maintainable code. This can improve the
-            quality and performance of your software.
+            opt2 : 20-40 %
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt3: 60 - 70%
           </Box>
           <Box
             sx={{
@@ -554,48 +691,20 @@ const AssessmentAdviceContainer = () => {
               maintainability
             </Box>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box>
-              <svg
-                width="23"
-                height="14"
-                viewBox="0 0 23 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18.925 1.00004L11.165 8.76004L3.405 1.00004C2.625 0.220039 1.365 0.220039 0.585 1.00004C-0.195 1.78004 -0.195 3.04004 0.585 3.82004L9.765 13C10.545 13.78 11.805 13.78 12.585 13L21.765 3.82004C22.545 3.04004 22.545 1.78004 21.765 1.00004C20.985 0.240039 19.705 0.220039 18.925 1.00004Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
-            <Box sx={{ ml: 2 }}>
-              <svg
-                width="37"
-                height="36"
-                viewBox="0 0 37 36"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.3"
-                  d="M9.34998 6H27.35V31.5H9.34998V6Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M16.85 27H13.85V10.5H16.85V27ZM22.85 27H19.85V10.5H22.85V27ZM6.34998 4.5H30.35V7.5H6.34998V4.5Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 7.5L21.35 3H15.35L10.85 7.5H25.85Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 33H10.85C9.19998 33 7.84998 31.65 7.84998 30V4.5H28.85V30C28.85 31.65 27.5 33 25.85 33ZM10.85 7.5V30H25.85V7.5H10.85Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#1CC2C4",
+              fontSize: "14px",
+              fontWeight: "500",
+              textDecoration: "underline",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            Code Quality
+            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
           </Box>
         </Box>
         <Divider />
@@ -606,31 +715,48 @@ const AssessmentAdviceContainer = () => {
             alignItems: "center",
           }}
         >
-          <Box sx={{ fontSize: "64px", color: "#1CC2C4", fontWeight: "700" }}>
+          <Box
+            sx={{
+              fontSize: "64px",
+              color: "#1CC2C4",
+              fontWeight: "700",
+              width: "5%",
+            }}
+          >
             3
           </Box>
           <Box
             sx={{
-              width: "15%",
+              width: "40%",
               color: "#0A2342",
               fontSize: "16px",
               fontWeight: "700",
             }}
           >
-            Invest in team training and education
-          </Box>{" "}
+            Has the appropriate layering architecture (e.g. hexagonal,
+            three-tier, DDD, etc.) been chosen for the system?
+          </Box>
           <Box
             sx={{
-              width: "40%",
+              width: "10%",
               color: "#0A2342",
               fontSize: "14px",
               fontWeight: "300",
+              textAlign: "center",
             }}
           >
-            Your team should be aware of the latest technologies, tools, and
-            standards for software development. They should also learn how to
-            write secure, clean, and maintainable code. This can improve the
-            quality and performance of your software.
+            opt2 : 20-40 %
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt3: 60 - 70%
           </Box>
           <Box
             sx={{
@@ -680,50 +806,252 @@ const AssessmentAdviceContainer = () => {
               maintainability
             </Box>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box>
-              <svg
-                width="23"
-                height="14"
-                viewBox="0 0 23 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18.925 1.00004L11.165 8.76004L3.405 1.00004C2.625 0.220039 1.365 0.220039 0.585 1.00004C-0.195 1.78004 -0.195 3.04004 0.585 3.82004L9.765 13C10.545 13.78 11.805 13.78 12.585 13L21.765 3.82004C22.545 3.04004 22.545 1.78004 21.765 1.00004C20.985 0.240039 19.705 0.220039 18.925 1.00004Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
-            <Box sx={{ ml: 2 }}>
-              <svg
-                width="37"
-                height="36"
-                viewBox="0 0 37 36"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.3"
-                  d="M9.34998 6H27.35V31.5H9.34998V6Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M16.85 27H13.85V10.5H16.85V27ZM22.85 27H19.85V10.5H22.85V27ZM6.34998 4.5H30.35V7.5H6.34998V4.5Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 7.5L21.35 3H15.35L10.85 7.5H25.85Z"
-                  fill="#1CC2C4"
-                />
-                <path
-                  d="M25.85 33H10.85C9.19998 33 7.84998 31.65 7.84998 30V4.5H28.85V30C28.85 31.65 27.5 33 25.85 33ZM10.85 7.5V30H25.85V7.5H10.85Z"
-                  fill="#1CC2C4"
-                />
-              </svg>
-            </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#1CC2C4",
+              fontSize: "14px",
+              fontWeight: "500",
+              textDecoration: "underline",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            Code Quality
+            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
           </Box>
         </Box>
+        <Divider />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              fontSize: "64px",
+              color: "#1CC2C4",
+              fontWeight: "700",
+              width: "5%",
+            }}
+          >
+            4
+          </Box>
+          <Box
+            sx={{
+              width: "40%",
+              color: "#0A2342",
+              fontSize: "16px",
+              fontWeight: "700",
+            }}
+          >
+            Is the system resilient to changes in the used technologies (e.g.
+            libraries, databases, etc)?
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt2 : 20-40 %
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt3: 60 - 70%
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              width: "15%",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                px: "10px",
+                color: "#0A2342",
+                background: "#EDF4FC",
+                fontSize: "11px",
+                border: "1px solid #0A2342",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              Team spirit
+            </Box>
+            <Box
+              sx={{
+                px: "10px",
+                color: "#D81E5B",
+                background: "#FDF1F5",
+                fontSize: "11px",
+                border: "1px solid #D81E5B",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              reliability
+            </Box>
+            <Box
+              sx={{
+                px: "10px",
+                color: "#F9A03F",
+                background: "#FEF5EB",
+                fontSize: "11px",
+                border: "1px solid #F9A03F",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              maintainability
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#1CC2C4",
+              fontSize: "14px",
+              fontWeight: "500",
+              textDecoration: "underline",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            Code Quality
+            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
+          </Box>
+        </Box>
+        <Divider />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              fontSize: "64px",
+              color: "#1CC2C4",
+              fontWeight: "700",
+              width: "5%",
+            }}
+          >
+            5
+          </Box>
+          <Box
+            sx={{
+              width: "40%",
+              color: "#0A2342",
+              fontSize: "16px",
+              fontWeight: "700",
+            }}
+          >
+            Is the system deployable on a cloud infrastructure?
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt2 : 20-40 %
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#0A2342",
+              fontSize: "14px",
+              fontWeight: "300",
+              textAlign: "center",
+            }}
+          >
+            opt3: 60 - 70%
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              width: "15%",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                px: "10px",
+                color: "#0A2342",
+                background: "#EDF4FC",
+                fontSize: "11px",
+                border: "1px solid #0A2342",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              Team spirit
+            </Box>
+            <Box
+              sx={{
+                px: "10px",
+                color: "#D81E5B",
+                background: "#FDF1F5",
+                fontSize: "11px",
+                border: "1px solid #D81E5B",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              reliability
+            </Box>
+            <Box
+              sx={{
+                px: "10px",
+                color: "#F9A03F",
+                background: "#FEF5EB",
+                fontSize: "11px",
+                border: "1px solid #F9A03F",
+                borderRadius: "8px",
+                m: "4px",
+              }}
+            >
+              maintainability
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              width: "10%",
+              color: "#1CC2C4",
+              fontSize: "14px",
+              fontWeight: "500",
+              textDecoration: "underline",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            Code Quality
+            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
+          </Box>
+        </Box>
+        {/* list item */}
       </Box>
     </div>
   );
