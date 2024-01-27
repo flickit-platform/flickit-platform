@@ -113,6 +113,7 @@ export const theme = createTheme({
         }
         body {
           background: #f5f5f5;
+          direction:rtl;
         }
       `,
     },
@@ -156,7 +157,7 @@ export const theme = createTheme({
         },
       },
     },
-    
+
     //@ts-expect-error
     MuiTabPanel: {
       styleOverrides: {

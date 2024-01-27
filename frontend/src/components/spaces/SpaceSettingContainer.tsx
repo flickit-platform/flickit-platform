@@ -49,7 +49,7 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
-        toolbar={isOwner?<EditSpaceButton fetchSpace={query} />:<div/>}
+        toolbar={isOwner ? <EditSpaceButton fetchSpace={query} /> : <div />}
         backLink={-1}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
@@ -61,7 +61,9 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}</Box>
+      <Box pt={3}>
+        {!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}
+      </Box>
     </Box>
   );
 };
@@ -99,14 +101,14 @@ const EditSpaceButton = (props: any) => {
   );
 };
 
-function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
+function SpaceSettings(props: { isOwner: boolean; owner: any }) {
   const { owner } = props;
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-
+  const is_farsi = true;
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
@@ -115,7 +117,13 @@ function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
-                  <GroupsRoundedIcon fontSize="small" sx={{ mr: "8px" }} />
+                  <GroupsRoundedIcon
+                    fontSize="small"
+                    sx={{
+                      mr: `${is_farsi ? 0 : "8px"}`,
+                      ml: `${is_farsi ? "8px" : 0}`,
+                    }}
+                  />
                   <Trans i18nKey="members" />
                 </Box>
               }

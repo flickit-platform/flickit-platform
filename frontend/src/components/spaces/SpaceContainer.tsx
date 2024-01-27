@@ -26,12 +26,18 @@ const SpaceContainer = () => {
   });
 
   const isEmpty = spacesQueryData?.data?.results?.length === 0;
-
+  const is_farsi = true;
   return (
     <SpaceLayout
       title={
         <Title borderBottom={true}>
-          <FolderRoundedIcon sx={{ mr: 1 }} /> <Trans i18nKey="spaces" />
+          <FolderRoundedIcon
+            sx={{
+              mr: `${is_farsi ? 0 : "8px"}`,
+              ml: `${is_farsi ? "8px" : 0}`,
+            }}
+          />{" "}
+          <Trans i18nKey="spaces" />
         </Title>
       }
     >
@@ -45,10 +51,16 @@ const SpaceContainer = () => {
           my: 3,
         }}
       >
-        <Box></Box>
-        <Box ml="auto">
+        <Box ml={`${is_farsi ? 0 : "auto"}`} mr={`${is_farsi ? "auto" : 0}`}>
           <ToolbarCreateItemBtn
-            icon={<CreateNewFolderRoundedIcon />}
+            icon={
+              <CreateNewFolderRoundedIcon
+                sx={{
+                  mr: `${is_farsi ? 0 : "4px"}`,
+                  ml: `${is_farsi ? "4px" : 0}`,
+                }}
+              />
+            }
             onClick={dialogProps.openDialog}
             shouldAnimate={isEmpty}
             text="createSpace"
@@ -60,7 +72,13 @@ const SpaceContainer = () => {
         renderLoading={() => (
           <Box mt={5}>
             {[1, 2, 3, 4, 5].map((item) => {
-              return <Skeleton key={item} variant="rectangular" sx={{ borderRadius: 2, height: "60px", mb: 1 }} />;
+              return (
+                <Skeleton
+                  key={item}
+                  variant="rectangular"
+                  sx={{ borderRadius: 2, height: "60px", mb: 1 }}
+                />
+              );
             })}
           </Box>
         )}
@@ -75,11 +93,20 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
-          return <SpacesList dialogProps={dialogProps} data={data} fetchSpaces={spacesQueryData.query} />;
+          return (
+            <SpacesList
+              dialogProps={dialogProps}
+              data={data}
+              fetchSpaces={spacesQueryData.query}
+            />
+          );
         }}
       />
 
-      <CreateSpaceDialog {...dialogProps} onSubmitForm={spacesQueryData.query} />
+      <CreateSpaceDialog
+        {...dialogProps}
+        onSubmitForm={spacesQueryData.query}
+      />
     </SpaceLayout>
   );
 };

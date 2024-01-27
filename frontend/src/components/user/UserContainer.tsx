@@ -37,18 +37,28 @@ const UserContainer = () => {
     setValue(newValue);
     navigate(`/user/${newValue}`);
   };
-
+  const is_farsi = true;
   return (
     <Box m="auto">
       <Box>
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box>
-              <TabList onChange={handleChange} scrollButtons="auto" variant="scrollable">
+              <TabList
+                onChange={handleChange}
+                scrollButtons="auto"
+                variant="scrollable"
+              >
                 <Tab
                   label={
                     <Box sx={{ ...styles.centerV }}>
-                      <AccountBoxRoundedIcon fontSize="small" sx={{ mr: "8px" }} />
+                      <AccountBoxRoundedIcon
+                        fontSize="small"
+                        sx={{
+                          mr: `${is_farsi ? 0 : "8px"}`,
+                          ml: `${is_farsi ? "8px" : 0}`,
+                        }}
+                      />
                       <Trans i18nKey="account" />
                     </Box>
                   }
@@ -57,7 +67,13 @@ const UserContainer = () => {
                 <Tab
                   label={
                     <Box sx={{ ...styles.centerV }}>
-                      <EngineeringIcon fontSize="small" sx={{ mr: "8px" }} />
+                      <EngineeringIcon
+                        fontSize="small"
+                        sx={{
+                          mr: `${is_farsi ? 0 : "8px"}`,
+                          ml: `${is_farsi ? "8px" : 0}`,
+                        }}
+                      />
                       <Trans i18nKey="expertGroups" />
                     </Box>
                   }

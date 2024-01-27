@@ -66,7 +66,7 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <CreateNewFolderRoundedIcon sx={{ mr: 1 }} />
+          <CreateNewFolderRoundedIcon sx={{ ml: 1 }} />
           {type === "update" ? <Trans i18nKey="updateSpace" /> : <Trans i18nKey="createSpace" />}
         </>
       }

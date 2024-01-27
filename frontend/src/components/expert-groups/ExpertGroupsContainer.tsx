@@ -24,7 +24,7 @@ const ExpertGroupsContainer = () => {
   });
 
   useDocumentTitle(t("expertGroups") as string);
-
+  const is_farsi = true;
   return (
     <Box>
       {is_expert && (
@@ -39,7 +39,11 @@ const ExpertGroupsContainer = () => {
           }}
         >
           <Box></Box>
-          <Box ml="auto">{is_expert && <CreateExpertGroupButton onSubmitForm={queryData.query} />}</Box>
+          <Box ml={`${is_farsi ? 0 : "auto"}`} mr={`${is_farsi ? "auto" : 0}`}>
+            {is_expert && (
+              <CreateExpertGroupButton onSubmitForm={queryData.query} />
+            )}
+          </Box>
         </Box>
       )}
       <QueryData
@@ -68,10 +72,15 @@ const ExpertGroupsContainer = () => {
 const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
   const { onSubmitForm } = props;
   const dialogProps = useDialog();
-
+  const is_farsi = true;
   return (
     <>
-      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
+      <Button
+        variant="contained"
+        sx={{ ml: `${is_farsi ? 0 : "auto"}`, mr: `${is_farsi ? "auto" : 0}` }}
+        size="small"
+        onClick={dialogProps.openDialog}
+      >
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />

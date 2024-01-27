@@ -76,7 +76,7 @@ export const SpaceMembers = (props: any) => {
       controller?.abort();
     };
   }, [data]);
-
+  const is_farsi = true;
   return (
     <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
@@ -107,9 +107,7 @@ export const SpaceMembers = (props: any) => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (
-                  err.response.data.code === "user-is-member" 
-                ) {
+                if (err.response.data.code === "user-is-member") {
                   toastError(err.response.data.message);
                 } else {
                   dialogProps.openDialog({
@@ -147,7 +145,13 @@ export const SpaceMembers = (props: any) => {
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
-              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <PeopleOutlineRoundedIcon
+                sx={{
+                  mr: `${is_farsi ? 0 : "4px"}`,
+                  ml: `${is_farsi ? "4px" : 0}`,
+                }}
+                fontSize="small"
+              />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
                 {
                   spaceMembersQueryData?.data?.results?.filter(
@@ -205,9 +209,20 @@ export const SpaceMembers = (props: any) => {
                               <PersonRoundedIcon />
                             </Avatar>
                           </Box>
-                          <Box ml={2}>{name}</Box>
+                          <Box
+                            sx={{
+                              mr: `${is_farsi ? "16px" : 0}`,
+                              ml: `${is_farsi ? 0 : "16px"}`,
+                            }}
+                          >
+                            {name}
+                          </Box>
                         </Box>
-                        <Box ml="auto" sx={{ ...styles.centerV }}>
+                        <Box
+                          ml={`${is_farsi ? 0 : "auto"}`}
+                          mr={`${is_farsi ? "auto" : 0}`}
+                          sx={{ ...styles.centerV }}
+                        >
                           {isOwner && (
                             <Chip
                               label={<Trans i18nKey="owner" />}
@@ -269,20 +284,35 @@ export const SpaceMembers = (props: any) => {
                                     <PersonRoundedIcon />
                                   </Avatar>
                                 </Box>
-                                <Box ml={2}>{name}</Box>
+                                <Box
+                                  sx={{
+                                    mr: `${is_farsi ? "16px" : 0}`,
+                                    ml: `${is_farsi ? 0 : "16px"}`,
+                                  }}
+                                >
+                                  {name}
+                                </Box>
                               </Box>
-                              <Box ml="auto" sx={{ ...styles.centerV }}>
+                              <Box
+                                ml={`${is_farsi ? 0 : "auto"}`}
+                                mr={`${is_farsi ? "auto" : 0}`}
+                                sx={{ ...styles.centerV }}
+                              >
                                 <Box
                                   sx={{
                                     ...styles.centerV,
                                     opacity: 0.8,
                                     px: 0.4,
-                                    mr: 2,
+                                    mr: `${is_farsi ? 0 : "16px"}`,
+                                    ml: `${is_farsi ? "16px" : 0}`,
                                   }}
                                 >
                                   <EventBusyRoundedIcon
                                     fontSize="small"
-                                    sx={{ mr: 0.5 }}
+                                    sx={{
+                                      mr: `${is_farsi ? 0 : "4px"}`,
+                                      ml: `${is_farsi ? "4px" : 0}`,
+                                    }}
                                   />
                                   <Typography variant="body2">
                                     {formatDate(invite_expiration_date)}
@@ -292,7 +322,10 @@ export const SpaceMembers = (props: any) => {
                                   <Chip
                                     label={<Trans i18nKey="owner" />}
                                     size="small"
-                                    sx={{ mr: 1.5 }}
+                                    sx={{
+                                      mr: `${is_farsi ? 0 : "12px"}`,
+                                      ml: `${is_farsi ? "12px" : 0}`,
+                                    }}
                                   />
                                 )}
                                 {
@@ -331,12 +364,10 @@ export const SpaceMembers = (props: any) => {
 
 const AddMemberButton = ({ loading }: { loading: boolean }) => {
   const isSmallScreen = useScreenResize("sm");
-
   return (
     <InputAdornment position="end">
       <LoadingButton
         sx={{
-          mr: "-10px",
           minWidth: "10px",
           p: isSmallScreen ? 0.5 : undefined,
         }}

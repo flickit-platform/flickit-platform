@@ -58,6 +58,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
                 return {
                   bgcolor: (t) => t.palette.grey[800],
                   textDecoration: "none",
+                  ml: 2,
                 };
               })()}
               src={picture}
@@ -74,7 +75,8 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           subheader={
             <Box sx={{ ...styles.centerCV, textTransform: "lowercase" }}>
               <Box>
-                <Trans i18nKey="publishedAssessmentKits" />: {number_of_assessment_kits}
+                <Trans i18nKey="publishedAssessmentKits" />:{" "}
+                {number_of_assessment_kits}
               </Box>
             </Box>
           }

@@ -32,7 +32,6 @@ const SpacesList = (props: ISpaceListProps) => {
   const { dispatch } = useAuthContext();
   const { userInfo } = useAuthContext();
   const { id: userId } = userInfo;
-
   const setUserInfo = (signal: AbortSignal) => {
     service
       .getSignedInUser(undefined, { signal })
@@ -97,16 +96,19 @@ const SpaceCard = (props: ISpaceCardProps) => {
   } = props;
   const { service } = useServiceContext();
   const navigate = useNavigate();
-  const {
-    loading,
-    abortController,
-  } = useQuery({
+  const { loading, abortController } = useQuery({
     service: (args, config) => service.setCurrentSpace({ spaceId: id }, config),
     runOnMount: false,
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
+  const {
+    title,
+    id,
+    members_number = 0,
+    assessment_numbers = 0,
+    is_default_space_for_current_user,
+  } = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
     service
@@ -117,7 +119,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       })
       .catch((e) => {});
   };
-
+  const is_farsi = true;
   return (
     <Box
       sx={{
@@ -148,8 +150,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
               display: "flex",
               alignItems: "center",
               alignSelf: "stretch",
-              pl: 2,
-              pr: { xs: 0.5, sm: 2 },
+              px: 2,
               color: (t) => t.palette.primary.dark,
             }}
           >
@@ -157,7 +158,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
           </Typography>
           {isOwner && (
             <Chip
-              sx={{ ml: 1, opacity: 0.7 }}
+              sx={{
+                mr: `${is_farsi ? 0 : "8px"}`,
+                ml: `${is_farsi ? "8px" : 0}`,
+                opacity: 0.7,
+              }}
               label={<Trans i18nKey={"owner"} />}
               size="small"
               variant="outlined"
@@ -167,14 +172,31 @@ const SpaceCard = (props: ISpaceCardProps) => {
       </Box>
       <Box ml="auto" sx={{ ...styles.centerV }}>
         <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
-          <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+          <PeopleOutlineRoundedIcon
+            sx={{
+              mr: `${is_farsi ? 0 : "4px"}`,
+              ml: `${is_farsi ? "4px" : 0}`,
+            }}
+            fontSize="small"
+          />
           <Typography fontFamily="Roboto" fontWeight={"bold"}>
             {members_number}
           </Typography>
         </Box>
-        <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
+        <Box
+          sx={{
+            ...styles.centerV,
+            opacity: 0.8,
+            mr: `${is_farsi ? 0 : "32px"}`,
+            ml: `${is_farsi ? "32px" : 0}`,
+          }}
+        >
           <DescriptionRoundedIcon
-            sx={{ mr: 0.5, opacity: 0.8 }}
+            sx={{
+              mr: `${is_farsi ? 0 : "4px"}`,
+              ml: `${is_farsi ? "4px" : 0}`,
+              opacity: 0.8,
+            }}
             fontSize="small"
           />
           <Typography fontFamily="Roboto" fontWeight={"bold"}>
@@ -187,7 +209,12 @@ const SpaceCard = (props: ISpaceCardProps) => {
         sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}
       >
         {isActiveSpace && (
-          <Box mr={1}>
+          <Box
+            sx={{
+              mr: `${is_farsi ? 0 : "8px"}`,
+              ml: `${is_farsi ? "8px" : 0}`,
+            }}
+          >
             <Chip
               label={<Trans i18nKey={"current"} />}
               color="info"
@@ -208,7 +235,9 @@ const SpaceCard = (props: ISpaceCardProps) => {
             fetchSpaces={fetchSpaces}
             setUserInfo={setUserInfo}
             isOwner={isOwner}
-            is_default_space_for_current_user={is_default_space_for_current_user}
+            is_default_space_for_current_user={
+              is_default_space_for_current_user
+            }
           />
         </>
       </Box>
@@ -224,7 +253,7 @@ const Actions = (props: any) => {
     isActiveSpace,
     setUserInfo,
     isOwner,
-    is_default_space_for_current_user
+    is_default_space_for_current_user,
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -290,8 +319,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        !is_default_space_for_current_user&&
-        {
+        !is_default_space_for_current_user && {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,
           onClick: leaveSpace,

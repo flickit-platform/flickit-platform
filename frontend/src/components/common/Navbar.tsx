@@ -62,11 +62,9 @@ const Navbar = () => {
       fetchSpaceInfo();
     }
   }, [spaceId]);
+  const is_farsi = true;
   const drawer = (
-    <Box
-      onClick={handleDrawerToggle}
-      sx={{ pl: 1, pr: 1, textAlign: "center" }}
-    >
+    <Box onClick={handleDrawerToggle} sx={{ px: 1, textAlign: "center" }}>
       <Typography
         variant="h6"
         sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
@@ -175,7 +173,11 @@ const Navbar = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
+            sx={{
+              mr: `${is_farsi ? 0 : "16px"}`,
+              ml: `${is_farsi ? "16px" : 0}`,
+              display: { md: "none" },
+            }}
           >
             <MenuIcon />
           </IconButton>
@@ -195,14 +197,20 @@ const Navbar = () => {
           >
             <NavLogo />
           </Typography>
-          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "block" },
+              mr: `${is_farsi ? "24px" : 0}`,
+              ml: `${is_farsi ? 0 : "24px"}`,
+            }}
+          >
             <SpacesButton />
             <Button
               component={NavLink}
               to={`/compare`}
               startIcon={
                 <CompareRoundedIcon
-                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                  sx={{ mx: 1, opacity: 0.8, fontSize: "18px !important" }}
                 />
               }
               sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
@@ -217,14 +225,14 @@ const Navbar = () => {
               size="small"
               startIcon={
                 <AssessmentRoundedIcon
-                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                  sx={{ mx: 1, opacity: 0.8, fontSize: "18px !important" }}
                 />
               }
             >
               <Trans i18nKey="assessmentKits" />
             </Button>
           </Box>
-          <Box ml="auto">
+          <Box ml={`${is_farsi ? 0 : "auto"}`} mr={`${is_farsi ? "auto" : 0}`}>
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
         </Toolbar>
@@ -404,7 +412,7 @@ const SpacesButton = () => {
     service: (args, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
-
+  const is_farsi = true;
   return (
     <>
       <Button
@@ -420,7 +428,7 @@ const SpacesButton = () => {
         }}
         startIcon={
           <FolderRoundedIcon
-            sx={{ opacity: 0.8, fontSize: "18px !important" }}
+            sx={{ mx: 1, opacity: 0.8, fontSize: "18px !important" }}
           />
         }
         size="small"
@@ -451,7 +459,13 @@ const SpacesButton = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{ sx: { left: "165px !important", minWidth: "260px" } }}
+        PaperProps={{
+          sx: {
+            left: `${is_farsi ? "" : "165px !important"}`,
+            right: `${is_farsi ? "165px !important" : ""}`,
+            minWidth: "260px",
+          },
+        }}
       >
         <QueryData
           {...spacesQueryData}
@@ -505,7 +519,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const is_farsi = true;
   return (
     <>
       <Button
@@ -514,14 +528,23 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           e.stopPropagation();
           handleClick(e);
         }}
-        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+        sx={{
+          ...styles.activeNavbarLink,
+          mr: `${is_farsi ? "2px" : "8px"}`,
+          ml: `${is_farsi ? "8px" : "2px"}`,
+        }}
         size="small"
         endIcon={
           open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
         }
       >
         <Avatar
-          sx={{ width: 26, height: 26, mr: 1.3 }}
+          sx={{
+            width: 26,
+            height: 26,
+            mr: `${is_farsi ? 0 : "8px"}`,
+            ml: `${is_farsi ? "8px" : 0}`,
+          }}
           alt={userInfo.display_name}
           src={userInfo.picture || ""}
         />
