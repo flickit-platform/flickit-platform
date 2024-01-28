@@ -12,3 +12,9 @@ def upload_dsl_assessment(data, request):
                              files={"expertGroupId": (None, data['expert_group_id']), "dslFile": data['dsl_file']},
                              headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def download_dsl_assessment(assessment_kit_id, request):
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/dsl-download-link',
+                            headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

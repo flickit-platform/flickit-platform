@@ -375,9 +375,6 @@ def update_assessment_kit_info(assessment_kit_id, **kwargs):
     return ActionResult(success=True)
 
 
-def get_assessment_kit_file_address(assessment_kit_id):
-    kit = AssessmentKit.objects.get(id=assessment_kit_id)
-    return kit.dsl.dsl_file.url
 
 
 def get_maturity_level_for_internal(maturity_levels):
