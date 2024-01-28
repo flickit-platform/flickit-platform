@@ -944,7 +944,7 @@ export const createService = (
     ) {
       const { assessmentKitId } = args ?? {};
 
-      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/file/`, {
+      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/dsl-download-link/`, {
         ...(config ?? {}),
       });
     },
