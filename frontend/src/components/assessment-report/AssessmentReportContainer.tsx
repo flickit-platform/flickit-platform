@@ -14,6 +14,7 @@ import { IAssessmentReportModel } from "@types";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
+import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 
 const AssessmentReportContainer = () => {
   const { service } = useServiceContext();
@@ -233,6 +234,9 @@ const AssessmentReportContainer = () => {
                   subjects={subjects}
                   colorCode={colorCode}
                 />
+              </Grid>
+              <Grid item sm={14} xs={14} id="advice">
+                <AssessmentAdviceContainer />
               </Grid>
             </Grid>
           </Box>

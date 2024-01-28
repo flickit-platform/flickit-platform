@@ -12,30 +12,15 @@ const AssessmentAdviceContainer = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
   return (
     <div>
-      {/* <Title
-        wrapperProps={{
-          sx: {
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: { xs: "flex-start", md: "flex-end" },
-          },
-        }}
-        sup={
-          <SupTitleBreadcrumb
-            routes={[
-              {
-                title: "space title",
-                to: "",
-              },
-              {
-                title: "assessment title",
-                to: "",
-              },
-            ]}
-          />
-        }
-      >
-        Advice
-      </Title> */}
+      <Box mt={4}>
+        <Title
+          borderBottom={true}
+          sx={{ borderBottomColor: "#000" }}
+          inPageLink="advice"
+        >
+          <Trans i18nKey="advice" />
+        </Title>
+      </Box>
       {expanded && (
         <Box
           sx={{
@@ -704,7 +689,7 @@ const AssessmentAdviceContainer = () => {
             }}
           >
             Code Quality
-            <Box sx={{ textAlign: "center", textDecoration: "none" }}>Q.11</Box>
+            <Box sx={{ textAlign: "center" }}>Q.11</Box>
           </Box>
         </Box>
         <Divider />
