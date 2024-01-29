@@ -107,9 +107,7 @@ export const SpaceMembers = (props: any) => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (
-                  err.response.data.code === "user-is-member" 
-                ) {
+                if (err.response.data.code === "user-is-member") {
                   toastError(err.response.data.message);
                 } else {
                   dialogProps.openDialog({
@@ -365,7 +363,7 @@ const Actions = (props: any) => {
     service: (arg, config) =>
       service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
     runOnMount: false,
-    toastError: true,
+    toastError: false,
   });
   const inviteMemberQueryData = useQuery({
     service: (args = { id: spaceId, data: { email } }, config) =>
@@ -374,8 +372,13 @@ const Actions = (props: any) => {
   });
 
   const deleteItem = async (e: any) => {
-    await deleteSpaceMember();
-    await fetchSpaceMembers();
+    try {
+      await deleteSpaceMember();
+      await fetchSpaceMembers();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err?.response?.data?.message);
+    }
   };
 
   const inviteMember = async () => {
