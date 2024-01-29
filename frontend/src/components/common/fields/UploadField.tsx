@@ -46,6 +46,7 @@ interface IUploadFieldProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
+  setIsValid?:any
 }
 
 const UploadField = (props: IUploadFieldProps) => {
@@ -93,6 +94,7 @@ interface IUploadProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
+  setIsValid?:any
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -112,6 +114,7 @@ const Uploader = (props: IUploadProps) => {
     param,
     setSyntaxErrorObject,
     setShowErrorLog,
+    setIsValid
   } = props;
 
   const { service } = useServiceContext();
@@ -183,17 +186,22 @@ const Uploader = (props: IUploadProps) => {
               file: acceptedFiles?.[0],
               expert_group_id: param,
             });
+            setIsValid(true)
             setMyFiles(acceptedFiles);
             fieldProps.onChange(res);
-          } catch (e: any) {
-            if (e.response.status === 422) {
-              const responseObject = JSON.parse(e.response.data.message);
+          } catch (e) {
+            const err = e as ICustomError;
+            console.log(err)
+            if (err?.response?.status === 422) {
+              const responseObject = JSON.parse(err?.response?.data?.message);
               setSyntaxErrorObject(responseObject.errors);
               setShowErrorLog(true);
+              setIsValid(false)
             }
-            if (e.response.status !== 422) {
-              toastError(e as ICustomError);
+            if (err?.response?.status !== 422) {
+              toastError(err?.response?.data?.message);
               setMyFiles([]);
+              setIsValid(false)
               fieldProps.onChange("");
             }
           }
@@ -273,10 +281,10 @@ const Uploader = (props: IUploadProps) => {
                         onClick={async (e) => {
                           e.stopPropagation();
                           // if (!deleteService) {
-                            setMyFiles([]);
-                            fieldProps.onChange("");
-                            return;
-                          // }  
+                          setMyFiles([]);
+                          fieldProps.onChange("");
+                          return;
+                          // }
                           // if (uploadQueryProps.error) {
                           //   setMyFiles([]);
                           //   return;
