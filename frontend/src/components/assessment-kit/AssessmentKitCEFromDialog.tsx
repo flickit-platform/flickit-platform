@@ -35,6 +35,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState<number>(0);
   const { service } = useServiceContext();
   const {
@@ -136,6 +137,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             label={<Trans i18nKey="dsl" />}
             setShowErrorLog={setShowErrorLog}
             setSyntaxErrorObject={setSyntaxErrorObject}
+            setIsValid={setIsValid}
           />
         </Grid>
         <Grid
@@ -233,7 +235,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           sx={{ ml: 2 }}
           variant="contained"
           onClick={handleNext}
-          disabled={!formMethods.formState.dirtyFields.dsl_id}
+          disabled={!isValid}
         >
           <Trans i18nKey="next" />
         </Button>
