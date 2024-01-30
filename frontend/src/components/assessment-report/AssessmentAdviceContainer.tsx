@@ -8,8 +8,24 @@ import { Button, Divider } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-const AssessmentAdviceContainer = () => {
+import EmptyAdvice from "@assets/img/emptyAdvice.gif";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+const AssessmentAdviceContainer = (props: any) => {
+  const { ...rest } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
       <Box mt={4}>
@@ -21,355 +37,445 @@ const AssessmentAdviceContainer = () => {
           <Trans i18nKey="advice" />
         </Title>
       </Box>
-      {expanded && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: "70%",
-            margin: "0 auto",
-          }}
-        >
-          <Box
-            sx={{
-              background: "#1CC2C4",
-              py: 4,
-              textAlign: "center",
-              color: "#fff",
-              fontSize: "32px",
-              fontWeight: "700",
-              borderRadius: "32px 32px 0 0",
-            }}
-          >
-            Set Your goals
-          </Box>
-          <Box
-            sx={{
-              background: "#EDF4FC",
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              sx={{
-                color: "#6C7B8E",
-                fontSize: "16px",
-                fontWeight: "500",
-                display: "flex",
-                textAlign: "center",
-                width: "50%",
-                py: 2,
-              }}
-            >
-              Which attributes you want to change? The Advisor will try to
-              provide most accurate advice based on your choices
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                width: "50%",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-                my: 4,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Team</Box>
-                <Divider sx={{ my: 2 }} />
-                <Box>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Team spirit"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Agile work frame"
-                    />
-                  </FormGroup>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Software</Box>
-                <Divider sx={{ my: 2 }} />
-                <Box>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Usability"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Reliability"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Security"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#0A2342",
-                            "&.Mui-checked": {
-                              color: "#1CC2C4",
-                            },
-                          }}
-                        />
-                      }
-                      label="Maintainability"
-                    />
-                  </FormGroup>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
 
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth={"md"}
+        fullWidth
+        sx={{
+          ".MuiDialog-paper": {
+            borderRadius: "32px",
+          },
+        }}
+      >
+        <DialogContent sx={{ padding: "0!important" }}>
           <Box
-            sx={{ borderRadius: "0 0 32px 32px", background: "#fff", py: 8 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              width: "100%",
+              margin: "0 auto",
+            }}
           >
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                px: 8,
-                width: "100%",
-                margin: "0 auto",
+                background: "#1CC2C4",
+                py: 4,
+                textAlign: "center",
+                color: "#fff",
+                fontSize: "32px",
+                fontWeight: "700",
+                borderRadius: "32px 32px 0 0",
               }}
             >
-              <Box sx={{ display: "contents" }}>
-                <Box
-                  sx={{
-                    px: "10px",
-                    color: "#D81E5B",
-                    background: "#FDF1F5",
-                    fontSize: "11px",
-                    border: "1px solid #D81E5B",
-                    borderRadius: "8px",
-                  }}
-                >
-                  software
-                </Box>
-                <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
-                  Usablity
-                </Box>
-              </Box>
-              <AdviceSlider defaultValue={1} />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                }}
-              >
-                <Box
-                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-                >
-                  from
-                </Box>
-                <Box
-                  sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
-                >
-                  Moderate
-                </Box>
-                <Box
-                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-                >
-                  to
-                </Box>
-                <Box
-                  sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
-                >
-                  Good
-                </Box>
-              </Box>
+              Set Your goals
             </Box>
             <Box
               sx={{
+                background: "#EDF4FC",
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "center",
+                flexDirection: "column",
                 alignItems: "center",
-                px: 8,
-                width: "100%",
-                margin: "0 auto",
               }}
             >
-              <Box sx={{ display: "contents" }}>
-                <Box
-                  sx={{
-                    px: "10px",
-                    color: "#D81E5B",
-                    background: "#FDF1F5",
-                    fontSize: "11px",
-                    border: "1px solid #D81E5B",
-                    borderRadius: "8px",
-                  }}
-                >
-                  software
-                </Box>
-                <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
-                  Usablity
-                </Box>
+              <Box
+                sx={{
+                  color: "#6C7B8E",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  display: "flex",
+                  textAlign: "center",
+                  width: "50%",
+                  py: 2,
+                }}
+              >
+                Which attributes you want to change? The Advisor will try to
+                provide most accurate advice based on your choices
               </Box>
-              <AdviceSlider defaultValue={3} />
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
+                  width: "50%",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  my: 4,
                 }}
               >
                 <Box
-                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
                 >
-                  from
+                  <Box sx={{ fontSize: "16px", fontWeight: "700" }}>Team</Box>
+                  <Divider sx={{ my: 2 }} />
+                  <Box>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Team spirit"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Agile work frame"
+                      />
+                    </FormGroup>
+                  </Box>
                 </Box>
                 <Box
-                  sx={{ color: "#FDAE61", fontSize: "11px", fontWeight: "700" }}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
                 >
-                  Moderate
-                </Box>
-                <Box
-                  sx={{ color: "#9DA7B3", fontSize: "11px", fontWeight: "400" }}
-                >
-                  to
-                </Box>
-                <Box
-                  sx={{ color: "#66BD63", fontSize: "16px", fontWeight: "700" }}
-                >
-                  Good
+                  <Box sx={{ fontSize: "16px", fontWeight: "700" }}>
+                    Software
+                  </Box>
+                  <Divider sx={{ my: 2 }} />
+                  <Box>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Usability"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Reliability"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Security"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{
+                              color: "#0A2342",
+                              "&.Mui-checked": {
+                                color: "#1CC2C4",
+                              },
+                            }}
+                          />
+                        }
+                        label="Maintainability"
+                      />
+                    </FormGroup>
+                  </Box>
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ mt: "64px", display: "flex", justifyContent: "center" }}>
-              <Button
+
+            <Box
+              sx={{ borderRadius: "0 0 32px 32px", background: "#fff", py: 8 }}
+            >
+              <Box
                 sx={{
-                  color: "#1CC2C4",
-                  px: 2,
-                  py: 1,
-                  borderRadius: "16px",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  width: "fit-content",
-                  mr: 2,
-                }}
-                onClick={() => setExpanded(false)}
-              >
-                cancel
-              </Button>
-              <Button
-                sx={{
-                  background: "#1CC2C4",
-                  color: "#EDFCFC",
-                  px: 2,
-                  py: 1,
-                  borderRadius: "16px",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  width: "fit-content",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  px: 8,
+                  width: "100%",
+                  margin: "0 auto",
                 }}
               >
-                Set these parameters
-              </Button>
+                <Box sx={{ display: "contents" }}>
+                  <Box
+                    sx={{
+                      px: "10px",
+                      color: "#D81E5B",
+                      background: "#FDF1F5",
+                      fontSize: "11px",
+                      border: "1px solid #D81E5B",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    software
+                  </Box>
+                  <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
+                    Usablity
+                  </Box>
+                </Box>
+                <AdviceSlider defaultValue={1} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      color: "#9DA7B3",
+                      fontSize: "11px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    from
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#FDAE61",
+                      fontSize: "11px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Moderate
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#9DA7B3",
+                      fontSize: "11px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    to
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#66BD63",
+                      fontSize: "16px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Good
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  px: 8,
+                  width: "100%",
+                  margin: "0 auto",
+                }}
+              >
+                <Box sx={{ display: "contents" }}>
+                  <Box
+                    sx={{
+                      px: "10px",
+                      color: "#D81E5B",
+                      background: "#FDF1F5",
+                      fontSize: "11px",
+                      border: "1px solid #D81E5B",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    software
+                  </Box>
+                  <Box sx={{ fontSize: "24px", fontWeight: "500", ml: 4 }}>
+                    Usablity
+                  </Box>
+                </Box>
+                <AdviceSlider defaultValue={3} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      color: "#9DA7B3",
+                      fontSize: "11px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    from
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#FDAE61",
+                      fontSize: "11px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Moderate
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#9DA7B3",
+                      fontSize: "11px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    to
+                  </Box>
+                  <Box
+                    sx={{
+                      color: "#66BD63",
+                      fontSize: "16px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Good
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                sx={{ mt: "64px", display: "flex", justifyContent: "center" }}
+              >
+                <Button
+                  sx={{
+                    color: "#1CC2C4",
+                    px: 2,
+                    py: 1,
+                    borderRadius: "16px",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    width: "fit-content",
+                    mr: 2,
+                  }}
+                  onClick={handleClose}
+                >
+                  cancel
+                </Button>
+                <Button
+                  sx={{
+                    background: "#1CC2C4",
+                    color: "#EDFCFC",
+                    px: 2,
+                    py: 1,
+                    borderRadius: "16px",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    width: "fit-content",
+                    "&:hover": {
+                      backgroundColor: "rgba(28, 194, 196, 0.5)",
+                    },
+                  }}
+                >
+                  Set these parameters
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      )}
+        </DialogContent>
+      </Dialog>
 
       <Box mt={6}>
         <Box
           sx={{
-            fontSize: "64px",
-            fontWeight: "700",
-            color: "#1CC2C4",
-            textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
-            textAlign: "center",
-          }}
-        >
-          Advisor
-        </Box>
-        <Box
-          sx={{
-            fontSize: "16px",
-            fontWeight: "400",
-            color: "#0A2342",
-            px: 16,
+            borderRadius: "24px",
+            border: "1px solid #9DA7B3 ",
+            width: "60%",
+            p: 6,
             margin: "0 auto",
-            mb: 16,
           }}
         >
-          The Advisor service provides you some tips help you to improve your
-          software score in diffrent subjects and attributes. It considers your
-          priorities you tell itand tries to Give Advices with most
-          effectiveness and least efforts to fullfill. some advices affect more
-          than attributes and subject. you can always change your preferences
-          and goals via setting new parameteres for advisor. There are many
-          factors determining the situation whetere an advice worths its costs
-          and efforts or not for you. we are always here to to see if you have
-          any further question but the final decision is yours! Make it wise.
+          <Box
+            sx={{
+              fontSize: "64px",
+              fontWeight: "700",
+              color: "#1CC2C4",
+              textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
+              textAlign: "center",
+            }}
+          >
+            Advisor
+          </Box>
+          <Box
+            sx={{
+              fontSize: "16px",
+              fontWeight: "400",
+              color: "#0A2342",
+              margin: "0 auto",
+            }}
+          >
+            The Advisor service provides you some tips help you to improve your
+            software score in diffrent subjects and attributes. It considers
+            your priorities you tell itand tries to Give Advices with most
+            effectiveness and least efforts to fullfill. some advices affect
+            more than attributes and subject. you can always change your
+            preferences and goals via setting new parameteres for advisor. There
+            are many factors determining the situation whetere an advice worths
+            its costs and efforts or not for you. we are always here to to see
+            if you have any further question but the final decision is yours!
+            Make it wise.
+          </Box>
+          <Box sx={{ margin: "0 auto", width: "50%" }}>
+            <img src={EmptyAdvice} alt="advice" width="100%" />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              sx={{
+                background: "#1CC2C4",
+                color: "#EDFCFC",
+                px: 5,
+                py: 1,
+                borderRadius: "16px",
+                fontSize: "16px",
+                fontWeight: "700",
+                width: "fit-content",
+                "&:hover": {
+                  backgroundColor: "rgba(28, 194, 196, 0.5)",
+                },
+              }}
+              onClick={handleClickOpen}
+            >
+              Create your first advice
+            </Button>
+          </Box>
         </Box>
         <Box
           sx={{
