@@ -26,6 +26,31 @@ const AssessmentAdviceContainer = (props: any) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const marks = [
+    {
+      value: 1,
+      label: "Elementary",
+    },
+    {
+      value: 2,
+      label: "Weak",
+    },
+    {
+      value: 3,
+      label: "Moderate",
+    },
+    {
+      value: 4,
+      label: "Good",
+    },
+    {
+      value: 5,
+      label: "Great",
+    },
+  ];
+  const [value, setValue] = useState();
+
+
   return (
     <div>
       <Box mt={4}>
@@ -47,6 +72,11 @@ const AssessmentAdviceContainer = (props: any) => {
           ".MuiDialog-paper": {
             borderRadius: "32px",
           },
+          ".MuiDialog-paper::-webkit-scrollbar": {
+            display: "none",
+            scrollbarWidth: "none",
+            msOverflowStyle:"none"
+          }
         }}
       >
         <DialogContent sx={{ padding: "0!important" }}>
@@ -247,7 +277,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     Usablity
                   </Box>
                 </Box>
-                <AdviceSlider defaultValue={1} />
+                <AdviceSlider setValue={setValue} defaultValue={1} />
                 <Box
                   sx={{
                     display: "flex",
@@ -289,7 +319,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       fontWeight: "700",
                     }}
                   >
-                    Good
+                    {/* {marks[value??0].label} */}
                   </Box>
                 </Box>
               </Box>
@@ -320,7 +350,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     Usablity
                   </Box>
                 </Box>
-                <AdviceSlider defaultValue={3} />
+                <AdviceSlider setValue={setValue} defaultValue={3} />
                 <Box
                   sx={{
                     display: "flex",

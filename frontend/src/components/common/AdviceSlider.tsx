@@ -18,55 +18,20 @@ const AdviceSlider = (props: any) => {
       backgroundColor: "#1CC2C4 !important",
     },
   }));
-  const { defaultValue } = props;
-  const marks = [
-    {
-      value: 1,
-      label: "Level 1",
-    },
-    {
-      value: 2,
-      label: "Level 2",
-    },
-    {
-      value: 3,
-      label: "Level 3",
-    },
-    {
-      value: 4,
-      label: "Level 4",
-    },
-    {
-      value: 5,
-      label: "Level 5",
-    },
-  ];
-  const [value, setValue] = useState<number>(defaultValue);
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    // Prevent the user from selecting a value under the default value
-    const defaultValue: number = 2; // Set your default value here
+  const { defaultValue, setValue } = props;
 
-    if (Array.isArray(newValue)) {
-      // Handle case where multiple values are selected (not applicable to your scenario)
-      return;
-    }
-
-    const newValueAdjusted: number = Math.max(newValue, defaultValue);
-    setValue(newValueAdjusted);
+  const handleSliderChange = (event: Event, newValue: any) => {
+    console.log(newValue);
+    // setValue(newValue);
   };
   return (
     <Box width={"400px"} margin={"0 auto"} my={6}>
       <Box px={2}>
         <IOSSlider
-          aria-label="Restricted values"
-          //   value={value}
-          //   onChange={handleChange}
-          defaultValue={defaultValue}
-          valueLabelDisplay="off"
-          step={1}
-          marks
           min={1}
           max={5}
+          onChange={handleSliderChange}
+          marks
           sx={{
             "&.MuiSlider-thumb": { backgroundColor: "red" },
             "& .MuiSlider-rail": {
