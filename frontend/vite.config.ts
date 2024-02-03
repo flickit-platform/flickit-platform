@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig, type PluginOption } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
@@ -8,7 +9,11 @@ import react from "@vitejs/plugin-react-swc";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), visualizer() as PluginOption],
+  plugins: [react(), visualizer() as PluginOption, sentryVitePlugin({
+    org: "flickit",
+    project: "front-end-test",
+    url: "https://flickit.sentry.io/"
+  })],
   resolve: {
     alias: [
       {
@@ -90,5 +95,7 @@ export default defineConfig({
         terser(),
       ],
     },
+
+    sourcemap: true
   },
 });
