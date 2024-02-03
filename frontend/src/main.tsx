@@ -17,7 +17,6 @@ Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
     new Sentry.BrowserTracing({
-      // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
       tracePropagationTargets: ["localhost", "https://flickit.sentry.io"],
     }),
     Sentry.replayIntegration({
