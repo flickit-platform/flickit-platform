@@ -1,5 +1,5 @@
 #!/bin/sh
-for i in $(env | grep FLICKIT_KEYCLOACK_)
+for i in $(env | grep FLICKIT_)
 do
     key=$(echo $i | cut -d '=' -f 1)
     value=$(echo $i | cut -d '=' -f 2-)
