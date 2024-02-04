@@ -1,7 +1,7 @@
 import Keycloak, { KeycloakInstance } from "keycloak-js";
 // const _kc: KeycloakInstance = new Keycloak("/keycloak.json");
 const _kc: KeycloakInstance = new Keycloak({
-  url: "https://test.flickit.org/accounts",
+  url: "https://migration.flickit.org/accounts",
   realm: "flickit",
   clientId: "flickit-frontend",
 });
