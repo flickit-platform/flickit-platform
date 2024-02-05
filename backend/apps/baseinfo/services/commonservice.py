@@ -8,7 +8,6 @@ from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Ques
 from baseinfo.serializers import commonserializers
 
 
-
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
     if AssessmentKit.objects.filter(id=assessment_kit_id).filter(assessment_subjects=subject_id).exists():
         return AssessmentSubject.objects.get(id=subject_id)
@@ -71,15 +70,6 @@ def load_assessment_subject(assessment_subject_id) -> AssessmentSubject:
 def get_option_value_with_answer_tamplate(answer_tamplate_id):
     answer_tamplate = load_answer_tamplate(answer_tamplate_id=answer_tamplate_id)
     result = OptionValue.objects.filter(option=answer_tamplate_id)
-    return result
-
-
-def get_assessment_subject_with_assessment_kit(assessment_kit_id):
-    try:
-        AssessmentKit.objects.get(id=assessment_kit_id)
-    except AssessmentKit.DoesNotExist as e:
-        return False
-    result = AssessmentSubject.objects.filter(assessment_kit=assessment_kit_id)
     return result
 
 

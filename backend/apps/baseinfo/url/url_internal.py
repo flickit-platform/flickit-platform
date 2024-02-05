@@ -5,8 +5,6 @@ from baseinfo.views import assessmentkitviews
 
 urlpatterns = [
     path("answer-template/<str:answer_tamplate_id>/option-values/", commonviews.LoadOptionValueInternalApi.as_view()),
-    path("v1/assessment-kits/<str:assessment_kit_id>/subjects/",
-         commonviews.LoadAssessmentSubjectInternalApi.as_view()),
     path("maturity-level/<str:maturity_level_id>/level-competences/",
          assessmentkitviews.LoadLevelCompetenceInternalApi.as_view()),
     path("quality-attribute/<str:quality_attribute_id>/question/", commonviews.LoadQuestionInternalApi.as_view()),
