@@ -8,7 +8,6 @@ from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Ques
 from baseinfo.serializers import commonserializers
 
 
-
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
     if AssessmentKit.objects.filter(id=assessment_kit_id).filter(assessment_subjects=subject_id).exists():
         return AssessmentSubject.objects.get(id=subject_id)
@@ -74,15 +73,6 @@ def get_option_value_with_answer_tamplate(answer_tamplate_id):
     return result
 
 
-def get_assessment_subject_with_assessment_kit(assessment_kit_id):
-    try:
-        AssessmentKit.objects.get(id=assessment_kit_id)
-    except AssessmentKit.DoesNotExist as e:
-        return False
-    result = AssessmentSubject.objects.filter(assessment_kit=assessment_kit_id)
-    return result
-
-
 def get_question_with_quality_attribute(quality_attribute_id):
     quality_attribute = load_quality_attribute(quality_attribute_id)
     result = Question.objects.filter(quality_attributes=quality_attribute_id)
@@ -98,15 +88,6 @@ def get_quality_attribute_with_assessment_subject(assessment_subject_id):
 def get_question_impact_with_id(question_impact_id):
     question_impact = load_question_impact(question_impact_id)
     result = QuestionImpact.objects.filter(id=question_impact_id)
-    return result
-
-
-def get_questions_with_assessmnet_kit_id(assessment_kit_id):
-    try:
-        AssessmentKit.objects.get(id=assessment_kit_id)
-    except AssessmentKit.DoesNotExist as e:
-        return False
-    result = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).order_by("id")
     return result
 
 
@@ -193,21 +174,3 @@ def get_question_impacts_for_questionnaire(question_id, attributes):
         data_attribute_list["attribute"] = data_attribute
         data.append(data_attribute_list)
     return data
-
-
-def get_questions_of_a_assessment_subject_id(subject_id):
-    result = dict()
-    try:
-        AssessmentSubject.objects.get(id=subject_id)
-    except:
-        result["Success"] = False
-        result["body"] = {"message": "'subject_id' does not exist. "}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-
-    question_ids = Question.objects.filter(quality_attributes__assessment_subject=subject_id).distinct().order_by(
-        "id").values("id")
-    result["Success"] = True
-    result["body"] = {"items": question_ids}
-    result["status_code"] = status.HTTP_200_OK
-    return result

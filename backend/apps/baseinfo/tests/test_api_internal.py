@@ -46,44 +46,6 @@ class TestLoadOptionValuesWithAnswerTamplate:
 
 
 @pytest.mark.django_db
-class TestLoadAssessmentSubjectsWithAssessmentKit:
-    def test_load_assessment_subjects_when_assessment_kit_exist(self, init_data):
-        # init data
-        base_info = init_data()
-
-        # create request and send request
-        assessment_kit_id = base_info['assessment_kit'].id
-        api = APIRequestFactory()
-        request = api.get(f'/api/internal/v1/assessment-kits/{assessment_kit_id}/subjects/', {}, format='json')
-        view = commonviews.LoadAssessmentSubjectInternalApi.as_view()
-        resp = view(request, assessment_kit_id)
-
-        # responses testing
-        assert resp.status_code == status.HTTP_200_OK
-        subjects1 = base_info['subject1']
-        attributes = base_info['attributes']
-        data = resp.data['items']
-        assert data[0]['id'] == subjects1.id
-        assert data[0]['quality_attributes'][0]['id'] == attributes[0].id
-        assert data[0]['quality_attributes'][0]['weight'] == attributes[0].weight
-
-    def test_load_assessment_subjects_when_assessment_kit_not_exist(self):
-        # init data
-
-        # create request and send request
-        assessment_kit_id = 1000
-        api = APIRequestFactory()
-        request = api.get(f'/api/internal/assessment-kit/{assessment_kit_id}/assessment-subjects/', {}, format='json')
-        view = commonviews.LoadAssessmentSubjectInternalApi.as_view()
-        resp = view(request, assessment_kit_id)
-
-        # responses testing
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data["message"] == "'assessment_kit_id' does not exist"
-        assert resp.data["code"] == "NOT_FOUND"
-
-
-@pytest.mark.django_db
 class TestLoadLevelCompetencesWithMaturityLevel:
     def test_load_level_competences_when_maturity_level_exist(self, init_data):
         # init data
@@ -211,36 +173,6 @@ class TestLoadQuestionImpactWithQuestionImpactId:
 
         assert resp.status_code == status.HTTP_404_NOT_FOUND
         assert resp.data["message"] == "Object does not exists"
-
-
-@pytest.mark.django_db
-class TestLoadQuestionsWithAssessmentKitId:
-    def test_load_questions_when_assessment_kit_when_assessment_kit_exist(self, init_data):
-        # init data
-        base_info = init_data()
-
-        # create request and send request
-        assessment_kit_id = base_info['assessment_kit'].id
-        api = APIRequestFactory()
-        request = api.get(f'/api/internal/v1/assessment-kits/{assessment_kit_id}/questions/', {}, format='json')
-        view = commonviews.LoadQuestionsInternalApi.as_view()
-        resp = view(request, assessment_kit_id)
-        count = Question.objects.filter(questionnaire__assessment_kit=assessment_kit_id).count()
-        # responses testing
-        assert resp.status_code == status.HTTP_200_OK
-        assert resp.data["count"] == count
-        assert "next" in resp.data
-        assert "previous" in resp.data
-
-    def test_load_questions_when_assessment_kit_when_assessment_kit_not_exist(self):
-        api = APIRequestFactory()
-        request = api.get(f'/api/internal/v1/assessment-kits/1000/questions/', {}, format='json')
-        view = commonviews.LoadQuestionsInternalApi.as_view()
-        resp = view(request, 1000)
-
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data["message"] == "'assessment_kit_id' does not exist"
-        assert resp.data["code"] == "NOT_FOUND"
 
 
 @pytest.mark.django_db

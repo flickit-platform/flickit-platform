@@ -92,15 +92,6 @@ class LoadQualityAttributeSerilizer(serializers.ModelSerializer):
         fields = ['id', 'weight']
 
 
-class LoadAssessmentSubjectAndQualityAttributeSerilizer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    quality_attributes = LoadQualityAttributeSerilizer(many=True)
-
-    class Meta:
-        model = AssessmentSubject
-        fields = ['id', 'quality_attributes']
-
-
 class LoadQuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact
@@ -111,14 +102,6 @@ class SimpleLoadQuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact
         fields = ['id', 'weight', 'maturity_level_id', 'quality_attribute_id']
-
-
-class SimpleLoadQuestionsSerilizer(serializers.ModelSerializer):
-    question_impacts = SimpleLoadQuestionImpactSerilizer(many=True)
-
-    class Meta:
-        model = Question
-        fields = ['id', 'question_impacts']
 
 
 class SimpleLoadOptionValueSerilizer(serializers.ModelSerializer):

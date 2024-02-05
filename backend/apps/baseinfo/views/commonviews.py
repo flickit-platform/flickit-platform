@@ -66,21 +66,6 @@ class LoadOptionValueInternalApi(APIView):
         return Response({'items': response}, status=status.HTTP_200_OK)
 
 
-class LoadAssessmentSubjectInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(
-        responses={200: commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(many=True)})
-    def get(self, request, assessment_kit_id):
-        assessment_subject = commonservice.get_assessment_subject_with_assessment_kit(assessment_kit_id)
-        if assessment_subject == False:
-            return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        response = commonserializers.LoadAssessmentSubjectAndQualityAttributeSerilizer(assessment_subject,
-                                                                                       many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
 class LoadQuestionInternalApi(APIView):
     permission_classes = [AllowAny]
 
@@ -109,36 +94,6 @@ class LoadQuestionImpactInternalApi(APIView):
         question_impact = commonservice.get_question_impact_with_id(question_impact_id)
         response = commonserializers.LoadQuestionImpactSerilizer(question_impact, many=True).data
         return Response({'items': response}, status=status.HTTP_200_OK)
-
-
-class CustomPaginationForQuestions(PageNumberPagination):
-    page_size = 100
-    page_size_query_param = 'page_size'
-    max_page_size = 10000
-
-    def get_paginated_response(self, data):
-        return Response({
-            'count': self.page.paginator.count,
-            'next': self.get_next_link(),
-            'previous': self.get_previous_link(),
-            'items': data
-        })
-
-
-class LoadQuestionsInternalApi(APIView):
-    permission_classes = [AllowAny]
-    pagination_class = CustomPaginationForQuestions
-
-    @swagger_auto_schema(responses={200: commonserializers.SimpleLoadQuestionsSerilizer(many=True)})
-    def get(self, request, assessment_kit_id):
-        paginator = self.pagination_class()
-        question = commonservice.get_questions_with_assessmnet_kit_id(assessment_kit_id)
-        if question == False:
-            return Response({"code": "NOT_FOUND", 'message': "'assessment_kit_id' does not exist"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        paginated_queryset = paginator.paginate_queryset(question, request)
-        response = commonserializers.SimpleLoadQuestionsSerilizer(paginated_queryset, many=True).data
-        return paginator.get_paginated_response(response)
 
 
 test_param = openapi.Parameter('ids', openapi.IN_QUERY, description="test manual param", type=openapi.TYPE_ARRAY,
@@ -223,10 +178,3 @@ class LoadQuestionDetailsApi(APIView):
         response = commonserializers.LoadQuestionDetailsDetailsSerializer(question).data
         return Response(response, status=status.HTTP_200_OK)
 
-
-class LoadQuestionsOfSubjectInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, subject_id):
-        result = commonservice.get_questions_of_a_assessment_subject_id(subject_id)
-        return Response(result["body"], result["status_code"])
