@@ -205,6 +205,21 @@ export const createService = (
         config
       );
     },
+    createAdvice(
+      {
+        assessmentId,
+        attributeLevelTargets,
+      }: { assessmentId: string; attributeLevelTargets: any },
+      config: AxiosRequestConfig<any> | undefined = {}
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/advice/`,
+        {
+          attributeLevelTargets,
+        },
+        config
+      );
+    },
     fetchSubjectProgress(
       { subjectId, assessmentId }: { subjectId: string; assessmentId: string },
       config: AxiosRequestConfig<any> | undefined = {}

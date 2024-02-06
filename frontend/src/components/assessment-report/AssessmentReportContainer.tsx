@@ -236,7 +236,7 @@ const AssessmentReportContainer = () => {
                 />
               </Grid>
               <Grid item sm={14} xs={14} id="advice">
-                <AssessmentAdviceContainer />
+                <AssessmentAdviceContainer subjects={subjects} />
               </Grid>
             </Grid>
           </Box>
