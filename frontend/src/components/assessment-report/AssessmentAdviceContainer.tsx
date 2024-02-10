@@ -1,25 +1,20 @@
 import Title from "@common/Title";
 import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
-import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import { Button, Divider } from "@mui/material";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import { Button, Divider,IconButton } from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { ISubjectReportModel, TId } from "@types";
 import { useServiceContext } from "@providers/ServiceProvider";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
+import languageDetector from "@utils/languageDetector";
+import { LoadingButton } from "@mui/lab";
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -55,7 +50,8 @@ const AssessmentAdviceContainer = (props: any) => {
           attributeLevelTargets: target,
         });
         setAdviceResult(data?.items);
-        handleClose()
+        setIsFarsi(languageDetector(data?.items[0]?.question?.title));
+        handleClose();
       }
     } catch (e) {
       const err = e as ICustomError;
@@ -66,7 +62,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const [target, setTarget] = useState<any>([]);
   const attributeColorPallet = ["#D81E5B", "#0A2342", "#F9A03F"];
   const attributeBGColorPallet = ["#FDF1F5", "#EDF4FC", "#FEF5EB"];
-  
+  const [isFarsi, setIsFarsi] = useState<boolean>(false);
   return (
     <div>
       <Box mt={4}>
@@ -122,7 +118,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 borderRadius: "32px 32px 0 0",
               }}
             >
-              Set Your goals
+              <Trans i18nKey="setYourGoals" />
             </Box>
             <Box
               sx={{
@@ -144,8 +140,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   py: 2,
                 }}
               >
-                Which attributes you want to change? The Advisor will try to
-                provide most accurate advice based on your choices
+                <Trans i18nKey="wichAttYouWant" />
               </Box>
               <Box
                 sx={{
@@ -247,9 +242,10 @@ const AssessmentAdviceContainer = (props: any) => {
                   }}
                   onClick={handleClose}
                 >
-                  cancel
+                  <Trans i18nKey="cancel" />
                 </Button>
-                <Button
+
+                <LoadingButton
                   sx={{
                     background: "#1CC2C4",
                     color: "#EDFCFC",
@@ -263,10 +259,14 @@ const AssessmentAdviceContainer = (props: any) => {
                       backgroundColor: "rgba(28, 194, 196, 0.5)",
                     },
                   }}
+                  variant="contained"
+                  color="secondary"
                   onClick={createAdvice}
+                  loading={createAdviceQueryData.loading}
                 >
-                  Set these parameters
-                </Button>
+                  <Trans i18nKey="setTheseParameters" />
+                </LoadingButton>
+    
               </Box>
             </Box>
           </Box>
@@ -292,7 +292,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 textAlign: "center",
               }}
             >
-              Advisor
+              <Trans i18nKey="advisor" />
             </Box>
             <Box
               sx={{
@@ -302,16 +302,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 margin: "0 auto",
               }}
             >
-              The Advisor service provides you some tips help you to improve
-              your software score in diffrent subjects and attributes. It
-              considers your priorities you tell itand tries to Give Advices
-              with most effectiveness and least efforts to fullfill. some
-              advices affect more than attributes and subject. you can always
-              change your preferences and goals via setting new parameteres for
-              advisor. There are many factors determining the situation whetere
-              an advice worths its costs and efforts or not for you. we are
-              always here to to see if you have any further question but the
-              final decision is yours! Make it wise.
+              <Trans i18nKey="theAdvisorService" />
             </Box>
             <Box sx={{ margin: "0 auto", width: "50%" }}>
               <img src={EmptyAdvice} alt="advice" width="100%" />
@@ -339,7 +330,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 }}
                 onClick={handleClickOpen}
               >
-                Create your first advice
+                <Trans i18nKey="createYourFirstAdvice" />
               </Button>
             </Box>
           </Box>
@@ -352,10 +343,34 @@ const AssessmentAdviceContainer = (props: any) => {
                 color: "#0A2342",
                 textShadow: "0px 0px 11.2px rgba(10, 35, 66, 0.30)",
                 textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
                 mb: 6,
               }}
             >
-              Advices list
+              <Trans i18nKey="advicesList" />
+
+              <IconButton
+                title="Edit"
+                edge="end"
+                sx={{
+                  ml: 2,
+                }}
+                onClick={handleClickOpen}
+              >
+                <svg
+                  width="31"
+                  height="31"
+                  viewBox="0 0 31 31"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0.674988 25.5C0.674988 26.4167 1.42499 27.1667 2.34165 27.1667H10.675V23.8333H2.34165C1.42499 23.8333 0.674988 24.5833 0.674988 25.5ZM0.674988 5.5C0.674988 6.41667 1.42499 7.16667 2.34165 7.16667H17.3417V3.83333H2.34165C1.42499 3.83333 0.674988 4.58333 0.674988 5.5ZM17.3417 28.8333V27.1667H29.0083C29.925 27.1667 30.675 26.4167 30.675 25.5C30.675 24.5833 29.925 23.8333 29.0083 23.8333H17.3417V22.1667C17.3417 21.25 16.5917 20.5 15.675 20.5C14.7583 20.5 14.0083 21.25 14.0083 22.1667V28.8333C14.0083 29.75 14.7583 30.5 15.675 30.5C16.5917 30.5 17.3417 29.75 17.3417 28.8333ZM7.34165 12.1667V13.8333H2.34165C1.42499 13.8333 0.674988 14.5833 0.674988 15.5C0.674988 16.4167 1.42499 17.1667 2.34165 17.1667H7.34165V18.8333C7.34165 19.75 8.09165 20.5 9.00832 20.5C9.92499 20.5 10.675 19.75 10.675 18.8333V12.1667C10.675 11.25 9.92499 10.5 9.00832 10.5C8.09165 10.5 7.34165 11.25 7.34165 12.1667ZM30.675 15.5C30.675 14.5833 29.925 13.8333 29.0083 13.8333H14.0083V17.1667H29.0083C29.925 17.1667 30.675 16.4167 30.675 15.5ZM22.3417 10.5C23.2583 10.5 24.0083 9.75 24.0083 8.83333V7.16667H29.0083C29.925 7.16667 30.675 6.41667 30.675 5.5C30.675 4.58333 29.925 3.83333 29.0083 3.83333H24.0083V2.16667C24.0083 1.25 23.2583 0.5 22.3417 0.5C21.425 0.5 20.675 1.25 20.675 2.16667V8.83333C20.675 9.75 21.425 10.5 22.3417 10.5Z"
+                    fill="black"
+                  />
+                </svg>
+              </IconButton>
             </Box>
 
             {/* list header */}
@@ -365,6 +380,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 mb: 4,
+                direction: isFarsi ? "rtl" : "ltr",
               }}
             >
               <Box
@@ -376,7 +392,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   width: "5%",
                 }}
               >
-                Number
+                <Trans i18nKey="number" />
               </Box>
               <Box
                 sx={{
@@ -387,7 +403,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   textAlign: "center",
                 }}
               >
-                Question
+                <Trans i18nKey="question" />
               </Box>
               <Box
                 sx={{
@@ -398,7 +414,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   textAlign: "center",
                 }}
               >
-                What is now
+                <Trans i18nKey="whatIsNow" />
               </Box>
               <Box
                 sx={{
@@ -409,7 +425,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   textAlign: "center",
                 }}
               >
-                What should be
+                <Trans i18nKey="whatShouldBe" />
               </Box>
               <Box
                 sx={{
@@ -420,7 +436,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   textAlign: "center",
                 }}
               >
-                Targeted attributes
+                <Trans i18nKey="targetedAttributes" />
               </Box>
               <Box
                 sx={{
@@ -431,7 +447,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   textAlign: "center",
                 }}
               >
-                Questionnaire
+                <Trans i18nKey="questionnaire" />
               </Box>
             </Box>
             {/* list item */}
@@ -450,6 +466,8 @@ const AssessmentAdviceContainer = (props: any) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      direction: isFarsi ? "rtl" : "ltr",
+                      fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
                     }}
                   >
                     <Box
@@ -457,10 +475,10 @@ const AssessmentAdviceContainer = (props: any) => {
                         fontSize: "64px",
                         color: "#1CC2C4",
                         fontWeight: "700",
-                        width: "5%",
+                        width: "fit-content",
                       }}
                     >
-                      {index+1}
+                      {index + 1}
                     </Box>
                     <Box
                       sx={{
@@ -481,7 +499,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      {answeredOption&&answeredOption.index}:{answeredOption&&answeredOption.title}
+                      {answeredOption ?? answeredOption.index}.
+                      {answeredOption ?? answeredOption.title}
                     </Box>
                     <Box
                       sx={{
@@ -492,7 +511,7 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      {recommendedOption.index}:{recommendedOption.title}
+                      {recommendedOption.index}.{recommendedOption.title}
                     </Box>
                     <Box
                       sx={{
@@ -502,32 +521,6 @@ const AssessmentAdviceContainer = (props: any) => {
                         justifyContent: "center",
                       }}
                     >
-                      {/* <Box
-                        sx={{
-                          px: "10px",
-                          color: "#0A2342",
-                          background: "#EDF4FC",
-                          fontSize: "11px",
-                          border: "1px solid #0A2342",
-                          borderRadius: "8px",
-                          m: "4px",
-                        }}
-                      >
-                        Team spirit
-                      </Box> */}
-                      {/* <Box
-                        sx={{
-                          px: "10px",
-                          color: "#D81E5B",
-                          background: "#FDF1F5",
-                          fontSize: "11px",
-                          border: "1px solid #D81E5B",
-                          borderRadius: "8px",
-                          m: "4px",
-                        }}
-                      >
-                        reliability
-                      </Box> */}
                       {attributes.map((attribute: any, index: number) => {
                         return (
                           <Box
@@ -535,14 +528,15 @@ const AssessmentAdviceContainer = (props: any) => {
                             sx={{
                               px: "10px",
                               color: attributeColorPallet[Math.ceil(index % 3)],
-                              background: attributeBGColorPallet[Math.ceil(index % 3)],
+                              background:
+                                attributeBGColorPallet[Math.ceil(index % 3)],
                               fontSize: "11px",
                               border: `1px solid  ${
                                 attributeColorPallet[Math.ceil(index % 3)]
                               }`,
                               borderRadius: "8px",
                               m: "4px",
-                              textAlign:"center"
+                              textAlign: "center",
                             }}
                           >
                             {attribute.title}
@@ -556,15 +550,15 @@ const AssessmentAdviceContainer = (props: any) => {
                         color: "#1CC2C4",
                         fontSize: "14px",
                         fontWeight: "500",
-                        textDecoration: "underline",
+                        // textDecoration: "underline",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        textAlign:"center"
+                        textAlign: "center",
                       }}
                     >
                       {questionnaire.title}
-                      <Box sx={{ textAlign: "center", textDecoration: "none" }}>
+                      <Box sx={{ textAlign: "center" }}>
                         Q.{question?.index}
                       </Box>
                     </Box>
