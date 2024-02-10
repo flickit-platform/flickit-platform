@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import { Button, Divider,IconButton } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -60,9 +60,9 @@ const AssessmentAdviceContainer = (props: any) => {
   };
   const [subjectData, setsubjectData] = useState<any>([]);
   const [target, setTarget] = useState<any>([]);
-  const attributeColorPallet = ["#D81E5B", "#0A2342", "#F9A03F"];
-  const attributeBGColorPallet = ["#FDF1F5", "#EDF4FC", "#FEF5EB"];
   const [isFarsi, setIsFarsi] = useState<boolean>(false);
+  const attributeColorPallet = ["#D81E5B", "#F9A03F", "#0A2342"];
+  const attributeBGColorPallet = ["#FDF1F5", "#FEF5EB", "#EDF4FC"];
   return (
     <div>
       <Box mt={4}>
@@ -266,7 +266,6 @@ const AssessmentAdviceContainer = (props: any) => {
                 >
                   <Trans i18nKey="setTheseParameters" />
                 </LoadingButton>
-    
               </Box>
             </Box>
           </Box>
@@ -499,8 +498,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      {answeredOption ?? answeredOption.index}.
-                      {answeredOption ?? answeredOption.title}
+                      {answeredOption && answeredOption.index}.
+                      {answeredOption && answeredOption.title}
                     </Box>
                     <Box
                       sx={{
