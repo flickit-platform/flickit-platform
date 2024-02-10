@@ -50,7 +50,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
 
     const formattedData = {
       ...restOfData,
-      picture: picture || "",
+      picture: picture || null,
     };
     setLoading(true);
     try {
