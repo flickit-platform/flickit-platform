@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider,IconButton } from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -14,7 +14,6 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
-import { IconButton } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects } = props;
@@ -500,8 +499,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      {answeredOption && answeredOption.index}.
-                      {answeredOption && answeredOption.title}
+                      {answeredOption ?? answeredOption.index}.
+                      {answeredOption ?? answeredOption.title}
                     </Box>
                     <Box
                       sx={{
