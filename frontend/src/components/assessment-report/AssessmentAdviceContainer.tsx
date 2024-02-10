@@ -41,10 +41,6 @@ const AssessmentAdviceContainer = (props: any) => {
   const createAdvice = async () => {
     try {
       if (target) {
-        console.log({
-          assessmentId: assessmentId,
-          attributeLevelTargets: target,
-        });
         const data = await createAdviceQueryData.query({
           assessmentId: assessmentId,
           attributeLevelTargets: target,
@@ -183,7 +179,6 @@ const AssessmentAdviceContainer = (props: any) => {
                       <Box>
                         {/* <FormGroup>
                           {subjectData.map((subject: any) => {
-                            console.log(subject)
                             subject?.attributes.map((attribute: any) => {
                               return (
                                 <FormControlLabel

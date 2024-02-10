@@ -191,7 +191,6 @@ const Uploader = (props: IUploadProps) => {
             fieldProps.onChange(res);
           } catch (e) {
             const err = e as ICustomError;
-            console.log(err)
             if (err?.response?.status === 422) {
               const responseObject = JSON.parse(err?.response?.data?.message);
               setSyntaxErrorObject(responseObject.errors);
