@@ -279,7 +279,6 @@ const Uploader = (props: IUploadProps) => {
                         aria-label="delete"
                         onClick={async (e) => {
                           e.stopPropagation();
-                          // if (!deleteService) {
                           setMyFiles([]);
                           fieldProps.onChange("");
                           return;

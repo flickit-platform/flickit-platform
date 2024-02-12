@@ -913,6 +913,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
   const [updateErrorObject, setUpdateErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
+  const [isValid, setIsValid] = useState<boolean>(false);
   const close = () => {
     setSyntaxErrorObject(null);
     setUpdateErrorObject(null);
@@ -972,12 +973,12 @@ const UpdateAssessmentKitDialog = (props: any) => {
         <Trans i18nKey="pleaseNoteThatThereAreSomeLimitations" />
       </Typography>
       <Box sx={{ ml: 4, my: 2 }}>
-        <Typography component="li" variant="body1" fontWeight={"bold"}>
+        {/* <Typography component="li" variant="body1" fontWeight={"bold"}>
           <Trans i18nKey="deletingAnSubjectOrAddingANewOne" />
-        </Typography>
-        <Typography component="li" variant="body1" fontWeight={"bold"}>
+        </Typography> */}
+        {/* <Typography component="li" variant="body1" fontWeight={"bold"}>
           <Trans i18nKey="deletingAnAttributeOrAddingANewOne" />
-        </Typography>
+        </Typography> */}
         <Typography component="li" variant="body1" fontWeight={"bold"}>
           <Trans i18nKey="deletingAQuestionnaire" />
         </Typography>
@@ -998,6 +999,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
             deleteService={(args, config) =>
               service.deleteAssessmentKitDSL(args, config)
             }
+            setIsValid={setIsValid}
             name="dsl_id"
             required={true}
             label={<Trans i18nKey="dsl" />}

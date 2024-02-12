@@ -451,7 +451,7 @@ export const createService = (
     ) {
       return axios.post(
         `/baseinfo/dsl/`,
-        { dsl_file: file },
+        { dsl_file: file?.file },
         {
           ...config,
           headers: {
