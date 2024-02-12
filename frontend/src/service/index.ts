@@ -746,7 +746,7 @@ export const createService = (
     ) {
       const { data = {} } = args ?? {};
 
-      return axios.post(`/baseinfo/expertgroups/`, data, {
+      return axios.post(`/api/v1/expert-groups/`, data, {
         ...(config ?? {}),
         headers: {
           "Content-Type": "multipart/form-data",
