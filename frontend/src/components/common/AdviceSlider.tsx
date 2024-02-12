@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { getMaturityLevelColors } from "@styles";
+import { Trans } from "react-i18next";
 const AdviceSlider = (props: any) => {
   const {
     defaultValue,
@@ -10,9 +11,9 @@ const AdviceSlider = (props: any) => {
     maturityLevels,
     setTarget,
     target,
+    currentState,
   } = props;
   const [value, setValue] = useState();
-  const [maturityLevelID, setMaturityLevelID] = useState();
   const handleSliderChange = (event: Event, newValue: any) => {
     if (newValue >= defaultValue) {
       setValue(newValue);
@@ -42,7 +43,6 @@ const AdviceSlider = (props: any) => {
       }
     }
   };
-
   const colorPallet = getMaturityLevelColors(
     subject?.maturity_level?.maturity_levels_count ?? 5
   );
@@ -66,7 +66,7 @@ const AdviceSlider = (props: any) => {
             fontSize: "11px",
             border: "1px solid #D81E5B",
             borderRadius: "8px",
-            textAlign:"center"
+            textAlign: "center",
           }}
         >
           {subject.title}
@@ -145,7 +145,7 @@ const AdviceSlider = (props: any) => {
               color: "#F9A03F",
             }}
           >
-            current stage
+            <Trans i18nKey="currentStage" />
           </Box>
         </Box>
       </Box>
@@ -165,16 +165,16 @@ const AdviceSlider = (props: any) => {
             fontWeight: "400",
           }}
         >
-          from
+          <Trans i18nKey="from" />
         </Box>
         <Box
           sx={{
-            color: "#FDAE61",
+            color: colorPallet[currentState?.index - 1],
             fontSize: "11px",
             fontWeight: "700",
           }}
         >
-          Moderate
+          {currentState?.title}
         </Box>
         <Box
           sx={{
@@ -183,7 +183,7 @@ const AdviceSlider = (props: any) => {
             fontWeight: "400",
           }}
         >
-          to
+          <Trans i18nKey="to" />
         </Box>
 
         <Box

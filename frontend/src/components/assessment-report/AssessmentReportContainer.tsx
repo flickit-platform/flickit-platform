@@ -235,7 +235,7 @@ const AssessmentReportContainer = () => {
                   colorCode={colorCode}
                 />
               </Grid>
-              <Grid item sm={14} xs={14} id="advice-test">
+              <Grid item sm={14} xs={14} id="advices">
                 <AssessmentAdviceContainer subjects={subjects} />
               </Grid>
             </Grid>
