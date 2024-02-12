@@ -212,6 +212,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   <AdviceSlider
                     key={attribute.id}
                     defaultValue={attribute?.maturity_level?.value || 0}
+                    currentState={attribute?.maturity_level}
                     attribute={attribute}
                     subject={subject?.subject}
                     maturityLevels={attribute?.maturity_scores}
@@ -374,7 +375,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 mb: 4,
-                direction: isFarsi ? "rtl" : "ltr",
+                // direction: isFarsi ? "rtl" : "ltr",
               }}
             >
               <Box
@@ -460,7 +461,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      direction: isFarsi ? "rtl" : "ltr",
+                      // direction: isFarsi ? "rtl" : "ltr",
                       fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
                     }}
                   >

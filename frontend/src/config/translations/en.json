@@ -341,5 +341,9 @@
   "whatIsNow":"What is now",
   "whatShouldBe":"What should be",
   "targetedAttributes":"Targeted attributes",
-  "theAdvisorService":"The Advisor service provides you with some tips to help you improve your software score in different subjects and attributes. It considers your priorities that you tell it and tries to give advice with the most effectiveness and least effort to fulfill. Some advice affects more than attributes and subjects. You can always change your preferences and goals by setting new parameters for the advisor. There are many factors determining whether an advice is worth its costs and efforts for you. We are always here to see if you have any further questions, but the final decision is yours! Make it wise."
+  "theAdvisorService":"The Advisor service provides you with some tips to help you improve your software score in different subjects and attributes. It considers your priorities that you tell it and tries to give advice with the most effectiveness and least effort to fulfill. Some advice affects more than attributes and subjects. You can always change your preferences and goals by setting new parameters for the advisor. There are many factors determining whether an advice is worth its costs and efforts for you. We are always here to see if you have any further questions, but the final decision is yours! Make it wise.",
+  "from":"from",
+  "currentStage":"current stage",
+  "to":"to",
+  "questionnaire":"Questionnaire"
 }
