@@ -660,7 +660,7 @@ export const createService = (
       });
     },
     fetchExpertGroups(args: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/baseinfo/userexpertgroup/`, {
+      return axios.get(`/api/v1/expert-groups/`, {
         ...(config ?? {}),
       });
     },
@@ -975,9 +975,12 @@ export const createService = (
     ) {
       const { assessmentKitId } = args ?? {};
 
-      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/dsl-download-link/`, {
-        ...(config ?? {}),
-      });
+      return axios.get(
+        `/api/v1/assessment-kits/${assessmentKitId}/dsl-download-link/`,
+        {
+          ...(config ?? {}),
+        }
+      );
     },
 
     fetchMaturityLevelQuestions(

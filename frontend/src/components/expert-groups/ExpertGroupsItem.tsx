@@ -31,14 +31,13 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
   const { data, disableActions = false } = props;
   const {
     id,
-    name,
-    picture,
+    title,
     bio = "",
-    website,
-    about = "",
-    users = [],
-    number_of_assessment_kits,
-    is_expert,
+    picture,
+    membersCount,
+    members = [],
+    publishedKitsCount,
+    editable,
   } = data || {};
 
   return (
@@ -62,20 +61,19 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               })()}
               src={picture}
             >
-              {name?.[0]?.toUpperCase()}
+              {title?.[0]?.toUpperCase()}
             </Avatar>
           }
-          action={!disableActions && <Actions expertGroup={data} />}
+          action={!disableActions && <Actions editable={editable} expertGroup={data} />}
           title={
             <Box component={"b"} color="GrayText" fontSize=".95rem">
-              {name}
+              {title}
             </Box>
           }
           subheader={
             <Box sx={{ ...styles.centerCV, textTransform: "lowercase" }}>
-              <Box>
-                <Trans i18nKey="publishedAssessmentKits" />: {number_of_assessment_kits}
-              </Box>
+              <Trans i18nKey="publishedAssessmentKits" />: {publishedKitsCount}
+              <Box></Box>
             </Box>
           }
         />
@@ -98,7 +96,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         <Divider sx={{ mx: 2 }} />
         <CardActions disableSpacing>
           <AvatarGroup
-            total={users.length}
+            total={membersCount}
             max={5}
             sx={{ mx: 0.5 }}
             slotProps={{
@@ -107,7 +105,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               },
             }}
           >
-            {users.map((user: any) => {
+            {members.map((user: any) => {
               return (
                 <Avatar
                   key={user.id}
@@ -126,7 +124,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { expertGroup } = props;
+  const { expertGroup,editable } = props;
   const { query: fetchExpertGroups } = useQueryDataContext();
   const { userInfo } = useAuthContext();
   const { service } = useServiceContext();
@@ -137,8 +135,6 @@ const Actions = (props: any) => {
     runOnMount: false,
   });
   const dialogProps = useDialog();
-  const hasAccess =
-    expertGroup?.owner?.id === userInfo.id || expertGroup.is_expert;
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
@@ -148,7 +144,7 @@ const Actions = (props: any) => {
     });
   };
 
-  return hasAccess ? (
+  return editable ? (
     <>
       <MoreActions
         {...useMenu()}
