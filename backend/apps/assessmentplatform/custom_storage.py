@@ -5,14 +5,15 @@ from assessmentplatform.settings import MINIO_MEDIA_BUCKET_NAME, MINIO_STATIC_BU
 
 class CustomStorage(S3Boto3Storage):
     custom_url = MINIO_URL
-    def url(self, name, parameters=None, expire=None, http_method=None):
+    def url(self, name, parameters=None, expire=None, http_method=None, bucket_name=None):
         # Preserve the trailing slash after normalizing the path.
         name = self._normalize_name(clean_name(name))
         params = parameters.copy() if parameters else {}
         if expire is None:
             expire = self.querystring_expire
-        
         params['Bucket'] = self.bucket.name
+        if bucket_name is not None:
+            params['Bucket'] = bucket_name
         params['Key'] = name
         url = self.bucket.meta.client.generate_presigned_url('get_object', Params=params,
                                                              ExpiresIn=expire, HttpMethod=http_method)
