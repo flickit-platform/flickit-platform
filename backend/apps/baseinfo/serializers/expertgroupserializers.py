@@ -1,4 +1,5 @@
 from django.db import transaction
+from pathlib import Path
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
@@ -38,9 +39,12 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         return current_user == expert_group.owner
 
     def get_picture(self, expert_group: ExpertGroup):
-        picture_path = expert_group.picture.name
-        picture_path = picture_path.replace("media/", '')
-        return default_storage.url(picture_path)
+        if expert_group.picture is not None:
+            path = expert_group.picture.name
+            bucket = path.split('/')[0]
+            picture_path = path.replace(bucket + '/', '')
+            return default_storage.url(name=picture_path, bucket_name=bucket)
+        return None
 
     class Meta:
         model = ExpertGroup
