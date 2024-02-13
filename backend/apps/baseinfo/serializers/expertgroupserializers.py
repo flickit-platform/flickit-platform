@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 from account.serializers.userserializers import UserSimpleSerializer, UserSerializer
@@ -16,6 +17,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     is_expert = serializers.SerializerMethodField(method_name='check_expert')
     is_member = serializers.SerializerMethodField(method_name='check_is_member')
     is_owner = serializers.SerializerMethodField(method_name='check_is_owner')
+    picture = serializers.SerializerMethodField(method_name='get_picture')
 
     def get_number_of_members(self, expert_group: ExpertGroup):
         return expert_group.users.count()
@@ -34,6 +36,11 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
     def check_is_owner(self, expert_group: ExpertGroup):
         current_user = self.context.get('request', None).user
         return current_user == expert_group.owner
+
+    def get_picture(self, expert_group: ExpertGroup):
+        picture_path = expert_group.picture.name
+        picture_path = picture_path.replace("media/", '')
+        return default_storage.url(picture_path)
 
     class Meta:
         model = ExpertGroup
@@ -70,6 +77,8 @@ class ExpertGroupGiveAccessSerializer(serializers.Serializer):
 
 
 class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
+    picture = serializers.SerializerMethodField(method_name='get_picture')
+
 
     @transaction.atomic
     def create(self, validated_data):
@@ -80,8 +89,25 @@ class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
         expertgroupservice.add_expert_group_coordinator(expert_group, current_user)
         return expert_group
 
+    @transaction.atomic
+    def update(self, expert_group, validated_data):
+        ExpertGroup.objects.filter(id=expert_group.id).update(**validated_data)
+        expert_group = ExpertGroup.objects.get(id=expert_group.id)
+        if 'picture' in validated_data:
+            expert_group.picture = validated_data['picture']
+            expert_group.save()
+            expert_group.picture = "media/" + expert_group.picture.name
+            expert_group.save()
+        return expert_group
+
     def validate_website(self, website):
         return expertgroupservice.validate_website(website)
+
+    def get_picture(self, expert_group: ExpertGroup):
+        picture_path = expert_group.picture.name
+        picture_path = picture_path.replace("media/", '')
+        return default_storage.url(picture_path)
+
 
     class Meta:
         model = ExpertGroup
