@@ -77,8 +77,6 @@ class ExpertGroupGiveAccessSerializer(serializers.Serializer):
 
 
 class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
-    picture = serializers.SerializerMethodField(method_name='get_picture')
-
 
     @transaction.atomic
     def create(self, validated_data):
@@ -92,21 +90,20 @@ class ExpertGroupCreateSerilizers(serializers.ModelSerializer):
     @transaction.atomic
     def update(self, expert_group, validated_data):
         ExpertGroup.objects.filter(id=expert_group.id).update(**validated_data)
-        expert_group = ExpertGroup.objects.get(id=expert_group.id)
+        expert_group_updated = ExpertGroup.objects.get(id=expert_group.id)
+
         if 'picture' in validated_data:
-            expert_group.picture = validated_data['picture']
-            expert_group.save()
-            expert_group.picture = "media/" + expert_group.picture.name
-            expert_group.save()
-        return expert_group
+            expert_group_updated.picture = validated_data['picture']
+            expert_group_updated.save()
+            expert_group_updated.picture = "media/" + expert_group_updated.picture.name
+            expert_group_updated.save()
+        picture_path = expert_group_updated.picture.name
+        expert_group_updated.picture.name = picture_path.replace("media/", '')
+        return expert_group_updated
 
     def validate_website(self, website):
         return expertgroupservice.validate_website(website)
 
-    def get_picture(self, expert_group: ExpertGroup):
-        picture_path = expert_group.picture.name
-        picture_path = picture_path.replace("media/", '')
-        return default_storage.url(picture_path)
 
 
     class Meta:
