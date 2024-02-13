@@ -661,7 +661,7 @@ export const createService = (
     },
     fetchExpertGroups(args: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/api/v1/expert-groups/`, {
-        ...(config ?? {}),
+        ...(config ?? {}), params: { size: 20 },
       });
     },
     fetchUserExpertGroup(

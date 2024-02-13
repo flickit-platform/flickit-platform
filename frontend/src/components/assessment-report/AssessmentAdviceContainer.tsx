@@ -461,7 +461,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      // direction: isFarsi ? "rtl" : "ltr",
+                     
                       fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
                     }}
                   >
@@ -481,6 +481,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         color: "#0A2342",
                         fontSize: "16px",
                         fontWeight: "700",
+                         direction: isFarsi ? "rtl" : "ltr",
+                         textAlign:"left"
                       }}
                     >
                       {question?.title}

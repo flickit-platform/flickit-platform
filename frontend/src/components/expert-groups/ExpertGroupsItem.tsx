@@ -21,6 +21,7 @@ import { Trans } from "react-i18next";
 import useDialog from "@utils/useDialog";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import { useAuthContext } from "@providers/AuthProvider";
+import Tooltip from "@mui/material/Tooltip";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -40,6 +41,14 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     editable,
   } = data || {};
 
+  function stringAvatar(name: string) {
+    console.log(name);
+    if (name) {
+      return {
+        children: `${name.split("")[0]}`,
+      };
+    }
+  }
   return (
     <Box>
       <Card>
@@ -64,7 +73,11 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               {title?.[0]?.toUpperCase()}
             </Avatar>
           }
-          action={!disableActions && <Actions editable={editable} expertGroup={data} />}
+          action={
+            !disableActions && (
+              <Actions editable={editable} expertGroup={data} />
+            )
+          }
           title={
             <Box component={"b"} color="GrayText" fontSize=".95rem">
               {title}
@@ -106,14 +119,18 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
             }}
           >
             {members.map((user: any) => {
+              console.log(user);
               return (
-                <Avatar
-                  key={user.id}
-                  sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-                  alt={user.display_name}
-                  title={user.display_name}
-                  src="/"
-                />
+                <Tooltip title={user?.displayName}>
+                  <Avatar
+                    key={user.id}
+                    sx={{ width: 28, height: 28, fontSize: ".8rem" }}
+                    alt={user.displayName}
+                    title={user.displayName}
+                  >
+                    {user?.displayName.split("")[0].toUpperCase()}
+                  </Avatar>
+                </Tooltip>
               );
             })}
           </AvatarGroup>
@@ -124,7 +141,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const { expertGroup,editable } = props;
+  const { expertGroup, editable } = props;
   const { query: fetchExpertGroups } = useQueryDataContext();
   const { userInfo } = useAuthContext();
   const { service } = useServiceContext();
