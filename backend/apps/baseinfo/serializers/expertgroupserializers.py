@@ -39,12 +39,15 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
         return current_user == expert_group.owner
 
     def get_picture(self, expert_group: ExpertGroup):
-        if expert_group.picture is not None:
-            path = expert_group.picture.name
-            bucket = path.split('/')[0]
-            picture_path = path.replace(bucket + '/', '')
-            return default_storage.url(name=picture_path, bucket_name=bucket)
-        return None
+
+        if expert_group.picture.name == "":
+            return None
+        if expert_group.picture.name is None:
+            return None
+        path = expert_group.picture.name
+        bucket = path.split('/')[0]
+        picture_path = path.replace(bucket + '/', '')
+        return default_storage.url(name=picture_path, bucket_name=bucket)
 
     class Meta:
         model = ExpertGroup
