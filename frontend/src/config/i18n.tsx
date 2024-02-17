@@ -11,7 +11,7 @@ const resources = {
     translation: fa,
   },
 };
-const storedLanguage = localStorage.getItem("lang") || "fa";
+const storedLanguage = localStorage.getItem("lang") || "en";
 i18n.use(initReactI18next).init({
   resources,
   lng: storedLanguage,
