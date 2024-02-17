@@ -119,7 +119,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       })
       .catch((e) => {});
   };
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
   return (
     <Box
       sx={{

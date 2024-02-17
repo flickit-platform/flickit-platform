@@ -26,6 +26,7 @@ import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
+import LanguageIcon from "@mui/icons-material/Language";
 import QueryData from "@common/QueryData";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -62,7 +63,8 @@ const Navbar = () => {
       fetchSpaceInfo();
     }
   }, [spaceId]);
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ px: 1, textAlign: "center" }}>
       <Typography
@@ -412,7 +414,7 @@ const SpacesButton = () => {
     service: (args, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
   return (
     <>
       <Button
@@ -513,13 +515,25 @@ const SpacesButton = () => {
 const AccountDropDownButton = ({ userInfo }: any) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const currentLanguage = localStorage.getItem("lang");
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const is_farsi = true;
+  const changeLanguage = () => {
+    localStorage.setItem("lang", currentLanguage === "en" ? "fa" : "en");
+
+    localStorage.setItem(
+      "is_farsi",
+      currentLanguage === "en" ? JSON.stringify(true) : JSON.stringify(false)
+    );
+    window.location.reload();
+  };
+
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
+
   return (
     <>
       <Button
@@ -584,6 +598,12 @@ const AccountDropDownButton = ({ userInfo }: any) => {
             {" "}
             <Trans i18nKey={"expertGroups"} />
           </ListItemText>
+        </MenuItem>
+        <MenuItem dense onClick={changeLanguage}>
+          <ListItemIcon>
+            <LanguageIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>{currentLanguage === "en" ? "FA" : "EN"}</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem

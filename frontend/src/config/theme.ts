@@ -54,7 +54,7 @@ const palette = createPalette({
   ml: { primary: "#6035A1" },
   cl: { primary: "#3596A1" },
 });
-
+const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
 export const theme = createTheme({
   palette,
   typography: {
@@ -113,7 +113,7 @@ export const theme = createTheme({
         }
         body {
           background: #f5f5f5;
-          direction:rtl;
+          direction:${is_farsi?"rtl":"ltr"};
         }
       `,
     },

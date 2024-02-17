@@ -11,13 +11,16 @@ const resources = {
     translation: fa,
   },
 };
-
+const storedLanguage = localStorage.getItem("lang") || "fa";
 i18n.use(initReactI18next).init({
   resources,
-  lng: "fa",
+  lng: storedLanguage,
   fallbackLng: "fa",
 
   interpolation: {
     escapeValue: false,
   },
+});
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("lang", lng);
 });

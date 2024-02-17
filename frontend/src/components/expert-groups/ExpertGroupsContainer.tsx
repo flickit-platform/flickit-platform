@@ -24,7 +24,7 @@ const ExpertGroupsContainer = () => {
   });
 
   useDocumentTitle(t("expertGroups") as string);
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
   return (
     <Box>
       {is_expert && (
@@ -72,7 +72,7 @@ const ExpertGroupsContainer = () => {
 const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
   const { onSubmitForm } = props;
   const dialogProps = useDialog();
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
   return (
     <>
       <Button

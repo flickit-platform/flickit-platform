@@ -76,7 +76,7 @@ export const SpaceMembers = (props: any) => {
       controller?.abort();
     };
   }, [data]);
-  const is_farsi = true;
+  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
   return (
     <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
