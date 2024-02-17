@@ -37,7 +37,7 @@ const UserContainer = () => {
     setValue(newValue);
     navigate(`/user/${newValue}`);
   };
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
+    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <Box m="auto">
       <Box>

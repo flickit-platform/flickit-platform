@@ -26,7 +26,7 @@ const SpaceContainer = () => {
   });
 
   const isEmpty = spacesQueryData?.data?.results?.length === 0;
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
+    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <SpaceLayout
       title={

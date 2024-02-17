@@ -108,7 +108,7 @@ function SpaceSettings(props: { isOwner: boolean; owner: any }) {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");;
+    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>

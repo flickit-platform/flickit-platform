@@ -63,7 +63,7 @@ const Navbar = () => {
       fetchSpaceInfo();
     }
   }, [spaceId]);
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ px: 1, textAlign: "center" }}>
@@ -414,7 +414,7 @@ const SpacesButton = () => {
     service: (args, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <>
       <Button
@@ -516,6 +516,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const currentLanguage = localStorage.getItem("lang");
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -523,16 +524,9 @@ const AccountDropDownButton = ({ userInfo }: any) => {
     setAnchorEl(null);
   };
   const changeLanguage = () => {
-    localStorage.setItem("lang", currentLanguage === "en" ? "fa" : "en");
-
-    localStorage.setItem(
-      "is_farsi",
-      currentLanguage === "en" ? JSON.stringify(true) : JSON.stringify(false)
-    );
+    localStorage.setItem("lang", currentLanguage === "fa" ? "en" : "fa");
     window.location.reload();
   };
-
-  const is_farsi = JSON.parse(localStorage.getItem("is_farsi") ?? "false");
 
   return (
     <>
@@ -603,7 +597,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           <ListItemIcon>
             <LanguageIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>{currentLanguage === "en" ? "FA" : "EN"}</ListItemText>
+          <ListItemText>{currentLanguage === "fa" ? "EN" : "FA"}</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem
