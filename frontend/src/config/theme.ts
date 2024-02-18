@@ -54,12 +54,14 @@ const palette = createPalette({
   ml: { primary: "#6035A1" },
   cl: { primary: "#3596A1" },
 });
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
+const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 export const theme = createTheme({
   palette,
   typography: {
     subSmall: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
+      fontFamily: is_farsi
+        ? "'Vazirmatn','Arial','sans-serif'"
+        : "'Helvetica','Roboto','Arial','sans-serif'",
       fontWeight: 500,
       fontSize: "0.665rem",
       lineHeight: 1.57,
@@ -68,7 +70,9 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subMedium: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
+      fontFamily: is_farsi
+        ? "'Vazirmatn','Arial','sans-serif'"
+        : "'Helvetica','Roboto','Arial','sans-serif'",
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: 1.57,
@@ -76,7 +80,10 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subLarge: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
+      fontFamily: is_farsi
+        ? "'Vazirmatn','Arial','sans-serif'"
+        : "'Helvetica','Roboto','Arial','sans-serif'",
+
       fontWeight: 500,
       fontSize: "0.8rem",
       lineHeight: 1.57,
@@ -84,23 +91,23 @@ export const theme = createTheme({
       color: "GrayText",
     },
     button: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
-      letterSpacing: ".1em",
+      fontFamily: is_farsi ? "'Vazirmatn'" : "'Oswald','Roboto'",
+      letterSpacing: is_farsi ? "0" : ".1em",
     },
     h3: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
+      fontFamily: is_farsi ? "'Vazirmatn'" : "'Oswald','Roboto'",
     },
     h4: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
+      fontFamily: is_farsi ? "'Vazirmatn'" : "'Oswald','Roboto'",
       opacity: 0.9,
     },
     h5: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
+      fontFamily: is_farsi ? "'Vazirmatn'" : "'Oswald','Roboto'",
       opacity: 0.85,
     },
     h6: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
-      letterSpacing: "0.05em",
+      fontFamily: is_farsi ? "'Vazirmatn'" : "'Oswald','Roboto'",
+      letterSpacing: is_farsi ? "0" : "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
     },
@@ -113,7 +120,7 @@ export const theme = createTheme({
         }
         body {
           background: #f5f5f5;
-          direction:${is_farsi?"rtl":"ltr"};
+          direction:${is_farsi ? "rtl" : "ltr"};
         }
       `,
     },

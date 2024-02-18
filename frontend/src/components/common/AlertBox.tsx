@@ -7,12 +7,16 @@ interface IAlertBox extends AlertProps {}
 const AlertBox = (props: IAlertBox) => {
   const { children, action, ...rest } = props;
   const isSmall = useScreenResize("md");
-
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Alert
       {...rest}
       action={!isSmall ? action : undefined}
-      sx={isSmall && action ? { ...(rest.sx || {}), "& .MuiAlert-message": { width: "100%" } } : rest.sx}
+      sx={
+        isSmall && action
+          ? { ...(rest.sx || {}), "& .MuiAlert-message": { width: "100%" } }
+          : rest.sx
+      }
     >
       <Box sx={isSmall ? { flexDirection: "column", width: "100%" } : {}}>
         {children}
@@ -21,8 +25,8 @@ const AlertBox = (props: IAlertBox) => {
             sx={{
               pt: { xs: 1.5, md: 0.5 },
               pl: 2,
-              ml: "auto",
-              mr: { xs: 0, md: -1 },
+              ml: `${is_farsi ? { xs: 0, md: -1 } : "auto"}`,
+              mr: `${is_farsi ? "auto" : { xs: 0, md: -1 }}`,
               alignItems: { xs: "flex-end", md: "flex-start" },
               justifyContent: "flex-end",
               display: "flex",

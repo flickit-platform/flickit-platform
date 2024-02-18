@@ -54,6 +54,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { maturity_levels_count } = assessment_kit;
   const location = useLocation();
   const { service } = useServiceContext();
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId: id }, config) =>
       service.calculateMaturityLevel(args, config),
@@ -182,7 +183,14 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           </Grid>
           <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
             <Button
-              startIcon={<QueryStatsRounded />}
+              startIcon={
+                <QueryStatsRounded
+                  sx={{
+                    mr: `${is_farsi ? "-4px" : "8px"}`,
+                    ml: `${is_farsi ? "8px" : "-4px"}`,
+                  }}
+                />
+              }
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
@@ -201,7 +209,14 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           </Grid>
           <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
             <Button
-              startIcon={<QuizRoundedIcon />}
+              startIcon={
+                <QuizRoundedIcon
+                  sx={{
+                    mr: `${is_farsi ? "-4px" : "8px"}`,
+                    ml: `${is_farsi ? "8px" : "-4px"}`,
+                  }}
+                />
+              }
               variant={"contained"}
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

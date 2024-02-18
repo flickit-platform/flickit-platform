@@ -155,7 +155,7 @@ const QuestionnaireTitle = (props: any) => {
   const { pathInfo } = props;
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
-
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   useEffect(() => {
     setDocumentTitle(`${assessment?.title} ${t("questionnaires")}`);
   }, [assessment]);
@@ -181,7 +181,9 @@ const QuestionnaireTitle = (props: any) => {
         />
       }
     >
-      <QuizRoundedIcon sx={{ mr: 1 }} />
+      <QuizRoundedIcon
+        sx={{ ml: `${is_farsi ? "8px" : 0}`, m4: `${is_farsi ? 0 : "8px"}` }}
+      />
       <Trans i18nKey="Questionnaires" />
     </Title>
   );

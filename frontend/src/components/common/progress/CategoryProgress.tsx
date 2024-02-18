@@ -1,5 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
-import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
+import LinearProgress, {
+  LinearProgressProps,
+} from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import QANumberIndicator from "../QANumberIndicator";
@@ -30,6 +32,7 @@ const progressToColorMapColor: Record<number, string> = {
 
 const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
   const { progress = 0, q, a, isQuestionnaire, isSmallScreen, ...rest } = props;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box sx={{ ...styles.centerV }} flex="1" {...rest}>
       <Box flex={1}>
@@ -38,16 +41,20 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
           color={progressToColorMap[progress] || "primary"}
           variant="determinate"
           sx={{
-            borderRadius: "0 8px 8px 0px",
+            borderRadius: is_farsi ? "8px 0 0 8px " : "0 8px 8px 0px",
             color: progress === 0 ? "gray" : undefined,
           }}
         />
       </Box>
-      <Box pl="8px" mr="-2px">
+      <Box pl={is_farsi ? 0 : "8px"} pr={is_farsi ? "8px" : 0}  mr="-2px">
         {isQuestionnaire && isSmallScreen ? (
           <QANumberIndicator q={q} a={a} />
         ) : (
-          <Typography fontWeight={"bold"} textTransform="uppercase" color={progressToColorMapColor[progress] || "#1976d2"}>
+          <Typography
+            fontWeight={"bold"}
+            textTransform="uppercase"
+            color={progressToColorMapColor[progress] || "#1976d2"}
+          >
             <Trans i18nKey={progressToLabelMap[progress] || "inprogress"} />
           </Typography>
         )}

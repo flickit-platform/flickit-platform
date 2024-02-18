@@ -119,7 +119,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       })
       .catch((e) => {});
   };
-    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box
       sx={{
@@ -170,7 +170,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
           )}
         </Box>
       </Box>
-      <Box ml="auto" sx={{ ...styles.centerV }}>
+      <Box
+        ml={`${is_farsi ? 0 : "auto"}`}
+        mr={`${is_farsi ? "auto" : 0}`}
+        sx={{ ...styles.centerV,flexDirection:`${is_farsi ? "row-reverse" : "row"}` }}
+      >
         <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
           <PeopleOutlineRoundedIcon
             sx={{

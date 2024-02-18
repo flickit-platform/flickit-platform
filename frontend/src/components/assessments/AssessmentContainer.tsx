@@ -28,9 +28,10 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
-  const {currentSpace } = useAuthContext();
+  const { currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const { fetchAssessments, ...rest } = useFetchAssessments();
   const { data, error, errorObject, size, total } = rest;
   const isEmpty = data.length == 0;
@@ -84,7 +85,7 @@ const AssessmentContainer = () => {
           my: 3,
         }}
       >
-        <Box ml="auto">
+        <Box ml={`${is_farsi ? 0 : "auto"}`} mr={`${is_farsi ? "auto" : 0}`}>
           <ToolbarCreateItemBtn
             data-cy="create-assessment-btn"
             onClick={() =>
@@ -95,7 +96,14 @@ const AssessmentContainer = () => {
                 },
               })
             }
-            icon={<NoteAddRoundedIcon />}
+            icon={
+              <NoteAddRoundedIcon
+                sx={{
+                  mr: `${is_farsi ? "-4px" : "8px"}`,
+                  ml: `${is_farsi ? "8px" : "-4px"}`,
+                }}
+              />
+            }
             shouldAnimate={isEmpty}
             minWidth="195px"
             text="createAssessment"
@@ -169,7 +177,7 @@ const useFetchAssessments = () => {
 
   useEffect(() => {
     fetchAssessments();
-  }, [page,spaceId]);
+  }, [page, spaceId]);
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);
