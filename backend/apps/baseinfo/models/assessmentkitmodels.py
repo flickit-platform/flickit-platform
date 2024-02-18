@@ -36,7 +36,7 @@ class AssessmentKit(models.Model):
     summary = models.TextField()
     about = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
+    last_modification_date = models.DateTimeField(auto_now=True,  db_column="last_modification_time")
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='assessmentkits')
     is_active = models.BooleanField(default=False, db_column="published")
     is_private = models.BooleanField(default=False)
