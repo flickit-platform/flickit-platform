@@ -41,17 +41,19 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
           color={progressToColorMap[progress] || "primary"}
           variant="determinate"
           sx={{
-            borderRadius: is_farsi ? "8px 0 0 8px " : "0 8px 8px 0px",
+            borderRadius: "0 8px 8px 0px",
             color: progress === 0 ? "gray" : undefined,
+            transform: `rotate(${is_farsi ? "180" : "0"}deg)`,
           }}
         />
       </Box>
-      <Box pl={is_farsi ? 0 : "8px"} pr={is_farsi ? "8px" : 0}  mr="-2px">
+      <Box pl={is_farsi ? 0 : "8px"} pr={is_farsi ? "8px" : 0} mr="-2px">
         {isQuestionnaire && isSmallScreen ? (
           <QANumberIndicator q={q} a={a} />
         ) : (
           <Typography
             fontWeight={"bold"}
+            fontFamily={is_farsi?"Vazirmatn":"Roboto"}
             textTransform="uppercase"
             color={progressToColorMapColor[progress] || "#1976d2"}
           >
