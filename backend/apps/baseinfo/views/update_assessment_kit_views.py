@@ -18,7 +18,7 @@ class AssessmentKitUpdateApi(APIView):
     def put(self, request, assessment_kit_id):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = update_assessment_kit_service.dsl_parser_update(assessment_kit_id,
+        result = update_assessment_kit_service.assessment_core_dsl_update(assessment_kit_id,
                                                                  serializer.validated_data['dsl_id'],
                                                                  header_authorization=request.headers['Authorization'])
         return Response(data=result["body"], status=result["status_code"])
