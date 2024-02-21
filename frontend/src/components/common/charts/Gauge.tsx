@@ -64,7 +64,7 @@ const Gauge = (props: IGaugeProps) => {
           )}
           <Typography
             sx={{ fontWeight: "bold" }}
-            variant="h5"
+            variant="h6"
             color={colorCode}
           >
             {maturity_level_status}
@@ -75,7 +75,7 @@ const Gauge = (props: IGaugeProps) => {
             </Typography>
           )}
           {show_confidence && (
-            <Typography variant="subtitle2" color="#3596A1" mt={1}>
+            <Typography variant="subtitle2" color="#3596A1" fontSize="10px" mt={1}>
               <Trans
                 i18nKey="withPercentConfidence"
                 values={{

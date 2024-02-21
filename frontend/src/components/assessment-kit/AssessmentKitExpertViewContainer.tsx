@@ -914,6 +914,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const [updateErrorObject, setUpdateErrorObject] = useState<any>();
   const { assessmentKitId } = useParams();
   const [isValid, setIsValid] = useState<boolean>(false);
+  const { expertGroupId } = useParams();
   const close = () => {
     setSyntaxErrorObject(null);
     setUpdateErrorObject(null);
@@ -929,8 +930,9 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     const { dsl_id, ...restOfData } = data;
+    console.log(dsl_id.kitDslId)
     const formattedData = {
-      dsl_id: dsl_id.id,
+      dsl_id: dsl_id.kitDslId,
       ...restOfData,
     };
     setLoading(true);
@@ -994,12 +996,13 @@ const UpdateAssessmentKitDialog = (props: any) => {
           <UploadField
             accept={{ "application/zip": [".zip"] }}
             uploadService={(args, config) =>
-              service.uploadAssessmentKitDSL(args, config)
+              service.uploadAssessmentKitDSLFile(args, config)
             }
             deleteService={(args, config) =>
               service.deleteAssessmentKitDSL(args, config)
             }
             setIsValid={setIsValid}
+            param={expertGroupId}
             name="dsl_id"
             required={true}
             label={<Trans i18nKey="dsl" />}
