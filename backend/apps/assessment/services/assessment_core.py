@@ -387,17 +387,6 @@ def get_subject_progress(assessments_details, subject_id):
     response = requests.get(
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/subjects/{subject_id}/progress')
     response_body = response.json()
-    if response.status_code == status.HTTP_200_OK:
-        subject = AssessmentSubject.objects.get(id=subject_id)
-        question_count = Question.objects.filter(quality_attributes__assessment_subject=subject_id).distinct().count()
-        response_body["title"] = subject.title
-        response_body["question_count"] = question_count
-        response_body["answers_count"] = response_body.pop("answerCount")
-        result["Success"] = True
-        result["body"] = response_body
-        result["status_code"] = status.HTTP_200_OK
-        return result
-
     result["Success"] = False
     result["body"] = response_body
     result["status_code"] = response.status_code
