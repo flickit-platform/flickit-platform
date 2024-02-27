@@ -109,16 +109,6 @@ class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
         fields = ['id']
 
 
-class ImportAssessmentKitSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    about = serializers.CharField()
-    summary = serializers.CharField()
-    tag_ids = serializers.ListField(child=serializers.IntegerField())
-    expert_group_id = serializers.IntegerField()
-    dsl_id = serializers.IntegerField()
-    is_private = serializers.BooleanField(required=True)
-
-
 class AssessmentKitInitFormSerilizer(serializers.ModelSerializer):
     tags = AssessmentKitTagSerializer(many=True)
 

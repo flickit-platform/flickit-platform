@@ -37,7 +37,6 @@ urlpatterns += [
     path("userexpertgroup/", expertgroupviews.UserExpertGroupsApiView.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
-    path("importassessmentkit/", importassessmentkitviews.ImportAssessmentKitApi.as_view()),
     path("assessmentkits/like/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
     path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
     path("assessmentkits/update/<str:assessment_kit_id>/", assessmentkitviews.UpdateAssessmentKitApi.as_view()),

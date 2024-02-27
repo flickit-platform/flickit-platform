@@ -1,8 +1,6 @@
 import requests
-import json
 from assessmentplatform.settings import DSL_PARSER_URL_SERVICE, ASSESSMENT_URL
 from rest_framework import status
-from baseinfo.services import importassessmentkitservice
 
 
 def dsl_parser_upload_dsl(dsl_contents):
