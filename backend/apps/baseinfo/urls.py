@@ -44,5 +44,4 @@ urlpatterns += [
     path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
     path("assessmentkits/update/<str:assessment_kit_id>/", assessmentkitviews.UpdateAssessmentKitApi.as_view()),
     path("assessmentkits/get/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitInitFormApi.as_view()),
-    path("dsl/download/<str:assessment_kit_id>/", importassessmentkitviews.DownloadDslApi.as_view()),
 ]

@@ -56,23 +56,6 @@ class ImportAssessmentKitApi(APIView):
             return Response({'message': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class DownloadDslApi(APIView):
-    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
-
-    def get(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
-        result = importassessmentkitservice.get_dsl_file(assessment_kit)
-        if result.success:
-            return FileResponse(result.data["file"], as_attachment=True,
-                                filename=result.data["filename"])
-        else:
-            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def access_dsl_file(request):
-    return HttpResponseForbidden('Not  to access this file.')
-
-
 class ImportDslFileView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = DslSerializer
