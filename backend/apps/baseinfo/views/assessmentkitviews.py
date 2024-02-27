@@ -104,17 +104,6 @@ class AssessmentKitListOptionsApi(APIView):
         return Response({'results': assessment_kit_options})
 
 
-class AssessmentKitPublishApi(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
-
-    def post(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
-        result = assessmentkitservice.publish_assessment_kit(assessment_kit)
-        if not result.success:
-            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'message': result.message})
-
-
 class AssessmentKitTagViewSet(ModelViewSet):
     serializer_class = AssessmentKitTagSerializer
 

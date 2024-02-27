@@ -233,15 +233,6 @@ def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_
 
 
 @transaction.atomic
-def publish_assessment_kit(assessment_kit: AssessmentKit):
-    if assessment_kit.is_active:
-        return ActionResult(success=False, message='The assessment_kit has already been published')
-    assessment_kit.is_active = True
-    assessment_kit.save()
-    return ActionResult(success=True, message='The assessment_kit is published successfully')
-
-
-@transaction.atomic
 def like_assessment_kit(user, assessment_kit_id):
     assessment_kit = load_assessment_kit(assessment_kit_id)
     deleted_rows_number = AssessmentKitLike.objects.filter(user=user.id, assessment_kit_id=assessment_kit.id).delete()[
