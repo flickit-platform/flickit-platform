@@ -41,7 +41,6 @@ def is_assessment_kit_deletable(assessment_kit_id):
     return ActionResult(success=True)
 
 
-
 def extract_detail_of_assessment_kit(assessment_kit, request):
     response = extract_asessment_kit_basic_infos(assessment_kit)
     response['assessmentkitInfos'] = extract_asessment_kit_report_infos(assessment_kit)
@@ -234,15 +233,6 @@ def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_
 
 
 @transaction.atomic
-def archive_assessment_kit(assessment_kit: AssessmentKit):
-    if not assessment_kit.is_active:
-        return ActionResult(success=False, message='The assessment_kit has already been archived')
-    assessment_kit.is_active = False
-    assessment_kit.save()
-    return ActionResult(success=True, message='The assessment_kit is archived successfully')
-
-
-@transaction.atomic
 def publish_assessment_kit(assessment_kit: AssessmentKit):
     if assessment_kit.is_active:
         return ActionResult(success=False, message='The assessment_kit has already been published')
@@ -375,8 +365,6 @@ def update_assessment_kit_info(assessment_kit_id, **kwargs):
     return ActionResult(success=True)
 
 
-
-
 def get_maturity_level_for_internal(maturity_levels):
     level_ids = list(maturity_levels.values_list("id", flat=True))
     levels_list = list()
@@ -388,4 +376,3 @@ def get_maturity_level_for_internal(maturity_levels):
                             "level_competences": level_competences,
                             })
     return levels_list
-

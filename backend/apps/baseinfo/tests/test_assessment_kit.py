@@ -75,67 +75,6 @@ class Test_Delete_AssessmentKit:
         assert response.data['message'] == 'Some assessments with this assessment_kit exist'
 
 
-@pytest.mark.django_db
-class TestArchiveAssessmentKits:
-    def test_archive_assessment_kits_returns_400(self, create_expertgroup, init_assessment_kit, authenticate):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        user1 = User.objects.get(email="test@test.com")
-        assessment_kit.is_active = False
-        assessment_kit.save()
-
-        api = APIRequestFactory()
-        request = api.post(f'/baseinfo/assessmentkits/archive/{assessment_kit.id}/', {}, format='json')
-        force_authenticate(request, user=user1)
-        view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assessment_kit_id=assessment_kit.id)
-
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data['message'] == 'The assessment_kit has already been archived'
-
-    def test_archive_assessment_kits_returns_403(self, create_expertgroup):
-        user1 = baker.make(User, email="test@test.com")
-        user2 = baker.make(User, email="test2@test.com")
-        permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
-        user2.user_permissions.add(permission)
-        assessment_kit = baker.make(AssessmentKit)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        api = APIRequestFactory()
-        request = api.post(f'/baseinfo/assessmentkits/archive/{assessment_kit.id}/', {}, format='json')
-        force_authenticate(request, user=user2)
-        view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assessment_kit_id=assessment_kit.id)
-
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
-        assert resp.data['message'] == 'You do not have permission to perform this action.'
-
-        expert_group.users.add(user2)
-        request = api.post(f'/baseinfo/assessmentkits/archive/{assessment_kit.id}/', {}, format='json')
-        force_authenticate(request, user=user2)
-        view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assessment_kit_id=assessment_kit.id)
-
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
-        assert resp.data['message'] == 'You do not have permission to perform this action.'
-
-    def test_archive_assessment_kits_returns_200(self, authenticate, init_assessment_kit, create_expertgroup):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        user1 = User.objects.get(email="test@test.com")
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        api = APIRequestFactory()
-        request = api.post(f'/baseinfo/assessmentkits/archive/{assessment_kit.id}/', {}, format='json')
-        force_authenticate(request, user=user1)
-        view = assessmentkitviews.AssessmentKitArchiveApi.as_view()
-        resp = view(request, assessment_kit_id=assessment_kit.id)
-
-        assert resp.status_code == status.HTTP_200_OK
-        assert resp.data['message'] == 'The assessment_kit is archived successfully'
 
 
 @pytest.mark.django_db
