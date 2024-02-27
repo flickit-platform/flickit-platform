@@ -12,12 +12,6 @@ from .expertgroupserializers import ExpertGroupAvatarSerializer
 from ..services import assessmentkitservice
 
 
-class AssessmentKitDslSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentKitDsl
-        fields = ['id', 'dsl_file']
-
-
 class AssessmentKitTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKitTag

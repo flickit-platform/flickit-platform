@@ -94,13 +94,6 @@ class AssessmentKitTagViewSet(ModelViewSet):
         return AssessmentKitTag.objects.all()
 
 
-class UploadAssessmentKitApi(ModelViewSet):
-    serializer_class = AssessmentKitDslSerializer
-
-    def get_queryset(self):
-        return AssessmentKitDsl.objects.all()
-
-
 class AssessmentKitLikeApi(APIView):
     @transaction.atomic
     def post(self, request, assessment_kit_id):
