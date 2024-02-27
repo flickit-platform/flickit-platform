@@ -1,13 +1,9 @@
-import itertools
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
-
 from common.restutil import ActionResult
-
 from baseinfo.services import expertgroupservice
-from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKit, AssessmentKitLike
-from baseinfo.models.basemodels import QualityAttribute
-from baseinfo.serializers.assessmentkitserializers import AssessmentKitSerilizer, SimpleLevelCompetenceSerilizer
+from baseinfo.models.assessmentkitmodels import AssessmentKitLike
+from baseinfo.serializers.assessmentkitserializers import SimpleLevelCompetenceSerilizer
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel, LevelCompetence
 from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
@@ -41,8 +37,6 @@ def is_assessment_kit_deletable(assessment_kit_id):
     return ActionResult(success=True)
 
 
-
-
 def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_id):
     if assessment_kit.expert_group is not None:
         if assessment_kit.expert_group.owner is not None:
@@ -61,49 +55,10 @@ def like_assessment_kit(user, assessment_kit_id):
     return assessment_kit
 
 
-def analyze(assessment_kit_id):
-    assessment_kit = AssessmentKit.objects.get(pk=assessment_kit_id)
-    output = []
-    attributes = extract_asessment_kit_attribute(assessment_kit)
-    assessment_kit_maturity_levels = assessment_kit.maturity_levels.all().order_by('value')
-    for att in attributes:
-        attribute_analyse = {}
-        attribute_analyse['title'] = att['title']
-        level_analysis = []
-        for ml in assessment_kit_maturity_levels:
-            attribute_question_by_level = {}
-            attribute_question_by_level['level_value'] = ml.value
-            attribute_question_number_by_level = 0
-            attribute = QualityAttribute.objects.get(id=att['id'])
-            for impact in attribute.question_impacts.all():
-                if impact.maturity_level.value == ml.value:
-                    attribute_question_number_by_level = attribute_question_number_by_level + 1
-
-            attribute_question_by_level['attribute_question_number'] = attribute_question_number_by_level
-            level_analysis.append(attribute_question_by_level)
-        attribute_analyse['level_analysis'] = level_analysis
-        output.append(attribute_analyse)
-
-    return ActionResult(data=output, success=True)
-
-
-def extract_asessment_kit_attribute(assessment_kit):
-    subjects = assessment_kit.assessment_subjects.all()
-    attributes = []
-    for subject in subjects:
-        attributes.append(subject.quality_attributes.values('id', 'title'))
-
-    return list(itertools.chain(*attributes))
-
-
 def get_extrac_assessment_kit_data(assessment_kit, request):
     result = []
-    data = {}
-    data["id"] = assessment_kit.id
-    data["title"] = assessment_kit.title
-    data['summary'] = assessment_kit.summary
-    data['about'] = assessment_kit.about
-    data["tags"] = assessment_kit.tags.all()
+    data = {"id": assessment_kit.id, "title": assessment_kit.title, 'summary': assessment_kit.summary,
+            'about': assessment_kit.about, "tags": assessment_kit.tags.all()}
     result.append(data)
     return result
 

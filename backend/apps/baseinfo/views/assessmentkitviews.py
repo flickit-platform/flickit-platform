@@ -66,14 +66,6 @@ class AssessmentKitViewSet(mixins.RetrieveModelMixin,
             return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AssessmentKitAnalyzeApi(APIView):
-    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
-
-    def get(self, request, assessment_kit_id):
-        result = assessmentkitservice.analyze(assessment_kit_id)
-        return Response(result.data, status=status.HTTP_200_OK)
-
-
 class AssessmentKitListForExpertGroupApi(APIView):
     permission_classes = [IsAuthenticated]
 

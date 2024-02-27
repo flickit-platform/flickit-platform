@@ -31,7 +31,6 @@ questionnaire_by_subject_router.register('questionnaires', commonviews.Questionn
 urlpatterns = router.urls + questionnaire_router.urls + questionnaire_by_subject_router.urls  + expert_group_access_router.urls
 
 urlpatterns += [
-    path("analyzeassessmentkit/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitAnalyzeApi.as_view()),
     path("expertgroup/<str:expert_group_id>/assessmentkits/", assessmentkitviews.AssessmentKitListForExpertGroupApi.as_view()),
     path("userexpertgroup/", expertgroupviews.UserExpertGroupsApiView.as_view()),
     path("addexpertgroup/<str:expert_group_id>/", expertgroupviews.AddUserToExpertGroupApi.as_view()),
