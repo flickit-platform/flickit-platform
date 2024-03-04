@@ -16,7 +16,7 @@ class Questionnaire(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questionnaires',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-
+    ref_num = models.UUIDField()
     class Meta:
         db_table = 'fak_questionnaire'
         verbose_name = 'Questionnaire'
@@ -42,7 +42,7 @@ class AssessmentSubject(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_subjects',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-
+    ref_num = models.UUIDField()
     class Meta:
         db_table = 'fak_subject'
         unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('index', 'assessment_kit')]
@@ -77,7 +77,7 @@ class QualityAttribute(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quality_attributes',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-
+    ref_num = models.UUIDField()
     class Meta:
         db_table = 'fak_attribute'
         verbose_name = 'Quality Attribute'
