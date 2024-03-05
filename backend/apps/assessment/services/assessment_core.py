@@ -28,7 +28,8 @@ def create_assessment(user, data, authorization_header):
     body["title"] = data["title"]
     body["assessmentKitId"] = data["assessment_kit_id"]
     body["colorId"] = data["color_id"]
-    response = requests.post(ASSESSMENT_URL + 'assessment-core/api/assessments', json=body, headers={"Authorization": authorization_header})
+    response = requests.post(ASSESSMENT_URL + 'assessment-core/api/assessments', json=body,
+                             headers={"Authorization": authorization_header})
     result["Success"] = True
     result["body"] = response
     return result
@@ -376,7 +377,7 @@ def get_subject_report(assessments_details, subject_id):
     return result
 
 
-def get_subject_progress(assessments_details, subject_id):
+def get_subject_progress(authorization_header, assessments_details, subject_id):
     result = dict()
     if not AssessmentSubject.objects.filter(id=subject_id).filter(
             assessment_kit=assessments_details["kitId"]).exists():
@@ -385,7 +386,8 @@ def get_subject_progress(assessments_details, subject_id):
         result["status_code"] = status.HTTP_400_BAD_REQUEST
         return result
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/subjects/{subject_id}/progress')
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/subjects/{subject_id}/progress',
+        headers={"Authorization": authorization_header})
     response_body = response.json()
     result["Success"] = False
     result["body"] = response_body
