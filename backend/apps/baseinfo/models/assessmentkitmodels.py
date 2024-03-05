@@ -99,6 +99,7 @@ class MaturityLevel(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='maturity_levels',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
+    ref_num = models.UUIDField()
 
     class Meta:
         db_table = 'fak_maturity_level'
