@@ -30,13 +30,18 @@ class ExpertGroupAccess(models.Model):
         unique_together = ('expert_group', 'user')
 
 
+class AssessmentKitVersion(models.Model):
+    assessment_kit = models.ForeignKey('AssessmentKit', on_delete=models.CASCADE, db_column="kit_id")
+    status = models.SmallIntegerField()
+
+
 class AssessmentKit(models.Model):
     code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100, unique=True)
     summary = models.TextField()
     about = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True,  db_column="last_modification_time")
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
     expert_group = models.ForeignKey(ExpertGroup, on_delete=models.CASCADE, related_name='assessmentkits')
     is_active = models.BooleanField(default=False, db_column="published")
     is_private = models.BooleanField(default=False)
