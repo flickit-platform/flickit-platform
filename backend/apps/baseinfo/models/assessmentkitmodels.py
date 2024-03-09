@@ -49,7 +49,8 @@ class AssessmentKit(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_kit_owner',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-
+    last_major_modification_time = models.DateTimeField(auto_now_add=True)
+    kit_version = models.BigIntegerField()
     def __str__(self) -> str:
         return self.title
 

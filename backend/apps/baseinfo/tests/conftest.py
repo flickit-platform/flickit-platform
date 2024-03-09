@@ -5,7 +5,7 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKitDsl, LevelCompetence, MaturityLevel, \
-    AssessmentKit
+    AssessmentKit , AssessmentKitVersion
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.questionmodels import Question, QuestionImpact, OptionValue, AnswerTemplate
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -110,9 +110,12 @@ def create_tag():
 @pytest.fixture
 def init_data():
     def do_init_data():
+
         assessment_kit = AssessmentKit.objects.filter(title="p1").first()
         if assessment_kit is None:
             assessment_kit = baker.make(AssessmentKit)
+        assessment_kit_version = baker.make(AssessmentKitVersion, assessment_kit=assessment_kit)
+        assessment_kit.kit_version  = assessment_kit_version.id
         questionnaire_list = [baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, code='c1', title='c1'),
                               baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, code='c2', title='c2'),
                               baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, code='c3', title='c3'),
