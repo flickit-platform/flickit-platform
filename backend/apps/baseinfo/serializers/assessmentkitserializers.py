@@ -88,8 +88,8 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         return assessment_kit.likes.count()
 
     def get_maturity_levels(self, assessment_kit: AssessmentKit):
-        levels = MaturityLevel.objects.filter(assessment_kit=assessment_kit.id).values('id', 'title',
-                                                                                       'value')
+        levels = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
+                                                                                                    'value')
         for i in range(len(levels)):
             levels[i]["index"] = i + 1
         return levels
@@ -254,7 +254,11 @@ class SimpleMaturityLevelSerializer(serializers.ModelSerializer):
 class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
     subjects = SimpleAssessmentSubjectsSerializer(source='assessment_subjects', many=True)
     questionnaires = SimpleQuestionnairesSerializer(many=True)
-    maturity_levels = SimpleMaturityLevelSerializer(many=True)
+    maturity_levels = serializers.SerializerMethodField()
+
+    def get_maturity_levels(self, assessment_kit: AssessmentKit):
+        data = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id)
+        return SimpleMaturityLevelSerializer(data=data, many=True)
 
     class Meta:
         model = AssessmentKit

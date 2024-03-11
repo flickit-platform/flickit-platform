@@ -31,8 +31,16 @@ class ExpertGroupAccess(models.Model):
 
 
 class AssessmentKitVersion(models.Model):
+    status_types = (
+        (0, "ACTIVE"),
+        (1, "UPDATING"),
+        (2, "ARCHIVE"),
+    )
     assessment_kit = models.ForeignKey('AssessmentKit', on_delete=models.CASCADE, db_column="kit_id")
-    status = models.SmallIntegerField()
+    status = models.SmallIntegerField(choices=status_types)
+
+    class Meta:
+        db_table = 'fak_kit_version'
 
 
 class AssessmentKit(models.Model):
@@ -50,7 +58,8 @@ class AssessmentKit(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     last_major_modification_time = models.DateTimeField(auto_now_add=True)
-    kit_version = models.BigIntegerField()
+    kit_version_id = models.BigIntegerField()
+
     def __str__(self) -> str:
         return self.title
 
@@ -98,21 +107,20 @@ class MaturityLevel(models.Model):
     title = models.CharField(max_length=100)
     value = models.PositiveSmallIntegerField()
     index = models.PositiveSmallIntegerField()
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='maturity_levels',
-                                       db_column='kit_id')
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='maturity_levels',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     ref_num = models.UUIDField()
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='maturity_levels')
 
     class Meta:
         db_table = 'fak_maturity_level'
         verbose_name = 'MaturityLevel'
         verbose_name_plural = "MaturityLevels"
-        unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('value', 'assessment_kit'),
-                           ('index', 'assessment_kit')]
+        unique_together = [('code', 'kit_version'), ('title', 'kit_version'), ('value', 'kit_version'),
+                           ('index', 'kit_version')]
 
 
 class LevelCompetence(models.Model):

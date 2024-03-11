@@ -10,6 +10,7 @@ from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, AnswerTemplate
 from baseinfo.serializers.assessmentkitserializers import LoadAssessmentKitDetailsForReportSerializer
+from baseinfo.services.assessmentkitservice import load_assessment_kit
 
 
 def create_assessment(user, data, authorization_header):
@@ -307,8 +308,9 @@ def get_subject_report(assessments_details, subject_id):
     if response.status_code == status.HTTP_200_OK:
         subject_dict = dict()
         attribute_list = list()
-        levels = MaturityLevel.objects.filter(assessment_kit=assessments_details["kitId"]).values('id', 'title',
-                                                                                                  'value')
+        kit = load_assessment_kit(assessments_details["kitId"])
+        levels = MaturityLevel.objects.filter(kit_version=kit.kit_version_id).values('id', 'title',
+                                                                                     'value')
         subject = AssessmentSubject.objects.get(id=response_body["subject"]["id"])
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title

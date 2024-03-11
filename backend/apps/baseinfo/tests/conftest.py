@@ -155,12 +155,12 @@ def init_data():
 
         question_impacts = []
 
-        maturity_level_0 = baker.make(MaturityLevel, code="l0", title='Elementary', value=0, assessment_kit=assessment_kit, index=1)
-        maturity_level_1 = baker.make(MaturityLevel, code="l1", title='Weak', value=1, assessment_kit=assessment_kit, index=2)
-        maturity_level_2 = baker.make(MaturityLevel, code="l2", title='Moderate', value=2, assessment_kit=assessment_kit, index=3)
-        maturity_level_3 = baker.make(MaturityLevel, code="l3", title='Good', value=3, assessment_kit=assessment_kit, index=4)
-        maturity_level_4 = baker.make(MaturityLevel, code="l4", title='Great', value=4, assessment_kit=assessment_kit, index=5)
-        maturity_level_5 = baker.make(MaturityLevel, code="l5", title='Exceptional', value=5, assessment_kit=assessment_kit, index=6)
+        maturity_level_0 = baker.make(MaturityLevel, code="l0", title='Elementary', value=0, kit_version=assessment_kit_version, index=1)
+        maturity_level_1 = baker.make(MaturityLevel, code="l1", title='Weak', value=1, kit_version=assessment_kit_version, index=2)
+        maturity_level_2 = baker.make(MaturityLevel, code="l2", title='Moderate', value=2, kit_version=assessment_kit_version, index=3)
+        maturity_level_3 = baker.make(MaturityLevel, code="l3", title='Good', value=3, kit_version=assessment_kit_version, index=4)
+        maturity_level_4 = baker.make(MaturityLevel, code="l4", title='Great', value=4, kit_version=assessment_kit_version, index=5)
+        maturity_level_5 = baker.make(MaturityLevel, code="l5", title='Exceptional', value=5, kit_version=assessment_kit_version, index=6)
         maturity_level = [maturity_level_0, maturity_level_1, maturity_level_2, maturity_level_3, maturity_level_4,
                           maturity_level_5]
 

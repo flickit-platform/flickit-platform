@@ -333,10 +333,10 @@ def get_level_competence_with_maturity_level(maturity_level_id):
 
 def get_maturity_level_with_assessment_kit(assessment_kit_id):
     try:
-        AssessmentKit.objects.get(id=assessment_kit_id)
+        kit = AssessmentKit.objects.get(id=assessment_kit_id)
     except AssessmentKit.DoesNotExist as e:
         return False
-    result = MaturityLevel.objects.filter(assessment_kit=assessment_kit_id)
+    result = MaturityLevel.objects.filter(kit_version=kit.kit_version_id)
     return result
 
 

@@ -6,6 +6,7 @@ from baseinfo.models.questionmodels import AnswerTemplate, OptionValue, Question
 from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.serializers import commonserializers
+from baseinfo.services import assessmentkitservice
 
 
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
@@ -22,7 +23,8 @@ def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
 
 
 def check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id):
-    if MaturityLevel.objects.filter(assessment_kit=assessment_kit_id).filter(id=maturity_level_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if MaturityLevel.objects.filter(kit_version=kit.kit_version_id).filter(id=maturity_level_id).exists():
         return MaturityLevel.objects.get(id=maturity_level_id)
     return False
 
