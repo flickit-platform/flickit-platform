@@ -16,46 +16,6 @@ from baseinfo.serializers import commonserializers
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 
-class QuestionnaireViewSet(ModelViewSet):
-    serializer_class = commonserializers.QuestionnaireSerializer
-
-    def get_queryset(self):
-        return Questionnaire.objects.all()
-
-
-class QuestionViewSet(ModelViewSet):
-    serializer_class = commonserializers.QuestionSerilizer
-
-    def get_queryset(self):
-        return Question.objects.filter(questionnaire_id=self.kwargs['questionnaire_pk']).order_by('index')
-
-
-class QuestionnaireBySubjectViewSet(ModelViewSet):
-    serializer_class = commonserializers.QuestionnaireBySubjectSerilizer
-
-    def get_queryset(self):
-        return Questionnaire.objects.prefetch_related('assessment_subjects').filter(
-            assessment_subjects__id=self.kwargs['assessment_subject_pk']).order_by('index')
-
-
-class AssessmentSubjectViewSet(ModelViewSet):
-    serializer_class = commonserializers.AssessmentSubjectSerilizer
-
-    def get_queryset(self):
-        return AssessmentSubject.objects.all().order_by('index')
-
-
-class QualityAttributeViewSet(ModelViewSet):
-    serializer_class = commonserializers.QualityAttributeSerilizer
-
-    def get_queryset(self):
-        if 'assessment_subject_pk' in self.kwargs:
-            return QualityAttribute.objects.filter(assessment_subject_id=self.kwargs['assessment_subject_pk']).order_by(
-                'index');
-        else:
-            return QualityAttribute.objects.all().order_by('index')
-
-
 class LoadOptionValueInternalApi(APIView):
     permission_classes = [AllowAny]
 
@@ -177,4 +137,3 @@ class LoadQuestionDetailsApi(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         response = commonserializers.LoadQuestionDetailsDetailsSerializer(question).data
         return Response(response, status=status.HTTP_200_OK)
-

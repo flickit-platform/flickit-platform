@@ -3,7 +3,7 @@ from unittest import skip
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from account.models import User, Space, UserAccess
+from account.models import User
 from baseinfo.views import expertgroupviews
 from django.contrib.auth.models import Permission
 from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
