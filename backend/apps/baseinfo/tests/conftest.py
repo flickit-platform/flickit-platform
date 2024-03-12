@@ -138,19 +138,19 @@ def init_data():
         subject2 = baker.make(AssessmentSubject, kit_version=assessment_kit_version, title='s2', code='s2', index=2,
                               questionnaires=[questionnaire_list[2], questionnaire_list[3]])
 
-        atts = [baker.make(QualityAttribute, title='a1', code='a1', index=1, assessment_kit=assessment_kit,
+        atts = [baker.make(QualityAttribute, title='a1', code='a1', index=1, kit_version=assessment_kit_version,
                            assessment_subject=subject1, weight=1),
-                baker.make(QualityAttribute, title='a2', code='a2', index=2, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a2', code='a2', index=2, kit_version=assessment_kit_version,
                            assessment_subject=subject1, weight=1),
-                baker.make(QualityAttribute, title='a3', code='a3', index=3, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a3', code='a3', index=3, kit_version=assessment_kit_version,
                            assessment_subject=subject1, weight=1),
-                baker.make(QualityAttribute, title='a4', code='a4', index=4, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a4', code='a4', index=4, kit_version=assessment_kit_version,
                            assessment_subject=subject2, weight=1),
-                baker.make(QualityAttribute, title='a5', code='a5', index=5, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a5', code='a5', index=5, kit_version=assessment_kit_version,
                            assessment_subject=subject2, weight=1),
-                baker.make(QualityAttribute, title='a6', code='a6', index=6, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a6', code='a6', index=6, kit_version=assessment_kit_version,
                            assessment_subject=subject2, weight=1),
-                baker.make(QualityAttribute, title='a7', code='a7', index=7, assessment_kit=assessment_kit,
+                baker.make(QualityAttribute, title='a7', code='a7', index=7, kit_version=assessment_kit_version,
                            assessment_subject=subject2, weight=1)]
 
         question_impacts = []

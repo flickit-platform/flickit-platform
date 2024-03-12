@@ -17,8 +17,8 @@ def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
 
 
 def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
-    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(
-            assessment_subjects__quality_attributes=attribute_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if QualityAttribute.objects.filter(id=attribute_id).filter(kit_version=kit.kit_version_id).exists():
         return QualityAttribute.objects.get(id=attribute_id)
     return False
 

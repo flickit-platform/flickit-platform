@@ -70,8 +70,7 @@ class QualityAttribute(models.Model):
     last_modification_date = models.DateTimeField(auto_now=True)
     assessment_subject = models.ForeignKey(AssessmentSubject, on_delete=models.CASCADE,
                                            related_name='quality_attributes', db_column="subject_id")
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='quality_attributes',
-                                       db_column="kit_id")
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='quality_attributes')
     index = models.PositiveIntegerField()
     weight = models.PositiveIntegerField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quality_attributes',
@@ -83,7 +82,7 @@ class QualityAttribute(models.Model):
         db_table = 'fak_attribute'
         verbose_name = 'Quality Attribute'
         verbose_name_plural = "Quality Attributes"
-        unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('code', 'assessment_subject'),
+        unique_together = [('code', 'kit_version'), ('title', 'kit_version'), ('code', 'assessment_subject'),
                            ('index', 'assessment_subject')]
 
     def __str__(self) -> str:

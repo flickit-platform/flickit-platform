@@ -1078,8 +1078,7 @@ class TestLoadQualityAttributesDetailsApi:
         assert resp.data["description"] == attribute.description
         assert resp.data["questions_count"] == attribute.question_set.count()
         counter = len(resp.data["questions_on_levels"])
-        levels = MaturityLevel.objects.filter(assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by(
-            'value')
+        levels = MaturityLevel.objects.filter(kit_version=attribute.assessment_subject.kit_version.id).order_by('value')
         assert counter == levels.count()
         for level_counter in range(counter):
             assert levels[level_counter].id == resp.data["questions_on_levels"][level_counter]["id"]
