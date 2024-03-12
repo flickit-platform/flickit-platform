@@ -31,13 +31,15 @@ def check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id)
 
 
 def check_questionnaire_in_assessment_kit(assessment_kit_id, questionnaire_id):
-    if Questionnaire.objects.filter(assessment_kit=assessment_kit_id).filter(id=questionnaire_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if Questionnaire.objects.filter(id=questionnaire_id).filter(kit_version=kit.kit_version_id).exists():
         return Questionnaire.objects.get(id=questionnaire_id)
     return False
 
 
 def check_question_in_assessment_kit(assessment_kit_id, question_id):
-    if Question.objects.filter(id=question_id).filter(questionnaire__assessment_kit=assessment_kit_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if Question.objects.filter(id=question_id).filter(questionnaire__kit_version=kit.kit_version_id).exists():
         return Question.objects.get(id=question_id)
     return False
 

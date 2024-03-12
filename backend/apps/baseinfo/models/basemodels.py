@@ -10,8 +10,7 @@ class Questionnaire(models.Model):
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='questionnaires',
-                                       db_column='kit_id')
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='questionnaires')
     index = models.PositiveIntegerField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questionnaires',
                                    db_column="created_by")
@@ -22,7 +21,7 @@ class Questionnaire(models.Model):
         db_table = 'fak_questionnaire'
         verbose_name = 'Questionnaire'
         verbose_name_plural = "Questionnaires"
-        unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('index', 'assessment_kit')]
+        unique_together = [('code', 'kit_version'), ('title', 'kit_version'), ('index', 'kit_version')]
 
     def __str__(self) -> str:
         return self.title

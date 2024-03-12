@@ -116,10 +116,10 @@ def init_data():
         assessment_kit_version = baker.make(AssessmentKitVersion, assessment_kit=assessment_kit)
         assessment_kit.kit_version_id = assessment_kit_version.id
         assessment_kit.save()
-        questionnaire_list = [baker.make(Questionnaire, assessment_kit=assessment_kit, index=1, code='c1', title='c1'),
-                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=2, code='c2', title='c2'),
-                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=3, code='c3', title='c3'),
-                              baker.make(Questionnaire, assessment_kit=assessment_kit, index=4, code='c4', title='c4')]
+        questionnaire_list = [baker.make(Questionnaire, kit_version=assessment_kit_version, index=1, code='c1', title='c1'),
+                              baker.make(Questionnaire, kit_version=assessment_kit_version, index=2, code='c2', title='c2'),
+                              baker.make(Questionnaire, kit_version=assessment_kit_version, index=3, code='c3', title='c3'),
+                              baker.make(Questionnaire, kit_version=assessment_kit_version, index=4, code='c4', title='c4')]
 
         questions_list = [baker.make(Question, questionnaire=questionnaire_list[0], index=1),
                           baker.make(Question, questionnaire=questionnaire_list[0], index=2),

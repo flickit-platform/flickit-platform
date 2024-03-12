@@ -120,8 +120,8 @@ def question_answering(assessments_details, serializer_data, authorization_heade
         data["isNotApplicable"] = serializer_data["is_not_applicable"]
 
     result = dict()
-    if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -189,8 +189,9 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
               'size': 50,
               }
     result = dict()
-    if not Questionnaire.objects.filter(id=questionnaire_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if Questionnaire.objects.filter(id=questionnaire_id).filter(
+            kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -245,7 +246,8 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
 
 
 def get_questionnaires_in_assessment(assessments_details):
-    questionnaire_query = Questionnaire.objects.filter(assessment_kit=assessments_details["kitId"])
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    questionnaire_query = Questionnaire.objects.filter(kit_version=kit.kit_version_id)
     questionnaire_data = LoadQuestionnairesSerializer(questionnaire_query, many=True).data
 
     response = requests.get(
