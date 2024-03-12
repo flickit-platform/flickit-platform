@@ -83,11 +83,13 @@ def get_assessment_list(request):
             assessment_kit = AssessmentKit.objects.get(id=item["assessmentKitId"])
             row_data["assessment_kit"] = {"id": assessment_kit.id,
                                           "title": assessment_kit.title,
-                                          "maturity_levels_count": assessment_kit.maturity_levels.count()
+                                          "maturity_levels_count": MaturityLevel.objects.filter(
+                                              kit_version=assessment_kit.kit_version_id).count()
                                           }
             if item["maturityLevelId"] is not None:
                 level = MaturityLevel.objects.get(id=item["maturityLevelId"])
-                maturity_levels_id = list(assessment_kit.maturity_levels.values_list("id", flat=True))
+                maturity_levels_id = list(MaturityLevel.objects.filter(
+                                              kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
                 row_data["result_maturity_level"] = {"id": level.id,
                                                      "title": level.title,
                                                      "index": maturity_levels_id.index(item["maturityLevelId"]) + 1,
@@ -121,7 +123,8 @@ def question_answering(assessments_details, serializer_data, authorization_heade
 
     result = dict()
     kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(kit_version=kit.kit_version_id).exists():
+    if Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
+            kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -317,7 +320,8 @@ def get_subject_report(assessments_details, subject_id):
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title
         maturity_level = MaturityLevel.objects.get(id=response_body["subject"]["maturityLevelId"])
-        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+                                              kit_version=kit.kit_version_id).values_list("id", flat=True))
         maturity_levels_count = len(maturity_levels_id)
         subject_dict["maturity_level"] = {
             "id": maturity_level.id,
