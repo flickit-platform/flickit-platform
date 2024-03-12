@@ -12,12 +12,6 @@ from .expertgroupserializers import ExpertGroupAvatarSerializer
 from ..services import assessmentkitservice
 
 
-class AssessmentKitDslSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentKitDsl
-        fields = ['id', 'dsl_file']
-
-
 class AssessmentKitTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKitTag
@@ -71,10 +65,11 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         return assessment_kit.assessment_subjects.all().count()
 
     def get_number_of_questionaries(self, assessment_kit: AssessmentKit):
-        return assessment_kit.questionnaires.all().count()
+        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
 
     def get_subjects_with_desc(self, assessment_kit: AssessmentKit):
-        subjects = assessment_kit.assessment_subjects.values('id', 'title', 'description')
+        subjects = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
+                                                                                                      'description')
         for subject in subjects:
             subj_qs = AssessmentSubject.objects.get(id=subject['id'])
             attributes = subj_qs.quality_attributes.values('id', 'title', 'description')
@@ -82,14 +77,14 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         return subjects
 
     def get_questionnaires(self, assessment_kit: AssessmentKit):
-        return assessment_kit.questionnaires.values('id', 'title', 'description')
+        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title', 'description')
 
     def get_likes_number(self, assessment_kit: AssessmentKit):
         return assessment_kit.likes.count()
 
     def get_maturity_levels(self, assessment_kit: AssessmentKit):
-        levels = MaturityLevel.objects.filter(assessment_kit=assessment_kit.id).values('id', 'title',
-                                                                                       'value')
+        levels = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
+                                                                                                'value')
         for i in range(len(levels)):
             levels[i]["index"] = i + 1
         return levels
@@ -107,16 +102,6 @@ class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id']
-
-
-class ImportAssessmentKitSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    about = serializers.CharField()
-    summary = serializers.CharField()
-    tag_ids = serializers.ListField(child=serializers.IntegerField())
-    expert_group_id = serializers.IntegerField()
-    dsl_id = serializers.IntegerField()
-    is_private = serializers.BooleanField(required=True)
 
 
 class AssessmentKitInitFormSerilizer(serializers.ModelSerializer):
@@ -184,7 +169,7 @@ class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSer
 
 class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     last_update_time = serializers.DateTimeField(source='last_modification_date')
-    questionnaires_count = serializers.IntegerField(source='questionnaires.count')
+    questionnaires_count = serializers.SerializerMethodField()
     attributes_count = serializers.SerializerMethodField()
     questions_count = serializers.SerializerMethodField()
     maturity_levels_count = serializers.IntegerField(source='maturity_levels.count')
@@ -193,11 +178,13 @@ class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
     subjects = SimpleAssessmentSubjectDataForAssessmentKitSerializer(source='assessment_subjects', many=True)
     expert_group = SimpleExpertGroupDataForAssessmentKitSerializer()
 
+    def get_questionnaires_count(self, assessment_kit: AssessmentKit):
+        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
     def get_attributes_count(self, assessment_kit: AssessmentKit):
-        return assessment_kit.assessment_subjects.values('quality_attributes').count()
+        return AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('quality_attributes').count()
 
     def get_questions_count(self, assessment_kit: AssessmentKit):
-        return assessment_kit.questionnaires.values('question').count()
+        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('question').count()
 
     def get_assessments_count(self, assessment_kit: AssessmentKit):
         assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
@@ -252,9 +239,20 @@ class SimpleMaturityLevelSerializer(serializers.ModelSerializer):
 
 
 class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
-    subjects = SimpleAssessmentSubjectsSerializer(source='assessment_subjects', many=True)
-    questionnaires = SimpleQuestionnairesSerializer(many=True)
-    maturity_levels = SimpleMaturityLevelSerializer(many=True)
+    subjects = serializers.SerializerMethodField()
+    questionnaires = serializers.SerializerMethodField()
+    maturity_levels = serializers.SerializerMethodField()
+
+    def get_questionnaires(self, assessment_kit: AssessmentKit):
+        data = Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id)
+        return SimpleQuestionnairesSerializer(data=data, many=True)
+    def get_subjects(self, assessment_kit: AssessmentKit):
+        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id)
+        return SimpleAssessmentSubjectsSerializer(data=data, many=True)
+
+    def get_maturity_levels(self, assessment_kit: AssessmentKit):
+        data = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id)
+        return SimpleMaturityLevelSerializer(data=data, many=True)
 
     class Meta:
         model = AssessmentKit

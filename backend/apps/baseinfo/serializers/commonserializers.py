@@ -7,30 +7,6 @@ from baseinfo.models.assessmentkitmodels import AssessmentKit, ExpertGroup, Matu
 from baseinfo.services import commonservice
 
 
-class QuestionnaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Questionnaire
-        fields = ['id', 'code', 'title', 'index']
-
-
-class QuestionnaireBySubjectSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = Questionnaire
-        fields = ['id', 'code', 'title', 'total_question', 'index']
-
-    total_question = serializers.SerializerMethodField()
-
-    def get_total_question(self, questionnaire: Questionnaire):
-        questions = Questionnaire.objects.get(pk=questionnaire.id).question_set.all()
-        return len(questions)
-
-
-class AssessmentSubjectSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentSubject
-        fields = ['id', 'code', 'title', 'description', 'index']
-
-
 class QuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact
@@ -60,12 +36,6 @@ class SimpleQuestionSerializers(serializers.ModelSerializer):
         fields = ['id', 'title', 'index', 'quality_attributes', 'question_impacts']
 
 
-class QuestionSerilizer(serializers.ModelSerializer):
-    answer_templates = AnswerTemplateSerializer(many=True)
-
-    class Meta:
-        model = Question
-        fields = ['id', 'title', 'index', 'answer_templates']
 
 
 class AssessmentKitSimpleSerilizer(serializers.ModelSerializer):
@@ -152,7 +122,7 @@ class LoadQualityAttributesDetailsSerializer(serializers.ModelSerializer):
 
     def get_questions_on_levels(self, attribute: QualityAttribute):
         maturity_levels = MaturityLevel.objects.filter(
-            assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by('value')
+            kit_version=attribute.assessment_subject.kit_version.id).order_by('value')
         return commonservice.get_maturity_level_details(maturity_levels, attribute.id)
 
     class Meta:

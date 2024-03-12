@@ -12,9 +12,6 @@ from baseinfo.views import importassessmentkitviews
 
 admin.autodiscover()
 
-# dsl_path = f"{settings.MEDIA_URL} { AssessmentKitDsl._meta.get_field('dsl_file').upload_to }"
-# dsl_path = dsl_path.replace(' ','')
-# dsl_path = dsl_path[1:]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,8 +26,6 @@ urlpatterns = [
     path('api/v1/path-info/', include('assessment.url.url_path_info')),
     path('api/v1/confidence-levels/', include('assessment.url.confidence-levels-url')),
     path('api/v1/expert-groups/', include('baseinfo.url.expert_group_url')),
-
-    # re_path(dsl_path+"/.*?",importassessmentkitviews.access_dsl_file),
 ]
 
 if settings.PRODUCTION_STATE == False:
@@ -47,4 +42,3 @@ if settings.PRODUCTION_STATE == False:
         path('swagger/', login_required(schema_view.with_ui('swagger', cache_timeout=0), login_url="/admin/login/"),
              name='schema-swagger-ui'))
 
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
