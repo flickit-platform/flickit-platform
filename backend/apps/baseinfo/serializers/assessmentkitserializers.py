@@ -68,7 +68,8 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
         return assessment_kit.questionnaires.all().count()
 
     def get_subjects_with_desc(self, assessment_kit: AssessmentKit):
-        subjects = assessment_kit.assessment_subjects.values('id', 'title', 'description')
+        subjects = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
+                                                                                                      'description')
         for subject in subjects:
             subj_qs = AssessmentSubject.objects.get(id=subject['id'])
             attributes = subj_qs.quality_attributes.values('id', 'title', 'description')
@@ -83,7 +84,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
 
     def get_maturity_levels(self, assessment_kit: AssessmentKit):
         levels = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
-                                                                                                    'value')
+                                                                                                'value')
         for i in range(len(levels)):
             levels[i]["index"] = i + 1
         return levels
@@ -236,9 +237,13 @@ class SimpleMaturityLevelSerializer(serializers.ModelSerializer):
 
 
 class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
-    subjects = SimpleAssessmentSubjectsSerializer(source='assessment_subjects', many=True)
+    subjects = serializers.SerializerMethodField()
     questionnaires = SimpleQuestionnairesSerializer(many=True)
     maturity_levels = serializers.SerializerMethodField()
+
+    def get_subjects(self, assessment_kit: AssessmentKit):
+        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id)
+        return SimpleAssessmentSubjectsSerializer(data=data, many=True)
 
     def get_maturity_levels(self, assessment_kit: AssessmentKit):
         data = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id)

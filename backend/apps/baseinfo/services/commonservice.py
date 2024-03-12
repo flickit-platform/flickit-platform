@@ -10,7 +10,8 @@ from baseinfo.services import assessmentkitservice
 
 
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
-    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(assessment_subjects=subject_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         return AssessmentSubject.objects.get(id=subject_id)
     return False
 

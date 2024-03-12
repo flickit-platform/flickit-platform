@@ -10,6 +10,7 @@ from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, AnswerTemplate
 from baseinfo.serializers.assessmentkitserializers import LoadAssessmentKitDetailsForReportSerializer
+from baseinfo.services import assessmentkitservice
 from baseinfo.services.assessmentkitservice import load_assessment_kit
 
 
@@ -293,9 +294,8 @@ def get_assessment_progress(assessments_details):
 
 def get_subject_report(assessments_details, subject_id):
     result = dict()
-
-    if not AssessmentSubject.objects.filter(id=subject_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -381,8 +381,8 @@ def get_subject_report(assessments_details, subject_id):
 
 def get_subject_progress(authorization_header, assessments_details, subject_id):
     result = dict()
-    if not AssessmentSubject.objects.filter(id=subject_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST

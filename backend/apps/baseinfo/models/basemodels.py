@@ -1,6 +1,6 @@
 from django.db import models
 
-from baseinfo.models.assessmentkitmodels import AssessmentKit
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitVersion
 from account.models import User
 
 
@@ -17,6 +17,7 @@ class Questionnaire(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     ref_num = models.UUIDField()
+
     class Meta:
         db_table = 'fak_questionnaire'
         verbose_name = 'Questionnaire'
@@ -33,8 +34,6 @@ class AssessmentSubject(models.Model):
     description = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='assessment_subjects',
-                                       db_column="kit_id")
     questionnaires = models.ManyToManyField(Questionnaire, related_name='assessment_subjects',
                                             through='QuestionnaireSubject')
     index = models.PositiveIntegerField()
@@ -43,9 +42,11 @@ class AssessmentSubject(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     ref_num = models.UUIDField()
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='assessment_subjects')
+
     class Meta:
         db_table = 'fak_subject'
-        unique_together = [('code', 'assessment_kit'), ('title', 'assessment_kit'), ('index', 'assessment_kit')]
+        unique_together = [('code', 'kit_version'), ('title', 'kit_version'), ('index', 'kit_version')]
 
     def __str__(self) -> str:
         return self.title
@@ -78,6 +79,7 @@ class QualityAttribute(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     ref_num = models.UUIDField()
+
     class Meta:
         db_table = 'fak_attribute'
         verbose_name = 'Quality Attribute'

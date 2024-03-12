@@ -17,9 +17,9 @@ class AssessmentKitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(AssessmentSubject)
 class AssessmentSubjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     autocomplete_fields = ['questionnaires']
-    search_fields = ['code', 'title', 'assessment_kit']
-    fields = ['code', 'title', 'description', 'assessment_kit', 'questionnaire', 'index']
-    list_display = ['code', 'title', 'subject_questionnaires', 'assessment_kit']
+    search_fields = ['code', 'title', 'kit_version']
+    fields = ['code', 'title', 'description', 'kit_version', 'questionnaire', 'index']
+    list_display = ['code', 'title', 'subject_questionnaires', 'kit_version']
     list_editable = ['title']
     list_per_page = 10
 
