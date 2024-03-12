@@ -51,7 +51,6 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
     questionnaires = serializers.SerializerMethodField()
     likes_number = serializers.SerializerMethodField()
     maturity_levels = serializers.SerializerMethodField()
-
     def get_number_of_assessment(self, assessment_kit: AssessmentKit):
         assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
                                                                     total_count=True)
@@ -62,7 +61,7 @@ class AssessmentKitSerilizer(serializers.ModelSerializer):
                                                                     self.context.get('request', None).user.id)
 
     def get_number_of_subject(self, assessment_kit: AssessmentKit):
-        return assessment_kit.assessment_subjects.all().count()
+        return AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
 
     def get_number_of_questionaries(self, assessment_kit: AssessmentKit):
         return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
