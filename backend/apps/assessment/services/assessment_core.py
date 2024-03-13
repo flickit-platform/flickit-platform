@@ -123,7 +123,7 @@ def question_answering(assessments_details, serializer_data, authorization_heade
 
     result = dict()
     kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
+    if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
             kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
@@ -195,7 +195,7 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
               }
     result = dict()
     kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if Questionnaire.objects.filter(id=questionnaire_id).filter(
+    if not Questionnaire.objects.filter(id=questionnaire_id).filter(
             kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
