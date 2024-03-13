@@ -5,6 +5,7 @@ import {
   EAssessmentStatus,
   questionActions,
   useQuestionDispatch,
+  useQuestionContext,
 } from "@/providers/QuestionProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -55,14 +56,14 @@ export const QuestionsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
   const { children, isReview = false } = props;
-  const { questionsResultQueryData ,fetchPathInfo} = useQuestions();
+  const { questionsResultQueryData, fetchPathInfo } = useQuestions();
 
   return (
     <QueryBatchData<IQuestionsModel | IQuestionnaireModel>
-      queryBatchData={[questionsResultQueryData,fetchPathInfo]}
+      queryBatchData={[questionsResultQueryData, fetchPathInfo]}
       loaded={questionsResultQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
-      render={([data, questionnaireData,pathInfo={}]) => {
+      render={([data, questionnaireData, pathInfo = {}]) => {
         return (
           <Box>
             <Box py={1}>
@@ -86,10 +87,8 @@ const useQuestions = () => {
   const { service } = useServiceContext();
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const dispatch = useQuestionDispatch();
-  const {
-    questionnaireId = "",
-    assessmentId = "",
-  } = useParams();
+  const { assessmentStatus } = useQuestionContext();
+  const { questionnaireId = "", assessmentId = "" } = useParams();
   // const questionnaireQueryData = useQuery<IQuestionnaireModel>({
   //   service: (args, config) =>
   //     service.fetchQuestionnaire({ questionnaireId }, config),
@@ -119,11 +118,32 @@ const useQuestions = () => {
       );
     }
   }, [questionsResultQueryData.loading]);
+  const reloadQuestions = async () => {
+    try {
+      const response = await questionsResultQueryData.query();
+      if (response) {
+        const { items = [] } = response;
+        console.log(items)
+        dispatch(
+          questionActions.setQuestionsInfo({
+            total_number_of_questions: items.length,
+            resultId: "",
+            questions: items,
+          })
+        );
+      }
+    } catch (e) {}
+  };
+  useEffect(() => {
+    if (assessmentStatus === EAssessmentStatus.DONE) {
+      reloadQuestions();
+    }
+  }, [assessmentStatus]);
 
   return {
     questionsResultQueryData,
     // questionnaireQueryData,
-    fetchPathInfo
+    fetchPathInfo,
   };
 };
 

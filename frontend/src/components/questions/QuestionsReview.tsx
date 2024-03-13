@@ -26,7 +26,6 @@ const QuestionsReview = () => {
 
 export const Review = ({ questions = [], isReviewPage }: any) => {
   const navigate = useNavigate();
-
   return (
     <Box
       maxWidth={"1440px"}
