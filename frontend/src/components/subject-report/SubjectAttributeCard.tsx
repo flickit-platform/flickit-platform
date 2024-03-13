@@ -121,7 +121,7 @@ const SUbjectAttributeCard = (props: any) => {
           >
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
-          <Box sx={{ pr: 6 }}>
+          <Box sx={{ pr: {xs:2,sm:6} }}>
             {maturity_scores
               .map((item: any) => {
                 return (
@@ -302,33 +302,44 @@ const MaturityLevelDetailsContainer = (props: any) => {
           id="panel1bh-header"
           sx={{ padding: "0 !important" }}
         >
-          <Box display={"flex"} flex={1}>
-            <Box width="100%">
-              <MaturityLevelDetailsBar
-                text={text}
-                score={maturity_score?.score}
-                highestIndex={
-                  is_passed && maturity_score?.maturity_level?.index == totalml
-                }
-                is_passed={is_passed}
-              />
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              flexDirection: { xs: "column", sm: "row" },
+            }}
+          >
+            <Box display={"flex"} flex={1}>
+              <Box width="100%">
+                <MaturityLevelDetailsBar
+                  text={text}
+                  score={maturity_score?.score}
+                  highestIndex={
+                    is_passed &&
+                    maturity_score?.maturity_level?.index == totalml
+                  }
+                  is_passed={is_passed}
+                />
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
-            <Typography
-              variant="h4"
-              fontWeight={"bold"}
-              letterSpacing=".15em"
-              sx={{
-                borderLeft: `2px solid ${is_passed ? statusColor : "#808080"}`,
-                pl: 1,
-                ml: { xs: -2, sm: 0 },
-                pr: { xs: 0, sm: 1 },
-                color: is_passed ? statusColor : "#808080",
-              }}
-            >
-              {maturity_score?.maturity_level?.title}
-            </Typography>
+            <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
+              <Typography
+                variant="h4"
+                fontWeight={"bold"}
+                letterSpacing=".15em"
+                sx={{
+                  borderLeft: `2px solid ${
+                    is_passed ? statusColor : "#808080"
+                  }`,
+                  pl: 1,
+                  ml: { xs: -2, sm: 0 },
+                  pr: { xs: 0, sm: 1 },
+                  color: is_passed ? statusColor : "#808080",
+                }}
+              >
+                {maturity_score?.maturity_level?.title}
+              </Typography>
+            </Box>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -645,6 +656,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
           left: "12px",
           opacity: 0.8,
           letterSpacing: { xs: ".09em", sm: ".15em" },
+          fontSize: { xs: "12px", sm: "16px" },
           color: theme.palette.getContrastText(color),
         }}
         textTransform="uppercase"
