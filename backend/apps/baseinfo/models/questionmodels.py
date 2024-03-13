@@ -70,6 +70,7 @@ class Question(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
     kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='questions')
+    advisable = models.BooleanField()
 
     ref_num = models.UUIDField()
 
