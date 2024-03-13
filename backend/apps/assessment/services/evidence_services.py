@@ -4,12 +4,14 @@ from rest_framework import status
 from assessmentplatform.settings import ASSESSMENT_URL
 from baseinfo.models.questionmodels import Question
 from account.models import User
+from baseinfo.services import assessmentkitservice
 
 
 def add_evidences(assessments_details, validated_data, user_id, authorization_header):
     result = dict()
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
     if not Question.objects.filter(id=validated_data["question_id"]).filter(
-            questionnaire__assessment_kit=assessments_details["kitId"]).exists():
+            questionnaire__kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -30,8 +32,9 @@ def add_evidences(assessments_details, validated_data, user_id, authorization_he
 
 def get_list_evidences(assessments_details, question_id, request):
     result = dict()
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
     if not Question.objects.filter(id=question_id).filter(
-            questionnaire__assessment_kit=assessments_details["kitId"]).exists():
+            questionnaire__kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
