@@ -170,7 +170,9 @@ def get_maturity_level_calculate(assessments_details):
         data = response.json()
         data["maturity_level"] = data.pop("maturityLevel")
         level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
-        maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+                                              kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
         data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
         data["maturity_level"]["value"] = data["maturity_level"].pop("value")
@@ -283,7 +285,8 @@ def get_assessment_progress(assessments_details):
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/progress', )
     response_body = response.json()
     if response.status_code == status.HTTP_200_OK:
-        question_count = Question.objects.filter(questionnaire__assessment_kit=assessments_details["kitId"]).count()
+        kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+        question_count = Question.objects.filter(questionnaire__kit_version=kit.kit_version_id).count()
         response_body["question_count"] = question_count
         response_body["answers_count"] = response_body.pop("allAnswersCount")
         result["Success"] = True
@@ -418,7 +421,9 @@ def get_assessment_report(assessments_details):
         assessment_dict["last_modification_time"] = response_body["assessment"]["lastModificationTime"]
         assessment_dict["is_calculate_valid"] = response_body["assessment"]["isCalculateValid"]
         maturity_level = MaturityLevel.objects.get(id=response_body["assessment"]["maturityLevelId"])
-        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
         assessment_dict["assessment_kit"]["maturity_level"] = {"id": maturity_level.id,
                                                                "title": maturity_level.title,
                                                                "value": maturity_level.value,
