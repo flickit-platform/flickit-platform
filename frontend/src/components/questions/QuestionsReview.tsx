@@ -13,6 +13,7 @@ import languageDetector from "@utils/languageDetector";
 import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
+import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 const QuestionsReview = () => {
   const { questionIndex, questionsInfo, assessmentStatus } =
     useQuestionContext();
@@ -56,6 +57,16 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
             textTransform={"uppercase"}
           >
             <Trans i18nKey="youFinishedQuestionnaire" />
+            <Button
+              startIcon={<QuizRoundedIcon />}
+              variant="contained"
+              size="large"
+              component={Link}
+              to={"./../../../questionnaires"}
+              sx={{ml:2}}
+            >
+              <Trans i18nKey="seeQuestionnaires" />
+            </Button>
           </Typography>
           <Typography variant="h5" fontFamily="Roboto" fontWeight="bold">
             <Trans i18nKey="youCan" />{" "}
@@ -70,6 +81,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
             </Button>{" "}
             <Trans i18nKey="now" />.
           </Typography>
+
           <Hidden smDown>
             <Box display="flex" justifyContent={"flex-end"}>
               <Box width="480px" sx={{ minHeight: "310px" }} mt="-64px">

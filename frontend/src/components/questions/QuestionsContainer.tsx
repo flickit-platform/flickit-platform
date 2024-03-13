@@ -55,12 +55,12 @@ export const QuestionsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
   const { children, isReview = false } = props;
-  const { questionsResultQueryData, questionnaireQueryData ,fetchPathInfo} = useQuestions();
+  const { questionsResultQueryData ,fetchPathInfo} = useQuestions();
 
   return (
     <QueryBatchData<IQuestionsModel | IQuestionnaireModel>
-      queryBatchData={[questionsResultQueryData, questionnaireQueryData,fetchPathInfo]}
-      loaded={questionnaireQueryData.loaded}
+      queryBatchData={[questionsResultQueryData,fetchPathInfo]}
+      loaded={questionsResultQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
       render={([data, questionnaireData,pathInfo={}]) => {
         return (
@@ -90,10 +90,10 @@ const useQuestions = () => {
     questionnaireId = "",
     assessmentId = "",
   } = useParams();
-  const questionnaireQueryData = useQuery<IQuestionnaireModel>({
-    service: (args, config) =>
-      service.fetchQuestionnaire({ questionnaireId }, config),
-  });
+  // const questionnaireQueryData = useQuery<IQuestionnaireModel>({
+  //   service: (args, config) =>
+  //     service.fetchQuestionnaire({ questionnaireId }, config),
+  // });
   const questionsResultQueryData = useQuery<IQuestionsModel>({
     service: (args, config) =>
       service.fetchQuestionsResult(
@@ -122,7 +122,7 @@ const useQuestions = () => {
 
   return {
     questionsResultQueryData,
-    questionnaireQueryData,
+    // questionnaireQueryData,
     fetchPathInfo
   };
 };
