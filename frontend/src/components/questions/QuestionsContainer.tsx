@@ -63,7 +63,7 @@ export const QuestionsContainerC = (
       queryBatchData={[questionsResultQueryData, fetchPathInfo]}
       loaded={questionsResultQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
-      render={([data, questionnaireData, pathInfo = {}]) => {
+      render={([questionnaireData, pathInfo = {}]) => {
         return (
           <Box>
             <Box py={1}>
@@ -102,10 +102,9 @@ const useQuestions = () => {
   });
   const fetchPathInfo = useQuery({
     service: (args, config) =>
-      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+      service.fetchPathInfo({ questionnaireId,assessmentId, ...(args || {}) }, config),
     runOnMount: true,
   });
-
   useEffect(() => {
     if (questionsResultQueryData.loaded) {
       const { items = [] } = questionsResultQueryData.data;
