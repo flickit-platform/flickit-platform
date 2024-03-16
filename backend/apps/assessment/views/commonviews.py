@@ -21,7 +21,7 @@ class PathInfoApi(APIView):
             assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
             if not assessments_details["Success"]:
                 return Response(assessments_details["body"], assessments_details["status_code"])
-            result = assessment_core.get_path_info_with_assessment_id(assessments_details["body"])
+            result = assessment_core.get_path_info_with_assessment_id(request,  assessments_details["body"])
         elif "space_id" in request.query_params:
             space_id = request.query_params["space_id"]
             result = assessment_core.get_path_info_with_space_id(space_id)
