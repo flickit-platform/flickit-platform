@@ -89,7 +89,7 @@ def get_assessment_list(request):
             if item["maturityLevelId"] is not None:
                 level = MaturityLevel.objects.get(id=item["maturityLevelId"])
                 maturity_levels_id = list(MaturityLevel.objects.filter(
-                                              kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
+                    kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
                 row_data["result_maturity_level"] = {"id": level.id,
                                                      "title": level.title,
                                                      "index": maturity_levels_id.index(item["maturityLevelId"]) + 1,
@@ -172,7 +172,7 @@ def get_maturity_level_calculate(assessments_details):
         level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
         assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
         maturity_levels_id = list(MaturityLevel.objects.filter(
-                                              kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
+            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
         data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
         data["maturity_level"]["value"] = data["maturity_level"].pop("value")
@@ -324,7 +324,7 @@ def get_subject_report(assessments_details, subject_id):
         subject_dict["title"] = subject.title
         maturity_level = MaturityLevel.objects.get(id=response_body["subject"]["maturityLevelId"])
         maturity_levels_id = list(MaturityLevel.objects.filter(
-                                              kit_version=kit.kit_version_id).values_list("id", flat=True))
+            kit_version=kit.kit_version_id).values_list("id", flat=True))
         maturity_levels_count = len(maturity_levels_id)
         subject_dict["maturity_level"] = {
             "id": maturity_level.id,
@@ -474,8 +474,23 @@ def get_assessment_report(assessments_details):
     return result
 
 
-def get_path_info_with_assessment_id(assessments_details):
+def get_path_info_with_assessment_id(request, assessments_details):
     result = dict()
+    questionnaire = None
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if "questionnaire_id" in request.query_params:
+        if Questionnaire.objects.filter(id=request.query_params["questionnaire_id"]).filter(
+                kit_version=kit.kit_version_id).exists():
+            questionnaire_object = Questionnaire.objects.get(id=request.query_params["questionnaire_id"])
+            questionnaire = {"id": questionnaire_object.id,
+                             "title": questionnaire_object.title
+                             }
+        else:
+            result["Success"] = False
+            result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
+            result["status_code"] = status.HTTP_400_BAD_REQUEST
+            return result
+
     assessment = {"id": assessments_details["assessmentId"],
                   "title": assessments_details["assessmentTitle"]
                   }
@@ -483,9 +498,16 @@ def get_path_info_with_assessment_id(assessments_details):
     space = {"id": assessments_details["spaceId"],
              "title": space_object.title
              }
-    result["body"] = {"assessment": assessment,
-                      "space": space
-                      }
+
+    if questionnaire is None:
+        result["body"] = {"assessment": assessment,
+                          "space": space,
+                          }
+    else:
+        result["body"] = {"assessment": assessment,
+                          "space": space,
+                          "questionnaire": questionnaire
+                          }
     result["status_code"] = status.HTTP_200_OK
     return result
 
