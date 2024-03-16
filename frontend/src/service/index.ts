@@ -130,13 +130,13 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/useraccess/`, config);
     },
     fetchPathInfo(
-      { assessmentId, spaceId }: { assessmentId?: string; spaceId?: string },
+      { assessmentId, spaceId,questionnaireId }: { assessmentId?: string; spaceId?: string ,questionnaireId?:string},
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
         `/api/v1/path-info?${
           assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}`,
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""}`,
         {
           ...(config ?? {}),
         }
