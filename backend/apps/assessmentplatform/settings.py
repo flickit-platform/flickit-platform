@@ -120,6 +120,7 @@ TEMPLATES = [
 ]
 
 INSTALLED_APPS = [
+    "health_check",
     "django.contrib.admin",
     "django.contrib.auth",
     "mozilla_django_oidc",
