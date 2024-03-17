@@ -80,7 +80,7 @@ class AssessmentKitAccess(models.Model):
 
 
 class AssessmentKitDsl(models.Model):
-    assessment_kit = models.OneToOneField(AssessmentKit, on_delete=models.CASCADE, related_name='dsl', null=True)
+    assessment_kit = models.OneToOneField(AssessmentKit, on_delete=models.SET_NULL, related_name='dsl', null=True)
     dsl_path = models.CharField(max_length=200)
     creation_time = models.DateTimeField(auto_now_add=True)
     json_path = models.CharField(max_length=200)
