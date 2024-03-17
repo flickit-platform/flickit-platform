@@ -80,8 +80,18 @@ class AssessmentKitAccess(models.Model):
 
 
 class AssessmentKitDsl(models.Model):
-    dsl_file = models.FileField(upload_to='assessment_kit/dsl', validators=[validate_file_size])
-    assessment_kit = models.OneToOneField(AssessmentKit, on_delete=models.CASCADE, related_name='dsl', null=True)
+    assessment_kit = models.OneToOneField(AssessmentKit, on_delete=models.SET_NULL, related_name='dsl', null=True)
+    dsl_path = models.CharField(max_length=200)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    json_path = models.CharField(max_length=200)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='dsl_owner',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+                                         db_column="last_modified_by")
+    last_modification_time = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'fak_kit_dsl'
 
 
 class AssessmentKitTag(models.Model):
