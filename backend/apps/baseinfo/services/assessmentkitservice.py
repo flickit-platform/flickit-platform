@@ -55,31 +55,6 @@ def like_assessment_kit(user, assessment_kit_id):
     return assessment_kit
 
 
-def get_extrac_assessment_kit_data(assessment_kit, request):
-    result = []
-    data = {"id": assessment_kit.id, "title": assessment_kit.title, 'summary': assessment_kit.summary,
-            'about': assessment_kit.about, "tags": assessment_kit.tags.all()}
-    result.append(data)
-    return result
-
-
-@transaction.atomic
-def update_assessment_kit(assessment_kit, request, **kwargs):
-    if len(kwargs) == 0:
-        return ActionResult(success=False, message="All fields cannot be empty.")
-    try:
-        if "tags" in kwargs:
-            assessment_kit.tags.clear()
-            for tag in kwargs["tags"]:
-                assessment_kit.tags.add(AssessmentKitTag.objects.get(id=tag))
-            assessment_kit.save()
-            kwargs.pop("tags")
-        assessment_kit = AssessmentKit.objects.filter(id=assessment_kit.id).update(**kwargs)
-        return ActionResult(success=True, message="Assessment Kit edited successfully.")
-    except AssessmentKitTag.DoesNotExist:
-        return ActionResult(success=False, message="There is no assessment_kit tag with this id.")
-
-
 def get_level_competence_with_maturity_level(maturity_level_id):
     load_maturity = load_maturity_level(maturity_level_id)
     result = LevelCompetence.objects.filter(maturity_level=maturity_level_id)
@@ -134,7 +109,8 @@ def get_maturity_level_for_internal(maturity_levels):
     level_ids = list(maturity_levels.values_list("id", flat=True))
     levels_list = list()
     for level in maturity_levels:
-        level_competences = assessmentkitserializers.SimpleLevelCompetenceSerilizer(level.level_competences, many=True).data
+        level_competences = assessmentkitserializers.SimpleLevelCompetenceSerilizer(level.level_competences,
+                                                                                    many=True).data
         levels_list.append({"id": level.id,
                             "value": level.value,
                             "index": level_ids.index(level.id) + 1,

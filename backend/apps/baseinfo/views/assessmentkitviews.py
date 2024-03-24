@@ -101,31 +101,6 @@ class AssessmentKitLikeApi(APIView):
         return Response({'likes': assessment_kit.likes.count()})
 
 
-class AssessmentKitInitFormApi(APIView):
-    permission_classes = [IsAuthenticated, IsMemberExpertGroup]
-
-    def get(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
-        data = assessmentkitservice.get_extrac_assessment_kit_data(assessment_kit, request)
-        response = AssessmentKitInitFormSerilizer(data, many=True, context={'request': request}).data
-        return Response(response, status=status.HTTP_200_OK)
-
-
-class UpdateAssessmentKitApi(APIView):
-    serializer_class = UpdateAssessmentKitSerializer
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
-
-    def post(self, request, assessment_kit_id):
-        serializer = UpdateAssessmentKitSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        assessment_kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
-        result = assessmentkitservice.update_assessment_kit(assessment_kit, request, **serializer.validated_data)
-        if result.success:
-            return Response({'message': result.message})
-        else:
-            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class LoadLevelCompetenceInternalApi(APIView):
     permission_classes = [AllowAny]
 

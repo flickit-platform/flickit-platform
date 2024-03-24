@@ -105,14 +105,6 @@ class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
         fields = ['id']
 
 
-class AssessmentKitInitFormSerilizer(serializers.ModelSerializer):
-    tags = AssessmentKitTagSerializer(many=True)
-
-    class Meta:
-        model = AssessmentKit
-        fields = ['id', 'title', 'summary', 'about', 'tags']
-
-
 class UpdateAssessmentKitSerializer(serializers.Serializer):
     title = serializers.CharField(required=False)
     about = serializers.CharField(required=False)
@@ -258,7 +250,8 @@ class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
         return data
 
     def get_subjects(self, assessment_kit: AssessmentKit):
-        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title', 'index')
+        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
+                                                                                                  'index')
         return data
 
     def get_maturity_levels(self, assessment_kit: AssessmentKit):
@@ -280,6 +273,7 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
 
     def get_maturity_level_count(self, assessment_kit: AssessmentKit):
         return MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
+
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'summary', 'maturity_level_count', 'expert_group']
