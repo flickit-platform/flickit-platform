@@ -6,35 +6,40 @@ from baseinfo.models.questionmodels import AnswerTemplate, OptionValue, Question
 from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.serializers import commonserializers
+from baseinfo.services import assessmentkitservice
 
 
 def check_subject_in_assessment_kit(assessment_kit_id, subject_id):
-    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(assessment_subjects=subject_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         return AssessmentSubject.objects.get(id=subject_id)
     return False
 
 
 def check_attributes_in_assessment_kit(assessment_kit_id, attribute_id):
-    if AssessmentKit.objects.filter(id=assessment_kit_id).filter(
-            assessment_subjects__quality_attributes=attribute_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if QualityAttribute.objects.filter(id=attribute_id).filter(kit_version=kit.kit_version_id).exists():
         return QualityAttribute.objects.get(id=attribute_id)
     return False
 
 
 def check_maturity_level_in_assessment_kit(assessment_kit_id, maturity_level_id):
-    if MaturityLevel.objects.filter(assessment_kit=assessment_kit_id).filter(id=maturity_level_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if MaturityLevel.objects.filter(kit_version=kit.kit_version_id).filter(id=maturity_level_id).exists():
         return MaturityLevel.objects.get(id=maturity_level_id)
     return False
 
 
 def check_questionnaire_in_assessment_kit(assessment_kit_id, questionnaire_id):
-    if Questionnaire.objects.filter(assessment_kit=assessment_kit_id).filter(id=questionnaire_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if Questionnaire.objects.filter(id=questionnaire_id).filter(kit_version=kit.kit_version_id).exists():
         return Questionnaire.objects.get(id=questionnaire_id)
     return False
 
 
 def check_question_in_assessment_kit(assessment_kit_id, question_id):
-    if Question.objects.filter(id=question_id).filter(questionnaire__assessment_kit=assessment_kit_id).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessment_kit_id)
+    if Question.objects.filter(id=question_id).filter(questionnaire__kit_version=kit.kit_version_id).exists():
         return Question.objects.get(id=question_id)
     return False
 

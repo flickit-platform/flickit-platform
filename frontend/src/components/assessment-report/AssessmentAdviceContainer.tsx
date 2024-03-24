@@ -5,6 +5,7 @@ import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
 import { Button, Divider, IconButton } from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
+import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { useParams } from "react-router-dom";
@@ -268,68 +269,80 @@ const AssessmentAdviceContainer = (props: any) => {
         </DialogContent>
       </Dialog>
       <Box mt={6}>
-        {!adviceResult ? (
+        <Box
+          sx={{
+            borderRadius: "24px",
+            border:  `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
+            width: "60%",
+            p: 6,
+            margin: "0 auto",
+          }}
+        >
           <Box
             sx={{
-              borderRadius: "24px",
-              border: "1px solid #9DA7B3 ",
-              width: "60%",
-              p: 6,
+              fontSize: "64px",
+              fontWeight: "700",
+              color: "#1CC2C4",
+              textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Trans i18nKey="advisor" />
+            <Box sx={{ ml: 2 }}>
+              <img src={BetaSvg} alt="beta" />
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              fontSize: "16px",
+              fontWeight: "400",
+              color: "#0A2342",
               margin: "0 auto",
             }}
           >
-            <Box
-              sx={{
-                fontSize: "64px",
-                fontWeight: "700",
-                color: "#1CC2C4",
-                textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
-                textAlign: "center",
-              }}
-            >
-              <Trans i18nKey="advisor" />
-            </Box>
-            <Box
-              sx={{
-                fontSize: "16px",
-                fontWeight: "400",
-                color: "#0A2342",
-                margin: "0 auto",
-              }}
-            >
-              <Trans i18nKey="theAdvisorService" />
-            </Box>
-            <Box sx={{ margin: "0 auto", width: "50%" }}>
-              <img src={EmptyAdvice} alt="advice" width="100%" />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                sx={{
-                  background: "#1CC2C4",
-                  color: "#EDFCFC",
-                  px: 5,
-                  py: 1,
-                  borderRadius: "16px",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  width: "fit-content",
-                  "&:hover": {
-                    backgroundColor: "rgba(28, 194, 196, 0.5)",
-                  },
-                }}
-                onClick={handleClickOpen}
-              >
-                <Trans i18nKey="createYourFirstAdvice" />
-              </Button>
-            </Box>
+            <Trans i18nKey="theAdvisorService" />
           </Box>
-        ) : (
+          <Box
+            sx={{
+              margin: "0 auto",
+              width: "50%",
+              display: `${adviceResult ? "none" : "flex"}`,
+            }}
+          >
+            <img src={EmptyAdvice} alt="advice" width="100%" />
+          </Box>
+          <Box
+            sx={{
+              display: `${adviceResult ? "none" : "flex"}`,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              sx={{
+                background: "#1CC2C4",
+                color: "#EDFCFC",
+                px: 5,
+                py: 1,
+                borderRadius: "16px",
+                fontSize: "16px",
+                fontWeight: "700",
+                width: "fit-content",
+                "&:hover": {
+                  backgroundColor: "rgba(28, 194, 196, 0.5)",
+                },
+              }}
+              onClick={handleClickOpen}
+            >
+              <Trans i18nKey="createYourFirstAdvice" />
+            </Button>
+          </Box>
+        </Box>
+        {adviceResult && (
           <>
             <Box
               sx={{
@@ -461,7 +474,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                     
+
                       fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
                     }}
                   >
@@ -481,8 +494,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         color: "#0A2342",
                         fontSize: "16px",
                         fontWeight: "700",
-                         direction: isFarsi ? "rtl" : "ltr",
-                         textAlign:"left"
+                        direction: isFarsi ? "rtl" : "ltr",
+                        textAlign: "left",
                       }}
                     >
                       {question?.title}

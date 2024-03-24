@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from common.restutil import ActionResult
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitLike
-from baseinfo.serializers.assessmentkitserializers import SimpleLevelCompetenceSerilizer
+from baseinfo.serializers import assessmentkitserializers
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel, LevelCompetence
 from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
@@ -88,10 +88,10 @@ def get_level_competence_with_maturity_level(maturity_level_id):
 
 def get_maturity_level_with_assessment_kit(assessment_kit_id):
     try:
-        AssessmentKit.objects.get(id=assessment_kit_id)
+        kit = AssessmentKit.objects.get(id=assessment_kit_id)
     except AssessmentKit.DoesNotExist as e:
         return False
-    result = MaturityLevel.objects.filter(assessment_kit=assessment_kit_id)
+    result = MaturityLevel.objects.filter(kit_version=kit.kit_version_id)
     return result
 
 
@@ -134,7 +134,7 @@ def get_maturity_level_for_internal(maturity_levels):
     level_ids = list(maturity_levels.values_list("id", flat=True))
     levels_list = list()
     for level in maturity_levels:
-        level_competences = SimpleLevelCompetenceSerilizer(level.level_competences, many=True).data
+        level_competences = assessmentkitserializers.SimpleLevelCompetenceSerilizer(level.level_competences, many=True).data
         levels_list.append({"id": level.id,
                             "value": level.value,
                             "index": level_ids.index(level.id) + 1,

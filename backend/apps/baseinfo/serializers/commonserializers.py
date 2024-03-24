@@ -122,7 +122,7 @@ class LoadQualityAttributesDetailsSerializer(serializers.ModelSerializer):
 
     def get_questions_on_levels(self, attribute: QualityAttribute):
         maturity_levels = MaturityLevel.objects.filter(
-            assessment_kit=attribute.assessment_subject.assessment_kit.id).order_by('value')
+            kit_version=attribute.assessment_subject.kit_version.id).order_by('value')
         return commonservice.get_maturity_level_details(maturity_levels, attribute.id)
 
     class Meta:

@@ -1,7 +1,7 @@
 from django.db import models
 
 from baseinfo.models.basemodels import Questionnaire, QualityAttribute
-from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
+from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit, AssessmentKitVersion
 from account.models import User
 
 
@@ -31,8 +31,6 @@ class OptionValue(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='OptionValue',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-    ref_num = models.UUIDField()
-
     class Meta:
         db_table = 'fak_answer_option_impact'
 
@@ -46,8 +44,10 @@ class AnswerTemplate(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answer_templates',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='answer_templates',
-                                       db_column="kit_id")
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='answer_templates')
+    ref_num = models.UUIDField()
+
+
 
     class Meta:
         db_table = 'fak_answer_option'
@@ -69,8 +69,9 @@ class Question(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='question',
-                                       db_column="kit_id")
+    kit_version = models.ForeignKey(AssessmentKitVersion, on_delete=models.CASCADE, related_name='questions')
+    advisable = models.BooleanField()
+
     ref_num = models.UUIDField()
 
     class Meta:

@@ -10,6 +10,8 @@ from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
 from baseinfo.models.questionmodels import Question, AnswerTemplate
 from baseinfo.serializers.assessmentkitserializers import LoadAssessmentKitDetailsForReportSerializer
+from baseinfo.services import assessmentkitservice
+from baseinfo.services.assessmentkitservice import load_assessment_kit
 
 
 def create_assessment(user, data, authorization_header):
@@ -81,11 +83,13 @@ def get_assessment_list(request):
             assessment_kit = AssessmentKit.objects.get(id=item["assessmentKitId"])
             row_data["assessment_kit"] = {"id": assessment_kit.id,
                                           "title": assessment_kit.title,
-                                          "maturity_levels_count": assessment_kit.maturity_levels.count()
+                                          "maturity_levels_count": MaturityLevel.objects.filter(
+                                              kit_version=assessment_kit.kit_version_id).count()
                                           }
             if item["maturityLevelId"] is not None:
                 level = MaturityLevel.objects.get(id=item["maturityLevelId"])
-                maturity_levels_id = list(assessment_kit.maturity_levels.values_list("id", flat=True))
+                maturity_levels_id = list(MaturityLevel.objects.filter(
+                    kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
                 row_data["result_maturity_level"] = {"id": level.id,
                                                      "title": level.title,
                                                      "index": maturity_levels_id.index(item["maturityLevelId"]) + 1,
@@ -118,8 +122,9 @@ def question_answering(assessments_details, serializer_data, authorization_heade
         data["isNotApplicable"] = serializer_data["is_not_applicable"]
 
     result = dict()
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
     if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+            kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -165,7 +170,9 @@ def get_maturity_level_calculate(assessments_details):
         data = response.json()
         data["maturity_level"] = data.pop("maturityLevel")
         level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
-        maturity_levels_id = list(level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
         data["maturity_level"]["title"] = level.title
         data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
         data["maturity_level"]["value"] = data["maturity_level"].pop("value")
@@ -187,8 +194,9 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
               'size': 50,
               }
     result = dict()
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
     if not Questionnaire.objects.filter(id=questionnaire_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+            kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -243,7 +251,8 @@ def get_questionnaire_answer(request, assessments_details, questionnaire_id):
 
 
 def get_questionnaires_in_assessment(assessments_details):
-    questionnaire_query = Questionnaire.objects.filter(assessment_kit=assessments_details["kitId"])
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    questionnaire_query = Questionnaire.objects.filter(kit_version=kit.kit_version_id)
     questionnaire_data = LoadQuestionnairesSerializer(questionnaire_query, many=True).data
 
     response = requests.get(
@@ -276,7 +285,8 @@ def get_assessment_progress(assessments_details):
         ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/progress', )
     response_body = response.json()
     if response.status_code == status.HTTP_200_OK:
-        question_count = Question.objects.filter(questionnaire__assessment_kit=assessments_details["kitId"]).count()
+        kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+        question_count = Question.objects.filter(questionnaire__kit_version=kit.kit_version_id).count()
         response_body["question_count"] = question_count
         response_body["answers_count"] = response_body.pop("allAnswersCount")
         result["Success"] = True
@@ -292,9 +302,8 @@ def get_assessment_progress(assessments_details):
 
 def get_subject_report(assessments_details, subject_id):
     result = dict()
-
-    if not AssessmentSubject.objects.filter(id=subject_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -307,13 +316,15 @@ def get_subject_report(assessments_details, subject_id):
     if response.status_code == status.HTTP_200_OK:
         subject_dict = dict()
         attribute_list = list()
-        levels = MaturityLevel.objects.filter(assessment_kit=assessments_details["kitId"]).values('id', 'title',
-                                                                                                  'value')
+        kit = load_assessment_kit(assessments_details["kitId"])
+        levels = MaturityLevel.objects.filter(kit_version=kit.kit_version_id).values('id', 'title',
+                                                                                     'value')
         subject = AssessmentSubject.objects.get(id=response_body["subject"]["id"])
         subject_dict["id"] = subject.id
         subject_dict["title"] = subject.title
         maturity_level = MaturityLevel.objects.get(id=response_body["subject"]["maturityLevelId"])
-        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+            kit_version=kit.kit_version_id).values_list("id", flat=True))
         maturity_levels_count = len(maturity_levels_id)
         subject_dict["maturity_level"] = {
             "id": maturity_level.id,
@@ -379,8 +390,8 @@ def get_subject_report(assessments_details, subject_id):
 
 def get_subject_progress(authorization_header, assessments_details, subject_id):
     result = dict()
-    if not AssessmentSubject.objects.filter(id=subject_id).filter(
-            assessment_kit=assessments_details["kitId"]).exists():
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
         result["Success"] = False
         result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
         result["status_code"] = status.HTTP_400_BAD_REQUEST
@@ -410,7 +421,9 @@ def get_assessment_report(assessments_details):
         assessment_dict["last_modification_time"] = response_body["assessment"]["lastModificationTime"]
         assessment_dict["is_calculate_valid"] = response_body["assessment"]["isCalculateValid"]
         maturity_level = MaturityLevel.objects.get(id=response_body["assessment"]["maturityLevelId"])
-        maturity_levels_id = list(maturity_level.assessment_kit.maturity_levels.values_list("id", flat=True))
+        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
+        maturity_levels_id = list(MaturityLevel.objects.filter(
+            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
         assessment_dict["assessment_kit"]["maturity_level"] = {"id": maturity_level.id,
                                                                "title": maturity_level.title,
                                                                "value": maturity_level.value,
@@ -461,8 +474,23 @@ def get_assessment_report(assessments_details):
     return result
 
 
-def get_path_info_with_assessment_id(assessments_details):
+def get_path_info_with_assessment_id(request, assessments_details):
     result = dict()
+    questionnaire = None
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if "questionnaire_id" in request.query_params:
+        if Questionnaire.objects.filter(id=request.query_params["questionnaire_id"]).filter(
+                kit_version=kit.kit_version_id).exists():
+            questionnaire_object = Questionnaire.objects.get(id=request.query_params["questionnaire_id"])
+            questionnaire = {"id": questionnaire_object.id,
+                             "title": questionnaire_object.title
+                             }
+        else:
+            result["Success"] = False
+            result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
+            result["status_code"] = status.HTTP_400_BAD_REQUEST
+            return result
+
     assessment = {"id": assessments_details["assessmentId"],
                   "title": assessments_details["assessmentTitle"]
                   }
@@ -470,9 +498,16 @@ def get_path_info_with_assessment_id(assessments_details):
     space = {"id": assessments_details["spaceId"],
              "title": space_object.title
              }
-    result["body"] = {"assessment": assessment,
-                      "space": space
-                      }
+
+    if questionnaire is None:
+        result["body"] = {"assessment": assessment,
+                          "space": space,
+                          }
+    else:
+        result["body"] = {"assessment": assessment,
+                          "space": space,
+                          "questionnaire": questionnaire
+                          }
     result["status_code"] = status.HTTP_200_OK
     return result
 

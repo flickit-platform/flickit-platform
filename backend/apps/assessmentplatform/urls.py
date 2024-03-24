@@ -14,6 +14,7 @@ admin.autodiscover()
 
 
 urlpatterns = [
+    path(r'ht/', include('health_check.urls')),
     path("admin/", admin.site.urls),
     path('authinfo/', include('djoser.urls')),
     path('baseinfo/', include('baseinfo.urls')),
