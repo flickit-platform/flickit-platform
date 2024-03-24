@@ -15,47 +15,6 @@ from baseinfo.models.questionmodels import Question, OptionValue
 from baseinfo.serializers import commonserializers
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
-
-class LoadOptionValueInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: commonserializers.OptionValueSerilizers(many=True)})
-    def get(self, request, answer_tamplate_id):
-        option_value = commonservice.get_option_value_with_answer_tamplate(answer_tamplate_id)
-        response = commonserializers.OptionValueSerilizers(option_value, many=True, ).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
-class LoadQuestionInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: commonserializers.SimpleQuestionSerializers(many=True)})
-    def get(self, request, quality_attribute_id):
-        question = commonservice.get_question_with_quality_attribute(quality_attribute_id)
-        response = commonserializers.SimpleQuestionSerializers(question, many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
-class LoadQualityAttributeInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: commonserializers.LoadQualityAttributeSerilizer(many=True)})
-    def get(self, request, assessment_subject_id):
-        quality_attribute = commonservice.get_quality_attribute_with_assessment_subject(assessment_subject_id)
-        response = commonserializers.LoadQualityAttributeSerilizer(quality_attribute, many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
-class LoadQuestionImpactInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: commonserializers.LoadQuestionImpactSerilizer(many=True)})
-    def get(self, request, question_impact_id):
-        question_impact = commonservice.get_question_impact_with_id(question_impact_id)
-        response = commonserializers.LoadQuestionImpactSerilizer(question_impact, many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
-
-
 test_param = openapi.Parameter('ids', openapi.IN_QUERY, description="test manual param", type=openapi.TYPE_ARRAY,
                                items=openapi.Items(type=openapi.TYPE_NUMBER))
 

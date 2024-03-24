@@ -72,27 +72,9 @@ def load_assessment_subject(assessment_subject_id) -> AssessmentSubject:
         raise AssessmentSubject.DoesNotExist
 
 
-def get_option_value_with_answer_tamplate(answer_tamplate_id):
-    answer_tamplate = load_answer_tamplate(answer_tamplate_id=answer_tamplate_id)
-    result = OptionValue.objects.filter(option=answer_tamplate_id)
-    return result
-
-
 def get_question_with_quality_attribute(quality_attribute_id):
     quality_attribute = load_quality_attribute(quality_attribute_id)
     result = Question.objects.filter(quality_attributes=quality_attribute_id)
-    return result
-
-
-def get_quality_attribute_with_assessment_subject(assessment_subject_id):
-    assessment_subject = load_assessment_subject(assessment_subject_id)
-    result = QualityAttribute.objects.filter(assessment_subject=assessment_subject_id)
-    return result
-
-
-def get_question_impact_with_id(question_impact_id):
-    question_impact = load_question_impact(question_impact_id)
-    result = QuestionImpact.objects.filter(id=question_impact_id)
     return result
 
 

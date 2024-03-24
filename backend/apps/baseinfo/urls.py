@@ -24,6 +24,4 @@ urlpatterns += [
     path("expertgroup/confirm/<str:token>/", expertgroupviews.ConfirmUserForExpertGroupApi.as_view()),
     path("assessmentkits/like/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
     path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
-    path("assessmentkits/update/<str:assessment_kit_id>/", assessmentkitviews.UpdateAssessmentKitApi.as_view()),
-    path("assessmentkits/get/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitInitFormApi.as_view()),
 ]
