@@ -36,8 +36,6 @@ class SimpleQuestionSerializers(serializers.ModelSerializer):
         fields = ['id', 'title', 'index', 'quality_attributes', 'question_impacts']
 
 
-
-
 class AssessmentKitSimpleSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
@@ -48,24 +46,6 @@ class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'bio', 'about']
-
-
-class OptionValueSerilizers(serializers.ModelSerializer):
-    class Meta:
-        model = OptionValue
-        fields = ['id', 'option_id', 'value', 'question_impact_id']
-
-
-class LoadQualityAttributeSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = QualityAttribute
-        fields = ['id', 'weight']
-
-
-class LoadQuestionImpactSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = QuestionImpact
-        fields = '__all__'
 
 
 class SimpleLoadQuestionImpactSerilizer(serializers.ModelSerializer):

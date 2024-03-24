@@ -101,14 +101,6 @@ class AssessmentKitLikeApi(APIView):
         return Response({'likes': assessment_kit.likes.count()})
 
 
-class LoadLevelCompetenceInternalApi(APIView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(responses={200: LevelCompetenceSerilizer(many=True)})
-    def get(self, request, maturity_level_id):
-        level_competence = assessmentkitservice.get_level_competence_with_maturity_level(maturity_level_id)
-        response = LevelCompetenceSerilizer(level_competence, many=True).data
-        return Response({'items': response}, status=status.HTTP_200_OK)
 
 
 class LoadAssessmentKitInfoEditableApi(APIView):

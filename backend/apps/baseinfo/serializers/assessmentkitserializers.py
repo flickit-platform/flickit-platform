@@ -112,12 +112,6 @@ class UpdateAssessmentKitSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
-class LevelCompetenceSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = LevelCompetence
-        fields = ['id', 'maturity_level_id', 'value', 'maturity_level_competence_id']
-
-
 class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit

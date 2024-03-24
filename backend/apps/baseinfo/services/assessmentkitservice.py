@@ -55,12 +55,6 @@ def like_assessment_kit(user, assessment_kit_id):
     return assessment_kit
 
 
-def get_level_competence_with_maturity_level(maturity_level_id):
-    load_maturity = load_maturity_level(maturity_level_id)
-    result = LevelCompetence.objects.filter(maturity_level=maturity_level_id)
-    return result
-
-
 def get_maturity_level_with_assessment_kit(assessment_kit_id):
     try:
         kit = AssessmentKit.objects.get(id=assessment_kit_id)
