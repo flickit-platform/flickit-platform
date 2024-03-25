@@ -42,12 +42,6 @@ class AssessmentKitSimpleSerilizer(serializers.ModelSerializer):
         fields = ['id', 'code', 'title', 'summary']
 
 
-class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
-    class Meta:
-        model = ExpertGroup
-        fields = ['id', 'name', 'bio', 'about']
-
-
 class SimpleLoadQuestionImpactSerilizer(serializers.ModelSerializer):
     class Meta:
         model = QuestionImpact

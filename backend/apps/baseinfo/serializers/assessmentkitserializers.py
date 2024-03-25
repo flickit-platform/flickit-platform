@@ -5,11 +5,10 @@ from assessment.services.assessment_core_services import get_assessment_kit_asse
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, \
     MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire
-from baseinfo.serializers.commonserializers import ExpertGroupSimpleSerilizers
 from rest_framework.validators import UniqueValidator
 
-from .expertgroupserializers import ExpertGroupAvatarSerializer
-from ..services import assessmentkitservice
+from baseinfo.serializers import expertgroupserializers
+from baseinfo.services import assessmentkitservice
 
 
 class AssessmentKitTagSerializer(serializers.ModelSerializer):
@@ -38,6 +37,12 @@ class MaturityLevelSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaturityLevel
         fields = ['id', 'title', 'value']
+
+
+class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
+    class Meta:
+        model = ExpertGroup
+        fields = ['id', 'name', 'bio', 'about']
 
 
 class AssessmentKitSerilizer(serializers.ModelSerializer):
@@ -279,7 +284,7 @@ class AssessmentKitUpdateSerializer(serializers.Serializer):
 
 class AssessmentKitListSerializer(serializers.ModelSerializer):
     tags = AssessmentKitTagSerializer(many=True)
-    expert_group = ExpertGroupAvatarSerializer()
+    expert_group = expertgroupserializers.ExpertGroupAvatarSerializer()
     number_of_assessment = serializers.SerializerMethodField()
     likes_number = serializers.SerializerMethodField()
 

@@ -1,9 +1,5 @@
-import requests
-from django.db.models import F
-from rest_framework import status
-
-from baseinfo.models.questionmodels import AnswerTemplate, OptionValue, Question, QuestionImpact
-from baseinfo.models.assessmentkitmodels import MaturityLevel, AssessmentKit
+from baseinfo.models.questionmodels import AnswerTemplate, Question, QuestionImpact
+from baseinfo.models.assessmentkitmodels import MaturityLevel
 from baseinfo.models.basemodels import AssessmentSubject, QualityAttribute, Questionnaire
 from baseinfo.serializers import commonserializers
 from baseinfo.services import assessmentkitservice
