@@ -6,18 +6,25 @@ from account.models import User
 
 
 class ExpertGroup(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, db_column="title")
     bio = models.CharField(max_length=200)
     about = models.TextField()
     website = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True, validators=[validate_file_size])
-    users = models.ManyToManyField(User, through='ExpertGroupAccess', related_name='expert_groups')
-    owner = models.ForeignKey(User, on_delete=models.PROTECT)
+    users = models.ManyToManyField(User, through='ExpertGroupAccess', through_fields=("expert_group","user"),
+                                   related_name='expert_groups')
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='expert_groups_owner')
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_groups_created_by',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
 
     class Meta:
         permissions = [
             ('manage_expert_group', 'Manage Expert Groups')
         ]
+        db_table = 'fau_expert_group'
 
 
 class ExpertGroupAccess(models.Model):
@@ -25,9 +32,16 @@ class ExpertGroupAccess(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     invite_email = models.EmailField(null=True)
     invite_expiration_date = models.DateTimeField(null=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_groups_access_created_by',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by",
+                                         related_name='expert_groups_access_last_modified_by')
 
     class Meta:
         unique_together = ('expert_group', 'user')
+        db_table = 'fau_expert_group_user_access'
 
 
 class AssessmentKitVersion(models.Model):
@@ -84,7 +98,7 @@ class AssessmentKitDsl(models.Model):
     dsl_path = models.CharField(max_length=200)
     creation_time = models.DateTimeField(auto_now_add=True)
     json_path = models.CharField(max_length=200)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='dsl_owner',
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dsl_owner',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,
                                          db_column="last_modified_by")

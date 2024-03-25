@@ -1,5 +1,7 @@
 import pytest
 from unittest import skip
+
+from model_bakery import baker
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate
 
@@ -69,7 +71,7 @@ class TestAddUserInExpertGroup:
         view = expertgroupviews.AddUserToExpertGroupApi.as_view()
         resp = view(request, expert_group_id=expert_group.id)
         assert resp.status_code == status.HTTP_403_FORBIDDEN
-
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2, last_modified_by=user2)
         expert_group.users.add(user2)
         request = api.post(f'baseinfo/addexpertgroup/{expert_group.id}', {'email': 'test3@test.com'}, format='json')
         force_authenticate(request, user=user2)
@@ -118,6 +120,7 @@ class TestViewExpertGroup:
         member = User.objects.create(email="tes1@test.com")
 
         expert_group = create_expertgroup(ExpertGroup, owner)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=member, created_by=member, last_modified_by=member)
         expert_group.users.add(member)
 
         api_client.force_authenticate(user=member)
@@ -166,6 +169,7 @@ class TestEditExpertGroup:
         permission = Permission.objects.get(name='Manage Expert Groups')
         user.user_permissions.add(permission)
         expert_group = create_expertgroup(ExpertGroup, owner)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user, created_by=user, last_modified_by=user)
         expert_group.users.add(user)
 
         api_client.force_authenticate(user=user)
@@ -204,6 +208,7 @@ class TestDeleteUserExpertGroup:
         user1 = User.objects.create(email="tes2@test.com")
 
         expert_group = create_expertgroup(ExpertGroup, owner)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user, created_by=user, last_modified_by=user)
         expert_group.users.add(user)
         expert_group_access_id = \
         ExpertGroupAccess.objects.filter(expert_group=expert_group.id).filter(user=user.id).values_list('id')[0][0]
@@ -222,6 +227,7 @@ class TestDeleteUserExpertGroup:
         permission = Permission.objects.get(name='Manage Expert Groups')
         user.user_permissions.add(permission)
         expert_group = create_expertgroup(ExpertGroup, owner)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user, created_by=user, last_modified_by=user)
         expert_group.users.add(user)
         expert_group_access_id = \
         ExpertGroupAccess.objects.filter(expert_group=expert_group.id).filter(user=user.id).values_list('id')[0][0]
@@ -240,6 +246,7 @@ class TestDeleteUserExpertGroup:
         permission = Permission.objects.get(name='Manage Expert Groups')
         owner.user_permissions.add(permission)
         expert_group = create_expertgroup(ExpertGroup, owner)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user, created_by=user, last_modified_by=user)
         expert_group.users.add(user)
         expert_group_access_id = \
         ExpertGroupAccess.objects.filter(expert_group=expert_group.id).filter(user=user.id).values_list('id')[0][0]

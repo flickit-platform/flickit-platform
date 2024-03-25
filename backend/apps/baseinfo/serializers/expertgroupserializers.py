@@ -1,9 +1,8 @@
 from django.db import transaction
-from pathlib import Path
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
-from account.serializers.userserializers import UserSimpleSerializer, UserSerializer
+from account.serializers import userserializers
 from account.services import userservices
 
 from baseinfo.models.assessmentkitmodels import ExpertGroup, ExpertGroupAccess
@@ -11,10 +10,10 @@ from baseinfo.services import expertgroupservice
 
 
 class ExpertGroupSerilizer(serializers.ModelSerializer):
-    users = UserSimpleSerializer(many=True)
+    users = userserializers.UserSimpleSerializer(many=True)
     number_of_members = serializers.SerializerMethodField()
     number_of_assessment_kits = serializers.SerializerMethodField()
-    owner = UserSimpleSerializer()
+    owner = userserializers.UserSimpleSerializer()
     is_expert = serializers.SerializerMethodField(method_name='check_expert')
     is_member = serializers.SerializerMethodField(method_name='check_is_member')
     is_owner = serializers.SerializerMethodField(method_name='check_is_owner')
@@ -56,7 +55,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
 
 
 class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):
-    owner = UserSimpleSerializer()
+    owner = userserializers.UserSimpleSerializer()
 
     class Meta:
         model = ExpertGroup
@@ -65,7 +64,7 @@ class ExpertGroupSimpleSerilizer(serializers.ModelSerializer):
 
 class ExpertGroupAccessSerializer(serializers.ModelSerializer):
     expert_group = ExpertGroupSimpleSerilizer()
-    user = UserSerializer()
+    user = userserializers.UserSerializer()
 
     class Meta:
         model = ExpertGroupAccess

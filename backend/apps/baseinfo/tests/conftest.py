@@ -5,7 +5,7 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 from account.models import User, Space, UserAccess
 from baseinfo.models.assessmentkitmodels import AssessmentKitTag, AssessmentKitDsl, LevelCompetence, MaturityLevel, \
-    AssessmentKit, AssessmentKitVersion
+    AssessmentKit, AssessmentKitVersion, ExpertGroupAccess
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire, QualityAttribute
 from baseinfo.models.questionmodels import Question, QuestionImpact, OptionValue, AnswerTemplate
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -75,7 +75,8 @@ def create_assessment_kit():
 @pytest.fixture
 def create_expertgroup():
     def do_create_expertgroup(expertgroup, user):
-        expert_group = baker.make(expertgroup, owner=user)
+        expert_group = baker.make(expertgroup, owner=user, created_by=user, last_modified_by=user)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user, created_by=user, last_modified_by=user)
         expert_group.users.add(user)
         return expert_group
 

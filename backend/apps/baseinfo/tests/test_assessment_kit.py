@@ -5,7 +5,7 @@ import pytest
 from model_bakery import baker
 from baseinfo.views import assessmentkitviews, commonviews
 from baseinfo.models.questionmodels import Question, QuestionImpact, MaturityLevel
-from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKitLike, AssessmentKit
+from baseinfo.models.assessmentkitmodels import ExpertGroup, AssessmentKitLike, AssessmentKit, ExpertGroupAccess
 from account.models import User
 from unittest import skip
 
@@ -225,6 +225,7 @@ class TestViewAssessmentKit:
         permission = Permission.objects.get(name='Manage Expert Groups')
         user1.user_permissions.add(permission)
         expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2, last_modified_by=user2)
         expert_group.users.add(user2)
         assessment_kit = baker.make(AssessmentKit)
         assessment_kit.expert_group = expert_group
@@ -261,6 +262,7 @@ class TestLoadAssessmentKitInfoEditableApi:
         user1 = create_user(email="test@test.com")
         user2 = create_user(email="test2@test.com")
         expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2, last_modified_by=user2)
         expert_group.users.add(user2)
         assessment_kit = baker.make(AssessmentKit)
         assessment_kit.expert_group = expert_group
@@ -346,6 +348,7 @@ class TestLoadAssessmentKitInfoStatisticalApi:
         user1 = create_user(email="test@test.com")
         user2 = create_user(email="test2@test.com")
         expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2, last_modified_by=user2)
         expert_group.users.add(user2)
         assessment_kit = baker.make(AssessmentKit)
         assessment_kit.expert_group = expert_group
@@ -471,6 +474,7 @@ class TestEditAssessmentKitInfoApi:
         user1.user_permissions.add(permission)
         assessment_kit = baker.make(AssessmentKit)
         expert_group = create_expertgroup(ExpertGroup, user1)
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2, last_modified_by=user2)
         expert_group.users.add(user2)
         assessment_kit.expert_group = expert_group
         assessment_kit.save()
@@ -677,6 +681,7 @@ class TestLoadAssessmentKitDetailsApi:
         # create request and send request
         assessment_kit_id = base_info['assessment_kit'].id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
         expert_group.save()
         api = APIRequestFactory()
@@ -743,6 +748,7 @@ class TestLoadAssessmentSubjectDetailsApi:
         subject = base_info['subject1']
         subject_id = subject.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         questions_count = Question.objects.filter(quality_attributes__assessment_subject=subject_id).distinct().count()
@@ -787,6 +793,7 @@ class TestLoadAssessmentSubjectDetailsApi:
         subject = base_info['subject1']
         subject_id = 1000
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         api = APIRequestFactory()
@@ -807,6 +814,7 @@ class TestLoadAssessmentSubjectDetailsApi:
         subject = base_info['subject1']
         subject_id = subject.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         api = APIRequestFactory()
@@ -842,6 +850,7 @@ class TestLoadQualityAttributesDetailsApi:
         attribute = base_info['attributes'][0]
         attribute_id = attribute.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -895,6 +904,7 @@ class TestLoadQualityAttributesDetailsApi:
         assessment_kit_id = base_info['assessment_kit'].id
         attribute_id = 1000
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -952,6 +962,7 @@ class TestLoadMaturityLevelsDetailsApi:
         level_id = level.id
         attribute_id = attribute.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1004,6 +1015,7 @@ class TestLoadMaturityLevelsDetailsApi:
         level_id = level.id
         attribute_id = attribute.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1028,6 +1040,7 @@ class TestLoadMaturityLevelsDetailsApi:
         level_id = 1000
         attribute_id = 1000
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1053,6 +1066,7 @@ class TestLoadMaturityLevelsDetailsApi:
         level_id = 1000
         attribute_id = attribute.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1097,6 +1111,7 @@ class TestLoadQuestionnairesDetailsApi:
         questionnaire = base_info['questionnaires'][0]
         questionnaire_id = questionnaire.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1161,6 +1176,7 @@ class TestLoadQuestionnairesDetailsApi:
         assessment_kit_id = base_info['assessment_kit'].id
         questionnaire_id = 1000
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1203,6 +1219,7 @@ class TestLoadQuestionDetailsApi:
         question = base_info['questions'][0]
         question_id = question.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
 
         # create request and send request
@@ -1247,6 +1264,7 @@ class TestLoadQuestionDetailsApi:
         question = base_info['questions'][0]
         question_id = question.id
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
         # create request and send request
         api = APIRequestFactory()
@@ -1269,6 +1287,7 @@ class TestLoadQuestionDetailsApi:
         assessment_kit_id = base_info['assessment_kit'].id
         question_id = 1000
         expert_group = base_info['assessment_kit'].expert_group
+        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user1, created_by=user1, last_modified_by=user1)
         expert_group.users.add(user1)
         # create request and send request
         api = APIRequestFactory()

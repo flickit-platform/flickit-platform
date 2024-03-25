@@ -4,7 +4,7 @@ from common.restutil import ActionResult
 from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitLike
 from baseinfo.serializers import assessmentkitserializers
-from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel, LevelCompetence
+from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel
 from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 
