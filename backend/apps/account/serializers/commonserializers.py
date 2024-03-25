@@ -25,5 +25,5 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'code', 'title', 'owner']
+        fields = ['id', 'title', 'owner']
 
