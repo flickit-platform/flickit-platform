@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from assessment.serializers.user_access_serializers import AssessmentKitAddUserAccess
+from assessment.serializers.user_access_serializers import InviteUserWithEmailSerializer
 from baseinfo.permissions import IsOwnerExpertGroup
 from baseinfo.services import user_access_services
 
@@ -19,9 +19,9 @@ class AssessmentKitUsersAccessApi(APIView):
                                                                )
         return Response(data=result["body"], status=result["status_code"])
 
-    @swagger_auto_schema(request_body=AssessmentKitAddUserAccess())
+    @swagger_auto_schema(request_body=InviteUserWithEmailSerializer())
     def post(self, request, assessment_kit_id):
-        serializer = AssessmentKitAddUserAccess(data=request.data)
+        serializer = InviteUserWithEmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = user_access_services.add_user_in_assessment_kit(assessment_kit_id=assessment_kit_id,
                                                                  authorization_header=request.headers['Authorization'],
