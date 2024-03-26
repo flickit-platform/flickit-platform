@@ -37,3 +37,11 @@ def get_expert_group_details(request, expert_group_id):
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
+
+def get_expert_group_members(request, expert_group_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/members',
+        json=request.data,
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
