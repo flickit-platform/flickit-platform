@@ -1,5 +1,5 @@
 from rest_framework import serializers
 
 
-class AssessmentKitAddUserAccess(serializers.Serializer):
+class InviteUserWithEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)

@@ -1,8 +1,10 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from assessment.serializers.user_access_serializers import InviteUserWithEmailSerializer
 from baseinfo.services import expert_group_services
 
 
@@ -37,8 +39,11 @@ class ExpertGroupMembersApi(APIView):
 class ExpertGroupInviteMembersApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=InviteUserWithEmailSerializer())
     def post(self, request, expert_group_id):
-        result = expert_group_services.add_expert_group_members(request, expert_group_id)
-        if result["status_code"] == status.HTTP_200_OK:
+        serializer = InviteUserWithEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = expert_group_services.add_expert_group_members(request, expert_group_id, serializer.validated_data)
+        if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])

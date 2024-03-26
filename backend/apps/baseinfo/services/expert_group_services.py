@@ -1,5 +1,6 @@
 import requests
 from assessmentplatform.settings import ASSESSMENT_URL
+from baseinfo.services.user_access_services import check_email_exists
 
 
 def get_expert_group_list(request):
@@ -46,11 +47,13 @@ def get_expert_group_members(request, expert_group_id):
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
 
-def add_expert_group_members(request, expert_group_id):
+def add_expert_group_members(request, expert_group_id, request_body):
+    result = check_email_exists(request_body["email"])
+    if not result["Success"]:
+        return result
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/invite',
-        json=request.data,
-        params=request.query_params,
+        json={"userId": result["body"]["id"]},
         headers={'Authorization': request.headers['Authorization']})
     if response.status_code == 200:
         return {"Success": True, "body": "", "status_code": response.status_code}
