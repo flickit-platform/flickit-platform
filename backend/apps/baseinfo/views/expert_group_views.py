@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -30,4 +31,14 @@ class ExpertGroupMembersApi(APIView):
 
     def get(self, request, expert_group_id):
         result = expert_group_services.get_expert_group_members(request, expert_group_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupInviteMembersApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, expert_group_id):
+        result = expert_group_services.add_expert_group_members(request, expert_group_id)
+        if result["status_code"] == status.HTTP_200_OK:
+            return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])

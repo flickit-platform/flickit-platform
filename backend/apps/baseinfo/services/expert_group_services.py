@@ -41,7 +41,17 @@ def get_expert_group_details(request, expert_group_id):
 def get_expert_group_members(request, expert_group_id):
     response = requests.get(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/members',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def add_expert_group_members(request, expert_group_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/invite',
         json=request.data,
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
