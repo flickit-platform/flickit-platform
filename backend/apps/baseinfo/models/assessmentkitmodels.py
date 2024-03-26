@@ -30,7 +30,9 @@ class ExpertGroup(models.Model):
 class ExpertGroupAccess(models.Model):
     expert_group = models.ForeignKey('ExpertGroup', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    invite_email = models.EmailField(null=True)
+    invite_token = models.UUIDField(null=True)
+    status = models.SmallIntegerField(default=1)
+    invite_date = models.DateTimeField(null=True)
     invite_expiration_date = models.DateTimeField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True, db_column="last_modification_time")
