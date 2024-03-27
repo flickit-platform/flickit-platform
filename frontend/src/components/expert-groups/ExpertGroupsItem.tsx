@@ -40,9 +40,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     publishedKitsCount,
     editable,
   } = data || {};
-
   function stringAvatar(name: string) {
-    console.log(name);
     if (name) {
       return {
         children: `${name.split("")[0]}`,
@@ -119,7 +117,6 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
             }}
           >
             {members.map((user: any) => {
-              console.log(user);
               return (
                 <Tooltip title={user?.displayName}>
                   <Avatar

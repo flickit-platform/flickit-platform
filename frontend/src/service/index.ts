@@ -130,13 +130,19 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/useraccess/`, config);
     },
     fetchPathInfo(
-      { assessmentId, spaceId,questionnaireId }: { assessmentId?: string; spaceId?: string ,questionnaireId?:string},
+      {
+        assessmentId,
+        spaceId,
+        questionnaireId,
+      }: { assessmentId?: string; spaceId?: string; questionnaireId?: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
         `/api/v1/path-info?${
           assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""}`,
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${
+          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        }`,
         {
           ...(config ?? {}),
         }
@@ -661,7 +667,8 @@ export const createService = (
     },
     fetchExpertGroups(args: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/api/v1/expert-groups/`, {
-        ...(config ?? {}), params: { size: 20 },
+        ...(config ?? {}),
+        params: { size: 20 },
       });
     },
     fetchUserExpertGroup(
@@ -669,7 +676,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/expertgroups/${id}/`, config);
+      return axios.get(`/api/v1/expert-groups/${id}/`, config);
     },
     deleteExpertGroupMember(
       args: { id: TId; userId: TId },
@@ -717,7 +724,11 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id, email } = args ?? {};
-      return axios.post(`/baseinfo/addexpertgroup/${id}/`, { email }, config);
+      return axios.post(
+        `/api/v1/expert-groups/${id}/invite/`,
+        { email },
+        config
+      );
     },
     addMemberToKitPermission(
       args: { assessmentKitId: TId; email: string },
@@ -787,13 +798,16 @@ export const createService = (
       });
     },
     fetchExpertGroupMembers(
-      args: { id: TId },
+      args: { id: TId; status: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { id } = args ?? {};
+      const { id, status } = args ?? {};
 
-      return axios.get(`/baseinfo/expertgroups/${id}/expertgroupaccess/`, {
+      return axios.get(`/api/v1/expert-groups/${id}/members/`, {
         ...(config ?? {}),
+        params: {
+          status: status,
+        },
       });
     },
     confirmExpertGroupInvitation(

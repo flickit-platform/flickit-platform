@@ -64,7 +64,11 @@ const ExpertGroupContainer = () => {
   });
 
   const expertGroupMembersQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
+    service: (args = { id: expertGroupId, status: "ACTIVE" }, config) =>
+      service.fetchExpertGroupMembers(args, config),
+  });
+  const expertGroupMembersInviteeQueryData = useQuery({
+    service: (args = { id: expertGroupId, status: "PENDING" }, config) =>
       service.fetchExpertGroupMembers(args, config),
   });
 
@@ -78,8 +82,8 @@ const ExpertGroupContainer = () => {
       {...queryData}
       render={(data) => {
         const {
-          name,
-          picture,
+          title,
+          pictureLink,
           website,
           about = "",
           number_of_members,
@@ -87,20 +91,20 @@ const ExpertGroupContainer = () => {
           users = [],
           bio,
           owner,
-          is_expert,
-          is_member,
-          is_owner,
+
+          editable,
           assessment_kits = [],
         } = data || {};
+        console.log(data);
         // const is_owner = data?.owner?.id === userInfo.id;
-        const hasAccess = is_expert;
-        setDocTitle(`${t("expertGroup")}: ${name || ""}`);
+        const hasAccess = editable;
+        setDocTitle(`${t("expertGroup")}: ${title || ""}`);
         return (
           <Box>
             <Title
               borderBottom
               pb={1}
-              avatar={<Avatar src={picture} sx={{ mr: 1 }} />}
+              avatar={<Avatar src={pictureLink} sx={{ mr: 1 }} />}
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -112,14 +116,14 @@ const ExpertGroupContainer = () => {
                 />
               }
               toolbar={
-                is_owner ? (
+                editable ? (
                   <EditExpertGroupButton fetchExpertGroup={queryData.query} />
                 ) : (
                   <></>
                 )
               }
             >
-              {name}
+              {title}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
               <Grid item xs={12} md={8}>
@@ -140,17 +144,18 @@ const ExpertGroupContainer = () => {
                 <Box mt={5}>
                   <AssessmentKitsList
                     queryData={queryData}
-                    hasAccess={is_owner}
+                    hasAccess={editable}
                     dialogProps={createAssessmentKitDialogProps}
-                    is_member={is_member}
-                    is_expert={is_expert}
+                    is_member={editable}
+                    is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
                   />
                 </Box>
                 <Box mt={5}>
                   <ExpertGroupMembersDetail
                     queryData={expertGroupMembersQueryData}
-                    hasAccess={is_owner}
+                    inviteeQueryData={expertGroupMembersInviteeQueryData}
+                    hasAccess={editable}
                   />
                 </Box>
               </Grid>
@@ -241,7 +246,7 @@ const ExpertGroupContainer = () => {
                             "publishedAssessmentKits"
                           ).toLowerCase()}`}
                       </Typography>
-                      {is_owner && (
+                      {editable && (
                         <Box ml="auto">
                           <IconButton
                             size="small"
@@ -258,7 +263,7 @@ const ExpertGroupContainer = () => {
                         </Box>
                       )}
                     </Box>
-                    {is_member && (
+                    {editable && (
                       <Box
                         sx={{
                           ...styles.centerV,
@@ -290,11 +295,12 @@ const ExpertGroupContainer = () => {
                     )}
                   </Box>
 
-                  {is_owner && (
+                  {editable && (
                     <Box>
                       <Divider sx={{ mt: 2, mb: 2 }} />
                       <ExpertGroupMembers
-                        {...expertGroupMembersQueryData}
+                        query={expertGroupMembersQueryData}
+                        inviteeQuery={expertGroupMembersInviteeQueryData}
                         hasAccess={hasAccess}
                       />
                     </Box>
@@ -348,100 +354,112 @@ const EditExpertGroupButton = (props: any) => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { hasAccess, ...rest } = props;
+  const { hasAccess, query, inviteeQuery } = props;
   const [openInvitees, setOpenInvitees] = useState(false);
   const [openAddMembers, setOpenAddMembers] = useState(false);
 
   return (
-    <QueryData
-      {...rest}
-      render={(data) => {
-        const { results = [] } = data;
-        const invitees = results.filter((user: any) => user.user === null);
-        const users = results.filter((user: any) => user.user !== null);
-        const hasInvitees = invitees.length > 0;
+    <Box>
+      <QueryData
+        {...query}
+        render={(data) => {
+          const { items = [] } = data;
 
-        return (
-          <Box>
-            <Typography
-              variant="h6"
-              display="flex"
-              alignItems={"center"}
-              component="a"
-              href="#members"
-              sx={{ textDecoration: "none", mb: 2, color: "inherit" }}
-            >
-              <Trans i18nKey="members" />
-            </Typography>
-            {hasAccess && (
-              <AddingNewMember
-                queryData={rest}
-                setOpenAddMembers={setOpenAddMembers}
-                openAddMembers={openAddMembers}
-              />
-            )}
-            {hasAccess && hasInvitees && (
+          const users = items.filter((user: any) => user.status === "ACTIVE");
+
+          return (
+            <Box>
+              <Typography
+                variant="h6"
+                display="flex"
+                alignItems={"center"}
+                component="a"
+                href="#members"
+                sx={{ textDecoration: "none", mb: 2, color: "inherit" }}
+              >
+                <Trans i18nKey="members" />
+              </Typography>
+              {hasAccess && (
+                <AddingNewMember
+                  queryData={query}
+                  inviteeQuery={inviteeQuery}
+                  setOpenAddMembers={setOpenAddMembers}
+                  openAddMembers={openAddMembers}
+                />
+              )}
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
+                <AvatarGroup>
+                  {users.map((user: any) => {
+                    return (
+                      <Avatar
+                        key={user.id}
+                        alt={user.title}
+                        title={user.title}
+                        src={user?.pictureLink || "/"}
+                      />
+                    );
+                  })}
+                </AvatarGroup>
+              </Box>
+            </Box>
+          );
+        }}
+      />
+      {hasAccess && (
+        <QueryData
+          {...inviteeQuery}
+          render={(data) => {
+            const { items = [] } = data;
+            return (
               <Box mb={2}>
                 <Invitees
-                  users={invitees}
-                  query={rest.query}
+                  users={items}
+                  query={inviteeQuery.query}
                   setOpenInvitees={setOpenInvitees}
                   openInvitees={openInvitees}
                 />
               </Box>
-            )}
-            <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
-              <AvatarGroup>
-                {users.map((user: any) => {
-                  const name = getUserName(user?.user);
-                  return (
-                    <Avatar
-                      key={user.id}
-                      alt={name}
-                      title={name}
-                      src={user?.picture || "/"}
-                    />
-                  );
-                })}
-              </AvatarGroup>
-            </Box>
-          </Box>
-        );
-      }}
-    />
+            );
+          }}
+        />
+      )}
+    </Box>
   );
 };
 
 const Invitees = (props: any) => {
   const { users, query, setOpenInvitees, openInvitees } = props;
-
+  const hasInvitees = users.length > 0;
   return (
     <Box>
-      <Typography
-        variant="h6"
-        display="flex"
-        alignItems={"center"}
-        sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
-        onClick={() => setOpenInvitees((state: boolean) => !state)}
-      >
-        <Trans i18nKey="invitees" />
-        <Box
-          sx={{
-            ...styles.centerV,
-            ml: "auto",
-          }}
+      {hasInvitees && (
+        <Typography
+          variant="h6"
+          display="flex"
+          alignItems={"center"}
+          sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
+          onClick={() => setOpenInvitees((state: boolean) => !state)}
         >
-          {openInvitees ? (
-            <MinimizeRoundedIcon fontSize="small" />
-          ) : (
-            <AddRoundedIcon fontSize="small" />
-          )}
-        </Box>
-      </Typography>
+          <Trans i18nKey="invitees" />
+          <Box
+            sx={{
+              ...styles.centerV,
+              ml: "auto",
+            }}
+          >
+            {openInvitees ? (
+              <MinimizeRoundedIcon fontSize="small" />
+            ) : (
+              <AddRoundedIcon fontSize="small" />
+            )}
+          </Box>
+        </Typography>
+      )}
       <Collapse in={openInvitees}>
         <Box sx={{ display: "flex", flexWrap: "wrap", my: 1 }}>
           {users.map((user: any) => {
-            const { invite_email, invite_expiration_date, id } = user;
+            const { id, email, inviteExpirationDate, displayName } = user;
             return (
               <Box
                 key={user.id}
@@ -457,17 +475,17 @@ const Invitees = (props: any) => {
               >
                 <Box sx={{ ...styles.centerV }}>
                   <Box>
-                    <Avatar sx={{ width: 34, height: 34 }} alt={invite_email} />
+                    <Avatar sx={{ width: 34, height: 34 }} alt={displayName} />
                   </Box>
                   <Box ml={2}>
-                    {invite_email}
+                    {displayName}
                     <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
                       <EventBusyRoundedIcon
                         fontSize="small"
                         sx={{ mr: 0.7, opacity: 0.9 }}
                       />
                       <Typography variant="body2">
-                        {formatDate(invite_expiration_date)}
+                        {formatDate(inviteExpirationDate)}
                       </Typography>
                     </Box>
                   </Box>
@@ -476,7 +494,7 @@ const Invitees = (props: any) => {
                   <MemberActions
                     query={query}
                     userId={id}
-                    email={invite_email}
+                    email={email}
                     isInvitationExpired={true}
                   />
                 </Box>
@@ -556,7 +574,7 @@ const MemberActions = (props: any) => {
 };
 
 const AddingNewMember = (props: any) => {
-  const { queryData, setOpenAddMembers, openAddMembers } = props;
+  const { queryData, inviteeQuery, setOpenAddMembers, openAddMembers } = props;
 
   return (
     <Box>
@@ -582,15 +600,15 @@ const AddingNewMember = (props: any) => {
         </Box>
       </Typography>
       <Collapse in={openAddMembers}>
-        <AddMember queryData={queryData} />
+        <AddMember queryData={queryData} inviteeQuery={inviteeQuery} />
       </Collapse>
     </Box>
   );
 };
 
 const AddMember = (props: any) => {
-  const { queryData } = props;
-  const { query } = queryData;
+  const { queryData, inviteeQuery } = props;
+  const { query } = inviteeQuery;
   const inputRef = useRef<HTMLInputElement>(null);
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
@@ -791,7 +809,7 @@ const CreateAssessmentKitButton = (props: {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, hasAccess } = props;
+  const { queryData, inviteeQueryData, hasAccess } = props;
 
   return (
     <>
@@ -813,18 +831,15 @@ const ExpertGroupMembersDetail = (props: any) => {
             >
               <Trans i18nKey="addNewMember" />
             </Title>
-            <AddMember queryData={queryData} />
+            <AddMember queryData={queryData} inviteeQuery={inviteeQueryData} />
           </Box>
         )}
 
         <QueryData
           {...queryData}
           render={(data) => {
-            const { results = [] } = data;
-            const invitees = results.filter((user: any) => user.user === null);
-            const users = results.filter((user: any) => user.user !== null);
-            const hasInvitees = invitees.length > 0;
-
+            const { items = [] } = data;
+            const users = items.filter((user: any) => user.status === "ACTIVE");
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
@@ -844,8 +859,15 @@ const ExpertGroupMembersDetail = (props: any) => {
                     )}
                     <Grid container spacing={2}>
                       {users.map((member: any) => {
-                        const { user, id } = member;
-                        const name = getUserName(user);
+                        const {
+                          displayName,
+                          id,
+                          pictureLink,
+                          email,
+                          linkedin,
+                          bio,
+                        } = member;
+
                         return (
                           <Grid item xs={12} sm={6} md={4} key={id}>
                             <Box
@@ -875,8 +897,8 @@ const ExpertGroupMembersDetail = (props: any) => {
                                       height: 58,
                                       border: "4px solid white",
                                     }}
-                                    alt={name}
-                                    src={user?.picture || "/"}
+                                    alt={displayName}
+                                    src={pictureLink || "/"}
                                   />
                                   <Title
                                     titleProps={{
@@ -895,18 +917,18 @@ const ExpertGroupMembersDetail = (props: any) => {
                                     sub={
                                       <Box
                                         component="a"
-                                        href={user.linkedin}
+                                        href={linkedin}
                                         target="_blank"
                                         sx={{
                                           textDecoration: "none",
                                           color: "inherit",
                                         }}
                                       >
-                                        {user.linkedin}
+                                        {linkedin}
                                       </Box>
                                     }
                                   >
-                                    {name}
+                                    {displayName}
                                   </Title>
                                 </Box>
                                 <Box mt={1} px={1} py={1} pb={3}>
@@ -914,7 +936,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                     variant="body2"
                                     textAlign={"center"}
                                   >
-                                    {user.bio}
+                                    {bio}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -928,83 +950,89 @@ const ExpertGroupMembersDetail = (props: any) => {
                       })}
                     </Grid>
                   </Box>
-                  {hasInvitees && hasAccess && (
-                    <Box mt={4}>
-                      <Title
-                        size="small"
-                        titleProps={{
-                          textTransform: "none",
-                          fontSize: ".95rem",
-                          fontFamily: "Roboto",
-                        }}
-                      >
-                        <Trans i18nKey="invitees" />
-                      </Title>
-                      <Box mt={1}>
-                        {invitees.map((member: any) => {
-                          const {
-                            user,
-                            id,
-                            invite_email,
-                            invite_expiration_date,
-                          } = member;
-                          const name = invite_email;
-
-                          return (
-                            <Box
-                              key={id}
-                              sx={{
-                                ...styles.centerV,
-                                boxShadow: 1,
-                                borderRadius: 2,
-                                my: 1,
-                                py: 0.8,
-                                px: 1.5,
-                              }}
-                            >
-                              <Box sx={{ ...styles.centerV }}>
-                                <Box>
-                                  <Avatar sx={{ width: 34, height: 34 }}>
-                                    <PersonRoundedIcon />
-                                  </Avatar>
-                                </Box>
-                                <Box ml={2}>{name}</Box>
-                              </Box>
-                              <Box ml="auto" sx={{ ...styles.centerV }}>
-                                <Box
-                                  sx={{
-                                    ...styles.centerV,
-                                    opacity: 0.8,
-                                    px: 0.4,
-                                    mr: 2,
-                                  }}
-                                >
-                                  <EventBusyRoundedIcon
-                                    fontSize="small"
-                                    sx={{ mr: 0.5 }}
-                                  />
-                                  <Typography variant="body2">
-                                    {formatDate(invite_expiration_date)}
-                                  </Typography>
-                                </Box>
-                                <MemberActions
-                                  query={queryData.query}
-                                  userId={id}
-                                  isInvitationExpired={true}
-                                  email={invite_email}
-                                />
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    </Box>
-                  )}
                 </Box>
               </Box>
             );
           }}
         />
+        {hasAccess && (
+          <QueryData
+            {...inviteeQueryData}
+            render={(data) => {
+              const { items = [] } = data;
+              const hasInvitees = items.length > 0;
+              return (
+                <Box mt={4}>
+                  {hasInvitees && (
+                    <Title
+                      size="small"
+                      titleProps={{
+                        textTransform: "none",
+                        fontSize: ".95rem",
+                        fontFamily: "Roboto",
+                      }}
+                    >
+                      <Trans i18nKey="invitees" />
+                    </Title>
+                  )}
+                  <Box mt={1}>
+                    {items.map((member: any) => {
+                      const { id, email, inviteExpirationDate, displayName } =
+                        member;
+
+                      return (
+                        <Box
+                          key={id}
+                          sx={{
+                            ...styles.centerV,
+                            boxShadow: 1,
+                            borderRadius: 2,
+                            my: 1,
+                            py: 0.8,
+                            px: 1.5,
+                          }}
+                        >
+                          <Box sx={{ ...styles.centerV }}>
+                            <Box>
+                              <Avatar sx={{ width: 34, height: 34 }}>
+                                <PersonRoundedIcon />
+                              </Avatar>
+                            </Box>
+                            <Box ml={2}>{displayName}</Box>
+                          </Box>
+                          <Box ml="auto" sx={{ ...styles.centerV }}>
+                            <Box
+                              sx={{
+                                ...styles.centerV,
+                                opacity: 0.8,
+                                px: 0.4,
+                                mr: 2,
+                              }}
+                            >
+                              <EventBusyRoundedIcon
+                                fontSize="small"
+                                sx={{ mr: 0.5 }}
+                              />
+                              <Typography variant="body2">
+                                {formatDate(inviteExpirationDate)}
+                              </Typography>
+                            </Box>
+                            <MemberActions
+                              query={queryData.query}
+                              userId={id}
+                              isInvitationExpired={true}
+                              email={email}
+                            />
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              );
+            }}
+          />
+        )}
       </Box>
     </>
   );
