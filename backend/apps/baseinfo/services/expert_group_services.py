@@ -55,6 +55,7 @@ def add_expert_group_members(request, expert_group_id, request_body):
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/invite',
         json={"userId": result["body"]["id"]},
         headers={'Authorization': request.headers['Authorization']})
-    if response.status_code == 200:
+
+    if response.status_code == 201:
         return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
