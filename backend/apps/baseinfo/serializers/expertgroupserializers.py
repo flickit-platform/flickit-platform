@@ -39,9 +39,7 @@ class ExpertGroupSerilizer(serializers.ModelSerializer):
 
     def get_picture(self, expert_group: ExpertGroup):
 
-        if expert_group.picture.name == "":
-            return None
-        if expert_group.picture.name is None:
+        if expert_group.picture.name == "" or expert_group.picture.name is None:
             return None
         path = expert_group.picture.name
         bucket = path.split('/')[0]
