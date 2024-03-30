@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from account.services.utils_services import create_new_code_number
 from common.validators import validate_file_size
 
 from uuid import uuid4
@@ -41,7 +42,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class Space(models.Model):
-    code = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=50, unique=True, default=create_new_code_number)
     title = models.CharField(max_length=100)
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)

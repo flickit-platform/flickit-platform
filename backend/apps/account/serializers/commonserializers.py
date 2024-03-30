@@ -10,10 +10,11 @@ class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'display_name']
-        
+
+
 class SpaceSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer(read_only=True)
-    
+
     @transaction.atomic
     def create(self, validated_data):
         current_user = self.context.get('request', None).user
@@ -26,4 +27,3 @@ class SpaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
         fields = ['id', 'title', 'owner']
-
