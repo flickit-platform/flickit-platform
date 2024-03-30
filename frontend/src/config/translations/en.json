@@ -345,5 +345,11 @@
   "from":"from",
   "currentStage":"current stage",
   "to":"to",
-  "questionnaire":"Questionnaire"
+  "questionnaire":"Questionnaire",
+  "noAssesmentHere":"No assesment here!",
+  "spacesAreEssentialForCreating":"Spaces are essential for creating and organizing your assessments. Additionally, you have the option to collaborate with others by adding them to spaces.",
+  "newAssessment":"New assessment",
+  "noSpaceHere":"Oh! You have no space?",
+  "createYourFirstSpace":"Create your first space",
+  "createAnAssessmentWith":"Create an assessment with your desired assessment kit, answer it's questions and view the insights."
 }

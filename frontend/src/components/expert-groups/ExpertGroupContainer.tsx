@@ -95,7 +95,6 @@ const ExpertGroupContainer = () => {
           editable,
           assessment_kits = [],
         } = data || {};
-        console.log(data);
         // const is_owner = data?.owner?.id === userInfo.id;
         const hasAccess = editable;
         setDocTitle(`${t("expertGroup")}: ${title || ""}`);

@@ -122,7 +122,6 @@ const useQuestions = () => {
       const response = await questionsResultQueryData.query();
       if (response) {
         const { items = [] } = response;
-        console.log(items)
         dispatch(
           questionActions.setQuestionsInfo({
             total_number_of_questions: items.length,

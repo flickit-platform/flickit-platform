@@ -930,7 +930,6 @@ const UpdateAssessmentKitDialog = (props: any) => {
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     const { dsl_id, ...restOfData } = data;
-    console.log(dsl_id.kitDslId)
     const formattedData = {
       dsl_id: dsl_id.kitDslId,
       ...restOfData,
