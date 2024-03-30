@@ -9,12 +9,13 @@ import CreateSpaceDialog from "./CreateSpaceDialog";
 import { SpacesList } from "./SpaceList";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
-import AddRounded from "@mui/icons-material/AddRounded";
-import { Skeleton, Typography } from "@mui/material";
+import { Skeleton, Typography, Button } from "@mui/material";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
+import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { styles } from "@styles";
 
 const SpaceContainer = () => {
@@ -35,32 +36,93 @@ const SpaceContainer = () => {
         </Title>
       }
     >
-      <Box
-        sx={{
-          background: "white",
-          py: 1,
-          px: 2,
-          ...styles.centerV,
-          borderRadius: 1,
-          my: 3,
-        }}
-      >
-        <Box></Box>
-        <Box ml="auto">
-          <ToolbarCreateItemBtn
-            icon={<CreateNewFolderRoundedIcon />}
-            onClick={dialogProps.openDialog}
-            shouldAnimate={isEmpty}
-            text="createSpace"
-          />
+      {!isEmpty && (
+        <Box
+          sx={{
+            background: "white",
+            py: 1,
+            px: 2,
+            ...styles.centerV,
+            borderRadius: 1,
+            my: 3,
+          }}
+        >
+          <Box ml="auto">
+            <ToolbarCreateItemBtn
+              icon={<CreateNewFolderRoundedIcon />}
+              onClick={dialogProps.openDialog}
+              shouldAnimate={isEmpty}
+              text="createSpace"
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
+      {isEmpty && (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 6,
+            gap: 4,
+          }}
+        >
+          <img
+            src={SpaceEmptyStateSVG}
+            alt={"Oh! You have no space?"}
+            width="240px"
+          />
+          <Typography
+            textAlign="center"
+            variant="h3"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "48px",
+              fontWeight: "900",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="noSpaceHere" />
+          </Typography>
+          <Typography
+            textAlign="center"
+            variant="h1"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "16px",
+              fontWeight: "500",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="spacesAreEssentialForCreating" />
+          </Typography>
+          <Box>
+            <Button
+              startIcon={<AddRoundedIcon />}
+              variant="contained"
+              onClick={dialogProps.openDialog}
+            >
+              <Typography sx={{ fontSize: "20px" }} variant="button">
+                <Trans i18nKey="createYourFirstSpace" />
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+      )}
       <QueryData
         {...spacesQueryData}
         renderLoading={() => (
           <Box mt={5}>
             {[1, 2, 3, 4, 5].map((item) => {
-              return <Skeleton key={item} variant="rectangular" sx={{ borderRadius: 2, height: "60px", mb: 1 }} />;
+              return (
+                <Skeleton
+                  key={item}
+                  variant="rectangular"
+                  sx={{ borderRadius: 2, height: "60px", mb: 1 }}
+                />
+              );
             })}
           </Box>
         )}
@@ -75,11 +137,20 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
-          return <SpacesList dialogProps={dialogProps} data={data} fetchSpaces={spacesQueryData.query} />;
+          return (
+            <SpacesList
+              dialogProps={dialogProps}
+              data={data}
+              fetchSpaces={spacesQueryData.query}
+            />
+          );
         }}
       />
 
-      <CreateSpaceDialog {...dialogProps} onSubmitForm={spacesQueryData.query} />
+      <CreateSpaceDialog
+        {...dialogProps}
+        onSubmitForm={spacesQueryData.query}
+      />
     </SpaceLayout>
   );
 };

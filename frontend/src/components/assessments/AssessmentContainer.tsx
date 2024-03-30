@@ -3,10 +3,11 @@ import { Trans } from "react-i18next";
 import Title from "@common/Title";
 import QueryData from "@common/QueryData";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
+import AssessmentEmptyState from "@assets/svg/assessmentEmptyState.svg";
 import { useServiceContext } from "@providers/ServiceProvider";
 import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
 import { useParams, useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
@@ -19,6 +20,7 @@ import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { styles } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +30,7 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
-  const {currentSpace } = useAuthContext();
+  const { currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
   const { fetchAssessments, ...rest } = useFetchAssessments();
@@ -73,36 +75,94 @@ const AssessmentContainer = () => {
           <Trans i18nKey="assessments" />
         </Box>
       </Title>
-
-      <Box
-        sx={{
-          background: "white",
-          py: 1,
-          px: 2,
-          ...styles.centerV,
-          borderRadius: 1,
-          my: 3,
-        }}
-      >
-        <Box ml="auto">
-          <ToolbarCreateItemBtn
-            data-cy="create-assessment-btn"
-            onClick={() =>
-              dialogProps.openDialog({
-                type: "create",
-                data: {
-                  space: { id: spaceId, title: currentSpace?.title },
-                },
-              })
-            }
-            icon={<NoteAddRoundedIcon />}
-            shouldAnimate={isEmpty}
-            minWidth="195px"
-            text="createAssessment"
-            disabled={rest.loading}
-          />
+      {!isEmpty && (
+        <Box
+          sx={{
+            background: "white",
+            py: 1,
+            px: 2,
+            ...styles.centerV,
+            borderRadius: 1,
+            my: 3,
+          }}
+        >
+          <Box ml="auto">
+            <ToolbarCreateItemBtn
+              data-cy="create-assessment-btn"
+              onClick={() =>
+                dialogProps.openDialog({
+                  type: "create",
+                  data: {
+                    space: { id: spaceId, title: currentSpace?.title },
+                  },
+                })
+              }
+              icon={<NoteAddRoundedIcon />}
+              shouldAnimate={isEmpty}
+              minWidth="195px"
+              text="createAssessment"
+              disabled={rest.loading}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
+      {isEmpty && (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 6,
+            gap: 4,
+          }}
+        >
+          <img
+            src={AssessmentEmptyState}
+            alt={"No assesment here!"}
+            width="240px"
+          />
+          <Typography
+            textAlign="center"
+            variant="h3"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "48px",
+              fontWeight: "900",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="noAssesmentHere" />
+          </Typography>
+          <Typography
+            textAlign="center"
+            variant="h1"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "16px",
+              fontWeight: "500",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="createAnAssessmentWith" />
+          </Typography>
+          <Box>
+            <Button startIcon={<AddRoundedIcon />} variant="contained" onClick={() =>
+                dialogProps.openDialog({
+                  type: "create",
+                  data: {
+                    space: { id: spaceId, title: currentSpace?.title },
+                  },
+                })
+              }>
+              <Typography sx={{ fontSize: "20px" }} variant="button">
+                <Trans i18nKey="newAssessment" />
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+      )}
       <QueryData
         {...rest}
         renderLoading={() => <LoadingSkeletonOfAssessments />}
@@ -169,7 +229,7 @@ const useFetchAssessments = () => {
 
   useEffect(() => {
     fetchAssessments();
-  }, [page,spaceId]);
+  }, [page, spaceId]);
   const fetchAssessments = async () => {
     setLoading(true);
     setErrorObject(undefined);

@@ -60,7 +60,6 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       picture: picture || null,
       title: title,
     };
-    console.log(restOfData);
     const formattedUpdateData = {
       ...restOfData,
       name: title,
@@ -68,7 +67,6 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     if (typeof picture !== "string") {
       formattedUpdateData.picture = picture;
     }
-    console.log(formattedUpdateData);
     setLoading(true);
     try {
       const { data: res } =
