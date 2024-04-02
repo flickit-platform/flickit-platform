@@ -7,7 +7,6 @@ from django.core.files.storage import default_storage
 from account.models import UserAccess, User
 from account.serializers.commonserializers import UserSimpleSerializer, SpaceSerializer
 from account.serializers.spaceserializers import SpaceSimpleSerializer
-from account.services import spaceservices
 from baseinfo.models.assessmentkitmodels import ExpertGroup
 
 
@@ -49,7 +48,6 @@ class UserCreateSerializer(UserCreatePasswordRetypeSerializer):
     @transaction.atomic
     def perform_create(self, validated_data):
         user = super().perform_create(validated_data)
-        spaceservices.create_default_space(user)
         return user
 
 
