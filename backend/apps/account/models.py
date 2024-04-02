@@ -6,6 +6,7 @@ from common.validators import validate_file_size
 
 from uuid import uuid4
 
+
 class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, display_name, **extra_fields):
@@ -13,8 +14,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email must be provided')
 
         user = self.model(
-            email = self.normalize_email(email),
-            display_name = display_name,
+            email=self.normalize_email(email),
+            display_name=display_name,
             **extra_fields
         )
 
@@ -50,9 +51,11 @@ class Space(models.Model):
     owner = models.ForeignKey('User', on_delete=models.PROTECT)
     is_default_space = models.BooleanField(default=False)
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid4)
-    email = models.EmailField(unique=True, max_length=254, error_messages={'unique':"A user with this email address already exists."})
+    email = models.EmailField(unique=True, max_length=254,
+                              error_messages={'unique': "A user with this email address already exists."})
     is_active = models.BooleanField(default=True)
     display_name = models.CharField(max_length=255)
     is_superuser = models.BooleanField(default=False)
@@ -68,10 +71,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['display_name']
 
+
 class UserAccess(models.Model):
     space = models.ForeignKey('Space', on_delete=models.CASCADE)
-    user =  models.ForeignKey('User', on_delete=models.CASCADE, null=True)
-    invite_email = models.EmailField(null = True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, null=True)
+    invite_email = models.EmailField(null=True)
     invite_expiration_date = models.DateTimeField(null=True)
 
     class Meta:

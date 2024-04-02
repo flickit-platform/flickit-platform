@@ -1,12 +1,10 @@
-import random
-import string
 from datetime import datetime
 from django.db import transaction
 from rest_framework.exceptions import PermissionDenied
 
 from common.restutil import ActionResult
 from account.services import userservices
-from account.models import UserAccess, User, Space
+from account.models import UserAccess, Space
 
 
 @transaction.atomic
@@ -24,21 +22,6 @@ def add_user_to_space(space_id, current_user, email):
         UserAccess.objects.create(space_id=space_id, user=user)
         return ActionResult(success=True, code='user-joined-space',
                             message='This user has successfully joined the space.')
-
-
-@transaction.atomic
-def create_default_space(user: User):
-    alphabet = string.digits
-    space = Space()
-    space.code = ''.join(random.choice(alphabet) for _ in range(6))
-    space.title = user.display_name + 'Default Space'
-    space.owner = user
-    space.is_default_space = True
-    space.save()
-    add_owner_to_space(space, user.id)
-    add_invited_user_to_space(user)
-    user.default_space = space
-    user.save()
 
 
 @transaction.atomic
