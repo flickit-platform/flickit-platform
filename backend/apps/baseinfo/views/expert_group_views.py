@@ -47,3 +47,13 @@ class ExpertGroupInviteMembersApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupInviteMembersConfirmApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, expert_group_id, invite_token):
+        result = expert_group_services.confirm_expert_group_members(request, expert_group_id, invite_token)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
