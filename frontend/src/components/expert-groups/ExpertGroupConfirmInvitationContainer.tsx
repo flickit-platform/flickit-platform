@@ -24,7 +24,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
       service.fetchUserExpertGroup(args, config),
   });
   const confirmInvitationQueryData = useQuery({
-    service: (args = { token }, config) =>
+    service: (args = { token, expert_group_id: expertGroupId }, config) =>
       service.confirmExpertGroupInvitation(args, config),
     runOnMount: false,
   });
