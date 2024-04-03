@@ -16,7 +16,7 @@ import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { styles } from "@styles";
+import { styles,animations } from "@styles";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
@@ -103,6 +103,12 @@ const SpaceContainer = () => {
               startIcon={<AddRoundedIcon />}
               variant="contained"
               onClick={dialogProps.openDialog}
+              sx={{
+                animation: `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)`,
+                "&:hover": {
+                  animation: `${animations.noPomp}`,
+                },
+              }}
             >
               <Typography sx={{ fontSize: "20px" }} variant="button">
                 <Trans i18nKey="createYourFirstSpace" />
