@@ -811,14 +811,17 @@ export const createService = (
       });
     },
     confirmExpertGroupInvitation(
-      args: { token: TId },
+      args: { token: TId; expert_group_id: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { token } = args ?? {};
+      const { token, expert_group_id } = args ?? {};
 
-      return axios.post(`/baseinfo/expertgroup/confirm/${token}/`, {
-        ...(config ?? {}),
-      });
+      return axios.put(
+        `/api/v1/expert-groups/${expert_group_id}/invite/${token}/confirm/`,
+        {
+          ...(config ?? {}),
+        }
+      );
     },
     likeAssessmentKit(
       args: { id: TId },
