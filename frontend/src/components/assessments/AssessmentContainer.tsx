@@ -177,7 +177,7 @@ const AssessmentContainer = () => {
 
       <QueryData
         {...rest}
-        renderLoading={() => <LoadingSkeletonOfAssessments />}
+        // renderLoading={() => <LoadingSkeletonOfAssessments />}
         emptyDataComponent={
           <ErrorEmptyData
             emptyMessage={<Trans i18nKey="nothingToSeeHere" />}
