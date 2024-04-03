@@ -28,14 +28,15 @@ import { Link } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
+import { animations } from "@styles";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
   const { fetchAssessments, ...rest } = useFetchAssessments();
-  const { data, error, errorObject, size, total } = rest;
-  const isEmpty = data.length == 0;
+  const { data, error, errorObject, size, total, loading } = rest;
+  const isEmpty = data.length === 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     navigate(`/${spaceId}/assessments/${value}`);
   };
@@ -106,7 +107,7 @@ const AssessmentContainer = () => {
           </Box>
         </Box>
       )}
-      {isEmpty && (
+      {isEmpty && !loading && (
         <Box
           sx={{
             width: "100%",
@@ -148,14 +149,24 @@ const AssessmentContainer = () => {
             <Trans i18nKey="createAnAssessmentWith" />
           </Typography>
           <Box>
-            <Button startIcon={<AddRoundedIcon />} variant="contained" onClick={() =>
+            <Button
+              startIcon={<AddRoundedIcon />}
+              variant="contained"
+              sx={{
+                animation: `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)`,
+                "&:hover": {
+                  animation: `${animations.noPomp}`,
+                },
+              }}
+              onClick={() =>
                 dialogProps.openDialog({
                   type: "create",
                   data: {
                     space: { id: spaceId, title: currentSpace?.title },
                   },
                 })
-              }>
+              }
+            >
               <Typography sx={{ fontSize: "20px" }} variant="button">
                 <Trans i18nKey="newAssessment" />
               </Typography>
@@ -163,6 +174,7 @@ const AssessmentContainer = () => {
           </Box>
         </Box>
       )}
+
       <QueryData
         {...rest}
         renderLoading={() => <LoadingSkeletonOfAssessments />}

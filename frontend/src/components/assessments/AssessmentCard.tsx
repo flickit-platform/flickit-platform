@@ -180,9 +180,28 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <LoadingGauge />
             )}
           </Grid>
+  
+          <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
+            <Button
+              startIcon={<QuizRoundedIcon />}
+           
+              fullWidth
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+              }}
+              component={Link}
+              state={location}
+              to={`${item.id}/questionnaires`}
+            
+              data-cy="questionnaires-btn"
+            >
+              <Trans i18nKey="questionnaires" />
+            </Button>
+          </Grid>
           <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
             <Button
               startIcon={<QueryStatsRounded />}
+              variant={"contained"}
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
@@ -193,30 +212,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               }}
               component={Link}
               to={hasML ? `${item.id}/insights` : ""}
-              // variant={is_calculate_valid ? "contained" : undefined}
-              data-cy="view-insights-btn"
-            >
-              <Trans i18nKey="insights" />
-            </Button>
-          </Grid>
-          <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
-            <Button
-              startIcon={<QuizRoundedIcon />}
-              variant={"contained"}
-              fullWidth
-              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                e.stopPropagation();
-              }}
-              component={Link}
-              state={location}
-              to={`${item.id}/questionnaires`}
               sx={{
                 backgroundColor: "#2e7d72",
                 background: `#01221e`,
               }}
-              data-cy="questionnaires-btn"
+              data-cy="view-insights-btn"
             >
-              <Trans i18nKey="questionnaires" />
+              <Trans i18nKey="insights" />
             </Button>
           </Grid>
         </Grid>
