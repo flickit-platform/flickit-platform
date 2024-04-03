@@ -38,7 +38,13 @@ const ExpertGroupConfirmInvitationContainer = () => {
       toast.success("You have joined this expert group successfully.");
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err);
+      if (err?.response?.data?.code === "ALREADY_EXISTS") {
+        navigate(`/user/expert-groups/${expertGroupId}`, {
+          replace: true,
+        });
+      } else {
+        toastError(err?.response?.data?.message);
+      }
     }
   };
 
