@@ -77,6 +77,7 @@ const ExpertGroupContainer = () => {
     context: { type: "create", data: { expertGroupId } },
   });
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({});
+  const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
   return (
     <QueryData
       {...queryData}
@@ -215,7 +216,7 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {number_of_members} {t("members").toLowerCase()}
+                        {numberOfMembers} {t("members").toLowerCase()}
                       </Typography>
                     </Box>
                     <Box
@@ -301,6 +302,7 @@ const ExpertGroupContainer = () => {
                         query={expertGroupMembersQueryData}
                         inviteeQuery={expertGroupMembersInviteeQueryData}
                         hasAccess={hasAccess}
+                        setNumberOfMembers={setNumberOfMembers}
                       />
                     </Box>
                   )}
@@ -353,7 +355,7 @@ const EditExpertGroupButton = (props: any) => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { hasAccess, query, inviteeQuery } = props;
+  const { hasAccess, query, inviteeQuery, setNumberOfMembers } = props;
   const [openInvitees, setOpenInvitees] = useState(false);
   const [openAddMembers, setOpenAddMembers] = useState(false);
 
@@ -365,7 +367,7 @@ const ExpertGroupMembers = (props: any) => {
           const { items = [] } = data;
 
           const users = items.filter((user: any) => user.status === "ACTIVE");
-
+          setNumberOfMembers(users?.length);
           return (
             <Box>
               <Typography
@@ -839,6 +841,7 @@ const ExpertGroupMembersDetail = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             const users = items.filter((user: any) => user.status === "ACTIVE");
+
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
