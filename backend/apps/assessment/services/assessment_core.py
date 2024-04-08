@@ -256,18 +256,22 @@ def get_questionnaires_in_assessment(assessments_details):
     questionnaire_data = LoadQuestionnairesSerializer(questionnaire_query, many=True).data
 
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/questionnaires/progress', )
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/questionnaires/progress')
+
     response_body = response.json()
     answer_dict = dict()
     for item in response_body["items"]:
-        answer_dict[item['id']] = item['answersCount']
+        answer_dict[item['id']] = {"answers_count": item['answersCount']}
+        if "nextQuestion" in item:
+            answer_dict[item['id']]["next_question"] = item['nextQuestion']
 
     for i in range(len(questionnaire_data)):
         if questionnaire_data[i]["id"] in answer_dict:
-            questionnaire_data[i]["answers_count"] = answer_dict[questionnaire_data[i]["id"]]
+            questionnaire_data[i]["answers_count"] = answer_dict[questionnaire_data[i]["id"]]["answers_count"]
+            questionnaire_data[i]["next_question"] = answer_dict[questionnaire_data[i]["id"]]["next_question"]
+
             questionnaire_data[i]["progress"] = int(
                 questionnaire_data[i]["answers_count"] / questionnaire_data[i]["questions_count"] * 100)
-
 
         else:
             questionnaire_data[i]["answers_count"] = 0
