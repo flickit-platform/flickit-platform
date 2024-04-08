@@ -125,8 +125,13 @@ class AssessmentKitTag(models.Model):
 
 
 class AssessmentKitLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes', primary_key=True, unique=True)
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes',db_column="kit_id")
+
+    class Meta:
+        db_table = 'fak_kit_like'
+        unique_together = [('user', 'assessment_kit')]
+
 
 
 class MaturityLevel(models.Model):
