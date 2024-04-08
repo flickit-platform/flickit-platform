@@ -40,6 +40,7 @@ class ExpertGroupAccess(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by",
                                          related_name='expert_groups_access_last_modified_by')
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('expert_group', 'user')
@@ -124,8 +125,13 @@ class AssessmentKitTag(models.Model):
 
 
 class AssessmentKitLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes', primary_key=True, unique=True)
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes',db_column="kit_id")
+
+    class Meta:
+        db_table = 'fak_kit_like'
+        unique_together = [('user', 'assessment_kit')]
+
 
 
 class MaturityLevel(models.Model):
