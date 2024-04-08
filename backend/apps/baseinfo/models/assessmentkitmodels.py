@@ -40,6 +40,7 @@ class ExpertGroupAccess(models.Model):
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by",
                                          related_name='expert_groups_access_last_modified_by')
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('expert_group', 'user')
