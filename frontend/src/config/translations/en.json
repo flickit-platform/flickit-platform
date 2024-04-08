@@ -351,5 +351,14 @@
   "newAssessment":"New assessment",
   "noSpaceHere":"Oh! You have no space?",
   "createYourFirstSpace":"Create your first space",
-  "createAnAssessmentWith":"Create an assessment with your desired assessment kit, answer it's questions and view the insights."
+  "createAnAssessmentWith":"Create an assessment with your desired assessment kit, answer it's questions and view the insights.",
+  "someQuestionsHaveNotBeenAnswered":"Some questions have not been answered, which may affect the accuracy of the insights.",
+  "nice":"Nice!",
+  "hmmm":"Hmmm!",
+  "noQuestionsHaveBeenAnswered":"No questions have been answered yet!",
+  "weHighlyRecommendAnsweringMoreQuestions":"We highly recommend answering more questions for more accurate and comprehensive insights.",
+  "goodJob":"Good job!",
+  "allQuestionsHaveBeenAnswered":"All questions have been answered.",
+  "allQuestionsInThisQuestionnaireHaveBeenAnswered":"All questions in this questionnaire have been answered. To have more accurate insights, you can complete other questionnaires as well.",
+  "youAnsweredQuestionOf":"You answered {{answeredQuestions}} question of {{totalQuestions}} questions"
 }
