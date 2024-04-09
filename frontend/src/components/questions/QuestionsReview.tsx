@@ -46,7 +46,6 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
       }
     }
   }, [questionsInfo]);
-  console.log(questionsInfo.total_number_of_questions);
   return (
     <Box
       maxWidth={"1440px"}
@@ -56,7 +55,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
         mx: "auto",
       }}
     >
-      {isReviewPage && (
+
         <Box
           mb={6}
           mt={6}
@@ -263,7 +262,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
             </Box>
           </Box>
         </Box>
-      )}
+
       <Box>
         {!isReviewPage && (
           <Title>
