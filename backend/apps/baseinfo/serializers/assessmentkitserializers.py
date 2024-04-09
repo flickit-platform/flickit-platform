@@ -245,7 +245,7 @@ class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
     maturity_levels = serializers.SerializerMethodField()
 
     def get_questionnaires(self, assessment_kit: AssessmentKit):
-        data = Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title', 'index')
+        data = Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).order_by('index').values('id', 'title', 'index')
         return data
 
     def get_subjects(self, assessment_kit: AssessmentKit):

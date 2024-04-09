@@ -132,8 +132,10 @@ class SimpleLoadQuestionForQuestionnairesDetailsSerializer(serializers.ModelSeri
 class LoadQuestionnairesDetailsSerializer(serializers.ModelSerializer):
     questions_count = serializers.IntegerField(source='question_set.count')
     related_subject = serializers.SerializerMethodField()
-    questions = SimpleLoadQuestionForQuestionnairesDetailsSerializer(source='question_set', many=True)
+    questions = serializers.SerializerMethodField()
 
+    def get_questions(self, questionnaire: Questionnaire):
+        return SimpleLoadQuestionForQuestionnairesDetailsSerializer(questionnaire.question_set.order_by('index'), many=True).data
     def get_related_subject(self, questionnaire: Questionnaire):
         return questionnaire.assessment_subjects.values_list('title', flat=True)
 
