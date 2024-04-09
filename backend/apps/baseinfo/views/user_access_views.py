@@ -10,7 +10,7 @@ from baseinfo.services import user_access_services
 
 
 class AssessmentKitUsersAccessApi(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_kit_id):
         result = user_access_services.get_assessment_kit_users(assessment_kit_id=assessment_kit_id,
