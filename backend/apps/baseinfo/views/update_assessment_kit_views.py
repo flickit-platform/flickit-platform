@@ -12,7 +12,7 @@ from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 class AssessmentKitUpdateApi(APIView):
     serializer_class = AssessmentKitUpdateSerializer
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=AssessmentKitUpdateSerializer())
     def put(self, request, assessment_kit_id):
