@@ -11,7 +11,7 @@ class ExpertGroup(models.Model):
     about = models.TextField()
     website = models.CharField(max_length=200, null=True, blank=True)
     picture = models.ImageField(upload_to='expertgroup/images', null=True, validators=[validate_file_size])
-    users = models.ManyToManyField(User, through='ExpertGroupAccess', through_fields=("expert_group","user"),
+    users = models.ManyToManyField(User, through='ExpertGroupAccess', through_fields=("expert_group", "user"),
                                    related_name='expert_groups')
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='expert_groups_owner')
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -114,9 +114,11 @@ class AssessmentKitDsl(models.Model):
 class AssessmentKitTag(models.Model):
     code = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100, unique=True)
-    assessmentkits = models.ManyToManyField(AssessmentKit, related_name='tags')
+    assessment_kits = models.ManyToManyField(AssessmentKit, through='AssessmentKitTagRelation', related_name='tags',
+                                             through_fields=("tag", "assessment_kit"))
 
     class Meta:
+        db_table = 'fak_kit_tag'
         verbose_name = 'Assessment Kit Tag'
         verbose_name_plural = "Assessment Kit Tags"
 
@@ -124,14 +126,23 @@ class AssessmentKitTag(models.Model):
         return self.title
 
 
+class AssessmentKitTagRelation(models.Model):
+    tag = models.ForeignKey(AssessmentKitTag, on_delete=models.CASCADE, db_column='tag_id')
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, db_column="kit_id")
+
+    class Meta:
+        db_table = 'fak_kit_tag_relation'
+        unique_together = ('tag', 'assessment_kit')
+
+
 class AssessmentKitLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes', primary_key=True, unique=True)
-    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes',db_column="kit_id")
+    assessment_kit = models.ForeignKey(AssessmentKit, on_delete=models.CASCADE, related_name='likes',
+                                       db_column="kit_id")
 
     class Meta:
         db_table = 'fak_kit_like'
         unique_together = [('user', 'assessment_kit')]
-
 
 
 class MaturityLevel(models.Model):
