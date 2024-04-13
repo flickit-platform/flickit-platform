@@ -70,3 +70,14 @@ def confirm_expert_group_members(request, expert_group_id, invite_token):
     if response.status_code == 200:
         return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_expert_group_members(request, expert_group_id):
+    result = dict()
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}',
+        headers={'Authorization': request.headers['Authorization']})
+
+    if response.status_code == 204:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
