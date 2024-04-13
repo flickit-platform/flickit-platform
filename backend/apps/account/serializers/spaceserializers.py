@@ -31,22 +31,15 @@ class SpaceListSerializer(serializers.ModelSerializer):
     owner = UserSimpleSerializer()
     members_number = serializers.IntegerField(source='users.count', read_only=True)
     assessment_numbers = serializers.SerializerMethodField(read_only=True)
-    is_default_space_for_current_user = serializers.SerializerMethodField()
-
     def get_assessment_numbers(self, space: Space):
         count_assessmnet = get_assessment_kit_assessment_count(space_id=space.id, not_deleted=True)
         return count_assessmnet["notDeletedCount"]
 
-    def get_is_default_space_for_current_user(self, space: Space):
-        current_user = self.context.get('request', None).user
-        if space == current_user.default_space:
-            return True
-        return False
+
 
     class Meta:
         model = Space
-        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers',
-                  'is_default_space', 'is_default_space_for_current_user']
+        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers']
 
 
 class SpaceSimpleSerializer(serializers.ModelSerializer):

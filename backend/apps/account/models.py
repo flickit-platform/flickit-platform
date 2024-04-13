@@ -48,8 +48,13 @@ class Space(models.Model):
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modification_date = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey('User', on_delete=models.PROTECT)
-    is_default_space = models.BooleanField(default=False)
+    owner = models.ForeignKey('User', on_delete=models.PROTECT, related_name='spaces_owner')
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='spaces_created',
+                                   db_column="created_by")
+    last_modified_by = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column="last_modified_by")
+
+    class Meta:
+        db_table = 'fau_space'
 
 
 class User(AbstractBaseUser, PermissionsMixin):
