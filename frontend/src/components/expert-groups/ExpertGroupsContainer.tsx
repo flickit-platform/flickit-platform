@@ -27,21 +27,22 @@ const ExpertGroupsContainer = () => {
 
   return (
     <Box>
-      {is_expert && (
-        <Box
-          sx={{
-            background: "white",
-            py: 1,
-            px: 2,
-            ...styles.centerV,
-            borderRadius: 1,
-            mt: 2,
-          }}
-        >
-          <Box></Box>
-          <Box ml="auto">{is_expert && <CreateExpertGroupButton onSubmitForm={queryData.query} />}</Box>
+      <Box
+        sx={{
+          background: "white",
+          py: 1,
+          px: 2,
+          ...styles.centerV,
+          borderRadius: 1,
+          mt: 2,
+        }}
+      >
+        <Box></Box>
+        <Box ml="auto">
+          {<CreateExpertGroupButton onSubmitForm={queryData.query} />}
         </Box>
-      )}
+      </Box>
+
       <QueryData
         {...queryData}
         renderLoading={() => {
@@ -71,7 +72,12 @@ const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
 
   return (
     <>
-      <Button variant="contained" sx={{ ml: "auto" }} size="small" onClick={dialogProps.openDialog}>
+      <Button
+        variant="contained"
+        sx={{ ml: "auto" }}
+        size="small"
+        onClick={dialogProps.openDialog}
+      >
         <Trans i18nKey="createExpertGroup" />
       </Button>
       <ExpertGroupCEFormDialog {...dialogProps} onSubmitForm={onSubmitForm} />
