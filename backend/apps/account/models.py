@@ -47,7 +47,7 @@ class Space(models.Model):
     title = models.CharField(max_length=100)
     users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
     creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
+    last_modification_date = models.DateTimeField(auto_now=True, db_column='last_modification_time')
     owner = models.ForeignKey('User', on_delete=models.PROTECT, related_name='spaces_owner')
     created_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='spaces_created',
                                    db_column="created_by")
