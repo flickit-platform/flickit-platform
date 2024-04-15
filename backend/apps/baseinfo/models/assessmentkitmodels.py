@@ -6,6 +6,7 @@ from account.models import User
 
 
 class ExpertGroup(models.Model):
+    code = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100, unique=True, db_column="title")
     bio = models.CharField(max_length=200)
     about = models.TextField()
@@ -19,6 +20,8 @@ class ExpertGroup(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expert_groups_created_by',
                                    db_column="created_by")
     last_modified_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="last_modified_by")
+    deleted = models.BooleanField(default=True, db_column="deleted")
+    deletion_time = models.BooleanField(default=0, db_column="deletion_time")
 
     class Meta:
         permissions = [
