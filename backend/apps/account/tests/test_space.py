@@ -38,22 +38,17 @@ def init_space():
         # create two space
         current_space = baker.make(Space, code='01', title="current_space_test_user1", owner=user1)
         default_space = baker.make(Space, code='02', title="default_space_test_user1", owner=user1)
-        current_space.users.add(user2)
-        user1.current_space = current_space
-        user1.default_space = default_space
-        user1.save()
-        UserAccess.objects.create(user=user1, space=current_space)
-        UserAccess.objects.create(user=user1, space=default_space)
+        UserAccess.objects.create(user=user1, space=current_space, created_by=user1)
+        UserAccess.objects.create(user=user1, space=default_space, created_by=user1)
+        assess = UserAccess.objects.create(user=user2, space=current_space, created_by=user2)
+
         space_list["user1"] = current_space, default_space, user1_mail
 
         # create two space
         current_space = baker.make(Space, code='03', title="current_space_test_user2", owner=user2)
         default_space = baker.make(Space, code='04', title="default_space_test_user2", owner=user2)
-        user2.current_space = current_space
-        user2.default_space = default_space
-        user2.save()
-        UserAccess.objects.create(user=user2, space=current_space)
-        UserAccess.objects.create(user=user2, space=default_space)
+        UserAccess.objects.create(user=user2, space=current_space, created_by=user2)
+        UserAccess.objects.create(user=user2, space=default_space, created_by=user2)
         space_list["user2"] = current_space, default_space, user2_mail
 
         return space_list
