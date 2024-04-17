@@ -23,7 +23,7 @@ class SpaceSerializer(serializers.ModelSerializer):
         space.created_by = current_user
         space.last_modified_by = current_user
         space.save()
-        spaceservices.add_owner_to_space(space, current_user.id)
+        spaceservices.add_owner_to_space(space, current_user)
         return space
 
     class Meta:
