@@ -19,20 +19,18 @@ def add_user_to_space(space_id, current_user, email):
         return ActionResult(success=False, code='user-is-member',
                             message='This user is already a member of this space.')
     except UserAccess.DoesNotExist:
-        UserAccess.objects.create(space_id=space_id, user=user)
+        UserAccess.objects.create(space_id=space_id, user=user, created_by=current_user)
         return ActionResult(success=True, code='user-joined-space',
                             message='This user has successfully joined the space.')
 
 
 @transaction.atomic
-def add_owner_to_space(space, current_user_id):
+def add_owner_to_space(space, current_user):
     try:
-        user_access = UserAccess.objects.get(space_id=space.id, user_id=current_user_id)
+        user_access = UserAccess.objects.get(space=space, user=current_user)
     except UserAccess.DoesNotExist:
-        user_access = UserAccess.objects.create(user_id=current_user_id, space_id=space.id)
+        user_access = UserAccess.objects.create(user=current_user, space=space, created_by=current_user)
         user_access.save()
-    space.owner_id = current_user_id
-    space.save()
     return space
 
 
@@ -91,10 +89,6 @@ def leave_user_space(space_id, current_user):
         if space.owner == current_user:
             return ActionResult(success=False, message="Not allowed to perform this action. ")
         space_user_access.delete()
-        result = change_current_space(current_user, current_user.default_space.id)
-        if not result.success:
-            return ActionResult(success=False,
-                                message="The user's current space cannot be set to user's default space.")
         return ActionResult(success=True, message='Leaving from the space is done successfully.')
     except UserAccess.DoesNotExist:
         return ActionResult(success=False, message='There is no such user or space')
