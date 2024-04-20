@@ -256,12 +256,13 @@ export const SpaceMembers = (props: any) => {
                                 ...styles.centerV,
                                 boxShadow: 1,
                                 borderRadius: 2,
+                                flexDirection:{xs:"column",sm:"row"},
                                 my: 1,
                                 py: 0.8,
                                 px: 1.5,
                               }}
                             >
-                              <Box sx={{ ...styles.centerV }}>
+                              <Box sx={{ ...styles.centerV,mr:{xs:"auto",sm:"0px"} }}>
                                 <Box>
                                   <Avatar sx={{ width: 34, height: 34 }}>
                                     <PersonRoundedIcon />

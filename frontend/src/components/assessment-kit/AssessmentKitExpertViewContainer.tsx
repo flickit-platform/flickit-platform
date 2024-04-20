@@ -76,7 +76,7 @@ const AssessmentKitExpertViewContainer = () => {
   }, [assessmentKitTitle]);
   return (
     <Box>
-      <Box>
+      <Box sx={{flexDirection:{xs:"column",sm:"row"}}}>
         <Title
           backLink={-1}
           sup={
@@ -1644,7 +1644,7 @@ const MaturityLevelsDetails = (props: any) => {
                   py: "4px",
                   pl: "16px",
                   margin: "16px",
-                  width: `${90 - 10 * key}%`,
+                  width: {xs:"90%",sm:`${90 - 10 * key}%`},
                 }}
                 key={key}
               >

@@ -16,6 +16,7 @@ import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
+import useScreenResize from "@utils/useScreenResize";
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -60,6 +61,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const [isFarsi, setIsFarsi] = useState<boolean>(false);
   const attributeColorPallet = ["#D81E5B", "#F9A03F", "#0A2342"];
   const attributeBGColorPallet = ["#FDF1F5", "#FEF5EB", "#EDF4FC"];
+  const fullScreen = useScreenResize("sm");
   return (
     <div>
       <Box mt={4}>
@@ -76,10 +78,11 @@ const AssessmentAdviceContainer = (props: any) => {
         open={expanded}
         onClose={handleClose}
         maxWidth={"md"}
+        fullScreen={fullScreen}
         fullWidth
         sx={{
           ".MuiDialog-paper": {
-            borderRadius: "32px",
+            borderRadius: {xs:0,sm:"32px"},
           },
           ".MuiDialog-paper::-webkit-scrollbar": {
             display: "none",
@@ -133,7 +136,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   fontWeight: "500",
                   display: "flex",
                   textAlign: "center",
-                  width: "50%",
+                  width: {xs:"100%",sm:"50%"},
                   py: 2,
                 }}
               >
@@ -176,7 +179,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       {/* <Box sx={{ fontSize: "16px", fontWeight: "700" }}>
                         {subject.title}
                       </Box> */}
-                      <Divider sx={{ my: 2 }} />
+                      {/* <Divider sx={{ my: 2 }} /> */}
                       <Box>
                         {/* <FormGroup>
                           {subjectData.map((subject: any) => {
@@ -206,7 +209,7 @@ const AssessmentAdviceContainer = (props: any) => {
               </Box>
             </Box>
             <Box
-              sx={{ borderRadius: "0 0 32px 32px", background: "#fff", py: 8 }}
+              sx={{ borderRadius: {xs:0,sm:"0 0 32px 32px"}, background: "#fff", py: 8 }}
             >
               {subjectData.map((subject: any) =>
                 subject?.attributes.map((attribute: any) => (
@@ -273,7 +276,7 @@ const AssessmentAdviceContainer = (props: any) => {
           sx={{
             borderRadius: "24px",
             border:  `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
-            width: "60%",
+            width: {xs:"100%",sm:"60%"},
             p: 6,
             margin: "0 auto",
           }}

@@ -57,7 +57,7 @@ const SpacesList = (props: ISpaceListProps) => {
 
   return (
     <Box sx={{ overflowX: "auto", py: 1 }}>
-      <Box minWidth="440px">
+      <Box sx={{ minWidth: { xs: "320px", sm: "440px" } }}>
         {results.map((item: any) => {
           const isOwner = userId == item?.owner.id;
           return (
@@ -97,16 +97,19 @@ const SpaceCard = (props: ISpaceCardProps) => {
   } = props;
   const { service } = useServiceContext();
   const navigate = useNavigate();
-  const {
-    loading,
-    abortController,
-  } = useQuery({
+  const { loading, abortController } = useQuery({
     service: (args, config) => service.setCurrentSpace({ spaceId: id }, config),
     runOnMount: false,
     toastError: true,
   });
   const { dispatch } = useAuthContext();
-  const { title, id, members_number = 0, assessment_numbers = 0 ,is_default_space_for_current_user} = item || {};
+  const {
+    title,
+    id,
+    members_number = 0,
+    assessment_numbers = 0,
+    is_default_space_for_current_user,
+  } = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
     service
@@ -165,52 +168,56 @@ const SpaceCard = (props: ISpaceCardProps) => {
           )}
         </Box>
       </Box>
-      <Box ml="auto" sx={{ ...styles.centerV }}>
-        <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
-          <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-          <Typography fontFamily="Roboto" fontWeight={"bold"}>
-            {members_number}
-          </Typography>
-        </Box>
-        <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
-          <DescriptionRoundedIcon
-            sx={{ mr: 0.5, opacity: 0.8 }}
-            fontSize="small"
-          />
-          <Typography fontFamily="Roboto" fontWeight={"bold"}>
-            {assessment_numbers}
-          </Typography>
-        </Box>
-      </Box>
-      <Box
-        justifyContent={"flex-end"}
-        sx={{ ...styles.centerV, minWidth: { xs: "170px", sm: "220px" } }}
-      >
-        {isActiveSpace && (
-          <Box mr={1}>
-            <Chip
-              label={<Trans i18nKey={"current"} />}
-              color="info"
-              size="small"
+      <Box sx={{ display: "flex", ml: "auto" }}>
+        <Box ml="auto" sx={{ ...styles.centerV }}>
+          <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
+            <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+              {members_number}
+            </Typography>
+          </Box>
+          <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
+            <DescriptionRoundedIcon
+              sx={{ mr: 0.5, opacity: 0.8 }}
+              fontSize="small"
             />
+            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+              {assessment_numbers}
+            </Typography>
           </Box>
-        )}
-        <>
-          <Box sx={{ ...styles.centerV }}>
-            <IconButton size="small" component={Link} to={`/${id}/setting`}>
-              <SettingsRoundedIcon />
-            </IconButton>
-          </Box>
-          <Actions
-            isActiveSpace={isActiveSpace}
-            dialogProps={dialogProps}
-            space={item}
-            fetchSpaces={fetchSpaces}
-            setUserInfo={setUserInfo}
-            isOwner={isOwner}
-            is_default_space_for_current_user={is_default_space_for_current_user}
-          />
-        </>
+        </Box>
+        <Box
+          justifyContent={"flex-end"}
+          sx={{ ...styles.centerV, minWidth: { xs: "80px", sm: "220px" } }}
+        >
+          {isActiveSpace && (
+            <Box mr={1}>
+              <Chip
+                label={<Trans i18nKey={"current"} />}
+                color="info"
+                size="small"
+              />
+            </Box>
+          )}
+          <>
+            <Box sx={{ ...styles.centerV }}>
+              <IconButton size="small" component={Link} to={`/${id}/setting`}>
+                <SettingsRoundedIcon />
+              </IconButton>
+            </Box>
+            <Actions
+              isActiveSpace={isActiveSpace}
+              dialogProps={dialogProps}
+              space={item}
+              fetchSpaces={fetchSpaces}
+              setUserInfo={setUserInfo}
+              isOwner={isOwner}
+              is_default_space_for_current_user={
+                is_default_space_for_current_user
+              }
+            />
+          </>
+        </Box>
       </Box>
     </Box>
   );
@@ -224,7 +231,7 @@ const Actions = (props: any) => {
     isActiveSpace,
     setUserInfo,
     isOwner,
-    is_default_space_for_current_user
+    is_default_space_for_current_user,
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -290,8 +297,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        !is_default_space_for_current_user&&
-        {
+        !is_default_space_for_current_user && {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,
           onClick: leaveSpace,

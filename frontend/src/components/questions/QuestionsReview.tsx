@@ -236,7 +236,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 4,
+                gap: {xs:1,sm:4},
               }}
             >
               <Button
