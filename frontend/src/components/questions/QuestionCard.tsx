@@ -177,6 +177,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             display: "flex",
             justifyContent: "space-between",
             background: `${notApplicable ? "#273248" : "#000000cc"}`,
+            flexDirection:{xs:"column",md:"row"},
             borderRadius: " 0 0 8px 8px ",
             px: { xs: 1.75, sm: 2, md: 2.5 },
             py: { xs: 1.5, sm: 2.5 },
@@ -187,6 +188,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             sx={{
               display: "flex",
               alignItems: "center",
+              flexDirection:{xs:"column",md:"row"},
             }}
           >
             <QueryData
@@ -204,7 +206,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                   >
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography sx={{ display: "flex" }}>
+                        <Typography sx={{ display: "flex",fontSize:{xs:"10px"} }}>
                           <Trans i18nKey={"youSelected"} />
                           <Typography
                             fontWeight={900}

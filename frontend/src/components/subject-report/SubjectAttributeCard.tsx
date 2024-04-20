@@ -401,7 +401,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                           <Box
                             sx={{
                               display: "flex",
-                              width: "80%",
+                              width: {xs:"100%",sm:"100%",md:"80%"},
                               flexDirection: "column",
                             }}
                           >
@@ -409,7 +409,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                ml: 4,
+                                ml: {xs:0,sm:4},
                               }}
                             >
                               <Box

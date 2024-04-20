@@ -52,9 +52,11 @@ const AdviceSlider = (props: any) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        px: 8,
+        px: {xs:3,sm:8},
         width: "100%",
         margin: "0 auto",
+        flexDirection:{xs:"column",sm:"row"},
+        mb:{xs:4,sm:2}
       }}
     >
       <Box sx={{ display: "contents" }}>
@@ -75,16 +77,17 @@ const AdviceSlider = (props: any) => {
           sx={{
             fontSize: "24px",
             fontWeight: "500",
-            ml: 4,
-            width: "240px",
+            ml: {xs:0,sm:4},
+            width: {xs:"100%",sm:"240px"},
             px: "8px",
+            textAlign:{xs:"center",sm:"left"}
           }}
         >
           {attribute.title}
         </Box>
       </Box>
 
-      <Box width={"400px"} margin={"0 auto"} my={6}>
+      <Box sx={{width:{xs:"100%",sm:"400px"}}} margin={"0 auto"} my={{xs:2,sm:6}}>
         <Box px={2}>
           <Slider
             defaultValue={defaultValue}
