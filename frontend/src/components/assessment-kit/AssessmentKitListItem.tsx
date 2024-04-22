@@ -170,7 +170,7 @@ const Actions = (props: any) => {
       // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err);
+      toastError(err?.response?.data?.message);
     }
   };
 
