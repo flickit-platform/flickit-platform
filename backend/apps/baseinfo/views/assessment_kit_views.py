@@ -19,3 +19,13 @@ class AssessmentKitInfoView(APIView):
     def get(self, request, assessment_kit_id):
         result = assessment_kit_service.get_assessment_kit_info(request, assessment_kit_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentKitView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, assessment_kit_id):
+        result = assessment_kit_service.update_assessment_kit(request, assessment_kit_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
