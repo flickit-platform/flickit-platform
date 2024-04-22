@@ -29,3 +29,11 @@ class AssessmentKitView(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentKitDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_kit_id):
+        result = assessment_kit_service.get_assessment_kit_details(request, assessment_kit_id)
+        return Response(data=result["body"], status=result["status_code"])
