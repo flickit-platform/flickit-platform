@@ -50,7 +50,7 @@ export interface IQuestionInfo {
   hint?: string;
   may_not_be_applicable?: boolean;
   is_not_applicable?: boolean;
-  confidence_level?:any;
+  confidence_level?: any;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
@@ -297,7 +297,7 @@ export interface IAssessment {
   // code: string;
   color: IColor;
   is_calculate_valid: boolean;
-  is_confidence_valid?:boolean;
+  is_confidence_valid?: boolean;
   assessment_results: string[];
   assessment_kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
@@ -339,6 +339,8 @@ export interface IQuestionnairesInfo {
   progress: number;
   last_updated?: string;
   current_question_index: number;
+
+  next_question?: number;
   title: string;
   subjects: { id: TId; title: string }[];
 }

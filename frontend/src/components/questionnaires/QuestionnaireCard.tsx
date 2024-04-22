@@ -28,7 +28,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
     answers_count: number_of_answers,
     progress = 0,
     subjects,
-
+    next_question,
     current_question_index,
   } = data || {};
 
@@ -105,6 +105,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             number_of_answers={number_of_answers}
             current_question_index={current_question_index}
             title={title}
+            next_question={next_question}
           />
         </Box>
       </Box>
@@ -118,10 +119,16 @@ const ActionButtons = (props: {
   progress: number;
   number_of_answers: number;
   current_question_index: number;
+  next_question?: number;
 }) => {
-  const { id, progress, number_of_answers, current_question_index, title } =
-    props;
-
+  const {
+    id,
+    progress,
+    number_of_answers,
+    current_question_index,
+    title,
+    next_question,
+  } = props;
   return (
     <Box display="flex">
       {progress === 100 && (
@@ -141,7 +148,7 @@ const ActionButtons = (props: {
       )}
       {progress < 100 && progress > 0 && (
         <ActionButton
-          to={`${id}/${current_question_index || number_of_answers + 1}`}
+          to={`${id}/${next_question ? next_question : number_of_answers + 1}`}
           text="continue"
           icon={<PlayArrowRoundedIcon fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
