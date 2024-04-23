@@ -7,5 +7,6 @@ urlpatterns = [
     path("<str:assessment_kit_id>/info/", assessment_kit_views.AssessmentKitInfoView.as_view()),
     path("<str:assessment_kit_id>/", assessment_kit_views.AssessmentKitView.as_view()),
     path("<str:assessment_kit_id>/details/", assessment_kit_views.AssessmentKitDetailsView.as_view()),
+    path("<str:assessment_kit_id>/details/subjects/<str:subject_id>/", assessment_kit_views.AssessmentKitDetailsSubjectView.as_view()),
 
 ]
