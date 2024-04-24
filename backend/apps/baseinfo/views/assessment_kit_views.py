@@ -53,3 +53,11 @@ class AssessmentKitDetailsAttributesView(APIView):
     def get(self, request, assessment_kit_id, attribute_id):
         result = assessment_kit_service.get_assessment_kit_details_attributes(request, assessment_kit_id, attribute_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentKitDetailsQuestionnairesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_kit_id, questionnaire_id):
+        result = assessment_kit_service.get_assessment_kit_details_questionnaires(request, assessment_kit_id, questionnaire_id)
+        return Response(data=result["body"], status=result["status_code"])

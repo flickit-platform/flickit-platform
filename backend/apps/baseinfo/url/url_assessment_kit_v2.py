@@ -9,5 +9,7 @@ urlpatterns = [
     path("<str:assessment_kit_id>/details/", assessment_kit_views.AssessmentKitDetailsView.as_view()),
     path("<str:assessment_kit_id>/details/subjects/<str:subject_id>/", assessment_kit_views.AssessmentKitDetailsSubjectView.as_view()),
     path("<str:assessment_kit_id>/details/attributes/<str:attribute_id>/", assessment_kit_views.AssessmentKitDetailsAttributesView.as_view()),
+    path("<str:assessment_kit_id>/details/questionnaires/<str:questionnaire_id>/",
+         assessment_kit_views.AssessmentKitDetailsQuestionnairesView.as_view()),
 
 ]
