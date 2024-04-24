@@ -31,6 +31,7 @@ interface IAssessmentKitListItemProps {
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
   const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
     props;
+    
   const { id, title, last_modification_date, is_private } = data || {};
   return (
     <Box
@@ -170,7 +171,7 @@ const Actions = (props: any) => {
       // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err);
+      toastError(err?.response?.data?.message);
     }
   };
 
