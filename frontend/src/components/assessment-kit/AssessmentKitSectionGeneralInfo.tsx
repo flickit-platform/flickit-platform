@@ -363,7 +363,7 @@ const AssessmentKitSectionGeneralInfo = (
                       />
                     </Box>
                   )}
-                  {stats?.last_update_time && (
+                  {stats?.lastModificationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
