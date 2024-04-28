@@ -12,7 +12,6 @@ from baseinfo.views import importassessmentkitviews
 
 admin.autodiscover()
 
-
 urlpatterns = [
     path(r'ht/', include('health_check.urls')),
     path("admin/", admin.site.urls),
@@ -22,12 +21,14 @@ urlpatterns = [
     path('api/internal/', include('baseinfo.url.url_internal')),
     path('api/v1/assessment-kits/', include('baseinfo.url.url_assessment_kit_v1')),
     path('api/v2/assessment-kits/', include('baseinfo.url.url_assessment_kit_v2')),
-    path('api/v1/assessments/', include('assessment.url.url_v1')),
+    path('api/v1/assessments/', include('assessment.url.url_assessment_v1')),
+    path('api/v2/assessments/', include('assessment.url.url_assessment_v2')),
     path('api/v1/assessment-colors/', include('assessment.url.url_assessment_colors')),
     path('api/v1/evidences/', include('assessment.url.url_evidences')),
     path('api/v1/path-info/', include('assessment.url.url_path_info')),
     path('api/v1/confidence-levels/', include('assessment.url.confidence-levels-url')),
     path('api/v1/expert-groups/', include('baseinfo.url.expert_group_url')),
+    path('api/v1/spaces/', include('account.url.url_space_v1')),
 ]
 
 if settings.PRODUCTION_STATE == False:
@@ -43,4 +44,3 @@ if settings.PRODUCTION_STATE == False:
     urlpatterns.append(
         path('swagger/', login_required(schema_view.with_ui('swagger', cache_timeout=0), login_url="/admin/login/"),
              name='schema-swagger-ui'))
-
