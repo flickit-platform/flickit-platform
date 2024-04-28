@@ -101,7 +101,7 @@ export const createService = (
     ) {
       const { spaceId, email } = args ?? {};
       return axios.post(
-        `/authinfo/spaces/adduser/${spaceId}/`,
+        `/api/v1/spaces/${spaceId}/members/`,
         {
           email,
         },
