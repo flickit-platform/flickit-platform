@@ -142,7 +142,7 @@ const AssessmentKitSectionGeneralInfo = (
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
                     current_user_is_coordinator={
-                      info?.current_user_is_coordinator
+                      info?.editable
                     }
                   />
                   <OnHoverInput
@@ -152,23 +152,23 @@ const AssessmentKitSectionGeneralInfo = (
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
                     current_user_is_coordinator={
-                      info?.current_user_is_coordinator
+                      info?.editable
                     }
                   />
                   <OnHoverStatus
-                    data={info?.is_active}
+                    data={info?.published}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     current_user_is_coordinator={
-                      info?.current_user_is_coordinator
+                      info?.editable
                     }
                   />
                   <OnHoverVisibilityStatus
-                    data={info?.is_private}
+                    data={info?.isPrivate}
                     title={<Trans i18nKey="visibility" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     current_user_is_coordinator={
-                      info?.current_user_is_coordinator
+                      info?.editable
                     }
                   />
                   <Box
@@ -212,7 +212,7 @@ const AssessmentKitSectionGeneralInfo = (
                     >
                       <Trans i18nKey="tags" />
                     </Typography>
-                    {info?.current_user_is_coordinator && show ? (
+                    {info?.editable && show ? (
                       <FormProviderWithForm formMethods={formMethods}>
                         <Box
                           sx={{
@@ -290,7 +290,7 @@ const AssessmentKitSectionGeneralInfo = (
                         }}
                         onClick={() => setShow(!show)}
                         onMouseOver={() =>
-                          handleMouseOver(info?.current_user_is_coordinator)
+                          handleMouseOver(info?.editable)
                         }
                         onMouseOut={handleMouseOut}
                       >
@@ -338,7 +338,7 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     current_user_is_coordinator={
-                      info?.current_user_is_coordinator
+                      info?.editable
                     }
                   />
                 </Box>
