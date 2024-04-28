@@ -51,6 +51,14 @@ def get_assessment_kit_details_question(request, assessment_kit_id, question_id)
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
+def get_assessment_kit_details_maturity_levels_as_attribute(request, assessment_kit_id, attribute_id,
+                                                            maturity_level_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/details/attributes/{attribute_id}/maturity-levels/{maturity_level_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
 def update_assessment_kit(request, assessment_kit_id):
     response = requests.patch(
         ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}',
