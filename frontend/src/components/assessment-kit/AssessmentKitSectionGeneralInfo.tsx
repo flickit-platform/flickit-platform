@@ -122,7 +122,7 @@ const AssessmentKitSectionGeneralInfo = (
           />
         }
         render={([info = {}, stats = {}]) => {
-          setExpertGroup(stats?.expert_group);
+          setExpertGroup(stats?.expertGroup);
           setAssessmentKitTitle(info?.title);
           return (
             <Grid container spacing={4}>
@@ -352,12 +352,12 @@ const AssessmentKitSectionGeneralInfo = (
                     background: "white",
                   }}
                 >
-                  {stats?.creation_time && (
+                  {stats?.creationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.creation_time),
+                          item: formatDate(stats?.creationTime),
                           title: t("creationDate"),
                         }}
                       />
@@ -368,7 +368,7 @@ const AssessmentKitSectionGeneralInfo = (
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.last_update_time),
+                          item: formatDate(stats?.lastModificationTime),
                           title: t("lastUpdated"),
                         }}
                       />
@@ -389,7 +389,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questionnaires_count,
+                        item: stats?.questionnairesCount,
                         title: t("questionnairesCount"),
                       }}
                     />
@@ -398,7 +398,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.attributes_count,
+                        item: stats?.attributesCount,
                         title: t("attributesCount"),
                       }}
                     />
@@ -407,7 +407,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questions_count,
+                        item: stats?.questionsCount,
                         title: t("totalQuestionsCount"),
                       }}
                     />
@@ -416,7 +416,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.maturity_levels_count,
+                        item: stats?.maturityLevelsCount,
                         title: t("maturitylevels"),
                       }}
                     />
@@ -426,13 +426,13 @@ const AssessmentKitSectionGeneralInfo = (
                     <Box sx={{ display: "flex" }} mr={4}>
                       <FavoriteRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.likes_count}
+                        {stats?.likes}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <ShoppingCartRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.assessments_count}
+                        {stats?.assessmentCounts}
                       </Typography>
                     </Box>
                   </Box>
