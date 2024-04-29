@@ -32,7 +32,7 @@ import { keyframes } from "@emotion/react";
 import { Link } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
-import {AssessmentKitInfo, AssessmentKitStats} from "@types";
+import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
 
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
