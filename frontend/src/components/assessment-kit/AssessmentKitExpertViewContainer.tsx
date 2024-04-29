@@ -489,7 +489,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     sx={{ ml: 2 }}
                     fontWeight="bold"
                   >
-                    {questionnaireDetails?.questions_count}
+                    {questionnaireDetails?.questionsCount}
                   </Typography>
                 </Box>
               </Grid>
@@ -507,7 +507,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                   <Typography variant="body2" fontFamily="Roboto">
                     <Trans i18nKey="relatedSubjects" />:
                   </Typography>
-                  {questionnaireDetails?.related_subject.map(
+                  {questionnaireDetails?.relatedSubject.map(
                     (subject: string, index: number) => (
                       <Typography
                         variant="body2"
@@ -1382,7 +1382,7 @@ const QuestionnairesQuestionList = (props: any) => {
                 variant="body2"
               >
                 {index + 1}.{question.title}
-                {question.may_not_be_applicable && (
+                {question.mayNotBeApplicable && (
                   <Box
                     sx={{
                       display: "flex",
