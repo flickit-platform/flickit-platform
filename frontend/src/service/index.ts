@@ -593,7 +593,7 @@ export const createService = (
     ) {
       const { assessmentKitId } = args ?? {};
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/stats/`,
+        `/api/v2/assessment-kits/${assessmentKitId}/stats/`,
         config
       );
     },
