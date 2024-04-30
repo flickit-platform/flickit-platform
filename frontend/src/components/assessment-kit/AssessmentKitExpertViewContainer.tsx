@@ -193,7 +193,7 @@ const AssessmentKitSectionsTabs = (props: { details: any }) => {
             value="maturityLevels"
             sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
           >
-            <MaturityLevelsDetails maturity_levels={details?.maturity_levels} />
+            <MaturityLevelsDetails maturity_levels={details?.maturityLevels} />
           </TabPanel>
         </TabContext>
       )}
