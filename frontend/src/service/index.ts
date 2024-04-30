@@ -1008,7 +1008,7 @@ export const createService = (
       const { assessmentKitId, attributeId, maturityLevelId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/maturity-levels/${maturityLevelId}/`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/maturity-levels/${maturityLevelId}/`,
         {
           ...(config ?? {}),
         }
