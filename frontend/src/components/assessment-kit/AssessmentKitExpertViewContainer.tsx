@@ -1167,7 +1167,7 @@ const SubjectQuestionList = (props: any) => {
                 variant="body2"
               >
                 {index + 1}.{question.title}
-                {question.may_not_be_applicable && (
+                {question.mayNotBeApplicable && (
                   <Box
                     sx={{
                       display: "flex",
@@ -1220,6 +1220,24 @@ const SubjectQuestionList = (props: any) => {
                     values={{ weight: question.weight }}
                   />
                 </Box>
+                {question.advisable && (
+                    <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "8px",
+                          background: "#1CC2C4",
+                          color: "#fff",
+                          fontSize: "12px",
+                          px: "12px",
+                          mx: "4px",
+                          height: "24px",
+                        }}
+                    >
+                      <Trans i18nKey="Advisable" />
+                    </Box>
+                )}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -1256,7 +1274,7 @@ const SubjectQuestionList = (props: any) => {
                     <Trans i18nKey="value" />
                   </Typography>
                 </Box>
-                {question.option.map((item: any) => (
+                {question.answerOptions.map((item: any) => (
                   <Box
                     sx={{
                       display: "flex",
