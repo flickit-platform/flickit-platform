@@ -600,14 +600,14 @@ const AssessmentKitQuestionsList = (props: {
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     setSelectedTabIndex(
-      attributesDetails?.questions_on_levels.findIndex(
+      attributesDetails?.maturityLevels.findIndex(
         (obj: any) => obj.id === newValue
       )
     );
   };
   const colorPallet = getMaturityLevelColors(
-    attributesDetails?.questions_on_levels
-      ? attributesDetails?.questions_on_levels.length
+    attributesDetails?.maturityLevels
+      ? attributesDetails?.maturityLevels.length
       : 5
   );
   useEffect(() => {
@@ -636,7 +636,7 @@ const AssessmentKitQuestionsList = (props: {
             sx={{ ml: 2 }}
             fontWeight="bold"
           >
-            {attributesDetails?.questions_count}
+            {attributesDetails?.questionCount}
           </Typography>
         </Box>
       </Grid>
@@ -700,7 +700,7 @@ const AssessmentKitQuestionsList = (props: {
                 },
               }}
             >
-              {attributesDetails?.questions_on_levels.map(
+              {attributesDetails?.maturityLevels.map(
                 (item: any, index: number) => {
                   return (
                     <Tab
@@ -718,7 +718,7 @@ const AssessmentKitQuestionsList = (props: {
                       }}
                       label={
                         <Box sx={{ ...styles.centerV }}>
-                          {item.title}|{item.questions_count}
+                          {item.title}|{item.questionCount}
                         </Box>
                       }
                       value={item.id}
@@ -732,7 +732,7 @@ const AssessmentKitQuestionsList = (props: {
             {maturityLevelQuestions && (
               <SubjectQuestionList
                 questions={maturityLevelQuestions?.questions}
-                questions_count={maturityLevelQuestions?.questions_count}
+                questions_count={maturityLevelQuestions?.questionsCount}
               />
             )}
           </TabPanel>
