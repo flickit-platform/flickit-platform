@@ -465,7 +465,7 @@ interface AssessmentKitDetailsMaturityLevel {
   competences: LevelCompetence[]
 }
 
-export interface AssessmentKitInfoType {
+export interface AssessmentKitInfoType  {
   id : number,
   title: string,
   summary: string,
@@ -474,7 +474,7 @@ export interface AssessmentKitInfoType {
   price: number,
   about: string,
   tags: [],
-  editable: boolean,
+  editable?: boolean ,
 }
 export interface AssessmentKitStatsType {
   creationTime: string,
@@ -484,7 +484,7 @@ export interface AssessmentKitStatsType {
   questionsCount: number,
   maturityLevelsCount: number,
   likes: number,
-  assessmentCount: number,
+  assessmentCounts: number,
   subjects: AssessmentKitStatsSubjects[],
   expertGroup: AssessmentKitStatsExpertGroup[]
 }
