@@ -931,7 +931,7 @@ export const createService = (
     ) {
       const { assessmentKitId } = args ?? {};
 
-      return axios.get(`/api/v1/assessment-kits/${assessmentKitId}/details/`, {
+      return axios.get(`/api/v2/assessment-kits/${assessmentKitId}/details/`, {
         ...(config ?? {}),
       });
     },
