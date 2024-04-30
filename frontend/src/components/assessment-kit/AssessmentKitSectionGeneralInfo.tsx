@@ -32,6 +32,9 @@ import firstCharDetector from "@/utils/firstCharDetector";
 import { keyframes } from "@emotion/react";
 import { Link } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+
+import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
+
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -126,9 +129,32 @@ const AssessmentKitSectionGeneralInfo = (
             sx={{ mt: 1, borderRadius: 2 }}
           />
         }
-        render={([info = {}, stats = {}]) => {
-          setExpertGroup(stats?.expertGroup);
-          setAssessmentKitTitle(info?.title);
+        render={([info, stats]) => {
+          const {
+            id,
+            title,
+            summary,
+            published,
+            isPrivate,
+            price,
+            about,
+            tags,
+            editable,
+          } = info as AssessmentKitInfoType;
+          const {
+            creationTime,
+            lastModificationTime,
+            questionnairesCount,
+            attributesCount,
+            questionsCount,
+            maturityLevelsCount,
+            likes,
+            assessmentCounts,
+            subjects,
+            expertGroup,
+          } = stats as AssessmentKitStatsType;
+          setExpertGroup(expertGroup);
+          setAssessmentKitTitle(title);
           return (
             <Grid container spacing={4}>
               <Grid item xs={12} md={7}>
@@ -142,31 +168,31 @@ const AssessmentKitSectionGeneralInfo = (
                 >
                   <OnHoverInput
                     formMethods={formMethods}
-                    data={info?.title}
+                    data={title}
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
-                    editable={info?.editable}
+                    editable={editable}
                   />
                   <OnHoverInput
                     formMethods={formMethods}
-                    data={info?.summary}
+                    data={summary}
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
-                    editable={info?.editable}
+                    editable={editable}
                   />
                   <OnHoverStatus
-                    data={info?.published}
+                    data={published}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={info?.editable}
+                    editable={editable}
                   />
                   <OnHoverVisibilityStatus
-                    data={info?.isPrivate}
+                    data={isPrivate}
                     title={<Trans i18nKey="visibility" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={info?.editable}
+                    editable={editable}
                   />
                   <Box
                     sx={{
@@ -188,7 +214,7 @@ const AssessmentKitSectionGeneralInfo = (
                     </Typography>
                   </Box>
                   {/* <OnHoverAutocompleteAsyncField
-                    data={info?.tags}
+                    data={tags}
                     title={<Trans i18nKey="tags" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     editable ={editable }
@@ -209,7 +235,7 @@ const AssessmentKitSectionGeneralInfo = (
                     >
                       <Trans i18nKey="tags" />
                     </Typography>
-                    {info?.editable && show ? (
+                    {editable && show ? (
                       <FormProviderWithForm formMethods={formMethods}>
                         <Box
                           sx={{
@@ -226,7 +252,7 @@ const AssessmentKitSectionGeneralInfo = (
                             })}
                             name="tags"
                             multiple={true}
-                            defaultValue={info?.tags}
+                            defaultValue={tags}
                             searchOnType={false}
                             required={true}
                             label={""}
@@ -286,11 +312,11 @@ const AssessmentKitSectionGeneralInfo = (
                           "&:hover": { border: "1px solid #1976d299" },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={() => handleMouseOver(info?.editable)}
+                        onMouseOver={() => handleMouseOver(editable??false)}
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
-                          {info?.tags.map((tag: any, index: number) => {
+                          {tags.map((tag: any, index: number) => {
                             return (
                               <Box
                                 sx={{
@@ -329,10 +355,10 @@ const AssessmentKitSectionGeneralInfo = (
                   </Box>
 
                   <OnHoverRichEditor
-                    data={info?.about}
+                    data={about}
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={info?.editable}
+                    editable={editable}
                   />
                 </Box>
               </Grid>
@@ -345,23 +371,23 @@ const AssessmentKitSectionGeneralInfo = (
                     background: "white",
                   }}
                 >
-                  {stats?.creationTime && (
+                  {creationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.creationTime),
+                          item: formatDate(creationTime),
                           title: t("creationDate"),
                         }}
                       />
                     </Box>
                   )}
-                  {stats?.lastModificationTime && (
+                  {lastModificationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.lastModificationTime),
+                          item: formatDate(lastModificationTime),
                           title: t("lastUpdated"),
                         }}
                       />
@@ -372,7 +398,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.subjects.map((sub: any) => sub?.title),
+                        item: subjects.map((sub: any) => sub?.title),
                         title: t("subjects"),
                         type: "array",
                       }}
@@ -382,7 +408,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questionnairesCount,
+                        item: questionnairesCount,
                         title: t("questionnairesCount"),
                       }}
                     />
@@ -391,7 +417,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.attributesCount,
+                        item: attributesCount,
                         title: t("attributesCount"),
                       }}
                     />
@@ -400,7 +426,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questionsCount,
+                        item: questionsCount,
                         title: t("totalQuestionsCount"),
                       }}
                     />
@@ -409,7 +435,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.maturityLevelsCount,
+                        item: maturityLevelsCount,
                         title: t("maturitylevels"),
                       }}
                     />
@@ -419,13 +445,13 @@ const AssessmentKitSectionGeneralInfo = (
                     <Box sx={{ display: "flex" }} mr={4}>
                       <FavoriteRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.likes}
+                        {likes}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <ShoppingCartRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.assessmentCounts}
+                        {assessmentCounts}
                       </Typography>
                     </Box>
                   </Box>

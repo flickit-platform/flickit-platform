@@ -445,3 +445,51 @@ export interface ICompareResultModel {
   overall_insights: ICompareResultCompareItems[];
   subjects: ICompareResultSubject[];
 }
+
+interface AssessmentKitStatsSubjects {
+  title: string
+}
+interface AssessmentKitStatsExpertGroup {
+  id: number,
+  title: string
+}
+
+type LevelCompetence = {
+ title: string; value: number; maturityLevelId: number
+}
+
+interface AssessmentKitDetailsMaturityLevel {
+  id: number,
+  title: string,
+  index: number,
+  competences: LevelCompetence[]
+}
+
+export interface AssessmentKitInfoType  {
+  id : number,
+  title: string,
+  summary: string,
+  published: boolean,
+  isPrivate: boolean,
+  price: number,
+  about: string,
+  tags: [],
+  editable?: boolean ,
+}
+export interface AssessmentKitStatsType {
+  creationTime: string,
+  lastModificationTime: string,
+  questionnairesCount: number,
+  attributesCount: number,
+  questionsCount: number,
+  maturityLevelsCount: number,
+  likes: number,
+  assessmentCounts: number,
+  subjects: AssessmentKitStatsSubjects[],
+  expertGroup: AssessmentKitStatsExpertGroup[]
+}
+export interface AssessmentKitDetailsType {
+  maturityLevel: AssessmentKitDetailsMaturityLevel,
+  subjects: { id: number, title: string, index: number}[]
+  questionnaires: { id: number, title: string, index: number}[]
+}

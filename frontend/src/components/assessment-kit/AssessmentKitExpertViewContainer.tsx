@@ -34,6 +34,7 @@ import { useForm } from "react-hook-form";
 import UploadField from "@common/fields/UploadField";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import setServerFieldErrors from "@utils/setServerFieldError";
+import {AssessmentKitDetailsType} from "@types";
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
@@ -41,13 +42,13 @@ const AssessmentKitExpertViewContainer = () => {
   const { userInfo } = useAuthContext();
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState<AssessmentKitDetailsType>();
   const [expertGroup, setExpertGroup] = useState<any>();
   const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
 
   const AssessmentKitDetails = async () => {
-    const data = await fetchAssessmentKitDetailsQuery.query();
+    const data : AssessmentKitDetailsType = await fetchAssessmentKitDetailsQuery.query();
     setDetails(data);
     setLoaded(true);
   };
