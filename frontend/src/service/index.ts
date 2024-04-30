@@ -101,7 +101,7 @@ export const createService = (
     ) {
       const { spaceId, email } = args ?? {};
       return axios.post(
-        `/api/v1/spaces/${spaceId}/members/`,
+        `/authinfo/spaces/adduser/${spaceId}/`,
         {
           email,
         },
@@ -783,7 +783,7 @@ export const createService = (
     ) {
       const { data = {}, id } = args ?? {};
 
-      return axios.post(`/authinfo/users/spaces/invite/${id}/`, data, {
+      return axios.post(`/api/v1/spaces/${id}/invite/`, data, {
         ...(config ?? {}),
       });
     },
