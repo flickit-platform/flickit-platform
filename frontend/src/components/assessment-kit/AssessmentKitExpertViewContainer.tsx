@@ -490,7 +490,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     sx={{ ml: 2 }}
                     fontWeight="bold"
                   >
-                    {questionnaireDetails?.questions_count}
+                    {questionnaireDetails?.questionsCount}
                   </Typography>
                 </Box>
               </Grid>
@@ -508,7 +508,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                   <Typography variant="body2" fontFamily="Roboto">
                     <Trans i18nKey="relatedSubjects" />:
                   </Typography>
-                  {questionnaireDetails?.related_subject.map(
+                  {questionnaireDetails?.relatedSubjects.map(
                     (subject: string, index: number) => (
                       <Typography
                         variant="body2"
@@ -601,14 +601,14 @@ const AssessmentKitQuestionsList = (props: {
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     setSelectedTabIndex(
-      attributesDetails?.questions_on_levels.findIndex(
+      attributesDetails?.maturityLevels.findIndex(
         (obj: any) => obj.id === newValue
       )
     );
   };
   const colorPallet = getMaturityLevelColors(
-    attributesDetails?.questions_on_levels
-      ? attributesDetails?.questions_on_levels.length
+    attributesDetails?.maturityLevels
+      ? attributesDetails?.maturityLevels.length
       : 5
   );
   useEffect(() => {
@@ -637,7 +637,7 @@ const AssessmentKitQuestionsList = (props: {
             sx={{ ml: 2 }}
             fontWeight="bold"
           >
-            {attributesDetails?.questions_count}
+            {attributesDetails?.questionCount}
           </Typography>
         </Box>
       </Grid>
@@ -701,7 +701,7 @@ const AssessmentKitQuestionsList = (props: {
                 },
               }}
             >
-              {attributesDetails?.questions_on_levels.map(
+              {attributesDetails?.maturityLevels.map(
                 (item: any, index: number) => {
                   return (
                     <Tab
@@ -719,7 +719,7 @@ const AssessmentKitQuestionsList = (props: {
                       }}
                       label={
                         <Box sx={{ ...styles.centerV }}>
-                          {item.title}|{item.questions_count}
+                          {item.title}|{item.questionCount}
                         </Box>
                       }
                       value={item.id}
@@ -733,7 +733,7 @@ const AssessmentKitQuestionsList = (props: {
             {maturityLevelQuestions && (
               <SubjectQuestionList
                 questions={maturityLevelQuestions?.questions}
-                questions_count={maturityLevelQuestions?.questions_count}
+                questions_count={maturityLevelQuestions?.questionsCount}
               />
             )}
           </TabPanel>
@@ -1168,7 +1168,7 @@ const SubjectQuestionList = (props: any) => {
                 variant="body2"
               >
                 {index + 1}.{question.title}
-                {question.may_not_be_applicable && (
+                {question.mayNotBeApplicable && (
                   <Box
                     sx={{
                       display: "flex",
@@ -1221,6 +1221,24 @@ const SubjectQuestionList = (props: any) => {
                     values={{ weight: question.weight }}
                   />
                 </Box>
+                {question.advisable && (
+                    <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "8px",
+                          background: "#1CC2C4",
+                          color: "#fff",
+                          fontSize: "12px",
+                          px: "12px",
+                          mx: "4px",
+                          height: "24px",
+                        }}
+                    >
+                      <Trans i18nKey="Advisable" />
+                    </Box>
+                )}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -1257,7 +1275,7 @@ const SubjectQuestionList = (props: any) => {
                     <Trans i18nKey="value" />
                   </Typography>
                 </Box>
-                {question.option.map((item: any) => (
+                {question.answerOptions.map((item: any) => (
                   <Box
                     sx={{
                       display: "flex",
@@ -1383,7 +1401,7 @@ const QuestionnairesQuestionList = (props: any) => {
                 variant="body2"
               >
                 {index + 1}.{question.title}
-                {question.may_not_be_applicable && (
+                {question.mayNotBeApplicable && (
                   <Box
                     sx={{
                       display: "flex",
@@ -1400,6 +1418,24 @@ const QuestionnairesQuestionList = (props: any) => {
                   >
                     <Trans i18nKey="na" />
                   </Box>
+                )}
+                {question.advisable && (
+                    <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "8px",
+                          background: "#1CC2C4",
+                          color: "#fff",
+                          fontSize: "12px",
+                          px: "12px",
+                          mx: "4px",
+                          height: "24px",
+                        }}
+                    >
+                      <Trans i18nKey="advisable" />
+                    </Box>
                 )}
               </Typography>
             </AccordionSummary>

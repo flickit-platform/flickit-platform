@@ -101,7 +101,7 @@ export const createService = (
     ) {
       const { spaceId, email } = args ?? {};
       return axios.post(
-        `/api/v1/spaces/${spaceId}/members/`,
+        `/authinfo/spaces/adduser/${spaceId}/`,
         {
           email,
         },
@@ -602,10 +602,11 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId, data } = args ?? {};
-      return axios.patch(`/api/v1/assessment-kits/${assessmentKitId}/`, {
+      return axios.patch(
+        `/api/v2/assessment-kits/${assessmentKitId}/`,
         data,
-        config,
-      });
+        config
+      );
     },
     fetchAssessmentKitTags(
       args: any,
@@ -783,7 +784,7 @@ export const createService = (
     ) {
       const { data = {}, id } = args ?? {};
 
-      return axios.post(`/authinfo/users/spaces/invite/${id}/`, data, {
+      return axios.post(`/api/v1/spaces/${id}/invite/`, data, {
         ...(config ?? {}),
       });
     },
@@ -954,7 +955,7 @@ export const createService = (
       const { assessmentKitId, attributeId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/`,
         {
           ...(config ?? {}),
         }
@@ -967,7 +968,7 @@ export const createService = (
       const { assessmentKitId, questionnaireId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/questionnaires/${questionnaireId}`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/questionnaires/${questionnaireId}`,
         {
           ...(config ?? {}),
         }
@@ -1007,7 +1008,7 @@ export const createService = (
       const { assessmentKitId, attributeId, maturityLevelId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/maturity-levels/${maturityLevelId}/`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/attributes/${attributeId}/maturity-levels/${maturityLevelId}/`,
         {
           ...(config ?? {}),
         }

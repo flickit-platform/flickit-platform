@@ -12,6 +12,7 @@ import { useParams } from "react-router";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import toastError from "@utils/toastError";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import { useForm } from "react-hook-form";
@@ -95,6 +96,7 @@ const AssessmentKitSectionGeneralInfo = (
   const handleCancel = () => {
     setShow(false);
   };
+
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     try {
@@ -105,10 +107,13 @@ const AssessmentKitSectionGeneralInfo = (
         },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        fetchAssessmentKitInfoQuery.query();
-      }
-    } catch {}
+
+      await fetchAssessmentKitInfoQuery.query();
+      await handleCancel()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err)
+    }
   };
   return (
     <Box>
@@ -640,7 +645,7 @@ const OnHoverStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_active: data ? false : true },
+        data: { published: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -746,7 +751,7 @@ const OnHoverVisibilityStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_private: data ? false : true },
+        data: { isPrivate: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -890,9 +895,8 @@ const OnHoverRichEditor = (props: any) => {
         { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        infoQuery();
-      }
+      await infoQuery();
+      await setShow(false);
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
