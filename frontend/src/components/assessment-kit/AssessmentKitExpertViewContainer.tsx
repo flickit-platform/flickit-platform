@@ -312,7 +312,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                       >
-                        {assessmentKitSubjectDetails?.questions_count}
+                        {assessmentKitSubjectDetails?.questionsCount}
                       </Typography>
                     </Box>
                   </Grid>
