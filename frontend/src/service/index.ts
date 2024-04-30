@@ -602,7 +602,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentKitId, data } = args ?? {};
-      return axios.patch(`/api/v1/assessment-kits/${assessmentKitId}/`, {
+      return axios.patch(`/api/v2/assessment-kits/${assessmentKitId}/`, {
         data,
         config,
       });
