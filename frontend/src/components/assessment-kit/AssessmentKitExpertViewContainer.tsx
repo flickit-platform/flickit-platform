@@ -1400,6 +1400,24 @@ const QuestionnairesQuestionList = (props: any) => {
                     <Trans i18nKey="na" />
                   </Box>
                 )}
+                {question.advisable && (
+                    <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "8px",
+                          background: "#1CC2C4",
+                          color: "#fff",
+                          fontSize: "12px",
+                          px: "12px",
+                          mx: "4px",
+                          height: "24px",
+                        }}
+                    >
+                      <Trans i18nKey="advisable" />
+                    </Box>
+                )}
               </Typography>
             </AccordionSummary>
             {questionsDetails && (
