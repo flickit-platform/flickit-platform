@@ -12,6 +12,7 @@ import { useParams } from "react-router";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import toastError from "@utils/toastError";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import { useForm } from "react-hook-form";
@@ -82,8 +83,8 @@ const AssessmentKitSectionGeneralInfo = (
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = (editable : boolean) => {
-      editable && setIsHovering(true);
+  const handleMouseOver = (editable: boolean) => {
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
@@ -92,6 +93,7 @@ const AssessmentKitSectionGeneralInfo = (
   const handleCancel = () => {
     setShow(false);
   };
+
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     try {
@@ -102,10 +104,13 @@ const AssessmentKitSectionGeneralInfo = (
         },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        fetchAssessmentKitInfoQuery.query();
-      }
-    } catch {}
+
+      await fetchAssessmentKitInfoQuery.query();
+      await handleCancel()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err)
+    }
   };
   return (
     <Box>
@@ -141,9 +146,7 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
-                    editable ={
-                      info?.editable
-                    }
+                    editable={info?.editable}
                   />
                   <OnHoverInput
                     formMethods={formMethods}
@@ -151,25 +154,19 @@ const AssessmentKitSectionGeneralInfo = (
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
-                    editable ={
-                      info?.editable
-                    }
+                    editable={info?.editable}
                   />
                   <OnHoverStatus
                     data={info?.published}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable ={
-                      info?.editable
-                    }
+                    editable={info?.editable}
                   />
                   <OnHoverVisibilityStatus
                     data={info?.isPrivate}
                     title={<Trans i18nKey="visibility" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable ={
-                      info?.editable
-                    }
+                    editable={info?.editable}
                   />
                   <Box
                     sx={{
@@ -289,9 +286,7 @@ const AssessmentKitSectionGeneralInfo = (
                           "&:hover": { border: "1px solid #1976d299" },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={() =>
-                          handleMouseOver(info?.editable)
-                        }
+                        onMouseOver={() => handleMouseOver(info?.editable)}
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
@@ -337,9 +332,7 @@ const AssessmentKitSectionGeneralInfo = (
                     data={info?.about}
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable ={
-                      info?.editable
-                    }
+                    editable={info?.editable}
                   />
                 </Box>
               </Grid>
@@ -449,20 +442,13 @@ const OnHoverInput = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-      editable && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const {
-    data,
-    title,
-    editable,
-    infoQuery,
-    type,
-    formMethods,
-  } = props;
+  const { data, title, editable, infoQuery, type, formMethods } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const [inputData, setInputData] = useState<string>(data);
@@ -633,7 +619,7 @@ const OnHoverStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_active: data ? false : true },
+        data: { published: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -739,7 +725,7 @@ const OnHoverVisibilityStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_private: data ? false : true },
+        data: { isPrivate: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -857,7 +843,7 @@ const OnHoverRichEditor = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-      editable && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
@@ -883,9 +869,8 @@ const OnHoverRichEditor = (props: any) => {
         { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        infoQuery();
-      }
+      await infoQuery();
+      await setShow(false);
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
@@ -1010,7 +995,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-      editable && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
