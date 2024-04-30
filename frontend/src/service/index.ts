@@ -967,7 +967,7 @@ export const createService = (
       const { assessmentKitId, questionnaireId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/questionnaires/${questionnaireId}`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/questionnaires/${questionnaireId}`,
         {
           ...(config ?? {}),
         }
