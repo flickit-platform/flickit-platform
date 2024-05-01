@@ -7,15 +7,23 @@ import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getMaturityLevelColors, styles } from "@styles";
-import { ISubjectInfo, IMaturityLevel } from "@types";
+import { ISubjectInfo, IMaturityLevel, TId } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useEffect, useState } from "react";
+import toastError from "@utils/toastError";
+import { ICustomError } from "@utils/CustomError";
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
+}
+interface IAssessmentSubjectProgress {
+  id: TId;
+  title: string;
+  questionCount: number;
+  answerCount: number;
 }
 
 export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
@@ -24,7 +32,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
-  const subjectProgressQueryData = useQuery<any>({
+  const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
       service.fetchSubjectProgress(args, config),
     runOnMount: false,
@@ -33,18 +41,21 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
     try {
       setInProgress(true);
       const data = await subjectProgressQueryData.query();
-      const total_progress =
-        ((data?.answers_count ?? 0) / (data?.question_count ?? 1)) * 100;
+      const { answerCount, questionCount } = data;
+      const total_progress = ((answerCount ?? 0) / (questionCount ?? 1)) * 100;
       setProgress(total_progress);
       setInProgress(false);
-    } catch (e) {}
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err.response.data.message);
+    }
   };
   useEffect(() => {
     fetchProgress();
   }, []);
-  function hexToRGBA(hex:string, alpha:number) {
+  function hexToRGBA(hex: string, alpha: number) {
     // Remove the '#' if it's there
-    hex = hex.replace(/^#/, '');
+    hex = hex.replace(/^#/, "");
 
     // Parse the hex value to separate R, G, and B values
     let bigint = parseInt(hex, 16);
@@ -54,7 +65,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
 
     // Return the RGBA value
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+  }
   return (
     <Paper
       sx={{
@@ -100,10 +111,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
           description={description}
         />
 
-        <SubjectProgress
-          inProgress={inProgress}
-          progress={progress}
-        />
+        <SubjectProgress inProgress={inProgress} progress={progress} />
 
         <SubjectStatus title={title} maturity_level={maturity_level} />
         <Box mt="auto">
@@ -208,7 +216,7 @@ const ReadMoreAboutSubject = (
           transform: "translateX(-50%)",
           width: "calc(100% - 25px)",
           textAlign: "center",
-          color:"#F4F4F8"
+          color: "#F4F4F8",
         }}
       >
         <Typography>{description}</Typography>
