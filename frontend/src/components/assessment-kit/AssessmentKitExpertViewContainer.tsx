@@ -1534,7 +1534,7 @@ const QuestionnairesQuestionList = (props: any) => {
                     </Box>
                     <Divider sx={{ background: "#7A589B" }} />
                     <Box>
-                      {questionsDetails?.attribute_impacts.map(
+                      {questionsDetails?.attributeImpacts.map(
                         (attributes: any, index: number) => {
                           return (
                             <Box
@@ -1553,7 +1553,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                 fontFamily="Roboto"
                                 fontWeight={"bold"}
                               >
-                                {attributes.attribute.title}
+                                {attributes.title}
                               </Typography>
                               <Box
                                 sx={{
@@ -1564,7 +1564,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                   width: "20%",
                                 }}
                               >
-                                {attributes.attribute?.affected_levels.map(
+                                {attributes?.affectedLevels.map(
                                   (affectedLevel: any) => {
                                     return (
                                       <Typography
@@ -1573,8 +1573,8 @@ const QuestionnairesQuestionList = (props: any) => {
                                         fontWeight={"bold"}
                                         sx={{ py: 1 }}
                                       >
-                                        {affectedLevel.maturity_level.title} |{" "}
-                                        {affectedLevel.maturity_level.index}
+                                        {affectedLevel.maturityLevel.title} |{" "}
+                                        {affectedLevel.maturityLevel.index}
                                       </Typography>
                                     );
                                   }
@@ -1589,7 +1589,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                   width: "10%",
                                 }}
                               >
-                                {attributes.attribute?.affected_levels.map(
+                                {attributes?.affectedLevels.map(
                                   (affectedLevel: any) => {
                                     return (
                                       <Typography
@@ -1613,7 +1613,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                   width: "30%",
                                 }}
                               >
-                                {attributes.attribute?.affected_levels.map(
+                                {attributes?.affectedLevels.map(
                                   (affectedLevel: any) => {
                                     return (
                                       <Box
@@ -1623,7 +1623,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                           width: "100%",
                                         }}
                                       >
-                                        {affectedLevel.option_values.map(
+                                        {affectedLevel.optionValues.map(
                                           (option: any) => {
                                             return (
                                               <Typography
