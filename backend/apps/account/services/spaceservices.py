@@ -88,7 +88,7 @@ def leave_user_space(space_id, current_user):
         space = Space.objects.get(id=space_id)
         if space.owner == current_user:
             return ActionResult(success=False, message="Not allowed to perform this action. ")
-        space_user_access.delete()
+        space.users.remove(current_user)
         return ActionResult(success=True, message='Leaving from the space is done successfully.')
     except UserAccess.DoesNotExist:
         return ActionResult(success=False, message='There is no such user or space')

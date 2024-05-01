@@ -91,7 +91,7 @@ class SpaceInvitee(models.Model):
 
 
 class UserAccess(models.Model):
-    space = models.ForeignKey('Space', on_delete=models.CASCADE)
+    space = models.ForeignKey('Space', on_delete=models.CASCADE, primary_key=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     created_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='created_space_user_access',
                                    db_column="created_by")
