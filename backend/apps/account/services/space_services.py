@@ -2,6 +2,14 @@ import requests
 from assessmentplatform.settings import ASSESSMENT_URL
 
 
+def get_list_members_in_space(request, space_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}/members',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
 def add_member_in_space(request, space_id):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}/members',
