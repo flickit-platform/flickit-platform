@@ -942,7 +942,7 @@ export const createService = (
       const { assessmentKitId, subjectId } = args ?? {};
 
       return axios.get(
-        `/api/v1/assessment-kits/${assessmentKitId}/details/subjects/${subjectId}/`,
+        `/api/v2/assessment-kits/${assessmentKitId}/details/subjects/${subjectId}/`,
         {
           ...(config ?? {}),
         }
