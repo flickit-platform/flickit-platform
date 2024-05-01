@@ -241,7 +241,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { assessmentId } = args ?? {};
-      return axios.get(`/api/v1/assessments/${assessmentId}/questionnaires/`, {
+      return axios.get(`/api/v2/assessments/${assessmentId}/questionnaires/`, {
         ...config,
       });
     },

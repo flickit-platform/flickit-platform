@@ -50,7 +50,7 @@ export interface IQuestionInfo {
   hint?: string;
   may_not_be_applicable?: boolean;
   is_not_applicable?: boolean;
-  confidence_level?:any;
+  confidence_level?: any;
 }
 export type TQuestionsInfo = {
   total_number_of_questions: number;
@@ -297,7 +297,7 @@ export interface IAssessment {
   // code: string;
   color: IColor;
   is_calculate_valid: boolean;
-  is_confidence_valid?:boolean;
+  is_confidence_valid?: boolean;
   assessment_results: string[];
   assessment_kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
@@ -331,14 +331,13 @@ export interface IQuestionnaire {
   title: string;
   last_updated?: string;
 }
-
 export interface IQuestionnairesInfo {
-  answers_count: number;
+  answerCount: number;
   id: TId;
-  questions_count: number;
+  questionCount: number;
   progress: number;
   last_updated?: string;
-  current_question_index: number;
+  nextQuestion: number;
   title: string;
   subjects: { id: TId; title: string }[];
 }
@@ -447,49 +446,51 @@ export interface ICompareResultModel {
 }
 
 interface AssessmentKitStatsSubjects {
-  title: string
+  title: string;
 }
 interface AssessmentKitStatsExpertGroup {
-  id: number,
-  title: string
+  id: number;
+  title: string;
 }
 
 type LevelCompetence = {
- title: string; value: number; maturityLevelId: number
-}
+  title: string;
+  value: number;
+  maturityLevelId: number;
+};
 
 interface AssessmentKitDetailsMaturityLevel {
-  id: number,
-  title: string,
-  index: number,
-  competences: LevelCompetence[]
+  id: number;
+  title: string;
+  index: number;
+  competences: LevelCompetence[];
 }
 
-export interface AssessmentKitInfoType  {
-  id : number,
-  title: string,
-  summary: string,
-  published: boolean,
-  isPrivate: boolean,
-  price: number,
-  about: string,
-  tags: [],
-  editable?: boolean ,
+export interface AssessmentKitInfoType {
+  id: number;
+  title: string;
+  summary: string;
+  published: boolean;
+  isPrivate: boolean;
+  price: number;
+  about: string;
+  tags: [];
+  editable?: boolean;
 }
 export interface AssessmentKitStatsType {
-  creationTime: string,
-  lastModificationTime: string,
-  questionnairesCount: number,
-  attributesCount: number,
-  questionsCount: number,
-  maturityLevelsCount: number,
-  likes: number,
-  assessmentCounts: number,
-  subjects: AssessmentKitStatsSubjects[],
-  expertGroup: AssessmentKitStatsExpertGroup[]
+  creationTime: string;
+  lastModificationTime: string;
+  questionnairesCount: number;
+  attributesCount: number;
+  questionsCount: number;
+  maturityLevelsCount: number;
+  likes: number;
+  assessmentCounts: number;
+  subjects: AssessmentKitStatsSubjects[];
+  expertGroup: AssessmentKitStatsExpertGroup[];
 }
 export interface AssessmentKitDetailsType {
-  maturityLevel: AssessmentKitDetailsMaturityLevel,
-  subjects: { id: number, title: string, index: number}[]
-  questionnaires: { id: number, title: string, index: number}[]
+  maturityLevel: AssessmentKitDetailsMaturityLevel;
+  subjects: { id: number; title: string; index: number }[];
+  questionnaires: { id: number; title: string; index: number }[];
 }
