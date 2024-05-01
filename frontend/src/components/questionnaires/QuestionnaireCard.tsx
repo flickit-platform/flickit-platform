@@ -24,8 +24,8 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const {
     id,
     title,
-    questions_count: number_of_questions,
-    answers_count: number_of_answers,
+    questionCount: number_of_questions,
+    answerCount: number_of_answers,
     progress = 0,
     subjects,
 

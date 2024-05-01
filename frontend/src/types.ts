@@ -331,11 +331,10 @@ export interface IQuestionnaire {
   title: string;
   last_updated?: string;
 }
-
 export interface IQuestionnairesInfo {
-  answers_count: number;
+  answerCount: number;
   id: TId;
-  questions_count: number;
+  questionCount: number;
   progress: number;
   last_updated?: string;
   current_question_index: number;
