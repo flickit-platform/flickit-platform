@@ -31,7 +31,7 @@ import getUserName from "@utils/getUserName";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
-import stringAvatar from "@utils/makeShortName";
+import stringAvatar from "@utils/stringAvatar";
 
 export const SpaceMembers = (props: any) => {
   const { owner } = props;
