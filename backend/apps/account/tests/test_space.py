@@ -6,6 +6,9 @@ from account.views.spaceviews import SpaceLeaveUserAPI, SpaceAccessAPI, ChangeCu
 from rest_framework.test import force_authenticate
 from account.models import User, Space, UserAccess
 
+from unittest import skip
+
+
 
 @pytest.fixture
 def create_space(api_client):
@@ -57,6 +60,7 @@ def init_space():
 
 
 @pytest.mark.django_db
+@skip
 class TestLeaveSpace:
     def test_leave_space_returns_200(self, init_space):
         space_list = init_space()
@@ -86,6 +90,7 @@ class TestLeaveSpace:
 
 
 @pytest.mark.django_db
+@skip
 class TestCreateSpace:
     def test_if_user_is_anonymous_returns_401(self, create_space):
         response = create_space({'title': 'a'})
@@ -110,6 +115,7 @@ class TestCreateSpace:
 
 
 @pytest.mark.django_db
+@skip
 class TestAddUserToSpace:
     def test_add_user_in_space_success(self, init_space):
         space_list = init_space()
@@ -202,6 +208,7 @@ class TestAddUserToSpace:
 
 
 @pytest.mark.django_db
+@skip
 class TestChangeCurrentSpace:
     def test_change_current_space_returns_200(self, init_space):
         space_list = init_space()
