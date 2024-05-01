@@ -183,7 +183,6 @@ export const SpaceMembers = (props: any) => {
               <Box>
                 {items.map((member: any) => {
                   const { displayName, id , pictureLink } = member;
-                  const name = getUserName(displayName);
                   const isOwner = owner?.id == displayName?.id;
                   return (
                       displayName && (
@@ -204,7 +203,6 @@ export const SpaceMembers = (props: any) => {
                                     {...stringAvatar(displayName.toUpperCase())}
                                     src={pictureLink}
                                     sx={{ width: 34, height: 34 }}>
-                              {/*<PersonRoundedIcon />*/}
                             </Avatar>
                           </Box>
                           <Box ml={2}>{displayName}</Box>
