@@ -127,7 +127,7 @@ export const createService = (
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/authinfo/spaces/${spaceId}/useraccess/`, config);
+      return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
     },
     fetchPathInfo(
       {

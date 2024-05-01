@@ -31,6 +31,7 @@ import getUserName from "@utils/getUserName";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
+import stringAvatar from "@utils/makeShortName";
 
 export const SpaceMembers = (props: any) => {
   const { owner } = props;
@@ -176,16 +177,16 @@ export const SpaceMembers = (props: any) => {
             );
           }}
           render={(data) => {
-            const { results } = data;
-            const invitees = results.filter((item: any) => !item.user);
+            const { items } = data;
+            const invitees = items.filter((item: any) => !item.displayName);
             return (
               <Box>
-                {results.map((member: any) => {
-                  const { user, id } = member;
-                  const name = getUserName(user);
-                  const isOwner = owner?.id == user?.id;
+                {items.map((member: any) => {
+                  const { displayName, id , pictureLink } = member;
+                  const name = getUserName(displayName);
+                  const isOwner = owner?.id == displayName?.id;
                   return (
-                    user && (
+                      displayName && (
                       <Box
                         key={id}
                         sx={{
@@ -199,11 +200,14 @@ export const SpaceMembers = (props: any) => {
                       >
                         <Box sx={{ ...styles.centerV }}>
                           <Box>
-                            <Avatar sx={{ width: 34, height: 34 }}>
-                              <PersonRoundedIcon />
+                            <Avatar
+                                    {...stringAvatar(displayName.toUpperCase())}
+                                    src={pictureLink}
+                                    sx={{ width: 34, height: 34 }}>
+                              {/*<PersonRoundedIcon />*/}
                             </Avatar>
                           </Box>
-                          <Box ml={2}>{name}</Box>
+                          <Box ml={2}>{displayName}</Box>
                         </Box>
                         <Box ml="auto" sx={{ ...styles.centerV }}>
                           {isOwner && (
@@ -409,11 +413,11 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
-        !isInvitees && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="remove" />,
-          onClick: deleteItem,
-        },
+        // !isInvitees && {
+        //   icon: <DeleteRoundedIcon fontSize="small" />,
+        //   text: <Trans i18nKey="remove" />,
+        //   onClick: deleteItem,
+        // },
       ]}
     />
   );
