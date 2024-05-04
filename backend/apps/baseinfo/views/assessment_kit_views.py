@@ -93,3 +93,10 @@ class AssessmentKitLikeApi(APIView):
         result = assessment_kit_service.like_assessment_kit(request, assessment_kit_id)
         return Response(data=result["body"], status=result["status_code"])
 
+
+class AssessmentKitsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        result = assessment_kit_service.get_assessment_kits_list(request)
+        return Response(data=result["body"], status=result["status_code"])
