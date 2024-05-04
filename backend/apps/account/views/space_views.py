@@ -5,6 +5,14 @@ from rest_framework.response import Response
 from account.services import space_services
 
 
+class SpaceApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        result = space_services.create_spacer(request)
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class MembersSpaceApi(APIView):
     permission_classes = [IsAuthenticated]
 
