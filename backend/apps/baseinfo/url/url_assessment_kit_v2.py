@@ -17,5 +17,6 @@ urlpatterns = [
          assessment_kit_views.AssessmentKitDetailsQuestionApi.as_view()),
     path("<str:assessment_kit_id>/details/attributes/<str:attribute_id>/maturity-levels/<str:maturity_level_id>/",
          assessment_kit_views.AssessmentKitDetailsMaturityLevelsAsAttributeApi.as_view()),
+    path("<str:assessment_kit_id>/like/", assessment_kit_views.AssessmentKitLikeApi.as_view()),
 
 ]
