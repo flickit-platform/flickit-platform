@@ -84,3 +84,12 @@ class AssessmentKitDetailsMaturityLevelsAsAttributeApi(APIView):
                                                                                                 attribute_id,
                                                                                                 maturity_level_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentKitLikeApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_kit_id):
+        result = assessment_kit_service.like_assessment_kit(request, assessment_kit_id)
+        return Response(data=result["body"], status=result["status_code"])
+
