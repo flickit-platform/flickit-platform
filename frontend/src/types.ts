@@ -31,7 +31,7 @@ export interface IDefaultModel<T extends any = any> {
   next: null;
   previous: null;
   results: T[];
-  total?: number
+  items: T[];
 }
 
 export interface IAnswerTemplate {

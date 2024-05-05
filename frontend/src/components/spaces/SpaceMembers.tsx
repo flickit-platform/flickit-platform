@@ -149,7 +149,7 @@ export const SpaceMembers = (props: any) => {
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
               <Typography fontFamily="Roboto" fontWeight={"bold"}>
                 {
-                  spaceMembersQueryData?.data?.total
+                  spaceMembersQueryData?.data?.items?.length
                 }
               </Typography>
             </Box>
