@@ -88,7 +88,7 @@ const AssessmentKitExpertViewContainer = () => {
                   to: `/user/expert-groups`,
                 },
                 {
-                  title: expertGroup?.name,
+                  title: expertGroup?.title,
                   to: `/user/expert-groups/${expertGroupId}`,
                 },
                 {
