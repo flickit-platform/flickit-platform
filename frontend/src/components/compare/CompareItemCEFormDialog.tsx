@@ -68,6 +68,9 @@ interface ICompareItemCEForm extends IDialogProps {
 }
 
 const CompareItemCEForm = (props: ICompareItemCEForm) => {
+
+  const PAGE_SIZE: number = 5
+
   const { closeDialog, context, open, index } = props;
   const { type, data } = context || {};
   const defaultValues = type === "update" ? data || {} : {};
@@ -121,7 +124,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               url: "/api/v1/assessments/",
               searchParams: {
                 kit_id: assessment_kit && assessment_kit[0]?.assessment_kit?.id,
-                size: 5,
+                size: PAGE_SIZE,
                 page: PageCount
               },
               loadMore: PageCount
