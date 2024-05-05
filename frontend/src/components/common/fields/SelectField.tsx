@@ -10,6 +10,8 @@ import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
 import Box from "@mui/material/Box";
 import { styles } from "@styles";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
+import ListItemButton from "@mui/material/ListItemButton";
+import {Trans} from "react-i18next";
 
 const selectField = () => {
   return <div>selectField</div>;
@@ -50,6 +52,8 @@ interface ISelectField extends SelectProps {
   register?: UseFormRegister<any>;
   defaultOption?: any;
   selectedOptions?: any;
+  loadMore?: boolean,
+  loadMoreHandler?: any,
 }
 
 export const SelectField = (props: ISelectField) => {
@@ -71,6 +75,8 @@ export const SelectField = (props: ISelectField) => {
     register,
     defaultOption,
     selectedOptions=[],
+    loadMore,
+    loadMoreHandler,
     ...rest
   } = props;
 
@@ -106,6 +112,7 @@ export const SelectField = (props: ISelectField) => {
           : selectOptions.map((option: any) => {
               return renderOption(option);
             })}
+        {loadMore && <ListItemButton onClick={()=>loadMoreHandler((prev : number) => prev + 1)} sx={{display:"flex",justifyContent:"center"}}><Trans i18nKey="loadMore"/></ListItemButton>}
       </Select>
       {helperText && <FormHelperText>{helperText as any}</FormHelperText>}
     </FormControl>

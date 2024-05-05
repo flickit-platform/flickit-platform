@@ -21,6 +21,7 @@ import {
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import AlertBox from "@common/AlertBox";
+import {useState} from "react";
 
 interface ICompareItemCEFormDialog
   extends Omit<ICompareItemCEForm, "closeDialog"> {}
@@ -74,6 +75,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
+  const [PageCount, setPageCount] = useState(1)
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
@@ -119,8 +121,10 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               url: "/api/v1/assessments/",
               searchParams: {
                 kit_id: assessment_kit && assessment_kit[0]?.assessment_kit?.id,
-                size: 15
+                size: 5,
+                page: PageCount
               },
+              getDate: PageCount
             })}
             required={true}
             autoFocus={true}
@@ -129,6 +133,8 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             label={<Trans i18nKey="assessment" />}
             size="medium"
             selectedOptions={assessment_kit}
+            loadMore={true}
+            loadMoreHandler={setPageCount}
             renderOption={(option = {}) => {
               return (
                 <MenuItem
