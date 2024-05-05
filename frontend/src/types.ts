@@ -31,6 +31,7 @@ export interface IDefaultModel<T extends any = any> {
   next: null;
   previous: null;
   results: T[];
+  items: T[];
 }
 
 export interface IAnswerTemplate {
