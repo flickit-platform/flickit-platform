@@ -119,6 +119,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               url: "/api/v1/assessments/",
               searchParams: {
                 kit_id: assessment_kit && assessment_kit[0]?.assessment_kit?.id,
+                size: 15
               },
             })}
             required={true}
