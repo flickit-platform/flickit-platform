@@ -10,13 +10,13 @@ const useConnectSelectField = (props: {
   url: string;
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
-  getDate?: number
+  loadMore?: number
 }) => {
   const {
     url,
     filterOptions = (options) => options,
     searchParams = {},
-    getDate
+    loadMore
   } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [defaultOption, setDefaultOption] = useState<any>({});
@@ -32,7 +32,7 @@ const useConnectSelectField = (props: {
     return () => {
       controller.abort();
     };
-  }, [getDate]);
+  }, [loadMore]);
 
   const fetchOptions = async (signal: AbortSignal) => {
     setLoading(true);
@@ -42,8 +42,11 @@ const useConnectSelectField = (props: {
       } = await service.fetchOptions({ url }, { signal, params: searchParams });
       if (items) {
         if (Array.isArray(items)) {
-          console.log(options,"test options")
-          setOptions([...options,...items]);
+          if(loadMore){
+            setOptions([...options,...items]);
+          }else{
+            setOptions(items);
+          }
           setError(false);
         } else {
           setOptions([]);

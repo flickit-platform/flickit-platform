@@ -124,7 +124,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                 size: 5,
                 page: PageCount
               },
-              getDate: PageCount
+              loadMore: PageCount
             })}
             required={true}
             autoFocus={true}
