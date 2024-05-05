@@ -28,3 +28,11 @@ def invite_member_in_space(request, space_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def create_spacer(request):
+    response = requests.post(
+        ASSESSMENT_URL + 'assessment-core/api/spaces',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
