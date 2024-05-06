@@ -88,8 +88,8 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
-  const [PageCount, setPageCount] = useState(0)
-  const [total,setTotal]= useState(0)
+  const [PageCount, setPageCount] = useState<number>(0)
+  const [total,setTotal]= useState<number>(0)
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
