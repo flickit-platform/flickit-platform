@@ -115,7 +115,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
                 "image/png": [".png"],
               }}
               defaultValueType="image"
-              defaultValue={defaultValues.picture}
+              defaultValue={defaultValues.pictureLink}
               shouldFetchFileInfo={true}
               hideDropText
               name="picture"
@@ -124,7 +124,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
           </Grid>
           <Grid item xs={12} md={7}>
             <InputFieldUC
-              defaultValue={defaultValues.name || ""}
+              defaultValue={defaultValues.title || ""}
               name="title"
               label={<Trans i18nKey="title" />}
               required
