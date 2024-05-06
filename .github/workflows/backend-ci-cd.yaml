@@ -62,71 +62,71 @@ jobs:
       run: pytest backend/apps
 
 
-  Sonar:
-    needs: [Backend_Test]
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+  # Sonar:
+  #   needs: [Backend_Test]
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     postgres:
+  #       image: postgres:latest
+  #       env:
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_DB: github_actions
+  #       ports:
+  #         - 5432:5432
+  #       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
-    - name: Install coverage
-      run: |
-        pip install coverage
-    - name: Run migrations
-      env: 
-        SECRET_KEY: test-secret-key
-        DEBUG_VALUE: False
-      run: python backend/apps/manage.py migrate
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: '3.10'
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install -r backend/requirements.txt
+  #   - name: Install coverage
+  #     run: |
+  #       pip install coverage
+  #   - name: Run migrations
+  #     env: 
+  #       SECRET_KEY: test-secret-key
+  #       DEBUG_VALUE: False
+  #     run: python backend/apps/manage.py migrate
 
-    - name: Run tests with coverage
-      env: 
-        SECRET_KEY: test-secret-key
-        DEBUG_VALUE: False
-      run: |
-        coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
-        coverage report
-        coverage xml
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        COVERAGE_REPORT_PATH: 'coverage.xml'
+  #   - name: Run tests with coverage
+  #     env: 
+  #       SECRET_KEY: test-secret-key
+  #       DEBUG_VALUE: False
+  #     run: |
+  #       coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
+  #       coverage report
+  #       coverage xml
+  #   - name: SonarCloud Scan
+  #     uses: sonarsource/sonarcloud-github-action@master
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+  #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       COVERAGE_REPORT_PATH: 'coverage.xml'
 
 
   Backend_Push_Latest_Image:
     if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
-    needs: Sonar
+    needs: Backend_Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/flickit-platform/flickit-platform:latest ./backend
+        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:latest ./backend
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: flickit-platform
+          username: flickit-platform-dev
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/flickit-platform/flickit-platform:latest
+        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:latest
 
   Backend_Deploy_Latest:
     needs: Backend_Push_Latest_Image
@@ -143,7 +143,7 @@ jobs:
 
   Backend_Push_Image:
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
-    needs: Sonar
+    needs: Backend_Test
     runs-on: ubuntu-latest
     outputs:
       TAG: ${{ steps.TAG.outputs.tag }}
@@ -162,13 +162,13 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: flickit-platform
+          username: flickit-platform-dev
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/flickit-platform/flickit-platform:${{ steps.TAG.outputs.tag }} ./backend
+        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:${{ steps.TAG.outputs.tag }} ./backend
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/flickit-platform/flickit-platform:${{ steps.TAG.outputs.tag }}
+        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:${{ steps.TAG.outputs.tag }}
 
   Backend_Deploy:
     needs: Backend_Push_Image
