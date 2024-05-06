@@ -304,7 +304,7 @@ def get_assessment_progress(assessments_details):
     return result
 
 
-def get_subject_report(assessments_details, subject_id):
+def get_subject_report(request, assessments_details, subject_id):
     result = dict()
     kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
     if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
@@ -314,7 +314,9 @@ def get_subject_report(assessments_details, subject_id):
         return result
 
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report/subjects/{subject_id}', )
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report/subjects/{subject_id}',
+        headers={'Authorization': request.headers['Authorization']})
+
     response_body = response.json()
 
     if response.status_code == status.HTTP_200_OK:
@@ -410,10 +412,11 @@ def get_subject_progress(authorization_header, assessments_details, subject_id):
     return result
 
 
-def get_assessment_report(assessments_details):
+def get_assessment_report(assessments_details, request):
     result = dict()
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report')
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report',
+        headers={'Authorization': request.headers['Authorization']})
     response_body = response.json()
     if response.status_code == status.HTTP_200_OK:
         assessment_dict = dict()
