@@ -12,6 +12,7 @@ import { styles } from "@styles";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 import ListItemButton from "@mui/material/ListItemButton";
 import {Trans} from "react-i18next";
+import {useEffect} from "react";
 
 const selectField = () => {
   return <div>selectField</div>;
@@ -54,6 +55,8 @@ interface ISelectField extends SelectProps {
   selectedOptions?: any;
   loadMore?: boolean,
   loadMoreHandler?: any,
+  getTotalHandler?: any,
+  totalItem?: number,
 }
 
 export const SelectField = (props: ISelectField) => {
@@ -77,8 +80,16 @@ export const SelectField = (props: ISelectField) => {
     selectedOptions=[],
     loadMore,
     loadMoreHandler,
+    getTotalHandler,
+    totalItem,
     ...rest
   } = props;
+
+  useEffect(()=>{
+    if(totalItem){
+      getTotalHandler(totalItem)
+    }
+  },[totalItem])
 
   let selectOptions;
   if (selectedOptions.length > 0) {

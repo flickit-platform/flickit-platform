@@ -88,7 +88,8 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
-  const [PageCount, setPageCount] = useState(1)
+  const [PageCount, setPageCount] = useState(0)
+  const [total,setTotal]= useState(0)
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
@@ -146,10 +147,11 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             label={<Trans i18nKey="assessment" />}
             size="medium"
             selectedOptions={assessment_kit}
-            loadMore={true}
+            loadMore={total > ((PAGE_SIZE * PageCount) + PAGE_SIZE)}
             loadMoreHandler={setPageCount}
+            getTotalHandler={setTotal}
             MenuProps={MenuProps}
-            nullable={PageCount ? false : true}
+            nullable={total >= 1 ? false : true}
             renderOption={(option = {}) => {
               return (
                 <MenuItem
