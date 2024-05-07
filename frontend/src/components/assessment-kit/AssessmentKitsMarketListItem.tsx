@@ -67,7 +67,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         //       fontSize="inherit"
         //       sx={{ mr: 0.5, pb: 0.2 }}
         //     />
-        //     {data.likes_number || 0}
+        //     {data.likes || 0}
         //   </Box>
         // }
         sx={{ width: "100%" }}
@@ -118,13 +118,13 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       <Box mt="auto">
         <CardHeader
           component={Link}
-          to={`/user/expert-groups/${data.expert_group?.id}`}
+          to={`/user/expert-groups/${data.expertGroup?.id}`}
           sx={{ px: 0, textDecoration: "none" }}
           titleTypographyProps={{
             sx: { textDecoration: "none" },
             color: "white",
           }}
-          avatar={<Avatar alt={data.expert_group?.name} src={"/"} />}
+          avatar={<Avatar alt={data.expertGroup?.title} src={"/"} />}
           title={
             <Box
               component={"b"}
@@ -132,7 +132,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
               textTransform={"capitalize"}
               color={"#000000de"}
             >
-              {data.expert_group?.name}
+              {data.expertGroup?.title}
             </Box>
           }
         />
@@ -153,7 +153,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
           >
             <Trans i18nKey="used" />:{" "}
             <Box component="span" color="black" textTransform="lowercase">
-              {data.number_of_assessment} <Trans i18nKey="times" />
+              {data.assessmentsCount} <Trans i18nKey="times" />
             </Box>
           </Box>
         </Box>
@@ -177,7 +177,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
                 fontSize="inherit"
                 sx={{ mr: 0.5, pt: 0.2 }}
               />
-              {data.likes_number || 0}
+              {data.likes || 0}
             </Box>
           </Box>
         </Box>

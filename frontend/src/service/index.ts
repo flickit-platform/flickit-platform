@@ -404,9 +404,9 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      const { query, is_private } = args ?? {};
-      const params = query ? { query } : { is_private };
-      return axios.get(`/baseinfo/assessmentkits/`, { params, ...config });
+      const { query, isPrivate } = args ?? {};
+      const params = query ? { query } : { isPrivate };
+      return axios.get(`/api/v2/assessment-kits/`, { params, ...config });
     },
     fetchAssessmentKitsOptions(
       args: any,
