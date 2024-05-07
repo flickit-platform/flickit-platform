@@ -96,6 +96,7 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
               shouldFetchFileInfo={true}
               name="picture"
               label={<Trans i18nKey="accountPicture" />}
+              maxSize={2000000}
             />
           </Grid>
           <Grid item xs={12} sm={6}>

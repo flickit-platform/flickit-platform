@@ -138,6 +138,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             setShowErrorLog={setShowErrorLog}
             setSyntaxErrorObject={setSyntaxErrorObject}
             setIsValid={setIsValid}
+            maxSize={5000000}
           />
         </Grid>
         <Grid

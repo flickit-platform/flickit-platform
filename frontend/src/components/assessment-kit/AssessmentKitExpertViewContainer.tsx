@@ -1006,6 +1006,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
             name="dsl_id"
             required={true}
             label={<Trans i18nKey="dsl" />}
+            maxSize={5000000}
           />
         </Box>
       </Grid>
