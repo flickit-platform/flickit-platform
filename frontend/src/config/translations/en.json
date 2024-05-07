@@ -361,5 +361,6 @@
   "allQuestionsHaveBeenAnswered":"All questions have been answered.",
   "allQuestionsInThisQuestionnaireHaveBeenAnswered":"All questions in this questionnaire have been answered. To have more accurate insights, you can complete other questionnaires as well.",
   "youAnsweredQuestionOf":"{{answeredQuestions}} out of {{totalQuestions}} questions have been answered",
-  "advisable":"Advisable"
+  "advisable":"Advisable",
+  "loadMore": "Load more"
 }
