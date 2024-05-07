@@ -243,7 +243,7 @@ export const useConnectAutocompleteField = <T extends any = any>(props: {
   service: TQueryServiceFunction<T>;
   accessor?: string;
 }) => {
-  const { service, accessor = "results" } = props;
+  const { service, accessor = "items" } = props;
   const serviceQueryData = useQuery({
     service,
     runOnMount: false,

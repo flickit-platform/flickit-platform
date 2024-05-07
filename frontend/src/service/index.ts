@@ -612,7 +612,7 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/baseinfo/tags/`, config);
+      return axios.get(`/api/v1/assessment-kit-tags/`, config);
     },
     deleteAssessmentKit(
       args: { id: TId },
