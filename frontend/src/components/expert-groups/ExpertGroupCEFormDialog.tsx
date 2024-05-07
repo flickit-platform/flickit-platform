@@ -120,6 +120,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
               hideDropText
               name="picture"
               label={<Trans i18nKey="groupPicture" />}
+              maxSize={2000000}
             />
           </Grid>
           <Grid item xs={12} md={7}>
