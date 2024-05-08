@@ -138,10 +138,8 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${
-          assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${
-          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -666,10 +664,12 @@ export const createService = (
         params: { user_id: id },
       });
     },
-    fetchExpertGroups(args: any, config: AxiosRequestConfig<any> | undefined) {
+    fetchExpertGroups(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+      const { page, size } = args ?? {};
+
       return axios.get(`/api/v1/expert-groups/`, {
         ...(config ?? {}),
-        params: { size: 20, page: args.page },
+        params: { size: size, page: page },
       });
     },
     fetchUserExpertGroup(
@@ -857,13 +857,13 @@ export const createService = (
       const { description, questionId, assessmentId, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-            description,
-          })
+          description,
+        })
         : axios.post(`/api/v1/evidences/`, {
-            assessment_id: assessmentId,
-            question_id: questionId,
-            description,
-          });
+          assessment_id: assessmentId,
+          question_id: questionId,
+          description,
+        });
     },
     deleteEvidence(
       args: { id: TId },

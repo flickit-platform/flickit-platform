@@ -22,24 +22,26 @@ const ExpertGroupsContainer = () => {
   const { id } = userInfo || {};
   const { is_expert } = userInfo;
   const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 20
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPageNumber(value);
   };
 
   const queryData = useQuery({
-    service: (args = { id, page: pageNumber - 1 }, config) =>
+    service: (args = { id, size: pageSize, page: pageNumber - 1 }, config) =>
       service.fetchExpertGroups(args, config),
   });
 
   useEffect(() => {
-    queryData.query({ id, page: pageNumber - 1 });
+    queryData.query({ id, size: pageSize, page: pageNumber - 1 });
   }, [pageNumber]);
 
   const pageCount =
-    queryData.data?.size === 0
+    !queryData.data || queryData.data?.size === 0
       ? 1
       : Math.ceil(queryData.data?.total / queryData.data?.size);
+      
   useDocumentTitle(t("expertGroups") as string);
 
   return (
@@ -92,7 +94,7 @@ const ExpertGroupsContainer = () => {
                   variant="outlined"
                   color="primary"
                   count={pageCount}
-                  onChange={handleChange}
+                  onChange={handleChangePage}
                   page={pageNumber}
                 />
               </Stack>
