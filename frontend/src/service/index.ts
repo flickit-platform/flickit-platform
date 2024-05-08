@@ -669,7 +669,7 @@ export const createService = (
 
       return axios.get(`/api/v1/expert-groups/`, {
         ...(config ?? {}),
-        params: { size: size, page: page },
+        params: { size: size, page: page - 1 },
       });
     },
     fetchUserExpertGroup(

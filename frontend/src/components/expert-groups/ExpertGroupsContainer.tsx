@@ -29,19 +29,19 @@ const ExpertGroupsContainer = () => {
   };
 
   const queryData = useQuery({
-    service: (args = { id, size: pageSize, page: pageNumber - 1 }, config) =>
+    service: (args = { id, size: pageSize, page: pageNumber }, config) =>
       service.fetchExpertGroups(args, config),
   });
 
   useEffect(() => {
-    queryData.query({ id, size: pageSize, page: pageNumber - 1 });
+    queryData.query({ id, size: pageSize, page: pageNumber });
   }, [pageNumber]);
 
   const pageCount =
     !queryData.data || queryData.data?.size === 0
       ? 1
       : Math.ceil(queryData.data?.total / queryData.data?.size);
-      
+
   useDocumentTitle(t("expertGroups") as string);
 
   return (
