@@ -443,7 +443,7 @@ const LikeAssessmentKit = ({ likes_number }: any) => {
       onClick={like}
       loading={likeQueryData.loading}
     >
-      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.likes || likes_number}</Box>
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.count || likes_number}</Box>
     </LoadingButton>
   );
 };

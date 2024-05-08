@@ -830,7 +830,7 @@ export const createService = (
     ) {
       const { id } = args ?? {};
 
-      return axios.post(`/baseinfo/assessmentkits/like/${id}/`, {
+      return axios.post(`/api/v2/assessment-kits/${id}/like/`, {
         ...(config ?? {}),
       });
     },
