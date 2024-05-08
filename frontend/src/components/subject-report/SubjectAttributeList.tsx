@@ -5,17 +5,18 @@ import SubjectAttributeCard from "./SubjectAttributeCard";
 
 export const SubjectAttributeList = (props: any) => {
   const { data } = props;
-  const { subject,attributes} = data;
+  const { subject,attributes,maturityLevelsCount} = data;
+  const {title}=subject
   return (
     <Box mt={15} id="attributes">
       <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="attributes">
-        {subject?.title} <Trans i18nKey="attributes" />
+        {title} <Trans i18nKey="attributes" />
       </Title>
       <Box mt={3}>
         {attributes.map((result: any = {}) => {
           return (
             <SubjectAttributeCard
-              maturity_levels_count={subject?.maturity_level?.maturity_levels_count}
+              maturity_levels_count={maturityLevelsCount}
               {...result}
               key={result.id}
             />
