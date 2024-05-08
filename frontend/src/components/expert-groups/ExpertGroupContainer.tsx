@@ -413,7 +413,7 @@ const ExpertGroupMembers = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             return (
-              <Box mb={2}>
+              <Box my={2}>
                 <Invitees
                   users={items}
                   query={inviteeQuery.query}
@@ -442,7 +442,7 @@ const Invitees = (props: any) => {
           sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
           onClick={() => setOpenInvitees((state: boolean) => !state)}
         >
-          <Trans i18nKey="invitees" />
+          <Trans i18nKey="invited" />
           <Box
             sx={{
               ...styles.centerV,
