@@ -21,7 +21,7 @@ interface IAssessmentReportTitle {
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   const { data, colorCode, pathInfo } = props;
   const {
-    assessment: { title, last_modification_time, assessment_kit },
+    assessment: { title, lastModificationTime, assessmentKit },
   } = data;
   const { spaceId, page } = useParams();
   const {space,assessment}=pathInfo
@@ -58,7 +58,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
       toolbar={
         <Box sx={{ mt: { xs: 1.5, md: 0 } }}>
           <Typography variant="subLarge" sx={{ opacity: 0.6, ml: "auto" }}>
-            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_time)}
+            <Trans i18nKey="lastUpdated" /> {formatDate(lastModificationTime)}
           </Typography>
         </Box>
       }
@@ -89,7 +89,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           {title}
         </Box>
         <span style={{ opacity: 0.9 }}>
-          {assessment_kit.description || <Trans i18nKey="insights" />}
+          {assessmentKit.description || <Trans i18nKey="insights" />}
         </span>
       </Box>
     </Title>

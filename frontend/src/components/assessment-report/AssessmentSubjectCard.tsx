@@ -27,7 +27,7 @@ interface IAssessmentSubjectProgress {
 }
 
 export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
-  const { title, maturity_level, id, colorCode, description = "" } = props;
+  const { title, maturityLevel, id, colorCode, description = "" } = props;
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
@@ -113,7 +113,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
 
         <SubjectProgress inProgress={inProgress} progress={progress} />
 
-        <SubjectStatus title={title} maturity_level={maturity_level} />
+        <SubjectStatus title={title} maturity_level={maturityLevel} />
         <Box mt="auto">
           <Button
             variant="contained"
