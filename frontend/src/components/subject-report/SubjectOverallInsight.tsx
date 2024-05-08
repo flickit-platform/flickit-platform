@@ -24,11 +24,10 @@ const OverallInsightText = (props: any) => {
   const {
     subject,
     attributes,
-    top_strengths,
-    top_weaknesses,
-    cl = 1,
+    topStrengths,
+    topWeaknesses,
   } = data;
-  const { title, maturity_level } = subject;
+  const { title, maturityLevel,confidenceValue } = subject;
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
       <Typography
@@ -49,7 +48,7 @@ const OverallInsightText = (props: any) => {
               sx={{ color: "#3596A1" }}
               fontSize="1.15rem"
             >
-              <Trans i18nKey={"clOf"} values={{ cl }} />
+              <Trans i18nKey={"clOf"} values={{ cl:confidenceValue }} />
             </Typography>{" "}
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography
@@ -59,7 +58,7 @@ const OverallInsightText = (props: any) => {
               sx={{ color: "#6035A1" }}
               fontSize="1.15rem"
             >
-              {maturity_level.index}.
+              {maturityLevel.index}.
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
             <Typography
@@ -67,7 +66,7 @@ const OverallInsightText = (props: any) => {
               fontFamily="Roboto"
               fontWeight={"bold"}
             >
-              {maturity_level.title}.
+              {maturityLevel.title}.
             </Typography>
             <Box>
               <Typography variant="body2">
@@ -83,7 +82,7 @@ const OverallInsightText = (props: any) => {
             color="#005e00"
             text="strengths"
             loading={loading}
-            att={top_strengths}
+            att={topStrengths}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={5} lg={4}>
@@ -91,7 +90,7 @@ const OverallInsightText = (props: any) => {
             color="#b10202"
             text="weaknesses"
             loading={loading}
-            att={top_weaknesses}
+            att={topWeaknesses}
           />
         </Grid>
       </Grid>

@@ -22,10 +22,10 @@ const SUbjectAttributeCard = (props: any) => {
   const {
     title,
     description,
-    maturity_level,
+    maturityLevel,
     maturity_levels_count,
-    maturity_scores,
-    confidence_value,
+    maturityScores,
+    confidenceValue,
     id,
   } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -63,9 +63,9 @@ const SUbjectAttributeCard = (props: any) => {
                 </Title>
               </Box>
               <AttributeStatusBarContainer
-                status={maturity_level?.title}
-                ml={maturity_level?.index}
-                cl={Math.ceil(confidence_value)}
+                status={maturityLevel?.title}
+                ml={maturityLevel?.index}
+                cl={Math.ceil(confidenceValue)}
                 mn={maturity_levels_count}
               />
               <Box mt={3}>
@@ -84,7 +84,7 @@ const SUbjectAttributeCard = (props: any) => {
                     fontSize="1.12rem"
                     mx={1}
                   >
-                    {Math.ceil(confidence_value)}%
+                    {Math.ceil(confidenceValue)}%
                   </Typography>
                   <Trans
                     i18nKey={"wasEstimate"}
@@ -98,9 +98,9 @@ const SUbjectAttributeCard = (props: any) => {
                     fontSize="1.2rem"
                   >
                     {" "}
-                    {maturity_level?.index}.{" "}
+                    {maturityLevel?.index}.{" "}
                   </Typography>
-                  <Trans i18nKey={"meaning"} /> {maturity_level?.title}.
+                  <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
                 </Typography>
               </Box>
               <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
@@ -122,12 +122,12 @@ const SUbjectAttributeCard = (props: any) => {
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
           <Box sx={{ pr: {xs:2,sm:6} }}>
-            {maturity_scores
+            {maturityScores
               .map((item: any) => {
                 return (
                   <MaturityLevelDetailsContainer
                     maturity_score={item}
-                    totalml={maturity_level?.index}
+                    totalml={maturityLevel?.index}
                     mn={maturity_levels_count}
                     expanded={expanded}
                     setExpanded={setExpanded}
@@ -243,9 +243,10 @@ export const AttributeStatusBar = (props: any) => {
 const MaturityLevelDetailsContainer = (props: any) => {
   const { maturity_score, totalml, mn, expanded, setExpanded, attributeId } =
     props;
+    const {maturityLevel,score}=maturity_score
   const colorPallet = getMaturityLevelColors(mn);
-  const statusColor = colorPallet[maturity_score?.maturity_level?.index - 1];
-  const is_passed = maturity_score?.maturity_level?.index <= totalml;
+  const statusColor = colorPallet[maturityLevel?.index - 1];
+  const is_passed = maturityLevel?.index <= totalml;
   const { service } = useServiceContext();
   const { assessmentId } = useParams();
   const fetchAffectedQuestionsOnAttributeQueryData = useQuery({
@@ -261,16 +262,16 @@ const MaturityLevelDetailsContainer = (props: any) => {
       setExpanded(isExpanded ? panel : false);
     };
   useEffect(() => {
-    if (expanded === maturity_score?.maturity_level?.id) {
+    if (expanded === maturityLevel?.id) {
       fetchAffectedQuestionsOnAttributeQueryData.query();
     }
   }, [expanded]);
 
   let text;
-  if (maturity_score?.score == null) {
+  if (score == null) {
     text = <Trans i18nKey="noQuestionOnLevel" />;
   }
-  if (is_passed && maturity_score?.maturity_level?.index == totalml) {
+  if (is_passed && maturityLevel?.index == totalml) {
     text = <Trans i18nKey="theHighestLevelAchived" />;
   }
 
@@ -292,8 +293,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
       }}
     >
       <Accordion
-        expanded={expanded === maturity_score?.maturity_level?.id}
-        onChange={handleChange(maturity_score?.maturity_level?.id)}
+        expanded={expanded === maturityLevel?.id}
+        onChange={handleChange(maturityLevel?.id)}
         sx={{ width: "100%", boxShadow: "none !important" }}
       >
         <AccordionSummary
@@ -313,10 +314,10 @@ const MaturityLevelDetailsContainer = (props: any) => {
               <Box width="100%">
                 <MaturityLevelDetailsBar
                   text={text}
-                  score={maturity_score?.score}
+                  score={score}
                   highestIndex={
                     is_passed &&
-                    maturity_score?.maturity_level?.index == totalml
+                    maturityLevel?.index == totalml
                   }
                   is_passed={is_passed}
                 />
@@ -337,7 +338,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   color: is_passed ? statusColor : "#808080",
                 }}
               >
-                {maturity_score?.maturity_level?.title}
+                {maturityLevel?.title}
               </Typography>
             </Box>
           </Box>

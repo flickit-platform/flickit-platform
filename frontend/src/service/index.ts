@@ -205,7 +205,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.get(
-        `/api/v1/assessments/${assessmentId}/report/subjects/${subjectId}/`,
+        `/api/v2/assessments/${assessmentId}/report/subjects/${subjectId}/`,
         config
       );
     },
