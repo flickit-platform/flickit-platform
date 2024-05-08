@@ -87,7 +87,7 @@ export const createService = (
       return axios.delete(`/authinfo/spaces/${spaceId}/`, config);
     },
     createSpace(data: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`/authinfo/spaces/`, data, config);
+      return axios.post(`api/v1/spaces/`, data, config);
     },
     updateSpace(
       { spaceId, data }: { spaceId: string; data: any },
