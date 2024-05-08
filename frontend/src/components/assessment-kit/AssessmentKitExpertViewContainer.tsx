@@ -34,7 +34,9 @@ import { useForm } from "react-hook-form";
 import UploadField from "@common/fields/UploadField";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import setServerFieldErrors from "@utils/setServerFieldError";
-import {AssessmentKitDetailsType} from "@types";
+import { AssessmentKitDetailsType } from "@types";
+import convertToBytes from "@/utils/convertToBytes";
+
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
@@ -48,7 +50,7 @@ const AssessmentKitExpertViewContainer = () => {
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
 
   const AssessmentKitDetails = async () => {
-    const data : AssessmentKitDetailsType = await fetchAssessmentKitDetailsQuery.query();
+    const data: AssessmentKitDetailsType = await fetchAssessmentKitDetailsQuery.query();
     setDetails(data);
     setLoaded(true);
   };
@@ -77,7 +79,7 @@ const AssessmentKitExpertViewContainer = () => {
   }, [assessmentKitTitle]);
   return (
     <Box>
-      <Box sx={{flexDirection:{xs:"column",sm:"row"}}}>
+      <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
         <Title
           backLink={-1}
           sup={
@@ -228,7 +230,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
         subjectId: subjectId,
       });
       setAssessmentKitSubjectDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   return (
@@ -430,7 +432,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
         questionnaireId: questionnaireId,
       });
       setQuestionnaireDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   return (
     <Box>
@@ -579,7 +581,7 @@ const AssessmentKitQuestionsList = (props: {
         attributeId: attributeId,
       });
       setAttributesDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   const fetchMaturityLevelQuestions = async () => {
     try {
@@ -589,7 +591,7 @@ const AssessmentKitQuestionsList = (props: {
         maturityLevelId: value,
       });
       setMaturityLevelQuestions(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (isExpanded && attributeId) {
@@ -695,9 +697,8 @@ const AssessmentKitQuestionsList = (props: {
               onChange={handleTabChange}
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: `${
-                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
-                  } !important`,
+                  backgroundColor: `${colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                    } !important`,
                 },
               }}
             >
@@ -1006,6 +1007,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
             name="dsl_id"
             required={true}
             label={<Trans i18nKey="dsl" />}
+            maxSize={convertToBytes(5, "MB")}
           />
         </Box>
       </Grid>
@@ -1222,22 +1224,22 @@ const SubjectQuestionList = (props: any) => {
                   />
                 </Box>
                 {question.advisable && (
-                    <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRadius: "8px",
-                          background: "#1CC2C4",
-                          color: "#fff",
-                          fontSize: "12px",
-                          px: "12px",
-                          mx: "4px",
-                          height: "24px",
-                        }}
-                    >
-                      <Trans i18nKey="Advisable" />
-                    </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "8px",
+                      background: "#1CC2C4",
+                      color: "#fff",
+                      fontSize: "12px",
+                      px: "12px",
+                      mx: "4px",
+                      height: "24px",
+                    }}
+                  >
+                    <Trans i18nKey="Advisable" />
+                  </Box>
                 )}
               </Typography>
             </AccordionSummary>
@@ -1338,7 +1340,7 @@ const QuestionnairesQuestionList = (props: any) => {
         questionId: questionId,
       });
       setQuestionsDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   function formatNumber(value: any) {
     // Check if the value is an integer (no decimal places)
@@ -1420,22 +1422,22 @@ const QuestionnairesQuestionList = (props: any) => {
                   </Box>
                 )}
                 {question.advisable && (
-                    <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRadius: "8px",
-                          background: "#1CC2C4",
-                          color: "#fff",
-                          fontSize: "12px",
-                          px: "12px",
-                          mx: "4px",
-                          height: "24px",
-                        }}
-                    >
-                      <Trans i18nKey="advisable" />
-                    </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "8px",
+                      background: "#1CC2C4",
+                      color: "#fff",
+                      fontSize: "12px",
+                      px: "12px",
+                      mx: "4px",
+                      height: "24px",
+                    }}
+                  >
+                    <Trans i18nKey="advisable" />
+                  </Box>
                 )}
               </Typography>
             </AccordionSummary>
@@ -1541,9 +1543,8 @@ const QuestionnairesQuestionList = (props: any) => {
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                borderTop: `${
-                                  index !== 0 && "1px solid #D3D3D3"
-                                }`,
+                                borderTop: `${index !== 0 && "1px solid #D3D3D3"
+                                  }`,
                                 py: 1,
                               }}
                             >
@@ -1681,7 +1682,7 @@ const MaturityLevelsDetails = (props: any) => {
                   py: "4px",
                   pl: "16px",
                   margin: "16px",
-                  width: {xs:"90%",sm:`${90 - 10 * key}%`},
+                  width: { xs: "90%", sm: `${90 - 10 * key}%` },
                 }}
                 key={key}
               >

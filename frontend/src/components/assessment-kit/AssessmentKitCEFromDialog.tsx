@@ -22,6 +22,7 @@ import { Box, Button, Typography, Alert } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
+import convertToBytes from "@/utils/convertToBytes";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -81,13 +82,13 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       const { data: res } =
         type === "update"
           ? await service.updateAssessmentKit(
-              { data: formattedData, assessmentKitId: id },
-              { signal: abortController.signal }
-            )
+            { data: formattedData, assessmentKitId: id },
+            { signal: abortController.signal }
+          )
           : await service.createAssessmentKit(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+            { data: formattedData },
+            { signal: abortController.signal }
+          );
       setLoading(false);
       onSubmitForm();
       close();
@@ -138,6 +139,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             setShowErrorLog={setShowErrorLog}
             setSyntaxErrorObject={setSyntaxErrorObject}
             setIsValid={setIsValid}
+            maxSize={convertToBytes(5, "MB")}
           />
         </Grid>
         <Grid

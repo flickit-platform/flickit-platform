@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import UploadField from "@common/fields/UploadField";
+import convertToBytes from "@/utils/convertToBytes";
 
 interface IUserCEFormDialogProps extends DialogProps {
   onClose: () => void;
@@ -96,7 +97,8 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
               shouldFetchFileInfo={true}
               name="picture"
               label={<Trans i18nKey="accountPicture" />}
-            />
+              maxSize={convertToBytes(2, "MB")}
+              />
           </Grid>
           <Grid item xs={12} sm={6}>
             <InputFieldUC
