@@ -138,8 +138,10 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${
+          assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${
+          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -548,6 +550,21 @@ export const createService = (
         }
       );
     },
+    fetchRelatedEvidences(
+      args: { assessmentId: TId; attributeId: TId; type: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, attributeId, type } = args ?? {};
+      return axios.get(
+        `/assessment-core/api/assessments/${assessmentId}/attributes/${attributeId}/evidences/`,
+        {
+          ...(config ?? {}),
+          params: {
+            type,
+          },
+        }
+      );
+    },
     assessmentKitUsersList(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -664,7 +681,10 @@ export const createService = (
         params: { user_id: id },
       });
     },
-    fetchExpertGroups(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+    fetchExpertGroups(
+      args: { page: number; size: number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       const { page = 1, size = 20 } = args ?? {};
 
       return axios.get(`/api/v1/expert-groups/`, {
@@ -857,13 +877,13 @@ export const createService = (
       const { description, questionId, assessmentId, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-          description,
-        })
+            description,
+          })
         : axios.post(`/api/v1/evidences/`, {
-          assessment_id: assessmentId,
-          question_id: questionId,
-          description,
-        });
+            assessment_id: assessmentId,
+            question_id: questionId,
+            description,
+          });
     },
     deleteEvidence(
       args: { id: TId },

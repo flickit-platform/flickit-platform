@@ -114,6 +114,31 @@ const SUbjectAttributeCard = (props: any) => {
         <Divider sx={{ mx: 2 }} />
         <AccordionDetails sx={{ padding: "0 !important" }}>
           <Typography
+            variant="h4"
+            mt={4}
+            mb={2}
+            sx={{
+              display: "flex",
+              gap: "46px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Trans i18nKey={"relatedEvidences"} />
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "46px",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingX: "104px",
+            }}
+          >
+            <RelatedEvidencesContainer attributeId={id} type="POSITIVE" />
+            <RelatedEvidencesContainer attributeId={id} type="NEGATIVE" />
+          </Box>
+          <Typography
             variant="h6"
             mt={4}
             mb={2}
@@ -121,7 +146,7 @@ const SUbjectAttributeCard = (props: any) => {
           >
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
-          <Box sx={{ pr: {xs:2,sm:6} }}>
+          <Box sx={{ pr: { xs: 2, sm: 6 } }}>
             {maturityScores
               .map((item: any) => {
                 return (
@@ -243,7 +268,7 @@ export const AttributeStatusBar = (props: any) => {
 const MaturityLevelDetailsContainer = (props: any) => {
   const { maturity_score, totalml, mn, expanded, setExpanded, attributeId } =
     props;
-    const {maturityLevel,score}=maturity_score
+  const { maturityLevel, score } = maturity_score;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[maturityLevel?.index - 1];
   const is_passed = maturityLevel?.index <= totalml;
@@ -315,10 +340,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 <MaturityLevelDetailsBar
                   text={text}
                   score={score}
-                  highestIndex={
-                    is_passed &&
-                    maturityLevel?.index == totalml
-                  }
+                  highestIndex={is_passed && maturityLevel?.index == totalml}
                   is_passed={is_passed}
                 />
               </Box>
@@ -402,7 +424,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                           <Box
                             sx={{
                               display: "flex",
-                              width: {xs:"100%",sm:"100%",md:"80%"},
+                              width: { xs: "100%", sm: "100%", md: "80%" },
                               flexDirection: "column",
                             }}
                           >
@@ -410,7 +432,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                ml: {xs:0,sm:4},
+                                ml: { xs: 0, sm: 4 },
                               }}
                             >
                               <Box
@@ -678,6 +700,139 @@ export const MaturityLevelDetailsBar = (props: any) => {
         {score != null ? "%" : ""}
       </Typography>
     </Box>
+  );
+};
+
+const RelatedEvidencesContainer = (props: any) => {
+  const { attributeId, type } = props;
+  const { assessmentId } = useParams();
+  const { service } = useServiceContext();
+  const fetchRelatedEvidences = useQuery({
+    service: (
+      args = { assessmentId, attributeId: attributeId, type: type },
+      config
+    ) => service.fetchRelatedEvidences(args, config),
+    runOnMount: false,
+  });
+
+  useEffect(() => {
+    fetchRelatedEvidences.query();
+  }, []);
+  const items = [
+    {
+      description:
+        "The team demonstrated remarkable agility in adapting to changing project requirements.",
+    },
+    {
+      description:
+        "Through effective collaboration and quick decision-making, the team showcased its agility in responding to market shifts.",
+    },
+    {
+      description:
+        "Team agility was evident as they seamlessly transitioned between different tasks and projects.",
+    },
+    {
+      description:
+        "The team's agility enabled them to swiftly overcome unexpected obstacles and meet project deadlines.",
+    },
+    {
+      description:
+        "By embracing a flexible mindset, the team demonstrated its agility in navigating complex challenges.",
+    },
+    {
+      description:
+        "The team's agility was a key factor in their ability to innovate and stay ahead of competitors.",
+    },
+    {
+      description:
+        "Rapid iterations and constant feedback loops highlighted the team's agility in delivering high-quality results.",
+    },
+    {
+      description:
+        "The team's agility fostered a culture of continuous improvement and adaptability.",
+    },
+    {
+      description:
+        "In the face of uncertainty, the team's agility allowed them to pivot and find creative solutions.",
+    },
+    {
+      description:
+        "The team's agility was instrumental in their ability to respond effectively to changing customer needs.",
+    },
+  ];
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      gap="16px"
+      borderRadius="16px"
+      height={"442px"}
+      width="100%"
+      padding="16px 0px 0px 0px"
+      border="1px solid"
+      borderColor={type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD"}
+    >
+      <Typography
+        variant="h5"
+        color={type === "POSITIVE" ? "#1CC2C4" : "#D81E5B"}
+      >
+        <Trans
+          i18nKey={
+            type === "POSITIVE" ? "positiveEvidences" : "negativeEvidences"
+          }
+        />
+      </Typography>
+      <Divider
+        sx={{
+          width: "100%",
+          backgroundColor: type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD",
+        }}
+      />
+      <Box
+        overflow="auto"
+        gap="8px"
+        display="flex"
+        flexDirection="column"
+        paddingX="30px"
+        width="100%"
+      >
+        {items.map((item: any, index: number) => (
+          <EvidanceDescription
+            key={index}
+            number={index + 1}
+            item={item}
+            color={type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD"}
+            textColor={type === "POSITIVE" ? "#1CC2C4" : "#D81E5B"}
+          />
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
+const EvidanceDescription = ({
+  number,
+  color,
+  textColor,
+  item,
+}: {
+  number: number;
+  color: string;
+  textColor: string;
+  item: any;
+}) => {
+  return (
+    <>
+      <Box display="flex" justifyContent="center">
+        <Typography display="flex" margin="16px" color={textColor}>
+          {number}
+        </Typography>
+        <Typography>{item?.description}</Typography>
+      </Box>
+      <Divider sx={{ width: "100%", backgroundColor: color }} />
+    </>
   );
 };
 
