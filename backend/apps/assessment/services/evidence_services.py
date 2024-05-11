@@ -30,45 +30,12 @@ def add_evidences(assessments_details, validated_data, user_id, authorization_he
     return result
 
 
-def get_list_evidences(assessments_details, question_id, request):
-    result = dict()
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if not Question.objects.filter(id=question_id).filter(
-            questionnaire__kit_version=kit.kit_version_id).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-    params = {"questionId": question_id,
-              "assessmentId": assessments_details["assessmentId"]
-              }
-    if "size" in request.query_params:
-        size = request.query_params["size"]
-        params["size"] = size
-
-    if "page" in request.query_params:
-        page = request.query_params["page"]
-        params["page"] = page
-
+def get_list_evidences(request):
     response = requests.get(
-        ASSESSMENT_URL + 'assessment-core/api/evidences', params=params)
-    response_body = response.json()
-    users_id = list()
-    if response.status_code == status.HTTP_200_OK:
-        for item in response_body["items"]:
-            users_id.append(item["createdById"])
-        users = User.objects.filter(id__in=users_id)
-        if response.status_code == status.HTTP_200_OK:
-            for i in range(len(response_body["items"])):
-                user = users.get(id=response_body["items"][i].pop("createdById"))
-                response_body["items"][i]["created_by"] = {"id": user.id, "display_name": user.display_name}
-                response_body["items"][i]["last_modification_date"] = response_body["items"][i].pop(
-                    "lastModificationTime")
-
-    result["Success"] = True
-    result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/evidences',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
 def edit_evidence(validated_data, evidence_id, authorization_header):
