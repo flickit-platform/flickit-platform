@@ -35,14 +35,13 @@ class EvidencesApi(APIView):
 
 
 class EvidenceApi(APIView):
-    @swagger_auto_schema(request_body=evidence_serializers.EditEvidenceSerializer(), responses={201: ""})
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={201: ""})
     def put(self, request, evidence_id):
-        serializer_data = evidence_serializers.EditEvidenceSerializer(data=request.data)
-        serializer_data.is_valid(raise_exception=True)
-        result = evidence_services.edit_evidence(serializer_data.validated_data, evidence_id,
-                                                 authorization_header=request.headers['Authorization'],
-                                                 )
-        return Response(result["body"], result["status_code"])
+        result = evidence_services.edit_evidence(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
 
     def delete(self, request, evidence_id):
         result = evidence_services.delete_evidence(evidence_id)
