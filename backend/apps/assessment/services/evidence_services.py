@@ -27,13 +27,10 @@ def edit_evidence(request, evidence_id):
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def delete_evidence(evidence_id):
-    result = dict()
-
+def delete_evidence(request, evidence_id):
     response = requests.delete(
-        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}')
-
-    result["Success"] = True
-    result["body"] = None
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response}

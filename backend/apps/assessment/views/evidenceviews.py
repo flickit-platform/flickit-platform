@@ -43,6 +43,10 @@ class EvidenceApi(APIView):
         result = evidence_services.edit_evidence(request, evidence_id)
         return Response(data=result["body"], status=result["status_code"])
 
+    @swagger_auto_schema(responses={204: ""})
     def delete(self, request, evidence_id):
-        result = evidence_services.delete_evidence(evidence_id)
-        return Response(status=result["status_code"])
+        result = evidence_services.delete_evidence(request, evidence_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
