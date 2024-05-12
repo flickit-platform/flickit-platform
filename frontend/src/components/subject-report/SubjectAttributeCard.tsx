@@ -783,7 +783,7 @@ const EvidanceDescription = ({
 }) => {
   return (
     <>
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="flex-start" alignItems="center">
         <Typography display="flex" margin="16px" color={textColor}>
           {number}
         </Typography>
