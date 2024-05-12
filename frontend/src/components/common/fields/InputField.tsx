@@ -19,8 +19,13 @@ const InputField = () => {
 interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   name: string;
   minLength?: number;
+  maxLength?: number;
   isFocused?: boolean;
   pallet?: any;
+  borderRadius?: string
+  setValueCount?: any,
+  hasCounter?: boolean,
+  isFarsi?: boolean,
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -30,9 +35,14 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     InputLabelProps,
     type,
     minLength,
+    maxLength,
     helperText,
     isFocused,
     pallet,
+    borderRadius,
+    setValueCount,
+    hasCounter,
+    isFarsi,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -41,7 +51,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     formState: { errors },
   } = useFormContext();
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
-  const { hasError, errorMessage } = getFieldError(errors, name, minLength);
+  const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
   useEffect(() => {
     if (isFocused && inputRef.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
@@ -57,6 +67,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     }
   }, [inputRef.current?.value]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+     setValueCount(event.target.value)
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
@@ -70,7 +81,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   return (
     <TextField
       {...rest}
-      {...register(name, { required, minLength })}
+      {...register(name, { required, minLength, maxLength })}
       type={showPassword ? "text" : type}
       fullWidth
       size="small"
@@ -82,6 +93,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderColor: pallet?.borderColor,
+            borderRadius: borderRadius,
           },
           "&:hover fieldset": {
             borderColor: pallet?.borderHover,
@@ -108,7 +120,13 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
                 </InputAdornment>
               ),
             }
-          : {}
+          : {  style:hasCounter ? isFarsi ? {
+                paddingLeft: 90,
+                minHeight: "110px"
+              }:{
+                paddingRight: 90,
+                minHeight: "110px"
+              } : {} }
       }
       error={hasError}
       helperText={(errorMessage as ReactNode) || helperText}

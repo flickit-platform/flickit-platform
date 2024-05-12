@@ -14,6 +14,7 @@
   "requiredFieldError": "This field is required",
   "needStrongPassword": "Your password should contain at least one special character and one capital character",
   "minLengthFieldError": "Please enter at least {{length}} characters",
+  "maxLengthFieldError": "Please enter up to {{length}} characters",
   "signOutOfYourAccount": "Sign out of your account",
   "signOut": "Sign out",
   "gettingThingsReady": "We are getting things ready for you...",
