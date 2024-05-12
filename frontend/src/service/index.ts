@@ -556,7 +556,7 @@ export const createService = (
     ) {
       const { assessmentId, attributeId, type } = args ?? {};
       return axios.get(
-        `/assessment-core/api/assessments/${assessmentId}/attributes/${attributeId}/evidences/`,
+        `/api/v1/assessments/${assessmentId}/attributes/${attributeId}/evidences`,
         {
           ...(config ?? {}),
           params: {

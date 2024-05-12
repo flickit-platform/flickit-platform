@@ -718,48 +718,6 @@ const RelatedEvidencesContainer = (props: any) => {
   useEffect(() => {
     fetchRelatedEvidences.query();
   }, []);
-  const items = [
-    {
-      description:
-        "The team demonstrated remarkable agility in adapting to changing project requirements.",
-    },
-    {
-      description:
-        "Through effective collaboration and quick decision-making, the team showcased its agility in responding to market shifts.",
-    },
-    {
-      description:
-        "Team agility was evident as they seamlessly transitioned between different tasks and projects.",
-    },
-    {
-      description:
-        "The team's agility enabled them to swiftly overcome unexpected obstacles and meet project deadlines.",
-    },
-    {
-      description:
-        "By embracing a flexible mindset, the team demonstrated its agility in navigating complex challenges.",
-    },
-    {
-      description:
-        "The team's agility was a key factor in their ability to innovate and stay ahead of competitors.",
-    },
-    {
-      description:
-        "Rapid iterations and constant feedback loops highlighted the team's agility in delivering high-quality results.",
-    },
-    {
-      description:
-        "The team's agility fostered a culture of continuous improvement and adaptability.",
-    },
-    {
-      description:
-        "In the face of uncertainty, the team's agility allowed them to pivot and find creative solutions.",
-    },
-    {
-      description:
-        "The team's agility was instrumental in their ability to respond effectively to changing customer needs.",
-    },
-  ];
 
   return (
     <Box
@@ -798,7 +756,7 @@ const RelatedEvidencesContainer = (props: any) => {
         paddingX="30px"
         width="100%"
       >
-        {items.map((item: any, index: number) => (
+        {fetchRelatedEvidences?.data?.items?.map((item: any, index: number) => (
           <EvidanceDescription
             key={index}
             number={index + 1}
