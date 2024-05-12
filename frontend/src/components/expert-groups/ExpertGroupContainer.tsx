@@ -156,6 +156,7 @@ const ExpertGroupContainer = () => {
                     queryData={expertGroupMembersQueryData}
                     inviteeQueryData={expertGroupMembersInviteeQueryData}
                     hasAccess={editable}
+                    setNumberOfMembers={setNumberOfMembers}
                   />
                 </Box>
               </Grid>
@@ -302,7 +303,6 @@ const ExpertGroupContainer = () => {
                         query={expertGroupMembersQueryData}
                         inviteeQuery={expertGroupMembersInviteeQueryData}
                         hasAccess={hasAccess}
-                        setNumberOfMembers={setNumberOfMembers}
                       />
                     </Box>
                   )}
@@ -355,7 +355,7 @@ const EditExpertGroupButton = (props: any) => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { hasAccess, query, inviteeQuery, setNumberOfMembers } = props;
+  const { hasAccess, query, inviteeQuery } = props;
   const [openInvitees, setOpenInvitees] = useState(false);
   const [openAddMembers, setOpenAddMembers] = useState(false);
 
@@ -367,7 +367,6 @@ const ExpertGroupMembers = (props: any) => {
           const { items = [] } = data;
 
           const users = items.filter((user: any) => user.status === "ACTIVE");
-          setNumberOfMembers(users?.length);
           return (
             <Box>
               <Typography
@@ -810,7 +809,7 @@ const CreateAssessmentKitButton = (props: {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, inviteeQueryData, hasAccess } = props;
+  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
   return (
     <>
@@ -841,7 +840,7 @@ const ExpertGroupMembersDetail = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             const users = items.filter((user: any) => user.status === "ACTIVE");
-
+              setNumberOfMembers(users?.length);
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
