@@ -78,16 +78,16 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
-        background: pallet.background,
+        background: pallet?.background,
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
-            borderColor: pallet.borderColor,
+            borderColor: pallet?.borderColor,
           },
           "&:hover fieldset": {
-            borderColor: pallet.borderHover,
+            borderColor: pallet?.borderHover,
           },
           "&.Mui-focused fieldset": {
-            borderColor: pallet.borderColor,
+            borderColor: pallet?.borderColor,
           },
         },
       }}

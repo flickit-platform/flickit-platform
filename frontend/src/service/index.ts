@@ -864,6 +864,7 @@ export const createService = (
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
             description,
+            type,
           })
         : axios.post(`/api/v1/evidences/`, {
             assessmentId: assessmentId,
