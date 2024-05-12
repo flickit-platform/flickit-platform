@@ -17,7 +17,6 @@ import {
   useQuestionContext,
   useQuestionDispatch,
 } from "@/providers/QuestionProvider";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
@@ -49,6 +48,14 @@ import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 import firstCharDetector from "@/utils/firstCharDetector";
+import Avatar from "@mui/material/Avatar";
+import stringAvatar from "@utils/stringAvatar";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -177,7 +184,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             display: "flex",
             justifyContent: "space-between",
             background: `${notApplicable ? "#273248" : "#000000cc"}`,
-            flexDirection:{xs:"column",md:"row"},
+            flexDirection: { xs: "column", md: "row" },
             borderRadius: " 0 0 8px 8px ",
             px: { xs: 1.75, sm: 2, md: 2.5 },
             py: { xs: 1.5, sm: 2.5 },
@@ -188,7 +195,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              flexDirection:{xs:"column",md:"row"},
+              flexDirection: { xs: "column", md: "row" },
             }}
           >
             <QueryData
@@ -206,7 +213,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                   >
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography sx={{ display: "flex",fontSize:{xs:"10px"} }}>
+                        <Typography
+                          sx={{ display: "flex", fontSize: { xs: "10px" } }}
+                        >
                           <Trans i18nKey={"youSelected"} />
                           <Typography
                             fontWeight={900}
@@ -725,7 +734,39 @@ const Evidence = (props: any) => {
     service: (args, config) => service.addEvidence(args, config),
     runOnMount: false,
   });
+  const [value, setValue] = React.useState("POSITIVE");
+  const [evidenceBG, setEvidenceBG] = useState<any>({
+    background: "#EDFCFC",
+    borderColor: "#1CC2C4",
+    borderHover: "#117476",
+  });
+  useEffect(() => {
+    if (value === null) {
+      setEvidenceBG({
+        background: "#EDF4FC",
+        borderColor: "#0A2342",
+        borderHover: "#061528",
+      });
+    }
+    if (value === "POSITIVE") {
+      setEvidenceBG({
+        background: "#EDFCFC",
+        borderColor: "#1CC2C4",
+        borderHover: "#117476",
+      });
+    }
+    if (value === "NEGATIVE") {
+      setEvidenceBG({
+        background: "#FDF1F5",
+        borderColor: "#D81E5B",
+        borderHover: "#821237",
+      });
+    }
+  }, [value]);
 
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   //if there is a evidence we should use addEvidence service
   const onSubmit = async (data: any) => {
     try {
@@ -733,6 +774,7 @@ const Evidence = (props: any) => {
         description: data.evidence,
         questionId: questionInfo.id,
         assessmentId,
+        type: value,
         id: evidenceId,
       });
       await await evidencesQueryData.query();
@@ -751,7 +793,52 @@ const Evidence = (props: any) => {
           onSubmit={formMethods.handleSubmit(onSubmit)}
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
         >
-          <Grid container spacing={1} sx={styles.formGrid}>
+          <Grid container sx={styles.formGrid}>
+            <TabContext value={value}>
+              <TabList
+                onChange={handleChange}
+                sx={{
+                  width: "100%",
+
+                  "&.MuiTabs-root": {
+                    borderBottomColor: "transparent",
+                    justifyContent: "space-between",
+                    display: "flex",
+                  },
+                  ".MuiTabs-indicator": {
+                    backgroundColor: evidenceBG.borderColor,
+                  },
+                }}
+              >
+                <Tab
+                  label="Negative evidence"
+                  value="NEGATIVE"
+                  sx={{
+                    "&.Mui-selected": {
+                      color: `${evidenceBG.borderColor}  !important`,
+                    },
+                  }}
+                />
+                <Tab
+                  label="Comment"
+                  sx={{
+                    "&.Mui-selected": {
+                      color: `${evidenceBG.borderColor}  !important`,
+                    },
+                  }}
+                  value={null}
+                />
+                <Tab
+                  label="Positive evidence"
+                  sx={{
+                    "&.Mui-selected": {
+                      color: `${evidenceBG.borderColor}  !important`,
+                    },
+                  }}
+                  value="POSITIVE"
+                />
+              </TabList>
+            </TabContext>
             <Grid item xs={12}>
               <InputFieldUC
                 multiline
@@ -760,24 +847,29 @@ const Evidence = (props: any) => {
                 minLength={3}
                 autoFocus={true}
                 defaultValue={""}
+                pallet={evidenceBG}
                 name="evidence"
-                label={<Trans i18nKey="evidence" />}
+                label={null}
                 required={true}
                 placeholder="Please write your evidence"
                 isFocused={evidenceId ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
-              <Box display={"flex"}>
+              <Box display={"flex"} mt={2}>
                 <LoadingButton
-                  sx={{ ml: "auto" }}
+                  sx={{
+                    ml: "auto",
+                    borderRadius: "100%",
+                    p: 2,
+                    minWidth: "56px",
+                    background: evidenceBG.borderColor,
+                  }}
                   type="submit"
                   variant="contained"
                   loading={evidencesQueryData.loading}
                 >
-                  <Trans
-                    i18nKey={evidenceId ? "updateEvidence" : "addEvidence"}
-                  />
+                  <AddRoundedIcon fontSize="large" />
                 </LoadingButton>
               </Box>
             </Grid>
@@ -790,6 +882,7 @@ const Evidence = (props: any) => {
               const { items } = data;
               return items.map((item: any, index: number) => (
                 <EvidenceDetail
+                  setValue={setValue}
                   item={item}
                   setEvidenceId={setEvidenceId}
                   evidencesQueryData={evidencesQueryData}
@@ -806,82 +899,12 @@ const Evidence = (props: any) => {
 };
 
 const EvidenceDetail = (props: any) => {
-  const { item, evidencesQueryData, setEvidenceId } = props;
-  const { description, last_modification_date, created_by, id } = item;
+  const { item, evidencesQueryData, setEvidenceId, setValue } = props;
+  const { description, lastModificationTime, createdBy, id, type } = item;
   const is_farsi = firstCharDetector(description);
-  return (
-    <Box display="flex" flexDirection="column" width="100%">
-      <ListItem
-        sx={{
-          px: 0.5,
-          borderBottom: "1px solid #e9e8e8",
-          mb: 1,
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <ListItemText
-            sx={{
-              direction: `${is_farsi ? "rtl" : "ltr"}`,
-              textAlign: `${is_farsi ? "right" : "left"}`,
-              px: 4,
-              whiteSpace: "pre-line",
-            }}
-            primary={description}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: `${is_farsi ? "row-reverse" : "row"}`,
-            justifyContent: "flex-end",
-            alignItems: "center",
-            width: "100%",
-            mr: 4,
-          }}
-        >
-          <Box sx={{ display: "contents" }}>
-            <PersonOutlineRoundedIcon
-              sx={{ mr: 0.7, color: "gray" }}
-              fontSize="small"
-            />
-            <Typography fontSize="12px" variant="overline">
-              {created_by.display_name}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "contents" }}>
-            <AccessTimeRoundedIcon
-              sx={{ mr: 0.7, color: "gray" }}
-              fontSize="small"
-            />
-            <Typography fontSize="12px" variant="overline">
-              {formatDate(last_modification_date)}
-            </Typography>
-          </Box>
-          <Box>
-            <Actions
-              fetchEvidences={evidencesQueryData.query}
-              id={id}
-              setEvidenceId={setEvidenceId}
-              description={description}
-            />
-          </Box>
-        </Box>
-      </ListItem>
-    </Box>
-  );
-};
-
-const Actions = (props: any) => {
-  const { fetchEvidences, id, setEvidenceId, description } = props;
-  const { service } = useServiceContext();
+  const [evidenceBG, setEvidenceBG] = useState<any>();
   const formContext = useFormContext();
+  const { service } = useServiceContext();
   const deleteEvidence = useQuery({
     service: (args = { id }, config) => service.deleteEvidence(args, config),
     runOnMount: false,
@@ -890,36 +913,97 @@ const Actions = (props: any) => {
   const onUpdate = async () => {
     formContext.setValue("evidence", description);
     setEvidenceId(id);
+    if (type === "Positive") {
+      setValue("POSITIVE");
+    }
+    if (type === "Negative") {
+      setValue("NEGATIVE");
+    }
+    if (type === null) {
+      setValue(null);
+    }
   };
 
   const deleteItem = async (e: any) => {
     try {
       await deleteEvidence.query();
-      await fetchEvidences?.();
+      await evidencesQueryData.query();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
   };
-
+  useEffect(() => {
+    if (type === null) {
+      setEvidenceBG({
+        background: "#EDF4FC",
+        borderColor: "#0A2342",
+        borderHover: "#061528",
+      });
+    }
+    if (type === "Positive") {
+      setEvidenceBG({
+        background: "#EDFCFC",
+        borderColor: "#1CC2C4",
+        borderHover: "#117476",
+      });
+    }
+    if (type === "Negative") {
+      setEvidenceBG({
+        background: "#FDF1F5",
+        borderColor: "#D81E5B",
+        borderHover: "#821237",
+      });
+    }
+  }, [type]);
   return (
-    <MoreActions
-      {...useMenu()}
-      boxProps={{ ml: 0.4 }}
-      loading={deleteEvidence.loading}
-      items={[
-        {
-          icon: <EditRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="edit" />,
-          onClick: onUpdate,
-        },
-        {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
-          onClick: deleteItem,
-        },
-      ]}
-    />
+    <Box display="flex" flexDirection="column" width="100%">
+      <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
+        <Avatar
+          {...stringAvatar(createdBy.displayName.toUpperCase())}
+          // src={pictureLink}
+          sx={{ width: 56, height: 56 }}
+        ></Avatar>
+        <Box
+          sx={{
+            px: "32px",
+            py: "24px",
+            display: "flex",
+            alignItems: "baseline",
+            border: `1px solid ${evidenceBG?.borderColor}`,
+            background: evidenceBG?.background,
+            color: "#0A2342",
+            borderRadius: "0 24px 24px 24px ",
+            gap: "64px",
+            direction: `${is_farsi ? "rtl" : "ltr"}`,
+            textAlign: `${is_farsi ? "right" : "left"}`,
+          }}
+        >
+          <Typography>{description}</Typography>
+          <Typography fontSize="12px" variant="overline">
+            {formatDate(lastModificationTime)}
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <IconButton
+            aria-label="edit"
+            size="small"
+            sx={{ boxShadow: 2, p: 1 }}
+            onClick={onUpdate}
+          >
+            <EditRoundedIcon fontSize="small" color="success" />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            sx={{ boxShadow: 2, p: 1 }}
+            onClick={deleteItem}
+          >
+            <DeleteRoundedIcon fontSize="small" color="error" />
+          </IconButton>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

@@ -138,8 +138,10 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${
+          assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${
+          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -664,7 +666,10 @@ export const createService = (
         params: { user_id: id },
       });
     },
-    fetchExpertGroups(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+    fetchExpertGroups(
+      args: { page: number; size: number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       const { page = 1, size = 20 } = args ?? {};
 
       return axios.get(`/api/v1/expert-groups/`, {
@@ -850,20 +855,22 @@ export const createService = (
         description: string;
         questionId: TId;
         assessmentId: TId;
+        type: string;
         id?: TId;
       },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { description, questionId, assessmentId, id } = args ?? {};
+      const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-          description,
-        })
+            description,
+          })
         : axios.post(`/api/v1/evidences/`, {
-          assessment_id: assessmentId,
-          question_id: questionId,
-          description,
-        });
+            assessmentId: assessmentId,
+            questionId: questionId,
+            type: type,
+            description,
+          });
     },
     deleteEvidence(
       args: { id: TId },
@@ -890,8 +897,8 @@ export const createService = (
       return axios.get(`/api/v1/evidences/`, {
         ...(config ?? {}),
         params: {
-          question_id: questionId,
-          assessment_id: assessmentId,
+          questionId: questionId,
+          assessmentId: assessmentId,
           page,
           size,
         },

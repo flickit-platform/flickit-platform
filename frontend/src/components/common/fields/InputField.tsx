@@ -20,6 +20,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   name: string;
   minLength?: number;
   isFocused?: boolean;
+  pallet?: any;
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -31,6 +32,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     minLength,
     helperText,
     isFocused,
+    pallet,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -46,7 +48,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     }
   }, [isFocused]);
   useEffect(() => {
-    if (inputRef.current&&isFocused) {
+    if (inputRef.current && isFocused) {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
@@ -75,6 +77,20 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       variant="outlined"
       inputRef={inputRef}
       onChange={handleInputChange}
+      sx={{
+        background: pallet.background,
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: pallet.borderColor,
+          },
+          "&:hover fieldset": {
+            borderColor: pallet.borderHover,
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: pallet.borderColor,
+          },
+        },
+      }}
       InputLabelProps={{ ...InputLabelProps, required }}
       InputProps={
         type === "password"
