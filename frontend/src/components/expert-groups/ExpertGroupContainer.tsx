@@ -1020,7 +1020,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                               </Typography>
                             </Box>
                             <MemberActions
-                              query={queryData.query}
+                              query={inviteeQueryData.query}
                               userId={id}
                               isInvitationExpired={true}
                               email={email}
