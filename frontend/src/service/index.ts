@@ -326,7 +326,7 @@ export const createService = (
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/${assessmentId}/progress/`, config);
+      return axios.get(`/api/v2/assessments/${assessmentId}/progress/`, config);
     },
     calculateMaturityLevel(
       { assessmentId }: { assessmentId: TId },
