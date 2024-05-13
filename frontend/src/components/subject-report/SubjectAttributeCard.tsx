@@ -29,6 +29,13 @@ const SUbjectAttributeCard = (props: any) => {
     id,
   } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
+    false
+  );
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedAttribute(isExpanded ? panel : false);
+    };
   return (
     <Paper
       elevation={2}
@@ -39,7 +46,11 @@ const SUbjectAttributeCard = (props: any) => {
         mb: 5,
       }}
     >
-      <Accordion sx={{ boxShadow: "none !important" }}>
+      <Accordion
+        sx={{ boxShadow: "none !important" }}
+        expanded={expandedAttribute === id}
+        onChange={handleChange(id)}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -135,8 +146,18 @@ const SUbjectAttributeCard = (props: any) => {
               paddingX: "104px",
             }}
           >
-            <RelatedEvidencesContainer attributeId={id} type="POSITIVE" />
-            <RelatedEvidencesContainer attributeId={id} type="NEGATIVE" />
+            <RelatedEvidencesContainer
+              expandedAttribute={expandedAttribute}
+              setExpandedAttribute={setExpandedAttribute}
+              attributeId={id}
+              type="POSITIVE"
+            />
+            <RelatedEvidencesContainer
+              expandedAttribute={expandedAttribute}
+              setExpandedAttribute={setExpandedAttribute}
+              attributeId={id}
+              type="NEGATIVE"
+            />
           </Box>
           <Typography
             variant="h6"
@@ -704,7 +725,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
 };
 
 const RelatedEvidencesContainer = (props: any) => {
-  const { attributeId, type } = props;
+  const { attributeId, type, expandedAttribute } = props;
   const { assessmentId } = useParams();
   const { service } = useServiceContext();
   const fetchRelatedEvidences = useQuery({
@@ -716,8 +737,10 @@ const RelatedEvidencesContainer = (props: any) => {
   });
 
   useEffect(() => {
-    fetchRelatedEvidences.query();
-  }, []);
+    if (expandedAttribute === attributeId) {
+      fetchRelatedEvidences.query();
+    }
+  }, [expandedAttribute]);
 
   return (
     <Box
