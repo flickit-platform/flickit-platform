@@ -66,7 +66,6 @@ const AssessmentKit = (props: any) => {
     is_active,
     maturity_levels,
   } = data || {};
-
   const colorPallet = getMaturityLevelColors(
     maturity_levels ? maturity_levels.length : 5
   );
@@ -443,7 +442,7 @@ const LikeAssessmentKit = ({ likes_number }: any) => {
       onClick={like}
       loading={likeQueryData.loading}
     >
-      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.count || likes_number}</Box>
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.count ?? likes_number}</Box>
     </LoadingButton>
   );
 };
