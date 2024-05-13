@@ -22,7 +22,7 @@ const UserAccount = () => {
     service: (args, config) => service.getSignedInUser(args, config),
     runOnMount: false,
   });
-  const { display_name, email, is_expert, bio, linkedin, picture } = userInfo;
+  const { display_name, email, bio, linkedin, picture } = userInfo;
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -88,16 +88,6 @@ const UserAccount = () => {
                 </Typography>
                 <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{linkedin}</Typography>
               </Box>
-              {is_expert && (
-                <Box mt={2.5}>
-                  <Typography variant="subLarge">
-                    <Trans i18nKey="accessLevel" />
-                  </Typography>
-                  <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
-                    <Trans i18nKey="expert" />
-                  </Typography>
-                </Box>
-              )}
               <Box mt={2.5}>
                 <Typography variant="subLarge">
                   <Trans i18nKey="bio" />
