@@ -84,9 +84,9 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
   const renderEvidenceItems = () => (
     <Box
       sx={{ ...styles.centerCH }}
-      gap="16px"
-      borderRadius="16px"
-      height={"442px"}
+      gap={2}
+      borderRadius={2}
+      height={"46vh"}
       width="100%"
       padding="16px 0px 0px 0px"
       border="1px solid"
@@ -135,7 +135,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
   return (
     <>
       {fetchRelatedEvidences.loading || !opositeEvidenceLoading ? (
-        <Box sx={{ ...styles.centerVH }} height="200px" width="100%">
+        <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
           <CircularProgress />
         </Box>
       ) : fetchRelatedEvidences?.data?.items.length === 0 ? (
