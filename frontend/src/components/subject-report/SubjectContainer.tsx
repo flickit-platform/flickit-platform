@@ -67,7 +67,7 @@ const SubjectContainer = () => {
 
         const attributesNumber = attributes.length;
         return (
-          <Box display="flex" flexDirection="column" gap={3}>
+          <Box display="flex" flexDirection="column" gap={3} marginX="160px">
             <SubjectTitle
               {...subjectQueryData}
               loading={loading}
@@ -101,7 +101,6 @@ const SubjectContainer = () => {
                   boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
                   display="flex"
                   padding="36px"
-                  marginX="160px"
                 >
                   <SubjectOverallInsight
                     {...subjectQueryData}
@@ -117,7 +116,6 @@ const SubjectContainer = () => {
                       boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
                       display="flex"
                       padding="36px"
-                      marginX="160px"
                     >
                       {/* <Typography>
                         <Trans
@@ -138,13 +136,8 @@ const SubjectContainer = () => {
                     <SubjectBarChart {...subjectQueryData} loading={loading} />
                   </Box> */}
                 </Hidden>
-            
-                <Box>
-                  <SubjectAttributeList
-                    {...subjectQueryData}
-                    loading={loading}
-                  />
-                </Box>
+
+                <SubjectAttributeList {...subjectQueryData} loading={loading} />
               </Box>
             )}
           </Box>
