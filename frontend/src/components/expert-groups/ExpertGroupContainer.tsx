@@ -415,7 +415,8 @@ const ExpertGroupMembers = (props: any) => {
               <Box my={2}>
                 <Invitees
                   users={items}
-                  query={inviteeQuery.query}
+                  query={query.query}
+                  inviteeQuery={inviteeQuery.query}
                   setOpenInvitees={setOpenInvitees}
                   openInvitees={openInvitees}
                 />
@@ -429,7 +430,7 @@ const ExpertGroupMembers = (props: any) => {
 };
 
 const Invitees = (props: any) => {
-  const { users, query, setOpenInvitees, openInvitees } = props;
+  const { users, query,inviteeQuery, setOpenInvitees, openInvitees } = props;
   const hasInvitees = users.length > 0;
   return (
     <Box>
@@ -493,6 +494,7 @@ const Invitees = (props: any) => {
                 <Box ml="auto" sx={{ ...styles.centerV }}>
                   <MemberActions
                     query={query}
+                    inviteeQuery={inviteeQuery}
                     userId={id}
                     email={email}
                     isInvitationExpired={true}
@@ -508,7 +510,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query, userId, email, isInvitationExpired } = props;
+  const { query,inviteeQuery, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -539,6 +541,7 @@ const MemberActions = (props: any) => {
       });
       res?.message && toast.success(res.message);
       query();
+      inviteeQuery()
     } catch (e) {
       const error = e as ICustomError;
       if ("message" in error.data || {}) {
@@ -1020,6 +1023,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                             </Box>
                             <MemberActions
                               query={queryData.query}
+                              inviteeQuery={inviteeQueryData.query}
                               userId={id}
                               isInvitationExpired={true}
                               email={email}
