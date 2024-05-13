@@ -18,6 +18,16 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
+import emptyPositiveState from "@assets/svg/emptyPositiveState.svg";
+import emptyState from "@assets/svg/emptyState.svg";
+import emptyNegativeState from "@assets/svg/emptyNegativeState.svg";
+import { CircularProgress } from "@mui/material";
+
+enum evidenceType {
+  positive = "POSITIVE",
+  negative = "NEGATIVE",
+}
+
 const SUbjectAttributeCard = (props: any) => {
   const {
     title,
@@ -32,6 +42,14 @@ const SUbjectAttributeCard = (props: any) => {
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
     false
   );
+  const [emptyPositiveEvidence, setEmptyPositiveEvidence] =
+    useState<boolean>(false);
+  const [emptyNegativeEvidence, setEmptyNegativeEvidence] =
+    useState<boolean>(false);
+  const [positiveEvidenceLoading, setPositiveEvidenceLoading] =
+    useState<boolean>(false);
+  const [negativeEvidenceLoading, setNegativeEvidenceLoading] =
+    useState<boolean>(false);
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpandedAttribute(isExpanded ? panel : false);
@@ -129,36 +147,48 @@ const SUbjectAttributeCard = (props: any) => {
             mt={4}
             mb={2}
             sx={{
-              display: "flex",
               gap: "46px",
-              justifyContent: "center",
-              alignItems: "center",
+              ...styles.centerVH,
             }}
           >
             <Trans i18nKey={"relatedEvidences"} />
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "46px",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingX: "104px",
-            }}
-          >
-            <RelatedEvidencesContainer
-              expandedAttribute={expandedAttribute}
-              setExpandedAttribute={setExpandedAttribute}
-              attributeId={id}
-              type="POSITIVE"
-            />
-            <RelatedEvidencesContainer
-              expandedAttribute={expandedAttribute}
-              setExpandedAttribute={setExpandedAttribute}
-              attributeId={id}
-              type="NEGATIVE"
-            />
-          </Box>
+          {emptyNegativeEvidence && emptyPositiveEvidence ? (
+            <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
+              <img width="25%" src={emptyState} alt="empty" />
+              <Typography variant="h5" color="#9DA7B3">
+                <Trans i18nKey={"noEvidence"} />
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                ...styles.centerVH,
+                gap: "46px",
+                paddingX: "104px",
+              }}
+            >
+              {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+              <RelatedEvidencesContainer
+                expandedAttribute={expandedAttribute}
+                attributeId={id}
+                type={evidenceType.positive}
+                setEmptyEvidence={setEmptyPositiveEvidence}
+                setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                opositeEvidenceLoading={negativeEvidenceLoading}
+              />
+              {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+              <RelatedEvidencesContainer
+                expandedAttribute={expandedAttribute}
+                attributeId={id}
+                type={evidenceType.negative}
+                setEmptyEvidence={setEmptyNegativeEvidence}
+                setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                opositeEvidenceLoading={positiveEvidenceLoading}
+              />
+            </Box>
+          )}
+
           <Typography
             variant="h6"
             mt={4}
@@ -724,15 +754,28 @@ export const MaturityLevelDetailsBar = (props: any) => {
   );
 };
 
-const RelatedEvidencesContainer = (props: any) => {
-  const { attributeId, type, expandedAttribute } = props;
+interface RelatedEvidencesContainerProps {
+  attributeId: string;
+  type: evidenceType;
+  expandedAttribute: string | false;
+  setEmptyEvidence: (value: boolean) => void;
+  setOpositeEvidenceLoading: (value: boolean) => void;
+  opositeEvidenceLoading: boolean;
+}
+
+const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
+  attributeId,
+  type,
+  expandedAttribute,
+  setEmptyEvidence,
+  opositeEvidenceLoading,
+  setOpositeEvidenceLoading,
+}) => {
   const { assessmentId } = useParams();
   const { service } = useServiceContext();
   const fetchRelatedEvidences = useQuery({
-    service: (
-      args = { assessmentId, attributeId: attributeId, type: type },
-      config
-    ) => service.fetchRelatedEvidences(args, config),
+    service: (args = { assessmentId, attributeId, type }, config) =>
+      service.fetchRelatedEvidences(args, config),
     runOnMount: false,
   });
 
@@ -742,33 +785,66 @@ const RelatedEvidencesContainer = (props: any) => {
     }
   }, [expandedAttribute]);
 
-  return (
+  useEffect(() => {
+    if (fetchRelatedEvidences.loaded) {
+      setOpositeEvidenceLoading(true);
+      if (fetchRelatedEvidences?.data?.items.length === 0) {
+        setEmptyEvidence(true);
+      }
+    }
+  }, [fetchRelatedEvidences.loaded]);
+
+  const renderEmptyState = () => (
+    <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
+      <img
+        width="75%"
+        src={
+          type === evidenceType.positive
+            ? emptyPositiveState
+            : emptyNegativeState
+        }
+        alt="empty"
+      />
+      <Typography variant="h5" color="#9DA7B3">
+        <Trans
+          i18nKey={
+            type === evidenceType.positive
+              ? "noPositiveEvidence"
+              : "noNegativeEvidence"
+          }
+        />
+      </Typography>
+    </Box>
+  );
+
+  const renderEvidenceItems = () => (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
+      sx={{ ...styles.centerCH }}
       gap="16px"
       borderRadius="16px"
       height={"442px"}
       width="100%"
       padding="16px 0px 0px 0px"
       border="1px solid"
-      borderColor={type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD"}
+      borderColor={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
     >
       <Typography
         variant="h5"
-        color={type === "POSITIVE" ? "#1CC2C4" : "#D81E5B"}
+        color={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
       >
         <Trans
           i18nKey={
-            type === "POSITIVE" ? "positiveEvidences" : "negativeEvidences"
+            type === evidenceType.positive
+              ? "positiveEvidences"
+              : "negativeEvidences"
           }
         />
       </Typography>
       <Divider
         sx={{
           width: "100%",
-          backgroundColor: type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD",
+          backgroundColor:
+            type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD",
         }}
       />
       <Box
@@ -784,12 +860,30 @@ const RelatedEvidencesContainer = (props: any) => {
             key={index}
             number={index + 1}
             item={item}
-            color={type === "POSITIVE" ? "#A4E7E7" : "#EFA5BD"}
-            textColor={type === "POSITIVE" ? "#1CC2C4" : "#D81E5B"}
+            color={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
+            textColor={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
           />
         ))}
       </Box>
     </Box>
+  );
+
+  return (
+    <>
+      {fetchRelatedEvidences.loading || !opositeEvidenceLoading ? (
+        <Box
+          sx={{ ...styles.centerVH }}
+          height="200px"
+          width="100%"
+        >
+          <CircularProgress />
+        </Box>
+      ) : fetchRelatedEvidences?.data?.items.length === 0 ? (
+        renderEmptyState()
+      ) : (
+        renderEvidenceItems()
+      )}
+    </>
   );
 };
 
