@@ -156,6 +156,7 @@ const ExpertGroupContainer = () => {
                     queryData={expertGroupMembersQueryData}
                     inviteeQueryData={expertGroupMembersInviteeQueryData}
                     hasAccess={editable}
+                    setNumberOfMembers={setNumberOfMembers}
                   />
                 </Box>
               </Grid>
@@ -302,7 +303,6 @@ const ExpertGroupContainer = () => {
                         query={expertGroupMembersQueryData}
                         inviteeQuery={expertGroupMembersInviteeQueryData}
                         hasAccess={hasAccess}
-                        setNumberOfMembers={setNumberOfMembers}
                       />
                     </Box>
                   )}
@@ -355,7 +355,7 @@ const EditExpertGroupButton = (props: any) => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { hasAccess, query, inviteeQuery, setNumberOfMembers } = props;
+  const { hasAccess, query, inviteeQuery } = props;
   const [openInvitees, setOpenInvitees] = useState(false);
   const [openAddMembers, setOpenAddMembers] = useState(false);
 
@@ -367,7 +367,6 @@ const ExpertGroupMembers = (props: any) => {
           const { items = [] } = data;
 
           const users = items.filter((user: any) => user.status === "ACTIVE");
-          setNumberOfMembers(users?.length);
           return (
             <Box>
               <Typography
@@ -413,10 +412,11 @@ const ExpertGroupMembers = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             return (
-              <Box mb={2}>
+              <Box my={2}>
                 <Invitees
                   users={items}
-                  query={inviteeQuery.query}
+                  query={query.query}
+                  inviteeQuery={inviteeQuery.query}
                   setOpenInvitees={setOpenInvitees}
                   openInvitees={openInvitees}
                 />
@@ -430,7 +430,7 @@ const ExpertGroupMembers = (props: any) => {
 };
 
 const Invitees = (props: any) => {
-  const { users, query, setOpenInvitees, openInvitees } = props;
+  const { users, query,inviteeQuery, setOpenInvitees, openInvitees } = props;
   const hasInvitees = users.length > 0;
   return (
     <Box>
@@ -442,7 +442,7 @@ const Invitees = (props: any) => {
           sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
           onClick={() => setOpenInvitees((state: boolean) => !state)}
         >
-          <Trans i18nKey="invitees" />
+          <Trans i18nKey="invited" />
           <Box
             sx={{
               ...styles.centerV,
@@ -494,6 +494,7 @@ const Invitees = (props: any) => {
                 <Box ml="auto" sx={{ ...styles.centerV }}>
                   <MemberActions
                     query={query}
+                    inviteeQuery={inviteeQuery}
                     userId={id}
                     email={email}
                     isInvitationExpired={true}
@@ -509,7 +510,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query, userId, email, isInvitationExpired } = props;
+  const { query,inviteeQuery, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -540,6 +541,7 @@ const MemberActions = (props: any) => {
       });
       res?.message && toast.success(res.message);
       query();
+      inviteeQuery()
     } catch (e) {
       const error = e as ICustomError;
       if ("message" in error.data || {}) {
@@ -810,7 +812,7 @@ const CreateAssessmentKitButton = (props: {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, inviteeQueryData, hasAccess } = props;
+  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
   return (
     <>
@@ -841,7 +843,7 @@ const ExpertGroupMembersDetail = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             const users = items.filter((user: any) => user.status === "ACTIVE");
-
+              setNumberOfMembers(users?.length);
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
@@ -1021,6 +1023,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                             </Box>
                             <MemberActions
                               query={queryData.query}
+                              inviteeQuery={inviteeQueryData.query}
                               userId={id}
                               isInvitationExpired={true}
                               email={email}

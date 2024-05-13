@@ -326,7 +326,7 @@ export const createService = (
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/${assessmentId}/progress/`, config);
+      return axios.get(`/api/v2/assessments/${assessmentId}/progress/`, config);
     },
     calculateMaturityLevel(
       { assessmentId }: { assessmentId: TId },
@@ -850,7 +850,7 @@ export const createService = (
     ) {
       const { id } = args ?? {};
 
-      return axios.post(`/baseinfo/assessmentkits/like/${id}/`, {
+      return axios.post(`/api/v2/assessment-kits/${id}/like/`, {
         ...(config ?? {}),
       });
     },
@@ -870,18 +870,21 @@ export const createService = (
         description: string;
         questionId: TId;
         assessmentId: TId;
+        type: string;
         id?: TId;
       },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { description, questionId, assessmentId, id } = args ?? {};
+      const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
             description,
+            type,
           })
         : axios.post(`/api/v1/evidences/`, {
-            assessment_id: assessmentId,
-            question_id: questionId,
+            assessmentId: assessmentId,
+            questionId: questionId,
+            type: type,
             description,
           });
     },
@@ -910,8 +913,8 @@ export const createService = (
       return axios.get(`/api/v1/evidences/`, {
         ...(config ?? {}),
         params: {
-          question_id: questionId,
-          assessment_id: assessmentId,
+          questionId: questionId,
+          assessmentId: assessmentId,
           page,
           size,
         },
