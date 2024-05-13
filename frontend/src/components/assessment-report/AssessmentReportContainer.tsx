@@ -83,10 +83,10 @@ const AssessmentReportContainer = () => {
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
         const { expertGroup } = assessmentKit || {};
-        const { question_count, answers_count } = progress;
+        const { questionsCount, answersCount } = progress;
 
-        const total_progress =
-          ((answers_count || 0) / (question_count || 1)) * 100;
+        const totalProgress =
+          ((answersCount || 0) / (questionsCount || 1)) * 100;
         return (
           <Box m="auto" pb={3} maxWidth="1440px">
             <AssessmentReportTitle
@@ -97,10 +97,10 @@ const AssessmentReportContainer = () => {
 
             <Box mt={3}>
               <QuestionnairesNotCompleteAlert
-                progress={total_progress}
+                progress={totalProgress}
                 to="./../questionnaires"
-                q={question_count}
-                a={answers_count}
+                q={questionsCount}
+                a={answersCount}
               />
             </Box>
 
