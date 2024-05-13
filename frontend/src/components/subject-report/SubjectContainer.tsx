@@ -29,7 +29,6 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
-import { Home } from "@mui/icons-material";
 
 const SubjectContainer = () => {
   const {
@@ -53,21 +52,15 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
-        const {
-          attributes,
-          subject,
-          topStrengths,
-          topWeaknesses,
-          maturityLevelsCount,
-        } = data;
-        const { isConfidenceValid, isCalculateValid, title } = subject;
+        const { attributes, subject,topStrengths,topWeaknesses,maturityLevelsCount } = data;
+        const {isConfidenceValid,isCalculateValid,title}=subject
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
 
         const attributesNumber = attributes.length;
         return (
-          <Box display="flex" flexDirection="column" gap={3}>
+          <Box>
             <SubjectTitle
               {...subjectQueryData}
               loading={loading}
@@ -88,57 +81,54 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : !isCalculateValid || !isConfidenceValid ? (
+            ) : !loaded ? null : !isCalculateValid||!isConfidenceValid ? (
               <NoInsightYetMessage
                 title={title}
-                no_insight_yet_message={!isCalculateValid || !isConfidenceValid}
+                no_insight_yet_message={!isCalculateValid||!isConfidenceValid}
               />
             ) : (
-              <Box display="flex" flexDirection="column" gap={6}>
+              <Box sx={{ px: 0.5 }}>
                 <Box
-                  bgcolor="white"
-                  borderRadius="32px"
-                  boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
-                  display="flex"
-                  padding="36px"
-                  marginX="160px"
+                  mt={3}
+                  sx={{
+                    background: "white",
+                    borderRadius: 2,
+                    py: 4,
+                    px: { xs: 1, sm: 2, md: 3 },
+                  }}
                 >
-                  <SubjectOverallInsight
-                    {...subjectQueryData}
-                    loading={loading}
-                  />
-                </Box>
-                <Hidden smDown>
-                  {attributesNumber > 2 && (
-                    <Box
-                      height={"620px"}
-                      bgcolor="white"
-                      borderRadius="32px"
-                      boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
-                      display="flex"
-                      padding="36px"
-                      marginX="160px"
-                    >
-                      {/* <Typography>
-                        <Trans
-                          i18nKey="inTheRadarChartBelow"
-                          values={{
-                            title: title || "",
-                          }}
-                        />
-                      </Typography> */}
+                  <Box>
+                    <SubjectOverallInsight
+                      {...subjectQueryData}
+                      loading={loading}
+                    />
+                  </Box>
+                  <Hidden smDown>
+                    {attributesNumber > 2 && (
+                      <Box height={"620px"} mb={10} mt={10}>
+                        <Typography>
+                          <Trans
+                            i18nKey="inTheRadarChartBelow"
+                            values={{
+                              title: title || "",
+                            }}
+                          />
+                        </Typography>
 
-                      <SubjectRadarChart
+                        <SubjectRadarChart
+                          {...subjectQueryData}
+                          loading={loading}
+                        />
+                      </Box>
+                    )}
+                    <Box height={"520px"} mt={10}>
+                      <SubjectBarChart
                         {...subjectQueryData}
                         loading={loading}
                       />
                     </Box>
-                  )}
-                  {/* <Box height={"520px"} mt={10}>
-                    <SubjectBarChart {...subjectQueryData} loading={loading} />
-                  </Box> */}
-                </Hidden>
-            
+                  </Hidden>
+                </Box>
                 <Box>
                   <SubjectAttributeList
                     {...subjectQueryData}
@@ -200,11 +190,8 @@ const useSubject = () => {
     if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
-    if (
-      subjectQueryData.errorObject?.data?.code ==
-      "CONFIDENCE_CALCULATION_NOT_VALID"
-    ) {
-      calculateConfidence();
+    if(subjectQueryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"){
+      calculateConfidence()
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
@@ -253,29 +240,41 @@ const SubjectTitle = (props: {
     <Title
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
-      backLink="/spaces"
+      backLink={-1}
       id="insight"
       inPageLink="insight"
-      appTitle="Flickit"
       sup={
         <SupTitleBreadcrumb
           routes={[
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
+              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
             {
               title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
+              icon: (
+                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
           ]}
         />
       }
     >
       <Box sx={{ ...styles.centerV }}>
+        <QueryStatsRoundedIcon
+          sx={{
+            mr: 1,
+            color: "rgba(0, 0, 0, 0.87)",
+          }}
+        />
         {loading ? (
           <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
         ) : (

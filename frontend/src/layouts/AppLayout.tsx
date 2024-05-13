@@ -13,8 +13,8 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
         sx={{
           p: { xs: 1, sm: 1, md: 4 },
           pt: {
-            xs: "20px !important",
-            sm: "80px !important",
+            xs: "84px !important",
+            sm: "112px !important",
             minHeight: "100%",
           },
         }}

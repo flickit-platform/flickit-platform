@@ -6,8 +6,6 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { IconProps, SvgIconProps } from "@mui/material";
 import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
-import { Home } from "@mui/icons-material";
-import { Trans } from "react-i18next";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
   sub?: JSX.Element | string;
@@ -22,7 +20,6 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   avatar?: JSX.Element;
   titleProps?: TypographyProps;
   subProps?: TypographyProps;
-  appTitle?: string;
 }
 
 const Title = (props: ITitle) => {
@@ -41,7 +38,6 @@ const Title = (props: ITitle) => {
     subProps = {},
     inPageLink,
     avatar,
-    appTitle,
     ...rest
   } = props;
 
@@ -49,7 +45,7 @@ const Title = (props: ITitle) => {
     <Box
       display="flex"
       justifyContent="space-between"
-      alignItems="center"
+      alignItems="flex-end"
       sx={{
         paddingBottom: "2px",
         "&:hover a.title-hash-link": { opacity: 1 },
@@ -62,17 +58,8 @@ const Title = (props: ITitle) => {
       }}
       {...wrapperProps}
     >
-      {avatar && (
-        <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>
-      )}
-      <Box
-        sx={{ flex: 1 }}
-        {...rest}
-        width="100%"
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-      >
+      {avatar && <Box sx={{ ...styles.centerV, alignSelf: "center" }}>{avatar}</Box>}
+      <Box sx={{ flex: 1 }} {...rest}>
         {backLink ? (
           <Box display="flex" justifyContent={"flex-start"}>
             <Box
@@ -84,32 +71,17 @@ const Title = (props: ITitle) => {
               }}
             >
               <Box component={RLink} to={backLink as To} display="flex">
-                {backLink === "/spaces" ? (
-                  <Home
-                    fontSize="small"
-                    color="inherit"
-                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
-                    {...backIconProps}
-                  />
-                ) : (
-                  <ArrowBackRoundedIcon
-                    fontSize="small"
-                    color="inherit"
-                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
-                    {...backIconProps}
-                  />
-                )}
+                <ArrowBackRoundedIcon
+                  fontSize="small"
+                  color="inherit"
+                  sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
+                  {...backIconProps}
+                />
               </Box>
               {sup && (
                 <Typography
                   textTransform="uppercase"
-                  variant={
-                    size === "small"
-                      ? "subSmall"
-                      : size === "large"
-                      ? "subLarge"
-                      : "subMedium"
-                  }
+                  variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
                   lineHeight={0}
                 >
                   {sup}
@@ -120,13 +92,7 @@ const Title = (props: ITitle) => {
         ) : sup ? (
           <Typography
             textTransform="uppercase"
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
+            variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}
             {...subProps}
           >
             {sup}
@@ -134,22 +100,6 @@ const Title = (props: ITitle) => {
         ) : (
           <></>
         )}
-        {appTitle && (
-          <Typography
-            color="#CED3D9"
-            fontWeight="500"
-            variant="subtitle1"
-            {...titleProps}
-            sx={{
-              ...styles.centerV,
-              display: { xs: "block", sm: "flex" },
-              ...((titleProps?.sx || {}) as any),
-            }}
-          >
-            <Trans i18nKey={appTitle} />
-          </Typography>
-        )}
-
         <Typography
           variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
           textTransform="uppercase"
@@ -181,17 +131,7 @@ const Title = (props: ITitle) => {
           )}
         </Typography>
         {sub && (
-          <Typography
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
-          >
-            {sub}
-          </Typography>
+          <Typography variant={size === "small" ? "subSmall" : size === "large" ? "subLarge" : "subMedium"}>{sub}</Typography>
         )}
       </Box>
       <Box ml="auto" {...toolbarProps}>
