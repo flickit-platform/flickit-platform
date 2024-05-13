@@ -230,6 +230,7 @@
   "displayName": "Display name",
   "sorryYouCanCreateAssessmentWithThisAssessmentKit": "Sorry! You can't create assessment with this assessment kit.",
   "invitees": "Invitees",
+  "invited": "Invited",
   "used": "Used",
   "times": "Times",
   "acceptInvitation": "Accept invitation",
