@@ -19,3 +19,11 @@ class AssessmentSubjectReportApi(APIView):
     def get(self, request, assessment_id, subject_id):
         result = assessment_report_services.get_assessment_subject_report(request, assessment_id, subject_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentProgressApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_id):
+        result = assessment_report_services.get_assessment_progress(request, assessment_id)
+        return Response(data=result["body"], status=result["status_code"])
