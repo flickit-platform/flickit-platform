@@ -47,13 +47,16 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
   }, [expandedAttribute]);
 
   useEffect(() => {
-    if (fetchRelatedEvidences.loaded) {
+    if (fetchRelatedEvidences.loaded || fetchRelatedEvidences.error) {
       setOpositeEvidenceLoading(true);
-      if (fetchRelatedEvidences?.data?.items.length === 0) {
+      if (
+        fetchRelatedEvidences?.data?.items.length === 0 ||
+        fetchRelatedEvidences.error
+      ) {
         setEmptyEvidence(true);
       }
     }
-  }, [fetchRelatedEvidences.loaded]);
+  }, [fetchRelatedEvidences.loaded, fetchRelatedEvidences.error]);
 
   const renderEmptyState = () => (
     <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
@@ -158,10 +161,15 @@ const EvidanceDescription = ({
   return (
     <>
       <Box display="flex" justifyContent="flex-start" alignItems="center">
-        <Typography display="flex" margin="16px" color={textColor}>
+        <Typography display="flex" margin={2} color={textColor}>
           {number}
         </Typography>
-        <Typography>{item?.description}</Typography>
+        <Typography
+          variant="body1"
+          sx={{ flex: 1, whiteSpace: "pre-wrap", textAlign: "justify" }}
+        >
+          {item?.description}
+        </Typography>
       </Box>
       <Divider sx={{ width: "100%", backgroundColor: color }} />
     </>

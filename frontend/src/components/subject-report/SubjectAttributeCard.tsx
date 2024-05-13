@@ -18,10 +18,7 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
-import emptyPositiveState from "@assets/svg/emptyPositiveState.svg";
 import emptyState from "@assets/svg/emptyState.svg";
-import emptyNegativeState from "@assets/svg/emptyNegativeState.svg";
-import { CircularProgress } from "@mui/material";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 
 const SUbjectAttributeCard = (props: any) => {
@@ -151,7 +148,7 @@ const SUbjectAttributeCard = (props: any) => {
           </Typography>
           {emptyNegativeEvidence && emptyPositiveEvidence ? (
             <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
-              <img width="25%" src={emptyState} alt="empty" />
+              <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
               <Typography variant="h5" color="#9DA7B3">
                 <Trans i18nKey={"noEvidence"} />
               </Typography>
@@ -160,28 +157,33 @@ const SUbjectAttributeCard = (props: any) => {
             <Box
               sx={{
                 ...styles.centerVH,
-                gap: "46px",
-                paddingX: "104px",
+                paddingX: "10vw",
               }}
             >
-              {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
-              <RelatedEvidencesContainer
-                expandedAttribute={expandedAttribute}
-                attributeId={id}
-                type={evidenceType.positive}
-                setEmptyEvidence={setEmptyPositiveEvidence}
-                setOpositeEvidenceLoading={setPositiveEvidenceLoading}
-                opositeEvidenceLoading={negativeEvidenceLoading}
-              />
-              {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
-              <RelatedEvidencesContainer
-                expandedAttribute={expandedAttribute}
-                attributeId={id}
-                type={evidenceType.negative}
-                setEmptyEvidence={setEmptyNegativeEvidence}
-                setOpositeEvidenceLoading={setNegativeEvidenceLoading}
-                opositeEvidenceLoading={positiveEvidenceLoading}
-              />
+              <Grid container spacing={4}>
+                {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+                <Grid item lg={6} md={6} xs={12}>
+                  <RelatedEvidencesContainer
+                    expandedAttribute={expandedAttribute}
+                    attributeId={id}
+                    type={evidenceType.positive}
+                    setEmptyEvidence={setEmptyPositiveEvidence}
+                    setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                    opositeEvidenceLoading={negativeEvidenceLoading}
+                  />
+                </Grid>
+                {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+                <Grid item lg={6} md={6} xs={12}>
+                  <RelatedEvidencesContainer
+                    expandedAttribute={expandedAttribute}
+                    attributeId={id}
+                    type={evidenceType.negative}
+                    setEmptyEvidence={setEmptyNegativeEvidence}
+                    setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                    opositeEvidenceLoading={positiveEvidenceLoading}
+                  />
+                </Grid>
+              </Grid>
             </Box>
           )}
 
