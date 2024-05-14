@@ -221,8 +221,8 @@ export interface ITotalProgress {
   progress: number;
   total_answered_question_number: number;
   total_question_number: number;
-  answers_count?: number;
-  question_count?: number;
+  answersCount?: number;
+  questionsCount?: number;
 }
 
 export interface ITotalProgressModel {
