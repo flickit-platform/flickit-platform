@@ -166,7 +166,12 @@ const EvidanceDescription = ({
         </Typography>
         <Typography
           variant="body1"
-          sx={{ flex: 1, whiteSpace: "pre-wrap", textAlign: "justify" }}
+          sx={{
+            flex: 1,
+            whiteSpace: "pre-wrap",
+            textAlign: "justify",
+            wordBreak: "break-word",
+          }}
         >
           {item?.description}
         </Typography>
