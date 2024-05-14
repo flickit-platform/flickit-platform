@@ -64,7 +64,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const fullScreen = useScreenResize("sm");
   return (
     <div>
-      <Box mt={4}>
+      {/* <Box mt={4}>
         <Title
           borderBottom={true}
           sx={{ borderBottomColor: "#000" }}
@@ -72,7 +72,7 @@ const AssessmentAdviceContainer = (props: any) => {
         >
           <Trans i18nKey="advice" />
         </Title>
-      </Box>
+      </Box> */}
 
       <Dialog
         open={expanded}
