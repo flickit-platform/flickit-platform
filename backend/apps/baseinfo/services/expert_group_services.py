@@ -62,7 +62,6 @@ def add_expert_group_members(request, expert_group_id, request_body):
 
 
 def confirm_expert_group_members(request, expert_group_id, invite_token):
-    result = dict()
     response = requests.put(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/invite/{invite_token}/confirm',
         headers={'Authorization': request.headers['Authorization']})
@@ -72,8 +71,17 @@ def confirm_expert_group_members(request, expert_group_id, invite_token):
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
 
-def delete_expert_group_members(request, expert_group_id):
-    result = dict()
+def delete_expert_group_member(request, expert_group_id, user_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/members/{user_id}',
+        headers={'Authorization': request.headers['Authorization']})
+
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_expert_group(request, expert_group_id):
     response = requests.delete(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}',
         headers={'Authorization': request.headers['Authorization']})
