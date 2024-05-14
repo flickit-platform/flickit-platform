@@ -85,9 +85,9 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
     <Box
       sx={{ ...styles.centerCH }}
       gap={2}
-      borderRadius={2}
-      height={"46vh"}
-      width="100%"
+      borderRadius={8}
+      height={"50vh"}
+      width="90%"
       padding="16px 0px 0px 0px"
       border="1px solid"
       borderColor={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
@@ -161,7 +161,7 @@ const EvidanceDescription = ({
   return (
     <>
       <Box display="flex" justifyContent="flex-start" alignItems="center">
-        <Typography display="flex" margin={2} color={textColor}>
+        <Typography display="flex" margin={2} color={textColor} fontWeight="bold">
           {number}
         </Typography>
         <Typography

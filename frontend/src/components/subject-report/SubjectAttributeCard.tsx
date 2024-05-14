@@ -160,7 +160,7 @@ const SUbjectAttributeCard = (props: any) => {
                 paddingX: "10vw",
               }}
             >
-              <Grid container spacing={4}>
+              <Grid container spacing={4} mt={1}>
                 {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
                 <Grid item lg={6} md={6} xs={12}>
                   <RelatedEvidencesContainer
