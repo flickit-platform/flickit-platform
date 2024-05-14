@@ -3,6 +3,7 @@ import requests, types
 from assessment.services.assessment_report_services import get_assessment_subject_report
 from assessmentplatform.settings import ASSESSMENT_URL
 
+from assessment.services import maturity_level_services
 from assessment.services import assessment_report_services, confidence_levels_services
 
 
@@ -13,13 +14,6 @@ class DictObject:
                 setattr(self, key, DictObject(**value))
             else:
                 setattr(self, key, value)
-
-
-def calculate_maturity_level(request, assessment_id):
-    response = requests.post(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/calculate',
-        headers={'Authorization': request.headers['Authorization']})
-    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
 def get_assessment_progres(request, assessment_id):
@@ -182,19 +176,19 @@ def get_assessment_details(request, assessment_id):
 
     if result["status_code"] == 400:
         if assessment_report.code == "NOT_FOUND":
-            return {"status":False}
+            return {"status": False}
         if assessment_report.code == "CONFIDENCE_CALCULATION_NOT_VALID":
             confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(assessment_id)
             return get_assessment_details(request, assessment_id)
         elif assessment_report.code == "CALCULATE_NOT_VALID":
-            calculate_maturity_level(request, assessment_id)
+            maturity_level_services.calculate_maturity_level(request, assessment_id)
             return get_assessment_details(request, assessment_id)
     elif result["status_code"] == 200:
         if not assessment_report.assessment.isCalculateValid:
             confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(assessment_id)
             return get_assessment_details(request, assessment_id)
         elif not assessment_report.assessment.isConfidenceValid:
-            calculate_maturity_level(request, assessment_id)
+            maturity_level_services.calculate_maturity_level(request, assessment_id)
             return get_assessment_details(request, assessment_id)
     result = get_assessment_progres(request, assessment_id)
     assessment_progres = DictObject(**result["body"])
