@@ -8,6 +8,4 @@ urlpatterns = [
     path("<uuid:assessment_id>/report/subjects/<int:subject_id>/",
          assessment_report_views.AssessmentSubjectReportApi.as_view()),
     path("<uuid:assessment_id>/progress/", assessment_report_views.AssessmentProgressApi.as_view()),
-    path("<uuid:assessment_id>/calculate/", maturity_level_views.MaturityLevelCalculateApi.as_view()),
-
 ]
