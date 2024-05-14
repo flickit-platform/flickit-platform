@@ -121,7 +121,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       </Title>
       <Box mt={4} mb={2}>
           <Tooltip title={data?.summary.length > 55  && data?.summary}>
-              <Typography>{`${data.summary.substring(0, 55)} ${data?.summary.length > 55 ? "..." : ""}` || ""}</Typography>
+              <Typography sx={{wordBreak:"break-word"}} >{`${data.summary.substring(0, 55)} ${data?.summary.length > 55 ? "..." : ""}` || ""}</Typography>
           </Tooltip>
       </Box>
       <Box mt="auto">
