@@ -598,7 +598,11 @@ const AnswerDetails = ({ questionInfo }: any) => {
 
   return (
     <Box mt={2} width="100%">
-      <Title px={1} sup={<Trans i18nKey="addDetailsToYourAnswer" />} size="small">
+      <Title
+        px={1}
+        sup={<Trans i18nKey="addDetailsToYourAnswer" />}
+        size="small"
+      >
         <Trans i18nKey="answerDetail" />
       </Title>
       <Box
@@ -709,7 +713,8 @@ const AnswerDetails = ({ questionInfo }: any) => {
               flexDirection: "column",
               px: 2,
               width: "100%",
-              alignItems: "center"
+              alignItems: "center",
+              wordBreak: "break-word",
             }}
           >
             <Evidence
@@ -725,9 +730,8 @@ const AnswerDetails = ({ questionInfo }: any) => {
 };
 
 const Evidence = (props: any) => {
-
-  const LIMITED = 200
-  const [valueCount,setValueCount] = useState("")
+  const LIMITED = 200;
+  const [valueCount, setValueCount] = useState("");
   const is_farsi = firstCharDetector(valueCount);
   const { service } = useServiceContext();
   const { onClose: closeDialog, openDialog, ...rest } = props;
@@ -775,17 +779,17 @@ const Evidence = (props: any) => {
   //if there is a evidence we should use addEvidence service
   const onSubmit = async (data: any) => {
     try {
-       if(data.evidence.length <= LIMITED){
-           await addEvidence.query({
-               description: data.evidence,
-               questionId: questionInfo.id,
-               assessmentId,
-               type: value,
-               id: evidenceId,
-           });
-           await await evidencesQueryData.query();
-           setValueCount("")
-       }
+      if (data.evidence.length <= LIMITED) {
+        await addEvidence.query({
+          description: data.evidence,
+          questionId: questionInfo.id,
+          assessmentId,
+          type: value,
+          id: evidenceId,
+        });
+        await await evidencesQueryData.query();
+        setValueCount("");
+      }
     } catch (e) {
       const err = e as ICustomError;
       toastError(err.response.data.description[0]);
@@ -795,9 +799,11 @@ const Evidence = (props: any) => {
     }
   };
   return (
-    <Box  display={"flex"} flexDirection={"column"}
-          width="100%"
-          sx={{ width:{md :"80%"}}}
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      width="100%"
+      sx={{ width: { md: "80%" } }}
     >
       <FormProvider {...formMethods}>
         <form
@@ -825,10 +831,10 @@ const Evidence = (props: any) => {
                   label="Negative evidence"
                   value="NEGATIVE"
                   sx={{
-                      fontSize: "16px",
-                      display: "flex",
-                      flex: 1,
-                      "&.Mui-selected": {
+                    fontSize: "16px",
+                    display: "flex",
+                    flex: 1,
+                    "&.Mui-selected": {
                       color: `${evidenceBG.borderColor}  !important`,
                     },
                   }}
@@ -836,10 +842,10 @@ const Evidence = (props: any) => {
                 <Tab
                   label="Comment"
                   sx={{
-                      fontSize: "16px",
-                      display: "flex",
-                      flex: 1,
-                      "&.Mui-selected": {
+                    fontSize: "16px",
+                    display: "flex",
+                    flex: 1,
+                    "&.Mui-selected": {
                       color: `${evidenceBG.borderColor}  !important`,
                     },
                   }}
@@ -848,10 +854,10 @@ const Evidence = (props: any) => {
                 <Tab
                   label="Positive evidence"
                   sx={{
-                      fontSize: "16px",
-                      display: "flex",
-                      flex: 1,
-                      "&.Mui-selected": {
+                    fontSize: "16px",
+                    display: "flex",
+                    flex: 1,
+                    "&.Mui-selected": {
                       color: `${evidenceBG.borderColor}  !important`,
                     },
                   }}
@@ -879,40 +885,44 @@ const Evidence = (props: any) => {
                 hasCounter={true}
                 isFarsi={is_farsi}
               />
-                <Typography
-                    style={is_farsi ? {left:20} : {right:20}}
-                    sx={{
-                        position:"absolute", top :5,
-                        fontSize:"14px",
-                        fontWeight:300,
-                        color: valueCount.length > LIMITED ? "#D81E5B" :"#9DA7B3"
-                    }}>
-                    {valueCount.length || 0 } /  {LIMITED}
-                </Typography>
-                <Grid item xs={12}
-                      sx={is_farsi   ?
-                          {position:"absolute", top :15,left:5}
-                          :
-                          {position:"absolute", top :15,right:5}
+              <Typography
+                style={is_farsi ? { left: 20 } : { right: 20 }}
+                sx={{
+                  position: "absolute",
+                  top: 5,
+                  fontSize: "14px",
+                  fontWeight: 300,
+                  color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
+                }}
+              >
+                {valueCount.length || 0} / {LIMITED}
+              </Typography>
+              <Grid
+                item
+                xs={12}
+                sx={
+                  is_farsi
+                    ? { position: "absolute", top: 15, left: 5 }
+                    : { position: "absolute", top: 15, right: 5 }
                 }
-                >
-                    <Box display={"flex"} mt={2}>
-                        <LoadingButton
-                            sx={{
-                                ml: "auto",
-                                borderRadius: "100%",
-                                p: 2,
-                                minWidth: "56px",
-                                background: evidenceBG.borderColor,
-                            }}
-                            type="submit"
-                            variant="contained"
-                            loading={evidencesQueryData.loading}
-                        >
-                            <AddRoundedIcon fontSize="large" />
-                        </LoadingButton>
-                    </Box>
-                </Grid>
+              >
+                <Box display={"flex"} mt={2}>
+                  <LoadingButton
+                    sx={{
+                      ml: "auto",
+                      borderRadius: "100%",
+                      p: 2,
+                      minWidth: "56px",
+                      background: evidenceBG.borderColor,
+                    }}
+                    type="submit"
+                    variant="contained"
+                    loading={evidencesQueryData.loading}
+                  >
+                    <AddRoundedIcon fontSize="large" />
+                  </LoadingButton>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
         </form>

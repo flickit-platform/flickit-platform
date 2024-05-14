@@ -18,6 +18,9 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
+import emptyState from "@assets/svg/emptyState.svg";
+import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
+
 const SUbjectAttributeCard = (props: any) => {
   const {
     title,
@@ -29,6 +32,21 @@ const SUbjectAttributeCard = (props: any) => {
     id,
   } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
+    false
+  );
+  const [emptyPositiveEvidence, setEmptyPositiveEvidence] =
+    useState<boolean>(false);
+  const [emptyNegativeEvidence, setEmptyNegativeEvidence] =
+    useState<boolean>(false);
+  const [positiveEvidenceLoading, setPositiveEvidenceLoading] =
+    useState<boolean>(false);
+  const [negativeEvidenceLoading, setNegativeEvidenceLoading] =
+    useState<boolean>(false);
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedAttribute(isExpanded ? panel : false);
+    };
   return (
     <Paper
       elevation={2}
@@ -39,7 +57,11 @@ const SUbjectAttributeCard = (props: any) => {
         mb: 5,
       }}
     >
-      <Accordion sx={{ boxShadow: "none !important" }}>
+      <Accordion
+        sx={{ boxShadow: "none !important" }}
+        expanded={expandedAttribute === id}
+        onChange={handleChange(id)}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -114,6 +136,58 @@ const SUbjectAttributeCard = (props: any) => {
         <Divider sx={{ mx: 2 }} />
         <AccordionDetails sx={{ padding: "0 !important" }}>
           <Typography
+            variant="h4"
+            mt={4}
+            mb={2}
+            sx={{
+              gap: "46px",
+              ...styles.centerVH,
+            }}
+          >
+            <Trans i18nKey={"relatedEvidences"} />
+          </Typography>
+          {emptyNegativeEvidence && emptyPositiveEvidence ? (
+            <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
+              <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
+              <Typography variant="h5" color="#9DA7B3">
+                <Trans i18nKey={"noEvidence"} />
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                ...styles.centerVH,
+                paddingX: "10vw",
+              }}
+            >
+              <Grid container spacing={4} mt={1}>
+                {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+                <Grid item lg={6} md={6} xs={12}>
+                  <RelatedEvidencesContainer
+                    expandedAttribute={expandedAttribute}
+                    attributeId={id}
+                    type={evidenceType.positive}
+                    setEmptyEvidence={setEmptyPositiveEvidence}
+                    setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                    opositeEvidenceLoading={negativeEvidenceLoading}
+                  />
+                </Grid>
+                {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+                <Grid item lg={6} md={6} xs={12}>
+                  <RelatedEvidencesContainer
+                    expandedAttribute={expandedAttribute}
+                    attributeId={id}
+                    type={evidenceType.negative}
+                    setEmptyEvidence={setEmptyNegativeEvidence}
+                    setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                    opositeEvidenceLoading={positiveEvidenceLoading}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+
+          <Typography
             variant="h6"
             mt={4}
             mb={2}
@@ -121,7 +195,7 @@ const SUbjectAttributeCard = (props: any) => {
           >
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
-          <Box sx={{ pr: {xs:2,sm:6} }}>
+          <Box sx={{ pr: { xs: 2, sm: 6 } }}>
             {maturityScores
               .map((item: any) => {
                 return (
@@ -243,7 +317,7 @@ export const AttributeStatusBar = (props: any) => {
 const MaturityLevelDetailsContainer = (props: any) => {
   const { maturity_score, totalml, mn, expanded, setExpanded, attributeId } =
     props;
-    const {maturityLevel,score}=maturity_score
+  const { maturityLevel, score } = maturity_score;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[maturityLevel?.index - 1];
   const is_passed = maturityLevel?.index <= totalml;
@@ -315,10 +389,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 <MaturityLevelDetailsBar
                   text={text}
                   score={score}
-                  highestIndex={
-                    is_passed &&
-                    maturityLevel?.index == totalml
-                  }
+                  highestIndex={is_passed && maturityLevel?.index == totalml}
                   is_passed={is_passed}
                 />
               </Box>
@@ -402,7 +473,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                           <Box
                             sx={{
                               display: "flex",
-                              width: {xs:"100%",sm:"100%",md:"80%"},
+                              width: { xs: "100%", sm: "100%", md: "80%" },
                               flexDirection: "column",
                             }}
                           >
@@ -410,7 +481,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                ml: {xs:0,sm:4},
+                                ml: { xs: 0, sm: 4 },
                               }}
                             >
                               <Box

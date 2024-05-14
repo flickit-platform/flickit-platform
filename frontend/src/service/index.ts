@@ -550,6 +550,21 @@ export const createService = (
         }
       );
     },
+    fetchRelatedEvidences(
+      args: { assessmentId: TId; attributeId: TId; type: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, attributeId, type } = args ?? {};
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/attributes/${attributeId}/evidences`,
+        {
+          ...(config ?? {}),
+          params: {
+            type,
+          },
+        }
+      );
+    },
     assessmentKitUsersList(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
