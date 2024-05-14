@@ -495,7 +495,7 @@ const OnHoverInput = (props: any) => {
       config
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
-    toastError: true,
+    // toastError: true,
   });
   const updateAssessmentKit = async () => {
     try {
@@ -504,6 +504,13 @@ const OnHoverInput = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
+        if ("message" in err.response.data || {}) {
+            if (Array.isArray(err.response.data.message)) {
+                toastError(err.response.data.message[0]);
+            } else if (err.response.data.message) {
+                toastError(err.response.data.message);
+            }
+        }
       setError(err);
       setHasError(true);
     }
