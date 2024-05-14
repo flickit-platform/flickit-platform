@@ -605,6 +605,7 @@ const OnHoverInput = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              wordBreak: "break-word",
               "&:hover": { border: "1px solid #1976d299" },
             }}
             onClick={() => setShow(!show)}
