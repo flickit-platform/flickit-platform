@@ -31,6 +31,16 @@ class MembersSpaceApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class MemberSpaceApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, space_id, user_id):
+        result = space_services.delete_member_space(request, space_id, user_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class InviteMemberInSpaceApi(APIView):
     permission_classes = [IsAuthenticated]
 
