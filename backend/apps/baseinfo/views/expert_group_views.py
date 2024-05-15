@@ -1,3 +1,4 @@
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.views import APIView
@@ -72,4 +73,17 @@ class ExpertGroupInviteMembersConfirmApi(APIView):
         result = expert_group_services.confirm_expert_group_members(request, expert_group_id, invite_token)
         if result["Success"]:
             return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupAssessmentKitListApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, expert_group_id):
+        result = expert_group_services.get_assessment_kit_list_with_expert_group_id(request, expert_group_id)
         return Response(data=result["body"], status=result["status_code"])
