@@ -12,6 +12,10 @@ class SpacesApi(APIView):
         result = space_services.create_spacer(request)
         return Response(data=result["body"], status=result["status_code"])
 
+    def get(self, request):
+        result = space_services.get_spaces_list(request)
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class MembersSpaceApi(APIView):
     permission_classes = [IsAuthenticated]
