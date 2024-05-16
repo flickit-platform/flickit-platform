@@ -25,6 +25,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
+      height="100%"
       gap={3}
       py={4}
       sx={{ ...styles.card, px: { xs: 2, sm: 3 } }}
@@ -36,7 +37,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         <Typography
           component={Link}
           to={`/assessment-kits/${assessmentKit?.id}`}
-          fontSize="40px"
+          fontSize="38px"
           sx={{
             textDecoration: "none",
           }}

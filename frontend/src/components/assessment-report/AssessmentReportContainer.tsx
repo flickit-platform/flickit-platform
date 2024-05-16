@@ -97,31 +97,35 @@ const AssessmentReportContainer = (props: any) => {
               pathInfo={pathInfo}
             />
             <Grid container spacing={3} columns={12} mt={0.2}>
-              <Grid item lg={5} md={14} sm={14} xs={14}>
-                <AssessmentSummary
-                  expertGroup={expertGroup}
-                  assessmentKit={assessmentKit}
-                  pathInfo={pathInfo}
-                  data={data}
-                  progress={totalProgress}
-                />
+              <Grid item sm={12} xs={12}>
+                <Grid container alignItems="stretch" spacing={5}>
+                  <Grid item lg={5} md={12} sm={12} xs={12}>
+                    <AssessmentSummary
+                      expertGroup={expertGroup}
+                      assessmentKit={assessmentKit}
+                      pathInfo={pathInfo}
+                      data={data}
+                      progress={totalProgress}
+                    />
+                  </Grid>
+                  <Grid item lg={7} md={12} sm={12} xs={12}>
+                    <AssessmentOverallStatus
+                      status={status}
+                      subjects_info={subjects}
+                      maturity_level={maturityLevel}
+                      maturity_level_count={assessmentKit?.maturityLevelCount}
+                      confidence_value={confidenceValue}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item lg={7} md={14} sm={14} xs={14}>
-                <AssessmentOverallStatus
-                  status={status}
-                  subjects_info={subjects}
-                  maturity_level={maturityLevel}
-                  maturity_level_count={assessmentKit?.maturityLevelCount}
-                  confidence_value={confidenceValue}
-                />
-              </Grid>
-              <Grid item sm={14} xs={14} id="subjects">
+              <Grid item sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
                   subjects={subjects}
                   colorCode={colorCode}
                 />
               </Grid>
-              <Grid item sm={14} xs={14} id="advices">
+              <Grid item sm={12} xs={12} id="advices">
                 <AssessmentAdviceContainer subjects={subjects} />
               </Grid>
             </Grid>

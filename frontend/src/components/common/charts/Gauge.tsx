@@ -15,6 +15,10 @@ interface IGaugeProps extends BoxProps {
   level_value: number;
   confidence_value?: number | null;
   show_confidence?: boolean;
+  height?: number;
+  className?: string;
+  shortTitle?: boolean;
+  titleSize?: number;
 }
 
 const Gauge = (props: IGaugeProps) => {
@@ -26,6 +30,10 @@ const Gauge = (props: IGaugeProps) => {
     level_value,
     confidence_value,
     show_confidence,
+    height = 200,
+    className,
+    shortTitle,
+    titleSize = 24,
     ...rest
   } = props;
   const colorPallet = getMaturityLevelColors(maturity_level_number);
@@ -45,19 +53,21 @@ const Gauge = (props: IGaugeProps) => {
           value={
             level_value !== null && level_value !== undefined ? level_value : -1
           }
+          height={height}
+          className={className}
         />
       </Suspense>
       {level_value !== null && level_value !== undefined ? (
         <Box
           sx={{
             ...styles.centerCVH,
-            bottom: `${show_confidence ? "45%" : "40%"}`,
+            bottom: `${show_confidence ? "45%" : shortTitle ? "30%" : "40%"}`,
             left: "25%",
             right: "25%",
           }}
           position="absolute"
         >
-          {!show_confidence && (
+          {!show_confidence && !shortTitle && (
             <Typography variant="subtitle2" color="black">
               <Trans i18nKey="thisSystemIsIn" />
             </Typography>
@@ -66,16 +76,22 @@ const Gauge = (props: IGaugeProps) => {
             sx={{ fontWeight: "bold" }}
             variant="h6"
             color={colorCode}
+            fontSize={titleSize}
           >
             {maturity_level_status}
           </Typography>
-          {!show_confidence && (
+          {!show_confidence && !shortTitle && (
             <Typography variant="subtitle2" color="black">
               <Trans i18nKey="shape" />
             </Typography>
           )}
           {show_confidence && (
-            <Typography variant="subtitle2" color="#3596A1" fontSize="10px" mt={1}>
+            <Typography
+              variant="subtitle2"
+              color="#3596A1"
+              fontSize="10px"
+              mt={1}
+            >
               <Trans
                 i18nKey="withPercentConfidence"
                 // values={{

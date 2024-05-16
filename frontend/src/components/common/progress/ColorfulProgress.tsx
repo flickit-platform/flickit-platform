@@ -43,7 +43,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   }
 
   return (
-    <Box sx={{ ...styles.centerCVH }} gap={1}>
+    <Box sx={{ ...styles.centerCVH }} gap={1} width="80%">
       <Typography
         display="flex"
         textAlign="center"
@@ -56,7 +56,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         </Typography>
       </Typography>
       <LinearProgress
-        sx={{ borderRadius: 3, width: "300px", height: "12px" }}
+        sx={{ borderRadius: 3, width: "100%", height: "12px" }}
         value={progress}
         variant="determinate"
         color={color}

@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import { styles } from "@styles";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
+import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects_info: ISubjectInfo[];
@@ -26,20 +27,19 @@ export const AssessmentOverallStatus = (
     confidence_value,
   } = props;
   return (
-    <Box py={3} sx={{ ...styles.card, px: { xs: 2, sm: 3 } }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={5} sx={{ pt: "0px !important" }}>
-          <Gauge
-            level_value={maturity_level?.index ?? 0}
-            maturity_level_status={maturity_level?.title}
-            maturity_level_number={maturity_level_count}
-            systemStatus={ESystemStatus[status as ESystemStatus]}
-            confidence_value={confidence_value}
-            show_confidence={true}
-            width="100%"
-          />
-        </Grid>
-      </Grid>
+    <Box sx={{ ...styles.card }}>
+      <Gauge
+        level_value={maturity_level?.index ?? 0}
+        maturity_level_status={maturity_level?.title}
+        maturity_level_number={maturity_level_count}
+        systemStatus={ESystemStatus[status as ESystemStatus]}
+        confidence_value={confidence_value}
+        show_confidence={false}
+        shortTitle={true}
+        titleSize={60}
+        height={getNumberBaseOnScreen(240, 320, 400, 480, 560)}
+        className="insight--report__gauge"
+      />
     </Box>
   );
 };

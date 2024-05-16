@@ -515,3 +515,13 @@ export interface AssessmentKitDetailsType {
   subjects: { id: number; title: string; index: number }[];
   questionnaires: { id: number; title: string; index: number }[];
 }
+
+export interface IDynamicGaugeSVGProps {
+  colorCode: string;
+  value: number;
+  confidence_value?: number | null;
+  show_confidence?: boolean;
+  height?: number;
+  width?: number | string;
+  className?: string;
+}
