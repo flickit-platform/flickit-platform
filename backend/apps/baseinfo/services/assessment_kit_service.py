@@ -69,6 +69,15 @@ def update_assessment_kit(request, assessment_kit_id):
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
 
+def delete_assessment_kit(request, assessment_kit_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
 def like_assessment_kit(request, assessment_kit_id):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/likes',
