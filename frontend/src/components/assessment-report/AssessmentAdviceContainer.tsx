@@ -64,16 +64,6 @@ const AssessmentAdviceContainer = (props: any) => {
   const fullScreen = useScreenResize("sm");
   return (
     <div>
-      <Box mt={4}>
-        <Title
-          borderBottom={true}
-          sx={{ borderBottomColor: "#000" }}
-          inPageLink="advice"
-        >
-          <Trans i18nKey="advice" />
-        </Title>
-      </Box>
-
       <Dialog
         open={expanded}
         onClose={handleClose}

@@ -78,9 +78,9 @@ const Gauge = (props: IGaugeProps) => {
             <Typography variant="subtitle2" color="#3596A1" fontSize="10px" mt={1}>
               <Trans
                 i18nKey="withPercentConfidence"
-                values={{
-                  percent: Math.ceil(confidenceValue),
-                }}
+                // values={{
+                //   percent: Math.ceil(confidenceValue),
+                // }}
               />
             </Typography>
           )}

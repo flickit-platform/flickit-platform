@@ -323,7 +323,7 @@
   "deletingQuestionFromAPreExistingQuestionnaireOrAddingANewOne": " Deleting question from a pre-existing questionnaire or adding a newone",
   "anyChangesInTheNumberOfOptionsForAPreExistingQuestion": "Any changes in the number of options for a pre-existing question",
   "unsupportedDslContentChange": "Unsupported dsl content change",
-  "withPercentConfidence": "With {{percent}}% confidence",
+  "withPercentConfidence": "Confidence:",
   "assessmentKitPermissons": "{{assessmentKit}} permissions",
   "addNewUser": "Add new user",
   "users": "Users",

@@ -59,6 +59,10 @@ const commonStyles = {
     overflow: "hidden",
     textOverflow: "ellipsis",
   }),
+  card: style({
+    background:"#fff",
+    boxShadow: "0 0 2px #000",
+  })
 };
 
 const cards = {

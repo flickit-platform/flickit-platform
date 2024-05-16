@@ -16,11 +16,6 @@ export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
 
   return (
     <Box mt={4}>
-      <Box>
-        <Title borderBottom={true} sx={{ borderBottomColor: colorCode }} inPageLink="subjects">
-          <Trans i18nKey="subjects" />
-        </Title>
-      </Box>
       <Box mt={3}>
         {isEmpty ? (
           <ErrorEmptyData />
