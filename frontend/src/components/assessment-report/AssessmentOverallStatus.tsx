@@ -26,7 +26,7 @@ export const AssessmentOverallStatus = (
     confidence_value,
   } = props;
   return (
-    <Box py={3} sx={{ px: { xs: 2, sm: 3 } }}>
+    <Box py={3} sx={{ ...styles.card, px: { xs: 2, sm: 3 } }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5} sx={{ pt: "0px !important" }}>
           <Gauge

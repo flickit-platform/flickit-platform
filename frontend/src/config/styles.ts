@@ -60,9 +60,10 @@ const commonStyles = {
     textOverflow: "ellipsis",
   }),
   card: style({
-    background:"#fff",
-    boxShadow: "0 0 2px #000",
-  })
+    background: "#fff",
+    boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+    borderRadius: "40px",
+  }),
 };
 
 const cards = {

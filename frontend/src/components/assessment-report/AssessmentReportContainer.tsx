@@ -95,15 +95,15 @@ const AssessmentReportContainer = () => {
               pathInfo={pathInfo}
             />
 
-            <Box mt={3}>
+            {/* <Box mt={3}>
               <QuestionnairesNotCompleteAlert
                 progress={totalProgress}
                 to="./../questionnaires"
                 q={questionsCount}
                 a={answersCount}
               />
-            </Box>
-
+            </Box> */}
+{/* 
             <Box mt={3}>
               <Paper elevation={2} sx={{ borderRadius: 3, height: "100%" }}>
                 <Box
@@ -207,9 +207,9 @@ const AssessmentReportContainer = () => {
                   </Box>
                 </Box>
               </Paper>
-            </Box>
-            <Grid container spacing={3} columns={14} mt={0.2}>
-              <Grid item lg={8} md={14} sm={14} xs={14}>
+            </Box> */}
+            <Grid container spacing={3} columns={12} mt={0.2}>
+              <Grid item lg={5} md={14} sm={14} xs={14}>
                 <AssessmentOverallStatus
                   status={status}
                   subjects_info={subjects}
@@ -218,16 +218,13 @@ const AssessmentReportContainer = () => {
                   confidence_value={confidenceValue}
                 />
               </Grid>
-              <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes
-                  isWeakness={false}
-                  most_significant_items={topStrengths}
-                />
-              </Grid>
-              <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes
-                  isWeakness={true}
-                  most_significant_items={topWeaknesses}
+              <Grid item lg={7} md={14} sm={14} xs={14}>
+                <AssessmentOverallStatus
+                  status={status}
+                  subjects_info={subjects}
+                  maturity_level={maturityLevel}
+                  maturity_level_count={assessmentKit?.maturityLevelCount}
+                  confidence_value={confidenceValue}
                 />
               </Grid>
               <Grid item sm={14} xs={14} id="subjects">
