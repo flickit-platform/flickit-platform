@@ -185,7 +185,7 @@
   "viewOtherAssessmentKitsFromThisAuthor": "View other assessment kit from this author",
   "questionImpact": "Question impact",
   "aboutAssessmentKit": "About assessment kit",
-  "created": "Created",
+  "created": "Created:",
   "description": "Description",
   "createAssessmentKit": "Create Assessment Kit",
   "updateAssessmentKit": "Update Assessment Kit",
@@ -369,5 +369,8 @@
   "allQuestionsInThisQuestionnaireHaveBeenAnswered":"All questions in this questionnaire have been answered. To have more accurate insights, you can complete other questionnaires as well.",
   "youAnsweredQuestionOf":"{{answeredQuestions}} out of {{totalQuestions}} questions have been answered",
   "advisable":"Advisable",
-  "loadMore": "Load more"
+  "loadMore": "Load more",
+  "totalProgressWithPercent": "Total progress: ",
+  "seeQuestionaires": "See questionaires",
+  "lastModified":"Last modified: "
 }

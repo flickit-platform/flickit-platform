@@ -467,6 +467,26 @@ interface AssessmentKitDetailsMaturityLevel {
   competences: LevelCompetence[];
 }
 
+export interface ExpertGroupDetails {
+  id: number;
+  title: string;
+  bio: string;
+  about: string | JSX.Element;
+  picture: string;
+  pictureLink: string;
+  website: string;
+  editable: boolean;
+}
+
+type ModelValue = {
+  id: number;
+  title: string;
+};
+
+export interface PathInfo {
+  space?: ModelValue;
+  assessment?: ModelValue;
+}
 export interface AssessmentKitInfoType {
   id: number;
   title: string;
