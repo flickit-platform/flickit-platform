@@ -8,7 +8,7 @@ import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 interface IGaugeProps extends BoxProps {
-  systemStatus: TStatus;
+  systemStatus?: TStatus;
   name?: string;
   maturity_level_number: number;
   maturity_level_status: string;

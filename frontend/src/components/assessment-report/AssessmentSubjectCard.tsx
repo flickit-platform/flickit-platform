@@ -1,11 +1,13 @@
-import Paper from "@mui/material/Paper";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import BgLines1 from "@assets/svg/bgLines1.svg";
 import SubjectProgress from "@common/progress/SubjectProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { getMaturityLevelColors, styles } from "@styles";
 import { ISubjectInfo, IMaturityLevel, TId } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
@@ -15,6 +17,10 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useEffect, useState } from "react";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
+import ColorfulProgress from "../common/progress/ColorfulProgress";
+import { Gauge } from "../common/charts/Gauge";
+import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
@@ -26,7 +32,9 @@ interface IAssessmentSubjectProgress {
   answerCount: number;
 }
 
-export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
+export const AssessmentSubjectAccordion = (
+  props: IAssessmentSubjectCardProps
+) => {
   const { title, maturityLevel, id, colorCode, description = "" } = props;
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -37,6 +45,7 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
       service.fetchSubjectProgress(args, config),
     runOnMount: false,
   });
+
   const fetchProgress = async () => {
     try {
       setInProgress(true);
@@ -50,70 +59,77 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
       toastError(err.response.data.message);
     }
   };
+
   useEffect(() => {
     fetchProgress();
   }, []);
+
   function hexToRGBA(hex: string, alpha: number) {
-    // Remove the '#' if it's there
     hex = hex.replace(/^#/, "");
 
-    // Parse the hex value to separate R, G, and B values
     let bigint = parseInt(hex, 16);
     let r = (bigint >> 16) & 255;
     let g = (bigint >> 8) & 255;
     let b = bigint & 255;
 
-    // Return the RGBA value
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
+
   return (
-    <Paper
+    <Accordion
       sx={{
-        borderRadius: 3,
-        backgroundColor: hexToRGBA(colorCode, 0.1),
-        backgroundImage: `url(${BgLines1})`,
-        backgroundPosition: "30% 30%",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        borderRadius: "32px !important",
+        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
         transition: "background-position .4s ease",
-        "&:hover": {
-          backgroundPosition: "0% 0%",
-        },
-        height: "100%",
         position: "relative",
       }}
-      elevation={2}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        sx={{
-          textAlign: "center",
-          color: "#000000de",
-          px: { xs: 2, sm: 5 },
-          py: { xs: 3, sm: 5 },
-          height: "100%",
-        }}
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+        sx={{ textAlign: "center", py: 3, maxHeight: "160px" }}
       >
-        <Typography
-          variant="h4"
-          textTransform={"uppercase"}
-          letterSpacing={".13em"}
-          fontFamily="Oswald"
-          fontWeight={500}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          width="100%"
+          alignItems="center"
+          px={4}
         >
-          {title}
-        </Typography>
-        <ReadMoreAboutSubject
-          colorCode={colorCode}
-          title={title}
-          description={description}
-        />
-
-        <SubjectProgress inProgress={inProgress} progress={progress} />
-
-        <SubjectStatus title={title} maturity_level={maturityLevel} />
+          <Typography
+            variant="h6"
+            textTransform={"uppercase"}
+            letterSpacing={".1em"}
+            fontFamily="Oswald"
+            fontWeight={500}
+            flexGrow={1}
+          >
+            {title}
+          </Typography>
+          <Box
+            sx={{
+              ml: 2,
+              flexGrow: 2,
+              maxHeight: "100px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Typography variant="body2">{description}</Typography>
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <ColorfulProgress progress={progress} />
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <SubjectStatus title={title} maturity_level={maturityLevel} />
+          </Box>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails
+        sx={{ textAlign: "center", px: { xs: 2, sm: 5 }, py: { xs: 3, sm: 5 } }}
+      >
         <Box mt="auto">
           <Button
             variant="contained"
@@ -128,8 +144,8 @@ export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
             <Trans i18nKey={"viewInsights"} />
           </Button>
         </Box>
-      </Box>
-    </Paper>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
@@ -140,87 +156,21 @@ const SubjectStatus = (
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   return (
-    <Box mt={8} mb={16} sx={{ ...styles.centerCH }} minHeight={"80px"}>
-      {
-        <>
-          <Typography textAlign={"center"}>
-            <Trans i18nKey="subjectStatusIs" values={{ title }} />{" "}
-            {hasStats && <Trans i18nKey="evaluatedAs" />}
-          </Typography>
-          <Typography
-            variant={hasStats ? "h3" : "h4"}
-            letterSpacing=".17em"
-            sx={{
-              fontWeight: "500",
-              borderBottom: colorPallet
-                ? `3px solid ${colorPallet}`
-                : undefined,
-              pl: 1,
-              pr: 1,
-            }}
-          >
-            {maturity_level?.title ? (
-              maturity_level?.title
-            ) : (
-              <Trans i18nKey="notEvaluated" />
-            )}
-          </Typography>
-        </>
-      }
-    </Box>
-  );
-};
-
-const ReadMoreAboutSubject = (
-  props: Pick<
-    IAssessmentSubjectCardProps,
-    "title" | "colorCode" | "description"
-  >
-) => {
-  const { title, description } = props;
-  return (
-    <Box
-      sx={{
-        "&:hover .subj_desc": description && {
-          opacity: 1,
-          zIndex: 2,
-          transition: "opacity .2s .2s ease, z-index .2s .2s ease",
-        },
-      }}
-    >
-      <Typography
-        variant="subSmall"
-        sx={{
-          opacity: 0.7,
-          letterSpacing: ".14em",
-          color: "#000000de",
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}
-        fontFamily="Roboto"
-      >
-        <Trans i18nKey="readAbout" /> {title}
+    <Box sx={{ textAlign: "center", paddingTop: 6, marginRight:-10 }}>
+      <Typography>
+        {hasStats ? (
+          <Gauge
+            maturity_level_number={5}
+            maturity_level_status={maturity_level?.title ?? ""}
+            level_value={maturity_level?.index ?? 0}
+            shortTitle={true}
+            titleSize={20}
+            height={getNumberBaseOnScreen(60, 90, 120, 150, 180)}
+          />
+        ) : (
+          <Trans i18nKey="notEvaluated" />
+        )}
       </Typography>
-      <Box
-        className="subj_desc"
-        sx={{
-          transition: "opacity .2s .4s ease, z-index .2s .4s ease",
-          backgroundColor: "#000000cc",
-          opacity: 0,
-          zIndex: -1,
-          px: 2,
-          py: 4,
-          borderRadius: 2,
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "calc(100% - 25px)",
-          textAlign: "center",
-          color: "#F4F4F8",
-        }}
-      >
-        <Typography>{description}</Typography>
-      </Box>
     </Box>
   );
 };

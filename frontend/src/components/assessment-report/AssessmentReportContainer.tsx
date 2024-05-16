@@ -96,7 +96,7 @@ const AssessmentReportContainer = (props: any) => {
               colorCode={colorCode}
               pathInfo={pathInfo}
             />
-            <Grid container spacing={3} columns={12} mt={0.2}>
+            <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
                 <Grid container alignItems="stretch" spacing={5}>
                   <Grid item lg={5} md={12} sm={12} xs={12}>
