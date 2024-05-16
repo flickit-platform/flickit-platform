@@ -162,32 +162,6 @@ def question_answering(assessments_details, serializer_data, authorization_heade
     return result
 
 
-def get_maturity_level_calculate(assessments_details):
-    result = dict()
-    response = requests.post(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/calculate')
-    if response.status_code == status.HTTP_200_OK:
-        data = response.json()
-        data["maturity_level"] = data.pop("maturityLevel")
-        level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
-        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
-        maturity_levels_id = list(MaturityLevel.objects.filter(
-            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
-        data["maturity_level"]["title"] = level.title
-        data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
-        data["maturity_level"]["value"] = data["maturity_level"].pop("value")
-        data["maturity_level"].pop("levelCompetences")
-        result["Success"] = True
-        result["body"] = data
-        result["status_code"] = response.status_code
-        return result
-
-    result["Success"] = True
-    result["body"] = response.json()
-    result["status_code"] = response.status_code
-    return result
-
-
 def get_questionnaire_answer(request, assessments_details, questionnaire_id):
     params = {"questionnaireId": questionnaire_id,
               'page': 0,

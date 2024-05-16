@@ -35,3 +35,13 @@ class InviteMemberInSpaceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class SpaceSeenApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, space_id):
+        result = space_services.space_seen_service(request, space_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

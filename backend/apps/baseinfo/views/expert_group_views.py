@@ -28,7 +28,7 @@ class ExpertGroupApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
     def delete(self, request, expert_group_id):
-        result = expert_group_services.delete_expert_group_members()
+        result = expert_group_services.delete_expert_group(request, expert_group_id)
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
@@ -39,6 +39,16 @@ class ExpertGroupMembersApi(APIView):
 
     def get(self, request, expert_group_id):
         result = expert_group_services.get_expert_group_members(request, expert_group_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupMemberApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, expert_group_id, user_id):
+        result = expert_group_services.delete_expert_group_member(request, expert_group_id, user_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
 

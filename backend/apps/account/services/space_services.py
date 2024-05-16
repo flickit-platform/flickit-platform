@@ -36,3 +36,12 @@ def create_spacer(request):
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def space_seen_service(request, space_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}/seen',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

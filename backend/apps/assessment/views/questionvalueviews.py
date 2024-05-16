@@ -28,18 +28,6 @@ class AnswerQuestionApi(APIView):
         return Response(result["body"], result["status_code"])
 
 
-class MaturityLevelCalculateApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(responses={200: ""})
-    def post(self, request, assessment_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_maturity_level_calculate(assessments_details["body"])
-        return Response(result["body"], result["status_code"])
-
-
 class LoadQuestionnaireAnswerApi(APIView):
     permission_classes = [IsAuthenticated]
 
