@@ -132,6 +132,7 @@ const AssessmentAdviceContainer = (props: any) => {
               >
                 <Trans i18nKey="wichAttYouWant" />
               </Box>
+              {/*
               <Box
                 sx={{
                   display: "flex",
@@ -166,12 +167,12 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      {/* <Box sx={{ fontSize: "16px", fontWeight: "700" }}>
+                      <Box sx={{ fontSize: "16px", fontWeight: "700" }}>
                         {subject.title}
-                      </Box> */}
-                      {/* <Divider sx={{ my: 2 }} /> */}
+                      </Box> 
+                       <Divider sx={{ my: 2 }} /> 
                       <Box>
-                        {/* <FormGroup>
+                         <FormGroup>
                           {subjectData.map((subject: any) => {
                             subject?.attributes.map((attribute: any) => {
                               return (
@@ -191,12 +192,13 @@ const AssessmentAdviceContainer = (props: any) => {
                               );
                             });
                           })}
-                        </FormGroup> */}
+                        </FormGroup> 
                       </Box>
                     </Box>
                   );
                 })}
               </Box>
+*/}
             </Box>
             <Box
               sx={{ borderRadius: {xs:0,sm:"0 0 32px 32px"}, background: "#fff", py: 8 }}

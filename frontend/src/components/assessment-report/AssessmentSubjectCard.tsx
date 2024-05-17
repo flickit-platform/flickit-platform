@@ -1,30 +1,33 @@
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import React, { useState, useEffect } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import SubjectProgress from "@common/progress/SubjectProgress";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { Button, CircularProgress } from "@mui/material";
-import { getMaturityLevelColors, styles } from "@styles";
-import { ISubjectInfo, IMaturityLevel, TId } from "@types";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import StartRoundedIcon from "@mui/icons-material/StartRounded";
+import toastError from "@utils/toastError";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useEffect, useState } from "react";
-import toastError from "@utils/toastError";
-import { ICustomError } from "@utils/CustomError";
 import ColorfulProgress from "../common/progress/ColorfulProgress";
 import { Gauge } from "../common/charts/Gauge";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+import { getMaturityLevelColors, styles } from "@styles";
+import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
+import { ICustomError } from "@/utils/CustomError";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
 }
+
 interface IAssessmentSubjectProgress {
   id: TId;
   title: string;
@@ -40,6 +43,9 @@ export const AssessmentSubjectAccordion = (
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [subjectData, setsubjectData] = useState<any>([]);
+
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
       service.fetchSubjectProgress(args, config),
@@ -75,8 +81,34 @@ export const AssessmentSubjectAccordion = (
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
+  const subjectQueryData = useQuery<ISubjectReportModel>({
+    service: (args, config) => service.fetchSubject(args, config),
+    runOnMount: false,
+  });
+
+  const fetchAttributes = async () => {
+    try {
+      const data = await subjectQueryData.query({
+        subjectId: id,
+        assessmentId: assessmentId,
+      });
+      setsubjectData((prev: any) => [...prev, data]);
+    } catch (e) {}
+  };
+
+  const handleAccordionChange = (
+    event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
+    setExpanded(isExpanded);
+    if (isExpanded) {
+      fetchAttributes();
+    }
+  };
   return (
     <Accordion
+      expanded={expanded}
+      onChange={handleAccordionChange}
       sx={{
         borderRadius: "32px !important",
         boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -88,60 +120,80 @@ export const AssessmentSubjectAccordion = (
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
         id="panel1a-header"
-        sx={{ textAlign: "center", py: 3, maxHeight: "160px" }}
+        sx={{
+          borderTopLeftRadius: "32px !important",
+          borderTopRightRadius: "32px !important",
+          textAlign: "center",
+          py: 3,
+          maxHeight: { sm: "160px" },
+          backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
+        }}
       >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          width="100%"
-          alignItems="center"
-          px={4}
-        >
-          <Typography
-            variant="h6"
-            textTransform={"uppercase"}
-            letterSpacing={".1em"}
-            fontFamily="Oswald"
-            fontWeight={500}
-            flexGrow={1}
-          >
-            {title}
-          </Typography>
-          <Box
-            sx={{
-              ml: 2,
-              flexGrow: 2,
-              maxHeight: "100px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <Typography variant="body2">{description}</Typography>
-          </Box>
-          <Box sx={{ ml: 2 }}>
-            <ColorfulProgress progress={progress} />
-          </Box>
-          <Box sx={{ ml: 2 }}>
+        <Grid container spacing={2} alignItems="center" px={4}>
+          <Grid item xs={12} sm={2}>
+            <Box
+              sx={{
+                maxHeight: "100px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                textAlign: "start",
+                width: "100%",
+              }}
+            >
+              <Typography variant="h6" sx={{ textTransform: "none" }}>
+                {title}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <Box
+              sx={{
+                maxHeight: "100px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                textAlign: "start",
+                width: "100%",
+              }}
+            >
+              <Typography variant="body2" sx={{ textTransform: "none" }}>
+                {description}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
+              <ColorfulProgress progress={progress} />
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ borderRadius: 4, textTransform: "none" }}
+                component={Link}
+                to="./../questionnaires"
+              >
+                Complete Now!
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={3}>
             <SubjectStatus title={title} maturity_level={maturityLevel} />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </AccordionSummary>
-      <AccordionDetails
-        sx={{ textAlign: "center", px: { xs: 2, sm: 5 }, py: { xs: 3, sm: 5 } }}
-      >
+      <AccordionDetails sx={{ padding: 0, paddingTop: 10 }}>
         <Box mt="auto">
           <Button
+            color="success"
             variant="contained"
             size="large"
             fullWidth
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
-            startIcon={
-              progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />
-            }
+            sx={{
+              borderBottomRightRadius: "32px",
+              borderBottomLeftRadius: "32px",
+            }}
           >
-            <Trans i18nKey={"viewInsights"} />
+            <Trans i18nKey={"checkMoreDetails"} />
           </Button>
         </Box>
       </AccordionDetails>
@@ -156,7 +208,7 @@ const SubjectStatus = (
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   return (
-    <Box sx={{ textAlign: "center", paddingTop: 6, marginRight:-10 }}>
+    <Box sx={{ textAlign: "center", paddingTop: 6, marginRight: -10 }}>
       <Typography>
         {hasStats ? (
           <Gauge
