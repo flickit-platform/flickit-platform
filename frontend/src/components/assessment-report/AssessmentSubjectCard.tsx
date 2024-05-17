@@ -7,6 +7,10 @@ import {
   Button,
   Grid,
   Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
@@ -45,7 +49,8 @@ export const AssessmentSubjectAccordion = (
   const [progress, setProgress] = useState<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [subjectData, setsubjectData] = useState<any>([]);
+  const [subjectData, setSubjectData] = useState<any>([]);
+  const [attributes, setAttributes] = useState<any>([]);
 
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
@@ -93,7 +98,8 @@ export const AssessmentSubjectAccordion = (
         subjectId: id,
         assessmentId: assessmentId,
       });
-      setsubjectData((prev: any) => [...prev, data]);
+      setSubjectData((prev: any) => [...prev, data]);
+      setAttributes(data.attributes);
     } catch (e) {}
   };
 
@@ -106,6 +112,7 @@ export const AssessmentSubjectAccordion = (
       fetchAttributes();
     }
   };
+
   return (
     <Accordion
       expanded={expanded}
@@ -181,13 +188,39 @@ export const AssessmentSubjectAccordion = (
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
-        <Grid container spacing={2} alignItems="center" padding={2}>
-          <Grid item xs={12} sm={8}>
+        <Grid container alignItems="center" padding={2}>
+          <Grid item xs={12} sm={7.5}>
             <Box height={"340px"}>
               <SubjectRadarChart {...subjectQueryData} loading={false} />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={3}></Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            sx={{
+              borderLeft: "0.5px solid rgba(0, 0, 0, 0.32)",
+              paddingLeft: "12px",
+            }}
+          >
+            {attributes.map((element: any) => {
+              return (
+                <Box display="flex" justifyContent="space-between" margin={2}>
+                  <Typography>{element.title}</Typography>
+                  <Typography
+                    sx={{
+                      color: getMaturityLevelColors(
+                        element.maturityScores.length
+                      )[element.maturityLevel.value - 1],
+                    }}
+                  >
+                    {element.maturityLevel.title}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Grid>
         </Grid>
         <Box mt="auto">
           <Button
