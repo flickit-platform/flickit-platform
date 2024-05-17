@@ -58,6 +58,7 @@ const SubjectRadar = (props: any) => {
           domain={[0, maturityLevelsCount]}
           type="number"
           tickCount={maturityLevelsCount + 1}
+          tick={false}
         />
         {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar
@@ -67,7 +68,7 @@ const SubjectRadar = (props: any) => {
           fill="#6035A1"
           fillOpacity={0.5}
         />
-        <Legend />
+        <Legend wrapperStyle={{ paddingTop: 20 }} />{" "}
       </RadarChart>
     </ResponsiveContainer>
   );

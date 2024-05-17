@@ -22,6 +22,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 import { getMaturityLevelColors, styles } from "@styles";
 import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
 import { ICustomError } from "@/utils/CustomError";
+import SubjectRadarChart from "../subject-report/SubjectRadarChart";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
@@ -179,7 +180,15 @@ export const AssessmentSubjectAccordion = (
           </Grid>
         </Grid>
       </AccordionSummary>
-      <AccordionDetails sx={{ padding: 0, paddingTop: 10 }}>
+      <AccordionDetails sx={{ padding: 0 }}>
+        <Grid container spacing={2} alignItems="center" padding={2}>
+          <Grid item xs={12} sm={8}>
+            <Box height={"340px"}>
+              <SubjectRadarChart {...subjectQueryData} loading={false} />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={3}></Grid>
+        </Grid>
         <Box mt="auto">
           <Button
             color="success"
