@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  useMediaQuery,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
@@ -51,6 +52,9 @@ export const AssessmentSubjectAccordion = (
   const [expanded, setExpanded] = useState<boolean>(false);
   const [subjectData, setSubjectData] = useState<any>([]);
   const [attributes, setAttributes] = useState<any>([]);
+  const isMobileScreen = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("sm")
+  );
 
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
@@ -138,7 +142,7 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container spacing={2} alignItems="center" px={4}>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={6} sm={2}>
             <Box
               sx={{
                 maxHeight: "100px",
@@ -153,21 +157,31 @@ export const AssessmentSubjectAccordion = (
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <Box
-              sx={{
-                maxHeight: "100px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                textAlign: "start",
-                width: "100%",
-              }}
-            >
-              <Typography variant="body2" sx={{ textTransform: "none" }}>
-                {description}
-              </Typography>
-            </Box>
-          </Grid>
+          {!isMobileScreen && (
+            <Grid item xs={12} sm={2}>
+              <Box
+                sx={{
+                  maxHeight: "100px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  textAlign: "start",
+                  width: "100%",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ textTransform: "none", wordBreak: "break-word" }}
+                >
+                  {description}
+                </Typography>
+              </Box>
+            </Grid>
+          )}
+          {isMobileScreen && (
+            <Grid item xs={12} sm={3}  marginTop="-120px">
+              <SubjectStatus title={title} maturity_level={maturityLevel} />
+            </Grid>
+          )}
           <Grid item xs={12} sm={4}>
             <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
               <ColorfulProgress progress={progress} />
@@ -182,9 +196,11 @@ export const AssessmentSubjectAccordion = (
               </Button>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={3}>
-            <SubjectStatus title={title} maturity_level={maturityLevel} />
-          </Grid>
+          {!isMobileScreen && (
+            <Grid item xs={6} sm={3}>
+              <SubjectStatus title={title} maturity_level={maturityLevel} />
+            </Grid>
+          )}
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
@@ -259,7 +275,7 @@ const SubjectStatus = (
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}
             titleSize={20}
-            height={getNumberBaseOnScreen(60, 90, 120, 150, 180)}
+            height={getNumberBaseOnScreen(90, 90, 120, 150, 180)}
           />
         ) : (
           <Trans i18nKey="notEvaluated" />

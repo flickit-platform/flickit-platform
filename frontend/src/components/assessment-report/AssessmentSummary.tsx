@@ -25,6 +25,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
+      textAlign="center"
       height="100%"
       gap={3}
       py={4}
