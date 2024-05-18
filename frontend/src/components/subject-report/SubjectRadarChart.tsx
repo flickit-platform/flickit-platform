@@ -29,8 +29,7 @@ const SubjectRadarChart = (props: any) => {
 
 const SubjectRadar = (props: any) => {
   const { data: res = {}, loaded } = props;
-  const { subject } = res;
-  const {maturity_level}=subject
+  const { maturityLevelsCount } = res;
   const data = useMemo(() => {
     return convertToSubjectChartData(res);
   }, [loaded]);
@@ -56,9 +55,9 @@ const SubjectRadar = (props: any) => {
         />
         <PolarRadiusAxis
           angle={90}
-          domain={[0, maturity_level?.maturity_levels_count]}
+          domain={[0, maturityLevelsCount]}
           type="number"
-          tickCount={maturity_level?.maturity_levels_count + 1}
+          tickCount={maturityLevelsCount + 1}
         />
         {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar

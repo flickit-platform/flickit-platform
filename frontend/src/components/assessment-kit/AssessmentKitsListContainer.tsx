@@ -16,11 +16,11 @@ const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
   const [value, setValue] = useState("public");
   const publicAssessmentKitsQueryData = useQuery({
-    service: (args = { is_private: false  }, config) =>
+    service: (args = { isPrivate: false  }, config) =>
       service.fetchAssessmentKits(args, config),
   });
   const privateAssessmentKitsQueryData = useQuery({
-    service: (args = { is_private: true  }, config) =>
+    service: (args = { isPrivate: true  }, config) =>
       service.fetchAssessmentKits(args, config),
   });
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -69,23 +69,23 @@ const AssessmentKitsListContainer = () => {
               </>
             )}
             render={(data) => {
-              const { results = [] } = data;
+              const { items = [] } = data;
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {results.map((assessment_kit: any) => {
+                    {items.map((assessmentKit: any) => {
                       return (
                         <Grid
                           item
                           xs={12}
                           md={4}
                           lg={3}
-                          key={assessment_kit.id}
+                          key={assessmentKit.id}
                         >
                           <AssessmentKitsMarketListItem
                             bg1={"#4568dc"}
                             bg2={"#b06ab3"}
-                            data={assessment_kit}
+                            data={assessmentKit}
                           />
                         </Grid>
                       );
@@ -116,23 +116,23 @@ const AssessmentKitsListContainer = () => {
               </>
             )}
             render={(data) => {
-              const { results = [] } = data;
+              const { items = [] } = data;
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {results.map((assessment_kit: any) => {
+                    {items.map((assessmentKit: any) => {
                       return (
                         <Grid
                           item
                           xs={12}
                           md={4}
                           lg={3}
-                          key={assessment_kit.id}
+                          key={assessmentKit.id}
                         >
                           <AssessmentKitsMarketListItem
                             bg1={"#4568dc"}
                             bg2={"#b06ab3"}
-                            data={assessment_kit}
+                            data={assessmentKit}
                           />
                         </Grid>
                       );

@@ -15,6 +15,7 @@ import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import RichEditorField from "@common/fields/RichEditorField";
 import UploadField from "@common/fields/UploadField";
+import convertToBytes from "@/utils/convertToBytes";
 
 interface IExpertGroupCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -115,16 +116,17 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
                 "image/png": [".png"],
               }}
               defaultValueType="image"
-              defaultValue={defaultValues.picture}
+              defaultValue={defaultValues.pictureLink}
               shouldFetchFileInfo={true}
               hideDropText
               name="picture"
               label={<Trans i18nKey="groupPicture" />}
-            />
+              maxSize={convertToBytes(2, "MB")}
+              />
           </Grid>
           <Grid item xs={12} md={7}>
             <InputFieldUC
-              defaultValue={defaultValues.name || ""}
+              defaultValue={defaultValues.title || ""}
               name="title"
               label={<Trans i18nKey="title" />}
               required

@@ -11,9 +11,13 @@ import { styles } from "@styles";
 import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
+import Tooltip from "@mui/material/Tooltip";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
-  return (
+
+    const HEIGHT_TITLE : number = 12
+
+    return (
     <Box
       sx={{
         minHeight: "280px",
@@ -67,10 +71,10 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         //       fontSize="inherit"
         //       sx={{ mr: 0.5, pb: 0.2 }}
         //     />
-        //     {data.likes_number || 0}
+        //     {data.likes || 0}
         //   </Box>
         // }
-        sx={{ width: "100%" }}
+        sx={{ width: "100%",height:`${HEIGHT_TITLE}vh` }}
         sub={
           <Box
             sx={{
@@ -105,6 +109,9 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             textDecoration: "none",
             color: "#000000de",
             width: "100%",
+            display: '-webkit-box',
+            WebkitLineClamp: '2',
+            WebkitBoxOrient: 'vertical',
             overflow: "hidden",
             textOverflow: "ellipsis",
           }}
@@ -113,18 +120,20 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         </Box>
       </Title>
       <Box mt={4} mb={2}>
-        <Typography>{data.summary || ""}</Typography>
+          <Tooltip title={data?.summary.length > 55  && data?.summary}>
+              <Typography sx={{wordBreak:"break-word"}} >{`${data.summary.substring(0, 55)} ${data?.summary.length > 55 ? "..." : ""}` || ""}</Typography>
+          </Tooltip>
       </Box>
       <Box mt="auto">
         <CardHeader
           component={Link}
-          to={`/user/expert-groups/${data.expert_group?.id}`}
+          to={`/user/expert-groups/${data.expertGroup?.id}`}
           sx={{ px: 0, textDecoration: "none" }}
           titleTypographyProps={{
             sx: { textDecoration: "none" },
             color: "white",
           }}
-          avatar={<Avatar alt={data.expert_group?.name} src={"/"} />}
+          avatar={<Avatar alt={data.expertGroup?.title} src={"/"} />}
           title={
             <Box
               component={"b"}
@@ -132,7 +141,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
               textTransform={"capitalize"}
               color={"#000000de"}
             >
-              {data.expert_group?.name}
+              {data.expertGroup?.title}
             </Box>
           }
         />
@@ -153,7 +162,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
           >
             <Trans i18nKey="used" />:{" "}
             <Box component="span" color="black" textTransform="lowercase">
-              {data.number_of_assessment} <Trans i18nKey="times" />
+              {data.assessmentsCount} <Trans i18nKey="times" />
             </Box>
           </Box>
         </Box>
@@ -177,7 +186,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
                 fontSize="inherit"
                 sx={{ mr: 0.5, pt: 0.2 }}
               />
-              {data.likes_number || 0}
+              {data.likes || 0}
             </Box>
           </Box>
         </Box>

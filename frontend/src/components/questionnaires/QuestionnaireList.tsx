@@ -63,12 +63,12 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             errorComponent={<></>}
             renderLoading={() => <Skeleton width="60px" height="36px" />}
             render={(data) => {
-              const { question_count = 0, answers_count = 0 } = data || {};
+              const { questionsCount = 0, answersCount = 0 } = data || {};
               return (
                 <QANumberIndicator
                   color="white"
-                  q={question_count}
-                  a={answers_count}
+                  q={questionsCount}
+                  a={answersCount}
                   variant="h6"
                 />
               );

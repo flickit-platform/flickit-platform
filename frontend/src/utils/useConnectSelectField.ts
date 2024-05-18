@@ -10,17 +10,19 @@ const useConnectSelectField = (props: {
   url: string;
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
+  loadMore?: number
 }) => {
   const {
     url,
     filterOptions = (options) => options,
     searchParams = {},
+    loadMore
   } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [defaultOption, setDefaultOption] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [totalItem,setTotalItem] = useState(0)
   const { service } = useServiceContext();
 
   useEffect(() => {
@@ -30,17 +32,22 @@ const useConnectSelectField = (props: {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [loadMore]);
 
   const fetchOptions = async (signal: AbortSignal) => {
     setLoading(true);
     try {
       const {
-        data: { items, colors, default_color },
+        data: { items, colors, default_color, total },
       } = await service.fetchOptions({ url }, { signal, params: searchParams });
       if (items) {
+        setTotalItem(total)
         if (Array.isArray(items)) {
-          setOptions(items);
+          if(loadMore){
+            setOptions(prev => [...prev,...items]);
+          }else{
+            setOptions(items);
+          }
           setError(false);
         } else {
           setOptions([]);
@@ -72,7 +79,7 @@ const useConnectSelectField = (props: {
       setError(true);
     }
   };
-  return { options, loading, error, fetchOptions, defaultOption };
+  return { options, loading, error, fetchOptions, defaultOption, totalItem };
 };
 
 export default useConnectSelectField;

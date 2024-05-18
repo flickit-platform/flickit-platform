@@ -52,7 +52,8 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
-        const { attributes, subject } = data;
+        const { attributes, subject,topStrengths,topWeaknesses,maturityLevelsCount } = data;
+        const {isConfidenceValid,isCalculateValid,title}=subject
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
@@ -80,10 +81,10 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : !subject?.is_calculate_valid||!subject?.is_confidence_valid ? (
+            ) : !loaded ? null : !isCalculateValid||!isConfidenceValid ? (
               <NoInsightYetMessage
-                title={subject?.title}
-                no_insight_yet_message={!subject?.is_calculate_valid||!subject?.is_confidence_valid}
+                title={title}
+                no_insight_yet_message={!isCalculateValid||!isConfidenceValid}
               />
             ) : (
               <Box sx={{ px: 0.5 }}>
@@ -109,7 +110,7 @@ const SubjectContainer = () => {
                           <Trans
                             i18nKey="inTheRadarChartBelow"
                             values={{
-                              title: subject?.title || "",
+                              title: title || "",
                             }}
                           />
                         </Typography>

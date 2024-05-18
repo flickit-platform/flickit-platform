@@ -87,7 +87,7 @@ export const createService = (
       return axios.delete(`/authinfo/spaces/${spaceId}/`, config);
     },
     createSpace(data: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`/authinfo/spaces/`, data, config);
+      return axios.post(`api/v1/spaces/`, data, config);
     },
     updateSpace(
       { spaceId, data }: { spaceId: string; data: any },
@@ -200,14 +200,14 @@ export const createService = (
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/${assessmentId}/report/`, config);
+      return axios.get(`/api/v2/assessments/${assessmentId}/report/`, config);
     },
     fetchSubject(
       { subjectId, assessmentId }: { subjectId: string; assessmentId: string },
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.get(
-        `/api/v1/assessments/${assessmentId}/report/subjects/${subjectId}/`,
+        `/api/v2/assessments/${assessmentId}/report/subjects/${subjectId}/`,
         config
       );
     },
@@ -326,7 +326,7 @@ export const createService = (
       { assessmentId }: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/${assessmentId}/progress/`, config);
+      return axios.get(`/api/v2/assessments/${assessmentId}/progress/`, config);
     },
     calculateMaturityLevel(
       { assessmentId }: { assessmentId: TId },
@@ -404,9 +404,9 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
-      const { query, is_private } = args ?? {};
-      const params = query ? { query } : { is_private };
-      return axios.get(`/baseinfo/assessmentkits/`, { params, ...config });
+      const { query, isPrivate } = args ?? {};
+      const params = query ? { query } : { isPrivate };
+      return axios.get(`/api/v2/assessment-kits/`, { params, ...config });
     },
     fetchAssessmentKitsOptions(
       args: any,
@@ -550,6 +550,21 @@ export const createService = (
         }
       );
     },
+    fetchRelatedEvidences(
+      args: { assessmentId: TId; attributeId: TId; type: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, attributeId, type } = args ?? {};
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/attributes/${attributeId}/evidences`,
+        {
+          ...(config ?? {}),
+          params: {
+            type,
+          },
+        }
+      );
+    },
     assessmentKitUsersList(
       args: { assessmentKitId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -612,7 +627,7 @@ export const createService = (
       args: any,
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/baseinfo/tags/`, config);
+      return axios.get(`/api/v1/assessment-kit-tags/`, config);
     },
     deleteAssessmentKit(
       args: { id: TId },
@@ -666,10 +681,15 @@ export const createService = (
         params: { user_id: id },
       });
     },
-    fetchExpertGroups(args: any, config: AxiosRequestConfig<any> | undefined) {
+    fetchExpertGroups(
+      args: { page: number; size: number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { page = 1, size = 20 } = args ?? {};
+
       return axios.get(`/api/v1/expert-groups/`, {
         ...(config ?? {}),
-        params: { size: 20 },
+        params: { size: size, page: page - 1 },
       });
     },
     fetchUserExpertGroup(
@@ -830,7 +850,7 @@ export const createService = (
     ) {
       const { id } = args ?? {};
 
-      return axios.post(`/baseinfo/assessmentkits/like/${id}/`, {
+      return axios.post(`/api/v2/assessment-kits/${id}/like/`, {
         ...(config ?? {}),
       });
     },
@@ -850,18 +870,21 @@ export const createService = (
         description: string;
         questionId: TId;
         assessmentId: TId;
+        type: string;
         id?: TId;
       },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { description, questionId, assessmentId, id } = args ?? {};
+      const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
             description,
+            type,
           })
         : axios.post(`/api/v1/evidences/`, {
-            assessment_id: assessmentId,
-            question_id: questionId,
+            assessmentId: assessmentId,
+            questionId: questionId,
+            type: type,
             description,
           });
     },
@@ -890,8 +913,8 @@ export const createService = (
       return axios.get(`/api/v1/evidences/`, {
         ...(config ?? {}),
         params: {
-          question_id: questionId,
-          assessment_id: assessmentId,
+          questionId: questionId,
+          assessmentId: assessmentId,
           page,
           size,
         },

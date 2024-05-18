@@ -13,16 +13,21 @@ type TQuestionnairesNotCompleteAlertProps = {
   a?: number;
 };
 
-const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertProps) => {
+const QuestionnairesNotCompleteAlert = (
+  props: TQuestionnairesNotCompleteAlertProps
+) => {
   const { subjectName, to, progress, q, a } = props;
   const location = useLocation();
+  const isComplete = q === a;
   return (
     <AlertBox
       severity="warning"
       variant="filled"
       sx={{
         backgroundColor: "#622301",
-        background: progress ? `linear-gradient(135deg, #a53900 ${progress}%, #622301 ${progress}%)` : undefined,
+        background: progress
+          ? `linear-gradient(135deg, #a53900 ${progress}%, #622301 ${progress}%)`
+          : undefined,
         color: "white",
         borderRadius: 2,
       }}
@@ -61,13 +66,26 @@ const QuestionnairesNotCompleteAlert = (props: TQuestionnairesNotCompleteAlertPr
         </>
       }
     >
-      <AlertTitle>
-        <Trans i18nKey="thisReportIsNotAccurate" />
-      </AlertTitle>
-      {subjectName ? (
-        <Trans i18nKey="pleaseCompleteAllSubjectQuestionnaires" values={{ subjectName }} />
+      {!isComplete ? (
+        <>
+          <AlertTitle>
+            <Trans i18nKey="thisReportIsNotAccurate" />
+          </AlertTitle>
+          {subjectName ? (
+            <Trans
+              i18nKey="pleaseCompleteAllSubjectQuestionnaires"
+              values={{ subjectName }}
+            />
+          ) : (
+            <Trans i18nKey="pleaseCompleteAllQuestionnaires" />
+          )}
+        </>
       ) : (
-        <Trans i18nKey="pleaseCompleteAllQuestionnaires" />
+        <>
+          <AlertTitle>
+            <Trans i18nKey="allQuestionsHaveBeenAnswered" />
+          </AlertTitle>
+        </>
       )}
     </AlertBox>
   );

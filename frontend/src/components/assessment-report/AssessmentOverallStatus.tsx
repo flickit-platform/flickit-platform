@@ -53,7 +53,7 @@ export const AssessmentOverallStatus = (
                     </span>{" "}
                     <Trans i18nKey={"statusIs"} />{" "}
                     <b data-cy={"status"}>
-                      {subject?.maturity_level?.title ?? "NOT EVALUATED"}
+                      {subject?.maturityLevel?.title ?? "NOT EVALUATED"}
                     </b>
                   </Typography>
                 );

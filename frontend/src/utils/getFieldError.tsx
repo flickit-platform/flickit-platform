@@ -32,7 +32,8 @@ const getFieldError = (
     [x: string]: any;
   }>,
   name: string,
-  minLength?: number
+  minLength?: number,
+  maxLength?: number
 ) => {
   const error = errors?.[name];
   const hasError = !!error?.type;
@@ -43,6 +44,12 @@ const getFieldError = (
       <Trans
         i18nKey="minLengthFieldError"
         values={{ length: minLength ?? "8" }}
+      />
+    ),
+    maxLength: (
+      <Trans
+        i18nKey="maxLengthFieldError"
+        values={{ length: maxLength ?? "8" }}
       />
     ),
   };
