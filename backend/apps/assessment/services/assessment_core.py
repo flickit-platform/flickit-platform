@@ -494,13 +494,19 @@ def get_path_info_with_assessment_id(request, assessments_details):
     return result
 
 
-def edit_assessment(request, assessment_id):
+def edit_assessment(assessments_details, request_body, authorization_header):
+    result = dict()
+    data_json = {"title": request_body["title"],
+                 "colorId": request_body["color_id"]
+                 }
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}',
-        json=request.data,
-        headers={'Authorization': request.headers['Authorization']})
-    return {"Success": True, "body": response.json(), "status_code": response.status_code}
-
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}', json=data_json,
+        headers={"Authorization": authorization_header})
+    response_body = response.json()
+    result["Success"] = True
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result
 
 def get_path_info_with_space_id(space_id):
     result = dict()

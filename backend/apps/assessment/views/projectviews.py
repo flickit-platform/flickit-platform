@@ -32,9 +32,15 @@ class AssessmentProjectApi(APIView):
 class AssessmentApi(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=openapi.Schema(type=openapi.TYPE_OBJECT), responses={201: ""})
+    @swagger_auto_schema(request_body=projectserializers.EditAssessmentSerializer(), responses={201: ""})
     def put(self, request, assessment_id):
-        result = assessment_core.edit_assessment(request, assessment_id)
+        serializer = projectserializers.EditAssessmentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        result = assessment_core.edit_assessment(assessments_details["body"], serializer.validated_data,
+                                                 authorization_header=request.headers['Authorization'])
         return Response(result["body"], result["status_code"])
 
     def delete(self, request, assessment_id):
