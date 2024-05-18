@@ -7,6 +7,7 @@ import hasStatus from "@utils/hasStatus";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 interface IGaugeProps extends BoxProps {
   systemStatus?: TStatus;
   name?: string;
@@ -19,6 +20,7 @@ interface IGaugeProps extends BoxProps {
   className?: string;
   shortTitle?: boolean;
   titleSize?: number;
+  display_confidence_component?: boolean;
 }
 
 const Gauge = (props: IGaugeProps) => {
@@ -34,6 +36,7 @@ const Gauge = (props: IGaugeProps) => {
     className,
     shortTitle,
     titleSize = 24,
+    display_confidence_component,
     ...rest
   } = props;
   const colorPallet = getMaturityLevelColors(maturity_level_number);
@@ -61,7 +64,7 @@ const Gauge = (props: IGaugeProps) => {
         <Box
           sx={{
             ...styles.centerCVH,
-            bottom: `${show_confidence ? "45%" : shortTitle ? "30%" : "40%"}`,
+            bottom: `${display_confidence_component ? "20%" : shortTitle ? "30%" : "40%"}`,
             left: "25%",
             right: "25%",
           }}
@@ -94,10 +97,29 @@ const Gauge = (props: IGaugeProps) => {
             >
               <Trans
                 i18nKey="withPercentConfidence"
-                // values={{
-                //   percent: Math.ceil(confidenceValue),
-                // }}
+                values={{
+                  percent: Math.ceil(confidenceValue),
+                }}
               />
+            </Typography>
+          )}
+          {display_confidence_component && (
+            <Typography
+              variant="subtitle2"
+              color="rgba(157, 167, 179, 1)"
+              mt={1}
+              fontSize={16}
+            >
+              <Trans
+                i18nKey="withPercentConfidence"
+                values={{
+                  percent: Math.ceil(confidenceValue),
+                }}
+              />{" "}
+              <ConfidenceLevel
+                displayNumber
+                inputNumber={Math.ceil(confidenceValue)}
+              ></ConfidenceLevel>
             </Typography>
           )}
         </Box>

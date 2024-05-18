@@ -6,6 +6,7 @@ import { styles } from "@styles";
 import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
+import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 interface IAssessmentSummaryProps {
   assessmentKit: AssessmentKitInfoType;
   expertGroup: ExpertGroupDetails;
@@ -88,7 +89,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             <Trans i18nKey="lastModified" />
           </Typography>
           <Typography color="#9DA7B3">
-            {formatDate(lastModificationTime)}
+            {convertToRelativeTime(lastModificationTime)}
           </Typography>
         </Box>
       </Box>

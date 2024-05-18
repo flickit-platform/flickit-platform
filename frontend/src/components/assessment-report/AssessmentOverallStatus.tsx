@@ -35,6 +35,7 @@ export const AssessmentOverallStatus = (
         systemStatus={ESystemStatus[status as ESystemStatus]}
         confidence_value={confidence_value}
         show_confidence={false}
+        display_confidence_component={true}
         shortTitle={true}
         titleSize={60}
         height={getNumberBaseOnScreen(240, 320, 400, 480, 560)}

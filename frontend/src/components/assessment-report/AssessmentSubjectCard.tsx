@@ -178,7 +178,7 @@ export const AssessmentSubjectAccordion = (
             </Grid>
           )}
           {isMobileScreen && (
-            <Grid item xs={12} sm={3}  marginTop="-120px">
+            <Grid item xs={12} sm={3} marginTop="-120px">
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -206,7 +206,7 @@ export const AssessmentSubjectAccordion = (
       <AccordionDetails sx={{ padding: 0 }}>
         <Grid container alignItems="center" padding={2}>
           <Grid item xs={12} sm={7.5}>
-            <Box height={"340px"}>
+            <Box height={"400px"}>
               <SubjectRadarChart {...subjectQueryData} loading={false} />
             </Box>
           </Grid>
@@ -275,7 +275,7 @@ const SubjectStatus = (
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}
             titleSize={20}
-            height={getNumberBaseOnScreen(90, 90, 120, 150, 180)}
+            height={getNumberBaseOnScreen(140, 140, 140, 150, 180)}
           />
         ) : (
           <Trans i18nKey="notEvaluated" />
