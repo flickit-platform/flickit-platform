@@ -55,7 +55,6 @@ export const AssessmentSubjectAccordion = (
   const isMobileScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("sm")
   );
-
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
       service.fetchSubjectProgress(args, config),
@@ -123,7 +122,7 @@ export const AssessmentSubjectAccordion = (
       onChange={handleAccordionChange}
       sx={{
         borderRadius: "32px !important",
-        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+        boxShadow: "0px 0px 8px 0px rgba(10, 35, 66, 0.25)",
         transition: "background-position .4s ease",
         position: "relative",
       }}
@@ -142,13 +141,13 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container spacing={2} alignItems="center" px={4}>
-          <Grid item xs={6} sm={2}>
+          <Grid item xs={12} sm={2}>
             <Box
               sx={{
                 maxHeight: "100px",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                textAlign: "start",
+                textAlign: isMobileScreen ? "center" : "start",
                 width: "100%",
               }}
             >
@@ -178,7 +177,7 @@ export const AssessmentSubjectAccordion = (
             </Grid>
           )}
           {isMobileScreen && (
-            <Grid item xs={12} sm={3} marginTop="-120px">
+            <Grid item xs={12} sm={3}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -188,11 +187,20 @@ export const AssessmentSubjectAccordion = (
               <Button
                 variant="contained"
                 color="success"
-                sx={{ borderRadius: 4, textTransform: "none" }}
+                sx={{
+                  borderRadius: 4,
+                  textTransform: "none",
+                  background: "#1CC2C4",
+                }}
                 component={Link}
                 to="./../questionnaires"
+                disabled={progress === 100 ? true : false}
               >
-                Complete Now!
+                {progress === 100 ? (
+                  <Typography> Completed</Typography>
+                ) : (
+                  <Typography> Complete Now!</Typography>
+                )}
               </Button>
             </Box>
           </Grid>
@@ -241,14 +249,25 @@ export const AssessmentSubjectAccordion = (
         <Box mt="auto">
           <Button
             color="success"
-            variant="contained"
+            variant="outlined"
             size="large"
             fullWidth
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
             sx={{
+              borderRadius: 0,
               borderBottomRightRadius: "32px",
               borderBottomLeftRadius: "32px",
+              padding: 2,
+              textTransform: "none",
+              fontSize: 24,
+              backgroundColor: "#D2F3F3",
+              borderColor: "#D2F3F3",
+              color: "#1CC2C4",
+              "&:hover": {
+                backgroundColor: "#D2F3F3",
+                borderColor: "#D2F3F3",
+              },
             }}
           >
             <Trans i18nKey={"checkMoreDetails"} />
@@ -265,8 +284,17 @@ const SubjectStatus = (
   const { title, maturity_level } = props;
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
+  const isMobileScreen = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("sm")
+  );
   return (
-    <Box sx={{ textAlign: "center", paddingTop: 6, marginRight: -10 }}>
+    <Box
+      sx={{
+        textAlign: "center",
+        paddingTop: isMobileScreen ? "unset" : 6,
+        marginRight: isMobileScreen ? "unset" : -10,
+      }}
+    >
       <Typography>
         {hasStats ? (
           <Gauge

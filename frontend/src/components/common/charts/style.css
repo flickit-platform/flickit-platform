@@ -7,6 +7,10 @@
     margin-top: 6%;
     margin-bottom: -10%;
   }
+  .recharts-wrapper > .recharts-surface {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 }
 .path1 {
   fill: rgba(0, 0, 0, 0.1);

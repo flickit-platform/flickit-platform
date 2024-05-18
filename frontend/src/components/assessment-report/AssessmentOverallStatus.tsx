@@ -27,7 +27,13 @@ export const AssessmentOverallStatus = (
     confidence_value,
   } = props;
   return (
-    <Box sx={{ ...styles.card }}>
+    <Box
+      sx={{
+        background: "#fff",
+        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+        borderRadius: "40px",
+      }}
+    >
       <Gauge
         level_value={maturity_level?.index ?? 0}
         maturity_level_status={maturity_level?.title}
@@ -37,7 +43,7 @@ export const AssessmentOverallStatus = (
         show_confidence={false}
         display_confidence_component={true}
         shortTitle={true}
-        titleSize={60}
+        titleSize={getNumberBaseOnScreen(30, 30, 30, 60, 60)}
         height={getNumberBaseOnScreen(240, 320, 400, 480, 560)}
         className="insight--report__gauge"
       />

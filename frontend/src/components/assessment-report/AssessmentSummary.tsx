@@ -30,7 +30,12 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       height="100%"
       gap={3}
       py={4}
-      sx={{ ...styles.card, px: { xs: 2, sm: 3 } }}
+      sx={{
+        background: "#fff",
+        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+        borderRadius: "40px",
+        px: { xs: 2, sm: 3 },
+      }}
     >
       <Typography color="#3B4F68" fontSize="18px">
         {pathInfo?.space?.title}

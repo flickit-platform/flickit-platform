@@ -53,6 +53,9 @@ const palette = createPalette({
   background: { secondary: "#273248", secondaryDark: "#121d33" },
   ml: { primary: "#6035A1" },
   cl: { primary: "#3596A1" },
+  success: { main: "#1CC2C4", contrastText: "#fff" },
+  error: { main: "#D81E5B", contrastText: "#fff" },
+  warning: { main: "#F9A03F", contrastText: "#fff" },
 });
 
 export const theme = createTheme({
@@ -156,7 +159,7 @@ export const theme = createTheme({
         },
       },
     },
-    
+
     //@ts-expect-error
     MuiTabPanel: {
       styleOverrides: {

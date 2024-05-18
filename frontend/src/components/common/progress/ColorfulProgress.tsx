@@ -30,13 +30,13 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   let percentColor: string;
   switch (color) {
     case "error":
-      percentColor = "red";
+      percentColor = "#D81E5B";
       break;
     case "warning":
       percentColor = "orange";
       break;
     case "success":
-      percentColor = "green";
+      percentColor = "#1CC2C4";
       break;
     default:
       percentColor = "inherit";
@@ -56,7 +56,12 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         </Typography>
       </Typography>
       <LinearProgress
-        sx={{ borderRadius: 3, width: "100%", height: "12px" }}
+        sx={{
+          borderRadius: 3,
+          width: "100%",
+          height: "12px",
+          border: `1px solid ${percentColor}`,
+        }}
         value={progress}
         variant="determinate"
         color={color}
