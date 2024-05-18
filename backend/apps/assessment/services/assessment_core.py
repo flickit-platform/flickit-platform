@@ -110,12 +110,57 @@ def get_assessment_list(request):
     return result
 
 
-def question_answering(request, assessment_id):
+def question_answering(assessments_details, serializer_data, authorization_header):
+    data = {"assessmentId": assessments_details["assessmentId"],
+            "questionnaireId": serializer_data["questionnaire_id"],
+            "questionId": serializer_data["question_id"],
+            "answerOptionId": serializer_data["answer_option_id"],
+            "confidenceLevelId": serializer_data["confidence_level_id"],
+            }
+
+    if "is_not_applicable" in serializer_data:
+        data["isNotApplicable"] = serializer_data["is_not_applicable"]
+
+    result = dict()
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    if not Questionnaire.objects.filter(id=serializer_data["questionnaire_id"]).filter(
+            kit_version=kit.kit_version_id).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    if not Question.objects.filter(id=serializer_data["question_id"]).filter(
+            questionnaire=serializer_data["questionnaire_id"]).exists():
+        result["Success"] = False
+        result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
+        result["status_code"] = status.HTTP_400_BAD_REQUEST
+        return result
+
+    if serializer_data["answer_option_id"] is not None:
+        if not AnswerTemplate.objects.filter(id=serializer_data["answer_option_id"]).filter(
+                question=serializer_data["question_id"]).exists():
+            result["Success"] = False
+            result["body"] = {"code": "NOT_FOUND", "message": "'answer_option_id' does not exist"}
+            result["status_code"] = status.HTTP_400_BAD_REQUEST
+            return result
+
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/answer-question',
-        json=request.data,
-        headers={'Authorization': request.headers['Authorization']})
-    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answer-question',
+        json=data,
+        headers={"Authorization": authorization_header},
+    )
+    if response.status_code == status.HTTP_201_CREATED:
+        result["Success"] = True
+        result["body"] = response.json()
+        result["status_code"] = response.status_code
+        return result
+
+    result["Success"] = False
+    result["body"] = response.json()
+    result["status_code"] = response.status_code
+    return result
+
 
 
 def get_questionnaire_answer(request, assessments_details, questionnaire_id):
@@ -449,13 +494,19 @@ def get_path_info_with_assessment_id(request, assessments_details):
     return result
 
 
-def edit_assessment(request, assessment_id):
+def edit_assessment(assessments_details, request_body, authorization_header):
+    result = dict()
+    data_json = {"title": request_body["title"],
+                 "colorId": request_body["color_id"]
+                 }
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}',
-        json=request.data,
-        headers={'Authorization': request.headers['Authorization']})
-    return {"Success": True, "body": response.json(), "status_code": response.status_code}
-
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}', json=data_json,
+        headers={"Authorization": authorization_header})
+    response_body = response.json()
+    result["Success"] = True
+    result["body"] = response_body
+    result["status_code"] = response.status_code
+    return result
 
 def get_path_info_with_space_id(space_id):
     result = dict()

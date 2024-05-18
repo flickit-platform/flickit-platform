@@ -13,11 +13,19 @@ from assessment.services import assessment_core, assessment_core_services
 
 class AnswerQuestionApi(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = questionvalueserializers.AnswerQuestionSerializer
 
-    @swagger_auto_schema(request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT), responses={201: ""})
+    @swagger_auto_schema(request_body=serializer_class, responses={201: ""})
     def put(self, request, assessment_id):
-        result = assessment_core.question_answering(request, assessment_id)
+        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
+        if not assessments_details["Success"]:
+            return Response(assessments_details["body"], assessments_details["status_code"])
+        serializer_data = self.serializer_class(data=request.data)
+        serializer_data.is_valid(raise_exception=True)
+        result = assessment_core.question_answering(assessments_details=assessments_details["body"],
+                                                    serializer_data=serializer_data.validated_data,
+                                                    authorization_header=request.headers['Authorization'],
+                                                    )
         return Response(result["body"], result["status_code"])
 
 

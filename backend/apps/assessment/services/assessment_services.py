@@ -16,3 +16,11 @@ def assessment_delete(request, assessment_id):
     if response.status_code == 204:
         return {"Success": False, "body": None, "status_code": response.status_code}
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def edit_assessment(request, assessment_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
