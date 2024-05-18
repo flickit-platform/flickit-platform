@@ -34,7 +34,7 @@ import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
 
 export const SpaceMembers = (props: any) => {
-  const { owner } = props;
+  const { isOwner } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { dispatch, userInfo } = useAuthContext();
@@ -181,7 +181,6 @@ export const SpaceMembers = (props: any) => {
               <Box>
                 {items.map((member: any) => {
                   const { displayName, id , pictureLink } = member;
-                  const isOwner = owner?.id == displayName?.id;
                   return (
                       displayName && (
                       <Box
