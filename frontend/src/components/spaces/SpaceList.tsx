@@ -110,8 +110,13 @@ const SpaceCard = (props: ISpaceCardProps) => {
     assessment_numbers = 0,
     is_default_space_for_current_user,
   } = item || {};
+
+  const trackSeen = () =>{
+    service.seenSpaceList({ id },{})
+  }
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
+    trackSeen()
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
@@ -200,7 +205,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            <Box sx={{ ...styles.centerV }}>
+            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
               <IconButton size="small" component={Link} to={`/${id}/setting`}>
                 <SettingsRoundedIcon />
               </IconButton>

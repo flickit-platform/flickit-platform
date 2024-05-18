@@ -80,7 +80,13 @@ export const createService = (
     ) {
       return axios.get(`/authinfo/spaces/${spaceId}/`, config);
     },
-    deleteSpace(
+    seenSpaceList(
+      { id }: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+    return axios.put(`/api/v1/spaces/${id}/seen/`, config);
+    },
+  deleteSpace(
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
