@@ -531,6 +531,7 @@ const MemberActions = (props: any) => {
   const deleteItem = async (e: any) => {
     await deleteExpertGroupMember();
     await query();
+    await inviteeQuery()
   };
 
   const inviteMember = async () => {

@@ -705,7 +705,7 @@ export const createService = (
     ) {
       const { id, userId } = args ?? {};
       return axios.delete(
-        `/baseinfo/expertgroups/${id}/expertgroupaccess/${userId}/`,
+        `/api/v1/expert-groups/${id}/members/${userId}/`,
         config
       );
     },
