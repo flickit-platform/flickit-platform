@@ -185,12 +185,17 @@ export const AssessmentSubjectAccordion = (
             <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
               <ColorfulProgress progress={progress} />
               <Button
-                variant="contained"
-                color="success"
+                variant="outlined"
                 sx={{
                   borderRadius: 4,
                   textTransform: "none",
-                  background: "#1CC2C4",
+                  backgroundColor: "#D2F3F3",
+                  borderColor: "#D2F3F3",
+                  color: "#1CC2C4",
+                  "&:hover": {
+                    backgroundColor: "#D2F3F3",
+                    borderColor: "#D2F3F3",
+                  },
                 }}
                 component={Link}
                 to="./../questionnaires"

@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
@@ -50,6 +50,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
               title: assessment?.title,
             },
           ]}
+          displayChip
         />
       }
     ></Title>
