@@ -53,19 +53,18 @@ const SpacesList = (props: ISpaceListProps) => {
     };
   }, []);
 
-  const { results = [] } = data || {};
+  const { items = [] } = data || {};
 
   return (
     <Box sx={{ overflowX: "auto", py: 1 }}>
       <Box sx={{ minWidth: { xs: "320px", sm: "440px" } }}>
-        {results.map((item: any) => {
-          const isOwner = userId == item?.owner.id;
+        {items.map((item: any) => {
           return (
             <SpaceCard
               key={item?.id}
               item={item}
               isActiveSpace={false}
-              isOwner={isOwner}
+              isOwner={item?.isOwner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
               setUserInfo={setUserInfo}
@@ -106,8 +105,9 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const {
     title,
     id,
-    members_number = 0,
-    assessment_numbers = 0,
+    membersCount = 0,
+    assessmentsCount = 0,
+    lastModificationTime,
     is_default_space_for_current_user,
   } = item || {};
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
@@ -173,7 +173,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
             <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
             <Typography fontFamily="Roboto" fontWeight={"bold"}>
-              {members_number}
+              {membersCount}
             </Typography>
           </Box>
           <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
@@ -182,7 +182,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
               fontSize="small"
             />
             <Typography fontFamily="Roboto" fontWeight={"bold"}>
-              {assessment_numbers}
+              {assessmentsCount}
             </Typography>
           </Box>
         </Box>

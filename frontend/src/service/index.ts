@@ -72,7 +72,7 @@ export const createService = (
       });
     },
     fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/authinfo/spaces/`, config);
+      return axios.get(`/api/v1/spaces/`, config);
     },
     fetchSpace(
       { spaceId }: { spaceId: string },
