@@ -30,6 +30,12 @@ class AssessmentKitApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    def delete(self, request, assessment_kit_id):
+        result = assessment_kit_service.delete_assessment_kit(request, assessment_kit_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class AssessmentKitDetailsApi(APIView):
     permission_classes = [IsAuthenticated]

@@ -89,3 +89,11 @@ def delete_expert_group(request, expert_group_id):
     if response.status_code == 204:
         return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def get_assessment_kit_list_with_expert_group_id(request, expert_group_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/assessment-kits',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

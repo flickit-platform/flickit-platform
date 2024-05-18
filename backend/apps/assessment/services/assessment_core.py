@@ -162,6 +162,7 @@ def question_answering(assessments_details, serializer_data, authorization_heade
     return result
 
 
+
 def get_questionnaire_answer(request, assessments_details, questionnaire_id):
     params = {"questionnaireId": questionnaire_id,
               'page': 0,
@@ -506,17 +507,6 @@ def edit_assessment(assessments_details, request_body, authorization_header):
     result["body"] = response_body
     result["status_code"] = response.status_code
     return result
-
-
-def delete_assessment(assessments_details):
-    result = dict()
-    response = requests.delete(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}')
-    result["Success"] = True
-    result["body"] = None
-    result["status_code"] = response.status_code
-    return result
-
 
 def get_path_info_with_space_id(space_id):
     result = dict()
