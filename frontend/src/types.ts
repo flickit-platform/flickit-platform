@@ -196,11 +196,11 @@ export interface IOwnerModel {
 export interface ISpaceModel {
   code: string;
   id: TId;
-  owner: IOwnerModel;
+  isOwner:boolean;
   title: string;
-  last_modification_date?: string;
-  members_number?: number;
-  assessment_numbers?: number;
+  lastModificationTime?: string;
+  membersCount?: number;
+  assessmentsCount?: number;
   is_default_space_for_current_user?: boolean;
 }
 
