@@ -369,11 +369,11 @@ const AnswerTemplate = (props: {
         {
           assessmentId,
           data: {
-            questionnaire_id: questionnaireId,
-            question_id: questionInfo?.id,
-            answer_option_id: value?.id || null,
-            is_not_applicable: notApplicable,
-            confidence_level_id:
+            questionnaireId: questionnaireId,
+            questionId: questionInfo?.id,
+            answerOptionId: value?.id || null,
+            isNotApplicable: notApplicable,
+            confidenceLevelId:
               value?.id || submitOnAnswerSelection || notApplicable
                 ? selcetedConfidenceLevel
                 : null,
@@ -381,6 +381,7 @@ const AnswerTemplate = (props: {
         },
         { signal: abortController.current.signal }
       );
+        console.log(res,"test res")
       dispatch(questionActions.setIsSubmitting(false));
       dispatch(
         questionActions.setQuestionInfo({

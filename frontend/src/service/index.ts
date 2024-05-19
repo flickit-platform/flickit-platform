@@ -283,7 +283,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.put(
-        `/api/v1/assessments/${assessmentId ?? ""}/answer-question/`,
+        `/api/v2/assessments/${assessmentId ?? ""}/answer-question/`,
         data,
         { ...config }
       );
