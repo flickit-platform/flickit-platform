@@ -381,7 +381,6 @@ const AnswerTemplate = (props: {
         },
         { signal: abortController.current.signal }
       );
-        console.log(res,"test res")
       dispatch(questionActions.setIsSubmitting(false));
       dispatch(
         questionActions.setQuestionInfo({
