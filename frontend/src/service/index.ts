@@ -720,7 +720,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/expertgroup/${id}/assessmentkits/`, config);
+      return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, config);
     },
     fetchExpertGroupUnpublishedAssessmentKits(
       args: { id: TId },
