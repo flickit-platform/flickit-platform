@@ -52,8 +52,14 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
-        const { attributes, subject,topStrengths,topWeaknesses,maturityLevelsCount } = data;
-        const {isConfidenceValid,isCalculateValid,title}=subject
+        const {
+          attributes,
+          subject,
+          topStrengths,
+          topWeaknesses,
+          maturityLevelsCount,
+        } = data;
+        const { isConfidenceValid, isCalculateValid, title } = subject;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
@@ -81,10 +87,10 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : !isCalculateValid||!isConfidenceValid ? (
+            ) : !loaded ? null : !isCalculateValid || !isConfidenceValid ? (
               <NoInsightYetMessage
                 title={title}
-                no_insight_yet_message={!isCalculateValid||!isConfidenceValid}
+                no_insight_yet_message={!isCalculateValid || !isConfidenceValid}
               />
             ) : (
               <Box sx={{ px: 0.5 }}>
@@ -187,11 +193,14 @@ const useSubject = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+    if (subjectQueryData.errorObject?.response.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
-    if(subjectQueryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"){
-      calculateConfidence()
+    if (
+      subjectQueryData.errorObject?.response.data?.code ==
+      "CONFIDENCE_CALCULATION_NOT_VALID"
+    ) {
+      calculateConfidence();
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {
