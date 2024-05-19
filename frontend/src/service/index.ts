@@ -194,7 +194,7 @@ export const createService = (
       { id, data }: { id: any; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/api/v1/assessments/${id}/`, data, config);
+      return axios.put(`/api/v2/assessments/${id}/`, data, config);
     },
     deleteAssessment(
       { id }: { id: any },
