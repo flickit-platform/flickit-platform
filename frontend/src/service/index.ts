@@ -804,6 +804,13 @@ export const createService = (
         },
       });
     },
+     deleteExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.delete(`/api/v1/expert-groups/${id}/`, config);
+    },
     inviteSpaceMember(
       args: { id: TId; data: any },
       config: AxiosRequestConfig<any> | undefined
