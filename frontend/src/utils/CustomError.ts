@@ -1,6 +1,12 @@
 import { AxiosError } from "axios";
 
-export interface ICustomError extends AxiosError {
+interface IResponseData {
+  code: string;
+  message: any;
+  errors: any;
+  messages: any;
+}
+export interface ICustomError extends AxiosError<IResponseData> {
   action?: (...args: any[]) => any;
   toastConfig?: any;
 }
