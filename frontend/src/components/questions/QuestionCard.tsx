@@ -786,7 +786,7 @@ const Evidence = (props: any) => {
           onSubmit={formMethods.handleSubmit(onSubmit)}
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
         >
-          <Grid container sx={styles.formGrid}>
+          <Grid container display={"flex"} justifyContent={"end"} sx={styles.formGrid}>
             <TabContext value={value}>
               <TabList
                 onChange={handleChange}
@@ -881,7 +881,7 @@ const Evidence = (props: any) => {
                 style={is_farsi ? { left: 20 } : { right: 20 }}
                 sx={{
                   position: "absolute",
-                  top: 5,
+                  top: 20,
                   fontSize: "14px",
                   fontWeight: 300,
                   color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
@@ -930,69 +930,69 @@ const Evidence = (props: any) => {
                       }
                 }
               >
-                <Box display={"flex"} mt={2}>
-                  {!evidenceId ? (
-                    <LoadingButton
-                      sx={{
-                        ml: "auto",
-                        borderRadius: "100%",
-                        p: 2,
-                        minWidth: "56px",
-                        background: evidenceBG.borderColor,
-                        "&:hover": {
-                          background: evidenceBG.borderHover,
-                        },
-                      }}
-                      type="submit"
-                      variant="contained"
-                      loading={evidencesQueryData.loading}
-                    >
-                      <AddRoundedIcon fontSize="large" />
-                    </LoadingButton>
-                  ) : (
-                    <Box
-                      sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
-                    >
-                      <IconButton
-                        aria-label="delete"
-                        sx={{
-                          boxShadow: 2,
-                          borderRadius: "100%",
-                          width: "46px",
-                          height: "46px",
-                          p: 1,
-                          background: "#F7D2DE",
-                          border: "1px solid #D81E5B",
-                          "&.MuiButtonBase-root:hover": {
-                            background: "#EFA5BD",
-                          },
-                        }}
-                        onClick={cancelEditing}
-                      >
-                        <CloseRoundedIcon style={{ color: "#D81E5B" }} />
-                      </IconButton>
-                      <LoadingButton
-                        sx={{
-                          ml: "auto",
-                          borderRadius: "100%",
-                          p: 2,
-                          minWidth: "56px",
-                          background: evidenceBG.borderColor,
-                          "&:hover": {
-                            background: evidenceBG.borderHover,
-                          },
-                        }}
-                        type="submit"
-                        variant="contained"
-                        loading={evidencesQueryData.loading}
-                      >
-                        <CheckRoundedIcon fontSize="large" />
-                      </LoadingButton>
-                    </Box>
-                  )}
-                </Box>
               </Grid>
             </Grid>
+              <Box display={"flex"} justifyContent={"end"} mt={2}>
+                  {!evidenceId ? (
+                      <LoadingButton
+                          sx={{
+                              ml: "auto",
+                              borderRadius: "100%",
+                              p: 2,
+                              minWidth: "56px",
+                              background: evidenceBG.borderColor,
+                              "&:hover": {
+                                  background: evidenceBG.borderHover,
+                              },
+                          }}
+                          type="submit"
+                          variant="contained"
+                          loading={evidencesQueryData.loading}
+                      >
+                          <AddRoundedIcon fontSize="large" />
+                      </LoadingButton>
+                  ) : (
+                      <Box
+                          sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
+                      >
+                          <IconButton
+                              aria-label="delete"
+                              sx={{
+                                  boxShadow: 2,
+                                  borderRadius: "100%",
+                                  width: "46px",
+                                  height: "46px",
+                                  p: 1,
+                                  background: "#F7D2DE",
+                                  border: "1px solid #D81E5B",
+                                  "&.MuiButtonBase-root:hover": {
+                                      background: "#EFA5BD",
+                                  },
+                              }}
+                              onClick={cancelEditing}
+                          >
+                              <CloseRoundedIcon style={{ color: "#D81E5B" }} />
+                          </IconButton>
+                          <LoadingButton
+                              sx={{
+                                  ml: "auto",
+                                  borderRadius: "100%",
+                                  p: 2,
+                                  minWidth: "56px",
+                                  background: evidenceBG.borderColor,
+                                  "&:hover": {
+                                      background: evidenceBG.borderHover,
+                                  },
+                              }}
+                              type="submit"
+                              variant="contained"
+                              loading={evidencesQueryData.loading}
+                          >
+                              <CheckRoundedIcon fontSize="large" />
+                          </LoadingButton>
+                      </Box>
+                  )}
+              </Box>
           </Grid>
         </form>
         <Box mt={3}>
