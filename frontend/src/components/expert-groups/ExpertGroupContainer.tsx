@@ -242,11 +242,14 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                          {assessmentKitsCounts.filter((item : any) => item.published) &&
-                              `${assessmentKitsCounts.filter((item : any) => item.published).length} ${t(
-                                  "publishedAssessmentKits"
-                              ).toLowerCase()}`
-                          }
+                        {assessmentKitsCounts.filter(
+                          (item: any) => item.published
+                        ) &&
+                          `${
+                            assessmentKitsCounts.filter(
+                              (item: any) => item.published
+                            ).length
+                          } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
                         <Box ml="auto">
@@ -288,11 +291,14 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                        {assessmentKitsCounts.filter((item : any) => !item.published) &&
-                           `${assessmentKitsCounts.filter((item : any) => !item.published).length} ${t(
-                                    "unpublishedAssessmentKits"
-                           ).toLowerCase()}`
-                        }
+                          {assessmentKitsCounts.filter(
+                            (item: any) => !item.published
+                          ) &&
+                            `${
+                              assessmentKitsCounts.filter(
+                                (item: any) => !item.published
+                              ).length
+                            } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
                     )}
@@ -547,8 +553,8 @@ const MemberActions = (props: any) => {
       inviteeQuery();
     } catch (e) {
       const error = e as ICustomError;
-      if (Array.isArray(error.response?.data)) {
-        toastError(error.response.data[0]);
+      if (Array.isArray(error.response?.data?.message)) {
+        toastError(error.response?.data?.message[0]);
       } else if (
         error.response?.data !== undefined &&
         error.response?.data !== null &&
@@ -635,8 +641,8 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if (Array.isArray(error.response?.data)) {
-        toastError(error.response.data[0]);
+      if (Array.isArray(error.response?.data?.message)) {
+        toastError(error.response?.data?.message[0]);
       } else if (
         error.response?.data !== undefined &&
         error.response?.data !== null &&
@@ -758,25 +764,9 @@ const AssessmentKitsList = (props: any) => {
             }
             return (
               <>
-                {items?.filter((item : any)  => item.published)?.map((assessment_kit: any) => {
-                  return (
-                    <AssessmentKitListItem
-                      link={
-                        is_member
-                          ? `assessment-kits/${assessment_kit?.id}`
-                          : `/assessment-kits/${assessment_kit?.id}`
-                      }
-                      key={assessment_kit?.id}
-                      data={assessment_kit}
-                      fetchAssessmentKits={assessmentKitQuery.query}
-                      hasAccess={hasAccess}
-                      is_member={is_member}
-                      is_active={true}
-                    />
-                  );
-                })}
-                {is_member &&
-                  items?.filter((item : any) => !item.published)?.map((assessment_kit: any) => {
+                {items
+                  ?.filter((item: any) => item.published)
+                  ?.map((assessment_kit: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
@@ -789,10 +779,30 @@ const AssessmentKitsList = (props: any) => {
                         fetchAssessmentKits={assessmentKitQuery.query}
                         hasAccess={hasAccess}
                         is_member={is_member}
-                        is_active={false}
+                        is_active={true}
                       />
                     );
                   })}
+                {is_member &&
+                  items
+                    ?.filter((item: any) => !item.published)
+                    ?.map((assessment_kit: any) => {
+                      return (
+                        <AssessmentKitListItem
+                          link={
+                            is_member
+                              ? `assessment-kits/${assessment_kit?.id}`
+                              : `/assessment-kits/${assessment_kit?.id}`
+                          }
+                          key={assessment_kit?.id}
+                          data={assessment_kit}
+                          fetchAssessmentKits={assessmentKitQuery.query}
+                          hasAccess={hasAccess}
+                          is_member={is_member}
+                          is_active={false}
+                        />
+                      );
+                    })}
               </>
             );
           }}

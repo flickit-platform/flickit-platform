@@ -206,8 +206,8 @@ const AddMember = (props: any) => {
           error.response?.data.hasOwnProperty("message")) ||
         {}
       ) {
-        if (Array.isArray(error.response?.data)) {
-          toastError(error.response.data[0]);
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
         } else if (
           error.response?.data !== undefined &&
           error.response?.data !== null &&
