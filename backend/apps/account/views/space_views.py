@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,11 +9,16 @@ from account.services import space_services
 
 class SpacesApi(APIView):
     permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
 
     def post(self, request):
         result = space_services.create_spacer(request)
         return Response(data=result["body"], status=result["status_code"])
 
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
     def get(self, request):
         result = space_services.get_spaces_list(request)
         return Response(data=result["body"], status=result["status_code"])

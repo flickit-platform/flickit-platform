@@ -58,7 +58,7 @@ def get_space(request, space_id):
 def get_spaces_list(request):
     response = requests.get(
         ASSESSMENT_URL + 'assessment-core/api/spaces',
-        json=request.data,
+        params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
