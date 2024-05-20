@@ -71,8 +71,12 @@ export const createService = (
         },
       });
     },
-    fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/api/v1/spaces/`, config);
+    fetchSpaces(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+      const { page = 1, size = 10 } = args ?? {};
+      return axios.get(`/api/v1/spaces/`, {
+        ...(config ?? {}),
+        params: { size, page : page - 1 },
+      });
     },
     fetchSpace(
       { spaceId }: { spaceId: string },

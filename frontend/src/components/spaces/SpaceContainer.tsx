@@ -1,3 +1,4 @@
+import {useState} from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -21,8 +22,16 @@ import { styles,animations } from "@styles";
 const SpaceContainer = () => {
   const dialogProps = useDialog();
   const { service } = useServiceContext();
+
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 2
+
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPageNumber(value);
+  };
+
   const spacesQueryData = useQuery<ISpacesModel>({
-    service: (args, config) => service.fetchSpaces(args, config),
+    service: (args= { size: pageSize, page: pageNumber }, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
 
