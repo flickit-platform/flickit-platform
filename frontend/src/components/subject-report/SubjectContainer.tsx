@@ -29,6 +29,8 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
 
 const SubjectContainer = () => {
   const {
@@ -52,8 +54,14 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
-        const { attributes, subject,topStrengths,topWeaknesses,maturityLevelsCount } = data;
-        const {isConfidenceValid,isCalculateValid,title}=subject
+        const {
+          attributes,
+          subject,
+          topStrengths,
+          topWeaknesses,
+          maturityLevelsCount,
+        } = data;
+        const { isConfidenceValid, isCalculateValid, title } = subject;
         const { question_count, answers_count } = subjectProgress;
         const isComplete = question_count === answers_count;
         const progress = ((answers_count || 0) / (question_count || 1)) * 100;
@@ -81,10 +89,10 @@ const SubjectContainer = () => {
               <Box sx={{ ...styles.centerVH }} py={6} mt={5}>
                 <GettingThingsReadyLoading color="gray" />
               </Box>
-            ) : !loaded ? null : !isCalculateValid||!isConfidenceValid ? (
+            ) : !loaded ? null : !isCalculateValid || !isConfidenceValid ? (
               <NoInsightYetMessage
                 title={title}
-                no_insight_yet_message={!isCalculateValid||!isConfidenceValid}
+                no_insight_yet_message={!isCalculateValid || !isConfidenceValid}
               />
             ) : (
               <Box sx={{ px: 0.5 }}>
@@ -177,7 +185,9 @@ const useSubject = () => {
       await calculateMaturityLevelQuery.query();
       await subjectQueryData.query({ subjectId, assessmentId });
       await subjectProgressQueryData.query({ subjectId, assessmentId });
-    } catch (e) {}
+    } catch (e) {
+      toastError(e as ICustomError);
+    }
   };
   const calculateConfidence = async () => {
     try {
@@ -190,8 +200,11 @@ const useSubject = () => {
     if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
-    if(subjectQueryData.errorObject?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"){
-      calculateConfidence()
+    if (
+      subjectQueryData.errorObject?.data?.code ==
+      "CONFIDENCE_CALCULATION_NOT_VALID"
+    ) {
+      calculateConfidence();
     }
   }, [subjectQueryData.errorObject]);
   useEffect(() => {

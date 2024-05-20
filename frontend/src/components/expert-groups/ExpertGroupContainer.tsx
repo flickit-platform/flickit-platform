@@ -430,7 +430,7 @@ const ExpertGroupMembers = (props: any) => {
 };
 
 const Invitees = (props: any) => {
-  const { users, query,inviteeQuery, setOpenInvitees, openInvitees } = props;
+  const { users, query, inviteeQuery, setOpenInvitees, openInvitees } = props;
   const hasInvitees = users.length > 0;
   return (
     <Box>
@@ -510,7 +510,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query,inviteeQuery, userId, email, isInvitationExpired } = props;
+  const { query, inviteeQuery, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -531,7 +531,7 @@ const MemberActions = (props: any) => {
   const deleteItem = async (e: any) => {
     await deleteExpertGroupMember();
     await query();
-    await inviteeQuery()
+    await inviteeQuery();
   };
 
   const inviteMember = async () => {
@@ -542,15 +542,17 @@ const MemberActions = (props: any) => {
       });
       res?.message && toast.success(res.message);
       query();
-      inviteeQuery()
+      inviteeQuery();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.data || {}) {
-        if (Array.isArray(error.data.message)) {
-          toastError(error.data?.message[0]);
-        } else if (error.data?.message) {
-          toastError(error.data?.message);
-        }
+      if (Array.isArray(error.response?.data)) {
+        toastError(error.response.data[0]);
+      } else if (
+        error.response?.data !== undefined &&
+        error.response?.data !== null &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
       }
     }
   };
@@ -631,12 +633,14 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.response.data || {}) {
-        if (Array.isArray(error.response.data.message)) {
-          toastError(error.response.data?.message[0]);
-        } else if (error.response.data?.message) {
-          toastError(error.response.data?.message);
-        }
+      if (Array.isArray(error.response?.data)) {
+        toastError(error.response.data[0]);
+      } else if (
+        error.response?.data !== undefined &&
+        error.response?.data !== null &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
       }
     }
   };
@@ -844,7 +848,7 @@ const ExpertGroupMembersDetail = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             const users = items.filter((user: any) => user.status === "ACTIVE");
-              setNumberOfMembers(users?.length);
+            setNumberOfMembers(users?.length);
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>

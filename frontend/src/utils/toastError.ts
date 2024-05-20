@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 import { ECustomErrorType } from "@types";
 import { ICustomError } from "./CustomError";
 
@@ -18,13 +19,10 @@ export interface IToastErrorOptions {
   filterIfHasData?: boolean;
 }
 
-/**
- * This function will try to find errors in passed CustomError object and show it
- * @param err If provided with CustomError it will try to find the message inside error data object or message and show it otherwise if passed a string it will show it and for boolean it shows its own generated errors
- * @param options toast config
- * @returns
- */
-const toastError = (err: ICustomError | string | true, options?: IToastErrorOptions) => {
+const toastError = (
+  err: ICustomError | AxiosError | string | true,
+  options?: IToastErrorOptions
+) => {
   if (typeof err === "boolean" && err) {
     toast.error(t("someThingWentWrong") as string);
     return;
@@ -34,37 +32,70 @@ const toastError = (err: ICustomError | string | true, options?: IToastErrorOpti
     return;
   }
 
-  const { filterByStatus = [], filterByType = [], filterIfHasData = true } = options || {};
+  const {
+    filterByStatus = [],
+    filterByType = [],
+    filterIfHasData = true,
+  } = options || {};
+
   if (!err) {
     return;
   }
-  if (filterByStatus?.length > 0 && err.status) {
-    const shouldFilter = filterByStatus.findIndex((status) => status == err.status) === -1 ? false : true;
 
-    if (shouldFilter) {
+  let status: number | undefined;
+  let data: any;
+  let type: ECustomErrorType | undefined;
+  let message: string | undefined;
+
+  if (err.isAxiosError) {
+    const axiosError = err as AxiosError;
+    status = axiosError.response?.status;
+    data = axiosError.response?.data;
+    message = axiosError.message;
+  } else {
+    const customError = err as ICustomError;
+    status = customError.response?.status;
+    data = customError.response?.data;
+    type = customError.code as ECustomErrorType; 
+    message = customError.message;
+  }
+
+  if (filterByStatus.length > 0 && status) {
+    if (filterByStatus.includes(status)) {
       return;
     }
   }
-  if (filterByType?.length > 0 && err.type) {
-    const shouldFilter = filterByType.findIndex((type) => type == err.type) === -1 ? false : true;
-    if (shouldFilter) {
+
+  if (filterByType.length > 0 && type) {
+    if (filterByType.includes(type)) {
       return;
     }
   }
+
   if (filterIfHasData) {
     if (
-      typeof err.data === "object" &&
-      Object.keys(err.data).length > 0 &&
-      !err?.data?.message &&
-      !err?.data?.detail &&
-      err?.data?.non_field_errors?.length === 0
-    )
+      typeof data === "object" &&
+      data !== null &&
+      Object.keys(data).length > 0 &&
+      !data?.message &&
+      !data?.detail &&
+      !(data?.non_field_errors?.length > 0)
+    ) {
       return;
+    }
   }
-  if (err.status == 401 || err.type == ECustomErrorType.INVALID_TOKEN || err.type == ECustomErrorType.CANCELED) {
+
+  if (
+    status === 401 ||
+    type === ECustomErrorType.INVALID_TOKEN ||
+    type === ECustomErrorType.CANCELED
+  ) {
     return;
   }
-  toast.error(err?.data?.message || err?.data?.detail || err?.data?.non_field_errors?.[0] || err.message);
+
+  toast.error(
+    data?.message || data?.detail || data?.non_field_errors?.[0] || message
+  );
 };
 
 export default toastError;

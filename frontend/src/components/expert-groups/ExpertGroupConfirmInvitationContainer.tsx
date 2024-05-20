@@ -43,7 +43,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
           replace: true,
         });
       } else {
-        toastError(err?.response?.data?.message);
+        toastError(err);
       }
     }
   };

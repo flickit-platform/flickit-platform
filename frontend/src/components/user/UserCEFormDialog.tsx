@@ -66,6 +66,7 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
       onSubmitForm();
       close();
     } catch (e) {
+      console.log(e)
       const err = e as ICustomError;
       setLoading(false);
       setServerFieldErrors(err, formMethods);

@@ -108,8 +108,8 @@ export const SpaceMembers = (props: any) => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (err.response.data.code === "user-is-member") {
-                  toastError(err.response.data.message);
+                if (err.response?.data.code === "user-is-member") {
+                  toastError(err);
                 } else {
                   dialogProps.openDialog({
                     type: "invite",
@@ -377,7 +377,7 @@ const Actions = (props: any) => {
       await fetchSpaceMembers();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err?.response?.data?.message);
+      toastError(err);
     }
   };
 

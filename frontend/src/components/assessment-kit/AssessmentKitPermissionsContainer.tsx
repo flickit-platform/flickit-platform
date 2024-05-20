@@ -200,11 +200,20 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.response.data || {}) {
-        if (Array.isArray(error.response.data.messagee)) {
-          toastError(error.response.data.message[0]);
-        } else if (error.response.data.message) {
-          toastError(error.response.data.message);
+      if (
+        (error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")) ||
+        {}
+      ) {
+        if (Array.isArray(error.response?.data)) {
+          toastError(error.response.data[0]);
+        } else if (
+          error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")
+        ) {
+          toastError(error);
         }
       }
     }
