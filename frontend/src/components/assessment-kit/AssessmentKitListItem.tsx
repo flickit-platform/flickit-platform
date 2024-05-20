@@ -16,9 +16,9 @@ interface IAssessmentKitListItemProps {
   data: {
     id: TId;
     title: string;
-    last_modification_date: string;
+    lastModificationTime: string;
     is_active: boolean;
-    is_private?: boolean;
+    isPrivate?: boolean;
   };
   fetchAssessmentKits?: TQueryFunction;
   fetchUnpublishedAssessmentKits?: TQueryFunction;
@@ -31,8 +31,7 @@ interface IAssessmentKitListItemProps {
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
   const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
     props;
-    
-  const { id, title, last_modification_date, is_private } = data || {};
+  const { id, title, lastModificationTime, isPrivate } = data || {};
   return (
     <Box
       sx={{
@@ -76,7 +75,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             {title}
           </Typography>
           <Typography color="GrayText" variant="body2">
-            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_date)}
+            <Trans i18nKey="lastUpdated" /> {formatDate(lastModificationTime)}
           </Typography>
         </Box>
 
@@ -85,7 +84,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           sx={{ ...styles.centerV, color: "#525252" }}
           alignSelf="stretch"
         >
-          {is_private && (
+          {isPrivate && (
             <Chip
               label={<Trans i18nKey="private" />}
               size="small"

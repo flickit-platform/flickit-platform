@@ -194,7 +194,7 @@ export const createService = (
       { id, data }: { id: any; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/api/v1/assessments/${id}/`, data, config);
+      return axios.put(`/api/v2/assessments/${id}/`, data, config);
     },
     deleteAssessment(
       { id }: { id: any },
@@ -283,7 +283,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.put(
-        `/api/v1/assessments/${assessmentId ?? ""}/answer-question/`,
+        `/api/v2/assessments/${assessmentId ?? ""}/answer-question/`,
         data,
         { ...config }
       );
@@ -640,7 +640,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.delete(`/baseinfo/assessmentkits/${id}/`, config);
+      return axios.delete(`/api/v2/assessment-kits/${id}/`, config);
     },
     uploadAssessmentKitPhoto(
       file: any,
@@ -720,7 +720,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/expertgroup/${id}/assessmentkits/`, config);
+      return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, config);
     },
     fetchExpertGroupUnpublishedAssessmentKits(
       args: { id: TId },

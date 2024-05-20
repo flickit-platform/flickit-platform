@@ -63,7 +63,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               id: assessmentId,
               data: {
                 title,
-                color_id: color,
+                colorId: color,
               },
             },
             { signal: abortController.signal }

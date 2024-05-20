@@ -197,11 +197,11 @@ const useSubject = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+    if (subjectQueryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
     if (
-      subjectQueryData.errorObject?.data?.code ==
+      subjectQueryData.errorObject?.response?.data?.code ==
       "CONFIDENCE_CALCULATION_NOT_VALID"
     ) {
       calculateConfidence();

@@ -76,7 +76,7 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({});
+  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
   return (
     <QueryData
@@ -242,10 +242,11 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {assessmentKitsCounts?.published &&
-                          `${assessmentKitsCounts?.published.length} ${t(
-                            "publishedAssessmentKits"
-                          ).toLowerCase()}`}
+                          {assessmentKitsCounts.filter((item : any) => item.published) &&
+                              `${assessmentKitsCounts.filter((item : any) => item.published).length} ${t(
+                                  "publishedAssessmentKits"
+                              ).toLowerCase()}`
+                          }
                       </Typography>
                       {editable && (
                         <Box ml="auto">
@@ -287,10 +288,11 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {assessmentKitsCounts?.unpublished &&
-                            `${assessmentKitsCounts?.unpublished.length} ${t(
-                              "unpublishedAssessmentKits"
-                            ).toLowerCase()}`}
+                        {assessmentKitsCounts.filter((item : any) => !item.published) &&
+                           `${assessmentKitsCounts.filter((item : any) => !item.published).length} ${t(
+                                    "unpublishedAssessmentKits"
+                           ).toLowerCase()}`
+                        }
                         </Typography>
                       </Box>
                     )}
@@ -738,8 +740,8 @@ const AssessmentKitsList = (props: any) => {
             </Box>
           }
           isDataEmpty={(data) => {
-            const { results } = data;
-            const isEmpty = results;
+            const { items } = data;
+            const isEmpty = items;
             return isEmpty;
           }}
           renderLoading={() => (
@@ -750,13 +752,13 @@ const AssessmentKitsList = (props: any) => {
             </>
           )}
           render={(data = {}) => {
-            const { results } = data;
-            if (results) {
-              setAssessmentKitsCounts(results);
+            const { items } = data;
+            if (items) {
+              setAssessmentKitsCounts(items);
             }
             return (
               <>
-                {results?.published.map((assessment_kit: any) => {
+                {items?.filter((item : any)  => item.published)?.map((assessment_kit: any) => {
                   return (
                     <AssessmentKitListItem
                       link={
@@ -774,7 +776,7 @@ const AssessmentKitsList = (props: any) => {
                   );
                 })}
                 {is_member &&
-                  results?.unpublished.map((assessment_kit: any) => {
+                  items?.filter((item : any) => !item.published)?.map((assessment_kit: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
