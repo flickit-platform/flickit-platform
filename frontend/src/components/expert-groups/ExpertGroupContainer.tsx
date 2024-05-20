@@ -779,30 +779,10 @@ const AssessmentKitsList = (props: any) => {
                         fetchAssessmentKits={assessmentKitQuery.query}
                         hasAccess={hasAccess}
                         is_member={is_member}
-                        is_active={true}
+                        is_active={false}
                       />
                     );
                   })}
-                {is_member &&
-                  items
-                    ?.filter((item: any) => !item.published)
-                    ?.map((assessment_kit: any) => {
-                      return (
-                        <AssessmentKitListItem
-                          link={
-                            is_member
-                              ? `assessment-kits/${assessment_kit?.id}`
-                              : `/assessment-kits/${assessment_kit?.id}`
-                          }
-                          key={assessment_kit?.id}
-                          data={assessment_kit}
-                          fetchAssessmentKits={assessmentKitQuery.query}
-                          hasAccess={hasAccess}
-                          is_member={is_member}
-                          is_active={false}
-                        />
-                      );
-                    })}
               </>
             );
           }}
