@@ -171,6 +171,7 @@ const EvidanceDescription = ({
             whiteSpace: "pre-wrap",
             textAlign: "justify",
             wordBreak: "break-word",
+            unicodeBidi: "plaintext"
           }}
         >
           {item?.description}
