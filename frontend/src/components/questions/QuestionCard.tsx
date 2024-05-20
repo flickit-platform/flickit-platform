@@ -768,7 +768,7 @@ const Evidence = (props: any) => {
       }
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err.response.data.description[0]);
+      toastError(err?.response?.data.description[0]);
     } finally {
       setEvidenceId(null);
       formMethods.reset();

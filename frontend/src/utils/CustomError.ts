@@ -1,12 +1,15 @@
 import { AxiosError } from "axios";
+import { FieldErrorData } from "./setServerFieldError";
 
 interface IResponseData {
   code: string;
   message: any;
   errors: any;
   messages: any;
+  description: any;
 }
-export interface ICustomError extends AxiosError<IResponseData> {
+export interface ICustomError
+  extends AxiosError<IResponseData | FieldErrorData> {
   action?: (...args: any[]) => any;
   toastConfig?: any;
 }

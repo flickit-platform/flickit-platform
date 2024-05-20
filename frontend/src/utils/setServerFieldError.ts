@@ -1,6 +1,6 @@
 import { ICustomError } from "./CustomError";
 import { UseFormReturn } from "react-hook-form";
-interface FieldErrorData {
+export interface FieldErrorData {
   [key: string]: string[];
 }
 
