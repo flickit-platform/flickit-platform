@@ -553,14 +553,21 @@ const MemberActions = (props: any) => {
       inviteeQuery();
     } catch (e) {
       const error = e as ICustomError;
-      if (Array.isArray(error.response?.data?.message)) {
-        toastError(error.response?.data?.message[0]);
-      } else if (
-        error.response?.data !== undefined &&
-        error.response?.data !== null &&
-        error.response?.data.hasOwnProperty("message")
+      if (
+        (error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")) ||
+        {}
       ) {
-        toastError(error);
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else if (
+          error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")
+        ) {
+          toastError(error);
+        }
       }
     }
   };
@@ -641,14 +648,21 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if (Array.isArray(error.response?.data?.message)) {
-        toastError(error.response?.data?.message[0]);
-      } else if (
-        error.response?.data !== undefined &&
-        error.response?.data !== null &&
-        error.response?.data.hasOwnProperty("message")
+      if (
+        (error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")) ||
+        {}
       ) {
-        toastError(error);
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else if (
+          error.response?.data !== undefined &&
+          error.response?.data !== null &&
+          error.response?.data.hasOwnProperty("message")
+        ) {
+          toastError(error);
+        }
       }
     }
   };
@@ -779,10 +793,30 @@ const AssessmentKitsList = (props: any) => {
                         fetchAssessmentKits={assessmentKitQuery.query}
                         hasAccess={hasAccess}
                         is_member={is_member}
-                        is_active={false}
+                        is_active={true}
                       />
                     );
                   })}
+                {is_member &&
+                  items
+                    ?.filter((item: any) => !item.published)
+                    ?.map((assessment_kit: any) => {
+                      return (
+                        <AssessmentKitListItem
+                          link={
+                            is_member
+                              ? `assessment-kits/${assessment_kit?.id}`
+                              : `/assessment-kits/${assessment_kit?.id}`
+                          }
+                          key={assessment_kit?.id}
+                          data={assessment_kit}
+                          fetchAssessmentKits={assessmentKitQuery.query}
+                          hasAccess={hasAccess}
+                          is_member={is_member}
+                          is_active={false}
+                        />
+                      );
+                    })}
               </>
             );
           }}
