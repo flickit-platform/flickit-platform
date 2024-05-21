@@ -87,3 +87,11 @@ class SpaceApi(APIView):
     def get(self, request, space_id):
         result = space_services.get_space(request, space_id)
         return Response(data=result["body"], status=result["status_code"])
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, space_id):
+        result = space_services.update_space(request, space_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
