@@ -43,6 +43,9 @@ export const SpaceMembers = (props: any) => {
   const spaceMembersQueryData = useQuery<IMemberModel>({
     service: (args, config) => service.fetchSpaceMembers({ spaceId }, config),
   });
+  const spaceMembersInviteeQueryData = useQuery<IMemberModel>({
+    service: (args, config) => service.fetchSpaceMembersInvitees({ spaceId }, config),
+  });
   const dialogProps = useDialog();
   const {
     query: addMember,
