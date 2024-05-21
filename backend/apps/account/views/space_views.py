@@ -95,3 +95,9 @@ class SpaceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, space_id):
+        result = space_services.delete_space(request, space_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
