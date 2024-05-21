@@ -78,3 +78,13 @@ def space_invites_list(request, space_id):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def update_space(request, space_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
