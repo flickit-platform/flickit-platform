@@ -952,45 +952,10 @@ const Evidence = (props: any) => {
                           <AddRoundedIcon fontSize="large" />
                       </LoadingButton>
                   ) : (
-                      <Box
-                          sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
-                      >
-                          <IconButton
-                              aria-label="delete"
-                              sx={{
-                                  boxShadow: 2,
-                                  borderRadius: "100%",
-                                  width: "46px",
-                                  height: "46px",
-                                  p: 1,
-                                  background: "#F7D2DE",
-                                  border: "1px solid #D81E5B",
-                                  "&.MuiButtonBase-root:hover": {
-                                      background: "#EFA5BD",
-                                  },
-                              }}
-                              onClick={cancelEditing}
-                          >
-                              <CloseRoundedIcon style={{ color: "#D81E5B" }} />
-                          </IconButton>
-                          <LoadingButton
-                              sx={{
-                                  ml: "auto",
-                                  borderRadius: "100%",
-                                  p: 2,
-                                  minWidth: "56px",
-                                  background: evidenceBG.borderColor,
-                                  "&:hover": {
-                                      background: evidenceBG.borderHover,
-                                  },
-                              }}
-                              type="submit"
-                              variant="contained"
-                              loading={evidencesQueryData.loading}
-                          >
-                              <CheckRoundedIcon fontSize="large" />
-                          </LoadingButton>
-                      </Box>
+                      <EvidenceEditingBtn cancelEditing={cancelEditing}
+                                   evidenceBG={evidenceBG}
+                                   evidencesQueryData={evidencesQueryData}
+                      />
                   )}
               </Box>
           </Grid>
@@ -1018,6 +983,51 @@ const Evidence = (props: any) => {
     </Box>
   );
 };
+
+const EvidenceEditingBtn = (props : any) =>{
+    const { cancelEditing, evidenceBG, evidencesQueryData } = props
+    return (
+        <Box
+            sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
+        >
+            <IconButton
+                aria-label="delete"
+                sx={{
+                    boxShadow: 2,
+                    borderRadius: "100%",
+                    width: "46px",
+                    height: "46px",
+                    p: 1,
+                    background: "#F7D2DE",
+                    border: "1px solid #D81E5B",
+                    "&.MuiButtonBase-root:hover": {
+                        background: "#EFA5BD",
+                    },
+                }}
+                onClick={cancelEditing}
+            >
+                <CloseRoundedIcon style={{ color: "#D81E5B" }} />
+            </IconButton>
+            <LoadingButton
+                sx={{
+                    ml: "auto",
+                    borderRadius: "100%",
+                    p: 2,
+                    minWidth: "56px",
+                    background: evidenceBG.borderColor,
+                    "&:hover": {
+                        background: evidenceBG.borderHover,
+                    },
+                }}
+                type="submit"
+                variant="contained"
+                loading={evidencesQueryData.loading}
+            >
+                <CheckRoundedIcon fontSize="large" />
+            </LoadingButton>
+        </Box>
+    )
+}
 
 const EvidenceDetail = (props: any) => {
   const { item, evidencesQueryData, setEvidenceId, evidenceId, setValue } =
@@ -1144,7 +1154,7 @@ const EvidenceDetail = (props: any) => {
             justifyContent: "center",
           }}
         >
-          <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             <IconButton
               aria-label="edit"
               size="small"
@@ -1189,7 +1199,7 @@ const DeleteEvidenceDialog = (props: any) => {
       open={expanded}
       onClose={onClose}
       maxWidth={"sm"}
-      fullScreen={fullScreen}
+      // fullScreen={fullScreen}
       fullWidth
       sx={{
         ".MuiDialog-paper": {
