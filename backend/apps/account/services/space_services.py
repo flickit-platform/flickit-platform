@@ -70,3 +70,11 @@ def delete_member_space(request, space_id, member_id):
     if response.status_code == 204:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def space_invites_list(request, space_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}/invitees',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
