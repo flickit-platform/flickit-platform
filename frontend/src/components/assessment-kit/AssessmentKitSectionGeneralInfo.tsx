@@ -504,12 +504,11 @@ const OnHoverInput = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
-      if (Array.isArray(error.response?.data?.message)) {
-        toastError(error.response?.data?.message[0]);
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
       } else if (
-        error.response?.data !== undefined &&
-        error.response?.data !== null &&
-        error.response?.data.hasOwnProperty("message")
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
       ) {
         toastError(error);
       }

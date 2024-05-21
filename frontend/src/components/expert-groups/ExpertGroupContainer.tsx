@@ -554,18 +554,12 @@ const MemberActions = (props: any) => {
     } catch (e) {
       const error = e as ICustomError;
       if (
-        (error.response?.data !== undefined &&
-          error.response?.data !== null &&
-          error.response?.data.hasOwnProperty("message")) ||
-        {}
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
       ) {
         if (Array.isArray(error.response?.data?.message)) {
           toastError(error.response?.data?.message[0]);
-        } else if (
-          error.response?.data !== undefined &&
-          error.response?.data !== null &&
-          error.response?.data.hasOwnProperty("message")
-        ) {
+        } else {
           toastError(error);
         }
       }
@@ -649,18 +643,12 @@ const AddMember = (props: any) => {
     } catch (e) {
       const error = e as ICustomError;
       if (
-        (error.response?.data !== undefined &&
-          error.response?.data !== null &&
-          error.response?.data.hasOwnProperty("message")) ||
-        {}
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
       ) {
         if (Array.isArray(error.response?.data?.message)) {
           toastError(error.response?.data?.message[0]);
-        } else if (
-          error.response?.data !== undefined &&
-          error.response?.data !== null &&
-          error.response?.data.hasOwnProperty("message")
-        ) {
+        } else {
           toastError(error);
         }
       }
