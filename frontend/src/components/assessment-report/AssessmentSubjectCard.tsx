@@ -28,10 +28,13 @@ import { getMaturityLevelColors, styles } from "@styles";
 import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
 import { ICustomError } from "@/utils/CustomError";
 import SubjectRadarChart from "../subject-report/SubjectRadarChart";
+import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
+import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
+  attributes?: any;
 }
 
 interface IAssessmentSubjectProgress {
@@ -44,14 +47,22 @@ interface IAssessmentSubjectProgress {
 export const AssessmentSubjectAccordion = (
   props: IAssessmentSubjectCardProps
 ) => {
-  const { title, maturityLevel, id, colorCode, description = "" } = props;
+  const {
+    title,
+    maturityLevel,
+    id,
+    colorCode,
+    attributes,
+    description = "",
+  } = props;
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [subjectData, setSubjectData] = useState<any>([]);
-  const [attributes, setAttributes] = useState<any>([]);
+  const [subjectAttributes, setSubjectAttributes] = useState<any>([]);
+  const [radarData, setRadarData] = useState<any>([]);
   const isMobileScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("sm")
   );
@@ -77,6 +88,7 @@ export const AssessmentSubjectAccordion = (
 
   useEffect(() => {
     fetchProgress();
+    fetchAttributes();
   }, []);
 
   function hexToRGBA(hex: string, alpha: number) {
@@ -96,14 +108,9 @@ export const AssessmentSubjectAccordion = (
   });
 
   const fetchAttributes = async () => {
-    try {
-      const data = await subjectQueryData.query({
-        subjectId: id,
-        assessmentId: assessmentId,
-      });
-      setSubjectData((prev: any) => [...prev, data]);
-      setAttributes(data.attributes);
-    } catch (e) {}
+    const data = { data: { attributes } };
+    setSubjectAttributes(attributes);
+    setRadarData(convertToSubjectChartData(data));
   };
 
   const handleAccordionChange = (
@@ -220,7 +227,11 @@ export const AssessmentSubjectAccordion = (
         <Grid container alignItems="center" padding={2}>
           <Grid item xs={12} sm={7.5}>
             <Box height={"400px"}>
-              <SubjectRadarChart {...subjectQueryData} loading={false} />
+              <AssessmentSubjectRadarChart
+                data={subjectAttributes}
+                maturityLevelsCount={5}
+                loading={false}
+              />
             </Box>
           </Grid>
 
@@ -233,15 +244,16 @@ export const AssessmentSubjectAccordion = (
               paddingLeft: "12px",
             }}
           >
-            {attributes.map((element: any) => {
+            {subjectAttributes.map((element: any) => {
               return (
                 <Box display="flex" justifyContent="space-between" margin={2}>
                   <Typography>{element.title}</Typography>
                   <Typography
                     sx={{
-                      color: getMaturityLevelColors(
-                        element.maturityScores.length
-                      )[element.maturityLevel.value - 1],
+                      color:
+                        getMaturityLevelColors(5)[
+                          element.maturityLevel.value - 1
+                        ],
                     }}
                   >
                     {element.maturityLevel.title}
