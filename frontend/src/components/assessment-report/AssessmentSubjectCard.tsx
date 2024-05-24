@@ -30,10 +30,12 @@ import { ICustomError } from "@/utils/CustomError";
 import SubjectRadarChart from "../subject-report/SubjectRadarChart";
 import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
+  confidenceValue?: number;
   attributes?: any;
 }
 
@@ -50,6 +52,7 @@ export const AssessmentSubjectAccordion = (
   const {
     title,
     maturityLevel,
+    confidenceValue,
     id,
     colorCode,
     attributes,
@@ -184,7 +187,7 @@ export const AssessmentSubjectAccordion = (
             </Grid>
           )}
           {isMobileScreen && (
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={2}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -216,8 +219,14 @@ export const AssessmentSubjectAccordion = (
               </Button>
             </Box>
           </Grid>
+          <Grid item xs={12} sm={2}>
+            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
+              <Typography> Confidence level</Typography>
+              <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
+            </Box>
+          </Grid>
           {!isMobileScreen && (
-            <Grid item xs={6} sm={3}>
+            <Grid item xs={6} sm={1}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -248,16 +257,19 @@ export const AssessmentSubjectAccordion = (
               return (
                 <Box display="flex" justifyContent="space-between" margin={2}>
                   <Typography>{element.title}</Typography>
-                  <Typography
-                    sx={{
-                      color:
-                        getMaturityLevelColors(5)[
-                          element.maturityLevel.value - 1
-                        ],
-                    }}
-                  >
-                    {element.maturityLevel.title}
-                  </Typography>
+                  <Box display="flex" gap={0.5}>
+                    <Typography
+                      sx={{
+                        color:
+                          getMaturityLevelColors(5)[
+                            element.maturityLevel.value - 1
+                          ],
+                      }}
+                    >
+                      {element.maturityLevel.title}
+                    </Typography>
+                    <ConfidenceLevel inputNumber={element.confidenceValue} />
+                  </Box>
                 </Box>
               );
             })}
