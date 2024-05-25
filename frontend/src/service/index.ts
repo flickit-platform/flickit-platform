@@ -99,7 +99,7 @@ export const createService = (
       { spaceId, data }: { spaceId: string; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/authinfo/spaces/${spaceId}/`, data, config);
+      return axios.put(`/api/v1/spaces/${spaceId}/`, data, config);
     },
     addMemberToSpace(
       args: { spaceId: string; email: string | undefined },
