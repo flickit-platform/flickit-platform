@@ -114,7 +114,17 @@ export type TToastConfig = ToastOptions & {
   message: string | JSX.Element;
 };
 
+export interface IAttribute {
+  id: number;
+  title: string;
+  description: string;
+  index: number;
+  confidenceValue: number;
+  maturityLevel: IMaturityLevel;
+}
+
 export interface ISubjectInfo {
+  attributes?: IAttribute[];
   description: string;
   id: TId;
   image: string | null;
@@ -228,15 +238,6 @@ export interface ITotalProgress {
 export interface ITotalProgressModel {
   total_progress: ITotalProgress;
   assessment_project_title: string;
-}
-export interface IAssessmentReportModel {
-  subjects_info: ISubjectInfo[];
-  status: TStatus;
-  most_significant_strength_atts: string[];
-  most_significant_weaknessness_atts: string[];
-  assessment_project: IAssessmentReport;
-  total_progress: ITotalProgress;
-  maturity_level_status: string;
 }
 
 export interface IQuestionnaireModel {
@@ -449,9 +450,10 @@ export interface ICompareResultModel {
 interface AssessmentKitStatsSubjects {
   title: string;
 }
-interface AssessmentKitStatsExpertGroup {
+export interface AssessmentKitStatsExpertGroup {
   id: number;
   title: string;
+  picture?: string;
 }
 
 type LevelCompetence = {
@@ -465,6 +467,27 @@ interface AssessmentKitDetailsMaturityLevel {
   title: string;
   index: number;
   competences: LevelCompetence[];
+}
+
+export interface IAssessmentKitReportModel {
+  id: number;
+  title: string;
+  summary: string;
+  maturityLevelCount: number;
+  expertGroup: AssessmentKitStatsExpertGroup;
+}
+
+export interface IAssessmentReportModel {
+  id: string;
+  title: string;
+  assessmentKit: IAssessmentKitReportModel;
+  maturityLevel: IMaturityLevel;
+  confidenceValue: number;
+  isCalculateValid: boolean;
+  isConfidenceValid: boolean;
+  color: IColor;
+  creationTime: string;
+  lastModificationTime: string;
 }
 
 export interface ExpertGroupDetails {

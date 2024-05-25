@@ -64,7 +64,7 @@ const Gauge = (props: IGaugeProps) => {
         <Box
           sx={{
             ...styles.centerCVH,
-            bottom: `${display_confidence_component ? "20%" : shortTitle ? "30%" : "40%"}`,
+            bottom: `${display_confidence_component ? "16%" : shortTitle ? "30%" : "40%"}`,
             left: "25%",
             right: "25%",
           }}

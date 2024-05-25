@@ -7,7 +7,8 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 
 interface ISubjectProgressProps {
-  progress: number;
+  answerCount: number;
+  questionCount: number;
 }
 
 const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
@@ -17,11 +18,12 @@ const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
 };
 
 const ColorfulProgress = (props: ISubjectProgressProps) => {
-  const { progress } = props;
+  const { answerCount, questionCount } = props;
+  const totalProgress = ((answerCount || 0) / (questionCount || 1)) * 100;
 
   let color: LinearProgressProps["color"] = "primary";
   for (const key in progressToColorMap) {
-    if (progress <= parseInt(key)) {
+    if (totalProgress <= parseInt(key)) {
       color = progressToColorMap[key];
       break;
     }
@@ -50,9 +52,9 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         color="#9DA7B3"
         fontWeight={800}
       >
-        <Trans i18nKey="totalProgressWithPercent" />
+        <Trans i18nKey="answeredQuestions" />
         <Typography color={percentColor} mx={1} fontWeight={800}>
-          {Math.ceil(progress)}%
+          {answerCount} of {questionCount}
         </Typography>
       </Typography>
       <LinearProgress
@@ -62,7 +64,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
           height: "12px",
           border: `1px solid ${percentColor}`,
         }}
-        value={progress}
+        value={totalProgress}
         variant="determinate"
         color={color}
       />

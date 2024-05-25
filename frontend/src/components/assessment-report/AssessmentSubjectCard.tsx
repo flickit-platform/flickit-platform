@@ -61,6 +61,8 @@ export const AssessmentSubjectAccordion = (
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
+  const [questionCount, setQuestionCount] = useState<number>(0);
+  const [answerCount, setAnswerCount] = useState<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [subjectData, setSubjectData] = useState<any>([]);
@@ -81,8 +83,10 @@ export const AssessmentSubjectAccordion = (
       const data = await subjectProgressQueryData.query();
       const { answerCount, questionCount } = data;
       const total_progress = ((answerCount ?? 0) / (questionCount ?? 1)) * 100;
-      setProgress(total_progress);
+      setQuestionCount(questionCount);
+      setAnswerCount(answerCount);
       setInProgress(false);
+      setProgress(total_progress);
     } catch (e) {
       const err = e as ICustomError;
       toastError(err.response.data.message);
@@ -193,30 +197,10 @@ export const AssessmentSubjectAccordion = (
           )}
           <Grid item xs={12} sm={4}>
             <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
-              <ColorfulProgress progress={progress} />
-              <Button
-                variant="outlined"
-                sx={{
-                  borderRadius: 4,
-                  textTransform: "none",
-                  backgroundColor: "#D2F3F3",
-                  borderColor: "#D2F3F3",
-                  color: "#1CC2C4",
-                  "&:hover": {
-                    backgroundColor: "#D2F3F3",
-                    borderColor: "#D2F3F3",
-                  },
-                }}
-                component={Link}
-                to="./../questionnaires"
-                disabled={progress === 100 ? true : false}
-              >
-                {progress === 100 ? (
-                  <Typography> Completed</Typography>
-                ) : (
-                  <Typography> Complete Now!</Typography>
-                )}
-              </Button>
+              <ColorfulProgress
+                questionCount={questionCount}
+                answerCount={answerCount}
+              />
             </Box>
           </Grid>
           <Grid item xs={12} sm={2}>

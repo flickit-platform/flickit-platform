@@ -1,11 +1,9 @@
 .insight--report__gauge {
   margin-top: 6%;
-  margin-bottom: -18%;
 }
 @media screen and (max-width: 620px) {
   .insight--report__gauge {
     margin-top: 6%;
-    margin-bottom: -10%;
   }
   .recharts-wrapper > .recharts-surface {
     padding-left: 30px;

@@ -12,6 +12,9 @@ import AssessmentReportTitle from "./AssessmentReportTitle";
 import { IAssessmentReportModel } from "@types";
 import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 import { AssessmentSummary } from "./AssessmentSummary";
+import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
+import { AssessmentReportKit } from "./AssessmentReportKit";
+import { AssessmentProgress } from "./AssessmentProgress";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -73,7 +76,7 @@ const AssessmentReportContainer = (props: any) => {
     <QueryBatchData
       queryBatchData={[queryData, assessmentTotalProgress, fetchPathInfo]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress = {}, pathInfo = {}]) => {
+      render={([data = {}, progress, pathInfo = {}]) => {
         const { status, assessment, subjects, topStrengths, topWeaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
@@ -99,22 +102,38 @@ const AssessmentReportContainer = (props: any) => {
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
                 <Grid container alignItems="stretch" spacing={5}>
-                  <Grid item lg={5} md={12} sm={12} xs={12}>
+                  <Grid item lg={4} md={12} sm={12} xs={12}>
                     <AssessmentSummary
                       expertGroup={expertGroup}
-                      assessmentKit={assessmentKit}
+                      assessmentKit={assessment}
                       pathInfo={pathInfo}
                       data={data}
                       progress={totalProgress}
                     />
                   </Grid>
-                  <Grid item lg={7} md={12} sm={12} xs={12}>
+                  <Grid item lg={4} md={12} sm={12} xs={12}>
                     <AssessmentOverallStatus
                       status={status}
                       subjects_info={subjects}
                       maturity_level={maturityLevel}
                       maturity_level_count={assessmentKit?.maturityLevelCount}
                       confidence_value={confidenceValue}
+                    />
+                  </Grid>
+                  <Grid item lg={4} md={12} sm={12} xs={12}>
+                    <AssessmentSubjectStatus subjects={subjects} />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={12} xs={12}>
+                <Grid container alignItems="stretch" spacing={5}>
+                  <Grid item lg={7} md={12} sm={12} xs={12}>
+                    <AssessmentReportKit assessmentKit={assessmentKit} />
+                  </Grid>
+                  <Grid item lg={5} md={12} sm={12} xs={12}>
+                    <AssessmentProgress
+                      questionCount={questionsCount}
+                      answerCount={answersCount}
                     />
                   </Grid>
                 </Grid>

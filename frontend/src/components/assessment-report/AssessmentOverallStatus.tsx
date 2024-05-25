@@ -30,7 +30,7 @@ export const AssessmentOverallStatus = (
     <Box
       sx={{
         background: "#fff",
-        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: "40px",
       }}
     >
@@ -43,8 +43,8 @@ export const AssessmentOverallStatus = (
         show_confidence={false}
         display_confidence_component={true}
         shortTitle={true}
-        titleSize={getNumberBaseOnScreen(30, 30, 30, 60, 60)}
-        height={getNumberBaseOnScreen(240, 320, 400, 480, 560)}
+        titleSize={getNumberBaseOnScreen(20, 20, 20, 40, 40)}
+        height={getNumberBaseOnScreen(140, 140, 160, 240, 320)}
         className="insight--report__gauge"
       />
     </Box>
