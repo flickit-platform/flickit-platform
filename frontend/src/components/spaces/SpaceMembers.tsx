@@ -272,6 +272,10 @@ export const SpaceMembers = (props: any) => {
                                 email,
                                 expirationDate,
                               } = invitees;
+
+                              const expirationDateTime = new Date(expirationDate).getTime()
+                              const timeNow =  new Date().getTime()
+
                               const name = email;
                               const isOwner = userId == id;
 
@@ -327,7 +331,7 @@ export const SpaceMembers = (props: any) => {
                                                 fetchSpaceMembers={
                                                   spaceMembersInviteeQueryData.query
                                                 }
-                                                isInvitationExpired={true}
+                                                isInvitationExpired={expirationDateTime <= timeNow }
                                                 isInvitees={true}
                                                 email={email}
                                             />
