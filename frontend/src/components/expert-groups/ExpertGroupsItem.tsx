@@ -23,7 +23,7 @@ import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import { useAuthContext } from "@providers/AuthProvider";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import {ICustomError} from "@utils/CustomError";
+import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 
 interface IExpertGroupsItemProps {
@@ -151,11 +151,11 @@ const Actions = (props: any) => {
       service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
-    const deleteExpertGroupQuery = useQuery({
-        service: (args, config) => service.deleteExpertGroup({ id }, config),
-        runOnMount: false,
-        toastError: false
-    });
+  const deleteExpertGroupQuery = useQuery({
+    service: (args, config) => service.deleteExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
   const dialogProps = useDialog();
 
   const openEditDialog = async (e: any) => {
@@ -165,21 +165,24 @@ const Actions = (props: any) => {
       type: "update",
     });
   };
-    const deleteExpertGroup = async ()=>{
-        try{
-            await deleteExpertGroupQuery.query()
-            await fetchExpertGroups();
-        }catch(e){
-            const err = e as ICustomError;
-            if ("message" in err.response.data || {}) {
-                if (Array.isArray(err.response.data.message)) {
-                    toastError(err.response.data.message[0]);
-                } else if (err.response.data.message) {
-                    toastError(err.response.data.message);
-                }
-            }
+  const deleteExpertGroup = async () => {
+    try {
+      await deleteExpertGroupQuery.query();
+      await fetchExpertGroups();
+    } catch (e) {
+      const err = e as ICustomError;
+      if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(err.response?.data?.message)) {
+          toastError(err.response?.data?.message[0]);
+        } else {
+          toastError(err);
         }
+      }
     }
+  };
 
   return editable ? (
     <>
@@ -196,7 +199,7 @@ const Actions = (props: any) => {
           {
             icon: <DeleteRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="delete" />,
-             onClick: deleteExpertGroup,
+            onClick: deleteExpertGroup,
           },
         ]}
       />
