@@ -1135,7 +1135,7 @@ const EvidenceDetail = (props: any) => {
               <Trans i18nKey="editing" />
             </Typography>
           )}
-          <Box sx={{ display: "flex", alignItems: "flex-end", gap: "48px" }}>
+          <Box sx={{ display: "flex", flexDirection: {xs:"column",sm:"row"}, alignItems: "flex-end", gap: {xs:"24px",sm:"48px"}}}>
             <Typography>{description}</Typography>
             <Typography
               fontSize="12px"
@@ -1203,7 +1203,7 @@ const DeleteEvidenceDialog = (props: any) => {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius: { xs: 0, sm: "32px" },
+          borderRadius:"32px" ,
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",
@@ -1221,6 +1221,7 @@ const DeleteEvidenceDialog = (props: any) => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          textAlign: "center",
           gap: 6,
         }}
       >
