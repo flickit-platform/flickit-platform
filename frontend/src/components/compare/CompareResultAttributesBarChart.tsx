@@ -47,7 +47,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
           mt: 2,
         }}
       >
-        <Trans i18nKey="attributes" />
+        <Trans i18nKey={data.title} />
       </Typography>
       <Box sx={{ overflowX: "auto", overflowY: "hidden" }}>
         <Box height="420px" minWidth="740px">
