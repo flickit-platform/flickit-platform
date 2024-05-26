@@ -7,7 +7,7 @@ import ErrorEmptyData from "./errors/ErrorEmptyData";
 import ErrorDataLoading from "./errors/ErrorDataLoading";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 import GettingThingsReadyLoading from "./loadings/GettingThingsReadyLoading";
-import ErrorRecalculating from './errors/ErrorRecalculating'
+import ErrorRecalculating from "./errors/ErrorRecalculating";
 
 interface IQueryDataProps<T> {
   loadingComponent?: JSX.Element;
@@ -21,9 +21,14 @@ interface IQueryDataProps<T> {
   abortController?: AbortController;
   render: (data: T) => JSX.Element;
   renderLoading?: () => JSX.Element;
-  renderError?: (err: ICustomError | (ICustomError | ICustomError[] | undefined)[] | undefined) => JSX.Element;
+  renderError?: (
+    err:
+      | ICustomError
+      | (ICustomError | ICustomError[] | undefined)[]
+      | undefined
+  ) => JSX.Element;
   isDataEmpty?: (data: T) => boolean;
-  showEmptyError?:boolean,
+  showEmptyError?: boolean;
   query?: TQueryFunction<T>;
 }
 
@@ -74,7 +79,7 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
     return renderError(errorObject, errorComponent);
   }
   const isEmpty = loaded && data ? isDataEmpty(data) : false;
-  if (isEmpty&&showEmptyError) {
+  if (isEmpty && showEmptyError) {
     return emptyDataComponent;
   }
   return (
@@ -97,7 +102,9 @@ const QueryData = <T extends any = any>(props: IQueryDataProps<T>) => {
 export const useQueryDataContext = () => {
   const context = useContext(QueryDataContext);
   if (context === undefined) {
-    throw new Error("useQueryDataContext must be used within a QueryData render method");
+    throw new Error(
+      "useQueryDataContext must be used within a QueryData render method"
+    );
   }
   return context;
 };
@@ -122,17 +129,23 @@ const defaultIsDataEmpty = (data: any) => {
   return false;
 };
 
-export const defaultRenderError = (err: ICustomError | undefined, errorComponent: JSX.Element = <ErrorDataLoading />): any => {
+export const defaultRenderError = (
+  err: ICustomError | undefined,
+  errorComponent: JSX.Element = <ErrorDataLoading />
+): any => {
   if (!err) {
     return errorComponent;
   }
-  if (err.type === ECustomErrorType.NOT_FOUND || err.type === ECustomErrorType.ACCESS_DENIED) {
+  if (
+    err.code === ECustomErrorType.NOT_FOUND ||
+    err.code === ECustomErrorType.ACCESS_DENIED
+  ) {
     return <ErrorNotFoundOrAccessDenied />;
   }
-  if (err?.data?.code == "CALCULATE_NOT_VALID") {
+  if (err?.response?.data?.code == "CALCULATE_NOT_VALID") {
     return <ErrorRecalculating />;
   }
-  if (err?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+  if (err?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
     return <ErrorRecalculating />;
   }
   return errorComponent;

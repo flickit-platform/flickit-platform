@@ -1,20 +1,29 @@
 import { ICustomError } from "./CustomError";
+import { UseFormReturn } from "react-hook-form";
+export interface FieldErrorData {
+  [key: string]: string[];
+}
 
-/**
- * Sets server field level errors on form fields
- *
- * Side effect on formMethods
- */
-const setServerFieldErrors = (e: ICustomError | unknown, formMethods: any) => {
-  const { data = {}, status } = e as ICustomError;
-  if (status !== 400) {
+const setServerFieldErrors = (
+  e: ICustomError | unknown,
+  formMethods: UseFormReturn<any>
+) => {
+  const { response, status } = e as ICustomError;
+  if (status !== 400 || !response || !response.data) {
     return;
   }
-  Object.keys(data).forEach((key, index) => {
+
+  const responseData = response.data as FieldErrorData;
+
+  Object.keys(responseData).forEach((key, index) => {
     if (key === "non_field_errors") {
       return;
     }
-    formMethods.setError(key, { message: data[key][0], type: "server" }, index === 0 ? { shouldFocus: true } : undefined);
+    formMethods.setError(
+      key,
+      { message: responseData[key][0], type: "server" },
+      index === 0 ? { shouldFocus: true } : undefined
+    );
   });
 };
 

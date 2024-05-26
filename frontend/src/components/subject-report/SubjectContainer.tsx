@@ -29,6 +29,8 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
 
 const SubjectContainer = () => {
   const {
@@ -183,7 +185,9 @@ const useSubject = () => {
       await calculateMaturityLevelQuery.query();
       await subjectQueryData.query({ subjectId, assessmentId });
       await subjectProgressQueryData.query({ subjectId, assessmentId });
-    } catch (e) {}
+    } catch (e) {
+      toastError(e as ICustomError);
+    }
   };
   const calculateConfidence = async () => {
     try {
@@ -193,11 +197,11 @@ const useSubject = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (subjectQueryData.errorObject?.response.data?.code == "CALCULATE_NOT_VALID") {
+    if (subjectQueryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
     }
     if (
-      subjectQueryData.errorObject?.response.data?.code ==
+      subjectQueryData.errorObject?.response?.data?.code ==
       "CONFIDENCE_CALCULATION_NOT_VALID"
     ) {
       calculateConfidence();

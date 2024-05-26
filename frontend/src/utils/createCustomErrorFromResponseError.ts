@@ -7,17 +7,20 @@ import CustomError from "./CustomError";
  *
  */
 const createCustomErrorFromResponseError = (err: any) => {
-  const { response = {}, config = {} } = err;
+  const { name, toJSON, response = {}, config = {} } = err;
   const { toastConfig } = config;
 
   const errorType = getCustomErrorType(err);
   const errorMessage = getCustomErrorMessage(err);
   const Error = CustomError({
-    type: errorType,
+    code: errorType,
     status: response.status,
     message: errorMessage,
-    data: response.data,
+    response: response,
+    isAxiosError: true,
     toastConfig,
+    name,
+    toJSON,
   });
 
   return Error;
@@ -31,7 +34,9 @@ const getCustomErrorType = (err: any) => {
     return ECustomErrorType.DEFAULT;
   }
   const errorType =
-    errorToErrorTypeMap[statusText as string] || errorToErrorTypeMap[code as string] || errorToErrorTypeMap[status];
+    errorToErrorTypeMap[statusText as string] ||
+    errorToErrorTypeMap[code as string] ||
+    errorToErrorTypeMap[status];
 
   return errorType;
 };
