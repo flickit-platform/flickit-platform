@@ -125,7 +125,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.delete(
-        `/authinfo/spaces/${spaceId}/useraccess/${memberId}/`,
+        `/api/v1/spaces/${spaceId}/members/${memberId}/`,
         config
       );
     },

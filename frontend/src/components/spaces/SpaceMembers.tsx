@@ -435,11 +435,11 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
-        // !isInvitees && {
-        //   icon: <DeleteRoundedIcon fontSize="small" />,
-        //   text: <Trans i18nKey="remove" />,
-        //   onClick: deleteItem,
-        // },
+        !isInvitees && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="remove" />,
+          onClick: deleteItem,
+        },
       ]}
     />
   );
