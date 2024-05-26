@@ -1,10 +1,12 @@
+from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from assessment.serializers import projectserializers
-from assessment.services import assessment_core, assessment_core_services
+from assessment.services import assessment_core, assessment_core_services, assessment_services
+
 
 class AssessmentProjectApi(APIView):
     permission_classes = [IsAuthenticated]
@@ -13,7 +15,8 @@ class AssessmentProjectApi(APIView):
     def post(self, request):
         serializer = projectserializers.AssessmentProjectSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = assessment_core.create_assessment(request.user, serializer.validated_data, authorization_header=request.headers['Authorization'])
+        result = assessment_core.create_assessment(request.user, serializer.validated_data,
+                                                   authorization_header=request.headers['Authorization'])
         if not result["Success"]:
             return Response(result["body"],
                             status=status.HTTP_400_BAD_REQUEST)
@@ -40,10 +43,8 @@ class AssessmentApi(APIView):
                                                  authorization_header=request.headers['Authorization'])
         return Response(result["body"], result["status_code"])
 
-    @swagger_auto_schema(responses={204: ""})
     def delete(self, request, assessment_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.delete_assessment(assessments_details["body"])
-        return Response(status=result["status_code"])
+        result = assessment_services.assessment_delete(request, assessment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

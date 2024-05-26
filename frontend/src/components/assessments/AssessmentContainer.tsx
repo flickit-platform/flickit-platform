@@ -42,8 +42,8 @@ const AssessmentContainer = () => {
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
-    (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
+    (errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
+      errorObject?.code === ECustomErrorType.NOT_FOUND) ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">

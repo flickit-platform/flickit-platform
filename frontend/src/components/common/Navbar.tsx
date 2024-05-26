@@ -90,10 +90,10 @@ const Navbar = () => {
           <QueryData
             {...spacesQueryData}
             render={(data) => {
-              const { results } = data;
+              const { items } = data;
               return (
                 <Box>
-                  {results.slice(0, 5).map((space: any) => {
+                  {items.slice(0, 5).map((space: any) => {
                     return (
                       <ListItem disablePadding key={space?.id}>
                         <ListItemButton
@@ -456,7 +456,7 @@ const SpacesButton = () => {
         <QueryData
           {...spacesQueryData}
           render={(data) => {
-            const { results } = data;
+            const { items } = data;
             return (
               <Box>
                 <Typography
@@ -465,7 +465,7 @@ const SpacesButton = () => {
                 >
                   <Trans i18nKey={"recentSpaces"} />
                 </Typography>
-                {results.slice(0, 5).map((space: any) => {
+                {items.slice(0, 5).map((space: any) => {
                   return (
                     <MenuItem
                       key={space?.id}

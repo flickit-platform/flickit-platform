@@ -109,10 +109,10 @@ const AssessmentKitSectionGeneralInfo = (
       );
 
       await fetchAssessmentKitInfoQuery.query();
-      await handleCancel()
+      await handleCancel();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err)
+      toastError(err);
     }
   };
   return (
@@ -312,7 +312,7 @@ const AssessmentKitSectionGeneralInfo = (
                           "&:hover": { border: "1px solid #1976d299" },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={() => handleMouseOver(editable??false)}
+                        onMouseOver={() => handleMouseOver(editable ?? false)}
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
@@ -495,7 +495,7 @@ const OnHoverInput = (props: any) => {
       config
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
-    toastError: true,
+    // toastError: true,
   });
   const updateAssessmentKit = async () => {
     try {
@@ -504,6 +504,14 @@ const OnHoverInput = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
+      } else if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
+      }
       setError(err);
       setHasError(true);
     }
@@ -598,6 +606,7 @@ const OnHoverInput = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              wordBreak: "break-word",
               "&:hover": { border: "1px solid #1976d299" },
             }}
             onClick={() => setShow(!show)}

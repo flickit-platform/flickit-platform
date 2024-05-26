@@ -71,7 +71,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       if (!is_calculate_valid) {
         const data = await calculateMaturityLevelQuery.query();
         setCalculateResault(data);
-        if (data.maturity_level?.id) {
+        if (data?.id) {
           setShow(true);
         }
       }
@@ -164,13 +164,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 systemStatus={item?.status}
                 maturity_level_number={maturity_levels_count}
                 level_value={
-                  calculateResault?.maturity_level
-                    ? calculateResault?.maturity_level?.index
+                  calculateResault?.index
+                    ? calculateResault?.index
                     : result_maturity_level?.index
                 }
                 maturity_level_status={
-                  calculateResault?.maturity_level
-                    ? calculateResault?.maturity_level?.title
+                  calculateResault?.title
+                    ? calculateResault?.title
                     : result_maturity_level?.title
                 }
                 maxWidth="275px"

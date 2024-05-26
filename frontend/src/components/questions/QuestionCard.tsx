@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
@@ -55,6 +56,12 @@ import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import useScreenResize from "@utils/useScreenResize";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -362,11 +369,11 @@ const AnswerTemplate = (props: {
         {
           assessmentId,
           data: {
-            questionnaire_id: questionnaireId,
-            question_id: questionInfo?.id,
-            answer_option_id: value?.id || null,
-            is_not_applicable: notApplicable,
-            confidence_level_id:
+            questionnaireId: questionnaireId,
+            questionId: questionInfo?.id,
+            answerOptionId: value?.id || null,
+            isNotApplicable: notApplicable,
+            confidenceLevelId:
               value?.id || submitOnAnswerSelection || notApplicable
                 ? selcetedConfidenceLevel
                 : null,
@@ -582,28 +589,14 @@ const AnswerDetails = ({ questionInfo }: any) => {
     ) => service.fetchEvidences(args, config),
     toastError: true,
   });
-  const hasSetCollapse = useRef(false);
-  const [collapse, setCollapse] = useState<boolean>(false);
+
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
-  useEffect(() => {
-    if (!hasSetCollapse.current && evidencesQueryData.loaded) {
-      if (evidencesQueryData.data?.items?.length > 0) {
-        setCollapse(true);
-        hasSetCollapse.current = true;
-      }
-    }
-  }, [evidencesQueryData.loaded]);
-
   return (
     <Box mt={2} width="100%">
-      <Title
-        px={1}
-        sup={<Trans i18nKey="addDetailsToYourAnswer" />}
-        size="small"
-      >
-        <Trans i18nKey="answerDetail" />
+      <Title px={1} size="small">
+        <Trans i18nKey="answerEvidences" />
       </Title>
       <Box
         mt={2}
@@ -612,38 +605,19 @@ const AnswerDetails = ({ questionInfo }: any) => {
         alignItems="center"
         position={"relative"}
         width="100%"
-        onClick={() => setCollapse(!collapse)}
-      >
-        {!collapse ? (
-          <AddRoundedIcon />
-        ) : (
-          <MinimizeRoundedIcon sx={{ position: "relative", bottom: "8px" }} />
-        )}
-        <Typography ml={1} variant="h6">
-          <Trans i18nKey={"evidences"} />
-        </Typography>
-      </Box>
-      <Collapse
-        in={collapse}
+      ></Box>
+
+      <Box
         sx={{
           flex: 1,
-          borderLeft: "1px dashed purple",
-          px: 1,
-          ml: 1.5,
+          mr: { xs: 0, md: 4 },
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
           width: "100%",
         }}
       >
-        <Box
-          sx={{
-            flex: 1,
-            mr: { xs: 0, md: 4 },
-            position: "relative",
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-          }}
-        >
-          {/* <Box mb={1.8}>
+        {/* <Box mb={1.8}>
           <Typography
             variant="subLarge"
             fontFamily={"Roboto"}
@@ -706,25 +680,24 @@ const AnswerDetails = ({ questionInfo }: any) => {
             </Box>
           </Box>
         </Box> */}
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-              px: 2,
-              width: "100%",
-              alignItems: "center",
-              wordBreak: "break-word",
-            }}
-          >
-            <Evidence
-              {...dialogProps}
-              questionInfo={questionInfo}
-              evidencesQueryData={evidencesQueryData}
-            />
-          </Box>
+        <Box
+          display="flex"
+          alignItems={"baseline"}
+          sx={{
+            flexDirection: "column",
+            px: 2,
+            width: "100%",
+            alignItems: "center",
+            wordBreak: "break-word",
+          }}
+        >
+          <Evidence
+            {...dialogProps}
+            questionInfo={questionInfo}
+            evidencesQueryData={evidencesQueryData}
+          />
         </Box>
-      </Collapse>
+      </Box>
     </Box>
   );
 };
@@ -772,7 +745,10 @@ const Evidence = (props: any) => {
       });
     }
   }, [value]);
-
+  const cancelEditing = async (e: any) => {
+    setEvidenceId(null);
+    formMethods.reset();
+  };
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -792,7 +768,7 @@ const Evidence = (props: any) => {
       }
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err.response.data.description[0]);
+      toastError(err?.response?.data.description[0]);
     } finally {
       setEvidenceId(null);
       formMethods.reset();
@@ -828,7 +804,7 @@ const Evidence = (props: any) => {
                 }}
               >
                 <Tab
-                  label="Negative evidence"
+                  label={<Trans i18nKey="negativeEvidence" />}
                   value="NEGATIVE"
                   sx={{
                     fontSize: "16px",
@@ -840,7 +816,23 @@ const Evidence = (props: any) => {
                   }}
                 />
                 <Tab
-                  label="Comment"
+                  label={
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Trans i18nKey="comment" />
+                      {value == null && (
+                        <InfoOutlinedIcon
+                          style={{ color: evidenceBG.borderColor }}
+                          sx={{ ml: 1 }}
+                        />
+                      )}
+                    </Box>
+                  }
                   sx={{
                     fontSize: "16px",
                     display: "flex",
@@ -852,7 +844,7 @@ const Evidence = (props: any) => {
                   value={null}
                 />
                 <Tab
-                  label="Positive evidence"
+                  label={<Trans i18nKey="positiveEvidence" />}
                   sx={{
                     fontSize: "16px",
                     display: "flex",
@@ -897,30 +889,107 @@ const Evidence = (props: any) => {
               >
                 {valueCount.length || 0} / {LIMITED}
               </Typography>
+              {value == null && valueCount.length == 0 && !evidenceId && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: "8px",
+                    right: "80px",
+                    display: "flex",
+                    alignItems: "center",
+                    border: "1px solid #9DA7B3",
+                    px: "6px",
+                    py: "2px",
+                    borderRadius: "16px 0 16px 16px",
+                  }}
+                >
+                  <InfoOutlinedIcon
+                    style={{ color: "#0A2342" }}
+                    sx={{ mr: 1 }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: 300,
+                    }}
+                  >
+                    <Trans i18nKey="commentsWillNotBeShown" />
+                  </Typography>
+                </Box>
+              )}
               <Grid
                 item
                 xs={12}
                 sx={
                   is_farsi
                     ? { position: "absolute", top: 15, left: 5 }
-                    : { position: "absolute", top: 15, right: 5 }
+                    : {
+                        position: "absolute",
+                        top: 15,
+                        right: 5,
+                      }
                 }
               >
                 <Box display={"flex"} mt={2}>
-                  <LoadingButton
-                    sx={{
-                      ml: "auto",
-                      borderRadius: "100%",
-                      p: 2,
-                      minWidth: "56px",
-                      background: evidenceBG.borderColor,
-                    }}
-                    type="submit"
-                    variant="contained"
-                    loading={evidencesQueryData.loading}
-                  >
-                    <AddRoundedIcon fontSize="large" />
-                  </LoadingButton>
+                  {!evidenceId ? (
+                    <LoadingButton
+                      sx={{
+                        ml: "auto",
+                        borderRadius: "100%",
+                        p: 2,
+                        minWidth: "56px",
+                        background: evidenceBG.borderColor,
+                        "&:hover": {
+                          background: evidenceBG.borderHover,
+                        },
+                      }}
+                      type="submit"
+                      variant="contained"
+                      loading={evidencesQueryData.loading}
+                    >
+                      <AddRoundedIcon fontSize="large" />
+                    </LoadingButton>
+                  ) : (
+                    <Box
+                      sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
+                    >
+                      <IconButton
+                        aria-label="delete"
+                        sx={{
+                          boxShadow: 2,
+                          borderRadius: "100%",
+                          width: "46px",
+                          height: "46px",
+                          p: 1,
+                          background: "#F7D2DE",
+                          border: "1px solid #D81E5B",
+                          "&.MuiButtonBase-root:hover": {
+                            background: "#EFA5BD",
+                          },
+                        }}
+                        onClick={cancelEditing}
+                      >
+                        <CloseRoundedIcon style={{ color: "#D81E5B" }} />
+                      </IconButton>
+                      <LoadingButton
+                        sx={{
+                          ml: "auto",
+                          borderRadius: "100%",
+                          p: 2,
+                          minWidth: "56px",
+                          background: evidenceBG.borderColor,
+                          "&:hover": {
+                            background: evidenceBG.borderHover,
+                          },
+                        }}
+                        type="submit"
+                        variant="contained"
+                        loading={evidencesQueryData.loading}
+                      >
+                        <CheckRoundedIcon fontSize="large" />
+                      </LoadingButton>
+                    </Box>
+                  )}
                 </Box>
               </Grid>
             </Grid>
@@ -936,6 +1005,7 @@ const Evidence = (props: any) => {
                   setValue={setValue}
                   item={item}
                   setEvidenceId={setEvidenceId}
+                  evidenceId={evidenceId}
                   evidencesQueryData={evidencesQueryData}
                   questionInfo={questionInfo}
                   assessmentId={assessmentId}
@@ -950,12 +1020,14 @@ const Evidence = (props: any) => {
 };
 
 const EvidenceDetail = (props: any) => {
-  const { item, evidencesQueryData, setEvidenceId, setValue } = props;
+  const { item, evidencesQueryData, setEvidenceId, evidenceId, setValue } =
+    props;
   const { description, lastModificationTime, createdBy, id, type } = item;
   const is_farsi = firstCharDetector(description);
   const [evidenceBG, setEvidenceBG] = useState<any>();
   const formContext = useFormContext();
   const { service } = useServiceContext();
+  const isEditing = evidenceId === id;
   const deleteEvidence = useQuery({
     service: (args = { id }, config) => service.deleteEvidence(args, config),
     runOnMount: false,
@@ -984,6 +1056,7 @@ const EvidenceDetail = (props: any) => {
       toastError(err);
     }
   };
+
   useEffect(() => {
     if (type === null) {
       setEvidenceBG({
@@ -1007,6 +1080,14 @@ const EvidenceDetail = (props: any) => {
       });
     }
   }, [type]);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const handleClickOpen = () => {
+    setExpanded(true);
+  };
+
+  const handleClose = () => {
+    setExpanded(false);
+  };
   return (
     <Box display="flex" flexDirection="column" width="100%">
       <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
@@ -1015,46 +1096,165 @@ const EvidenceDetail = (props: any) => {
           // src={pictureLink}
           sx={{ width: 56, height: 56 }}
         ></Avatar>
+
         <Box
           sx={{
             px: "32px",
-            py: "24px",
+            py: "16px",
+            height: "fit-content",
             display: "flex",
-            alignItems: "baseline",
+            flexDirection: "column",
+            // alignItems: "flex-end",
             border: `1px solid ${evidenceBG?.borderColor}`,
             background: evidenceBG?.background,
             color: "#0A2342",
             borderRadius: "0 24px 24px 24px ",
-            gap: "64px",
+            gap: "16px",
             direction: `${is_farsi ? "rtl" : "ltr"}`,
             textAlign: `${is_farsi ? "right" : "left"}`,
           }}
         >
-          <Typography>{description}</Typography>
-          <Typography fontSize="12px" variant="overline">
-            {formatDate(lastModificationTime)}
-          </Typography>
+          {isEditing && (
+            <Typography
+              sx={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: evidenceBG?.borderColor,
+              }}
+            >
+              <Trans i18nKey="editing" />
+            </Typography>
+          )}
+          <Box sx={{ display: "flex", alignItems: "flex-end", gap: "48px" }}>
+            <Typography>{description}</Typography>
+            <Typography
+              fontSize="12px"
+              variant="overline"
+              sx={{ whiteSpace: "nowrap", lineHeight: "12px" }}
+            >
+              {formatDate(lastModificationTime)}
+            </Typography>
+          </Box>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-          <IconButton
-            aria-label="edit"
-            size="small"
-            sx={{ boxShadow: 2, p: 1 }}
-            onClick={onUpdate}
-          >
-            <EditRoundedIcon fontSize="small" color="success" />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            size="small"
-            sx={{ boxShadow: 2, p: 1 }}
-            onClick={deleteItem}
-          >
-            <DeleteRoundedIcon fontSize="small" color="error" />
-          </IconButton>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            justifyContent: "center",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
+            <IconButton
+              aria-label="edit"
+              size="small"
+              sx={{ boxShadow: 2, p: 1 }}
+              onClick={onUpdate}
+            >
+              <EditRoundedIcon fontSize="small" style={{ color: "#1CC2C4" }} />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              sx={{ boxShadow: 2, p: 1 }}
+              onClick={handleClickOpen}
+            >
+              <DeleteRoundedIcon
+                fontSize="small"
+                style={{ color: "#D81E5B" }}
+              />
+            </IconButton>
+          </Box>
+
+          <DeleteEvidenceDialog
+            expanded={expanded}
+            onClose={handleClose}
+            onConfirm={deleteItem}
+            title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"} />}
+            cancelText={<Trans i18nKey={"letMeSeeItAgain"} />}
+            confirmText={<Trans i18nKey={"yesDeleteIt"} />}
+          />
         </Box>
       </Box>
     </Box>
+  );
+};
+
+const DeleteEvidenceDialog = (props: any) => {
+  const { expanded, onClose, onConfirm, title, cancelText, confirmText } =
+    props;
+  const fullScreen = useScreenResize("sm");
+  return (
+    <Dialog
+      open={expanded}
+      onClose={onClose}
+      maxWidth={"sm"}
+      fullScreen={fullScreen}
+      fullWidth
+      sx={{
+        ".MuiDialog-paper": {
+          borderRadius: { xs: 0, sm: "32px" },
+        },
+        ".MuiDialog-paper::-webkit-scrollbar": {
+          display: "none",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        },
+      }}
+    >
+      <DialogContent
+        sx={{
+          padding: "32px",
+          background: "#fff",
+          overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <Typography sx={{ color: "#0A2342" }}>{title}</Typography>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button
+            sx={{
+              "&.MuiButton-root": {
+                color: "#0A2342",
+                border: "1px solid #0A2342",
+                borderRadius: "100px",
+              },
+              "&.MuiButton-root:hover": {
+                background: "#CED3D9  ",
+                border: "1px solid #0A2342",
+              },
+            }}
+            variant="outlined"
+            onClick={onClose}
+          >
+            {cancelText}
+          </Button>
+          <Button
+            sx={{
+              "&.MuiButton-root": {
+                color: "#FDF1F5",
+                border: "1px solid #D81E5B",
+                background: "#D81E5B",
+                borderRadius: "100px",
+              },
+              "&.MuiButton-root:hover": {
+                background: "#AD1849  ",
+                border: "1px solid #AD1849",
+              },
+            }}
+            variant="contained"
+            onClick={onConfirm}
+          >
+            {confirmText}
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 

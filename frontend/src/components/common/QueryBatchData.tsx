@@ -119,15 +119,15 @@ export const defaultRenderError = (
   }
 
   if (
-    err.type === ECustomErrorType.NOT_FOUND ||
-    err.type === ECustomErrorType.ACCESS_DENIED
+    err.code === ECustomErrorType.NOT_FOUND ||
+    err.code === ECustomErrorType.ACCESS_DENIED
   ) {
     return <ErrorNotFoundOrAccessDenied />;
   }
-  if (err?.data?.code == "CALCULATE_NOT_VALID") {
+  if (err?.response?.data?.code == "CALCULATE_NOT_VALID") {
     return <ErrorRecalculating />;
   }
-  if (err?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+  if (err?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
     return <ErrorRecalculating />;
   }
 

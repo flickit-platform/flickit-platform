@@ -90,7 +90,7 @@ export const AssessmentSubjectAccordion = (
       setProgress(total_progress);
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err.response.data.message);
+      toastError(err);
     }
   };
 
