@@ -118,7 +118,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:latest ./backend
+        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:"${GITHUB_SHA:0:7}" ./backend
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -126,7 +126,7 @@ jobs:
           username: flickit-platform-dev
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:latest
+        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:"${GITHUB_SHA:0:7}"
 
   Backend_Deploy_Latest:
     needs: Backend_Push_Latest_Image
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "latest" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
           DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND_STAGE }}
           DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}    
