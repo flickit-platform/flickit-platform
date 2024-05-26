@@ -10,11 +10,19 @@ import {
   Legend,
 } from "recharts";
 import Skeleton from "@mui/material/Skeleton";
-import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 import { t } from "i18next";
+import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
+import convertToAssessmentChartData from "@/utils/convertToAssessmentChartData";
 
-const SubjectRadarChart = (props: any) => {
-  const { loading, ...rest } = props;
+interface AssessmentSubjectRadarChartProps {
+  loading: boolean;
+  data: any[];
+  maturityLevelsCount: number;
+}
+
+const AssessmentSubjectRadarChart: React.FC<
+  AssessmentSubjectRadarChartProps
+> = ({ loading, data, maturityLevelsCount }) => {
   return loading ? (
     <Skeleton
       height={"620px"}
@@ -23,16 +31,20 @@ const SubjectRadarChart = (props: any) => {
       sx={{ margin: "auto" }}
     />
   ) : (
-    <SubjectRadar {...rest} />
+    <SubjectRadar data={data} maturityLevelsCount={maturityLevelsCount} />
   );
 };
 
-const SubjectRadar = (props: any) => {
-  const { data: res = {}, loaded } = props;
-  const { maturityLevelsCount } = res;
-  const data = useMemo(() => {
-    return convertToSubjectChartData(res);
-  }, [loaded]);
+interface SubjectRadarProps {
+  data: any[];
+  maturityLevelsCount: number;
+}
+
+const SubjectRadar: React.FC<SubjectRadarProps> = ({
+  data,
+  maturityLevelsCount,
+}) => {
+  const chartData = useMemo(() => convertToAssessmentChartData(data), [data]);
 
   const getFontSize = () => {
     const width = window.innerWidth;
@@ -42,9 +54,10 @@ const SubjectRadar = (props: any) => {
       return "12px";
     }
   };
+
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
         <PolarGrid />
         <PolarAngleAxis
           dataKey="title"
@@ -69,13 +82,13 @@ const SubjectRadar = (props: any) => {
           tickCount={maturityLevelsCount + 1}
           tick={false}
         />
-        {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar
           name={t("maturityLevel") as string}
           dataKey="ml"
           stroke="#1CC2C4"
           fill="#1CC2C4"
           fillOpacity={0.5}
+          isAnimationActive={true}
         />
         <Legend wrapperStyle={{ paddingTop: 20 }} />{" "}
       </RadarChart>
@@ -83,4 +96,4 @@ const SubjectRadar = (props: any) => {
   );
 };
 
-export default SubjectRadarChart;
+export default AssessmentSubjectRadarChart;

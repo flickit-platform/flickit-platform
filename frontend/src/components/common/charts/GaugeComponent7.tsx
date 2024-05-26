@@ -1,20 +1,19 @@
 import React from "react";
-interface IDynamicGaugeSVGProps {
-  colorCode: string;
-  value: number;
-  confidence_value?: number | null;
-  show_confidence?: boolean;
-}
+import { IDynamicGaugeSVGProps } from "@/types";
+import "./style.css";
+
 const GaugeComponent7 = (props: IDynamicGaugeSVGProps) => {
-  const { colorCode, value, confidence_value, show_confidence } = props;
+  const { colorCode, value, confidence_value, show_confidence, height, className } = props;
   const progress = Math.ceil(((confidence_value ?? 0) / 100) * 60);
   return (
     <svg
       width="100%"
-      height="200"
+      height={height}
       viewBox="0 0 201 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+
     >
       <path
         d="M12.0273 128.584C8.08787 129.864 3.82738 127.713 2.84616 123.688C-0.195753 111.213 -0.806287 98.2663 1.04806 85.5598C1.64621 81.461 5.68532 78.9182 9.7277 79.8218C13.7701 80.7253 16.2796 84.7337 15.7358 88.84C14.402 98.9106 14.8844 109.14 17.16 119.04C18.0879 123.077 15.9667 127.304 12.0273 128.584Z"
@@ -52,7 +51,7 @@ const GaugeComponent7 = (props: IDynamicGaugeSVGProps) => {
         fill={`${value == 7 ? colorCode : "black"}`}
         fillOpacity={`${value == 7 ? "0.9" : "0.1"}`}
       />
-        {show_confidence && (
+      {show_confidence && (
         <>
           <path
             d="M25.7997 121.311C24.3134 121.738 22.7574 120.88 22.3828 119.38C19.6042 108.251 19.2485 96.6441 21.3534 85.3468C23.6294 73.1311 28.7198 61.6134 36.2209 51.7069C43.722 41.8004 53.4277 33.7774 64.5685 28.2741C75.7094 22.7707 87.979 19.9381 100.405 20.001C112.831 20.0639 125.071 23.0205 136.156 28.6364C147.24 34.2523 156.864 42.373 164.265 52.3549C171.665 62.3369 176.639 73.9055 178.791 86.1437C180.781 97.4617 180.308 109.065 177.417 120.164C177.027 121.661 175.463 122.503 173.981 122.061C172.499 121.619 171.661 120.06 172.047 118.563C174.692 108.298 175.115 97.5749 173.276 87.1136C171.274 75.7321 166.649 64.9733 159.766 55.6901C152.884 46.4069 143.933 38.8546 133.625 33.6318C123.316 28.4091 111.933 25.6594 100.377 25.601C88.8205 25.5425 77.4097 28.1767 67.0487 33.2949C56.6878 38.413 47.6615 45.8744 40.6854 55.0874C33.7094 64.3005 28.9754 75.0119 26.8587 86.3726C24.9131 96.8147 25.228 107.541 27.7687 117.833C28.1394 119.334 27.286 120.884 25.7997 121.311Z"
