@@ -31,6 +31,7 @@ import SubjectRadarChart from "../subject-report/SubjectRadarChart";
 import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
@@ -220,11 +221,19 @@ export const AssessmentSubjectAccordion = (
         <Grid container alignItems="center" padding={2}>
           <Grid item xs={12} sm={7.5}>
             <Box height={"400px"}>
-              <AssessmentSubjectRadarChart
-                data={subjectAttributes}
-                maturityLevelsCount={5}
-                loading={false}
-              />
+              {subjectAttributes.length > 2 ? (
+                <AssessmentSubjectRadarChart
+                  data={subjectAttributes}
+                  maturityLevelsCount={5}
+                  loading={false}
+                />
+              ) : (
+                <AssessmentSubjectRadialChart
+                  data={subjectAttributes}
+                  maturityLevelsCount={5}
+                  loading={false}
+                />
+              )}
             </Box>
           </Grid>
 

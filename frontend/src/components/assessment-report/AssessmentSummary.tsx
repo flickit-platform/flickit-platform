@@ -1,6 +1,12 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import { AssessmentKitInfoType, ExpertGroupDetails, AssessmentKitStatsExpertGroup, IAssessmentKitReportModel, PathInfo } from "@types";
+import {
+  AssessmentKitInfoType,
+  ExpertGroupDetails,
+  AssessmentKitStatsExpertGroup,
+  IAssessmentKitReportModel,
+  PathInfo,
+} from "@types";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import { Link } from "react-router-dom";
@@ -43,8 +49,6 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       </Typography>
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
-          component={Link}
-          to={`/assessment-kits/${assessmentKit?.id}`}
           fontSize="32px"
           sx={{
             textDecoration: "none",

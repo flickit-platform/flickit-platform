@@ -4,7 +4,6 @@ import {
   AssessmentKitInfoType,
   ExpertGroupDetails,
   IAssessmentKitReportModel,
-  IProgress,
   ISubjectInfo,
   PathInfo,
 } from "@types";
@@ -14,7 +13,7 @@ import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
-import { Avatar, Button, Chip, Divider } from "@mui/material";
+import { Avatar, Button, Chip, Divider, Grid } from "@mui/material";
 interface IAssessmentReportKit {
   assessmentKit: IAssessmentKitReportModel;
 }
@@ -38,33 +37,53 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
         px: { xs: 2, sm: 3 },
       }}
     >
-      <Box display="flex" alignItems="center" gap="2px">
-        <Typography color="#3B4F68" fontSize="14px">
-          Created with
-        </Typography>
-        <Chip
-          label={assessmentKit.title}
-          size="small"
-          sx={{
-            background: "rgba(210, 243, 243, 1)",
-            color: "rgba(28, 194, 196, 1)",
-            textTransform: "none",
-          }}
-        />
+      <Box
+        display="flex"
+        alignItems="center"
+        gap={1}
+        flexDirection={{ xs: "column", sm: "row" }}
+      >
+        <Box display="flex" alignItems="center" gap="2px">
+          <Typography color="#3B4F68" fontSize="14px">
+            Created with
+          </Typography>
+          <Chip
+            component={Link}
+            to={`/assessment-kits/${assessmentKit?.id}`}
+            label={assessmentKit.title}
+            size="small"
+            sx={{
+              background: "rgba(210, 243, 243, 1)",
+              color: "rgba(28, 194, 196, 1)",
+              textTransform: "none",
+              cursor: "pointer",
+            }}
+          />
+        </Box>
         <Divider orientation="vertical" flexItem sx={{ marginX: 2 }} />
-        <Typography color="#3B4F68" fontSize="14px">
-          Kit is provided by
-        </Typography>
-        <Avatar src={assessmentKit.expertGroup.picture}></Avatar>
-        <Chip
-          label={assessmentKit.expertGroup.title}
-          size="small"
-          sx={{
-            background: "rgba(210, 243, 243, 1)",
-            color: "rgba(28, 194, 196, 1)",
-            textTransform: "none",
-          }}
-        />
+        <Box display="flex" alignItems="center" gap="2px">
+          <Typography color="#3B4F68" fontSize="14px">
+            Kit is provided by
+          </Typography>
+          <Avatar
+            component={Link}
+            to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+            src={assessmentKit.expertGroup.picture}
+            sx={{ cursor: "pointer" }}
+          ></Avatar>
+          <Chip
+            component={Link}
+            to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+            label={assessmentKit.expertGroup.title}
+            size="small"
+            sx={{
+              background: "rgba(210, 243, 243, 1)",
+              color: "rgba(28, 194, 196, 1)",
+              textTransform: "none",
+              cursor: "pointer",
+            }}
+          />
+        </Box>
       </Box>
     </Box>
   );

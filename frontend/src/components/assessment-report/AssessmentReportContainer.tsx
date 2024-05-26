@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
 import { useParams } from "react-router-dom";
@@ -15,7 +15,8 @@ import { AssessmentSummary } from "./AssessmentSummary";
 import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
 import { AssessmentReportKit } from "./AssessmentReportKit";
 import { AssessmentProgress } from "./AssessmentProgress";
-
+import { Trans } from "react-i18next";
+import { styles } from "@styles";
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -101,42 +102,81 @@ const AssessmentReportContainer = (props: any) => {
             />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
+                <Box sx={{ ...styles.centerCVH }} marginY={4} gap={2}>
+                  <Typography color="#9DA7B3">
+                    <Trans i18nKey="overallReport" />
+                  </Typography>
+                  <Divider sx={{ width: "100%" }} />
+                </Box>
                 <Grid container alignItems="stretch" spacing={5}>
                   <Grid item lg={4} md={12} sm={12} xs={12}>
-                    <AssessmentSummary
-                      expertGroup={expertGroup}
-                      assessmentKit={assessment}
-                      pathInfo={pathInfo}
-                      data={data}
-                      progress={totalProgress}
-                    />
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#9DA7B3" marginX={4}>
+                        <Trans i18nKey="general" />
+                      </Typography>
+                      <AssessmentSummary
+                        expertGroup={expertGroup}
+                        assessmentKit={assessment}
+                        pathInfo={pathInfo}
+                        data={data}
+                        progress={totalProgress}
+                      />
+                    </Box>
                   </Grid>
                   <Grid item lg={4} md={12} sm={12} xs={12}>
-                    <AssessmentOverallStatus
-                      status={status}
-                      subjects_info={subjects}
-                      maturity_level={maturityLevel}
-                      maturity_level_count={assessmentKit?.maturityLevelCount}
-                      confidence_value={confidenceValue}
-                    />
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#9DA7B3" marginX={4}>
+                        <Trans i18nKey="updatedoverallStatus" />
+                      </Typography>
+                      <AssessmentOverallStatus
+                        status={status}
+                        subjects_info={subjects}
+                        maturity_level={maturityLevel}
+                        maturity_level_count={assessmentKit?.maturityLevelCount}
+                        confidence_value={confidenceValue}
+                      />
+                    </Box>
                   </Grid>
                   <Grid item lg={4} md={12} sm={12} xs={12}>
-                    <AssessmentSubjectStatus subjects={subjects} />
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#9DA7B3" marginX={4}>
+                        <Trans i18nKey="subjectStatus" />
+                      </Typography>
+                      <AssessmentSubjectStatus subjects={subjects} />
+                    </Box>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item sm={12} xs={12}>
                 <Grid container alignItems="stretch" spacing={5}>
                   <Grid item lg={7} md={12} sm={12} xs={12}>
-                    <AssessmentReportKit assessmentKit={assessmentKit} />
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#9DA7B3" marginX={4}>
+                        <Trans i18nKey="assessmentKit" />
+                      </Typography>
+                      <AssessmentReportKit assessmentKit={assessmentKit} />
+                    </Box>
                   </Grid>
                   <Grid item lg={5} md={12} sm={12} xs={12}>
-                    <AssessmentProgress
-                      questionCount={questionsCount}
-                      answerCount={answersCount}
-                    />
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#9DA7B3" marginX={4}>
+                        <Trans i18nKey="assessmentProgress" />
+                      </Typography>
+                      <AssessmentProgress
+                        questionCount={questionsCount}
+                        answerCount={answersCount}
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
+              </Grid>
+              <Grid item sm={12} xs={12}>
+                <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
+                  <Typography color="#9DA7B3">
+                    <Trans i18nKey="subjectReport" />
+                  </Typography>
+                  <Divider sx={{ width: "100%" }} />
+                </Box>
               </Grid>
               <Grid item sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
