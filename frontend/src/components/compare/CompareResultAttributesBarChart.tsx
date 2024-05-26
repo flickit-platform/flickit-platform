@@ -16,19 +16,23 @@ import { Trans } from "react-i18next";
 import { t } from "i18next";
 import { convertToGeneralChartData } from "@utils/convertToAttributesChartData";
 import { convertToAttributesChartData } from "@utils/convertToAttributesChartData";
+import CompareBarChart from "./CompareBarChart";
 
 const CompareResultSubjectAttributesBarChart = (props: {
   data?: any;
   isSubject: boolean;
+  assessments?: any;
 }) => {
-  const { data, isSubject } = props;
+  const { data, isSubject, assessments } = props;
+
   const res = useMemo(() => {
     if (!isSubject) {
-    return convertToGeneralChartData(data);}
+      return convertToGeneralChartData(data);
+    }
   }, [data, isSubject]);
   const attRes = useMemo(() => {
     if (isSubject) {
-      return convertToAttributesChartData(data);
+      return convertToAttributesChartData(data, assessments);
     }
   }, [data, isSubject]);
 
@@ -47,36 +51,10 @@ const CompareResultSubjectAttributesBarChart = (props: {
       </Typography>
       <Box sx={{ overflowX: "auto", overflowY: "hidden" }}>
         <Box height="420px" minWidth="740px">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={isSubject ? attRes : res}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 120,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                interval={0}
-                angle={-90}
-                textAnchor="end"
-                dataKey="title"
-                tick={<CustomAxisTick />}
-              />
-              <YAxis type="number" domain={[0, 5]} tickCount={6} />
-              <Tooltip />
-              <Legend />
-              <Bar
-                dataKey={"ml"}
-                name={"Maturity Level"}
-                fill={barColors[1]}
-                maxBarSize={40}
-              />
-              
-            </BarChart>
-          </ResponsiveContainer>
+          <CompareBarChart
+            isSubject={isSubject}
+            data={isSubject ? attRes : res}
+          />
         </Box>
       </Box>
     </Box>

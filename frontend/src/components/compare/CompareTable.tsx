@@ -44,6 +44,8 @@ const CompareTable = (props: {
               <CompareResultSubjectAttributesBarChart
                 data={subject}
                 isSubject={isSubject}
+                key={subject.id}
+                assessments={data.assessments}
               />
             );
           })}

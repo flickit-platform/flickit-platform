@@ -38,7 +38,6 @@ const CompareResultContainer = () => {
     <QueryData
       {...compareResultQueryData}
       render={(data) => {
-        console.log(data)
         const {assessments,subjects}=data
         return (
           <Box>
