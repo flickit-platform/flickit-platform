@@ -11,6 +11,7 @@ export enum ECustomErrorType {
   "NOT_FOUND" = "NOT_FOUND",
   "CANCELED" = "CANCELED",
   "ACCESS_DENIED" = "ACCESS_DENIED",
+  "ERR_BAD_REQUEST" = "ERR_BAD_REQUEST",
 }
 
 export enum ESystemStatus {
@@ -196,7 +197,7 @@ export interface IOwnerModel {
 export interface ISpaceModel {
   code: string;
   id: TId;
-  isOwner:boolean;
+  isOwner: boolean;
   title: string;
   lastModificationTime?: string;
   membersCount?: number;

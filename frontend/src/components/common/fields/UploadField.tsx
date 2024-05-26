@@ -198,7 +198,7 @@ const Uploader = (props: IUploadProps) => {
               setIsValid(false)
             }
             if (err?.response?.status !== 422) {
-              toastError(err?.response?.data?.message);
+              toastError(err);
               setMyFiles([]);
               setIsValid(false)
               fieldProps.onChange("");

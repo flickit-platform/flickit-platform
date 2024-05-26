@@ -87,8 +87,8 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
-      setServerFieldErrors(err?.response?.data?.message, formMethods);
-      toastError(err?.response?.data?.message);
+      setServerFieldErrors(err, formMethods);
+      toastError(err);
     }
   };
 
@@ -122,7 +122,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
               name="picture"
               label={<Trans i18nKey="groupPicture" />}
               maxSize={convertToBytes(2, "MB")}
-              />
+            />
           </Grid>
           <Grid item xs={12} md={7}>
             <InputFieldUC
