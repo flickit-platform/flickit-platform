@@ -182,7 +182,7 @@ export const SpaceMembers = (props: any) => {
             return (
               <Box>
                 {items.map((member: any) => {
-                  const { displayName, id , pictureLink } = member;
+                  const { displayName, id , pictureLink, isOwner } = member;
                   return (
                       displayName && (
                       <Box
@@ -313,13 +313,6 @@ export const SpaceMembers = (props: any) => {
                                               {formatDate(expirationDate)}
                                             </Typography>
                                           </Box>
-                                          {isOwner && (
-                                              <Chip
-                                                  label={<Trans i18nKey="owner" />}
-                                                  size="small"
-                                                  sx={{ mr: 1.5 }}
-                                              />
-                                          )}
                                           {
                                             <Actions
                                                 isOwner={isOwner}
