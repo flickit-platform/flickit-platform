@@ -80,13 +80,11 @@ export const AssessmentSubjectAccordion = (
 
   const fetchProgress = async () => {
     try {
-      setInProgress(true);
       const data = await subjectProgressQueryData.query();
       const { answerCount, questionCount } = data;
       const total_progress = ((answerCount ?? 0) / (questionCount ?? 1)) * 100;
       setQuestionCount(questionCount);
       setAnswerCount(answerCount);
-      setInProgress(false);
       setProgress(total_progress);
     } catch (e) {
       const err = e as ICustomError;
@@ -263,7 +261,12 @@ export const AssessmentSubjectAccordion = (
               <Divider sx={{ width: "100%" }} />
               {subjectAttributes.map((element: any) => {
                 return (
-                  <Box display="flex" justifyContent="space-between" margin={2}>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    margin={2}
+                    key={element.id}
+                  >
                     <Typography>{element.title}</Typography>
                     <Box display="flex" gap={0.5}>
                       <Typography
@@ -333,7 +336,7 @@ const SubjectStatus = (
         marginRight: isMobileScreen ? "unset" : -10,
       }}
     >
-      <Typography>
+      <Box>
         {hasStats ? (
           <Gauge
             maturity_level_number={5}
@@ -344,9 +347,11 @@ const SubjectStatus = (
             height={getNumberBaseOnScreen(140, 140, 140, 150, 180)}
           />
         ) : (
-          <Trans i18nKey="notEvaluated" />
+          <Typography>
+            <Trans i18nKey="notEvaluated" />
+          </Typography>
         )}
-      </Typography>
+      </Box>
     </Box>
   );
 };
