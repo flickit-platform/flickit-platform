@@ -20,16 +20,19 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { styles,animations } from "@styles";
 import Pagination from "@mui/material/Pagination";
 import Stack from '@mui/material/Stack';
+import {useNavigate, useParams} from "react-router-dom";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
   const { service } = useServiceContext();
-
-  const [pageNumber, setPageNumber] = useState(1);
+  const navigate = useNavigate();
+  const { page } = useParams();
   const PAGESIZE : number= 10
 
+  let pageNumber = Number(page)
+
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPageNumber(value);
+      navigate(`/spaces/${value}`);
   };
 
   const spacesQueryData = useQuery<ISpacesModel>({
