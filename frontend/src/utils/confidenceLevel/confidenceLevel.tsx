@@ -14,10 +14,10 @@ const ConfidenceLevel = ({
 }: confidenceLevelType) => {
   const { id, colorText, number } = calculate(inputNumber);
 
-  const ImgRate = lazy(() => import(`./confLevel${id}`));
+  const ImgRate = lazy(() => import(`./confLevel${id}.tsx`));
 
   return (
-    <Suspense>
+    <Suspense fallback={<Box>fallback</Box>}>
       <Box
         sx={{
           display: "inline-flex",
