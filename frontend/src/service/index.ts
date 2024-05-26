@@ -135,6 +135,12 @@ export const createService = (
     ) {
       return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
     },
+    fetchSpaceMembersInvitees(
+        { spaceId }: { spaceId: string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/spaces/${spaceId}/invitees/`, config);
+    },
     fetchPathInfo(
       {
         assessmentId,
@@ -803,6 +809,13 @@ export const createService = (
           "Content-Type": "multipart/form-data",
         },
       });
+    },
+     deleteExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
     inviteSpaceMember(
       args: { id: TId; data: any },

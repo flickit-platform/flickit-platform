@@ -53,7 +53,7 @@ const AssessmentAdviceContainer = (props: any) => {
       }
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err.response.data.message);
+      toastError(err);
     }
   };
   const [subjectData, setsubjectData] = useState<any>([]);
