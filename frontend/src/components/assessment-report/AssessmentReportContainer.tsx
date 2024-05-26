@@ -126,7 +126,7 @@ const AssessmentReportContainer = (props: any) => {
                   <Grid item lg={4} md={12} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
                       <Typography color="#9DA7B3" marginX={4}>
-                        <Trans i18nKey="updatedoverallStatus" />
+                        <Trans i18nKey="overallStatus" />
                       </Typography>
                       <AssessmentOverallStatus
                         status={status}

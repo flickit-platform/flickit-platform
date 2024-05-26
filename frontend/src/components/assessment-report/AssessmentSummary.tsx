@@ -34,8 +34,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       alignItems="center"
       justifyContent="center"
       textAlign="center"
-      height="100%"
-      maxHeight="320px"
+      height="320px"
       gap={3}
       py={4}
       sx={{

@@ -74,7 +74,11 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
         barSize={10}
         data={chartData}
       >
-        <PolarAngleAxis type="number" domain={[0, 5]} />
+        <PolarAngleAxis
+          domain={[0, 5]}
+          type="number"
+          tick={false}
+        />
 
         <RadialBar
           min={15}

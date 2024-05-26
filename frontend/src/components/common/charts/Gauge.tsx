@@ -109,6 +109,9 @@ const Gauge = (props: IGaugeProps) => {
               color="rgba(157, 167, 179, 1)"
               mt={1}
               fontSize={16}
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
             >
               <Trans
                 i18nKey="withPercentConfidence"
