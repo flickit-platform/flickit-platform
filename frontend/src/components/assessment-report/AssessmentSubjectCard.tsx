@@ -243,29 +243,45 @@ export const AssessmentSubjectAccordion = (
             sm={4}
             sx={{
               borderLeft: "0.5px solid rgba(0, 0, 0, 0.32)",
-              paddingLeft: "12px",
+              paddingLeft: 4,
             }}
           >
-            {subjectAttributes.map((element: any) => {
-              return (
-                <Box display="flex" justifyContent="space-between" margin={2}>
-                  <Typography>{element.title}</Typography>
-                  <Box display="flex" gap={0.5}>
-                    <Typography
-                      sx={{
-                        color:
-                          getMaturityLevelColors(5)[
-                            element.maturityLevel.value - 1
-                          ],
-                      }}
-                    >
-                      {element.maturityLevel.title}
-                    </Typography>
-                    <ConfidenceLevel inputNumber={element.confidenceValue} />
+            <Box display="flex" flexDirection="column">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                width="100%"
+                px={2}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Subject
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Status
+                </Typography>
+              </Box>
+              <Divider sx={{ width: "100%" }} />
+              {subjectAttributes.map((element: any) => {
+                return (
+                  <Box display="flex" justifyContent="space-between" margin={2}>
+                    <Typography>{element.title}</Typography>
+                    <Box display="flex" gap={0.5}>
+                      <Typography
+                        sx={{
+                          color:
+                            getMaturityLevelColors(5)[
+                              element.maturityLevel.value - 1
+                            ],
+                        }}
+                      >
+                        {element.maturityLevel.title}
+                      </Typography>
+                      <ConfidenceLevel inputNumber={element.confidenceValue} />
+                    </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Box>
           </Grid>
         </Grid>
         <Box mt="auto">

@@ -49,7 +49,7 @@ export const AssessmentSubjectStatus = (props: IAssessmentSubjectStatus) => {
         display="flex"
         flexDirection="column"
         width="100%"
-        height="160px"
+        height="180px"
         overflow="auto"
         paddingX={2}
       >

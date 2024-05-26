@@ -44,7 +44,7 @@ export const AssessmentOverallStatus = (
         display_confidence_component={true}
         shortTitle={true}
         titleSize={getNumberBaseOnScreen(20, 20, 20, 40, 40)}
-        height={getNumberBaseOnScreen(140, 140, 160, 240, 320)}
+        height={getNumberBaseOnScreen(140, 140, 200, 280, 340)}
         className="insight--report__gauge"
       />
     </Box>

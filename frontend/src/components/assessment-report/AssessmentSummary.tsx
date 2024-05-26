@@ -25,7 +25,7 @@ interface IAssessmentSummaryProps {
 export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   const { assessmentKit, expertGroup, pathInfo, data, progress } = props;
   const {
-    assessment: { title, lastModificationTime },
+    assessment: { title, lastModificationTime, creationTime },
   } = data;
   return (
     <Box
@@ -35,6 +35,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       justifyContent="center"
       textAlign="center"
       height="100%"
+      maxHeight="320px"
       gap={3}
       py={4}
       sx={{
@@ -70,7 +71,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             <Trans i18nKey="created" values={{ progress }} />{" "}
           </Typography>
           <Typography color="#9DA7B3">
-            {convertToRelativeTime(lastModificationTime)}
+            {convertToRelativeTime(creationTime)}
           </Typography>
         </Box>
         <Box display="flex" flexDirection="column" textAlign={"center"}>
