@@ -135,6 +135,12 @@ export const createService = (
     ) {
       return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
     },
+    fetchSpaceMembersInvitees(
+        { spaceId }: { spaceId: string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/spaces/${spaceId}/invitees/`, config);
+    },
     fetchPathInfo(
       {
         assessmentId,
