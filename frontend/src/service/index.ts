@@ -81,10 +81,10 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/`, config);
     },
     seenSpaceList(
-      { id }: { id: TId },
+      { spaceId }: { spaceId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-    return axios.put(`/api/v1/spaces/${id}/seen/`, config);
+    return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
     },
   deleteSpace(
       { spaceId }: { spaceId: string },
@@ -99,7 +99,7 @@ export const createService = (
       { spaceId, data }: { spaceId: string; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/authinfo/spaces/${spaceId}/`, data, config);
+      return axios.put(`/api/v1/spaces/${spaceId}/`, data, config);
     },
     addMemberToSpace(
       args: { spaceId: string; email: string | undefined },
@@ -134,6 +134,12 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
+    },
+    fetchSpaceMembersInvitees(
+        { spaceId }: { spaceId: string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/spaces/${spaceId}/invitees/`, config);
     },
     fetchPathInfo(
       {
@@ -811,6 +817,13 @@ export const createService = (
           "Content-Type": "multipart/form-data",
         },
       });
+    },
+     deleteExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
     inviteSpaceMember(
       args: { id: TId; data: any },

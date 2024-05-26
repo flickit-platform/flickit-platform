@@ -34,6 +34,14 @@ const SubjectRadar = (props: any) => {
     return convertToSubjectChartData(res);
   }, [loaded]);
 
+  const getFontSize = () => {
+    const width = window.innerWidth;
+    if (width < 600) {
+      return "8px";
+    } else {
+      return "12px";
+    }
+  };
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
@@ -47,6 +55,7 @@ const SubjectRadar = (props: any) => {
                 verticalAnchor="middle"
                 y={y + (y - cy) / 15}
                 x={x + (x - cx) / 15}
+                style={{ fontSize: getFontSize() }}
               >
                 {payload.value}
               </Text>
@@ -58,16 +67,17 @@ const SubjectRadar = (props: any) => {
           domain={[0, maturityLevelsCount]}
           type="number"
           tickCount={maturityLevelsCount + 1}
+          tick={false}
         />
         {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar
           name={t("maturityLevel") as string}
           dataKey="ml"
-          stroke="#491e8a"
-          fill="#6035A1"
+          stroke="#1CC2C4"
+          fill="#1CC2C4"
           fillOpacity={0.5}
         />
-        <Legend />
+        <Legend wrapperStyle={{ paddingTop: 20 }} />{" "}
       </RadarChart>
     </ResponsiveContainer>
   );

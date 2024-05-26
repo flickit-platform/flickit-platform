@@ -48,6 +48,19 @@ class MemberSpaceApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class InviteMembersSpaceApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, space_id):
+        result = space_services.space_invites_list(request, space_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class InviteMemberInSpaceApi(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -73,4 +86,18 @@ class SpaceApi(APIView):
 
     def get(self, request, space_id):
         result = space_services.get_space(request, space_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, space_id):
+        result = space_services.update_space(request, space_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, space_id):
+        result = space_services.delete_space(request, space_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])

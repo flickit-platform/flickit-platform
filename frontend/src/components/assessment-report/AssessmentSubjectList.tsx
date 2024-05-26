@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
 import Title from "@common/Title";
-import { AssessmentSubjectCard } from "./AssessmentSubjectCard";
+import { AssessmentSubjectAccordion } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
 import { ISubjectInfo } from "@types";
 interface IAssessmentSubjectListProps {
@@ -16,20 +16,18 @@ export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
 
   return (
     <Box mt={4}>
-      <Box>
-        <Title borderBottom={true} sx={{ borderBottomColor: colorCode }} inPageLink="subjects">
-          <Trans i18nKey="subjects" />
-        </Title>
-      </Box>
       <Box mt={3}>
         {isEmpty ? (
           <ErrorEmptyData />
         ) : (
-          <Grid container spacing={3} sx={{ px: { lg: 2, md: 4, sm: 9, xs: 0 } }}>
+          <Grid container spacing={3}>
             {subjects.map((subject) => {
               return (
-                <Grid item xs={12} sm={12} md={6} lg={4} key={subject?.id}>
-                  <AssessmentSubjectCard {...subject} colorCode={colorCode} />
+                <Grid item xs={12} sm={12} md={12} lg={12} key={subject?.id}>
+                  <AssessmentSubjectAccordion
+                    {...subject}
+                    colorCode={colorCode}
+                  />
                 </Grid>
               );
             })}

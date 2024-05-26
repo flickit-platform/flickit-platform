@@ -97,14 +97,14 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const { service } = useServiceContext();
   const navigate = useNavigate();
   const { loading, abortController } = useQuery({
-    service: (args, config) => service.setCurrentSpace({ spaceId: id }, config),
+    service: (args, config) => service.setCurrentSpace({ spaceId }, config),
     runOnMount: false,
     toastError: true,
   });
   const { dispatch } = useAuthContext();
   const {
     title,
-    id,
+    id : spaceId,
     membersCount = 0,
     assessmentsCount = 0,
     lastModificationTime,
@@ -112,7 +112,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
   } = item || {};
 
   const trackSeen = () =>{
-    service.seenSpaceList({ id },{})
+    service.seenSpaceList({ spaceId },{})
   }
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
@@ -121,7 +121,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
         dispatch(authActions.setUserInfo(data));
-        navigate(`/${id}/assessments/1`);
+        navigate(`/${spaceId}/assessments/1`);
       })
       .catch((e) => {});
   };
@@ -145,7 +145,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             component={Link}
             variant="h6"
             fontFamily={"Roboto"}
-            to={`/${id}/assessments/1`}
+            to={`/${spaceId}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
@@ -206,7 +206,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           )}
           <>
             <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
-              <IconButton size="small" component={Link} to={`/${id}/setting`}>
+              <IconButton size="small" component={Link} to={`/${spaceId}/setting`}>
                 <SettingsRoundedIcon />
               </IconButton>
             </Box>

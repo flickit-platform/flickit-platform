@@ -1,20 +1,19 @@
 import React from "react";
-interface IDynamicGaugeSVGProps {
-  colorCode: string;
-  value: number;
-  confidence_value?: number | null;
-  show_confidence?: boolean;
-}
+import { IDynamicGaugeSVGProps } from "@/types";
+import "./style.css";
+
 const GaugeComponent4 = (props: IDynamicGaugeSVGProps) => {
-  const { colorCode, value, confidence_value, show_confidence } = props;
+  const { colorCode, value, confidence_value, show_confidence, height, className } = props;
   const progress = Math.ceil(((confidence_value ?? 0) / 100) * 60);
   return (
     <svg
       width="100%"
-      height="200"
+      height={height}
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+
     >
       <path
         d="M12.0273 128.584C8.08787 129.864 3.82743 127.713 2.84621 123.688C-0.286943 110.839 -0.84566 97.4691 1.23117 84.3566C3.30799 71.244 7.97075 58.7015 14.9214 47.4487C17.0982 43.9247 21.8149 43.1952 25.1659 45.6299C28.517 48.0645 29.2283 52.7399 27.0984 56.2924C21.5131 65.6082 17.7529 75.9293 16.0465 86.7031C14.3401 97.4769 14.7269 108.455 17.16 119.041C18.0879 123.077 15.9667 127.304 12.0273 128.584Z"
