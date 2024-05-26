@@ -33,7 +33,7 @@ const SupTitleBreadcrumb = (
         return (
           <Box display="flex" flexDirection={"column"} key={index}>
             <MuiLink
-              component={disabled ? "p" : Link}
+              component={disabled ? "div" : Link}
               underline={disabled ? "none" : "hover"}
               color="inherit"
               to={to}

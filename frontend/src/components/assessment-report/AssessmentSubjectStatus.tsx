@@ -55,7 +55,7 @@ export const AssessmentSubjectStatus = (props: IAssessmentSubjectStatus) => {
       >
         {subjects.map((element: any) => {
           return (
-            <>
+            <div key={element.id}>
               <Box
                 display="flex"
                 justifyContent="space-between"
@@ -77,7 +77,7 @@ export const AssessmentSubjectStatus = (props: IAssessmentSubjectStatus) => {
                 </Box>
               </Box>
               <Divider sx={{ width: "100%" }} />
-            </>
+            </div>
           );
         })}{" "}
       </Box>
