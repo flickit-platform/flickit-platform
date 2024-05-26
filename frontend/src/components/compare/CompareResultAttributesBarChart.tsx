@@ -14,17 +14,23 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { t } from "i18next";
-import convertToAttributesChartData from "@utils/convertToAttributesChartData";
-import processData from "@utils/convertToAttributesChartData";
+import { convertToGeneralChartData } from "@utils/convertToAttributesChartData";
+import { convertToAttributesChartData } from "@utils/convertToAttributesChartData";
 
 const CompareResultSubjectAttributesBarChart = (props: {
   data?: any;
-  base_infos: any;
+  isSubject: boolean;
 }) => {
-  const { data } = props;
+  const { data, isSubject } = props;
   const res = useMemo(() => {
-    return convertToAttributesChartData(data);
-  }, [data]);
+    if (!isSubject) {
+    return convertToGeneralChartData(data);}
+  }, [data, isSubject]);
+  const attRes = useMemo(() => {
+    if (isSubject) {
+      return convertToAttributesChartData(data);
+    }
+  }, [data, isSubject]);
 
   return (
     <Box>
@@ -43,7 +49,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
         <Box height="420px" minWidth="740px">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={res.reverse()}
+              data={isSubject ? attRes : res}
               margin={{
                 top: 20,
                 right: 30,
@@ -61,14 +67,14 @@ const CompareResultSubjectAttributesBarChart = (props: {
               />
               <YAxis type="number" domain={[0, 5]} tickCount={6} />
               <Tooltip />
-              {/* <Legend /> */}
-
+              <Legend />
               <Bar
                 dataKey={"ml"}
                 name={"Maturity Level"}
                 fill={barColors[1]}
                 maxBarSize={40}
               />
+              
             </BarChart>
           </ResponsiveContainer>
         </Box>

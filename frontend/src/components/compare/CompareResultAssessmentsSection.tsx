@@ -37,7 +37,7 @@ const CompareResultAssessmentsSection = (props: {
                   ...styles.centerCH,
                 }}
               >
-                <Title>{item.assessment.title}</Title>
+                <Title>{item.title}</Title>
                 <Box
                   sx={{
                     ...styles.centerV,
@@ -47,14 +47,12 @@ const CompareResultAssessmentsSection = (props: {
                 >
                   <Gauge
                     maturity_level_number={
-                      item.assessment.assessment_kit.maturity_level_count
+                      item.maturityLevel.maturityLevelCount
                     }
-                    maturity_level_status={
-                      item.assessment.assessment_kit.maturity_level.title
-                    }
-                    level_value={
-                      item.assessment.assessment_kit.maturity_level.index
-                    }
+                    maturity_level_status={item.maturityLevel.title}
+                    level_value={item.maturityLevel.index}
+                    confidence_value={item.confidenceValue}
+                    show_confidence={true}
                     maxWidth="250px"
                     m="auto"
                   />

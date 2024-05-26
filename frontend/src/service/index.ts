@@ -202,6 +202,14 @@ export const createService = (
     ) {
       return axios.delete(`/api/v1/assessments/${id}/`, config);
     },
+    comparessessments(
+      { data }: { data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(`/api/v1/assessments-compare/${data}`,{
+        ...(config ?? {}),
+      });;
+    },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined

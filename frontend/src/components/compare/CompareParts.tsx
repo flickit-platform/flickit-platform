@@ -73,7 +73,7 @@ const CompareButton = (props: { disabled?: boolean }) => {
     if (assessment_kit) {
       navigate({
         pathname: "result",
-        search: createSearchParams({ assessmentIds: id }).toString(),
+        search: createSearchParams({ assessment_id: id }).toString(),
       });
     }
   };

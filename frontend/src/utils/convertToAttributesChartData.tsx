@@ -1,19 +1,32 @@
-const convertToAttributesChartData = (data: any) => {
-  return data?.flatMap((item: any) => {
-    return item.attributes.map((att: any,index:number) => {
+export const convertToAttributesChartData = (data: any) => {
+  console.log(data);
+  return data?.attributes.map((attribute: any) => {
+    attribute?.assessment.map((item: any) => {
       return {
-        ml: att?.maturity_level?.value,
+        ml: item?.maturityLevelValue,
         cl: 1,
-        title: att?.title,
-        id: att?.id,
-        mn: item?.subject?.maturity_scores?.length,
-        index:index
+        title: "title",
+        id: item?.assessmentId,
+        mn: 5,
+        index: attribute?.index,
       };
     });
   });
 };
 
-export default convertToAttributesChartData;
+export const convertToGeneralChartData = (data: any) => {
+  console.log(data);
+  return data?.assessments.map((assessment: any) => {
+    return {
+      ml: assessment?.maturityLevel?.value,
+      cl: assessment?.confidenceValue,
+      title: assessment?.title,
+      id: assessment?.id,
+      mn: assessment?.maturityLevel?.maturityLevelCount,
+      index: assessment?.maturityLevel?.index,
+    };
+  });
+};
 
 function groupObjects(arr: any) {
   const result = [];
