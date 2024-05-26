@@ -40,7 +40,9 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     setLoading(true);
     try {
       type === "update"
-        ? await service.updateSpace({ spaceId, data }, { signal: abortController.signal })
+        ?( await service.updateSpace({ spaceId, data }, { signal: abortController.signal }) &&
+           await service.seenSpaceList({ spaceId },{})
+          )
         : await service.createSpace(data, { signal: abortController.signal });
 
       setLoading(false);
