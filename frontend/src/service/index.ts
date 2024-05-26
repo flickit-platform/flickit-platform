@@ -81,10 +81,10 @@ export const createService = (
       return axios.get(`/authinfo/spaces/${spaceId}/`, config);
     },
     seenSpaceList(
-      { id }: { id: TId },
+      { spaceId }: { spaceId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-    return axios.put(`/api/v1/spaces/${id}/seen/`, config);
+    return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
     },
   deleteSpace(
       { spaceId }: { spaceId: string },
