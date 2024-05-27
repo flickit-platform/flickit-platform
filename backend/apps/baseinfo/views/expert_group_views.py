@@ -87,3 +87,13 @@ class ExpertGroupAssessmentKitListApi(APIView):
     def get(self, request, expert_group_id):
         result = expert_group_services.get_assessment_kit_list_with_expert_group_id(request, expert_group_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupSeenApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, expert_group_id):
+        result = expert_group_services.expert_group_seen(request, expert_group_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
