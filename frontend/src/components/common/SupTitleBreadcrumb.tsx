@@ -40,6 +40,7 @@ const SupTitleBreadcrumb = (
               onClick={(e) => disabled && e.preventDefault()}
               sx={{
                 ...styles.centerV,
+                cursor: "pointer",
                 fontSize: "0.8rem",
                 fontFamily: "Roboto",
                 fontWeight: "bold",
@@ -59,6 +60,7 @@ const SupTitleBreadcrumb = (
                   size="small"
                   sx={{
                     marginTop: 0.5,
+                    cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
                       ? "rgba(210, 243, 243, 1)"

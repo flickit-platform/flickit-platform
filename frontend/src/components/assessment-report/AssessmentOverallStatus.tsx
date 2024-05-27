@@ -28,7 +28,7 @@ export const AssessmentOverallStatus = (
   } = props;
   return (
     <Box
-      height="320px"
+      maxHeight="400px"
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
@@ -44,8 +44,8 @@ export const AssessmentOverallStatus = (
         show_confidence={false}
         display_confidence_component={true}
         shortTitle={true}
-        titleSize={getNumberBaseOnScreen(20, 20, 20, 40, 40)}
-        height={getNumberBaseOnScreen(140, 140, 200, 280, 340)}
+        titleSize={40}
+        height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
         className="insight--report__gauge"
       />
     </Box>

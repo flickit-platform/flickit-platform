@@ -20,21 +20,32 @@ interface IAssessmentSummaryProps {
   pathInfo: PathInfo;
   data: any;
   progress: number;
+  questionCount: number;
+  answerCount: number;
 }
 
 export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
-  const { assessmentKit, expertGroup, pathInfo, data, progress } = props;
+  const {
+    assessmentKit,
+    expertGroup,
+    pathInfo,
+    data,
+    progress,
+    questionCount,
+    answerCount,
+  } = props;
   const {
     assessment: { title, lastModificationTime, creationTime },
   } = data;
   return (
     <Box
+      minHeight="400px"
+      maxHeight="400px"
       display="flex"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
       textAlign="center"
-      height="320px"
       gap={3}
       py={4}
       sx={{
@@ -43,10 +54,8 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         borderRadius: "40px",
         px: { xs: 2, sm: 3 },
       }}
+      color="#1CC2C4"
     >
-      <Typography color="#3B4F68" fontSize="18px">
-        {pathInfo?.space?.title}
-      </Typography>
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
           fontSize="32px"
@@ -59,29 +68,10 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           {assessmentKit?.title}
         </Typography>
       </Box>
-
-      <Box
-        sx={{ ...styles.centerV }}
-        width="100%"
-        justifyContent="space-evenly"
-      >
-        <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#9DA7B3">
-            <Trans i18nKey="created" values={{ progress }} />{" "}
-          </Typography>
-          <Typography color="#9DA7B3">
-            {convertToRelativeTime(creationTime)}
-          </Typography>
-        </Box>
-        <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#9DA7B3">
-            <Trans i18nKey="updated" />
-          </Typography>
-          <Typography color="#9DA7B3">
-            {convertToRelativeTime(lastModificationTime)}
-          </Typography>
-        </Box>
-      </Box>
+      <ColorfullProgress
+        questionCount={questionCount}
+        answerCount={answerCount}
+      />
       <Button
         variant="contained"
         fullWidth
@@ -99,10 +89,31 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         }}
         component={Link}
         to="./../questionnaires"
-        disabled={progress === 100 ? true : false}
       >
         <Trans i18nKey="seeQuestionaires" />
       </Button>
+      <Box
+        sx={{ ...styles.centerV }}
+        width="100%"
+        justifyContent="space-evenly"
+      >
+        <Box display="flex" flexDirection="column" textAlign={"center"}>
+          <Typography color="#9DA7B3">
+            <Trans i18nKey="created" values={{ progress }} />{" "}
+          </Typography>
+          <Typography color="#6C7B8E" fontWeight="bold">
+            {convertToRelativeTime(creationTime)}
+          </Typography>
+        </Box>
+        <Box display="flex" flexDirection="column" textAlign={"center"}>
+          <Typography color="#9DA7B3">
+            <Trans i18nKey="updated" />
+          </Typography>
+          <Typography color="#6C7B8E" fontWeight="bold">
+            {convertToRelativeTime(lastModificationTime)}
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
