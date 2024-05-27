@@ -90,7 +90,7 @@ export const createService = (
     ) {
     return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
     },
-  deleteSpace(
+    deleteSpace(
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
@@ -549,7 +549,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
+      return axios.get(`api/v1/assessment-kits/${id}/`, config);
     },
     fetchAffectedQuestionsOnAttribute(
       args: { assessmentId: TId; attributeId: TId; levelId: TId },
