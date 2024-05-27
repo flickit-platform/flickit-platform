@@ -215,7 +215,10 @@ export interface ISpaceModel {
   is_default_space_for_current_user?: boolean;
 }
 
-export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
+export interface ISpacesModel extends IDefaultModel<ISpaceModel> {
+  size?: number
+  total?: number
+}
 export interface IAssessmentReport {
   assessment_kit: Omit<
     IAssessmentKitModel,
