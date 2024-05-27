@@ -746,6 +746,7 @@ const Evidence = (props: any) => {
     }
   }, [value]);
   const cancelEditing = async (e: any) => {
+    // TODO
     setEvidenceId(null);
     formMethods.reset();
   };
