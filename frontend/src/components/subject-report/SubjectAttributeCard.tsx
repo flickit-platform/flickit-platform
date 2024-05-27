@@ -20,6 +20,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import emptyState from "@assets/svg/emptyState.svg";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
+import languageDetector from "@utils/languageDetector";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -573,6 +574,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                   answerScore,
                                   weightedScore,
                                 } = question;
+
+                                let is_farsi = languageDetector(questionTitle);
+
                                 return (
                                   <Box
                                     sx={{
@@ -597,11 +601,11 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             variant="body1"
                                             fontFamily="Roboto"
                                             fontWeight={"bold"}
+                                            dir={is_farsi ? "rtl" : "ltr" }
                                             sx={{
                                               whiteSpace: "nowrap",
                                               overflow: "hidden",
                                               textOverflow: "ellipsis",
-                                              direction: "rtl",
                                             }}
                                           >
                                             {questionTitle}
