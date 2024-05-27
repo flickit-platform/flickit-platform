@@ -52,6 +52,7 @@ const AssessmentKitContainer = () => {
 const AssessmentKit = (props: any) => {
   const { data, query } = props;
   const { assessmentKitId } = useParams();
+
   const {
     title,
     summary = "",
@@ -60,6 +61,7 @@ const AssessmentKit = (props: any) => {
     isPrivate,
     creationTime,
     lastModificationTime,
+    expertGroupId,
     like,
     assessmentsCount,
     subjectsCount,
@@ -71,6 +73,11 @@ const AssessmentKit = (props: any) => {
 
     // expert_group = {},
   } = data || {};
+  const { service } = useServiceContext();
+  const expertGroupQueryData = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
+  });
   const colorPallet = getMaturityLevelColors(
     maturityLevels ? maturityLevels.length : 5
   );
@@ -147,32 +154,41 @@ const AssessmentKit = (props: any) => {
             >
               {title}
             </Title>
-            {/* <Box
-              sx={{
-                borderRadius: 2,
-                opacity: 1,
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                ml: "auto",
-                textDecoration: "none",
-              }}
-              component={Link}
-              to={`/user/expert-groups/${expert_group.id}`}
-            >
-              <CardHeader
-                titleTypographyProps={{
-                  sx: { textDecoration: "none" },
-                  color: "white",
-                }}
-                avatar={<Avatar alt={expert_group?.name || "E"} src={"/"} />}
-                title={
-                  <Box component={"b"} fontSize=".95rem">
-                    {expert_group?.name}
+            <QueryData
+              {...expertGroupQueryData}
+              loading={false}
+              render={(data) => {
+                const { title, id, pictureLink } = data;
+                return (
+                  <Box
+                    sx={{
+                      borderRadius: 2,
+                      opacity: 1,
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      ml: "auto",
+                      textDecoration: "none",
+                    }}
+                    component={Link}
+                    to={`/user/expert-groups/${id}`}
+                  >
+                    <CardHeader
+                      titleTypographyProps={{
+                        sx: { textDecoration: "none" },
+                        color: "white",
+                      }}
+                      avatar={<Avatar alt={title} src={pictureLink} />}
+                      title={
+                        <Box component={"b"} fontSize=".95rem">
+                          {title}
+                        </Box>
+                      }
+                    />
                   </Box>
-                }
-              />
-            </Box> */}
+                );
+              }}
+            />
           </Box>
           <Box sx={{ ...styles.centerCVH, mt: 3 }}>
             <Box>
