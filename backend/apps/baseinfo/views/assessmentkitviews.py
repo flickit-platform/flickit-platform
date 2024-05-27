@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from baseinfo.services import assessmentkitservice, dsl_services
+from baseinfo.services import assessmentkitservice, dsl_services, assessment_kit_service
 from baseinfo.serializers.assessmentkitserializers import *
 from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitTag, AssessmentKit
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
@@ -101,8 +101,6 @@ class AssessmentKitLikeApi(APIView):
         return Response({'likes': assessment_kit.likes.count()})
 
 
-
-
 class LoadAssessmentKitInfoEditableApi(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -130,8 +128,17 @@ class LoadAssessmentKitInfoStatisticalApi(APIView):
 
 
 class EditAssessmentKitInfoApi(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
     serializer_class = EditAssessmentKitInfoSerializer
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        if self.request.method == 'PATCH':
+            permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
+        return [permission() for permission in permission_classes]
+
+    def get(self, request, assessment_kit_id):
+        result = assessment_kit_service.get_assessment_kit_publish(request, assessment_kit_id)
+        return Response(data=result["body"], status=result["status_code"])
 
     @swagger_auto_schema(request_body=EditAssessmentKitInfoSerializer(),
                          responses={200: LoadAssessmentKitInfoEditableSerilizer(many=True)})
