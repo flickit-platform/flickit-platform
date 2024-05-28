@@ -104,10 +104,7 @@ const AssessmentReportContainer = (props: any) => {
                   textAlign="center"
                 >
                   <Typography color="#9DA7B3" fontSize="44px" fontWeight={900}>
-                    <Trans
-                      i18nKey="assessmentInsight"
-                      values={{ assessment: assessment.title }}
-                    />
+                    <Trans i18nKey="assessmentInsight" />
                   </Typography>
                 </Box>
                 <Grid container alignItems="stretch" spacing={5}>
