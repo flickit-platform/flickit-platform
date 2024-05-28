@@ -29,9 +29,26 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
     const barName = data.find(
       (attribute) => attribute[`assessmentTitle${i + 1}`]
     )?.[`assessmentTitle${i + 1}`];
-
     if (barName) {
       bars.push(
+        <Bar
+          key={mlKey}
+          dataKey={mlKey}
+          name={barName}
+          fill={barColors[i % barColors.length]}
+          maxBarSize={40}
+        />
+      );
+    }
+  }
+  const generalBars: any = [];
+  for (let i = 0; i < assessmentCount; i++) {
+    const mlKey = `ml${i + 1}`;
+    const barName = data.find(
+      (subject) => subject[`assessmentTitle${i + 1}`]
+    )?.[`assessmentTitle${i + 1}`];
+    if (barName) {
+      generalBars.push(
         <Bar
           key={mlKey}
           dataKey={mlKey}
@@ -65,16 +82,7 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
         <YAxis type="number" domain={[0, 5]} tickCount={6} />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="right" />
-        {isSubject ? (
-          <>{bars}</>
-        ) : (
-          <Bar
-            dataKey={"ml"}
-            name={"Maturity Level"}
-            fill={barColors[1]}
-            maxBarSize={40}
-          />
-        )}
+        {isSubject ? <>{bars}</> : <>{generalBars}</>}
       </BarChart>
     </ResponsiveContainer>
   );

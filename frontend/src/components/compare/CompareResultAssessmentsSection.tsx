@@ -23,7 +23,6 @@ const CompareResultAssessmentsSection = (props: {
     >
       <Box sx={{display:"flex",width:"100%",justifyContent:"center",flexWrap:"wrap"}}>
         {data.map((item) => {
-          console.log(item.confidenceValue)
           return (
             <Box
               // item
