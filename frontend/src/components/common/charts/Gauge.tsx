@@ -89,7 +89,7 @@ const Gauge = (props: IGaugeProps) => {
           sx={{
             ...styles.centerCVH,
             bottom: `${
-              display_confidence_component ? "22%" : shortTitle ? "30%" : "40%"
+              display_confidence_component ? "22%" : shortTitle ? "40%" : "40%"
             }`,
             left: "25%",
             right: "25%",
