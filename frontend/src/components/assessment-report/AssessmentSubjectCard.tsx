@@ -226,7 +226,10 @@ export const AssessmentSubjectAccordion = (
       <AccordionDetails sx={{ padding: 0 }}>
         <Grid container alignItems="center" padding={2}>
           <Grid item xs={12} sm={12} md={12} lg={7.5}>
-            <Box sx={{ display: { sm: "none", md: "block" } }} height={"400px"}>
+            <Box
+              sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+              height={"400px"}
+            >
               {subjectAttributes.length > 2 ? (
                 <AssessmentSubjectRadarChart
                   data={subjectAttributes}
