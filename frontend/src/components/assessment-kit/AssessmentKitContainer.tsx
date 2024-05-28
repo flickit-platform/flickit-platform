@@ -336,7 +336,7 @@ const AssessmentKit = (props: any) => {
                 </Box>
               </Box>
             )}
-            {maturityLevels[0] && (
+            {maturityLevels && (
               <Box mb={8}>
                 <Title>
                   <Trans i18nKey="maturityLevels" />
