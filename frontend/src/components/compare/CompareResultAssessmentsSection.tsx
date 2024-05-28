@@ -21,14 +21,16 @@ const CompareResultAssessmentsSection = (props: {
         mt: 1,
       }}
     >
-      <Grid container spacing={2}>
+      <Box sx={{display:"flex",width:"100%",justifyContent:"center",flexWrap:"wrap"}}>
         {data.map((item) => {
+          console.log(item.confidenceValue)
           return (
-            <Grid
-              item
-              xs={calcGridSizeBasedOnTheLengthOfAssessments(data.length)}
+            <Box
+              // item
+              // xs={4}
               sx={{
-                ...styles.compareResultBorder,
+                // ...styles.compareResultBorder,
+                width: "300px"
               }}
             >
               <Box
@@ -63,10 +65,10 @@ const CompareResultAssessmentsSection = (props: {
                   sx={{ flexDirection: { xs: "column-reverse", lg: "row" } }}
                 ></Box>
               </Box>
-            </Grid>
+            </Box>
           );
         })}
-      </Grid>
+      </Box>
     </Box>
   );
 };

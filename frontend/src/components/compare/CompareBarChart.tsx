@@ -16,7 +16,7 @@ interface CompareBarProps {
   assessmentCount: number;
 }
 
-const barColors = ["#A3C7D6", "#9F73AB", "#624F82", "#3F3B6C"];
+const barColors = ["#49CED0", "#3B4F68", "#FAB365", "#E04B7C"];
 
 const CompareBarChart: React.FC<CompareBarProps> = ({
   data,

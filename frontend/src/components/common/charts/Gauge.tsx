@@ -96,7 +96,7 @@ const Gauge = (props: IGaugeProps) => {
               mt={1}
             >
               <Trans
-                i18nKey="withPercentConfidence"
+                i18nKey="gaugeConfidence"
                 values={{
                   percent: Math.ceil(confidenceValue),
                 }}

@@ -327,6 +327,7 @@
   "anyChangesInTheNumberOfOptionsForAPreExistingQuestion": "Any changes in the number of options for a pre-existing question",
   "unsupportedDslContentChange": "Unsupported dsl content change",
   "withPercentConfidence": "Confidence:",
+  "gaugeConfidence":"Confidence: {{percent}}%s",
   "assessmentKitPermissons": "{{assessmentKit}} permissions",
   "addNewUser": "Add new user",
   "users": "Users",
