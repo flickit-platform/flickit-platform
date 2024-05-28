@@ -171,6 +171,8 @@ export const AssessmentSubjectAccordion = (
                 sx={{
                   textTransform: "none",
                   whiteSpace: "pre-wrap",
+                  fontSize: "2rem",
+                  mb: "32px",
                 }}
               >
                 {title}
@@ -213,8 +215,10 @@ export const AssessmentSubjectAccordion = (
             </Box>
           </Grid> */}
           <Grid item xs={12} lg={4} md={3.5} sm={12}>
-            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
-              <Typography> Confidence level</Typography>
+            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" ,mt:{xs:"-64px",sm:"0"}}}>
+              <Typography fontSize="1rem">
+                <Trans i18nKey="confidenceLevel" />
+              </Typography>
               <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
             </Box>
           </Grid>
@@ -361,6 +365,7 @@ const SubjectStatus = (
         {hasStats ? (
           <Gauge
             maturity_level_number={5}
+            isMobileScreen={true}
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}

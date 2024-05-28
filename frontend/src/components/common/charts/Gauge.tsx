@@ -21,6 +21,7 @@ interface IGaugeProps extends BoxProps {
   shortTitle?: boolean;
   titleSize?: number;
   display_confidence_component?: boolean;
+  isMobileScreen?: boolean;
 }
 
 const Gauge = (props: IGaugeProps) => {
@@ -36,6 +37,7 @@ const Gauge = (props: IGaugeProps) => {
     className,
     shortTitle,
     titleSize = 24,
+    isMobileScreen,
     display_confidence_component,
     ...rest
   } = props;
@@ -45,12 +47,27 @@ const Gauge = (props: IGaugeProps) => {
     () => import(`./GaugeComponent${maturity_level_number}.tsx`)
   );
   const confidenceValue = confidence_value ? confidence_value : 0;
-  const calculateFontSize = (length: number) => {
+  const calculateFontSize = (length: number): string => {
     const maxLength = 14; // Example threshold for maximum length
     const minLength = 8; // Example threshold for minimum length
-    if (length <= minLength) return 24;
-    if (length >= maxLength) return 18;
-    return 24 - ((length - minLength) / (maxLength - minLength)) * (24 - 18);
+    let maxFontSizeRem = 1.5; // 24px / 16 = 1.5rem
+    let minFontSizeRem = 1.125; // 18px / 16 = 1.125rem
+    if (isMobileScreen) {
+      maxFontSizeRem = 1.5;
+      minFontSizeRem = 1.25;
+    }
+    if (shortTitle && !isMobileScreen) {
+      maxFontSizeRem = 4;
+      minFontSizeRem = 3;
+    }
+    if (length <= minLength) return `${maxFontSizeRem}rem`;
+    if (length >= maxLength) return `${minFontSizeRem}rem`;
+
+    const fontSizeRem =
+      maxFontSizeRem -
+      ((length - minLength) / (maxLength - minLength)) *
+        (maxFontSizeRem - minFontSizeRem);
+    return `${fontSizeRem}rem`;
   };
   const fontSize = calculateFontSize(maturity_level_status?.length);
   return (
