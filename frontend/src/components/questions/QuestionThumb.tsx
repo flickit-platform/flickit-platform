@@ -32,7 +32,7 @@ export const QuestionThumb = (props: any) => {
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
           </Typography>
-          <Typography variant="h6">{question.answer.selectedOption.title}</Typography>
+          <Typography variant="h6">{question.answer?.selectedOption?.title}</Typography>
         </Box>
       )}
       {question.answer && question.answer.isNotApplicable && (
