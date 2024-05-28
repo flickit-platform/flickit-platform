@@ -26,6 +26,12 @@ class UserRolesInAssessmentApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    def delete(self, request, assessment_id, user_id):
+        result = assessment_user_roles_services.delete_user_role_in_assessment(request, assessment_id, user_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class UsersRolesInAssessmentApi(APIView):
     permission_classes = [IsAuthenticated]
