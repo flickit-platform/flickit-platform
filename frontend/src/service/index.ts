@@ -807,7 +807,7 @@ export const createService = (
     ) {
       const { data = {}, id } = args ?? {};
 
-      return axios.put(`/baseinfo/expertgroups/${id}/`, data, {
+      return axios.put(`/api/v1/expert-groups/${id}/`, data, {
         ...(config ?? {}),
         headers: {
           "Content-Type": "multipart/form-data",

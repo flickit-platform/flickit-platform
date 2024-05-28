@@ -63,7 +63,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     };
     const formattedUpdateData = {
       ...restOfData,
-      name: title,
+      title: title,
     };
     if (typeof picture !== "string") {
       formattedUpdateData.picture = picture;
@@ -109,22 +109,24 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} md={5}>
-            <UploadField
-              accept={{
-                "image/jpeg": [".jpeg", ".jpg"],
-                "image/png": [".png"],
-              }}
-              defaultValueType="image"
-              defaultValue={defaultValues.pictureLink}
-              shouldFetchFileInfo={true}
-              hideDropText
-              name="picture"
-              label={<Trans i18nKey="groupPicture" />}
-              maxSize={convertToBytes(2, "MB")}
-            />
-          </Grid>
-          <Grid item xs={12} md={7}>
+          {type !== "update" && (
+              <Grid item xs={12} md={5}>
+                <UploadField
+                    accept={{
+                      "image/jpeg": [".jpeg", ".jpg"],
+                      "image/png": [".png"],
+                    }}
+                    defaultValueType="image"
+                    defaultValue={defaultValues.pictureLink}
+                    shouldFetchFileInfo={true}
+                    hideDropText
+                    name="picture"
+                    label={<Trans i18nKey="groupPicture" />}
+                    maxSize={convertToBytes(2, "MB")}
+                />
+              </Grid>
+          )}
+          <Grid item xs={12} md={type === "update" ? 12 : 7}>
             <InputFieldUC
               defaultValue={defaultValues.title || ""}
               name="title"
