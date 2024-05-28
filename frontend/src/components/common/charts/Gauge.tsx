@@ -45,7 +45,14 @@ const Gauge = (props: IGaugeProps) => {
     () => import(`./GaugeComponent${maturity_level_number}.tsx`)
   );
   const confidenceValue = confidence_value ? confidence_value : 0;
-
+  const calculateFontSize = (length: number) => {
+    const maxLength = 14; // Example threshold for maximum length
+    const minLength = 8; // Example threshold for minimum length
+    if (length <= minLength) return 24;
+    if (length >= maxLength) return 18;
+    return 24 - ((length - minLength) / (maxLength - minLength)) * (24 - 18);
+  };
+  const fontSize = calculateFontSize(maturity_level_status?.length);
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
       <Suspense fallback={<SkeletonGauge />}>
@@ -82,7 +89,7 @@ const Gauge = (props: IGaugeProps) => {
             sx={{ fontWeight: "bold" }}
             variant="h6"
             color={colorCode}
-            fontSize={titleSize}
+            fontSize={fontSize}
           >
             {maturity_level_status}
           </Typography>
