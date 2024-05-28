@@ -34,6 +34,14 @@ class ExpertGroupApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, expert_group_id):
+        result = expert_group_services.update_expert_group(request, expert_group_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class ExpertGroupMembersApi(APIView):
     permission_classes = [IsAuthenticated]
