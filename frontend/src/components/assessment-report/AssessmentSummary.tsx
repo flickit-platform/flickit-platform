@@ -74,7 +74,6 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       />
       <Button
         variant="contained"
-        fullWidth
         sx={{
           borderRadius: 4,
           textTransform: "none",
@@ -86,7 +85,9 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             backgroundColor: "#1CC2C4",
             borderColor: "#1CC2C4",
           },
+          width: "86%",
         }}
+        size="small"
         component={Link}
         to="./../questionnaires"
       >
