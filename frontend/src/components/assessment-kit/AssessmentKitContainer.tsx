@@ -79,7 +79,7 @@ const AssessmentKit = (props: any) => {
       service.fetchUserExpertGroup(args, config),
   });
   const colorPallet = getMaturityLevelColors(
-    maturityLevels ? maturityLevels.length : 5
+    maturityLevels ? maturityLevels?.length : 5
   );
   const dialogProps = useDialog({
     context: {
@@ -309,7 +309,7 @@ const AssessmentKit = (props: any) => {
                     <Trans i18nKey="numberOfMaturityLevels" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>
-                    {maturityLevels.length || 0}
+                    {maturityLevels?.length || 0}
                   </Typography>
                 </Box>
                 <Button
@@ -356,7 +356,7 @@ const AssessmentKit = (props: any) => {
                           borderRadius:
                             index === 0
                               ? "8px 0 0 8px"
-                              : index === maturityLevels.length - 1
+                              : index === maturityLevels?.length - 1
                               ? "0 8px 8px 0"
                               : "0",
                         }}
