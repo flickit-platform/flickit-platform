@@ -1,4 +1,4 @@
-import { Box, Typography, BoxProps } from "@mui/material";
+import { Box, Typography, BoxProps, Tooltip } from "@mui/material";
 import { lazy, Suspense } from "react";
 import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
 import { TStatus, IMaturityLevel } from "@types";
@@ -64,9 +64,12 @@ const Gauge = (props: IGaugeProps) => {
         <Box
           sx={{
             ...styles.centerCVH,
-            bottom: `${display_confidence_component ? "16%" : shortTitle ? "30%" : "40%"}`,
+            bottom: `${
+              display_confidence_component ? "22%" : shortTitle ? "30%" : "40%"
+            }`,
             left: "25%",
             right: "25%",
+            textAlign: "center",
           }}
           position="absolute"
         >
@@ -104,26 +107,34 @@ const Gauge = (props: IGaugeProps) => {
             </Typography>
           )}
           {display_confidence_component && (
-            <Typography
-              variant="subtitle2"
-              color="rgba(157, 167, 179, 1)"
-              mt={1}
-              fontSize={16}
-              justifyContent="center"
-              alignItems="center"
-              display="flex"
+            <Tooltip
+              title={
+                <Trans
+                  i18nKey="withPercentConfidence"
+                  values={{
+                    percent: Math.ceil(confidenceValue),
+                  }}
+                />
+              }
             >
-              <Trans
-                i18nKey="withPercentConfidence"
-                values={{
-                  percent: Math.ceil(confidenceValue),
-                }}
-              />{" "}
-              <ConfidenceLevel
-                displayNumber
-                inputNumber={Math.ceil(confidenceValue)}
-              ></ConfidenceLevel>
-            </Typography>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Typography
+                  variant="subtitle2"
+                  color="rgba(157, 167, 179, 1)"
+                  mt={1}
+                  fontSize={16}
+                  justifyContent="center"
+                  alignItems="center"
+                  display="flex"
+                >
+                  {" "}
+                  <ConfidenceLevel
+                    displayNumber
+                    inputNumber={Math.ceil(confidenceValue)}
+                  ></ConfidenceLevel>
+                </Typography>
+              </Box>
+            </Tooltip>
           )}
         </Box>
       ) : (
