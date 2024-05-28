@@ -1,10 +1,8 @@
 export const convertToAttributesChartData = (data: any, assessments?: any) => {
-  console.log(data);
   if (!data || !data.attributes) {
     return [];
   }
   
-  console.log(assessments)
   const assessmentTitleMap: { [key: string]: string } = {};
   assessments?.forEach((assessment: any) => {
     assessmentTitleMap[assessment.id] = assessment.title;

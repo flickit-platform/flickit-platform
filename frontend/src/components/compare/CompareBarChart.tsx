@@ -13,27 +13,35 @@ import {
 interface CompareBarProps {
   data: any[];
   isSubject: boolean;
+  assessmentCount: number;
 }
 
 const barColors = ["#A3C7D6", "#9F73AB", "#624F82", "#3F3B6C"];
 
-const CompareBarChart: React.FC<CompareBarProps> = ({ data, isSubject }) => {
-  const bars = Object.values(data).map((attribute, index) => {
-    const mlKey = `ml${index + 1}`;
-    if (attribute.hasOwnProperty(mlKey)) {
-      const barName = attribute[`assessmentTitle${index + 1}`];
-      return (
+const CompareBarChart: React.FC<CompareBarProps> = ({
+  data,
+  isSubject,
+  assessmentCount,
+}) => {
+  const bars: any = [];
+  for (let i = 0; i < assessmentCount; i++) {
+    const mlKey = `ml${i + 1}`;
+    const barName = data.find(
+      (attribute) => attribute[`assessmentTitle${i + 1}`]
+    )?.[`assessmentTitle${i + 1}`];
+
+    if (barName) {
+      bars.push(
         <Bar
           key={mlKey}
           dataKey={mlKey}
           name={barName}
-          fill={barColors[index % barColors.length]}
+          fill={barColors[i % barColors.length]}
           maxBarSize={40}
         />
       );
     }
-    return null;
-  });
+  }
 
   return (
     <ResponsiveContainer width="100%" height="100%">

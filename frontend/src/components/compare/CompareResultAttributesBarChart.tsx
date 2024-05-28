@@ -32,6 +32,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
   }, [data, isSubject]);
   const attRes = useMemo(() => {
     if (isSubject) {
+      console.log(convertToAttributesChartData(data, assessments));
       return convertToAttributesChartData(data, assessments);
     }
   }, [data, isSubject]);
@@ -53,6 +54,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
         <Box height="420px" minWidth="740px">
           <CompareBarChart
             isSubject={isSubject}
+            assessmentCount={assessments?.length}
             data={isSubject ? attRes : res}
           />
         </Box>
