@@ -384,9 +384,11 @@ const AnswerTemplate = (props: {
       dispatch(
         questionActions.setQuestionInfo({
           ...questionInfo,
-          answer: value,
-          is_not_applicable: notApplicable,
-          confidence_level: selcetedConfidenceLevel ?? null,
+          answer: {
+              selectedOption: value,
+              isNotApplicable: notApplicable,
+              confidenceLevel: selcetedConfidenceLevel ?? null,
+          } as TAnswer
         })
       );
       if (isLastQuestion) {
