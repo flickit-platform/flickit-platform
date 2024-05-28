@@ -9,5 +9,6 @@ urlpatterns = [
     path("<str:space_id>/invite/", space_views.InviteMemberInSpaceApi.as_view()),
     path("<str:space_id>/invitees/", space_views.InviteMembersSpaceApi.as_view()),
     path("<str:space_id>/seen/", space_views.SpaceSeenApi.as_view()),
+    path("<str:space_id>/leave/", space_views.LeaveSpaceApi.as_view()),
 
 ]

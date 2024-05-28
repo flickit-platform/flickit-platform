@@ -89,10 +89,20 @@ def update_space(request, space_id):
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
+
 def delete_space(request, space_id):
     response = requests.delete(
         ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}',
         json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def leave_space(request, space_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/spaces/{space_id}/leave',
         headers={'Authorization': request.headers['Authorization']})
     if response.status_code == 204:
         return {"Success": True, "body": None, "status_code": response.status_code}
