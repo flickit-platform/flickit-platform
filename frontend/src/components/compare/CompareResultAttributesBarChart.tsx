@@ -14,7 +14,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { t } from "i18next";
-import { convertToGeneralChartData } from "@utils/convertToAttributesChartData";
+import { convertToAssessmentsChartData } from "@utils/convertToAttributesChartData";
 import { convertToAttributesChartData } from "@utils/convertToAttributesChartData";
 import CompareBarChart from "./CompareBarChart";
 
@@ -27,9 +27,12 @@ const CompareResultSubjectAttributesBarChart = (props: {
 
   const res = useMemo(() => {
     if (!isSubject) {
-      return convertToGeneralChartData(data);
+      let tempData = data;
+      tempData = { ...tempData, title: "assessment", id: 0 };
+      return convertToAssessmentsChartData(tempData, assessments);
     }
   }, [data, isSubject]);
+  
   const attRes = useMemo(() => {
     if (isSubject) {
       return convertToAttributesChartData(data, assessments);

@@ -36,6 +36,7 @@ const CompareTable = (props: {
         <CompareResultSubjectAttributesBarChart
           data={data}
           isSubject={isSubject}
+          assessments={data.assessments}
         />
       ) : (
         <Box>

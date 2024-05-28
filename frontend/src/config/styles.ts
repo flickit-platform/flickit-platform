@@ -114,7 +114,8 @@ const buttons = {
 const compare = {
   compareResultBorder: style({
     "&:not(:last-of-type) > div": {
-      borderRight: "1px solid #e7e7e7",
+      borderRight: {md:"1px solid #e7e7e7",sm:"transparent"},
+      borderBottom: {md:"transparent",sm:"",xs:"1px solid #e7e7e7"},
     },
   }),
 };

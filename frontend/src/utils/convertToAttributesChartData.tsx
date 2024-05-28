@@ -2,7 +2,7 @@ export const convertToAttributesChartData = (data: any, assessments?: any) => {
   if (!data || !data.attributes) {
     return [];
   }
-  
+
   const assessmentTitleMap: { [key: string]: string } = {};
   assessments?.forEach((assessment: any) => {
     assessmentTitleMap[assessment.id] = assessment.title;
@@ -29,16 +29,33 @@ export const convertToAttributesChartData = (data: any, assessments?: any) => {
   });
 };
 
-export const convertToGeneralChartData = (data: any) => {
-  return data?.assessments.map((assessment: any) => {
-    return {
-      ml: assessment?.maturityLevel?.value,
-      cl: assessment?.confidenceValue,
-      title: assessment?.title,
-      id: assessment?.id,
-      mn: assessment?.maturityLevel?.maturityLevelCount,
-      index: assessment?.maturityLevel?.index,
+export const convertToAssessmentsChartData = (data: any, assessments?: any) => {
+  if (!data || !data.subjects) {
+    return [];
+  }
+
+  const assessmentTitleMap: { [key: string]: string } = {};
+  assessments?.forEach((assessment: any) => {
+    assessmentTitleMap[assessment.id] = assessment.title;
+  });
+
+  return data.subjects.map((subject: any, index: number) => {
+    const subjectData: any = {
+      index: index,
+      title: subject.title,
     };
+
+    subject.assessments?.forEach((item: any, index: number) => {
+      const mlKey = `ml${index + 1}`;
+      const assessmentTitleKey = `assessmentTitle${index + 1}`;
+      if (item?.assessmentId) {
+        subjectData[mlKey] = item.maturityLevel.value;
+        subjectData[assessmentTitleKey] =
+          assessmentTitleMap[item.assessmentId] || item.assessmentId;
+      }
+    });
+
+    return subjectData;
   });
 };
 

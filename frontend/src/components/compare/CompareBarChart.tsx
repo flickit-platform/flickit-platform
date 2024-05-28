@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,32 +16,36 @@ interface CompareBarProps {
   assessmentCount: number;
 }
 
-const barColors = ["#A3C7D6", "#9F73AB", "#624F82", "#3F3B6C"];
+const barColors = ["#49CED0", "#3B4F68", "#FAB365", "#E04B7C"];
 
 const CompareBarChart: React.FC<CompareBarProps> = ({
   data,
   isSubject,
   assessmentCount,
 }) => {
-  const bars: any = [];
-  for (let i = 0; i < assessmentCount; i++) {
-    const mlKey = `ml${i + 1}`;
-    const barName = data.find(
-      (attribute) => attribute[`assessmentTitle${i + 1}`]
-    )?.[`assessmentTitle${i + 1}`];
+  const generalBars = useMemo(() => {
+    const bars: any = [];
 
-    if (barName) {
-      bars.push(
-        <Bar
-          key={mlKey}
-          dataKey={mlKey}
-          name={barName}
-          fill={barColors[i % barColors.length]}
-          maxBarSize={40}
-        />
-      );
+    console.log(assessmentCount)
+    for (let i = 0; i < assessmentCount; i++) {
+      const mlKey = `ml${i + 1}`;
+      const barName = data.find(
+        (attribute) => attribute[`assessmentTitle${i + 1}`]
+      )?.[`assessmentTitle${i + 1}`];
+      if (barName) {
+        bars.push(
+          <Bar
+            key={mlKey}
+            dataKey={mlKey}
+            name={barName}
+            fill={barColors[i % barColors.length]}
+            maxBarSize={40}
+          />
+        );
+      }
     }
-  }
+    return bars;
+  }, [data]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -65,16 +69,7 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
         <YAxis type="number" domain={[0, 5]} tickCount={6} />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="right" />
-        {isSubject ? (
-          <>{bars}</>
-        ) : (
-          <Bar
-            dataKey={"ml"}
-            name={"Maturity Level"}
-            fill={barColors[1]}
-            maxBarSize={40}
-          />
-        )}
+        {generalBars}{" "}
       </BarChart>
     </ResponsiveContainer>
   );
