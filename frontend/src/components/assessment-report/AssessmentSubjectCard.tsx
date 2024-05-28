@@ -148,12 +148,14 @@ export const AssessmentSubjectAccordion = (
           borderTopLeftRadius: "32px !important",
           borderTopRightRadius: "32px !important",
           textAlign: "center",
-          py: 3,
-          maxHeight: { md: "160px" },
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
+          marginY: 2,
+          "& .MuiAccordionSummary-content": {
+            maxHeight: { md: "160px" },
+          },
         }}
       >
-        <Grid container spacing={2} alignItems="center" px={4}>
+        <Grid container alignItems="center" px={4}>
           <Grid item xs={12} lg={2.5} md={2.5} sm={12}>
             <Box
               sx={{
@@ -351,7 +353,6 @@ const SubjectStatus = (
     <Box
       sx={{
         textAlign: "center",
-        paddingTop: isMobileScreen ? "unset" : 6,
         marginRight: isMobileScreen ? "unset" : -10,
       }}
     >
