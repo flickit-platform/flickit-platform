@@ -75,23 +75,25 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       <Button
         variant="contained"
         sx={{
-          borderRadius: 4,
+          borderRadius: "24px",
           textTransform: "none",
           backgroundColor: "#1CC2C4",
           borderColor: "#1CC2C4",
-          color: "#D2F3F3",
+          color: "#fff",
+          fontSize:"1.25rem",
+          py:"8px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#1CC2C4",
             borderColor: "#1CC2C4",
           },
-          width: "86%",
+          width: "65%",
         }}
         size="small"
         component={Link}
         to="./../questionnaires"
       >
-        <Trans i18nKey="seeQuestionaires" />
+        <Trans i18nKey="Questionnaires" />
       </Button>
       <Box
         sx={{ ...styles.centerV }}

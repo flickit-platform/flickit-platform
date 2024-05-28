@@ -43,6 +43,7 @@ export const AssessmentOverallStatus = (
         confidence_value={confidence_value}
         show_confidence={false}
         display_confidence_component={true}
+        isMobileScreen={false}
         shortTitle={true}
         titleSize={40}
         height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
