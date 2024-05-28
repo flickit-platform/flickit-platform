@@ -272,6 +272,10 @@ export const SpaceMembers = (props: any) => {
                                 email,
                                 expirationDate,
                               } = invitees;
+
+                              const expirationDateTime = new Date(expirationDate).getTime()
+                              const timeNow =  new Date().getTime()
+
                               const name = email;
                               const isOwner = userId == id;
 
@@ -320,7 +324,7 @@ export const SpaceMembers = (props: any) => {
                                                 fetchSpaceMembers={
                                                   spaceMembersInviteeQueryData.query
                                                 }
-                                                isInvitationExpired={true}
+                                                isInvitationExpired={expirationDateTime <= timeNow }
                                                 isInvitees={true}
                                                 email={email}
                                             />
@@ -428,11 +432,11 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
-        // !isInvitees && {
-        //   icon: <DeleteRoundedIcon fontSize="small" />,
-        //   text: <Trans i18nKey="remove" />,
-        //   onClick: deleteItem,
-        // },
+        !isInvitees && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="remove" />,
+          onClick: deleteItem,
+        },
       ]}
     />
   );

@@ -70,7 +70,7 @@ export const AssessmentSubjectAccordion = (
   const [subjectAttributes, setSubjectAttributes] = useState<any>([]);
   const [radarData, setRadarData] = useState<any>([]);
   const isMobileScreen = useMediaQuery((theme: any) =>
-    theme.breakpoints.down("sm")
+    theme.breakpoints.down("md")
   );
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
@@ -149,12 +149,12 @@ export const AssessmentSubjectAccordion = (
           borderTopRightRadius: "32px !important",
           textAlign: "center",
           py: 3,
-          maxHeight: { sm: "160px" },
+          maxHeight: { md: "160px" },
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
         }}
       >
         <Grid container spacing={2} alignItems="center" px={4}>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} lg={2.5} md={2.5} sm={12}>
             <Box
               sx={{
                 maxHeight: "100px",
@@ -164,13 +164,19 @@ export const AssessmentSubjectAccordion = (
                 width: "100%",
               }}
             >
-              <Typography variant="h6" sx={{ textTransform: "none" }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  textTransform: "none",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
                 {title}
               </Typography>
             </Box>
           </Grid>
           {!isMobileScreen && (
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} lg={4} md={4} sm={12}>
               <Box
                 sx={{
                   maxHeight: "100px",
@@ -178,6 +184,8 @@ export const AssessmentSubjectAccordion = (
                   textOverflow: "ellipsis",
                   textAlign: "start",
                   width: "100%",
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-all",
                 }}
               >
                 <Typography
@@ -190,26 +198,26 @@ export const AssessmentSubjectAccordion = (
             </Grid>
           )}
           {isMobileScreen && (
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} lg={2} md={2} sm={12}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
-          <Grid item xs={12} sm={4}>
+          {/* <Grid item xs={12} lg={4} md={12} sm={4}>
             <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
               <ColorfulProgress
                 questionCount={questionCount}
                 answerCount={answerCount}
               />
             </Box>
-          </Grid>
-          <Grid item xs={12} sm={2}>
+          </Grid> */}
+          <Grid item xs={12} lg={4} md={3.5} sm={12}>
             <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
               <Typography> Confidence level</Typography>
               <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
             </Box>
           </Grid>
           {!isMobileScreen && (
-            <Grid item xs={6} sm={1}>
+            <Grid item xs={6} lg={1} md={1} sm={12}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -217,8 +225,8 @@ export const AssessmentSubjectAccordion = (
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
         <Grid container alignItems="center" padding={2}>
-          <Grid item xs={12} sm={7.5}>
-            <Box height={"400px"}>
+          <Grid item xs={12} sm={12} md={12} lg={7.5}>
+            <Box sx={{ display: { sm: "none", md: "block" } }} height={"400px"}>
               {subjectAttributes.length > 2 ? (
                 <AssessmentSubjectRadarChart
                   data={subjectAttributes}
@@ -238,10 +246,12 @@ export const AssessmentSubjectAccordion = (
           <Grid
             item
             xs={12}
-            sm={4}
+            sm={12}
+            md={12}
+            lg={4}
             sx={{
-              borderLeft: "0.5px solid rgba(0, 0, 0, 0.32)",
-              paddingLeft: 4,
+              borderLeft: { md: "0.5px solid rgba(0, 0, 0, 0.32)" },
+              paddingLeft: { md: 4 },
             }}
           >
             <Box display="flex" flexDirection="column">
@@ -249,41 +259,47 @@ export const AssessmentSubjectAccordion = (
                 display="flex"
                 justifyContent="space-between"
                 width="100%"
-                px={2}
+                px={4}
               >
-                <Typography variant="subtitle1" fontWeight="bold">
-                  Subject
-                </Typography>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  Status
-                </Typography>
+                <Typography color="#9DA7B3">Attribute</Typography>
+                <Typography color="#9DA7B3">Status</Typography>
               </Box>
               <Divider sx={{ width: "100%" }} />
-              {subjectAttributes.map((element: any) => {
-                return (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    margin={2}
-                    key={element.id}
-                  >
-                    <Typography>{element.title}</Typography>
-                    <Box display="flex" gap={0.5}>
-                      <Typography
-                        sx={{
-                          color:
-                            getMaturityLevelColors(5)[
-                              element.maturityLevel.value - 1
-                            ],
-                        }}
-                      >
-                        {element.maturityLevel.title}
+              <Box maxHeight="400px" overflow="auto">
+                {subjectAttributes.map((element: any) => {
+                  return (
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      margin={2}
+                      gap={1}
+                      key={element.id}
+                    >
+                      <Typography fontWeight="bold" fontSize="14px">
+                        {element.title}
                       </Typography>
-                      <ConfidenceLevel inputNumber={element.confidenceValue} />
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <Typography
+                          sx={{
+                            color:
+                              getMaturityLevelColors(5)[
+                                element.maturityLevel.value - 1
+                              ],
+                          }}
+                          fontWeight="bold"
+                          fontSize="14px"
+                        >
+                          {element.maturityLevel.title}
+                        </Typography>
+                        <ConfidenceLevel
+                          inputNumber={element.confidenceValue}
+                        />
+                      </Box>
                     </Box>
-                  </Box>
-                );
-              })}
+                  );
+                })}
+              </Box>
             </Box>
           </Grid>
         </Grid>
@@ -326,7 +342,7 @@ const SubjectStatus = (
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   const isMobileScreen = useMediaQuery((theme: any) =>
-    theme.breakpoints.down("sm")
+    theme.breakpoints.down("md")
   );
   return (
     <Box
@@ -343,8 +359,8 @@ const SubjectStatus = (
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}
-            titleSize={20}
-            height={getNumberBaseOnScreen(140, 140, 140, 150, 180)}
+            titleSize={getNumberBaseOnScreen(26, 20, 20, 17, 30)}
+            height={getNumberBaseOnScreen(240, 240, 200, 150, 200)}
           />
         ) : (
           <Typography>

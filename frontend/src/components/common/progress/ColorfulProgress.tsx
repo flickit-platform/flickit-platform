@@ -14,7 +14,7 @@ interface ISubjectProgressProps {
 const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
   34: "error",
   67: "warning",
-  100: "success",
+  100: "inherit",
 };
 
 const ColorfulProgress = (props: ISubjectProgressProps) => {
@@ -37,7 +37,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
     case "warning":
       percentColor = "orange";
       break;
-    case "success":
+    case "inherit":
       percentColor = "#1CC2C4";
       break;
     default:
@@ -45,7 +45,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   }
 
   return (
-    <Box sx={{ ...styles.centerCVH }} gap={1} width="80%">
+    <Box sx={{ ...styles.centerCVH }} gap={3} width="80%">
       <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
         <Typography component="span">
           <Trans i18nKey="answeredQuestions" />

@@ -37,32 +37,71 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
         px: { xs: 2, sm: 3 },
       }}
     >
-      <Box
-        display="flex"
-        alignItems="center"
-        gap={1}
-        flexDirection={{ xs: "column", sm: "row" }}
-      >
-        <Box display="flex" alignItems="center" gap="2px">
-          <Typography color="#3B4F68" fontSize="14px">
+      <Grid container alignItems="stretch" gap={0.5}>
+        <Grid
+          item
+          lg={3.5}
+          md={6}
+          sm={12}
+          xs={12}
+          sx={{ ...styles.centerVH }}
+          gap={1}
+        >
+          <Typography color="#3B4F68" fontSize="12px">
             Created with
           </Typography>
           <Chip
             component={Link}
             to={`/assessment-kits/${assessmentKit?.id}`}
             label={assessmentKit.title}
-            size="small"
+            size="medium"
             sx={{
               background: "rgba(210, 243, 243, 1)",
               color: "rgba(28, 194, 196, 1)",
               textTransform: "none",
               cursor: "pointer",
+              "& .MuiChip-label": {
+                fontSize: "12px",
+                whiteSpace: "pre-wrap",
+              },
             }}
           />
-        </Box>
-        <Divider orientation="vertical" flexItem sx={{ marginX: 2 }} />
-        <Box display="flex" alignItems="center" gap="2px">
-          <Typography color="#3B4F68" fontSize="14px">
+        </Grid>
+        <Divider orientation="vertical" flexItem />
+
+        <Grid
+          item
+          lg={4}
+          md={5.5}
+          sm={12}
+          xs={12}
+          sx={{ ...styles.centerVH }}
+          gap={1}
+        >
+          <Typography
+            color="#3B4F68"
+            fontSize="12px"
+            sx={{ wordBreak: "break-all" }}
+          >
+            {assessmentKit.summary}
+          </Typography>
+        </Grid>
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ display: { md: "none", lg: "block" } }}
+        />
+
+        <Grid
+          item
+          lg={4}
+          md={12}
+          sm={12}
+          xs={12}
+          sx={{ ...styles.centerVH }}
+          gap={1}
+        >
+          <Typography color="#6C7B8E" fontSize="12px">
             Kit is provided by
           </Typography>
           <Avatar
@@ -75,16 +114,20 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             component={Link}
             to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
             label={assessmentKit.expertGroup.title}
-            size="small"
+            size="medium"
             sx={{
               background: "rgba(210, 243, 243, 1)",
               color: "rgba(28, 194, 196, 1)",
               textTransform: "none",
               cursor: "pointer",
+              "& .MuiChip-label": {
+                fontSize: "12px",
+                whiteSpace: "pre-wrap",
+              },
             }}
           />
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

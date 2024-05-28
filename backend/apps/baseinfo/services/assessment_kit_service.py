@@ -91,3 +91,10 @@ def get_assessment_kits_list(request):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_assessment_kit_publish(request, assessment_kit_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

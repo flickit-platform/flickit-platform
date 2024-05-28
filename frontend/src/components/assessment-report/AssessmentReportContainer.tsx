@@ -89,12 +89,7 @@ const AssessmentReportContainer = (props: any) => {
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
         return (
-          <Box
-            m="auto"
-            pb={3}
-            maxWidth="1440px"
-            sx={{ px: { lg: 14, xs: 2, sm: 3 } }}
-          >
+          <Box m="auto" pb={3} sx={{ px: { lg: 14, xs: 2, sm: 3 } }}>
             <AssessmentReportTitle
               data={data}
               colorCode={colorCode}
@@ -102,14 +97,18 @@ const AssessmentReportContainer = (props: any) => {
             />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
-                <Box sx={{ ...styles.centerCVH }} marginY={4} gap={2}>
-                  <Typography color="#9DA7B3">
-                    <Trans i18nKey="overallReport" />
+                <Box
+                  sx={{ ...styles.centerCVH }}
+                  marginY={4}
+                  gap={2}
+                  textAlign="center"
+                >
+                  <Typography color="#9DA7B3" fontSize="44px" fontWeight={900}>
+                    <Trans i18nKey="assessmentInsight" />
                   </Typography>
-                  <Divider sx={{ width: "100%" }} />
                 </Box>
                 <Grid container alignItems="stretch" spacing={5}>
-                  <Grid item lg={4} md={12} sm={12} xs={12}>
+                  <Grid item lg={5} md={6} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
                       <Typography color="#9DA7B3" marginX={4}>
                         <Trans i18nKey="general" />
@@ -120,10 +119,12 @@ const AssessmentReportContainer = (props: any) => {
                         pathInfo={pathInfo}
                         data={data}
                         progress={totalProgress}
+                        questionCount={questionsCount}
+                        answerCount={answersCount}
                       />
                     </Box>
                   </Grid>
-                  <Grid item lg={4} md={12} sm={12} xs={12}>
+                  <Grid item lg={7} md={6} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
                       <Typography color="#9DA7B3" marginX={4}>
                         <Trans i18nKey="overallStatus" />
@@ -137,54 +138,48 @@ const AssessmentReportContainer = (props: any) => {
                       />
                     </Box>
                   </Grid>
-                  <Grid item lg={4} md={12} sm={12} xs={12}>
+                  {/* <Grid item lg={4} md={12} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
                       <Typography color="#9DA7B3" marginX={4}>
                         <Trans i18nKey="subjectStatus" />
                       </Typography>
                       <AssessmentSubjectStatus subjects={subjects} />
                     </Box>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
-              <Grid item sm={12} xs={12}>
-                <Grid container alignItems="stretch" spacing={5}>
-                  <Grid item lg={7} md={12} sm={12} xs={12}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                      <Typography color="#9DA7B3" marginX={4}>
-                        <Trans i18nKey="assessmentKit" />
-                      </Typography>
-                      <AssessmentReportKit assessmentKit={assessmentKit} />
-                    </Box>
-                  </Grid>
-                  <Grid item lg={5} md={12} sm={12} xs={12}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                      <Typography color="#9DA7B3" marginX={4}>
-                        <Trans i18nKey="assessmentProgress" />
-                      </Typography>
-                      <AssessmentProgress
-                        questionCount={questionsCount}
-                        answerCount={answersCount}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
+
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box display="flex" flexDirection="column" gap={1}>
+                  <Typography color="#9DA7B3" marginX={4}>
+                    <Trans i18nKey="assessmentKit" />
+                  </Typography>
+                  <AssessmentReportKit assessmentKit={assessmentKit} />
+                </Box>
               </Grid>
-              <Grid item sm={12} xs={12}>
+              <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
-                  <Typography color="#9DA7B3">
+                  <Typography color="#9DA7B3" fontSize="28px" fontWeight="bold">
                     <Trans i18nKey="subjectReport" />
                   </Typography>
                   <Divider sx={{ width: "100%" }} />
                 </Box>
               </Grid>
-              <Grid item sm={12} xs={12} id="subjects">
+              <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
                   subjects={subjects}
                   colorCode={colorCode}
                 />
               </Grid>
-              <Grid item sm={12} xs={12} id="advices">
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
+                  <Typography color="#9DA7B3" fontSize="28px" fontWeight="bold">
+                    <Trans i18nKey="advices" />
+                  </Typography>
+                  <Divider sx={{ width: "100%" }} />
+                </Box>
+              </Grid>
+              <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
                 <AssessmentAdviceContainer subjects={subjects} />
               </Grid>
             </Grid>

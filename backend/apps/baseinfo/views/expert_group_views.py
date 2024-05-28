@@ -34,6 +34,14 @@ class ExpertGroupApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, expert_group_id):
+        result = expert_group_services.update_expert_group(request, expert_group_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class ExpertGroupMembersApi(APIView):
     permission_classes = [IsAuthenticated]
@@ -86,4 +94,14 @@ class ExpertGroupAssessmentKitListApi(APIView):
     @swagger_auto_schema(manual_parameters=[size_param, page_param])
     def get(self, request, expert_group_id):
         result = expert_group_services.get_assessment_kit_list_with_expert_group_id(request, expert_group_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupSeenApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, expert_group_id):
+        result = expert_group_services.expert_group_seen(request, expert_group_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])

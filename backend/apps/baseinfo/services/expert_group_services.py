@@ -97,3 +97,22 @@ def get_assessment_kit_list_with_expert_group_id(request, expert_group_id):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def expert_group_seen(request, expert_group_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/seen',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def update_expert_group(request, expert_group_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

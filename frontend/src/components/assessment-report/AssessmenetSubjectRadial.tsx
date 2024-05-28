@@ -71,7 +71,7 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
         cy="50%"
         innerRadius="10%"
         outerRadius="80%"
-        barSize={10}
+        barSize={30}
         data={chartData}
       >
         <PolarAngleAxis
@@ -83,7 +83,7 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
         <RadialBar
           min={15}
           dataKey="ml"
-          label={{ position: "insideStart", fill: "#fff" }}
+          label={{ position: "middle", fill: "#fff", fontSize:30 }}
           background
         />
         <Legend iconSize={10} />

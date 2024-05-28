@@ -71,8 +71,12 @@ export const createService = (
         },
       });
     },
-    fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/api/v1/spaces/`, config);
+    fetchSpaces(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+      const { page = 1, size = 10 } = args ?? {};
+      return axios.get(`/api/v1/spaces/`, {
+        ...(config ?? {}),
+        params: { size, page : page - 1 },
+      });
     },
     fetchSpace(
       { spaceId }: { spaceId: string },
@@ -86,7 +90,7 @@ export const createService = (
     ) {
     return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
     },
-  deleteSpace(
+    deleteSpace(
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
@@ -125,7 +129,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.delete(
-        `/authinfo/spaces/${spaceId}/useraccess/${memberId}/`,
+        `/api/v1/spaces/${spaceId}/members/${memberId}/`,
         config
       );
     },
@@ -553,7 +557,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
+      return axios.get(`/api/v1/assessment-kits/${id}/`, config);
     },
     fetchAffectedQuestionsOnAttribute(
       args: { assessmentId: TId; attributeId: TId; levelId: TId },

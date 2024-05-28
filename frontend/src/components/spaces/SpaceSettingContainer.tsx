@@ -40,7 +40,7 @@ const SpaceSettingContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                to: "/spaces",
+                to: "/spaces/1",
                 title: "spaces",
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
