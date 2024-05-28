@@ -215,7 +215,7 @@ export const AssessmentSubjectAccordion = (
             </Box>
           </Grid> */}
           <Grid item xs={12} lg={4} md={3.5} sm={12}>
-            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" ,mt:{xs:"-64px",sm:"0"}}}>
+            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" ,mt:{xs:"-72px",sm:"0"}}}>
               <Typography fontSize="1rem">
                 <Trans i18nKey="confidenceLevel" />
               </Typography>
