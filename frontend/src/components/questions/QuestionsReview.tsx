@@ -321,7 +321,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >
-                        {question.answer.selectedOption.index}.{question.answer.selectedOption.title}
+                        {question.answer?.selectedOption?.index}.{question.answer?.selectedOption?.title}
                       </Typography>
                     </Box>
                   )}

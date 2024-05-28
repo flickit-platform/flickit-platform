@@ -330,7 +330,7 @@ const AnswerTemplate = (props: {
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
   const { assessmentId = "", questionnaireId } = useParams();
-  const [value, setValue] = useState<TAnswer | null>(answer);
+  const [value, setValue] = useState<TAnswer | null>((answer?.selectedOption || null));
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
   const isSelectedValueTheSameAsAnswer =
