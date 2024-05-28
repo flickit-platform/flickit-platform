@@ -354,6 +354,7 @@ const SubjectStatus = (
       sx={{
         textAlign: "center",
         marginRight: isMobileScreen ? "unset" : -10,
+        marginBottom: isMobileScreen ? "unset" : -3,
       }}
     >
       <Box>
