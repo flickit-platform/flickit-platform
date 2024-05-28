@@ -57,7 +57,7 @@ const Gauge = (props: IGaugeProps) => {
       minFontSizeRem = 1.25;
     }
     if (shortTitle && !isMobileScreen) {
-      maxFontSizeRem = 4;
+      maxFontSizeRem = 3;
       minFontSizeRem = 2.5;
     }
     if (length <= minLength) return `${maxFontSizeRem}rem`;
