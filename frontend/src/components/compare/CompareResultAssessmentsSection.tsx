@@ -21,7 +21,14 @@ const CompareResultAssessmentsSection = (props: {
         mt: 1,
       }}
     >
-      <Box sx={{display:"flex",width:"100%",justifyContent:"center",flexWrap:"wrap"}}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
         {data.map((item) => {
           return (
             <Box
@@ -29,13 +36,18 @@ const CompareResultAssessmentsSection = (props: {
               // xs={4}
               sx={{
                 // ...styles.compareResultBorder,
-                width: "300px"
+                width: "300px",
               }}
             >
               <Box
                 sx={{
                   p: { xs: 0.5, sm: 1, md: 2 },
-                  ...styles.centerCH,
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  textAlign: "center",
+                  flexDirection:"column"
                 }}
               >
                 <Title>{item.title}</Title>
@@ -58,11 +70,6 @@ const CompareResultAssessmentsSection = (props: {
                     m="auto"
                   />
                 </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  sx={{ flexDirection: { xs: "column-reverse", lg: "row" } }}
-                ></Box>
               </Box>
             </Box>
           );
