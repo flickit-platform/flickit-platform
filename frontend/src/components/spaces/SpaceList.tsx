@@ -205,11 +205,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+            {isOwner && <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
               <IconButton size="small" component={Link} to={`/${spaceId}/setting`}>
                 <SettingsRoundedIcon />
               </IconButton>
-            </Box>
+            </Box>}
             <Actions
               isActiveSpace={isActiveSpace}
               dialogProps={dialogProps}

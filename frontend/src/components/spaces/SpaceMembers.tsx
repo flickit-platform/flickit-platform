@@ -379,7 +379,7 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const Actions = (props: any) => {
-  const { member, fetchSpaceMembers, isInvitees, isInvitationExpired, email } =
+  const { isOwner, member, fetchSpaceMembers, isInvitees, isInvitationExpired, email } =
     props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
@@ -432,7 +432,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="cancelInvitation" />,
           onClick: deleteItem,
         },
-        !isInvitees && {
+        !isInvitees && !isOwner && {
           icon: <DeleteRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="remove" />,
           onClick: deleteItem,
