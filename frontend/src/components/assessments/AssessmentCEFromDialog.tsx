@@ -71,10 +71,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
         : await service.createAssessment(
             {
               data: {
-                space_id: spaceId || space?.id,
-                assessment_kit_id: assessment_kit?.id,
+                spaceId: spaceId || space?.id,
+                assessmentKitId: assessment_kit?.id,
                 title: title,
-                color_id: color,
+                colorId: color,
               },
             },
             { signal: abortController.signal }

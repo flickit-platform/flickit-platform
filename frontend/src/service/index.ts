@@ -192,7 +192,7 @@ export const createService = (
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/api/v1/assessments/`, data, config);
+      return axios.post(`/api/v2/assessments/`, data, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
