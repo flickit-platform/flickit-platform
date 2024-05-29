@@ -24,3 +24,10 @@ def edit_assessment(request, assessment_id):
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+def create_assessment(request):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/assessments',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
