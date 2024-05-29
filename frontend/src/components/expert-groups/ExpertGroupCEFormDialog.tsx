@@ -16,12 +16,14 @@ import FormProviderWithForm from "@common/FormProviderWithForm";
 import RichEditorField from "@common/fields/RichEditorField";
 import UploadField from "@common/fields/UploadField";
 import convertToBytes from "@/utils/convertToBytes";
+import { useQuery } from "@utils/useQuery";
 
 interface IExpertGroupCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
+  seenExpertGroup?: () => void;
   hideSubmitAndView?: boolean;
 }
 
@@ -52,7 +54,11 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       abortController.abort();
     };
   }, []);
-
+  const seenExpertGroupQuery = useQuery({
+    service: (args, config) => service.seenExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     const { picture, title, ...restOfData } = data;
 
@@ -80,6 +86,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
               { data: formattedData },
               { signal: abortController.signal }
             );
+      await seenExpertGroupQuery.query();
       setLoading(false);
       onSubmitForm();
       close();

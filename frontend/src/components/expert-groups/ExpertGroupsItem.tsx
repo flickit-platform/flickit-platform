@@ -43,17 +43,31 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     publishedKitsCount,
     editable,
   } = data || {};
-  function stringAvatar(name: string) {
-    if (name) {
-      return {
-        children: `${name.split("")[0]}`,
-      };
+  const { service } = useServiceContext();
+  const seenExpertGroupQuery = useQuery({
+    service: (args, config) => service.seenExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
+  const seenExpertGroup = async () => {
+    try {
+      await seenExpertGroupQuery.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      if (err.response?.data && err.response?.data.hasOwnProperty("message")) {
+        if (Array.isArray(err.response?.data?.message)) {
+          toastError(err.response?.data?.message[0]);
+        } else {
+          toastError(err);
+        }
+      }
     }
-  }
+  };
   return (
     <Box>
       <Card>
         <CardHeader
+          onClick={seenExpertGroup}
           titleTypographyProps={{
             component: Link,
             to: `/user/expert-groups/${id}`,
@@ -76,7 +90,10 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }
           action={
             !disableActions && (
-              <Actions editable={editable} expertGroup={data} />
+              <Actions
+                editable={editable}
+                expertGroup={data}
+              />
             )
           }
           title={
