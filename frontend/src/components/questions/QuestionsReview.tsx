@@ -306,7 +306,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       {question.index}.{question.title}
                     </Typography>
                   </Box>
-                  {question.answer && (
+                  {question?.answer?.selectedOption && (
                     <Box mt={3}>
                       <Typography
                         variant="subMedium"

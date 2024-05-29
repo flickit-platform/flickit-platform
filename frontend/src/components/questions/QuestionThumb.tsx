@@ -27,7 +27,7 @@ export const QuestionThumb = (props: any) => {
           {question?.title}
         </Typography>
       </Box>
-      {question.answer && (
+      {question.answer?.selectedOption && (
         <Box mt={3}>
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
