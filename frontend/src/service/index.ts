@@ -829,6 +829,13 @@ export const createService = (
       const { id } = args ?? {};
       return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
+    seenExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.put(`/api/v1/expert-groups/${id}/seen/`, config);
+    },
     inviteSpaceMember(
       args: { id: TId; data: any },
       config: AxiosRequestConfig<any> | undefined
