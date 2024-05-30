@@ -50,7 +50,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           }}
           gap={1}
         >
-          <Typography color="#6C7B8E"  fontSize={"0.9rem"}>
+          <Typography color="#6C7B8E" fontSize={"0.9rem"}>
             <Trans i18nKey="createdWith" />
           </Typography>
           <Chip
@@ -64,7 +64,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               textTransform: "none",
               cursor: "pointer",
               "& .MuiChip-label": {
-                fontSize: "0.9rem",
+                fontSize: "1.125rem",
                 whiteSpace: "pre-wrap",
               },
             }}
@@ -84,7 +84,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           <Typography
             color="#3B4F68"
             fontSize="0.9rem"
-            sx={{ wordBreak: "break-all",px:2 }}
+            sx={{ wordBreak: "break-all", px: 2 }}
           >
             {assessmentKit.summary}
           </Typography>
@@ -108,10 +108,9 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           gap={1}
         >
           <Typography color="#6C7B8E" fontSize="0.9rem">
-          <Trans i18nKey="kitIsProvidedBy" />
-          
+            <Trans i18nKey="kitIsProvidedBy" />
           </Typography>
-          <Box sx={{display:"flex",alignItems:"center"}}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar
               component={Link}
               to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
@@ -127,11 +126,11 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
                 background: "rgba(210, 243, 243, 1)",
                 color: "rgba(28, 194, 196, 1)",
                 textTransform: "none",
-                height:"fit-content",
-                mx:1,
+                height: "fit-content",
+                mx: 1,
                 cursor: "pointer",
                 "& .MuiChip-label": {
-                  fontSize: "0.9rem",
+                  fontSize: "1.125rem",
                   whiteSpace: "pre-wrap",
                 },
               }}
