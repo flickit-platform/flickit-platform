@@ -60,6 +60,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             size="medium"
             sx={{
               background: "rgba(210, 243, 243, 1)",
+              height: "fit-content",
               color: "rgba(28, 194, 196, 1)",
               textTransform: "none",
               cursor: "pointer",
