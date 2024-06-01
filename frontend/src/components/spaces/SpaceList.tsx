@@ -302,7 +302,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        !is_default_space_for_current_user && {
+        !is_default_space_for_current_user && !isOwner && {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,
           onClick: leaveSpace,
