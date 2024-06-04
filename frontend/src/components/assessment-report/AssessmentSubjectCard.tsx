@@ -7,27 +7,20 @@ import {
   Button,
   Grid,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
   Divider,
   useMediaQuery,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
-import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import toastError from "@utils/toastError";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import ColorfulProgress from "../common/progress/ColorfulProgress";
 import { Gauge } from "../common/charts/Gauge";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 import { getMaturityLevelColors, styles } from "@styles";
 import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
 import { ICustomError } from "@/utils/CustomError";
-import SubjectRadarChart from "../subject-report/SubjectRadarChart";
 import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
@@ -62,13 +55,8 @@ export const AssessmentSubjectAccordion = (
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
-  const [questionCount, setQuestionCount] = useState<number>(0);
-  const [answerCount, setAnswerCount] = useState<number>(0);
-  const [inProgress, setInProgress] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [subjectData, setSubjectData] = useState<any>([]);
   const [subjectAttributes, setSubjectAttributes] = useState<any>([]);
-  const [radarData, setRadarData] = useState<any>([]);
   const isMobileScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("md")
   );
@@ -83,8 +71,6 @@ export const AssessmentSubjectAccordion = (
       const data = await subjectProgressQueryData.query();
       const { answerCount, questionCount } = data;
       const total_progress = ((answerCount ?? 0) / (questionCount ?? 1)) * 100;
-      setQuestionCount(questionCount);
-      setAnswerCount(answerCount);
       setProgress(total_progress);
     } catch (e) {
       const err = e as ICustomError;
@@ -97,26 +83,8 @@ export const AssessmentSubjectAccordion = (
     fetchAttributes();
   }, []);
 
-  function hexToRGBA(hex: string, alpha: number) {
-    hex = hex.replace(/^#/, "");
-
-    let bigint = parseInt(hex, 16);
-    let r = (bigint >> 16) & 255;
-    let g = (bigint >> 8) & 255;
-    let b = bigint & 255;
-
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
-
-  const subjectQueryData = useQuery<ISubjectReportModel>({
-    service: (args, config) => service.fetchSubject(args, config),
-    runOnMount: false,
-  });
-
   const fetchAttributes = async () => {
-    const data = { data: { attributes } };
     setSubjectAttributes(attributes);
-    setRadarData(convertToSubjectChartData(data));
   };
 
   const handleAccordionChange = (
@@ -149,38 +117,37 @@ export const AssessmentSubjectAccordion = (
           borderTopRightRadius: "32px !important",
           textAlign: "center",
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
-          marginY: 2,
           "& .MuiAccordionSummary-content": {
-            maxHeight: { md: "160px" },
+            maxHeight: { md: "160px", lg: "160px" },
+            paddingLeft: { md: "2rem", lg: "2rem" },
           },
         }}
       >
-        <Grid container alignItems="center" px={4}>
-          <Grid item xs={12} lg={2.5} md={2.5} sm={12}>
+        <Grid container alignItems="center">
+          <Grid item xs={12} lg={2.8} md={2.8} sm={12}>
             <Box
               sx={{
-                maxHeight: "100px",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                textAlign: isMobileScreen ? "center" : "start",
+                textAlign: "center",
                 width: "100%",
               }}
             >
               <Typography
-                variant="h6"
+                color="#3B4F68"
                 sx={{
                   textTransform: "none",
                   whiteSpace: "pre-wrap",
-                  fontSize: "2rem",
-                  mb: "32px",
+                  fontSize: "1.75rem",
                 }}
+                fontWeight={700}
               >
                 {title}
               </Typography>
             </Box>
           </Grid>
           {!isMobileScreen && (
-            <Grid item xs={12} lg={4} md={4} sm={12}>
+            <Grid item xs={12} lg={4.2} md={4.2} sm={12}>
               <Box
                 sx={{
                   maxHeight: "100px",
@@ -194,7 +161,8 @@ export const AssessmentSubjectAccordion = (
               >
                 <Typography
                   variant="body2"
-                  sx={{ textTransform: "none", wordBreak: "break-word" }}
+                  color="rgba(157, 167, 179, 1)"
+                  sx={{ textTransform: "none", whiteSpace: "break-spaces" }}
                 >
                   {description}
                 </Typography>
@@ -206,15 +174,7 @@ export const AssessmentSubjectAccordion = (
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
-          {/* <Grid item xs={12} lg={4} md={12} sm={4}>
-            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
-              <ColorfulProgress
-                questionCount={questionCount}
-                answerCount={answerCount}
-              />
-            </Box>
-          </Grid> */}
-          <Grid item xs={12} lg={4} md={3.5} sm={12}>
+          <Grid item xs={12} lg={3} md={3} sm={12}>
             <Box
               sx={{
                 ...styles.centerCVH,
@@ -223,14 +183,18 @@ export const AssessmentSubjectAccordion = (
                 mt: { xs: "-72px", sm: "0" },
               }}
             >
-              <Typography fontSize="1rem">
+              <Typography
+                fontWeight={500}
+                fontSize="1rem"
+                color="rgba(108, 123, 142, 1)"
+              >
                 <Trans i18nKey="confidenceLevel" />
               </Typography>
               <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
             </Box>
           </Grid>
           {!isMobileScreen && (
-            <Grid item xs={6} lg={1} md={1} sm={12}>
+            <Grid item xs={6} lg={2} md={2} sm={12}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
@@ -364,7 +328,6 @@ const SubjectStatus = (
     <Box
       sx={{
         textAlign: "center",
-        marginRight: isMobileScreen ? "unset" : -10,
         marginBottom: isMobileScreen ? "unset" : -3,
       }}
     >
@@ -376,7 +339,7 @@ const SubjectStatus = (
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             hideGuidance={true}
-            height={getNumberBaseOnScreen(240, 240, 200, 150, 200)}
+            height={getNumberBaseOnScreen(240, 240, 200, 150, 150)}
           />
         ) : (
           <Typography>

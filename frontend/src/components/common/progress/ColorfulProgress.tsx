@@ -47,7 +47,13 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   return (
     <Box sx={{ ...styles.centerCVH }} gap={3} width="80%">
       <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
-        <Typography component="span">
+        <Typography
+          component="span"
+          fontSize="1rem"
+          color="#6C7B8E"
+          fontWeight={500}
+          lineHeight={2}
+        >
           <Trans i18nKey="answeredQuestions" />
         </Typography>
         <Typography
@@ -55,6 +61,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
           color={percentColor}
           mx={1}
           fontWeight={800}
+          fontSize="1.25rem"
         >
           {answerCount} of {questionCount}
         </Typography>

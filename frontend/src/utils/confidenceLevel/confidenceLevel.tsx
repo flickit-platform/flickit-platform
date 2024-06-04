@@ -28,7 +28,7 @@ const ConfidenceLevel = ({
       >
         {displayNumber && (
           <Typography
-            sx={{ fontWeight: 900, fontSize: "1.37rem" }}
+            sx={{ fontWeight: 900, fontSize: "1.25rem" }}
             color={colorText}
           >
             {number}%
