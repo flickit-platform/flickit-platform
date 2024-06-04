@@ -547,7 +547,6 @@ export interface IDynamicGaugeSVGProps {
   colorCode: string;
   value: number;
   confidence_value?: number | null;
-  show_confidence?: boolean;
   height?: number;
   width?: number | string;
   className?: string;

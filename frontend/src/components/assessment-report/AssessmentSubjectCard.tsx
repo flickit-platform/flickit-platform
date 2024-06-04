@@ -375,7 +375,7 @@ const SubjectStatus = (
             isMobileScreen={true}
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
-            shortTitle={true}
+            hideGuidance={true}
             height={getNumberBaseOnScreen(240, 240, 200, 150, 200)}
           />
         ) : (

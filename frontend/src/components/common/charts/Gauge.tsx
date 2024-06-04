@@ -1,40 +1,30 @@
 import { Box, Typography, BoxProps, Tooltip } from "@mui/material";
 import { lazy, Suspense } from "react";
-import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
-import { TStatus, IMaturityLevel } from "@types";
-import getStatusText from "@utils/getStatusText";
-import hasStatus from "@utils/hasStatus";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 interface IGaugeProps extends BoxProps {
-  systemStatus?: TStatus;
-  name?: string;
   maturity_level_number: number;
   maturity_level_status: string;
   level_value: number;
   confidence_value?: number | null;
-  show_confidence?: boolean;
   height?: number;
   className?: string;
-  shortTitle?: boolean;
+  hideGuidance?: boolean;
   display_confidence_component?: boolean;
   isMobileScreen?: boolean;
 }
 
 const Gauge = (props: IGaugeProps) => {
   const {
-    systemStatus,
-    name = "This system",
     maturity_level_status,
     maturity_level_number,
     level_value,
     confidence_value,
-    show_confidence,
     height = 200,
     className,
-    shortTitle,
+    hideGuidance,
     isMobileScreen,
     display_confidence_component,
     ...rest
@@ -54,7 +44,7 @@ const Gauge = (props: IGaugeProps) => {
       maxFontSizeRem = 1.5;
       minFontSizeRem = 1.25;
     }
-    if (shortTitle && !isMobileScreen) {
+    if (hideGuidance && !isMobileScreen) {
       maxFontSizeRem = 3;
       minFontSizeRem = 2.5;
     }
@@ -74,7 +64,6 @@ const Gauge = (props: IGaugeProps) => {
       <Suspense fallback={<SkeletonGauge />}>
         <GaugeComponent
           confidence_value={confidence_value}
-          show_confidence={show_confidence}
           colorCode={colorCode}
           value={!!level_value ? level_value : -1}
           height={height}
@@ -92,7 +81,7 @@ const Gauge = (props: IGaugeProps) => {
           }}
           position="absolute"
         >
-          {!show_confidence && !shortTitle && (
+          {!hideGuidance && (
             <Typography variant="subtitle2" color="black">
               <Trans i18nKey="thisSystemIsIn" />
             </Typography>
@@ -105,24 +94,9 @@ const Gauge = (props: IGaugeProps) => {
           >
             {maturity_level_status}
           </Typography>
-          {!show_confidence && !shortTitle && (
+          {!hideGuidance && (
             <Typography variant="subtitle2" color="black">
               <Trans i18nKey="shape" />
-            </Typography>
-          )}
-          {show_confidence && (
-            <Typography
-              variant="subtitle2"
-              color="#3596A1"
-              fontSize="10px"
-              mt={1}
-            >
-              <Trans
-                i18nKey="gaugeConfidence"
-                values={{
-                  percent: Math.ceil(confidenceValue),
-                }}
-              />
             </Typography>
           )}
           {display_confidence_component && (

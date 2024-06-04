@@ -39,12 +39,10 @@ export const AssessmentOverallStatus = (
         level_value={maturity_level?.index ?? 0}
         maturity_level_status={maturity_level?.title}
         maturity_level_number={maturity_level_count}
-        systemStatus={ESystemStatus[status as ESystemStatus]}
         confidence_value={confidence_value}
-        show_confidence={false}
         display_confidence_component={true}
         isMobileScreen={false}
-        shortTitle={true}
+        hideGuidance={true}
         height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
         className="insight--report__gauge"
       />

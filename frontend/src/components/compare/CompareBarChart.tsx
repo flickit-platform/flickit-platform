@@ -17,7 +17,7 @@ interface CompareBarProps {
   assessmentCount: number;
 }
 
-const barColors = ["#03254c", "#1167b1", "#187bcd", "#2a9df4"];
+const barColors = ["#B4D4FF", "#98ABEE", "#0E46A3", "#1E0342"];
 
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   active,

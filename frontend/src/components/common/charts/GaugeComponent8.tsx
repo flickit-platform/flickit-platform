@@ -3,8 +3,7 @@ import { IDynamicGaugeSVGProps } from "@/types";
 import "./style.css";
 
 const GaugeComponent8 = (props: IDynamicGaugeSVGProps) => {
-  const { colorCode, value, confidence_value, show_confidence, height, className } = props;
-  const progress = Math.ceil(((confidence_value ?? 0) / 100) * 60);
+  const { colorCode, value, height, className } = props;
   return (
     <svg
       width="100%"
@@ -13,7 +12,6 @@ const GaugeComponent8 = (props: IDynamicGaugeSVGProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-
     >
       <path
         d="M12.0273 128.584C8.08787 129.864 3.82743 127.713 2.84621 123.688C0.304249 113.263 -0.543154 102.496 0.336638 91.8014C0.676244 87.6732 4.54769 84.8819 8.63883 85.5298C12.73 86.1778 15.4863 90.0206 15.2013 94.1529C14.6258 102.5 15.2858 110.886 17.16 119.041C18.0879 123.077 15.9667 127.304 12.0273 128.584Z"
@@ -55,7 +53,6 @@ const GaugeComponent8 = (props: IDynamicGaugeSVGProps) => {
         fill={`${value === 8 ? colorCode : "black"}`}
         fillOpacity={`${value === 8 ? "0.9" : "0.1"}`}
       />
-
     </svg>
   );
 };
