@@ -45,7 +45,6 @@ export const AssessmentOverallStatus = (
         display_confidence_component={true}
         isMobileScreen={false}
         shortTitle={true}
-        titleSize={40}
         height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
         className="insight--report__gauge"
       />

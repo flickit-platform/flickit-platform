@@ -65,7 +65,9 @@ const CompareResultAssessmentsSection = (props: {
                     maturity_level_status={item.maturityLevel.title}
                     level_value={item.maturityLevel.index}
                     confidence_value={item.confidenceValue}
-                    show_confidence={true}
+                    show_confidence={false}
+                    display_confidence_component={true}
+                    shortTitle={true}
                     maxWidth="250px"
                     m="auto"
                   />

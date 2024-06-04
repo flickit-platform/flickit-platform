@@ -19,7 +19,6 @@ interface IGaugeProps extends BoxProps {
   height?: number;
   className?: string;
   shortTitle?: boolean;
-  titleSize?: number;
   display_confidence_component?: boolean;
   isMobileScreen?: boolean;
 }
@@ -36,7 +35,6 @@ const Gauge = (props: IGaugeProps) => {
     height = 200,
     className,
     shortTitle,
-    titleSize = 24,
     isMobileScreen,
     display_confidence_component,
     ...rest
@@ -60,6 +58,7 @@ const Gauge = (props: IGaugeProps) => {
       maxFontSizeRem = 3;
       minFontSizeRem = 2.5;
     }
+
     if (length <= minLength) return `${maxFontSizeRem}rem`;
     if (length >= maxLength) return `${minFontSizeRem}rem`;
 
@@ -77,20 +76,16 @@ const Gauge = (props: IGaugeProps) => {
           confidence_value={confidence_value}
           show_confidence={show_confidence}
           colorCode={colorCode}
-          value={
-            level_value !== null && level_value !== undefined ? level_value : -1
-          }
+          value={!!level_value ? level_value : -1}
           height={height}
           className={className}
         />
       </Suspense>
-      {level_value !== null && level_value !== undefined ? (
+      {!!level_value ? (
         <Box
           sx={{
             ...styles.centerCVH,
-            bottom: `${
-              display_confidence_component ? "22%" : shortTitle ? "40%" : "40%"
-            }`,
+            bottom: `${display_confidence_component ? "22%" : "40%"}`,
             left: "25%",
             right: "25%",
             textAlign: "center",

@@ -47,9 +47,11 @@ export const convertToAssessmentsChartData = (data: any, assessments?: any) => {
 
     subject.assessments?.forEach((item: any, index: number) => {
       const mlKey = `ml${index + 1}`;
+      const mlTitle = `ml${index + 1}Title`;
       const assessmentTitleKey = `assessmentTitle${index + 1}`;
       if (item?.assessmentId) {
         subjectData[mlKey] = item.maturityLevel.value;
+        subjectData[mlTitle] = item.maturityLevel.title;
         subjectData[assessmentTitleKey] =
           assessmentTitleMap[item.assessmentId] || item.assessmentId;
       }

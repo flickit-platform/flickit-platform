@@ -215,7 +215,14 @@ export const AssessmentSubjectAccordion = (
             </Box>
           </Grid> */}
           <Grid item xs={12} lg={4} md={3.5} sm={12}>
-            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" ,mt:{xs:"-72px",sm:"0"}}}>
+            <Box
+              sx={{
+                ...styles.centerCVH,
+                gap: 2,
+                width: "100%",
+                mt: { xs: "-72px", sm: "0" },
+              }}
+            >
               <Typography fontSize="1rem">
                 <Trans i18nKey="confidenceLevel" />
               </Typography>
@@ -369,7 +376,6 @@ const SubjectStatus = (
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}
-            titleSize={getNumberBaseOnScreen(26, 20, 20, 17, 30)}
             height={getNumberBaseOnScreen(240, 240, 200, 150, 200)}
           />
         ) : (
