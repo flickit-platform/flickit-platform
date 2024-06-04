@@ -119,7 +119,7 @@ export const AssessmentSubjectAccordion = (
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
             maxHeight: { md: "160px", lg: "160px" },
-            paddingLeft: { md: "2rem", lg: "2rem" },
+            paddingLeft: { lg: "1rem" },
           },
         }}
       >
