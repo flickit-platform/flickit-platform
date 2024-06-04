@@ -119,7 +119,7 @@ export const AssessmentSubjectAccordion = (
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
             maxHeight: { md: "160px", lg: "160px" },
-            paddingLeft: { lg: "1rem" },
+            paddingLeft: { md: "1rem", lg: "1rem" },
           },
         }}
       >
@@ -180,7 +180,7 @@ export const AssessmentSubjectAccordion = (
                 ...styles.centerCVH,
                 gap: 2,
                 width: "100%",
-                mt: { xs: "-72px", sm: "0" },
+                mt: { xs: "-72px", sm: "-72px", md:"0"},
               }}
             >
               <Typography
