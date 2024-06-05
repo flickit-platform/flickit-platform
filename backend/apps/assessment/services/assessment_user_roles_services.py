@@ -40,3 +40,11 @@ def delete_user_role_in_assessment(request, assessment_id, user_id):
     if response.status_code == 204:
         return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def assessment_user_list(request, assessment_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/users',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

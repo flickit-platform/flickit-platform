@@ -18,6 +18,8 @@ urlpatterns = [
     path("<uuid:assessment_id>/report/attributes/<int:attribute_id>/",
          reportviews.AssessmentAttributesReportApi.as_view()),
     path("<uuid:assessment_id>/", projectviews.AssessmentApi.as_view()),
+    path("<uuid:assessment_id>/users/",
+         assessment_user_roles_views.UsersAccessToAssessmentApi.as_view()),
     path("<uuid:assessment_id>/assessment-user-roles/",
          assessment_user_roles_views.UsersRolesInAssessmentApi.as_view()),
     path("<uuid:assessment_id>/assessment-user-roles/<uuid:user_id>/",
