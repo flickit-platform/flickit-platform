@@ -32,6 +32,10 @@ class AssessmentProjectApi(APIView):
 class AssessmentApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, assessment_id):
+        result = assessment_services.load_assessment(request, assessment_id)
+        return Response(result["body"], result["status_code"])
+
     @swagger_auto_schema(request_body=projectserializers.EditAssessmentSerializer(), responses={201: ""})
     def put(self, request, assessment_id):
         serializer = projectserializers.EditAssessmentSerializer(data=request.data)
