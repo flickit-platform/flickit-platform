@@ -175,7 +175,7 @@ export interface IAssessmentKit {
   description: string;
   id: TId;
   title: string;
-  assessment_kit?: IAssessmentKit;
+  kit?: IAssessmentKit;
 }
 
 export interface IAssessmentResult {
