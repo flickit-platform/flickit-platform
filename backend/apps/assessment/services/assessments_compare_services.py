@@ -32,6 +32,7 @@ def get_subject_progres(request, assessment_id, subject_id):
 
 def __get_maturity_level_details_for_assessment(maturity_level, maturity_level_count):
     maturity_level_details = dict()
+    maturity_level_details['id'] = maturity_level.id
     maturity_level_details['title'] = maturity_level.title
     maturity_level_details['value'] = maturity_level.value
     maturity_level_details['index'] = maturity_level.index
@@ -113,12 +114,28 @@ def __get_attributes_details_for_subject(subject_response, assessment, attribute
             attributes_details["title"] = attribute["title"]
             attributes_details["assessment"] = list()
             attributes_details["assessment"].append(
-                {"assessmentId": assessment.id, "maturityLevelValue": attribute["maturityLevel"]["value"]})
+                {"assessmentId": assessment.id,
+                 "maturityLevel": {
+                     "id": attribute["maturityLevel"]["id"],
+                     "title": attribute["maturityLevel"]["title"],
+                     "value": attribute["maturityLevel"]["value"],
+                     "index": attribute["maturityLevel"]["index"],
+                    }
+                 }
+            )
             attributes_list.append(attributes_details)
     else:
         for i in range(len(attributes_list)):
             attributes_list[i]["assessment"].append(
-                {"assessmentId": assessment.id, "maturityLevelValue": attributes[i]["maturityLevel"]["value"]})
+                {
+                    "assessmentId": assessment.id,
+                    "maturityLevel": {
+                        "id": attributes[i]["maturityLevel"]["id"],
+                        "title": attributes[i]["maturityLevel"]["title"],
+                        "value": attributes[i]["maturityLevel"]["value"],
+                        "index": attributes[i]["maturityLevel"]["index"],
+                    }
+                })
 
     return attributes_list
 
@@ -170,7 +187,6 @@ def get_subject_details(request, assessment, subjects, subjects_list):
 def get_assessment_details(request, assessment_id):
     result = assessment_report_services.get_assessment_report(request=request, assessment_id=assessment_id)
     assessment_report = DictObject(**result["body"])
-    print(result["body"], result["status_code"])
     if result["status_code"] == 400:
         if assessment_report.code == "NOT_FOUND":
             return {"status": False}
@@ -182,7 +198,7 @@ def get_assessment_details(request, assessment_id):
             return get_assessment_details(request, assessment_id)
     elif result["status_code"] == 200:
         if not assessment_report.assessment.isCalculateValid:
-            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(request,assessment_id)
+            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(request, assessment_id)
             return get_assessment_details(request, assessment_id)
         elif not assessment_report.assessment.isConfidenceValid:
             maturity_level_services.calculate_maturity_level(request, assessment_id)

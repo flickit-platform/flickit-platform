@@ -94,10 +94,10 @@ export const createService = (
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.delete(`/authinfo/spaces/${spaceId}/`, config);
+      return axios.delete(`/api/v1/spaces/${spaceId}/`, config);
     },
     createSpace(data: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`api/v1/spaces/`, data, config);
+      return axios.post(`/api/v1/spaces/`, data, config);
     },
     updateSpace(
       { spaceId, data }: { spaceId: string; data: any },
@@ -192,7 +192,7 @@ export const createService = (
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/api/v1/assessments/`, data, config);
+      return axios.post(`/api/v2/assessments/`, data, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
@@ -211,6 +211,14 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.delete(`/api/v1/assessments/${id}/`, config);
+    },
+    comparessessments(
+      { data }: { data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(`/api/v1/assessments-compare/${data}`,{
+        ...(config ?? {}),
+      });;
     },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
@@ -807,7 +815,7 @@ export const createService = (
     ) {
       const { data = {}, id } = args ?? {};
 
-      return axios.put(`/baseinfo/expertgroups/${id}/`, data, {
+      return axios.put(`/api/v1/expert-groups/${id}/`, data, {
         ...(config ?? {}),
         headers: {
           "Content-Type": "multipart/form-data",
@@ -820,6 +828,13 @@ export const createService = (
        ) {
       const { id } = args ?? {};
       return axios.delete(`/api/v1/expert-groups/${id}/`, config);
+    },
+    seenExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.put(`/api/v1/expert-groups/${id}/seen/`, config);
     },
     inviteSpaceMember(
       args: { id: TId; data: any },

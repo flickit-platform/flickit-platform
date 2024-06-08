@@ -46,7 +46,7 @@ interface IUploadFieldProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?:any
+  setIsValid?: any
 }
 
 const UploadField = (props: IUploadFieldProps) => {
@@ -94,7 +94,7 @@ interface IUploadProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?:any
+  setIsValid?: any
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -143,12 +143,16 @@ const Uploader = (props: IUploadProps) => {
     return [];
   };
 
+  const [limitGuide, setLimitGuide] = useState<string>()
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
       setTheState
     );
 
   useEffect(() => {
+    if (maxSize) {
+      setLimitGuide(t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
+    }
     if (
       typeof defaultValue === "string" &&
       defaultValue &&
@@ -173,6 +177,8 @@ const Uploader = (props: IUploadProps) => {
 
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
+      delete errors[fieldProps.name]
+
       if (acceptedFiles?.[0]) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -207,9 +213,6 @@ const Uploader = (props: IUploadProps) => {
         };
 
         reader.readAsArrayBuffer(acceptedFiles[0]);
-      } else if (fileRejections.length > 0) {
-        const errorMessage = fileRejections[0].errors[0]?.message;
-        toastError(errorMessage);
       }
     },
     []
@@ -221,8 +224,18 @@ const Uploader = (props: IUploadProps) => {
     onDrop,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
-      if (rejectedFiles.length > 1) {
-        toastError(t("oneFileOnly") as string);
+      if (rejectedFiles.length > 0) {
+        const error = rejectedFiles[0].errors.find(
+          (e) => e.code === "file-too-large"
+        );
+        if (error) {
+          errors[fieldProps.name] = {
+            type: "maxSize",
+            message: (t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
+          };
+        } else {
+          toastError(t("oneFileOnly") as string);
+        }
       }
     },
     onError(err) {
@@ -340,11 +353,10 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${(acceptedFiles[0] || file)?.name} - ${
-                    (acceptedFiles[0] || file)?.size
-                      ? formatBytes((acceptedFiles[0] || file)?.size)
-                      : ""
-                  }`}
+                  title={`${(acceptedFiles[0] || file)?.name} - ${(acceptedFiles[0] || file)?.size
+                    ? formatBytes((acceptedFiles[0] || file)?.size)
+                    : ""
+                    }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
@@ -393,7 +405,7 @@ const Uploader = (props: IUploadProps) => {
           )}
         </Box>
       </Box>
-      <FormHelperText>{errorMessage as string}</FormHelperText>
+      <FormHelperText>{limitGuide || errorMessage as string}</FormHelperText>
     </FormControl>
   );
 };

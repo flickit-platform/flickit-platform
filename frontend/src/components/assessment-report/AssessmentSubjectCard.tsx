@@ -148,12 +148,14 @@ export const AssessmentSubjectAccordion = (
           borderTopLeftRadius: "32px !important",
           borderTopRightRadius: "32px !important",
           textAlign: "center",
-          py: 3,
-          maxHeight: { md: "160px" },
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
+          marginY: 2,
+          "& .MuiAccordionSummary-content": {
+            maxHeight: { md: "160px" },
+          },
         }}
       >
-        <Grid container spacing={2} alignItems="center" px={4}>
+        <Grid container alignItems="center" px={4}>
           <Grid item xs={12} lg={2.5} md={2.5} sm={12}>
             <Box
               sx={{
@@ -169,6 +171,8 @@ export const AssessmentSubjectAccordion = (
                 sx={{
                   textTransform: "none",
                   whiteSpace: "pre-wrap",
+                  fontSize: "2rem",
+                  mb: "32px",
                 }}
               >
                 {title}
@@ -211,8 +215,10 @@ export const AssessmentSubjectAccordion = (
             </Box>
           </Grid> */}
           <Grid item xs={12} lg={4} md={3.5} sm={12}>
-            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" }}>
-              <Typography> Confidence level</Typography>
+            <Box sx={{ ...styles.centerCVH, gap: 2, width: "100%" ,mt:{xs:"-72px",sm:"0"}}}>
+              <Typography fontSize="1rem">
+                <Trans i18nKey="confidenceLevel" />
+              </Typography>
               <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
             </Box>
           </Grid>
@@ -226,7 +232,10 @@ export const AssessmentSubjectAccordion = (
       <AccordionDetails sx={{ padding: 0 }}>
         <Grid container alignItems="center" padding={2}>
           <Grid item xs={12} sm={12} md={12} lg={7.5}>
-            <Box sx={{ display: { sm: "none", md: "block" } }} height={"400px"}>
+            <Box
+              sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+              height={"400px"}
+            >
               {subjectAttributes.length > 2 ? (
                 <AssessmentSubjectRadarChart
                   data={subjectAttributes}
@@ -348,14 +357,15 @@ const SubjectStatus = (
     <Box
       sx={{
         textAlign: "center",
-        paddingTop: isMobileScreen ? "unset" : 6,
         marginRight: isMobileScreen ? "unset" : -10,
+        marginBottom: isMobileScreen ? "unset" : -3,
       }}
     >
       <Box>
         {hasStats ? (
           <Gauge
             maturity_level_number={5}
+            isMobileScreen={true}
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             shortTitle={true}

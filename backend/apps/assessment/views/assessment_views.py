@@ -13,3 +13,12 @@ class AssessmentApi(APIView):
     def put(self, request, assessment_id):
         result = assessment_services.edit_assessment(request, assessment_id)
         return Response(result["body"], result["status_code"])
+
+
+class AssessmentsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(type=openapi.TYPE_OBJECT), responses={201: ""})
+    def post(self, request):
+        result = assessment_services.create_assessment(request)
+        return Response(result["body"], result["status_code"])

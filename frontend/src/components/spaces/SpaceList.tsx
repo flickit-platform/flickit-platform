@@ -19,6 +19,7 @@ import { styles } from "@styles";
 import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -244,7 +245,7 @@ const Actions = (props: any) => {
   const { default_space } = userInfo;
   const [editLoading, setEditLoading] = useState(false);
   const {
-    query: deleteSpaceMember,
+    query: deleteSpace,
     loading,
     abortController,
   } = useQuery({
@@ -272,7 +273,7 @@ const Actions = (props: any) => {
 
   const deleteItem = async (e: any) => {
     try {
-      await deleteSpaceMember();
+      await deleteSpace();
       await fetchSpaces();
       await setUserInfo();
     } catch (e) {

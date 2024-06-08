@@ -21,6 +21,7 @@ interface IGaugeProps extends BoxProps {
   shortTitle?: boolean;
   titleSize?: number;
   display_confidence_component?: boolean;
+  isMobileScreen?: boolean;
 }
 
 const Gauge = (props: IGaugeProps) => {
@@ -36,6 +37,7 @@ const Gauge = (props: IGaugeProps) => {
     className,
     shortTitle,
     titleSize = 24,
+    isMobileScreen,
     display_confidence_component,
     ...rest
   } = props;
@@ -45,7 +47,29 @@ const Gauge = (props: IGaugeProps) => {
     () => import(`./GaugeComponent${maturity_level_number}.tsx`)
   );
   const confidenceValue = confidence_value ? confidence_value : 0;
+  const calculateFontSize = (length: number): string => {
+    const maxLength = 14; // Example threshold for maximum length
+    const minLength = 8; // Example threshold for minimum length
+    let maxFontSizeRem = 1.5; // 24px / 16 = 1.5rem
+    let minFontSizeRem = 1.125; // 18px / 16 = 1.125rem
+    if (isMobileScreen) {
+      maxFontSizeRem = 1.5;
+      minFontSizeRem = 1.25;
+    }
+    if (shortTitle && !isMobileScreen) {
+      maxFontSizeRem = 3;
+      minFontSizeRem = 2.5;
+    }
+    if (length <= minLength) return `${maxFontSizeRem}rem`;
+    if (length >= maxLength) return `${minFontSizeRem}rem`;
 
+    const fontSizeRem =
+      maxFontSizeRem -
+      ((length - minLength) / (maxLength - minLength)) *
+        (maxFontSizeRem - minFontSizeRem);
+    return `${fontSizeRem}rem`;
+  };
+  const fontSize = calculateFontSize(maturity_level_status?.length);
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
       <Suspense fallback={<SkeletonGauge />}>
@@ -65,7 +89,7 @@ const Gauge = (props: IGaugeProps) => {
           sx={{
             ...styles.centerCVH,
             bottom: `${
-              display_confidence_component ? "22%" : shortTitle ? "30%" : "40%"
+              display_confidence_component ? "22%" : shortTitle ? "40%" : "40%"
             }`,
             left: "25%",
             right: "25%",
@@ -82,7 +106,7 @@ const Gauge = (props: IGaugeProps) => {
             sx={{ fontWeight: "bold" }}
             variant="h6"
             color={colorCode}
-            fontSize={titleSize}
+            fontSize={fontSize}
           >
             {maturity_level_status}
           </Typography>
@@ -99,7 +123,7 @@ const Gauge = (props: IGaugeProps) => {
               mt={1}
             >
               <Trans
-                i18nKey="withPercentConfidence"
+                i18nKey="gaugeConfidence"
                 values={{
                   percent: Math.ceil(confidenceValue),
                 }}

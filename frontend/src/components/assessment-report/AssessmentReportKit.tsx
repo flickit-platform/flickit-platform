@@ -40,15 +40,18 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
       <Grid container alignItems="stretch" gap={0.5}>
         <Grid
           item
-          lg={3.5}
+          lg={4}
           md={6}
           sm={12}
           xs={12}
-          sx={{ ...styles.centerVH }}
+          sx={{
+            ...styles.centerVH,
+            flexDirection: { xs: "column", sm: "row" },
+          }}
           gap={1}
         >
-          <Typography color="#3B4F68" fontSize="12px">
-            Created with
+          <Typography color="#6C7B8E" fontSize={"0.9rem"}>
+            <Trans i18nKey="createdWith" />
           </Typography>
           <Chip
             component={Link}
@@ -57,11 +60,12 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             size="medium"
             sx={{
               background: "rgba(210, 243, 243, 1)",
+              height: "fit-content",
               color: "rgba(28, 194, 196, 1)",
               textTransform: "none",
               cursor: "pointer",
               "& .MuiChip-label": {
-                fontSize: "12px",
+                fontSize: "1.125rem",
                 whiteSpace: "pre-wrap",
               },
             }}
@@ -71,17 +75,17 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
 
         <Grid
           item
-          lg={4}
-          md={5.5}
+          lg={3}
+          md={5}
           sm={12}
           xs={12}
-          sx={{ ...styles.centerVH }}
+          sx={{ ...styles.centerVH, my: 4 }}
           gap={1}
         >
           <Typography
             color="#3B4F68"
-            fontSize="12px"
-            sx={{ wordBreak: "break-all" }}
+            fontSize="0.9rem"
+            sx={{ wordBreak: "break-all", px: 2 }}
           >
             {assessmentKit.summary}
           </Typography>
@@ -98,34 +102,41 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           md={12}
           sm={12}
           xs={12}
-          sx={{ ...styles.centerVH }}
+          sx={{
+            ...styles.centerVH,
+            flexDirection: { xs: "column", sm: "row" },
+          }}
           gap={1}
         >
-          <Typography color="#6C7B8E" fontSize="12px">
-            Kit is provided by
+          <Typography color="#6C7B8E" fontSize="0.9rem">
+            <Trans i18nKey="kitIsProvidedBy" />
           </Typography>
-          <Avatar
-            component={Link}
-            to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
-            src={assessmentKit.expertGroup.picture}
-            sx={{ cursor: "pointer" }}
-          ></Avatar>
-          <Chip
-            component={Link}
-            to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
-            label={assessmentKit.expertGroup.title}
-            size="medium"
-            sx={{
-              background: "rgba(210, 243, 243, 1)",
-              color: "rgba(28, 194, 196, 1)",
-              textTransform: "none",
-              cursor: "pointer",
-              "& .MuiChip-label": {
-                fontSize: "12px",
-                whiteSpace: "pre-wrap",
-              },
-            }}
-          />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Avatar
+              component={Link}
+              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+              src={assessmentKit.expertGroup.picture}
+              sx={{ cursor: "pointer" }}
+            ></Avatar>
+            <Chip
+              component={Link}
+              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+              label={assessmentKit.expertGroup.title}
+              size="medium"
+              sx={{
+                background: "rgba(210, 243, 243, 1)",
+                color: "rgba(28, 194, 196, 1)",
+                textTransform: "none",
+                height: "fit-content",
+                mx: 1,
+                cursor: "pointer",
+                "& .MuiChip-label": {
+                  fontSize: "1.125rem",
+                  whiteSpace: "pre-wrap",
+                },
+              }}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Box>

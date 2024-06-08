@@ -864,7 +864,7 @@ const Evidence = (props: any) => {
                 maxRows={8}
                 minLength={3}
                 maxLength={200}
-                autoFocus={true}
+                autoFocus={false}
                 defaultValue={""}
                 pallet={evidenceBG}
                 name="evidence"
