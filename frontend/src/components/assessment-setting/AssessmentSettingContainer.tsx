@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
-import AssessmentAccessManagementTitle from "./AssessmentAccessManagementTitle"
+import AssessmentAccessManagementTitle from "./AssessmentSettingTitle"
 import QueryBatchData from "@common/QueryBatchData";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
@@ -12,7 +12,7 @@ import {styles} from "@styles";
 import {IAssessmentReportModel, IMemberModel, UserRoles} from "@types";
 import {ICustomError} from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import AssessmentAccessManagermentBox from "@components/assessment-accessManagement/AssessmentAccessManagermentBox";
+import AssessmentAccessManagermentBox from "@components/assessment-setting/AssessmentSettingBox";
 
 import {FormControl, SelectChangeEvent, Typography} from "@mui/material";
 import Paper from '@mui/material/Paper';
@@ -35,7 +35,7 @@ import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import ListItem from "@mui/material/ListItem";
 
-const AssessmentAccessManagementContainer = () => {
+const AssessmentSettingContainer = () => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
 
@@ -657,4 +657,4 @@ const MemberSection = (props: { listOfRoles: UserRoles[],
         </Paper>
     );
 }
-export default AssessmentAccessManagementContainer
+export default AssessmentSettingContainer

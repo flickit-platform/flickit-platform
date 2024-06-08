@@ -16,7 +16,7 @@ interface IAssessmentAccessManagementTitle {
   };
 }
 
-const AssessmentAccessManagementTitle = (props: IAssessmentAccessManagementTitle) => {
+const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
   const { pathInfo } = props;
 
   const { spaceId, page } = useParams();
@@ -49,4 +49,4 @@ const AssessmentAccessManagementTitle = (props: IAssessmentAccessManagementTitle
   );
 };
 
-export default AssessmentAccessManagementTitle;
+export default AssessmentSettingTitle;

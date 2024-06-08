@@ -12,8 +12,8 @@ const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
 const ExpertGroupConfirmInvitationScreen = lazy(
   () => import("../screens/ExpertGroupConfirmInvitationScreen")
 );
-const AssessmentAssessManagementScreen = lazy(
-  () => import("../screens/AssessmentAssessManagementScreen")
+const AssessmentSettingScreen = lazy(
+  () => import("../screens/AssessmentSettingScreen")
 );
 const AssessmentReportScreen = lazy(
   () => import("../screens/AssessmentReportScreen")
@@ -98,7 +98,7 @@ const Routes = () => {
           />
           <Route
               path="/:spaceId/assessments/:page/assessmentsettings/:assessmentId"
-              element={<AssessmentAssessManagementScreen />}
+              element={<AssessmentSettingScreen />}
           />
           <Route
             path="/:spaceId/assessments/:page/:assessmentId/insights"

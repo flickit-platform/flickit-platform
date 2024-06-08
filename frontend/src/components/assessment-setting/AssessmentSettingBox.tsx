@@ -7,7 +7,7 @@ import {styles} from "@styles";
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
 
-const AssessmentAccessManagermentBox = (props: any) => {
+const AssessmentSettingBox = (props: any) => {
 
     const {children, assessmentTitle, boxTitle,openModal} = props
 
@@ -113,4 +113,4 @@ const AssessmentAccessManagermentBox = (props: any) => {
     )
 }
 
-export default AssessmentAccessManagermentBox;
+export default AssessmentSettingBox;
