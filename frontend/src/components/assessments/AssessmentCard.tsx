@@ -37,7 +37,7 @@ interface IAssessmentCardProps {
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -254,9 +254,9 @@ const Actions = (props: {
     });
   };
 
-  const accessManagement = (e: any) => {
+  const assessmentSetting = (e: any) => {
     navigate({
-      pathname: `accessManagement/${item.id}`,
+      pathname: `assessmentsettings/${item.id}`,
     });
   };
 
@@ -291,9 +291,9 @@ const Actions = (props: {
                 onClick: openEditDialog,
               },
               {
-                icon: <ManageAccountsIcon fontSize="small" />,
-                text: <Trans i18nKey="accessManagement" />,
-                onClick: accessManagement,
+                icon: <SettingsIcon fontSize="small" />,
+                text: <Trans i18nKey="setting" />,
+                onClick: assessmentSetting,
               },
               {
                 icon: <DeleteRoundedIcon fontSize="small" />,

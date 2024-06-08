@@ -557,10 +557,7 @@ const MemberSection = (props: { listOfRoles: UserRoles[],
          await fetchAssessmentsUserlistRoles
      }catch(e){
          console.log(e)
-     }
-
-
-    }
+     }}
 
     return (
         <Paper sx={{width: '100%', overflow: 'hidden'}}>
