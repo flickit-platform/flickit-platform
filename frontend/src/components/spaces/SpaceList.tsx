@@ -19,6 +19,7 @@ import { styles } from "@styles";
 import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -53,19 +54,18 @@ const SpacesList = (props: ISpaceListProps) => {
     };
   }, []);
 
-  const { results = [] } = data || {};
+  const { items = [] } = data || {};
 
   return (
     <Box sx={{ overflowX: "auto", py: 1 }}>
       <Box sx={{ minWidth: { xs: "320px", sm: "440px" } }}>
-        {results.map((item: any) => {
-          const isOwner = userId == item?.owner.id;
+        {items.map((item: any) => {
           return (
             <SpaceCard
               key={item?.id}
               item={item}
               isActiveSpace={false}
-              isOwner={isOwner}
+              isOwner={item?.isOwner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
               setUserInfo={setUserInfo}
@@ -98,25 +98,31 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const { service } = useServiceContext();
   const navigate = useNavigate();
   const { loading, abortController } = useQuery({
-    service: (args, config) => service.setCurrentSpace({ spaceId: id }, config),
+    service: (args, config) => service.setCurrentSpace({ spaceId }, config),
     runOnMount: false,
     toastError: true,
   });
   const { dispatch } = useAuthContext();
   const {
     title,
-    id,
-    members_number = 0,
-    assessment_numbers = 0,
+    id : spaceId,
+    membersCount = 0,
+    assessmentsCount = 0,
+    lastModificationTime,
     is_default_space_for_current_user,
   } = item || {};
+
+  const trackSeen = () =>{
+    service.seenSpaceList({ spaceId },{})
+  }
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
+    trackSeen()
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
         dispatch(authActions.setUserInfo(data));
-        navigate(`/${id}/assessments/1`);
+        navigate(`/${spaceId}/assessments/1`);
       })
       .catch((e) => {});
   };
@@ -140,7 +146,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             component={Link}
             variant="h6"
             fontFamily={"Roboto"}
-            to={`/${id}/assessments/1`}
+            to={`/${spaceId}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
@@ -173,7 +179,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
             <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
             <Typography fontFamily="Roboto" fontWeight={"bold"}>
-              {members_number}
+              {membersCount}
             </Typography>
           </Box>
           <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
@@ -182,7 +188,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
               fontSize="small"
             />
             <Typography fontFamily="Roboto" fontWeight={"bold"}>
-              {assessment_numbers}
+              {assessmentsCount}
             </Typography>
           </Box>
         </Box>
@@ -200,8 +206,8 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            <Box sx={{ ...styles.centerV }}>
-              <IconButton size="small" component={Link} to={`/${id}/setting`}>
+            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+              <IconButton size="small" component={Link} to={`/${spaceId}/setting`}>
                 <SettingsRoundedIcon />
               </IconButton>
             </Box>
@@ -239,7 +245,7 @@ const Actions = (props: any) => {
   const { default_space } = userInfo;
   const [editLoading, setEditLoading] = useState(false);
   const {
-    query: deleteSpaceMember,
+    query: deleteSpace,
     loading,
     abortController,
   } = useQuery({
@@ -267,7 +273,7 @@ const Actions = (props: any) => {
 
   const deleteItem = async (e: any) => {
     try {
-      await deleteSpaceMember();
+      await deleteSpace();
       await fetchSpaces();
       await setUserInfo();
     } catch (e) {
@@ -296,6 +302,11 @@ const Actions = (props: any) => {
           icon: <EditRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
+        },
+        isOwner && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="delete" />,
+          onClick: deleteItem,
         },
         !is_default_space_for_current_user && {
           icon: <ExitToAppRoundedIcon fontSize="small" />,

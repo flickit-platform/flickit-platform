@@ -66,7 +66,7 @@ const AssessmentKitExpertViewContainer = () => {
       a.remove();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err?.response?.data?.message);
+      toastError(err);
     }
   };
   useEffect(() => {

@@ -71,8 +71,12 @@ export const createService = (
         },
       });
     },
-    fetchSpaces(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/authinfo/spaces/`, config);
+    fetchSpaces(args: { page: number; size: number }, config: AxiosRequestConfig<any> | undefined) {
+      const { page = 1, size = 10 } = args ?? {};
+      return axios.get(`/api/v1/spaces/`, {
+        ...(config ?? {}),
+        params: { size, page : page - 1 },
+      });
     },
     fetchSpace(
       { spaceId }: { spaceId: string },
@@ -80,20 +84,26 @@ export const createService = (
     ) {
       return axios.get(`/authinfo/spaces/${spaceId}/`, config);
     },
+    seenSpaceList(
+      { spaceId }: { spaceId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+    return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
+    },
     deleteSpace(
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.delete(`/authinfo/spaces/${spaceId}/`, config);
+      return axios.delete(`/api/v1/spaces/${spaceId}/`, config);
     },
     createSpace(data: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.post(`api/v1/spaces/`, data, config);
+      return axios.post(`/api/v1/spaces/`, data, config);
     },
     updateSpace(
       { spaceId, data }: { spaceId: string; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/authinfo/spaces/${spaceId}/`, data, config);
+      return axios.put(`/api/v1/spaces/${spaceId}/`, data, config);
     },
     addMemberToSpace(
       args: { spaceId: string; email: string | undefined },
@@ -119,7 +129,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.delete(
-        `/authinfo/spaces/${spaceId}/useraccess/${memberId}/`,
+        `/api/v1/spaces/${spaceId}/members/${memberId}/`,
         config
       );
     },
@@ -128,6 +138,12 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
+    },
+    fetchSpaceMembersInvitees(
+        { spaceId }: { spaceId: string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/spaces/${spaceId}/invitees/`, config);
     },
     fetchPathInfo(
       {
@@ -176,7 +192,7 @@ export const createService = (
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/api/v1/assessments/`, data, config);
+      return axios.post(`/api/v2/assessments/`, data, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
@@ -188,13 +204,21 @@ export const createService = (
       { id, data }: { id: any; data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.put(`/api/v1/assessments/${id}/`, data, config);
+      return axios.put(`/api/v2/assessments/${id}/`, data, config);
     },
     deleteAssessment(
       { id }: { id: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.delete(`/api/v1/assessments/${id}/`, config);
+    },
+    comparessessments(
+      { data }: { data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(`/api/v1/assessments-compare/${data}`,{
+        ...(config ?? {}),
+      });;
     },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
@@ -277,7 +301,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined = {}
     ) {
       return axios.put(
-        `/api/v1/assessments/${assessmentId ?? ""}/answer-question/`,
+        `/api/v2/assessments/${assessmentId ?? ""}/answer-question/`,
         data,
         { ...config }
       );
@@ -533,7 +557,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/assessmentkits/${id}/`, config);
+      return axios.get(`/api/v1/assessment-kits/${id}/`, config);
     },
     fetchAffectedQuestionsOnAttribute(
       args: { assessmentId: TId; attributeId: TId; levelId: TId },
@@ -546,6 +570,21 @@ export const createService = (
           ...(config ?? {}),
           params: {
             maturityLevelId: levelId,
+          },
+        }
+      );
+    },
+    fetchRelatedEvidences(
+      args: { assessmentId: TId; attributeId: TId; type: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, attributeId, type } = args ?? {};
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/attributes/${attributeId}/evidences`,
+        {
+          ...(config ?? {}),
+          params: {
+            type,
           },
         }
       );
@@ -619,7 +658,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.delete(`/baseinfo/assessmentkits/${id}/`, config);
+      return axios.delete(`/api/v2/assessment-kits/${id}/`, config);
     },
     uploadAssessmentKitPhoto(
       file: any,
@@ -690,7 +729,7 @@ export const createService = (
     ) {
       const { id, userId } = args ?? {};
       return axios.delete(
-        `/baseinfo/expertgroups/${id}/expertgroupaccess/${userId}/`,
+        `/api/v1/expert-groups/${id}/members/${userId}/`,
         config
       );
     },
@@ -699,7 +738,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args ?? {};
-      return axios.get(`/baseinfo/expertgroup/${id}/assessmentkits/`, config);
+      return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, config);
     },
     fetchExpertGroupUnpublishedAssessmentKits(
       args: { id: TId },
@@ -776,12 +815,26 @@ export const createService = (
     ) {
       const { data = {}, id } = args ?? {};
 
-      return axios.put(`/baseinfo/expertgroups/${id}/`, data, {
+      return axios.put(`/api/v1/expert-groups/${id}/`, data, {
         ...(config ?? {}),
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+    },
+     deleteExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.delete(`/api/v1/expert-groups/${id}/`, config);
+    },
+    seenExpertGroup(
+      args: { id: TId },
+      config: AxiosRequestConfig<any> | undefined
+       ) {
+      const { id } = args ?? {};
+      return axios.put(`/api/v1/expert-groups/${id}/seen/`, config);
     },
     inviteSpaceMember(
       args: { id: TId; data: any },

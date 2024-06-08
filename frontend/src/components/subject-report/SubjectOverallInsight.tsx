@@ -8,19 +8,26 @@ import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
 
 const SubjectOverallInsight = (props: any) => {
   return (
-    <>
-      <OverallInsightText {...props} />
-      <Box sx={{ pl: { xs: 0, sm: 3, md: 6 }, mt: { xs: 4, sm: 0 } }}>
-        <SubjectOverallStatusLevelChart {...props} />
+    <Box>
+      <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }}>
+        <OverallInsightText {...props} />
+        <Box sx={{ pl: { xs: 0, sm: 3, md: 6 }, mt: { xs: 4, sm: 0 } }}>
+          <SubjectOverallStatusLevelChart {...props} />
+        </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 
 const OverallInsightText = (props: any) => {
   const { data = {}, loading } = props;
-  const { subject, attributes, topStrengths, topWeaknesses } = data;
-  const { title, maturityLevel, confidenceValue } = subject;
+  const {
+    subject,
+    attributes,
+    topStrengths,
+    topWeaknesses,
+  } = data;
+  const { title, maturityLevel,confidenceValue } = subject;
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
       <Typography
@@ -41,7 +48,7 @@ const OverallInsightText = (props: any) => {
               sx={{ color: "#3596A1" }}
               fontSize="1.15rem"
             >
-              <Trans i18nKey={"clOf"} values={{ cl: confidenceValue }} />
+              <Trans i18nKey={"clOf"} values={{ cl:confidenceValue }} />
             </Typography>{" "}
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography
@@ -63,10 +70,7 @@ const OverallInsightText = (props: any) => {
             </Typography>
             <Box>
               <Typography variant="body2">
-                <Trans
-                  i18nKey="attributesAreConsidered"
-                  values={{ length: attributes?.length }}
-                />
+                <Trans i18nKey="attributesAreConsidered" values={{ length: attributes?.length }} />
               </Typography>
             </Box>
           </>

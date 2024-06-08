@@ -32,8 +32,7 @@ const SpaceSettingContainer = () => {
     service: (args, config) => service.fetchSpace({ spaceId }, config),
   });
 
-  const { title } = data || {};
-  const isOwner = userId == data?.owner?.id;
+  const { title, isOwner} = data || {};
   return (
     <Box maxWidth="1440px" m="auto">
       <Title
@@ -41,7 +40,7 @@ const SpaceSettingContainer = () => {
           <SupTitleBreadcrumb
             routes={[
               {
-                to: "/spaces",
+                to: "/spaces/1",
                 title: "spaces",
                 sup: "spaces",
                 icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
@@ -61,7 +60,7 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner} owner={data?.owner} />}</Box>
+      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner}  />}</Box>
     </Box>
   );
 };
@@ -99,8 +98,8 @@ const EditSpaceButton = (props: any) => {
   );
 };
 
-function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
-  const { owner } = props;
+function SpaceSettings(props: { isOwner: boolean }) {
+  const { isOwner } = props;
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -125,7 +124,7 @@ function SpaceSettings(props: { isOwner: boolean ,owner:any}) {
         </Box>
         <TabPanel value="1">
           {/* <ErrorAccessDenied hasAccess={isOwner}> */}
-          <SpaceMembers owner={owner} />
+          <SpaceMembers isOwner={isOwner} />
           {/* </ErrorAccessDenied> */}
         </TabPanel>
       </TabContext>

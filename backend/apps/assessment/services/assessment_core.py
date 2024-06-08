@@ -162,32 +162,6 @@ def question_answering(assessments_details, serializer_data, authorization_heade
     return result
 
 
-def get_maturity_level_calculate(assessments_details):
-    result = dict()
-    response = requests.post(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/calculate')
-    if response.status_code == status.HTTP_200_OK:
-        data = response.json()
-        data["maturity_level"] = data.pop("maturityLevel")
-        level = MaturityLevel.objects.get(id=data["maturity_level"]["id"])
-        assessment_kit = AssessmentKit.objects.get(id=assessments_details["kitId"])
-        maturity_levels_id = list(MaturityLevel.objects.filter(
-            kit_version=assessment_kit.kit_version_id).values_list("id", flat=True))
-        data["maturity_level"]["title"] = level.title
-        data["maturity_level"]["index"] = maturity_levels_id.index(data["maturity_level"]["id"]) + 1
-        data["maturity_level"]["value"] = data["maturity_level"].pop("value")
-        data["maturity_level"].pop("levelCompetences")
-        result["Success"] = True
-        result["body"] = data
-        result["status_code"] = response.status_code
-        return result
-
-    result["Success"] = True
-    result["body"] = response.json()
-    result["status_code"] = response.status_code
-    return result
-
-
 def get_questionnaire_answer(request, assessments_details, questionnaire_id):
     params = {"questionnaireId": questionnaire_id,
               'page': 0,
@@ -394,22 +368,11 @@ def get_subject_report(request, assessments_details, subject_id):
     return result
 
 
-def get_subject_progress(authorization_header, assessments_details, subject_id):
-    result = dict()
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if not AssessmentSubject.objects.filter(id=subject_id).filter(kit_version=kit.kit_version_id).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'subject_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
+def get_subject_progress(request, assessment_id, subject_id):
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/subjects/{subject_id}/progress',
-        headers={"Authorization": authorization_header})
-    response_body = response.json()
-    result["Success"] = False
-    result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/subjects/{subject_id}/progress',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
 def get_assessment_report(assessments_details, request):
@@ -530,16 +493,6 @@ def edit_assessment(assessments_details, request_body, authorization_header):
     response_body = response.json()
     result["Success"] = True
     result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
-
-
-def delete_assessment(assessments_details):
-    result = dict()
-    response = requests.delete(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}')
-    result["Success"] = True
-    result["body"] = None
     result["status_code"] = response.status_code
     return result
 

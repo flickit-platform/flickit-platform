@@ -27,7 +27,7 @@ interface IComparePartsItemProps {
 }
 
 const ComparePartItem = (props: IComparePartsItemProps) => {
-  const { data, index, disabled, } = props;
+  const { data, index, disabled } = props;
   const dialogProps = useDialog({
     context: {
       data,
@@ -83,7 +83,18 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
               {data.title}
             </Title>
             <Box display="flex" justifyContent="center">
-              <Gauge systemStatus={data?.result_maturity_level.title} maturity_level_number={data?.assessment_kit.maturity_levels_count} maturity_level_status={data?.result_maturity_level.title} level_value={data?.result_maturity_level.index}maxWidth="255px" mt="auto" />
+              <Gauge
+                systemStatus={data?.result_maturity_level.title}
+                maturity_level_number={
+                  data?.assessment_kit.maturity_levels_count
+                }
+                isMobileScreen={true}
+                shortTitle={true}
+                maturity_level_status={data?.result_maturity_level.title}
+                level_value={data?.result_maturity_level.index}
+                maxWidth="275px"
+                mt="auto"
+              />
             </Box>
           </Box>
         ) : (
@@ -111,9 +122,9 @@ const DeleteAssessmentIconBtn = (props: {
   fetchAssessmentsInfo: TQueryFunction;
 }) => {
   const { id, index, fetchAssessmentsInfo } = props;
-  const { assessmentIds,assessment_kit } = useCompareContext();
+  const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
-  const filteredData = assessment_kit.filter(item => item.id !== id);
+  const filteredData = assessment_kit.filter((item) => item.id !== id);
 
   const handleClick = () => {
     const newAssessmentIds = assessmentIds.filter(

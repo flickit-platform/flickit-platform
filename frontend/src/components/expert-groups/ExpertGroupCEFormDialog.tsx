@@ -16,12 +16,14 @@ import FormProviderWithForm from "@common/FormProviderWithForm";
 import RichEditorField from "@common/fields/RichEditorField";
 import UploadField from "@common/fields/UploadField";
 import convertToBytes from "@/utils/convertToBytes";
+import { useQuery } from "@utils/useQuery";
 
 interface IExpertGroupCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
+  seenExpertGroup?: () => void;
   hideSubmitAndView?: boolean;
 }
 
@@ -52,7 +54,11 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       abortController.abort();
     };
   }, []);
-
+  const seenExpertGroupQuery = useQuery({
+    service: (args, config) => service.seenExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     const { picture, title, ...restOfData } = data;
 
@@ -63,7 +69,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     };
     const formattedUpdateData = {
       ...restOfData,
-      name: title,
+      title: title,
     };
     if (typeof picture !== "string") {
       formattedUpdateData.picture = picture;
@@ -80,6 +86,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
               { data: formattedData },
               { signal: abortController.signal }
             );
+      await seenExpertGroupQuery.query();
       setLoading(false);
       onSubmitForm();
       close();
@@ -87,8 +94,8 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
-      setServerFieldErrors(err?.response?.data?.message, formMethods);
-      toastError(err?.response?.data?.message);
+      setServerFieldErrors(err, formMethods);
+      toastError(err);
     }
   };
 
@@ -109,22 +116,24 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} md={5}>
-            <UploadField
-              accept={{
-                "image/jpeg": [".jpeg", ".jpg"],
-                "image/png": [".png"],
-              }}
-              defaultValueType="image"
-              defaultValue={defaultValues.pictureLink}
-              shouldFetchFileInfo={true}
-              hideDropText
-              name="picture"
-              label={<Trans i18nKey="groupPicture" />}
-              maxSize={convertToBytes(2, "MB")}
-              />
-          </Grid>
-          <Grid item xs={12} md={7}>
+          {type !== "update" && (
+              <Grid item xs={12} md={5}>
+                <UploadField
+                    accept={{
+                      "image/jpeg": [".jpeg", ".jpg"],
+                      "image/png": [".png"],
+                    }}
+                    defaultValueType="image"
+                    defaultValue={defaultValues.pictureLink}
+                    shouldFetchFileInfo={true}
+                    hideDropText
+                    name="picture"
+                    label={<Trans i18nKey="groupPicture" />}
+                    maxSize={convertToBytes(2, "MB")}
+                />
+              </Grid>
+          )}
+          <Grid item xs={12} md={type === "update" ? 12 : 7}>
             <InputFieldUC
               defaultValue={defaultValues.title || ""}
               name="title"

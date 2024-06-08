@@ -71,7 +71,7 @@ const Navbar = () => {
         variant="h6"
         sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
         component={NavLink}
-        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces`}
+        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces/1`}
       >
         <NavLogo />
       </Typography>
@@ -81,7 +81,7 @@ const Navbar = () => {
           <ListItemButton
             sx={{ textAlign: "left", borderRadius: 1.5 }}
             component={NavLink}
-            to="spaces"
+            to="spaces/1"
           >
             <ListItemText primary={<Trans i18nKey="spaces" />} />
           </ListItemButton>
@@ -90,10 +90,10 @@ const Navbar = () => {
           <QueryData
             {...spacesQueryData}
             render={(data) => {
-              const { results } = data;
+              const { items } = data;
               return (
                 <Box>
-                  {results.slice(0, 5).map((space: any) => {
+                  {items.slice(0, 5).map((space: any) => {
                     return (
                       <ListItem disablePadding key={space?.id}>
                         <ListItemButton
@@ -191,7 +191,7 @@ const Navbar = () => {
                 width: "110px",
               },
             }}
-            to={`/spaces`}
+            to={`/spaces/1`}
           >
             <NavLogo />
           </Typography>
@@ -409,7 +409,7 @@ const SpacesButton = () => {
     <>
       <Button
         data-cy="spaces"
-        onClick={() => navigate("/spaces")}
+        onClick={() => navigate("/spaces/1")}
         sx={{
           ...styles.activeNavbarLink,
           ml: 0.1,
@@ -456,7 +456,7 @@ const SpacesButton = () => {
         <QueryData
           {...spacesQueryData}
           render={(data) => {
-            const { results } = data;
+            const { items } = data;
             return (
               <Box>
                 <Typography
@@ -465,7 +465,7 @@ const SpacesButton = () => {
                 >
                   <Trans i18nKey={"recentSpaces"} />
                 </Typography>
-                {results.slice(0, 5).map((space: any) => {
+                {items.slice(0, 5).map((space: any) => {
                   return (
                     <MenuItem
                       key={space?.id}
@@ -487,7 +487,7 @@ const SpacesButton = () => {
           dense
           onClick={handleClose}
           component={NavLink}
-          to={`/spaces`}
+          to={`/spaces/1`}
         >
           <Trans i18nKey={"spaceDirectory"} />
         </MenuItem>

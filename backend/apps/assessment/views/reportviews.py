@@ -31,11 +31,8 @@ class SubjectProgressApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id, subject_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_subject_progress(request.headers['Authorization'],
-                                                      assessments_details["body"],
+        result = assessment_core.get_subject_progress(request,
+                                                      assessment_id,
                                                       subject_id)
         return Response(result["body"], result["status_code"])
 

@@ -29,7 +29,8 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
-import { Home } from "@mui/icons-material";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
 
 const SubjectContainer = () => {
   const {
@@ -94,7 +95,7 @@ const SubjectContainer = () => {
                 no_insight_yet_message={!isCalculateValid || !isConfidenceValid}
               />
             ) : (
-              <Box display="flex" flexDirection="column" gap={6}>
+              <Box sx={{ px: 0.5 }}>
                 <Box
                   bgcolor="white"
                   borderRadius="32px"
@@ -132,6 +133,10 @@ const SubjectContainer = () => {
                       />
                     </Box>
                   )}
+                  <Box height={"520px"} mt={10}>
+                    <SubjectBarChart {...subjectQueryData} loading={loading} />
+                  </Box>
+
                   {/* <Box height={"520px"} mt={10}>
                     <SubjectBarChart {...subjectQueryData} loading={loading} />
                   </Box> */}
@@ -180,7 +185,9 @@ const useSubject = () => {
       await calculateMaturityLevelQuery.query();
       await subjectQueryData.query({ subjectId, assessmentId });
       await subjectProgressQueryData.query({ subjectId, assessmentId });
-    } catch (e) {}
+    } catch (e) {
+      toastError(e as ICustomError);
+    }
   };
   const calculateConfidence = async () => {
     try {
@@ -190,11 +197,14 @@ const useSubject = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (subjectQueryData.errorObject?.data?.code == "CALCULATE_NOT_VALID") {
+    if (
+      subjectQueryData.errorObject?.response?.data?.code ==
+      "CALCULATE_NOT_VALID"
+    ) {
       calculate();
     }
     if (
-      subjectQueryData.errorObject?.data?.code ==
+      subjectQueryData.errorObject?.response?.data?.code ==
       "CONFIDENCE_CALCULATION_NOT_VALID"
     ) {
       calculateConfidence();
@@ -246,29 +256,41 @@ const SubjectTitle = (props: {
     <Title
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
-      backLink="/spaces"
+      backLink={-1}
       id="insight"
       inPageLink="insight"
-      appTitle="Flickit"
       sup={
         <SupTitleBreadcrumb
           routes={[
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
+              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
+              icon: (
+                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
             {
               title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
+              icon: (
+                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              ),
             },
           ]}
         />
       }
     >
       <Box sx={{ ...styles.centerV }}>
+        <QueryStatsRoundedIcon
+          sx={{
+            mr: 1,
+            color: "rgba(0, 0, 0, 0.87)",
+          }}
+        />
         {loading ? (
           <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
         ) : (

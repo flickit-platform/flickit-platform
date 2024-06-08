@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -17,14 +18,36 @@ import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRound
 import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { styles,animations } from "@styles";
+import Pagination from "@mui/material/Pagination";
+import Stack from '@mui/material/Stack';
+import {useNavigate, useParams} from "react-router-dom";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
   const { service } = useServiceContext();
+  const navigate = useNavigate();
+  const { page } = useParams();
+  const PAGESIZE : number= 10
+
+  let pageNumber = Number(page)
+
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+      navigate(`/spaces/${value}`);
+  };
+
   const spacesQueryData = useQuery<ISpacesModel>({
-    service: (args, config) => service.fetchSpaces(args, config),
+    service: (args= { size: PAGESIZE, page: pageNumber }, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
+
+  useEffect(() => {
+    spacesQueryData.query({ size: PAGESIZE, page: pageNumber });
+  }, [pageNumber]);
+
+  const pageCount =
+      !spacesQueryData.data || !spacesQueryData?.data?.total || !spacesQueryData?.data?.size || spacesQueryData.data?.size === 0
+          ? 1
+          : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
   const isEmpty = spacesQueryData?.data?.results?.length === 0;
 
@@ -152,7 +175,23 @@ const SpaceContainer = () => {
           );
         }}
       />
-
+      <Stack
+          spacing={2}
+          sx={{
+            mt: 3,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+      >
+      <Pagination
+          variant="outlined"
+          color="primary"
+          count={pageCount}
+          onChange={handleChangePage}
+          page={pageNumber}
+      />
+      </Stack>
       <CreateSpaceDialog
         {...dialogProps}
         onSubmitForm={spacesQueryData.query}

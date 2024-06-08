@@ -11,6 +11,7 @@ export enum ECustomErrorType {
   "NOT_FOUND" = "NOT_FOUND",
   "CANCELED" = "CANCELED",
   "ACCESS_DENIED" = "ACCESS_DENIED",
+  "ERR_BAD_REQUEST" = "ERR_BAD_REQUEST",
 }
 
 export enum ESystemStatus {
@@ -114,7 +115,17 @@ export type TToastConfig = ToastOptions & {
   message: string | JSX.Element;
 };
 
+export interface IAttribute {
+  id: number;
+  title: string;
+  description: string;
+  index: number;
+  confidenceValue: number;
+  maturityLevel: IMaturityLevel;
+}
+
 export interface ISubjectInfo {
+  attributes?: IAttribute[];
   description: string;
   id: TId;
   image: string | null;
@@ -196,15 +207,18 @@ export interface IOwnerModel {
 export interface ISpaceModel {
   code: string;
   id: TId;
-  owner: IOwnerModel;
+  isOwner: boolean;
   title: string;
-  last_modification_date?: string;
-  members_number?: number;
-  assessment_numbers?: number;
+  lastModificationTime?: string;
+  membersCount?: number;
+  assessmentsCount?: number;
   is_default_space_for_current_user?: boolean;
 }
 
-export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
+export interface ISpacesModel extends IDefaultModel<ISpaceModel> {
+  size?: number
+  total?: number
+}
 export interface IAssessmentReport {
   assessment_kit: Omit<
     IAssessmentKitModel,
@@ -228,15 +242,6 @@ export interface ITotalProgress {
 export interface ITotalProgressModel {
   total_progress: ITotalProgress;
   assessment_project_title: string;
-}
-export interface IAssessmentReportModel {
-  subjects_info: ISubjectInfo[];
-  status: TStatus;
-  most_significant_strength_atts: string[];
-  most_significant_weaknessness_atts: string[];
-  assessment_project: IAssessmentReport;
-  total_progress: ITotalProgress;
-  maturity_level_status: string;
 }
 
 export interface IQuestionnaireModel {
@@ -449,9 +454,10 @@ export interface ICompareResultModel {
 interface AssessmentKitStatsSubjects {
   title: string;
 }
-interface AssessmentKitStatsExpertGroup {
+export interface AssessmentKitStatsExpertGroup {
   id: number;
   title: string;
+  picture?: string;
 }
 
 type LevelCompetence = {
@@ -467,6 +473,47 @@ interface AssessmentKitDetailsMaturityLevel {
   competences: LevelCompetence[];
 }
 
+export interface IAssessmentKitReportModel {
+  id: number;
+  title: string;
+  summary: string;
+  maturityLevelCount: number;
+  expertGroup: AssessmentKitStatsExpertGroup;
+}
+
+export interface IAssessmentReportModel {
+  id: string;
+  title: string;
+  assessmentKit: IAssessmentKitReportModel;
+  maturityLevel: IMaturityLevel;
+  confidenceValue: number;
+  isCalculateValid: boolean;
+  isConfidenceValid: boolean;
+  color: IColor;
+  creationTime: string;
+  lastModificationTime: string;
+}
+
+export interface ExpertGroupDetails {
+  id: number;
+  title: string;
+  bio: string;
+  about: string | JSX.Element;
+  picture: string;
+  pictureLink: string;
+  website: string;
+  editable: boolean;
+}
+
+type ModelValue = {
+  id: number;
+  title: string;
+};
+
+export interface PathInfo {
+  space?: ModelValue;
+  assessment?: ModelValue;
+}
 export interface AssessmentKitInfoType {
   id: number;
   title: string;
@@ -494,4 +541,14 @@ export interface AssessmentKitDetailsType {
   maturityLevel: AssessmentKitDetailsMaturityLevel;
   subjects: { id: number; title: string; index: number }[];
   questionnaires: { id: number; title: string; index: number }[];
+}
+
+export interface IDynamicGaugeSVGProps {
+  colorCode: string;
+  value: number;
+  confidence_value?: number | null;
+  show_confidence?: boolean;
+  height?: number;
+  width?: number | string;
+  className?: string;
 }
