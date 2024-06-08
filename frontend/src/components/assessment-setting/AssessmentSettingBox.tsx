@@ -95,6 +95,7 @@ const AssessmentSettingBox = (props: any) => {
                             </Typography>
 
                             <Box sx={{display: "flex", justifyContent: 'center', alignItems: "center"}}>
+                              {/*TODO*/}
                                 <Typography color="#1CC2C4" fontWeight={500}
                                             sx={{fontSize: {xs: "18px", sm: "24px"}}}
                                             lineHeight={"normal"}>

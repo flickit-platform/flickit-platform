@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import Box from "@mui/material/Box";
 import AssessmentAccessManagementTitle from "./AssessmentSettingTitle"
 import QueryBatchData from "@common/QueryBatchData";
 import {useQuery} from "@utils/useQuery";
@@ -12,7 +11,7 @@ import {styles} from "@styles";
 import {IAssessmentReportModel, IMemberModel, UserRoles} from "@types";
 import {ICustomError} from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import AssessmentAccessManagermentBox from "@components/assessment-setting/AssessmentSettingBox";
+import AssessmentSettingBox from "@components/assessment-setting/AssessmentSettingBox";
 
 import {FormControl, SelectChangeEvent, Typography} from "@mui/material";
 import Paper from '@mui/material/Paper';
@@ -34,13 +33,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import ListItem from "@mui/material/ListItem";
+import Box from "@mui/material/Box";
 
 const AssessmentSettingContainer = () => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
 
     const [expanded, setExpanded] = useState<boolean>(false);
-
 
     const fetchAssessmentsUserRoles = useQuery<IAssessmentReportModel>({
         service: (args, config) =>
@@ -108,17 +107,17 @@ const AssessmentSettingContainer = () => {
                         </Grid>
                         <Grid container columns={12} mb={"32px"}>
                             <Grid item sm={12} xs={12}>
-                                <AssessmentAccessManagermentBox
+                                <AssessmentSettingBox
                                     assessmentTitle={title}
                                     boxTitle={"general"}
                                 >
                                     <GeneralSection/>
-                                </AssessmentAccessManagermentBox>
+                                </AssessmentSettingBox>
                             </Grid>
                         </Grid>
                         <Grid container columns={12}>
                             <Grid item sm={12} xs={12}>
-                                <AssessmentAccessManagermentBox
+                                <AssessmentSettingBox
                                     boxTitle={"members"}
                                     openModal={handleClickOpen}
                                 >
@@ -126,7 +125,7 @@ const AssessmentSettingContainer = () => {
                                                    fetchAssessmentsUserlistRoles={fetchAssessmentsUserlistRoles.query}
                                                    fetchAssessmentsUserRoles={fetchAssessmentsUserRoles.query}
                                     />
-                                </AssessmentAccessManagermentBox>
+                                </AssessmentSettingBox>
                             </Grid>
                         </Grid>
                         <AddMemeberDialog
@@ -475,14 +474,15 @@ const GeneralSection = () => {
     )
 }
 
-const MemberSection = (props: { listOfRoles: UserRoles[],
-    fetchAssessmentsUserlistRoles: ()=> void,
-    fetchAssessmentsUserRoles: ()=> void
+const MemberSection = (props: {
+    listOfRoles: UserRoles[],
+    fetchAssessmentsUserlistRoles: () => void,
+    fetchAssessmentsUserRoles: () => void
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
 
-    const {listOfRoles,fetchAssessmentsUserlistRoles,fetchAssessmentsUserRoles} = props
+    const {listOfRoles, fetchAssessmentsUserlistRoles, fetchAssessmentsUserRoles} = props
 
     interface Column {
         id: 'displayName' | 'email' | 'role'
@@ -551,13 +551,14 @@ const MemberSection = (props: { listOfRoles: UserRoles[],
 
 
     const Deleteperson = async () => {
-     try{
-         await  deleteUserRole.query()
-         await fetchAssessmentsUserRoles
-         await fetchAssessmentsUserlistRoles
-     }catch(e){
-         console.log(e)
-     }}
+        try {
+            await deleteUserRole.query()
+            await fetchAssessmentsUserRoles
+            await fetchAssessmentsUserlistRoles
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <Paper sx={{width: '100%', overflow: 'hidden'}}>
