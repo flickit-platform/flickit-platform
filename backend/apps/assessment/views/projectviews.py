@@ -24,9 +24,8 @@ class AssessmentProjectApi(APIView):
             return Response({"assessment_id": result["body"].json()['id']}, status=result["body"].status_code)
         return Response(result["body"].json(), status=result["body"].status_code)
 
-    space_id_param = openapi.Parameter(name='spaceId', in_=openapi.IN_QUERY, description="space id param",
-                                       type=openapi.TYPE_ARRAY,
-                                       items=openapi.Items(type=openapi.TYPE_INTEGER), collectionFormat="multi")
+    space_id_param = openapi.Parameter('spaceId', openapi.IN_QUERY, description="space id param",
+                                       type=openapi.TYPE_INTEGER)
     kit_id_param = openapi.Parameter('kitId', openapi.IN_QUERY, description="kit id param",
                                      type=openapi.TYPE_INTEGER)
     size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
