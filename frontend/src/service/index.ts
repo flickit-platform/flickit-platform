@@ -194,6 +194,25 @@ export const createService = (
     ) {
       return axios.post(`/api/v2/assessments/`, data, config);
     },
+    fetchAssessmentsUserRoles(
+        args: any,
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`api/v1/assessment-user-roles/`, config);
+    },
+    fetchAssessmentsUserlistRoles(
+        {assessmentId}: {assessmentId : string},
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+        return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
+    },
+    deleteUserRole(
+        {assessmentId,userId}: {assessmentId: string,userId: string},
+        config: AxiosRequestConfig<any> | undefined
+    ){
+      return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
+`   , config);
+    },
     loadAssessment(
       { rowId }: { rowId: any },
       config: AxiosRequestConfig<any> | undefined
