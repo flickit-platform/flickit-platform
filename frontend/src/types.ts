@@ -167,7 +167,7 @@ export interface IAssessmentKitModel {
 }
 export interface IAssessmentKitList {
   id: TId;
-  maturity_levels_count: number;
+  maturityLevelsCount: number;
 }
 
 export interface IAssessmentKit {
@@ -297,17 +297,17 @@ export interface IQuestionsResultsModel
 
 export interface IAssessment {
   id: TId;
-  last_modification_time: string;
+  lastModificationTime: string;
   status: TStatus;
   title: string;
   // code: string;
   color: IColor;
-  is_calculate_valid: boolean;
-  is_confidence_valid?: boolean;
+  isCalculateValid: boolean;
+  isConfidenceValid?: boolean;
   assessment_results: string[];
-  assessment_kit: IAssessmentKitList;
+  kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
-  result_maturity_level: IMaturityLevel;
+  maturityLevel: IMaturityLevel;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {

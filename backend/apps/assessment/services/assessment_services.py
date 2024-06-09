@@ -25,9 +25,25 @@ def edit_assessment(request, assessment_id):
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
+
 def create_assessment(request):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/assessments',
         json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def load_assessment(request, assessment_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def list_assessments(request):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments',
+        params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}

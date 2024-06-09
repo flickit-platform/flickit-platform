@@ -972,7 +972,7 @@ export const createService = (
     ) {
       const { spaceId } = args ?? {};
 
-      return axios.post(`/authinfo/spaces/leave/${spaceId}/`, {
+      return axios.delete(`/api/v1/spaces/${spaceId}/leave/`, {
         ...(config ?? {}),
       });
     },

@@ -43,3 +43,16 @@ class UsersRolesInAssessmentApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class UsersAccessToAssessmentApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, assessment_id):
+        result = assessment_user_roles_services.assessment_user_list(request, assessment_id)
+        return Response(data=result["body"], status=result["status_code"])

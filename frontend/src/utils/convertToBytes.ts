@@ -1,7 +1,7 @@
 const convertToBytes = (bytes: number, format = "B") => {
     if (!+bytes) return 0;
 
-    const k = 1000;
+    const k = 1024;
     const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
     const findSize = (element: string) => element.toLowerCase() === format.toLowerCase()
