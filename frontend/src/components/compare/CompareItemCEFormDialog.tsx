@@ -134,7 +134,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             {...useConnectSelectField({
               url: "/api/v1/assessments/",
               searchParams: {
-                kit_id: assessment_kit && assessment_kit[0]?.kit?.id,
+                kitId: assessment_kit && assessment_kit[0]?.kit?.id,
                 size: PAGE_SIZE,
                 page: PageCount
               },
