@@ -120,7 +120,7 @@ const AssessmentSettingContainer = () => {
                                 </AssessmentSettingBox>
                             </Grid>
                         </Grid>
-                        <AddMemeberDialog
+                        <AddMemberDialog
                             expanded={expanded}
                             onClose={handleClose}
                             listOfRoles={listOfRoles}
@@ -136,7 +136,7 @@ const AssessmentSettingContainer = () => {
     )
 }
 
-const AddMemeberDialog = (props: {
+const AddMemberDialog = (props: {
     expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
     listOfRoles: any,assessmentId: any
@@ -311,6 +311,11 @@ const AddMemeberDialog = (props: {
                             </Select>
                         </FormControl>
                     </div>
+                </Box>
+                <Box sx={{
+                    width: "100%", display: "flex", gap: 2, padding: "16px",
+                    justifyContent: "center"
+                }}>
                     <Button
                         sx={{
                             color: "#1CC2C4",
@@ -327,11 +332,6 @@ const AddMemeberDialog = (props: {
                     >
                         {cancelText}
                     </Button>
-                </Box>
-                <Box sx={{
-                    width: "100%", display: "flex", gap: 2, padding: "16px",
-                    justifyContent: "center"
-                }}>
                     <Button
                         sx={{
                             "&.MuiButton-root": {
@@ -517,7 +517,7 @@ const MemberSection = (props: {
         {id: 'email', label: 'email', minWidth: 140},
         {
             id: 'role',
-            label: 'rouls',
+            label: 'roles',
             minWidth: 140,
             align: 'right',
         },
@@ -657,7 +657,7 @@ const MemberSection = (props: {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
+    {/*        <TablePagination
                 rowsPerPageOptions={[5, 10]}
                 component="div"
                 count={rows.length}
@@ -665,7 +665,7 @@ const MemberSection = (props: {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            />*/}
         </Paper>
     );
 }

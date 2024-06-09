@@ -207,7 +207,7 @@ export const createService = (
         return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
     },
     addRoleMember(
-        args: { assessmentId: string, memberSelected :any ,roleSelected:any },
+        args: { assessmentId: string, userId :string ,roleId:string },
         config: AxiosRequestConfig<any> | undefined
     ){
         const { assessmentId, } = args ?? {};
