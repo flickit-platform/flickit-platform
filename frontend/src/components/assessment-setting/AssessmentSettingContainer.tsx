@@ -8,7 +8,7 @@ import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOf
 import stringAvatar from "@utils/stringAvatar";
 import {Trans} from "react-i18next";
 import {styles} from "@styles";
-import {IAssessmentReportModel, IMemberModel, UserRoles} from "@types";
+import {IAssessmentReportModel, IMemberModel, RolesType} from "@types";
 import {ICustomError} from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import AssessmentSettingBox from "@components/assessment-setting/AssessmentSettingBox";
@@ -38,12 +38,11 @@ import Box from "@mui/material/Box";
 const AssessmentSettingContainer = () => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
-
     const [expanded, setExpanded] = useState<boolean>(false);
 
-    const fetchAssessmentsUserRoles = useQuery<IAssessmentReportModel>({
+    const fetchAssessmentsRoles = useQuery<RolesType>({
         service: (args, config) =>
-            service.fetchAssessmentsUserRoles(args, config),
+            service.fetchAssessmentsRoles(args, config),
         toastError: false,
         toastErrorOptions: {filterByStatus: [404]},
     });
@@ -54,22 +53,11 @@ const AssessmentSettingContainer = () => {
         toastError: false,
         toastErrorOptions: {filterByStatus: [404]},
     });
-
     const fetchPathInfo = useQuery({
         service: (args, config) =>
             service.fetchPathInfo({assessmentId, ...(args || {})}, config),
         runOnMount: true,
     });
-
-    const addMember = async (e: any) => {
-        try {
-            // await deleteEvidence.query();
-            // await evidencesQueryData.query();
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
 
     const handleClickOpen = () => {
         setExpanded(true);
@@ -81,11 +69,15 @@ const AssessmentSettingContainer = () => {
 
     return (
         <QueryBatchData
-            queryBatchData={[fetchPathInfo, fetchAssessmentsUserRoles]}
+            queryBatchData={[
+                fetchPathInfo,
+                fetchAssessmentsRoles,
+                fetchAssessmentsUserlistRoles
+            ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([pathInfo = {}, UserRoles = {}]) => {
+            render={([pathInfo = {}, Roles = {}, listOfUser = []]) => {
                 const {space, assessment: {title}} = pathInfo;
-                const {items: listOfRoles} = UserRoles;
+                const {items: listOfRoles} = Roles;
 
                 return (
                     <Box m="auto" pb={3} sx={{px: {lg: 14, xs: 2, sm: 3}}}>
@@ -122,8 +114,8 @@ const AssessmentSettingContainer = () => {
                                     openModal={handleClickOpen}
                                 >
                                     <MemberSection listOfRoles={listOfRoles}
-                                                   fetchAssessmentsUserlistRoles={fetchAssessmentsUserlistRoles.query}
-                                                   fetchAssessmentsUserRoles={fetchAssessmentsUserRoles.query}
+                                                   listOfUser={listOfUser}
+                                                   fetchAssessmentsRoles={fetchAssessmentsRoles.query}
                                     />
                                 </AssessmentSettingBox>
                             </Grid>
@@ -131,8 +123,8 @@ const AssessmentSettingContainer = () => {
                         <AddMemeberDialog
                             expanded={expanded}
                             onClose={handleClose}
-                            onConfirm={addMember}
                             listOfRoles={listOfRoles}
+                            assessmentId={assessmentId}
                             title={<Trans i18nKey={"addNewMember"}/>}
                             cancelText={<Trans i18nKey={"cancel"}/>}
                             confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
@@ -145,13 +137,13 @@ const AssessmentSettingContainer = () => {
 }
 
 const AddMemeberDialog = (props: {
-    expanded: boolean, onClose: () => void, onConfirm: any,
+    expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
-    listOfRoles: UserRoles[]
+    listOfRoles: any,assessmentId: any
 }) => {
     const {
-        expanded, onClose, onConfirm, title, cancelText, confirmText,
-        listOfRoles
+        expanded, onClose, title, cancelText, confirmText,
+        listOfRoles, assessmentId
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -161,9 +153,14 @@ const AddMemeberDialog = (props: {
     const {spaceId = ""} = useParams();
 
     const fullScreen = useScreenResize("sm");
-
     const spaceMembersQueryData = useQuery({
         service: (args, config) => service.fetchSpaceMembers({spaceId}, config),
+    });
+
+    const addRoleMember = useQuery({
+        service: (args = {assessmentId,userId : memberSelected,roleId: roleSelected },
+                  config) => service.addRoleMember(
+            args, config),
     });
 
     const handleChangeMember = (event: SelectChangeEvent<typeof memberOfSpace>) => {
@@ -192,10 +189,25 @@ const AddMemeberDialog = (props: {
         })()
     }, [expanded]);
 
+    const onConfirm = async (e: any) => {
+        try {
+        await addRoleMember.query()
+
+        } catch (e) {
+            const err = e as ICustomError;
+            toastError(err);
+        }
+    };
+    const closeDialog =()=>{
+        onClose()
+        setMemberSelected([])
+        setRoleSelected("")
+    }
+
     return (
         <Dialog
             open={expanded}
-            onClose={onClose}
+            onClose={closeDialog}
             maxWidth={"sm"}
             // fullScreen={fullScreen}
             fullWidth
@@ -260,7 +272,7 @@ const AddMemeberDialog = (props: {
                             >
                                 {memberOfSpace.map(member => {
                                     return (
-                                        <MenuItem key={member.id} value={member.displayName}
+                                        <MenuItem key={member.id} value={member.id}
                                         >
                                             <Box style={{display: "flex", gap: "2px"}}>
                                                 <Avatar
@@ -281,27 +293,24 @@ const AddMemeberDialog = (props: {
                         <Trans i18nKey={"as"}/>
                     </Typography>
                     <div>
-                        <FormControl sx={{m: 1, minWidth: {xs: 90, sm: 150}, maxWidth: 150}}>
+                        <FormControl
+                            sx={{m: 1, minWidth: {xs: 90, sm: 150}, maxWidth: 150}}>
                             <Select
                                 labelId="demo-simple-select-autowidth-label"
                                 id="demo-simple-select-autowidth"
                                 value={roleSelected}
                                 onChange={handleChangeRole}
                                 autoWidth
+                                disabled={!memberSelected}
                             >
-                                {listOfRoles.map(roles => {
+                                {listOfRoles.map((role : any) => {
                                     return (
-                                        <MenuItem key={roles.id} value={roles.title}>{roles.title}</MenuItem>
+                                        <MenuItem key={role.id} value={role.id}>{role.title}</MenuItem>
                                     )
                                 })}
                             </Select>
                         </FormControl>
                     </div>
-                </Box>
-                <Box sx={{
-                    width: "100%", display: "flex", gap: 2, padding: "16px",
-                    justifyContent: "center"
-                }}>
                     <Button
                         sx={{
                             color: "#1CC2C4",
@@ -314,10 +323,15 @@ const AddMemeberDialog = (props: {
                             },
                         }}
                         variant="outlined"
-                        onClick={onClose}
+                        onClick={closeDialog}
                     >
                         {cancelText}
                     </Button>
+                </Box>
+                <Box sx={{
+                    width: "100%", display: "flex", gap: 2, padding: "16px",
+                    justifyContent: "center"
+                }}>
                     <Button
                         sx={{
                             "&.MuiButton-root": {
@@ -475,14 +489,13 @@ const GeneralSection = () => {
 }
 
 const MemberSection = (props: {
-    listOfRoles: UserRoles[],
-    fetchAssessmentsUserlistRoles: () => void,
-    fetchAssessmentsUserRoles: () => void
+    listOfRoles: any,
+    listOfUser: any,
+    fetchAssessmentsRoles: () => void
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
-
-    const {listOfRoles, fetchAssessmentsUserlistRoles, fetchAssessmentsUserRoles} = props
+    const {listOfRoles, listOfUser, fetchAssessmentsRoles} = props
 
     interface Column {
         id: 'displayName' | 'email' | 'role'
@@ -492,12 +505,11 @@ const MemberSection = (props: {
         format?: (value: number) => string;
     }
 
-    const deleteUserRole = useQuery({
+    const deleteUserRole= useQuery({
         service: (args, config) =>
-            service.deleteUserRole({assessmentId, ...(args || {})}, config),
+            service.deleteUserRole({assessmentId,args}, config),
         runOnMount: true,
     });
-
 
     const columns: readonly Column[] = [
         {id: 'displayName', label: '', minWidth: 140},
@@ -516,7 +528,6 @@ const MemberSection = (props: {
             align: 'right',
         }
     ];
-
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -550,11 +561,11 @@ const MemberSection = (props: {
     };
 
 
-    const Deleteperson = async () => {
+    const Deleteperson = async (id: any) => {
         try {
-            await deleteUserRole.query()
-            await fetchAssessmentsUserRoles
-            await fetchAssessmentsUserlistRoles
+            await deleteUserRole.query(id)
+            await fetchAssessmentsRoles
+            // await fetchAssessmentsUserlistRoles
         } catch (e) {
             console.log(e)
         }
@@ -580,7 +591,7 @@ const MemberSection = (props: {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {listOfUser.items
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any) => {
                                 return (
@@ -615,11 +626,11 @@ const MemberSection = (props: {
                                                     <Select
                                                         labelId="demo-multiple-name-label"
                                                         id="demo-multiple-name"
-                                                        value={changeRole}
+                                                        value={changeRole || row?.role?.title}
                                                         onChange={handleChange}
                                                         // input={<OutlinedInput label="Name"/>}
                                                     >
-                                                        {listOfRoles.map((role) => (
+                                                        {listOfRoles.map((role : any) => (
                                                             <MenuItem
                                                                 key={role.title}
                                                                 value={role.title}
@@ -632,7 +643,7 @@ const MemberSection = (props: {
                                             </div>
                                             <Box
                                                 sx={{...styles.centerVH, width: "150px"}}
-                                                onClick={Deleteperson}
+                                                onClick={() => Deleteperson(row.id)}
                                             >
                                                 <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
                                                     <DeleteRoundedIcon/>

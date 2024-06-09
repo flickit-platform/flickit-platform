@@ -553,8 +553,10 @@ export interface IDynamicGaugeSVGProps {
   className?: string;
 }
 
-export interface UserRoles {
-  id: number;
-  title: string;
-  description: string
+export interface RolesType {
+  items:{
+    id: number;
+    title: string;
+    description: string
+  }[]
 }

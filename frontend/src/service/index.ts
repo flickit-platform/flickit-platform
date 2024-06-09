@@ -194,7 +194,7 @@ export const createService = (
     ) {
       return axios.post(`/api/v2/assessments/`, data, config);
     },
-    fetchAssessmentsUserRoles(
+      fetchAssessmentsRoles(
         args: any,
         config: AxiosRequestConfig<any> | undefined
     ) {
@@ -206,8 +206,15 @@ export const createService = (
     ) {
         return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
     },
+    addRoleMember(
+        args: { assessmentId: string, memberSelected :any ,roleSelected:any },
+        config: AxiosRequestConfig<any> | undefined
+    ){
+        const { assessmentId, } = args ?? {};
+        return axios.post(`/api/v1/assessments/${assessmentId}/assessment-user-roles/`,args, config);
+    },
     deleteUserRole(
-        {assessmentId,userId}: {assessmentId: string,userId: string},
+        {assessmentId,args : userId}: {assessmentId: string,args: string},
         config: AxiosRequestConfig<any> | undefined
     ){
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
