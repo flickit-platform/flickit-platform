@@ -28,7 +28,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import useScreenResize from "@utils/useScreenResize";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
@@ -47,9 +46,9 @@ const AssessmentSettingContainer = () => {
         toastErrorOptions: {filterByStatus: [404]},
     });
 
-    const fetchAssessmentsUserlistRoles = useQuery<IAssessmentReportModel>({
+    const fetchAssessmentsUserListRoles = useQuery<IAssessmentReportModel>({
         service: (args = {assessmentId}, config) =>
-            service.fetchAssessmentsUserlistRoles(args, config),
+            service.fetchAssessmentsUserListRoles(args, config),
         toastError: false,
         toastErrorOptions: {filterByStatus: [404]},
     });
@@ -72,7 +71,7 @@ const AssessmentSettingContainer = () => {
             queryBatchData={[
                 fetchPathInfo,
                 fetchAssessmentsRoles,
-                fetchAssessmentsUserlistRoles
+                fetchAssessmentsUserListRoles
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
             render={([pathInfo = {}, Roles = {}, listOfUser = []]) => {
@@ -116,19 +115,21 @@ const AssessmentSettingContainer = () => {
                                     <MemberSection listOfRoles={listOfRoles}
                                                    listOfUser={listOfUser}
                                                    fetchAssessmentsRoles={fetchAssessmentsRoles.query}
+                                                   fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
                                     />
                                 </AssessmentSettingBox>
                             </Grid>
                         </Grid>
-                        <AddMemberDialog
-                            expanded={expanded}
-                            onClose={handleClose}
-                            listOfRoles={listOfRoles}
-                            assessmentId={assessmentId}
-                            title={<Trans i18nKey={"addNewMember"}/>}
-                            cancelText={<Trans i18nKey={"cancel"}/>}
-                            confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
-                        />
+                        {/*<AddMemberDialog*/}
+                        {/*    expanded={expanded}*/}
+                        {/*    onClose={handleClose}*/}
+                        {/*    listOfRoles={listOfRoles}*/}
+                        {/*    fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}*/}
+                        {/*    assessmentId={assessmentId}*/}
+                        {/*    title={<Trans i18nKey={"addNewMember"}/>}*/}
+                        {/*    cancelText={<Trans i18nKey={"cancel"}/>}*/}
+                        {/*    confirmText={<Trans i18nKey={"addToThisAssessment"}/>}*/}
+                        {/*/>*/}
                     </Box>
                 );
             }}
@@ -139,11 +140,11 @@ const AssessmentSettingContainer = () => {
 const AddMemberDialog = (props: {
     expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
-    listOfRoles: any,assessmentId: any
+    listOfRoles: any,assessmentId: any,fetchAssessmentsUserListRoles : ()=> void
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles, assessmentId
+        listOfRoles, assessmentId, fetchAssessmentsUserListRoles
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -152,13 +153,12 @@ const AddMemberDialog = (props: {
     const {service} = useServiceContext();
     const {spaceId = ""} = useParams();
 
-    const fullScreen = useScreenResize("sm");
     const spaceMembersQueryData = useQuery({
         service: (args, config) => service.fetchSpaceMembers({spaceId}, config),
     });
 
     const addRoleMember = useQuery({
-        service: (args = {assessmentId,userId : memberSelected,roleId: roleSelected },
+        service: (args = { assessmentId, userId : memberSelected,roleId: roleSelected },
                   config) => service.addRoleMember(
             args, config),
     });
@@ -184,25 +184,28 @@ const AddMemberDialog = (props: {
                 const filtredItems = items.filter((item: any) => !item.isOwner)
                 setMemberOfSpace(filtredItems)
             } catch (e) {
-                console.log(e)
+                const err = e as ICustomError;
+                toastError(err);
             }
         })()
     }, [expanded]);
 
-    const onConfirm = async (e: any) => {
-        try {
-        await addRoleMember.query()
-
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
     const closeDialog =()=>{
         onClose()
         setMemberSelected([])
         setRoleSelected("")
     }
+
+    const onConfirm = async (e: any) => {
+        try {
+        await addRoleMember.query()
+        await fetchAssessmentsUserListRoles()
+        } catch (e) {
+            const err = e as ICustomError;
+            toastError(err);
+        }
+        closeDialog()
+    };
 
     return (
         <Dialog
@@ -491,11 +494,11 @@ const GeneralSection = () => {
 const MemberSection = (props: {
     listOfRoles: any,
     listOfUser: any,
-    fetchAssessmentsRoles: () => void
+    fetchAssessmentsUserListRoles: () => void
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
-    const {listOfRoles, listOfUser, fetchAssessmentsRoles} = props
+    const {listOfRoles, listOfUser, fetchAssessmentsUserListRoles} = props
 
     interface Column {
         id: 'displayName' | 'email' | 'role'
@@ -560,14 +563,13 @@ const MemberSection = (props: {
         );
     };
 
-
-    const Deleteperson = async (id: any) => {
+    const DeletePerson = async (id: any) => {
         try {
             await deleteUserRole.query(id)
-            await fetchAssessmentsRoles
-            // await fetchAssessmentsUserlistRoles
+            await fetchAssessmentsUserListRoles()
         } catch (e) {
-            console.log(e)
+            const err = e as ICustomError;
+            toastError(err);
         }
     }
 
@@ -643,7 +645,7 @@ const MemberSection = (props: {
                                             </div>
                                             <Box
                                                 sx={{...styles.centerVH, width: "150px"}}
-                                                onClick={() => Deleteperson(row.id)}
+                                                onClick={() => DeletePerson(row.id)}
                                             >
                                                 <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
                                                     <DeleteRoundedIcon/>

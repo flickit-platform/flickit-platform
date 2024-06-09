@@ -122,7 +122,6 @@ const AssessmentSettingBox = (props: any) => {
                                 <OnHoverInputTitleSetting
                                     formMethods={formMethods}
                                     data={assessmentTitle}
-                                    // title={<Trans i18nKey="summary" />}
                                     infoQuery={assessmentTitle}
                                     type="assessmentTitle"
                                     editable={true}
@@ -150,7 +149,7 @@ const OnHoverInputTitleSetting = (props: any) => {
     const handleMouseOut = () => {
         setIsHovering(false);
     };
-    const {data, title, editable, infoQuery, type, formMethods} = props;
+    const {data, editable, infoQuery, type, formMethods} = props;
     const [hasError, setHasError] = useState<boolean>(false);
     const [error, setError] = useState<any>({});
     const [inputData, setInputData] = useState<string>(data);
@@ -175,9 +174,9 @@ const OnHoverInputTitleSetting = (props: any) => {
     });
     const updateAssessmentKit = async () => {
         try {
-            const res = await updateAssessmentKitQuery.query();
+    /*        const res = await updateAssessmentKitQuery.query();
             res.message && toast.success(res.message);
-            await infoQuery();
+            await infoQuery();*/
         } catch (e) {
             const err = e as ICustomError;
             if (Array.isArray(err.response?.data?.message)) {
@@ -209,9 +208,6 @@ const OnHoverInputTitleSetting = (props: any) => {
                 }}
                 width="100%"
             >
-                <Typography variant="body2" mr={4} sx={{minWidth: "64px !important"}}>
-                    {title}
-                </Typography>
 
                 {editable && show ? (
                     <Box
@@ -289,9 +285,11 @@ const OnHoverInputTitleSetting = (props: any) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                     >
-                        <Typography variant="body2" fontWeight="700">
-                            {data.replace(/<\/?p>/g, "")}
-                        </Typography>
+                          <Typography color="#1CC2C4" fontWeight={500}
+                                      sx={{fontSize: {xs: "18px", sm: "24px"}}}
+                                      lineHeight={"normal"}>
+                              {data.replace(/<\/?p>/g, "")}
+                          </Typography>
                         {isHovering && (
                             <IconButton
                                 title="Edit"
