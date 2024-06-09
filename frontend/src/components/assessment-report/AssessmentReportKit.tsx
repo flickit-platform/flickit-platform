@@ -37,10 +37,10 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
         px: { xs: 2, sm: 3 },
       }}
     >
-      <Grid container alignItems="stretch" gap={0.5}>
+      <Grid container alignItems="stretch" sx={{ gap: { lg: 1, md: 1 } }}>
         <Grid
           item
-          lg={4}
+          lg={3.8}
           md={6}
           sm={12}
           xs={12}
@@ -75,7 +75,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
 
         <Grid
           item
-          lg={3}
+          lg={3.8}
           md={5}
           sm={12}
           xs={12}
@@ -98,7 +98,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
 
         <Grid
           item
-          lg={4}
+          lg={3.9}
           md={12}
           sm={12}
           xs={12}

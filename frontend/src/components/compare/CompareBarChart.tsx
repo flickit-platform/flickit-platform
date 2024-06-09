@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   Bar,
+  TooltipProps,
 } from "recharts";
 
 interface CompareBarProps {
@@ -16,7 +17,39 @@ interface CompareBarProps {
   assessmentCount: number;
 }
 
-const barColors = ["#49CED0", "#3B4F68", "#FAB365", "#E04B7C"];
+const barColors = ["#82A6CB", "#98ABEE", "#0E46A3", "#11235A"];
+
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
+  active,
+  payload,
+}) => {
+  if (active && payload && payload.length) {
+    {
+      payload.map((entry, index) => console.log(entry.payload));
+    }
+    return (
+      <div
+        className="custom-tooltip"
+        style={{
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          padding: "10px",
+        }}
+      >
+        {payload.map((entry, index) => (
+          <p key={`tooltip-item-${index}`} style={{ color: entry.color }}>
+            {`${entry.name}: ${
+              entry.payload[`${entry.dataKey}Title`]
+                ? entry.payload[`${entry.dataKey}Title`]
+                : entry.value
+            } `}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 const CompareBarChart: React.FC<CompareBarProps> = ({
   data,
@@ -25,10 +58,9 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
 }) => {
   const generalBars = useMemo(() => {
     const bars: any = [];
-
-    console.log(assessmentCount)
     for (let i = 0; i < assessmentCount; i++) {
       const mlKey = `ml${i + 1}`;
+      const mlTitleKey = `mlTitle${i + 1}`;
       const barName = data.find(
         (attribute) => attribute[`assessmentTitle${i + 1}`]
       )?.[`assessmentTitle${i + 1}`];
@@ -40,12 +72,13 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
             name={barName}
             fill={barColors[i % barColors.length]}
             maxBarSize={40}
+            type={mlTitleKey}
           />
         );
       }
     }
     return bars;
-  }, [data]);
+  }, [data, assessmentCount]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -67,9 +100,9 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
           tick={<CustomAxisTick />}
         />
         <YAxis type="number" domain={[0, 5]} tickCount={6} />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         <Legend layout="horizontal" verticalAlign="top" align="right" />
-        {generalBars}{" "}
+        {generalBars}
       </BarChart>
     </ResponsiveContainer>
   );

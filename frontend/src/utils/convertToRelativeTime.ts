@@ -25,6 +25,6 @@ export const convertToRelativeTime = (dateString: any) => {
   } else if (isSameMonth(date, subMonths(now, 1))) {
     return "Last month";
   } else {
-    return formatDistanceToNow(date, { addSuffix: true });
+    return formatDistanceToNow(date);
   }
 };

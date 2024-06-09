@@ -109,8 +109,13 @@ const AssessmentReportContainer = (props: any) => {
                 </Box>
                 <Grid container alignItems="stretch" spacing={5}>
                   <Grid item lg={5} md={6} sm={12} xs={12}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                      <Typography color="#9DA7B3" marginX={4}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={1}
+                      height="100%"
+                    >
+                      <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
                         <Trans i18nKey="general" />
                       </Typography>
                       <AssessmentSummary
@@ -125,8 +130,13 @@ const AssessmentReportContainer = (props: any) => {
                     </Box>
                   </Grid>
                   <Grid item lg={7} md={6} sm={12} xs={12}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                      <Typography color="#9DA7B3" marginX={4}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={1}
+                      height="100%"
+                    >
+                      <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
                         <Trans i18nKey="overallStatus" />
                       </Typography>
                       <AssessmentOverallStatus
@@ -151,7 +161,7 @@ const AssessmentReportContainer = (props: any) => {
 
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography color="#9DA7B3" marginX={4}>
+                  <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
                     <Trans i18nKey="assessmentKit" />
                   </Typography>
                   <AssessmentReportKit assessmentKit={assessmentKit} />

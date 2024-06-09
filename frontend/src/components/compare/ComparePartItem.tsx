@@ -84,14 +84,11 @@ const ComparePartItem = (props: IComparePartsItemProps) => {
             </Title>
             <Box display="flex" justifyContent="center">
               <Gauge
-                systemStatus={data?.result_maturity_level.title}
-                maturity_level_number={
-                  data?.assessment_kit.maturity_levels_count
-                }
+                maturity_level_number={data?.kit?.maturityLevelsCount}
                 isMobileScreen={true}
-                shortTitle={true}
-                maturity_level_status={data?.result_maturity_level.title}
-                level_value={data?.result_maturity_level.index}
+                hideGuidance={true}
+                maturity_level_status={data?.maturityLevel?.title}
+                level_value={data?.maturityLevel?.value}
                 maxWidth="275px"
                 mt="auto"
               />
