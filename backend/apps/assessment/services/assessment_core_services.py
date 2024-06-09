@@ -9,7 +9,7 @@ def load_assessment_details_with_id(request, assessment_id):
     response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}')
     if response.status_code == status.HTTP_200_OK:
         data = response.json()
-        if not request.user.spaces.filter(id=data["spaceId"]).exists():
+        if not request.user.spaces.filter(id=data["space"]["id"]).exists():
             result["Success"] = False
             result["body"] = {"code": "no assessment found by this 'assessmentId'"}
             result["status_code"] = status.HTTP_400_BAD_REQUEST
