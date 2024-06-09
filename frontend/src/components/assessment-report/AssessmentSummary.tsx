@@ -9,11 +9,14 @@ import {
 } from "@types";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams} from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { Button } from "@mui/material";
+import MoreActions from "@common/MoreActions";
+import useMenu from "@utils/useMenu";
+import SettingsIcon from "@mui/icons-material/Settings";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
   expertGroup: AssessmentKitStatsExpertGroup;
@@ -35,7 +38,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
     answerCount,
   } = props;
   const {
-    assessment: { title, lastModificationTime, creationTime },
+    assessment: { title, lastModificationTime, creationTime, id: assessmentId },
   } = data;
   return (
     <Box
@@ -53,9 +56,11 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: "40px",
         px: { xs: 2, sm: 3 },
+        position: "relative"
       }}
       color="#1CC2C4"
     >
+        <Actions assessmentId={assessmentId} />
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
           fontSize="32px"
@@ -119,4 +124,29 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       </Box>
     </Box>
   );
+};
+
+const Actions = (props: {assessmentId: string}) => {
+    const { assessmentId } = props;
+    const navigate = useNavigate();
+    const { spaceId } = useParams()
+
+    const assessmentSetting = (e: any) => {
+        navigate({
+            pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+        });
+    };
+    return (
+        <MoreActions
+            {...useMenu()}
+            boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
+            items={
+                [{
+                    icon: <SettingsIcon fontSize="small" />,
+                    text: <Trans i18nKey="setting" />,
+                    onClick: assessmentSetting,
+                }]
+            }
+        />
+    );
 };
