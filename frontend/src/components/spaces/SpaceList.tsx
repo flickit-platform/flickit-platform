@@ -206,11 +206,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+            {isOwner && <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
               <IconButton size="small" component={Link} to={`/${spaceId}/setting`}>
                 <SettingsRoundedIcon />
               </IconButton>
-            </Box>
+            </Box>}
             <Actions
               isActiveSpace={isActiveSpace}
               dialogProps={dialogProps}
@@ -303,12 +303,7 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        isOwner && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="delete" />,
-          onClick: deleteItem,
-        },
-        !is_default_space_for_current_user && {
+        !is_default_space_for_current_user && !isOwner && {
           icon: <ExitToAppRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="leaveSpace" />,
           onClick: leaveSpace,
