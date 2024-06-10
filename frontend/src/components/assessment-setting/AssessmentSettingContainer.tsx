@@ -522,20 +522,13 @@ const MemberSection = (props: {
     });
 
     const columns: readonly Column[] = [
-        {id: 'displayName', label: '', minWidth: 140},
-        {id: 'displayName', label: 'Name', minWidth: 140},
-        {id: 'email', label: 'email', minWidth: 140},
+        {id: 'displayName', label: 'Name',minWidth: 230 },
+        {id: 'email', label: 'email', minWidth: 230 },
         {
             id: 'role',
             label: 'roles',
-            minWidth: 140,
             align: 'right',
-        },
-        {
-            id: 'role',
-            label: '',
-            minWidth: 140,
-            align: 'right',
+            minWidth: 230
         }
     ];
 
@@ -584,7 +577,9 @@ const MemberSection = (props: {
         <Paper sx={{width: '100%', overflow: 'hidden'}}>
             <TableContainer sx={{maxHeight: 440}}>
                 <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
+                    <TableHead
+                        sx={{width: '100%', overflow: 'hidden'}}
+                    >
                         <TableRow sx={{display: "inline", justifyContent: 'center', width: "100%"}}>
                             {columns.map((column) => (
                                 <TableCell
@@ -625,7 +620,7 @@ const MemberSection = (props: {
                                                 {row.displayName}
                                             </Typography>
                                             <Typography
-                                                sx={{...styles.centerVH, minWidth: "140px"}}
+                                                sx={{...styles.centerVH,width:"200px", minWidth: "300px"}}
                                             >
                                                 {row.email}
                                             </Typography>

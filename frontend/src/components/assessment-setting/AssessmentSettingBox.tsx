@@ -93,7 +93,7 @@ const AssessmentSettingBox = (props: any) => {
                         </Typography>
                     )
                 }
-                <Divider sx={{width: "100%", marginY: "24px"}}/>
+                <Divider sx={{width: "100%", marginTop: "24px",marginBottom: "10px"}}/>
                 {assessmentTitle && (
                     <>
                         <Box sx={{
@@ -105,12 +105,12 @@ const AssessmentSettingBox = (props: any) => {
                         >
                             <Typography color="#9DA7B3" fontWeight={500}
                                         whiteSpace={"nowrap"}
-                                        sx={{fontSize: {xs: "18px", sm: "24px"}}}
+                                        sx={{fontSize: {xs: "18px", sm: "24px"}, width:"40%"}}
                                         lineHeight={"normal"}>
                                 <Trans i18nKey="assessmentTitle"/>
                             </Typography>
 
-                            <Box sx={{display: "flex", justifyContent: 'center', alignItems: "center"}}>
+                            <Box sx={{display: "flex", justifyContent: 'center', alignItems: "center",width:"40%"}}>
                                 {/*TODO*/}
                                 {/*  <Typography color="#1CC2C4" fontWeight={500}*/}
                                 {/*              sx={{fontSize: {xs: "18px", sm: "24px"}}}*/}
@@ -128,7 +128,7 @@ const AssessmentSettingBox = (props: any) => {
                                 />
                             </Box>
                         </Box>
-                        <Divider sx={{width: "100%", marginY: "24px"}}/>
+                        <Divider sx={{width: "100%", marginBottom: "24px",marginTop: "10px"}}/>
                     </>
                 )}
                 {children}
