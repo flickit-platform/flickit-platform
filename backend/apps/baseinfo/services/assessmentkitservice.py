@@ -5,7 +5,6 @@ from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitLike
 from baseinfo.serializers import assessmentkitserializers
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel
-from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 
 def load_assessment_kit(assessment_kit_id) -> AssessmentKit:
@@ -27,14 +26,6 @@ def load_maturity_level(maturity_level_id) -> MaturityLevel:
         return MaturityLevel.objects.get(id=maturity_level_id)
     except MaturityLevel.DoesNotExist as e:
         raise MaturityLevel.DoesNotExist
-
-
-def is_assessment_kit_deletable(assessment_kit_id):
-    assessment_kit = load_assessment_kit(assessment_kit_id)
-    assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id, not_deleted=True)
-    if assessment_count_data["notDeletedCount"] != 0:
-        return ActionResult(success=False, message='Some assessments with this assessment_kit exist')
-    return ActionResult(success=True)
 
 
 def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_id):
