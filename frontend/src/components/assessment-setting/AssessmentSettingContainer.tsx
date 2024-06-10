@@ -124,7 +124,6 @@ const AssessmentSettingContainer = () => {
                         {/*    expanded={expanded}*/}
                         {/*    onClose={handleClose}*/}
                         {/*    listOfRoles={listOfRoles}*/}
-                        {/*    fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}*/}
                         {/*    assessmentId={assessmentId}*/}
                         {/*    title={<Trans i18nKey={"addNewMember"}/>}*/}
                         {/*    cancelText={<Trans i18nKey={"cancel"}/>}*/}
@@ -140,11 +139,11 @@ const AssessmentSettingContainer = () => {
 const AddMemberDialog = (props: {
     expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
-    listOfRoles: any,assessmentId: any,fetchAssessmentsUserListRoles : ()=> void
+    listOfRoles: any,assessmentId: any,
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles, assessmentId, fetchAssessmentsUserListRoles
+        listOfRoles, assessmentId,
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -199,12 +198,13 @@ const AddMemberDialog = (props: {
     const onConfirm = async (e: any) => {
         try {
         await addRoleMember.query()
-        await fetchAssessmentsUserListRoles()
+            // await fetchAssessmentsUserListRoles()
+            closeDialog()
         } catch (e) {
             const err = e as ICustomError;
             toastError(err);
+            closeDialog()
         }
-        closeDialog()
     };
 
     return (
@@ -308,8 +308,16 @@ const AddMemberDialog = (props: {
                             >
                                 {listOfRoles.map((role : any) => {
                                     return (
-                                        <MenuItem key={role.id} value={role.id}>{role.title}</MenuItem>
-                                    )
+                                        <MenuItem
+                                            style={{ display: "block"}}
+                                            key={role.title}
+                                            value={role.title}
+                                            sx={{maxWidth: "240px"}}
+                                        >
+                                            <Typography sx={{}}>{role.title}</Typography>
+
+                                            <div style={{ color: "#D3D3D3",fontSize: "12px",whiteSpace: "break-spaces" }}>{role.description}</div>
+                                        </MenuItem>                                    )
                                 })}
                             </Select>
                         </FormControl>
@@ -358,7 +366,6 @@ const AddMemberDialog = (props: {
         </Dialog>
     );
 };
-
 
 const GeneralSection = () => {
     return (
@@ -631,13 +638,20 @@ const MemberSection = (props: {
                                                         value={changeRole || row?.role?.title}
                                                         onChange={handleChange}
                                                         // input={<OutlinedInput label="Name"/>}
+                                                        inputProps={{
+                                                            renderValue: (option) => (changeRole || row?.role?.title ),
+                                                        }}
                                                     >
                                                         {listOfRoles.map((role : any) => (
                                                             <MenuItem
-                                                                key={role.title}
-                                                                value={role.title}
+                                                            style={{ display: "block"}}
+                                                            key={role.title}
+                                                            value={role.title}
+                                                            sx={{maxWidth: "240px"}}
                                                             >
-                                                                {role.title}
+                                                            <Typography>{role.title}</Typography>
+
+                                                            <div style={{ color: "#D3D3D3",fontSize: "12px",whiteSpace: "break-spaces" }}>{role.description}</div>
                                                             </MenuItem>
                                                         ))}
                                                     </Select>
