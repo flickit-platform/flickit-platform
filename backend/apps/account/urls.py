@@ -11,7 +11,6 @@ from account.views.spaceviews import ChangeCurrentSpaceViewSet
 from account.serializers.authserializers import MyTokenObtainPairSerializer
 
 router = routers.DefaultRouter()
-router.register('spaces', spaceviews.SpaceViewSet, basename='spaces')
 
 router.register('users', userviews.CustomUserViewSet, basename='users')
 

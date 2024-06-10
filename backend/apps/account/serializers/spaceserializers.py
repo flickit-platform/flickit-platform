@@ -27,21 +27,6 @@ class InviteMemberSerializer(serializers.Serializer):
         return attrs
 
 
-class SpaceListSerializer(serializers.ModelSerializer):
-    owner = UserSimpleSerializer()
-    members_number = serializers.IntegerField(source='users.count', read_only=True)
-    assessment_numbers = serializers.SerializerMethodField(read_only=True)
-    def get_assessment_numbers(self, space: Space):
-        count_assessmnet = get_assessment_kit_assessment_count(space_id=space.id, not_deleted=True)
-        return count_assessmnet["notDeletedCount"]
-
-
-
-    class Meta:
-        model = Space
-        fields = ['id', 'code', 'title', 'last_modification_date', 'owner', 'members_number', 'assessment_numbers']
-
-
 class SpaceSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
