@@ -39,8 +39,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   } = data;
   return (
     <Box
-      minHeight="400px"
-      maxHeight="400px"
+      height="100%"
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -80,8 +79,8 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           backgroundColor: "#1CC2C4",
           borderColor: "#1CC2C4",
           color: "#fff",
-          fontSize:"1.25rem",
-          py:"8px",
+          fontSize: "1.25rem",
+          py: "8px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#1CC2C4",

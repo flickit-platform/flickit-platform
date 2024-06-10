@@ -32,7 +32,7 @@ const SpaceSettingContainer = () => {
     service: (args, config) => service.fetchSpace({ spaceId }, config),
   });
 
-  const { title, isOwner} = data || {};
+  const { title, editable} = data || {};
   return (
     <Box maxWidth="1440px" m="auto">
       <Title
@@ -48,7 +48,7 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
-        toolbar={isOwner?<EditSpaceButton fetchSpace={query} />:<div/>}
+        toolbar={editable?<EditSpaceButton fetchSpace={query} />:<div/>}
         backLink={-1}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
@@ -60,7 +60,7 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings isOwner={isOwner}  />}</Box>
+      <Box pt={3}>{!loading && <SpaceSettings isOwner={editable}  />}</Box>
     </Box>
   );
 };

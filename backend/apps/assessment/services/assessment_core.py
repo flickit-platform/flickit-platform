@@ -447,7 +447,7 @@ def get_assessment_report(assessments_details, request):
 def get_path_info_with_assessment_id(request, assessments_details):
     result = dict()
     questionnaire = None
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
+    kit = assessmentkitservice.load_assessment_kit(assessments_details["kit"]["id"])
     if "questionnaire_id" in request.query_params:
         if Questionnaire.objects.filter(id=request.query_params["questionnaire_id"]).filter(
                 kit_version=kit.kit_version_id).exists():
@@ -461,11 +461,11 @@ def get_path_info_with_assessment_id(request, assessments_details):
             result["status_code"] = status.HTTP_400_BAD_REQUEST
             return result
 
-    assessment = {"id": assessments_details["assessmentId"],
-                  "title": assessments_details["assessmentTitle"]
+    assessment = {"id": assessments_details["id"],
+                  "title": assessments_details["title"]
                   }
-    space_object = Space.objects.get(id=assessments_details["spaceId"])
-    space = {"id": assessments_details["spaceId"],
+    space_object = Space.objects.get(id=assessments_details["space"]["id"])
+    space = {"id": space_object.id,
              "title": space_object.title
              }
 

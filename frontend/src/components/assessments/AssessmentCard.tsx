@@ -43,15 +43,11 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const {
-    result_maturity_level,
-    is_calculate_valid,
-    is_confidence_valid,
-    assessment_kit,
-    id,
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime
   } = item;
-  const hasML = hasMaturityLevel(result_maturity_level?.value);
-  const { maturity_levels_count } = assessment_kit;
+  const hasML = hasMaturityLevel(maturityLevel?.value);
+  console.log(item);
+  const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();
   const calculateMaturityLevelQuery = useQuery({
@@ -67,8 +63,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
   const fetchAssessments = async () => {
     try {
-      setShow(is_calculate_valid);
-      if (!is_calculate_valid) {
+      setShow(isCalculateValid);
+      if (!isCalculateValid) {
         const data = await calculateMaturityLevelQuery.query();
         setCalculateResault(data);
         if (data?.id) {
@@ -88,7 +84,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   };
   useEffect(() => {
     fetchAssessments();
-  }, [is_calculate_valid]);
+  }, [isCalculateValid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper
@@ -116,7 +112,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               sx={{ textDecoration: "none" }}
               component={Link}
               to={
-                is_calculate_valid
+                isCalculateValid
                   ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
@@ -147,7 +143,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(item.last_modification_time)}
+                {formatDate(lastModificationTime)}
               </Typography>
             </Box>
           </Grid>
@@ -161,17 +157,16 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           >
             {show ? (
               <Gauge
-                systemStatus={item?.status}
-                maturity_level_number={maturity_levels_count}
+                maturity_level_number={maturityLevelsCount}
                 level_value={
                   calculateResault?.index
                     ? calculateResault?.index
-                    : result_maturity_level?.index
+                    : maturityLevel?.index
                 }
                 maturity_level_status={
                   calculateResault?.title
                     ? calculateResault?.title
-                    : result_maturity_level?.title
+                    : maturityLevel?.title
                 }
                 maxWidth="275px"
                 mt="auto"
@@ -180,11 +175,10 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <LoadingGauge />
             )}
           </Grid>
-  
+
           <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
             <Button
               startIcon={<QuizRoundedIcon />}
-           
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
@@ -192,7 +186,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               component={Link}
               state={location}
               to={`${item.id}/questionnaires`}
-            
               data-cy="questionnaires-btn"
             >
               <Trans i18nKey="questionnaires" />

@@ -82,7 +82,7 @@ export const createService = (
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/authinfo/spaces/${spaceId}/`, config);
+      return axios.get(`/api/v1/spaces/${spaceId}/`, config);
     },
     seenSpaceList(
       { spaceId }: { spaceId: TId },
@@ -183,7 +183,7 @@ export const createService = (
         params: {
           page: page,
           size: size,
-          space_id: spaceId,
+          spaceId: spaceId,
           ...(assessmentKitId && { assessment_kit_id: assessmentKitId }),
         },
       });
@@ -972,7 +972,7 @@ export const createService = (
     ) {
       const { spaceId } = args ?? {};
 
-      return axios.post(`/authinfo/spaces/leave/${spaceId}/`, {
+      return axios.delete(`/api/v1/spaces/${spaceId}/leave/`, {
         ...(config ?? {}),
       });
     },
