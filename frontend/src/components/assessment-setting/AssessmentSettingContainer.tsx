@@ -46,17 +46,17 @@ const AssessmentSettingContainer = () => {
         toastErrorOptions: {filterByStatus: [404]},
     });
 
-    const fetchAssessmentsUserListRoles = useQuery<IAssessmentReportModel>({
+    const fetchAssessmentsUserListRoles = useQuery({
         service: (args = {assessmentId}, config) =>
             service.fetchAssessmentsUserListRoles(args, config),
         toastError: false,
         toastErrorOptions: {filterByStatus: [404]},
     });
-    const fetchPathInfo = useQuery({
-        service: (args, config) =>
-            service.fetchPathInfo({assessmentId, ...(args || {})}, config),
-        runOnMount: true,
-    });
+    // const fetchPathInfo = useQuery({
+    //     service: (args, config) =>
+    //         service.fetchPathInfo({assessmentId, ...(args || {})}, config),
+    //     runOnMount: true,
+    // });
 
     const handleClickOpen = () => {
         setExpanded(true);
@@ -65,24 +65,26 @@ const AssessmentSettingContainer = () => {
     const handleClose = () => {
         setExpanded(false);
     };
-
+let title = "test"
     return (
         <QueryBatchData
             queryBatchData={[
-                fetchPathInfo,
+                // fetchPathInfo,
                 fetchAssessmentsRoles,
                 fetchAssessmentsUserListRoles
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([pathInfo = {}, Roles = {}, listOfUser = []]) => {
-                const {space, assessment: {title}} = pathInfo;
+            render={([
+                // pathInfo = {}
+                         , Roles = {}, listOfUser = []]) => {
+                // const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = Roles;
 
                 return (
                     <Box m="auto" pb={3} sx={{px: {lg: 14, xs: 2, sm: 3}}}>
-                        <AssessmentAccessManagementTitle
-                            pathInfo={pathInfo}
-                        />
+                        {/*<AssessmentAccessManagementTitle*/}
+                        {/*    pathInfo={pathInfo}*/}
+                        {/*/>*/}
                         <Grid container columns={12} mt={3} mb={5}>
                             <Grid item sm={12} xs={12}>
                                 <Box
@@ -112,11 +114,11 @@ const AssessmentSettingContainer = () => {
                                     boxTitle={"members"}
                                     openModal={handleClickOpen}
                                 >
-                                    <MemberSection listOfRoles={listOfRoles}
-                                                   listOfUser={listOfUser}
-                                                   fetchAssessmentsRoles={fetchAssessmentsRoles.query}
-                                                   fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
-                                    />
+                                    {/*<MemberSection listOfRoles={listOfRoles}*/}
+                                    {/*               listOfUser={listOfUser}*/}
+                                    {/*               fetchAssessmentsRoles={fetchAssessmentsRoles.query}*/}
+                                    {/*               fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}*/}
+                                    {/*/>*/}
                                 </AssessmentSettingBox>
                             </Grid>
                         </Grid>
@@ -634,7 +636,7 @@ const MemberSection = (props: {
                                                         onChange={handleChange}
                                                         // input={<OutlinedInput label="Name"/>}
                                                         inputProps={{
-                                                            renderValue: (option) => (changeRole || row?.role?.title ),
+                                                            renderValue: () => (changeRole || row?.role?.title ),
                                                         }}
                                                     >
                                                         {listOfRoles.map((role : any) => (
