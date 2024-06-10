@@ -57,14 +57,6 @@ class SimpleLoadOptionValueSerilizer(serializers.ModelSerializer):
         fields = ['id', 'value', 'question_impact']
 
 
-class LoadAnswerOptionWithlistidSerilizer(serializers.ModelSerializer):
-    answer_option_impacts = SimpleLoadOptionValueSerilizer(many=True, source="option_values")
-
-    class Meta:
-        model = AnswerTemplate
-        fields = ['id', 'question_id', 'answer_option_impacts']
-
-
 class SimpleLoadAttributesForAssessmentSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualityAttribute
