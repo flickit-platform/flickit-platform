@@ -5,7 +5,6 @@ from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitLike
 from baseinfo.serializers import assessmentkitserializers
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel
-from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 
 def load_assessment_kit(assessment_kit_id) -> AssessmentKit:

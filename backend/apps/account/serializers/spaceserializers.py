@@ -2,7 +2,6 @@ from rest_framework import serializers
 from account.models import Space
 from account.services import userservices
 from account.serializers.commonserializers import UserSimpleSerializer
-from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 
 # from django.db.models.fields import IntegerField

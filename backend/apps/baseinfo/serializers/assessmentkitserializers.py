@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, \
     MaturityLevel, LevelCompetence
