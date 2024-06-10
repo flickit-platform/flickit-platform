@@ -207,7 +207,7 @@ export interface IOwnerModel {
 export interface ISpaceModel {
   code: string;
   id: TId;
-  isOwner: boolean;
+  editable: boolean;
   title: string;
   lastModificationTime?: string;
   membersCount?: number;
