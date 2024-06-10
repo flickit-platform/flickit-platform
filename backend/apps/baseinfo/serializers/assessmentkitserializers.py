@@ -100,45 +100,6 @@ class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSer
         fields = ['title']
 
 
-class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
-    last_update_time = serializers.DateTimeField(source='last_modification_date')
-    questionnaires_count = serializers.SerializerMethodField()
-    attributes_count = serializers.SerializerMethodField()
-    questions_count = serializers.SerializerMethodField()
-    maturity_levels_count = serializers.SerializerMethodField()
-    likes_count = serializers.IntegerField(source='likes.count')
-    assessments_count = serializers.SerializerMethodField()
-    subjects = serializers.SerializerMethodField()
-    expert_group = SimpleExpertGroupDataForAssessmentKitSerializer()
-
-    def get_subjects(self, assessment_kit: AssessmentKit):
-        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('title')
-        return data
-
-    def get_questionnaires_count(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    def get_attributes_count(self, assessment_kit: AssessmentKit):
-        return AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values(
-            'quality_attributes').count()
-
-    def get_questions_count(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('question').count()
-
-    def get_assessments_count(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
-                                                                    total_count=True)
-        return assessment_count_data["totalCount"]
-
-    def get_maturity_levels_count(self, assessment_kit: AssessmentKit):
-        return MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    class Meta:
-        model = AssessmentKit
-        fields = ['creation_time', 'last_update_time', 'questionnaires_count', 'attributes_count', 'questions_count',
-                  'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects', 'expert_group']
-
-
 class EditAssessmentKitInfoSerializer(serializers.Serializer):
     title = serializers.CharField(required=False, min_length=3, max_length=50,
                                   validators=[UniqueValidator(queryset=AssessmentKit.objects.all())])
