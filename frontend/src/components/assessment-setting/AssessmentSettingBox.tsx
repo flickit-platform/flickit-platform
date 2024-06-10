@@ -307,7 +307,7 @@ export const AssessmentSettingMemberBox = (props: {
 
                 </Box>
                 <Divider sx={{width: "100%", marginTop: "24px", marginBottom: "10px"}}/>
-                <Paper sx={{width: '100%', overflow: 'hidden'}}>
+                {/*<Paper sx={{width: '100%', overflow: 'hidden'}}>*/}
                     <TableContainer sx={{maxHeight: 440}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead
@@ -338,7 +338,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                     sx={{
                                                         display: "flex",
                                                         justifyContent: "center",
-                                                        alignItems: "center"
+                                                        alignItems: "center",
+                                                        border: "none"
                                                     }}
                                                 >
                                                     <Box
@@ -418,7 +419,7 @@ export const AssessmentSettingMemberBox = (props: {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />*/}
-                </Paper>
+                {/*</Paper>*/}
             </Box>
         </Box>
     )
