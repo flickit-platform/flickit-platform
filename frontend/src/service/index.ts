@@ -188,6 +188,14 @@ export const createService = (
         },
       });
     },
+    AssessmentsLoad(
+        { assessmentId }: { assessmentId?: TId },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.get(`/api/v1/assessments/${assessmentId}`, {
+              ...(config ?? {}),
+        });
+    },
     createAssessment(
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined

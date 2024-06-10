@@ -51,6 +51,13 @@ const AssessmentSettingContainer = () => {
     //     runOnMount: true,
     // });
 
+    const AssessmentInfo = useQuery({
+        service: (args = {assessmentId}, config) =>
+            service.AssessmentsLoad(args, config),
+        toastError: false,
+        toastErrorOptions: {filterByStatus: [404]},
+    });
+
     const handleClickOpen = () => {
         setExpanded(true);
     };
@@ -64,12 +71,13 @@ const AssessmentSettingContainer = () => {
             queryBatchData={[
                 // fetchPathInfo,
                 fetchAssessmentsRoles,
-                fetchAssessmentsUserListRoles
+                fetchAssessmentsUserListRoles,
+                AssessmentInfo
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
             render={([
                          // pathInfo = {},
-                         Roles = {}, listOfUser = []]) => {
+                         Roles = {}, listOfUser = [], AssessmentInfo = {}]) => {
                 // const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = Roles;
 
@@ -93,7 +101,9 @@ const AssessmentSettingContainer = () => {
                         </Grid>
                         <Grid container columns={12} mb={"32px"}>
                             <Grid item sm={12} xs={12}>
-                                <AssessmentSettingGeneralBox/>
+                                <AssessmentSettingGeneralBox
+                                    AssessmentInfo={AssessmentInfo}
+                                />
                             </Grid>
                         </Grid>
                         <Grid container columns={12}>

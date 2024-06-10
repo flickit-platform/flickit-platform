@@ -31,8 +31,14 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import Paper from "@mui/material/Paper";
+import formatDate from "@utils/formatDate";
+import {Link} from "react-router-dom";
 
-export const AssessmentSettingGeneralBox = () => {
+export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
+    const {AssessmentInfo} = props
+    const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
+
+   const title = ["created","dateCreated","lastModified","assessmentKits"]
 
     return (
         <Box
@@ -113,109 +119,50 @@ export const AssessmentSettingGeneralBox = () => {
                           gap: "32px"
                       }}
                 >
-                    <Grid item
-                          sx={{display: "flex", justifyContent: "center"}}
-                    ><Grid item
-                           xs={12}
-                           sm={12}
-                           md={8}
 
-                           sx={{
-                               display: "flex",
-                               justifyContent: "space-between",
-                               alignItems: 'center',
-                           }}
-                    >
-                        <Typography color="#9DA7B3" fontWeight={500}
-                                    whiteSpace={"nowrap"}
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        fontSize: {xs: "18px", md: "24px"},
-                                    }}
-                                    lineHeight={"normal"}>
-                            <Trans i18nKey="creator"/>
-                        </Typography>
+                    {title.map((itemList,index) =>{
+                        return (
+                            <Grid item
+                                  sx={{display: "flex", justifyContent: "center"}}
+                            ><Grid item
+                                   xs={12}
+                                   sm={12}
+                                   md={8}
 
+                                   sx={{
+                                       display: "flex",
+                                       justifyContent: "space-between",
+                                       alignItems: 'center',
+                                   }}
+                            >
+                                <Typography color="#9DA7B3" fontWeight={500}
+                                            whiteSpace={"nowrap"}
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                fontSize: {xs: "18px", md: "24px"},
+                                            }}
+                                            lineHeight={"normal"}>
+                                    <Trans i18nKey={`${itemList}`}/>:
+                                </Typography>
 
-                        <Typography color="#0A2342" fontWeight={500}
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        fontSize: {xs: "18px", md: "24px"},
-                                        width:{md: "350px"}
-                                    }}
-                                    lineHeight={"normal"}>
-                            "hi"
-                        </Typography>
-
-
-                    </Grid>
-
-                    </Grid>
-
-                    {/*<Grid item*/}
-                    {/*      sx={{*/}
-                    {/*          width: "100%",*/}
-                    {/*          display: "flex",*/}
-                    {/*          justifyContent: 'space-around',*/}
-                    {/*          alignItems: "center",*/}
-                    {/*      }}*/}
-                    {/*>*/}
-
-                    {/*        <Typography color="#9DA7B3" fontWeight={500}*/}
-                    {/*                    whiteSpace={"nowrap"}*/}
-                    {/*                    sx={{*/}
-                    {/*                        display: "flex",*/}
-                    {/*                        justifyContent: "start",*/}
-                    {/*                        fontSize: {xs: "18px", md: "24px"},*/}
-                    {/*                        width: {xs: "100%", md: "60%"},*/}
-                    {/*                    }}*/}
-                    {/*                    lineHeight={"normal"}>*/}
-                    {/*            <Trans i18nKey="Created"/>*/}
-                    {/*        </Typography>*/}
-                    {/*    <Typography color="#0A2342" fontWeight={500}*/}
-                    {/*                sx={{*/}
-                    {/*                    display: "flex",*/}
-                    {/*                    justifyContent: {xs: "end", md: "center"},*/}
-                    {/*                    fontSize: {xs: "18px", md: "24px"},*/}
-                    {/*                    width: {xs: "100%", md: "50%"},*/}
-                    {/*                }}*/}
-                    {/*                lineHeight={"normal"}>*/}
-                    {/*        "hi"*/}
-                    {/*    </Typography>*/}
-                    {/*</Grid>*/}
-                    {/*<Grid item*/}
-                    {/*      sx={{*/}
-                    {/*          width: "100%",*/}
-                    {/*          display: "flex",*/}
-                    {/*          justifyContent: 'space-around',*/}
-                    {/*          alignItems: "center",*/}
-                    {/*      }}*/}
-                    {/*>*/}
-
-                    {/*        <Typography color="#9DA7B3" fontWeight={500}*/}
-                    {/*                    whiteSpace={"nowrap"}*/}
-                    {/*                    sx={{*/}
-                    {/*                        display: "flex",*/}
-                    {/*                        justifyContent: "start",*/}
-                    {/*                        fontSize: {xs: "18px", md: "24px"},*/}
-                    {/*                        width: {xs: "100%", md: "60%"},*/}
-                    {/*                    }}*/}
-                    {/*                    lineHeight={"normal"}>*/}
-                    {/*            <Trans i18nKey="assessmentkit"/>*/}
-                    {/*        </Typography>*/}
-                    {/*    <Typography color="#0A2342" fontWeight={500}*/}
-                    {/*                sx={{*/}
-                    {/*                    display: "flex",*/}
-                    {/*                    justifyContent: {xs: "end", md: "center"},*/}
-                    {/*                    fontSize: {xs: "18px", md: "24px"},*/}
-                    {/*                    width: {xs: "100%", md: "50%"},*/}
-                    {/*                }}*/}
-                    {/*                lineHeight={"normal"}>*/}
-                    {/*        "hi"*/}
-                    {/*    </Typography>*/}
-                    {/*</Grid>*/}
+                                <Typography color="#0A2342" fontWeight={500}
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                fontSize: {xs: "18px", md: "24px"},
+                                                width:{md: "350px"}
+                                            }}
+                                            lineHeight={"normal"}>
+                                    {index == 0 && displayName}
+                                    {index == 1 && formatDate(creationTime)}
+                                    {index == 2 && formatDate(lastModificationTime)}
+                                    {index == 3 && <Link style={{textDecoration:"none", color:"inherit"}} to={`/assessment-kits/${kit.id}`} >{kit.title}</Link>}
+                                </Typography>
+                            </Grid>
+                            </Grid>
+                        )
+                    })}
                 </Grid>
             </Box>
         </Box>
