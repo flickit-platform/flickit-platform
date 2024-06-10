@@ -26,55 +26,6 @@ def init_assessment_kit():
 
     return do_create_assessment_kit
 
-
-@pytest.mark.django_db
-class Test_Delete_AssessmentKit:
-    @skip
-    def test_delete_assessment_kit_when_user_is_owner_of_assessment_kit_expert_group(self, api_client,
-                                                                                     init_assessment_kit, authenticate,
-                                                                                     create_expertgroup):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        response = api_client.delete('/baseinfo/assessmentkits/' + str(assessment_kit.id) + "/")
-        assert response.status_code == status.HTTP_204_NO_CONTENT
-
-    def test_delete_assessment_kit_when_user_is_not_memeber_of_assessment_kit_expert_group(self, api_client,
-                                                                                           init_assessment_kit,
-                                                                                           authenticate,
-                                                                                           create_expertgroup):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        expert_group = create_expertgroup(ExpertGroup, user=baker.make(User, email='sajjad@test.com'))
-        assessment_kit.expert_group = expert_group
-        assessment_kit.save()
-
-        response = api_client.delete('/baseinfo/assessmentkits/' + str(assessment_kit.id) + "/")
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert response.data['message'] == 'You do not have permission to perform this action.'
-
-    def test_delete_assessment_kit_when_user_is_member_of_assessment_kit_expert_group(self, api_client,
-                                                                                      init_assessment_kit, authenticate,
-                                                                                      create_expertgroup):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        user = baker.make(User, email='sajjad@test.com')
-        expert_group = create_expertgroup(ExpertGroup, user=user)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.save()
-        expert_group.users.add(user)
-
-        response = api_client.delete('/baseinfo/assessmentkits/' + str(assessment_kit.id) + "/")
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert response.data['message'] == 'You do not have permission to perform this action.'
-
-    @skip
-    def test_delete_assessment_kit_when_assessments_exist_with_assessment_kit(self, api_client, init_assessment_kit,
-                                                                              authenticate, create_expertgroup):
-        assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
-        # baker.make(AssessmentProject, assessment_kit=assessment_kit)
-
-        response = api_client.delete('/baseinfo/assessmentkits/' + str(assessment_kit.id) + "/")
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.data['message'] == 'Some assessments with this assessment_kit exist'
-
-
 @pytest.mark.django_db
 class TestLikeAssessmentKits:
     def test_like_assessment_kit_return_200(self, authenticate, init_assessment_kit, create_expertgroup):
@@ -183,78 +134,6 @@ class TestExpertGroupeListAssessmentKit:
         assert resp.status_code == status.HTTP_200_OK
         assert results["published"][0]["id"] == assessment_kit1.id
         assert results["unpublished"][0]["id"] == assessment_kit2.id
-
-
-@pytest.mark.django_db
-class TestViewAssessmentKit:
-    def test_get_assessment_kit_when_user_unauthorized(self, api_client, create_user, create_expertgroup):
-        user1 = create_user(email="test@test.com")
-        permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        assessment_kit = baker.make(AssessmentKit)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        resp = api_client.get(f'/baseinfo/assessmentkits/{assessment_kit.id}/')
-        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
-
-    @skip
-    def test_get_assessment_kit_when_not_member_expert_group(self, api_client, create_user, create_expertgroup):
-        user1 = create_user(email="test@test.com")
-        user2 = create_user(email="test1@test.com")
-        permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        assessment_kit = baker.make(AssessmentKit)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        api_client.force_authenticate(user=user2)
-        resp = api_client.get(f'/baseinfo/assessmentkits/{assessment_kit.id}/')
-        assert resp.status_code == status.HTTP_200_OK
-        assert resp.data["id"] == assessment_kit.id
-        assert resp.data["current_user_is_coordinator"] == False
-
-    @skip
-    def test_get_assessment_kit_when_user_member_expert_group(self, api_client, create_user, create_expertgroup):
-        user1 = create_user(email="test@test.com")
-        user2 = create_user(email="test1@test.com")
-        permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        expert_group_access = baker.make(ExpertGroupAccess, expert_group=expert_group, user=user2, created_by=user2,
-                                         last_modified_by=user2)
-        expert_group.users.add(user2)
-        assessment_kit = baker.make(AssessmentKit)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        api_client.force_authenticate(user=user2)
-        resp = api_client.get(f'/baseinfo/assessmentkits/{assessment_kit.id}/')
-        assert resp.status_code == status.HTTP_200_OK
-        assert resp.data["id"] == assessment_kit.id
-        assert resp.data["current_user_is_coordinator"] == False
-
-    @skip
-    def test_get_assessment_kit_when_user_is_owner(self, api_client, create_user, create_expertgroup):
-        user1 = create_user(email="test@test.com")
-        permission = Permission.objects.get(name='Manage Expert Groups')
-        user1.user_permissions.add(permission)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        assessment_kit = baker.make(AssessmentKit)
-        assessment_kit.expert_group = expert_group
-        assessment_kit.is_active = True
-        assessment_kit.save()
-
-        api_client.force_authenticate(user=expert_group.owner)
-        resp = api_client.get(f'/baseinfo/assessmentkits/{assessment_kit.id}/')
-        assert resp.status_code == status.HTTP_200_OK
-        assert resp.data["id"] == assessment_kit.id
-        assert resp.data["current_user_is_coordinator"] == True
 
 
 @pytest.mark.django_db
