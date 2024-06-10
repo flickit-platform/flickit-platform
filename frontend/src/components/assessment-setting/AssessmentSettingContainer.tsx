@@ -65,7 +65,7 @@ const AssessmentSettingContainer = () => {
     const handleClose = () => {
         setExpanded(false);
     };
-let title = "test"
+    let title = "test"
     return (
         <QueryBatchData
             queryBatchData={[
@@ -75,8 +75,8 @@ let title = "test"
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
             render={([
-                // pathInfo = {}
-                         , Roles = {}, listOfUser = []]) => {
+                // pathInfo = {},
+                          Roles = {}, listOfUser = []]) => {
                 // const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = Roles;
 
@@ -114,23 +114,23 @@ let title = "test"
                                     boxTitle={"members"}
                                     openModal={handleClickOpen}
                                 >
-                                    {/*<MemberSection listOfRoles={listOfRoles}*/}
-                                    {/*               listOfUser={listOfUser}*/}
-                                    {/*               fetchAssessmentsRoles={fetchAssessmentsRoles.query}*/}
-                                    {/*               fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}*/}
-                                    {/*/>*/}
+                                    <MemberSection listOfRoles={listOfRoles}
+                                                   listOfUser={listOfUser}
+                                                   fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
+                                    />
                                 </AssessmentSettingBox>
                             </Grid>
                         </Grid>
-                        {/*<AddMemberDialog*/}
-                        {/*    expanded={expanded}*/}
-                        {/*    onClose={handleClose}*/}
-                        {/*    listOfRoles={listOfRoles}*/}
-                        {/*    assessmentId={assessmentId}*/}
-                        {/*    title={<Trans i18nKey={"addNewMember"}/>}*/}
-                        {/*    cancelText={<Trans i18nKey={"cancel"}/>}*/}
-                        {/*    confirmText={<Trans i18nKey={"addToThisAssessment"}/>}*/}
-                        {/*/>*/}
+                        <AddMemberDialog
+                            expanded={expanded}
+                            onClose={handleClose}
+                            listOfRoles={listOfRoles}
+                            assessmentId={assessmentId}
+                            fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
+                            title={<Trans i18nKey={"addNewMember"}/>}
+                            cancelText={<Trans i18nKey={"cancel"}/>}
+                            confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
+                        />
                     </Box>
                 );
             }}
@@ -141,27 +141,28 @@ let title = "test"
 const AddMemberDialog = (props: {
     expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
-    listOfRoles: any,assessmentId: any,
+    listOfRoles: any,assessmentId: any,fetchAssessmentsUserListRoles: any
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles, assessmentId,
+        listOfRoles, assessmentId,fetchAssessmentsUserListRoles
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
     const [memberSelected, setMemberSelected] = useState<any>([])
-    const [roleSelected, setRoleSelected] = useState("")
+    const [roleSelected, setRoleSelected] = useState({id:0,title:""})
     const {service} = useServiceContext();
-    const {spaceId = ""} = useParams();
+    const {spaceId= "" } = useParams();
 
     const spaceMembersQueryData = useQuery({
         service: (args, config) => service.fetchSpaceMembers({spaceId}, config),
     });
 
-    const addRoleMember = useQuery({
-        service: (args = { assessmentId, userId : memberSelected,roleId: roleSelected },
+    const addRoleMemberQueryData = useQuery({
+        service: (args = { assessmentId, userId : memberSelected,roleId: roleSelected.id },
                   config) => service.addRoleMember(
             args, config),
+        runOnMount: false,
     });
 
     const handleChangeMember = (event: SelectChangeEvent<typeof memberOfSpace>) => {
@@ -171,19 +172,22 @@ const AddMemberDialog = (props: {
         setMemberSelected(value)
 
     };
-    const handleChangeRole = (event: SelectChangeEvent<typeof roleSelected>) => {
+    const handleChangeRole = (event: any) => {
         const {
-            target: {value},
+            target: {value:{id,title}},
         } = event;
-        setRoleSelected(value)
+        setRoleSelected({id,title})
     };
 
     useEffect(() => {
         (async () => {
             try {
-                const {data: {items}} = await spaceMembersQueryData
-                const filtredItems = items.filter((item: any) => !item.isOwner)
-                setMemberOfSpace(filtredItems)
+                const { data } = await spaceMembersQueryData
+                if(data){
+                    const {items} = data
+                    const filtredItems = items.filter((item: any) => !item.isOwner)
+                    setMemberOfSpace(filtredItems)
+                }
             } catch (e) {
                 const err = e as ICustomError;
                 toastError(err);
@@ -194,13 +198,13 @@ const AddMemberDialog = (props: {
     const closeDialog =()=>{
         onClose()
         setMemberSelected([])
-        setRoleSelected("")
+        setRoleSelected({id:0,title:""})
     }
 
     const onConfirm = async (e: any) => {
         try {
-        await addRoleMember.query()
-            // await fetchAssessmentsUserListRoles()
+            await addRoleMemberQueryData.query()
+            await fetchAssessmentsUserListRoles()
             closeDialog()
         } catch (e) {
             const err = e as ICustomError;
@@ -303,21 +307,24 @@ const AddMemberDialog = (props: {
                             <Select
                                 labelId="demo-simple-select-autowidth-label"
                                 id="demo-simple-select-autowidth"
-                                value={roleSelected}
+                                value={roleSelected?.title}
                                 onChange={handleChangeRole}
                                 autoWidth
                                 disabled={!memberSelected}
+                                inputProps={{
+                                    renderValue: () => (roleSelected.title),
+                                }}
                             >
                                 {listOfRoles.map((role : any) => {
                                     return (
                                         <MenuItem
                                             style={{ display: "block"}}
                                             key={role.title}
-                                            value={role.title}
+                                            value={role}
+                                            id={role.id}
                                             sx={{maxWidth: "240px"}}
                                         >
-                                            <Typography sx={{}}>{role.title}</Typography>
-
+                                            <Typography >{role.title}</Typography>
                                             <div style={{ color: "#D3D3D3",fontSize: "12px",whiteSpace: "break-spaces" }}>{role.description}</div>
                                         </MenuItem>                                    )
                                 })}
@@ -520,7 +527,7 @@ const MemberSection = (props: {
     const deleteUserRole= useQuery({
         service: (args, config) =>
             service.deleteUserRole({assessmentId,args}, config),
-        runOnMount: true,
+        runOnMount: false,
     });
 
     const columns: readonly Column[] = [
@@ -602,10 +609,10 @@ const MemberSection = (props: {
                             .map((row: any) => {
                                 return (
                                     <TableRow
-                                        tabIndex={-1} key={row.code}>
+                                        tabIndex={-1}  key={row.id}>
                                         <TableCell
                                             sx={{display: "flex", justifyContent: "center", alignItems: "center"}}
-                                            key={row.id}>
+                                           >
                                             <Box
                                                 sx={{...styles.centerVH, minWidth: "140px"}}
                                             >

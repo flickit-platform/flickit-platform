@@ -183,7 +183,7 @@ export const createService = (
         params: {
           page: page,
           size: size,
-          space_id: spaceId,
+          spaceId: spaceId,
           ...(assessmentKitId && { assessment_kit_id: assessmentKitId }),
         },
       });
