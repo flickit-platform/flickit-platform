@@ -529,6 +529,11 @@ const MemberSection = (props: {
             service.deleteUserRole({assessmentId,args}, config),
         runOnMount: false,
     });
+    // const EditUserRole= useQuery({
+    //     service: (args, config) =>
+    //         service.EditUserRole({assessmentId,args}, config),
+    //     runOnMount: false,
+    // });
 
     const columns: readonly Column[] = [
         {id: 'displayName', label: 'Name',minWidth: 230 },

@@ -220,6 +220,13 @@ export const createService = (
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
 `   , config);
     },
+    EditUserRole(
+        {assessmentId,args : userId}: {assessmentId: string,args: string},
+        config: AxiosRequestConfig<any> | undefined
+    ){
+      return axios.put(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
+`   , config);
+    },
     loadAssessment(
       { rowId }: { rowId: any },
       config: AxiosRequestConfig<any> | undefined
