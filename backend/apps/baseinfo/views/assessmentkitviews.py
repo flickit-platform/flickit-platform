@@ -17,55 +17,6 @@ from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitT
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 
-class AssessmentKitViewSet(mixins.RetrieveModelMixin,
-                           mixins.DestroyModelMixin,
-                           mixins.ListModelMixin,
-                           GenericViewSet):
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    search_fields = ['title']
-
-    # filterset_fields = ['is_private']
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return AssessmentKitListSerializer
-        return AssessmentKitSerilizer
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
-        return [permission() for permission in permission_classes]
-
-    def get_queryset(self):
-        if self.action == 'list':
-            if "is_private" in self.request.query_params:
-
-                if self.request.query_params["is_private"].lower() == "true":
-                    return (AssessmentKit.objects.filter(is_active=True)
-                            .filter(is_private=True)
-                            .filter(users=self.request.user))
-
-                elif self.request.query_params["is_private"].lower() == "false":
-                    return (AssessmentKit.objects.filter(is_active=True)
-                            .filter(is_private=False))
-
-            return (AssessmentKit.objects.filter(is_active=True)
-                    .filter(is_private=True)
-                    .filter(users=self.request.user)) | (AssessmentKit.objects.filter(is_active=True)
-                                                         .filter(is_private=False))
-        return AssessmentKit.objects.all()
-
-    @transaction.atomic
-    def destroy(self, request, *args, **kwargs):
-        result = assessmentkitservice.is_assessment_kit_deletable(kwargs['pk'])
-        if result.success:
-            return super().destroy(request, *args, **kwargs)
-        else:
-            return Response({'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class AssessmentKitListForExpertGroupApi(APIView):
     permission_classes = [IsAuthenticated]
 
