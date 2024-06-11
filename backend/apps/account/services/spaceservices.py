@@ -48,19 +48,6 @@ def add_invited_user_to_space(user):
         ua.save()
 
 
-@transaction.atomic
-def perform_delete(instance: UserAccess, current_user):
-    if current_user.id != instance.space.owner_id:
-        raise PermissionDenied
-
-    if instance.user_id == instance.space.owner_id:
-        return False
-    instance.delete()
-    if instance.user is not None and instance.space.id == instance.user.current_space_id:
-        instance.user.current_space_id = None
-        instance.user.save()
-    return True
-
 
 @transaction.atomic
 def change_current_space(current_user, space_id):
@@ -70,15 +57,6 @@ def change_current_space(current_user, space_id):
         return ActionResult(success=True, message='The current space of user is changed successfully.')
     else:
         return ActionResult(success=False, message="The space does not exists in the user's spaces.")
-
-
-@transaction.atomic
-def remove_expire_invitions(user_space_access_list):
-    user_space_access_list_id = [obj['id'] for obj in user_space_access_list]
-    qs = UserAccess.objects.filter(id__in=user_space_access_list_id)
-    expire_list = qs.filter(invite_expiration_date__lt=datetime.now())
-    for expire in expire_list.all():
-        UserAccess.objects.get(id=expire.id).delete()
 
 
 @transaction.atomic

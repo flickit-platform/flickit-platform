@@ -16,10 +16,12 @@ export const convertToAttributesChartData = (data: any, assessments?: any) => {
 
     attribute.assessment?.forEach((item: any, index: number) => {
       const mlKey = `ml${index + 1}`;
+      const mlTitle = `ml${index + 1}Title`;
       const assessmentTitleKey = `assessmentTitle${index + 1}`;
 
       if (item.assessmentId) {
-        attributeData[mlKey] = item.maturityLevelValue;
+        attributeData[mlKey] = item.maturityLevel.value;
+        attributeData[mlTitle] = item.maturityLevel.title;
         attributeData[assessmentTitleKey] =
           assessmentTitleMap[item.assessmentId] || item.assessmentId;
       }
@@ -47,9 +49,11 @@ export const convertToAssessmentsChartData = (data: any, assessments?: any) => {
 
     subject.assessments?.forEach((item: any, index: number) => {
       const mlKey = `ml${index + 1}`;
+      const mlTitle = `ml${index + 1}Title`;
       const assessmentTitleKey = `assessmentTitle${index + 1}`;
       if (item?.assessmentId) {
         subjectData[mlKey] = item.maturityLevel.value;
+        subjectData[mlTitle] = item.maturityLevel.title;
         subjectData[assessmentTitleKey] =
           assessmentTitleMap[item.assessmentId] || item.assessmentId;
       }

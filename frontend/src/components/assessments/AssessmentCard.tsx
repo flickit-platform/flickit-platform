@@ -157,7 +157,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           >
             {show ? (
               <Gauge
-                systemStatus={item?.status}
                 maturity_level_number={maturityLevelsCount}
                 level_value={
                   calculateResault?.index

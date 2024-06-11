@@ -6,7 +6,6 @@ from baseinfo.views import assessmentkitviews, importassessmentkitviews
 from baseinfo.views import expertgroupviews
 
 router = routers.DefaultRouter()
-router.register('assessmentkits', assessmentkitviews.AssessmentKitViewSet, basename='assessmentkits')
 router.register('tags', assessmentkitviews.AssessmentKitTagViewSet, basename='tags')
 router.register('expertgroups', expertgroupviews.ExpertGroupViewSet, basename='expertgroups')
 

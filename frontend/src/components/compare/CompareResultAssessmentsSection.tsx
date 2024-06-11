@@ -47,7 +47,7 @@ const CompareResultAssessmentsSection = (props: {
                   justifyContent: "space-between",
                   alignItems: "center",
                   textAlign: "center",
-                  flexDirection:"column"
+                  flexDirection: "column",
                 }}
               >
                 <Title>{item.title}</Title>
@@ -62,10 +62,12 @@ const CompareResultAssessmentsSection = (props: {
                     maturity_level_number={
                       item.maturityLevel.maturityLevelCount
                     }
+                    isMobileScreen={true}
                     maturity_level_status={item.maturityLevel.title}
                     level_value={item.maturityLevel.index}
                     confidence_value={item.confidenceValue}
-                    show_confidence={true}
+                    display_confidence_component={true}
+                    hideGuidance={true}
                     maxWidth="250px"
                     m="auto"
                   />

@@ -306,7 +306,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       {question.index}.{question.title}
                     </Typography>
                   </Box>
-                  {question.answer && (
+                  {question?.answer?.selectedOption && (
                     <Box mt={3}>
                       <Typography
                         variant="subMedium"
@@ -321,11 +321,11 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >
-                        {question.answer.index}.{question.answer.caption}
+                        {question.answer?.selectedOption?.index}.{question.answer?.selectedOption?.title}
                       </Typography>
                     </Box>
                   )}
-                  {question.is_not_applicable && (
+                  {question?.answer?.isNotApplicable && (
                     <Box mt={3}>
                       <Typography
                         variant="subMedium"
@@ -343,7 +343,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                     </Box>
                   )}
-                  {question.confidence_level && (
+                  {question?.answer?.confidenceLevel && (
                     <Box mt={3}>
                       <Typography
                         variant="subMedium"
@@ -360,13 +360,13 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                               fontFamily="Roboto"
                               fontWeight="bold"
                             >
-                              {question.confidence_level.title}
+                              {question.answer.confidenceLevel.title}
                             </Typography>
                           </Typography>
                         </Box>
                         <Rating
                           sx={{ alignItems: "center" }}
-                          value={question.confidence_level?.id}
+                          value={question.answer.confidenceLevel?.id}
                           size="medium"
                           readOnly
                           icon={

@@ -27,15 +27,3 @@ class AnswerQuestionApi(APIView):
                                                     authorization_header=request.headers['Authorization'],
                                                     )
         return Response(result["body"], result["status_code"])
-
-
-class LoadQuestionnaireAnswerApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(responses={200: ""})
-    def get(self, request, assessment_id, questionnaire_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_questionnaire_answer(request, assessments_details["body"], questionnaire_id)
-        return Response(result["body"], result["status_code"])
