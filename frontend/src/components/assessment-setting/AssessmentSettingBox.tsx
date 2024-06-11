@@ -34,6 +34,7 @@ import Paper from "@mui/material/Paper";
 import formatDate from "@utils/formatDate";
 import {Link} from "react-router-dom";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {SelectHeight} from "@utils/selectHeight";
 
 export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
     const {AssessmentInfo} = props
@@ -176,16 +177,15 @@ export const AssessmentSettingMemberBox = (props: {
     listOfUser: any,
     fetchAssessmentsUserListRoles: () => void,
     openModal: () => void,
+    openRemoveModal: (id: string,name: string) => void,
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
-    const {listOfRoles, listOfUser, fetchAssessmentsUserListRoles, openModal} = props
+    const {listOfRoles, listOfUser, fetchAssessmentsUserListRoles,
+        openModal, openRemoveModal} = props
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const ITEM_HEIGHT = 59;
-    const ITEM_PADDING_TOP = 8;
 
     interface Column {
         id: 'displayName' | 'email' | 'role'
@@ -195,11 +195,6 @@ export const AssessmentSettingMemberBox = (props: {
         display?: string;
     }
 
-    const deleteUserRole = useQuery({
-        service: (args, config) =>
-            service.deleteUserRole({assessmentId, args}, config),
-        runOnMount: false,
-    });
     const EditUserRole= useQuery({
         service: (args, config) =>
             service.EditUserRole({assessmentId ,...args}, config),
@@ -236,25 +231,10 @@ export const AssessmentSettingMemberBox = (props: {
         }
     };
 
-    const DeletePerson = async (id: any) => {
-        try {
-            await deleteUserRole.query(id)
-            await fetchAssessmentsUserListRoles()
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    }
-    const MenuProps = {
-        PaperProps: {
-            sx: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                '&::-webkit-scrollbar': {
-                    display : "none"
-                }
-            },
-        },
-    };
+    const ITEM_HEIGHT = 59;
+    const ITEM_PADDING_TOP = 8;
+
+    const MenuProps = SelectHeight(ITEM_HEIGHT,ITEM_PADDING_TOP)
 
     return (
         <Box
@@ -422,6 +402,9 @@ export const AssessmentSettingMemberBox = (props: {
                                                                     '.MuiSvgIcon-root': {
                                                                         fill: "#A4E7E7 !important",
                                                                     },
+                                                                    "& .MuiSelect-select": {
+                                                                        padding: "4px 5px"
+                                                                    }
                                                                 }}
                                                                 IconComponent={KeyboardArrowDownIcon}
                                                                 inputProps={{
@@ -479,7 +462,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                             </Select>
                                                         </FormControl>
                                                         <Box
-                                                            onClick={() => DeletePerson(row.id)}
+                                                            onClick={() => openRemoveModal(row.displayName, row.id)}
                                                         >
                                                             <IconButton sx={{"&:hover": {color: "#d32f2f"},width:"1.125rem"}} size="small">
                                                                 <DeleteRoundedIcon/>
