@@ -3,7 +3,6 @@ from operator import itemgetter
 from rest_framework import status
 
 from account.models import Space
-from assessment.serializers.projectserializers import LoadQuestionnairesSerializer
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
@@ -158,39 +157,6 @@ def question_answering(assessments_details, serializer_data, authorization_heade
     result["Success"] = False
     result["body"] = response.json()
     result["status_code"] = response.status_code
-    return result
-
-
-def get_questionnaires_in_assessment(assessments_details):
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    questionnaire_query = Questionnaire.objects.filter(kit_version=kit.kit_version_id)
-    questionnaire_data = LoadQuestionnairesSerializer(questionnaire_query, many=True).data
-
-    response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/questionnaires/progress')
-
-    response_body = response.json()
-    answer_dict = dict()
-    for item in response_body["items"]:
-        answer_dict[item['id']] = {"answers_count": item['answersCount']}
-        if "nextQuestion" in item:
-            answer_dict[item['id']]["next_question"] = item['nextQuestion']
-
-    for i in range(len(questionnaire_data)):
-        if questionnaire_data[i]["id"] in answer_dict:
-            questionnaire_data[i]["answers_count"] = answer_dict[questionnaire_data[i]["id"]]["answers_count"]
-            questionnaire_data[i]["next_question"] = answer_dict[questionnaire_data[i]["id"]]["next_question"]
-
-            questionnaire_data[i]["progress"] = int(
-                questionnaire_data[i]["answers_count"] / questionnaire_data[i]["questions_count"] * 100)
-
-        else:
-            questionnaire_data[i]["answers_count"] = 0
-            questionnaire_data[i]["progress"] = 0
-    result = dict()
-    result["Success"] = True
-    result["body"] = {"items": questionnaire_data}
-    result["status_code"] = status.HTTP_200_OK
     return result
 
 
