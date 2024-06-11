@@ -4,7 +4,6 @@ from rest_framework import status
 
 from account.models import Space
 from assessment.serializers.projectserializers import LoadQuestionnairesSerializer
-from assessment.serializers.questionvalueserializers import LoadQuestionnaireAnswerSerializer
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
@@ -153,68 +152,6 @@ def question_answering(assessments_details, serializer_data, authorization_heade
     if response.status_code == status.HTTP_201_CREATED:
         result["Success"] = True
         result["body"] = response.json()
-        result["status_code"] = response.status_code
-        return result
-
-    result["Success"] = False
-    result["body"] = response.json()
-    result["status_code"] = response.status_code
-    return result
-
-
-def get_questionnaire_answer(request, assessments_details, questionnaire_id):
-    params = {"questionnaireId": questionnaire_id,
-              'page': 0,
-              'size': 50,
-              }
-    result = dict()
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kitId"])
-    if not Questionnaire.objects.filter(id=questionnaire_id).filter(
-            kit_version=kit.kit_version_id).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-    questionnaire = Questionnaire.objects.get(id=questionnaire_id)
-    if "size" in request.query_params:
-        size = request.query_params["size"]
-        params["size"] = size
-
-    if "page" in request.query_params:
-        page = request.query_params["page"]
-        params["page"] = page
-
-    response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/answers',
-        params=params)
-
-    if response.status_code == status.HTTP_200_OK:
-        response_body = response.json()
-        questions_id = list()
-        for item in response_body["items"]:
-            questions_id.append(item["questionId"])
-        questions = questionnaire.question_set.order_by("index")
-        items = LoadQuestionnaireAnswerSerializer(questions, many=True).data
-        for i in range(len(items)):
-            if items[i]["id"] in questions_id:
-                response_item = list(filter(lambda x: x['questionId'] == items[i]["id"], response_body["items"]))[0]
-                items[i]["confidence_level"] = response_item["confidenceLevel"]
-                if response_item["answerOptionId"] is not None:
-                    answer = \
-                        list(filter(lambda x: x['id'] == response_item["answerOptionId"], items[i]["answer_options"]))[
-                            0].copy()
-                    items[i]["answer"] = answer
-                else:
-                    items[i]["answer"] = None
-                items[i]["is_not_applicable"] = response_item["isNotApplicable"]
-            else:
-                items[i]["answer"] = None
-                items[i]["is_not_applicable"] = False
-                items[i]["confidence_level"] = None
-
-        response_body = {"items": items}
-        result["Success"] = True
-        result["body"] = response_body
         result["status_code"] = response.status_code
         return result
 
