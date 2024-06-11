@@ -37,7 +37,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {SelectHeight} from "@utils/selectHeight";
 
 export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
-    const {AssessmentInfo} = props
+    const {AssessmentInfo, AssessmentTitle} = props
     const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
 
    const title = ["created","dateCreated","lastModified","assessmentKits"]
@@ -93,7 +93,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
                             <Typography color="#1CC2C4" fontWeight={500}
                                         sx={{fontSize: {xs: "1rem", sm: "24px"}}}
                                         lineHeight={"normal"}>
-                                {"assessmentTitle"}
+                                {AssessmentTitle}
                             </Typography>
                             <EditRoundedIcon sx={{color: "#9DA7B3"}} fontSize="small" width={"32px"}
                                              height={"32px"}/>

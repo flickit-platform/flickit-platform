@@ -18,6 +18,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AddMemberDialog from "@components/assessment-setting/addMemberDialog";
 import ConfirmRemoveMemberDialog from "@components/assessment-setting/confirmRemoveMemberDialog";
+import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSettingTitle";
 
 const AssessmentSettingContainer = () => {
     const {service} = useServiceContext();
@@ -38,11 +39,11 @@ const AssessmentSettingContainer = () => {
         toastError: false,
         toastErrorOptions: {filterByStatus: [404]},
     });
-    // const fetchPathInfo = useQuery({
-    //     service: (args, config) =>
-    //         service.fetchPathInfo({assessmentId, ...(args || {})}, config),
-    //     runOnMount: true,
-    // });
+    const fetchPathInfo = useQuery({
+        service: (args, config) =>
+            service.fetchPathInfo({assessmentId, ...(args || {})}, config),
+        runOnMount: true,
+    });
 
     const AssessmentInfo = useQuery({
         service: (args = {assessmentId}, config) =>
@@ -66,27 +67,24 @@ const AssessmentSettingContainer = () => {
         setExpandedRemoveModal({display: false, name:"", id : ""})
     }
 
-    let title = "test"
     return (
         <QueryBatchData
             queryBatchData={[
-                // fetchPathInfo,
+                fetchPathInfo,
                 fetchAssessmentsRoles,
                 fetchAssessmentsUserListRoles,
                 AssessmentInfo
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([
-                         // pathInfo = {},
-                         Roles = {}, listOfUser = [], AssessmentInfo = {}]) => {
-                // const {space, assessment: {title}} = pathInfo;
+            render={([pathInfo = {},Roles = {}, listOfUser = [], AssessmentInfo = {}]) => {
+                const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = Roles;
 
                 return (
                     <Box m="auto" pb={3} sx={{px: {lg: 14, xs: 2, sm: 3}}}>
-                        {/*<AssessmentAccessManagementTitle*/}
-                        {/*    pathInfo={pathInfo}*/}
-                        {/*/>*/}
+                        <AssessmentSettingTitle
+                            pathInfo={pathInfo}
+                        />
                         <Grid container columns={12} mt={3} mb={5}>
                             <Grid item sm={12} xs={12}>
                                 <Box
@@ -104,6 +102,7 @@ const AssessmentSettingContainer = () => {
                             <Grid item sm={12} xs={12}>
                                 <AssessmentSettingGeneralBox
                                     AssessmentInfo={AssessmentInfo}
+                                    AssessmentTitle={title}
                                 />
                             </Grid>
                         </Grid>

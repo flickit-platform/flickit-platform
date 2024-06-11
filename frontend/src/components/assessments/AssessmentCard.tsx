@@ -220,9 +220,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   );
 };
 
-const Actions = (props: {
+const Actions = (props: {f
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & {manageable: boolean};
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -288,7 +288,7 @@ const Actions = (props: {
                 text: <Trans i18nKey="edit" />,
                 onClick: openEditDialog,
               },
-              {
+               item.manageable && {
                 icon: <SettingsIcon fontSize="small" />,
                 text: <Trans i18nKey="setting" />,
                 onClick: assessmentSetting,
