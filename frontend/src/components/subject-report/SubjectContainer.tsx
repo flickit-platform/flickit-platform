@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import GettingThingsReadyLoading from "@common/loadings/GettingThingsReadyLoading";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -68,12 +68,24 @@ const SubjectContainer = () => {
 
         const attributesNumber = attributes.length;
         return (
-          <Box display="flex" flexDirection="column" gap={3} marginX="160px">
+          <Box
+            display="flex"
+            flexDirection="column"
+            m="auto"
+            pb={3}
+            sx={{ px: { lg: 14, xs: 2, sm: 3 } }}
+            gap="1.5rem"
+          >
             <SubjectTitle
               {...subjectQueryData}
               loading={loading}
               pathInfo={pathInfo}
             />
+            <Box sx={{ ...styles.centerCVH }} gap={2} textAlign="center">
+              <Typography color="#1CC2C4" fontSize="4rem" fontWeight={700}>
+                <Trans i18nKey="report" values={{ title: title }} />
+              </Typography>
+            </Box>
             {!isComplete && loaded && (
               <Box mt={2} mb={1}>
                 <QuestionnairesNotCompleteAlert
@@ -95,28 +107,23 @@ const SubjectContainer = () => {
                 no_insight_yet_message={!isCalculateValid || !isConfidenceValid}
               />
             ) : (
-              <Box sx={{ px: 0.5 }}>
+              <Box display="flex" flexDirection="column" gap="4rem">
+                <SubjectOverallInsight
+                  {...subjectQueryData}
+                  loading={loading}
+                />
                 <Box
-                  bgcolor="white"
-                  borderRadius="32px"
-                  boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
-                  display="flex"
-                  padding="36px"
+                  sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+                  height={"400px"}
                 >
-                  <SubjectOverallInsight
-                    {...subjectQueryData}
-                    loading={loading}
-                  />
-                </Box>
-                <Hidden smDown>
                   {attributesNumber > 2 && (
                     <Box
-                      height={"620px"}
-                      bgcolor="white"
-                      borderRadius="32px"
-                      boxShadow="0px 0px 8px 0px rgba(10, 35, 66, 0.25)"
-                      display="flex"
-                      padding="36px"
+                      height="100%"
+                      sx={{
+                        background: "#fff",
+                        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+                        borderRadius: "40px",
+                      }}
                     >
                       {/* <Typography>
                         <Trans
@@ -133,14 +140,11 @@ const SubjectContainer = () => {
                       />
                     </Box>
                   )}
-                  <Box height={"520px"} mt={10}>
-                    <SubjectBarChart {...subjectQueryData} loading={loading} />
-                  </Box>
+                </Box>
 
-                  {/* <Box height={"520px"} mt={10}>
+                {/* <Box height={"520px"} mt={10}>
                     <SubjectBarChart {...subjectQueryData} loading={loading} />
                   </Box> */}
-                </Hidden>
 
                 <SubjectAttributeList {...subjectQueryData} loading={loading} />
               </Box>
@@ -254,11 +258,13 @@ const SubjectTitle = (props: {
   }, [title]);
   return (
     <Title
-      letterSpacing=".08em"
-      sx={{ opacity: 0.9 }}
-      backLink={-1}
-      id="insight"
-      inPageLink="insight"
+      backLink="/spaces"
+      wrapperProps={{
+        sx: {
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "flex-start", md: "flex-end" },
+        },
+      }}
       sup={
         <SupTitleBreadcrumb
           routes={[
@@ -281,24 +287,10 @@ const SubjectTitle = (props: {
               ),
             },
           ]}
+          displayChip
         />
       }
-    >
-      <Box sx={{ ...styles.centerV }}>
-        <QueryStatsRoundedIcon
-          sx={{
-            mr: 1,
-            color: "rgba(0, 0, 0, 0.87)",
-          }}
-        />
-        {loading ? (
-          <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
-        ) : (
-          title || ""
-        )}{" "}
-        <Trans i18nKey="insights" />
-      </Box>
-    </Title>
+    ></Title>
   );
 };
 

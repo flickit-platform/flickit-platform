@@ -133,6 +133,7 @@
   "gotAnyEvidence": "Add your evidence if you have any",
   "completeSomeOfQuestionnaires": "Complete some of the questionnaires to get basic insights.",
   "inTheRadarChartBelow": "In the radar chart below, you can view {{title}} attributes maturity level.",
+  "report": "{{title}} Report",
   "attributesAreConsidered": "{{length}} attributes are considered. Maturity level and confidence level have been evaluated for each of them.",
   "pleaseCheckYouEmail": "Please check your email to verify your account",
   "weSentYouAVerificationLink": "A verification link has been sent to your email account.",
