@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -105,4 +107,19 @@ class AssessmentKitsApi(APIView):
 
     def get(self, request):
         result = assessment_kit_service.get_assessment_kits_list(request)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentKitsSearchApi(APIView):
+    permission_classes = [IsAuthenticated]
+    query_param = openapi.Parameter('query', openapi.IN_QUERY, description="search query param",
+                                    type=openapi.TYPE_STRING)
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[query_param, size_param, page_param])
+    def get(self, request):
+        result = assessment_kit_service.assessment_kit_search(request)
         return Response(data=result["body"], status=result["status_code"])
