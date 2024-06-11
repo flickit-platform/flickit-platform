@@ -188,7 +188,7 @@ export const AssessmentSettingMemberBox = (props: {
         label: string;
         minWidth?: number;
         align?: 'right';
-        format?: (value: number) => string;
+        display?: string
     }
 
     const deleteUserRole = useQuery({
@@ -204,13 +204,8 @@ export const AssessmentSettingMemberBox = (props: {
 
     const columns: readonly Column[] = [
         {id: 'displayName', label: 'Name', minWidth: 230},
-        {id: 'email', label: 'email', minWidth: 230},
-        {
-            id: 'role',
-            label: 'roles',
-            align: 'right',
-            minWidth: 230
-        }
+        {id: 'email', label: 'email', minWidth: 230, display: "none"},
+        {id: 'role', label: 'roles', align: 'right', minWidth: 230}
     ];
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -314,8 +309,8 @@ export const AssessmentSettingMemberBox = (props: {
                                         <TableCell
                                             key={column.id}
                                             align={column.align}
-                                            style={{
-                                                minWidth: column.minWidth, textAlign: "center"
+                                            sx={{
+                                                minWidth:{xs:"8.5rem",sm: column.minWidth} , textAlign: {xs:"left", sm:"center"},display:{xs:column.display,sm:"inline-block"}
                                             }}
                                         >
                                             {column.label}
@@ -335,31 +330,42 @@ export const AssessmentSettingMemberBox = (props: {
                                                         display: "flex",
                                                         justifyContent: "center",
                                                         alignItems: "center",
-                                                        border: "none"
+                                                        border: "none",
+                                                        gap: {xs:"0px",sm:"1.3rem"}
                                                     }}
                                                 >
-                                                    <Box
-                                                        sx={{...styles.centerVH, minWidth: "140px"}}
-                                                    >
+                                                    <Box sx={{
+                                                        display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,gap: ".5rem",width: {xs:"5rem",sm: "11.25rem"}
+                                                    }}>
                                                         <Avatar
-                                                            {...stringAvatar(row.displayName.toUpperCase())}
-                                                            src={row.pictureLink}
-                                                            sx={{width: 40, height: 40}}
-                                                        ></Avatar>
+                                                                {...stringAvatar(row.displayName.toUpperCase())}
+                                                                src={row.pictureLink}
+                                                                sx={{width: 40, height: 40,
+                                                                display: {xs: "none",sm:"flex"}
+                                                                }}
+                                                         ></Avatar>
+                                                        <Typography
+                                                        sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap"}}
+                                                        >
+                                                            {row.displayName}
+                                                        </Typography>
                                                     </Box>
-
-                                                    <Typography
-                                                        sx={{...styles.centerVH, minWidth: "140px"}}
+                                                    <Box
+                                                    sx={{display:{xs: "none",sm: "flex"}, justifyContent: "flex-start", width: "13rem"
+                                                    }}
                                                     >
-                                                        {row.displayName}
-                                                    </Typography>
-                                                    <Typography
-                                                        sx={{...styles.centerVH, width: "200px", minWidth: "300px"}}
+                                                        <Typography
+                                                            sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap"}}
+                                                        >
+                                                            {row.email}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box
+                                                    sx={{display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,
+                                                        gap:{xs:"0px",sm:".3rem" } ,width: "11.25rem"
+                                                    }}
                                                     >
-                                                        {row.email}
-                                                    </Typography>
-                                                    <div>
-                                                        <FormControl sx={{m: 1, minWidth: 140}}>
+                                                        <FormControl sx={{m: 1}}>
                                                             {/*<InputLabel id="demo-multiple-name-label">Name</InputLabel>*/}
                                                             <Select
                                                                 labelId="demo-multiple-name-label"
@@ -390,17 +396,15 @@ export const AssessmentSettingMemberBox = (props: {
                                                                 ))}
                                                             </Select>
                                                         </FormControl>
-                                                    </div>
-                                                    <Box
-                                                        sx={{...styles.centerVH, width: "150px"}}
-                                                        onClick={() => DeletePerson(row.id)}
-                                                    >
-                                                        <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
-                                                            <DeleteRoundedIcon/>
-                                                        </IconButton>
+                                                        <Box
+                                                            onClick={() => DeletePerson(row.id)}
+                                                        >
+                                                            <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
+                                                                <DeleteRoundedIcon/>
+                                                            </IconButton>
+                                                        </Box>
                                                     </Box>
                                                 </TableCell>
-
                                             </TableRow>
                                         );
                                     })}
