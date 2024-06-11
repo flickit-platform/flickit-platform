@@ -222,14 +222,14 @@ export const createService = (
         return axios.post(`/api/v1/assessments/${assessmentId}/assessment-user-roles/`,args, config);
     },
     deleteUserRole(
-        {assessmentId,args : userId}: {assessmentId: string,args: string} | {assessmentId: string},
+        {assessmentId,args : userId}: {assessmentId: string,args: string} | any,
         config: AxiosRequestConfig<any> | undefined
     ){
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
 `   , config);
     },
     EditUserRole(
-        args: { assessmentId: string, userId :string , roleId:number } | {assessmentId: string},
+        args: { assessmentId: string, userId :string , roleId:number } | any,
         config: AxiosRequestConfig<any> | undefined
     ){
       const { assessmentId, userId } = args

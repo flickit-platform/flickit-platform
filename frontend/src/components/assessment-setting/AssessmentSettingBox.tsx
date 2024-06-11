@@ -188,7 +188,7 @@ export const AssessmentSettingMemberBox = (props: {
         label: string;
         minWidth?: number;
         align?: 'right';
-        display?: string
+        display?: string;
     }
 
     const deleteUserRole = useQuery({
@@ -204,8 +204,8 @@ export const AssessmentSettingMemberBox = (props: {
 
     const columns: readonly Column[] = [
         {id: 'displayName', label: 'Name', minWidth: 230},
-        {id: 'email', label: 'email', minWidth: 230, display: "none"},
-        {id: 'role', label: 'roles', align: 'right', minWidth: 230}
+        {id: 'email', label: 'Email', minWidth: 230, display: "none"},
+        {id: 'role', label: 'Roles', align: 'right', minWidth: 230}
     ];
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -287,11 +287,14 @@ export const AssessmentSettingMemberBox = (props: {
                         onClick={openModal}
                     >
                         <AddIcon
+                            sx={{width:'1.125rem', height: '1.125rem'}}
                             fontSize="small"
                             style={{color: "#EDFCFC"}}
                         />
-                        <Typography color="#EDFCFC" fontSize="14px" fontWeight={500}
-                                    lineHeight={"normal"}>
+                        <Typography color="#EDFCFC" fontSize="0.9rem" fontWeight={500}
+                                    lineHeight={"normal"}
+                                    sx={{lineHeight:'1.25rem'}}
+                        >
                             <Trans i18nKey={`addMember`}/>
                         </Typography>
                     </Button>
@@ -299,7 +302,9 @@ export const AssessmentSettingMemberBox = (props: {
                 </Box>
                 <Divider sx={{width: "100%", marginTop: "24px", marginBottom: "10px"}}/>
                 {/*<Paper sx={{width: '100%', overflow: 'hidden'}}>*/}
-                    <TableContainer sx={{maxHeight: 440}}>
+                    <TableContainer sx={{maxHeight: 440,'&::-webkit-scrollbar': {
+                            display : "none"
+                        },}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead
                                 sx={{width: '100%', overflow: 'hidden'}}
@@ -310,7 +315,11 @@ export const AssessmentSettingMemberBox = (props: {
                                             key={column.id}
                                             align={column.align}
                                             sx={{
-                                                minWidth:{xs:"8.5rem",sm: column.minWidth} , textAlign: {xs:"left", sm:"center"},display:{xs:column.display,sm:"inline-block"}
+                                                minWidth:{xs:"8.5rem",md: column.minWidth} ,
+                                                textAlign: {xs:"left", md:"center"},
+                                                display:{xs:column.display,md:"inline-block",
+                                                color: "#9DA7B3"
+                                                }
                                             }}
                                         >
                                             {column.label}
@@ -331,17 +340,17 @@ export const AssessmentSettingMemberBox = (props: {
                                                         justifyContent: "center",
                                                         alignItems: "center",
                                                         border: "none",
-                                                        gap: {xs:"0px",sm:"1.3rem"}
+                                                        gap: {xs:"0px",md:"1.3rem"}
                                                     }}
                                                 >
                                                     <Box sx={{
-                                                        display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,gap: ".5rem",width: {xs:"5rem",sm: "11.25rem"}
+                                                        display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,gap: ".5rem",width: {xs:"5rem",md: "11.25rem"}
                                                     }}>
                                                         <Avatar
                                                                 {...stringAvatar(row.displayName.toUpperCase())}
                                                                 src={row.pictureLink}
                                                                 sx={{width: 40, height: 40,
-                                                                display: {xs: "none",sm:"flex"}
+                                                                display: {xs: "none",md:"flex"}
                                                                 }}
                                                          ></Avatar>
                                                         <Typography
@@ -351,7 +360,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                         </Typography>
                                                     </Box>
                                                     <Box
-                                                    sx={{display:{xs: "none",sm: "flex"}, justifyContent: "flex-start", width: "13rem"
+                                                    sx={{display:{xs: "none",md: "flex"}, justifyContent: "flex-start", width: "13rem"
                                                     }}
                                                     >
                                                         <Typography
@@ -361,8 +370,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                         </Typography>
                                                     </Box>
                                                     <Box
-                                                    sx={{display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,
-                                                        gap:{xs:"0px",sm:".3rem" } ,width: "11.25rem"
+                                                    sx={{display: "flex" ,justifyContent: "flex-end",alignItems: "center" ,
+                                                        gap:{xs:"0px",md:".7rem" } ,width: "11.25rem"
                                                     }}
                                                     >
                                                         <FormControl sx={{m: 1}}>
@@ -399,7 +408,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                         <Box
                                                             onClick={() => DeletePerson(row.id)}
                                                         >
-                                                            <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
+                                                            <IconButton sx={{"&:hover": {color: "#d32f2f"},width:"1.125rem"}} size="small">
                                                                 <DeleteRoundedIcon/>
                                                             </IconButton>
                                                         </Box>
