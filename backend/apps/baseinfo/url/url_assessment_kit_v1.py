@@ -1,9 +1,10 @@
 from django.urls import path
 
-from baseinfo.views import assessmentkitviews, commonviews, update_assessment_kit_views, user_access_views
-from baseinfo.views import importassessmentkitviews
+from baseinfo.views import (assessmentkitviews, commonviews, update_assessment_kit_views, user_access_views,
+                            importassessmentkitviews, assessment_kit_views)
 
 urlpatterns = [
+    path("options/search/", assessment_kit_views.AssessmentKitsSearchApi.as_view()),
     path("upload-dsl/", importassessmentkitviews.ImportDslFileView.as_view()),
     path("create-by-dsl/", importassessmentkitviews.CreateAssessmentKitByDsl.as_view()),
     path("<str:assessment_kit_id>/info/", assessmentkitviews.LoadAssessmentKitInfoEditableApi.as_view()),
