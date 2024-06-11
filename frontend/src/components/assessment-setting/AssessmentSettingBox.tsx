@@ -33,6 +33,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import Paper from "@mui/material/Paper";
 import formatDate from "@utils/formatDate";
 import {Link} from "react-router-dom";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
     const {AssessmentInfo} = props
@@ -183,6 +184,9 @@ export const AssessmentSettingMemberBox = (props: {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+    const ITEM_HEIGHT = 59;
+    const ITEM_PADDING_TOP = 8;
+
     interface Column {
         id: 'displayName' | 'email' | 'role'
         label: string;
@@ -241,6 +245,16 @@ export const AssessmentSettingMemberBox = (props: {
             toastError(err);
         }
     }
+    const MenuProps = {
+        PaperProps: {
+            sx: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                '&::-webkit-scrollbar': {
+                    display : "none"
+                }
+            },
+        },
+    };
 
     return (
         <Box
@@ -374,7 +388,14 @@ export const AssessmentSettingMemberBox = (props: {
                                                         gap:{xs:"0px",md:".7rem" } ,width: "11.25rem"
                                                     }}
                                                     >
-                                                        <FormControl sx={{m: 1}}>
+                                                        <FormControl
+                                                        sx={{
+                                                            m: 1,
+                                                            width: '100%',
+                                                            textAlign: "center",
+                                                            padding : "6px, 12px, 6px, 12px",
+                                                        }}
+                                                        >
                                                             {/*<InputLabel id="demo-multiple-name-label">Name</InputLabel>*/}
                                                             <Select
                                                                 labelId="demo-multiple-name-label"
@@ -382,26 +403,78 @@ export const AssessmentSettingMemberBox = (props: {
                                                                 value={row?.role?.title}
                                                                 onChange={handleChange}
                                                                 name={row}
+                                                                MenuProps={MenuProps}
                                                                 // input={<OutlinedInput label="Name"/>}
+                                                                sx={{
+                                                                    boxShadow: 'none',
+                                                                    '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                                                                    border:"1px solid #A4E7E7",
+                                                                    borderRadius: "0.5rem",
+                                                                    "&.MuiOutlinedInput-notchedOutline": { border: 0 },
+                                                                    "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                                                                        {
+                                                                            border: 0,
+                                                                        },
+                                                                    "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                                                        {
+                                                                            border: 0,
+                                                                        },
+                                                                    '.MuiSvgIcon-root': {
+                                                                        fill: "#A4E7E7 !important",
+                                                                    },
+                                                                }}
+                                                                IconComponent={KeyboardArrowDownIcon}
                                                                 inputProps={{
                                                                     renderValue: () => (row?.role?.title),
                                                                 }}
                                                             >
-                                                                {listOfRoles.map((role: any) => (
-                                                                    <MenuItem
-                                                                        style={{display: "block"}}
-                                                                        key={role.title}
-                                                                        value={role}
-                                                                        sx={{maxWidth: "240px"}}
-                                                                    >
-                                                                        <Typography>{role.title}</Typography>
+                                                                <Box
+                                                                sx={{
+                                                                    paddingY: "16px",
+                                                                    color: '#9DA7B3',
+                                                                    textAlign: "center",
+                                                                    borderBottom: "1px solid #9DA7B3",
+                                                                }}
+                                                                >
+                                                                    <Typography><Trans i18nKey={"chooseARole"} /></Typography>
+                                                                </Box>
+                                                                {listOfRoles.map((role: any,index: number) => (
+                                                                   <MenuItem
+                                                                       style={{display: "block"}}
+                                                                       key={role.title}
+                                                                       value={role}
+                                                                       sx={{paddingY: "0px", maxHeight: "200px"}}
+                                                                   >
+                                                                       <Box
+                                                                           sx={{maxWidth: "240px",
+                                                                               color: "#000",
+                                                                               fontSize: "0.875rem",
+                                                                               lineHeight: "21px",
+                                                                               fontWeight: 500,
+                                                                               paddingY: "1rem",
+                                                                               // "&.MuiMenuItem-root:hover":{
+                                                                               //     backgroundColor: 'transparent'
+                                                                               // },
+                                                                           }}
+                                                                       >
+                                                                           <Typography>{role.title}</Typography>
 
-                                                                        <div style={{
-                                                                            color: "#D3D3D3",
-                                                                            fontSize: "12px",
-                                                                            whiteSpace: "break-spaces"
-                                                                        }}>{role.description}</div>
-                                                                    </MenuItem>
+                                                                           <div style={{
+                                                                               color: "#000",
+                                                                               fontSize: "0.875rem",
+                                                                               lineHeight: "21px",
+                                                                               fontWeight: 300,
+                                                                               whiteSpace: "break-spaces",
+                                                                               paddingTop: "1rem"
+                                                                           }}>{role.description}</div>
+
+                                                                       </Box>
+                                                                       {listOfRoles.length > index + 1 && <Box sx={{
+                                                                           height: '0.5px', width: "80%",
+                                                                           backgroundColor: "#9DA7B3",
+                                                                           mx: "auto"
+                                                                       }}></Box>}
+                                                                   </MenuItem>
                                                                 ))}
                                                             </Select>
                                                         </FormControl>
