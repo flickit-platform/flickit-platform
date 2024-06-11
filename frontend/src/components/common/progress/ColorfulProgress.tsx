@@ -6,9 +6,14 @@ import LinearProgress, {
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 
+export enum ProgessBarTypes {
+  Questioannaire = "questionnaire",
+}
 interface ISubjectProgressProps {
-  answerCount: number;
-  questionCount: number;
+  numaratur: number;
+  denominator: number;
+  displayPercent?: boolean;
+  type?: ProgessBarTypes;
 }
 
 const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
@@ -18,8 +23,8 @@ const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
 };
 
 const ColorfulProgress = (props: ISubjectProgressProps) => {
-  const { answerCount, questionCount } = props;
-  const totalProgress = ((answerCount || 0) / (questionCount || 1)) * 100;
+  const { numaratur, denominator, type, displayPercent } = props;
+  const totalProgress = ((numaratur || 0) / (denominator || 1)) * 100;
 
   let color: LinearProgressProps["color"] = "primary";
   for (const key in progressToColorMap) {
@@ -45,38 +50,55 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   }
 
   return (
-    <Box sx={{ ...styles.centerCVH }} gap={3} width="80%">
-      <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
-        <Typography
-          component="span"
-          fontSize="1rem"
-          color="#6C7B8E"
-          fontWeight={500}
-          lineHeight={2}
-        >
-          <Trans i18nKey="answeredQuestions" />
-        </Typography>
-        <Typography
-          component="span"
-          color={percentColor}
-          mx={1}
-          fontWeight={800}
-          fontSize="1.25rem"
-        >
-          {answerCount} of {questionCount}
-        </Typography>
+    <Box sx={{ ...styles.centerCVH }} gap={3} width="100%">
+      {type === ProgessBarTypes.Questioannaire && (
+        <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
+          <Typography
+            component="span"
+            fontSize="1rem"
+            color="#6C7B8E"
+            fontWeight={500}
+            lineHeight={2}
+          >
+            <Trans i18nKey="answeredQuestions" />
+          </Typography>
+          <Typography
+            component="span"
+            color={percentColor}
+            mx={1}
+            fontWeight={800}
+            fontSize="1.25rem"
+          >
+            {numaratur} of {denominator}
+          </Typography>
+        </Box>
+      )}
+      <Box display="flex" width="100%" alignItems="center">
+        <LinearProgress
+          sx={{
+            borderRadius: 3,
+            width: "100%",
+            height: "12px",
+            border: `1px solid ${percentColor}`,
+          }}
+          value={totalProgress}
+          variant="determinate"
+          color={color}
+        />
+        {displayPercent && (
+          <Typography
+            component="span"
+            color={color}
+            mx="0.5rem"
+            fontWeight={300}
+            fontSize="0.75rem"
+            width="1rem"
+          >
+            {totalProgress != null && Math.ceil(totalProgress)}
+            {totalProgress != null ? "%" : ""}
+          </Typography>
+        )}
       </Box>
-      <LinearProgress
-        sx={{
-          borderRadius: 3,
-          width: "100%",
-          height: "12px",
-          border: `1px solid ${percentColor}`,
-        }}
-        value={totalProgress}
-        variant="determinate"
-        color={color}
-      />
     </Box>
   );
 };

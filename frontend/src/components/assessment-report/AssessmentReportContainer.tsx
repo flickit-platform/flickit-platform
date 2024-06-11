@@ -14,7 +14,6 @@ import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 import { AssessmentSummary } from "./AssessmentSummary";
 import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
 import { AssessmentReportKit } from "./AssessmentReportKit";
-import { AssessmentProgress } from "./AssessmentProgress";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 const AssessmentReportContainer = (props: any) => {

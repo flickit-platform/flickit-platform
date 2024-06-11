@@ -11,7 +11,9 @@ import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
+import ColorfullProgress, {
+  ProgessBarTypes,
+} from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { Button } from "@mui/material";
 interface IAssessmentSummaryProps {
@@ -67,10 +69,14 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           {assessmentKit?.title}
         </Typography>
       </Box>
-      <ColorfullProgress
-        questionCount={questionCount}
-        answerCount={answerCount}
-      />
+      <Box sx={{ ...styles.centerCVH }} width="80%">
+        <ColorfullProgress
+          denominator={questionCount}
+          numaratur={answerCount}
+          type={ProgessBarTypes.Questioannaire}
+        />
+      </Box>
+
       <Button
         variant="contained"
         sx={{

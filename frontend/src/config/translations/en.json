@@ -391,5 +391,6 @@
   "yesDeleteIt":"Yes, delete it",
   "letMeSeeItAgain":"Let me see it again",
   "areYouSureYouWantDeleteThisEvidence":"Are you sure you want delete this evidence?",
-  "maximumUploadFileSize":"Maximuim upload file size: {{maxSize}}"
+  "maximumUploadFileSize":"Maximuim upload file size: {{maxSize}}",
+  "maturityLevelsScoreDetails":"Maturity Levels Score Details"
 }

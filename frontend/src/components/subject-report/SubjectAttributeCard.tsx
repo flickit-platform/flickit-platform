@@ -21,6 +21,8 @@ import { styled } from "@mui/material/styles";
 import emptyState from "@assets/svg/emptyState.svg";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import ColorfulProgress from "../common/progress/ColorfulProgress";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -49,172 +51,244 @@ const SUbjectAttributeCard = (props: any) => {
       setExpandedAttribute(isExpanded ? panel : false);
     };
   return (
-    <Paper
-      elevation={2}
+    <Accordion
       sx={{
-        borderRadius: 3,
-        py: { xs: 3, sm: 4 },
-        // pr: { xs: 1.5, sm: 3, md: 4 },
-        mb: 5,
+        width: "100%",
+        borderRadius: "32px !important",
+        boxShadow: "0px 0px 8px 0px rgba(10, 35, 66, 0.25)",
+        transition: "background-position .4s ease",
+        position: "relative",
+        "&::before": {
+          display: "none",
+        },
       }}
+      expanded={expandedAttribute === id}
+      onChange={handleChange(id)}
     >
-      <Accordion
-        sx={{ boxShadow: "none !important" }}
-        expanded={expandedAttribute === id}
-        onChange={handleChange(id)}
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+        sx={{
+          borderTopLeftRadius: "32px !important",
+          borderTopRightRadius: "32px !important",
+          textAlign: "center",
+          backgroundColor: expandedAttribute ? "rgba(10, 35, 66, 0.07)" : "",
+          "& .MuiAccordionSummary-content": {
+            minHeight: { md: "100px", lg: "100px" },
+            maxHeight: { md: "160px", lg: "160px" },
+            paddingLeft: { md: "1rem", lg: "1rem" },
+          },
+        }}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          sx={{ padding: "0 !important", alignItems: "flex-start", mr: 2 }}
-        >
-          <Grid container spacing={2}>
-            <Grid item md={11} xs={12}>
-              <Box mb={1}>
-                <Title
-                  textTransform={"uppercase"}
-                  fontWeight="bolder"
-                  sx={{
-                    opacity: 0.95,
-                    letterSpacing: ".05em",
-                    ml: { xs: 0.75, sm: 1.5, md: 2 },
-                  }}
-                  fontFamily="Roboto"
-                >
-                  {title}
-                </Title>
-              </Box>
-              <AttributeStatusBarContainer
-                status={maturityLevel?.title}
-                ml={maturityLevel?.index}
-                cl={Math.ceil(confidenceValue)}
-                mn={maturity_levels_count}
-              />
-              <Box mt={3}>
+        <Grid container spacing={2}>
+          <Grid item md={11} xs={12} display="flex">
+            <AttributeSummary
+              title={title}
+              status={maturityLevel?.title}
+              maturityLevelValue={maturityLevel?.value}
+              confidenceValue={Math.ceil(confidenceValue)}
+              maturityLevelsCount={maturity_levels_count}
+            />
+            {/* <Box mt={3}>
+              <Typography
+                fontSize="1.15rem"
+                fontFamily="Roboto"
+                fontWeight={"bold"}
+                sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+              >
+                <Trans i18nKey={"withConfidence"} />
                 <Typography
-                  fontSize="1.15rem"
+                  component="span"
                   fontFamily="Roboto"
                   fontWeight={"bold"}
-                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                  color="#3596A1"
+                  fontSize="1.12rem"
+                  mx={1}
                 >
-                  <Trans i18nKey={"withConfidence"} />
-                  <Typography
-                    component="span"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                    color="#3596A1"
-                    fontSize="1.12rem"
-                    mx={1}
-                  >
-                    {Math.ceil(confidenceValue)}%
-                  </Typography>
-                  <Trans
-                    i18nKey={"wasEstimate"}
-                    values={{ attribute: title }}
-                  />
-                  <Typography
-                    component="span"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
-                    color="#6035A1"
-                    fontSize="1.2rem"
-                  >
-                    {" "}
-                    {maturityLevel?.index}.{" "}
-                  </Typography>
-                  <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
+                  {Math.ceil(confidenceValue)}%
                 </Typography>
-              </Box>
-              <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
-                <Typography fontSize="1.05rem" fontFamily="Roboto">
-                  {description}
+                <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
+                <Typography
+                  component="span"
+                  fontFamily="Roboto"
+                  fontWeight={"bold"}
+                  color="#6035A1"
+                  fontSize="1.2rem"
+                >
+                  {" "}
+                  {maturityLevel?.index}.{" "}
                 </Typography>
-              </Box>
-            </Grid>
+                <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
+              </Typography>
+            </Box> */}
+            {/* <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+              <Typography fontSize="1.05rem" fontFamily="Roboto">
+                {description}
+              </Typography>
+            </Box> */}
           </Grid>
-        </AccordionSummary>
-        <Divider sx={{ mx: 2 }} />
-        <AccordionDetails sx={{ padding: "0 !important" }}>
-          <Typography
-            variant="h4"
-            mt={4}
-            mb={2}
+        </Grid>
+      </AccordionSummary>
+      <AccordionDetails sx={{ padding: "0 !important", mb: 2 }}>
+        <Typography
+          mt={4}
+          fontSize="2rem"
+          fontWeight={700}
+          sx={{
+            gap: "46px",
+            ...styles.centerVH,
+          }}
+        >
+          <Trans i18nKey={"relatedEvidences"} />
+        </Typography>
+        {emptyNegativeEvidence && emptyPositiveEvidence ? (
+          <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
+            <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
+            <Typography fontSize="1.5rem" fontWeight={500} color="#9DA7B3">
+              <Trans i18nKey={"noEvidence"} />
+            </Typography>
+          </Box>
+        ) : (
+          <Box
             sx={{
-              gap: "46px",
               ...styles.centerVH,
+              paddingX: "10vw",
             }}
           >
-            <Trans i18nKey={"relatedEvidences"} />
-          </Typography>
-          {emptyNegativeEvidence && emptyPositiveEvidence ? (
-            <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
-              <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-              <Typography variant="h5" color="#9DA7B3">
-                <Trans i18nKey={"noEvidence"} />
-              </Typography>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                ...styles.centerVH,
-                paddingX: "10vw",
-              }}
-            >
-              <Grid container spacing={4} mt={1}>
-                {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.positive}
-                    setEmptyEvidence={setEmptyPositiveEvidence}
-                    setOpositeEvidenceLoading={setPositiveEvidenceLoading}
-                    opositeEvidenceLoading={negativeEvidenceLoading}
-                  />
-                </Grid>
-                {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.negative}
-                    setEmptyEvidence={setEmptyNegativeEvidence}
-                    setOpositeEvidenceLoading={setNegativeEvidenceLoading}
-                    opositeEvidenceLoading={positiveEvidenceLoading}
-                  />
-                </Grid>
+            <Grid container spacing={4} mt={1}>
+              {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+              <Grid item lg={6} md={6} xs={12}>
+                <RelatedEvidencesContainer
+                  expandedAttribute={expandedAttribute}
+                  attributeId={id}
+                  type={evidenceType.positive}
+                  setEmptyEvidence={setEmptyPositiveEvidence}
+                  setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                  opositeEvidenceLoading={negativeEvidenceLoading}
+                />
               </Grid>
-            </Box>
-          )}
-
-          <Typography
-            variant="h6"
-            mt={4}
-            mb={2}
-            sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
-          >
-            <Trans i18nKey={"theAchivedScores"} />
-          </Typography>
-          <Box sx={{ pr: { xs: 2, sm: 6 } }}>
-            {maturityScores
-              .map((item: any) => {
-                return (
-                  <MaturityLevelDetailsContainer
-                    maturity_score={item}
-                    totalml={maturityLevel?.index}
-                    mn={maturity_levels_count}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                    attributeId={id}
-                  />
-                );
-              })
-              .reverse()}
+              {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+              <Grid item lg={6} md={6} xs={12}>
+                <RelatedEvidencesContainer
+                  expandedAttribute={expandedAttribute}
+                  attributeId={id}
+                  type={evidenceType.negative}
+                  setEmptyEvidence={setEmptyNegativeEvidence}
+                  setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                  opositeEvidenceLoading={positiveEvidenceLoading}
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </AccordionDetails>
-      </Accordion>
-    </Paper>
+        )}
+
+        <Typography
+          textAlign="center"
+          fontSize="2rem"
+          fontWeight={700}
+          color="#3B4F68"
+          my="2rem"
+        >
+          <Trans i18nKey={"maturityLevelsScoreDetails"} />
+        </Typography>
+        <Box
+          display="flex"
+          flexDirection="column"
+          gap="0.5rem"
+          sx={{ px: { xs: 2, sm: 10 } }}
+        >
+          {maturityScores
+            .map((item: any) => {
+              return (
+                <MaturityLevelDetailsContainer
+                  maturity_score={item}
+                  totalml={maturityLevel?.index}
+                  mn={maturity_levels_count}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  attributeId={id}
+                />
+              );
+            })
+            .reverse()}
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+  );
+};
+
+const AttributeSummary = (props: any) => {
+  const {
+    status,
+    maturityLevelValue,
+    confidenceValue,
+    maturityLevelsCount,
+    title,
+  } = props;
+  const colorPallet = getMaturityLevelColors(maturityLevelsCount);
+  const statusColor = colorPallet[maturityLevelsCount - 1];
+  return (
+    <Grid container alignItems="center">
+      <Grid item xs={12} lg={3} md={3} sm={12}>
+        <Box
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <Typography
+            color="#3B4F68"
+            sx={{
+              textTransform: "none",
+              whiteSpace: "pre-wrap",
+              fontSize: "1.5rem",
+            }}
+            fontWeight={500}
+          >
+            {title}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={0} lg={2} md={2} sm={0}></Grid>
+      <Grid item xs={12} lg={3} md={3} sm={12}>
+        <Box
+          sx={{
+            ...styles.centerVH,
+            justifyContent: "space-around",
+          }}
+        >
+          <Typography
+            fontWeight={500}
+            fontSize="1rem"
+            color="rgba(108, 123, 142, 1)"
+          >
+            <Trans i18nKey="confidenceLevel" />
+          </Typography>
+          <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
+        </Box>
+      </Grid>
+      <Grid item xs={0} lg={2} md={2} sm={0}></Grid>
+
+      <Grid item xs={12} lg={2} md={2} sm={12}>
+        <Box
+          sx={{
+            ...styles.centerVH,
+            textAlign: "center",
+          }}
+        >
+          <Typography
+            fontWeight={700}
+            fontSize="2rem"
+            color={colorPallet[maturityLevelValue - 1]}
+          >
+            {status}
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -360,42 +434,93 @@ const MaturityLevelDetailsContainer = (props: any) => {
     },
   });
   return (
-    <Box
-      display={"flex"}
-      sx={{
-        maxWidth: { xs: "100%", sm: "100%", md: "91%", lg: "92%" },
-        flexDirection: { xs: "column", sm: "row" },
-      }}
-    >
+    <Box display={"flex"}>
       <Accordion
         expanded={expanded === maturityLevel?.id}
         onChange={handleChange(maturityLevel?.id)}
-        sx={{ width: "100%", boxShadow: "none !important" }}
+        sx={{
+          width: "100%",
+          borderRadius: "32px !important",
+          transition: "background-position .4s ease",
+          position: "relative",
+          border: "1px solid #EDF4FC",
+          boxShadow: "none !important",
+          "&::before": {
+            display: "none",
+          },
+        }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
-          sx={{ padding: "0 !important" }}
+          sx={{
+            borderRadius:
+              expanded === maturityLevel?.id ? "" : "32px !important",
+            borderTopLeftRadius: "32px !important",
+            borderTopRightRadius: "32px !important",
+            textAlign: "center",
+            backgroundColor:
+              expanded === maturityLevel?.id ? "#EDFCFC" : "#EDFCFC80",
+            "& .MuiAccordionSummary-content": {
+              height: { md: "64px" },
+              paddingLeft: { md: "1rem", lg: "1rem" },
+            },
+          }}
         >
           <Box
             sx={{
               display: "flex",
               width: "100%",
+              alignItems: "center",
               flexDirection: { xs: "column", sm: "row" },
             }}
           >
-            <Box display={"flex"} flex={1}>
-              <Box width="100%">
-                <MaturityLevelDetailsBar
+            <Grid container spacing={2}>
+              <Grid
+                item
+                lg={7}
+                md={12}
+                xs={12}
+                sm={12}
+                display={"flex"}
+                flex={1}
+                color="#1CC2C4"
+                width="100%"
+              >
+                {/* <MaturityLevelDetailsBar
                   text={text}
                   score={score}
                   highestIndex={is_passed && maturityLevel?.index == totalml}
                   is_passed={is_passed}
+                /> */}
+                <ColorfulProgress
+                  numaratur={score}
+                  denominator={100}
+                  displayPercent
                 />
-              </Box>
-            </Box>
-            <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
+              </Grid>
+              <Grid item lg={1} md={12} xs={12}></Grid>
+
+              <Grid item lg={4} md={12} xs={12}>
+                {" "}
+                <Box
+                  sx={{
+                    ...styles.centerVH,
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    fontWeight={700}
+                    fontSize="1.5rem"
+                    color={colorPallet[maturityLevel?.value - 1]}
+                  >
+                    {maturityLevel?.title}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+            {/* <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
@@ -412,7 +537,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
               >
                 {maturityLevel?.title}
               </Typography>
-            </Box>
+            </Box> */}
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -601,7 +726,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             variant="body1"
                                             fontFamily="Roboto"
                                             fontWeight={"bold"}
-                                            dir={is_farsi ? "rtl" : "ltr" }
+                                            dir={is_farsi ? "rtl" : "ltr"}
                                             sx={{
                                               whiteSpace: "nowrap",
                                               overflow: "hidden",
