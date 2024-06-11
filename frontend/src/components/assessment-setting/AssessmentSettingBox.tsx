@@ -180,6 +180,9 @@ export const AssessmentSettingMemberBox = (props: {
     const {assessmentId = ""} = useParams();
     const {listOfRoles, listOfUser, fetchAssessmentsUserListRoles, openModal} = props
 
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
     interface Column {
         id: 'displayName' | 'email' | 'role'
         label: string;
@@ -193,11 +196,11 @@ export const AssessmentSettingMemberBox = (props: {
             service.deleteUserRole({assessmentId, args}, config),
         runOnMount: false,
     });
-    // const EditUserRole= useQuery({
-    //     service: (args, config) =>
-    //         service.EditUserRole({assessmentId,args}, config),
-    //     runOnMount: false,
-    // });
+    const EditUserRole= useQuery({
+        service: (args, config) =>
+            service.EditUserRole({assessmentId ,...args}, config),
+        runOnMount: false,
+    });
 
     const columns: readonly Column[] = [
         {id: 'displayName', label: 'Name', minWidth: 230},
@@ -210,9 +213,6 @@ export const AssessmentSettingMemberBox = (props: {
         }
     ];
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -222,23 +222,19 @@ export const AssessmentSettingMemberBox = (props: {
         setPage(0);
     };
 
-    const rows = [{
-        id: 1,
-        email: "hi@1.com",
-        displayName: "mostafa",
-        pictureLink: "https://cdn.test.flickit.org/media/user/images/images.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=jsSamVF3lQ5OSCpwc2SDdGXPY8jd05zC%2F20240602%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240602T085956Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=aca9ad1dfcc6978f5ecce5824bb123c6cba43af1d9ddb909bef886401036aca0",
-        role: "admin"
-    }] as any
-
-    const [changeRole, setChangeRole] = React.useState<string>("");
-
-    const handleChange = (event: SelectChangeEvent<typeof changeRole>) => {
-        const {
-            target: {value},
-        } = event;
-        setChangeRole(
-            value
-        );
+    const handleChange = async (event:any) => {
+        try {
+            const {
+                target: {value,name},
+            } = event;
+            const {id: roleId} = value
+            const {id: userId} = name
+            await EditUserRole.query({userId, roleId})
+            await fetchAssessmentsUserListRoles()
+        }catch (e){
+            const err = e as ICustomError;
+            toastError(err);
+        }
     };
 
     const DeletePerson = async (id: any) => {
@@ -368,18 +364,19 @@ export const AssessmentSettingMemberBox = (props: {
                                                             <Select
                                                                 labelId="demo-multiple-name-label"
                                                                 id="demo-multiple-name"
-                                                                value={changeRole || row?.role?.title}
+                                                                value={row?.role?.title}
                                                                 onChange={handleChange}
+                                                                name={row}
                                                                 // input={<OutlinedInput label="Name"/>}
                                                                 inputProps={{
-                                                                    renderValue: () => (changeRole || row?.role?.title),
+                                                                    renderValue: () => (row?.role?.title),
                                                                 }}
                                                             >
                                                                 {listOfRoles.map((role: any) => (
                                                                     <MenuItem
                                                                         style={{display: "block"}}
                                                                         key={role.title}
-                                                                        value={role.title}
+                                                                        value={role}
                                                                         sx={{maxWidth: "240px"}}
                                                                     >
                                                                         <Typography>{role.title}</Typography>
