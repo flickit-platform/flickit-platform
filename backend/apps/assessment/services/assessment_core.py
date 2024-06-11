@@ -452,13 +452,8 @@ def get_path_info_with_space_id(space_id):
     return result
 
 
-def get_assessment_attribute_report(assessments_details, attribute_id, query_params, authorization_header):
-    result = dict()
-    response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessments_details["assessmentId"]}/report/attributes/{attribute_id}',
-        params=query_params
-        , headers={"Authorization": authorization_header})
-    result["Success"] = True
-    result["body"] = response.json()
-    result["status_code"] = response.status_code
-    return result
+def get_assessment_attribute_report(request, assessment_id, attribute_id):
+    response = requests.get(ASSESSMENT_URL +
+                            f'assessment-core/api/assessments/{assessment_id}/report/attributes/{attribute_id}',
+                            params=request.query_params, headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
