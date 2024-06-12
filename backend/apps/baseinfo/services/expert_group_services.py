@@ -116,3 +116,11 @@ def update_expert_group(request, expert_group_id):
     if response.status_code == 200:
         return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def update_expert_group_picture(request, expert_group_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
+        files=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
