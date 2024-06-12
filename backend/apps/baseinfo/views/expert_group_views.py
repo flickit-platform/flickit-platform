@@ -1,6 +1,6 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -104,4 +104,16 @@ class ExpertGroupSeenApi(APIView):
         result = expert_group_services.expert_group_seen(request, expert_group_id)
         if result["Success"]:
             return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class ExpertGroupPictureApi(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    picture_param = openapi.Parameter('pictureFile', openapi.IN_FORM, description="picture file",
+                                      type=openapi.TYPE_FILE, required=True)
+
+    @swagger_auto_schema(manual_parameters=[picture_param])
+    def put(self, request, expert_group_id):
+        result = expert_group_services.update_expert_group_picture(request, expert_group_id)
         return Response(data=result["body"], status=result["status_code"])
