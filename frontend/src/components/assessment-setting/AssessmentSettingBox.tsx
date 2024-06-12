@@ -36,7 +36,7 @@ import {Link} from "react-router-dom";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {SelectHeight} from "@utils/selectHeight";
 
-export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any}) => {
+export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,AssessmentTitle: string}) => {
     const {AssessmentInfo, AssessmentTitle} = props
     const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
 
