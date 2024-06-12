@@ -137,6 +137,7 @@ const AssessmentSettingContainer = () => {
                             listOfRoles={listOfRoles}
                             assessmentId={assessmentId}
                             fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
+                            assessmentName ={title}
                         />
                     </Box>
                 );

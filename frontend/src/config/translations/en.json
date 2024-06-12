@@ -405,7 +405,7 @@
   "chooseASpaceMember": "Choose a space member",
   "chooseARole": "Choose a Role",
   "addMemberParent": "Only members of the parent space  can be add to an assessment.",
-  "areYouSureYouWantDeleteThisMember" : "Are you sure you want remove {{name}} from Flickit?",
+  "areYouSureYouWantDeleteThisMember" : "Are you sure you want remove {{name}} from {{assessment}}?",
   "letMeCheckAgain": "Let me check again",
   "yesContinue": "Yes, Continue"
 }

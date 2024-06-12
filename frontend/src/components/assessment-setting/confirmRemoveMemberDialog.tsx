@@ -12,7 +12,7 @@ import {useServiceContext} from "@providers/ServiceProvider";
 import {Trans} from "react-i18next";
 
 const ConfirmRemoveMemberDialog = (props: any) => {
-    const { expandedRemoveDialog, onCloseRemoveDialog, assessmentId,
+    const { expandedRemoveDialog, onCloseRemoveDialog, assessmentId,assessmentName,
         fetchAssessmentsUserListRoles
     } = props;
 
@@ -71,6 +71,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
                         i18nKey="areYouSureYouWantDeleteThisMember"
                         values={{
                             name: expandedRemoveDialog.name,
+                            assessment: assessmentName
                         }}
                     />
                 </Typography>
