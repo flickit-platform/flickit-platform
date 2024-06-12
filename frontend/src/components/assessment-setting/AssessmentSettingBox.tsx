@@ -233,13 +233,15 @@ export const AssessmentSettingMemberBox = (props: {
     return (
         <Box
             sx={{
-                ...styles.centerCVH
-                , px: {xs: "15px", sm: "51px"}
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                px: {xs: "15px", sm: "51px"}
             }}
             gap={2}
             textAlign="center"
             height={"auto"}
-            // minHeight={"415px"}
+            minHeight={"350px"}
             width={"100%"}
             bgcolor={"#FFF"}
             borderRadius={"40.53px"}
