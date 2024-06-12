@@ -295,7 +295,17 @@ const AddMemberDialog = (props: {
                                 }}
                                 MenuProps={MenuProps}
                             >
-                                {listOfRoles.map((role: any) => {
+                                <Box
+                                    sx={{
+                                        paddingY: "16px",
+                                        color: '#9DA7B3',
+                                        textAlign: "center",
+                                        borderBottom: "1px solid #9DA7B3",
+                                    }}
+                                >
+                                    <Typography><Trans i18nKey={"chooseARole"} /></Typography>
+                                </Box>
+                                {listOfRoles.map((role: any,index: number) => {
                                     return (
                                         <MenuItem
                                             style={{display: "block"}}
@@ -304,12 +314,33 @@ const AddMemberDialog = (props: {
                                             id={role.id}
                                             sx={{maxWidth: "240px"}}
                                         >
+                                            <Box
+                                                sx={{maxWidth: "240px",
+                                                    color: "#000",
+                                                    fontSize: "0.875rem",
+                                                    lineHeight: "21px",
+                                                    fontWeight: 500,
+                                                    paddingY: "1rem",
+                                                    // "&.MuiMenuItem-root:hover":{
+                                                    //     backgroundColor: 'transparent'
+                                                    // },
+                                                }}
+                                            >
                                             <Typography>{role.title}</Typography>
                                             <div style={{
-                                                color: "#D3D3D3",
-                                                fontSize: "12px",
-                                                whiteSpace: "break-spaces"
+                                                color: "#000",
+                                                fontSize: "0.875rem",
+                                                lineHeight: "21px",
+                                                fontWeight: 300,
+                                                whiteSpace: "break-spaces",
+                                                paddingTop: "1rem"
                                             }}>{role.description}</div>
+                                            </Box>
+                                            {listOfRoles.length > index + 1 && <Box sx={{
+                                                height: '0.5px', width: "80%",
+                                                backgroundColor: "#9DA7B3",
+                                                mx: "auto"
+                                            }}></Box>}
                                         </MenuItem>)
                                 })}
                             </Select>
