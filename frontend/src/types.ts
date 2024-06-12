@@ -318,6 +318,7 @@ export interface IAssessment {
   kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
   maturityLevel: IMaturityLevel;
+  manageable?: boolean;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
