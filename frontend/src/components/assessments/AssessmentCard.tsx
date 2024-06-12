@@ -33,7 +33,7 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & {manageable: boolean};
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
@@ -220,7 +220,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   );
 };
 
-const Actions = (props: {f
+const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
   item: IAssessment & { space: any } & {manageable: boolean};
   dialogProps: TDialogProps;
