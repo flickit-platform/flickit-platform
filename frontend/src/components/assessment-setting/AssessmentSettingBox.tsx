@@ -16,8 +16,6 @@ import toastError from "@utils/toastError";
 import firstCharDetector from "@utils/firstCharDetector";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Grid from "@mui/material/Grid";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -30,13 +28,14 @@ import stringAvatar from "@utils/stringAvatar";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import Paper from "@mui/material/Paper";
 import formatDate from "@utils/formatDate";
 import {Link} from "react-router-dom";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {SelectHeight} from "@utils/selectHeight";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+
+
 export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,AssessmentTitle: string,fetchPathInfo: ()=> void, color: any}) => {
     const {AssessmentInfo, AssessmentTitle, fetchPathInfo, color} = props
     const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
@@ -63,7 +62,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                 height={"100%"}
                 width={"100%"}
             >
-                <Typography color="#9DA7B3" fontSize="32px" fontWeight={700}
+                <Typography color="#9DA7B3" fontSize="2rem" fontWeight={700}
                             lineHeight={"normal"}>
                     <Trans i18nKey={`${"General"}`}/>
                 </Typography>
@@ -82,7 +81,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                           }}
                     >
                         <Typography color="#9DA7B3" fontWeight={500}
-                                    sx={{fontSize: {xs: "1rem", sm: "24px"},
+                                    sx={{fontSize: {xs: "1rem", sm: "1.375rem"},
                                     whiteSpace: {xs: "wrap", sm: "nowrap"}
                                     }}
                                     lineHeight={"normal"}>
@@ -137,7 +136,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "center",
-                                                fontSize: {xs: "18px", md: "24px"},
+                                                fontSize: {xs: "1rem", md: "1.375rem"},
                                             }}
                                             lineHeight={"normal"}>
                                     <Trans i18nKey={`${itemList}`}/>:
@@ -147,7 +146,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "center",
-                                                fontSize: {xs: "18px", md: "24px"},
+                                                fontSize: {xs: "1rem", md: "1.375rem"},
                                                 width:{md: "350px"}
                                             }}
                                             lineHeight={"normal"}>
@@ -264,14 +263,15 @@ export const AssessmentSettingMemberBox = (props: {
                     </Typography>
                     <Button
                         sx={{
-                            borderRadius: 100, backgroundColor: "#1CC2C4",
+                            borderRadius: 100, backgroundColor: "#004F83",
                             width: "fit-content",
                             alignSelf: "end",
                             "&.MuiButtonBase-root:hover": {
-                                bgcolor: "#1CC2C4"
+                                bgcolor: "#004F83"
                             },
                             position: "absolute",
-                            right: 10
+                            right: 0,
+                            paddingX: "1.5rem"
                         }}
                         onClick={openModal}
                     >
@@ -280,9 +280,10 @@ export const AssessmentSettingMemberBox = (props: {
                             fontSize="small"
                             style={{color: "#EDFCFC"}}
                         />
-                        <Typography color="#EDFCFC" fontSize="0.9rem" fontWeight={500}
+                        <Typography color="#EDFCFC" fontWeight={500}
                                     lineHeight={"normal"}
-                                    sx={{lineHeight:'1.25rem'}}
+                                    sx={{lineHeight:'1.25rem',fontSize:{xs:"0.7rem",sm:"0.85rem"}
+                        }}
                         >
                             <Trans i18nKey={`addMember`}/>
                         </Typography>
@@ -304,11 +305,11 @@ export const AssessmentSettingMemberBox = (props: {
                                             key={column.id}
                                             align={column.align}
                                             sx={{
-                                                minWidth:{xs:"8.5rem",md: column.minWidth} ,
+                                                minWidth:{xs:"8.1rem",md: column.minWidth} ,
                                                 textAlign: {xs:"left", md:"center"},
                                                 display:{xs:column.display,md:"inline-block",
                                                 color: "#9DA7B3",
-                                                border: "none"
+                                                border: "none", fontSize: "1rem"
                                                 }
                                             }}
                                         >
@@ -331,7 +332,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                         justifyContent: "center",
                                                         alignItems: "center",
                                                         border: "none",
-                                                        gap: {xs:"0px",md:"1.3rem"}
+                                                        gap: {xs:"0px",md:"1.3rem"},
+                                                        paddingX: {xs:"0px",md:"1rem"}
                                                     }}
                                                 >
                                                     <Box sx={{
@@ -345,17 +347,23 @@ export const AssessmentSettingMemberBox = (props: {
                                                                 }}
                                                          ></Avatar>
                                                         <Typography
-                                                        sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap"}}
+                                                        sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap",
+                                                        fontSize: "0.875rem",
+                                                            color: "#1B1B1E",
+                                                            fontWeight: 500
+                                                        }}
                                                         >
                                                             {row.displayName}
                                                         </Typography>
                                                     </Box>
                                                     <Box
-                                                    sx={{display:{xs: "none",md: "flex"}, justifyContent: "flex-start", width: "13rem"
+                                                    sx={{display:{xs: "none",md: "flex"}, justifyContent: "center", width: "13rem"
                                                     }}
                                                     >
                                                         <Typography
-                                                            sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap"}}
+                                                            sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap",
+                                                            color: '#1B1B1E',fontSize: "0.875",wight:300
+                                                            }}
                                                         >
                                                             {row.email}
                                                         </Typography>
@@ -385,7 +393,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                                 sx={{
                                                                     boxShadow: 'none',
                                                                     '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                                                    border:"1px solid #A4E7E7",
+                                                                    border:"1px solid #2974B4",
+                                                                    fontSize: "0.875rem",
                                                                     borderRadius: "0.5rem",
                                                                     "&.MuiOutlinedInput-notchedOutline": { border: 0 },
                                                                     "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
@@ -397,7 +406,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                                             border: 0,
                                                                         },
                                                                     '.MuiSvgIcon-root': {
-                                                                        fill: "#A4E7E7 !important",
+                                                                        fill: "#2974B4 !important",
                                                                     },
                                                                     "& .MuiSelect-select": {
                                                                         padding: "4px 5px"
@@ -437,7 +446,9 @@ export const AssessmentSettingMemberBox = (props: {
                                                                                // },
                                                                            }}
                                                                        >
-                                                                           <Typography>{role.title}</Typography>
+                                                                           <Typography
+                                                                           sx={{fontSize: '0.875rem'}}
+                                                                           >{role.title}</Typography>
 
                                                                            <div style={{
                                                                                color: "#000",
@@ -660,7 +671,7 @@ const OnHoverInputTitleSetting = (props: any) => {
                         onMouseOut={handleMouseOut}
                     >
                         <Typography color="#1CC2C4" fontWeight={500}
-                                    sx={{fontSize: {xs: "18px", sm: "24px"}}}
+                                    sx={{fontSize: {xs: "1rem", sm: "1.375rem"}}}
                                     lineHeight={"normal"}>
                             {data.replace(/<\/?p>/g, "")}
                         </Typography>

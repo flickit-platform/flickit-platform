@@ -157,9 +157,13 @@ const AddMemberDialog = (props: {
                     display="flex"
                     alignItems="center"
                     justifyContent={"center"}
-                    gap={1}
+                    sx={{gap: {xs: "0rem", sm:"1rem"}}}
                 >
-                    <Typography>
+                    <Typography
+                    sx={{fontSize: {xs: '0.7rem',sm:"1rem"},
+                        fontWeight: 500
+                    }}
+                    >
                         <Trans i18nKey={"add"}/>
                     </Typography>
                     <Box>
@@ -167,9 +171,10 @@ const AddMemberDialog = (props: {
                             sx={{
                                 m: 1,
                                 // width: '100%',
-                                textAlign: "center",
+                                textAlign: "right",
                                 padding: "6px, 12px, 6px, 12px",
-                                minWidth: {xs: 90, sm: 150}
+                                minWidth: {xs: 90, sm: 150},
+                                maxWidth: {xs: 90, sm: 150},
                             }}
                         >
                             {/*<InputLabel sx={{width: "fit-content"}} id="demo-simple-select-autowidth-label"><Trans*/}
@@ -200,7 +205,8 @@ const AddMemberDialog = (props: {
                                     "& .MuiSelect-select": {
                                         padding: "4px 5px"
                                     },
-                                    height: '40px'
+                                    height: '40px',
+                                    fontSize: {xs: '0.7rem',sm:"1rem"}
                                 }}
                                 IconComponent={KeyboardArrowDownIcon}
                             >
@@ -208,15 +214,22 @@ const AddMemberDialog = (props: {
                                     <MenuItem
                                         style={{display: "block"}}
                                         key={member.id} value={member.id}
-                                        sx={{paddingY: "0px", maxHeight: "200px", gap: "20px"}}
+                                        sx={{paddingY: "0px", maxHeight: "200px", gap: "20px"
+                                    }}
                                     >
-                                        <Box style={{display: "flex", gap: "10px", justifyContent: "center", alignItems: "center"}}>
+                                        <Box sx={{display: "flex", gap: {xs:"2px",sm:"10px"},
+                                            justifyContent: "flex-start", alignItems: "center"
+                                           }}>
                                             <Avatar
-                                                sx={{width: '2rem', height: '2rem'}}
+                                                sx={{width: {xs:'1.3rem',sm: '2rem'}, height: {xs:'1.3rem', sm:'2rem'},
+                                                fontSize: {xs:'0.7rem',sm: '1rem'}
+                                            }}
                                                 {...stringAvatar(member.displayName.toUpperCase())}
                                                 src={member.pictureLink}
                                             />
-                                            <ListItem sx={{paddingX: "unset"}}>
+                                            <ListItem sx={{paddingX: "unset",
+                                              overflow: 'hidden',  textOverflow : 'ellipsis',whiteSpace : 'nowrap'
+                                            }}>
                                                 {member.displayName}
                                             </ListItem>
                                         </Box>
@@ -226,7 +239,11 @@ const AddMemberDialog = (props: {
                         </FormControl>
 
                     </Box>
-                    <Typography>
+                    <Typography
+                        sx={{fontSize: {xs: '0.7rem',sm:"1rem"},
+                            fontWeight: 500
+                        }}
+                    >
                         <Trans i18nKey={"as"}/>
                     </Typography>
                     <div>
@@ -269,7 +286,8 @@ const AddMemberDialog = (props: {
                                     "& .MuiSelect-select": {
                                         padding: "4px 5px"
                                     },
-                                    height: '40px'
+                                    height: '40px',
+                                    fontSize: {xs: '0.7rem',sm:"1rem"}
                                 }}
                                 IconComponent={KeyboardArrowDownIcon}
                                 inputProps={{
@@ -304,6 +322,8 @@ const AddMemberDialog = (props: {
                 }}>
                     <Button
                         sx={{
+                            fontSize: {xs: '0.7rem',sm:"1rem"},
+                            fontWeight: 700,
                             color: "#1CC2C4",
                             "&.MuiButton-root": {
                                 border: "unset",
@@ -320,6 +340,8 @@ const AddMemberDialog = (props: {
                     </Button>
                     <Button
                         sx={{
+                            fontSize: {xs: '0.7rem',sm:"1rem"},
+                            fontWeight: 700,
                             "&.MuiButton-root": {
                                 color: "#EDFCFC",
                                 border: "1px solid #1CC2C4",
