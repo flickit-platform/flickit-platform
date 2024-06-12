@@ -67,7 +67,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                 </Typography>
 
 
-                <Divider sx={{width: "100%", marginTop: "24px", marginBottom: "10px"}}/>
+                <Divider sx={{width: "100%", marginTop: "24px", marginBottom: "10px !important"}}/>
                 <Box sx={{display: "flex", justifyContent: "center"}}>
                     <Grid item
                           xs={12}
