@@ -9,12 +9,12 @@ import {ICustomError} from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
+import {Trans} from "react-i18next";
 
 const ConfirmRemoveMemberDialog = (props: any) => {
-    const { expandedRemoveDialog, onCloseRemoveDialog, title, cancelText, confirmText, assessmentId,
+    const { expandedRemoveDialog, onCloseRemoveDialog, assessmentId,
         fetchAssessmentsUserListRoles
-    } =
-        props;
+    } = props;
 
     const {service} = useServiceContext();
 
@@ -66,7 +66,14 @@ const ConfirmRemoveMemberDialog = (props: any) => {
                     gap: 6,
                 }}
             >
-                <Typography sx={{ color: "#0A2342" }}>{title}</Typography>
+                <Typography sx={{ color: "#0A2342" }}>
+                    <Trans
+                        i18nKey="areYouSureYouWantDeleteThisMember"
+                        values={{
+                            name: expandedRemoveDialog.name,
+                        }}
+                    />
+                </Typography>
 
                 <Box sx={{ display: "flex", gap: 2 }}>
                     <Button
@@ -84,7 +91,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
                         variant="outlined"
                         onClick={onCloseRemoveDialog}
                     >
-                        {cancelText}
+                        <Trans i18nKey={"letMeCheckAgain"}/>
                     </Button>
                     <Button
                         sx={{
@@ -102,7 +109,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
                         variant="contained"
                         onClick={DeletePerson}
                     >
-                        {confirmText}
+                        <Trans i18nKey={"yesContinue"}/>
                     </Button>
                 </Box>
             </DialogContent>

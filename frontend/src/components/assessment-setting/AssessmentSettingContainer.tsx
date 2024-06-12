@@ -65,7 +65,7 @@ const AssessmentSettingContainer = () => {
         setExpandedRemoveModal({display: true,name , id})
     }
     const handleCloseRemoveModal = () =>{
-        setExpandedRemoveModal({display: false, name:"", id : ""})
+        setExpandedRemoveModal({display: false, name:"", id :""})
     }
 
     return (
@@ -137,14 +137,6 @@ const AssessmentSettingContainer = () => {
                             listOfRoles={listOfRoles}
                             assessmentId={assessmentId}
                             fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
-                            title={ <Trans
-                                i18nKey="areYouSureYouWantDeleteThisMember"
-                                values={{
-                                    name: expandedRemoveModal.name,
-                                }}
-                            />}
-                            cancelText={<Trans i18nKey={"letMeCheckAgain"}/>}
-                            confirmText={<Trans i18nKey={"yesContinue"}/>}
                         />
                     </Box>
                 );
