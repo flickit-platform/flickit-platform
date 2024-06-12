@@ -264,7 +264,7 @@ const AddMemberDialog = (props: {
                                 id="demo-multiple-name"
                                 value={roleSelected?.title}
                                 onChange={handleChangeRole}
-
+                                disabled={memberSelected == "" ? true : false}
                                 // input={<OutlinedInput label="choose A Role"/>}
                                 sx={{
                                     boxShadow: 'none',
