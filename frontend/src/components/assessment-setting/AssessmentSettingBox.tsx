@@ -472,7 +472,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                         <Box
                                                             onClick={() => openRemoveModal(row.displayName, row.id)}
                                                         >
-                                                            <IconButton sx={{"&:hover": {color: "#d32f2f"},width:"1.125rem"}} size="small">
+                                                            <IconButton sx={{"&:hover": {color: "#d32f2f"}}} size="small">
                                                                 <DeleteRoundedIcon/>
                                                             </IconButton>
                                                         </Box>
