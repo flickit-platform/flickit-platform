@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import {Trans} from "react-i18next";
 import {styles} from "@styles";
@@ -26,6 +26,7 @@ const AssessmentSettingContainer = () => {
     const [expanded, setExpanded] = useState<boolean>(false);
     const [expandedRemoveModal, setExpandedRemoveModal] = useState<{display: boolean,name: string, id: string}>({display:false,name:"", id:""});
 
+    const { state } = useLocation();
     const fetchAssessmentsRoles = useQuery<RolesType>({
         service: (args, config) =>
             service.fetchAssessmentsRoles(args, config),
@@ -103,6 +104,8 @@ const AssessmentSettingContainer = () => {
                                 <AssessmentSettingGeneralBox
                                     AssessmentInfo={AssessmentInfo}
                                     AssessmentTitle={title}
+                                    fetchPathInfo={fetchPathInfo.query}
+                                    color={state}
                                 />
                             </Grid>
                         </Grid>

@@ -35,12 +35,14 @@ import formatDate from "@utils/formatDate";
 import {Link} from "react-router-dom";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {SelectHeight} from "@utils/selectHeight";
-
-export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,AssessmentTitle: string}) => {
-    const {AssessmentInfo, AssessmentTitle} = props
+import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
+export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,AssessmentTitle: string,fetchPathInfo: ()=> void, color: any}) => {
+    const {AssessmentInfo, AssessmentTitle, fetchPathInfo, color} = props
     const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
 
    const title = ["created","dateCreated","lastModified","assessmentKits"]
+   const formMethods = useForm({ shouldUnregister: true });
 
     return (
         <Box
@@ -80,8 +82,9 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                           }}
                     >
                         <Typography color="#9DA7B3" fontWeight={500}
-                                    whiteSpace={"nowrap"}
-                                    sx={{fontSize: {xs: "1rem", sm: "24px"}}}
+                                    sx={{fontSize: {xs: "1rem", sm: "24px"},
+                                    whiteSpace: {xs: "wrap", sm: "nowrap"}
+                                    }}
                                     lineHeight={"normal"}>
                             <Trans i18nKey="assessmentTitle"/>:
                         </Typography>
@@ -89,21 +92,13 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                         <Box sx={{display: "flex", justifyContent: 'center', alignItems: "center"
                         , width:{md: "350px"}
                         }}>
-                            {/*TODO*/}
-                            <Typography color="#1CC2C4" fontWeight={500}
-                                        sx={{fontSize: {xs: "1rem", sm: "24px"}}}
-                                        lineHeight={"normal"}>
-                                {AssessmentTitle}
-                            </Typography>
-                            <EditRoundedIcon sx={{color: "#9DA7B3"}} fontSize="small" width={"32px"}
-                                             height={"32px"}/>
-                            {/*<OnHoverInputTitleSetting*/}
-                            {/*    formMethods={formMethods}*/}
-                            {/*    data={assessmentTitle}*/}
-                            {/*    infoQuery={assessmentTitle}*/}
-                            {/*    type="assessmentTitle"*/}
-                            {/*    editable={true}*/}
-                            {/*/>*/}
+                            <OnHoverInputTitleSetting
+                                formMethods={formMethods}
+                                data={AssessmentTitle}
+                                infoQuery={fetchPathInfo}
+                                editable={true}
+                                color={color}
+                            />
                         </Box>
                     </Grid>
                 </Box>
@@ -505,7 +500,7 @@ const OnHoverInputTitleSetting = (props: any) => {
     const handleMouseOut = () => {
         setIsHovering(false);
     };
-    const {data, editable, infoQuery, type, formMethods} = props;
+    const {data, editable, infoQuery, formMethods,color} = props;
     const [hasError, setHasError] = useState<boolean>(false);
     const [error, setError] = useState<any>({});
     const [inputData, setInputData] = useState<string>(data);
@@ -515,24 +510,26 @@ const OnHoverInputTitleSetting = (props: any) => {
         setError({});
         setHasError(false);
     };
-    const {assessmentKitId} = useParams();
+    const {assessmentId} = useParams();
     const {service} = useServiceContext();
-    const updateAssessmentKitQuery = useQuery({
+    const updateAssessmentQuery = useQuery({
         service: (
             args = {
-                assessmentKitId: assessmentKitId,
-                data: {[type]: inputData},
+                id: assessmentId,
+                data: {title: inputData,
+                       colorId: color?.id || 6
+                },
             },
             config
-        ) => service.updateAssessmentKitStats(args, config),
+        ) => service.updateAssessment(args, config),
         runOnMount: false,
         // toastError: true,
     });
-    const updateAssessmentKit = async () => {
+    const updateAssessmentTitle = async () => {
         try {
-            /*        const res = await updateAssessmentKitQuery.query();
-                    res.message && toast.success(res.message);
-                    await infoQuery();*/
+            const res = await updateAssessmentQuery.query();
+            res.message && toast.success(res.message);
+            await infoQuery();
         } catch (e) {
             const err = e as ICustomError;
             if (Array.isArray(err.response?.data?.message)) {
@@ -561,6 +558,8 @@ const OnHoverInputTitleSetting = (props: any) => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    position: 'relative',
+                    cursor: "pointer",
                 }}
                 width="100%"
             >
@@ -586,6 +585,23 @@ const OnHoverInputTitleSetting = (props: any) => {
                                 fontFamily: "Roboto",
                                 fontWeight: "700",
                                 fontSize: "0.875rem",
+                                "&.MuiOutlinedInput-notchedOutline": { border: 0 },
+                                "&.MuiOutlinedInput-root:hover":
+                                    {
+                                        border: 0,
+                                        outline: "none"
+                                    },
+                                '& .MuiOutlinedInput-input:focused':
+                                    {
+                                        border: 0,
+                                        outline: "none"
+                                    },
+                                "&.MuiOutlinedInput-root.Mui-selected":
+                                    {
+                                        border: 0,
+                                        outline: "none"
+                                    },
+                                "&:hover": {border: "1px solid #79747E"},
                             }}
                             endAdornment={
                                 <InputAdornment position="end">
@@ -593,35 +609,37 @@ const OnHoverInputTitleSetting = (props: any) => {
                                         title="Submit Edit"
                                         edge="end"
                                         sx={{
-                                            background: "#1976d299",
-                                            borderRadius: "3px",
-                                            height: "36px",
+                                            background: "#49CED0",
+                                            borderRadius: "2px",
+                                            height: {xs: "26px" ,sm: "36px"},
+                                            width: {xs: "26px" ,sm: "36px"},
                                             margin: "3px",
                                         }}
-                                        onClick={updateAssessmentKit}
+                                        onClick={updateAssessmentTitle}
                                     >
-                                        <CheckCircleOutlineRoundedIcon sx={{color: "#fff"}}/>
+                                        <DoneIcon sx={{color: "#fff"}}/>
                                     </IconButton>
                                     <IconButton
                                         title="Cancel Edit"
                                         edge="end"
                                         sx={{
-                                            background: "#1976d299",
-                                            borderRadius: "4px",
-                                            height: "36px",
+                                            background: "#E04B7C",
+                                            borderRadius: "2px",
+                                            height: {xs: "26px" ,sm: "36px"},
+                                            width: {xs: "26px" ,sm: "36px"},
                                         }}
                                         onClick={handleCancel}
                                     >
-                                        <CancelRoundedIcon sx={{color: "#fff"}}/>
+                                        <CloseIcon sx={{color: "#fff"}}/>
                                     </IconButton>
                                 </InputAdornment>
                             }
                         />
-                        {hasError && (
-                            <Typography color="#ba000d" variant="caption">
-                                {error?.data?.[type]}
-                            </Typography>
-                        )}
+                        {/*{hasError && (*/}
+                        {/*    <Typography color="#ba000d" variant="caption">*/}
+                        {/*        {error?.data}*/}
+                        {/*    </Typography>*/}
+                        {/*)}*/}
                     </Box>
                 ) : (
                     <Box
@@ -635,7 +653,7 @@ const OnHoverInputTitleSetting = (props: any) => {
                             justifyContent: "space-between",
                             alignItems: "center",
                             wordBreak: "break-word",
-                            "&:hover": {border: "1px solid #1976d299"},
+                            // "&:hover": {border: "1px solid #79747E"},
                         }}
                         onClick={() => setShow(!show)}
                         onMouseOver={handleMouseOver}
@@ -647,18 +665,13 @@ const OnHoverInputTitleSetting = (props: any) => {
                             {data.replace(/<\/?p>/g, "")}
                         </Typography>
                         {isHovering && (
-                            <IconButton
-                                title="Edit"
-                                edge="end"
-                                sx={{
-                                    background: "#1976d299",
-                                    borderRadius: "3px",
-                                    height: "36px",
-                                }}
-                                onClick={() => setShow(!show)}
-                            >
-                                <EditRoundedIcon sx={{color: "#fff"}}/>
-                            </IconButton>
+                                <EditRoundedIcon sx={{color: "#9DA7B3", position: "absolute", right: -10,
+                                }} fontSize="small" width={"32px"}
+                                                 height={"32px"}
+                                                 onClick={() => setShow(!show)}
+                                />
+                                // <EditRoundedIcon sx={{color: "#fff"}}/>
+                            // </IconButton>
                         )}
                     </Box>
                 )}

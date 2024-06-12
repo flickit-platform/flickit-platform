@@ -253,8 +253,8 @@ const Actions = (props: {
   };
 
   const assessmentSetting = (e: any) => {
-    navigate({
-      pathname: `assessmentsettings/${item.id}`,
+    navigate(`assessmentsettings/${item.id}`,{
+        state: item?.color || {code: '#073B4C', id: 6}
     });
   };
 
