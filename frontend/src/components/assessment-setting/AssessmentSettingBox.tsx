@@ -294,7 +294,7 @@ export const AssessmentSettingMemberBox = (props: {
                     </Button>
 
                 </Box>
-                <Divider sx={{width: "100%", marginTop: "24px", marginBottom: "10px"}}/>
+                <Divider sx={{width: "100%", marginTop: "24px"}}/>
                 {/*<Paper sx={{width: '100%', overflow: 'hidden'}}>*/}
                     <TableContainer sx={{maxHeight: 440,'&::-webkit-scrollbar': {
                             display : "none"
@@ -312,7 +312,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                 minWidth:{xs:"8.5rem",md: column.minWidth} ,
                                                 textAlign: {xs:"left", md:"center"},
                                                 display:{xs:column.display,md:"inline-block",
-                                                color: "#9DA7B3"
+                                                color: "#9DA7B3",
+                                                border: "none"
                                                 }
                                             }}
                                         >
@@ -321,6 +322,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     ))}
                                 </TableRow>
                             </TableHead>
+                            <Divider sx={{width: "100%"}}/>
                             <TableBody>
                                 {listOfUser.items
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
