@@ -291,7 +291,9 @@ const SubjectTitle = (props: {
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
             },
             {
-              title: <>{<Trans i18nKey="report" values={{title: title}} />}</>,
+              title: (
+                <>{<Trans i18nKey="report" values={{ title: title }} />}</>
+              ),
             },
           ]}
           displayChip

@@ -243,11 +243,12 @@ const AttributeSummary = (props: any) => {
       <Grid item xs={6} lg={3} md={3} sm={6}>
         <Box
           display="flex"
+          justifyItems="center"
+          alignItems="center"
           sx={{
             overflow: "hidden",
             textOverflow: "ellipsis",
             textAlign: "center",
-            pr: 2,
           }}
         >
           <Typography
