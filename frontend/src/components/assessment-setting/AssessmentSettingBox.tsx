@@ -427,7 +427,9 @@ export const AssessmentSettingMemberBox = (props: {
                                                                     borderBottom: "1px solid #9DA7B3",
                                                                 }}
                                                                 >
-                                                                    <Typography><Trans i18nKey={"chooseARole"} /></Typography>
+                                                                    <Typography
+                                                                        sx={{fontSize:"0.875rem"}}
+                                                                    ><Trans i18nKey={"chooseARole"} /></Typography>
                                                                 </Box>
                                                                 {listOfRoles.map((role: any,index: number) => (
                                                                    <MenuItem

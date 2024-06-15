@@ -31,7 +31,7 @@ const AddMemberDialog = (props: {
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
-    const [memberSelected, setMemberSelected] = useState<any>([])
+    const [memberSelected, setMemberSelected] = useState<any>("")
     const [roleSelected, setRoleSelected] = useState({id: 0, title: ""})
     const {service} = useServiceContext();
     const {spaceId = ""} = useParams();
@@ -79,7 +79,7 @@ const AddMemberDialog = (props: {
 
     const closeDialog = () => {
         onClose()
-        setMemberSelected([])
+        setMemberSelected("")
         setRoleSelected({id: 0, title: ""})
     }
 
@@ -206,10 +206,22 @@ const AddMemberDialog = (props: {
                                         padding: "4px 5px"
                                     },
                                     height: '40px',
-                                    fontSize: {xs: '0.7rem',sm:"1rem"}
+                                    fontSize: {xs: '0.7rem',sm:"1rem"},
                                 }}
                                 IconComponent={KeyboardArrowDownIcon}
                             >
+                                <Box
+                                    sx={{
+                                        paddingY: "16px",
+                                        color: '#9DA7B3',
+                                        textAlign: "center",
+                                        borderBottom: "1px solid #9DA7B3",
+                                    }}
+                                >
+                                    <Typography
+                                    sx={{fontSize:"0.875rem"}}
+                                    ><Trans i18nKey={"whoWantToAdd"} /></Typography>
+                                </Box>
                                 {memberOfSpace.map((member: any, index: number) => (
                                     <MenuItem
                                         style={{display: "block"}}
@@ -303,7 +315,9 @@ const AddMemberDialog = (props: {
                                         borderBottom: "1px solid #9DA7B3",
                                     }}
                                 >
-                                    <Typography><Trans i18nKey={"chooseARole"} /></Typography>
+                                    <Typography
+                                        sx={{fontSize:"0.875rem"}}
+                                    ><Trans i18nKey={"chooseARole"} /></Typography>
                                 </Box>
                                 {listOfRoles.map((role: any,index: number) => {
                                     return (
