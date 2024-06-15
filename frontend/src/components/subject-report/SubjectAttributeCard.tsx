@@ -288,7 +288,8 @@ const AttributeSummary = (props: any) => {
         >
           <Typography
             fontWeight={700}
-            fontSize={{ md: "2rem", xs: "1rem" }}
+            pl={1}
+            fontSize={{ md: "1.75rem", xs: "1rem" }}
             color={colorPallet[maturityLevelValue - 1]}
           >
             {status}
