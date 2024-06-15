@@ -93,7 +93,8 @@ const AssessmentSettingContainer = () => {
                                     gap={2}
                                     textAlign="center"
                                 >
-                                    <Typography color="#1CC2C4" fontSize="44px" fontWeight={900}>
+                                    <Typography color="#004F83"
+                                                sx={{fontSize:{xs:"2.125rem",sm:"3.5rem"}}} fontWeight={900}>
                                         <Trans i18nKey="assessmentSettings"/>
                                     </Typography>
                                 </Box>

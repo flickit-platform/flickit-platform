@@ -672,7 +672,7 @@ const OnHoverInputTitleSetting = (props: any) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                     >
-                        <Typography color="#1CC2C4" fontWeight={500}
+                        <Typography color="#004F83" fontWeight={500}
                                     sx={{fontSize: {xs: "1rem", sm: "1.375rem"}}}
                                     lineHeight={"normal"}>
                             {data.replace(/<\/?p>/g, "")}
@@ -683,8 +683,6 @@ const OnHoverInputTitleSetting = (props: any) => {
                                                  height={"32px"}
                                                  onClick={() => setShow(!show)}
                                 />
-                                // <EditRoundedIcon sx={{color: "#fff"}}/>
-                            // </IconButton>
                         )}
                     </Box>
                 )}
