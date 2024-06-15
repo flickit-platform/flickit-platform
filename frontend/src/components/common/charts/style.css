@@ -5,9 +5,8 @@
   .insight--report__gauge {
     margin-top: 6%;
   }
-  .recharts-wrapper > .recharts-surface {
-    padding-left: 30px;
-    padding-right: 30px;
+  .recharts-legend-wrapper {
+    width: 100% !important;
   }
 }
 .path1 {
