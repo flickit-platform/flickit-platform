@@ -401,6 +401,7 @@
   "areYouSureYouWantDeleteThisEvidence":"Are you sure you want delete this evidence?",
   "maximumUploadFileSize":"Maximuim upload file size: {{maxSize}}",
   "chooseARole": "Choose a Role",
+  "selectARole": "Select a Role",
   "add": "Add",
   "chooseASpaceMember": "Choose a space member",
   "whoWantToAdd": "Who do you want to add?\n",

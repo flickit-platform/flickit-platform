@@ -183,7 +183,11 @@ const AddMemberDialog = (props: {
                                 labelId="demo-simple-select-autowidth-label"
                                 id="demo-simple-select-autowidth-labelh"
                                 value={memberSelected}
+                                displayEmpty
                                 onChange={handleChangeMember}
+                                renderValue={memberSelected == "" ? ()=> <Box sx={{color:"#6C7B8E", fontSize: "0.6rem",textAlign: "left",
+                                    overflow: 'hidden',  textOverflow : 'ellipsis',whiteSpace : 'nowrap'
+                                }}><Trans i18nKey={"chooseASpaceMember"} /></Box> : undefined }
                                 // label="Choose a space member"
                                 sx={{
                                     boxShadow: 'none',
@@ -267,7 +271,6 @@ const AddMemberDialog = (props: {
                                 padding: "6px, 12px, 6px, 12px",
                                 minWidth: {xs: 90, sm: 150}
                             }}
-                            placeholder={"Choose a space member"}
                         >
                             {/*<InputLabel id="demo-multiple-name-label"><Trans*/}
                             {/*    i18nKey={"chooseARole"}/> handleChangeMember</InputLabel>*/}
@@ -275,6 +278,7 @@ const AddMemberDialog = (props: {
                                 labelId="demo-multiple-name-label"
                                 id="demo-multiple-name"
                                 value={roleSelected?.title}
+                                displayEmpty
                                 onChange={handleChangeRole}
                                 disabled={memberSelected == "" ? true : false}
                                 // input={<OutlinedInput label="choose A Role"/>}
@@ -303,7 +307,9 @@ const AddMemberDialog = (props: {
                                 }}
                                 IconComponent={KeyboardArrowDownIcon}
                                 inputProps={{
-                                    renderValue: () => (roleSelected.title),
+                                    renderValue: () => (roleSelected?.title == "" ? <Box sx={{color:"#6C7B8E", fontSize: "0.6rem",textAlign: "left",
+                                        overflow: 'hidden',  textOverflow : 'ellipsis',whiteSpace : 'nowrap'
+                                    }}><Trans i18nKey={"chooseARole"} /></Box> :   roleSelected.title),
                                 }}
                                 MenuProps={MenuProps}
                             >
