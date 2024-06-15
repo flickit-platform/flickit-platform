@@ -330,7 +330,7 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/assessments/${assessmentId}/${questionnaireId}/`,
+        `/api/v1/assessments/${assessmentId}/questionnaires/${questionnaireId}/`,
         {
           ...(config ?? {}),
           params: {
@@ -438,7 +438,7 @@ export const createService = (
     ) {
       const { query } = args ?? {};
       const params = query ? { query } : {};
-      return axios.get(`/baseinfo/assessmentkits/options/select/`, {
+      return axios.get(`/api/v1/assessment-kits/options/search/`, {
         params,
         ...config,
       });

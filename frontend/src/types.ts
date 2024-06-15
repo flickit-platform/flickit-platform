@@ -36,7 +36,7 @@ export interface IDefaultModel<T extends any = any> {
 }
 
 export interface IAnswerTemplate {
-  caption: string;
+  title: string;
   value: number;
   id: TId;
 }
@@ -45,12 +45,12 @@ export type TAnswerTemplates = IAnswerTemplate[];
 export interface IQuestionInfo {
   id: TId;
   index: number;
-  answer: null | TAnswer;
+  answer: TAnswer | null;
   title: string;
   questionResultId?: string | number;
-  answer_options?: TAnswerTemplates;
+  options?: TAnswerTemplates;
   hint?: string;
-  may_not_be_applicable?: boolean;
+  mayNotBeApplicable?: boolean;
   is_not_applicable?: boolean;
   confidence_level?: any;
 }
@@ -61,10 +61,20 @@ export type TQuestionsInfo = {
 };
 
 export type TAnswer = {
-  id: TId;
-  index: string | number;
-  caption: string;
-  evidences: TEvidences;
+  confidenceLevel?: {
+    id : TId,
+    title:string
+  },
+  isNotApplicable?: boolean,
+  selectedOption?:{
+    id: TId,
+    index: number
+    title: string
+  },
+  id?:TId;
+  index?: string | number;
+  caption?: string;
+  evidences?: TEvidences;
 };
 export type TEvidences = {
   created_by_id: TId;

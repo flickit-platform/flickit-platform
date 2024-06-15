@@ -2,7 +2,7 @@ import pytest
 from rest_framework import status
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory
-from account.views.spaceviews import SpaceLeaveUserAPI, SpaceAccessAPI, ChangeCurrentSpaceViewSet
+from account.views.spaceviews import SpaceLeaveUserAPI, SpaceAccessAPI
 from rest_framework.test import force_authenticate
 from account.models import User, Space, UserAccess
 
@@ -207,37 +207,4 @@ class TestAddUserToSpace:
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-@pytest.mark.django_db
-@skip
-class TestChangeCurrentSpace:
-    def test_change_current_space_returns_200(self, init_space):
-        space_list = init_space()
-        user = User.objects.get(email=space_list["user1"][2])
 
-        api = APIRequestFactory()
-        request = api.post(f'/authinfo/spaces/changecurrentspace/{space_list["user1"][0].id}', {}, format='json')
-        force_authenticate(request, user=user)
-        view = ChangeCurrentSpaceViewSet.as_view()
-        resp = view(request, space_list["user1"][0].id)
-
-        assert resp.status_code == status.HTTP_200_OK
-
-    def test_change_current_space_returns_400(self, init_space):
-        space_list = init_space()
-        user = User.objects.get(email=space_list["user1"][2])
-
-        api = APIRequestFactory()
-        request = api.post(f'/authinfo/spaces/changecurrentspace/{space_list["user2"][0].id}', {}, format='json')
-        force_authenticate(request, user=user)
-        view = ChangeCurrentSpaceViewSet.as_view()
-        resp = view(request, space_list["user2"][0].id)
-
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
-
-    def test_change_current_space_returns_401(self):
-        api = APIRequestFactory()
-        request = api.post(f'/authinfo/spaces/changecurrentspace/2', {}, format='json')
-        view = ChangeCurrentSpaceViewSet.as_view()
-        resp = view(request, 2)
-
-        assert resp.status_code == status.HTTP_401_UNAUTHORIZED

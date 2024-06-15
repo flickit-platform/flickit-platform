@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from account.serializers.spaceserializers import SpaceListSerializer, InputSpaceAccessSerializer
+from account.serializers.spaceserializers import InputSpaceAccessSerializer
 from account.serializers.commonserializers import SpaceSerializer
 from account.services import spaceservices
 
@@ -31,19 +31,6 @@ class SpaceAccessAPI(APIView):
             return Response({'code': result.code, 'message': result.message})
         else:
             return Response({'code': result.code, 'message': result.message}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SpaceViewSet(ModelViewSet):
-    def get_serializer_class(self):
-        if self.action in ('create', 'update'):
-            return SpaceSerializer
-        else:
-            return SpaceListSerializer
-
-    def get_queryset(self):
-        current_user = self.request.user
-        if current_user.spaces is not None:
-            return current_user.spaces.all()
 
 
 class SpaceLeaveUserAPI(APIView):

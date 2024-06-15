@@ -74,13 +74,6 @@ def get_question_with_quality_attribute(quality_attribute_id):
     return result
 
 
-def get_answer_option_whit_id(answer_option_ids):
-    answer_option_list = answer_option_ids.split(',')
-    answer_option_list = [int(x) for x in answer_option_list if x.isdigit()]
-    result = AnswerTemplate.objects.filter(id__in=answer_option_list)
-    return result
-
-
 def get_maturity_level_details(maturity_levels, quality_attributes_id):
     data = list()
     for level in maturity_levels:

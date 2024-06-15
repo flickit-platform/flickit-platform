@@ -9,18 +9,6 @@ class AssessmentProjectSerializer(serializers.Serializer):
     color_id = serializers.IntegerField(required=True)
 
 
-class LoadQuestionnairesSerializer(serializers.ModelSerializer):
-    subjects = serializers.SerializerMethodField()
-    questions_count = serializers.IntegerField(source="question_set.count")
-
-    def get_subjects(self, questionnaire: Questionnaire):
-        return questionnaire.assessment_subjects.values('id', 'title')
-
-    class Meta:
-        model = Questionnaire
-        fields = ['id', 'index', 'title', 'questions_count', 'subjects']
-
-
 class EditAssessmentSerializer(serializers.Serializer):
     title = serializers.CharField(required=True)
     color_id = serializers.IntegerField(required=True)
