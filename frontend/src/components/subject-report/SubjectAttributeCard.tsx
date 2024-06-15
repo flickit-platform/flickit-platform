@@ -25,7 +25,7 @@ import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import ColorfulProgress from "../common/progress/ColorfulProgress";
-import { IconButton } from "@mui/material";
+import { IconButton, useMediaQuery } from "@mui/material";
 import { Info, InfoOutlined, InfoRounded } from "@mui/icons-material";
 
 const SUbjectAttributeCard = (props: any) => {
@@ -239,6 +239,9 @@ const AttributeSummary = (props: any) => {
   } = props;
   const colorPallet = getMaturityLevelColors(maturityLevelsCount);
   const statusColor = colorPallet[maturityLevelsCount - 1];
+  const isMobileScreen = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("sm")
+  );
   return (
     <Grid container alignItems="center">
       <Grid
@@ -267,7 +270,7 @@ const AttributeSummary = (props: any) => {
             sx={{
               textTransform: "none",
               whiteSpace: "pre-wrap",
-              fontSize: { md: "1.5rem", xs: "1rem" },
+              fontSize: { md: "1.5rem", xs: "0.75rem" },
             }}
             fontWeight={500}
           >
@@ -293,13 +296,16 @@ const AttributeSummary = (props: any) => {
         >
           <Typography
             fontWeight={500}
-            fontSize={{ md: "1rem", xs: "0.75rem" }}
+            fontSize={{ md: "1rem", xs: "0.9rem" }}
             display={{ xs: "none", sm: "none", md: "block" }}
             color="rgba(108, 123, 142, 1)"
           >
             <Trans i18nKey="confidenceLevel" />
           </Typography>
-          <ConfidenceLevel inputNumber={confidenceValue} displayNumber />
+          <ConfidenceLevel
+            inputNumber={confidenceValue}
+            displayNumber={isMobileScreen ? false : true}
+          />
         </Box>
       </Grid>
       <Grid item xs={0} lg={2} md={2} sm={0}></Grid>
@@ -314,7 +320,7 @@ const AttributeSummary = (props: any) => {
           <Typography
             fontWeight={700}
             pl={1}
-            fontSize={{ md: "1.75rem", xs: "1rem" }}
+            fontSize={{ md: "1.75rem", xs: "0.9rem" }}
             color={colorPallet[maturityLevelValue - 1]}
           >
             {status}
