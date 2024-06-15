@@ -650,6 +650,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
 
                       return (
                         <Accordion
+                          defaultExpanded
                           sx={{
                             boxShadow: "none",
                             "&:before": {
