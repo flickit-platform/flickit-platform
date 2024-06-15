@@ -99,12 +99,12 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             component="span"
             color="black"
             fontWeight={300}
-            fontSize="0.8rem"
+            fontSize={{ md: "0.8rem", xs: "0.5rem" }}
             textAlign="center"
-            style={{
+            sx={{
               position: "absolute",
-              left: "26%",
-              top: "50%",
+              left: { md: "26%", xs: "34%", sm: "34%" },
+              top: { md: "50%", xs: "26%", sm: "26%" },
               transform: "translate(-50%, -50%)",
               pointerEvents: "none",
             }}

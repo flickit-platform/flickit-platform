@@ -510,11 +510,18 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   progressHeight="1.25rem"
                 />
               </Grid>
-              <Grid item lg={2} md={2} xs={2} alignSelf="center">
-                <img
-                  src={is_passed ? checkmark : deleteSvg}
-                  alt={is_passed ? "is passed" : "failed"}
-                />
+              <Grid item lg={2} md={2} xs={2}>
+                <Box
+                  sx={{
+                    ...styles.centerCVH,
+                    height:"100%"
+                  }}
+                >
+                  <img
+                    src={is_passed ? checkmark : deleteSvg}
+                    alt={is_passed ? "is passed" : "failed"}
+                  />
+                </Box>
               </Grid>
 
               <Grid item lg={3} md={3} xs={12}>
