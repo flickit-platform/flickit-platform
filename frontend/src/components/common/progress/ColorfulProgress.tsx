@@ -104,7 +104,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             sx={{
               position: "absolute",
               left: { md: "26%", xs: "34%", sm: "34%" },
-              top: { md: "50%", xs: "26%", sm: "26%" },
+              top: { md: "50%", xs: "29%", sm: "29%" },
               transform: "translate(-50%, -50%)",
               pointerEvents: "none",
             }}
