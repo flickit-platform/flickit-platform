@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from assessment.services.assessment_core_services import get_assessment_kit_assessment_count
 
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, \
     MaturityLevel, LevelCompetence
@@ -43,65 +42,6 @@ class ExpertGroupSimpleSerilizers(serializers.ModelSerializer):
     class Meta:
         model = ExpertGroup
         fields = ['id', 'name', 'bio', 'about']
-
-
-class AssessmentKitSerilizer(serializers.ModelSerializer):
-    tags = AssessmentKitTagSerializer(many=True)
-    expert_group = ExpertGroupSimpleSerilizers()
-    number_of_assessment = serializers.SerializerMethodField()
-    current_user_is_coordinator = serializers.SerializerMethodField()
-    number_of_subject = serializers.SerializerMethodField()
-    number_of_questionaries = serializers.SerializerMethodField()
-    subjects_with_desc = serializers.SerializerMethodField()
-    questionnaires = serializers.SerializerMethodField()
-    likes_number = serializers.SerializerMethodField()
-    maturity_levels = serializers.SerializerMethodField()
-
-    def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
-                                                                    total_count=True)
-        return assessment_count_data["totalCount"]
-
-    def get_current_user_is_coordinator(self, assessment_kit: AssessmentKit):
-        return assessmentkitservice.get_current_user_is_coordinator(assessment_kit,
-                                                                    self.context.get('request', None).user.id)
-
-    def get_number_of_subject(self, assessment_kit: AssessmentKit):
-        return AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    def get_number_of_questionaries(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    def get_subjects_with_desc(self, assessment_kit: AssessmentKit):
-        subjects = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
-                                                                                                      'description')
-        for subject in subjects:
-            subj_qs = AssessmentSubject.objects.get(id=subject['id'])
-            attributes = subj_qs.quality_attributes.values('id', 'title', 'description')
-            subject['attributes'] = attributes
-        return subjects
-
-    def get_questionnaires(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
-                                                                                              'description')
-
-    def get_likes_number(self, assessment_kit: AssessmentKit):
-        return assessment_kit.likes.count()
-
-    def get_maturity_levels(self, assessment_kit: AssessmentKit):
-        levels = MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).values('id', 'title',
-                                                                                                'value')
-        for i in range(len(levels)):
-            levels[i]["index"] = i + 1
-        return levels
-
-    class Meta:
-        model = AssessmentKit
-        fields = ['id', 'code', 'title', 'summary', 'about', 'tags', 'expert_group',
-                  'creation_time', 'last_modification_date', 'likes_number', 'number_of_subject',
-                  'number_of_questionaries',
-                  'number_of_assessment', 'is_active', 'is_private', 'current_user_is_coordinator',
-                  'subjects_with_desc', 'questionnaires', 'maturity_levels']
 
 
 class AssessmentKitCreateSerilizer(serializers.ModelSerializer):
@@ -159,45 +99,6 @@ class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSer
         fields = ['title']
 
 
-class LoadAssessmentKitInfoStatisticalSerilizer(serializers.ModelSerializer):
-    last_update_time = serializers.DateTimeField(source='last_modification_date')
-    questionnaires_count = serializers.SerializerMethodField()
-    attributes_count = serializers.SerializerMethodField()
-    questions_count = serializers.SerializerMethodField()
-    maturity_levels_count = serializers.SerializerMethodField()
-    likes_count = serializers.IntegerField(source='likes.count')
-    assessments_count = serializers.SerializerMethodField()
-    subjects = serializers.SerializerMethodField()
-    expert_group = SimpleExpertGroupDataForAssessmentKitSerializer()
-
-    def get_subjects(self, assessment_kit: AssessmentKit):
-        data = AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values('title')
-        return data
-
-    def get_questionnaires_count(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    def get_attributes_count(self, assessment_kit: AssessmentKit):
-        return AssessmentSubject.objects.filter(kit_version=assessment_kit.kit_version_id).values(
-            'quality_attributes').count()
-
-    def get_questions_count(self, assessment_kit: AssessmentKit):
-        return Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).values('question').count()
-
-    def get_assessments_count(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
-                                                                    total_count=True)
-        return assessment_count_data["totalCount"]
-
-    def get_maturity_levels_count(self, assessment_kit: AssessmentKit):
-        return MaturityLevel.objects.filter(kit_version=assessment_kit.kit_version_id).all().count()
-
-    class Meta:
-        model = AssessmentKit
-        fields = ['creation_time', 'last_update_time', 'questionnaires_count', 'attributes_count', 'questions_count',
-                  'maturity_levels_count', 'likes_count', 'assessments_count', 'subjects', 'expert_group']
-
-
 class EditAssessmentKitInfoSerializer(serializers.Serializer):
     title = serializers.CharField(required=False, min_length=3, max_length=50,
                                   validators=[UniqueValidator(queryset=AssessmentKit.objects.all())])
@@ -245,7 +146,9 @@ class LoadAssessmentKitDetailsSerializer(serializers.ModelSerializer):
     maturity_levels = serializers.SerializerMethodField()
 
     def get_questionnaires(self, assessment_kit: AssessmentKit):
-        data = Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).order_by('index').values('id', 'title', 'index')
+        data = Questionnaire.objects.filter(kit_version=assessment_kit.kit_version_id).order_by('index').values('id',
+                                                                                                                'title',
+                                                                                                                'index')
         return data
 
     def get_subjects(self, assessment_kit: AssessmentKit):
@@ -280,26 +183,6 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
 
 class AssessmentKitUpdateSerializer(serializers.Serializer):
     dsl_id = serializers.IntegerField()
-
-
-class AssessmentKitListSerializer(serializers.ModelSerializer):
-    tags = AssessmentKitTagSerializer(many=True)
-    expert_group = expertgroupserializers.ExpertGroupAvatarSerializer()
-    number_of_assessment = serializers.SerializerMethodField()
-    likes_number = serializers.SerializerMethodField()
-
-    def get_number_of_assessment(self, assessment_kit: AssessmentKit):
-        assessment_count_data = get_assessment_kit_assessment_count(assessment_kit_id=assessment_kit.id,
-                                                                    total_count=True)
-        return assessment_count_data["totalCount"]
-
-    def get_likes_number(self, assessment_kit: AssessmentKit):
-        return assessment_kit.likes.count()
-
-    class Meta:
-        model = AssessmentKit
-        fields = ['id', 'title', 'summary', 'tags', 'expert_group', 'likes_number', 'number_of_assessment',
-                  'is_private']
 
 
 class DslSerializer(serializers.Serializer):

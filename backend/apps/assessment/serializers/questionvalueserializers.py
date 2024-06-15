@@ -15,16 +15,3 @@ class AnswerQuestionSerializer(serializers.Serializer):
         return data
 
 
-class LoadQuestionnaireAnswerSerializer(serializers.ModelSerializer):
-    answer_options = serializers.SerializerMethodField()
-    hint = serializers.SerializerMethodField()
-
-    def get_answer_options(self, question: Question):
-        return question.answer_templates.values("id", "index", "caption").order_by("index")
-
-    def get_hint(self, question: Question):
-        return question.description
-
-    class Meta:
-        model = Question
-        fields = ["id", "index", "title", "hint", "answer_options", "may_not_be_applicable"]

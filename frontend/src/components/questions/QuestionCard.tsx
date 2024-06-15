@@ -70,13 +70,7 @@ interface IQuestionCardProps {
 
 export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionInfo, questionsInfo } = props;
-  const {
-    title,
-    hint,
-    may_not_be_applicable,
-    is_not_applicable,
-    confidence_level,
-  } = questionInfo;
+  const { answer, title, hint, mayNotBeApplicable } = questionInfo;
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
@@ -90,15 +84,17 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const is_farsi = languageDetector(title);
   useEffect(() => {
     setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
-    setNotApplicable(is_not_applicable ?? false);
-    if (confidence_level) {
+    setNotApplicable(answer?.isNotApplicable ?? false);
+    if (answer?.confidenceLevel) {
       dispatch(
         questionActions.setSelectedConfidenceLevel(
-          confidence_level?.id ? confidence_level?.id : confidence_level ?? null
+          answer?.confidenceLevel?.id
+            ? answer?.confidenceLevel?.id
+            : answer?.confidenceLevel ?? null
         )
       );
     }
-  }, [title, confidence_level]);
+  }, [title, answer?.confidenceLevel]);
   const ConfidenceListQueryData = useQuery({
     service: (args = {}, config) =>
       service.fetchConfidenceLevelsList(args, config),
@@ -179,7 +175,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             is_farsi={is_farsi}
             setNotApplicable={setNotApplicable}
             notApplicable={notApplicable}
-            may_not_be_applicable={may_not_be_applicable ?? false}
+            may_not_be_applicable={mayNotBeApplicable ?? false}
             setDisabledConfidence={setDisabledConfidence}
             selcetedConfidenceLevel={selcetedConfidenceLevel}
           />
@@ -321,12 +317,14 @@ const AnswerTemplate = (props: {
     setDisabledConfidence,
     selcetedConfidenceLevel,
   } = props;
-  const { answer_options, answer } = questionInfo;
+  const { options, answer } = questionInfo;
   const { total_number_of_questions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
   const { assessmentId = "", questionnaireId } = useParams();
-  const [value, setValue] = useState<TAnswer | null>(answer);
+  const [value, setValue] = useState<TAnswer | null>(
+    answer?.selectedOption || null
+  );
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
   const isSelectedValueTheSameAsAnswer =
@@ -380,9 +378,11 @@ const AnswerTemplate = (props: {
       dispatch(
         questionActions.setQuestionInfo({
           ...questionInfo,
-          answer: value,
-          is_not_applicable: notApplicable,
-          confidence_level: selcetedConfidenceLevel ?? null,
+          answer: {
+            selectedOption: value,
+            isNotApplicable: notApplicable,
+            confidenceLevel: selcetedConfidenceLevel ?? null,
+          } as TAnswer,
         })
       );
       if (isLastQuestion) {
@@ -441,8 +441,8 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {answer_options?.map((option: any) => {
-            const { index: templateValue, caption } = option || {};
+          {options?.map((option: any) => {
+            const { index: templateValue, title } = option || {};
             return (
               <Box
                 key={option.value}
@@ -504,7 +504,7 @@ const AnswerTemplate = (props: {
                       },
                     }}
                   />
-                  {templateValue}. {caption}
+                  {templateValue}. {title}
                 </ToggleButton>
               </Box>
             );
@@ -780,7 +780,12 @@ const Evidence = (props: any) => {
           onSubmit={formMethods.handleSubmit(onSubmit)}
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
         >
-          <Grid container display={"flex"} justifyContent={"end"} sx={styles.formGrid}>
+          <Grid
+            container
+            display={"flex"}
+            justifyContent={"end"}
+            sx={styles.formGrid}
+          >
             <TabContext value={value}>
               <TabList
                 onChange={handleChange}
@@ -923,35 +928,35 @@ const Evidence = (props: any) => {
                         right: 5,
                       }
                 }
-              >
-              </Grid>
+              ></Grid>
             </Grid>
-              <Box display={"flex"} justifyContent={"end"} mt={2}>
-                  {!evidenceId ? (
-                      <LoadingButton
-                          sx={{
-                              ml: "auto",
-                              borderRadius: "100%",
-                              p: 2,
-                              minWidth: "56px",
-                              background: evidenceBG.borderColor,
-                              "&:hover": {
-                                  background: evidenceBG.borderHover,
-                              },
-                          }}
-                          type="submit"
-                          variant="contained"
-                          loading={evidencesQueryData.loading}
-                      >
-                          <AddRoundedIcon fontSize="large" />
-                      </LoadingButton>
-                  ) : (
-                      <EvidenceEditingBtn cancelEditing={cancelEditing}
-                                   evidenceBG={evidenceBG}
-                                   evidencesQueryData={evidencesQueryData}
-                      />
-                  )}
-              </Box>
+            <Box display={"flex"} justifyContent={"end"} mt={2}>
+              {!evidenceId ? (
+                <LoadingButton
+                  sx={{
+                    ml: "auto",
+                    borderRadius: "100%",
+                    p: 2,
+                    minWidth: "56px",
+                    background: evidenceBG.borderColor,
+                    "&:hover": {
+                      background: evidenceBG.borderHover,
+                    },
+                  }}
+                  type="submit"
+                  variant="contained"
+                  loading={evidencesQueryData.loading}
+                >
+                  <AddRoundedIcon fontSize="large" />
+                </LoadingButton>
+              ) : (
+                <EvidenceEditingBtn
+                  cancelEditing={cancelEditing}
+                  evidenceBG={evidenceBG}
+                  evidencesQueryData={evidencesQueryData}
+                />
+              )}
+            </Box>
           </Grid>
         </form>
         <Box mt={3}>
@@ -978,55 +983,54 @@ const Evidence = (props: any) => {
   );
 };
 
-const EvidenceEditingBtn = (props : any) =>{
-    const { cancelEditing, evidenceBG, evidencesQueryData } = props
-    return (
-        <Box
-            sx={{ display: "flex", gap: 1, alignItems: "baseline" }}
-        >
-            <IconButton
-                aria-label="delete"
-                sx={{
-                    boxShadow: 2,
-                    borderRadius: "100%",
-                    width: "46px",
-                    height: "46px",
-                    p: 1,
-                    background: "#F7D2DE",
-                    border: "1px solid #D81E5B",
-                    "&.MuiButtonBase-root:hover": {
-                        background: "#EFA5BD",
-                    },
-                }}
-                onClick={cancelEditing}
-            >
-                <CloseRoundedIcon style={{ color: "#D81E5B" }} />
-            </IconButton>
-            <LoadingButton
-                sx={{
-                    ml: "auto",
-                    borderRadius: "100%",
-                    p: 2,
-                    minWidth: "56px",
-                    background: evidenceBG.borderColor,
-                    "&:hover": {
-                        background: evidenceBG.borderHover,
-                    },
-                }}
-                type="submit"
-                variant="contained"
-                loading={evidencesQueryData.loading}
-            >
-                <CheckRoundedIcon fontSize="large" />
-            </LoadingButton>
-        </Box>
-    )
-}
+const EvidenceEditingBtn = (props: any) => {
+  const { cancelEditing, evidenceBG, evidencesQueryData } = props;
+  return (
+    <Box sx={{ display: "flex", gap: 1, alignItems: "baseline" }}>
+      <IconButton
+        aria-label="delete"
+        sx={{
+          boxShadow: 2,
+          borderRadius: "100%",
+          width: "46px",
+          height: "46px",
+          p: 1,
+          background: "#F7D2DE",
+          border: "1px solid #D81E5B",
+          "&.MuiButtonBase-root:hover": {
+            background: "#EFA5BD",
+          },
+        }}
+        onClick={cancelEditing}
+      >
+        <CloseRoundedIcon style={{ color: "#D81E5B" }} />
+      </IconButton>
+      <LoadingButton
+        sx={{
+          ml: "auto",
+          borderRadius: "100%",
+          p: 2,
+          minWidth: "56px",
+          background: evidenceBG.borderColor,
+          "&:hover": {
+            background: evidenceBG.borderHover,
+          },
+        }}
+        type="submit"
+        variant="contained"
+        loading={evidencesQueryData.loading}
+      >
+        <CheckRoundedIcon fontSize="large" />
+      </LoadingButton>
+    </Box>
+  );
+};
 
 const EvidenceDetail = (props: any) => {
   const { item, evidencesQueryData, setEvidenceId, evidenceId, setValue } =
     props;
   const { description, lastModificationTime, createdBy, id, type } = item;
+  const { displayName, pictureLink } = createdBy;
   const is_farsi = firstCharDetector(description);
   const [evidenceBG, setEvidenceBG] = useState<any>();
   const formContext = useFormContext();
@@ -1096,8 +1100,8 @@ const EvidenceDetail = (props: any) => {
     <Box display="flex" flexDirection="column" width="100%">
       <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
         <Avatar
-          {...stringAvatar(createdBy.displayName.toUpperCase())}
-          // src={pictureLink}
+          {...stringAvatar(displayName.toUpperCase())}
+          src={pictureLink}
           sx={{ width: 56, height: 56 }}
         ></Avatar>
 
@@ -1129,7 +1133,14 @@ const EvidenceDetail = (props: any) => {
               <Trans i18nKey="editing" />
             </Typography>
           )}
-          <Box sx={{ display: "flex", flexDirection: {xs:"column",sm:"row"}, alignItems: "flex-end", gap: {xs:"24px",sm:"48px"}}}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: "flex-end",
+              gap: { xs: "24px", sm: "48px" },
+            }}
+          >
             <Typography>{description}</Typography>
             <Typography
               fontSize="12px"
@@ -1197,7 +1208,7 @@ const DeleteEvidenceDialog = (props: any) => {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius:"32px" ,
+          borderRadius: "32px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",

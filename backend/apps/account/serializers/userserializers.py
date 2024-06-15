@@ -69,11 +69,3 @@ class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         fields = ['id', 'email', 'display_name', 'bio', 'picture', 'linkedin']
 
-
-class UserAccessSerializer(serializers.ModelSerializer):
-    user = UserSimpleSerializer(read_only=True)
-    space = SpaceSimpleSerializer()
-
-    class Meta:
-        model = UserAccess
-        fields = ['id', 'user', 'space', 'invite_email', 'invite_expiration_date']

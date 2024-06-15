@@ -18,7 +18,6 @@ urlpatterns = [
     path('authinfo/', include('djoser.urls')),
     path('baseinfo/', include('baseinfo.urls')),
     path('authinfo/', include('account.urls')),
-    path('api/internal/', include('baseinfo.url.url_internal')),
     path('api/v1/assessment-kits/', include('baseinfo.url.url_assessment_kit_v1')),
     path('api/v2/assessment-kits/', include('baseinfo.url.url_assessment_kit_v2')),
     path('api/v1/assessment-kit-tags/', include('baseinfo.url.url_assessment_kit_tags_v1')),
