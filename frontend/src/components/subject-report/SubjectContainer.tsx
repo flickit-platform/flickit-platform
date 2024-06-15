@@ -268,7 +268,8 @@ const SubjectTitle = (props: {
   const { space, assessment } = pathInfo;
 
   useEffect(() => {
-    setDocumentTitle(`${title} ${t("report")}`);
+    console.log(title);
+    setDocumentTitle(`${title} ${t("report", { title: title })}`);
   }, [title]);
   return (
     <Title

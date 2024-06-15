@@ -24,9 +24,6 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   payload,
 }) => {
   if (active && payload && payload.length) {
-    {
-      payload.map((entry, index) => console.log(entry.payload));
-    }
     return (
       <div
         className="custom-tooltip"

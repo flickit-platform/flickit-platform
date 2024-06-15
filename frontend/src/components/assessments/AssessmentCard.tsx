@@ -46,7 +46,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
-  console.log(item);
   const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();

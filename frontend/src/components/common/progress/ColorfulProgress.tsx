@@ -33,7 +33,6 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
     guideText,
     progressHeight,
   } = props;
-  console.log(numaratur);
   const totalProgress = ((numaratur || 0) / (denominator || 1)) * 100;
 
   let color: LinearProgressProps["color"] = "primary";
