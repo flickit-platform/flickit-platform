@@ -226,7 +226,7 @@ const AddMemberDialog = (props: {
                                     sx={{fontSize:"0.875rem"}}
                                     ><Trans i18nKey={"whoWantToAdd"} /></Typography>
                                 </Box>
-                                {memberOfSpace.map((member: any, index: number) => (
+                                {(memberOfSpace || []).map((member: any, index: number) => (
                                     <MenuItem
                                         style={{display: "block"}}
                                         key={member.id} value={member.id}
@@ -326,7 +326,7 @@ const AddMemberDialog = (props: {
                                         sx={{fontSize:"0.875rem"}}
                                     ><Trans i18nKey={"chooseARole"} /></Typography>
                                 </Box>
-                                {listOfRoles.map((role: any,index: number) => {
+                                {(listOfRoles || []).map((role: any,index: number) => {
                                     return (
                                         <MenuItem
                                             style={{display: "block"}}
@@ -359,7 +359,7 @@ const AddMemberDialog = (props: {
                                                 paddingTop: "1rem"
                                             }}>{role.description}</div>
                                             </Box>
-                                            {listOfRoles.length > index + 1 && <Box sx={{
+                                            {listOfRoles && listOfRoles.length > index + 1 && <Box sx={{
                                                 height: '0.5px', width: "80%",
                                                 backgroundColor: "#9DA7B3",
                                                 mx: "auto"
