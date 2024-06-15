@@ -445,9 +445,10 @@ export const AssessmentSettingMemberBox = (props: {
                                                                                lineHeight: "21px",
                                                                                fontWeight: 500,
                                                                                paddingY: "1rem",
-                                                                               // "&.MuiMenuItem-root:hover":{
-                                                                               //     backgroundColor: 'transparent'
-                                                                               // },
+                                                                               "&.MuiMenuItem-root:hover":{
+                                                                                   backgroundColor: '#EFEDF0',
+                                                                                   color:"#1B1B1E"
+                                                                               },
                                                                            }}
                                                                        >
                                                                            <Typography

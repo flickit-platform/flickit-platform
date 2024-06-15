@@ -230,7 +230,11 @@ const AddMemberDialog = (props: {
                                     <MenuItem
                                         style={{display: "block"}}
                                         key={member.id} value={member.id}
-                                        sx={{paddingY: "0px", maxHeight: "200px", gap: "20px"
+                                        sx={{paddingY: "0px", maxHeight: "200px", gap: "20px",
+                                            "&.MuiMenuItem-root:hover":{
+                                                backgroundColor: '#EFEDF0',
+                                                color:"#1B1B1E"
+                                            },
                                     }}
                                     >
                                         <Box sx={{display: "flex", gap: {xs:"2px",sm:"10px"},
@@ -272,8 +276,6 @@ const AddMemberDialog = (props: {
                                 minWidth: {xs: 90, sm: 150}
                             }}
                         >
-                            {/*<InputLabel id="demo-multiple-name-label"><Trans*/}
-                            {/*    i18nKey={"chooseARole"}/> handleChangeMember</InputLabel>*/}
                             <Select
                                 labelId="demo-multiple-name-label"
                                 id="demo-multiple-name"
@@ -281,7 +283,6 @@ const AddMemberDialog = (props: {
                                 displayEmpty
                                 onChange={handleChangeRole}
                                 disabled={memberSelected == "" ? true : false}
-                                // input={<OutlinedInput label="choose A Role"/>}
                                 sx={{
                                     boxShadow: 'none',
                                     '.MuiOutlinedInput-notchedOutline': {border: 0},
@@ -332,7 +333,12 @@ const AddMemberDialog = (props: {
                                             key={role.title}
                                             value={role}
                                             id={role.id}
-                                            sx={{maxWidth: "240px"}}
+                                            sx={{maxWidth: "240px",
+                                                "&.MuiMenuItem-root:hover":{
+                                                    backgroundColor: '#EFEDF0',
+                                                    color:"#1B1B1E"
+                                                },
+                                        }}
                                         >
                                             <Box
                                                 sx={{maxWidth: "240px",
@@ -341,9 +347,6 @@ const AddMemberDialog = (props: {
                                                     lineHeight: "21px",
                                                     fontWeight: 500,
                                                     paddingY: "1rem",
-                                                    // "&.MuiMenuItem-root:hover":{
-                                                    //     backgroundColor: 'transparent'
-                                                    // },
                                                 }}
                                             >
                                             <Typography>{role.title}</Typography>
