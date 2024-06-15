@@ -77,9 +77,9 @@ const AssessmentSettingContainer = () => {
                 AssessmentInfo
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([pathInfo = {},Roles = {}, listOfUser = [], AssessmentInfo = {}]) => {
+            render={([pathInfo = {},roles = {}, listOfUser = [], assessmentInfo = {}]) => {
                 const {space, assessment: {title}} = pathInfo;
-                const {items: listOfRoles} = Roles;
+                const {items: listOfRoles} = roles;
 
                 return (
                     <Box m="auto" pb={3} sx={{px: {lg: 14, xs: 2, sm: 3}}}>
@@ -103,7 +103,7 @@ const AssessmentSettingContainer = () => {
                         <Grid container columns={12} mb={"32px"}>
                             <Grid item sm={12} xs={12}>
                                 <AssessmentSettingGeneralBox
-                                    AssessmentInfo={AssessmentInfo}
+                                    AssessmentInfo={assessmentInfo}
                                     AssessmentTitle={title}
                                     fetchPathInfo={fetchPathInfo.query}
                                     color={state}
