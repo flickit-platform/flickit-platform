@@ -84,7 +84,7 @@ const AssessmentAdviceContainer = (props: any) => {
         <DialogContent
           sx={{
             padding: "0!important",
-            background: "#1CC2C4",
+            background: "#004F83",
             overflowX: "hidden",
           }}
         >
@@ -99,7 +99,7 @@ const AssessmentAdviceContainer = (props: any) => {
           >
             <Box
               sx={{
-                background: "#1CC2C4",
+                background: "#004F83",
                 py: 4,
                 textAlign: "center",
                 color: "#fff",
@@ -182,7 +182,7 @@ const AssessmentAdviceContainer = (props: any) => {
                                       sx={{
                                         color: "#0A2342",
                                         "&.Mui-checked": {
-                                          color: "#1CC2C4",
+                                          color: "#004F83",
                                         },
                                       }}
                                     />
@@ -223,7 +223,7 @@ const AssessmentAdviceContainer = (props: any) => {
               >
                 <Button
                   sx={{
-                    color: "#1CC2C4",
+                    color: "#004F83",
                     px: 2,
                     py: 1,
                     borderRadius: "16px",
@@ -239,7 +239,7 @@ const AssessmentAdviceContainer = (props: any) => {
 
                 <LoadingButton
                   sx={{
-                    background: "#1CC2C4",
+                    background: "#004F83",
                     color: "#EDFCFC",
                     px: 2,
                     py: 1,
@@ -277,7 +277,7 @@ const AssessmentAdviceContainer = (props: any) => {
             sx={{
               fontSize: "64px",
               fontWeight: "700",
-              color: "#1CC2C4",
+              color: "#004F83",
               textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
               textAlign: "center",
               display: "flex",
@@ -319,7 +319,7 @@ const AssessmentAdviceContainer = (props: any) => {
           >
             <Button
               sx={{
-                background: "#1CC2C4",
+                background: "#004F83",
                 color: "#EDFCFC",
                 px: 5,
                 py: 1,
@@ -476,7 +476,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     <Box
                       sx={{
                         fontSize: "64px",
-                        color: "#1CC2C4",
+                        color: "#004F83",
                         fontWeight: "700",
                         width: "fit-content",
                       }}
@@ -552,7 +552,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     <Box
                       sx={{
                         width: "10%",
-                        color: "#1CC2C4",
+                        color: "#004F83",
                         fontSize: "14px",
                         fontWeight: "500",
                         // textDecoration: "underline",

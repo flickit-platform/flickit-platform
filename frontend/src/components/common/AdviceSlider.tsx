@@ -98,17 +98,17 @@ const AdviceSlider = (props: any) => {
             marks
             sx={{
               ".MuiSlider-thumb": {
-                color: "#1CC2C4",
+                color: "#004F83",
               },
               ".MuiSlider-track": {
                 border: "none",
                 height: "4px",
-                backgroundColor: "#1CC2C4",
+                backgroundColor: "#004F83",
               },
               ".MuiSlider-rail": {
                 opacity: 0.5,
                 height: "4px",
-                backgroundColor: "#1CC2C4 !important",
+                backgroundColor: "#004F83 !important",
               },
               ".MuiSlider-markActive": {
                 background: "rgba(237, 244, 252, 1)",

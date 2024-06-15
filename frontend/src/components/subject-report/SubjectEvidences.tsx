@@ -69,7 +69,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
         }
         alt="empty"
       />
-      <Typography variant="h5" color="#9DA7B3">
+      <Typography color="#9DA7B3">
         <Trans
           i18nKey={
             type === evidenceType.positive
@@ -93,8 +93,9 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
       borderColor={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
     >
       <Typography
-        variant="h5"
-        color={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
+        fontSize={{ md: "1.5rem", sm: "1rem" }}
+        fontWeight={500}
+        color={type === evidenceType.positive ? "#004F83" : "#D81E5B"}
       >
         <Trans
           i18nKey={
@@ -125,7 +126,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
             number={index + 1}
             item={item}
             color={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
-            textColor={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
+            textColor={type === evidenceType.positive ? "#004F83" : "#D81E5B"}
           />
         ))}
       </Box>
@@ -161,7 +162,12 @@ const EvidanceDescription = ({
   return (
     <>
       <Box display="flex" justifyContent="flex-start" alignItems="center">
-        <Typography display="flex" margin={2} color={textColor} fontWeight="bold">
+        <Typography
+          display="flex"
+          margin={2}
+          color={textColor}
+          fontWeight="bold"
+        >
           {number}
         </Typography>
         <Typography
@@ -171,7 +177,7 @@ const EvidanceDescription = ({
             whiteSpace: "pre-wrap",
             textAlign: "justify",
             wordBreak: "break-word",
-            unicodeBidi: "plaintext"
+            unicodeBidi: "plaintext",
           }}
         >
           {item?.description}
