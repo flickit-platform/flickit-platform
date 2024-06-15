@@ -51,6 +51,9 @@ const SupTitleBreadcrumb = (
                   : disabled
                   ? "GrayText"
                   : "primary.dark",
+                "&:hover": {
+                  textDecoration: "none",
+                },
               }}
             >
               {icon}
