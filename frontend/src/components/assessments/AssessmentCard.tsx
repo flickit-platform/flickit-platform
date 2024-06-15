@@ -288,7 +288,7 @@ const Actions = (props: {
                 text: <Trans i18nKey="edit" />,
                 onClick: openEditDialog,
               },
-               item.manageable && {
+               item?.manageable && {
                 icon: <SettingsIcon fontSize="small" />,
                 text: <Trans i18nKey="setting" />,
                 onClick: assessmentSetting,

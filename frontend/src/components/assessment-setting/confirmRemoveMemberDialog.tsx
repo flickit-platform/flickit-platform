@@ -26,7 +26,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
 
     const DeletePerson = async () => {
         try {
-            await deleteUserRole.query(expandedRemoveDialog.id)
+            await deleteUserRole.query(expandedRemoveDialog?.id)
             onCloseRemoveDialog()
             await fetchAssessmentsUserListRoles()
         } catch (e) {
@@ -70,7 +70,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
                     <Trans
                         i18nKey="areYouSureYouWantDeleteThisMember"
                         values={{
-                            name: expandedRemoveDialog.name,
+                            name: expandedRemoveDialog?.name,
                             assessment: assessmentName
                         }}
                     />
