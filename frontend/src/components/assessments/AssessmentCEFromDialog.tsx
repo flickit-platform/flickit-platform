@@ -165,7 +165,7 @@ const AssessmentKitField = ({
   const { service } = useServiceContext();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchAssessmentKitsOptions(args, config),
-    accessor: "results"
+    accessor: "items"
   });
 
   return (
