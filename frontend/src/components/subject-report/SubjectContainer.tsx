@@ -268,7 +268,7 @@ const SubjectTitle = (props: {
   const { space, assessment } = pathInfo;
 
   useEffect(() => {
-    setDocumentTitle(`${title} ${t("insight")}`);
+    setDocumentTitle(`${title} ${t("report")}`);
   }, [title]);
   return (
     <Title
@@ -291,7 +291,7 @@ const SubjectTitle = (props: {
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
             },
             {
-              title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
+              title: <>{<Trans i18nKey="report" values={{title: title}} />}</>,
             },
           ]}
           displayChip
