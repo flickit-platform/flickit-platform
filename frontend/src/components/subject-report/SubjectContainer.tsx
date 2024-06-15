@@ -73,7 +73,9 @@ const SubjectContainer = () => {
             flexDirection="column"
             m="auto"
             pb={3}
-            sx={{ px: { lg: 14, xs: 2, sm: 3 } }}
+            sx={{
+              px: { lg: 14, xs: 2, sm: 3 },
+            }}
             gap="1.5rem"
           >
             <SubjectTitle
@@ -82,7 +84,11 @@ const SubjectContainer = () => {
               pathInfo={pathInfo}
             />
             <Box sx={{ ...styles.centerCVH }} gap={2} textAlign="center">
-              <Typography color="#1CC2C4" fontSize="4rem" fontWeight={700}>
+              <Typography
+                color="#1CC2C4"
+                fontSize={{ md: "4rem", sx: "2rem", xs: "2rem" }}
+                fontWeight={700}
+              >
                 <Trans i18nKey="report" values={{ title: title }} />
               </Typography>
             </Box>
@@ -112,11 +118,11 @@ const SubjectContainer = () => {
                   {...subjectQueryData}
                   loading={loading}
                 />
-                <Box
-                  sx={{ display: { xs: "none", sm: "none", md: "block" } }}
-                  height={"400px"}
-                >
-                  {attributesNumber > 2 && (
+                {attributesNumber > 2 && (
+                  <Box
+                    sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+                    height={"400px"}
+                  >
                     <Box
                       height="100%"
                       sx={{
@@ -139,12 +145,20 @@ const SubjectContainer = () => {
                         loading={loading}
                       />
                     </Box>
-                  )}
-                </Box>
-
-                {/* <Box height={"520px"} mt={10}>
+                  </Box>
+                )}
+                <Box
+                  height="100%"
+                  sx={{
+                    background: "#fff",
+                    boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+                    borderRadius: "40px",
+                  }}
+                >
+                  <Box height={"60vh"} mt={10}>
                     <SubjectBarChart {...subjectQueryData} loading={loading} />
-                  </Box> */}
+                  </Box>
+                </Box>
 
                 <SubjectAttributeList {...subjectQueryData} loading={loading} />
               </Box>
@@ -271,20 +285,13 @@ const SubjectTitle = (props: {
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
             },
             {
               title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
-              icon: (
-                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
             },
           ]}
           displayChip

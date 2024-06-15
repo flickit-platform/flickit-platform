@@ -19,6 +19,8 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import emptyState from "@assets/svg/emptyState.svg";
+import deleteSvg from "@assets/svg/delete.svg";
+import checkmark from "@assets/svg/checkmark.svg";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
@@ -133,7 +135,7 @@ const SUbjectAttributeCard = (props: any) => {
       <AccordionDetails sx={{ padding: "0 !important", mb: 2 }}>
         <Typography
           mt={4}
-          fontSize="2rem"
+          fontSize={{ md: "2rem", xs: "1.25rem" }}
           fontWeight={700}
           sx={{
             gap: "46px",
@@ -145,7 +147,11 @@ const SUbjectAttributeCard = (props: any) => {
         {emptyNegativeEvidence && emptyPositiveEvidence ? (
           <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
             <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-            <Typography fontSize="1.5rem" fontWeight={500} color="#9DA7B3">
+            <Typography
+              fontSize={{ md: "1.5rem", xs: "1rem" }}
+              fontWeight={500}
+              color="#9DA7B3"
+            >
               <Trans i18nKey={"noEvidence"} />
             </Typography>
           </Box>
@@ -185,7 +191,7 @@ const SUbjectAttributeCard = (props: any) => {
 
         <Typography
           textAlign="center"
-          fontSize="2rem"
+          fontSize={{ md: "2rem", xs: "1.25rem" }}
           fontWeight={700}
           color="#3B4F68"
           my="2rem"
@@ -230,13 +236,13 @@ const AttributeSummary = (props: any) => {
   const statusColor = colorPallet[maturityLevelsCount - 1];
   return (
     <Grid container alignItems="center">
-      <Grid item xs={12} lg={3} md={3} sm={12}>
+      <Grid item xs={6} lg={3} md={3} sm={6}>
         <Box
           sx={{
             overflow: "hidden",
             textOverflow: "ellipsis",
             textAlign: "center",
-            width: "100%",
+            pr: 2,
           }}
         >
           <Typography
@@ -244,7 +250,7 @@ const AttributeSummary = (props: any) => {
             sx={{
               textTransform: "none",
               whiteSpace: "pre-wrap",
-              fontSize: "1.5rem",
+              fontSize: { md: "1.5rem", xs: "1rem" },
             }}
             fontWeight={500}
           >
@@ -252,8 +258,8 @@ const AttributeSummary = (props: any) => {
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={0} lg={2} md={2} sm={0}></Grid>
-      <Grid item xs={12} lg={3} md={3} sm={12}>
+      <Grid item xs={0} lg={2} md={1} sm={0}></Grid>
+      <Grid item xs={2} lg={3} md={4} sm={2}>
         <Box
           sx={{
             ...styles.centerVH,
@@ -262,7 +268,8 @@ const AttributeSummary = (props: any) => {
         >
           <Typography
             fontWeight={500}
-            fontSize="1rem"
+            fontSize={{ md: "1rem", xs: "0.75rem" }}
+            display={{ xs: "none", sm: "none", md: "block" }}
             color="rgba(108, 123, 142, 1)"
           >
             <Trans i18nKey="confidenceLevel" />
@@ -272,7 +279,7 @@ const AttributeSummary = (props: any) => {
       </Grid>
       <Grid item xs={0} lg={2} md={2} sm={0}></Grid>
 
-      <Grid item xs={12} lg={2} md={2} sm={12}>
+      <Grid item xs={4} lg={2} md={2} sm={4}>
         <Box
           sx={{
             ...styles.centerVH,
@@ -281,7 +288,7 @@ const AttributeSummary = (props: any) => {
         >
           <Typography
             fontWeight={700}
-            fontSize="2rem"
+            fontSize={{ md: "2rem", xs: "1rem" }}
             color={colorPallet[maturityLevelValue - 1]}
           >
             {status}
@@ -480,13 +487,14 @@ const MaturityLevelDetailsContainer = (props: any) => {
               <Grid
                 item
                 lg={7}
-                md={12}
-                xs={12}
-                sm={12}
+                md={7}
+                xs={10}
+                sm={10}
                 display={"flex"}
                 flex={1}
                 color="#1CC2C4"
                 width="100%"
+                alignItems="center"
               >
                 {/* <MaturityLevelDetailsBar
                   text={text}
@@ -498,11 +506,18 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   numaratur={score}
                   denominator={100}
                   displayPercent
+                  guideText={text}
+                  progressHeight="1.25rem"
                 />
               </Grid>
-              <Grid item lg={1} md={12} xs={12}></Grid>
+              <Grid item lg={2} md={2} xs={2} alignSelf="center">
+                <img
+                  src={is_passed ? checkmark : deleteSvg}
+                  alt={is_passed ? "is passed" : "failed"}
+                />
+              </Grid>
 
-              <Grid item lg={4} md={12} xs={12}>
+              <Grid item lg={3} md={3} xs={12}>
                 {" "}
                 <Box
                   sx={{
@@ -512,7 +527,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 >
                   <Typography
                     fontWeight={700}
-                    fontSize="1.5rem"
+                    fontSize={{ md: "1.5rem", xs: "1rem" }}
                     color={colorPallet[maturityLevel?.value - 1]}
                   >
                     {maturityLevel?.title}
@@ -553,263 +568,398 @@ const MaturityLevelDetailsContainer = (props: any) => {
               } = data;
               return (
                 <>
-                  <Typography variant="body2" display={"flex"}>
-                    <Trans i18nKey="maxPossibleScore" />
-                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
-                      {maxPossibleScore}
-                    </Typography>
-                  </Typography>
-                  <Typography mt={2} variant="body2" display={"flex"}>
-                    <Trans i18nKey="gainedScore" />
-                    <Typography
-                      variant="body2"
-                      display={"flex"}
-                      fontWeight={"bold"}
-                      ml={2}
-                    >
-                      {Math.ceil(gainedScore)}
-                      <Typography variant="body2" fontWeight={"bold"} ml={0.5}>
-                        ({Math.ceil(gainedScorePercentage * 100)} %)
+                  <Box
+                    display="flex"
+                    justifyContent="space-around"
+                    alignItems="center"
+                    flexDirection={{ sm: "column", xs: "column", md: "row" }}
+                  >
+                    <Typography mt={2} variant="body2" display={"flex"}>
+                      <Trans i18nKey="maxPossibleScore" />
+                      <Typography
+                        variant="body2"
+                        display={"flex"}
+                        fontWeight={"bold"}
+                        ml={2}
+                      >
+                        {maxPossibleScore}
                       </Typography>
                     </Typography>
-                  </Typography>
-                  <Typography mt={2} variant="body2" display={"flex"}>
-                    <Trans i18nKey="questionsCount" />
-                    <Typography variant="body2" fontWeight={"bold"} ml={2}>
-                      {questionsCount}
+                    <Typography mt={2} variant="body2" display={"flex"}>
+                      <Trans i18nKey="gainedScore" />
+                      <Typography
+                        variant="body2"
+                        display={"flex"}
+                        fontWeight={"bold"}
+                        ml={2}
+                      >
+                        {Math.ceil(gainedScore)}
+                        <Typography
+                          variant="body2"
+                          fontWeight={"bold"}
+                          ml={0.5}
+                        >
+                          ({Math.ceil(gainedScorePercentage * 100)} %)
+                        </Typography>
+                      </Typography>
                     </Typography>
-                  </Typography>
+                    <Typography mt={2} variant="body2" display={"flex"}>
+                      <Trans i18nKey="questionsCount" />
+                      <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                        {questionsCount}
+                      </Typography>
+                    </Typography>
+                  </Box>
                   <Divider sx={{ my: 2 }} />
                   {questionnaires.map((questionnaire: any) => {
                     const { title, questionScores } = questionnaire;
 
                     return (
-                      <>
-                        <Box>
-                          <Typography
-                            variant="body2"
-                            fontWeight={"bold"}
-                            sx={{ opacity: "0.8", ml: 1 }}
-                          >
-                            {title}
-                          </Typography>
-                        </Box>
-
-                        <Box mt={2}>
+                      <Accordion
+                        sx={{
+                          boxShadow: "none",
+                          "&:before": {
+                            display: "none",
+                          },
+                        }}
+                      >
+                        <AccordionSummary
+                          sx={{ backgroundColor: "transparent", padding: 0 }}
+                        >
+                          <Box display="flex" alignItems="center" width="100%">
+                            <Box
+                              flexGrow={1}
+                              display="flex"
+                              flexDirection="column"
+                              alignItems="center"
+                            >
+                              <Typography
+                                variant="body2"
+                                fontWeight="bold"
+                                sx={{ opacity: 0.8 }}
+                              >
+                                {title}
+                              </Typography>
+                              <Divider sx={{ width: "100%", my: 1 }} />
+                            </Box>
+                            <ExpandMoreIcon sx={{ mt: 2 }} />
+                          </Box>
+                        </AccordionSummary>
+                        <AccordionDetails
+                          sx={{ display: "flex", justifyContent: "center" }}
+                        >
                           <Box
                             sx={{
-                              display: "flex",
-                              width: { xs: "100%", sm: "100%", md: "80%" },
-                              flexDirection: "column",
+                              width: { xs: "100%", sm: "100%", md: "96%" },
                             }}
                           >
                             <Box
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                ml: { xs: 0, sm: 4 },
+                                alignItems: "center",
                               }}
                             >
                               <Box
                                 sx={{
                                   display: "flex",
-                                  flexDirection: "row",
+                                  flexDirection: "column",
+                                  width: "100%",
                                 }}
                               >
-                                <Box sx={{ width: "40%" }}>
-                                  <Typography
-                                    sx={{
-                                      pb: "4px",
-                                      color: "#767676",
-                                      display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
-                                    }}
-                                    textAlign={"center"}
-                                  >
-                                    <Trans i18nKey="questions" />
-                                  </Typography>
-                                </Box>
-                                <Box sx={{ width: "10%" }}>
-                                  <Typography
-                                    sx={{
-                                      pb: "4px",
-                                      color: "#767676",
-                                      display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
-                                    }}
-                                    textAlign={"center"}
-                                  >
-                                    <Trans i18nKey="weight" />
-                                  </Typography>
-                                </Box>
-                                <Box sx={{ width: "25%" }}>
-                                  <Typography
-                                    sx={{
-                                      pb: "4px",
-                                      color: "#767676",
-                                      display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
-                                    }}
-                                    textAlign={"center"}
-                                  >
-                                    <Trans i18nKey="answer" />
-                                  </Typography>
-                                </Box>
-                                <Box sx={{ width: "10%" }}>
-                                  <Typography
-                                    sx={{
-                                      pb: "4px",
-                                      color: "#767676",
-                                      display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
-                                    }}
-                                    textAlign={"center"}
-                                  >
-                                    <Trans i18nKey="score" />
-                                  </Typography>
-                                </Box>
-                                <Box sx={{ width: "15%" }}>
-                                  <Typography
-                                    sx={{
-                                      pb: "4px",
-                                      color: "#767676",
-                                      display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
-                                    }}
-                                    textAlign={"center"}
-                                  >
-                                    <Trans i18nKey="weightedScore" />
-                                  </Typography>
-                                </Box>
-                              </Box>
-                              <Divider sx={{ my: 1 }} />
-                              {questionScores.map((question: any) => {
-                                const {
-                                  questionIndex,
-                                  questionTitle,
-                                  questionWeight,
-                                  answerOptionIndex,
-                                  answerOptionTitle,
-                                  answerIsNotApplicable,
-                                  answerScore,
-                                  weightedScore,
-                                } = question;
-
-                                let is_farsi = languageDetector(questionTitle);
-
-                                return (
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                  }}
+                                >
+                                  <Box sx={{ width: "4%" }}>
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
+                                    >
+                                      <Trans i18nKey="index" />
+                                    </Typography>
+                                  </Box>
                                   <Box
                                     sx={{
-                                      display: "flex",
-                                      flexDirection: "row",
-                                      my: 1,
+                                      width: {
+                                        md: "36%",
+                                        xs: "100%",
+                                        sm: "100%",
+                                      },
                                     }}
                                   >
-                                    <CustomWidthTooltip
-                                      title={`${questionIndex}.${questionTitle}`}
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
                                     >
-                                      <Box sx={{ width: "40%" }}>
-                                        <Typography
-                                          display="flex"
-                                          variant="body1"
-                                          fontFamily="Roboto"
-                                          fontWeight={"bold"}
-                                          textAlign={"left"}
+                                      <Trans i18nKey="questions" />
+                                    </Typography>
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      width: "10%",
+                                      display: {
+                                        sm: "none",
+                                        xs: "none",
+                                        md: "block",
+                                      },
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
+                                    >
+                                      <Trans i18nKey="weight" />
+                                    </Typography>
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      width: "25%",
+                                      display: {
+                                        sm: "none",
+                                        xs: "none",
+                                        md: "block",
+                                      },
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
+                                    >
+                                      <Trans i18nKey="answer" />
+                                    </Typography>
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      width: "10%",
+                                      display: {
+                                        sm: "none",
+                                        xs: "none",
+                                        md: "block",
+                                      },
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
+                                    >
+                                      <Trans i18nKey="score" />
+                                    </Typography>
+                                  </Box>
+                                  <Box sx={{ width: "15%" }}>
+                                    <Typography
+                                      sx={{
+                                        pb: "4px",
+                                        color: "#767676",
+                                        display: "block",
+                                        fontFamily: "Roboto",
+                                        fontSize: "0.7rem",
+                                      }}
+                                      textAlign="center"
+                                    >
+                                      <Trans i18nKey="weightedScore" />
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Divider sx={{ my: 1 }} />
+                                <Box maxHeight="40vh" overflow="auto">
+                                  {questionScores.map((question: any) => {
+                                    const {
+                                      questionIndex,
+                                      questionTitle,
+                                      questionWeight,
+                                      answerOptionIndex,
+                                      answerOptionTitle,
+                                      answerIsNotApplicable,
+                                      answerScore,
+                                      weightedScore,
+                                    } = question;
+
+                                    let is_farsi =
+                                      languageDetector(questionTitle);
+
+                                    return (
+                                      <Box
+                                        key={questionIndex}
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "row",
+                                          my: 1,
+                                        }}
+                                      >
+                                        <Box sx={{ width: "4%", mr: 2 }}>
+                                          <Typography
+                                            display="flex"
+                                            variant="body1"
+                                            fontFamily="Roboto"
+                                            fontWeight="bold"
+                                            textAlign="left"
+                                          >
+                                            {questionIndex}
+                                          </Typography>
+                                        </Box>
+                                        <CustomWidthTooltip
+                                          title={`${questionTitle}`}
                                         >
-                                          {questionIndex}.
+                                          <Box
+                                            sx={{
+                                              width: {
+                                                md: "36%",
+                                                xs: "90%",
+                                                sm: "90%",
+                                              },
+                                            }}
+                                          >
+                                            <Typography
+                                              variant="body1"
+                                              fontFamily="Ubuntu"
+                                              fontWeight="300"
+                                              fontSize="0.75rem"
+                                              letterSpacing="0.4px"
+                                              textAlign="justify"
+                                              dir={is_farsi ? "rtl" : "ltr"}
+                                              sx={{
+                                                display: "-webkit-box",
+                                                WebkitBoxOrient: "vertical",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                WebkitLineClamp: 3,
+                                                whiteSpace: "normal",
+                                              }}
+                                            >
+                                              {questionTitle}
+                                            </Typography>
+                                          </Box>
+                                        </CustomWidthTooltip>
+                                        <Box
+                                          sx={{
+                                            width: "10%",
+                                            display: {
+                                              sm: "none",
+                                              xs: "none",
+                                              md: "block",
+                                            },
+                                          }}
+                                        >
+                                          <Typography
+                                            variant="body1"
+                                            fontFamily="Ubuntu"
+                                            fontWeight="300"
+                                            textAlign="center"
+                                            fontSize="0.75rem"
+                                          >
+                                            {questionWeight}
+                                          </Typography>
+                                        </Box>
+                                        <Tooltip
+                                          title={
+                                            answerIsNotApplicable
+                                              ? "NA"
+                                              : answerOptionTitle !== null
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"
+                                          }
+                                        >
+                                          <Box
+                                            sx={{
+                                              width: "25%",
+                                              display: {
+                                                sm: "none",
+                                                xs: "none",
+                                                md: "block",
+                                              },
+                                            }}
+                                          >
+                                            <Typography
+                                              variant="body1"
+                                              fontFamily="Ubuntu"
+                                              fontWeight="300"
+                                              textAlign="center"
+                                              fontSize="0.75rem"
+                                            >
+                                              {answerIsNotApplicable
+                                                ? "NA"
+                                                : answerOptionTitle !== null
+                                                ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                : "---"}
+                                            </Typography>
+                                          </Box>
+                                        </Tooltip>
+                                        <Box
+                                          sx={{
+                                            width: "10%",
+                                            display: {
+                                              sm: "none",
+                                              xs: "none",
+                                              md: "block",
+                                            },
+                                          }}
+                                        >
+                                          <Typography
+                                            variant="body1"
+                                            fontFamily="Ubuntu"
+                                            fontWeight="300"
+                                            textAlign="center"
+                                            fontSize="0.75rem"
+                                          >
+                                            {answerIsNotApplicable
+                                              ? "---"
+                                              : answerScore}
+                                          </Typography>
+                                        </Box>
+                                        <Box sx={{ width: "15%" }}>
                                           <Typography
                                             variant="body1"
                                             fontFamily="Roboto"
-                                            fontWeight={"bold"}
-                                            dir={is_farsi ? "rtl" : "ltr"}
-                                            sx={{
-                                              whiteSpace: "nowrap",
-                                              overflow: "hidden",
-                                              textOverflow: "ellipsis",
-                                            }}
+                                            fontWeight="bold"
+                                            textAlign="center"
                                           >
-                                            {questionTitle}
+                                            {answerIsNotApplicable
+                                              ? "---"
+                                              : weightedScore}
                                           </Typography>
-                                        </Typography>
+                                        </Box>
                                       </Box>
-                                    </CustomWidthTooltip>
-                                    <Box sx={{ width: "10%" }}>
-                                      <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
-                                        textAlign={"center"}
-                                      >
-                                        {questionWeight}
-                                      </Typography>
-                                    </Box>
-                                    <Tooltip
-                                      title={
-                                        answerIsNotApplicable
-                                          ? "NA"
-                                          : answerOptionTitle !== null
-                                          ? `${answerOptionIndex}.${answerOptionTitle}`
-                                          : "---"
-                                      }
-                                    >
-                                      <Box sx={{ width: "25%" }}>
-                                        <Typography
-                                          variant="body1"
-                                          fontFamily="Roboto"
-                                          fontWeight={"bold"}
-                                          textAlign={"center"}
-                                        >
-                                          {answerIsNotApplicable
-                                            ? "NA"
-                                            : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"}
-                                        </Typography>
-                                      </Box>
-                                    </Tooltip>
-                                    <Box sx={{ width: "10%" }}>
-                                      <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
-                                        textAlign={"center"}
-                                      >
-                                        {answerIsNotApplicable
-                                          ? "---"
-                                          : answerScore}
-                                      </Typography>
-                                    </Box>
-                                    <Box sx={{ width: "15%" }}>
-                                      <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
-                                        textAlign={"center"}
-                                      >
-                                        {answerIsNotApplicable
-                                          ? "---"
-                                          : weightedScore}
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                );
-                              })}
+                                    );
+                                  })}
+                                </Box>
+                              </Box>
                             </Box>
                           </Box>
-                          <Divider
-                            sx={{
-                              my: 4,
-                              background: "#7A589B",
-                              opacity: "40%",
-                            }}
-                          />
-                        </Box>
-                      </>
+                        </AccordionDetails>
+                      </Accordion>
                     );
                   })}
                 </>

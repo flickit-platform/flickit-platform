@@ -14,6 +14,8 @@ interface ISubjectProgressProps {
   denominator: number;
   displayPercent?: boolean;
   type?: ProgessBarTypes;
+  guideText?: any;
+  progressHeight?: string | number;
 }
 
 const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
@@ -23,7 +25,14 @@ const progressToColorMap: Record<number, LinearProgressProps["color"]> = {
 };
 
 const ColorfulProgress = (props: ISubjectProgressProps) => {
-  const { numaratur, denominator, type, displayPercent } = props;
+  const {
+    numaratur,
+    denominator,
+    type,
+    displayPercent,
+    guideText,
+    progressHeight,
+  } = props;
   const totalProgress = ((numaratur || 0) / (denominator || 1)) * 100;
 
   let color: LinearProgressProps["color"] = "primary";
@@ -78,20 +87,38 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
           sx={{
             borderRadius: 3,
             width: "100%",
-            height: "12px",
+            height: progressHeight ? progressHeight : "12px",
             border: `1px solid ${percentColor}`,
           }}
           value={totalProgress}
           variant="determinate"
           color={color}
-        />
+        />{" "}
+        {guideText && (
+          <Typography
+            component="span"
+            color="black"
+            fontWeight={300}
+            fontSize="0.8rem"
+            textAlign="center"
+            style={{
+              position: "absolute",
+              left: "26%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              pointerEvents: "none",
+            }}
+          >
+            {guideText}
+          </Typography>
+        )}
         {displayPercent && (
           <Typography
             component="span"
-            color={color}
+            color={percentColor}
             mx="0.5rem"
             fontWeight={300}
-            fontSize="0.75rem"
+            fontSize="1rem"
             width="1rem"
           >
             {totalProgress != null && Math.ceil(totalProgress)}
