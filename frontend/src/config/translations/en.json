@@ -377,6 +377,7 @@
   "advisable":"Advisable",
   "loadMore": "Load more",
   "answeredQuestions": "Answered questions: ",
+  "progressBarTilte":"{{numaratur}} of {{denominator}}",
   "seeQuestionaires": "See questionaires",
   "updated":"Updated: ",
   "checkMoreDetails":"Check for more details",

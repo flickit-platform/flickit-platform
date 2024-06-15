@@ -55,8 +55,8 @@ const SubjectBar = (props: any) => {
         <Bar
           dataKey="ml"
           name={t("maturityLevel") as string}
-          stroke="#1CC2C4"
-          fill="#1CC2C4"
+          stroke="#004F83"
+          fill="#004F83"
           fillOpacity={0.5}
           maxBarSize={40}
         />

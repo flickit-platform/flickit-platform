@@ -298,12 +298,12 @@ export const AssessmentSubjectAccordion = (
               padding: 2,
               textTransform: "none",
               fontSize: 24,
-              backgroundColor: "#D2F3F3",
-              borderColor: "#D2F3F3",
-              color: "#1CC2C4",
+              backgroundColor: "#D0E4FF",
+              borderColor: "#D0E4FF",
+              color: "#004F83",
               "&:hover": {
-                backgroundColor: "#D2F3F3",
-                borderColor: "#D2F3F3",
+                backgroundColor: "#D0E4FF",
+                borderColor: "#D0E4FF",
               },
             }}
           >

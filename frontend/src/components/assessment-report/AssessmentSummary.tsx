@@ -55,7 +55,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         borderRadius: "40px",
         px: { xs: 2, sm: 3 },
       }}
-      color="#1CC2C4"
+      color="#004F83"
     >
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
@@ -63,7 +63,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           sx={{
             textDecoration: "none",
           }}
-          color="#1CC2C4"
+          color="#004F83"
           fontWeight={800}
         >
           {assessmentKit?.title}
@@ -82,15 +82,15 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         sx={{
           borderRadius: "24px",
           textTransform: "none",
-          backgroundColor: "#1CC2C4",
-          borderColor: "#1CC2C4",
+          backgroundColor: "#004F83",
+          borderColor: "#004F83",
           color: "#fff",
           fontSize: "1.25rem",
           py: "8px",
           boxShadow: "none",
           "&:hover": {
-            backgroundColor: "#1CC2C4",
-            borderColor: "#1CC2C4",
+            backgroundColor: "#004F83",
+            borderColor: "#004F83",
           },
           width: "65%",
         }}

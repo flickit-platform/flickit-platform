@@ -85,7 +85,7 @@ const SubjectContainer = () => {
             />
             <Box sx={{ ...styles.centerCVH }} gap={2} textAlign="center">
               <Typography
-                color="#1CC2C4"
+                color="#004F83"
                 fontSize={{ md: "4rem", sx: "2rem", xs: "2rem" }}
                 fontWeight={700}
               >

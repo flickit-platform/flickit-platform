@@ -33,6 +33,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
     guideText,
     progressHeight,
   } = props;
+  console.log(numaratur);
   const totalProgress = ((numaratur || 0) / (denominator || 1)) * 100;
 
   let color: LinearProgressProps["color"] = "primary";
@@ -52,7 +53,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
       percentColor = "orange";
       break;
     case "inherit":
-      percentColor = "#1CC2C4";
+      percentColor = "#004F83";
       break;
     default:
       percentColor = "inherit";
@@ -78,7 +79,10 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             fontWeight={800}
             fontSize="1.25rem"
           >
-            {numaratur} of {denominator}
+            <Trans
+              i18nKey="progressBarTilte"
+              values={{ numaratur, denominator }}
+            />
           </Typography>
         </Box>
       )}
@@ -88,7 +92,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             borderRadius: 3,
             width: "100%",
             height: progressHeight ? progressHeight : "12px",
-            border: `1px solid ${percentColor}`,
+            border: numaratur !== null ? `1px solid ${percentColor}`:"transparent",
           }}
           value={totalProgress}
           variant="determinate"
@@ -97,8 +101,8 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         {guideText && (
           <Typography
             component="span"
-            color="black"
-            fontWeight={300}
+            color="white"
+            fontWeight={500}
             fontSize={{ md: "0.8rem", xs: "0.5rem" }}
             textAlign="center"
             sx={{
@@ -112,19 +116,20 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             {guideText}
           </Typography>
         )}
-        {displayPercent && (
-          <Typography
-            component="span"
-            color={percentColor}
-            mx="0.5rem"
-            fontWeight={300}
-            fontSize="1rem"
-            width="1rem"
-          >
-            {totalProgress != null && Math.ceil(totalProgress)}
-            {totalProgress != null ? "%" : ""}
-          </Typography>
-        )}
+        <Box width="1rem">
+          {displayPercent && numaratur !== null && (
+            <Typography
+              component="span"
+              color={percentColor}
+              mx="0.5rem"
+              fontWeight={300}
+              fontSize="1rem"
+            >
+              {totalProgress != null && Math.ceil(totalProgress)}
+              {totalProgress != null ? "%" : ""}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );

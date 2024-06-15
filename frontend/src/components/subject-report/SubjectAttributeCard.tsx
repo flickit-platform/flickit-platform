@@ -25,6 +25,8 @@ import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import ColorfulProgress from "../common/progress/ColorfulProgress";
+import { IconButton } from "@mui/material";
+import { Info, InfoOutlined, InfoRounded } from "@mui/icons-material";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -87,6 +89,7 @@ const SUbjectAttributeCard = (props: any) => {
           <Grid item md={11} xs={12} display="flex">
             <AttributeSummary
               title={title}
+              description={description}
               status={maturityLevel?.title}
               maturityLevelValue={maturityLevel?.value}
               confidenceValue={Math.ceil(confidenceValue)}
@@ -231,6 +234,7 @@ const AttributeSummary = (props: any) => {
     confidenceValue,
     maturityLevelsCount,
     title,
+    description,
   } = props;
   const colorPallet = getMaturityLevelColors(maturityLevelsCount);
   const statusColor = colorPallet[maturityLevelsCount - 1];
@@ -238,6 +242,7 @@ const AttributeSummary = (props: any) => {
     <Grid container alignItems="center">
       <Grid item xs={6} lg={3} md={3} sm={6}>
         <Box
+          display="flex"
           sx={{
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -256,6 +261,14 @@ const AttributeSummary = (props: any) => {
           >
             {title}
           </Typography>
+          <Tooltip title={description} arrow>
+            <IconButton
+              size="small"
+              sx={{ ml: 1, "&:hover": { background: "transparent" } }}
+            >
+              <InfoOutlined fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Grid>
       <Grid item xs={0} lg={2} md={1} sm={0}></Grid>
@@ -493,7 +506,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 sm={10}
                 display={"flex"}
                 flex={1}
-                color="#1CC2C4"
+                color="#004F83"
                 width="100%"
                 alignItems="center"
               >
@@ -515,7 +528,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 <Box
                   sx={{
                     ...styles.centerCVH,
-                    height:"100%"
+                    height: "100%",
                   }}
                 >
                   <img
