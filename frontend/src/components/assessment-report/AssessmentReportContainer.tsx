@@ -189,7 +189,10 @@ const AssessmentReportContainer = (props: any) => {
                 </Box>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
-                <AssessmentAdviceContainer subjects={subjects} />
+                <AssessmentAdviceContainer
+                  subjects={subjects}
+                  assessment={assessment}
+                />
               </Grid>
             </Grid>
           </Box>

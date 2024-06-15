@@ -18,7 +18,7 @@ import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@utils/useScreenResize";
 const AssessmentAdviceContainer = (props: any) => {
-  const { subjects } = props;
+  const { subjects, assessment } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
   const [adviceResult, setAdviceResult] = useState<any>();
   const { assessmentId } = useParams();
@@ -72,7 +72,7 @@ const AssessmentAdviceContainer = (props: any) => {
         fullWidth
         sx={{
           ".MuiDialog-paper": {
-            borderRadius: {xs:0,sm:"32px"},
+            borderRadius: { xs: 0, sm: "32px" },
           },
           ".MuiDialog-paper::-webkit-scrollbar": {
             display: "none",
@@ -126,7 +126,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   fontWeight: "500",
                   display: "flex",
                   textAlign: "center",
-                  width: {xs:"100%",sm:"50%"},
+                  width: { xs: "100%", sm: "50%" },
                   py: 2,
                 }}
               >
@@ -201,17 +201,21 @@ const AssessmentAdviceContainer = (props: any) => {
 */}
             </Box>
             <Box
-              sx={{ borderRadius: {xs:0,sm:"0 0 32px 32px"}, background: "#fff", py: 8 }}
+              sx={{
+                borderRadius: { xs: 0, sm: "0 0 32px 32px" },
+                background: "#fff",
+                py: 8,
+              }}
             >
-              {subjectData.map((subject: any) =>
+              {subjects.map((subject: any) =>
                 subject?.attributes.map((attribute: any) => (
                   <AdviceSlider
                     key={attribute.id}
-                    defaultValue={attribute?.maturity_level?.value || 0}
-                    currentState={attribute?.maturity_level}
+                    defaultValue={attribute?.maturityLevel?.value || 0}
+                    currentState={attribute?.maturityLevel}
                     attribute={attribute}
-                    subject={subject?.subject}
-                    maturityLevels={attribute?.maturity_scores}
+                    subject={subject}
+                    maturityLevels={assessment?.assessmentKit?.maturityLevels}
                     target={target}
                     setTarget={setTarget}
                   />
@@ -267,8 +271,8 @@ const AssessmentAdviceContainer = (props: any) => {
         <Box
           sx={{
             borderRadius: "24px",
-            border:  `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
-            width: {xs:"100%",sm:"60%"},
+            border: `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
+            width: { xs: "100%", sm: "60%" },
             p: 6,
             margin: "0 auto",
           }}
