@@ -131,7 +131,7 @@ const AddMemberDialog = (props: {
             >
                 <Box
                     sx={{
-                        backgroundColor: "#1CC2C4", width: "100%", display: "flex",
+                        backgroundColor: "#004F83", width: "100%", display: "flex",
                         justifyContent: "center", alignItems: "baseline", gap: "0.4rem"
                     }}
                 >
@@ -192,7 +192,7 @@ const AddMemberDialog = (props: {
                                 sx={{
                                     boxShadow: 'none',
                                     '.MuiOutlinedInput-notchedOutline': {border: 0},
-                                    border: "1px solid #A4E7E7",
+                                    border: "1px solid #2974B4",
                                     borderRadius: "0.5rem",
                                     "&.MuiOutlinedInput-notchedOutline": {border: 0},
                                     "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
@@ -204,7 +204,7 @@ const AddMemberDialog = (props: {
                                             border: 0,
                                         },
                                     '.MuiSvgIcon-root': {
-                                        fill: "#A4E7E7 !important",
+                                        fill: "#2974B4 !important",
                                     },
                                     "& .MuiSelect-select": {
                                         padding: "4px 5px"
@@ -285,7 +285,7 @@ const AddMemberDialog = (props: {
                                 sx={{
                                     boxShadow: 'none',
                                     '.MuiOutlinedInput-notchedOutline': {border: 0},
-                                    border: "1px solid #A4E7E7",
+                                    border: "1px solid #2974B4",
                                     borderRadius: "0.5rem",
                                     "&.MuiOutlinedInput-notchedOutline": {border: 0},
                                     "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
@@ -297,7 +297,7 @@ const AddMemberDialog = (props: {
                                             border: 0,
                                         },
                                     '.MuiSvgIcon-root': {
-                                        fill: "#A4E7E7 !important",
+                                        fill: "#2974B4 !important",
                                     },
                                     "& .MuiSelect-select": {
                                         padding: "4px 5px"
@@ -375,7 +375,7 @@ const AddMemberDialog = (props: {
                         sx={{
                             fontSize: {xs: '0.7rem',sm:"1rem"},
                             fontWeight: 700,
-                            color: "#1CC2C4",
+                            color: "#004F83",
                             "&.MuiButton-root": {
                                 border: "unset",
                             },
@@ -395,13 +395,13 @@ const AddMemberDialog = (props: {
                             fontWeight: 700,
                             "&.MuiButton-root": {
                                 color: "#EDFCFC",
-                                border: "1px solid #1CC2C4",
-                                background: "#1CC2C4",
+                                border: "1px solid #004F83",
+                                background: "#004F83",
                                 borderRadius: "100px",
                             },
                             "&.MuiButton-root:hover": {
-                                background: "#1CC2C4",
-                                border: "1px solid #1CC2C4",
+                                background: "#004F83",
+                                border: "1px solid #004F83",
                             },
                         }}
                         variant="contained"
