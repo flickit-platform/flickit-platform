@@ -205,6 +205,7 @@ const SUbjectAttributeCard = (props: any) => {
           display="flex"
           flexDirection="column"
           gap="0.5rem"
+          pb="1rem"
           sx={{ px: { xs: 2, sm: 10 } }}
         >
           {maturityScores
@@ -240,7 +241,17 @@ const AttributeSummary = (props: any) => {
   const statusColor = colorPallet[maturityLevelsCount - 1];
   return (
     <Grid container alignItems="center">
-      <Grid item xs={6} lg={3} md={3} sm={6}>
+      <Grid
+        item
+        xs={6}
+        lg={3}
+        md={3}
+        sm={6}
+        display="flex"
+        flexDirection="column"
+        justifyItems="center"
+        alignItems="center"
+      >
         <Box
           display="flex"
           justifyItems="center"
