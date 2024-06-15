@@ -167,7 +167,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
 
 
 export const AssessmentSettingMemberBox = (props: {
-    listOfRoles: any,
+    listOfRoles: any[],
     listOfUser: any,
     fetchAssessmentsUserListRoles: () => void,
     openModal: () => void,
@@ -175,7 +175,7 @@ export const AssessmentSettingMemberBox = (props: {
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
-    const {listOfRoles, listOfUser, fetchAssessmentsUserListRoles,
+    const {listOfRoles = [], listOfUser, fetchAssessmentsUserListRoles,
         openModal, openRemoveModal} = props
 
     const [page, setPage] = React.useState(0);
@@ -322,7 +322,7 @@ export const AssessmentSettingMemberBox = (props: {
                             </TableHead>
                             <Divider sx={{width: "100%"}}/>
                             <TableBody>
-                                {(listOfUser || []).items
+                                {listOfUser && listOfUser?.items
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: any) => {
                                         return (
@@ -431,7 +431,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                                         sx={{fontSize:"0.875rem"}}
                                                                     ><Trans i18nKey={"chooseARole"} /></Typography>
                                                                 </Box>
-                                                                {(listOfRoles || []).map((role: any,index: number) => (
+                                                                {listOfRoles && listOfRoles.map((role: any,index: number) => (
                                                                    <MenuItem
                                                                        style={{display: "block"}}
                                                                        key={role.title}

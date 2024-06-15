@@ -23,11 +23,11 @@ import Button from "@mui/material/Button";
 const AddMemberDialog = (props: {
     expanded: boolean, onClose: () => void,
     title: any, cancelText: any, confirmText: any
-    listOfRoles: any, assessmentId: any, fetchAssessmentsUserListRoles: any
+    listOfRoles: any[], assessmentId: any, fetchAssessmentsUserListRoles: any
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles, assessmentId, fetchAssessmentsUserListRoles
+        listOfRoles = [], assessmentId, fetchAssessmentsUserListRoles
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -177,8 +177,6 @@ const AddMemberDialog = (props: {
                                 maxWidth: {xs: 90, sm: 150},
                             }}
                         >
-                            {/*<InputLabel sx={{width: "fit-content"}} id="demo-simple-select-autowidth-label"><Trans*/}
-                            {/*    i18nKey={"chooseASpaceMember"}/></InputLabel>*/}
                             <Select
                                 labelId="demo-simple-select-autowidth-label"
                                 id="demo-simple-select-autowidth-labelh"
@@ -188,7 +186,6 @@ const AddMemberDialog = (props: {
                                 renderValue={memberSelected == "" ? ()=> <Box sx={{color:"#6C7B8E", fontSize: "0.6rem",textAlign: "left",
                                     overflow: 'hidden',  textOverflow : 'ellipsis',whiteSpace : 'nowrap'
                                 }}><Trans i18nKey={"chooseASpaceMember"} /></Box> : undefined }
-                                // label="Choose a space member"
                                 sx={{
                                     boxShadow: 'none',
                                     '.MuiOutlinedInput-notchedOutline': {border: 0},
@@ -226,7 +223,7 @@ const AddMemberDialog = (props: {
                                     sx={{fontSize:"0.875rem"}}
                                     ><Trans i18nKey={"whoWantToAdd"} /></Typography>
                                 </Box>
-                                {(memberOfSpace || []).map((member: any, index: number) => (
+                                {memberOfSpace && memberOfSpace.length > 0 && memberOfSpace.map((member: any, index: number) => (
                                     <MenuItem
                                         style={{display: "block"}}
                                         key={member.id} value={member.id}
@@ -326,7 +323,7 @@ const AddMemberDialog = (props: {
                                         sx={{fontSize:"0.875rem"}}
                                     ><Trans i18nKey={"chooseARole"} /></Typography>
                                 </Box>
-                                {(listOfRoles || []).map((role: any,index: number) => {
+                                {listOfRoles && listOfRoles.map((role: any,index: number) => {
                                     return (
                                         <MenuItem
                                             style={{display: "block"}}
