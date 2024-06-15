@@ -27,7 +27,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   const { space, assessment } = pathInfo;
 
   useEffect(() => {
-    setDocumentTitle(`${title} ${t("overallInsightsT")}`);
+    setDocumentTitle(`${t("overallInsight", { title: title })}`);
   }, [title]);
 
   return (
