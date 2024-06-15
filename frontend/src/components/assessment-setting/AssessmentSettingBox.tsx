@@ -116,7 +116,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                       }}
                 >
 
-                    {title.map((itemList,index) =>{
+                    {(title || []).map((itemList,index) =>{
                         return (
                             <Grid item
                                   sx={{display: "flex", justifyContent: "center"}}
@@ -322,7 +322,7 @@ export const AssessmentSettingMemberBox = (props: {
                             </TableHead>
                             <Divider sx={{width: "100%"}}/>
                             <TableBody>
-                                {listOfUser.items
+                                {(listOfUser || []).items
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: any) => {
                                         return (
@@ -431,7 +431,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                                         sx={{fontSize:"0.875rem"}}
                                                                     ><Trans i18nKey={"chooseARole"} /></Typography>
                                                                 </Box>
-                                                                {listOfRoles.map((role: any,index: number) => (
+                                                                {(listOfRoles || []).map((role: any,index: number) => (
                                                                    <MenuItem
                                                                        style={{display: "block"}}
                                                                        key={role.title}
@@ -465,7 +465,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                                            }}>{role.description}</div>
 
                                                                        </Box>
-                                                                       {listOfRoles.length > index + 1 && <Box sx={{
+                                                                       {listOfRoles && listOfRoles.length > index + 1 && <Box sx={{
                                                                            height: '0.5px', width: "80%",
                                                                            backgroundColor: "#9DA7B3",
                                                                            mx: "auto"
