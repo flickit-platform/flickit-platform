@@ -269,7 +269,7 @@ const SubjectTitle = (props: {
 
   useEffect(() => {
     console.log(title);
-    setDocumentTitle(`${title} ${t("report", { title: title })}`);
+    setDocumentTitle(`${t("report", { title: title })}`);
   }, [title]);
   return (
     <Title
