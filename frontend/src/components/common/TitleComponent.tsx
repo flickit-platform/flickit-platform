@@ -84,7 +84,7 @@ const Title = (props: ITitle) => {
               }}
             >
               <Box component={RLink} to={backLink as To} display="flex">
-                {backLink === "/spaces" ? (
+                {backLink === "/" ? (
                   <HomeRounded
                     fontSize="small"
                     color="inherit"

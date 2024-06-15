@@ -273,7 +273,7 @@ const SubjectTitle = (props: {
   }, [title]);
   return (
     <Title
-      backLink="/spaces"
+      backLink="/"
       wrapperProps={{
         sx: {
           flexDirection: { xs: "column", md: "row" },
