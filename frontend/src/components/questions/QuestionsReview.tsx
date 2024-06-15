@@ -109,7 +109,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       mb: 1,
                       fontFamily: "Roboto",
                       fontWeight: 600,
-                      color: "#1CC2C4",
+                      color: "#004F83",
                     }}
                   >
                     <Trans i18nKey="goodJob" />
@@ -121,7 +121,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       mb: 4,
                       fontFamily: "Roboto",
                       fontWeight: 600,
-                      color: "#1CC2C4",
+                      color: "#004F83",
                     }}
                   >
                     <Trans i18nKey="allQuestionsHaveBeenAnswered" />

@@ -51,6 +51,9 @@ const SupTitleBreadcrumb = (
                   : disabled
                   ? "GrayText"
                   : "primary.dark",
+                "&:hover": {
+                  textDecoration: "none",
+                },
               }}
             >
               {icon}
@@ -63,11 +66,9 @@ const SupTitleBreadcrumb = (
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
-                      ? "rgba(210, 243, 243, 1)"
+                      ? "#D0E4FF"
                       : "rgba(206, 211, 217, 0.4)",
-                    color: isActive
-                      ? "rgba(28, 194, 196, 1)"
-                      : "rgba(157, 167, 179, 1)",
+                    color: isActive ? "#004F83" : "rgba(157, 167, 179, 1)",
                     textTransform: "none",
                   }}
                 />

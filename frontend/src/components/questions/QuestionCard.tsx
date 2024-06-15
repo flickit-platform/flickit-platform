@@ -719,7 +719,7 @@ const Evidence = (props: any) => {
   const [value, setValue] = React.useState("POSITIVE");
   const [evidenceBG, setEvidenceBG] = useState<any>({
     background: "#EDFCFC",
-    borderColor: "#1CC2C4",
+    borderColor: "#004F83",
     borderHover: "#117476",
   });
   useEffect(() => {
@@ -733,7 +733,7 @@ const Evidence = (props: any) => {
     if (value === "POSITIVE") {
       setEvidenceBG({
         background: "#EDFCFC",
-        borderColor: "#1CC2C4",
+        borderColor: "#004F83",
         borderHover: "#117476",
       });
     }
@@ -1082,7 +1082,7 @@ const EvidenceDetail = (props: any) => {
     if (type === "Positive") {
       setEvidenceBG({
         background: "#EDFCFC",
-        borderColor: "#1CC2C4",
+        borderColor: "#004F83",
         borderHover: "#117476",
       });
     }
@@ -1172,7 +1172,7 @@ const EvidenceDetail = (props: any) => {
               sx={{ boxShadow: 2, p: 1 }}
               onClick={onUpdate}
             >
-              <EditRoundedIcon fontSize="small" style={{ color: "#1CC2C4" }} />
+              <EditRoundedIcon fontSize="small" style={{ color: "#004F83" }} />
             </IconButton>
             <IconButton
               aria-label="delete"

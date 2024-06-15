@@ -11,7 +11,9 @@ import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
+import ColorfullProgress, {
+  ProgessBarTypes,
+} from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { Button } from "@mui/material";
 interface IAssessmentSummaryProps {
@@ -53,7 +55,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         borderRadius: "40px",
         px: { xs: 2, sm: 3 },
       }}
-      color="#1CC2C4"
+      color="#004F83"
     >
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
@@ -61,30 +63,34 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           sx={{
             textDecoration: "none",
           }}
-          color="#1CC2C4"
+          color="#004F83"
           fontWeight={800}
         >
           {assessmentKit?.title}
         </Typography>
       </Box>
-      <ColorfullProgress
-        questionCount={questionCount}
-        answerCount={answerCount}
-      />
+      <Box sx={{ ...styles.centerCVH }} width="80%">
+        <ColorfullProgress
+          denominator={questionCount}
+          numaratur={answerCount}
+          type={ProgessBarTypes.Questioannaire}
+        />
+      </Box>
+
       <Button
         variant="contained"
         sx={{
           borderRadius: "24px",
           textTransform: "none",
-          backgroundColor: "#1CC2C4",
-          borderColor: "#1CC2C4",
+          backgroundColor: "#004F83",
+          borderColor: "#004F83",
           color: "#fff",
           fontSize: "1.25rem",
           py: "8px",
           boxShadow: "none",
           "&:hover": {
-            backgroundColor: "#1CC2C4",
-            borderColor: "#1CC2C4",
+            backgroundColor: "#004F83",
+            borderColor: "#004F83",
           },
           width: "65%",
         }}

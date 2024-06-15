@@ -16,12 +16,7 @@ import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 const SubjectBarChart = (props: any) => {
   const { loading, ...rest } = props;
   return loading ? (
-    <Skeleton
-      height={"520px"}
-      width="520px"
-      variant="rectangular"
-      sx={{ margin: "auto" }}
-    />
+    <Skeleton height={"520px"} variant="rectangular" sx={{ margin: "auto" }} />
   ) : (
     <SubjectBar {...rest} />
   );
@@ -53,11 +48,16 @@ const SubjectBar = (props: any) => {
         />
         <YAxis type="number" domain={[0, 5]} tickCount={5 + 1} />
         <Tooltip />
-        <Legend  layout="horizontal" wrapperStyle={{ position: 'absolute', bottom: '8px', left: '0%' }} />
+        <Legend
+          layout="horizontal"
+          wrapperStyle={{ position: "absolute", bottom: "8px", left: "0%" }}
+        />
         <Bar
           dataKey="ml"
           name={t("maturityLevel") as string}
-          fill="#6035A1"
+          stroke="#004F83"
+          fill="#004F83"
+          fillOpacity={0.5}
           maxBarSize={40}
         />
       </BarChart>

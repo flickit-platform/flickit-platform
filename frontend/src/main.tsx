@@ -13,6 +13,8 @@ import App from "./App";
 import { createRoot } from "react-dom/client";
 import keycloakService from "@/service/keycloakService";
 import * as Sentry from "@sentry/react";
+import "./styles.css";
+
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
