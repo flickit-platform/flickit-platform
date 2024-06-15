@@ -33,10 +33,11 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & {manageable?: boolean};
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -46,7 +47,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
-  console.log(item);
   const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();
@@ -222,7 +222,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & {manageable?: boolean};
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -249,6 +249,12 @@ const Actions = (props: {
       search: createSearchParams({
         assessmentIds: item.id as string,
       }).toString(),
+    });
+  };
+
+  const assessmentSetting = (e: any) => {
+    navigate(`assessmentsettings/${item.id}`,{
+        state: item?.color || {code: '#073B4C', id: 6}
     });
   };
 
@@ -281,6 +287,11 @@ const Actions = (props: {
                 icon: <EditRoundedIcon fontSize="small" />,
                 text: <Trans i18nKey="edit" />,
                 onClick: openEditDialog,
+              },
+               item?.manageable && {
+                icon: <SettingsIcon fontSize="small" />,
+                text: <Trans i18nKey="setting" />,
+                onClick: assessmentSetting,
               },
               {
                 icon: <DeleteRoundedIcon fontSize="small" />,

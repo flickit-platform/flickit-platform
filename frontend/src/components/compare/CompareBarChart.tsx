@@ -58,6 +58,7 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
 }) => {
   const generalBars = useMemo(() => {
     const bars: any = [];
+
     for (let i = 0; i < assessmentCount; i++) {
       const mlKey = `ml${i + 1}`;
       const mlTitleKey = `mlTitle${i + 1}`;

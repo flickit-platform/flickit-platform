@@ -318,6 +318,7 @@ export interface IAssessment {
   kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
   maturityLevel: IMaturityLevel;
+  manageable?: boolean;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
@@ -560,4 +561,12 @@ export interface IDynamicGaugeSVGProps {
   height?: number;
   width?: number | string;
   className?: string;
+}
+
+export interface RolesType {
+  items:{
+    id: number;
+    title: string;
+    description: string
+  }[]
 }

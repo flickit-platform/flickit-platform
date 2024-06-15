@@ -188,11 +188,52 @@ export const createService = (
         },
       });
     },
+    AssessmentsLoad(
+        { assessmentId }: { assessmentId?: TId },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.get(`/api/v1/assessments/${assessmentId}`, {
+              ...(config ?? {}),
+        });
+    },
     createAssessment(
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.post(`/api/v2/assessments/`, data, config);
+    },
+      fetchAssessmentsRoles(
+        args: any,
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`api/v1/assessment-user-roles/`, config);
+    },
+    fetchAssessmentsUserListRoles(
+        {assessmentId}: {assessmentId : string},
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+        return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
+    },
+    addRoleMember(
+        args: { assessmentId: string, userId :string , roleId:number },
+        config: AxiosRequestConfig<any> | undefined
+    ){
+        const { assessmentId, } = args ?? {};
+        return axios.post(`/api/v1/assessments/${assessmentId}/assessment-user-roles/`,args, config);
+    },
+    deleteUserRole(
+        {assessmentId,args : userId}: {assessmentId: string,args: string} | any,
+        config: AxiosRequestConfig<any> | undefined
+    ){
+      return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
+`   , config);
+    },
+    EditUserRole(
+        args: { assessmentId: string, userId :string , roleId:number } | any,
+        config: AxiosRequestConfig<any> | undefined
+    ){
+      const { assessmentId, userId } = args
+      return axios.put(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/`,args , config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
