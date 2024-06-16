@@ -184,7 +184,7 @@ export const AssessmentSettingMemberBox = (props: {
     interface Column {
         id: 'displayName' | 'email' | 'role'
         label: string;
-        minWidth?: number;
+        minWidth?: string;
         align?: 'right';
         display?: string;
     }
@@ -196,9 +196,9 @@ export const AssessmentSettingMemberBox = (props: {
     });
 
     const columns: readonly Column[] = [
-        {id: 'displayName', label: 'Name', minWidth: 230},
-        {id: 'email', label: 'Email', minWidth: 230, display: "none"},
-        {id: 'role', label: 'Role', align: 'right', minWidth: 230}
+        {id: 'displayName', label: 'Name', minWidth: "20vw"},
+        {id: 'email', label: 'Email', minWidth: "20vw", display: "none"},
+        {id: 'role', label: 'Role', align: 'right', minWidth: "20vw"}
     ];
 
 
@@ -331,7 +331,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                     }}
                                                 >
                                                     <Box sx={{
-                                                        display: "flex" ,justifyContent: "flex-start",alignItems: "center" ,gap: ".5rem",width: {xs:"5rem",md: "11.25rem"}
+                                                        display: "flex" ,justifyContent: {xs:"flex-start", md: "center"},alignItems: "center" ,gap: ".5rem",width: {xs:"6rem",md: "20vw"}
                                                     }}>
                                                         <Avatar
                                                                 {...stringAvatar(row.displayName.toUpperCase())}
@@ -351,7 +351,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                         </Typography>
                                                     </Box>
                                                     <Box
-                                                    sx={{display:{xs: "none",md: "flex"}, justifyContent: "center", width: "13rem"
+                                                    sx={{display:{xs: "none",md: "flex"}, justifyContent: "center", width: {xs:"5rem",md: "20vw"}
                                                     }}
                                                     >
                                                         <Typography
@@ -364,7 +364,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                     </Box>
                                                     <Box
                                                     sx={{display: "flex" ,justifyContent: "flex-end",alignItems: "center" ,
-                                                        gap:{xs:"0px",md:".7rem" } ,width: "11.25rem"
+                                                        gap:{xs:"0px",md:".7rem" } ,width: {xs:"10.1rem",md: "20vw"}
                                                     }}
                                                     >
                                                         <FormControl
