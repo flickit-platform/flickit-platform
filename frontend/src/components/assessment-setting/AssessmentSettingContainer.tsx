@@ -77,7 +77,7 @@ const AssessmentSettingContainer = () => {
                 AssessmentInfo
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([pathInfo = {},roles = {}, listOfUser = [], assessmentInfo = {}]) => {
+            render={([pathInfo = {},roles = {}, listOfUser = {}, assessmentInfo = {}]) => {
                 const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = roles;
 
@@ -135,7 +135,6 @@ const AssessmentSettingContainer = () => {
                         <ConfirmRemoveMemberDialog
                             expandedRemoveDialog={expandedRemoveModal}
                             onCloseRemoveDialog={handleCloseRemoveModal}
-                            listOfRoles={listOfRoles}
                             assessmentId={assessmentId}
                             fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
                             assessmentName ={title}

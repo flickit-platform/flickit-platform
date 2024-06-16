@@ -148,7 +148,7 @@ const Actions = (props: {assessmentId: string}) => {
             items={
                 [{
                     icon: <SettingsIcon fontSize="small" />,
-                    text: <Trans i18nKey="setting" />,
+                    text: <Trans i18nKey="settings" />,
                     onClick: assessmentSetting,
                 }]
             }

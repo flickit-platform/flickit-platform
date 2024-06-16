@@ -15,7 +15,7 @@ interface ISupTitleBreadcrumbProps {
     sup?: string;
     to?: string;
     icon?: JSX.Element;
-    title: string | JSX.Element;
+    title?: string | JSX.Element;
   }[];
   displayChip?: boolean;
   colorSetting?: string;

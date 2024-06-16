@@ -290,7 +290,7 @@ const Actions = (props: {
               },
                item?.manageable && {
                 icon: <SettingsIcon fontSize="small" />,
-                text: <Trans i18nKey="setting" />,
+                text: <Trans i18nKey="settings" />,
                 onClick: assessmentSetting,
               },
               {

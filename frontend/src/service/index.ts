@@ -206,7 +206,7 @@ export const createService = (
         args: any,
         config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`api/v1/assessment-user-roles/`, config);
+      return axios.get(`/api/v1/assessment-user-roles/`, config);
     },
     fetchAssessmentsUserListRoles(
         {assessmentId}: {assessmentId : string},
@@ -228,7 +228,7 @@ export const createService = (
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
 `   , config);
     },
-    EditUserRole(
+    editUserRole(
         args: { assessmentId: string, userId :string , roleId:number } | any,
         config: AxiosRequestConfig<any> | undefined
     ){

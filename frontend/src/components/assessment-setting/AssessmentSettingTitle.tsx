@@ -23,7 +23,7 @@ const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
 
   return (
     <Title
-      backLink="/spaces"
+      backLink="/"
       wrapperProps={{
         sx: {
           flexDirection: { xs: "column", md: "row" },
