@@ -373,9 +373,12 @@ export const AssessmentSettingMemberBox = (props: {
                                                             width: '100%',
                                                             textAlign: "center",
                                                             padding : "6px, 12px, 6px, 12px",
+                                                            display: "inline-flex",
+                                                            justifyContent: "center",
+                                                            alignItems: "center"
                                                         }}
                                                         >
-                                                            <Grid item>
+                                                            <Grid item lg={8} sx={{minWidth: {md: "12vw", lg:"6vw", xl: "5vw"}}} >
                                                                 <Select
                                                                     labelId="demo-multiple-name-label"
                                                                     id="demo-multiple-name"
@@ -384,6 +387,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                                     name={row}
                                                                     MenuProps={MenuProps}
                                                                     sx={{
+                                                                        width:"100%",
                                                                         boxShadow: 'none',
                                                                         '.MuiOutlinedInput-notchedOutline': { border: 0 },
                                                                         border:"1px solid #2974B4",
