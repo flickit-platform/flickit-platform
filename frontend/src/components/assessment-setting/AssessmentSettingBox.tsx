@@ -40,7 +40,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
     const {AssessmentInfo, AssessmentTitle, fetchPathInfo, color} = props
     const { createdBy:{displayName},creationTime,lastModificationTime,kit} = AssessmentInfo
 
-   const title = ["created","dateCreated","lastModified","assessmentKits"]
+   const title = ["creator","created","lastModified","assessmentKit"]
    const formMethods = useForm({ shouldUnregister: true });
 
     return (
@@ -116,7 +116,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                       }}
                 >
 
-                    {(title || []).map((itemList,index) =>{
+                    {title && title.map((itemList,index) =>{
                         return (
                             <Grid item
                                   sx={{display: "flex", justifyContent: "center"}}
@@ -198,7 +198,7 @@ export const AssessmentSettingMemberBox = (props: {
     const columns: readonly Column[] = [
         {id: 'displayName', label: 'Name', minWidth: 230},
         {id: 'email', label: 'Email', minWidth: 230, display: "none"},
-        {id: 'role', label: 'Roles', align: 'right', minWidth: 230}
+        {id: 'role', label: 'Role', align: 'right', minWidth: 230}
     ];
 
     const handleChangePage = (event: unknown, newPage: number) => {
