@@ -411,8 +411,8 @@ const AnswerTemplate = (props: {
     if (
       submitOnAnswerSelection &&
       value &&
-      changeHappened.current &&
-      selcetedConfidenceLevel
+      changeHappened.current
+      // && selcetedConfidenceLevel
     ) {
       submitQuestion();
     }
