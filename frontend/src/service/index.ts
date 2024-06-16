@@ -228,7 +228,7 @@ export const createService = (
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
 `   , config);
     },
-    EditUserRole(
+    editUserRole(
         args: { assessmentId: string, userId :string , roleId:number } | any,
         config: AxiosRequestConfig<any> | undefined
     ){

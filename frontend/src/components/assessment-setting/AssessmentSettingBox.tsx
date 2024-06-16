@@ -116,7 +116,7 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
                       }}
                 >
 
-                    {title && title.map((itemList,index) =>{
+                    {title && title.map((itemList: string,index: number) =>{
                         return (
                             <Grid item
                                   sx={{display: "flex", justifyContent: "center"}}
@@ -178,8 +178,8 @@ export const AssessmentSettingMemberBox = (props: {
     const {listOfRoles = [], listOfUser, fetchAssessmentsUserListRoles,
         openModal, openRemoveModal} = props
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    // const [page, setPage] = React.useState(0);
+    // const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     interface Column {
         id: 'displayName' | 'email' | 'role'
@@ -189,9 +189,9 @@ export const AssessmentSettingMemberBox = (props: {
         display?: string;
     }
 
-    const EditUserRole= useQuery({
+    const editUserRole= useQuery({
         service: (args, config) =>
-            service.EditUserRole({assessmentId ,...args}, config),
+            service.editUserRole({assessmentId ,...args}, config),
         runOnMount: false,
     });
 
@@ -201,14 +201,6 @@ export const AssessmentSettingMemberBox = (props: {
         {id: 'role', label: 'Role', align: 'right', minWidth: 230}
     ];
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
 
     const handleChange = async (event:any) => {
         try {
@@ -217,7 +209,7 @@ export const AssessmentSettingMemberBox = (props: {
             } = event;
             const {id: roleId} = value
             const {id: userId} = name
-            await EditUserRole.query({userId, roleId})
+            await editUserRole.query({userId, roleId})
             await fetchAssessmentsUserListRoles()
         }catch (e){
             const err = e as ICustomError;
@@ -287,7 +279,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     sx={{lineHeight:'1.25rem',fontSize:{xs:"0.7rem",sm:"0.85rem"}
                         }}
                         >
-                            <Trans i18nKey={`addMember`}/>
+                            <Trans i18nKey={"addMember"}/>
                         </Typography>
                     </Button>
 
@@ -323,7 +315,7 @@ export const AssessmentSettingMemberBox = (props: {
                             <Divider sx={{width: "100%"}}/>
                             <TableBody>
                                 {listOfUser && listOfUser?.items
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: any) => {
                                         return (
                                             <TableRow
@@ -489,16 +481,6 @@ export const AssessmentSettingMemberBox = (props: {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {/*        <TablePagination
-                rowsPerPageOptions={[5, 10]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />*/}
-                {/*</Paper>*/}
             </Box>
         </Box>
     )
