@@ -379,8 +379,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -734,11 +734,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     </Box>
                                     <Box
                                       sx={{
-                                        width: {
-                                          md: "36%",
-                                          xs: "100%",
-                                          sm: "100%",
-                                        },
+                                        width: "36%",
                                       }}
                                     >
                                       <Typography
@@ -757,11 +753,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     <Box
                                       sx={{
                                         width: "10%",
-                                        display: {
-                                          sm: "none",
-                                          xs: "none",
-                                          md: "block",
-                                        },
                                       }}
                                     >
                                       <Typography
@@ -780,11 +771,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     <Box
                                       sx={{
                                         width: "25%",
-                                        display: {
-                                          sm: "none",
-                                          xs: "none",
-                                          md: "block",
-                                        },
+                                 
                                       }}
                                     >
                                       <Typography
@@ -803,11 +790,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     <Box
                                       sx={{
                                         width: "10%",
-                                        display: {
-                                          sm: "none",
-                                          xs: "none",
-                                          md: "block",
-                                        },
+
                                       }}
                                     >
                                       <Typography
@@ -839,137 +822,97 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     </Box>
                                   </Box>
                                   <Divider sx={{ my: 1 }} />
-                                  <Box maxHeight="40vh" overflow="auto">
-                                    {questionScores.map((question: any) => {
-                                      const {
-                                        questionIndex,
-                                        questionTitle,
-                                        questionWeight,
-                                        answerOptionIndex,
-                                        answerOptionTitle,
-                                        answerIsNotApplicable,
-                                        answerScore,
-                                        weightedScore,
-                                      } = question;
+                                  {questionScores.map((question: any) => {
+                                    const {
+                                      questionIndex,
+                                      questionTitle,
+                                      questionWeight,
+                                      answerOptionIndex,
+                                      answerOptionTitle,
+                                      answerIsNotApplicable,
+                                      answerScore,
+                                      weightedScore,
+                                    } = question;
 
-                                      let is_farsi =
-                                        languageDetector(questionTitle);
+                                    let is_farsi =
+                                      languageDetector(questionTitle);
 
-                                      return (
+                                    return (
+                                      <Box
+                                        key={questionIndex}
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "row",
+                                          my: 1,
+                                        }}
+                                      >
+                                        <Box sx={{ width: "4%", mr: 2 }}>
+                                          <Typography
+                                            display="flex"
+                                            variant="body1"
+                                            fontFamily="Ubuntu"
+                                            textAlign="left"
+                                            fontSize="0.75rem"
+                                          >
+                                            {questionIndex}
+                                          </Typography>
+                                        </Box>
+                                        <CustomWidthTooltip
+                                          title={`${questionTitle}`}
+                                        >
+                                          <Box
+                                            sx={{
+                                              width: "36%",
+                                            }}
+                                          >
+                                            <Typography
+                                              variant="body1"
+                                              fontFamily="Ubuntu"
+                                              fontWeight="300"
+                                              fontSize="0.75rem"
+                                              letterSpacing="0.4px"
+                                              textAlign="justify"
+                                              dir={is_farsi ? "rtl" : "ltr"}
+                                              sx={{
+                                                display: "-webkit-box",
+                                                WebkitBoxOrient: "vertical",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                WebkitLineClamp: 3,
+                                                whiteSpace: "normal",
+                                              }}
+                                            >
+                                              {questionTitle}
+                                            </Typography>
+                                          </Box>
+                                        </CustomWidthTooltip>
                                         <Box
-                                          key={questionIndex}
                                           sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            my: 1,
+                                            width: "10%",
                                           }}
                                         >
-                                          <Box sx={{ width: "4%", mr: 2 }}>
-                                            <Typography
-                                              display="flex"
-                                              variant="body1"
-                                              fontFamily="Roboto"
-                                              fontWeight="bold"
-                                              textAlign="left"
-                                            >
-                                              {questionIndex}
-                                            </Typography>
-                                          </Box>
-                                          <CustomWidthTooltip
-                                            title={`${questionTitle}`}
+                                          <Typography
+                                            variant="body1"
+                                            fontFamily="Ubuntu"
+                                            fontWeight="300"
+                                            textAlign="center"
+                                            fontSize="0.75rem"
                                           >
-                                            <Box
-                                              sx={{
-                                                width: {
-                                                  md: "36%",
-                                                  xs: "90%",
-                                                  sm: "90%",
-                                                },
-                                              }}
-                                            >
-                                              <Typography
-                                                variant="body1"
-                                                fontFamily="Ubuntu"
-                                                fontWeight="300"
-                                                fontSize="0.75rem"
-                                                letterSpacing="0.4px"
-                                                textAlign="justify"
-                                                dir={is_farsi ? "rtl" : "ltr"}
-                                                sx={{
-                                                  display: "-webkit-box",
-                                                  WebkitBoxOrient: "vertical",
-                                                  overflow: "hidden",
-                                                  textOverflow: "ellipsis",
-                                                  WebkitLineClamp: 3,
-                                                  whiteSpace: "normal",
-                                                }}
-                                              >
-                                                {questionTitle}
-                                              </Typography>
-                                            </Box>
-                                          </CustomWidthTooltip>
-                                          <Box
-                                            sx={{
-                                              width: "10%",
-                                              display: {
-                                                sm: "none",
-                                                xs: "none",
-                                                md: "block",
-                                              },
-                                            }}
-                                          >
-                                            <Typography
-                                              variant="body1"
-                                              fontFamily="Ubuntu"
-                                              fontWeight="300"
-                                              textAlign="center"
-                                              fontSize="0.75rem"
-                                            >
-                                              {questionWeight}
-                                            </Typography>
-                                          </Box>
-                                          <Tooltip
-                                            title={
-                                              answerIsNotApplicable
-                                                ? "NA"
-                                                : answerOptionTitle !== null
+                                            {questionWeight}
+                                          </Typography>
+                                        </Box>
+                                        <Tooltip
+                                          title={
+                                            answerIsNotApplicable
+                                              ? "NA"
+                                              : answerOptionTitle !== null
                                                 ? `${answerOptionIndex}.${answerOptionTitle}`
                                                 : "---"
-                                            }
-                                          >
-                                            <Box
-                                              sx={{
-                                                width: "25%",
-                                                display: {
-                                                  sm: "none",
-                                                  xs: "none",
-                                                  md: "block",
-                                                },
-                                              }}
-                                            >
-                                              <Typography
-                                                variant="body1"
-                                                fontFamily="Ubuntu"
-                                                fontWeight="300"
-                                                textAlign="center"
-                                                fontSize="0.75rem"
-                                              >
-                                                {answerIsNotApplicable
-                                                  ? "NA"
-                                                  : answerOptionTitle !== null
-                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                  : "---"}
-                                              </Typography>
-                                            </Box>
-                                          </Tooltip>
+                                          }
+                                        >
                                           <Box
                                             sx={{
-                                              width: "10%",
-                                              display: {
-                                                sm: "none",
-                                                xs: "none",
-                                                md: "block",
-                                              },
+                                              width: "25%",
                                             }}
                                           >
                                             <Typography
@@ -980,26 +923,45 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                               fontSize="0.75rem"
                                             >
                                               {answerIsNotApplicable
-                                                ? "---"
-                                                : answerScore}
+                                                ? "NA"
+                                                : answerOptionTitle !== null
+                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                  : "---"}
                                             </Typography>
                                           </Box>
-                                          <Box sx={{ width: "15%" }}>
-                                            <Typography
-                                              variant="body1"
-                                              fontFamily="Roboto"
-                                              fontWeight="bold"
-                                              textAlign="center"
-                                            >
-                                              {answerIsNotApplicable
-                                                ? "---"
-                                                : weightedScore}
-                                            </Typography>
-                                          </Box>
+                                        </Tooltip>
+                                        <Box
+                                          sx={{
+                                            width: "10%",
+                                          }}
+                                        >
+                                          <Typography
+                                            variant="body1"
+                                            fontFamily="Ubuntu"
+                                            fontWeight="300"
+                                            textAlign="center"
+                                            fontSize="0.75rem"
+                                          >
+                                            {answerIsNotApplicable
+                                              ? "---"
+                                              : answerScore}
+                                          </Typography>
                                         </Box>
-                                      );
-                                    })}
-                                  </Box>
+                                        <Box sx={{ width: "15%" }}>
+                                          <Typography
+                                            variant="body1"
+                                            fontFamily="Roboto"
+                                            fontWeight="bold"
+                                            textAlign="center"
+                                          >
+                                            {answerIsNotApplicable
+                                              ? "---"
+                                              : weightedScore}
+                                          </Typography>
+                                        </Box>
+                                      </Box>
+                                    );
+                                  })}
                                 </Box>
                               </Box>
                             </Box>

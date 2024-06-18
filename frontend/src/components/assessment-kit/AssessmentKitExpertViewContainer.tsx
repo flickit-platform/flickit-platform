@@ -261,7 +261,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Roboto",
+                  fontFamily: "Ubuntu",
                   fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
@@ -305,12 +305,12 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                         borderRadius: 1,
                       }}
                     >
-                      <Typography variant="body2" fontFamily="Roboto">
+                      <Typography variant="body2" fontFamily="Ubuntu">
                         <Trans i18nKey="questionsCount" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="Roboto"
+                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                       >
@@ -328,12 +328,12 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                         borderRadius: 1,
                       }}
                     >
-                      <Typography variant="body2" fontFamily="Roboto">
+                      <Typography variant="body2" fontFamily="Ubuntu">
                         <Trans i18nKey="description" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="Roboto"
+                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                       >
@@ -347,7 +347,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
               <Box m={1} mt={2}>
                 <Typography
                   variant="h6"
-                  fontFamily="Roboto"
+                  fontFamily="Ubuntu"
                   fontWeight={"bold"}
                   fontSize="1rem"
                 >
@@ -368,7 +368,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                           >
                             <Typography
                               variant="body1"
-                              fontFamily="Roboto"
+                              fontFamily="Ubuntu"
                               fontWeight={"bold"}
                               minWidth="180px"
                             >
@@ -386,7 +386,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                               ...(isExpanded ? {} : styles.ellipsis),
                             }}
                             variant="body2"
-                            fontFamily="Roboto"
+                            fontFamily="Ubuntu"
                           >
                             {item.description}
                           </Typography> */}
@@ -462,7 +462,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Roboto",
+                  fontFamily: "Ubuntu",
                   fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
@@ -483,12 +483,12 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     borderRadius: 1,
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Roboto">
+                  <Typography variant="body2" fontFamily="Ubuntu">
                     <Trans i18nKey="questionsCount" />:
                   </Typography>
                   <Typography
                     variant="body2"
-                    fontFamily="Roboto"
+                    fontFamily="Ubuntu"
                     sx={{ ml: 2 }}
                     fontWeight="bold"
                   >
@@ -507,14 +507,14 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     my: "16px",
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Roboto">
+                  <Typography variant="body2" fontFamily="Ubuntu">
                     <Trans i18nKey="relatedSubjects" />:
                   </Typography>
                   {questionnaireDetails?.relatedSubjects.map(
                     (subject: string, index: number) => (
                       <Typography
                         variant="body2"
-                        fontFamily="Roboto"
+                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                         key={index}
@@ -536,12 +536,12 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     my: "16px",
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Roboto">
+                  <Typography variant="body2" fontFamily="Ubuntu">
                     <Trans i18nKey="description" />:
                   </Typography>
                   <Typography
                     variant="body2"
-                    fontFamily="Roboto"
+                    fontFamily="Ubuntu"
                     sx={{ ml: 2 }}
                     fontWeight="bold"
                   >
@@ -630,12 +630,12 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Roboto">
+          <Typography variant="body2" fontFamily="Ubuntu">
             <Trans i18nKey="questionsCount" />:
           </Typography>
           <Typography
             variant="body2"
-            fontFamily="Roboto"
+            fontFamily="Ubuntu"
             sx={{ ml: 2 }}
             fontWeight="bold"
           >
@@ -653,12 +653,12 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Roboto">
+          <Typography variant="body2" fontFamily="Ubuntu">
             <Trans i18nKey="weight" />:
           </Typography>
           <Typography
             variant="body2"
-            fontFamily="Roboto"
+            fontFamily="Ubuntu"
             sx={{ ml: 2 }}
             fontWeight="bold"
           >
@@ -676,12 +676,12 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Roboto">
+          <Typography variant="body2" fontFamily="Ubuntu">
             <Trans i18nKey="description" />:
           </Typography>
           <Typography
             variant="body2"
-            fontFamily="Roboto"
+            fontFamily="Ubuntu"
             sx={{ ml: 2 }}
             fontWeight="bold"
           >
@@ -740,7 +740,7 @@ const AssessmentKitQuestionsList = (props: {
           </TabPanel>
         </TabContext>
       </Box>
-      {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Roboto" fontSize=".9rem">
+      {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Ubuntu" fontSize=".9rem">
         <Trans i18nKey="questions" />
         <span style={{ float: "right" }}>{questions.length}</span>
       </Typography> */}
@@ -778,7 +778,7 @@ const AssessmentKitQuestionsList = (props: {
                     <Grid xs={12} item>
                       <Typography
                         variant="body1"
-                        fontFamily="Roboto"
+                        fontFamily="Ubuntu"
                         fontWeight={"bold"}
                         position="relative"
                         sx={{ cursor: "pointer" }}
@@ -794,7 +794,7 @@ const AssessmentKitQuestionsList = (props: {
                               pb: "2px",
                               color: "#767676",
                               display: "block",
-                              fontFamily: "Roboto",
+                              fontFamily: "Ubuntu",
                               fontSize: "0.8rem",
                               width: "100%",
                               borderBottom: (t) =>
@@ -817,7 +817,7 @@ const AssessmentKitQuestionsList = (props: {
                               width: "100%",
                               top: "-36px",
                               pb: "2px",
-                              fontFamily: "Roboto",
+                              fontFamily: "Ubuntu",
                               color: "#767676",
                               borderBottom: (t) => `1px solid ${t.palette.warning.main}`,
                             }}
@@ -844,7 +844,7 @@ const AssessmentKitQuestionsList = (props: {
                                 top: "-36px",
                                 pb: "2px",
                                 color: "#767676",
-                                fontFamily: "Roboto",
+                                fontFamily: "Ubuntu",
                                 borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
                               }}
                               variant="subMedium"
@@ -867,7 +867,7 @@ const AssessmentKitQuestionsList = (props: {
                                 top: "-36px",
                                 pb: "2px",
                                 color: "#767676",
-                                fontFamily: "Roboto",
+                                fontFamily: "Ubuntu",
                                 borderBottom: (t) =>
                                   `1px solid ${t.palette.secondary.dark}`,
                               }}
@@ -1123,7 +1123,7 @@ const SubjectQuestionList = (props: any) => {
         <Box m={1} mt={2}>
           <Typography
             variant="h6"
-            fontFamily="Roboto"
+            fontFamily="Ubuntu"
             fontWeight={"bold"}
             fontSize="1rem"
           >
@@ -1160,7 +1160,7 @@ const SubjectQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
+                  fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
@@ -1257,7 +1257,7 @@ const SubjectQuestionList = (props: any) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: "bold",
                       opacity: 0.6,
                       ml: "4px",
@@ -1268,7 +1268,7 @@ const SubjectQuestionList = (props: any) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: "bold",
                       opacity: 0.6,
                       ml: "4px",
@@ -1290,7 +1290,7 @@ const SubjectQuestionList = (props: any) => {
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        fontFamily: "Roboto",
+                        fontFamily: "Ubuntu",
                         fontWeight: "bold",
                         mr: "64px",
                       }}
@@ -1300,7 +1300,7 @@ const SubjectQuestionList = (props: any) => {
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        fontFamily: "Roboto",
+                        fontFamily: "Ubuntu",
                         fontWeight: "bold",
                       }}
                     >
@@ -1356,7 +1356,7 @@ const QuestionnairesQuestionList = (props: any) => {
       <Box m={1} mt={2}>
         <Typography
           variant="h6"
-          fontFamily="Roboto"
+          fontFamily="Ubuntu"
           fontWeight={"bold"}
           fontSize="1rem"
         >
@@ -1393,7 +1393,7 @@ const QuestionnairesQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
+                  fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
@@ -1457,7 +1457,7 @@ const QuestionnairesQuestionList = (props: any) => {
                       key={option.index}
                       sx={{
                         mx: 2,
-                        fontFamily: `${is_farsi ? "Vazirmatn" : "Roboto"}`,
+                        fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
                       }}
                       variant="body2"
                     >
@@ -1474,7 +1474,7 @@ const QuestionnairesQuestionList = (props: any) => {
                           pb: "4px",
                           color: "#767676",
                           display: "block",
-                          fontFamily: "Roboto",
+                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1488,7 +1488,7 @@ const QuestionnairesQuestionList = (props: any) => {
                           alignItems: "center",
                           pb: "4px",
                           color: "#767676",
-                          fontFamily: "Roboto",
+                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1502,7 +1502,7 @@ const QuestionnairesQuestionList = (props: any) => {
                           alignItems: "center",
                           pb: "4px",
                           color: "#767676",
-                          fontFamily: "Roboto",
+                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1520,7 +1520,7 @@ const QuestionnairesQuestionList = (props: any) => {
                             <Typography
                               sx={{
                                 color: "#767676",
-                                fontFamily: "Roboto",
+                                fontFamily: "Ubuntu",
                                 fontSize: "0.8rem",
                                 pb: "4px",
                               }}
@@ -1551,7 +1551,7 @@ const QuestionnairesQuestionList = (props: any) => {
                               <Typography
                                 sx={{ width: "40%", py: 1 }}
                                 variant="body1"
-                                fontFamily="Roboto"
+                                fontFamily="Ubuntu"
                                 fontWeight={"bold"}
                               >
                                 {attributes.title}
@@ -1570,7 +1570,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                     return (
                                       <Typography
                                         variant="body1"
-                                        fontFamily="Roboto"
+                                        fontFamily="Ubuntu"
                                         fontWeight={"bold"}
                                         sx={{ py: 1 }}
                                       >
@@ -1595,7 +1595,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                     return (
                                       <Typography
                                         variant="body1"
-                                        fontFamily="Roboto"
+                                        fontFamily="Ubuntu"
                                         fontWeight={"bold"}
                                         sx={{ py: 1 }}
                                       >

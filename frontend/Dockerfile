@@ -17,7 +17,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in package.json
-RUN npm install
+RUN npm install --f
 
 # Build the React app
 RUN npm run build
