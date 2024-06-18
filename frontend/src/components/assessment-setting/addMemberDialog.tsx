@@ -21,13 +21,13 @@ import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 
 const AddMemberDialog = (props: {
-    expanded: boolean, onClose: () => void,
+    expanded: boolean, onClose: () => void,listOfUser: any,
     title: any, cancelText: any, confirmText: any
     listOfRoles: any[], assessmentId: any, fetchAssessmentsUserListRoles: any
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles = [], assessmentId, fetchAssessmentsUserListRoles
+        listOfRoles = [],listOfUser, assessmentId, fetchAssessmentsUserListRoles
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -67,7 +67,8 @@ const AddMemberDialog = (props: {
                 const {data} = await spaceMembersQueryData
                 if (data) {
                     const {items} = data
-                    const filtredItems = items.filter((item: any) => !item.isOwner)
+                    const {items : userList} = listOfUser
+                    const filtredItems = items.filter((item :any) => !userList.some((userListItem :any) => item.id === userListItem.id));
                     setMemberOfSpace(filtredItems)
                 }
             } catch (e) {
