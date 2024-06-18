@@ -399,7 +399,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   width: "5%",
                 }}
               >
-                <Trans i18nKey="number" />
+                <Trans i18nKey="index" />
               </Box>
               <Box
                 sx={{
@@ -474,12 +474,12 @@ const AssessmentAdviceContainer = (props: any) => {
                       justifyContent: "space-between",
                       alignItems: "center",
 
-                      fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
+                      fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
                     }}
                   >
                     <Box
                       sx={{
-                        fontSize: "64px",
+                        fontSize: "1rem",
                         color: "#004F83",
                         fontWeight: "700",
                         width: "fit-content",
@@ -489,9 +489,15 @@ const AssessmentAdviceContainer = (props: any) => {
                     </Box>
                     <Box
                       sx={{
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        WebkitLineClamp: 3,
+                        whiteSpace: "normal",
                         width: "40%",
                         color: "#0A2342",
-                        fontSize: "16px",
+                        fontSize: "1rem",
                         fontWeight: "700",
                         direction: isFarsi ? "rtl" : "ltr",
                         textAlign: "left",
