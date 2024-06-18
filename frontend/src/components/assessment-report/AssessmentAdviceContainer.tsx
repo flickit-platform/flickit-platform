@@ -452,6 +452,10 @@ const AssessmentAdviceContainer = (props: any) => {
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
+                  display: {
+                    md: "block",
+                    xs: "none"
+                  }
                 }}
               >
                 <Trans i18nKey="questionnaire" />
@@ -512,6 +516,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         fontSize: "14px",
                         fontWeight: "300",
                         textAlign: "center",
+                        fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
+
                       }}
                     >
                       {answeredOption && answeredOption.index}.
@@ -524,6 +530,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         fontSize: "14px",
                         fontWeight: "300",
                         textAlign: "center",
+                        fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
+
                       }}
                     >
                       {recommendedOption.index}.{recommendedOption.title}
@@ -546,12 +554,12 @@ const AssessmentAdviceContainer = (props: any) => {
                               background:
                                 attributeBGColorPallet[Math.ceil(index % 3)],
                               fontSize: "11px",
-                              border: `1px solid  ${
-                                attributeColorPallet[Math.ceil(index % 3)]
-                              }`,
+                              border: `1px solid  ${attributeColorPallet[Math.ceil(index % 3)]
+                                }`,
                               borderRadius: "8px",
                               m: "4px",
                               textAlign: "center",
+                              fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
                             }}
                           >
                             {attribute.title}
@@ -566,10 +574,15 @@ const AssessmentAdviceContainer = (props: any) => {
                         fontSize: "14px",
                         fontWeight: "500",
                         // textDecoration: "underline",
-                        display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                         textAlign: "center",
+                        fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
+                        display: {
+                          md: "block",
+                          xs: "none"
+                        }
+
                       }}
                     >
                       {questionnaire.title}
