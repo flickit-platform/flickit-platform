@@ -187,6 +187,7 @@ export const AssessmentSettingMemberBox = (props: {
         minWidth?: string;
         align?: 'right';
         display?: string;
+        position: string
     }
 
     const editUserRole= useQuery({
@@ -196,9 +197,9 @@ export const AssessmentSettingMemberBox = (props: {
     });
 
     const columns: readonly Column[] = [
-        {id: 'displayName', label: 'Name', minWidth: "20vw"},
-        {id: 'email', label: 'Email', minWidth: "20vw", display: "none"},
-        {id: 'role', label: 'Role', align: 'right', minWidth: "20vw"}
+        {id: 'displayName', label: 'Name', minWidth: "20vw", position: "left"},
+        {id: 'email', label: 'Email', minWidth: "20vw", display: "none",position: "center"},
+        {id: 'role', label: 'Role', align: 'right', minWidth: "20vw",position: "center"}
     ];
 
 
@@ -292,6 +293,7 @@ export const AssessmentSettingMemberBox = (props: {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead
                                 sx={{width: '100%', overflow: 'hidden'}}
+                                style={{ position: "sticky" , top :0,  zIndex: 3, backgroundColor: "#fff"}}
                             >
                                 <TableRow sx={{display: "inline", justifyContent: 'center', width: "100%"}}>
                                     {columns.map((column) => (
@@ -299,8 +301,8 @@ export const AssessmentSettingMemberBox = (props: {
                                             key={column.id}
                                             align={column.align}
                                             sx={{
-                                                minWidth:{xs:"8.1rem",md: column.minWidth} ,
-                                                textAlign: {xs:"left", md:"center"},
+                                                minWidth:{xs:"8.1rem",sm: "12rem", md: column.minWidth} ,
+                                                textAlign: {xs:column.position, lg: "center"},
                                                 display:{xs:column.display,md:"inline-block",
                                                 color: "#9DA7B3",
                                                 border: "none", fontSize: "1rem"
@@ -311,8 +313,8 @@ export const AssessmentSettingMemberBox = (props: {
                                         </TableCell>
                                     ))}
                                 </TableRow>
+                                <Divider sx={{width: "100%"}}/>
                             </TableHead>
-                            <Divider sx={{width: "100%"}}/>
                             <TableBody>
                                 {listOfUser && listOfUser?.items
                                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -330,25 +332,28 @@ export const AssessmentSettingMemberBox = (props: {
                                                         paddingX: {xs:"0px",md:"1rem"}
                                                     }}
                                                 >
-                                                    <Box sx={{
-                                                        display: "flex" ,justifyContent: {xs:"flex-start", md: "center"},alignItems: "center" ,gap: ".5rem",width: {xs:"6rem",md: "20vw"}
-                                                    }}>
-                                                        <Avatar
+                                                    <Box sx={{width: {xs:"6rem",sm: "15rem", md: "20vw"}}}>
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex" ,justifyContent: {xs:"flex-start"},alignItems: "center" ,gap: ".5rem",paddingLeft: {lg:"45%"}
+                                                            }}>
+                                                            <Avatar
                                                                 {...stringAvatar(row.displayName.toUpperCase())}
                                                                 src={row.pictureLink}
                                                                 sx={{width: 40, height: 40,
-                                                                display: {xs: "none",md:"flex"}
+                                                                    display: {xs: "none",sm:"flex"}
                                                                 }}
-                                                         ></Avatar>
-                                                        <Typography
-                                                        sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap",
-                                                        fontSize: "0.875rem",
-                                                            color: "#1B1B1E",
-                                                            fontWeight: 500
-                                                        }}
-                                                        >
-                                                            {row.displayName}
-                                                        </Typography>
+                                                            ></Avatar>
+                                                            <Typography
+                                                                sx={{textOverflow: "ellipsis", overflow:"hidden",whiteSpace: "nowrap",
+                                                                    fontSize: "0.875rem",
+                                                                    color: "#1B1B1E",
+                                                                    fontWeight: 500
+                                                                }}
+                                                            >
+                                                                {row.displayName}
+                                                            </Typography>
+                                                        </Box>
                                                     </Box>
                                                     <Box
                                                     sx={{display:{xs: "none",md: "flex"}, justifyContent: "center", width: {xs:"5rem",md: "20vw"}
@@ -378,7 +383,8 @@ export const AssessmentSettingMemberBox = (props: {
                                                             alignItems: "center"
                                                         }}
                                                         >
-                                                            <Grid item lg={8} sx={{minWidth: {md: "12vw", lg:"6vw", xl: "5vw"}}} >
+                                                            {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
+                                                            <Grid item lg={8} sx={{minWidth: {xs: "100%", md: "160px"}}} >
                                                                 <Select
                                                                     labelId="demo-multiple-name-label"
                                                                     id="demo-multiple-name"

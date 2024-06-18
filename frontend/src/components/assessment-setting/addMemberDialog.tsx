@@ -21,13 +21,13 @@ import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 
 const AddMemberDialog = (props: {
-    expanded: boolean, onClose: () => void,
+    expanded: boolean, onClose: () => void,listOfUser: any,
     title: any, cancelText: any, confirmText: any
     listOfRoles: any[], assessmentId: any, fetchAssessmentsUserListRoles: any
 }) => {
     const {
         expanded, onClose, title, cancelText, confirmText,
-        listOfRoles = [], assessmentId, fetchAssessmentsUserListRoles
+        listOfRoles = [],listOfUser, assessmentId, fetchAssessmentsUserListRoles
     } = props;
 
     const [memberOfSpace, setMemberOfSpace] = useState<any[]>([])
@@ -67,7 +67,8 @@ const AddMemberDialog = (props: {
                 const {data} = await spaceMembersQueryData
                 if (data) {
                     const {items} = data
-                    const filtredItems = items.filter((item: any) => !item.isOwner)
+                    const {items : userList} = listOfUser
+                    const filtredItems = items.filter((item :any) => !userList.some((userListItem :any) => item.id === userListItem.id));
                     setMemberOfSpace(filtredItems)
                 }
             } catch (e) {
@@ -220,7 +221,7 @@ const AddMemberDialog = (props: {
                                     }}
                                 >
                                     <Typography
-                                    sx={{fontSize:"0.875rem"}}
+                                    sx={{fontSize:"0.7rem",paddingX: "0.5rem"}}
                                     ><Trans i18nKey={"whoWantToAdd"} /></Typography>
                                 </Box>
                                 {memberOfSpace && memberOfSpace.length > 0 && memberOfSpace.map((member: any, index: number) => (
@@ -332,9 +333,14 @@ const AddMemberDialog = (props: {
                                             id={role.id}
                                             sx={{maxWidth: "240px",
                                                 "&.MuiMenuItem-root:hover":{
-                                                    backgroundColor: '#EFEDF0',
-                                                    color:"#1B1B1E"
+                                                    ...(roleSelected?.title == role.title ? {
+                                                        backgroundColor: "#9CCAFF",
+                                                        color:"#004F83"
+                                                    } : {backgroundColor: '#EFEDF0',
+                                                        color:"#1B1B1E"
+                                                    }),
                                                 },
+                                               background: roleSelected?.title == role.title ? "#9CCAFF" : ""
                                         }}
                                         >
                                             <Box

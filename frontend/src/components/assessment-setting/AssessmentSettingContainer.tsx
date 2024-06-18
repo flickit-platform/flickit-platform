@@ -126,6 +126,7 @@ const AssessmentSettingContainer = () => {
                             expanded={expanded}
                             onClose={handleClose}
                             listOfRoles={listOfRoles}
+                            listOfUser={listOfUser}
                             assessmentId={assessmentId}
                             fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
                             title={<Trans i18nKey={"addNewMember"}/>}
