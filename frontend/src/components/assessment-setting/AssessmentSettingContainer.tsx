@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
@@ -25,6 +25,8 @@ const AssessmentSettingContainer = () => {
     const {assessmentId = ""} = useParams();
     const [expanded, setExpanded] = useState<boolean>(false);
     const [expandedRemoveModal, setExpandedRemoveModal] = useState<{display: boolean,name: string, id: string}>({display:false,name:"", id:""});
+    const [listOfUser,setListOfUser] = useState([])
+    const [changeData,setChangeData] = useState(false)
 
     const { state } = useLocation();
     const fetchAssessmentsRoles = useQuery<RolesType>({
@@ -53,6 +55,16 @@ const AssessmentSettingContainer = () => {
         toastErrorOptions: {filterByStatus: [404]},
     });
 
+    useEffect(()=>{
+     (
+         async ()=>{
+             const {items} = await fetchAssessmentsUserListRoles.query()
+             setListOfUser(items)
+         }
+     )()
+    },[changeData])
+
+
     const handleClickOpen = () => {
         setExpanded(true);
     };
@@ -73,11 +85,10 @@ const AssessmentSettingContainer = () => {
             queryBatchData={[
                 fetchPathInfo,
                 fetchAssessmentsRoles,
-                fetchAssessmentsUserListRoles,
                 AssessmentInfo
             ]}
             renderLoading={() => <LoadingSkeletonOfAssessmentRoles/>}
-            render={([pathInfo = {},roles = {}, listOfUser = {}, assessmentInfo = {}]) => {
+            render={([pathInfo = {},roles = {}, assessmentInfo = {}]) => {
                 const {space, assessment: {title}} = pathInfo;
                 const {items: listOfRoles} = roles;
 
@@ -118,6 +129,7 @@ const AssessmentSettingContainer = () => {
                                     fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
                                     openModal={handleClickOpen}
                                     openRemoveModal={ handleOpenRemoveModal}
+                                    setChangeData={setChangeData}
                                 />
 
                             </Grid>
@@ -132,6 +144,7 @@ const AssessmentSettingContainer = () => {
                             title={<Trans i18nKey={"addNewMember"}/>}
                             cancelText={<Trans i18nKey={"cancel"}/>}
                             confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
+                            setChangeData={setChangeData}
                         />
                         <ConfirmRemoveMemberDialog
                             expandedRemoveDialog={expandedRemoveModal}
@@ -139,6 +152,7 @@ const AssessmentSettingContainer = () => {
                             assessmentId={assessmentId}
                             fetchAssessmentsUserListRoles={fetchAssessmentsUserListRoles.query}
                             assessmentName ={title}
+                            setChangeData={setChangeData}
                         />
                     </Box>
                 );

@@ -21,12 +21,12 @@ import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 
 const AddMemberDialog = (props: {
-    expanded: boolean, onClose: () => void,listOfUser: any,
+    expanded: boolean, onClose: () => void,listOfUser: any,setChangeData?: any
     title: any, cancelText: any, confirmText: any
     listOfRoles: any[], assessmentId: any, fetchAssessmentsUserListRoles: any
 }) => {
     const {
-        expanded, onClose, title, cancelText, confirmText,
+        expanded, onClose, title, cancelText, confirmText,setChangeData,
         listOfRoles = [],listOfUser, assessmentId, fetchAssessmentsUserListRoles
     } = props;
 
@@ -67,8 +67,7 @@ const AddMemberDialog = (props: {
                 const {data} = await spaceMembersQueryData
                 if (data) {
                     const {items} = data
-                    const {items : userList} = listOfUser
-                    const filtredItems = items.filter((item :any) => !userList.some((userListItem :any) => item.id === userListItem.id));
+                    const filtredItems = items.filter((item :any) => !listOfUser.some((userListItem :any) => item.id === userListItem.id));
                     setMemberOfSpace(filtredItems)
                 }
             } catch (e) {
@@ -87,7 +86,8 @@ const AddMemberDialog = (props: {
     const onConfirm = async (e: any) => {
         try {
             await addRoleMemberQueryData.query()
-            await fetchAssessmentsUserListRoles()
+            // await fetchAssessmentsUserListRoles()
+            setChangeData((prev: boolean) => !prev)
             closeDialog()
         } catch (e) {
             const err = e as ICustomError;
