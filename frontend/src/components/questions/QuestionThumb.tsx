@@ -23,7 +23,7 @@ export const QuestionThumb = (props: any) => {
           <Trans i18nKey={"question"} /> {questionIndex}/
           {total_number_of_questions}
         </Typography>
-        <Typography variant="h6" fontFamily={"Roboto"}>
+        <Typography variant="h6" fontFamily={"Ubuntu"}>
           {question?.title}
         </Typography>
       </Box>

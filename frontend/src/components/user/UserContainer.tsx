@@ -76,7 +76,7 @@ const UserContainer = () => {
                   <Typography
                     sx={{ opacity: 0.85 }}
                     fontSize={"1rem"}
-                    fontFamily="Roboto"
+                    fontFamily="Ubuntu"
                     letterSpacing=".05rem"
                   >
                     <Trans i18nKey="signOutOfYourAccount" />

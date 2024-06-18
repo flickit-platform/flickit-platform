@@ -321,7 +321,7 @@ const AssessmentKitSectionGeneralInfo = (
                               <Box
                                 sx={{
                                   background: "#00000014",
-                                  fontFamily: "Roboto",
+                                  fontFamily: "Ubuntu",
                                   fontSize: "0.875rem",
                                   borderRadius: "8px",
                                   fontWeight: "700",
@@ -555,7 +555,7 @@ const OnHoverInput = (props: any) => {
                 minHeight: "38px",
                 borderRadius: "4px",
                 paddingRight: "12px;",
-                fontFamily: "Roboto",
+                fontFamily: "Ubuntu",
                 fontWeight: "700",
                 fontSize: "0.875rem",
               }}
@@ -1155,7 +1155,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                   <Box
                     sx={{
                       background: "#00000014",
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontSize: "0.875rem",
                       borderRadius: "8px",
                       fontWeight: "700",

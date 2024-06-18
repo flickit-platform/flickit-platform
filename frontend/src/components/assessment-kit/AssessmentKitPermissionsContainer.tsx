@@ -113,7 +113,7 @@ const AssessmentKitPermisson = (props: any) => {
             mb={2}
             titleProps={{
               fontSize: "1rem",
-              fontFamily: "Roboto",
+              fontFamily: "Ubuntu",
               textTransform: "unset",
               letterSpacing: ".05rem",
             }}
@@ -128,7 +128,7 @@ const AssessmentKitPermisson = (props: any) => {
             mb={2}
             titleProps={{
               fontSize: "1rem",
-              fontFamily: "Roboto",
+              fontFamily: "Ubuntu",
               textTransform: "unset",
               letterSpacing: ".05rem",
             }}

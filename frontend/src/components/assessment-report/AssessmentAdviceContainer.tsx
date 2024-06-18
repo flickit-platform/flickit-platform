@@ -474,7 +474,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       justifyContent: "space-between",
                       alignItems: "center",
 
-                      fontFamily: `${isFarsi ? "Vazirmatn" : "Roboto"}`,
+                      fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
                     }}
                   >
                     <Box

@@ -145,7 +145,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Typography
             component={Link}
             variant="h6"
-            fontFamily={"Roboto"}
+            fontFamily={"Ubuntu"}
             to={`/${spaceId}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
@@ -178,7 +178,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         <Box ml="auto" sx={{ ...styles.centerV }}>
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
             <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
               {membersCount}
             </Typography>
           </Box>
@@ -187,7 +187,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
               sx={{ mr: 0.5, opacity: 0.8 }}
               fontSize="small"
             />
-            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
               {assessmentsCount}
             </Typography>
           </Box>

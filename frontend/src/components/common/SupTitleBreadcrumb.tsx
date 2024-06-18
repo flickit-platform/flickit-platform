@@ -42,7 +42,7 @@ const SupTitleBreadcrumb = (
                 ...styles.centerV,
                 cursor: "pointer",
                 fontSize: "0.8rem",
-                fontFamily: "Roboto",
+                fontFamily: "Ubuntu",
                 fontWeight: "bold",
                 opacity: 0.8,
                 letterSpacing: "0.085em",

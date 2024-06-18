@@ -62,7 +62,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
                 xs: "1.05rem",
                 sm: "1.1rem",
                 md: "1.2rem",
-                fontFamily: "Roboto",
+                fontFamily: "Ubuntu",
               },
               fontWeight: "bold",
               textDecoration: "none",
