@@ -15,9 +15,11 @@ interface ISupTitleBreadcrumbProps {
     sup?: string;
     to?: string;
     icon?: JSX.Element;
-    title: string | JSX.Element;
+    title?: string | JSX.Element;
   }[];
   displayChip?: boolean;
+  colorSetting?: string;
+  bgColorSetting?: string;
 }
 
 const SupTitleBreadcrumb = (
@@ -66,9 +68,11 @@ const SupTitleBreadcrumb = (
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
-                      ? "#D0E4FF"
+                      ? rest.bgColorSetting ? rest.bgColorSetting : "rgba(210, 243, 243, 1)"
                       : "rgba(206, 211, 217, 0.4)",
-                    color: isActive ? "#004F83" : "rgba(157, 167, 179, 1)",
+                    color: isActive
+                      ? rest.colorSetting ? rest.colorSetting : "rgba(28, 194, 196, 1)"
+                      : "rgba(157, 167, 179, 1)",
                     textTransform: "none",
                   }}
                 />

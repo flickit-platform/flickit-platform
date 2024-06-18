@@ -234,20 +234,15 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       <Box
                         sx={{
                           mr: 2,
-                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
+                          color: "#fff",
                         }}
                       >
                         <Typography>
-                          {disabledConfidence ? (
                             <Trans i18nKey={"selcetYourConfidenceLevel"} />
-                          ) : (
-                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
-                          )}
                         </Typography>
                       </Box>
                     )}
                     <Rating
-                      disabled={disabledConfidence}
                       value={
                         selcetedConfidenceLevel !== null
                           ? selcetedConfidenceLevel
@@ -416,8 +411,8 @@ const AnswerTemplate = (props: {
     if (
       submitOnAnswerSelection &&
       value &&
-      changeHappened.current &&
-      selcetedConfidenceLevel
+      changeHappened.current
+      // && selcetedConfidenceLevel
     ) {
       submitQuestion();
     }
@@ -543,7 +538,6 @@ const AnswerTemplate = (props: {
           variant="contained"
           color={"info"}
           loading={isSubmitting}
-          disabled={(value || notApplicable) && !selcetedConfidenceLevel}
           sx={
             is_farsi
               ? {
