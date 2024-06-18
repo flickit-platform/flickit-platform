@@ -293,6 +293,7 @@ export const AssessmentSettingMemberBox = (props: {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead
                                 sx={{width: '100%', overflow: 'hidden'}}
+                                style={{ position: "sticky" , top :0,  zIndex: 3, backgroundColor: "#fff"}}
                             >
                                 <TableRow sx={{display: "inline", justifyContent: 'center', width: "100%"}}>
                                     {columns.map((column) => (
@@ -312,8 +313,8 @@ export const AssessmentSettingMemberBox = (props: {
                                         </TableCell>
                                     ))}
                                 </TableRow>
+                                <Divider sx={{width: "100%"}}/>
                             </TableHead>
-                            <Divider sx={{width: "100%"}}/>
                             <TableBody>
                                 {listOfUser && listOfUser?.items
                                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
