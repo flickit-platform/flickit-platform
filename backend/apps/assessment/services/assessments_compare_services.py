@@ -86,7 +86,7 @@ def __get_assessment_details(assessment: DictObject, assessment_progres: DictObj
     assessment_data["title"] = assessment.title
     assessment_data["maturityLevel"] = __get_maturity_level_details_for_assessment(assessment.maturityLevel,
                                                                                    assessment.assessmentKit.maturityLevelCount)
-    assessment_data["assessmentKit"] = assessment.assessmentKit.title
+    assessment_data["assessmentKit"] = {"id": assessment.assessmentKit.id, "title": assessment.assessmentKit.title}
     assessment_data["progress"] = __get_assessment_progres(assessment_progres)
     return assessment_data
 
@@ -120,7 +120,7 @@ def __get_attributes_details_for_subject(subject_response, assessment, attribute
                      "title": attribute["maturityLevel"]["title"],
                      "value": attribute["maturityLevel"]["value"],
                      "index": attribute["maturityLevel"]["index"],
-                    }
+                 }
                  }
             )
             attributes_list.append(attributes_details)
