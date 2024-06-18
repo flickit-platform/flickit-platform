@@ -168,15 +168,16 @@ export const AssessmentSettingGeneralBox = (props:{AssessmentInfo: any ,Assessme
 
 export const AssessmentSettingMemberBox = (props: {
     listOfRoles: any[],
-    listOfUser: any,
+    listOfUser: any[],
     fetchAssessmentsUserListRoles: () => void,
     openModal: () => void,
     openRemoveModal: (id: string,name: string) => void,
+    setChangeData?: any
 }) => {
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
     const {listOfRoles = [], listOfUser, fetchAssessmentsUserListRoles,
-        openModal, openRemoveModal} = props
+        setChangeData, openModal, openRemoveModal} = props
 
     // const [page, setPage] = React.useState(0);
     // const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -211,7 +212,8 @@ export const AssessmentSettingMemberBox = (props: {
             const {id: roleId} = value
             const {id: userId} = name
             await editUserRole.query({userId, roleId})
-            await fetchAssessmentsUserListRoles()
+            setChangeData((prev : boolean) => ! prev)
+            // await fetchAssessmentsUserListRoles()
         }catch (e){
             const err = e as ICustomError;
             toastError(err);
@@ -287,7 +289,7 @@ export const AssessmentSettingMemberBox = (props: {
                 </Box>
                 <Divider sx={{width: "100%", marginTop: "24px"}}/>
                 {/*<Paper sx={{width: '100%', overflow: 'hidden'}}>*/}
-                    <TableContainer sx={{maxHeight: 440,'&::-webkit-scrollbar': {
+                    <TableContainer sx={{maxHeight: 840,'&::-webkit-scrollbar': {
                             display : "none"
                         },}}>
                         <Table stickyHeader aria-label="sticky table">
@@ -316,7 +318,7 @@ export const AssessmentSettingMemberBox = (props: {
                                 <Divider sx={{width: "100%"}}/>
                             </TableHead>
                             <TableBody>
-                                {listOfUser && listOfUser?.items
+                                {listOfUser.length > 0 && listOfUser
                                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: any) => {
                                         return (
