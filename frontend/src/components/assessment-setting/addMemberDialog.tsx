@@ -221,7 +221,7 @@ const AddMemberDialog = (props: {
                                     }}
                                 >
                                     <Typography
-                                    sx={{fontSize:"0.875rem"}}
+                                    sx={{fontSize:"0.7rem",paddingX: "0.5rem"}}
                                     ><Trans i18nKey={"whoWantToAdd"} /></Typography>
                                 </Box>
                                 {memberOfSpace && memberOfSpace.length > 0 && memberOfSpace.map((member: any, index: number) => (
@@ -333,9 +333,14 @@ const AddMemberDialog = (props: {
                                             id={role.id}
                                             sx={{maxWidth: "240px",
                                                 "&.MuiMenuItem-root:hover":{
-                                                    backgroundColor: '#EFEDF0',
-                                                    color:"#1B1B1E"
+                                                    ...(roleSelected?.title == role.title ? {
+                                                        backgroundColor: "#9CCAFF",
+                                                        color:"#004F83"
+                                                    } : {backgroundColor: '#EFEDF0',
+                                                        color:"#1B1B1E"
+                                                    }),
                                                 },
+                                               background: roleSelected?.title == role.title ? "#9CCAFF" : ""
                                         }}
                                         >
                                             <Box
