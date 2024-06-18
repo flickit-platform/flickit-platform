@@ -98,14 +98,14 @@ const SUbjectAttributeCard = (props: any) => {
             {/* <Box mt={3}>
               <Typography
                 fontSize="1.15rem"
-                fontFamily="Roboto"
+                fontFamily="Ubuntu"
                 fontWeight={"bold"}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
               >
                 <Trans i18nKey={"withConfidence"} />
                 <Typography
                   component="span"
-                  fontFamily="Roboto"
+                  fontFamily="Ubuntu"
                   fontWeight={"bold"}
                   color="#3596A1"
                   fontSize="1.12rem"
@@ -116,7 +116,7 @@ const SUbjectAttributeCard = (props: any) => {
                 <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
                 <Typography
                   component="span"
-                  fontFamily="Roboto"
+                  fontFamily="Ubuntu"
                   fontWeight={"bold"}
                   color="#6035A1"
                   fontSize="1.2rem"
@@ -128,7 +128,7 @@ const SUbjectAttributeCard = (props: any) => {
               </Typography>
             </Box> */}
             {/* <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
-              <Typography fontSize="1.05rem" fontFamily="Roboto">
+              <Typography fontSize="1.05rem" fontFamily="Ubuntu">
                 {description}
               </Typography>
             </Box> */}
@@ -724,7 +724,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -742,7 +742,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -760,7 +760,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -779,7 +779,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -798,7 +798,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -812,7 +812,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
+                                          fontFamily: "Ubuntu",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -950,7 +950,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         <Box sx={{ width: "15%" }}>
                                           <Typography
                                             variant="body1"
-                                            fontFamily="Roboto"
+                                            fontFamily="Ubuntu"
                                             fontWeight="bold"
                                             textAlign="center"
                                           >

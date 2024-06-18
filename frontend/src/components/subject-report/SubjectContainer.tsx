@@ -324,17 +324,17 @@ const NoInsightYetMessage = (props: {
         }}
       >
         {no_insight_yet_message ? (
-          <Typography variant="h4" fontFamily={"Roboto"}>
+          <Typography variant="h4" fontFamily={"Ubuntu"}>
             {no_insight_yet_message}
           </Typography>
         ) : (
           <>
-            <Typography variant="h4" fontFamily={"Roboto"}>
+            <Typography variant="h4" fontFamily={"Ubuntu"}>
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
             <Typography
               variant="h5"
-              fontFamily={"Roboto"}
+              fontFamily={"Ubuntu"}
               fontWeight="300"
               sx={{ mt: 2 }}
             >
