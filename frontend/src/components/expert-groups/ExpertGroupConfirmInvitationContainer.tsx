@@ -63,7 +63,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
               m: "auto",
             }}
           >
-            <Title size="small" textTransform={"none"} fontFamily="Roboto">
+            <Title size="small" textTransform={"none"} fontFamily="Ubuntu">
               <Trans i18nKey="youHaveBeenInvitedToExpertGroup" />
             </Title>
             <Box my={3}>

@@ -107,7 +107,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     sx={{
                       fontSize: { xs: "24px", sm: "32px", md: "48px" },
                       mb: 1,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#004F83",
                     }}
@@ -119,7 +119,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     sx={{
                       fontSize: "24px",
                       mb: 4,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#004F83",
                     }}
@@ -132,7 +132,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       opacity: 0.8,
                       fontSize: "16px",
                       mb: 4,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#0A2342",
                     }}
@@ -148,7 +148,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     sx={{
                       fontSize: { xs: "24px", sm: "32px", md: "48px" },
                       mb: 1,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#D81E5B",
                     }}
@@ -160,7 +160,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     sx={{
                       fontSize: "24px",
                       mb: 4,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#D81E5B",
                     }}
@@ -173,7 +173,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       opacity: 0.8,
                       fontSize: "16px",
                       mb: 4,
-                      fontFamily: "Roboto",
+                      fontFamily: "Ubuntu",
                       fontWeight: 600,
                       color: "#0A2342",
                     }}
@@ -190,7 +190,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       sx={{
                         fontSize: { xs: "24px", sm: "32px", md: "48px" },
                         mb: 1,
-                        fontFamily: "Roboto",
+                        fontFamily: "Ubuntu",
                         fontWeight: 600,
                         color: "#F9A03F",
                       }}
@@ -202,7 +202,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       sx={{
                         fontSize: { xs: "14px", sm: "16px", md: "24px" },
                         mb: 4,
-                        fontFamily: "Roboto",
+                        fontFamily: "Ubuntu",
                         fontWeight: 600,
                         color: "#F9A03F",
                       }}
@@ -222,7 +222,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         opacity: 0.8,
                         fontSize: "16px",
                         mb: 4,
-                        fontFamily: "Roboto",
+                        fontFamily: "Ubuntu",
                         fontWeight: 600,
                         color: "#0A2342",
                       }}
@@ -299,7 +299,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
+                      fontFamily={`${is_farsi ? "Vazirmatn" : "Ubuntu"}`}
                       fontWeight="bold"
                       letterSpacing={is_farsi ? "0" : ".05em"}
                     >
@@ -317,7 +317,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily={`${is_farsi ? "Vazirmatn" : "Roboto"}`}
+                        fontFamily={`${is_farsi ? "Vazirmatn" : "Ubuntu"}`}
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >
@@ -336,7 +336,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily="Roboto"
+                        fontFamily="Ubuntu"
                         fontWeight="bold"
                       >
                         <Trans i18nKey={"markedAsNotApplicable"} />
@@ -357,7 +357,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                           <Typography sx={{ display: "flex" }}>
                             <Typography
                               variant="h6"
-                              fontFamily="Roboto"
+                              fontFamily="Ubuntu"
                               fontWeight="bold"
                             >
                               {question.answer.confidenceLevel.title}

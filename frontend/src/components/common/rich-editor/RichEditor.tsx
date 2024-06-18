@@ -83,7 +83,7 @@ const RichEditor = (props: IRichEditorProps) => {
     event.target.dir = farsiPattern.test(firstCharacter) ? "rtl" : "ltr";
     event.target.style.fontFamily = farsiPattern.test(firstCharacter)
       ? "VazirMatn"
-      : "Roboto";
+      : "Ubuntu";
   };
   return (
     <Box
@@ -94,7 +94,7 @@ const RichEditor = (props: IRichEditorProps) => {
           ? {
               ...(boxProps.sx || {}),
               direction: `${isFarsi ? "rtl" : "ltr"}`,
-              fontFamily: `  ${isFarsi ? "VazirMatn" : "Roboto"}`,
+              fontFamily: `  ${isFarsi ? "VazirMatn" : "Ubuntu"}`,
               position: "relative",
               marginTop: "0px !important",
               width: "100%",

@@ -62,12 +62,12 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Ubuntu";
       inputRef?.current?.focus();
     }
     if(inputRef.current && !isFocused){
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Ubuntu";
     }
   }, [inputRef.current?.value,isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
-      event.target.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      event.target.style.fontFamily = isFarsi ? "VazirMatn" : "Ubuntu";
     }
     if (type === "password" && inputRef.current) {
       inputRef?.current?.focus();

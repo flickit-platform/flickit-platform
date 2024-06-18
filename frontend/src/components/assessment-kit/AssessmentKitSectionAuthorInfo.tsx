@@ -28,7 +28,7 @@ const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) 
             <AccountBoxRoundedIcon fontSize="inherit" />
           </Box>
           <Box py={1} ml={1}>
-            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
               {data.assessmentkitInfos.authorInfos.name}
             </Typography>
             <Box sx={{ ...styles.centerV }}>

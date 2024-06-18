@@ -89,7 +89,7 @@ export const SpaceMembers = (props: any) => {
           mb={2}
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Roboto",
+            fontFamily: "Ubuntu",
             textTransform: "unset",
             letterSpacing: ".05rem",
           }}
@@ -143,14 +143,14 @@ export const SpaceMembers = (props: any) => {
           size="small"
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Roboto",
+            fontFamily: "Ubuntu",
             textTransform: "capitalize",
             letterSpacing: ".05rem",
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-              <Typography fontFamily="Roboto" fontWeight={"bold"}>
+              <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
                 {
                   spaceMembersQueryData?.data?.items?.length
                 }
@@ -258,7 +258,7 @@ export const SpaceMembers = (props: any) => {
                               titleProps={{
                                 textTransform: "none",
                                 fontSize: ".95rem",
-                                fontFamily: "Roboto",
+                                fontFamily: "Ubuntu",
                               }}
                           >
                             <Trans i18nKey="invitees" />

@@ -91,7 +91,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             borderRadius: 3,
             width: "100%",
             height: progressHeight ? progressHeight : "12px",
-            border: numaratur !== null ? `1px solid ${percentColor}`:"transparent",
+            border: numaratur !== null ? `1px solid ${percentColor}` : "transparent",
           }}
           value={totalProgress}
           variant="determinate"
@@ -122,7 +122,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
               color={percentColor}
               mx="0.5rem"
               fontWeight={300}
-              fontSize="1rem"
+              fontSize={{ md: "1rem", xs: "0.7rem" }}
             >
               {totalProgress != null && Math.ceil(totalProgress)}
               {totalProgress != null ? "%" : ""}
