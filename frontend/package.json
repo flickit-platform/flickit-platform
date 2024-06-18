@@ -15,7 +15,7 @@
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
     "@fontsource/oswald": "4.5.12",
-    "@fontsource/Ubuntu": "4.5.8",
+    "@fontsource/roboto": "4.5.8",
     "@mui/icons-material": "5.11.0",
     "@mui/lab": "5.0.0-alpha.119",
     "@mui/material": "5.11.8",
