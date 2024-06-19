@@ -71,7 +71,7 @@ const CompareResult = (props: ICompareResultProps) => {
           </Title>
           <Divider />
           <Box>
-            <CompareTable data={data} isSubject={true}/>
+            <CompareTable data={data} isSubject={true} />
           </Box>
         </Box>
       </Box>
@@ -86,7 +86,9 @@ const CompareResultCommonBaseInfo = (props: { data: any }) => {
   return (
     <AlertBox severity="info" sx={{ mb: 3 }}>
       <Trans i18nKey={"allOfTheSelectedAssessmentsUse"} />
-      <Chip sx={{ mx: 0.6 }} label={assessmentKit} />{" "}
+      <MuiLink href={`/assessment-kits/${assessmentKit.id}`} sx={{ mx: 0.6 }}>
+        <Chip sx={{ mx: 0.6 }} label={assessmentKit.title} />{" "}
+      </MuiLink>{" "}
       <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
       {subjects.map((subject: any) => (
         <MuiLink href={`#${subject.title}`} sx={{ mx: 0.6 }}>
