@@ -129,7 +129,7 @@ const DeleteAssessmentIconBtn = (props: {
     );
     dispatch(compareActions.setAssessmentKit(filteredData));
     if (newAssessmentIds.length === 0) {
-      dispatch(compareActions.setAssessmentKit(null));
+      dispatch(compareActions.setAssessmentKit([]));
     }
     dispatch(compareActions.setAssessmentIds(newAssessmentIds));
   };
