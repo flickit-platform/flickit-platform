@@ -51,7 +51,7 @@ export const AssessmentMostSignificantAttributes = (props: IAssessmentMostSignif
             most_significant_items.map((item:any, index:number) => {
               return (
                 <Box sx={{ ...styles.centerV }} mb={1} key={index}>
-                  <CircleRoundedIcon fontSize="inherit" sx={{ opacity: 0.5, fontSize: "8px" }} />
+                  <CircleRoundedIcon fontSize="inherit" sx={{ opacity: 0.5, fontSize: "0.5rem" }} />
                   <Typography textTransform={"uppercase"} fontWeight="bold" sx={{ ml: 1 }}>
                     {item?.title}
                   </Typography>

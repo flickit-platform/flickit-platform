@@ -180,7 +180,7 @@ export const AssessmentSubjectAccordion = (
                 ...styles.centerCVH,
                 gap: 2,
                 width: "100%",
-                mt: { xs: "-72px", sm: "-72px", md:"0"},
+                mt: { xs: "-72px", sm: "-72px", md: "0" },
               }}
             >
               <Typography
@@ -256,7 +256,7 @@ export const AssessmentSubjectAccordion = (
                       gap={1}
                       key={element.id}
                     >
-                      <Typography fontWeight="bold" fontSize="14px">
+                      <Typography fontWeight="bold" fontSize="0.875rem">
                         {element.title}
                       </Typography>
                       <Box display="flex" alignItems="center" gap={0.5}>
@@ -268,7 +268,7 @@ export const AssessmentSubjectAccordion = (
                               ],
                           }}
                           fontWeight="bold"
-                          fontSize="14px"
+                          fontSize="0.875rem"
                         >
                           {element.maturityLevel.title}
                         </Typography>
@@ -297,7 +297,7 @@ export const AssessmentSubjectAccordion = (
               borderBottomLeftRadius: "32px",
               padding: 2,
               textTransform: "none",
-              fontSize: 24,
+              fontSize: "1.5rem",
               backgroundColor: "#D0E4FF",
               borderColor: "#D0E4FF",
               color: "#004F83",
@@ -335,7 +335,7 @@ const SubjectStatus = (
         {hasStats ? (
           <Gauge
             maturity_level_number={5}
-            isMobileScreen={true}
+            isMobileScreen={isMobileScreen ? false : true}
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             hideGuidance={true}

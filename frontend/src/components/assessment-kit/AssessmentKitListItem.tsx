@@ -58,12 +58,6 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           <Typography
             variant="h6"
             sx={{
-              fontSize: {
-                xs: "1.05rem",
-                sm: "1.1rem",
-                md: "1.2rem",
-                fontFamily: "Ubuntu",
-              },
               fontWeight: "bold",
               textDecoration: "none",
               height: "100%",

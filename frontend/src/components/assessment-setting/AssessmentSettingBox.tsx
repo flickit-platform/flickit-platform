@@ -599,7 +599,6 @@ const OnHoverInputTitleSetting = (props: any) => {
                                 minHeight: "38px",
                                 borderRadius: "4px",
                                 paddingRight: "12px;",
-                                fontFamily: "Ubuntu",
                                 fontWeight: "700",
                                 fontSize: "0.875rem",
                                 "&.MuiOutlinedInput-notchedOutline": { border: 0 },

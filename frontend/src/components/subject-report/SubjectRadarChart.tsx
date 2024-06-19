@@ -34,14 +34,6 @@ const SubjectRadar = (props: any) => {
     return convertToSubjectChartData(res);
   }, [loaded]);
 
-  const getFontSize = () => {
-    const width = window.innerWidth;
-    if (width < 600) {
-      return "8px";
-    } else {
-      return "12px";
-    }
-  };
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
@@ -55,7 +47,7 @@ const SubjectRadar = (props: any) => {
                 verticalAnchor="middle"
                 y={y + (y - cy) / 15}
                 x={x + (x - cx) / 15}
-                style={{ fontSize: getFontSize() }}
+                fontSize="1.25rem"
               >
                 {payload.value}
               </Text>

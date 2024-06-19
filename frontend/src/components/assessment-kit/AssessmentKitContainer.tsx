@@ -348,8 +348,8 @@ const AssessmentKit = (props: any) => {
                       <Box
                         sx={{
                           background: colorCode,
-                          fontSize: "14px",
-                          py: { xs: "2px", md: 1 },
+                          fontSize: "0.825rem",
+                          py: { xs: "0.16rem", md: 1 },
                           px: { xs: 1, md: 4 },
                           fontWeight: "bold",
                           color: "#fff",
@@ -400,7 +400,7 @@ const AssessmentKit = (props: any) => {
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box component="span" fontSize={14}>
+                              <Box component="span" fontSize="0.825rem">
                                 {att.description}
                               </Box>
                             </Typography>

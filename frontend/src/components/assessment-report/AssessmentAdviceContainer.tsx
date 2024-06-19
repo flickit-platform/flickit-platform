@@ -103,7 +103,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 py: 4,
                 textAlign: "center",
                 color: "#fff",
-                fontSize: "32px",
+                fontSize: "2rem",
                 fontWeight: "700",
                 borderRadius: "32px 32px 0 0",
               }}
@@ -122,7 +122,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   color: "#6C7B8E",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   fontWeight: "500",
                   display: "flex",
                   textAlign: "center",
@@ -231,7 +231,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     px: 2,
                     py: 1,
                     borderRadius: "16px",
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     fontWeight: "700",
                     width: "fit-content",
                     mr: 2,
@@ -248,7 +248,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     px: 2,
                     py: 1,
                     borderRadius: "16px",
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     fontWeight: "700",
                     width: "fit-content",
                     "&:hover": {
@@ -279,7 +279,7 @@ const AssessmentAdviceContainer = (props: any) => {
         >
           <Box
             sx={{
-              fontSize: "64px",
+              fontSize: "4rem",
               fontWeight: "700",
               color: "#004F83",
               textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
@@ -297,7 +297,7 @@ const AssessmentAdviceContainer = (props: any) => {
 
           <Box
             sx={{
-              fontSize: "16px",
+              fontSize: "1rem",
               fontWeight: "400",
               color: "#0A2342",
               margin: "0 auto",
@@ -328,7 +328,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 px: 5,
                 py: 1,
                 borderRadius: "16px",
-                fontSize: "16px",
+                fontSize: "1rem",
                 fontWeight: "700",
                 width: "fit-content",
                 "&:hover": {
@@ -345,7 +345,7 @@ const AssessmentAdviceContainer = (props: any) => {
           <>
             <Box
               sx={{
-                fontSize: "32px",
+                fontSize: "2rem",
                 fontWeight: "700",
                 color: "#0A2342",
                 textShadow: "0px 0px 11.2px rgba(10, 35, 66, 0.30)",
@@ -392,7 +392,7 @@ const AssessmentAdviceContainer = (props: any) => {
             >
               <Box
                 sx={{
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -404,7 +404,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   width: "40%",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -415,7 +415,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   width: "10%",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -426,7 +426,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   width: "10%",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -437,7 +437,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   width: "15%",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -448,7 +448,7 @@ const AssessmentAdviceContainer = (props: any) => {
               <Box
                 sx={{
                   width: "10%",
-                  fontSize: "16px",
+                  fontSize: "1rem",
                   color: "#9DA7B3",
                   fontWeight: "700",
                   textAlign: "center",
@@ -479,7 +479,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   >
                     <Box
                       sx={{
-                        fontSize: "64px",
+                        fontSize: "4rem",
                         color: "#004F83",
                         fontWeight: "700",
                         width: "fit-content",
@@ -491,7 +491,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       sx={{
                         width: "40%",
                         color: "#0A2342",
-                        fontSize: "16px",
+                        fontSize: "1rem",
                         fontWeight: "700",
                         direction: isFarsi ? "rtl" : "ltr",
                         textAlign: "left",
@@ -503,7 +503,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       sx={{
                         width: "10%",
                         color: "#0A2342",
-                        fontSize: "14px",
+                        fontSize: ".875rem",
                         fontWeight: "300",
                         textAlign: "center",
                       }}
@@ -515,7 +515,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       sx={{
                         width: "10%",
                         color: "#0A2342",
-                        fontSize: "14px",
+                        fontSize: ".875rem",
                         fontWeight: "300",
                         textAlign: "center",
                       }}
@@ -539,7 +539,7 @@ const AssessmentAdviceContainer = (props: any) => {
                               color: attributeColorPallet[Math.ceil(index % 3)],
                               background:
                                 attributeBGColorPallet[Math.ceil(index % 3)],
-                              fontSize: "11px",
+                              fontSize: ".75rem",
                               border: `1px solid  ${
                                 attributeColorPallet[Math.ceil(index % 3)]
                               }`,
@@ -557,7 +557,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       sx={{
                         width: "10%",
                         color: "#004F83",
-                        fontSize: "14px",
+                        fontSize: ".875rem",
                         fontWeight: "500",
                         // textDecoration: "underline",
                         display: "flex",

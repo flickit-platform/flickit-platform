@@ -57,7 +57,6 @@ const CompareTable = (props: {
 };
 
 const textStyle = {
-  fontFamily: "Ubuntu",
   fontSize: "1.1rem",
   fontWeight: "bolder",
 };

@@ -45,7 +45,7 @@ const SubjectOverallInsight = ({ data }: any) => {
             ml={{ lg: 4 }}
             m={{ sm: 2, xs: 2 }}
           >
-            <Grid container >
+            <Grid container>
               {attributes.map((element: any) => (
                 <Grid item lg={6} md={6} sm={12} xs={12} key={element.id}>
                   <Box
@@ -59,7 +59,7 @@ const SubjectOverallInsight = ({ data }: any) => {
                   >
                     <Typography
                       fontWeight="500"
-                      fontSize={{ lg: "1.5rem", xs: "1rem" }}
+                      fontSize="1.5rem"
                       textAlign="center"
                     >
                       {element.title}

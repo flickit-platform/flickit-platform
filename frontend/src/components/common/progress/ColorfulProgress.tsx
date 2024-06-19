@@ -91,7 +91,8 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             borderRadius: 3,
             width: "100%",
             height: progressHeight ? progressHeight : "12px",
-            border: numaratur !== null ? `1px solid ${percentColor}` : "transparent",
+            border:
+              numaratur !== null ? `1px solid ${percentColor}` : "transparent",
           }}
           value={totalProgress}
           variant="determinate"
@@ -102,7 +103,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             component="span"
             color="white"
             fontWeight={500}
-            fontSize={{ md: "0.8rem", xs: "0.5rem" }}
+            fontSize="0.8rem"
             textAlign="center"
             sx={{
               position: "absolute",

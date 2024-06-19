@@ -39,14 +39,14 @@ const Gauge = (props: IGaugeProps) => {
     const maxLength = 14; // Example threshold for maximum length
     const minLength = 8; // Example threshold for minimum length
     let maxFontSizeRem = 1.5; // 24px / 16 = 1.5rem
-    let minFontSizeRem = 1.125; // 18px / 16 = 1.125rem
+    let minFontSizeRem = 1.25; // 18px / 16 = 1.125rem
     if (isMobileScreen) {
-      maxFontSizeRem = 1.5;
-      minFontSizeRem = 1.25;
+      maxFontSizeRem = 1.35;
+      minFontSizeRem = 1.125;
     }
     if (hideGuidance && !isMobileScreen) {
       maxFontSizeRem = 3;
-      minFontSizeRem = 2.5;
+      minFontSizeRem = 2.25;
     }
 
     if (length <= minLength) return `${maxFontSizeRem}rem`;
@@ -82,7 +82,11 @@ const Gauge = (props: IGaugeProps) => {
           position="absolute"
         >
           {!hideGuidance && (
-            <Typography variant="subtitle2" color="black">
+            <Typography
+              variant="subtitle2"
+              color="black"
+              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "1rem" }}
+            >
               <Trans i18nKey="thisSystemIsIn" />
             </Typography>
           )}
@@ -95,7 +99,11 @@ const Gauge = (props: IGaugeProps) => {
             {maturity_level_status}
           </Typography>
           {!hideGuidance && (
-            <Typography variant="subtitle2" color="black">
+            <Typography
+              variant="subtitle2"
+              color="black"
+              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "1rem" }}
+            >
               <Trans i18nKey="shape" />
             </Typography>
           )}

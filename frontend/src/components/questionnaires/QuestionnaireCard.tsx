@@ -47,7 +47,6 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             <Title
               // sub={last_updated && `${(<Trans i18nKey={"lastUpdated"} />)} ${last_updated}`}
               size="small"
-              fontFamily="Ubuntu"
               fontWeight={"bold"}
             >
               <Box flex="1" display="flex" alignItems={"flex-start"}>

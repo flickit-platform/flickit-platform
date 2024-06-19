@@ -84,11 +84,7 @@ const SubjectContainer = () => {
               pathInfo={pathInfo}
             />
             <Box sx={{ ...styles.centerCVH }} gap={2} textAlign="center">
-              <Typography
-                color="#004F83"
-                fontSize={{ md: "4rem", sx: "2rem", xs: "2rem" }}
-                fontWeight={700}
-              >
+              <Typography color="#004F83" fontSize="3.5rem" fontWeight={700}>
                 <Trans i18nKey="report" values={{ title: title }} />
               </Typography>
             </Box>
@@ -324,20 +320,13 @@ const NoInsightYetMessage = (props: {
         }}
       >
         {no_insight_yet_message ? (
-          <Typography variant="h4" fontFamily={"Ubuntu"}>
-            {no_insight_yet_message}
-          </Typography>
+          <Typography variant="h4">{no_insight_yet_message}</Typography>
         ) : (
           <>
-            <Typography variant="h4" fontFamily={"Ubuntu"}>
+            <Typography variant="h4">
               <Trans i18nKey="moreQuestionsNeedToBeAnswered" />
             </Typography>
-            <Typography
-              variant="h5"
-              fontFamily={"Ubuntu"}
-              fontWeight="300"
-              sx={{ mt: 2 }}
-            >
+            <Typography variant="h5" fontWeight="300" sx={{ mt: 2 }}>
               <Trans i18nKey="completeSomeOfQuestionnaires" />
             </Typography>
           </>

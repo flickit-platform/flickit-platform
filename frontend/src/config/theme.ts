@@ -57,25 +57,10 @@ const palette = createPalette({
   warning: { main: "#F9A03F", contrastText: "#fff" },
 });
 
-const baseTheme = createTheme({
-  typography: {
-    fontFamily: "Ubuntu",
-    fontSize: 16,
-  }
-});
-
 export const theme = createTheme({
   palette,
   typography: {
-    [baseTheme.breakpoints.down("md")]: {
-      fontSize: 14,
-    },
-    [baseTheme.breakpoints.down("xs")]: {
-      fontSize: 12,
-    },
-    [baseTheme.breakpoints.down("sm")]: {
-      fontSize: 10,
-    },
+    fontFamily: '"Ubuntu","sans-serif","Vazirmatn"',
     subSmall: {
       fontFamily: '"Ubuntu","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
@@ -125,6 +110,22 @@ export const theme = createTheme({
       styleOverrides: `
         html {
           scroll-behavior: smooth;
+          font-size: 16px;
+        }
+        @media (max-width: 1280px) {
+          html {
+            font-size: 14px;
+          }
+        }
+        @media (max-width: 960px) {
+          html {
+            font-size: 14px;
+          }
+        }
+        @media (max-width: 600px) {
+          html {
+            font-size: 12px;
+          }
         }
         body {
           background: #f5f5f5;

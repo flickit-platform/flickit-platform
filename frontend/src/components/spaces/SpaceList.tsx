@@ -105,19 +105,19 @@ const SpaceCard = (props: ISpaceCardProps) => {
   const { dispatch } = useAuthContext();
   const {
     title,
-    id : spaceId,
+    id: spaceId,
     membersCount = 0,
     assessmentsCount = 0,
     lastModificationTime,
     is_default_space_for_current_user,
   } = item || {};
 
-  const trackSeen = () =>{
-    service.seenSpaceList({ spaceId },{})
-  }
+  const trackSeen = () => {
+    service.seenSpaceList({ spaceId }, {});
+  };
   const changeCurrentSpaceAndNavigateToAssessments = async (e: any) => {
     e.preventDefault();
-    trackSeen()
+    trackSeen();
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
@@ -145,12 +145,10 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Typography
             component={Link}
             variant="h6"
-            fontFamily={"Ubuntu"}
             to={`/${spaceId}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
-              fontSize: { xs: "1.05rem", sm: "1.1rem", md: "1.2rem" },
               fontWeight: "bold",
               textDecoration: "none",
               height: "100%",
@@ -178,18 +176,14 @@ const SpaceCard = (props: ISpaceCardProps) => {
         <Box ml="auto" sx={{ ...styles.centerV }}>
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
             <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
-              {membersCount}
-            </Typography>
+            <Typography fontWeight={"bold"}>{membersCount}</Typography>
           </Box>
           <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
             <DescriptionRoundedIcon
               sx={{ mr: 0.5, opacity: 0.8 }}
               fontSize="small"
             />
-            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
-              {assessmentsCount}
-            </Typography>
+            <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
           </Box>
         </Box>
         <Box
@@ -206,11 +200,17 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            {isOwner && <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
-              <IconButton size="small" component={Link} to={`/${spaceId}/setting`}>
-                <SettingsRoundedIcon />
-              </IconButton>
-            </Box>}
+            {isOwner && (
+              <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+                <IconButton
+                  size="small"
+                  component={Link}
+                  to={`/${spaceId}/setting`}
+                >
+                  <SettingsRoundedIcon />
+                </IconButton>
+              </Box>
+            )}
             <Actions
               isActiveSpace={isActiveSpace}
               dialogProps={dialogProps}
@@ -303,11 +303,12 @@ const Actions = (props: any) => {
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
         },
-        !is_default_space_for_current_user && !isOwner && {
-          icon: <ExitToAppRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="leaveSpace" />,
-          onClick: leaveSpace,
-        },
+        !is_default_space_for_current_user &&
+          !isOwner && {
+            icon: <ExitToAppRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="leaveSpace" />,
+            onClick: leaveSpace,
+          },
       ]}
     />
   );

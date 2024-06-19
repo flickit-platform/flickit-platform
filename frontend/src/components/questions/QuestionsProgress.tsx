@@ -142,7 +142,6 @@ export const QuestionProgressItem = (props: any) => {
             fontSize: question.index == questionIndex ? ".75rem" : ".7rem",
             textAlign: "center",
             lineHeight: "13px",
-            fontFamily: "Ubuntu",
             opacity: question.index == questionIndex ? 1 : 0.6,
             color:
                 question?.answer?.selectedOption || question?.answer?.isNotApplicable ? `white` : "gray",

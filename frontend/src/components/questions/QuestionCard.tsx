@@ -129,7 +129,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           <Box>
             <Typography
               variant="subLarge"
-              fontFamily={"Ubuntu"}
               sx={
                 is_farsi
                   ? { color: "white", opacity: 0.65, direction: "rtl" }
@@ -145,14 +144,13 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                 is_farsi
                   ? {
                       pt: 0.5,
-                      fontSize: { xs: "1.4rem", sm: "2rem" },
+                      fontSize: "2rem",
                       fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
                       direction: "rtl",
                     }
                   : {
                       pt: 0.5,
-                      fontSize: { xs: "1.4rem", sm: "2rem" },
-                      fontFamily: { xs: "Ubuntu", lg: "Ubuntu" },
+                      fontSize: "2rem",
                     }
               }
             >
@@ -238,7 +236,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                            <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
                         </Typography>
                       </Box>
                     )}
@@ -614,7 +612,6 @@ const AnswerDetails = ({ questionInfo }: any) => {
         {/* <Box mb={1.8}>
           <Typography
             variant="subLarge"
-            fontFamily={"Ubuntu"}
             component={Link}
             to="#"
             sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
