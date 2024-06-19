@@ -10,12 +10,14 @@ import {
   useFormContext,
 } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
+import { useServiceContext } from "@providers/ServiceProvider";
 import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 import forLoopComponent from "@utils/forLoopComponent";
 import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   IAutocompleteAsyncFieldBase,
@@ -39,6 +41,7 @@ const AutocompleteAsyncField = (
     multiple,
     defaultValue = multiple ? undefined : null,
     required = false,
+    hasAddBtn = false,
     editable = false,
     ...rest
   } = props;
@@ -61,6 +64,7 @@ const AutocompleteAsyncField = (
             field={field}
             defaultValue={defaultValue}
             editable={editable}
+            hasAddBtn={hasAddBtn}
           />
         );
       }}
@@ -79,6 +83,7 @@ interface IAutocompleteAsyncFieldBase
   required?: boolean;
   searchOnType?: boolean;
   editable?: boolean;
+  hasAddBtn?: boolean;
 }
 
 const AutocompleteBaseField = (
@@ -107,6 +112,7 @@ const AutocompleteBaseField = (
     errorObject,
     abortController,
     defaultValue,
+    hasAddBtn,
     searchOnType = true,
     multiple,
     ...rest
@@ -118,6 +124,12 @@ const AutocompleteBaseField = (
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
+  const { service } = useServiceContext();
+  const createSpaceQueryData = useQuery({
+    service: (args, config) => service.createSpace(args, config),
+    runOnMount: false,
+  });
+
   const [inputValue, setInputValue] = useState(
     () => getOptionLabel(defaultValue) || ""
   );
@@ -129,7 +141,12 @@ const AutocompleteBaseField = (
       }, 800),
     []
   );
-
+  const createSpaceQuery = async (option: any) => {
+    try {
+      const response = await createSpaceQueryData.query({ title: inputValue });
+      fetch("")
+    } catch (e) {}
+  };
   useEffect(() => {
     if (!searchOnType && !isFirstFetchRef.current) {
       return;
@@ -173,7 +190,8 @@ const AutocompleteBaseField = (
           return [{}];
         } else if (editable) {
           return options.filter(
-            (option: any) => !value.some((selectedOpts: any) => selectedOpts.id === option.id)
+            (option: any) =>
+              !value.some((selectedOpts: any) => selectedOpts.id === option.id)
           );
         } else {
           return options;
@@ -183,8 +201,36 @@ const AutocompleteBaseField = (
       disablePortal={false}
       includeInputInList
       filterSelectedOptions={true}
+      filterOptions={(options, params) => {
+        const filtered = options.filter((option) =>
+          getOptionLabel(option)
+            .toLowerCase()
+            .includes(params.inputValue.toLowerCase())
+        );
+
+        if (
+          params.inputValue !== "" &&
+          !filtered.some(
+            (option) => getOptionLabel(option) === params.inputValue
+          ) &&
+          hasAddBtn
+        ) {
+          filtered.push({
+            inputValue: params.inputValue,
+            title: `Add "${params.inputValue}"`,
+          });
+        }
+
+        return filtered;
+      }}
       onChange={(event: any, newValue: any | null) => {
-        onChange(newValue);
+        if (newValue && newValue.inputValue) {
+          // handle the case where the "Add" button is clicked
+          setOptions([...options, { title: newValue.inputValue }]);
+          onChange({ title: newValue.inputValue });
+        } else {
+          onChange(newValue);
+        }
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -201,6 +247,15 @@ const AutocompleteBaseField = (
           name={name}
         />
       )}
+      renderOption={(props, option) =>
+        option.inputValue ? (
+          <li {...props}>
+            <LoadingButton onClick={createSpaceQuery}>Add "{option.inputValue}"</LoadingButton>
+          </li>
+        ) : (
+          <li {...props}>{option.title}</li>
+        )
+      }
       noOptionsText={
         error ? (
           <Box sx={{ ...styles.centerVH }}>
@@ -209,15 +264,6 @@ const AutocompleteBaseField = (
         ) : (
           noOptionsText
         )
-      }
-      renderOption={
-        error
-          ? () => (
-              <Box sx={{ ...styles.centerVH, color: "rgba(0, 0, 0, 0.6)" }}>
-                <ErrorDataLoading />
-              </Box>
-            )
-          : renderOption
       }
       {...rest}
     />
