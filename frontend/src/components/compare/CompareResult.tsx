@@ -15,7 +15,7 @@ import Title from "@common/Title";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "../common/QueryData";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Divider from "@mui/material/Divider";
 interface ICompareResultProps {
@@ -86,12 +86,39 @@ const CompareResultCommonBaseInfo = (props: { data: any }) => {
   return (
     <AlertBox severity="info" sx={{ mb: 3 }}>
       <Trans i18nKey={"allOfTheSelectedAssessmentsUse"} />
-      <MuiLink href={`/assessment-kits/${assessmentKit.id}`} sx={{ mx: 0.6 }}>
-        <Chip sx={{ mx: 0.6 }} label={assessmentKit.title} />{" "}
-      </MuiLink>{" "}
+      <Chip
+        component={Link}
+        to={`/assessment-kits/${assessmentKit?.id}`}
+        label={assessmentKit.title}
+        size="medium"
+        sx={{
+          height: "fit-content",
+          textTransform: "none",
+          color: "#004F83",
+          background: "#D0E4FF",
+          cursor: "pointer",
+          mx: "0.2rem",
+          "& .MuiChip-label": {
+            whiteSpace: "pre-wrap",
+          },
+        }}
+      />
       <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
       {subjects.map((subject: any) => (
-        <MuiLink href={`#${subject.title}`} sx={{ mx: 0.6 }}>
+        <MuiLink
+          href={`#${subject.title}`}
+          sx={{
+            mx: 0.6,
+            cursor: "default",
+            color: "#004F83",
+            textDecorationColor: "#004F83",
+
+            ":hover": {
+              color: "#004F83",
+              textDecorationColor: "#004F83",
+            },
+          }}
+        >
           {subject.title}
         </MuiLink>
       ))}

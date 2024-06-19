@@ -19,7 +19,7 @@ interface IGaugeProps extends BoxProps {
 const Gauge = (props: IGaugeProps) => {
   const {
     maturity_level_status,
-    maturity_level_number,
+    maturity_level_number = 5,
     level_value,
     confidence_value,
     height = 200,
