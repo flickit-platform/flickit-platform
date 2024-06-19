@@ -34,7 +34,7 @@ import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
 
 export const SpaceMembers = (props: any) => {
-  const { isOwner } = props;
+  const { editable } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { dispatch, userInfo } = useAuthContext();
@@ -215,6 +215,7 @@ export const SpaceMembers = (props: any) => {
                             <Actions
                               isOwner={isOwner}
                               member={member}
+                              editable={editable}
                               fetchSpaceMembers={spaceMembersQueryData.query}
                             />
                           }
@@ -391,6 +392,7 @@ const Actions = (props: any) => {
     isInvitees,
     isInvitationExpired,
     email,
+    editable,
   } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
@@ -431,20 +433,22 @@ const Actions = (props: any) => {
       {...useMenu()}
       loading={loading || inviteMemberQueryData.loading}
       items={[
-        isInvitees && isInvitationExpired
+        isInvitees && isInvitationExpired && editable
           ? {
               icon: <EmailRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="resendInvitation" />,
               onClick: inviteMember,
             }
           : undefined,
-        isInvitees && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="cancelInvitation" />,
-          onClick: deleteItem,
-        },
+        isInvitees &&
+          editable && {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="cancelInvitation" />,
+            onClick: deleteItem,
+          },
         !isInvitees &&
-          !isOwner && {
+          !isOwner &&
+          editable && {
             icon: <DeleteRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="remove" />,
             onClick: deleteItem,

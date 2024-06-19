@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Chip, CircularProgress, Typography } from "@mui/material";
+import { Avatar, Chip, CircularProgress, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -65,7 +65,7 @@ const SpacesList = (props: ISpaceListProps) => {
               key={item?.id}
               item={item}
               isActiveSpace={false}
-              isOwner={item?.isOwner}
+              owner={item?.owner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
               setUserInfo={setUserInfo}
@@ -80,22 +80,17 @@ const SpacesList = (props: ISpaceListProps) => {
 interface ISpaceCardProps {
   item: ISpaceModel;
   isActiveSpace: boolean;
-  isOwner: boolean;
+  owner: any;
   dialogProps: TDialogProps;
   fetchSpaces: TQueryFunction<ISpacesModel>;
   setUserInfo: (signal: AbortSignal) => void;
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const {
-    item,
-    isActiveSpace,
-    dialogProps,
-    fetchSpaces,
-    isOwner,
-    setUserInfo,
-  } = props;
+  const { item, isActiveSpace, dialogProps, fetchSpaces, owner, setUserInfo } =
+    props;
   const { service } = useServiceContext();
+  const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
   const { loading, abortController } = useQuery({
     service: (args, config) => service.setCurrentSpace({ spaceId }, config),
@@ -162,14 +157,26 @@ const SpaceCard = (props: ISpaceCardProps) => {
           >
             {loading ? <CircularProgress size="20px" /> : <>{title}</>}
           </Typography>
-          {isOwner && (
-            <Chip
-              sx={{ ml: 1, opacity: 0.7 }}
-              label={<Trans i18nKey={"owner"} />}
-              size="small"
-              variant="outlined"
-            />
-          )}
+          <Chip
+            sx={{
+              ml: 1,
+              opacity: 0.7,
+              color: `${isOwner ? "#9A003C" : ""}`,
+              borderColor: `${isOwner ? "#9A003C" : "#bdbdbd"}`,
+            }}
+            label={
+              <>
+                <Trans i18nKey={"owner"} />:
+                {isOwner ? (
+                  <Trans i18nKey={"you"} />
+                ) : (
+                  <Trans i18nKey={owner?.displayName} />
+                )}
+              </>
+            }
+            size="small"
+            variant="outlined"
+          />
         </Box>
       </Box>
       <Box sx={{ display: "flex", ml: "auto" }}>
@@ -200,17 +207,16 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            {isOwner && (
-              <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
-                <IconButton
-                  size="small"
-                  component={Link}
-                  to={`/${spaceId}/setting`}
-                >
-                  <SettingsRoundedIcon />
-                </IconButton>
-              </Box>
-            )}
+            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+              <IconButton
+                size="small"
+                component={Link}
+                to={`/${spaceId}/setting`}
+              >
+                <SettingsRoundedIcon />
+              </IconButton>
+            </Box>
+
             <Actions
               isActiveSpace={isActiveSpace}
               dialogProps={dialogProps}
