@@ -46,7 +46,6 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
               : `2px solid ${colorPallet[ml - 1]}`,
           }}
           variant="h3"
-          fontFamily={"Oswald"}
           fontWeight="bold"
           letterSpacing={".1em"}
         >

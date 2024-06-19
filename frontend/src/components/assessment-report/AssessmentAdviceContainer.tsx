@@ -167,7 +167,8 @@ const AssessmentAdviceContainer = (props: any) => {
                         textAlign: "center",
                       }}
                     >
-                      <Box sx={{ fontSize: "16px", fontWeight: "700" }}>
+                      <Box sx={{             fontSize: "1rem",
+, fontWeight: "700" }}>
                         {subject.title}
                       </Box> 
                        <Divider sx={{ my: 2 }} /> 

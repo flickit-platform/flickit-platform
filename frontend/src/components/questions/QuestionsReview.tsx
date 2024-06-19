@@ -189,7 +189,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   <Typography
                     variant="h4"
                     sx={{
-                      fontSize: { xs: "14px", sm: "16px", md: "24px" },
+                      fontSize: "1.25rem",
                       mb: 4,
                       fontWeight: 600,
                       color: "#F9A03F",
@@ -231,7 +231,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               size="large"
               component={Link}
               to={"./../../../insights"}
-              sx={{ fontSize: { xs: "12px", sm: "12px", md: "14px" } }}
+              sx={{ fontSize: "1rem" }}
               // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="insights" />
@@ -241,7 +241,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               size="large"
               component={Link}
               to={"./../../../questionnaires"}
-              sx={{ fontSize: { xs: "12px", sm: "12px", md: "14px" } }}
+              sx={{ fontSize: "1rem" }}
               // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="Choose another questionnaire" />

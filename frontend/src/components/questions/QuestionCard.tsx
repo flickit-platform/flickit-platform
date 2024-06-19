@@ -215,7 +215,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography
-                          sx={{ display: "flex", fontSize: { xs: "10px" } }}
+                          sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
                           <Trans i18nKey={"youSelected"} />
                           <Typography
@@ -803,7 +803,7 @@ const Evidence = (props: any) => {
                   label={<Trans i18nKey="negativeEvidence" />}
                   value="NEGATIVE"
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -830,7 +830,7 @@ const Evidence = (props: any) => {
                     </Box>
                   }
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -842,7 +842,7 @@ const Evidence = (props: any) => {
                 <Tab
                   label={<Trans i18nKey="positiveEvidence" />}
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -878,7 +878,7 @@ const Evidence = (props: any) => {
                 sx={{
                   position: "absolute",
                   top: 20,
-                  fontSize: "14px",
+                  fontSize: ".875rem",
                   fontWeight: 300,
                   color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
                 }}
@@ -905,7 +905,7 @@ const Evidence = (props: any) => {
                   />
                   <Typography
                     sx={{
-                      fontSize: "12px",
+                      fontSize: ".875rem",
                       fontWeight: 300,
                     }}
                   >
@@ -1122,7 +1122,7 @@ const EvidenceDetail = (props: any) => {
           {isEditing && (
             <Typography
               sx={{
-                fontSize: "18px",
+                fontSize: "1.125rem",
                 fontWeight: "bold",
                 color: evidenceBG?.borderColor,
               }}

@@ -202,7 +202,7 @@ const Navbar = () => {
               to={`/compare`}
               startIcon={
                 <CompareRoundedIcon
-                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
+                  sx={{ opacity: 0.8, fontSize: "1.125rem !important" }}
                 />
               }
               sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}

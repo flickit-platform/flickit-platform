@@ -139,7 +139,7 @@ const AddMemberDialog = (props: {
                         variant={"h5"}
                         sx={{
                             color: "#EDF4FC",
-                            fontsize: "32px",
+                            fontsize: "2rem",
                             lineHeight: '36.77px',
                             fontWeight: 700,
                             paddingY: "24px",

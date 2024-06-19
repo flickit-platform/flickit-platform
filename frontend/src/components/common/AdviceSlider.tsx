@@ -65,7 +65,7 @@ const AdviceSlider = (props: any) => {
             px: "10px",
             color: "#D81E5B",
             background: "#FDF1F5",
-            fontSize: "11px",
+            fontSize: ".75rem",
             border: "1px solid #D81E5B",
             borderRadius: "8px",
             textAlign: "center",
@@ -75,7 +75,7 @@ const AdviceSlider = (props: any) => {
         </Box>
         <Box
           sx={{
-            fontSize: "24px",
+            fontSize: "1.5rem",
             fontWeight: "500",
             ml: { xs: 0, sm: 4 },
             width: { xs: "100%", sm: "240px" },
@@ -147,7 +147,7 @@ const AdviceSlider = (props: any) => {
               ml: "-25px",
               mt: "-5px",
               whiteSpace: "nowrap",
-              fontSize: "12px",
+              fontSize: ".75rem",
               fontWeight: "400",
               color: "#F9A03F",
             }}
@@ -168,7 +168,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: "#9DA7B3",
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "400",
           }}
         >
@@ -177,7 +177,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: colorPallet[currentState?.index - 1],
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "700",
           }}
         >
@@ -186,7 +186,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: "#9DA7B3",
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "400",
           }}
         >
@@ -196,7 +196,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: colorPallet[value ? value - 1 : defaultValue - 1],
-            fontSize: "16px",
+            fontSize: "1rem",
             fontWeight: "700",
           }}
         >
