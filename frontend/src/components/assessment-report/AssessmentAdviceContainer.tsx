@@ -531,7 +531,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       xs={0}
                       md={2}
                       sx={{
-                        textAlign: "left",
+                        textAlign: "center",
                         fontWeight: "500",
                         color: "#004F83",
                         display: {
