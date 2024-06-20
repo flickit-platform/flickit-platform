@@ -75,7 +75,7 @@ export const createService = (
       const { page = 1, size = 10 } = args ?? {};
       return axios.get(`/api/v1/spaces/`, {
         ...(config ?? {}),
-        params: { size, page : page - 1 },
+        params: { size, page: page - 1 },
       });
     },
     fetchSpace(
@@ -88,7 +88,7 @@ export const createService = (
       { spaceId }: { spaceId: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-    return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
+      return axios.put(`/api/v1/spaces/${spaceId}/seen/`, config);
     },
     deleteSpace(
       { spaceId }: { spaceId: string },
@@ -140,8 +140,8 @@ export const createService = (
       return axios.get(`/api/v1/spaces/${spaceId}/members/`, config);
     },
     fetchSpaceMembersInvitees(
-        { spaceId }: { spaceId: string },
-        config: AxiosRequestConfig<any> | undefined
+      { spaceId }: { spaceId: string },
+      config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/spaces/${spaceId}/invitees/`, config);
     },
@@ -154,10 +154,8 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${
-          assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${
-          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -189,12 +187,12 @@ export const createService = (
       });
     },
     AssessmentsLoad(
-        { assessmentId }: { assessmentId?: TId },
-          config: AxiosRequestConfig<any> | undefined
-      ) {
-          return axios.get(`/api/v1/assessments/${assessmentId}`, {
-              ...(config ?? {}),
-        });
+      { assessmentId }: { assessmentId?: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/assessments/${assessmentId}`, {
+        ...(config ?? {}),
+      });
     },
     createAssessment(
       { data }: { data: any },
@@ -202,38 +200,38 @@ export const createService = (
     ) {
       return axios.post(`/api/v2/assessments/`, data, config);
     },
-      fetchAssessmentsRoles(
-        args: any,
-        config: AxiosRequestConfig<any> | undefined
+    fetchAssessmentsRoles(
+      args: any,
+      config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/assessment-user-roles/`, config);
     },
     fetchAssessmentsUserListRoles(
-        {assessmentId}: {assessmentId : string},
-        config: AxiosRequestConfig<any> | undefined
+      { assessmentId }: { assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined
     ) {
-        return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
+      return axios.get(`/api/v1/assessments/${assessmentId}/users`, config);
     },
     addRoleMember(
-        args: { assessmentId: string, userId :string , roleId:number },
-        config: AxiosRequestConfig<any> | undefined
-    ){
-        const { assessmentId, } = args ?? {};
-        return axios.post(`/api/v1/assessments/${assessmentId}/assessment-user-roles/`,args, config);
+      args: { assessmentId: string, userId: string, roleId: number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, } = args ?? {};
+      return axios.post(`/api/v1/assessments/${assessmentId}/assessment-user-roles/`, args, config);
     },
     deleteUserRole(
-        {assessmentId,args : userId}: {assessmentId: string,args: string} | any,
-        config: AxiosRequestConfig<any> | undefined
-    ){
+      { assessmentId, args: userId }: { assessmentId: string, args: string } | any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       return axios.delete(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/
 `   , config);
     },
     editUserRole(
-        args: { assessmentId: string, userId :string , roleId:number } | any,
-        config: AxiosRequestConfig<any> | undefined
-    ){
+      args: { assessmentId: string, userId: string, roleId: number } | any,
+      config: AxiosRequestConfig<any> | undefined
+    ) {
       const { assessmentId, userId } = args
-      return axios.put(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/`,args , config);
+      return axios.put(`/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/`, args, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },
@@ -257,7 +255,7 @@ export const createService = (
       { data }: { data: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.post(`/api/v1/assessments-compare/${data}`,{
+      return axios.post(`/api/v1/assessments-compare/${data}`, {
         ...(config ?? {}),
       });;
     },
@@ -863,17 +861,30 @@ export const createService = (
         },
       });
     },
-     deleteExpertGroup(
+    updateExpertGroupPicture(
+      args: { id: TId; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { data = {}, id } = args ?? {};
+
+      return axios.put(`/api/v1/expert-groups/${id}/picture/`, data, {
+        ...(config ?? {}),
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    deleteExpertGroup(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
-       ) {
+    ) {
       const { id } = args ?? {};
       return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
     seenExpertGroup(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
-       ) {
+    ) {
       const { id } = args ?? {};
       return axios.put(`/api/v1/expert-groups/${id}/seen/`, config);
     },
@@ -957,15 +968,15 @@ export const createService = (
       const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-            description,
-            type,
-          })
+          description,
+          type,
+        })
         : axios.post(`/api/v1/evidences/`, {
-            assessmentId: assessmentId,
-            questionId: questionId,
-            type: type,
-            description,
-          });
+          assessmentId: assessmentId,
+          questionId: questionId,
+          type: type,
+          description,
+        });
     },
     deleteEvidence(
       args: { id: TId },
