@@ -416,6 +416,6 @@
   "areYouSureYouWantDeleteThisMember": "Are you sure you want remove {{name}} from {{assessment}}?",
   "letMeCheckAgain": "Let me check again",
   "yesContinue": "Yes, Continue",
-  "owner": "Owner",
+  "ownerName": "Owner: ",
   "you": "You"
 }

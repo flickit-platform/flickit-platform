@@ -168,7 +168,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             }}
             label={
               <>
-                <Trans i18nKey={"owner"} />:
+                <Trans i18nKey={"ownerName"} />
                 {isOwner ? (
                   <Trans i18nKey={"you"} />
                 ) : (
@@ -314,6 +314,11 @@ const Actions = (props: any) => {
           icon: <EditRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
+        },
+        isOwner && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="delete" />,
+          onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
           !isOwner && {
