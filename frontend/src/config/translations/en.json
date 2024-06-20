@@ -253,7 +253,7 @@
   "unPublished": "Unpublished",
   "saveChanges": "Save changes",
   "assessmentKitSetting": "Assessment kit setting",
-  "emailIsNotOnFlickitYet": "{{email}} is not on Flickit yet.",
+  "emailIsNotOnAppTitleYet": "{{email}} is not on {{title}} yet.",
   "wouldYouLikeToInviteThemToJoin": "Would you like to invite them to join?",
   "color": "Color",
   "space": "Space",
