@@ -8,5 +8,5 @@ do
     # find /usr/share/nginx/html -type f -exec sed -i "s|${key}|${value}|g" '{}' +
 
     # sed JS and CSS only
-    find /usr/share/nginx/html -type f \( -name '*.js' -o -name '*.css' \) -exec sed -i "s|${key}|${value}|g" '{}' +
+    find /usr/share/nginx/html -type f \( -name '*.js' -o -name '*.html' \) -exec sed -i "s|${key}|${value}|g" '{}' +
 done
