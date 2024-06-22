@@ -144,10 +144,16 @@ const AutocompleteBaseField = (
   const createSpaceQuery = async (option: any) => {
     try {
       const response = await createSpaceQueryData.query({ title: inputValue });
-      fetch("")
-    } catch (e) {}
+      const newOption = { title: inputValue, id: response.id };
+      setOptions((prevOptions) => [...prevOptions, newOption]);
+      onChange(newOption);
+    } catch (e) {
+      console.error(e);
+    }
   };
+  
   useEffect(() => {
+    console.log(options)
     if (!searchOnType && !isFirstFetchRef.current) {
       return;
     }
@@ -226,7 +232,6 @@ const AutocompleteBaseField = (
       onChange={(event: any, newValue: any | null) => {
         if (newValue && newValue.inputValue) {
           // handle the case where the "Add" button is clicked
-          setOptions([...options, { title: newValue.inputValue }]);
           onChange({ title: newValue.inputValue });
         } else {
           onChange(newValue);
