@@ -92,7 +92,7 @@ export const SelectField = (props: ISelectField) => {
   },[totalItem])
 
   let selectOptions;
-  if (selectedOptions.length > 0) {
+  if (selectedOptions?.length > 0) {
     const filteredData = options.filter((item:any) => !selectedOptions.some((excludeItem:any) => excludeItem.id === item.id));
     selectOptions = [{ id: "", title: "---" }, ...filteredData];
 

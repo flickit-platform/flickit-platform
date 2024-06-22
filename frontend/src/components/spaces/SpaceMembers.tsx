@@ -501,8 +501,11 @@ const InviteSpaceMemberDialog = (
     >
       <Typography>
         <Trans
-          i18nKey="emailIsNotOnFlickitYet"
-          values={{ email: rest.context?.data?.email || "This user" }}
+          i18nKey="emailIsNotOnAppTitleYet"
+          values={{
+            email: rest.context?.data?.email || "This user",
+            title: import.meta.env.VITE_APP_TITLE,
+          }}
         />{" "}
         <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />
       </Typography>
