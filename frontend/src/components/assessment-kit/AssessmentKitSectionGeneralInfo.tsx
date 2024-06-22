@@ -321,7 +321,6 @@ const AssessmentKitSectionGeneralInfo = (
                               <Box
                                 sx={{
                                   background: "#00000014",
-                                  fontFamily: "Ubuntu",
                                   fontSize: "0.875rem",
                                   borderRadius: "8px",
                                   fontWeight: "700",
@@ -555,7 +554,6 @@ const OnHoverInput = (props: any) => {
                 minHeight: "38px",
                 borderRadius: "4px",
                 paddingRight: "12px;",
-                fontFamily: "Ubuntu",
                 fontWeight: "700",
                 fontSize: "0.875rem",
               }}
@@ -711,7 +709,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize="0.75rem"
             >
               <Trans i18nKey="published" />
             </Typography>
@@ -735,7 +733,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize=".75rem"
             >
               <Trans i18nKey="unpublished" />
             </Typography>
@@ -824,8 +822,8 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
-              >
+                fontSize=".75rem"
+                >
                 <Trans i18nKey="private" />
               </Typography>
             </Box>
@@ -848,8 +846,8 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
-              >
+                fontSize=".75rem"
+                >
                 <Trans i18nKey="public" />
               </Typography>
             </Box>
@@ -1155,7 +1153,6 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                   <Box
                     sx={{
                       background: "#00000014",
-                      fontFamily: "Ubuntu",
                       fontSize: "0.875rem",
                       borderRadius: "8px",
                       fontWeight: "700",

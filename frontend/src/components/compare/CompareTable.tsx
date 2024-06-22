@@ -57,7 +57,6 @@ const CompareTable = (props: {
 };
 
 const textStyle = {
-  fontFamily: "Ubuntu",
   fontSize: "1.1rem",
   fontWeight: "bolder",
 };
@@ -164,7 +163,7 @@ const MostSignificanComp = (props: any) => {
                 <Box sx={{ ...styles.centerV }} mb={1} key={index}>
                   <CircleRoundedIcon
                     fontSize="inherit"
-                    sx={{ opacity: 0.5, fontSize: "8px" }}
+                    sx={{ opacity: 0.5, fontSize: "0.5rem" }}
                   />
                   <Typography
                     textTransform={"uppercase"}

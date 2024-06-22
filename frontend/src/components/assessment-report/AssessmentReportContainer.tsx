@@ -102,7 +102,11 @@ const AssessmentReportContainer = (props: any) => {
                   gap={2}
                   textAlign="center"
                 >
-                  <Typography color="#9DA7B3" fontSize="44px" fontWeight={900}>
+                  <Typography
+                    color="#9DA7B3"
+                    fontSize="2.5rem"
+                    fontWeight={900}
+                  >
                     <Trans i18nKey="assessmentInsight" />
                   </Typography>
                 </Box>
@@ -168,7 +172,11 @@ const AssessmentReportContainer = (props: any) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
-                  <Typography color="#9DA7B3" fontSize="28px" fontWeight="bold">
+                  <Typography
+                    color="#9DA7B3"
+                    fontSize="1.5rem"
+                    fontWeight="bold"
+                  >
                     <Trans i18nKey="subjectReport" />
                   </Typography>
                   <Divider sx={{ width: "100%" }} />
@@ -182,7 +190,11 @@ const AssessmentReportContainer = (props: any) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
-                  <Typography color="#9DA7B3" fontSize="28px" fontWeight="bold">
+                  <Typography
+                    color="#9DA7B3"
+                    fontSize="1.5rem"
+                    fontWeight="bold"
+                  >
                     <Trans i18nKey="advices" />
                   </Typography>
                   <Divider sx={{ width: "100%" }} />

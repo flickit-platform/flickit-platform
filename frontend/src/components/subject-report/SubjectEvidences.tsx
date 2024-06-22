@@ -93,7 +93,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
       borderColor={type === evidenceType.positive ? "#9CCAFF" : "#EFA5BD"}
     >
       <Typography
-        fontSize={{ md: "1.5rem", sm: "1rem" }}
+        fontSize="1.25rem"
         fontWeight={500}
         color={type === evidenceType.positive ? "#004F83" : "#9A003C"}
       >

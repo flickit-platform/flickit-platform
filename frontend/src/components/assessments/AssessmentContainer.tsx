@@ -129,7 +129,7 @@ const AssessmentContainer = () => {
             variant="h3"
             sx={{
               color: "#9DA7B3",
-              fontSize: "48px",
+              fontSize: "3rem",
               fontWeight: "900",
               width: "60%",
             }}
@@ -141,7 +141,7 @@ const AssessmentContainer = () => {
             variant="h1"
             sx={{
               color: "#9DA7B3",
-              fontSize: "16px",
+              fontSize: "1rem",
               fontWeight: "500",
               width: "60%",
             }}
@@ -167,7 +167,7 @@ const AssessmentContainer = () => {
                 })
               }
             >
-              <Typography sx={{ fontSize: "20px" }} variant="button">
+              <Typography sx={{ fontSize: "1.25rem" }} variant="button">
                 <Trans i18nKey="newAssessment" />
               </Typography>
             </Button>

@@ -8,6 +8,10 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+
+const customFontFamily = '"Ubuntu","sans-serif","Vazirmatn"';
+const fontSize = ["12px", "14px", "14px", "16px", "18px"];
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -60,48 +64,37 @@ const palette = createPalette({
 export const theme = createTheme({
   palette,
   typography: {
+    fontFamily: customFontFamily,
     subSmall: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
-      fontSize: "0.665rem",
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       textTransform: "none",
       color: "GrayText",
     },
     subMedium: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
-      fontSize: "0.75rem",
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     subLarge: {
-      fontFamily: '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"',
       fontWeight: 500,
-      fontSize: "0.8rem",
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     button: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       letterSpacing: ".1em",
     },
-    h3: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
-    },
+
     h4: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       opacity: 0.9,
     },
     h5: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       opacity: 0.85,
     },
     h6: {
-      fontFamily: "'Oswald','Roboto','Vazirmatn'",
       letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
@@ -112,6 +105,27 @@ export const theme = createTheme({
       styleOverrides: `
         html {
           scroll-behavior: smooth;
+          font-size: ${fontSize[4]};
+        }
+        @media (max-width: 1600px) {
+          html {
+            font-size: ${fontSize[3]};
+          }
+        }
+        @media (max-width: 1280px) {
+          html {
+            font-size: ${fontSize[2]};
+          }
+        }
+        @media (max-width: 960px) {
+          html {
+            font-size: ${fontSize[1]};
+          }
+        }
+        @media (max-width: 600px) {
+          html {
+            font-size: ${fontSize[0]};
+          }
         }
         body {
           background: #f5f5f5;

@@ -129,7 +129,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           <Box>
             <Typography
               variant="subLarge"
-              fontFamily={"Ubuntu"}
               sx={
                 is_farsi
                   ? { color: "white", opacity: 0.65, direction: "rtl" }
@@ -145,14 +144,13 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                 is_farsi
                   ? {
                       pt: 0.5,
-                      fontSize: { xs: "1.4rem", sm: "2rem" },
+                      fontSize: "2rem",
                       fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
                       direction: "rtl",
                     }
                   : {
                       pt: 0.5,
-                      fontSize: { xs: "1.4rem", sm: "2rem" },
-                      fontFamily: { xs: "Ubuntu", lg: "Ubuntu" },
+                      fontSize: "2rem",
                     }
               }
             >
@@ -217,7 +215,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
                         <Typography
-                          sx={{ display: "flex", fontSize: { xs: "10px" } }}
+                          sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
                           <Trans i18nKey={"youSelected"} />
                           <Typography
@@ -238,7 +236,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                            <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
                         </Typography>
                       </Box>
                     )}
@@ -614,7 +612,6 @@ const AnswerDetails = ({ questionInfo }: any) => {
         {/* <Box mb={1.8}>
           <Typography
             variant="subLarge"
-            fontFamily={"Ubuntu"}
             component={Link}
             to="#"
             sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
@@ -806,7 +803,7 @@ const Evidence = (props: any) => {
                   label={<Trans i18nKey="negativeEvidence" />}
                   value="NEGATIVE"
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -833,7 +830,7 @@ const Evidence = (props: any) => {
                     </Box>
                   }
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -845,7 +842,7 @@ const Evidence = (props: any) => {
                 <Tab
                   label={<Trans i18nKey="positiveEvidence" />}
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "1rem",
                     display: "flex",
                     flex: 1,
                     "&.Mui-selected": {
@@ -881,7 +878,7 @@ const Evidence = (props: any) => {
                 sx={{
                   position: "absolute",
                   top: 20,
-                  fontSize: "14px",
+                  fontSize: ".875rem",
                   fontWeight: 300,
                   color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
                 }}
@@ -908,7 +905,7 @@ const Evidence = (props: any) => {
                   />
                   <Typography
                     sx={{
-                      fontSize: "12px",
+                      fontSize: ".875rem",
                       fontWeight: 300,
                     }}
                   >
@@ -1125,7 +1122,7 @@ const EvidenceDetail = (props: any) => {
           {isEditing && (
             <Typography
               sx={{
-                fontSize: "18px",
+                fontSize: "1.125rem",
                 fontWeight: "bold",
                 color: evidenceBG?.borderColor,
               }}
