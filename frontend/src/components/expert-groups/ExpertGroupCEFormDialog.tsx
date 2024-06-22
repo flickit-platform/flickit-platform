@@ -88,7 +88,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
             { signal: abortController.signal }
           );
       type === "update" && await service.updateExpertGroupPicture({ data: pictureData, id }, undefined)
-      await seenExpertGroupQuery.query();
+      type === "update"&& await seenExpertGroupQuery.query();
       setLoading(false);
       onSubmitForm();
       close();
