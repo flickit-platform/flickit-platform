@@ -49,7 +49,7 @@ const MoreActions = (props: IMoreActionsProps) => {
             !loading && openMenu(e);
           }}
         >
-          {loading ? <CircularProgress size="20px" /> : <MoreVertIcon fontSize="small" />}
+          {loading ? <CircularProgress size="1.25rem" /> : <MoreVertIcon fontSize="small" />}
         </IconButton>
       )}
 

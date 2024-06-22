@@ -140,12 +140,10 @@ const SpaceCard = (props: ISpaceCardProps) => {
           <Typography
             component={Link}
             variant="h6"
-            fontFamily={"Ubuntu"}
             to={`/${spaceId}/assessments/1`}
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
-              fontSize: { xs: "1.05rem", sm: "1.1rem", md: "1.2rem" },
               fontWeight: "bold",
               textDecoration: "none",
               height: "100%",
@@ -168,7 +166,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             }}
             label={
               <>
-                <Trans i18nKey={"owner"} />:
+                <Trans i18nKey={"ownerName"} />
                 {isOwner ? (
                   <Trans i18nKey={"you"} />
                 ) : (
@@ -185,18 +183,14 @@ const SpaceCard = (props: ISpaceCardProps) => {
         <Box ml="auto" sx={{ ...styles.centerV }}>
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
             <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
-              {membersCount}
-            </Typography>
+            <Typography fontWeight={"bold"}>{membersCount}</Typography>
           </Box>
           <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
             <DescriptionRoundedIcon
               sx={{ mr: 0.5, opacity: 0.8 }}
               fontSize="small"
             />
-            <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
-              {assessmentsCount}
-            </Typography>
+            <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
           </Box>
         </Box>
         <Box
@@ -314,6 +308,11 @@ const Actions = (props: any) => {
           icon: <EditRoundedIcon fontSize="small" />,
           text: <Trans i18nKey="edit" />,
           onClick: openEditDialog,
+        },
+        isOwner && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="delete" />,
+          onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
           !isOwner && {

@@ -69,7 +69,6 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
             dataKey={mlKey}
             name={barName}
             fill={barColors[i % barColors.length]}
-            maxBarSize={40}
             type={mlTitleKey}
           />
         );

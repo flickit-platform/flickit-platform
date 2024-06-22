@@ -55,15 +55,6 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
 }) => {
   const chartData = useMemo(() => convertToRadialChartData(data), [data]);
 
-  const getFontSize = () => {
-    const width = window.innerWidth;
-    if (width < 600) {
-      return "8px";
-    } else {
-      return "12px";
-    }
-  };
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RadialBarChart
@@ -74,16 +65,12 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
         barSize={30}
         data={chartData}
       >
-        <PolarAngleAxis
-          domain={[0, 5]}
-          type="number"
-          tick={false}
-        />
+        <PolarAngleAxis domain={[0, 5]} type="number" tick={false} />
 
         <RadialBar
           min={15}
           dataKey="ml"
-          label={{ position: "middle", fill: "#fff", fontSize:30 }}
+          label={{ position: "middle", fill: "#fff", fontSize: "1.75rem" }}
           background
         />
         <Legend iconSize={10} />

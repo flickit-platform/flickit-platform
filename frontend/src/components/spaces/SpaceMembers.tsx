@@ -90,7 +90,6 @@ export const SpaceMembers = (props: any) => {
           mb={2}
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Ubuntu",
             textTransform: "unset",
             letterSpacing: ".05rem",
           }}
@@ -144,14 +143,13 @@ export const SpaceMembers = (props: any) => {
           size="small"
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Ubuntu",
             textTransform: "capitalize",
             letterSpacing: ".05rem",
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-              <Typography fontFamily="Ubuntu" fontWeight={"bold"}>
+              <Typography fontWeight={"bold"}>
                 {spaceMembersQueryData?.data?.items?.length}
               </Typography>
             </Box>
@@ -258,7 +256,6 @@ export const SpaceMembers = (props: any) => {
                       titleProps={{
                         textTransform: "none",
                         fontSize: ".95rem",
-                        fontFamily: "Ubuntu",
                       }}
                     >
                       <Trans i18nKey="invitees" />
@@ -327,7 +324,6 @@ export const SpaceMembers = (props: any) => {
                               {
                                 <Actions
                                   isOwner={isOwner}
-                                  editable={editable}
                                   member={invitees}
                                   fetchSpaceMembers={
                                     spaceMembersInviteeQueryData.query
@@ -505,8 +501,11 @@ const InviteSpaceMemberDialog = (
     >
       <Typography>
         <Trans
-          i18nKey="emailIsNotOnFlickitYet"
-          values={{ email: rest.context?.data?.email || "This user" }}
+          i18nKey="emailIsNotOnAppTitleYet"
+          values={{
+            email: rest.context?.data?.email || "This user",
+            title: import.meta.env.VITE_APP_TITLE,
+          }}
         />{" "}
         <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />
       </Typography>

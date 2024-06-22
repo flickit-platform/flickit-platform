@@ -23,16 +23,16 @@ export const QuestionThumb = (props: any) => {
           <Trans i18nKey={"question"} /> {questionIndex}/
           {total_number_of_questions}
         </Typography>
-        <Typography variant="h6" fontFamily={"Ubuntu"}>
-          {question?.title}
-        </Typography>
+        <Typography variant="h6">{question?.title}</Typography>
       </Box>
       {question.answer?.selectedOption && (
         <Box mt={3}>
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
           </Typography>
-          <Typography variant="h6">{question.answer?.selectedOption?.title}</Typography>
+          <Typography variant="h6">
+            {question.answer?.selectedOption?.title}
+          </Typography>
         </Box>
       )}
       {question.answer && question.answer.isNotApplicable && (
@@ -55,7 +55,8 @@ export const QuestionThumb = (props: any) => {
             onClose();
           }}
         >
-          {question.answer || (question.answer && question.answer.isNotApplicable) ? (
+          {question.answer ||
+          (question.answer && question.answer.isNotApplicable) ? (
             <Trans i18nKey="edit" />
           ) : (
             <Trans i18nKey="submitAnAnswer" />

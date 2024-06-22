@@ -846,7 +846,6 @@ const ExpertGroupMembersDetail = (props: any) => {
               mb={2}
               titleProps={{
                 fontSize: "1rem",
-                fontFamily: "Ubuntu",
                 textTransform: "unset",
                 letterSpacing: ".05rem",
               }}
@@ -873,7 +872,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                         titleProps={{
                           textTransform: "none",
                           fontSize: ".95rem",
-                          fontFamily: "Ubuntu",
                           mb: 1,
                         }}
                       >
@@ -992,7 +990,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                       titleProps={{
                         textTransform: "none",
                         fontSize: ".95rem",
-                        fontFamily: "Ubuntu",
                       }}
                     >
                       <Trans i18nKey="invitees" />

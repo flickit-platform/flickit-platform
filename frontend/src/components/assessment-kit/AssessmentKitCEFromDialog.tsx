@@ -373,7 +373,7 @@ const IsPrivateSwitch = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"14px"}
+              fontSize="0.825rem"
             >
               <Trans i18nKey="private" />
             </Typography>
@@ -399,7 +399,7 @@ const IsPrivateSwitch = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"14px"}
+              fontSize="0.825rem"
             >
               <Trans i18nKey="public" />
             </Typography>

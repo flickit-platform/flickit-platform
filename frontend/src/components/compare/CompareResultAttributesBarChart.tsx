@@ -44,7 +44,6 @@ const CompareResultSubjectAttributesBarChart = (props: {
       <Typography
         sx={{
           fontSize: "1.05rem",
-          fontFamily: "Ubuntu",
           opacity: 0.7,
           mb: 0.5,
           mt: 2,

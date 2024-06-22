@@ -64,7 +64,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         <Actions assessmentId={assessmentId} />
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
-          fontSize="32px"
+          fontSize="2rem"
           sx={{
             textDecoration: "none",
           }}

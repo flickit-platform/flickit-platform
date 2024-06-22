@@ -50,7 +50,8 @@ const AssessmentKitExpertViewContainer = () => {
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
 
   const AssessmentKitDetails = async () => {
-    const data: AssessmentKitDetailsType = await fetchAssessmentKitDetailsQuery.query();
+    const data: AssessmentKitDetailsType =
+      await fetchAssessmentKitDetailsQuery.query();
     setDetails(data);
     setLoaded(true);
   };
@@ -230,7 +231,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
         subjectId: subjectId,
       });
       setAssessmentKitSubjectDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   return (
@@ -261,7 +262,6 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Ubuntu",
                   fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
@@ -305,12 +305,11 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                         borderRadius: 1,
                       }}
                     >
-                      <Typography variant="body2" fontFamily="Ubuntu">
+                      <Typography variant="body2">
                         <Trans i18nKey="questionsCount" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                       >
@@ -328,12 +327,11 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                         borderRadius: 1,
                       }}
                     >
-                      <Typography variant="body2" fontFamily="Ubuntu">
+                      <Typography variant="body2">
                         <Trans i18nKey="description" />:
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                       >
@@ -345,12 +343,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
               </Box>
               <Divider />
               <Box m={1} mt={2}>
-                <Typography
-                  variant="h6"
-                  fontFamily="Ubuntu"
-                  fontWeight={"bold"}
-                  fontSize="1rem"
-                >
+                <Typography variant="h6" fontWeight={"bold"} fontSize="1rem">
                   <Trans i18nKey="attributes" />
                 </Typography>
                 {assessmentKitSubjectDetails && (
@@ -368,7 +361,6 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                           >
                             <Typography
                               variant="body1"
-                              fontFamily="Ubuntu"
                               fontWeight={"bold"}
                               minWidth="180px"
                             >
@@ -386,7 +378,6 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
                               ...(isExpanded ? {} : styles.ellipsis),
                             }}
                             variant="body2"
-                            fontFamily="Ubuntu"
                           >
                             {item.description}
                           </Typography> */}
@@ -432,7 +423,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
         questionnaireId: questionnaireId,
       });
       setQuestionnaireDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   return (
     <Box>
@@ -462,7 +453,6 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: "Ubuntu",
                   fontWeight: "bold",
                   fontSize: "1.2rem",
                   opacity: 1,
@@ -483,15 +473,10 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     borderRadius: 1,
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Ubuntu">
+                  <Typography variant="body2">
                     <Trans i18nKey="questionsCount" />:
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    fontFamily="Ubuntu"
-                    sx={{ ml: 2 }}
-                    fontWeight="bold"
-                  >
+                  <Typography variant="body2" sx={{ ml: 2 }} fontWeight="bold">
                     {questionnaireDetails?.questionsCount}
                   </Typography>
                 </Box>
@@ -507,14 +492,13 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     my: "16px",
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Ubuntu">
+                  <Typography variant="body2">
                     <Trans i18nKey="relatedSubjects" />:
                   </Typography>
                   {questionnaireDetails?.relatedSubjects.map(
                     (subject: string, index: number) => (
                       <Typography
                         variant="body2"
-                        fontFamily="Ubuntu"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
                         key={index}
@@ -536,15 +520,10 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
                     my: "16px",
                   }}
                 >
-                  <Typography variant="body2" fontFamily="Ubuntu">
+                  <Typography variant="body2">
                     <Trans i18nKey="description" />:
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    fontFamily="Ubuntu"
-                    sx={{ ml: 2 }}
-                    fontWeight="bold"
-                  >
+                  <Typography variant="body2" sx={{ ml: 2 }} fontWeight="bold">
                     {questionnaireDetails?.description}
                   </Typography>
                 </Box>
@@ -581,7 +560,7 @@ const AssessmentKitQuestionsList = (props: {
         attributeId: attributeId,
       });
       setAttributesDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   const fetchMaturityLevelQuestions = async () => {
     try {
@@ -591,7 +570,7 @@ const AssessmentKitQuestionsList = (props: {
         maturityLevelId: value,
       });
       setMaturityLevelQuestions(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (isExpanded && attributeId) {
@@ -630,15 +609,10 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Ubuntu">
+          <Typography variant="body2">
             <Trans i18nKey="questionsCount" />:
           </Typography>
-          <Typography
-            variant="body2"
-            fontFamily="Ubuntu"
-            sx={{ ml: 2 }}
-            fontWeight="bold"
-          >
+          <Typography variant="body2" sx={{ ml: 2 }} fontWeight="bold">
             {attributesDetails?.questionCount}
           </Typography>
         </Box>
@@ -653,15 +627,10 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Ubuntu">
+          <Typography variant="body2">
             <Trans i18nKey="weight" />:
           </Typography>
-          <Typography
-            variant="body2"
-            fontFamily="Ubuntu"
-            sx={{ ml: 2 }}
-            fontWeight="bold"
-          >
+          <Typography variant="body2" sx={{ ml: 2 }} fontWeight="bold">
             {attributesDetails?.weight}
           </Typography>
         </Box>
@@ -676,15 +645,10 @@ const AssessmentKitQuestionsList = (props: {
             borderRadius: 1,
           }}
         >
-          <Typography variant="body2" fontFamily="Ubuntu">
+          <Typography variant="body2">
             <Trans i18nKey="description" />:
           </Typography>
-          <Typography
-            variant="body2"
-            fontFamily="Ubuntu"
-            sx={{ ml: 2 }}
-            fontWeight="bold"
-          >
+          <Typography variant="body2" sx={{ ml: 2 }} fontWeight="bold">
             {attributesDetails?.description}
           </Typography>
         </Box>
@@ -697,8 +661,9 @@ const AssessmentKitQuestionsList = (props: {
               onChange={handleTabChange}
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: `${colorPallet[selectedTabIndex ? selectedTabIndex : 0]
-                    } !important`,
+                  backgroundColor: `${
+                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                  } !important`,
                 },
               }}
             >
@@ -740,7 +705,7 @@ const AssessmentKitQuestionsList = (props: {
           </TabPanel>
         </TabContext>
       </Box>
-      {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontFamily="Ubuntu" fontSize=".9rem">
+      {/* <Typography variant="h6" sx={{ opacity: 0.8 }} fontSize=".9rem">
         <Trans i18nKey="questions" />
         <span style={{ float: "right" }}>{questions.length}</span>
       </Typography> */}
@@ -778,7 +743,6 @@ const AssessmentKitQuestionsList = (props: {
                     <Grid xs={12} item>
                       <Typography
                         variant="body1"
-                        fontFamily="Ubuntu"
                         fontWeight={"bold"}
                         position="relative"
                         sx={{ cursor: "pointer" }}
@@ -794,7 +758,6 @@ const AssessmentKitQuestionsList = (props: {
                               pb: "2px",
                               color: "#767676",
                               display: "block",
-                              fontFamily: "Ubuntu",
                               fontSize: "0.8rem",
                               width: "100%",
                               borderBottom: (t) =>
@@ -817,7 +780,6 @@ const AssessmentKitQuestionsList = (props: {
                               width: "100%",
                               top: "-36px",
                               pb: "2px",
-                              fontFamily: "Ubuntu",
                               color: "#767676",
                               borderBottom: (t) => `1px solid ${t.palette.warning.main}`,
                             }}
@@ -844,7 +806,6 @@ const AssessmentKitQuestionsList = (props: {
                                 top: "-36px",
                                 pb: "2px",
                                 color: "#767676",
-                                fontFamily: "Ubuntu",
                                 borderBottom: (t) => `1px solid ${t.palette.secondary.dark}`,
                               }}
                               variant="subMedium"
@@ -867,7 +828,6 @@ const AssessmentKitQuestionsList = (props: {
                                 top: "-36px",
                                 pb: "2px",
                                 color: "#767676",
-                                fontFamily: "Ubuntu",
                                 borderBottom: (t) =>
                                   `1px solid ${t.palette.secondary.dark}`,
                               }}
@@ -1121,12 +1081,7 @@ const SubjectQuestionList = (props: any) => {
     <Box>
       {questions[0] && (
         <Box m={1} mt={2}>
-          <Typography
-            variant="h6"
-            fontFamily="Ubuntu"
-            fontWeight={"bold"}
-            fontSize="1rem"
-          >
+          <Typography variant="h6" fontWeight={"bold"} fontSize="1rem">
             <Trans i18nKey="questions" />
           </Typography>
         </Box>
@@ -1179,7 +1134,7 @@ const SubjectQuestionList = (props: any) => {
                       borderRadius: "8px",
                       background: "#1976D2",
                       color: "#fff",
-                      fontSize: "12px",
+                      fontSize: ".75rem",
                       px: "12px",
                       mx: "4px",
                       height: "24px",
@@ -1196,7 +1151,7 @@ const SubjectQuestionList = (props: any) => {
                     borderRadius: "8px",
                     background: "#273248",
                     color: "#fff",
-                    fontSize: "12px",
+                    fontSize: ".75rem",
                     px: "12px",
                     mx: "4px",
                     height: "24px",
@@ -1212,7 +1167,7 @@ const SubjectQuestionList = (props: any) => {
                     borderRadius: "8px",
                     background: "#7954B3",
                     color: "#fff",
-                    fontSize: "12px",
+                    fontSize: ".75rem",
                     px: "12px",
                     mx: "4px",
                     height: "24px",
@@ -1232,7 +1187,7 @@ const SubjectQuestionList = (props: any) => {
                       borderRadius: "8px",
                       background: "#004F83",
                       color: "#fff",
-                      fontSize: "12px",
+                      fontSize: ".75rem",
                       px: "12px",
                       mx: "4px",
                       height: "24px",
@@ -1257,7 +1212,6 @@ const SubjectQuestionList = (props: any) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      fontFamily: "Ubuntu",
                       fontWeight: "bold",
                       opacity: 0.6,
                       ml: "4px",
@@ -1268,7 +1222,6 @@ const SubjectQuestionList = (props: any) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      fontFamily: "Ubuntu",
                       fontWeight: "bold",
                       opacity: 0.6,
                       ml: "4px",
@@ -1290,7 +1243,6 @@ const SubjectQuestionList = (props: any) => {
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        fontFamily: "Ubuntu",
                         fontWeight: "bold",
                         mr: "64px",
                       }}
@@ -1300,7 +1252,6 @@ const SubjectQuestionList = (props: any) => {
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        fontFamily: "Ubuntu",
                         fontWeight: "bold",
                       }}
                     >
@@ -1340,7 +1291,7 @@ const QuestionnairesQuestionList = (props: any) => {
         questionId: questionId,
       });
       setQuestionsDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   function formatNumber(value: any) {
     // Check if the value is an integer (no decimal places)
@@ -1354,12 +1305,7 @@ const QuestionnairesQuestionList = (props: any) => {
   return (
     <Box>
       <Box m={1} mt={2}>
-        <Typography
-          variant="h6"
-          fontFamily="Ubuntu"
-          fontWeight={"bold"}
-          fontSize="1rem"
-        >
+        <Typography variant="h6" fontWeight={"bold"} fontSize="1rem">
           <Trans i18nKey="questions" />
         </Typography>
       </Box>
@@ -1412,7 +1358,7 @@ const QuestionnairesQuestionList = (props: any) => {
                       borderRadius: "8px",
                       background: "#1976D2",
                       color: "#fff",
-                      fontSize: "12px",
+                      fontSize: ".75rem",
                       px: "12px",
                       mx: "4px",
                       height: "24px",
@@ -1430,7 +1376,7 @@ const QuestionnairesQuestionList = (props: any) => {
                       borderRadius: "8px",
                       background: "#004F83",
                       color: "#fff",
-                      fontSize: "12px",
+                      fontSize: ".75rem",
                       px: "12px",
                       mx: "4px",
                       height: "24px",
@@ -1474,7 +1420,6 @@ const QuestionnairesQuestionList = (props: any) => {
                           pb: "4px",
                           color: "#767676",
                           display: "block",
-                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1488,7 +1433,6 @@ const QuestionnairesQuestionList = (props: any) => {
                           alignItems: "center",
                           pb: "4px",
                           color: "#767676",
-                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1502,7 +1446,6 @@ const QuestionnairesQuestionList = (props: any) => {
                           alignItems: "center",
                           pb: "4px",
                           color: "#767676",
-                          fontFamily: "Ubuntu",
                           fontSize: "0.8rem",
                         }}
                       >
@@ -1520,7 +1463,6 @@ const QuestionnairesQuestionList = (props: any) => {
                             <Typography
                               sx={{
                                 color: "#767676",
-                                fontFamily: "Ubuntu",
                                 fontSize: "0.8rem",
                                 pb: "4px",
                               }}
@@ -1543,15 +1485,15 @@ const QuestionnairesQuestionList = (props: any) => {
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                borderTop: `${index !== 0 && "1px solid #D3D3D3"
-                                  }`,
+                                borderTop: `${
+                                  index !== 0 && "1px solid #D3D3D3"
+                                }`,
                                 py: 1,
                               }}
                             >
                               <Typography
                                 sx={{ width: "40%", py: 1 }}
                                 variant="body1"
-                                fontFamily="Ubuntu"
                                 fontWeight={"bold"}
                               >
                                 {attributes.title}
@@ -1570,7 +1512,6 @@ const QuestionnairesQuestionList = (props: any) => {
                                     return (
                                       <Typography
                                         variant="body1"
-                                        fontFamily="Ubuntu"
                                         fontWeight={"bold"}
                                         sx={{ py: 1 }}
                                       >
@@ -1595,7 +1536,6 @@ const QuestionnairesQuestionList = (props: any) => {
                                     return (
                                       <Typography
                                         variant="body1"
-                                        fontFamily="Ubuntu"
                                         fontWeight={"bold"}
                                         sx={{ py: 1 }}
                                       >
@@ -1666,7 +1606,7 @@ const MaturityLevelsDetails = (props: any) => {
   );
   return (
     <Box sx={{ background: "#fff", px: 4, py: 4, borderRadius: "8px" }}>
-      <Typography fontWeight={900} fontSize="24px" mb={8}>
+      <Typography fontWeight={900} fontSize="1.5rem" mb={8}>
         <Trans i18nKey="maturityLevels" />
       </Typography>
       {maturity_levels &&
@@ -1688,7 +1628,7 @@ const MaturityLevelsDetails = (props: any) => {
               >
                 <Typography
                   sx={{ transform: "skew(30deg);" }}
-                  fontSize="24px"
+                  fontSize="1.5rem"
                   fontWeight={900}
                   color="#fff"
                 >
@@ -1704,7 +1644,7 @@ const MaturityLevelsDetails = (props: any) => {
                 >
                   <Typography
                     sx={{ transform: "skew(30deg)" }}
-                    fontSize="14px"
+                    fontSize=".875rem"
                     color="#fff"
                     fontWeight={900}
                     mr={"4px"}
@@ -1716,7 +1656,7 @@ const MaturityLevelsDetails = (props: any) => {
                     return (
                       <Typography
                         sx={{ transform: "skew(30deg)" }}
-                        fontSize="12px"
+                        fontSize=".75rem"
                         color="#fff"
                       >
                         {title}:{value}%{competences.length - 1 !== key && ", "}

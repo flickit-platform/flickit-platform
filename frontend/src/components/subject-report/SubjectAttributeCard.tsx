@@ -98,14 +98,12 @@ const SUbjectAttributeCard = (props: any) => {
             {/* <Box mt={3}>
               <Typography
                 fontSize="1.15rem"
-                fontFamily="Roboto"
                 fontWeight={"bold"}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
               >
                 <Trans i18nKey={"withConfidence"} />
                 <Typography
                   component="span"
-                  fontFamily="Roboto"
                   fontWeight={"bold"}
                   color="#3596A1"
                   fontSize="1.12rem"
@@ -116,7 +114,6 @@ const SUbjectAttributeCard = (props: any) => {
                 <Trans i18nKey={"wasEstimate"} values={{ attribute: title }} />
                 <Typography
                   component="span"
-                  fontFamily="Roboto"
                   fontWeight={"bold"}
                   color="#6035A1"
                   fontSize="1.2rem"
@@ -128,7 +125,7 @@ const SUbjectAttributeCard = (props: any) => {
               </Typography>
             </Box> */}
             {/* <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
-              <Typography fontSize="1.05rem" fontFamily="Roboto">
+              <Typography fontSize="1.05rem" >
                 {description}
               </Typography>
             </Box> */}
@@ -138,7 +135,7 @@ const SUbjectAttributeCard = (props: any) => {
       <AccordionDetails sx={{ padding: "0 !important", mb: 2 }}>
         <Typography
           mt={4}
-          fontSize={{ md: "2rem", xs: "1.25rem" }}
+          fontSize="1.5rem"
           fontWeight={700}
           sx={{
             gap: "46px",
@@ -150,11 +147,7 @@ const SUbjectAttributeCard = (props: any) => {
         {emptyNegativeEvidence && emptyPositiveEvidence ? (
           <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
             <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-            <Typography
-              fontSize={{ md: "1.5rem", xs: "1rem" }}
-              fontWeight={500}
-              color="#9DA7B3"
-            >
+            <Typography fontSize="1.25rem" fontWeight={500} color="#9DA7B3">
               <Trans i18nKey={"noEvidence"} />
             </Typography>
           </Box>
@@ -194,7 +187,7 @@ const SUbjectAttributeCard = (props: any) => {
 
         <Typography
           textAlign="center"
-          fontSize={{ md: "2rem", xs: "1.25rem" }}
+          fontSize="1.5rem"
           fontWeight={700}
           color="#3B4F68"
           my="2rem"
@@ -270,7 +263,7 @@ const AttributeSummary = (props: any) => {
             sx={{
               textTransform: "none",
               whiteSpace: "pre-wrap",
-              fontSize: { md: "1.5rem", xs: "0.75rem" },
+              fontSize: "1.25rem",
             }}
             fontWeight={500}
           >
@@ -296,7 +289,6 @@ const AttributeSummary = (props: any) => {
         >
           <Typography
             fontWeight={500}
-            fontSize={{ md: "1rem", xs: "0.9rem" }}
             display={{ xs: "none", sm: "none", md: "block" }}
             color="rgba(108, 123, 142, 1)"
           >
@@ -320,7 +312,7 @@ const AttributeSummary = (props: any) => {
           <Typography
             fontWeight={700}
             pl={1}
-            fontSize={{ md: "1.75rem", xs: "0.9rem" }}
+            fontSize="1.5rem"
             color={colorPallet[maturityLevelValue - 1]}
           >
             {status}
@@ -379,8 +371,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-      ? `${cl}%`
-      : "0%";
+    ? `${cl}%`
+    : "0%";
   return (
     <Box
       height={"38px"}
@@ -469,7 +461,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
     [`& .${tooltipClasses.tooltip}`]: {
       maxWidth: 600,
       marginLeft: "36px",
-      fontSize: "14px",
+      fontSize: ".875rem",
     },
   });
   return (
@@ -539,7 +531,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   denominator={100}
                   displayPercent
                   guideText={text}
-                  progressHeight="1.25rem"
+                  progressHeight="20px"
                 />
               </Grid>
               <Grid item lg={2} md={2} xs={2}>
@@ -566,7 +558,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 >
                   <Typography
                     fontWeight={700}
-                    fontSize={{ md: "1.5rem", xs: "1rem" }}
+                    fontSize="1.5rem"
                     color={colorPallet[maturityLevel?.value - 1]}
                   >
                     {maturityLevel?.title}
@@ -724,7 +716,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -742,7 +733,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -760,7 +750,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -771,7 +760,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     <Box
                                       sx={{
                                         width: "25%",
-                                 
                                       }}
                                     >
                                       <Typography
@@ -779,7 +767,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -790,7 +777,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     <Box
                                       sx={{
                                         width: "10%",
-
                                       }}
                                     >
                                       <Typography
@@ -798,7 +784,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -812,7 +797,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           pb: "4px",
                                           color: "#767676",
                                           display: "block",
-                                          fontFamily: "Roboto",
                                           fontSize: "0.7rem",
                                         }}
                                         textAlign="center"
@@ -850,7 +834,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           <Typography
                                             display="flex"
                                             variant="body1"
-                                            fontFamily="Ubuntu"
                                             textAlign="left"
                                             fontSize="0.75rem"
                                           >
@@ -867,7 +850,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           >
                                             <Typography
                                               variant="body1"
-                                              fontFamily="Ubuntu"
                                               fontWeight="300"
                                               fontSize="0.75rem"
                                               letterSpacing="0.4px"
@@ -893,7 +875,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         >
                                           <Typography
                                             variant="body1"
-                                            fontFamily="Ubuntu"
                                             fontWeight="300"
                                             textAlign="center"
                                             fontSize="0.75rem"
@@ -906,8 +887,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             answerIsNotApplicable
                                               ? "NA"
                                               : answerOptionTitle !== null
-                                                ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                : "---"
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"
                                           }
                                         >
                                           <Box
@@ -917,7 +898,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           >
                                             <Typography
                                               variant="body1"
-                                              fontFamily="Ubuntu"
                                               fontWeight="300"
                                               textAlign="center"
                                               fontSize="0.75rem"
@@ -925,8 +905,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                               {answerIsNotApplicable
                                                 ? "NA"
                                                 : answerOptionTitle !== null
-                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                  : "---"}
+                                                ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                : "---"}
                                             </Typography>
                                           </Box>
                                         </Tooltip>
@@ -937,7 +917,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         >
                                           <Typography
                                             variant="body1"
-                                            fontFamily="Ubuntu"
                                             fontWeight="300"
                                             textAlign="center"
                                             fontSize="0.75rem"
@@ -950,7 +929,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         <Box sx={{ width: "15%" }}>
                                           <Typography
                                             variant="body1"
-                                            fontFamily="Roboto"
                                             fontWeight="bold"
                                             textAlign="center"
                                           >
@@ -1015,7 +993,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
           left: "12px",
           opacity: 0.8,
           letterSpacing: { xs: ".09em", sm: ".15em" },
-          fontSize: { xs: "12px", sm: "16px" },
+          fontSize: ".75rem",
           color: theme.palette.getContrastText(color),
         }}
         textTransform="uppercase"
