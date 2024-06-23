@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/v1/confidence-levels/', include('assessment.url.confidence-levels-url')),
     path('api/v1/expert-groups/', include('baseinfo.url.expert_group_url')),
     path('api/v1/spaces/', include('account.url.url_space_v1')),
+    path('api/v1/tenant/', include('account.url.url_tenant_v1')),
 ]
 
 if settings.PRODUCTION_STATE == False:
