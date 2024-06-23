@@ -22,7 +22,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
   expertGroup: AssessmentKitStatsExpertGroup;
-  pathInfo: PathInfo;
   data: any;
   progress: number;
   questionCount: number;
@@ -33,7 +32,6 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   const {
     assessmentKit,
     expertGroup,
-    pathInfo,
     data,
     progress,
     questionCount,
