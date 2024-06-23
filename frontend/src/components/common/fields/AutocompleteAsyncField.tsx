@@ -151,9 +151,9 @@ const AutocompleteBaseField = (
       console.error(e);
     }
   };
-  
+
   useEffect(() => {
-    console.log(options)
+    console.log(options);
     if (!searchOnType && !isFirstFetchRef.current) {
       return;
     }
@@ -255,7 +255,13 @@ const AutocompleteBaseField = (
       renderOption={(props, option) =>
         option.inputValue ? (
           <li {...props}>
-            <LoadingButton onClick={createSpaceQuery}>Add "{option.inputValue}"</LoadingButton>
+            <LoadingButton
+              fullWidth
+              onClick={createSpaceQuery}
+              sx={{ justifyContent: "start" }}
+            >
+              Add "{option.inputValue}"
+            </LoadingButton>
           </li>
         ) : (
           <li {...props}>{option.title}</li>
