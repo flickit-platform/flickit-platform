@@ -263,7 +263,7 @@ const SubjectTitle = (props: {
   const { title } = subject;
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
-  const { config } = useAppConfigContext();
+  const { config } = useConfigContext();
 
   useEffect(() => {
     setDocumentTitle(`${t("report", { title: title })}`, config.appTitle);
