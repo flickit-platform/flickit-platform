@@ -20,6 +20,7 @@ import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { customFontFamily } from "@/config/theme";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -119,7 +120,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         dispatch(authActions.setUserInfo(data));
         navigate(`/${spaceId}/assessments/1`);
       })
-      .catch((e) => {});
+      .catch((e) => { });
   };
 
   return (
@@ -144,6 +145,8 @@ const SpaceCard = (props: ISpaceCardProps) => {
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
+              fontFamily: customFontFamily,
+              fontSize: "1.2rem",
               fontWeight: "bold",
               textDecoration: "none",
               height: "100%",
@@ -315,11 +318,11 @@ const Actions = (props: any) => {
           onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
-          !isOwner && {
-            icon: <ExitToAppRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="leaveSpace" />,
-            onClick: leaveSpace,
-          },
+        !isOwner && {
+          icon: <ExitToAppRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="leaveSpace" />,
+          onClick: leaveSpace,
+        },
       ]}
     />
   );

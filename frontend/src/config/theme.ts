@@ -10,7 +10,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 
-const customFontFamily = '"Ubuntu","sans-serif","Vazirmatn"';
+export const customFontFamily = '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
+export const customHeaderFamily = 'Oswald, Roboto, Vazirmatn'
 const fontSize = ["12px", "14px", "14px", "16px", "18px"];
 
 declare module "@mui/material/styles/createPalette" {
@@ -85,16 +86,22 @@ export const theme = createTheme({
       color: "GrayText",
     },
     button: {
+      fontFamily: customHeaderFamily,
       letterSpacing: ".1em",
     },
-
+    h3: {
+      fontFamily: customHeaderFamily,
+    },
     h4: {
+      fontFamily: customHeaderFamily,
       opacity: 0.9,
     },
     h5: {
+      fontFamily: customHeaderFamily,
       opacity: 0.85,
     },
     h6: {
+      fontFamily: customHeaderFamily,
       letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
