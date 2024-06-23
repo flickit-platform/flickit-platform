@@ -43,11 +43,6 @@ const AssessmentReportContainer = (props: any) => {
         config
       ),
   });
-  const fetchPathInfo = useQuery({
-    service: (args, config) =>
-      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
-    runOnMount: true,
-  });
   const calculate = async () => {
     try {
       await calculateMaturityLevelQuery.query();
@@ -74,9 +69,9 @@ const AssessmentReportContainer = (props: any) => {
 
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress, fetchPathInfo]}
+      queryBatchData={[queryData, assessmentTotalProgress]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress, pathInfo = {}]) => {
+      render={([data = {}, progress]) => {
         const { status, assessment, subjects, topStrengths, topWeaknesses } =
           data || {};
         const colorCode = assessment?.color?.code || "#101c32";
@@ -92,7 +87,6 @@ const AssessmentReportContainer = (props: any) => {
             <AssessmentReportTitle
               data={data}
               colorCode={colorCode}
-              pathInfo={pathInfo}
             />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
@@ -124,7 +118,6 @@ const AssessmentReportContainer = (props: any) => {
                       <AssessmentSummary
                         expertGroup={expertGroup}
                         assessmentKit={assessment}
-                        pathInfo={pathInfo}
                         data={data}
                         progress={totalProgress}
                         questionCount={questionsCount}

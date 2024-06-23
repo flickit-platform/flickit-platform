@@ -15,16 +15,14 @@ import { t } from "i18next";
 interface IAssessmentReportTitle {
   data: any;
   colorCode: string;
-  pathInfo: any;
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
-  const { data, colorCode, pathInfo } = props;
+  const { data, colorCode, } = props;
   const {
-    assessment: { title, lastModificationTime, assessmentKit },
+    assessment: { title, lastModificationTime, assessmentKit ,space,},
   } = data;
   const { spaceId, page } = useParams();
-  const { space, assessment } = pathInfo;
 
   useEffect(() => {
     setDocumentTitle(`${t("overallInsight", { title: title })}`);
@@ -44,10 +42,10 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           routes={[
             {
               title: space?.title,
-              to: `/${spaceId}/assessments/${page}`,
+              to: `/${space?.id}/assessments/${page}`,
             },
             {
-              title: assessment?.title,
+              title: title,
             },
           ]}
           displayChip
