@@ -62,6 +62,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useScreenResize from "@utils/useScreenResize";
+import { useAppConfigContext } from "@/providers/AppActions";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -76,6 +77,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
   const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
+  const { state } = useAppConfigContext();
+
   useEffect(() => {
     return () => {
       abortController.current.abort();
@@ -83,7 +86,10 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   }, []);
   const is_farsi = languageDetector(title);
   useEffect(() => {
-    setDocumentTitle(`${t("question")} ${questionIndex}: ${title}`);
+    setDocumentTitle(
+      `${t("question")} ${questionIndex}: ${title}`,
+      state.appTitle
+    );
     setNotApplicable(answer?.isNotApplicable ?? false);
     if (answer?.confidenceLevel) {
       dispatch(

@@ -32,6 +32,7 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
+import { useAppConfigContext } from "@/providers/AppActions";
 
 export const SpaceMembers = (props: any) => {
   const { editable } = props;
@@ -465,6 +466,7 @@ const InviteSpaceMemberDialog = (
     resetForm: () => void;
   } & IDialogProps
 ) => {
+  const { state } = useAppConfigContext();
   const {
     spaceMembersQueryData,
     spaceMembersInviteeQueryData,
@@ -504,7 +506,7 @@ const InviteSpaceMemberDialog = (
           i18nKey="emailIsNotOnAppTitleYet"
           values={{
             email: rest.context?.data?.email || "This user",
-            title: import.meta.env.VITE_APP_TITLE,
+            title: state.appTitle,
           }}
         />{" "}
         <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />

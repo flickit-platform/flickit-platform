@@ -31,6 +31,7 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
+import { useAppConfigContext } from "@/providers/AppActions";
 
 const SubjectContainer = () => {
   const {
@@ -262,9 +263,10 @@ const SubjectTitle = (props: {
   const { title } = subject;
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
+  const { state } = useAppConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(`${t("report", { title: title })}`);
+    setDocumentTitle(`${t("report", { title: title })}`, state.appTitle);
   }, [title]);
   return (
     <Title

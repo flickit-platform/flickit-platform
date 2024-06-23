@@ -11,6 +11,7 @@ import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
+import { useAppConfigContext } from "@/providers/AppActions";
 
 interface IAssessmentReportTitle {
   data: any;
@@ -18,14 +19,18 @@ interface IAssessmentReportTitle {
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
-  const { data, colorCode, } = props;
+  const { data, colorCode } = props;
   const {
-    assessment: { title, lastModificationTime, assessmentKit ,space,},
+    assessment: { title, lastModificationTime, assessmentKit, space },
   } = data;
   const { spaceId, page } = useParams();
+  const { state } = useAppConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(`${t("overallInsight", { title: title })}`);
+    setDocumentTitle(
+      `${t("overallInsight", { title: title })}`,
+      state.appTitle
+    );
   }, [title]);
 
   return (
