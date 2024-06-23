@@ -39,6 +39,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   } = props;
   const {
     assessment: { title, lastModificationTime, creationTime, id: assessmentId },
+    assessmentPermissions: { manageable }
   } = data;
   return (
     <Box
@@ -59,7 +60,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       }}
       color="#004F83"
     >
-        <Actions assessmentId={assessmentId} />
+        <Actions assessmentId={assessmentId} manageable={manageable} />
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
           fontSize="2rem"
@@ -129,8 +130,8 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   );
 };
 
-const Actions = (props: {assessmentId: string}) => {
-    const { assessmentId } = props;
+const Actions = (props: {assessmentId: string, manageable: boolean}) => {
+    const { assessmentId, manageable } = props;
     const navigate = useNavigate();
     const { spaceId } = useParams()
 
@@ -144,7 +145,8 @@ const Actions = (props: {assessmentId: string}) => {
             {...useMenu()}
             boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
             items={
-                [{
+                [
+                    manageable && {
                     icon: <SettingsIcon fontSize="small" />,
                     text: <Trans i18nKey="settings" />,
                     onClick: assessmentSetting,
