@@ -10,13 +10,13 @@ import { ActionTypes } from "./actions";
 import { useServiceContext } from "../ServiceProvider";
 
 interface AppContextType {
-  state: AppState;
+  config: AppState;
   dispatch: React.Dispatch<any>;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const useAppConfigContext = () => {
+export const useConfigContext = () => {
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("useAppContext must be used within an AppProvider");
@@ -28,13 +28,12 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
-export const ActionProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const ConfigProvider: React.FC<AppProviderProps> = ({ children }) => {
+  const [config, dispatch] = useReducer(reducer, initialState);
   const { service } = useServiceContext();
 
   useEffect(() => {
-    const config = undefined;
-    service.fetchTenantInfo(config).then((res: any) => {
+    service.fetchTenantInfo(undefined).then((res: any) => {
       const appTitle = res.data.name;
       dispatch({
         type: ActionTypes.SET_APP_TITLE,
@@ -53,7 +52,7 @@ export const ActionProvider: React.FC<AppProviderProps> = ({ children }) => {
       // Update title tag
       document.title = appTitle;
     });
-    service.fetchTenantLogo(config).then((res: any) => {
+    service.fetchTenantLogo(undefined).then((res: any) => {
       dispatch({
         type: ActionTypes.SET_APP_LOGO_URL,
         payload: res.data.logoLink,
@@ -61,7 +60,7 @@ export const ActionProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }, []);
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ config, dispatch }}>
       {children}
     </AppContext.Provider>
   );

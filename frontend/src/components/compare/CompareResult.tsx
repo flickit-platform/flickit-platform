@@ -18,7 +18,7 @@ import QueryData from "../common/QueryData";
 import { Link, useSearchParams } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Divider from "@mui/material/Divider";
-import { useAppConfigContext } from "@/providers/AppActions";
+import { useConfigContext } from "@/providers/ConfgProvider";
 interface ICompareResultProps {
   data: any;
 }
@@ -27,12 +27,12 @@ const CompareResult = (props: ICompareResultProps) => {
   const { data } = props;
   const { subjects, assessments } = data;
 
-  const { state } = useAppConfigContext();
+  const { config } = useConfigContext();
 
   useEffect(() => {
     setDocumentTitle(
       `${t("comparisonResultT")} `,
-      state.appTitle
+      config.appTitle
     );
   }, []);
 

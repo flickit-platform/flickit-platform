@@ -1,11 +1,11 @@
 import { useLayoutEffect } from "react";
 import setDocumentTitle from "./setDocumentTitle";
-import { useAppConfigContext } from "@/providers/AppActions";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const useDocumentTitle = (title: string = "") => {
-  const { state } = useAppConfigContext();
+  const { config } = useConfigContext();
   useLayoutEffect(() => {
-    setDocumentTitle(title, state.appTitle);
+    setDocumentTitle(title, config.appTitle);
   }, []);
 
   return setDocumentTitle;

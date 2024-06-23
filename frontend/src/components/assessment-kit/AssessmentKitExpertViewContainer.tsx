@@ -36,14 +36,14 @@ import FormProviderWithForm from "@common/FormProviderWithForm";
 import setServerFieldErrors from "@utils/setServerFieldError";
 import { AssessmentKitDetailsType } from "@types";
 import convertToBytes from "@/utils/convertToBytes";
-import { useAppConfigContext } from "@/providers/AppActions";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
-  const { state } = useAppConfigContext();
+  const { config } = useConfigContext();
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
@@ -80,7 +80,7 @@ const AssessmentKitExpertViewContainer = () => {
   useEffect(() => {
     setDocumentTitle(
       `${t("assessmentKit")}: ${assessmentKitTitle || ""}`,
-      state.appTitle
+      config.appTitle
     );
   }, [assessmentKitTitle]);
   return (

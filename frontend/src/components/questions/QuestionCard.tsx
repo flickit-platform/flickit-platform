@@ -62,7 +62,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useScreenResize from "@utils/useScreenResize";
-import { useAppConfigContext } from "@/providers/AppActions";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -77,7 +77,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
   const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
-  const { state } = useAppConfigContext();
+  const { config } = useConfigContext();
 
   useEffect(() => {
     return () => {
@@ -88,7 +88,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   useEffect(() => {
     setDocumentTitle(
       `${t("question")} ${questionIndex}: ${title}`,
-      state.appTitle
+      config.appTitle
     );
     setNotApplicable(answer?.isNotApplicable ?? false);
     if (answer?.confidenceLevel) {

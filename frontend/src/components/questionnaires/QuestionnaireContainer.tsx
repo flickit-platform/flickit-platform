@@ -23,7 +23,7 @@ import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import QueryData from "../common/QueryData";
-import { useAppConfigContext } from "@/providers/AppActions";
+import { useConfigContext } from "@/providers/ConfgProvider";
 const QuestionnaireContainer = () => {
   const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
     useQuestionnaire();
@@ -157,12 +157,12 @@ const QuestionnaireTitle = (props: any) => {
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
 
-  const { state } = useAppConfigContext();
+  const { config } = useConfigContext();
 
   useEffect(() => {
     setDocumentTitle(
       `${assessment?.title} ${t("questionnaires")}`,
-      state.appTitle
+      config.appTitle
     );
   }, [assessment]);
 

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "@config/theme";
 import { AppProvider } from "./providers/AppProvider";
 import { AuthProvider } from "./providers/AuthProvider";
-import { ActionProvider } from "./providers/AppActions";
+import { ConfigProvider } from "./providers/ConfgProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
@@ -42,11 +42,11 @@ const renderApp = () =>
           <AppProvider>
             <AuthProvider>
               <ServiceProvider>
-                <ActionProvider>
+                <ConfigProvider>
                   <CssBaseline />
                   <ToastContainer {...toastDefaultConfig} />
                   <App />
-                </ActionProvider>
+                </ConfigProvider>
               </ServiceProvider>
             </AuthProvider>
           </AppProvider>
