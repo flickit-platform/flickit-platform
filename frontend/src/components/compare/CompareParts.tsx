@@ -24,7 +24,6 @@ import { styles } from "@styles";
 import AlertBox from "@common/AlertBox";
 import PermissionControl from "@common/PermissionControl";
 import forLoopComponent from "@utils/forLoopComponent";
-import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { Skeleton } from "@mui/material";
 

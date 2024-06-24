@@ -32,10 +32,12 @@ import { useQuery } from "@utils/useQuery";
 import { ISpacesModel } from "@types";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import keycloakService from "@/service//keycloakService";
+import { useConfigContext } from "@/providers/ConfgProvider";
 const drawerWidth = 240;
 
 const Navbar = () => {
   const { userInfo, dispatch } = useAuthContext();
+  const { config } = useConfigContext();
   const { spaceId } = useParams();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
@@ -73,7 +75,12 @@ const Navbar = () => {
         component={NavLink}
         to={spaceId ? `/${spaceId}/assessments/1` : `/spaces/1`}
       >
-        <img src={import.meta.env.VITE_APP_LOGO_URL} alt={"logo"} width={"224px"} height={"40px"}/>
+        <img
+          src={config.appLogoUrl}
+          alt={"logo"}
+          width={"224px"}
+          height={"40px"}
+        />
       </Typography>
       <Divider />
       <List dense>
@@ -193,7 +200,7 @@ const Navbar = () => {
             }}
             to={`/spaces/1`}
           >
-            <img src={import.meta.env.VITE_APP_LOGO_URL} alt={"logo"} />
+            <img src={config.appLogoUrl} alt={"logo"} />
           </Typography>
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <SpacesButton />

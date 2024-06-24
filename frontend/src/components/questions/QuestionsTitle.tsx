@@ -20,6 +20,7 @@ import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const QuestionsTitle = (props: {
   data: IQuestionnaireModel;
@@ -35,10 +36,15 @@ const QuestionsTitle = (props: {
   const { spaceId, assessmentId, questionIndex, page } = useParams();
   const isComplete = questionIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
-  const { space, assessment, questionnaire } = pathInfo
+  const { space, assessment, questionnaire } = pathInfo;
+  const { config } = useConfigContext();
+
   useEffect(() => {
     if (isComplete) {
-      setDocumentTitle(`${questionnaire.title} ${t("questionnaireFinished")}`);
+      setDocumentTitle(
+        `${questionnaire.title} ${t("questionnaireFinished")}`,
+        config.appTitle
+      );
     }
   }, [questionnaire, isComplete]);
 

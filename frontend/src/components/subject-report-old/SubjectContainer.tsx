@@ -31,6 +31,7 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const SubjectContainer = () => {
   const {
@@ -197,7 +198,10 @@ const useSubject = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    if (subjectQueryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
+    if (
+      subjectQueryData.errorObject?.response?.data?.code ==
+      "CALCULATE_NOT_VALID"
+    ) {
       calculate();
     }
     if (
@@ -245,9 +249,10 @@ const SubjectTitle = (props: {
   const { title } = subject;
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
+  const { config } = useConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(`${title} ${t("insight")}`);
+    setDocumentTitle(`${title} ${t("insight")}`, config.appTitle);
   }, [title]);
   return (
     <Title

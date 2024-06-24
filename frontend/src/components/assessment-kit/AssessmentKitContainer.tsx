@@ -27,6 +27,7 @@ import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { t } from "i18next";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -35,12 +36,16 @@ const AssessmentKitContainer = () => {
     service: (args = { id: assessmentKitId }, config) =>
       service.fetchAssessmentKit(args, config),
   });
+  const { config } = useConfigContext();
 
   return (
     <QueryData
       {...assessmentKitQueryData}
       render={(data) => {
-        setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+        setDocumentTitle(
+          `${t("assessmentKit")}: ${data.title || ""}`,
+          config.appTitle
+        );
         return (
           <AssessmentKit data={data} query={assessmentKitQueryData.query} />
         );

@@ -21,6 +21,7 @@ import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentKitPermissionsContainer = () => {
   const { service } = useServiceContext();
@@ -33,6 +34,8 @@ const AssessmentKitPermissionsContainer = () => {
     service: (args = { assessmentKitId: assessmentKitId }, config) =>
       service.assessmentKitMinInfo(args, config),
   });
+
+  const { config } = useConfigContext();
   return (
     <QueryBatchData
       queryBatchData={[
@@ -41,7 +44,8 @@ const AssessmentKitPermissionsContainer = () => {
       ]}
       render={([data = {}, info = {}]) => {
         setDocumentTitle(
-          `${t("assessmentKit")}: ${info?.expertGroup?.title || ""}`
+          `${t("assessmentKit")}: ${info?.expertGroup?.title || ""}`,
+          config.appTitle
         );
         return (
           <AssessmentKitPermisson
