@@ -56,7 +56,7 @@ const SpaceContainer = () => {
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
-  const isEmpty = spacesQueryData?.data?.results?.length === 0;
+  const isEmpty = spacesQueryData?.data?.items?.length === 0;
 
   return (
     <SpaceLayout

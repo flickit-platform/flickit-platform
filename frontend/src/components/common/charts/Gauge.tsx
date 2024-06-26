@@ -56,7 +56,7 @@ const Gauge = (props: IGaugeProps) => {
     const fontSizeRem =
       maxFontSizeRem -
       ((length - minLength) / (maxLength - minLength)) *
-        (maxFontSizeRem - minFontSizeRem);
+      (maxFontSizeRem - minFontSizeRem);
     return `${fontSizeRem}rem`;
   };
   const fontSize = calculateFontSize(maturity_level_status?.length);
@@ -88,7 +88,7 @@ const Gauge = (props: IGaugeProps) => {
             <Typography
               variant="subtitle2"
               color="black"
-              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "1rem" }}
+              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "0.875rem" }}
             >
               <Trans i18nKey="thisSystemIsIn" />
             </Typography>
@@ -105,40 +105,31 @@ const Gauge = (props: IGaugeProps) => {
             <Typography
               variant="subtitle2"
               color="black"
-              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "1rem" }}
+              fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "0.875rem" }}
             >
               <Trans i18nKey="shape" />
             </Typography>
           )}
           {display_confidence_component && (
-            <Tooltip
-              title={
-                <Trans
-                  i18nKey="withPercentConfidence"
-                  values={{
-                    percent: Math.ceil(confidenceValue),
-                  }}
-                />
-              }
+            <Typography
+              variant="subtitle2"
+              color="rgba(157, 167, 179, 1)"
+              mt={1}
+              fontSize={16}
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
+              gap="0.125rem"
             >
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <Typography
-                  variant="subtitle2"
-                  color="rgba(157, 167, 179, 1)"
-                  mt={1}
-                  fontSize={16}
-                  justifyContent="center"
-                  alignItems="center"
-                  display="flex"
-                >
-                  {" "}
-                  <ConfidenceLevel
-                    displayNumber
-                    inputNumber={Math.ceil(confidenceValue)}
-                  ></ConfidenceLevel>
-                </Typography>
-              </Box>
-            </Tooltip>
+              <Trans
+                i18nKey="withPercentConfidence"
+
+              />{" "}
+              <ConfidenceLevel
+                displayNumber
+                inputNumber={Math.ceil(confidenceValue)}
+              ></ConfidenceLevel>
+            </Typography>
           )}
         </Box>
       ) : (
