@@ -57,6 +57,15 @@ export const ConfigProvider: React.FC<AppProviderProps> = ({ children }) => {
         type: ActionTypes.SET_APP_LOGO_URL,
         payload: res.data.logoLink,
       });
+      const metaDescription = document.querySelector(
+        'link[rel="icon"]'
+      );
+      if (metaDescription) {
+        metaDescription.setAttribute(
+          "href",
+          res.data.favLink
+        );
+      }
     });
   }, []);
   return (
