@@ -4,6 +4,8 @@ import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import permissionRequired from "/assets/svg/permissionRequired.svg";
+
 interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;
@@ -145,7 +147,7 @@ const Gauge = (props: IGaugeProps) => {
           sx={{ ...styles.centerCVH, bottom: "30%", left: "25%", right: "25%",gap:"15px" }}
           position="absolute"
         >
-          <img  src={"/assets/svg/permissionRequired.svg"}  />
+          <img  src={permissionRequired}  />
           <Typography
             sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
             variant="h5"
