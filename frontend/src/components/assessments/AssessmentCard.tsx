@@ -113,7 +113,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               component={Link}
               to={
                 isCalculateValid
-                  ? `${item.id}/insights`
+                  ? maturityLevel && `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
@@ -153,7 +153,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={hasML ? maturityLevel && `${item.id}/insights` : `${item.id}/questionnaires`}
           >
             {show ? (
               <Gauge
@@ -204,10 +204,15 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasML ? `${item.id}/insights` : ""}
+              to={hasML ? maturityLevel && `${item.id}/insights` : ""}
               sx={{
                 backgroundColor: "#2e7d72",
-                background: `#01221e`,
+                background: maturityLevel ? `#01221e` : "rgba(0,59,100, 12%)",
+                color: !maturityLevel ? "rgba(10,35,66, 38%)" : "",
+                boxShadow: !maturityLevel ? "none" : "",
+                "&:hover": {background: maturityLevel ? `` : "rgba(0,59,100, 12%)",
+                    boxShadow: !maturityLevel ? "none" : "",
+                },
               }}
               data-cy="view-insights-btn"
             >

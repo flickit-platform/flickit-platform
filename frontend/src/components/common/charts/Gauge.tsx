@@ -4,6 +4,8 @@ import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import permissionRequired from "/assets/svg/permissionRequired.svg";
+
 interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;
@@ -62,13 +64,15 @@ const Gauge = (props: IGaugeProps) => {
   return (
     <Box p={1} position="relative" width="100%" {...rest}>
       <Suspense fallback={<SkeletonGauge />}>
-        <GaugeComponent
-          confidence_value={confidence_value}
-          colorCode={colorCode}
-          value={!!level_value ? level_value : -1}
-          height={height}
-          className={className}
-        />
+        {maturity_level_status ?
+            <GaugeComponent
+                confidence_value={confidence_value}
+                colorCode={colorCode}
+                value={!!level_value ? level_value : -1}
+                height={height}
+                className={className}
+            /> :
+            <img width={"100%"} height={height} src={"/assets/svg/maturityNull.svg"} />}
       </Suspense>
       {!!level_value ? (
         <Box
@@ -131,15 +135,16 @@ const Gauge = (props: IGaugeProps) => {
         </Box>
       ) : (
         <Box
-          sx={{ ...styles.centerCVH, bottom: "50%", left: "25%", right: "25%" }}
+          sx={{ ...styles.centerCVH, bottom: "30%", left: "25%", right: "25%",gap:"15px" }}
           position="absolute"
         >
+          <img  src={permissionRequired}  />
           <Typography
             sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
             variant="h5"
             color="GrayText"
           >
-            <Trans i18nKey="notEvaluated" />
+            <Trans i18nKey="permissionRequired" />
           </Typography>
         </Box>
       )}

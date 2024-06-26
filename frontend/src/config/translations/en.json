@@ -148,6 +148,7 @@
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
   "notEvaluated": "NOT EVALUATED",
+  "permissionRequired": "permission required",
   "viewAssessmentKitMarket": "View assessment kit market",
   "noOptions": "No options",
   "thisReportIsNotAccurate": "The report is not accurate enough.",
