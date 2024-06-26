@@ -68,6 +68,13 @@ const QueryBatchData = <T extends any = any>(
   if (loading) {
     return renderLoading();
   }
+  const accessDenied = errorObject.find((errorObj?: ICustomError) => {
+    return errorObj?.response?.data.code === ECustomErrorType.ACCESS_DENIED ||
+      errorObj?.response?.data.code === ECustomErrorType.NOT_FOUND
+  })
+  if (accessDenied) {
+    return <ErrorNotFoundOrAccessDenied />
+  }
   if (error) {
     return renderError(errorObject, errorComponent);
   }
