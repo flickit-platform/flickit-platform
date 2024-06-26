@@ -57,6 +57,10 @@ export const ConfigProvider: React.FC<AppProviderProps> = ({ children }) => {
         type: ActionTypes.SET_APP_LOGO_URL,
         payload: res.data.logoLink,
       });
+      const favIcon = document.querySelector('link[rel="icon"]');
+      if (favIcon) {
+        favIcon.setAttribute("href", res.data.favLink);
+      }
     });
   }, []);
   return (
