@@ -33,7 +33,7 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-  item: IAssessment & { space: any } & {manageable?: boolean};
+  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean};
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
@@ -44,7 +44,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime,viewable
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
@@ -112,8 +112,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               sx={{ textDecoration: "none" }}
               component={Link}
               to={
-                isCalculateValid
-                  ? maturityLevel && `${item.id}/insights`
+                isCalculateValid &&
+                viewable ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
@@ -153,7 +153,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML ? maturityLevel && `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={hasML && viewable  ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
             {show ? (
               <Gauge
@@ -204,14 +204,14 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasML ? maturityLevel && `${item.id}/insights` : ""}
+              to={hasML && viewable  ? `${item.id}/insights` : ""}
               sx={{
                 backgroundColor: "#2e7d72",
-                background: maturityLevel ? `#01221e` : "rgba(0,59,100, 12%)",
-                color: !maturityLevel ? "rgba(10,35,66, 38%)" : "",
-                boxShadow: !maturityLevel ? "none" : "",
-                "&:hover": {background: maturityLevel ? `` : "rgba(0,59,100, 12%)",
-                    boxShadow: !maturityLevel ? "none" : "",
+                background: viewable ? `#01221e` : "rgba(0,59,100, 12%)",
+                color: !viewable ? "rgba(10,35,66, 38%)" : "",
+                boxShadow: !viewable ? "none" : "",
+                "&:hover": {background: viewable ? `` : "rgba(0,59,100, 12%)",
+                    boxShadow: !viewable ? "none" : "",
                 },
               }}
               data-cy="view-insights-btn"
