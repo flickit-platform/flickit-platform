@@ -33,7 +33,7 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-  item: IAssessment & { space: any } & {manageable?: boolean};
+  item: IAssessment & { space: any } & { manageable?: boolean };
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
@@ -44,7 +44,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id, lastModificationTime
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
@@ -222,7 +222,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any } & {manageable?: boolean};
+  item: IAssessment & { space: any } & { manageable?: boolean };
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -253,8 +253,8 @@ const Actions = (props: {
   };
 
   const assessmentSetting = (e: any) => {
-    navigate(`assessmentsettings/${item.id}`,{
-        state: item?.color || {code: '#073B4C', id: 6}
+    navigate(`assessmentsettings/${item.id}`, {
+      state: item?.color || { code: '#073B4C', id: 6 }
     });
   };
 
@@ -265,41 +265,41 @@ const Actions = (props: {
       items={
         hasStatus(item.status)
           ? [
-              {
-                icon: <EditRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="edit" />,
-                onClick: openEditDialog,
-              },
-              {
-                icon: <CompareRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="addToCompare" />,
-                onClick: addToCompare,
-              },
-              {
-                icon: <DeleteRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="delete" />,
-                onClick: deleteItem,
-                menuItemProps: { "data-cy": "delete-action-btn" },
-              },
-            ]
+            // {
+            //   icon: <EditRoundedIcon fontSize="small" />,
+            //   text: <Trans i18nKey="edit" />,
+            //   onClick: openEditDialog,
+            // },
+            {
+              icon: <CompareRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="addToCompare" />,
+              onClick: addToCompare,
+            },
+            {
+              icon: <DeleteRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="delete" />,
+              onClick: deleteItem,
+              menuItemProps: { "data-cy": "delete-action-btn" },
+            },
+          ]
           : [
-              {
-                icon: <EditRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="edit" />,
-                onClick: openEditDialog,
-              },
-               item?.manageable && {
-                icon: <SettingsIcon fontSize="small" />,
-                text: <Trans i18nKey="settings" />,
-                onClick: assessmentSetting,
-              },
-              {
-                icon: <DeleteRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="delete" />,
-                onClick: deleteItem,
-                menuItemProps: { "data-cy": "delete-action-btn" },
-              },
-            ]
+            // {
+            //   icon: <EditRoundedIcon fontSize="small" />,
+            //   text: <Trans i18nKey="edit" />,
+            //   onClick: openEditDialog,
+            // },
+            item?.manageable && {
+              icon: <SettingsIcon fontSize="small" />,
+              text: <Trans i18nKey="settings" />,
+              onClick: assessmentSetting,
+            },
+            {
+              icon: <DeleteRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="delete" />,
+              onClick: deleteItem,
+              menuItemProps: { "data-cy": "delete-action-btn" },
+            },
+          ]
       }
     />
   );
