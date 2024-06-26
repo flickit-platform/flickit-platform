@@ -774,7 +774,7 @@ const AssessmentKitsList = (props: any) => {
                         link={
                           is_member
                             ? `assessment-kits/${assessment_kit?.id}`
-                            : `/assessment-kits/${assessment_kit?.id}`
+                            : `/assessment-kits`
                         }
                         key={assessment_kit?.id}
                         data={assessment_kit}
