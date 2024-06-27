@@ -309,7 +309,9 @@ const AssessmentKitSectionGeneralInfo = (
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          "&:hover": { border: "1px solid #1976d299" },
+                          "&:hover": {
+                            border: editable ? "1px solid #1976d299" : "unset",
+                          },
                         }}
                         onClick={() => setShow(!show)}
                         onMouseOver={() => handleMouseOver(editable ?? false)}
@@ -605,7 +607,9 @@ const OnHoverInput = (props: any) => {
               justifyContent: "space-between",
               alignItems: "center",
               wordBreak: "break-word",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -696,7 +700,7 @@ const OnHoverStatus = (props: any) => {
               padding: 0.5,
               backgroundColor: selected ? "#2e7d32" : "transparent",
               color: selected ? "#fff" : "#000",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -719,7 +723,7 @@ const OnHoverStatus = (props: any) => {
             sx={{
               padding: 0.5,
               backgroundColor: !selected ? "gray" : "transparent",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -809,7 +813,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 padding: 0.5,
                 backgroundColor: selected ? "#7954B3;" : "transparent",
                 color: selected ? "#fff" : "#000",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -823,7 +827,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
                 fontSize=".75rem"
-                >
+              >
                 <Trans i18nKey="private" />
               </Typography>
             </Box>
@@ -832,7 +836,7 @@ const OnHoverVisibilityStatus = (props: any) => {
               sx={{
                 padding: 0.5,
                 backgroundColor: !selected ? "gray" : "transparent",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -847,7 +851,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
                 fontSize=".75rem"
-                >
+              >
                 <Trans i18nKey="public" />
               </Typography>
             </Box>
@@ -992,7 +996,9 @@ const OnHoverRichEditor = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -1141,7 +1147,9 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
