@@ -101,7 +101,6 @@ const ExpertGroupContainer = () => {
             return res.id === userInfo.id;
           }
         );
-        console.log(is_member)
         const hasAccess = editable;
         setDocTitle(`${t("expertGroup")}: ${title || ""}`);
         return (
