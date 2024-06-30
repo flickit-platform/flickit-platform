@@ -63,16 +63,15 @@ const SupTitleBreadcrumb = (
                   label={title}
                   size="small"
                   sx={{
-                    marginTop: 0.5,
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
-                      ? rest.bgColorSetting ? rest.bgColorSetting : "rgba(210, 243, 243, 1)"
+                      ? "#D0ECFF"
                       : "rgba(206, 211, 217, 0.4)",
-                    color: isActive
-                      ? rest.colorSetting ? rest.colorSetting : "rgba(28, 194, 196, 1)"
-                      : "rgba(157, 167, 179, 1)",
+                    color: isActive ? "#00365C" : "#73808C",
                     textTransform: "none",
+                    borderRadius: "8px",
+                    padding: "8px",
                   }}
                 />
               ) : (

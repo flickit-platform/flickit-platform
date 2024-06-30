@@ -135,7 +135,7 @@ export const theme = createTheme({
           }
         }
         body {
-          background: #f5f5f5;
+          background: #EDEFF1;
         }
       `,
     },

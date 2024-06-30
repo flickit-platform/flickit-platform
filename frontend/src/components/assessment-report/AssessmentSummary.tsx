@@ -9,7 +9,7 @@ import {
 } from "@types";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
-import { Link, useNavigate, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress, {
   ProgessBarTypes,
@@ -19,6 +19,7 @@ import { Button } from "@mui/material";
 import MoreActions from "@common/MoreActions";
 import useMenu from "@utils/useMenu";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { calculateFontSize } from "@/utils/calculateFontSize";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
   expertGroup: AssessmentKitStatsExpertGroup;
@@ -39,7 +40,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   } = props;
   const {
     assessment: { title, lastModificationTime, creationTime, id: assessmentId },
-    assessmentPermissions: { manageable }
+    assessmentPermissions: { manageable },
   } = data;
   return (
     <Box
@@ -56,18 +57,18 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: "40px",
         px: { xs: 2, sm: 3 },
-        position: "relative"
+        position: "relative",
       }}
       color="#004F83"
     >
-        <Actions assessmentId={assessmentId} manageable={manageable} />
+      <Actions assessmentId={assessmentId} manageable={manageable} />
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
-          fontSize="2rem"
+          fontSize={calculateFontSize(assessmentKit?.title.length)}
           sx={{
             textDecoration: "none",
           }}
-          color="#004F83"
+          color="#00365C"
           fontWeight={800}
         >
           {assessmentKit?.title}
@@ -86,8 +87,8 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         sx={{
           borderRadius: "24px",
           textTransform: "none",
-          backgroundColor: "#004F83",
-          borderColor: "#004F83",
+          backgroundColor: "#00365C",
+          borderColor: "#00365C",
           color: "#fff",
           fontSize: "1.25rem",
           py: "8px",
@@ -110,18 +111,18 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         justifyContent="space-evenly"
       >
         <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#9DA7B3">
+          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
             <Trans i18nKey="created" values={{ progress }} />{" "}
           </Typography>
-          <Typography color="#6C7B8E" fontWeight="bold">
+          <Typography color="#243342" fontWeight={500}>
             {convertToRelativeTime(creationTime)}
           </Typography>
         </Box>
         <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#9DA7B3">
+          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
             <Trans i18nKey="updated" />
           </Typography>
-          <Typography color="#6C7B8E" fontWeight="bold">
+          <Typography color="#243342" fontWeight={500}>
             {convertToRelativeTime(lastModificationTime)}
           </Typography>
         </Box>
@@ -130,28 +131,27 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
   );
 };
 
-const Actions = (props: {assessmentId: string, manageable: boolean}) => {
-    const { assessmentId, manageable } = props;
-    const navigate = useNavigate();
-    const { spaceId } = useParams()
+const Actions = (props: { assessmentId: string; manageable: boolean }) => {
+  const { assessmentId, manageable } = props;
+  const navigate = useNavigate();
+  const { spaceId } = useParams();
 
-    const assessmentSetting = (e: any) => {
-        navigate({
-            pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
-        });
-    };
-    return (
-        <MoreActions
-            {...useMenu()}
-            boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
-            items={
-                [
-                    manageable && {
-                    icon: <SettingsIcon fontSize="small" />,
-                    text: <Trans i18nKey="settings" />,
-                    onClick: assessmentSetting,
-                }]
-            }
-        />
-    );
+  const assessmentSetting = (e: any) => {
+    navigate({
+      pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+    });
+  };
+  return (
+    <MoreActions
+      {...useMenu()}
+      boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
+      items={[
+        manageable && {
+          icon: <SettingsIcon fontSize="small" />,
+          text: <Trans i18nKey="settings" />,
+          onClick: assessmentSetting,
+        },
+      ]}
+    />
+  );
 };
