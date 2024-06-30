@@ -113,9 +113,9 @@ const Gauge = (props: IGaugeProps) => {
           {display_confidence_component && (
             <Typography
               variant="subtitle2"
-              color="rgba(157, 167, 179, 1)"
+              color="#73808C"
+              fontWeight={700}
               mt={1}
-              fontSize={16}
               justifyContent="center"
               alignItems="center"
               display="flex"

@@ -240,23 +240,33 @@ export const AssessmentSubjectAccordion = (
                 justifyContent="space-between"
                 width="100%"
                 px={4}
+                marginBottom="10px"
               >
-                <Typography color="#9DA7B3">Attribute</Typography>
-                <Typography color="#9DA7B3">Status</Typography>
+                <Typography fontWeight={500} color="#73808C">
+                  Attribute
+                </Typography>
+                <Typography fontWeight={500} color="#73808C">
+                  Status
+                </Typography>
               </Box>
               <Divider sx={{ width: "100%" }} />
-              <Box maxHeight="400px" overflow="auto">
+              <Box
+                sx={{ ...styles.centerCV }}
+                maxHeight="400px"
+                overflow="auto"
+                gap="1.875rem"
+                marginTop="1.875rem"
+              >
                 {subjectAttributes.map((element: any) => {
                   return (
                     <Box
                       display="flex"
                       alignItems="center"
                       justifyContent="space-between"
-                      margin={2}
                       gap={1}
                       key={element.id}
                     >
-                      <Typography fontWeight="bold" fontSize="0.875rem">
+                      <Typography fontWeight={500} color="#243342">
                         {element.title}
                       </Typography>
                       <Box display="flex" alignItems="center" gap={0.5}>
@@ -267,8 +277,7 @@ export const AssessmentSubjectAccordion = (
                                 element.maturityLevel.value - 1
                               ],
                           }}
-                          fontWeight="bold"
-                          fontSize="0.875rem"
+                          fontWeight={500}
                         >
                           {element.maturityLevel.title}
                         </Typography>
@@ -292,18 +301,20 @@ export const AssessmentSubjectAccordion = (
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
             sx={{
+              fontFamily: "Ubuntu",
               borderRadius: 0,
               borderBottomRightRadius: "32px",
               borderBottomLeftRadius: "32px",
               padding: 2,
               textTransform: "none",
-              fontSize: "1.5rem",
-              backgroundColor: "#D0E4FF",
-              borderColor: "#D0E4FF",
-              color: "#004F83",
+              fontWeight: 700,
+              fontSize: "2rem",
+              backgroundColor: "#D0ECFF",
+              borderColor: "#D0ECFF",
+              color: "#00365C",
               "&:hover": {
-                backgroundColor: "#D0E4FF",
-                borderColor: "#D0E4FF",
+                backgroundColor: "#D0ECFF",
+                borderColor: "#D0ECFF",
               },
             }}
           >
