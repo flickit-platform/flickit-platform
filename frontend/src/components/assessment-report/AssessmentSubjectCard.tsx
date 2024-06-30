@@ -312,6 +312,7 @@ export const AssessmentSubjectAccordion = (
               backgroundColor: "#D0ECFF",
               borderColor: "#D0ECFF",
               color: "#00365C",
+              letterSpacing: "0",
               "&:hover": {
                 backgroundColor: "#D0ECFF",
                 borderColor: "#D0ECFF",
