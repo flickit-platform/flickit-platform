@@ -47,7 +47,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="space-between"
       textAlign="center"
       gap={3}
       py={4}
