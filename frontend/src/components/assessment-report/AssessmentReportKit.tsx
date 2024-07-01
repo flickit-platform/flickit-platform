@@ -50,7 +50,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           }}
           gap={1}
         >
-          <Typography color="#6C7B8E" fontSize={"0.9rem"}>
+          <Typography color="#243342" fontSize={"0.9rem"}>
             <Trans i18nKey="createdWith" />
           </Typography>
           <Chip
@@ -83,7 +83,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           gap={1}
         >
           <Typography
-            color="#3B4F68"
+            color="#243342"
             fontSize="0.9rem"
             sx={{ wordBreak: "break-all", px: 2 }}
           >
@@ -108,7 +108,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           }}
           gap={1}
         >
-          <Typography color="#6C7B8E" fontSize="0.9rem">
+          <Typography color="#243342" fontSize="0.9rem">
             <Trans i18nKey="kitIsProvidedBy" />
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
