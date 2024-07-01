@@ -181,7 +181,7 @@ export const createService = (
       },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/`, {
+      return axios.get(`/api/v1/space-assessments/`, {
         ...(config ?? {}),
         params: {
           page: page,
