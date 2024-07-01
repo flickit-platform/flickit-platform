@@ -112,7 +112,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       >
         <Box display="flex" flexDirection="column" textAlign={"center"}>
           <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
-            <Trans i18nKey="created" values={{ progress }} />{" "}
+            <Trans i18nKey="created" values={{ progress }} />{": "}
           </Typography>
           <Typography color="#243342" fontWeight={500}>
             {convertToRelativeTime(creationTime)}
@@ -120,7 +120,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         </Box>
         <Box display="flex" flexDirection="column" textAlign={"center"}>
           <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
-            <Trans i18nKey="updated" />
+            <Trans i18nKey="updated" />:
           </Typography>
           <Typography color="#243342" fontWeight={500}>
             {convertToRelativeTime(lastModificationTime)}
