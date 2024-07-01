@@ -27,7 +27,7 @@ class AssessmentsApi(APIView):
 class AssessmentsComparableApi(APIView):
     permission_classes = [IsAuthenticated]
     kit_id_param = openapi.Parameter('kitId', openapi.IN_QUERY, description="kit id param",
-                                     type=openapi.TYPE_INTEGER, required=True)
+                                     type=openapi.TYPE_INTEGER)
     size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
                                    type=openapi.TYPE_INTEGER)
     page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
