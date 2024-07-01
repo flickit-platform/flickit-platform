@@ -96,7 +96,11 @@ const ExpertGroupContainer = () => {
           editable,
           assessment_kits = [],
         } = data || {};
-        // const is_owner = data?.owner?.id === userInfo.id;
+        const is_member = expertGroupMembersQueryData.data?.items?.some(
+          (res: any) => {
+            return res.id === userInfo.id;
+          }
+        );
         const hasAccess = editable;
         setDocTitle(`${t("expertGroup")}: ${title || ""}`);
         return (
@@ -146,7 +150,7 @@ const ExpertGroupContainer = () => {
                     queryData={queryData}
                     hasAccess={editable}
                     dialogProps={createAssessmentKitDialogProps}
-                    is_member={editable}
+                    is_member={is_member}
                     is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
                   />

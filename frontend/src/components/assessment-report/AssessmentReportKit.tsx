@@ -59,9 +59,9 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             label={assessmentKit.title}
             size="medium"
             sx={{
-              background: "rgba(210, 243, 243, 1)",
+              background: "#D0ECFF",
               height: "fit-content",
-              color: "rgba(28, 194, 196, 1)",
+              color: "#00365C",
               textTransform: "none",
               cursor: "pointer",
               "& .MuiChip-label": {
@@ -124,8 +124,8 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               label={assessmentKit.expertGroup.title}
               size="medium"
               sx={{
-                background: "rgba(210, 243, 243, 1)",
-                color: "rgba(28, 194, 196, 1)",
+                background: "#D0ECFF",
+                color: "#00365C",
                 textTransform: "none",
                 height: "fit-content",
                 mx: 1,

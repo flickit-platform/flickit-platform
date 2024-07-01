@@ -42,15 +42,15 @@ export default defineConfig({
       },
       {
         find: "@styles",
-        replacement: `${path.resolve(__dirname, "src/config/styles.ts")}/`,
+        replacement: `${path.resolve(__dirname, "src/config/styles.ts")}`,
       },
       {
         find: "@constants",
-        replacement: `${path.resolve(__dirname, "src/config/constants.ts")}/`,
+        replacement: `${path.resolve(__dirname, "src/config/constants.ts")}`,
       },
       {
         find: "@types",
-        replacement: `${path.resolve(__dirname, "src/types.ts")}/`,
+        replacement: `${path.resolve(__dirname, "src/types.ts")}`,
       },
       {
         find: "@assets",

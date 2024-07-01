@@ -26,8 +26,9 @@ const OverallInsightText = (props: any) => {
     attributes,
     topStrengths,
     topWeaknesses,
+    maturityLevelsCount,
   } = data;
-  const { title, maturityLevel,confidenceValue } = subject;
+  const { title, maturityLevel, confidenceValue } = subject;
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
       <Typography
@@ -48,7 +49,10 @@ const OverallInsightText = (props: any) => {
               sx={{ color: "#3596A1" }}
               fontSize="1.15rem"
             >
-              <Trans i18nKey={"clOf"} values={{ cl:confidenceValue }} />
+              <Trans
+                i18nKey={"clOf"}
+                values={{ cl: Math.ceil(confidenceValue) }}
+              />
             </Typography>{" "}
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography
@@ -58,7 +62,7 @@ const OverallInsightText = (props: any) => {
               sx={{ color: "#6035A1" }}
               fontSize="1.15rem"
             >
-              {maturityLevel.index}.
+              {maturityLevel.index} of {maturityLevelsCount}
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
             <Typography
@@ -70,7 +74,10 @@ const OverallInsightText = (props: any) => {
             </Typography>
             <Box>
               <Typography variant="body2">
-                <Trans i18nKey="attributesAreConsidered" values={{ length: attributes?.length }} />
+                <Trans
+                  i18nKey="attributesAreConsidered"
+                  values={{ length: attributes?.length }}
+                />
               </Typography>
             </Box>
           </>
