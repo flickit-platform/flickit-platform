@@ -50,7 +50,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           }}
           gap={1}
         >
-          <Typography color="#6C7B8E" fontSize={"0.9rem"}>
+          <Typography color="#243342" fontSize={"0.9rem"}>
             <Trans i18nKey="createdWith" />
           </Typography>
           <Chip
@@ -59,9 +59,9 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             label={assessmentKit.title}
             size="medium"
             sx={{
-              background: "rgba(210, 243, 243, 1)",
+              background: "#D0ECFF",
               height: "fit-content",
-              color: "rgba(28, 194, 196, 1)",
+              color: "#00365C",
               textTransform: "none",
               cursor: "pointer",
               "& .MuiChip-label": {
@@ -83,7 +83,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           gap={1}
         >
           <Typography
-            color="#3B4F68"
+            color="#243342"
             fontSize="0.9rem"
             sx={{ wordBreak: "break-all", px: 2 }}
           >
@@ -108,7 +108,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           }}
           gap={1}
         >
-          <Typography color="#6C7B8E" fontSize="0.9rem">
+          <Typography color="#243342" fontSize="0.9rem">
             <Trans i18nKey="kitIsProvidedBy" />
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -124,8 +124,8 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               label={assessmentKit.expertGroup.title}
               size="medium"
               sx={{
-                background: "rgba(210, 243, 243, 1)",
-                color: "rgba(28, 194, 196, 1)",
+                background: "#D0ECFF",
+                color: "#00365C",
                 textTransform: "none",
                 height: "fit-content",
                 mx: 1,

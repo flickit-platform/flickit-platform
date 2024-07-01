@@ -92,7 +92,7 @@ const AssessmentSettingContainer = () => {
         const { items: listOfRoles } = roles;
 
         return (
-          <Box m="auto" pb={3} sx={{ px: { lg: 14, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 28, lg: 14, xs: 2, sm: 3 } }}>
             <AssessmentSettingTitle pathInfo={pathInfo} />
             <Grid container columns={12} mt={3} mb={5}>
               <Grid item sm={12} xs={12}>

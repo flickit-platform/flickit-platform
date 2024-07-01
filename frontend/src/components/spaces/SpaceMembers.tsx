@@ -334,6 +334,8 @@ export const SpaceMembers = (props: any) => {
                                   }
                                   isInvitees={true}
                                   email={email}
+                                  editable={editable}
+                                  inviteId ={id}
                                 />
                               }
                             </Box>
@@ -394,12 +396,19 @@ const Actions = (props: any) => {
     isInvitationExpired,
     email,
     editable,
+    inviteId
   } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteSpaceMember, loading } = useQuery({
     service: (arg, config) =>
       service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
+  const { query: deleteSpaceInvite, loading: inviteLoading } = useQuery({
+    service: (arg, config) =>
+      service.deleteSpaceInvite({ inviteId }, config),
     runOnMount: false,
     toastError: false,
   });
@@ -412,6 +421,16 @@ const Actions = (props: any) => {
   const deleteItem = async (e: any) => {
     try {
       await deleteSpaceMember();
+      await fetchSpaceMembers();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const deleteItemInvite = async (e: any) => {
+    try {
+      await deleteSpaceInvite();
       await fetchSpaceMembers();
     } catch (e) {
       const err = e as ICustomError;
@@ -445,7 +464,7 @@ const Actions = (props: any) => {
           editable && {
             icon: <DeleteRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="cancelInvitation" />,
-            onClick: deleteItem,
+            onClick: deleteItemInvite,
           },
         !isInvitees &&
           !isOwner &&

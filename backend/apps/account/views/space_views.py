@@ -111,3 +111,28 @@ class LeaveSpaceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class RemoveSpaceInviteApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, invite_id):
+        result = space_services.remove_space_invite(request, invite_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class SpaceAssessmentListApi(APIView):
+    permission_classes = [IsAuthenticated]
+    space_id_param = openapi.Parameter('spaceId', openapi.IN_QUERY, description="space id param",
+                                       type=openapi.TYPE_INTEGER, required=True)
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[space_id_param, size_param, page_param])
+    def get(self, request):
+        result = space_services.space_assessment_list(request)
+        return Response(data=result["body"], status=result["status_code"])

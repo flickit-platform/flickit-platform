@@ -117,3 +117,7 @@ class ExpertGroupPictureApi(APIView):
     def put(self, request, expert_group_id):
         result = expert_group_services.update_expert_group_picture(request, expert_group_id)
         return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, expert_group_id):
+        result = expert_group_services.delete_expert_group_picture(request, expert_group_id)
+        return Response(data=result["body"], status=result["status_code"])

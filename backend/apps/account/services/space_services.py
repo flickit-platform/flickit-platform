@@ -107,3 +107,20 @@ def leave_space(request, space_id):
     if response.status_code == 204:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def remove_space_invite(request, invite_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/space-invitations/{invite_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def space_assessment_list(request):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/space-assessments',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

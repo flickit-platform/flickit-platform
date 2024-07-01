@@ -24,13 +24,15 @@ urlpatterns = [
     path('api/v1/assessments/', include('assessment.url.url_assessment_v1')),
     path('api/v2/assessments/', include('assessment.url.url_assessment_v2')),
     path('api/v1/assessments-compare/', include('assessment.url.url_assessments_compare_v1')),
+    path('api/v1/comparable-assessments/', include('assessment.url.url_comparable_assessments_v1')),
     path('api/v1/assessment-user-roles/', include('assessment.url.url_assessment_user_roles_v1')),
-    path('api/v1/assessment-colors/', include('assessment.url.url_assessment_colors')),
     path('api/v1/evidences/', include('assessment.url.url_evidences')),
     path('api/v1/path-info/', include('assessment.url.url_path_info')),
     path('api/v1/confidence-levels/', include('assessment.url.confidence-levels-url')),
     path('api/v1/expert-groups/', include('baseinfo.url.expert_group_url')),
     path('api/v1/spaces/', include('account.url.url_space_v1')),
+    path('api/v1/space-assessments/', include('account.url.url_space_assessments_v1')),
+    path('api/v1/space-invitations/', include('account.url.url_space_invitations_v1')),
     path('api/v1/tenant/', include('account.url.url_tenant_v1')),
 ]
 

@@ -43,7 +43,15 @@ def load_assessment(request, assessment_id):
 
 def list_assessments(request):
     response = requests.get(
-        ASSESSMENT_URL + f'assessment-core/api/assessments',
+        ASSESSMENT_URL + 'assessment-core/api/assessments',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def assessments_comparable_list(request):
+    response = requests.get(
+        ASSESSMENT_URL + 'assessment-core/api/comparable-assessments',
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}

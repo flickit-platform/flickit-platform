@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import {
+  Chip,
   Divider,
   FormControl,
   IconButton,
@@ -640,17 +641,36 @@ export const AssessmentSettingMemberBox = (props: {
                               </Grid>
                             </FormControl>
                             <Box
-                              onClick={() =>
-                                openRemoveModal(row.displayName, row.id)
-                              }
+                              width="30%"
+                              display="flex"
+                              justifyContent="center"
                             >
-                              <IconButton
-                                sx={{ "&:hover": { color: "#d32f2f" } }}
-                                size="small"
-                                disabled={!row.editable}
-                              >
-                                <DeleteRoundedIcon />
-                              </IconButton>
+                              {!row.editable ? (
+                                <Chip
+                                  sx={{
+                                    ml: 1,
+                                    opacity: 0.7,
+                                    color: "#9A003C",
+                                    borderColor: "#9A003C",
+                                  }}
+                                  label={<Trans i18nKey={"owner"} />}
+                                  size="small"
+                                  variant="outlined"
+                                />
+                              ) : (
+                                <Box
+                                  onClick={() =>
+                                    openRemoveModal(row.displayName, row.id)
+                                  }
+                                >
+                                  <IconButton
+                                    sx={{ "&:hover": { color: "#d32f2f" } }}
+                                    size="small"
+                                  >
+                                    <DeleteRoundedIcon />
+                                  </IconButton>{" "}
+                                </Box>
+                              )}
                             </Box>
                           </Box>
                         </TableCell>

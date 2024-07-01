@@ -136,6 +136,15 @@ export const createService = (
         config
       );
     },
+    deleteSpaceInvite(
+          { inviteId }: { inviteId: string },
+           config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.delete(
+        `/api/v1/space-invitations/${inviteId}/`,
+              config
+       );
+    },
     fetchSpaceMembers(
       { spaceId }: { spaceId: string },
       config: AxiosRequestConfig<any> | undefined
@@ -181,7 +190,7 @@ export const createService = (
       },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      return axios.get(`/api/v1/assessments/`, {
+      return axios.get(`/api/v1/space-assessments/`, {
         ...(config ?? {}),
         params: {
           page: page,
