@@ -4,14 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from assessment.services import commonservices, assessment_core_services, assessment_core
+from assessment.services import assessment_core_services, assessment_core
 from rest_framework.permissions import IsAuthenticated
-
-
-class ColorApi(APIView):
-    def get(self, request):
-        colors = commonservices.load_color()
-        return Response(colors, status=status.HTTP_200_OK)
 
 
 class PathInfoApi(APIView):
