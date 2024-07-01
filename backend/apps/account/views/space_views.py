@@ -111,3 +111,13 @@ class LeaveSpaceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class RemoveSpaceInviteApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, invite_id):
+        result = space_services.remove_space_invite(request, invite_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
