@@ -83,7 +83,7 @@ const AssessmentReportContainer = (props: any) => {
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
         return (
-          <Box m="auto" pb={3} sx={{ px: { lg: 14, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 28, lg: 14, xs: 2, sm: 3 } }}>
             <AssessmentReportTitle data={data} colorCode={colorCode} />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>

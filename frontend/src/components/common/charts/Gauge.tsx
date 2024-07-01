@@ -40,7 +40,7 @@ const Gauge = (props: IGaugeProps) => {
     const maxLength = 14; // Example threshold for maximum length
     const minLength = 8; // Example threshold for minimum length
     let maxFontSizeRem = 1.5; // 24px / 16 = 1.5rem
-    let minFontSizeRem = 1.25; // 18px / 16 = 1.125rem
+    let minFontSizeRem = 1.2; // 18px / 16 = 1.125rem
     if (isMobileScreen) {
       maxFontSizeRem = 1.35;
       minFontSizeRem = 1.125;

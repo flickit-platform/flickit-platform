@@ -202,7 +202,7 @@ export const AssessmentSubjectAccordion = (
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
         <Grid container alignItems="center" padding={2}>
-          <Grid item xs={12} sm={12} md={12} lg={7.5}>
+          <Grid item xs={12} sm={12} md={12} lg={6.5}>
             <Box
               sx={{ display: { xs: "none", sm: "none", md: "block" } }}
               height={"400px"}
@@ -222,18 +222,13 @@ export const AssessmentSubjectAccordion = (
               )}
             </Box>
           </Grid>
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ marginInline: { lg: 6 }, marginBlock: { lg: 10 } }}
+          />
 
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={12}
-            lg={4}
-            sx={{
-              borderLeft: { md: "0.5px solid rgba(0, 0, 0, 0.32)" },
-              paddingLeft: { md: 4 },
-            }}
-          >
+          <Grid item xs={12} sm={12} md={12} lg={4}>
             <Box display="flex" flexDirection="column">
               <Box
                 display="flex"
@@ -312,6 +307,7 @@ export const AssessmentSubjectAccordion = (
               backgroundColor: "#D0ECFF",
               borderColor: "#D0ECFF",
               color: "#00365C",
+              letterSpacing: "0",
               "&:hover": {
                 backgroundColor: "#D0ECFF",
                 borderColor: "#D0ECFF",

@@ -72,6 +72,7 @@ const SupTitleBreadcrumb = (
                     textTransform: "none",
                     borderRadius: "8px",
                     padding: "8px",
+                    fontWeight: 400,
                   }}
                 />
               ) : (
