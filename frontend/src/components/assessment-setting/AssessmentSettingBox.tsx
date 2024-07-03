@@ -460,6 +460,18 @@ export const AssessmentSettingMemberBox = (props: {
                               >
                                 {row.displayName}
                               </Typography>
+                              {!row.editable && <Chip
+                                sx={{
+                                  mr: 1,
+                                  opacity: 0.7,
+                                  color: "#9A003C",
+                                  borderColor: "#9A003C",
+                                }}
+                                label={<Trans i18nKey={"owner"} />}
+                                size="small"
+                                variant="outlined"
+                              />}
+
                             </Box>
                           </Box>
                           <Box
@@ -645,19 +657,8 @@ export const AssessmentSettingMemberBox = (props: {
                               width="30%"
                               display="flex"
                               justifyContent="center"
+                              alignItems="center"
                             >
-                              <Chip
-                                sx={{
-                                  ml: 1,
-                                  opacity: 0.7,
-                                  color: "#9A003C",
-                                  borderColor: "#9A003C",
-                                }}
-                                label={<Trans i18nKey={"owner"} />}
-                                size="small"
-                                variant="outlined"
-                              />
-
                               <IconButton
                                 sx={{ "&:hover": { color: "#d32f2f" } }}
                                 size="small"
