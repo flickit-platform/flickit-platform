@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/v1/expert-groups/', include('baseinfo.url.expert_group_url')),
     path('api/v1/spaces/', include('account.url.url_space_v1')),
     path('api/v1/users/', include('account.url.url_users_v1')),
+    path('api/v1/user-profile/', include('account.url.url_user_profile_v1')),
     path('api/v1/space-assessments/', include('account.url.url_space_assessments_v1')),
     path('api/v1/space-invitations/', include('account.url.url_space_invitations_v1')),
     path('api/v1/tenant/', include('account.url.url_tenant_v1')),

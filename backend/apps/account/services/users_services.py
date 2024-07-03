@@ -8,3 +8,9 @@ def user_info(request):
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
+
+def load_user_profile(request):
+    response = requests.get(
+        ASSESSMENT_URL + 'assessment-core/api/user-profile',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
