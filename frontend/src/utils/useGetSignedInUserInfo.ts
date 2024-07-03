@@ -26,7 +26,7 @@ const useGetSignedInUserInfo = (
     dispatch(authActions.setUserInfoLoading(true));
     try {
       const accessToken = keycloakService.getToken();
-      const { data } = await service.getSignedInUser(undefined, {
+      const { data } = await service.getUserProfile(undefined, {
         signal: abortController.current.signal,
         //@ts-expect-error
         headers: accessToken

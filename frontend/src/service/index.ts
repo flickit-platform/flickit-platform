@@ -60,11 +60,14 @@ export const createService = (
       return axios.post(`/authinfo/users/`, data, config);
     },
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
-      return axios.get(`/authinfo/users/me/`, config);
+      return axios.get(`/api/v1/users/me/`, config);
+    },
+    getUserProfile(arg: any, config: AxiosRequestConfig<any> | undefined) {
+      return axios.get(`/api/v1/user-profile/`, config);
     },
     updateUserInfo(args: any, config: AxiosRequestConfig<any> | undefined) {
       const { data, id } = args ?? {};
-      return axios.put(`/authinfo/users/${id}/`, data, {
+      return axios.put(`/api/v1/user-profile/`, data, {
         ...config,
         headers: {
           "Content-Type": "multipart/form-data",

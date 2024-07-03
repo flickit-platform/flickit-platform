@@ -19,10 +19,10 @@ const UserAccount = () => {
   const { userInfo, dispatch } = useAuthContext();
   const { service } = useServiceContext();
   const userQueryData = useQuery({
-    service: (args, config) => service.getSignedInUser(args, config),
-    runOnMount: false,
+    service: (args, config) => service.getUserProfile(args, config),
+    runOnMount: true,
   });
-  const { display_name, email, bio, linkedin, picture } = userInfo;
+  const { displayName, email, bio, linkedin, pictureLink } = userInfo;
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -52,8 +52,8 @@ const UserAccount = () => {
               height: "94px",
               border: "4px solid whitesmoke",
             }}
-            alt={display_name}
-            src={picture || "/"}
+            alt={displayName}
+            src={pictureLink || "/"}
           />
         </Box>
       </Box>
@@ -70,7 +70,7 @@ const UserAccount = () => {
             </>
           }
         >
-          {display_name}
+          {displayName}
         </Title>
       </Box>
       <Box mt={8}>
