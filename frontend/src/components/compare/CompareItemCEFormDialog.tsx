@@ -21,10 +21,10 @@ import {
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import AlertBox from "@common/AlertBox";
-import {useState} from "react";
+import { useState } from "react";
 
 interface ICompareItemCEFormDialog
-  extends Omit<ICompareItemCEForm, "closeDialog"> {}
+  extends Omit<ICompareItemCEForm, "closeDialog"> { }
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
   const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
@@ -89,7 +89,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
   const [PageCount, setPageCount] = useState<number>(0)
-  const [total,setTotal]= useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
@@ -132,7 +132,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
         <Grid item xs={12}>
           <SelectFieldUC
             {...useConnectSelectField({
-              url: "/api/v1/assessments/",
+              url: "/api/v1/comparable-assessments/",
               searchParams: {
                 kitId: assessment_kit && assessment_kit[0]?.kit?.id,
                 size: PAGE_SIZE,
