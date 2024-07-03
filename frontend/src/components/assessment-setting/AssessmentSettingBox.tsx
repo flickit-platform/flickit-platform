@@ -546,6 +546,7 @@ export const AssessmentSettingMemberBox = (props: {
                                   inputProps={{
                                     renderValue: () => row?.role?.title,
                                   }}
+                                  disabled={!row.editable}
                                 >
                                   <Box
                                     sx={{
@@ -656,17 +657,17 @@ export const AssessmentSettingMemberBox = (props: {
                                 size="small"
                                 variant="outlined"
                               />
-                        
-                                <IconButton
-                                  sx={{ "&:hover": { color: "#d32f2f" } }}
-                                  size="small"
-                                  disabled={!row.editable}
-                                  onClick={() =>
-                                    openRemoveModal(row.displayName, row.id)
-                                  }
-                                >
-                                  <DeleteRoundedIcon />
-                                </IconButton>{" "}
+
+                              <IconButton
+                                sx={{ "&:hover": { color: "#d32f2f" } }}
+                                size="small"
+                                disabled={!row.editable}
+                                onClick={() =>
+                                  openRemoveModal(row.displayName, row.id)
+                                }
+                              >
+                                <DeleteRoundedIcon />
+                              </IconButton>{" "}
                             </Box>
                           </Box>
                         </TableCell>
