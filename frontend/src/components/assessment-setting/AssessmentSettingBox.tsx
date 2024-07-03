@@ -521,7 +521,7 @@ export const AssessmentSettingMemberBox = (props: {
                                 lg={8}
                                 sx={{ minWidth: { xs: "100%", md: "160px" } }}
                               >
-                                <Tooltip hidden={row.editable} title={<Trans i18nKey="spaceOwnerRoleIsNotEditable" />}>
+                                <Tooltip disableHoverListener={row.editable} title={<Trans i18nKey="spaceOwnerRoleIsNotEditable" />}>
                                   <Select
                                     labelId="demo-multiple-name-label"
                                     id="demo-multiple-name"
@@ -656,23 +656,26 @@ export const AssessmentSettingMemberBox = (props: {
                                 </Tooltip>
                               </Grid>
                             </FormControl>
-                            <Box
-                              width="30%"
-                              display="flex"
-                              justifyContent="center"
-                              alignItems="center"
-                            >
-                              <IconButton
-                                sx={{ "&:hover": { color: "#d32f2f" } }}
-                                size="small"
-                                disabled={!row.editable}
-                                onClick={() =>
-                                  openRemoveModal(row.displayName, row.id)
-                                }
+                            <Tooltip disableHoverListener={row.editable} title={<Trans i18nKey="spaceOwnerRoleIsNotEditable" />}>
+
+                              <Box
+                                width="30%"
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
                               >
-                                <DeleteRoundedIcon />
-                              </IconButton>{" "}
-                            </Box>
+                                <IconButton
+                                  sx={{ "&:hover": { color: "#d32f2f" } }}
+                                  size="small"
+                                  disabled={!row.editable}
+                                  onClick={() =>
+                                    openRemoveModal(row.displayName, row.id)
+                                  }
+                                >
+                                  <DeleteRoundedIcon />
+                                </IconButton>{" "}
+                              </Box>
+                            </Tooltip>
                           </Box>
                         </TableCell>
                       </TableRow>
