@@ -188,7 +188,6 @@
   "viewOtherAssessmentKitsFromThisAuthor": "View other assessment kit from this author",
   "questionImpact": "Question impact",
   "aboutAssessmentKit": "About assessment kit",
-  "created": "Created:",
   "dateCreated": "Date created",
   "lastModified": "Last modified",
   "createdWith": "Assessment is created with",
@@ -392,10 +391,9 @@
   "answeredQuestions": "Answered questions: ",
   "progressBarTilte": "{{numaratur}} of {{denominator}}",
   "seeQuestionaires": "See questionaires",
-  "updated": "Updated: ",
+  "updated": "Updated",
   "checkMoreDetails": "Check for more details",
   "overallReport": "Overall Report",
-  "general": "General",
   "subjectStatus": "Subjects Status",
   "assessmentProgress": "Assessment Progress",
   "subjectReport": "Subjects Report",
@@ -418,5 +416,7 @@
   "letMeCheckAgain": "Let me check again",
   "yesContinue": "Yes, Continue",
   "ownerName": "Owner: ",
-  "you": "You"
+  "owner": "Owner",
+  "you": "You",
+  "spaceOwnerRoleIsNotEditable": "Sapace owner role isn't editable"
 }

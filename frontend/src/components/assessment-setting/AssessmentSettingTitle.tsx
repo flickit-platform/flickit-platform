@@ -42,8 +42,6 @@ const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
             },
           ]}
           displayChip
-          colorSetting="#004F83"
-          bgColorSetting="#D0E4FF"
         />
       }
     ></Title>

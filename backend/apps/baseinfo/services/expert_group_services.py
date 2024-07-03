@@ -124,3 +124,12 @@ def update_expert_group_picture(request, expert_group_id):
         files=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_expert_group_picture(request, expert_group_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

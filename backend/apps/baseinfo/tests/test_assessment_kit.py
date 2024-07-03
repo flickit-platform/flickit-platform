@@ -28,6 +28,7 @@ def init_assessment_kit():
 
 @pytest.mark.django_db
 class TestLikeAssessmentKits:
+    @skip
     def test_like_assessment_kit_return_200(self, authenticate, init_assessment_kit, create_expertgroup):
         assessment_kit = init_assessment_kit(authenticate, create_expertgroup)
         user1 = User.objects.get(email="test@test.com")

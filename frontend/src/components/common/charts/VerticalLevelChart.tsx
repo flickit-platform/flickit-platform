@@ -131,7 +131,7 @@ const VerticalLevel = ({
       <Box
         sx={{
           mx: 1,
-          background: "#f5f5f5",
+          background: "#EDEFF1",
           width: "74px",
           height: "216px",
           borderRadius: "100px",

@@ -6,7 +6,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { IconProps, SvgIconProps } from "@mui/material";
 import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
-import { HomeRounded } from "@mui/icons-material";
+import { GoHome } from "react-icons/go";
 import { Trans } from "react-i18next";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
@@ -83,14 +83,14 @@ const Title = (props: ITitle) => {
                 ml: sup ? { xs: 0, md: "-22px" } : "-4px",
               }}
             >
-              <Box component={RLink} to={backLink as To} display="flex">
+              <Box
+                component={RLink}
+                to={backLink as To}
+                display="flex"
+                sx={{ textDecoration: "none" }}
+              >
                 {backLink === "/" ? (
-                  <HomeRounded
-                    fontSize="small"
-                    color="inherit"
-                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
-                    {...backIconProps}
-                  />
+                  <GoHome fontSize="22px" color="#9DA7B3" {...backIconProps} />
                 ) : (
                   <ArrowBackRoundedIcon
                     fontSize="small"
@@ -99,6 +99,7 @@ const Title = (props: ITitle) => {
                     {...backIconProps}
                   />
                 )}
+                <span style={{ marginInline: "8px" }}>/</span>
               </Box>
               {sup && (
                 <Typography

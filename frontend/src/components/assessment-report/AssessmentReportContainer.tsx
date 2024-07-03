@@ -83,11 +83,8 @@ const AssessmentReportContainer = (props: any) => {
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
         return (
-          <Box m="auto" pb={3} sx={{ px: { lg: 14, xs: 2, sm: 3 } }}>
-            <AssessmentReportTitle
-              data={data}
-              colorCode={colorCode}
-            />
+          <Box m="auto" pb={3} sx={{ px: { xl: 28, lg: 14, xs: 2, sm: 3 } }}>
+            <AssessmentReportTitle data={data} colorCode={colorCode} />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
                 <Box
@@ -97,9 +94,10 @@ const AssessmentReportContainer = (props: any) => {
                   textAlign="center"
                 >
                   <Typography
-                    color="#9DA7B3"
-                    fontSize="2.5rem"
-                    fontWeight={900}
+                    color="#00365C"
+                    fontSize="4rem"
+                    fontWeight={500}
+                    fontFamily="Ubuntu"
                   >
                     <Trans i18nKey="assessmentInsight" />
                   </Typography>
@@ -112,8 +110,8 @@ const AssessmentReportContainer = (props: any) => {
                       gap={1}
                       height="100%"
                     >
-                      <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
-                        <Trans i18nKey="general" />
+                      <Typography color="#73808C" marginX={4} fontWeight={500}>
+                        <Trans i18nKey="assessmentProgress" />
                       </Typography>
                       <AssessmentSummary
                         expertGroup={expertGroup}
@@ -132,7 +130,7 @@ const AssessmentReportContainer = (props: any) => {
                       gap={1}
                       height="100%"
                     >
-                      <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
+                      <Typography color="#73808C" marginX={4} fontWeight={500}>
                         <Trans i18nKey="overallStatus" />
                       </Typography>
                       <AssessmentOverallStatus
@@ -146,7 +144,7 @@ const AssessmentReportContainer = (props: any) => {
                   </Grid>
                   {/* <Grid item lg={4} md={12} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
-                      <Typography color="#9DA7B3" marginX={4}>
+                      <Typography color="#73808C" marginX={4}>
                         <Trans i18nKey="subjectStatus" />
                       </Typography>
                       <AssessmentSubjectStatus subjects={subjects} />
@@ -157,7 +155,7 @@ const AssessmentReportContainer = (props: any) => {
 
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography color="#9DA7B3" marginX={4} fontWeight={700}>
+                  <Typography color="#73808C" marginX={4} fontWeight={500}>
                     <Trans i18nKey="assessmentKit" />
                   </Typography>
                   <AssessmentReportKit assessmentKit={assessmentKit} />
@@ -166,9 +164,9 @@ const AssessmentReportContainer = (props: any) => {
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
                   <Typography
-                    color="#9DA7B3"
+                    color="#73808C"
                     fontSize="1.5rem"
-                    fontWeight="bold"
+                    fontWeight={500}
                   >
                     <Trans i18nKey="subjectReport" />
                   </Typography>
@@ -184,9 +182,9 @@ const AssessmentReportContainer = (props: any) => {
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box sx={{ ...styles.centerCVH }} marginTop={6} gap={2}>
                   <Typography
-                    color="#9DA7B3"
+                    color="#73808C"
                     fontSize="1.5rem"
-                    fontWeight="bold"
+                    fontWeight={500}
                   >
                     <Trans i18nKey="advices" />
                   </Typography>

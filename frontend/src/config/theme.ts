@@ -12,7 +12,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 
 export const customFontFamily = '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
 export const customHeaderFamily = 'Oswald, Roboto, Vazirmatn'
-const fontSize = ["12px", "14px", "14px", "16px", "18px"];
+const fontSize = ["12px", "14px", "14px", "16px", "16px"];
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -135,7 +135,7 @@ export const theme = createTheme({
           }
         }
         body {
-          background: #f5f5f5;
+          background: #EDEFF1;
         }
       `,
     },
