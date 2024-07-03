@@ -20,7 +20,7 @@ const UserAccount = () => {
   const { service } = useServiceContext();
   const userQueryData = useQuery({
     service: (args, config) => service.getUserProfile(args, config),
-    runOnMount: false,
+    runOnMount: true,
   });
   const { displayName, email, bio, linkedin, pictureLink } = userInfo;
   const dialogProps = useDialog();
