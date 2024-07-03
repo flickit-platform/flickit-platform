@@ -98,12 +98,12 @@ export type TStatus =
 
 export interface IUserInfo {
   id: TId;
-  display_name: string;
+  displayName: string;
   email: string;
   // current_space: ISpaceInfo | null;
   is_expert?: boolean;
   bio?: string;
-  picture?: null | string;
+  pictureLink?: null | string;
   linkedin?: string | null;
   is_active?: boolean;
   default_space?: any;

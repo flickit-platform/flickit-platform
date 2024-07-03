@@ -400,10 +400,10 @@ const AccountDropDownButton = ({ userInfo }: any) => {
       >
         <Avatar
           sx={{ width: 26, height: 26, mr: 1.3 }}
-          alt={userInfo.display_name}
-          src={userInfo.picture || ""}
+          alt={userInfo.displayName}
+          src={userInfo.pictureLink || ""}
         />
-        {userInfo.display_name}
+        {userInfo.displayName}
       </Button>
 
       <Menu
