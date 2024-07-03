@@ -417,5 +417,6 @@
   "yesContinue": "Yes, Continue",
   "ownerName": "Owner: ",
   "owner": "Owner",
-  "you": "You"
+  "you": "You",
+  "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable."
 }
