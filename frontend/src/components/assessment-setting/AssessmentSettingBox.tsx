@@ -419,7 +419,7 @@ export const AssessmentSettingMemberBox = (props: {
                         <TableCell
                           sx={{
                             display: "flex",
-                            justifyContent: "center",
+                            justifyContent: "space-evenly",
                             alignItems: "center",
                             border: "none",
                             gap: { xs: "0px", md: "1.3rem" },
@@ -428,7 +428,7 @@ export const AssessmentSettingMemberBox = (props: {
                         >
                           <Box
                             sx={{
-                              width: { xs: "6rem", sm: "15rem", md: "20vw" },
+                              width: "18vw",
                             }}
                           >
                             <Box
@@ -437,7 +437,7 @@ export const AssessmentSettingMemberBox = (props: {
                                 justifyContent: { xs: "flex-start" },
                                 alignItems: "center",
                                 gap: ".5rem",
-                                paddingLeft: { lg: "45%" },
+                                paddingLeft: { lg: "30%" },
                               }}
                             >
                               <Avatar
