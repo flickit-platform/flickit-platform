@@ -74,7 +74,7 @@ export const SpaceMembers = (props: any) => {
       service
         .getSignedInUser(undefined, { signal: controller.signal })
         .then(({ data }) => {
-          dispatch(authActions.setUserInfo(data));
+          // dispatch(authActions.setUserInfo(data));
         })
         .catch((e) => {});
     }
