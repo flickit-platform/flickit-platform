@@ -39,7 +39,7 @@ const SpacesList = (props: ISpaceListProps) => {
     service
       .getSignedInUser(undefined, { signal })
       .then(({ data }) => {
-        dispatch(authActions.setUserInfo(data));
+        // dispatch(authActions.setUserInfo(data));
       })
       .catch((e) => {
         const err = e as ICustomError;
@@ -117,7 +117,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
     service
       .getSignedInUser(undefined, { signal: abortController.signal })
       .then(({ data }) => {
-        dispatch(authActions.setUserInfo(data));
+        // dispatch(authActions.setUserInfo(data));
         navigate(`/${spaceId}/assessments/1`);
       })
       .catch((e) => { });
