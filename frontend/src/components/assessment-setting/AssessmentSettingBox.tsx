@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import {
+  Chip,
   Divider,
   FormControl,
   IconButton,
@@ -527,13 +528,13 @@ export const AssessmentSettingMemberBox = (props: {
                                       border: 0,
                                     },
                                     "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                    {
+                                      border: 0,
+                                    },
                                     "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                    {
+                                      border: 0,
+                                    },
                                     ".MuiSvgIcon-root": {
                                       fill: "#2974B4 !important",
                                     },
@@ -574,13 +575,13 @@ export const AssessmentSettingMemberBox = (props: {
                                             "&.MuiMenuItem-root:hover": {
                                               ...(role.id === row.role.id
                                                 ? {
-                                                    backgroundColor: "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                  backgroundColor: "#9CCAFF",
+                                                  color: "#004F83",
+                                                }
                                                 : {
-                                                    backgroundColor: "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                  backgroundColor: "#EFEDF0",
+                                                  color: "#1B1B1E",
+                                                }),
                                             },
                                           }}
                                         >
@@ -599,11 +600,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                 fontSize: "0.875rem",
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                      color: "#004F83",
-                                                    }
+                                                    color: "#004F83",
+                                                  }
                                                   : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                    color: "#1B1B1E",
+                                                  }),
                                               }}
                                             >
                                               {role.title}
@@ -640,17 +641,32 @@ export const AssessmentSettingMemberBox = (props: {
                               </Grid>
                             </FormControl>
                             <Box
-                              onClick={() =>
-                                openRemoveModal(row.displayName, row.id)
-                              }
+                              width="30%"
+                              display="flex"
+                              justifyContent="center"
                             >
-                              <IconButton
-                                sx={{ "&:hover": { color: "#d32f2f" } }}
+                              <Chip
+                                sx={{
+                                  ml: 1,
+                                  opacity: 0.7,
+                                  color: "#9A003C",
+                                  borderColor: "#9A003C",
+                                }}
+                                label={<Trans i18nKey={"owner"} />}
                                 size="small"
-                                disabled={!row.editable}
-                              >
-                                <DeleteRoundedIcon />
-                              </IconButton>
+                                variant="outlined"
+                              />
+                        
+                                <IconButton
+                                  sx={{ "&:hover": { color: "#d32f2f" } }}
+                                  size="small"
+                                  disabled={!row.editable}
+                                  onClick={() =>
+                                    openRemoveModal(row.displayName, row.id)
+                                  }
+                                >
+                                  <DeleteRoundedIcon />
+                                </IconButton>{" "}
                             </Box>
                           </Box>
                         </TableCell>
