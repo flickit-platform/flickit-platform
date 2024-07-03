@@ -14,8 +14,11 @@ class PathInfoApi(APIView):
                                             type=openapi.TYPE_STRING)
     space_id_param = openapi.Parameter('space_id', openapi.IN_QUERY, description="space id param",
                                        type=openapi.TYPE_INTEGER)
+    questionnaire_id_param = openapi.Parameter('questionnaire_id', openapi.IN_QUERY,
+                                               description="questionnaire id param",
+                                               type=openapi.TYPE_INTEGER)
 
-    @swagger_auto_schema(manual_parameters=[assessment_id_param, space_id_param])
+    @swagger_auto_schema(manual_parameters=[assessment_id_param, space_id_param, questionnaire_id_param])
     def get(self, request):
         if "assessment_id" in request.query_params:
             assessment_id = request.query_params["assessment_id"]
