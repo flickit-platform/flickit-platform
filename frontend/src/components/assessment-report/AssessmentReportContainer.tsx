@@ -47,13 +47,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -88,18 +88,17 @@ const AssessmentReportContainer = (props: any) => {
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
                 <Box
-                  sx={{ ...styles.centerCVH }}
                   marginY={4}
                   gap={2}
-                  textAlign="center"
                 >
                   <Typography
                     color="#00365C"
                     fontSize="4rem"
                     fontWeight={500}
                     fontFamily="Ubuntu"
+                    textAlign="left"
                   >
-                    <Trans i18nKey="assessmentInsight" />
+                    <Trans i18nKey="assessmentInsights" />
                   </Typography>
                 </Box>
                 <Grid container alignItems="stretch" spacing={5}>
