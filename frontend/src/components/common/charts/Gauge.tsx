@@ -5,6 +5,7 @@ import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import PermissionRequired from "@common/charts/permissionRequired";
+import { primaryFontFamily } from "@/config/theme";
 interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;
@@ -64,14 +65,14 @@ const Gauge = (props: IGaugeProps) => {
     <Box p={1} position="relative" width="100%" {...rest}>
       <Suspense fallback={<SkeletonGauge />}>
         {maturity_level_status ?
-            <GaugeComponent
-                confidence_value={confidence_value}
-                colorCode={colorCode}
-                value={!!level_value ? level_value : -1}
-                height={height}
-                className={className}
-            /> :
-            <img width={"100%"} height={height} src={"/assets/svg/maturityNull.svg"} />}
+          <GaugeComponent
+            confidence_value={confidence_value}
+            colorCode={colorCode}
+            value={!!level_value ? level_value : -1}
+            height={height}
+            className={className}
+          /> :
+          <img width={"100%"} height={height} src={"/assets/svg/maturityNull.svg"} />}
       </Suspense>
       {!!level_value ? (
         <Box
@@ -94,7 +95,7 @@ const Gauge = (props: IGaugeProps) => {
             </Typography>
           )}
           <Typography
-            sx={{ fontWeight: "bold" }}
+            sx={{ fontWeight: "bold", fontFamily: primaryFontFamily }}
             variant="h6"
             color={colorCode}
             fontSize={fontSize}
@@ -112,9 +113,8 @@ const Gauge = (props: IGaugeProps) => {
           )}
           {display_confidence_component && (
             <Typography
-              variant="subtitle2"
+              variant="titleMedium"
               color="#73808C"
-              fontWeight={700}
               mt={1}
               justifyContent="center"
               alignItems="center"
@@ -134,7 +134,7 @@ const Gauge = (props: IGaugeProps) => {
         </Box>
       ) : (
         <Box
-          sx={{ ...styles.centerCVH, bottom: "30%", left: "25%", right: "25%",gap:"15px" }}
+          sx={{ ...styles.centerCVH, bottom: "30%", left: "25%", right: "25%", gap: "15px" }}
           position="absolute"
         >
           <PermissionRequired />

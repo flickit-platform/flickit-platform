@@ -79,6 +79,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           denominator={questionCount}
           numaratur={answerCount}
           type={ProgessBarTypes.Questioannaire}
+          progressHeight="20px"
         />
       </Box>
 
@@ -90,20 +91,21 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           backgroundColor: "#00365C",
           borderColor: "#00365C",
           color: "#fff",
-          fontSize: "1.25rem",
           py: "8px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#004F83",
             borderColor: "#004F83",
           },
-          width: "65%",
+          width: "56%",
         }}
         size="small"
         component={Link}
         to="./../questionnaires"
       >
-        <Trans i18nKey="Questionnaires" />
+        <Typography variant="titleLarge">
+          <Trans i18nKey="seeQuestionnaire" />
+        </Typography>
       </Button>
       <Box
         sx={{ ...styles.centerV }}
@@ -111,18 +113,18 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         justifyContent="space-evenly"
       >
         <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
+          <Typography color="#243342" variant="bodyMedium">
             <Trans i18nKey="created" values={{ progress }} />{": "}
           </Typography>
-          <Typography color="#243342" fontWeight={500}>
+          <Typography color="#243342"  variant="titleMedium">
             {convertToRelativeTime(creationTime)}
           </Typography>
         </Box>
         <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
+          <Typography color="#243342" variant="bodyMedium">
             <Trans i18nKey="updated" />:
           </Typography>
-          <Typography color="#243342" fontWeight={500}>
+          <Typography color="#243342" variant="titleMedium">
             {convertToRelativeTime(lastModificationTime)}
           </Typography>
         </Box>

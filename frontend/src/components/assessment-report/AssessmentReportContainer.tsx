@@ -87,27 +87,24 @@ const AssessmentReportContainer = (props: any) => {
             <AssessmentReportTitle data={data} colorCode={colorCode} />
             <Grid container spacing={2} columns={12} mt={0.2}>
               <Grid item sm={12} xs={12}>
-                <Box
-                  marginY={4}
-                  gap={2}
+
+                <Typography
+                  color="#00365C"
+                  textAlign="left"
+                  variant="headlineLarge"
+
                 >
-                  <Typography
-                    color="#00365C"
-                    textAlign="left"
-                    variant="headlineLarge"
-                  >
-                    <Trans i18nKey="assessmentInsights" />
-                  </Typography>
-                </Box>
-                <Grid container alignItems="stretch" spacing={5}>
-                  <Grid item lg={5} md={6} sm={12} xs={12}>
+                  <Trans i18nKey="assessmentInsights" />
+                </Typography>
+                <Grid container alignItems="stretch" spacing={5} mt={1}>
+                  <Grid item lg={6} md={6} sm={12} xs={12}>
                     <Box
                       display="flex"
                       flexDirection="column"
                       gap={1}
                       height="100%"
                     >
-                      <Typography color="#73808C" marginX={4} fontWeight={500}>
+                      <Typography color="#73808C" marginX={4} variant="titleMedium">
                         <Trans i18nKey="assessmentProgress" />
                       </Typography>
                       <AssessmentSummary
@@ -120,14 +117,14 @@ const AssessmentReportContainer = (props: any) => {
                       />
                     </Box>
                   </Grid>
-                  <Grid item lg={7} md={6} sm={12} xs={12}>
+                  <Grid item lg={6} md={6} sm={12} xs={12}>
                     <Box
                       display="flex"
                       flexDirection="column"
                       gap={1}
                       height="100%"
                     >
-                      <Typography color="#73808C" marginX={4} fontWeight={500}>
+                      <Typography color="#73808C" marginX={4}  variant="titleMedium">
                         <Trans i18nKey="overallStatus" />
                       </Typography>
                       <AssessmentOverallStatus
@@ -152,7 +149,7 @@ const AssessmentReportContainer = (props: any) => {
 
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography color="#73808C" marginX={4} fontWeight={500}>
+                  <Typography color="#73808C" marginX={4}  variant="titleMedium">
                     <Trans i18nKey="assessmentKit" />
                   </Typography>
                   <AssessmentReportKit assessmentKit={assessmentKit} />

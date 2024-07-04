@@ -148,48 +148,58 @@ export const theme = createTheme({
       lineHeight: "5.75rem"
     },
     displaySmall: {
+      fontFamily: primaryFontFamily,
       fontSize: '1.5rem',
       lineHeight: "2rem",
       letterSpacing: "-3%"
     },
     displayMedium: {
+      fontFamily: primaryFontFamily,
       fontSize: '2rem',
       fontWeight: 'Bold',
       lineHeight: "2.25rem"
     },
     displayLarge: {
+      fontFamily: primaryFontFamily,
       fontSize: '4rem',
       fontWeight: 'Bold',
       lineHeight: "4.25rem",
     },
     titleSmall: {
+      fontFamily: primaryFontFamily,
       fontSize: '0.875rem',
       lineHeight: "1.25rem",
       letterSpacing: ".1px"
 
     },
     titleMedium: {
+      fontFamily: primaryFontFamily,
       fontSize: '1rem',
       lineHeight: "1.5rem",
       letterSpacing: ".15px"
     },
     titleLarge: {
+      fontFamily: primaryFontFamily,
       fontSize: '1.375rem',
       lineHeight: "1.75rem"
     },
     bodySmall: {
+      fontFamily: primaryFontFamily,
       fontWeight: 'lighter',
       fontSize: '0.75rem',
       lineHeight: "1rem",
       letterSpacing: "0.4px"
     },
     bodyMedium: {
+      fontFamily: primaryFontFamily,
       fontWeight: 'lighter',
       fontSize: '0.875rem',
       lineHeight: "1.125rem",
       letterSpacing: "0.25px"
     },
     bodyLarge: {
+      fontFamily: primaryFontFamily,
+
       fontSize: '1rem',
       lineHeight: "1.5rem",
       letterSpacing: "0.5px"
@@ -201,11 +211,13 @@ export const theme = createTheme({
       letterSpacing: '0.5px',
     },
     labelMedium: {
+      fontFamily: primaryFontFamily,
       fontSize: '0.75rem',
       lineHeight: "1rem",
       letterSpacing: '0.5px',
     },
     labelLarge: {
+      fontFamily: primaryFontFamily,
       fontWeight: 'Bold',
       fontSize: '0.875rem',
       lineHeight: "1.125rem",

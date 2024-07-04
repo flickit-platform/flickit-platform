@@ -1,8 +1,8 @@
 export const calculateFontSize = (length: number): string => {
-  const maxLength = 14; // Example threshold for maximum length
-  const minLength = 8; // Example threshold for minimum length
+  const maxLength = 20; // Example threshold for maximum length
+  const minLength = 12; // Example threshold for minimum length
   let maxFontSizeRem = 4; // 24px / 16 = 1.5rem
-  let minFontSizeRem = 2; // 18px / 16 = 1.125rem
+  let minFontSizeRem = 3; // 18px / 16 = 1.125rem
 
   if (length <= minLength) return `${maxFontSizeRem}rem`;
   if (length >= maxLength) return `${minFontSizeRem}rem`;
