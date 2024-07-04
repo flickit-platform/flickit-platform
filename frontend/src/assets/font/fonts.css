@@ -4,3 +4,9 @@
     font-style: normal;
     src: url('./Ubuntu-Bold.ttf');
 }
+@font-face {
+    font-family: Sansation;
+    font-weight: 300;
+    font-style: normal;
+    src: url('./Sansation_Bold.ttf');
+}

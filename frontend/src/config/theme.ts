@@ -13,6 +13,8 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 export const customFontFamily = '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
 export const customHeaderFamily = 'Oswald, Roboto, Vazirmatn'
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
+export const primaryFontFamily = 'Ubuntu'
+export const secondaryFontFamily = 'Sansation'
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -27,13 +29,42 @@ declare module "@mui/material/styles/createPalette" {
 
 declare module "@mui/material/styles" {
   interface TypographyVariants {
+    headlineSmall: React.CSSProperties;
+    headlineMedium: React.CSSProperties;
+    headlineLarge: React.CSSProperties;
+    displaySmall: React.CSSProperties;
+    displayMedium: React.CSSProperties;
+    displayLarge: React.CSSProperties;
+    titleSmall: React.CSSProperties;
+    titleMedium: React.CSSProperties;
+    titleLarge: React.CSSProperties;
+    bodySmall: React.CSSProperties;
+    bodyMedium: React.CSSProperties;
+    bodyLarge: React.CSSProperties;
+    labelSmall: React.CSSProperties;
+    labelMedium: React.CSSProperties;
+    labelLarge: React.CSSProperties;
     subSmall: React.CSSProperties;
     subMedium: React.CSSProperties;
     subLarge: React.CSSProperties;
   }
 
-  // allow configuration using `createTheme`
   interface TypographyVariantsOptions {
+    headlineSmall?: React.CSSProperties;
+    headlineMedium?: React.CSSProperties;
+    headlineLarge?: React.CSSProperties;
+    displaySmall?: React.CSSProperties;
+    displayMedium?: React.CSSProperties;
+    displayLarge?: React.CSSProperties;
+    titleSmall?: React.CSSProperties;
+    titleMedium?: React.CSSProperties;
+    titleLarge?: React.CSSProperties;
+    bodySmall?: React.CSSProperties;
+    bodyMedium?: React.CSSProperties;
+    bodyLarge?: React.CSSProperties;
+    labelSmall?: React.CSSProperties;
+    labelMedium?: React.CSSProperties;
+    labelLarge?: React.CSSProperties;
     subSmall?: React.CSSProperties;
     subMedium?: React.CSSProperties;
     subLarge?: React.CSSProperties;
@@ -48,6 +79,21 @@ declare module "@mui/material/styles" {
 // Update the Typography's variant prop options
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
+    headlineSmall?: true;
+    headlineMedium?: true;
+    headlineLarge?: true;
+    displaySmall?: true;
+    displayMedium?: true;
+    displayLarge?: true;
+    titleSmall?: true;
+    titleMedium?: true;
+    titleLarge?: true;
+    bodySmall?: true;
+    bodyMedium?: true;
+    bodyLarge?: true;
+    labelSmall?: true;
+    labelMedium?: true;
+    labelLarge?: true;
     subSmall?: true;
     subMedium?: true;
     subLarge?: true;
@@ -84,6 +130,86 @@ export const theme = createTheme({
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
+    },
+    headlineSmall: {
+      fontFamily: secondaryFontFamily,
+      fontSize: '1.5rem',
+      lineHeight: "2rem"
+    },
+    headlineMedium: {
+      fontFamily: secondaryFontFamily,
+      fontSize: '1.75rem',
+      lineHeight: "2.25rem"
+    },
+    headlineLarge: {
+      fontFamily: secondaryFontFamily,
+      fontWeight: 'Bold',
+      fontSize: '4.5rem',
+      lineHeight: "5.75rem"
+    },
+    displaySmall: {
+      fontSize: '1.5rem',
+      lineHeight: "2rem",
+      letterSpacing: "-3%"
+    },
+    displayMedium: {
+      fontSize: '2rem',
+      fontWeight: 'Bold',
+      lineHeight: "2.25rem"
+    },
+    displayLarge: {
+      fontSize: '4rem',
+      fontWeight: 'Bold',
+      lineHeight: "4.25rem",
+    },
+    titleSmall: {
+      fontSize: '0.875rem',
+      lineHeight: "1.25rem",
+      letterSpacing: ".1px"
+
+    },
+    titleMedium: {
+      fontSize: '1rem',
+      lineHeight: "1.5rem",
+      letterSpacing: ".15px"
+    },
+    titleLarge: {
+      fontSize: '1.375rem',
+      lineHeight: "1.75rem"
+    },
+    bodySmall: {
+      fontWeight: 'lighter',
+      fontSize: '0.75rem',
+      lineHeight: "1rem",
+      letterSpacing: "0.4px"
+    },
+    bodyMedium: {
+      fontWeight: 'lighter',
+      fontSize: '0.875rem',
+      lineHeight: "1.125rem",
+      letterSpacing: "0.25px"
+    },
+    bodyLarge: {
+      fontSize: '1rem',
+      lineHeight: "1.5rem",
+      letterSpacing: "0.5px"
+    },
+    labelSmall: {
+      fontFamily: secondaryFontFamily,
+      fontSize: '0.6875rem',
+      lineHeight: "0.75rem",
+      letterSpacing: '0.5px',
+    },
+    labelMedium: {
+      fontSize: '0.75rem',
+      lineHeight: "1rem",
+      letterSpacing: '0.5px',
+    },
+    labelLarge: {
+      fontWeight: 'Bold',
+      fontSize: '0.875rem',
+      lineHeight: "1.125rem",
+      letterSpacing: "0.1px"
     },
     button: {
       fontFamily: customHeaderFamily,
@@ -139,6 +265,11 @@ export const theme = createTheme({
         }
       `,
     },
+    MuiButtonGroup: {
+      defaultProps: {
+        color: "primary"
+      },
+    },
     MuiTypography: {
       defaultProps: {
         variantMapping: {
@@ -179,7 +310,6 @@ export const theme = createTheme({
         },
       },
     },
-
     //@ts-expect-error
     MuiTabPanel: {
       styleOverrides: {

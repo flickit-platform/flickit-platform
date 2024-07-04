@@ -93,10 +93,8 @@ const AssessmentReportContainer = (props: any) => {
                 >
                   <Typography
                     color="#00365C"
-                    fontSize="4rem"
-                    fontWeight={500}
-                    fontFamily="Ubuntu"
                     textAlign="left"
+                    variant="headlineLarge"
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
