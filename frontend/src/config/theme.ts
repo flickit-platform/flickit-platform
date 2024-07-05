@@ -139,14 +139,14 @@ export const theme = createTheme({
     },
     headlineMedium: {
       fontFamily: secondaryFontFamily,
-      fontSize: "1.75rem",
+      fontSize: "2rem",
       lineHeight: "2.25rem",
       fontWeight: "bold",
     },
     headlineLarge: {
       fontFamily: secondaryFontFamily,
       fontWeight: "Bold",
-      fontSize: "4.5rem",
+      fontSize: "4rem",
       lineHeight: "5.75rem",
     },
     displaySmall: {
@@ -157,13 +157,13 @@ export const theme = createTheme({
     },
     displayMedium: {
       fontFamily: primaryFontFamily,
-      fontSize: "2rem",
+      fontSize: "1.75rem",
       fontWeight: "Bold",
       lineHeight: "2.25rem",
     },
     displayLarge: {
       fontFamily: primaryFontFamily,
-      fontSize: "4rem",
+      fontSize: "4.5rem",
       fontWeight: "Bold",
       lineHeight: "4.25rem",
     },
@@ -192,7 +192,7 @@ export const theme = createTheme({
       letterSpacing: "0.4px",
     },
     bodyMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: 'Ubuntu-light',
       fontWeight: "lighter",
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
