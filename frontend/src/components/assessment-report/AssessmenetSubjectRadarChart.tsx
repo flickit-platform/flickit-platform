@@ -75,8 +75,8 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
         <Radar
           name={t("maturityLevel") as string}
           dataKey="ml"
-          stroke="#00365C"
-          fill="#00365C"
+          stroke="#9CCAFF"
+          fill="#9CCAFF"
           fillOpacity={0.5}
           isAnimationActive={true}
         />

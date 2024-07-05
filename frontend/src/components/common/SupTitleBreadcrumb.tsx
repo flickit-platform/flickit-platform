@@ -9,6 +9,7 @@ import { TId } from "@types";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { Chip } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface ISupTitleBreadcrumbProps {
   routes: {
@@ -26,6 +27,7 @@ const SupTitleBreadcrumb = (
   props: ISupTitleBreadcrumbProps & BreadcrumbsProps
 ) => {
   const { displayChip, routes = [], ...rest } = props;
+  const theme = useTheme()
   return (
     <Breadcrumbs {...rest}>
       {routes.map((route, index) => {
@@ -43,36 +45,36 @@ const SupTitleBreadcrumb = (
               sx={{
                 ...styles.centerV,
                 cursor: "pointer",
-                fontSize: "0.8rem",
-                fontWeight: "bold",
                 opacity: 0.8,
-                letterSpacing: "0.085em",
                 color: rest?.color
                   ? rest.color
                   : disabled
-                  ? "GrayText"
-                  : "primary.dark",
+                    ? "GrayText"
+                    : "primary.dark",
                 "&:hover": {
                   textDecoration: "none",
                 },
               }}
+              variant="bodyLarge"
             >
               {icon}
               {(displayChip ? (
                 <Chip
                   label={title}
-                  size="small"
+                  size="medium"
                   sx={{
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
-                      ? "#D0ECFF"
+                      ? "#D0E4FF"
                       : "rgba(206, 211, 217, 0.4)",
                     color: isActive ? "#00365C" : "#73808C",
                     textTransform: "none",
                     borderRadius: "8px",
                     padding: "8px",
-                    fontWeight: 400,
+                    "& .MuiChip-label": {
+                      ...theme.typography.bodyLarge,
+                    },
                   }}
                 />
               ) : (

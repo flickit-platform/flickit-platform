@@ -59,7 +59,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   }
 
   return (
-    <Box sx={{ ...styles.centerCVH }} gap={3} width="100%">
+    <Box sx={{ ...styles.centerCVH }} gap={1} width="100%">
       {type === ProgessBarTypes.Questioannaire && (
         <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
           <Typography
@@ -100,10 +100,9 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         />{" "}
         {guideText && (
           <Typography
-            component="span"
+            variant="titleMedium"
             color="white"
             fontWeight={500}
-            fontSize="0.8rem"
             textAlign="center"
             sx={{
               position: "absolute",
@@ -119,11 +118,9 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         <Box width="1rem">
           {displayPercent && numaratur !== null && (
             <Typography
-              component="span"
+              variant="titleLarge"
               color={percentColor}
               mx="0.5rem"
-              fontWeight={300}
-              fontSize={{ md: "1rem", xs: "0.7rem" }}
             >
               {totalProgress != null && Math.ceil(totalProgress)}
               {totalProgress != null ? "%" : ""}

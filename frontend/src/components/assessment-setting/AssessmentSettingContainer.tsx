@@ -92,11 +92,15 @@ const AssessmentSettingContainer = () => {
         const { items: listOfRoles } = roles;
 
         return (
-          <Box m="auto" pb={3} sx={{ px: { xl: 28, lg: 14, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentSettingTitle pathInfo={pathInfo} />
             <Grid container columns={12} mt={3} mb={5}>
               <Grid item sm={12} xs={12}>
-                <Box sx={{ ...styles.centerCVH }} gap={2} textAlign="center">
+                <Box
+                  sx={{ ...styles.centerV }}
+                  gap={2}
+                  justifyContent="flex-start"
+                >
                   <Typography
                     color="#004F83"
                     sx={{ fontSize: { xs: "2.125rem", sm: "3.5rem" } }}

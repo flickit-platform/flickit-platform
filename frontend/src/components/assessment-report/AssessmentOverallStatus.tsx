@@ -8,6 +8,8 @@ import { styles } from "@styles";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+import { t } from "i18next";
+
 interface IAssessmentOverallStatusProps {
   status: TStatus;
   subjects_info: ISubjectInfo[];
@@ -32,7 +34,7 @@ export const AssessmentOverallStatus = (
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "40px",
+        borderRadius: "32px",
       }}
     >
       <Gauge
@@ -44,8 +46,9 @@ export const AssessmentOverallStatus = (
         isMobileScreen={false}
         hideGuidance={true}
         height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
-        mb="-8%"
+        mb="-36px"
         className="insight--report__gauge"
+        maturity_status_guide={t("overallMaturityLevelIs")}
       />
     </Box>
   );

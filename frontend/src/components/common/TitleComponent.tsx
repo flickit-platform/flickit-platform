@@ -69,7 +69,7 @@ const Title = (props: ITitle) => {
         sx={{ flex: 1 }}
         {...rest}
         width="100%"
-        alignItems="center"
+        alignItems="start"
         display="flex"
         flexDirection="column"
       >
@@ -77,10 +77,10 @@ const Title = (props: ITitle) => {
           <Box display="flex" justifyContent={"flex-start"}>
             <Box
               minWidth="40px"
+              marginTop="3rem"
               sx={{
                 ...styles.centerV,
                 textDecoration: "none",
-                ml: sup ? { xs: 0, md: "-22px" } : "-4px",
               }}
             >
               <Box
@@ -104,13 +104,7 @@ const Title = (props: ITitle) => {
               {sup && (
                 <Typography
                   textTransform="uppercase"
-                  variant={
-                    size === "small"
-                      ? "subSmall"
-                      : size === "large"
-                      ? "subLarge"
-                      : "subMedium"
-                  }
+                  variant="bodyLarge"
                   lineHeight={0}
                 >
                   {sup}
@@ -121,13 +115,7 @@ const Title = (props: ITitle) => {
         ) : sup ? (
           <Typography
             textTransform="uppercase"
-            variant={
-              size === "small"
-                ? "subSmall"
-                : size === "large"
-                ? "subLarge"
-                : "subMedium"
-            }
+            variant="bodyLarge"
             {...subProps}
           >
             {sup}
@@ -187,8 +175,8 @@ const Title = (props: ITitle) => {
               size === "small"
                 ? "subSmall"
                 : size === "large"
-                ? "subLarge"
-                : "subMedium"
+                  ? "subLarge"
+                  : "subMedium"
             }
           >
             {sub}

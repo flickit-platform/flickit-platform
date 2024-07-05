@@ -55,7 +55,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "40px",
+        borderRadius: "32px",
         px: { xs: 2, sm: 3 },
         position: "relative",
       }}
@@ -74,11 +74,15 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           {assessmentKit?.title}
         </Typography>
       </Box>
-      <Box sx={{ ...styles.centerCVH }} width="80%">
+      <Box
+        sx={{ ...styles.centerCVH }}
+        width={{ xl: "80%", lg: "90%", md: "90%", xs: "90%", sm: "90%" }}
+      >
         <ColorfullProgress
           denominator={questionCount}
           numaratur={answerCount}
           type={ProgessBarTypes.Questioannaire}
+          progressHeight="24px"
         />
       </Box>
 
@@ -90,39 +94,51 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           backgroundColor: "#00365C",
           borderColor: "#00365C",
           color: "#fff",
-          fontSize: "1.25rem",
           py: "8px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#004F83",
             borderColor: "#004F83",
           },
-          width: "65%",
+          width:{ xl: "56%", lg: "56%", md: "90%", xs: "90%", sm: "90%" }
         }}
         size="small"
         component={Link}
         to="./../questionnaires"
       >
-        <Trans i18nKey="Questionnaires" />
+        <Typography variant="titleLarge">
+          <Trans i18nKey="seeQuestionnaire" />
+        </Typography>
       </Button>
       <Box
         sx={{ ...styles.centerV }}
         width="100%"
         justifyContent="space-evenly"
       >
-        <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
-            <Trans i18nKey="created" values={{ progress }} />{": "}
+        <Box
+          display="flex"
+          flexDirection="column"
+          textAlign={"center"}
+          gap=".5rem"
+        >
+          <Typography color="#243342" variant="bodyMedium">
+            <Trans i18nKey="created" values={{ progress }} />
+            {": "}
           </Typography>
-          <Typography color="#243342" fontWeight={500}>
+          <Typography color="#243342" variant="titleMedium">
             {convertToRelativeTime(creationTime)}
           </Typography>
         </Box>
-        <Box display="flex" flexDirection="column" textAlign={"center"}>
-          <Typography color="#243342" fontSize=".875rem" fontWeight={300}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          textAlign={"center"}
+          gap=".5rem"
+        >
+          <Typography color="#243342" variant="bodyMedium">
             <Trans i18nKey="updated" />:
           </Typography>
-          <Typography color="#243342" fontWeight={500}>
+          <Typography color="#243342" variant="titleMedium">
             {convertToRelativeTime(lastModificationTime)}
           </Typography>
         </Box>

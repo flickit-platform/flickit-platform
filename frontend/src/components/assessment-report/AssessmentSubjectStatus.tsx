@@ -32,7 +32,7 @@ export const AssessmentSubjectStatus = (props: IAssessmentSubjectStatus) => {
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "40px",
+        borderRadius: "32px",
         px: { xs: 2, sm: 3 },
       }}
     >

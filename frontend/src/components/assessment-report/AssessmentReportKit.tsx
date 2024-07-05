@@ -13,132 +13,136 @@ import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
-import { Avatar, Button, Chip, Divider, Grid } from "@mui/material";
+import { Avatar, Button, Chip, Divider, Grid, Tooltip } from "@mui/material";
+import { useState } from "react";
 interface IAssessmentReportKit {
   assessmentKit: IAssessmentKitReportModel;
 }
 
 export const AssessmentReportKit = (props: IAssessmentReportKit) => {
   const { assessmentKit } = props;
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
     <Box
       display="flex"
       flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
+      alignItems="left"
+      justifyContent="left"
+      textAlign="left"
       maxHeight="100%"
       gap={3}
-      py={4}
+      py={3}
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "40px",
-        px: { xs: 2, sm: 3 },
+        borderRadius: "32px",
+        px: { xs: 2, sm: 3.75 },
       }}
     >
-      <Grid container alignItems="stretch" sx={{ gap: { lg: 1, md: 1 } }}>
-        <Grid
-          item
-          lg={3.8}
-          md={6}
-          sm={12}
-          xs={12}
-          sx={{
-            ...styles.centerVH,
-            flexDirection: { xs: "column", sm: "row" },
+      <Box sx={{ ...styles.centerCVH }} width="100%" gap={1}>
+        <Box
+          display="flex"
+          flexDirection={{
+            lg: "row",
+            md: "column",
+            xs: "column",
+            sm: "column",
           }}
           gap={1}
+          alignItems="center"
+          justifyContent="space-between"
+          width="100%"
         >
-          <Typography color="#243342" fontSize={"0.9rem"}>
-            <Trans i18nKey="createdWith" />
-          </Typography>
-          <Chip
-            component={Link}
-            to={`/assessment-kits/${assessmentKit?.id}`}
-            label={assessmentKit.title}
-            size="medium"
-            sx={{
-              background: "#D0ECFF",
-              height: "fit-content",
-              color: "#00365C",
-              textTransform: "none",
-              cursor: "pointer",
-              "& .MuiChip-label": {
-                fontSize: "1.125rem",
-                whiteSpace: "pre-wrap",
-              },
-            }}
-          />
-        </Grid>
-        <Divider orientation="vertical" flexItem />
-
-        <Grid
-          item
-          lg={3.8}
-          md={5}
-          sm={12}
-          xs={12}
-          sx={{ ...styles.centerVH, my: 4 }}
-          gap={1}
-        >
-          <Typography
-            color="#243342"
-            fontSize="0.9rem"
-            sx={{ wordBreak: "break-all", px: 2 }}
-          >
-            {assessmentKit.summary}
-          </Typography>
-        </Grid>
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ display: { md: "none", lg: "block" } }}
-        />
-
-        <Grid
-          item
-          lg={3.9}
-          md={12}
-          sm={12}
-          xs={12}
-          sx={{
-            ...styles.centerVH,
-            flexDirection: { xs: "column", sm: "row" },
-          }}
-          gap={1}
-        >
-          <Typography color="#243342" fontSize="0.9rem">
-            <Trans i18nKey="kitIsProvidedBy" />
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box display="flex" alignItems="center" gap="4px">
+            <Typography color="#243342" variant="titleMedium">
+              <Trans i18nKey="thisAssessmentIsUsing" />
+            </Typography>
+            <Tooltip title={assessmentKit.title}>
+              <Typography
+                component={Link}
+                to={`/assessment-kits/${assessmentKit?.id}`}
+                color="#8B0035"
+                variant="titleLarge"
+                sx={{
+                  textDecoration: "none",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  maxWidth: "30vw",
+                }}
+              >
+                {assessmentKit.title}
+              </Typography>
+            </Tooltip>
+            <Typography color="#243342" variant="titleMedium">
+              <Trans i18nKey="kit" />.
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center" gap="8px">
+            <Typography color="#243342" variant="titleMedium">
+              <Trans i18nKey="providedBy" />
+            </Typography>
             <Avatar
               component={Link}
               to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
               src={assessmentKit.expertGroup.picture}
               sx={{ cursor: "pointer" }}
-            ></Avatar>
-            <Chip
-              component={Link}
-              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
-              label={assessmentKit.expertGroup.title}
-              size="medium"
-              sx={{
-                background: "#D0ECFF",
-                color: "#00365C",
-                textTransform: "none",
-                height: "fit-content",
-                mx: 1,
-                cursor: "pointer",
-                "& .MuiChip-label": {
-                  fontSize: "1.125rem",
-                  whiteSpace: "pre-wrap",
-                },
-              }}
             />
+            <Tooltip title={assessmentKit.expertGroup.title}>
+              <Typography
+                component={Link}
+                to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+                color="#8B0035"
+                variant="titleLarge"
+                sx={{
+                  textDecoration: "none",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  maxWidth: "14vw",
+                }}
+              >
+                {assessmentKit.expertGroup.title}
+              </Typography>
+            </Tooltip>
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
+        <Box display="flex" width="100%" mb={1}>
+          <Typography
+            color="#243342"
+            variant="titleSmall"
+            width="100%"
+            textAlign={{
+              lg: "left",
+              md: "center",
+              xs: "center",
+              sm: "center",
+            }}
+            sx={{
+              wordBreak: "break-all",
+            }}
+          >
+            {isExpanded || assessmentKit.summary.length < 136
+              ? assessmentKit.summary
+              : `${assessmentKit.summary.substring(0, 136)}...`}{" "}
+            {assessmentKit.summary.length > 136 && (
+              <Typography
+                component="span"
+                color="primary"
+                sx={{ cursor: "pointer" }}
+                onClick={toggleExpanded}
+              >
+                {isExpanded ? "Show Less" : "Show More"}
+              </Typography>
+            )}
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };

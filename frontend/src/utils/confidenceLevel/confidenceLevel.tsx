@@ -6,11 +6,13 @@ import Typography from "@mui/material/Typography";
 interface confidenceLevelType {
   inputNumber: number | null | undefined;
   displayNumber?: boolean;
+  variant?: any;
 }
 
 const ConfidenceLevel = ({
   inputNumber = 0,
   displayNumber = false,
+  variant = "titleLarge",
 }: confidenceLevelType) => {
   const { id, colorText, number } = calculate(inputNumber);
 
@@ -27,10 +29,7 @@ const ConfidenceLevel = ({
         }}
       >
         {displayNumber && (
-          <Typography
-            sx={{ fontWeight: 900, fontSize: "1.25rem" }}
-            color={colorText}
-          >
+          <Typography variant={variant} color={colorText}>
             {number}%
           </Typography>
         )}
