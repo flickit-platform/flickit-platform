@@ -108,7 +108,7 @@ const Gauge = (props: IGaugeProps) => {
             <Typography
               variant="titleMedium"
               color="#73808C"
-              mt={1}
+              mt="0.5rem"
               justifyContent="center"
               alignItems="center"
               display="flex"
@@ -124,7 +124,7 @@ const Gauge = (props: IGaugeProps) => {
           )}
           {maturity_status_guide && (
             <Typography
-              mt={4}
+              mt="2rem"
               variant={maturity_status_guide_variant}
               color="#243342"
             >
@@ -136,7 +136,7 @@ const Gauge = (props: IGaugeProps) => {
             variant="h6"
             color={colorCode}
             fontSize={fontSize}
-            mt={maturity_status_guide ? 1 : 0}
+            mt={maturity_status_guide ? "0.5rem" : 0}
           >
             {maturity_level_status}
           </Typography>
