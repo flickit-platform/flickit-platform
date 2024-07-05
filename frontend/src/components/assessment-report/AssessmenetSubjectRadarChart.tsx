@@ -13,6 +13,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
 import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
 import convertToAssessmentChartData from "@/utils/convertToAssessmentChartData";
+import { useTheme, Typography } from "@mui/material";
 
 interface AssessmentSubjectRadarChartProps {
   loading: boolean;
@@ -44,6 +45,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
   data,
   maturityLevelsCount,
 }) => {
+  const theme = useTheme();
   const chartData = useMemo(() => convertToAssessmentChartData(data), [data]);
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -58,7 +60,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
                 verticalAnchor="middle"
                 y={y + (y - cy) / 15}
                 x={x + (x - cx) / 15}
-                fontSize="0.75rem"
+                style={{ ...theme.typography.titleSmall }}
               >
                 {payload.value}
               </Text>
