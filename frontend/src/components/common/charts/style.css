@@ -1,5 +1,5 @@
 .insight--report__gauge {
-  margin-top: 8%;
+  margin-top: 36px;
 }
 @media screen and (max-width: 620px) {
   .insight--report__gauge {

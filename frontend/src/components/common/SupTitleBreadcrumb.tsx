@@ -66,7 +66,7 @@ const SupTitleBreadcrumb = (
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
                     background: isActive
-                      ? "#D0ECFF"
+                      ? "#D0E4FF"
                       : "rgba(206, 211, 217, 0.4)",
                     color: isActive ? "#00365C" : "#73808C",
                     textTransform: "none",

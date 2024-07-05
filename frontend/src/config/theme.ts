@@ -10,11 +10,12 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 
-export const customFontFamily = '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
-export const customHeaderFamily = 'Oswald, Roboto, Vazirmatn'
+export const customFontFamily =
+  '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
+export const customHeaderFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
-export const primaryFontFamily = 'Ubuntu'
-export const secondaryFontFamily = 'Sansation'
+export const primaryFontFamily = "Ubuntu";
+export const secondaryFontFamily = "Sansation";
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -133,95 +134,95 @@ export const theme = createTheme({
     },
     headlineSmall: {
       fontFamily: secondaryFontFamily,
-      fontSize: '1.5rem',
-      lineHeight: "2rem"
+      fontSize: "1.5rem",
+      lineHeight: "2rem",
     },
     headlineMedium: {
       fontFamily: secondaryFontFamily,
-      fontSize: '1.75rem',
-      lineHeight: "2.25rem"
+      fontSize: "1.75rem",
+      lineHeight: "2.25rem",
+      fontWeight: "bold",
     },
     headlineLarge: {
       fontFamily: secondaryFontFamily,
-      fontWeight: 'Bold',
-      fontSize: '4.5rem',
-      lineHeight: "5.75rem"
+      fontWeight: "Bold",
+      fontSize: "4.5rem",
+      lineHeight: "5.75rem",
     },
     displaySmall: {
       fontFamily: primaryFontFamily,
-      fontSize: '1.5rem',
+      fontSize: "1.5rem",
       lineHeight: "2rem",
-      letterSpacing: "-3%"
+      letterSpacing: "-3%",
     },
     displayMedium: {
       fontFamily: primaryFontFamily,
-      fontSize: '2rem',
-      fontWeight: 'Bold',
-      lineHeight: "2.25rem"
+      fontSize: "2rem",
+      fontWeight: "Bold",
+      lineHeight: "2.25rem",
     },
     displayLarge: {
       fontFamily: primaryFontFamily,
-      fontSize: '4rem',
-      fontWeight: 'Bold',
+      fontSize: "4rem",
+      fontWeight: "Bold",
       lineHeight: "4.25rem",
     },
     titleSmall: {
       fontFamily: primaryFontFamily,
-      fontSize: '0.875rem',
+      fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      letterSpacing: ".1px"
-
+      letterSpacing: ".1px",
     },
     titleMedium: {
       fontFamily: primaryFontFamily,
-      fontSize: '1rem',
+      fontSize: "1rem",
       lineHeight: "1.5rem",
-      letterSpacing: ".15px"
+      letterSpacing: ".15px",
     },
     titleLarge: {
       fontFamily: primaryFontFamily,
-      fontSize: '1.375rem',
-      lineHeight: "1.75rem"
+      fontSize: "1.375rem",
+      lineHeight: "1.75rem",
     },
     bodySmall: {
       fontFamily: primaryFontFamily,
-      fontWeight: 'lighter',
-      fontSize: '0.75rem',
+      fontWeight: "lighter",
+      fontSize: "0.75rem",
       lineHeight: "1rem",
-      letterSpacing: "0.4px"
+      letterSpacing: "0.4px",
     },
     bodyMedium: {
       fontFamily: primaryFontFamily,
-      fontWeight: 'lighter',
-      fontSize: '0.875rem',
+      fontWeight: "lighter",
+      fontSize: "0.875rem",
       lineHeight: "1.125rem",
-      letterSpacing: "0.25px"
+      letterSpacing: "0.25px",
     },
     bodyLarge: {
       fontFamily: primaryFontFamily,
 
-      fontSize: '1rem',
+      fontSize: "1rem",
       lineHeight: "1.5rem",
-      letterSpacing: "0.5px"
+      letterSpacing: "0.5px",
     },
     labelSmall: {
       fontFamily: secondaryFontFamily,
-      fontSize: '0.6875rem',
+      fontSize: "0.6875rem",
       lineHeight: "0.75rem",
-      letterSpacing: '0.5px',
+      letterSpacing: "0.5px",
     },
     labelMedium: {
       fontFamily: primaryFontFamily,
-      fontSize: '0.75rem',
+      fontSize: "0.75rem",
       lineHeight: "1rem",
-      letterSpacing: '0.5px',
+      letterSpacing: "0.5px",
     },
     labelLarge: {
       fontFamily: primaryFontFamily,
-      fontWeight: 'Bold',
-      fontSize: '0.875rem',
+      fontWeight: "Bold",
+      fontSize: "0.875rem",
       lineHeight: "1.125rem",
-      letterSpacing: "0.1px"
+      letterSpacing: "0.1px",
     },
     button: {
       fontFamily: customHeaderFamily,
@@ -279,7 +280,7 @@ export const theme = createTheme({
     },
     MuiButtonGroup: {
       defaultProps: {
-        color: "primary"
+        color: "primary",
       },
     },
     MuiTypography: {
