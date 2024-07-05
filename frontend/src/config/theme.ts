@@ -136,18 +136,21 @@ export const theme = createTheme({
       fontFamily: secondaryFontFamily,
       fontSize: "1.5rem",
       lineHeight: "2rem",
+      letterSpacing: "0",
     },
     headlineMedium: {
       fontFamily: secondaryFontFamily,
       fontSize: "2rem",
       lineHeight: "2.25rem",
       fontWeight: "bold",
+      letterSpacing: "0",
     },
     headlineLarge: {
       fontFamily: secondaryFontFamily,
       fontWeight: "Bold",
       fontSize: "4rem",
       lineHeight: "5.75rem",
+      letterSpacing: "0",
     },
     displaySmall: {
       fontFamily: primaryFontFamily,
@@ -160,12 +163,14 @@ export const theme = createTheme({
       fontSize: "1.75rem",
       fontWeight: "Bold",
       lineHeight: "2.25rem",
+      letterSpacing: "0",
     },
     displayLarge: {
       fontFamily: primaryFontFamily,
       fontSize: "4.5rem",
       fontWeight: "Bold",
       lineHeight: "4.25rem",
+      letterSpacing: "0",
     },
     titleSmall: {
       fontFamily: primaryFontFamily,
@@ -183,6 +188,7 @@ export const theme = createTheme({
       fontFamily: primaryFontFamily,
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
+      letterSpacing: "0",
     },
     bodySmall: {
       fontFamily: primaryFontFamily,
@@ -192,7 +198,7 @@ export const theme = createTheme({
       letterSpacing: "0.4px",
     },
     bodyMedium: {
-      fontFamily: 'Ubuntu-light',
+      fontFamily: "Ubuntu-light",
       fontWeight: "lighter",
       fontSize: "0.875rem",
       lineHeight: "1.125rem",

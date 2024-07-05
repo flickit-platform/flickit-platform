@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
@@ -87,6 +88,8 @@ export const AssessmentSubjectAccordion = (
   const fetchAttributes = async () => {
     setSubjectAttributes(attributes);
   };
+
+  const theme = useTheme();
 
   const handleAccordionChange = (
     event: React.SyntheticEvent,
@@ -234,13 +237,13 @@ export const AssessmentSubjectAccordion = (
                 display="flex"
                 justifyContent="space-between"
                 width="100%"
-                px={4}
+                px="2rem"
                 marginBottom="10px"
               >
-                <Typography fontWeight={500} color="#73808C">
+                <Typography variant="titleMedium" color="#73808C">
                   Attribute
                 </Typography>
-                <Typography fontWeight={500} color="#73808C">
+                <Typography variant="titleMedium" color="#73808C">
                   Status
                 </Typography>
               </Box>
@@ -264,7 +267,7 @@ export const AssessmentSubjectAccordion = (
                       gap={1}
                       key={element.id}
                     >
-                      <Typography fontWeight={500} color="#243342">
+                      <Typography variant="titleMedium" color="#243342">
                         {element.title}
                       </Typography>
                       <Box display="flex" alignItems="center" gap={0.5}>
@@ -275,7 +278,7 @@ export const AssessmentSubjectAccordion = (
                                 element.maturityLevel.value - 1
                               ],
                           }}
-                          fontWeight={500}
+                          variant="titleMedium"
                         >
                           {element.maturityLevel.title}
                         </Typography>
@@ -299,22 +302,19 @@ export const AssessmentSubjectAccordion = (
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
             sx={{
-              fontFamily: "Ubuntu",
               borderRadius: 0,
               borderBottomRightRadius: "32px",
               borderBottomLeftRadius: "32px",
               padding: 2,
               textTransform: "none",
-              fontWeight: 700,
-              fontSize: "2rem",
               backgroundColor: "#D0E4FF",
               borderColor: "#D0E4FF",
               color: "#00365C",
-              letterSpacing: "0",
               "&:hover": {
                 backgroundColor: "#D0E4FF",
                 borderColor: "#D0E4FF",
               },
+              ...theme.typography.headlineMedium,
             }}
           >
             <Trans i18nKey={"checkMoreDetails"} />
