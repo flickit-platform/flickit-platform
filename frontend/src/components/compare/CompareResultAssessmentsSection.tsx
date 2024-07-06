@@ -6,6 +6,7 @@ import { ICompareResultBaseInfo } from "@types";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
+import { t } from "i18next";
 
 const CompareResultAssessmentsSection = (props: {
   data: ICompareResultBaseInfo[];
@@ -66,7 +67,7 @@ const CompareResultAssessmentsSection = (props: {
                     maturity_level_status={item.maturityLevel.title}
                     level_value={item.maturityLevel.index}
                     confidence_value={item.confidenceValue}
-                    display_confidence_component={true}
+                    confidence_text={t("confidence")}
                     hideGuidance={true}
                     maxWidth="250px"
                     m="auto"

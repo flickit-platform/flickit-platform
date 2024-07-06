@@ -1,0 +1,12 @@
+@font-face {
+	font-family: Sansation;
+	font-style: normal;
+	font-weight: bold;
+	src: url('./Sansation/Sansation_Bold.ttf')
+}
+@font-face {
+	font-family: Sansation;
+	font-style: normal;
+	font-weight: normal;
+	src: url('./Sansation/Sansation_Regular.ttf')
+}

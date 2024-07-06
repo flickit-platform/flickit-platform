@@ -74,6 +74,7 @@ const SupTitleBreadcrumb = (
                     padding: "8px",
                     "& .MuiChip-label": {
                       ...theme.typography.bodyLarge,
+                      fontWeight: isActive ? 'Bold' : '',
                     },
                   }}
                 />

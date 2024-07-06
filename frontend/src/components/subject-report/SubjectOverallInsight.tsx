@@ -10,6 +10,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 import { Divider } from "@mui/material";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import { getMaturityLevelColors } from "@/config/styles";
+import { t } from 'i18next'
 
 const SubjectOverallInsight = ({ data }: any) => {
   const {
@@ -69,7 +70,7 @@ const SubjectOverallInsight = ({ data }: any) => {
                         sx={{
                           color:
                             getMaturityLevelColors(5)[
-                              element.maturityLevel.value - 1
+                            element.maturityLevel.value - 1
                             ],
                         }}
                         fontWeight="500"
@@ -91,10 +92,10 @@ const SubjectOverallInsight = ({ data }: any) => {
             maturity_level_status={maturityLevel?.title}
             maturity_level_number={5}
             confidence_value={confidenceValue}
-            display_confidence_component={true}
+            confidence_text={t("withPercentConfidence")}
             isMobileScreen={false}
             hideGuidance={true}
-            height={getNumberBaseOnScreen(340, 440, 440, 380, 440)}
+            height={getNumberBaseOnScreen(340, 440, 440, 360, 400)}
             mb="-8%"
             mt="8%"
           />
