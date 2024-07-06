@@ -128,7 +128,7 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} lg={3.2} md={3.2} sm={12}>
+          <Grid item xs={12} lg={3.1} md={3.1} sm={12}>
             <Box
               sx={{
                 overflow: "hidden",
@@ -177,7 +177,7 @@ export const AssessmentSubjectAccordion = (
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
-          <Grid item xs={12} lg={1.6} md={1.6} sm={12}>
+          <Grid item xs={12} lg={1.7} md={1.7} sm={12}>
             <Box
               sx={{
                 ...styles.centerCVH,
@@ -186,7 +186,7 @@ export const AssessmentSubjectAccordion = (
                 mt: { xs: "-52px", sm: "-52px", md: "0" },
               }}
             >
-              <Typography variant="titleMedium" color="rgba(108, 123, 142, 1)">
+              <Typography variant="titleMedium" color="#73808C">
                 <Trans i18nKey="withPercentConfidence" />
               </Typography>
               <ConfidenceLevel
@@ -351,7 +351,7 @@ const SubjectStatus = (
             hideGuidance={true}
             height={getNumberBaseOnScreen(240, 240, 150, 150, 150)}
             maturity_status_guide={t("subjectMaturityLevelIs")}
-            maturity_status_guide_variant="titleSmall"
+            maturity_status_guide_variant="bodySmall"
           />
         ) : (
           <Typography>

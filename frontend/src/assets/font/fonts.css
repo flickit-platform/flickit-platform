@@ -1,15 +1,2 @@
-@font-face {
-    font-family: Ubuntu;
-    font-style: normal;
-    src: url('./Ubuntu-Medium.ttf');
-}
-@font-face {
-    font-family: Ubuntu-light;
-    font-style: normal;
-    src: url('./Ubuntu-Light.ttf');
-}
-@font-face {
-    font-family: Sansation;
-    font-style: normal;
-    src: url('./Sansation_Bold.ttf');
-}
+@import "./Sansation.css";
+@import "./Ubuntu.css"

@@ -63,11 +63,9 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
       {type === ProgessBarTypes.Questioannaire && (
         <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
           <Typography
-            component="span"
-            fontSize="1rem"
-            color="#6C7B8E"
-            fontWeight={500}
-            lineHeight={2}
+            variant="titleMedium"
+            color="#73808C"
+
           >
             <Trans i18nKey="answeredQuestions" />
           </Typography>

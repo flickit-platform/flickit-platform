@@ -36,7 +36,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
       textAlign="left"
       maxHeight="100%"
       gap={3}
-      py={3}
+      py={2}
       sx={{
         background: "#fff",
         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
@@ -48,43 +48,41 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
         <Box
           display="flex"
           flexDirection={{
-            lg: "row",
-            md: "column",
+            xl: assessmentKit.title.length + assessmentKit.expertGroup.title.length > 80 ? "column" : "row",
+            lg: assessmentKit.title.length + assessmentKit.expertGroup.title.length > 60 ? "column" : "row",
+            md: assessmentKit.title.length + assessmentKit.expertGroup.title.length > 40 ? "column" : "row",
             xs: "column",
             sm: "column",
           }}
           gap={1}
-          alignItems="center"
           justifyContent="space-between"
           width="100%"
         >
-          <Box display="flex" alignItems="center" gap="4px">
-            <Typography color="#243342" variant="titleMedium">
+          <Box display="flex" alignItems="center" gap="4px" justifyContent="flex-start">
+            <Typography color="#243342" variant="titleMedium" sx={{
+              whiteSpace: "nowrap",
+            }}>
               <Trans i18nKey="thisAssessmentIsUsing" />
             </Typography>
-            <Tooltip title={assessmentKit.title}>
-              <Typography
-                component={Link}
-                to={`/assessment-kits/${assessmentKit?.id}`}
-                color="#8B0035"
-                variant="titleLarge"
-                sx={{
-                  textDecoration: "none",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  maxWidth: "30vw",
-                }}
-              >
-                {assessmentKit.title}
-              </Typography>
-            </Tooltip>
+            <Typography
+              component={Link}
+              to={`/assessment-kits/${assessmentKit?.id}`}
+              color="#8B0035"
+              variant="titleLarge"
+              sx={{
+                textDecoration: "none",
+              }}
+            >
+              {assessmentKit.title}
+            </Typography>
             <Typography color="#243342" variant="titleMedium">
               <Trans i18nKey="kit" />.
             </Typography>
           </Box>
-          <Box display="flex" alignItems="center" gap="8px">
-            <Typography color="#243342" variant="titleMedium">
+          <Box display="flex" alignItems="center" gap="8px" justifyContent="flex-end">
+            <Typography color="#73808C" variant="titleMedium" fontStyle="italic" sx={{
+              whiteSpace: "nowrap",
+            }}>
               <Trans i18nKey="providedBy" />
             </Typography>
             <Avatar
@@ -93,23 +91,18 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               src={assessmentKit.expertGroup.picture}
               sx={{ cursor: "pointer" }}
             />
-            <Tooltip title={assessmentKit.expertGroup.title}>
-              <Typography
-                component={Link}
-                to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
-                color="#8B0035"
-                variant="titleLarge"
-                sx={{
-                  textDecoration: "none",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  maxWidth: "14vw",
-                }}
-              >
-                {assessmentKit.expertGroup.title}
-              </Typography>
-            </Tooltip>
+            <Typography
+              component={Link}
+              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
+              color="#8B0035"
+              variant="titleLarge"
+              sx={{
+                textDecoration: "none",
+
+              }}
+            >
+              {assessmentKit.expertGroup.title}
+            </Typography>
           </Box>
         </Box>
         <Box display="flex" width="100%" mb={1}>
@@ -117,12 +110,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             color="#243342"
             variant="titleSmall"
             width="100%"
-            textAlign={{
-              lg: "left",
-              md: "center",
-              xs: "center",
-              sm: "center",
-            }}
+            textAlign="left"
             sx={{
               wordBreak: "break-all",
             }}
@@ -132,8 +120,8 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               : `${assessmentKit.summary.substring(0, 136)}...`}{" "}
             {assessmentKit.summary.length > 136 && (
               <Typography
-                component="span"
-                color="primary"
+                variant="titleSmall"
+                color="#246297"
                 sx={{ cursor: "pointer" }}
                 onClick={toggleExpanded}
               >

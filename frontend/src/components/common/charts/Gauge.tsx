@@ -14,7 +14,7 @@ interface IGaugeProps extends BoxProps {
   height?: number;
   className?: string;
   hideGuidance?: boolean;
-  display_confidence_component?: boolean;
+  confidence_text?: string | null;
   isMobileScreen?: boolean;
   maturity_status_guide?: string | null;
   maturity_status_guide_variant?: any;
@@ -30,7 +30,7 @@ const Gauge = (props: IGaugeProps) => {
     className,
     hideGuidance,
     isMobileScreen,
-    display_confidence_component,
+    confidence_text,
     maturity_status_guide,
     maturity_status_guide_variant = "titleMedium",
     ...rest
@@ -61,7 +61,7 @@ const Gauge = (props: IGaugeProps) => {
     const fontSizeRem =
       maxFontSizeRem -
       ((length - minLength) / (maxLength - minLength)) *
-        (maxFontSizeRem - minFontSizeRem);
+      (maxFontSizeRem - minFontSizeRem);
     return `${fontSizeRem}rem`;
   };
   const fontSize = calculateFontSize(maturity_level_status?.length);
@@ -104,7 +104,7 @@ const Gauge = (props: IGaugeProps) => {
               <Trans i18nKey="thisSystemIsIn" />
             </Typography>
           )}
-          {display_confidence_component && (
+          {confidence_text && (
             <Typography
               variant="titleMedium"
               color="#73808C"
@@ -114,7 +114,7 @@ const Gauge = (props: IGaugeProps) => {
               display="flex"
               gap="0.125rem"
             >
-              <Trans i18nKey="withPercentConfidence" />{" "}
+              {confidence_text}
               <ConfidenceLevel
                 displayNumber
                 inputNumber={Math.ceil(confidenceValue)}
@@ -137,6 +137,7 @@ const Gauge = (props: IGaugeProps) => {
             color={colorCode}
             fontSize={fontSize}
             mt={maturity_status_guide ? "0.5rem" : 0}
+            mb={maturity_status_guide ? "-0.5rem" : 0}
           >
             {maturity_level_status}
           </Typography>
