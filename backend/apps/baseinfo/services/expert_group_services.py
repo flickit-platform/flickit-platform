@@ -14,13 +14,13 @@ def get_expert_group_list(request):
 
 def create_expert_group(request):
     if "picture" in request.data:
-        file = request.data['picture']
+        file = request.data.get('picture')
         data = request.data
         data.pop('picture')
         response = requests.post(
             ASSESSMENT_URL + 'assessment-core/api/expert-groups',
             data=data,
-            files={'picture': file},
+            files={'picture': (file.name, file, file.content_type)},
             headers={'Authorization': request.headers['Authorization']})
     else:
         response = requests.post(
@@ -119,9 +119,12 @@ def update_expert_group(request, expert_group_id):
 
 
 def update_expert_group_picture(request, expert_group_id):
+    data = request.data
+    file = data.pop('picture')
     response = requests.put(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
-        files=request.data,
+        data=data,
+        files={'pictureFile': (file.name, file, file.content_type)},
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
