@@ -25,6 +25,10 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
+import React, {useState} from "react";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -74,19 +78,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
             sx: { textDecoration: "none" },
           }}
           avatar={
-            <Avatar
-              component={Link}
-              to={`${id}`}
-              sx={(() => {
-                return {
-                  bgcolor: (t) => t.palette.grey[800],
-                  textDecoration: "none",
-                };
-              })()}
-              src={picture}
-            >
-              {title?.[0]?.toUpperCase()}
-            </Avatar>
+            <AvatarComponent expertGroupId={id} picture={picture} title={title} />
           }
           action={
             !disableActions && (
@@ -154,6 +146,95 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
         </CardActions>
       </Card>
     </Box>
+  );
+};
+
+const AvatarComponent = (props: any) => {
+  const {title, picture, expertGroupId} = props
+  const [hover, setHover] = useState(false);
+  const [image, setImage] = useState('');
+
+  const { service } = useServiceContext();
+
+  const handleMouseEnter = () => {
+    setHover(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHover(false);
+  };
+
+  const handleFileChange = (event :any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as any);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDelete = useQuery({
+    service: (
+        args = {expertGroupId},
+        config
+    ) => service.deleteExpertGroupImage(args, config),
+    runOnMount: false,
+  });
+
+  return (
+      <Box
+          position="relative"
+          display="inline-block"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+      >
+        <Avatar
+            sx={(() => {
+              return {
+                bgcolor: (t) => t.palette.grey[800],
+                textDecoration: "none",
+              };
+            })()}
+            src={picture}
+        >
+          {title && !hover && title?.[0]?.toUpperCase()}
+        </Avatar>
+        {hover && (
+            <Box
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                height="100%"
+                bgcolor="rgba(0, 0, 0, 0.2)"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="50%"
+            >
+              <Tooltip title={picture ? "Change Picture" : "Add Picture"}>
+                <IconButton
+
+                    component="label"
+                >
+                  {picture ? <Box onClick={handleDelete as any} ><DeleteIcon sx={{color: "whitesmoke"}} /></Box>  :
+                      <>
+                        <AddIcon sx={{color: "whitesmoke"}} />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            hidden
+                        />
+                      </>
+                  }
+                </IconButton>
+              </Tooltip>
+            </Box>
+        )}
+      </Box>
   );
 };
 
