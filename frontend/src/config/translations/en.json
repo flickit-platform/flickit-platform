@@ -79,7 +79,7 @@
   "showsOverallStatusOfSystem": "Shows overall status of your system",
   "overallStatus": "Overall Status",
   "overallMaturityLevelIs": "overall status is evaluated as",
-  "subjectMaturityLevelIs":"this Subject maturity status evaluated as",
+  "subjectMaturityLevelIs":"the subject status is evaluated as",
   "overallInsights": "Overall Insights",
   "overallInsight": "{{title}} Overall Insights",
   "technicalDueDiligence": "Technical Due Diligence Report Of ",
