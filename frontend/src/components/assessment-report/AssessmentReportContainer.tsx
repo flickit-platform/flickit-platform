@@ -101,7 +101,7 @@ const AssessmentReportContainer = (props: any) => {
                   <Typography
                     color="#00365C"
                     textAlign="left"
-                    variant="headlineMedium"
+                    variant="headlineLarge"
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
@@ -235,11 +235,12 @@ const Actions = (props: { assessmentId: string; manageable: boolean }) => {
   };
   return (
     <MoreActions
-      boxProps={{ padding: "0.2rem"}}
       {...useMenu()}
+      boxProps={{ py: "0.6rem" }}
+      fontSize="large"
       items={[
         manageable && {
-          icon: <SettingsIcon fontSize="small" />,
+          icon: <SettingsIcon style={{ fontSize: "2rem" }} fontSize="large" />,
           text: <Trans i18nKey="settings" />,
           onClick: assessmentSetting,
         },

@@ -78,7 +78,7 @@
   "setAsDefault": "Set as default",
   "showsOverallStatusOfSystem": "Shows overall status of your system",
   "overallStatus": "Overall Status",
-  "overallMaturityLevelIs": "overall maturity is evaluated as",
+  "overallMaturityLevelIs": "overall status is evaluated as",
   "subjectMaturityLevelIs":"this Subject maturity status evaluated as",
   "overallInsights": "Overall Insights",
   "overallInsight": "{{title}} Overall Insights",
@@ -420,6 +420,6 @@
   "owner": "Owner",
   "you": "You",
   "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable.",
-  "overallStatusDetails":"You can find detailed statuses accross {{attributes}} in {{subjects}} key subjects.",
+  "overallStatusDetails":"You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
   "subjectAccordionDetails":"You can find a detailed status of the {{subjects}} accross {{attributes}} attributes."
 }
