@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -50,3 +51,16 @@ class EvidenceApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+
+class EvidenceAttachmentsApi(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    attachment_param = openapi.Parameter('attachment', openapi.IN_FORM, description="attachment file",
+                                         type=openapi.TYPE_FILE, required=True)
+    description_param = openapi.Parameter('description', openapi.IN_FORM, description="description",
+                                          type=openapi.TYPE_STRING, required=False)
+
+    @swagger_auto_schema(manual_parameters=[attachment_param, description_param], responses={201: ""})
+    def post(self, request, evidence_id):
+        result = evidence_services.evidence_add_attachments(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
