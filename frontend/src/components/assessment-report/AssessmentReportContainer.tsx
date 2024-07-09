@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -70,6 +70,7 @@ const AssessmentReportContainer = (props: any) => {
       calculateConfidenceLevel();
     }
   }, [queryData.errorObject]);
+  const { spaceId } = useParams();
 
   return (
     <QueryBatchData
@@ -105,10 +106,18 @@ const AssessmentReportContainer = (props: any) => {
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Actions
-                    assessmentId={assessmentId}
-                    manageable={manageable}
-                  />
+                  <Box
+                    sx={{ py: "0.6rem" }}
+                    component={Link}
+                    to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
+                  >
+                    <IconButton
+                      data-cy="more-action-btn"
+                      disabled={!manageable}
+                    >
+                      <SettingsIcon fontSize="large" />
+                    </IconButton>
+                  </Box>
                 </Box>
                 <Grid container alignItems="stretch" spacing={2} mt={1}>
                   <Grid item lg={6} md={6} sm={12} xs={12}>
