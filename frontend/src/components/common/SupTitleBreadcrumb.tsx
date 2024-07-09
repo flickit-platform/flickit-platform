@@ -71,10 +71,10 @@ const SupTitleBreadcrumb = (
                     color: isActive ? "#00365C" : "#73808C",
                     textTransform: "none",
                     borderRadius: "8px",
-                    padding: "8px",
+                    padding: "4px",
                     "& .MuiChip-label": {
                       ...theme.typography.bodyLarge,
-                      fontWeight: isActive ? 'Bold' : '',
+                      fontWeight: isActive ? 'Bold' : '400',
                     },
                   }}
                 />

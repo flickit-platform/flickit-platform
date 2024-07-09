@@ -77,7 +77,7 @@ const Title = (props: ITitle) => {
           <Box display="flex" justifyContent={"flex-start"}>
             <Box
               minWidth="40px"
-              marginTop="3rem"
+              marginTop="0.5rem"
               sx={{
                 ...styles.centerV,
                 textDecoration: "none",

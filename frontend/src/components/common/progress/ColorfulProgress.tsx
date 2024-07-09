@@ -62,11 +62,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
     <Box sx={{ ...styles.centerCVH }} gap={1} width="100%">
       {type === ProgessBarTypes.Questioannaire && (
         <Box display="flex" textAlign="center" color="#9DA7B3" fontWeight={800}>
-          <Typography
-            variant="titleMedium"
-            color="#73808C"
-
-          >
+          <Typography variant="titleMedium" color="#73808C" p="2px">
             <Trans i18nKey="answeredQuestions" />
           </Typography>
           <Typography
@@ -83,7 +79,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
           </Typography>
         </Box>
       )}
-      <Box display="flex" width="100%" alignItems="center">
+      <Box display="flex" width="100%" alignItems="center" position="relative">
         <LinearProgress
           sx={{
             borderRadius: 3,
@@ -115,16 +111,28 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
         )}
         <Box width="1rem">
           {displayPercent && numaratur !== null && (
-            <Typography
-              variant="titleLarge"
-              color={percentColor}
-              mx="0.5rem"
-            >
+            <Typography variant="titleLarge" color={percentColor} mx="0.5rem">
               {totalProgress != null && Math.ceil(totalProgress)}
               {totalProgress != null ? "%" : ""}
             </Typography>
           )}
         </Box>
+        {totalProgress != null && Math.ceil(totalProgress) !== 100 && (
+          <Typography
+            variant="titleMedium"
+            color="#fff"
+            fontWeight={500}
+            sx={{
+              position: "absolute",
+              width: "100%",
+              top: "50%",
+              transform: "translateY(-50%)",
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Adds shadow effect
+            }}
+          >
+            <Trans i18nKey="completeNow" />
+          </Typography>
+        )}
       </Box>
     </Box>
   );

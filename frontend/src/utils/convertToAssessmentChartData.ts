@@ -17,7 +17,7 @@ export const convertToRadialChartData = (data: any) => {
     return {
       ml: item?.maturityLevel?.value,
       cl: 1,
-      name: item?.title,
+      title: item?.title,
       id: item?.id,
       fill: getMaturityLevelColors(5)[item.maturityLevel.value - 1],
     };
