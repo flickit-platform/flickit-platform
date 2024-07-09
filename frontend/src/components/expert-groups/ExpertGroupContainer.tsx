@@ -112,7 +112,7 @@ const ExpertGroupContainer = () => {
             <Title
               borderBottom
               pb={1}
-              avatar={<AvatarComponent queryData={queryData} picture={pictureLink}  />}
+              avatar={<AvatarComponent queryData={queryData} picture={pictureLink} editable={editable} />}
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -333,10 +333,10 @@ const ExpertGroupContainer = () => {
 };
 
 const AvatarComponent = (props: any) => {
-    const {title, picture , queryData } = props
+    const {title, picture , queryData, editable } = props
     const [hover, setHover] = useState(false);
     const [image, setImage] = useState('');
-    const { expertGroupId } = useParams();
+    const { expertGroupId = "" } = useParams();
 
     const { service } = useServiceContext();
 
@@ -348,7 +348,7 @@ const AvatarComponent = (props: any) => {
         setHover(false);
     };
 
-    const handleFileChange = (event :any) => {
+    const handleFileChange = async (event :any) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -357,6 +357,11 @@ const AvatarComponent = (props: any) => {
             };
             reader.readAsDataURL(file);
         }
+        const pictureData = {
+                    pictureFile: file ,
+                }
+        await service.updateExpertGroupPicture({ data: pictureData, id : expertGroupId }, undefined)
+        await queryData.query()
     };
 
     const handleDelete = useQuery({
@@ -369,82 +374,113 @@ const AvatarComponent = (props: any) => {
 
 
     const deletePicture = async () =>{
-        try{
+        try {
             await handleDelete.query()
             await queryData.query()
 
-        }catch(e){
-
+        } catch(e: any){
+            const err = e as ICustomError;
+            toastError(err);
         }
     }
 
-    const EditPicture = async () =>{
-        try{
-            // await handleDelete.query
-
-        }catch(e){
-
-        }
-    }
     return (
-        <Box
-            position="relative"
-            display="inline-block"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            sx={{ mr: 1 }}
-        >
-            <Avatar
-                sx={(() => {
-                    return {
-                        bgcolor: (t) => t.palette.grey[800],
-                        textDecoration: "none",
-                        width: 50,height: 50
-                    };
-                })()}
-                src={picture}
+        editable ?
+            <Box
+                position="relative"
+                display="inline-block"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{ mr: 1 }}
             >
-                {title && !hover && title?.[0]?.toUpperCase()}
-            </Avatar>
-            {hover && (
-                <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    width="100%"
-                    height="100%"
-                    bgcolor="rgba(0, 0, 0, 0.6)"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    borderRadius="50%"
-                    sx={{cursor: "pointer"}}
+                <Avatar
+                    sx={(() => {
+                        return {
+                            bgcolor: (t) => t.palette.grey[800],
+                            textDecoration: "none",
+                            width: 50,height: 50
+                        };
+                    })()}
+                    src={picture}
                 >
-                    {picture ?
-                        <>
-                            <Tooltip title={"Delete Picture"}>
-                                <DeleteIcon onClick={deletePicture}  sx={{color: "whitesmoke"}} />
-                            </Tooltip>
-                            <Tooltip title={"Edit Picture"}>
-                                <EditIcon onClick={EditPicture}  sx={{color: "whitesmoke"}} />
-                            </Tooltip>
-                        </>
-                        :
-                        <Tooltip title={"Add Picture"}>
+                    {title && !hover && title?.[0]?.toUpperCase()}
+                </Avatar>
+                {!hover && <Box sx={{position: "absolute",borderRadius: "2px", bottom: -11, right: 13, bgcolor: "white",width: "20px",height: "20px"}} >
+                    <EditIcon sx={{ color: "#000"}} />
+                </Box>}
+                {hover && (
+                    <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        width="100%"
+                        height="100%"
+                        bgcolor="rgba(0, 0, 0, 0.6)"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        borderRadius="50%"
+                        sx={{cursor: "pointer"}}
+                    >
+                        {picture ?
                             <>
-                                <AddIcon sx={{color: "whitesmoke"}} />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    hidden
-                                />
+                                <Tooltip title={"Delete Picture"}>
+                                    <DeleteIcon onClick={deletePicture}  sx={{color: "whitesmoke"}} />
+                                </Tooltip>
+                                <Tooltip title={"Edit Picture"}>
+
+                                    <IconButton
+                                        component="label"
+                                        sx={{padding:0, color: "whitesmoke" }}
+                                    >
+                                        <EditIcon />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            hidden
+                                        />
+                                    </IconButton>
+                                </Tooltip>
                             </>
-                        </Tooltip>
-                    }
-                </Box>
-            )}
-        </Box>
+                            :
+                            <Tooltip title={"Add Picture"}>
+
+                                <IconButton
+                                    component="label"
+                                    sx={{ color: "whitesmoke" }}
+                                >
+                                    <AddIcon />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        hidden
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        }
+                    </Box>
+                )}
+            </Box>
+            :
+            <Box
+                sx={{ mr: 1 }}
+            >
+                <Avatar
+                    sx={(() => {
+                        return {
+                            bgcolor: (t) => t.palette.grey[800],
+                            textDecoration: "none",
+                            width: 50,height: 50
+                        };
+                    })()}
+                    src={picture}
+                >
+                    {title && !hover && title?.[0]?.toUpperCase()}
+                </Avatar>
+            </Box>
+
     );
 };
 
