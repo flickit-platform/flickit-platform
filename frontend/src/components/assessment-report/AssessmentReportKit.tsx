@@ -92,13 +92,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             gap="4px"
             justifyContent="flex-start"
           >
-            <Typography
-              color="#243342"
-              variant="titleMedium"
-              sx={{
-                whiteSpace: "nowrap",
-              }}
-            >
+            <Typography color="#243342" variant="titleMedium">
               <Trans i18nKey="thisAssessmentIsUsing" />
             </Typography>
             <Typography
