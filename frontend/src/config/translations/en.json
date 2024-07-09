@@ -78,8 +78,8 @@
   "setAsDefault": "Set as default",
   "showsOverallStatusOfSystem": "Shows overall status of your system",
   "overallStatus": "Overall Status",
-  "overallMaturityLevelIs": "overall maturity is evaluated as",
-  "subjectMaturityLevelIs":"this Subject maturity status evaluated as",
+  "overallMaturityLevelIs": "overall status is evaluated as",
+  "subjectMaturityLevelIs":"the subject status is evaluated as",
   "overallInsights": "Overall Insights",
   "overallInsight": "{{title}} Overall Insights",
   "technicalDueDiligence": "Technical Due Diligence Report Of ",
@@ -191,7 +191,7 @@
   "aboutAssessmentKit": "About assessment kit",
   "dateCreated": "Date created",
   "lastModified": "Last modified",
-  "thisAssessmentIsUsing": "This Assessment was conducted",
+  "thisAssessmentIsUsing": "This Assessment was conducted using the",
   "description": "Description",
   "createAssessmentKit": "Create Assessment Kit",
   "updateAssessmentKit": "Update Assessment Kit",
@@ -420,6 +420,6 @@
   "owner": "Owner",
   "you": "You",
   "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable.",
-  "overallStatusDetails":"You can find detailed statuses accross {{attributes}} in {{subjects}} key subjects.",
+  "overallStatusDetails":"You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
   "subjectAccordionDetails":"You can find a detailed status of the {{subjects}} accross {{attributes}} attributes."
 }

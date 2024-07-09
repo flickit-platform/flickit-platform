@@ -54,7 +54,13 @@ export const AssessmentOverallStatus = (
         className="insight--report__gauge"
         maturity_status_guide={t("overallMaturityLevelIs")}
       />
-      <Typography variant="titleMedium" position="absolute" mx="2.5rem" mt="-3.5rem">
+      <Typography
+        variant="titleMedium"
+        position="absolute"
+        mx="2.5rem"
+        mt="-4rem"
+        maxWidth="390px"
+      >
         <Trans
           i18nKey="overallStatusDetails"
           values={{

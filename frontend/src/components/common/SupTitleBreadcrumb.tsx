@@ -61,7 +61,7 @@ const SupTitleBreadcrumb = (
               {(displayChip ? (
                 <Chip
                   label={title}
-                  size="medium"
+                  size="small"
                   sx={{
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",

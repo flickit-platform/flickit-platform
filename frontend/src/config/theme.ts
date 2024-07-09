@@ -149,8 +149,8 @@ export const theme = createTheme({
     headlineLarge: {
       fontFamily: primaryFontFamily,
       fontWeight: "bold",
-      fontSize: "4rem",
-      lineHeight: "4.25rem",
+      fontSize: "3.5rem",
+      lineHeight: "3.7rem",
       letterSpacing: "0",
     },
     displaySmall: {
