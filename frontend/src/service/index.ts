@@ -567,7 +567,7 @@ export const createService = (
       const { file, expert_group_id } = args ?? {};
       return axios.post(
         `/api/v1/assessment-kits/upload-dsl/`,
-        { dsl_file: file, expert_group_id: expert_group_id },
+        { dslFile: file, expert_group_id: expert_group_id },
         {
           ...config,
           headers: {
