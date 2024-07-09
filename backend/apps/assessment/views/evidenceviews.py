@@ -64,3 +64,7 @@ class EvidenceAttachmentsApi(APIView):
     def post(self, request, evidence_id):
         result = evidence_services.evidence_add_attachments(request, evidence_id)
         return Response(data=result["body"], status=result["status_code"])
+
+    def get(self, request, evidence_id):
+        result = evidence_services.evidence_list_attachments(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
