@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -16,6 +16,10 @@ import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
 import { AssessmentReportKit } from "./AssessmentReportKit";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
+import MoreActions from "@common/MoreActions";
+import SettingsIcon from "@mui/icons-material/Settings";
+import useMenu from "@/utils/useMenu";
+
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -72,8 +76,14 @@ const AssessmentReportContainer = (props: any) => {
       queryBatchData={[queryData, assessmentTotalProgress]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
       render={([data = {}, progress]) => {
-        const { status, assessment, subjects, topStrengths, topWeaknesses } =
-          data || {};
+        const {
+          status,
+          assessment,
+          subjects,
+          topStrengths,
+          topWeaknesses,
+          assessmentPermissions: { manageable },
+        } = data || {};
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
@@ -85,19 +95,29 @@ const AssessmentReportContainer = (props: any) => {
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentReportTitle data={data} colorCode={colorCode} />
-            <Grid container spacing={2} columns={12} mt={0.2}>
+            <Grid container spacing={1} columns={12} mt={0}>
               <Grid item sm={12} xs={12}>
-                <Typography
-                  color="#00365C"
-                  textAlign="left"
-                  variant="headlineLarge"
-                >
-                  <Trans i18nKey="assessmentInsights" />
-                </Typography>
-                <Grid container alignItems="stretch" spacing={5} mt={1}>
+                <Box display="flex">
+                  <Typography
+                    color="#00365C"
+                    textAlign="left"
+                    variant="headlineMedium"
+                  >
+                    <Trans i18nKey="assessmentInsights" />
+                  </Typography>
+                  <Actions
+                    assessmentId={assessmentId}
+                    manageable={manageable}
+                  />
+                </Box>
+                <Grid container alignItems="stretch" spacing={2} mt={1}>
                   <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Box display="flex" flexDirection="column" gap={1}       height="100%"
->
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={1}
+                      height="100%"
+                    >
                       <Typography
                         color="#73808C"
                         marginX={4}
@@ -199,6 +219,31 @@ const AssessmentReportContainer = (props: any) => {
           </Box>
         );
       }}
+    />
+  );
+};
+
+const Actions = (props: { assessmentId: string; manageable: boolean }) => {
+  const { assessmentId, manageable } = props;
+  const navigate = useNavigate();
+  const { spaceId } = useParams();
+
+  const assessmentSetting = (e: any) => {
+    navigate({
+      pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+    });
+  };
+  return (
+    <MoreActions
+      boxProps={{ padding: "0.2rem"}}
+      {...useMenu()}
+      items={[
+        manageable && {
+          icon: <SettingsIcon fontSize="small" />,
+          text: <Trans i18nKey="settings" />,
+          onClick: assessmentSetting,
+        },
+      ]}
     />
   );
 };

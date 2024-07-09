@@ -197,7 +197,7 @@ export const theme = createTheme({
     },
     bodySmall: {
       fontFamily: primaryFontFamily,
-      fontWeight: 200,
+      fontWeight: "normal",
       fontSize: "0.75rem",
       lineHeight: "1rem",
       letterSpacing: "0.4px",

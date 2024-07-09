@@ -8,8 +8,11 @@ import {
   Text,
   Radar,
   Legend,
-  RadialBarChart,
-  RadialBar,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
 } from "recharts";
 import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
@@ -57,24 +60,18 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <RadialBarChart
-        cx="50%"
-        cy="50%"
-        innerRadius="10%"
-        outerRadius="80%"
-        barSize={30}
-        data={chartData}
-      >
-        <PolarAngleAxis domain={[0, 5]} type="number" tick={false} />
-
-        <RadialBar
+      <BarChart cx="50%" cy="50%" barSize={30} data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="title" />
+        <YAxis type="number" domain={[0, 5]} tickCount={6} />
+        <Bar
           min={15}
           dataKey="ml"
           label={{ position: "middle", fill: "#fff", fontSize: "1.75rem" }}
           background
+          name="name"
         />
-        <Legend iconSize={10} />
-      </RadialBarChart>
+      </BarChart>
     </ResponsiveContainer>
   );
 };

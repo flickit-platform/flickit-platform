@@ -28,6 +28,10 @@ export const AssessmentOverallStatus = (
     maturity_level_count,
     confidence_value,
   } = props;
+  const totalAttributesLength = subjects_info.reduce((sum, subject) => {
+    return sum + (subject.attributes?.length || 0);
+  }, 0);
+
   return (
     <Box
       height="100%"
@@ -50,6 +54,15 @@ export const AssessmentOverallStatus = (
         className="insight--report__gauge"
         maturity_status_guide={t("overallMaturityLevelIs")}
       />
+      <Typography variant="titleMedium" position="absolute" mx="2.5rem" mt="-3.5rem">
+        <Trans
+          i18nKey="overallStatusDetails"
+          values={{
+            attributes: totalAttributesLength,
+            subjects: subjects_info.length,
+          }}
+        />
+      </Typography>
     </Box>
   );
 };
