@@ -97,7 +97,7 @@ const AssessmentReportContainer = (props: any) => {
             <AssessmentReportTitle data={data} colorCode={colorCode} />
             <Grid container spacing={1} columns={12} mt={0}>
               <Grid item sm={12} xs={12}>
-                <Box display="flex">
+                <Box display="flex" justifyContent="space-between">
                   <Typography
                     color="#00365C"
                     textAlign="left"
