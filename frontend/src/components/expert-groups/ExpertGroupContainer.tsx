@@ -34,7 +34,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -53,6 +53,10 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -108,7 +112,7 @@ const ExpertGroupContainer = () => {
             <Title
               borderBottom
               pb={1}
-              avatar={<Avatar src={pictureLink} sx={{ mr: 1 }} />}
+              avatar={<AvatarComponent queryData={queryData} picture={pictureLink}  />}
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -327,6 +331,123 @@ const ExpertGroupContainer = () => {
     />
   );
 };
+
+const AvatarComponent = (props: any) => {
+    const {title, picture , queryData } = props
+    const [hover, setHover] = useState(false);
+    const [image, setImage] = useState('');
+    const { expertGroupId } = useParams();
+
+    const { service } = useServiceContext();
+
+    const handleMouseEnter = () => {
+        setHover(true);
+    };
+
+    const handleMouseLeave = () => {
+        setHover(false);
+    };
+
+    const handleFileChange = (event :any) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImage(reader.result as any);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDelete = useQuery({
+        service: (
+            args = {expertGroupId},
+            config
+        ) => service.deleteExpertGroupImage(args, config),
+        runOnMount: false,
+    });
+
+
+    const deletePicture = async () =>{
+        try{
+            await handleDelete.query()
+            await queryData.query()
+
+        }catch(e){
+
+        }
+    }
+
+    const EditPicture = async () =>{
+        try{
+            // await handleDelete.query
+
+        }catch(e){
+
+        }
+    }
+    return (
+        <Box
+            position="relative"
+            display="inline-block"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{ mr: 1 }}
+        >
+            <Avatar
+                sx={(() => {
+                    return {
+                        bgcolor: (t) => t.palette.grey[800],
+                        textDecoration: "none",
+                        width: 50,height: 50
+                    };
+                })()}
+                src={picture}
+            >
+                {title && !hover && title?.[0]?.toUpperCase()}
+            </Avatar>
+            {hover && (
+                <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    bgcolor="rgba(0, 0, 0, 0.6)"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    borderRadius="50%"
+                    sx={{cursor: "pointer"}}
+                >
+                    {picture ?
+                        <>
+                            <Tooltip title={"Delete Picture"}>
+                                <DeleteIcon onClick={deletePicture}  sx={{color: "whitesmoke"}} />
+                            </Tooltip>
+                            <Tooltip title={"Edit Picture"}>
+                                <EditIcon onClick={EditPicture}  sx={{color: "whitesmoke"}} />
+                            </Tooltip>
+                        </>
+                        :
+                        <Tooltip title={"Add Picture"}>
+                            <>
+                                <AddIcon sx={{color: "whitesmoke"}} />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    hidden
+                                />
+                            </>
+                        </Tooltip>
+                    }
+                </Box>
+            )}
+        </Box>
+    );
+};
+
 
 const EditExpertGroupButton = (props: any) => {
   const { fetchExpertGroup } = props;
