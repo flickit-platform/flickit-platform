@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useLocation, useParams } from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -23,6 +23,7 @@ import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSet
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedRemoveModal, setExpandedRemoveModal] = useState<{
     display: boolean;
@@ -57,6 +58,14 @@ const AssessmentSettingContainer = () => {
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
+    useEffect(() => {
+        (async ()=>{
+            let {manageable} = await AssessmentInfo.query()
+            if(!manageable){
+                return  navigate("*")
+            }
+        })()
+    }, [assessmentId]);
 
   useEffect(() => {
     (async () => {
