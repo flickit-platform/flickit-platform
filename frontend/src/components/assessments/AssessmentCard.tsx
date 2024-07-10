@@ -34,7 +34,7 @@ import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
 
-  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean}  & {kit?: {id: number, title: string, maturityLevelsCount: number}};
+  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean};
 
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
