@@ -340,14 +340,6 @@ const AvatarComponent = (props: any) => {
 
     const { service } = useServiceContext();
 
-    const handleMouseEnter = () => {
-        setHover(true);
-    };
-
-    const handleMouseLeave = () => {
-        setHover(false);
-    };
-
     const handleFileChange = async (event :any) => {
         const file = event.target.files[0];
         if (file) {
@@ -389,8 +381,8 @@ const AvatarComponent = (props: any) => {
             <Box
                 position="relative"
                 display="inline-block"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={()=>setHover(true)}
+                onMouseLeave={()=>setHover(false)}
                 sx={{ mr: 1 }}
             >
                 <Avatar
@@ -405,8 +397,8 @@ const AvatarComponent = (props: any) => {
                 >
                     {title && !hover && title?.[0]?.toUpperCase()}
                 </Avatar>
-                {!hover && <Box sx={{position: "absolute",borderRadius: "2px", bottom: -11, right: 13, bgcolor: "white",width: "20px",height: "20px"}} >
-                    <EditIcon sx={{ color: "#000"}} />
+                {!hover && <Box sx={{display: "flex", justifyContent: "center",alignItems: "center", position: "absolute",borderRadius: "50%", bottom: -9, right: 0, bgcolor: "white",width: "21px",height: "21px"}} >
+                    <EditIcon sx={{ color: "#000", width: "16px"}} />
                 </Box>}
                 {hover && (
                     <Box
