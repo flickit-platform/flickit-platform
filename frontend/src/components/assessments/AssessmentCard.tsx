@@ -34,7 +34,7 @@ import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
 
-  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean}  & {kit?: {title: string}};
+  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean}  & {kit?: {id: number, title: string, maturityLevelsCount: number}};
 
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
@@ -47,8 +47,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
 
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime,viewable,
-
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime,viewable
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
