@@ -51,13 +51,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -93,6 +93,10 @@ const AssessmentReportContainer = (props: any) => {
 
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
+        const totalAttributesLength = subjects.reduce((sum: any, subject: any) => {
+          return sum + (subject.attributes?.length || 0);
+        }, 0);
+
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentReportTitle data={data} colorCode={colorCode} />
@@ -115,7 +119,7 @@ const AssessmentReportContainer = (props: any) => {
                       data-cy="more-action-btn"
                       disabled={!manageable}
                     >
-                      <SettingsIcon fontSize="large" />
+                      <SettingsIcon sx={{ fontSize: "1.5rem", margin: "0.2rem" }} />
                     </IconButton>
                   </Box>
                 </Box>
@@ -191,12 +195,23 @@ const AssessmentReportContainer = (props: any) => {
                   sx={{ ...styles.centerCV }}
                   alignItems="flex-start"
                   marginTop={6}
-                  gap={2}
                 >
                   <Typography color="#73808C" variant="headlineSmall">
                     <Trans i18nKey="subjectReport" />
                   </Typography>
-                  <Divider sx={{ width: "100%" }} />
+                  <Typography
+                    variant="titleSmall"
+                    fontWeight={400}
+                  >
+                    <Trans
+                      i18nKey="overallStatusDetails"
+                      values={{
+                        attributes: totalAttributesLength,
+                        subjects: subjects?.length,
+                      }}
+                    />
+                  </Typography>
+                  <Divider sx={{ width: "100%", marginTop: 2 }} />
                 </Box>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">

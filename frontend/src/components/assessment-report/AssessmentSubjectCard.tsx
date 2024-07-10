@@ -120,6 +120,7 @@ export const AssessmentSubjectAccordion = (
           borderTopLeftRadius: "32px !important",
           borderTopRightRadius: "32px !important",
           textAlign: "center",
+          paddingBottom: 2,
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
             maxHeight: { md: "160px", lg: "160px" },
@@ -128,17 +129,6 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} lg={12} md={12} sm={12}>
-            <Typography variant="titleMedium">
-              <Trans
-                i18nKey="subjectAccordionDetails"
-                values={{
-                  attributes: subjectAttributes.length,
-                  subjects: title,
-                }}
-              />
-            </Typography>
-          </Grid>
           <Grid item xs={12} lg={3} md={3} sm={12}>
             <Box
               sx={{
@@ -214,6 +204,17 @@ export const AssessmentSubjectAccordion = (
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
+          <Grid item xs={12} lg={12} md={12} sm={12} mb={2}>
+            <Typography variant="titleMedium" fontWeight={400}>
+              <Trans
+                i18nKey="subjectAccordionDetails"
+                values={{
+                  attributes: subjectAttributes.length,
+                  subjects: title,
+                }}
+              />
+            </Typography>
+          </Grid>
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
@@ -288,7 +289,7 @@ export const AssessmentSubjectAccordion = (
                           sx={{
                             color:
                               getMaturityLevelColors(5)[
-                                element.maturityLevel.value - 1
+                              element.maturityLevel.value - 1
                               ],
                           }}
                           variant="titleMedium"

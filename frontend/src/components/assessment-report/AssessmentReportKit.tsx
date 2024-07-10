@@ -151,10 +151,11 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             <Typography
               color="#243342"
               variant="titleSmall"
+              fontWeight={500}
               width="100%"
               textAlign="left"
               sx={{
-                wordBreak: "break-all",
+                whiteSpace:"pre-wrap",
                 overflow: isExpanded ? "visible" : "hidden",
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
@@ -166,6 +167,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             </Typography>
             <Typography
               variant="titleSmall"
+              fontWeight={500}
               color="#246297"
               sx={{ cursor: "pointer" }}
               onClick={toggleExpanded}
@@ -178,6 +180,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             <Typography
               color="#243342"
               variant="titleSmall"
+              fontWeight={500}
               width="100%"
               textAlign="left"
               sx={{
