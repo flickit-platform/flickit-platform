@@ -138,7 +138,10 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                             margin: "0 auto",
                             fontSize: "9px",
                             border: "1px solid #00365C",
-                            borderRadius: "100px"
+                            borderRadius: "100px",
+                            textTransform: "none",
+                            paddingInline: "10px",
+                            paddingBlock: '3px'
                         }}
                         data-cy="assessment-card-title"
                     >
