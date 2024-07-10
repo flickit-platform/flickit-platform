@@ -119,7 +119,7 @@ const AssessmentReportContainer = (props: any) => {
                       data-cy="more-action-btn"
                       disabled={!manageable}
                     >
-                      <SettingsIcon fontSize="large" />
+                      <SettingsIcon sx={{ fontSize: "1.5rem", margin: "0.2rem" }} />
                     </IconButton>
                   </Box>
                 </Box>
