@@ -306,7 +306,7 @@ const Actions = (props: {
               text: <Trans i18nKey="settings" />,
               onClick: assessmentSetting,
             },
-            item?.viewable && {
+            item?.manageable  && {
               icon: <DeleteRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="delete" />,
               onClick: deleteItem,
