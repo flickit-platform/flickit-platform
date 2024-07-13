@@ -8,8 +8,8 @@ import { CompareProvider } from "@providers/CompareProvider";
 const CompareContainer = () => {
   return (
     <Box>
-      <Title borderBottom={true}>
-        <CompareRoundedIcon sx={{ mr: 1 }} />
+      <Title size="large" borderBottom={true}>
+        {/* <CompareRoundedIcon sx={{ mr: 1 }} /> */}
         <Trans i18nKey="compare" />
       </Title>
       <Box mt={3}>

@@ -167,32 +167,30 @@ const QuestionnaireTitle = (props: any) => {
   }, [assessment]);
 
   return (
-      <Title
-          backLink = "/"
-          wrapperProps={{
-              sx: {
-                  flexDirection: { xs: "column", md: "row" },
-                  alignItems: { xs: "flex-start", md: "flex-end" },
-              },
-          }}
-          sup={
-              <SupTitleBreadcrumb
-                        routes={[
-                          {
-                            title: space?.title,
-                            to: `/${spaceId}/assessments/${page}`,
-                          },
-                          {
-                            title: assessment?.title,
-                          },
-                        ]}
-                  displayChip
-              />
-          }
-      >
-          <QuizRoundedIcon sx={{ mr: 1 }} />
-          <Trans i18nKey="Questionnaires" />
-      </Title>
+    <Title
+      backLink="/"
+      size="large"
+      sup={
+        <SupTitleBreadcrumb
+          routes={[
+            {
+              title: space?.title,
+              to: `/${spaceId}/assessments/${page}`,
+              // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+            },
+            {
+              title: assessment?.title,
+              // icon: (
+              //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
+            },
+          ]}
+        />
+      }
+    >
+      {/* <QuizRoundedIcon sx={{ mr: 1 }} /> */}
+      <Trans i18nKey="Questionnaires" />
+    </Title>
   );
 };
 

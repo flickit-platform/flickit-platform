@@ -140,9 +140,12 @@ const Title = (props: ITitle) => {
         )}
 
         <Typography
-          variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
-          textTransform="uppercase"
-          fontWeight="bold"
+          textTransform={size === "large" ? "inherit" : "uppercase"}
+          fontWeight="Bold"
+          variant={
+            size === "small" ? "h6" : size === "large" ? "headlineLarge" : "h5"
+          }
+          color={size === "large" ? "#00365C" : "inherit"}
           {...titleProps}
           sx={{
             ...styles.centerV,
@@ -175,8 +178,8 @@ const Title = (props: ITitle) => {
               size === "small"
                 ? "subSmall"
                 : size === "large"
-                  ? "subLarge"
-                  : "subMedium"
+                ? "subLarge"
+                : "subMedium"
             }
           >
             {sub}
@@ -186,7 +189,7 @@ const Title = (props: ITitle) => {
       <Box ml="auto" {...toolbarProps}>
         {toolbar}
       </Box>
-    </Box >
+    </Box>
   );
 };
 

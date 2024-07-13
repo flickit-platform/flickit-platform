@@ -48,11 +48,10 @@ const AssessmentContainer = () => {
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
-      <AssessmentTitle data={currentSpace}/>
-      <Title
-      >
+      <AssessmentTitle data={currentSpace} />
+      <Title size="large">
         <Box>
-          <DescriptionRoundedIcon sx={{ mr: 1 }} />
+          {/* <DescriptionRoundedIcon sx={{ mr: 1 }} /> */}
           <Trans i18nKey="assessments" />
         </Box>
       </Title>
