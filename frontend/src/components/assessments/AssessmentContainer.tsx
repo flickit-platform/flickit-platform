@@ -49,6 +49,13 @@ const AssessmentContainer = () => {
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
       <AssessmentTitle data={currentSpace}/>
+      <Title
+      >
+        <Box>
+          <DescriptionRoundedIcon sx={{ mr: 1 }} />
+          <Trans i18nKey="assessments" />
+        </Box>
+      </Title>
       {!isEmpty && (
         <Box
           sx={{

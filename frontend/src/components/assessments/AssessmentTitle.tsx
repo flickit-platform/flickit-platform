@@ -28,8 +28,6 @@ const AssessmentTitle = (props: IAssessmentReportTitle) => {
                         {
                             title: title || "",
                             to: `/`,
-                        },  {
-                            title: "Assessments",
                         }
                     ]}
                     displayChip
