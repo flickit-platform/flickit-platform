@@ -50,9 +50,9 @@ const SpaceContainer = () => {
 
   const pageCount =
     !spacesQueryData.data ||
-    !spacesQueryData?.data?.total ||
-    !spacesQueryData?.data?.size ||
-    spacesQueryData.data?.size === 0
+      !spacesQueryData?.data?.total ||
+      !spacesQueryData?.data?.size ||
+      spacesQueryData.data?.size === 0
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
@@ -61,8 +61,9 @@ const SpaceContainer = () => {
   return (
     <SpaceLayout
       title={
-        <Title borderBottom={true}>
-          <FolderRoundedIcon sx={{ mr: 1 }} /> <Trans i18nKey="spaces" />
+        <Title borderBottom={true} size="large">
+          {/* <FolderRoundedIcon sx={{ mr: 1 }} /> */}
+          <Trans i18nKey="spaces" />
         </Title>
       }
     >

@@ -256,8 +256,8 @@ const SubjectTitle = (props: {
   }, [title]);
   return (
     <Title
+      size="large"
       letterSpacing=".08em"
-      sx={{ opacity: 0.9 }}
       backLink={-1}
       id="insight"
       inPageLink="insight"
@@ -287,12 +287,12 @@ const SubjectTitle = (props: {
       }
     >
       <Box sx={{ ...styles.centerV }}>
-        <QueryStatsRoundedIcon
+        {/* <QueryStatsRoundedIcon
           sx={{
             mr: 1,
             color: "rgba(0, 0, 0, 0.87)",
           }}
-        />
+        /> */}
         {loading ? (
           <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
         ) : (

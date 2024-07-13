@@ -7,7 +7,7 @@ import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
 const AssessmentKitsContainer = (props: PropsWithChildren<{}>) => {
   return (
     <Box>
-      <Title>
+      <Title size="large">
         <Trans i18nKey="assessmentKits" />
       </Title>
 

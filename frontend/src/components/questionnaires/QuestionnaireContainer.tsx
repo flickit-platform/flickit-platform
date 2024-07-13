@@ -168,6 +168,7 @@ const QuestionnaireTitle = (props: any) => {
 
   return (
     <Title
+      size="large"
       backLink={-1}
       sup={
         <SupTitleBreadcrumb
@@ -187,7 +188,7 @@ const QuestionnaireTitle = (props: any) => {
         />
       }
     >
-      <QuizRoundedIcon sx={{ mr: 1 }} />
+      {/* <QuizRoundedIcon sx={{ mr: 1 }} /> */}
       <Trans i18nKey="Questionnaires" />
     </Title>
   );
