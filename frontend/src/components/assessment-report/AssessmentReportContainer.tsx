@@ -112,7 +112,7 @@ const AssessmentReportContainer = (props: any) => {
                   </Typography>
                   <Box
                     sx={{ py: "0.6rem" }}
-                    component={Link}
+                    component={manageable ? Link : "div"}
                     to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
                   >
                     <IconButton
