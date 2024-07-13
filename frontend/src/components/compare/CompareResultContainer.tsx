@@ -32,16 +32,17 @@ const CompareResultContainer = () => {
     service: (args, config) => service.calculateConfidenceLevel(args, config),
     runOnMount: false,
   });
-  
+
   const navigate = useNavigate();
   return (
     <QueryData
       {...compareResultQueryData}
       render={(data) => {
-        const {assessments,subjects}=data
+        const { assessments, subjects } = data
         return (
           <Box>
             <Title
+              size="large"
               borderBottom={true}
               toolbar={
                 <Button
@@ -57,7 +58,7 @@ const CompareResultContainer = () => {
             >
               <Trans i18nKey="comparisonResult" />{" "}
             </Title>
-      
+
             <CompareResult data={data} />
           </Box>
         );
