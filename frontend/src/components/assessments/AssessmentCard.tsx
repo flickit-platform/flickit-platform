@@ -124,6 +124,33 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   : `${item.id}/questionnaires`
               }
             >
+                    <Typography
+                        variant="subtitle1"
+                        color="CaptionText"
+                        textTransform={"uppercase"}
+                        sx={{
+                            padding: "1px 3px",
+                            fontWeight: "light",
+                            pb: 0,
+                            textAlign: "center",
+                            color: item.color?.code || "#101c32",
+                            maxWidth: "120px",
+                            width: "fit-content",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            margin: "0 auto",
+                            fontSize: "9px",
+                            border: "1px solid #00365C",
+                            borderRadius: "100px",
+                            textTransform: "none",
+                            paddingInline: "10px",
+                            paddingBlock: '3px'
+                        }}
+                        data-cy="assessment-card-title"
+                    >
+                        {kit?.title}
+                    </Typography>
               <Typography
                 variant="h5"
                 color="CaptionText"
