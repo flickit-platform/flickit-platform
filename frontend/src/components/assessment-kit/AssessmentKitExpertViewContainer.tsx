@@ -898,7 +898,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
     event.preventDefault();
     const { dsl_id, ...restOfData } = data;
     const formattedData = {
-      dsl_id: dsl_id.kitDslId,
+      kitDslId: dsl_id.kitDslId,
       ...restOfData,
     };
     setLoading(true);
