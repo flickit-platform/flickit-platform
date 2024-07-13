@@ -181,10 +181,3 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'summary', 'maturity_level_count', 'expert_group']
 
 
-class AssessmentKitUpdateSerializer(serializers.Serializer):
-    dsl_id = serializers.IntegerField()
-
-
-class DslSerializer(serializers.Serializer):
-    expert_group_id = serializers.IntegerField()
-    dsl_file = serializers.FileField()

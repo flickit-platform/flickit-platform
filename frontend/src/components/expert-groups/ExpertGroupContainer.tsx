@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData, { useQueryDataContext } from "@common/QueryData";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import { styles } from "@styles";
 import { Trans } from "react-i18next";
@@ -110,6 +110,7 @@ const ExpertGroupContainer = () => {
         return (
           <Box>
             <Title
+              backLink="/"
               borderBottom
               pb={1}
               avatar={<AvatarComponent queryData={queryData} picture={pictureLink} editable={editable} />}
@@ -120,6 +121,9 @@ const ExpertGroupContainer = () => {
                       title: t("expertGroups") as string,
                       to: `/user/expert-groups`,
                     },
+                      {
+                          title: title,
+                      },
                   ]}
                 />
               }

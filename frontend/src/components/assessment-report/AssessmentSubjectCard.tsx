@@ -120,6 +120,7 @@ export const AssessmentSubjectAccordion = (
           borderTopLeftRadius: "32px !important",
           borderTopRightRadius: "32px !important",
           textAlign: "center",
+          paddingBottom: 2,
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
             maxHeight: { md: "160px", lg: "160px" },
@@ -128,7 +129,7 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} lg={3.1} md={3.1} sm={12}>
+          <Grid item xs={12} lg={3} md={3} sm={12}>
             <Box
               sx={{
                 overflow: "hidden",
@@ -149,8 +150,9 @@ export const AssessmentSubjectAccordion = (
               </Typography>
             </Box>
           </Grid>
+
           {!isMobileScreen && (
-            <Grid item xs={12} lg={4.5} md={4.5} sm={12}>
+            <Grid item xs={12} lg={4.6} md={4.6} sm={12}>
               <Box
                 sx={{
                   maxHeight: "100px",
@@ -172,6 +174,7 @@ export const AssessmentSubjectAccordion = (
               </Box>
             </Grid>
           )}
+
           {isMobileScreen && (
             <Grid item xs={12} lg={2} md={2} sm={12}>
               <SubjectStatus title={title} maturity_level={maturityLevel} />
@@ -186,7 +189,7 @@ export const AssessmentSubjectAccordion = (
                 mt: { xs: "-52px", sm: "-52px", md: "0" },
               }}
             >
-              <Typography variant="titleMedium" color="#73808C">
+              <Typography variant="titleMedium" color="#243342">
                 <Trans i18nKey="withPercentConfidence" />
               </Typography>
               <ConfidenceLevel
@@ -201,6 +204,17 @@ export const AssessmentSubjectAccordion = (
               <SubjectStatus title={title} maturity_level={maturityLevel} />
             </Grid>
           )}
+          <Grid item xs={12} lg={12} md={12} sm={12} mb={2}>
+            <Typography variant="titleMedium" fontWeight={400}>
+              <Trans
+                i18nKey="subjectAccordionDetails"
+                values={{
+                  attributes: subjectAttributes.length,
+                  subjects: title,
+                }}
+              />
+            </Typography>
+          </Grid>
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
@@ -208,7 +222,7 @@ export const AssessmentSubjectAccordion = (
           <Grid item xs={12} sm={12} md={12} lg={6.5}>
             <Box
               sx={{ display: { xs: "none", sm: "none", md: "block" } }}
-              height={"400px"}
+              height={subjectAttributes.length > 2 ? "400px" : "300px"}
             >
               {subjectAttributes.length > 2 ? (
                 <AssessmentSubjectRadarChart
@@ -275,7 +289,7 @@ export const AssessmentSubjectAccordion = (
                           sx={{
                             color:
                               getMaturityLevelColors(5)[
-                                element.maturityLevel.value - 1
+                              element.maturityLevel.value - 1
                               ],
                           }}
                           variant="titleMedium"
@@ -351,7 +365,7 @@ const SubjectStatus = (
             hideGuidance={true}
             height={getNumberBaseOnScreen(240, 240, 150, 150, 150)}
             maturity_status_guide={t("subjectMaturityLevelIs")}
-            maturity_status_guide_variant="bodySmall"
+            maturity_status_guide_variant="titleSmall"
           />
         ) : (
           <Typography>

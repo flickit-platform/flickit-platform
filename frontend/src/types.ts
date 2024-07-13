@@ -177,6 +177,7 @@ export interface IAssessmentKitModel {
 }
 export interface IAssessmentKitList {
   id: TId;
+  title?: string,
   maturityLevelsCount: number;
 }
 

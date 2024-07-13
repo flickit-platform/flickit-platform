@@ -61,7 +61,7 @@ const Gauge = (props: IGaugeProps) => {
     const fontSizeRem =
       maxFontSizeRem -
       ((length - minLength) / (maxLength - minLength)) *
-      (maxFontSizeRem - minFontSizeRem);
+        (maxFontSizeRem - minFontSizeRem);
     return `${fontSizeRem}rem`;
   };
   const fontSize = calculateFontSize(maturity_level_status?.length);
@@ -106,8 +106,12 @@ const Gauge = (props: IGaugeProps) => {
           )}
           {confidence_text && (
             <Typography
-              variant="titleMedium"
-              color="#73808C"
+              variant={
+                maturity_status_guide_variant
+                  ? maturity_status_guide_variant
+                  : "titleMedium"
+              }
+              color="#243342"
               mt="0.5rem"
               justifyContent="center"
               alignItems="center"
@@ -124,7 +128,7 @@ const Gauge = (props: IGaugeProps) => {
           )}
           {maturity_status_guide && (
             <Typography
-              mt="2rem"
+              mt="1rem"
               variant={maturity_status_guide_variant}
               color="#243342"
             >

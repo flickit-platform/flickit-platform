@@ -58,10 +58,10 @@ const SupTitleBreadcrumb = (
               variant="bodyLarge"
             >
               {icon}
-              {(displayChip ? (
-                <Chip
+              {
+                < Chip
                   label={title}
-                  size="medium"
+                  size="small"
                   sx={{
                     cursor: isActive ? "auto" : "pointer",
                     alignSelf: "flex-start",
@@ -71,16 +71,14 @@ const SupTitleBreadcrumb = (
                     color: isActive ? "#00365C" : "#73808C",
                     textTransform: "none",
                     borderRadius: "8px",
-                    padding: "8px",
+                    padding: "4px",
                     "& .MuiChip-label": {
                       ...theme.typography.bodyLarge,
-                      fontWeight: isActive ? 'Bold' : '',
+                      fontWeight: isActive ? 'Bold' : '400',
                     },
                   }}
                 />
-              ) : (
-                title
-              )) || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
+                || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
             </MuiLink>
           </Box>
         );

@@ -61,7 +61,6 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       }}
       color="#004F83"
     >
-      <Actions assessmentId={assessmentId} manageable={manageable} />
       <Box sx={{ ...styles.centerCVH }} gap={1}>
         <Typography
           fontSize={calculateFontSize(assessmentKit?.title.length)}
@@ -75,8 +74,10 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         </Typography>
       </Box>
       <Box
-        sx={{ ...styles.centerCVH }}
+        sx={{ ...styles.centerCVH, textDecoration: "none", color: "inherit !important" }}
         width={{ xl: "80%", lg: "90%", md: "90%", xs: "90%", sm: "90%" }}
+        component={Link}
+        to="./../questionnaires"
       >
         <ColorfullProgress
           denominator={questionCount}
@@ -94,13 +95,13 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           backgroundColor: "#00365C",
           borderColor: "#00365C",
           color: "#E1E3E5",
-          py: "8px",
+          padding: "12px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#004F83",
             borderColor: "#004F83",
           },
-          width:{ xl: "50%", lg: "56%", md: "90%", xs: "90%", sm: "90%" }
+          width: { xl: "50%", lg: "56%", md: "90%", xs: "90%", sm: "90%" },
         }}
         size="small"
         component={Link}

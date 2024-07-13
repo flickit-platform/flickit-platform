@@ -113,7 +113,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
             <InputFieldUC
               autoFocus={true}
               defaultValue={defaultValues.title || ""}
@@ -121,16 +121,6 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               required={true}
               label={<Trans i18nKey="title" />}
               data-cy="title"
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <SelectFieldUC
-              {...useConnectSelectField({ url: "/api/v1/assessment-colors/" })}
-              name="color"
-              defaultValue={defaultValues?.color?.id || ""}
-              label={<Trans i18nKey="color" />}
-              required={true}
-              nullable={false}
             />
           </Grid>
           <Grid item xs={12}>

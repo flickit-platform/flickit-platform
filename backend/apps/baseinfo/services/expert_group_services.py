@@ -119,8 +119,9 @@ def update_expert_group(request, expert_group_id):
 
 
 def update_expert_group_picture(request, expert_group_id):
+    file = request.data.get('pictureFile')
     data = request.data
-    file = data.pop('picture')
+    data.pop('pictureFile')
     response = requests.put(
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
         data=data,

@@ -28,6 +28,7 @@ export const AssessmentOverallStatus = (
     maturity_level_count,
     confidence_value,
   } = props;
+
   return (
     <Box
       height="100%"

@@ -34,3 +34,22 @@ def delete_evidence(request, evidence_id):
     if response.status_code == 204:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response}
+
+
+def evidence_add_attachments(request, evidence_id):
+    file = request.data.get('attachment')
+    data = request.data
+    data.pop('attachment')
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments',
+        files={'attachment': (file.name, file, file.content_type)},
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def evidence_list_attachments(request, evidence_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
