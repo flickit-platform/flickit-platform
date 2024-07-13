@@ -68,7 +68,7 @@ const Title = (props: ITitle) => {
               sx={{
                 ...styles.centerV,
                 textDecoration: "none",
-                ml: sup ? { xs: 0, md: "-22px" } : "-4px",
+                ml: sup ? { xs: 0, md: 0 } : "-4px",
               }}
             >
               <Box component={RLink} to={backLink as To} display="flex" sx={{ textDecoration: "none", color: "inherit" }}
