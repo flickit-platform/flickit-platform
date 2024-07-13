@@ -34,7 +34,7 @@ import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
 
-  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean};
+  item: IAssessment & { space: any } & { manageable?: boolean } & { viewable?: boolean };
 
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
@@ -47,7 +47,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
 
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime,viewable
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id, lastModificationTime, viewable
+
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
@@ -68,7 +69,10 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
     try {
       setShow(isCalculateValid);
       if (!isCalculateValid) {
-        const data = await calculateMaturityLevelQuery.query();
+        const data = await calculateMaturityLevelQuery.query().catch(() => {
+          setShow(true);
+          console.log('first')
+        });
         setCalculateResault(data);
         if (data?.id) {
           setShow(true);
@@ -116,7 +120,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               component={Link}
               to={
                 isCalculateValid &&
-                viewable ? `${item.id}/insights`
+                  viewable ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
@@ -183,7 +187,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML && viewable  ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={hasML && viewable ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
             {show ? (
               <Gauge
@@ -234,14 +238,15 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasML && viewable  ? `${item.id}/insights` : ""}
+              to={hasML && viewable ? `${item.id}/insights` : ""}
               sx={{
                 backgroundColor: "#2e7d72",
                 background: viewable ? `#01221e` : "rgba(0,59,100, 12%)",
                 color: !viewable ? "rgba(10,35,66, 38%)" : "",
                 boxShadow: !viewable ? "none" : "",
-                "&:hover": {background: viewable ? `` : "rgba(0,59,100, 12%)",
-                    boxShadow: !viewable ? "none" : "",
+                "&:hover": {
+                  background: viewable ? `` : "rgba(0,59,100, 12%)",
+                  boxShadow: !viewable ? "none" : "",
                 },
               }}
               data-cy="view-insights-btn"
