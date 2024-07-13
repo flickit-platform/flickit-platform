@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
@@ -7,7 +7,7 @@ import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { IQuestionnairesModel } from "@types";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
@@ -168,21 +168,21 @@ const QuestionnaireTitle = (props: any) => {
 
   return (
     <Title
+      backLink="/"
       size="large"
-      backLink={-1}
       sup={
         <SupTitleBreadcrumb
           routes={[
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: assessment?.title,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
           ]}
         />

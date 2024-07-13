@@ -258,7 +258,7 @@ const SubjectTitle = (props: {
     <Title
       size="large"
       letterSpacing=".08em"
-      backLink={-1}
+      backLink={"/"}
       id="insight"
       inPageLink="insight"
       sup={
@@ -267,20 +267,20 @@ const SubjectTitle = (props: {
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
             {
               title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
-              icon: (
-                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
           ]}
         />

@@ -3,7 +3,7 @@ import { Box, Button, Typography, Alert } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -87,8 +87,14 @@ const AssessmentKitExpertViewContainer = () => {
     <Box>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
         <Title
+          backLink={"/"}
           size="large"
-          backLink={-1}
+          wrapperProps={{
+            sx: {
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: { xs: "flex-start", md: "flex-end" },
+            },
+          }}
           sup={
             <SupTitleBreadcrumb
               routes={[
@@ -105,6 +111,7 @@ const AssessmentKitExpertViewContainer = () => {
                   to: `/user/expert-groups`,
                 },
               ]}
+              displayChip
             />
           }
           toolbar={
