@@ -87,7 +87,7 @@ const Title = (props: ITitle) => {
                 component={RLink}
                 to={backLink as To}
                 display="flex"
-                sx={{ textDecoration: "none" }}
+                sx={{ textDecoration: "none", color: "inherit" }}
               >
                 {backLink === "/" ? (
                   <GoHome fontSize="22px" color="#9DA7B3" {...backIconProps} />
@@ -186,7 +186,7 @@ const Title = (props: ITitle) => {
       <Box ml="auto" {...toolbarProps}>
         {toolbar}
       </Box>
-    </Box>
+    </Box >
   );
 };
 
