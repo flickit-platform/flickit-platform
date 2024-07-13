@@ -258,7 +258,7 @@ const SubjectTitle = (props: {
     <Title
       letterSpacing=".08em"
       sx={{ opacity: 0.9 }}
-      backLink={-1}
+      backLink={"/"}
       id="insight"
       inPageLink="insight"
       sup={

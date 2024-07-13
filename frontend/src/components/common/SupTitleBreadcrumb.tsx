@@ -58,8 +58,8 @@ const SupTitleBreadcrumb = (
               variant="bodyLarge"
             >
               {icon}
-              {(displayChip ? (
-                <Chip
+              {
+                < Chip
                   label={title}
                   size="small"
                   sx={{
@@ -78,9 +78,7 @@ const SupTitleBreadcrumb = (
                     },
                   }}
                 />
-              ) : (
-                title
-              )) || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
+                || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
             </MuiLink>
           </Box>
         );

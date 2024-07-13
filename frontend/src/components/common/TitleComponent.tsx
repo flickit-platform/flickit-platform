@@ -13,7 +13,7 @@ interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sub?: JSX.Element | string;
   borderBottom?: string | boolean;
   toolbar?: JSX.Element;
-  backLink?: To | -1;
+  backLink?: To | "/";
   backIconProps?: SvgIconProps;
   size?: "small" | "medium" | "large";
   wrapperProps?: BoxProps;
