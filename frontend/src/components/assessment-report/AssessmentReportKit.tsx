@@ -64,19 +64,19 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             xl:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-              80
+                80
                 ? "column"
                 : "row",
             lg:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-              60
+                60
                 ? "column"
                 : "row",
             md:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-              40
+                40
                 ? "column"
                 : "row",
             xs: "column",
@@ -92,7 +92,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             gap="4px"
             justifyContent="flex-start"
           >
-            <Typography color="#243342" variant="titleMedium">
+            <Typography color="#243342" variant="titleMedium" fontWeight={400}>
               <Trans i18nKey="thisAssessmentIsUsing" />
             </Typography>
             <Typography
@@ -102,11 +102,12 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               variant="titleLarge"
               sx={{
                 textDecoration: "none",
+                mt:-0.25
               }}
             >
               {assessmentKit.title}
             </Typography>
-            <Typography color="#243342" variant="titleMedium">
+            <Typography color="#243342" variant="titleMedium" fontWeight={400}>
               <Trans i18nKey="kit" />.
             </Typography>
           </Box>
@@ -151,10 +152,11 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             <Typography
               color="#243342"
               variant="titleSmall"
+              fontWeight={500}
               width="100%"
               textAlign="left"
               sx={{
-                wordBreak: "break-all",
+                whiteSpace: "pre-wrap",
                 overflow: isExpanded ? "visible" : "hidden",
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
@@ -166,6 +168,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             </Typography>
             <Typography
               variant="titleSmall"
+              fontWeight={500}
               color="#246297"
               sx={{ cursor: "pointer" }}
               onClick={toggleExpanded}
@@ -177,7 +180,8 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           <Box display="flex" width="100%" mb={1}>
             <Typography
               color="#243342"
-              variant="titleSmall"
+              variant="titleMedium"
+              fontWeight={400}
               width="100%"
               textAlign="left"
               sx={{

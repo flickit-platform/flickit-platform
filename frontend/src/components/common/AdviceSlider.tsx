@@ -44,7 +44,7 @@ const AdviceSlider = (props: any) => {
     }
   };
   const colorPallet = getMaturityLevelColors(
-    subject?.maturity_level?.maturity_levels_count ?? 5
+    maturityLevels?.length ?? 5
   );
   return (
     <Box
@@ -96,7 +96,7 @@ const AdviceSlider = (props: any) => {
           <Slider
             defaultValue={defaultValue}
             min={1}
-            max={subject?.maturity_level?.maturity_levels_count ?? 5}
+            max={maturityLevels?.length ? maturityLevels?.length : 5}
             onChange={handleSliderChange}
             value={value}
             marks

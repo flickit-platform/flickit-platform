@@ -3,7 +3,7 @@ import { Box, Button, Typography, Alert } from "@mui/material";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import { Trans } from "react-i18next";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -87,7 +87,14 @@ const AssessmentKitExpertViewContainer = () => {
     <Box>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
         <Title
-          backLink={-1}
+          backLink={"/"}
+          size="large"
+          wrapperProps={{
+            sx: {
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: { xs: "flex-start", md: "flex-end" },
+            },
+          }}
           sup={
             <SupTitleBreadcrumb
               routes={[
@@ -104,6 +111,7 @@ const AssessmentKitExpertViewContainer = () => {
                   to: `/user/expert-groups`,
                 },
               ]}
+              displayChip
             />
           }
           toolbar={
@@ -236,7 +244,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
         subjectId: subjectId,
       });
       setAssessmentKitSubjectDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   return (
@@ -428,7 +436,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
         questionnaireId: questionnaireId,
       });
       setQuestionnaireDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   return (
     <Box>
@@ -565,7 +573,7 @@ const AssessmentKitQuestionsList = (props: {
         attributeId: attributeId,
       });
       setAttributesDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   const fetchMaturityLevelQuestions = async () => {
     try {
@@ -575,7 +583,7 @@ const AssessmentKitQuestionsList = (props: {
         maturityLevelId: value,
       });
       setMaturityLevelQuestions(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (isExpanded && attributeId) {
@@ -666,9 +674,8 @@ const AssessmentKitQuestionsList = (props: {
               onChange={handleTabChange}
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: `${
-                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
-                  } !important`,
+                  backgroundColor: `${colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                    } !important`,
                 },
               }}
             >
@@ -898,7 +905,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
     event.preventDefault();
     const { dsl_id, ...restOfData } = data;
     const formattedData = {
-      dsl_id: dsl_id.kitDslId,
+      kitDslId: dsl_id.kitDslId,
       ...restOfData,
     };
     setLoading(true);
@@ -1296,7 +1303,7 @@ const QuestionnairesQuestionList = (props: any) => {
         questionId: questionId,
       });
       setQuestionsDetails(data);
-    } catch (e) {}
+    } catch (e) { }
   };
   function formatNumber(value: any) {
     // Check if the value is an integer (no decimal places)
@@ -1490,9 +1497,8 @@ const QuestionnairesQuestionList = (props: any) => {
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                borderTop: `${
-                                  index !== 0 && "1px solid #D3D3D3"
-                                }`,
+                                borderTop: `${index !== 0 && "1px solid #D3D3D3"
+                                  }`,
                                 py: 1,
                               }}
                             >

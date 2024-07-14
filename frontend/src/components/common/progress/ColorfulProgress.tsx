@@ -127,7 +127,6 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
               width: "100%",
               top: "50%",
               transform: "translateY(-50%)",
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Adds shadow effect
             }}
           >
             <Trans i18nKey="completeNow" />

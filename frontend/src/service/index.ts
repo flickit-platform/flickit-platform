@@ -561,13 +561,13 @@ export const createService = (
       );
     },
     uploadAssessmentKitDSLFile(
-      args: { file: any; expert_group_id?: TId },
+      args: { file: any; expertGroupId?: TId },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { file, expert_group_id } = args ?? {};
+      const { file, expertGroupId } = args ?? {};
       return axios.post(
         `/api/v1/assessment-kits/upload-dsl/`,
-        { dslFile: file, expert_group_id: expert_group_id },
+        { dslFile: file, expertGroupId: expertGroupId },
         {
           ...config,
           headers: {

@@ -1,14 +1,34 @@
+::-webkit-scrollbar {
+  width: 10px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #dddddd; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b0b0b0; 
+  border-radius: 4px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
 .insight--report__gauge {
   margin-top: 36px;
 }
+
 @media screen and (max-width: 620px) {
   .insight--report__gauge {
     margin-top: 6%;
   }
+
   .recharts-legend-wrapper {
     width: 100% !important;
   }
 }
+
 .path1 {
   fill: rgba(0, 0, 0, 0.1);
   animation: fillAnimation1 2s linear infinite;
@@ -38,58 +58,72 @@
   0% {
     fill: #862123;
   }
+
   20%,
   80% {
     fill: rgba(0, 0, 0, 0.1);
   }
+
   100% {
     fill: #862123;
   }
 }
+
 @keyframes fillAnimation2 {
   0% {
     fill: #be5823;
   }
+
   20%,
   80% {
     fill: rgba(0, 0, 0, 0.1);
   }
+
   100% {
     fill: #be5823;
   }
 }
+
 @keyframes fillAnimation3 {
   0% {
     fill: #f4b942;
   }
+
   20%,
   80% {
     fill: rgba(0, 0, 0, 0.1);
   }
+
   100% {
     fill: #f4b942;
   }
 }
+
 @keyframes fillAnimation4 {
   0% {
     fill: #9bb763;
   }
+
   20%,
   80% {
     fill: rgba(0, 0, 0, 0.1);
   }
+
   100% {
     fill: #9bb763;
   }
 }
+
 @keyframes fillAnimation5 {
   0% {
     fill: #347444;
   }
+
   20%,
   80% {
     fill: rgba(0, 0, 0, 0.1);
   }
+
   100% {
     fill: #347444;
   }

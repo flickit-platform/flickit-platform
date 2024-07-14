@@ -190,7 +190,7 @@ const Uploader = (props: IUploadProps) => {
           try {
             const res = await uploadQueryProps.query({
               file: acceptedFiles?.[0],
-              expert_group_id: param,
+              expertGroupId: param,
             });
             setIsValid(true)
             setMyFiles(acceptedFiles);

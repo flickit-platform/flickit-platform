@@ -6,6 +6,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { IconProps, SvgIconProps } from "@mui/material";
 import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
+import { GoHome } from "react-icons/go";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
   sub?: JSX.Element | string;
@@ -67,16 +68,23 @@ const Title = (props: ITitle) => {
               sx={{
                 ...styles.centerV,
                 textDecoration: "none",
-                ml: sup ? { xs: 0, md: "-22px" } : "-4px",
+                ml: sup ? { xs: 0, md: 0 } : "-4px",
               }}
             >
-              <Box component={RLink} to={backLink as To} display="flex">
-                <ArrowBackRoundedIcon
-                  fontSize="small"
-                  color="inherit"
-                  sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
-                  {...backIconProps}
-                />
+              <Box component={RLink} to={backLink as To} display="flex" sx={{ textDecoration: "none", color: "inherit" }}
+              >
+                {backLink === "/" ? (
+                  <GoHome fontSize="22px" color="#9DA7B3" {...backIconProps} />
+                ) : (
+                  <ArrowBackRoundedIcon
+                    fontSize="small"
+                    color="inherit"
+                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
+                    {...backIconProps}
+                  />
+                )}
+                <span style={{ marginInline: "8px" }}>/</span>
+
               </Box>
               {sup && (
                 <Typography
@@ -101,9 +109,10 @@ const Title = (props: ITitle) => {
           <></>
         )}
         <Typography
-          variant={size === "small" ? "h6" : size === "large" ? "h4" : "h5"}
-          textTransform="uppercase"
-          fontWeight="bold"
+          textTransform={size === "large" ? "inherit" : "uppercase"}
+          fontWeight="Bold"
+          variant={size === "small" ? "h6" : size === "large" ? "headlineLarge" : "h5"}
+          color={size === "large" ? "#00365C" : "inherit"}
           {...titleProps}
           sx={{
             ...styles.centerV,

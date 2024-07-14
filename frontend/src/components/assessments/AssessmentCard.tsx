@@ -34,7 +34,7 @@ import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
 
-  item: IAssessment & { space: any } & {manageable?: boolean}  & {viewable?: boolean};
+  item: IAssessment & { space: any } & { manageable?: boolean } & { viewable?: boolean };
 
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
@@ -48,7 +48,8 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
 
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id,lastModificationTime,viewable
+  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id, lastModificationTime, viewable
+
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
@@ -69,7 +70,10 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
     try {
       setShow(isCalculateValid);
       if (!isCalculateValid) {
-        const data = await calculateMaturityLevelQuery.query();
+        const data = await calculateMaturityLevelQuery.query().catch(() => {
+          setShow(true);
+          console.log('first')
+        });
         setCalculateResault(data);
         if (data?.id) {
           setShow(true);
@@ -117,39 +121,39 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               component={Link}
               to={
                 isCalculateValid &&
-                viewable ? `${item.id}/insights`
+                  viewable ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
-                <Tooltip title={kit?.title}>
-                    <Typography
-                        variant="subtitle1"
-                        color="CaptionText"
-                        textTransform={"uppercase"}
-                        sx={{
-                            padding: "1px 3px",
-                            fontWeight: "light",
-                            pb: 0,
-                            textAlign: "center",
-                            color: item.color?.code || "#101c32",
-                            maxWidth: "70%",
-                            width: "fit-content",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            margin: "0 auto",
-                            fontSize: "9px",
-                            border: "1px solid #00365C",
-                            borderRadius: "100px",
-                            textTransform: "none",
-                            paddingInline: "10px",
-                            paddingBlock: '3px'
-                        }}
-                        data-cy="assessment-card-title"
-                    >
-                        {kit?.title}
-                    </Typography>
-                </Tooltip>
+              <Tooltip title={kit?.title}>
+                <Typography
+                  variant="subtitle1"
+                  color="CaptionText"
+                  textTransform={"uppercase"}
+                  sx={{
+                    padding: "1px 3px",
+                    fontWeight: "light",
+                    pb: 0,
+                    textAlign: "center",
+                    color: item.color?.code || "#101c32",
+                    maxWidth: "70%",
+                    width: "fit-content",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    margin: "0 auto",
+                    fontSize: "9px",
+                    border: "1px solid #00365C",
+                    borderRadius: "100px",
+                    textTransform: "none",
+                    paddingInline: "10px",
+                    paddingBlock: '3px'
+                  }}
+                  data-cy="assessment-card-title"
+                >
+                  {kit?.title}
+                </Typography>
+              </Tooltip>
               <Typography
                 variant="h5"
                 color="CaptionText"
@@ -186,7 +190,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML && viewable  ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={hasML && viewable ? `${item.id}/insights` : `${item.id}/questionnaires`}
           >
             {show ? (
               <Gauge
@@ -220,11 +224,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               state={location}
               to={`${item.id}/questionnaires`}
               data-cy="questionnaires-btn"
+              variant={viewable ? "outlined" : "contained"}
             >
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
+          <Grid item xs={12} sx={{ ...styles.centerCH, display: viewable ? "block" : "none" }} mt={1}>
             <Button
               startIcon={<QueryStatsRounded />}
               variant={"contained"}
@@ -237,14 +242,15 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasML && viewable  ? `${item.id}/insights` : ""}
+              to={hasML && viewable ? `${item.id}/insights` : ""}
               sx={{
                 backgroundColor: "#2e7d72",
                 background: viewable ? `#01221e` : "rgba(0,59,100, 12%)",
                 color: !viewable ? "rgba(10,35,66, 38%)" : "",
                 boxShadow: !viewable ? "none" : "",
-                "&:hover": {background: viewable ? `` : "rgba(0,59,100, 12%)",
-                    boxShadow: !viewable ? "none" : "",
+                "&:hover": {
+                  background: viewable ? `` : "rgba(0,59,100, 12%)",
+                  boxShadow: !viewable ? "none" : "",
                 },
               }}
               data-cy="view-insights-btn"
@@ -260,7 +266,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any } & { manageable?: boolean };
+  item: IAssessment & { space: any } & { manageable?: boolean } & { viewable?: boolean };
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -331,7 +337,7 @@ const Actions = (props: {
               text: <Trans i18nKey="settings" />,
               onClick: assessmentSetting,
             },
-            {
+            item?.manageable && {
               icon: <DeleteRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="delete" />,
               onClick: deleteItem,

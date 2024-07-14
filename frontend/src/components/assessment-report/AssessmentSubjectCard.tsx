@@ -33,6 +33,7 @@ interface IAssessmentSubjectCardProps extends ISubjectInfo {
   maturity_level?: IMaturityLevel;
   confidenceValue?: number;
   attributes?: any;
+  maturityLevelCount?: number
 }
 
 interface IAssessmentSubjectProgress {
@@ -48,6 +49,7 @@ export const AssessmentSubjectAccordion = (
   const {
     title,
     maturityLevel,
+    maturityLevelCount,
     confidenceValue,
     id,
     colorCode,
@@ -120,6 +122,7 @@ export const AssessmentSubjectAccordion = (
           borderTopLeftRadius: "32px !important",
           borderTopRightRadius: "32px !important",
           textAlign: "center",
+          paddingBottom: 2,
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
             maxHeight: { md: "160px", lg: "160px" },
@@ -128,17 +131,6 @@ export const AssessmentSubjectAccordion = (
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} lg={12} md={12} sm={12}>
-            <Typography variant="titleMedium">
-              <Trans
-                i18nKey="subjectAccordionDetails"
-                values={{
-                  attributes: subjectAttributes.length,
-                  subjects: title,
-                }}
-              />
-            </Typography>
-          </Grid>
           <Grid item xs={12} lg={3} md={3} sm={12}>
             <Box
               sx={{
@@ -175,7 +167,8 @@ export const AssessmentSubjectAccordion = (
                 }}
               >
                 <Typography
-                  variant="bodyMedium"
+                  variant="titleMedium"
+                  fontWeight={400}
                   color="#243342"
                   sx={{ textTransform: "none", whiteSpace: "break-spaces" }}
                 >
@@ -211,9 +204,21 @@ export const AssessmentSubjectAccordion = (
           </Grid>
           {!isMobileScreen && (
             <Grid item xs={6} lg={2.7} md={2.7} sm={12}>
-              <SubjectStatus title={title} maturity_level={maturityLevel} />
+              <SubjectStatus title={title} maturity_level={maturityLevel} maturityLevelCount={maturityLevelCount} />
             </Grid>
           )}
+          <Grid item xs={12} lg={12} md={12} sm={12} mb={2}>
+            <Typography variant="titleMedium"
+              fontWeight={400}>
+              <Trans
+                i18nKey="subjectAccordionDetails"
+                values={{
+                  attributes: subjectAttributes.length,
+                  subjects: title,
+                }}
+              />
+            </Typography>
+          </Grid>
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
@@ -226,13 +231,13 @@ export const AssessmentSubjectAccordion = (
               {subjectAttributes.length > 2 ? (
                 <AssessmentSubjectRadarChart
                   data={subjectAttributes}
-                  maturityLevelsCount={5}
+                  maturityLevelsCount={maturityLevelCount ?? 5}
                   loading={false}
                 />
               ) : (
                 <AssessmentSubjectRadialChart
                   data={subjectAttributes}
-                  maturityLevelsCount={5}
+                  maturityLevelsCount={maturityLevelCount ?? 5}
                   loading={false}
                 />
               )}
@@ -288,7 +293,7 @@ export const AssessmentSubjectAccordion = (
                           sx={{
                             color:
                               getMaturityLevelColors(5)[
-                                element.maturityLevel.value - 1
+                              element.maturityLevel.value - 1
                               ],
                           }}
                           variant="titleMedium"
@@ -339,9 +344,9 @@ export const AssessmentSubjectAccordion = (
 };
 
 const SubjectStatus = (
-  props: Pick<IAssessmentSubjectCardProps, "title" | "maturity_level">
+  props: Pick<IAssessmentSubjectCardProps, "title" | "maturity_level" | "maturityLevelCount">
 ) => {
-  const { title, maturity_level } = props;
+  const { title, maturity_level, maturityLevelCount } = props;
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   const isMobileScreen = useMediaQuery((theme: any) =>
@@ -357,7 +362,7 @@ const SubjectStatus = (
       <Box>
         {hasStats ? (
           <Gauge
-            maturity_level_number={5}
+            maturity_level_number={maturityLevelCount ?? 5}
             isMobileScreen={isMobileScreen ? false : true}
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}

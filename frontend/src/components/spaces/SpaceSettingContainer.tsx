@@ -32,11 +32,12 @@ const SpaceSettingContainer = () => {
     service: (args, config) => service.fetchSpace({ spaceId }, config),
   });
 
-  const { title, editable} = data || {};
-  
+  const { title, editable } = data || {};
+
   return (
     <Box maxWidth="1440px" m="auto">
       <Title
+        size="large"
         sup={
           <SupTitleBreadcrumb
             routes={[
@@ -44,13 +45,13 @@ const SpaceSettingContainer = () => {
                 to: "/spaces/1",
                 title: "spaces",
                 sup: "spaces",
-                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+                // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
             ]}
           />
         }
         toolbar={editable?<EditSpaceButton fetchSpace={query} />:<div/>}
-        backLink={-1}
+        backLink={"/"}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
           {loading ? (
@@ -61,7 +62,7 @@ const SpaceSettingContainer = () => {
           <Trans i18nKey="setting" />
         </Box>
       </Title>
-      <Box pt={3}>{!loading && <SpaceSettings editable={editable}  />}</Box>
+      <Box pt={3}>{!loading && <SpaceSettings editable={editable} />}</Box>
     </Box>
   );
 };
@@ -101,7 +102,7 @@ const EditSpaceButton = (props: any) => {
 
 function SpaceSettings(props: { editable: boolean }) {
   const { editable } = props;
-  
+
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {

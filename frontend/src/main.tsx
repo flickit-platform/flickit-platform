@@ -17,6 +17,7 @@ import * as Sentry from "@sentry/react";
 import "./assets/font/fonts.css";
 
 Sentry.init({
+  environment:  process.env.NODE_ENV === "development" ? "development" : "production",
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
     new Sentry.BrowserTracing({

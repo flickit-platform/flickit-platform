@@ -79,7 +79,7 @@
   "showsOverallStatusOfSystem": "Shows overall status of your system",
   "overallStatus": "Overall Status",
   "overallMaturityLevelIs": "overall status is evaluated as",
-  "subjectMaturityLevelIs":"the subject status is evaluated as",
+  "subjectMaturityLevelIs": "the subject status is evaluated as",
   "overallInsights": "Overall Insights",
   "overallInsight": "{{title}} Overall Insights",
   "technicalDueDiligence": "Technical Due Diligence Report Of ",
@@ -149,7 +149,7 @@
   "evaluatedAs": "evaluated as",
   "overallStatusOf": "Overall status of {{title}}",
   "notEvaluated": "NOT EVALUATED",
-  "permissionRequired": "permission required",
+  "permissionRequired": "Report Inaccessible",
   "viewAssessmentKitMarket": "View assessment kit market",
   "noOptions": "No options",
   "thisReportIsNotAccurate": "The report is not accurate enough.",
@@ -389,9 +389,9 @@
   "advisable": "Advisable",
   "loadMore": "Load more",
   "answeredQuestions": "Answered questions: ",
-  "completeNow":"Complete Now",
+  "completeNow": "Complete Now",
   "progressBarTilte": "{{numaratur}} of {{denominator}}",
-  "seeQuestionaires": "See questionaires",
+  "seeQuestionaires": "Questionaires",
   "updated": "Updated",
   "checkMoreDetails": "Check for more details",
   "overallReport": "Overall Report",
@@ -420,6 +420,6 @@
   "owner": "Owner",
   "you": "You",
   "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable.",
-  "overallStatusDetails":"You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
-  "subjectAccordionDetails":"You can find a detailed status of the {{subjects}} accross {{attributes}} attributes."
+  "overallStatusDetails": "You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
+  "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes."
 }

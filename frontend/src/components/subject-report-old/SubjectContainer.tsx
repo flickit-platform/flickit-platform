@@ -256,9 +256,9 @@ const SubjectTitle = (props: {
   }, [title]);
   return (
     <Title
+      size="large"
       letterSpacing=".08em"
-      sx={{ opacity: 0.9 }}
-      backLink={-1}
+      backLink={"/"}
       id="insight"
       inPageLink="insight"
       sup={
@@ -267,32 +267,32 @@ const SubjectTitle = (props: {
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessmentId}/insights`,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
             {
               title: <>{title || <Trans i18nKey="technicalDueDiligence" />}</>,
-              icon: (
-                <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <AnalyticsRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
           ]}
         />
       }
     >
       <Box sx={{ ...styles.centerV }}>
-        <QueryStatsRoundedIcon
+        {/* <QueryStatsRoundedIcon
           sx={{
             mr: 1,
             color: "rgba(0, 0, 0, 0.87)",
           }}
-        />
+        /> */}
         {loading ? (
           <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
         ) : (

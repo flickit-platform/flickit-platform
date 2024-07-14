@@ -8,10 +8,11 @@ import { ISubjectInfo } from "@types";
 interface IAssessmentSubjectListProps {
   subjects: ISubjectInfo[];
   colorCode: string;
+  maturityLevelCount?: number
 }
 
 export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
-  const { subjects = [], colorCode } = props;
+  const { subjects = [], colorCode, maturityLevelCount } = props;
   const isEmpty = subjects.length === 0;
 
   return (
@@ -27,6 +28,7 @@ export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {
                   <AssessmentSubjectAccordion
                     {...subject}
                     colorCode={colorCode}
+                    maturityLevelCount={maturityLevelCount}
                   />
                 </Grid>
               );
