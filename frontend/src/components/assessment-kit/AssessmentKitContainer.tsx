@@ -132,6 +132,7 @@ const AssessmentKit = (props: any) => {
                     {
                       title: t("assessmentKits") as string,
                       to: `/assessment-kits`,
+                      disabled: false
                     },
                   ]}
                 />
