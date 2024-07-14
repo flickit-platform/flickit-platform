@@ -17,6 +17,7 @@ interface ISupTitleBreadcrumbProps {
     to?: string;
     icon?: JSX.Element;
     title?: string | JSX.Element;
+    disabled?: boolean;
   }[];
   displayChip?: boolean;
   colorSetting?: string;
@@ -27,12 +28,14 @@ const SupTitleBreadcrumb = (
   props: ISupTitleBreadcrumbProps & BreadcrumbsProps
 ) => {
   const { displayChip, routes = [], ...rest } = props;
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Breadcrumbs {...rest}>
       {routes.map((route, index) => {
         const { to, title, sup, icon } = route;
-        const disabled = routes.length - 1 === index || !to;
+        const disabled =
+          (routes.length - 1 === index || !to) &&
+          (!route.hasOwnProperty("disabled") || route.disabled);
         const isActive = routes.length - 1 === index;
         return (
           <Box display="flex" flexDirection={"column"} key={index}>
@@ -49,8 +52,8 @@ const SupTitleBreadcrumb = (
                 color: rest?.color
                   ? rest.color
                   : disabled
-                    ? "GrayText"
-                    : "primary.dark",
+                  ? "GrayText"
+                  : "primary.dark",
                 "&:hover": {
                   textDecoration: "none",
                 },
@@ -58,8 +61,8 @@ const SupTitleBreadcrumb = (
               variant="bodyLarge"
             >
               {icon}
-              {
-                < Chip
+              {(
+                <Chip
                   label={title}
                   size="small"
                   sx={{
@@ -74,11 +77,11 @@ const SupTitleBreadcrumb = (
                     padding: "4px",
                     "& .MuiChip-label": {
                       ...theme.typography.bodyLarge,
-                      fontWeight: isActive ? 'Bold' : '400',
+                      fontWeight: isActive ? "Bold" : "400",
                     },
                   }}
                 />
-                || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
+              ) || <LoadingSkeleton width={"70px"} sx={{ borderRadius: 1 }} />}
             </MuiLink>
           </Box>
         );
