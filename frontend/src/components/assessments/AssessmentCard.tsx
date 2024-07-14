@@ -124,33 +124,33 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   : `${item.id}/questionnaires`
               }
             >
-                    <Typography
-                        variant="subtitle1"
-                        color="CaptionText"
-                        textTransform={"uppercase"}
-                        sx={{
-                            padding: "1px 3px",
-                            fontWeight: "light",
-                            pb: 0,
-                            textAlign: "center",
-                            color: item.color?.code || "#101c32",
-                            maxWidth: "120px",
-                            width: "fit-content",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            margin: "0 auto",
-                            fontSize: "9px",
-                            border: "1px solid #00365C",
-                            borderRadius: "100px",
-                            textTransform: "none",
-                            paddingInline: "10px",
-                            paddingBlock: '3px'
-                        }}
-                        data-cy="assessment-card-title"
-                    >
-                        {kit?.title}
-                    </Typography>
+              <Typography
+                variant="subtitle1"
+                color="CaptionText"
+                textTransform={"uppercase"}
+                sx={{
+                  padding: "1px 3px",
+                  fontWeight: "light",
+                  pb: 0,
+                  textAlign: "center",
+                  color: item.color?.code || "#101c32",
+                  maxWidth: "120px",
+                  width: "fit-content",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  margin: "0 auto",
+                  fontSize: "9px",
+                  border: "1px solid #00365C",
+                  borderRadius: "100px",
+                  textTransform: "none",
+                  paddingInline: "10px",
+                  paddingBlock: '3px'
+                }}
+                data-cy="assessment-card-title"
+              >
+                {kit?.title}
+              </Typography>
               <Typography
                 variant="h5"
                 color="CaptionText"
@@ -221,11 +221,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               state={location}
               to={`${item.id}/questionnaires`}
               data-cy="questionnaires-btn"
+              variant={viewable ? "outlined" : "contained"}
             >
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
+          <Grid item xs={12} sx={{ ...styles.centerCH, display: viewable ? "block" : "none" }} mt={1}>
             <Button
               startIcon={<QueryStatsRounded />}
               variant={"contained"}
@@ -333,7 +334,7 @@ const Actions = (props: {
               text: <Trans i18nKey="settings" />,
               onClick: assessmentSetting,
             },
-            item?.manageable  && {
+            item?.manageable && {
               icon: <DeleteRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="delete" />,
               onClick: deleteItem,
