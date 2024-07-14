@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
@@ -6,7 +6,7 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { IQuestionnairesModel } from "@types";
+import { ECustomErrorType, IAssessmentKitReportModel, IQuestionnairesModel } from "@types";
 import Title from "@common/TitleComponent";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
@@ -25,6 +25,20 @@ import { t } from "i18next";
 import QueryData from "../common/QueryData";
 import { useConfigContext } from "@/providers/ConfgProvider";
 const QuestionnaireContainer = () => {
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  const reportData = useQuery<IAssessmentKitReportModel>({
+    service: (args, config) =>
+      service.fetchAssessment({ assessmentId }, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
+
+  const isPermitted = useMemo(() => {
+    return reportData?.errorObject?.code !== ECustomErrorType.ERR_BAD_REQUEST;
+  }, [reportData?.errorObject?.code]);
+
   const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
     useQuestionnaire();
 
@@ -47,6 +61,7 @@ const QuestionnaireContainer = () => {
         <NotCompletedAlert
           isCompleted={progress == 100}
           hasStatus={false}
+          isAccessDenied={!isPermitted}
           loading={questionnaireQueryData.loading}
         />
         <Box
@@ -110,9 +125,11 @@ const NotCompletedAlert = (props: {
   isCompleted: boolean;
   loading: boolean;
   hasStatus: boolean;
+  isAccessDenied: boolean
 }) => {
-  const { isCompleted, loading, hasStatus } = props;
+  const { isCompleted, loading, hasStatus, isAccessDenied } = props;
 
+  console.log(isAccessDenied)
   return (
     <Box mt={2}>
       {loading ? (
@@ -127,6 +144,7 @@ const NotCompletedAlert = (props: {
               component={Link}
               to="./../insights"
               startIcon={<AnalyticsRoundedIcon />}
+              sx={{ display: isAccessDenied ? "none" : "" }}
             >
               <Trans i18nKey="viewInsights" />
             </Button>

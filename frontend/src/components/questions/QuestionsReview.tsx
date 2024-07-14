@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Title from "@common/Title";
 import { useQuestionContext } from "@/providers/QuestionProvider";
 import doneSvg from "@assets/svg/Done.svg";
@@ -17,7 +17,10 @@ import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useServiceContext } from "@/providers/ServiceProvider";
+import { useQuery } from "@/utils/useQuery";
+import { ECustomErrorType, IAssessmentKitReportModel } from "@/types";
 
 const QuestionsReview = () => {
   const { questionIndex, questionsInfo, assessmentStatus } =
@@ -30,6 +33,20 @@ const QuestionsReview = () => {
 };
 
 export const Review = ({ questions = [], isReviewPage }: any) => {
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  const reportData = useQuery<IAssessmentKitReportModel>({
+    service: (args, config) =>
+      service.fetchAssessment({ assessmentId }, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
+
+  const isAccessDenied = useMemo(() => {
+    return reportData?.errorObject?.code === ECustomErrorType.ERR_BAD_REQUEST;
+  }, [reportData?.errorObject?.code]);
+
   const navigate = useNavigate();
   const { questionIndex, questionsInfo, assessmentStatus } =
     useQuestionContext();
@@ -71,12 +88,12 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
             <Box mt="-28px" alignItems="center" display="flex">
               {answeredQuestions ===
                 questionsInfo?.total_number_of_questions && (
-                <img
-                  style={{ width: "100%" }}
-                  src={doneSvg}
-                  alt="questionnaire done"
-                />
-              )}
+                  <img
+                    style={{ width: "100%" }}
+                    src={doneSvg}
+                    alt="questionnaire done"
+                  />
+                )}
               {isEmpty && (
                 <img
                   style={{ width: "100%" }}
@@ -231,8 +248,8 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               size="large"
               component={Link}
               to={"./../../../insights"}
-              sx={{ fontSize: "1rem" }}
-              // sx={{borderRadius:"32px"}}
+              sx={{ fontSize: "1rem", display: isAccessDenied ? "none" : "" }}
+            // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="insights" />
             </Button>
@@ -242,7 +259,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               component={Link}
               to={"./../../../questionnaires"}
               sx={{ fontSize: "1rem" }}
-              // sx={{borderRadius:"32px"}}
+            // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="Choose another questionnaire" />
             </Button>
