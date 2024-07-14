@@ -49,7 +49,18 @@ const AssessmentContainer = () => {
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
       <AssessmentTitle data={currentSpace} />
-      <Title size="large">
+      <Title size="large"
+             toolbar={
+               <IconButton
+                   size="small"
+                   component={Link}
+                   to={`/${spaceId}/setting`}
+                   sx={{ ml: 2 }}
+               >
+                 <SettingsRoundedIcon />
+               </IconButton>
+             }
+      >
         <Box>
           {/* <DescriptionRoundedIcon sx={{ mr: 1 }} /> */}
           <Trans i18nKey="assessments" />
