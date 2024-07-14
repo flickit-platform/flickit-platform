@@ -57,7 +57,7 @@ const AssessmentContainer = () => {
                    to={`/${spaceId}/setting`}
                    sx={{ ml: 2 }}
                >
-                 <SettingsRoundedIcon color="primary" />
+                 <SettingsRoundedIcon />
                </IconButton>
              }
       >
