@@ -40,6 +40,7 @@ interface IAssessmentCardProps {
   deleteAssessment: TQueryFunction<any, TId>;
 }
 import SettingsIcon from '@mui/icons-material/Settings';
+import Tooltip from "@mui/material/Tooltip";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -120,6 +121,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   : `${item.id}/questionnaires`
               }
             >
+                <Tooltip title={kit?.title}>
                     <Typography
                         variant="subtitle1"
                         color="CaptionText"
@@ -130,7 +132,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                             pb: 0,
                             textAlign: "center",
                             color: item.color?.code || "#101c32",
-                            maxWidth: "120px",
+                            maxWidth: "70%",
                             width: "fit-content",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
@@ -147,6 +149,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                     >
                         {kit?.title}
                     </Typography>
+                </Tooltip>
               <Typography
                 variant="h5"
                 color="CaptionText"
