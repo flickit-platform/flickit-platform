@@ -51,6 +51,7 @@ const QuestionsTitle = (props: {
   return (
     <Box sx={{ pt: 1, pb: 0 }}>
       <Title
+        size="large"
         wrapperProps={{
           sx: {
             flexDirection: { xs: "column", md: "row" },
@@ -111,13 +112,12 @@ const QuestionsTitle = (props: {
         {isReview ? (
           <>
             {questionnaire?.title}
-            <Typography
-              display="inline-block"
-              variant="h5"
-              sx={{ opacity: 0.6, marginLeft: 1, fontWeight: "bold" }}
+            <div style={{ marginInline: 4 }}></div>
+            <Title
+              size="large"
             >
               <Trans i18nKey="review" />
-            </Typography>
+            </Title>
           </>
         ) : (
           <>

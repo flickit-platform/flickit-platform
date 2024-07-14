@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import { Button, Divider, Grid, IconButton } from "@mui/material";
+import { Button, Divider, Grid, IconButton, Tooltip } from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
 import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
@@ -206,6 +206,9 @@ const AssessmentAdviceContainer = (props: any) => {
                 borderRadius: { xs: 0, sm: "0 0 32px 32px" },
                 background: "#fff",
                 py: 8,
+                maxHeight: "60vh",
+                overflow: "auto",
+                overflowX: "hidden"
               }}
             >
               {subjects.map((subject: any) =>
@@ -467,7 +470,11 @@ const AssessmentAdviceContainer = (props: any) => {
                         whiteSpace: "normal",
                       }}
                     >
-                      {question?.title}
+                      <Tooltip title={question?.title.length > 100 ? question?.title : ''}>
+                        <Box>
+                          {question?.title}
+                        </Box>
+                      </Tooltip>
                     </Grid>
                     <Grid
                       item
@@ -514,9 +521,8 @@ const AssessmentAdviceContainer = (props: any) => {
                             background:
                               attributeBGColorPallet[Math.ceil(index % 3)],
                             fontSize: "11px",
-                            border: `1px solid ${
-                              attributeColorPallet[Math.ceil(index % 3)]
-                            }`,
+                            border: `1px solid ${attributeColorPallet[Math.ceil(index % 3)]
+                              }`,
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",

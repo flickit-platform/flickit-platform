@@ -200,7 +200,7 @@ const AssessmentReportContainer = (props: any) => {
                     <Trans i18nKey="subjectReport" />
                   </Typography>
                   <Typography
-                    variant="titleSmall"
+                    variant="titleMedium"
                     fontWeight={400}
                   >
                     <Trans
@@ -216,6 +216,7 @@ const AssessmentReportContainer = (props: any) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
+                  maturityLevelCount={assessmentKit?.maturityLevelCount??5}
                   subjects={subjects}
                   colorCode={colorCode}
                 />
