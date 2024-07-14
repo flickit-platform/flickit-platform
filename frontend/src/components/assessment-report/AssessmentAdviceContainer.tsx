@@ -85,7 +85,7 @@ const AssessmentAdviceContainer = (props: any) => {
           sx={{
             padding: "0!important",
             background: "#004F83",
-            overflowX: "hidden",
+            overflow: "hidden",
           }}
         >
           <Box
