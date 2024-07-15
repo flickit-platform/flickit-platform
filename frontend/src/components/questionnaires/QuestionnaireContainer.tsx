@@ -6,7 +6,11 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { ECustomErrorType, IAssessmentKitReportModel, IQuestionnairesModel } from "@types";
+import {
+  ECustomErrorType,
+  IAssessmentKitReportModel,
+  IQuestionnairesModel,
+} from "@types";
 import Title from "@common/TitleComponent";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
@@ -28,16 +32,16 @@ const QuestionnaireContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
-  const reportData = useQuery<IAssessmentKitReportModel>({
-    service: (args, config) =>
-      service.fetchAssessment({ assessmentId }, config),
+  const AssessmentInfo = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.AssessmentsLoad(args, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
 
   const isPermitted = useMemo(() => {
-    return reportData?.errorObject?.code !== ECustomErrorType.ERR_BAD_REQUEST;
-  }, [reportData?.errorObject?.code]);
+    return AssessmentInfo?.data?.viewable;
+  }, [AssessmentInfo]);
 
   const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
     useQuestionnaire();
@@ -125,11 +129,11 @@ const NotCompletedAlert = (props: {
   isCompleted: boolean;
   loading: boolean;
   hasStatus: boolean;
-  isAccessDenied: boolean
+  isAccessDenied: boolean;
 }) => {
   const { isCompleted, loading, hasStatus, isAccessDenied } = props;
 
-  console.log(isAccessDenied)
+  console.log(isAccessDenied);
   return (
     <Box mt={2}>
       {loading ? (
