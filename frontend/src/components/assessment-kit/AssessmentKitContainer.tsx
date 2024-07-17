@@ -124,7 +124,7 @@ const AssessmentKit = (props: any) => {
         <Box sx={{ color: "white" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Title
-              size="large"
+              size="medium"
               sup={
                 <SupTitleBreadcrumb
                   color="white"
@@ -132,6 +132,7 @@ const AssessmentKit = (props: any) => {
                     {
                       title: t("assessmentKits") as string,
                       to: `/assessment-kits`,
+                      disabled: false
                     },
                   ]}
                 />

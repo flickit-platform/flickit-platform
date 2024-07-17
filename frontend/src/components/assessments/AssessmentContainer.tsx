@@ -29,6 +29,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 import { animations } from "@styles";
+import AssessmentTitle from "./AssessmentTitle";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { currentSpace } = useAuthContext();
@@ -47,32 +48,21 @@ const AssessmentContainer = () => {
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
-      <Title
-        borderBottom={true}
-        sup={
-          <SupTitleBreadcrumb
-            routes={[
-              {
-                title: currentSpace?.title || "",
-                sup: "spaces",
-                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
-              },
-            ]}
-          />
-        }
-        toolbar={
-          <IconButton
-            size="small"
-            component={Link}
-            to={`/${spaceId}/setting`}
-            sx={{ ml: 2 }}
-          >
-            <SettingsRoundedIcon color="primary" />
-          </IconButton>
-        }
+      <AssessmentTitle data={currentSpace} />
+      <Title size="large"
+             toolbar={
+               <IconButton
+                   size="small"
+                   component={Link}
+                   to={`/${spaceId}/setting`}
+                   sx={{ ml: 2 }}
+               >
+                 <SettingsRoundedIcon />
+               </IconButton>
+             }
       >
         <Box>
-          <DescriptionRoundedIcon sx={{ mr: 1 }} />
+          {/* <DescriptionRoundedIcon sx={{ mr: 1 }} /> */}
           <Trans i18nKey="assessments" />
         </Box>
       </Title>
