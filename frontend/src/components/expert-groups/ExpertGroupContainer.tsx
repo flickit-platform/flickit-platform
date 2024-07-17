@@ -57,6 +57,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import formatBytes from "@utils/formatBytes";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -352,6 +353,10 @@ const AvatarComponent = (props: any) => {
                 setImage(reader.result as any);
             };
             reader.readAsDataURL(file);
+              let maxSize = 2097152
+              if((file.size > maxSize)){
+                 return toast((t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string))
+              }
         }
         const pictureData = {
                     pictureFile: file ,
