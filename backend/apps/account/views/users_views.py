@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from account.services import users_services
+from account.services.users_services import get_user_id_by_email
 
 
 class UserInfoApi(APIView):
@@ -28,4 +29,12 @@ class UserProfileApi(APIView):
         result = users_services.edit_user_profile(request)
         if result["Success"]:
             return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class LoadUserByEmailApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, email):
+        result = get_user_id_by_email(email)
         return Response(data=result["body"], status=result["status_code"])
