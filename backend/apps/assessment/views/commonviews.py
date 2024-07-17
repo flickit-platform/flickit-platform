@@ -10,24 +10,24 @@ from rest_framework.permissions import IsAuthenticated
 
 class PathInfoApi(APIView):
     permission_classes = [IsAuthenticated]
-    assessment_id_param = openapi.Parameter('assessmentId', openapi.IN_QUERY, description="assessment id param",
+    assessment_id_param = openapi.Parameter('assessment_id', openapi.IN_QUERY, description="assessment id param",
                                             type=openapi.TYPE_STRING)
-    space_id_param = openapi.Parameter('spaceId', openapi.IN_QUERY, description="space id param",
+    space_id_param = openapi.Parameter('space_id', openapi.IN_QUERY, description="space id param",
                                        type=openapi.TYPE_INTEGER)
-    questionnaire_id_param = openapi.Parameter('questionnaireId', openapi.IN_QUERY,
+    questionnaire_id_param = openapi.Parameter('questionnaire_id', openapi.IN_QUERY,
                                                description="questionnaire id param",
                                                type=openapi.TYPE_INTEGER)
 
     @swagger_auto_schema(manual_parameters=[assessment_id_param, space_id_param, questionnaire_id_param])
     def get(self, request):
-        if "assessmentId" in request.query_params:
-            assessment_id = request.query_params["assessmentId"]
+        if "assessment_id" in request.query_params:
+            assessment_id = request.query_params["assessment_id"]
             assessments_details = assessment_services.load_assessment(request, assessment_id)
             if assessments_details["status_code"] != status.HTTP_200_OK:
                 return Response(assessments_details["body"], assessments_details["status_code"])
             result = assessment_core.get_path_info_with_assessment_id(request, assessments_details["body"])
-        elif "spaceId" in request.query_params:
-            space_id = request.query_params["spaceId"]
+        elif "space_id" in request.query_params:
+            space_id = request.query_params["space_id"]
             result = assessment_core.get_path_info_with_space_id(request, space_id)
         else:
             return Response({"code": "INVALID_INPUT", "message": "'assessment_id' or 'space_id' may not be empty"},
