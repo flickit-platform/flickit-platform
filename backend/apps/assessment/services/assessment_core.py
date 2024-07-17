@@ -3,6 +3,7 @@ from operator import itemgetter
 from rest_framework import status
 
 from account.models import Space
+from account.services import space_services
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 from baseinfo.models.assessmentkitmodels import AssessmentKit, MaturityLevel
 from baseinfo.models.basemodels import Questionnaire, AssessmentSubject, QualityAttribute
@@ -367,9 +368,12 @@ def get_path_info_with_assessment_id(request, assessments_details):
     assessment = {"id": assessments_details["id"],
                   "title": assessments_details["title"]
                   }
-    space_object = Space.objects.get(id=assessments_details["space"]["id"])
-    space = {"id": space_object.id,
-             "title": space_object.title
+    result_space = space_services.get_space(request, assessments_details["space"]["id"])
+    if result_space["status_code"] != status.HTTP_200_OK:
+        return result_space
+
+    space = {"id": result_space["body"]["id"],
+             "title": result_space["body"]["title"]
              }
 
     if questionnaire is None:
@@ -400,16 +404,14 @@ def edit_assessment(assessments_details, request_body, authorization_header):
     return result
 
 
-def get_path_info_with_space_id(space_id):
+def get_path_info_with_space_id(request, space_id):
     result = dict()
-    if not Space.objects.filter(id=space_id).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'space_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-    space_object = Space.objects.get(id=space_id)
-    space = {"id": space_object.id,
-             "title": space_object.title
+    result_space = space_services.get_space(request, space_id)
+    if result_space["status_code"] != status.HTTP_200_OK:
+        return result_space
+
+    space = {"id": result_space["body"]["id"],
+             "title": result_space["body"]["title"]
              }
     result["body"] = {
         "space": space
