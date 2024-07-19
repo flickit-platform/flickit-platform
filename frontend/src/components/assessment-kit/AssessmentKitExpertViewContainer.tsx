@@ -37,6 +37,7 @@ import setServerFieldErrors from "@utils/setServerFieldError";
 import { AssessmentKitDetailsType } from "@types";
 import convertToBytes from "@/utils/convertToBytes";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { customFontFamily } from "@/config/theme";
 
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
@@ -1127,7 +1128,7 @@ const SubjectQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
+                  fontFamily: `${is_farsi ? "Vazirmatn" : customFontFamily}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
@@ -1351,7 +1352,7 @@ const QuestionnairesQuestionList = (props: any) => {
               <Typography
                 sx={{
                   flex: 1,
-                  fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
+                  fontFamily: `${is_farsi ? "Vazirmatn" : customFontFamily}`,
                   fontWeight: "bold",
                   opacity: 1,
                   display: "flex",
@@ -1415,7 +1416,7 @@ const QuestionnairesQuestionList = (props: any) => {
                       key={option.index}
                       sx={{
                         mx: 2,
-                        fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
+                        fontFamily: `${is_farsi ? "Vazirmatn" : customFontFamily}`,
                       }}
                       variant="body2"
                     >
