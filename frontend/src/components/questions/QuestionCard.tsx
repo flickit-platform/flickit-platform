@@ -469,7 +469,7 @@ const AnswerTemplate = (props: {
                     p: { xs: 0.6, sm: 1 },
                     textAlign: "left",
                     fontSize: { xs: "1.15rem", sm: "1.3rem" },
-                    fontFamily: `${is_farsi ? "Vazirmatn" : "Ubuntu"}`,
+                    fontFamily: `${is_farsi ? "Vazirmatn" : customElements}`,
                     justifyContent: "flex-start",
                     boxShadow: "0 0 2px white",
                     borderWidth: "2px",

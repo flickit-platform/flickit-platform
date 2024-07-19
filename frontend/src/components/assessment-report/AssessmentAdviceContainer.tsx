@@ -17,6 +17,7 @@ import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@utils/useScreenResize";
+import { customFontFamily } from "@/config/theme";
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -535,7 +536,7 @@ const AssessmentAdviceContainer = (props: any) => {
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",
-                            fontFamily: `${isFarsi ? "Vazirmatn" : "Ubuntu"}`,
+                            fontFamily: `${isFarsi ? "Vazirmatn" : customFontFamily}`,
                           }}
                         >
                           {attribute.title}
