@@ -51,13 +51,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -93,9 +93,12 @@ const AssessmentReportContainer = (props: any) => {
 
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
-        const totalAttributesLength = subjects.reduce((sum: any, subject: any) => {
-          return sum + (subject.attributes?.length || 0);
-        }, 0);
+        const totalAttributesLength = subjects.reduce(
+          (sum: any, subject: any) => {
+            return sum + (subject.attributes?.length || 0);
+          },
+          0
+        );
 
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
@@ -119,7 +122,9 @@ const AssessmentReportContainer = (props: any) => {
                       data-cy="more-action-btn"
                       disabled={!manageable}
                     >
-                      <SettingsIcon sx={{ fontSize: "1.5rem", margin: "0.2rem" }} />
+                      <SettingsIcon
+                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                      />
                     </IconButton>
                   </Box>
                 </Box>
@@ -202,6 +207,7 @@ const AssessmentReportContainer = (props: any) => {
                   <Typography
                     variant="titleMedium"
                     fontWeight={400}
+                    color="#73808C"
                   >
                     <Trans
                       i18nKey="overallStatusDetails"
@@ -216,7 +222,7 @@ const AssessmentReportContainer = (props: any) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
-                  maturityLevelCount={assessmentKit?.maturityLevelCount??5}
+                  maturityLevelCount={assessmentKit?.maturityLevelCount ?? 5}
                   subjects={subjects}
                   colorCode={colorCode}
                 />

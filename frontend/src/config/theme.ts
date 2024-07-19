@@ -111,6 +111,15 @@ const palette = createPalette({
 
 export const theme = createTheme({
   palette,
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
   typography: {
     fontFamily: customFontFamily,
     subSmall: {
@@ -149,8 +158,8 @@ export const theme = createTheme({
     headlineLarge: {
       fontFamily: primaryFontFamily,
       fontWeight: "bold",
-      fontSize: "3rem",
-      lineHeight: "3.2rem",
+      fontSize: "2.5rem",
+      lineHeight: "2.7rem",
       letterSpacing: "0",
     },
     displaySmall: {

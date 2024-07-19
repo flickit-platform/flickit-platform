@@ -33,14 +33,16 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-
-  item: IAssessment & { space: any } & { manageable?: boolean } & { viewable?: boolean };
+  item: IAssessment & { space: any } & { manageable?: boolean } & {
+    viewable?: boolean;
+  };
 
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 import Tooltip from "@mui/material/Tooltip";
+import { Chip } from "@mui/material";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -48,8 +50,14 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { item } = props;
   const abortController = useRef(new AbortController());
 
-  const { maturityLevel, isCalculateValid, isConfidenceValid, kit, id, lastModificationTime, viewable
-
+  const {
+    maturityLevel,
+    isCalculateValid,
+    isConfidenceValid,
+    kit,
+    id,
+    lastModificationTime,
+    viewable,
   } = item;
   const hasML = hasMaturityLevel(maturityLevel?.value);
   const { maturityLevelsCount } = kit;
@@ -72,7 +80,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       if (!isCalculateValid) {
         const data = await calculateMaturityLevelQuery.query().catch(() => {
           setShow(true);
-          console.log('first')
+          console.log("first");
         });
         setCalculateResault(data);
         if (data?.id) {
@@ -117,42 +125,37 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
-              sx={{ textDecoration: "none" }}
+              sx={{
+                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               component={Link}
               to={
-                isCalculateValid &&
-                  viewable ? `${item.id}/insights`
+                isCalculateValid && viewable
+                  ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
               <Tooltip title={kit?.title}>
-                <Typography
-                  variant="subtitle1"
-                  color="CaptionText"
-                  textTransform={"uppercase"}
+                <Chip
+                  label={kit?.title}
+                  size="small"
                   sx={{
-                    padding: "1px 3px",
-                    fontWeight: "light",
-                    pb: 0,
-                    textAlign: "center",
-                    color: item.color?.code || "#101c32",
                     maxWidth: "70%",
                     width: "fit-content",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    margin: "0 auto",
-                    fontSize: "9px",
-                    border: "1px solid #00365C",
-                    borderRadius: "100px",
+                    border: "0.5px solid #00365C",
                     textTransform: "none",
-                    paddingInline: "10px",
-                    paddingBlock: '3px'
+                    color: "#101c32",
+                    background: "transparent",
                   }}
                   data-cy="assessment-card-title"
-                >
-                  {kit?.title}
-                </Typography>
+                />
               </Tooltip>
               <Typography
                 variant="h5"
@@ -190,7 +193,11 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML && viewable ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={
+              hasML && viewable
+                ? `${item.id}/insights`
+                : `${item.id}/questionnaires`
+            }
           >
             {show ? (
               <Gauge
@@ -229,7 +236,12 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH, display: viewable ? "block" : "none" }} mt={1}>
+          <Grid
+            item
+            xs={12}
+            sx={{ ...styles.centerCH, display: viewable ? "block" : "none" }}
+            mt={1}
+          >
             <Button
               startIcon={<QueryStatsRounded />}
               variant={"contained"}
@@ -266,7 +278,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any } & { manageable?: boolean } & { viewable?: boolean };
+  item: IAssessment & { space: any } & { manageable?: boolean } & {
+    viewable?: boolean;
+  };
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -298,7 +312,7 @@ const Actions = (props: {
 
   const assessmentSetting = (e: any) => {
     navigate(`assessmentsettings/${item.id}`, {
-      state: item?.color || { code: '#073B4C', id: 6 }
+      state: item?.color || { code: "#073B4C", id: 6 },
     });
   };
 
@@ -309,41 +323,41 @@ const Actions = (props: {
       items={
         hasStatus(item.status)
           ? [
-            // {
-            //   icon: <EditRoundedIcon fontSize="small" />,
-            //   text: <Trans i18nKey="edit" />,
-            //   onClick: openEditDialog,
-            // },
-            {
-              icon: <CompareRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="addToCompare" />,
-              onClick: addToCompare,
-            },
-            {
-              icon: <DeleteRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="delete" />,
-              onClick: deleteItem,
-              menuItemProps: { "data-cy": "delete-action-btn" },
-            },
-          ]
+              // {
+              //   icon: <EditRoundedIcon fontSize="small" />,
+              //   text: <Trans i18nKey="edit" />,
+              //   onClick: openEditDialog,
+              // },
+              {
+                icon: <CompareRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="addToCompare" />,
+                onClick: addToCompare,
+              },
+              {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+                menuItemProps: { "data-cy": "delete-action-btn" },
+              },
+            ]
           : [
-            // {
-            //   icon: <EditRoundedIcon fontSize="small" />,
-            //   text: <Trans i18nKey="edit" />,
-            //   onClick: openEditDialog,
-            // },
-            item?.manageable && {
-              icon: <SettingsIcon fontSize="small" />,
-              text: <Trans i18nKey="settings" />,
-              onClick: assessmentSetting,
-            },
-            item?.manageable && {
-              icon: <DeleteRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="delete" />,
-              onClick: deleteItem,
-              menuItemProps: { "data-cy": "delete-action-btn" },
-            },
-          ]
+              // {
+              //   icon: <EditRoundedIcon fontSize="small" />,
+              //   text: <Trans i18nKey="edit" />,
+              //   onClick: openEditDialog,
+              // },
+              item?.manageable && {
+                icon: <SettingsIcon fontSize="small" />,
+                text: <Trans i18nKey="settings" />,
+                onClick: assessmentSetting,
+              },
+              item?.manageable && {
+                icon: <DeleteRoundedIcon fontSize="small" />,
+                text: <Trans i18nKey="delete" />,
+                onClick: deleteItem,
+                menuItemProps: { "data-cy": "delete-action-btn" },
+              },
+            ]
       }
     />
   );

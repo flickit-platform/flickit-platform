@@ -128,11 +128,12 @@ const AssessmentKit = (props: any) => {
               sup={
                 <SupTitleBreadcrumb
                   color="white"
+                  mouseCursor="pointer"
                   routes={[
                     {
                       title: t("assessmentKits") as string,
                       to: `/assessment-kits`,
-                      disabled: false
+                      disabled: false,
                     },
                   ]}
                 />

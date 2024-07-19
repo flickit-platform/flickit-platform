@@ -1,5 +1,5 @@
 import Title from "@common/Title";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
@@ -62,6 +62,12 @@ const AssessmentAdviceContainer = (props: any) => {
   const attributeColorPallet = ["#D81E5B", "#F9A03F", "#0A2342"];
   const attributeBGColorPallet = ["#FDF1F5", "#FEF5EB", "#EDF4FC"];
   const fullScreen = useScreenResize("sm");
+  const filteredMaturityLevels = useMemo(() => {
+    const filteredData = assessment?.assessmentKit?.maturityLevels.sort(
+      (elem1: any, elem2: any) => elem1.index - elem2.index
+    );
+    return filteredData;
+  }, [assessment]);
   return (
     <div>
       <Dialog
@@ -208,7 +214,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 py: 8,
                 maxHeight: "60vh",
                 overflow: "auto",
-                overflowX: "hidden"
+                overflowX: "hidden",
               }}
             >
               {subjects.map((subject: any) =>
@@ -219,7 +225,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     currentState={attribute?.maturityLevel}
                     attribute={attribute}
                     subject={subject}
-                    maturityLevels={assessment?.assessmentKit?.maturityLevels}
+                    maturityLevels={filteredMaturityLevels}
                     target={target}
                     setTarget={setTarget}
                   />
@@ -470,10 +476,12 @@ const AssessmentAdviceContainer = (props: any) => {
                         whiteSpace: "normal",
                       }}
                     >
-                      <Tooltip title={question?.title.length > 100 ? question?.title : ''}>
-                        <Box>
-                          {question?.title}
-                        </Box>
+                      <Tooltip
+                        title={
+                          question?.title.length > 100 ? question?.title : ""
+                        }
+                      >
+                        <Box>{question?.title}</Box>
                       </Tooltip>
                     </Grid>
                     <Grid
@@ -521,8 +529,9 @@ const AssessmentAdviceContainer = (props: any) => {
                             background:
                               attributeBGColorPallet[Math.ceil(index % 3)],
                             fontSize: "11px",
-                            border: `1px solid ${attributeColorPallet[Math.ceil(index % 3)]
-                              }`,
+                            border: `1px solid ${
+                              attributeColorPallet[Math.ceil(index % 3)]
+                            }`,
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",

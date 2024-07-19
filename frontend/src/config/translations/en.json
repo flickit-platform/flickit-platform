@@ -79,7 +79,7 @@
   "showsOverallStatusOfSystem": "Shows overall status of your system",
   "overallStatus": "Overall Status",
   "overallMaturityLevelIs": "overall status is evaluated as",
-  "subjectMaturityLevelIs": "the subject status is evaluated as",
+  "subjectMaturityLevelIs": "subject status is evaluated as",
   "overallInsights": "Overall Insights",
   "overallInsight": "{{title}} Overall Insights",
   "technicalDueDiligence": "Technical Due Diligence Report Of ",
@@ -421,5 +421,5 @@
   "you": "You",
   "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable.",
   "overallStatusDetails": "You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
-  "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes."
+  "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes below."
 }

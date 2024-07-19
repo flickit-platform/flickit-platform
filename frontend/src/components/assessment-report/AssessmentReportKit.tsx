@@ -185,7 +185,6 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               width="100%"
               textAlign="left"
               sx={{
-                wordBreak: "break-all",
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
               }}
