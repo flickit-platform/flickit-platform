@@ -88,6 +88,7 @@ const Gauge = (props: IGaugeProps) => {
         <Box
           sx={{
             ...styles.centerCVH,
+            top: isMobileScreen ? "20%" : "unset",
             bottom: hideGuidance ? `24%` : "40%",
             left: isMobileScreen ? "26%" : "20%",
             right: isMobileScreen ? "26%" : "20%",
