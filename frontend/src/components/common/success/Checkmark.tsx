@@ -16,9 +16,9 @@ const CheckmarkGif = () => {
   return (
     <div>
       {showGif ? (
-        <img src={GreenCheckmark} alt="checkmark" width="150px" />
+        <img src={GreenCheckmark} alt="checkmark" width="100px" />
       ) : (
-        <img src={GreenCheckmarkPng} alt="checkmark" width="150px" />
+        <img src={GreenCheckmarkPng} alt="checkmark" width="100px" />
       )}
     </div>
   );
