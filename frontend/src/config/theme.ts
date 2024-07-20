@@ -164,9 +164,8 @@ export const theme = createTheme({
     },
     displaySmall: {
       fontFamily: secondaryFontFamily,
-      fontSize: "1.5rem",
-      fontWeight: "lighter",
-      lineHeight: "2rem",
+      fontSize: "1rem",
+      fontWeight: "normal",
       letterSpacing: "0",
     },
     displayMedium: {

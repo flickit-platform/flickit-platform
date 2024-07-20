@@ -19,6 +19,8 @@ import { useQuery } from "@utils/useQuery";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "@common/fields/AutocompleteAsyncField";
+import CheckmarkGif from "../common/success/Checkmark";
+import { Box, Button, Typography } from "@mui/material";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -29,6 +31,9 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedTitle, setSubmittedTitle] = useState('');
+  const [createdKitId, setCreatedKitId] = useState('');
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -47,6 +52,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const close = () => {
     abortController.abort();
     closeDialog();
+    setIsSubmitted(false)
   };
   useEffect(() => {
     return () => {
@@ -60,29 +66,35 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       type === "update"
         ? await service.updateAssessment(
-            {
-              id: assessmentId,
-              data: {
-                title,
-                colorId: color,
-              },
+          {
+            id: assessmentId,
+            data: {
+              title,
+              colorId: color,
             },
-            { signal: abortController.signal }
-          )
+          },
+          { signal: abortController.signal }
+        )
         : await service.createAssessment(
-            {
-              data: {
-                spaceId: spaceId || space?.id,
-                assessmentKitId: assessment_kit?.id,
-                title: title,
-                colorId: color,
-              },
+          {
+            data: {
+              spaceId: spaceId || space?.id,
+              assessmentKitId: assessment_kit?.id,
+              title: title,
+              colorId: color,
             },
-            { signal: abortController.signal }
-          );
+          },
+          { signal: abortController.signal }
+        ).then((res: any) => {
+          setCreatedKitId(res.data.id)
+        });
       setLoading(false);
       onSubmitForm();
-      close();
+      setSubmittedTitle(title);
+      setIsSubmitted(true);
+      if (type === "update") {
+        close();
+      }
       !!staticData.assessment_kit &&
         navigate(`/${spaceId || space?.id}/assessments/1`);
     } catch (e) {
@@ -96,6 +108,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       };
     }
   };
+
   return (
     <CEDialog
       {...rest}
@@ -111,37 +124,64 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
         </>
       }
     >
-      <FormProviderWithForm formMethods={formMethods}>
-        <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} md={12}>
-            <InputFieldUC
-              autoFocus={true}
-              defaultValue={defaultValues.title || ""}
-              name="title"
-              required={true}
-              label={<Trans i18nKey="title" />}
-              data-cy="title"
-            />
+      {!isSubmitted ? (
+        <FormProviderWithForm formMethods={formMethods}>
+          <Grid container spacing={2} sx={styles.formGrid}>
+            <Grid item xs={12} md={12}>
+              <InputFieldUC
+                autoFocus={true}
+                defaultValue={defaultValues.title || ""}
+                name="title"
+                required={true}
+                label={<Trans i18nKey="title" />}
+                data-cy="title"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <SpaceField defaultValue={defaultValues?.space || data?.space} />
+            </Grid>
+            <Grid item xs={12}>
+              <AssessmentKitField
+                staticData={staticData?.assessment_kit}
+                defaultValue={defaultValues?.assessment_kit}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <SpaceField defaultValue={defaultValues?.space || data?.space} />
-          </Grid>
-          <Grid item xs={12}>
-            <AssessmentKitField
-              staticData={staticData?.assessment_kit}
-              defaultValue={defaultValues?.assessment_kit}
-            />
-          </Grid>
-        </Grid>
-        <CEDialogActions
-          closeDialog={close}
-          loading={loading}
-          type={type}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
-        />
-      </FormProviderWithForm>
+          <CEDialogActions
+            closeDialog={close}
+            loading={loading}
+            type={type}
+            onSubmit={(...args) =>
+              formMethods.handleSubmit((data) => onSubmit(data, ...args))
+            }
+          />
+        </FormProviderWithForm>
+      ) : (
+        <Box>
+          <Box sx={{ ...styles.centerCVH, textAlign: "center" }}>
+            <CheckmarkGif />
+            <Typography variant="titleLarge">
+              <Trans i18nKey="successCreatedAssessmentTitle" values={{ title: submittedTitle }} />
+            </Typography>
+            <Typography variant="displaySmall">
+              <Trans i18nKey="successCreatedAssessmentMessage" />
+            </Typography>
+          </Box>
+          <CEDialogActions
+            closeDialog={close}
+            loading={loading}
+            type={undefined}
+            cancelLabel="close"
+            hideSubmitButton
+          >
+            <Link to={`/${spaceId || data.space.id}/assessments/1/assessmentsettings/${createdKitId}`} style={{ textDecoration: 'none' }}>
+              <Button variant="contained">
+                <Trans i18nKey="assessmentSettings" />
+              </Button>
+            </Link>
+          </CEDialogActions>
+        </Box>
+      )}
     </CEDialog>
   );
 };
@@ -181,7 +221,6 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchSpaces(args, config),
   });
-
 
   return (
     <AutocompleteAsyncField
