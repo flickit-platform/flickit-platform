@@ -24,7 +24,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: (() => void);
+  onSubmitForm?: () => void;
   openDialog?: any;
   context?: any;
 }
@@ -32,8 +32,8 @@ interface IAssessmentCEFromDialogProps extends DialogProps {
 const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedTitle, setSubmittedTitle] = useState('');
-  const [createdKitId, setCreatedKitId] = useState('');
+  const [submittedTitle, setSubmittedTitle] = useState("");
+  const [createdKitId, setCreatedKitId] = useState("");
   const [createdKitSpaceId, setCreatedKitSpaceId] = useState(undefined);
   const { service } = useServiceContext();
   const {
@@ -53,8 +53,9 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const close = () => {
     abortController.abort();
     closeDialog();
-    setIsSubmitted(false)
+    setIsSubmitted(false);
     !!staticData.assessment_kit &&
+      createdKitSpaceId &&
       navigate(`/${createdKitSpaceId}/assessments/1`);
   };
   useEffect(() => {
@@ -69,28 +70,30 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       type === "update"
         ? await service.updateAssessment(
-          {
-            id: assessmentId,
-            data: {
-              title,
-              colorId: color,
+            {
+              id: assessmentId,
+              data: {
+                title,
+                colorId: color,
+              },
             },
-          },
-          { signal: abortController.signal }
-        )
-        : await service.createAssessment(
-          {
-            data: {
-              spaceId: spaceId || space?.id,
-              assessmentKitId: assessment_kit?.id,
-              title: title,
-              colorId: color,
-            },
-          },
-          { signal: abortController.signal }
-        ).then((res: any) => {
-          setCreatedKitId(res.data?.id)
-        });
+            { signal: abortController.signal }
+          )
+        : await service
+            .createAssessment(
+              {
+                data: {
+                  spaceId: spaceId || space?.id,
+                  assessmentKitId: assessment_kit?.id,
+                  title: title,
+                  colorId: color,
+                },
+              },
+              { signal: abortController.signal }
+            )
+            .then((res: any) => {
+              setCreatedKitId(res.data?.id);
+            });
       setLoading(false);
       setSubmittedTitle(title);
       setIsSubmitted(true);
@@ -100,7 +103,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       if (type === "update") {
         close();
       }
-      setCreatedKitSpaceId(spaceId || space?.id)
+      setCreatedKitSpaceId(spaceId || space?.id);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -165,7 +168,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           <Box sx={{ ...styles.centerCVH, textAlign: "center" }}>
             <CheckmarkGif />
             <Typography variant="titleLarge">
-              <Trans i18nKey="successCreatedAssessmentTitle" values={{ title: submittedTitle }} />
+              <Trans
+                i18nKey="successCreatedAssessmentTitle"
+                values={{ title: submittedTitle }}
+              />
             </Typography>
             <Typography variant="displaySmall">
               <Trans i18nKey="successCreatedAssessmentMessage" />
@@ -178,7 +184,12 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             cancelLabel="close"
             hideSubmitButton
           >
-            <Link to={`/${spaceId || data.space?.id}/assessments/1/assessmentsettings/${createdKitId}`} style={{ textDecoration: 'none' }}>
+            <Link
+              to={`/${
+                spaceId || data.space?.id
+              }/assessments/1/assessmentsettings/${createdKitId}`}
+              style={{ textDecoration: "none" }}
+            >
               <Button variant="contained">
                 <Trans i18nKey="assessmentSettings" />
               </Button>
