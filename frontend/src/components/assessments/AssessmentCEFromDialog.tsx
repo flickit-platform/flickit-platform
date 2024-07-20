@@ -161,7 +161,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           />
         </FormProviderWithForm>
       ) : (
-        <Box>
+        <FormProviderWithForm formMethods={formMethods}>
           <Box sx={{ ...styles.centerCVH, textAlign: "center" }}>
             <CheckmarkGif />
             <Typography variant="titleLarge">
@@ -184,7 +184,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               </Button>
             </Link>
           </CEDialogActions>
-        </Box>
+        </FormProviderWithForm>
       )}
     </CEDialog>
   );
