@@ -37,3 +37,14 @@ class AssessmentsComparableApi(APIView):
     def get(self, request):
         result = assessment_services.assessments_comparable_list(request)
         return Response(result["body"], result["status_code"])
+
+
+class InviteUsersAssessmentsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, assessment_id):
+        result = assessment_services.assessments_invite_user(request, assessment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

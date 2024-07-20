@@ -55,3 +55,13 @@ def assessments_comparable_list(request):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def assessments_invite_user(request, assessment_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/invite',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

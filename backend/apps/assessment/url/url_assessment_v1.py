@@ -1,6 +1,6 @@
 from django.urls import path
 
-from assessment.views import (projectviews, questionvalueviews, reportviews, confidence_levels_views,
+from assessment.views import (projectviews, questionvalueviews, reportviews, confidence_levels_views,assessment_views,
                               advice_views, assessment_user_roles_views, maturity_level_views, questionnaire_views, attributes_views)
 
 urlpatterns = [
@@ -26,5 +26,5 @@ urlpatterns = [
     path("<uuid:assessment_id>/advice/", advice_views.AdviceView.as_view()),
     path("<uuid:assessment_id>/attributes/<int:attribute_id>/evidences/",
          attributes_views.EvidencesOfAttributeApi.as_view()),
-
+    path("<uuid:assessment_id>/invite/", assessment_views.InviteUsersAssessmentsApi.as_view()),
 ]
