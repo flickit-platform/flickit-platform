@@ -328,7 +328,7 @@ const AssessmentKit = (props: any) => {
                 >
                   <Trans i18nKey="createAssessment" />
                 </Button>
-                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
+                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={undefined} />
               </Box>
             </Box>
           </Grid>
@@ -364,8 +364,8 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                              ? "0 8px 8px 0"
-                              : "0",
+                                ? "0 8px 8px 0"
+                                : "0",
                         }}
                       >
                         {item.title}

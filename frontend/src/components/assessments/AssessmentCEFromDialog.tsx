@@ -24,7 +24,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm: () => void;
+  onSubmitForm?: (() => void);
   openDialog?: any;
   context?: any;
 }
@@ -34,6 +34,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedTitle, setSubmittedTitle] = useState('');
   const [createdKitId, setCreatedKitId] = useState('');
+  const [createdKitSpaceId, setCreatedKitSpaceId] = useState(undefined);
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -53,6 +54,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     abortController.abort();
     closeDialog();
     setIsSubmitted(false)
+    !!staticData.assessment_kit &&
+      navigate(`/${createdKitSpaceId}/assessments/1`);
   };
   useEffect(() => {
     return () => {
@@ -86,17 +89,18 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           },
           { signal: abortController.signal }
         ).then((res: any) => {
-          setCreatedKitId(res.data.id)
+          setCreatedKitId(res.data?.id)
         });
       setLoading(false);
-      onSubmitForm();
       setSubmittedTitle(title);
       setIsSubmitted(true);
+      if (onSubmitForm !== undefined) {
+        onSubmitForm();
+      }
       if (type === "update") {
         close();
       }
-      !!staticData.assessment_kit &&
-        navigate(`/${spaceId || space?.id}/assessments/1`);
+      setCreatedKitSpaceId(spaceId || space?.id)
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -157,7 +161,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
           />
         </FormProviderWithForm>
       ) : (
-        <Box>
+        <FormProviderWithForm formMethods={formMethods}>
           <Box sx={{ ...styles.centerCVH, textAlign: "center" }}>
             <CheckmarkGif />
             <Typography variant="titleLarge">
@@ -174,13 +178,13 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             cancelLabel="close"
             hideSubmitButton
           >
-            <Link to={`/${spaceId || data.space.id}/assessments/1/assessmentsettings/${createdKitId}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/${spaceId || data.space?.id}/assessments/1/assessmentsettings/${createdKitId}`} style={{ textDecoration: 'none' }}>
               <Button variant="contained">
                 <Trans i18nKey="assessmentSettings" />
               </Button>
             </Link>
           </CEDialogActions>
-        </Box>
+        </FormProviderWithForm>
       )}
     </CEDialog>
   );
