@@ -30,6 +30,7 @@ interface IAutocompleteAsyncFieldProps
     RegisterOptions<any, any>,
     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
   >;
+  filterFields?: string[];
 }
 
 const AutocompleteAsyncField = (
@@ -43,6 +44,7 @@ const AutocompleteAsyncField = (
     required = false,
     hasAddBtn = false,
     editable = false,
+    filterFields = ["title"],
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -65,6 +67,7 @@ const AutocompleteAsyncField = (
             defaultValue={defaultValue}
             editable={editable}
             hasAddBtn={hasAddBtn}
+            filterFields={filterFields}
           />
         );
       }}
@@ -84,6 +87,8 @@ interface IAutocompleteAsyncFieldBase
   searchOnType?: boolean;
   editable?: boolean;
   hasAddBtn?: boolean;
+  filterFields?: string[];
+  filterOptionsByProperty?: (option: any) => boolean;
 }
 
 const AutocompleteBaseField = (
@@ -96,7 +101,7 @@ const AutocompleteBaseField = (
     helperText,
     label,
     getOptionLabel = (option) =>
-      typeof option === "string" ? option : option?.title || null,
+      typeof option === "string" ? option : option?.[filterFields[0]] || null,
     filterSelectedOption = (options: readonly any[], value: any): any[] =>
       value
         ? options.filter((option) => option?.id != value?.id)
@@ -115,6 +120,8 @@ const AutocompleteBaseField = (
     hasAddBtn,
     searchOnType = true,
     multiple,
+    filterFields = ["title"],
+    filterOptionsByProperty = () => true,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -153,12 +160,11 @@ const AutocompleteBaseField = (
   };
 
   useEffect(() => {
-    console.log(options);
     if (!searchOnType && !isFirstFetchRef.current) {
       return;
     }
 
-    if (getOptionLabel(value) == inputValue) {
+    if (getOptionLabel(value) === inputValue) {
       fetch("");
     } else {
       fetch(inputValue);
@@ -177,6 +183,18 @@ const AutocompleteBaseField = (
       active = false;
     };
   }, [loaded]);
+
+  const getFilteredOptions = (options: any[], params: any) => {
+    return options
+      .filter(filterOptionsByProperty)
+      .filter((option) =>
+        filterFields.some((field) =>
+          String(option[field])
+            ?.toLowerCase()
+            ?.includes(params.inputValue.toLowerCase())
+        )
+      );
+  };
 
   return (
     <Autocomplete
@@ -208,11 +226,7 @@ const AutocompleteBaseField = (
       includeInputInList
       filterSelectedOptions={true}
       filterOptions={(options, params) => {
-        const filtered = options.filter((option) =>
-          getOptionLabel(option)
-            .toLowerCase()
-            .includes(params.inputValue.toLowerCase())
-        );
+        const filtered = getFilteredOptions(options, params);
 
         if (
           params.inputValue !== "" &&
@@ -264,7 +278,7 @@ const AutocompleteBaseField = (
             </LoadingButton>
           </li>
         ) : (
-          <li {...props}>{option.title}</li>
+          <li {...props}>{option?.[filterFields[0]]}</li>
         )
       }
       noOptionsText={

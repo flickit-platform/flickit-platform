@@ -225,6 +225,7 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchSpaces(args, config),
   });
+  console.log(queryData)
 
   return (
     <AutocompleteAsyncField
