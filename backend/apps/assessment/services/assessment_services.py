@@ -65,3 +65,11 @@ def assessments_invite_user(request, assessment_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def assessment_invitees(request, assessment_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/invitees',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
