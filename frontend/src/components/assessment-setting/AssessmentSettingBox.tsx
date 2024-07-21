@@ -284,7 +284,6 @@ export const AssessmentSettingMemberBox = (props: {
       id: "email",
       label: "Email",
       minWidth: "28vw",
-      display: "none",
       position: "center",
     },
     {
@@ -786,8 +785,8 @@ export const AssessmentSettingMemberBox = (props: {
                         align={column.align}
                         sx={{
                           minWidth: {
-                            xs: "8.1rem",
-                            sm: "12rem",
+                            xs: "10rem",
+                            sm: "10rem",
                             md: column.minWidth,
                           },
                           textAlign: { xs: column.position, lg: "center" },
@@ -824,7 +823,6 @@ export const AssessmentSettingMemberBox = (props: {
                           >
                             <Box
                               sx={{
-                                display: { xs: "none", md: "flex" },
                                 justifyContent: "center",
                                 width: { xs: "5rem", md: "20vw" },
                               }}
