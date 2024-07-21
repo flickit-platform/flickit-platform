@@ -68,3 +68,13 @@ class EvidenceAttachmentsApi(APIView):
     def get(self, request, evidence_id):
         result = evidence_services.evidence_list_attachments(request, evidence_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class EvidenceAttachmentApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, evidence_id, attachment_id):
+        result = evidence_services.evidence_delete_attachment(request, evidence_id, attachment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
