@@ -184,6 +184,7 @@ const AddMemberDialog = (props: {
       sx={{
         ".MuiDialog-paper": {
           borderRadius: "32px",
+          maxWidth: "800px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",
@@ -250,7 +251,7 @@ const AddMemberDialog = (props: {
           >
             <Trans i18nKey={"add"} />
           </Typography>
-          <Box width="40%">
+          <Box width="46%">
             <FormProviderWithForm formMethods={formMethods}>
               <EmailField
                 memberOfSpace={memberOfSpace}
@@ -527,8 +528,19 @@ const AddMemberDialog = (props: {
           </div>
         </Box>
         {addedEmailType !== EUserType.DEFAULT && (
-          <Box>
-            <Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              backgroundColor: "rgba(255, 249, 196, 0.31)",
+              padding: 1,
+              borderRadius: 2,
+              marginInline: 4,
+              maxWidth: "80%",
+            }}
+          >
+            <InfoOutlinedIcon color="primary" sx={{ marginRight: 1 }} />
+            <Typography variant="bodyLarge" textAlign="left">
               {addedEmailType === EUserType.EXISTED ? (
                 <Trans i18nKey={"emailExistedInApp"} />
               ) : (
