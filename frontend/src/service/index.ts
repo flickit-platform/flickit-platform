@@ -124,6 +124,25 @@ export const createService = (
         config
       );
     },
+    inviteMemberToAssessment(
+      args: { assessmentId: any, email: any, roleId: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { assessmentId, email, roleId } = args ?? {};
+
+      return axios.post(`/api/v1/assessments/${assessmentId}/invite/`, { email, roleId },
+        {
+          ...(config ?? {}),
+        });
+    },
+    loadUserByEmail(args: { email: string },
+      config: AxiosRequestConfig<any> | undefined) {
+      const { email } = args ?? {};
+      return axios.get(
+        `/api/v1/users/email/${email}/`,
+        config
+      );
+    },
     setCurrentSpace(
       { spaceId }: { spaceId: string | number },
       config: AxiosRequestConfig<any> | undefined
@@ -140,13 +159,13 @@ export const createService = (
       );
     },
     deleteSpaceInvite(
-          { inviteId }: { inviteId: string },
-           config: AxiosRequestConfig<any> | undefined
-      ) {
-          return axios.delete(
+      { inviteId }: { inviteId: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.delete(
         `/api/v1/space-invitations/${inviteId}/`,
-              config
-       );
+        config
+      );
     },
     fetchSpaceMembers(
       { spaceId }: { spaceId: string },
@@ -169,10 +188,8 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${
-          assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${
-          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -1009,15 +1026,15 @@ export const createService = (
       const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-            description,
-            type,
-          })
+          description,
+          type,
+        })
         : axios.post(`/api/v1/evidences/`, {
-            assessmentId: assessmentId,
-            questionId: questionId,
-            type: type,
-            description,
-          });
+          assessmentId: assessmentId,
+          questionId: questionId,
+          type: type,
+          description,
+        });
     },
     deleteEvidence(
       args: { id: TId },

@@ -70,30 +70,30 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       type === "update"
         ? await service.updateAssessment(
+          {
+            id: assessmentId,
+            data: {
+              title,
+              colorId: color,
+            },
+          },
+          { signal: abortController.signal }
+        )
+        : await service
+          .createAssessment(
             {
-              id: assessmentId,
               data: {
-                title,
+                spaceId: spaceId || space?.id,
+                assessmentKitId: assessment_kit?.id,
+                title: title,
                 colorId: color,
               },
             },
             { signal: abortController.signal }
           )
-        : await service
-            .createAssessment(
-              {
-                data: {
-                  spaceId: spaceId || space?.id,
-                  assessmentKitId: assessment_kit?.id,
-                  title: title,
-                  colorId: color,
-                },
-              },
-              { signal: abortController.signal }
-            )
-            .then((res: any) => {
-              setCreatedKitId(res.data?.id);
-            });
+          .then((res: any) => {
+            setCreatedKitId(res.data?.id);
+          });
       setLoading(false);
       setSubmittedTitle(title);
       setIsSubmitted(true);
@@ -185,9 +185,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             hideSubmitButton
           >
             <Link
-              to={`/${
-                spaceId || data.space?.id
-              }/assessments/1/assessmentsettings/${createdKitId}`}
+              to={`/${spaceId || data.space?.id
+                }/assessments/1/assessmentsettings/${createdKitId}`}
               style={{ textDecoration: "none" }}
             >
               <Button variant="contained">
@@ -236,6 +235,17 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchSpaces(args, config),
   });
+  const createSpaceQueryData = useQuery({
+    service: (args, config) => service.createSpace(args, config),
+    runOnMount: false,
+  });
+
+  const createItemQuery = async (inputValue: any) => {
+    const response = await createSpaceQueryData.query({ title: inputValue });
+    const newOption = { title: inputValue, id: response.id }
+    return newOption;
+  };
+
 
   return (
     <AutocompleteAsyncField
@@ -247,6 +257,7 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
       label={<Trans i18nKey="space" />}
       data-cy="space"
       hasAddBtn={true}
+      createItemQuery={createItemQuery}
     />
   );
 };

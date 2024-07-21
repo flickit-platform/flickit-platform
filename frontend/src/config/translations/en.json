@@ -84,7 +84,7 @@
   "overallInsight": "{{title}} Overall Insights",
   "technicalDueDiligence": "Technical Due Diligence Report Of ",
   "mostSignificantStrengths": "Most significant strengths",
-  "mostSignificantWeaknesses": "Most significant weaknesses",
+  "mostSignificantWeaknesses": "Requires Improvement",
   "subjects": "Subjects",
   "readAbout": "Read about",
   "YourStatusIs": "Your {{title}} status is",
@@ -422,6 +422,6 @@
   "spaceOwnerRoleIsNotEditable": "Space owner role isn't editable.",
   "overallStatusDetails": "You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
   "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes below.",
-  "successCreatedAssessmentMessage": "This assessment is currently private.If you wish to make it visible to others, please visit the settings page.",
-  "successCreatedAssessmentTitle": "{{title}} created successfully."
+  "successCreatedAssessmentMessage": "For now, you're the only one who can see this assessment. You can grant access to others via the setting page.",
+  "successCreatedAssessmentTitle": "The {{title}} created successfully"
 }
