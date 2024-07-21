@@ -29,6 +29,11 @@ export enum EUserInfo {
   "NAME" = "displayName",
   "EMAIL" = "email",
 }
+export enum EUserType {
+  "DEFAULT" = "default",
+  "NONE" = "none",
+  "EXISTED" = "existed",
+}
 
 const AddMemberDialog = (props: {
   expanded: boolean;
@@ -55,11 +60,20 @@ const AddMemberDialog = (props: {
     fetchAssessmentsUserListRoles,
   } = props;
 
+  const [addedEmailType, setAddedEmailType] = useState<string>(
+    EUserType.DEFAULT
+  );
   const [memberOfSpace, setMemberOfSpace] = useState<any[]>([]);
-  const [memberSelected, setMemberSelected] = useState<any>("");
-  const [roleSelected, setRoleSelected] = useState({ id: 0, title: "" });
+  const [memberSelectedId, setMemberSelectedId] = useState<any>("");
+  const [memberSelectedEmail, setMemberSelectedEmail] = useState<any>("");
+  const [roleSelected, setRoleSelected] = useState({ id: 0, title: "Viewer" });
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
+
+  const inviteMemberToAssessment = useQuery({
+    service: (args, config) => service.inviteMemberToAssessment(args, config),
+    runOnMount: false,
+  });
 
   const spaceMembersQueryData = useQuery({
     service: (args, config) => service.fetchSpaceMembers({ spaceId }, config),
@@ -67,7 +81,11 @@ const AddMemberDialog = (props: {
 
   const addRoleMemberQueryData = useQuery({
     service: (
-      args = { assessmentId, userId: memberSelected, roleId: roleSelected.id },
+      args = {
+        assessmentId,
+        userId: memberSelectedId,
+        roleId: roleSelected.id,
+      },
       config
     ) => service.addRoleMember(args, config),
     runOnMount: false,
@@ -79,7 +97,7 @@ const AddMemberDialog = (props: {
     const {
       target: { value },
     } = event;
-    setMemberSelected(value);
+    setMemberSelectedId(value);
   };
   const handleChangeRole = (event: any) => {
     const {
@@ -93,6 +111,7 @@ const AddMemberDialog = (props: {
   useEffect(() => {
     (async () => {
       try {
+        setAddedEmailType(EUserType.DEFAULT);
         const { data } = await spaceMembersQueryData;
         if (data) {
           const { items } = data;
@@ -110,13 +129,19 @@ const AddMemberDialog = (props: {
 
   const closeDialog = () => {
     onClose();
-    setMemberSelected("");
-    setRoleSelected({ id: 0, title: "" });
+    setMemberSelectedId("");
+    setRoleSelected({ id: 0, title: "Viewer" });
   };
 
   const onConfirm = async (e: any) => {
     try {
-      await addRoleMemberQueryData.query();
+      addedEmailType === EUserType.NONE
+        ? await inviteMemberToAssessment.query({
+            email: memberSelectedEmail,
+            assessmentId,
+            roleId: roleSelected.id,
+          })
+        : await addRoleMemberQueryData.query();
       // await fetchAssessmentsUserListRoles()
       setChangeData((prev: boolean) => !prev);
       closeDialog();
@@ -135,8 +160,12 @@ const AddMemberDialog = (props: {
     const updateMemberSelected = async () => {
       try {
         const emailValue = await formMethods.getValues("email");
+        setMemberSelectedEmail(emailValue.email);
         if (emailValue?.id) {
-          setMemberSelected(emailValue.id);
+          setMemberSelectedId(emailValue.id);
+          if (addedEmailType !== EUserType.EXISTED) {
+            setAddedEmailType(EUserType.DEFAULT);
+          }
         }
       } catch (error) {
         console.error("Failed to get form value", error);
@@ -223,7 +252,13 @@ const AddMemberDialog = (props: {
           </Typography>
           <Box width="40%">
             <FormProviderWithForm formMethods={formMethods}>
-              <EmailField memberOfSpace={memberOfSpace} assessmentId={assessmentId} roleSelected={roleSelected} />
+              <EmailField
+                memberOfSpace={memberOfSpace}
+                assessmentId={assessmentId}
+                roleSelected={roleSelected}
+                addedEmailType={addedEmailType}
+                setAddedEmailType={setAddedEmailType}
+              />
             </FormProviderWithForm>
             {/* <FormControl
               sx={{
@@ -375,13 +410,13 @@ const AddMemberDialog = (props: {
                   borderRadius: "0.5rem",
                   "&.MuiOutlinedInput-notchedOutline": { border: 0 },
                   "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                  {
-                    border: 0,
-                  },
+                    {
+                      border: 0,
+                    },
                   "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    border: 0,
-                  },
+                    {
+                      border: 0,
+                    },
                   ".MuiSvgIcon-root": {
                     fill: "#2974B4 !important",
                   },
@@ -438,13 +473,13 @@ const AddMemberDialog = (props: {
                           "&.MuiMenuItem-root:hover": {
                             ...(roleSelected?.title == role.title
                               ? {
-                                backgroundColor: "#9CCAFF",
-                                color: "#004F83",
-                              }
+                                  backgroundColor: "#9CCAFF",
+                                  color: "#004F83",
+                                }
                               : {
-                                backgroundColor: "#EFEDF0",
-                                color: "#1B1B1E",
-                              }),
+                                  backgroundColor: "#EFEDF0",
+                                  color: "#1B1B1E",
+                                }),
                           },
                           background:
                             roleSelected?.title == role.title ? "#9CCAFF" : "",
@@ -491,6 +526,17 @@ const AddMemberDialog = (props: {
             </FormControl>
           </div>
         </Box>
+        {addedEmailType !== EUserType.DEFAULT && (
+          <Box>
+            <Typography>
+              {addedEmailType === EUserType.EXISTED ? (
+                <Trans i18nKey={"emailExistedInApp"} />
+              ) : (
+                <Trans i18nKey={"emailDoesntExistedInApp"} />
+              )}
+            </Typography>
+          </Box>
+        )}
         <Box
           sx={{
             width: "100%",
@@ -543,7 +589,20 @@ const AddMemberDialog = (props: {
     </Dialog>
   );
 };
-const EmailField = ({ memberOfSpace, assessmentId, roleSelected }: { memberOfSpace: any, assessmentId: any, roleSelected: any }) => {
+const EmailField = ({
+  memberOfSpace,
+  assessmentId,
+  roleSelected,
+  addedEmailType,
+  setAddedEmailType,
+}: {
+  memberOfSpace: any;
+  assessmentId: any;
+  roleSelected: any;
+  addedEmailType: any;
+  setAddedEmailType: any;
+}) => {
+  const [inputValue, setInputValue] = useState("");
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
   const queryData = useConnectAutocompleteField({
@@ -555,15 +614,20 @@ const EmailField = ({ memberOfSpace, assessmentId, roleSelected }: { memberOfSpa
     runOnMount: false,
   });
   const addMemberToSpaceQuery = useQuery({
-    service: (args, config) => service.addMemberToSpace(args, config), runOnMount: false,
-  })
+    service: (args, config) => service.addMemberToSpace(args, config),
+    runOnMount: false,
+  });
   const inviteMemberToAssessment = useQuery({
-    service: (args, config) => service.inviteMemberToAssessment(args, config), runOnMount: false,
-  })
+    service: (args, config) => service.inviteMemberToAssessment(args, config),
+    runOnMount: false,
+  });
+
   const createItemQuery = async (inputValue: any) => {
     const response = await loadUserByEmail.query({ email: inputValue });
-    response.id ? await addMemberToSpaceQuery.query({ email: inputValue, spaceId }) : inviteMemberToAssessment.query({ email: inputValue, assessmentId, roleId: roleSelected.id })
-    const newOption = { email: inputValue, id: response.id }
+    response.id
+      ? setAddedEmailType(EUserType.EXISTED)
+      : setAddedEmailType(EUserType.NONE);
+    const newOption = { email: inputValue, id: response.id };
     return newOption;
   };
 

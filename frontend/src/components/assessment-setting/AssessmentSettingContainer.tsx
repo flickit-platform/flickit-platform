@@ -94,7 +94,7 @@ const AssessmentSettingContainer = () => {
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentSettingTitle pathInfo={pathInfo} />
-            <Grid container columns={12}  mb={5}>
+            <Grid container columns={12} mb={5}>
               <Grid item sm={12} xs={12}>
                 <Box
                   sx={{ ...styles.centerV }}
@@ -132,6 +132,7 @@ const AssessmentSettingContainer = () => {
                   openModal={handleClickOpen}
                   openRemoveModal={handleOpenRemoveModal}
                   setChangeData={setChangeData}
+                  changeData={changeData}
                 />
               </Grid>
             </Grid>
