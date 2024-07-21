@@ -223,7 +223,7 @@ const AddMemberDialog = (props: {
           </Typography>
           <Box width="40%">
             <FormProviderWithForm formMethods={formMethods}>
-              <EmailField memberOfSpace={memberOfSpace} assessmentId={assessmentId} />
+              <EmailField memberOfSpace={memberOfSpace} assessmentId={assessmentId} roleSelected={roleSelected} />
             </FormProviderWithForm>
             {/* <FormControl
               sx={{
@@ -543,7 +543,7 @@ const AddMemberDialog = (props: {
     </Dialog>
   );
 };
-const EmailField = ({ memberOfSpace, assessmentId }: { memberOfSpace: any, assessmentId: any }) => {
+const EmailField = ({ memberOfSpace, assessmentId, roleSelected }: { memberOfSpace: any, assessmentId: any, roleSelected: any }) => {
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
   const queryData = useConnectAutocompleteField({
@@ -562,7 +562,7 @@ const EmailField = ({ memberOfSpace, assessmentId }: { memberOfSpace: any, asses
   })
   const createItemQuery = async (inputValue: any) => {
     const response = await loadUserByEmail.query({ email: inputValue });
-    response.id ? await addMemberToSpaceQuery.query({ email: inputValue, spaceId }) : inviteMemberToAssessment.query({ assessmentId })
+    response.id ? await addMemberToSpaceQuery.query({ email: inputValue, spaceId }) : inviteMemberToAssessment.query({ email: inputValue, assessmentId, roleId: roleSelected.id })
     const newOption = { email: inputValue, id: response.id }
     return newOption;
   };

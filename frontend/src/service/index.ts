@@ -125,14 +125,15 @@ export const createService = (
       );
     },
     inviteMemberToAssessment(
-      args: { assessmentId: any },
+      args: { assessmentId: any, email: any, roleId: any },
       config: AxiosRequestConfig<any> | undefined
     ) {
-      const { assessmentId } = args ?? {};
+      const { assessmentId, email, roleId } = args ?? {};
 
-      return axios.post(`/api/v1/assessments/${assessmentId}/invite/`, {
-        ...(config ?? {}),
-      });
+      return axios.post(`/api/v1/assessments/${assessmentId}/invite/`, { email, roleId },
+        {
+          ...(config ?? {}),
+        });
     },
     loadUserByEmail(args: { email: string },
       config: AxiosRequestConfig<any> | undefined) {
