@@ -135,6 +135,12 @@ export const createService = (
           ...(config ?? {}),
         });
     },
+    fetchAssessmentMembersInvitees(
+      { assessmentId }: { assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/assessments/${assessmentId}/invitees/`, config);
+    },
     loadUserByEmail(args: { email: string },
       config: AxiosRequestConfig<any> | undefined) {
       const { email } = args ?? {};
