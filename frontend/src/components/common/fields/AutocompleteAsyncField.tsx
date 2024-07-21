@@ -31,6 +31,7 @@ interface IAutocompleteAsyncFieldProps
     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
   >;
   filterFields?: string[];
+  createItemQuery?: any;
 }
 
 const AutocompleteAsyncField = (
@@ -45,6 +46,7 @@ const AutocompleteAsyncField = (
     hasAddBtn = false,
     editable = false,
     filterFields = ["title"],
+    createItemQuery,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -68,6 +70,7 @@ const AutocompleteAsyncField = (
             editable={editable}
             hasAddBtn={hasAddBtn}
             filterFields={filterFields}
+            createItemQuery={createItemQuery}
           />
         );
       }}
@@ -89,6 +92,7 @@ interface IAutocompleteAsyncFieldBase
   hasAddBtn?: boolean;
   filterFields?: string[];
   filterOptionsByProperty?: (option: any) => boolean;
+  createItemQuery?: any;
 }
 
 const AutocompleteBaseField = (
@@ -122,6 +126,7 @@ const AutocompleteBaseField = (
     multiple,
     filterFields = ["title"],
     filterOptionsByProperty = () => true,
+    createItemQuery,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -150,8 +155,7 @@ const AutocompleteBaseField = (
   );
   const createSpaceQuery = async (option: any) => {
     try {
-      const response = await createSpaceQueryData.query({ title: inputValue });
-      const newOption = { title: inputValue, id: response.id };
+      const newOption: any = await createItemQuery(inputValue)
       setOptions((prevOptions) => [...prevOptions, newOption]);
       onChange(newOption);
     } catch (e) {
@@ -272,7 +276,7 @@ const AutocompleteBaseField = (
             <LoadingButton
               fullWidth
               onClick={createSpaceQuery}
-              sx={{ justifyContent: "start" }}
+              sx={{ justifyContent: "start", textTransform: "none" }}
             >
               Add "{option.inputValue}"
             </LoadingButton>
