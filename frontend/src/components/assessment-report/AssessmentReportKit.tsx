@@ -86,31 +86,24 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
           justifyContent="space-between"
           width="100%"
         >
-          <Box
-            display="flex"
-            alignItems="center"
-            gap="4px"
-            justifyContent="flex-start"
-          >
-            <Typography color="#243342" variant="titleMedium" fontWeight={400}>
-              <Trans i18nKey="thisAssessmentIsUsing" />
-            </Typography>
-            <Typography
+          <Typography variant="titleMedium" fontWeight={400} color="#243342">
+            <Trans i18nKey="thisAssessmentIsUsing" />{" "}
+            <Box
               component={Link}
               to={`/assessment-kits/${assessmentKit?.id}`}
-              color="#8B0035"
-              variant="titleLarge"
               sx={{
                 textDecoration: "none",
-                mt:-0.25
+                color: "#8B0035",
+                fontSize: "inherit",
+                fontWeight: 500,
               }}
             >
-              {assessmentKit.title}
-            </Typography>
-            <Typography color="#243342" variant="titleMedium" fontWeight={400}>
-              <Trans i18nKey="kit" />.
-            </Typography>
-          </Box>
+              <Typography variant="titleLarge">
+                {assessmentKit.title}
+              </Typography>
+            </Box>{" "}
+            <Trans i18nKey="kit" />.
+          </Typography>
           <Box
             display="flex"
             alignItems="center"

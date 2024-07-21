@@ -18,6 +18,7 @@ import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { filter } from "lodash";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   IAutocompleteAsyncFieldBase,
@@ -250,7 +251,7 @@ const AutocompleteBaseField = (
       onChange={(event: any, newValue: any | null) => {
         if (newValue && newValue.inputValue) {
           // handle the case where the "Add" button is clicked
-          onChange({ title: newValue.inputValue });
+          onChange({ [filterFields[0]]: newValue.inputValue });
         } else {
           onChange(newValue);
         }

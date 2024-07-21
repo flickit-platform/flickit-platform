@@ -223,7 +223,7 @@ const AddMemberDialog = (props: {
           </Typography>
           <Box width="40%">
             <FormProviderWithForm formMethods={formMethods}>
-              <EmailField memberOfSpace={memberOfSpace} />
+              <EmailField memberOfSpace={memberOfSpace} assessmentId={assessmentId} />
             </FormProviderWithForm>
             {/* <FormControl
               sx={{
@@ -375,13 +375,13 @@ const AddMemberDialog = (props: {
                   borderRadius: "0.5rem",
                   "&.MuiOutlinedInput-notchedOutline": { border: 0 },
                   "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
+                  {
+                    border: 0,
+                  },
                   "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
+                  {
+                    border: 0,
+                  },
                   ".MuiSvgIcon-root": {
                     fill: "#2974B4 !important",
                   },
@@ -438,13 +438,13 @@ const AddMemberDialog = (props: {
                           "&.MuiMenuItem-root:hover": {
                             ...(roleSelected?.title == role.title
                               ? {
-                                  backgroundColor: "#9CCAFF",
-                                  color: "#004F83",
-                                }
+                                backgroundColor: "#9CCAFF",
+                                color: "#004F83",
+                              }
                               : {
-                                  backgroundColor: "#EFEDF0",
-                                  color: "#1B1B1E",
-                                }),
+                                backgroundColor: "#EFEDF0",
+                                color: "#1B1B1E",
+                              }),
                           },
                           background:
                             roleSelected?.title == role.title ? "#9CCAFF" : "",
@@ -543,13 +543,29 @@ const AddMemberDialog = (props: {
     </Dialog>
   );
 };
-const EmailField = ({ memberOfSpace }: { memberOfSpace: any }) => {
+const EmailField = ({ memberOfSpace, assessmentId }: { memberOfSpace: any, assessmentId: any }) => {
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
   const queryData = useConnectAutocompleteField({
     service: (args, config) => service.fetchSpaceMembers({ spaceId }, config),
     accessor: "items",
   });
+  const loadUserByEmail = useQuery({
+    service: (args, config) => service.loadUserByEmail(args, config),
+    runOnMount: false,
+  });
+  const addMemberToSpaceQuery = useQuery({
+    service: (args, config) => service.addMemberToSpace(args, config), runOnMount: false,
+  })
+  const inviteMemberToAssessment = useQuery({
+    service: (args, config) => service.inviteMemberToAssessment(args, config), runOnMount: false,
+  })
+  const createItemQuery = async (inputValue: any) => {
+    const response = await loadUserByEmail.query({ email: inputValue });
+    response.id ? await addMemberToSpaceQuery.query({ email: inputValue, spaceId }) : inviteMemberToAssessment.query({ assessmentId })
+    const newOption = { email: inputValue, id: response.id }
+    return newOption;
+  };
 
   return (
     <AutocompleteAsyncField
@@ -566,6 +582,7 @@ const EmailField = ({ memberOfSpace }: { memberOfSpace: any }) => {
           (userListItem: any) => option.id === userListItem.id
         )
       }
+      createItemQuery={createItemQuery}
     />
   );
 };
