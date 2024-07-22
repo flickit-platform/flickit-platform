@@ -151,7 +151,6 @@ const AddMemberDialog = (props: {
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
-      closeDialog();
     }
   };
   const handleClick = async (e: any) => {

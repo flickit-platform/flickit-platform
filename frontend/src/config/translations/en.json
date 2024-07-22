@@ -95,7 +95,7 @@
   "enterEmailOfTheUserYouWantToAdd": "Enter email address of the user you want to add",
   "emailExistedInApp":"The user with the provided email is not a member of the assessment space. Assigning them a role will automatically add them to the space.",
   "emailDoesntExistedInApp":"No user with the provided email was found. An invitation letter will be sent to this email. Once the user registers, they will automatically become a member of the space and be granted access to this assessment.",
-  "addNewMember": "Add new member",
+  "addNewMember": "Add New Role",
   "members": "Members",
   "grantedRoles":"Granted Roles",
   "addRole":"Add Role",
