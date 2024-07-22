@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
@@ -24,6 +24,7 @@ import FormProviderWithForm from "../common/FormProviderWithForm";
 import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "../common/fields/AutocompleteAsyncField";
+import { LoadingButton } from "@mui/lab";
 
 export enum EUserInfo {
   "NAME" = "displayName",
@@ -91,6 +92,8 @@ const AddMemberDialog = (props: {
     runOnMount: false,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChangeMember = (
     event: SelectChangeEvent<typeof memberOfSpace>
   ) => {
@@ -151,6 +154,14 @@ const AddMemberDialog = (props: {
       closeDialog();
     }
   };
+  const handleClick = async (e: any) => {
+    setLoading(true);
+    try {
+      await onConfirm(e);
+    } finally {
+      setLoading(false);
+    }
+  };
   const ITEM_HEIGHT = 59;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = SelectHeight(ITEM_HEIGHT, ITEM_PADDING_TOP);
@@ -174,6 +185,27 @@ const AddMemberDialog = (props: {
 
     updateMemberSelected();
   }, [formMethods.watch("email")]);
+
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const handleEnterKeyDown = (event: any) => {
+      if (event.key === "Enter" && buttonRef.current) {
+        const openDropdowns = document.querySelectorAll(
+          ".MuiAutocomplete-option"
+        );
+        if (openDropdowns.length === 0) {
+          buttonRef.current.click();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleEnterKeyDown, true);
+
+    return () => {
+      window.removeEventListener("keydown", handleEnterKeyDown, true);
+    };
+  }, []);
+
   return (
     <Dialog
       open={expanded}
@@ -394,7 +426,7 @@ const AddMemberDialog = (props: {
                 // width: '100%',
                 textAlign: "center",
                 padding: "6px, 12px, 6px, 12px",
-                minWidth: { xs: 90, sm: 150 },
+                minWidth: { xs: 120, sm: 200 },
               }}
             >
               <Select
@@ -576,26 +608,22 @@ const AddMemberDialog = (props: {
           >
             {cancelText}
           </Button>
-          <Button
+          <LoadingButton
             sx={{
               fontSize: { xs: "0.7rem", sm: "1rem" },
               fontWeight: 700,
-              "&.MuiButton-root": {
-                color: "#EDFCFC",
-                border: "1px solid #004F83",
-                background: "#004F83",
-                borderRadius: "100px",
-              },
-              "&.MuiButton-root:hover": {
-                background: "#004F83",
-                border: "1px solid #004F83",
-              },
+              color: "#EDFCFC",
+              border: "1px solid #004F83",
+              background: "#004F83",
+              borderRadius: "100px",
             }}
             variant="contained"
-            onClick={onConfirm}
+            onClick={handleClick}
+            loading={loading}
+            ref={buttonRef}
           >
             {confirmText}
-          </Button>
+          </LoadingButton>
         </Box>
       </DialogContent>
     </Dialog>
@@ -614,7 +642,7 @@ const EmailField = ({
   addedEmailType: any;
   setAddedEmailType: any;
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(null);
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
   const queryData = useConnectAutocompleteField({
@@ -625,41 +653,45 @@ const EmailField = ({
     service: (args, config) => service.loadUserByEmail(args, config),
     runOnMount: false,
   });
-  const addMemberToSpaceQuery = useQuery({
-    service: (args, config) => service.addMemberToSpace(args, config),
-    runOnMount: false,
-  });
-  const inviteMemberToAssessment = useQuery({
-    service: (args, config) => service.inviteMemberToAssessment(args, config),
-    runOnMount: false,
-  });
+
+  const [error, setError] = useState(undefined);
 
   const createItemQuery = async (inputValue: any) => {
-    const response = await loadUserByEmail.query({ email: inputValue });
-    response.id
-      ? setAddedEmailType(EUserType.EXISTED)
-      : setAddedEmailType(EUserType.NONE);
-    const newOption = { email: inputValue, id: response.id };
-    return newOption;
+    try {
+      setError(undefined);
+      const response = await loadUserByEmail.query({ email: inputValue });
+      response.id
+        ? setAddedEmailType(EUserType.EXISTED)
+        : setAddedEmailType(EUserType.NONE);
+      const newOption = { email: inputValue, id: response.id };
+      return newOption;
+    } catch (err: any) {
+      setError(err);
+      throw err;
+    }
   };
 
   return (
-    <AutocompleteAsyncField
-      {...queryData}
-      name={EUserInfo.EMAIL}
-      required={true}
-      label={<Trans i18nKey="email" />}
-      data-cy={EUserInfo.EMAIL}
-      hasAddBtn={true}
-      filterFields={[EUserInfo.EMAIL, EUserInfo.NAME]}
-      filterOptionsByProperty={(option: any) =>
-        !option.isOwner &&
-        !memberOfSpace.some(
-          (userListItem: any) => option.id === userListItem.id
-        )
-      }
-      createItemQuery={createItemQuery}
-    />
+    <Box mt={error ? "20px" : "0px"}>
+      <AutocompleteAsyncField
+        {...queryData}
+        name={EUserInfo.EMAIL}
+        required={true}
+        label={<Trans i18nKey="email" />}
+        data-cy={EUserInfo.EMAIL}
+        hasAddBtn={true}
+        filterFields={[EUserInfo.EMAIL, EUserInfo.NAME]}
+        filterOptionsByProperty={(option) =>
+          !option.isOwner &&
+          !memberOfSpace.some(
+            (userListItem: any) => option.id === userListItem.id
+          )
+        }
+        createItemQuery={createItemQuery}
+        errorObject={error}
+        setError={setError}
+      />
+    </Box>
   );
 };
 
