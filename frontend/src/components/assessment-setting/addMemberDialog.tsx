@@ -670,6 +670,10 @@ const EmailField = ({
     }
   };
 
+  useEffect(() => {
+    setAddedEmailType(EUserType.DEFAULT);
+  }, [error]);
+
   return (
     <Box mt={error ? "20px" : "0px"}>
       <AutocompleteAsyncField
