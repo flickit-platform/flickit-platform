@@ -33,6 +33,7 @@ interface IAutocompleteAsyncFieldProps
   >;
   filterFields?: string[];
   createItemQuery?: any;
+  setError?: any;
 }
 
 const AutocompleteAsyncField = (
@@ -48,6 +49,7 @@ const AutocompleteAsyncField = (
     editable = false,
     filterFields = ["title"],
     createItemQuery,
+    setError,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -72,6 +74,7 @@ const AutocompleteAsyncField = (
             hasAddBtn={hasAddBtn}
             filterFields={filterFields}
             createItemQuery={createItemQuery}
+            setError={setError}
           />
         );
       }}
@@ -94,6 +97,7 @@ interface IAutocompleteAsyncFieldBase
   filterFields?: string[];
   filterOptionsByProperty?: (option: any) => boolean;
   createItemQuery?: any;
+  setError?: any;
 }
 
 const AutocompleteBaseField = (
@@ -128,6 +132,7 @@ const AutocompleteBaseField = (
     filterFields = ["title"],
     filterOptionsByProperty = () => true,
     createItemQuery,
+    setError,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -156,7 +161,8 @@ const AutocompleteBaseField = (
   );
   const createSpaceQuery = async (option: any) => {
     try {
-      const newOption: any = await createItemQuery(inputValue)
+      setOpen(false);
+      const newOption: any = await createItemQuery(inputValue);
       setOptions((prevOptions) => [...prevOptions, newOption]);
       onChange(newOption);
     } catch (e) {
@@ -201,6 +207,35 @@ const AutocompleteBaseField = (
       );
   };
 
+  const loadingButtonRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        if (loadingButtonRef.current && inputValue && hasAddBtn) {
+          loadingButtonRef.current.click();
+          setOpen(false);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [inputValue, hasAddBtn]);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    // setOpen(true);
+  };
+
   return (
     <Autocomplete
       {...restFields}
@@ -208,6 +243,9 @@ const AutocompleteBaseField = (
       value={value || (multiple ? undefined : null)}
       multiple={multiple}
       loading={loading}
+      open={open}
+      onOpen={handleOpen}
+      onClose={handleClose}
       loadingText={
         options.length > 5 ? <LoadingComponent options={options} /> : undefined
       }
@@ -248,16 +286,21 @@ const AutocompleteBaseField = (
 
         return filtered;
       }}
+      onBlur={() => {
+        setOpen(false);
+      }}
       onChange={(event: any, newValue: any | null) => {
         if (newValue && newValue.inputValue) {
           // handle the case where the "Add" button is clicked
           onChange({ [filterFields[0]]: newValue.inputValue });
         } else {
           onChange(newValue);
+          setOpen(false);
         }
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
+        setError(undefined);
       }}
       renderInput={(params) => (
         <TextField
@@ -266,8 +309,12 @@ const AutocompleteBaseField = (
           label={label}
           fullWidth
           inputRef={ref}
-          error={hasError}
-          helperText={(errorMessage as ReactNode) || helperText}
+          error={hasError || errorObject?.response?.data.message}
+          helperText={
+            (errorMessage as ReactNode) ||
+            errorObject?.response?.data.message ||
+            helperText
+          }
           name={name}
         />
       )}
@@ -278,6 +325,7 @@ const AutocompleteBaseField = (
               fullWidth
               onClick={createSpaceQuery}
               sx={{ justifyContent: "start", textTransform: "none" }}
+              ref={loadingButtonRef}
             >
               Add "{option.inputValue}"
             </LoadingButton>

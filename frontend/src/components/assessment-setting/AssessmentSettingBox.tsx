@@ -283,14 +283,14 @@ export const AssessmentSettingMemberBox = (props: {
     {
       id: "email",
       label: "Email",
-      minWidth: "28vw",
+      minWidth: "30vw",
       position: "center",
     },
     {
       id: "role",
       label: "Role",
       align: "right",
-      minWidth: "28vw",
+      minWidth: "30vw",
       position: "center",
     },
   ];
@@ -348,7 +348,7 @@ export const AssessmentSettingMemberBox = (props: {
             fontWeight={700}
             lineHeight={"normal"}
           >
-            <Trans i18nKey={`member`} />
+            <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
             sx={{
@@ -379,7 +379,7 @@ export const AssessmentSettingMemberBox = (props: {
                 fontSize: { xs: "0.7rem", sm: "0.85rem" },
               }}
             >
-              <Trans i18nKey={"addMember"} />
+              <Trans i18nKey={"addRole"} />
             </Typography>
           </Button>
         </Box>
@@ -814,7 +814,7 @@ export const AssessmentSettingMemberBox = (props: {
                           <TableCell
                             sx={{
                               display: "flex",
-                              justifyContent: "space-evenly",
+                              justifyContent: "center",
                               alignItems: "center",
                               border: "none",
                               gap: { xs: "0px", md: "1.3rem" },
@@ -823,8 +823,13 @@ export const AssessmentSettingMemberBox = (props: {
                           >
                             <Box
                               sx={{
+                                m: 1,
+                                textAlign: "center",
+                                display: "inline-flex",
                                 justifyContent: "center",
-                                width: { xs: "5rem", md: "20vw" },
+                                alignItems: "center",
+                                width: { xs: "10rem", md: "30vw" },
+
                               }}
                             >
                               <Typography
@@ -843,10 +848,10 @@ export const AssessmentSettingMemberBox = (props: {
                             <Box
                               sx={{
                                 display: "flex",
-                                justifyContent: "flex-end",
+                                justifyContent: "center",
                                 alignItems: "center",
                                 gap: { xs: "0px", md: ".7rem" },
-                                width: { xs: "10.1rem", md: "20vw" },
+                                width: { xs: "10rem", md: "28vw" },
                               }}
                             >
                               <FormControl
