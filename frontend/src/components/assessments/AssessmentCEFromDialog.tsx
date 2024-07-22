@@ -70,30 +70,30 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       type === "update"
         ? await service.updateAssessment(
-          {
-            id: assessmentId,
-            data: {
-              title,
-              colorId: color,
-            },
-          },
-          { signal: abortController.signal }
-        )
-        : await service
-          .createAssessment(
             {
+              id: assessmentId,
               data: {
-                spaceId: spaceId || space?.id,
-                assessmentKitId: assessment_kit?.id,
-                title: title,
+                title,
                 colorId: color,
               },
             },
             { signal: abortController.signal }
           )
-          .then((res: any) => {
-            setCreatedKitId(res.data?.id);
-          });
+        : await service
+            .createAssessment(
+              {
+                data: {
+                  spaceId: spaceId || space?.id,
+                  assessmentKitId: assessment_kit?.id,
+                  title: title,
+                  colorId: color,
+                },
+              },
+              { signal: abortController.signal }
+            )
+            .then((res: any) => {
+              setCreatedKitId(res.data?.id);
+            });
       setLoading(false);
       setSubmittedTitle(title);
       setIsSubmitted(true);
@@ -169,11 +169,16 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             <CheckmarkGif />
             <Typography variant="titleLarge">
               <Trans
-                i18nKey="successCreatedAssessmentTitle"
+                i18nKey="successCreatedAssessmentTitleFirstPart"
+                values={{ title: submittedTitle }}
+              />{" "}
+              <Typography variant="headlineMedium">{submittedTitle}</Typography>
+              <Trans
+                i18nKey="successCreatedAssessmentTitleSecondPart"
                 values={{ title: submittedTitle }}
               />
             </Typography>
-            <Typography variant="displaySmall">
+            <Typography variant="displaySmall" mt={2}>
               <Trans i18nKey="successCreatedAssessmentMessage" />
             </Typography>
           </Box>
@@ -185,8 +190,9 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             hideSubmitButton
           >
             <Link
-              to={`/${spaceId || data.space?.id
-                }/assessments/1/assessmentsettings/${createdKitId}`}
+              to={`/${
+                spaceId || data.space?.id
+              }/assessments/1/assessmentsettings/${createdKitId}`}
               style={{ textDecoration: "none" }}
             >
               <Button variant="contained">
@@ -242,10 +248,9 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
 
   const createItemQuery = async (inputValue: any) => {
     const response = await createSpaceQueryData.query({ title: inputValue });
-    const newOption = { title: inputValue, id: response.id }
+    const newOption = { title: inputValue, id: response.id };
     return newOption;
   };
-
 
   return (
     <AutocompleteAsyncField
