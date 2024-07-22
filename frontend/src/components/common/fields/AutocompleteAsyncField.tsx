@@ -210,7 +210,7 @@ const AutocompleteBaseField = (
   const loadingButtonRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     const handleKeyDown = (event: any) => {
-      if (event.key === "Enter") {
+      if (event?.key === "Enter") {
         event.preventDefault();
         console.log(inputValue);
 
@@ -302,7 +302,9 @@ const AutocompleteBaseField = (
       onInputChange={(event: any, newInputValue) => {
         if (event?.key === "Enter") return;
         setInputValue(newInputValue);
-        setError(undefined);
+        if (setError) {
+          setError(undefined);
+        }
       }}
       renderInput={(params) => (
         <TextField
