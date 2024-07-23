@@ -3,7 +3,7 @@ import { Trans } from "react-i18next";
 import {
   AssessmentKitInfoType,
   ExpertGroupDetails,
-  AssessmentKitStatsExpertGroup,
+  IExpertGroup,
   IAssessmentKitReportModel,
   PathInfo,
 } from "@types";
@@ -22,7 +22,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { calculateFontSize } from "@/utils/calculateFontSize";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
-  expertGroup: AssessmentKitStatsExpertGroup;
+  expertGroup: IExpertGroup;
   data: any;
   progress: number;
   questionCount: number;

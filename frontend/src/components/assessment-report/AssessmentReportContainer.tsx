@@ -19,6 +19,7 @@ import { styles } from "@styles";
 import MoreActions from "@common/MoreActions";
 import SettingsIcon from "@mui/icons-material/Settings";
 import useMenu from "@/utils/useMenu";
+import { ArticleRounded } from "@mui/icons-material";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -51,13 +52,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -113,14 +114,21 @@ const AssessmentReportContainer = (props: any) => {
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Box
-                    sx={{ py: "0.6rem" }}
-                    component={manageable ? Link : "div"}
-                    to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
-                  >
+                  <Box sx={{ py: "0.6rem" }}>
+                    <IconButton
+                      data-cy="more-action-btn"
+                      component={Link}
+                      to={`/${spaceId}/assessments/1/assessmentDocument/${assessmentId}`}
+                    >
+                      <ArticleRounded
+                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                      />
+                    </IconButton>
                     <IconButton
                       data-cy="more-action-btn"
                       disabled={!manageable}
+                      component={manageable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
                     >
                       <SettingsIcon
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}

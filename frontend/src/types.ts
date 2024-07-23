@@ -150,7 +150,7 @@ export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
-  index?: number;
+  index: number;
 }
 
 export interface IImage {
@@ -466,7 +466,7 @@ export interface ICompareResultModel {
 interface AssessmentKitStatsSubjects {
   title: string;
 }
-export interface AssessmentKitStatsExpertGroup {
+export interface IExpertGroup {
   id: number;
   title: string;
   picture?: string;
@@ -490,7 +490,8 @@ export interface IAssessmentKitReportModel {
   title: string;
   summary: string;
   maturityLevelCount: number;
-  expertGroup: AssessmentKitStatsExpertGroup;
+  expertGroup: IExpertGroup;
+  maturityLevels: IMaturityLevel[];
 }
 
 export interface IAssessmentReportModel {
@@ -547,7 +548,7 @@ export interface AssessmentKitStatsType {
   likes: number;
   assessmentCounts: number;
   subjects: AssessmentKitStatsSubjects[];
-  expertGroup: AssessmentKitStatsExpertGroup[];
+  expertGroup: IExpertGroup[];
 }
 export interface AssessmentKitDetailsType {
   maturityLevel: AssessmentKitDetailsMaturityLevel;
@@ -570,4 +571,25 @@ export interface RolesType {
     title: string;
     description: string
   }[]
+}
+
+
+export interface ISubject {
+  id: number;
+  title: string;
+  index: number;
+  description: string;
+  confidenceValue: number | null;
+  maturityLevel: IMaturityLevel;
+  attributes: IAttribute[];
+}
+
+interface IAssessmentPermissions {
+  manageable: boolean;
+}
+
+export interface IAssessmentResponse {
+  assessment: IAssessmentReportModel;
+  subjects: ISubject[];
+  assessmentPermissions: IAssessmentPermissions;
 }
