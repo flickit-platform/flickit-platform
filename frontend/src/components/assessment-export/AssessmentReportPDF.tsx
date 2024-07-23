@@ -8,6 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
+import { IMaturityLevel, ISubject } from "@/types";
 
 const styles = StyleSheet.create({
   page: {
@@ -223,7 +224,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
 
           {/* Table Body */}
           {assessment?.assessmentKit?.maturityLevels.map(
-            (maturityLevel, index) => (
+            (maturityLevel: IMaturityLevel, index: number) => (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
                 <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
@@ -245,9 +246,9 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
           <Text style={styles.titleLarge}>Evaluation Criteria</Text>
           <Text style={styles.displaySmall}>
             In this evaluation, {subjects?.length} subjects:{" "}
-            {subjects?.map((elem) => elem?.title)?.join(", ")} were assessed.
-            The table below provides a detailed definition of these subjects and
-            the qualitative features evaluated for each.
+            {subjects?.map((elem: ISubject) => elem?.title)?.join(", ")} were
+            assessed. The table below provides a detailed definition of these
+            subjects and the qualitative features evaluated for each.
           </Text>
         </View>
         <Text
@@ -282,7 +283,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             </View>
 
             {/* Table Body */}
-            {subjects?.map((subject, index) => (
+            {subjects?.map((subject: ISubject, index: number) => (
               <>
                 {subject?.attributes?.map((feature, featureIndex) => (
                   <View style={styles.tableRow} key={featureIndex}>
@@ -314,7 +315,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
 
             {/* Table Body */}
             {assessment?.assessmentKit?.maturityLevels.map(
-              (maturityLevel, index) => (
+              (maturityLevel: IMaturityLevel, index: number) => (
                 <View key={index} style={styles.tableRow}>
                   <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
                   <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
@@ -334,7 +335,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
           </View>
         </View>
         <View style={styles.section}>
-          {subjects?.map((subject, index) => (
+          {subjects?.map((subject: ISubject, index: number) => (
             <>
               <Text style={styles.title}>{subject.title}</Text>
               {tableImages && (
