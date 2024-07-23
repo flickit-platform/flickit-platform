@@ -1051,6 +1051,25 @@ export const createService = (
         },
       });
     },
+    fetchEvidenceAttachments(
+        args: {evidence_id:string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+        const { evidence_id } = args ?? {};
+
+        return axios.get(`/api/v1/evidences/${evidence_id}/attachments`, {
+            ...(config ?? {}),
+        });
+    },
+      addEvidenceAttachments(
+          args: {evidence_id:string },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { evidence_id } = args ?? {};
+          return axios.post(`/api/v1/evidences/${evidence_id}/attachments`, {
+              ...(config ?? {}),
+          });
+      },
     fetchConfidenceLevelsList(
       args: {},
       config: AxiosRequestConfig<any> | undefined

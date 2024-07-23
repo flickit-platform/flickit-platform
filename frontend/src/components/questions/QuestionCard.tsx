@@ -25,7 +25,7 @@ import {useServiceContext} from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import {ICustomError} from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import {Collapse, Grid} from "@mui/material";
+import {Collapse, DialogTitle, FormControl, Grid} from "@mui/material";
 import {FormProvider, useForm, useFormContext} from "react-hook-form";
 import {styles} from "@styles";
 import Title from "@common/Title";
@@ -65,6 +65,15 @@ import useScreenResize from "@utils/useScreenResize";
 import {useConfigContext} from "@/providers/ConfgProvider";
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
+import {useTheme} from "@mui/material/styles";
+import arrowBtn from "../../assets/svg/arrow.svg"
+import UploadIcon from "../../assets/svg/UploadIcon.svg"
+import PreAttachment from "@components/questions/iconFiles/preAttachments";
+import Tooltip from "@mui/material/Tooltip";
+import Select from "@mui/material/Select";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuItem from "@mui/material/MenuItem";
+
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -704,12 +713,15 @@ const AnswerDetails = ({questionInfo}: any) => {
 const Evidence = (props: any) => {
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
+    const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
+    const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<boolean>(false);
+    const [attachments, setAttachments] = useState<any[]>([]);
     const is_farsi = firstCharDetector(valueCount);
     const {service} = useServiceContext();
+    const [evidenceId, setEvidenceId] = useState("")
     const {onClose: closeDialog, openDialog, ...rest} = props;
     const {questionInfo, evidencesQueryData} = props;
     const {assessmentId = ""} = useParams();
-    const [evidenceId, setEvidenceId] = useState(null);
     const formMethods = useForm({shouldUnregister: true});
     const addEvidence = useQuery({
         service: (args, config) => service.addEvidence(args, config),
@@ -745,7 +757,6 @@ const Evidence = (props: any) => {
         }
     }, [value]);
     const cancelEditing = async (e: any) => {
-        setEvidenceId(null);
         formMethods.reset();
     };
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -760,7 +771,6 @@ const Evidence = (props: any) => {
                     questionId: questionInfo.id,
                     assessmentId,
                     type: value,
-                    id: evidenceId,
                 });
                 await await evidencesQueryData.query();
                 setValueCount("");
@@ -769,10 +779,26 @@ const Evidence = (props: any) => {
             const err = e as ICustomError;
             toastError(err?.response?.data.description[0]);
         } finally {
-            setEvidenceId(null);
             formMethods.reset();
         }
     };
+
+    const deleteEvidence = useQuery({
+        service: (args = {id: evidenceId}, config) => service.deleteEvidence(args, config),
+        runOnMount: false,
+    });
+
+    const deleteItem = async (e: any) => {
+        try {
+            await deleteEvidence.query();
+            setExpandedDeleteDialog(false)
+            await evidencesQueryData.query();
+        } catch (e) {
+            const err = e as ICustomError;
+            toastError(err);
+        }
+    };
+
     return (
         <Box
             display={"flex"}
@@ -875,7 +901,6 @@ const Evidence = (props: any) => {
                                 label={null}
                                 required={true}
                                 placeholder="Write down your evidence and comment here...."
-                                // isFocused={evidenceId ? true : false}
                                 borderRadius={"16px"}
                                 setValueCount={setValueCount}
                                 hasCounter={true}
@@ -893,7 +918,7 @@ const Evidence = (props: any) => {
                             >
                                 {valueCount.length || 0} / {LIMITED}
                             </Typography>
-                            {value == null && valueCount.length == 0 && !evidenceId && (
+                            {value == null && valueCount.length == 0 && (
                                 <Box
                                     sx={{
                                         position: "absolute",
@@ -936,23 +961,23 @@ const Evidence = (props: any) => {
                             ></Grid>
                         </Grid>
                         <Box display={"flex"} justifyContent={"end"} mt={2}>
-                                <LoadingButton
-                                    sx={{
-                                        ml: "auto",
-                                        borderRadius: "100%",
-                                        p: 2,
-                                        minWidth: "56px",
-                                        background: evidenceBG.borderColor,
-                                        "&:hover": {
-                                            background: evidenceBG.borderHover,
-                                        },
-                                    }}
-                                    type="submit"
-                                    variant="contained"
-                                    loading={evidencesQueryData.loading}
-                                >
-                                    <AddRoundedIcon fontSize="large"/>
-                                </LoadingButton>
+                            <LoadingButton
+                                sx={{
+                                    ml: "auto",
+                                    borderRadius: "100%",
+                                    p: 2,
+                                    minWidth: "56px",
+                                    background: evidenceBG.borderColor,
+                                    "&:hover": {
+                                        background: evidenceBG.borderHover,
+                                    },
+                                }}
+                                type="submit"
+                                variant="contained"
+                                loading={evidencesQueryData.loading}
+                            >
+                                <AddRoundedIcon fontSize="large"/>
+                            </LoadingButton>
 
                         </Box>
                     </Grid>
@@ -967,8 +992,11 @@ const Evidence = (props: any) => {
                             <EvidenceDetail
                                 setValue={setValue}
                                 item={item}
+                                setExpandedDeleteDialog={setExpandedDeleteDialog}
+                                setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
                                 setEvidenceId={setEvidenceId}
-                                evidenceId={evidenceId}
+                                setAttachments={setAttachments}
+                                attachments={attachments}
                                 evidencesQueryData={evidencesQueryData}
                                 questionInfo={questionInfo}
                                 assessmentId={assessmentId}
@@ -976,17 +1004,40 @@ const Evidence = (props: any) => {
                         ));
                     }}
                 />
+                <EvidenceAttachmentsDialogs
+                    expanded={expandedAttachmentsDialogs}
+                    onClose={() => setExpandedAttachmentsDialogs(false)}
+                    assessmentId={assessmentId}
+                    title={<Trans i18nKey={"addNewMember"}/>}
+                    cancelText={<Trans i18nKey={"cancel"}/>}
+                    confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
+                    attachments={attachments}
+                />
+                <DeleteEvidenceDialog
+                    expanded={expandedDeleteDialog}
+                    onClose={() => setExpandedDeleteDialog(false)}
+                    onConfirm={deleteItem}
+                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}
+                    cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
+                    confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
+                />
             </Box>
         </Box>
     );
 };
 
 const EvidenceDetail = (props: any) => {
-    const {item, evidencesQueryData, setEvidenceId, evidenceId, questionInfo, assessmentId} =
+    const {
+        item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
+        setExpandedDeleteDialog, setExpandedAttachmentsDialogs,
+        setAttachments, attachments
+    } =
         props;
+
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
     const [value, setValue] = React.useState<any>("POSITIVE");
+    const [expandedEvidenceBox, setExpandedEvidenceBox] = useState<boolean>(false);
     const addEvidence = useQuery({
         service: (args, config) => service.addEvidence(args, config),
         runOnMount: false,
@@ -997,7 +1048,6 @@ const EvidenceDetail = (props: any) => {
     };
 
     const cancelEditing = async (e: any) => {
-        setEvidenceId(null);
         formMethods.reset();
     };
 
@@ -1005,13 +1055,11 @@ const EvidenceDetail = (props: any) => {
     const {displayName, pictureLink} = createdBy;
     const is_farsi = firstCharDetector(description);
     const [evidenceBG, setEvidenceBG] = useState<any>();
+
     const formContext = useFormContext();
     const {service} = useServiceContext();
-    const [isEditing, setIsEditing] = useState(evidenceId === id)
-    const deleteEvidence = useQuery({
-        service: (args = {id}, config) => service.deleteEvidence(args, config),
-        runOnMount: false,
-    });
+    const [isEditing, setIsEditing] = useState(false)
+
     const submitRef = useRef<any>(null)
 
     const formMethods = useForm({shouldUnregister: true});
@@ -1024,7 +1072,7 @@ const EvidenceDetail = (props: any) => {
                     questionId: questionInfo.id,
                     assessmentId,
                     type: value,
-                    id: evidenceId,
+                    id: id,
                 });
                 await await evidencesQueryData.query();
                 setValueCount("");
@@ -1033,14 +1081,12 @@ const EvidenceDetail = (props: any) => {
             const err = e as ICustomError;
             toastError(err?.response?.data.description[0]);
         } finally {
-            setEvidenceId(null);
             formMethods.reset();
         }
     };
 
     const onUpdate = async () => {
         // formContext.setValue("evidence", description);
-        setEvidenceId(id);
         setIsEditing(prev => !prev)
 
         if (type === "Positive") {
@@ -1054,21 +1100,11 @@ const EvidenceDetail = (props: any) => {
         }
     };
 
-    const EditEvidence = () =>{
-        if(submitRef?.current){
+    const EditEvidence = () => {
+        if (submitRef?.current) {
             submitRef?.current.click()
         }
     }
-
-    const deleteItem = async (e: any) => {
-        try {
-            await deleteEvidence.query();
-            await evidencesQueryData.query();
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
 
     useEffect(() => {
         if (type === null) {
@@ -1093,14 +1129,23 @@ const EvidenceDetail = (props: any) => {
             });
         }
     }, [type]);
-    const [expanded, setExpanded] = useState<boolean>(false);
-    const handleClickOpen = () => {
-        setExpanded(true);
-    };
 
-    const handleClose = () => {
-        setExpanded(false);
-    };
+
+    const theme = useTheme();
+    const refBox = useRef<any>(null)
+
+    const fetchEvidenceAttachments = useQuery({
+        service: (args = {evidence_id: id}, config) => service.fetchEvidenceAttachments(args, config),
+        runOnMount: false,
+    });
+
+    useEffect(() => {
+        (async () => {
+            let {attachments} = await fetchEvidenceAttachments.query()
+            setAttachments(attachments)
+        })()
+    }, []);
+
     return (
         <Box display="flex" flexDirection="column" width="100%">
             <Box sx={{display: "flex", gap: 2, mb: 4}}>
@@ -1159,7 +1204,6 @@ const EvidenceDetail = (props: any) => {
                                             label={null}
                                             required={true}
                                             // placeholder={`${description}`}
-                                            // isFocused={evidenceId ? true : false}
                                             borderRadius={"16px"}
                                             setValueCount={setValueCount}
                                             hasCounter={true}
@@ -1170,7 +1214,7 @@ const EvidenceDetail = (props: any) => {
                                             style={is_farsi ? {left: 20} : {right: 20}}
                                             sx={{
                                                 position: "absolute",
-                                                top: 20,
+                                                top: 40,
                                                 fontSize: ".875rem",
                                                 fontWeight: 300,
                                                 color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
@@ -1178,7 +1222,7 @@ const EvidenceDetail = (props: any) => {
                                         >
                                             {valueCount.length || 0} / {LIMITED}
                                         </Typography>
-                                        {value == null && valueCount.length == 0 && !evidenceId && (
+                                        {value == null && valueCount.length == 0 && (
                                             <Box
                                                 sx={{
                                                     position: "absolute",
@@ -1256,20 +1300,10 @@ const EvidenceDetail = (props: any) => {
                                     />
                                 </IconButton>
                             </Box>
-
-                            <DeleteEvidenceDialog
-                                expanded={expanded}
-                                onClose={handleClose}
-                                onConfirm={deleteItem}
-                                title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}
-                                cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
-                                confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
-                            />
                         </Box>
                     </>
                     :
                     <>
-
                         <Box
                             sx={{
                                 px: "32px",
@@ -1287,17 +1321,6 @@ const EvidenceDetail = (props: any) => {
                                 textAlign: `${is_farsi ? "right" : "left"}`,
                             }}
                         >
-                            {isEditing && (
-                                <Typography
-                                    sx={{
-                                        fontSize: "1.125rem",
-                                        fontWeight: "bold",
-                                        // color: evidenceBG?.borderColor,
-                                    }}
-                                >
-                                    <Trans i18nKey="editing"/>
-                                </Typography>
-                            )}
                             <Box
                                 sx={{
                                     display: "flex",
@@ -1306,7 +1329,34 @@ const EvidenceDetail = (props: any) => {
                                     gap: {xs: "24px", sm: "48px"},
                                 }}
                             >
-                                <Typography>{description}</Typography>
+                                <Box sx={{display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer"}}>
+                                    <Typography>{description}</Typography>
+                                    <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                                        <Box onClick={() => setExpandedEvidenceBox(prev => !prev)}
+                                             sx={{display: "flex"}}>
+                                            <Typography sx={{...theme.typography.titleMedium}}><Trans
+                                                i18nKey={"addAttachments"}/></Typography>
+                                            <img style={expandedEvidenceBox ? {
+                                                rotate: "180deg",
+                                                transition: "all .3s ease"
+                                            } : {rotate: "0deg", transition: "all .3s ease"}} src={arrowBtn}/>
+                                        </Box>
+                                        <Box ref={refBox}
+                                             style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
+                                                 maxHeight: 0,
+                                                 overflow: "hidden"
+                                             }} sx={{transition: "all 3s ease"}}>
+                                            {
+                                                attachments.length <= 5 && (
+                                                    <Box onClick={() => setExpandedAttachmentsDialogs(true)}>
+                                                        <PreAttachment mainColor={evidenceBG?.borderColor}
+                                                                       backgroundColor={evidenceBG?.background}/>
+                                                    </Box>
+                                                )
+                                            }
+                                        </Box>
+                                    </Box>
+                                </Box>
                                 <Typography
                                     fontSize="12px"
                                     variant="overline"
@@ -1325,8 +1375,6 @@ const EvidenceDetail = (props: any) => {
                             }}
                         >
                             <Box sx={{display: "flex", gap: 1}}>
-
-
                                 <IconButton
                                     aria-label="edit"
                                     size="small"
@@ -1339,7 +1387,10 @@ const EvidenceDetail = (props: any) => {
                                     aria-label="delete"
                                     size="small"
                                     sx={{boxShadow: 2, p: 1}}
-                                    onClick={handleClickOpen}
+                                    onClick={() => {
+                                        setExpandedDeleteDialog(true);
+                                        setEvidenceId(id)
+                                    }}
                                 >
                                     <DeleteRoundedIcon
                                         fontSize="small"
@@ -1347,94 +1398,153 @@ const EvidenceDetail = (props: any) => {
                                     />
                                 </IconButton>
                             </Box>
-
-                            <DeleteEvidenceDialog
-                                expanded={expanded}
-                                onClose={handleClose}
-                                onConfirm={deleteItem}
-                                title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}
-                                cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
-                                confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
-                            />
                         </Box>
                     </>
                 }
-                {/*        <Box*/}
-                {/*            sx={{*/}
-                {/*                display: "flex",*/}
-                {/*                flexDirection: "column",*/}
-                {/*                gap: 1,*/}
-                {/*                justifyContent: "center",*/}
-                {/*            }}*/}
-                {/*        >*/}
-                {/*            <Box sx={{display: "flex", gap: 1}}>*/}
-                {/*                {isEditing*/}
-                {/*                    ?*/}
-                {/*                    <>*/}
-                {/*                    <IconButton*/}
-                {/*                        aria-label="edit"*/}
-                {/*                        size="small"*/}
-                {/*                        sx={{*/}
-                {/*                            boxShadow: 2, p: 1,*/}
-                {/*                            background: evidenceBG?.background*/}
-                {/*                        }}*/}
-                {/*                        onClick={onUpdate}*/}
-                {/*                    >*/}
-                {/*                        <DoneIcon fontSize="small" style={{color: evidenceBG?.borderColor}}/>*/}
-                {/*                    </IconButton>*/}
-                {/*                    <IconButton*/}
-                {/*                        aria-label="delete"*/}
-                {/*                        size="small"*/}
-                {/*                        sx={{boxShadow: 2, p: 1}}*/}
-                {/*                        onClick={onUpdate}*/}
-                {/*                    >*/}
-                {/*                        <ClearIcon*/}
-                {/*                            fontSize="small"*/}
-                {/*                            style={{color: "#D81E5B"}}*/}
-                {/*                        />*/}
-                {/*                    </IconButton>*/}
-                {/*                    </>*/}
-                {/*                    :*/}
-                {/*                    <>*/}
-                {/*                    <IconButton*/}
-                {/*                    aria-label="edit"*/}
-                {/*                    size="small"*/}
-                {/*                    sx={{boxShadow: 2, p: 1}}*/}
-                {/*                 onClick={onUpdate}*/}
-                {/*            >*/}
-                {/*                <EditRoundedIcon fontSize="small" style={{color: "#004F83"}}/>*/}
-                {/*            </IconButton>*/}
-                {/*            <IconButton*/}
-                {/*                aria-label="delete"*/}
-                {/*                size="small"*/}
-                {/*                sx={{boxShadow: 2, p: 1}}*/}
-                {/*                onClick={handleClickOpen}*/}
-                {/*            >*/}
-                {/*                <DeleteRoundedIcon*/}
-                {/*                    fontSize="small"*/}
-                {/*                    style={{color: "#D81E5B"}}*/}
-                {/*                />*/}
-                {/*            </IconButton>*/}
-                {/*        </>*/}
-                {/*        }*/}
-
-
-                {/*    </Box>*/}
-
-                {/*    <DeleteEvidenceDialog*/}
-                {/*        expanded={expanded}*/}
-                {/*        onClose={handleClose}*/}
-                {/*        onConfirm={deleteItem}*/}
-                {/*        title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}*/}
-                {/*        cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}*/}
-                {/*        confirmText={<Trans i18nKey={"yesDeleteIt"}/>}*/}
-                {/*    />*/}
-                {/*</Box>*/}
             </Box>
         </Box>
     )
         ;
 };
+
+const EvidenceAttachmentsDialogs = (props: any) => {
+
+    const {
+        expanded, onClose, title, cancelText, confirmText, setChangeData,
+        assessmentId,attachments
+    } = props;
+
+    const theme = useTheme()
+
+    return (
+        <Dialog
+            open={expanded}
+            onClose={onClose}
+            maxWidth={"sm"}
+            // fullScreen={fullScreen}
+            fullWidth
+            sx={{
+                ".MuiDialog-paper": {
+                    borderRadius: "32px",
+                },
+                ".MuiDialog-paper::-webkit-scrollbar": {
+                    display: "none",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                },
+            }}
+        >
+            <DialogContent
+                sx={{
+                    padding: "0!important",
+                    background: "#004F83",
+                    overflow: "hidden",
+                }}
+            >
+                <Box
+                    sx={{
+                        background: "#004F83",
+                        textAlign: "center",
+                        color: "#fff",
+                        py: "24px",
+                        ...theme.typography.headlineMedium
+                    }}
+                >
+                    <Trans i18nKey="uploadAttachment"/>
+                </Box>
+            </DialogContent>
+            <DialogContent
+                sx={{
+                    padding: "unset",
+                    background: "#fff",
+                    overflowX: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                }}
+            >
+                <Box sx={{display: "flex", flexDirection: "column", py:"48px",gap:"48px"}}>
+                    <Box>
+                        <Typography sx={{...theme.typography.headlineSmall, pb: "24px"}}>
+                            <Trans i18nKey={"uploadAttachment"} /> ( {attachments.length } of 5 )
+                        </Typography>
+                        <Typography sx={{fontSize: "11px", color: "#73808C",maxWidth: "300px", textAlign: "left" }} >
+                          <Box sx={{display: "flex", gap: '2px'}}>
+                              <InfoOutlinedIcon
+                                  style={{color: "#73808C"}}
+                                  sx={{mr: 1,width: "12px", height: "12px"}}
+                              />
+                              <Trans i18nKey="uploadAcceptable" />
+                          </Box>
+
+                        </Typography>
+                        <Typography sx={{fontSize: "11px", color: "#73808C",maxWidth: "300px", textAlign: "left",paddingBottom: "1rem" }}>
+                            <Box sx={{display: "flex", gap: '2px'}}>
+                            <InfoOutlinedIcon
+                                style={{color: "#73808C"}}
+                                sx={{mr: 1,width: "12px", height: "12px"}}
+                            />
+                            <Trans i18nKey="uploadAcceptableSize" />
+                            </Box>
+                        </Typography>
+                        <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9",borderRadius: "32px" }}>
+                            <img src={UploadIcon} />
+                        </Box>
+                    </Box>
+                    <Box>
+fff
+                    </Box>
+                </Box>
+
+                <Box sx={{
+                    width: "100%", display: "flex", gap: 2, padding: "16px",
+                    justifyContent: "center"
+                }}>
+                    <Button
+                        sx={{
+                            fontSize: {xs: '0.7rem', sm: "1rem"},
+                            fontWeight: 700,
+                            color: "#004F83",
+                            "&.MuiButton-root": {
+                                border: "unset",
+                            },
+                            "&.MuiButton-root:hover": {
+                                background: "unset",
+                                border: "unset",
+                            },
+                        }}
+                        variant="outlined"
+                        onClick={onClose}
+                    >
+                        {cancelText}
+                    </Button>
+                    <Button
+                        sx={{
+                            fontSize: {xs: '0.7rem', sm: "1rem"},
+                            fontWeight: 700,
+                            "&.MuiButton-root": {
+                                color: "#EDFCFC",
+                                border: "1px solid #004F83",
+                                background: "#004F83",
+                                borderRadius: "100px",
+                            },
+                            "&.MuiButton-root:hover": {
+                                background: "#004F83",
+                                border: "1px solid #004F83",
+                            },
+                        }}
+                        variant="contained"
+                        // onClick={onConfirm}
+                    >
+                        {confirmText}
+                    </Button>
+                </Box>
+            </DialogContent>
+        </Dialog>
+    )
+}
 
 const DeleteEvidenceDialog = (props: any) => {
     const {expanded, onClose, onConfirm, title, cancelText, confirmText} =
@@ -1514,6 +1624,7 @@ const DeleteEvidenceDialog = (props: any) => {
         </Dialog>
     );
 };
+
 
 const QuestionGuide = (props: any) => {
     const hasSetCollapse = useRef(false);

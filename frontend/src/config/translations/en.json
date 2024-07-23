@@ -424,5 +424,9 @@
   "overallStatusDetails": "You can find detailed statuses accross {{attributes}} attributes in {{subjects}} key subjects.",
   "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes below.",
   "successCreatedAssessmentMessage": "This assessment is currently private.If you wish to make it visible to others, please visit the settings page.",
-  "successCreatedAssessmentTitle": "{{title}} created successfully."
+  "successCreatedAssessmentTitle": "{{title}} created successfully.",
+  "addAttachments": "Add attachments (max 5)",
+  "uploadAttachment": "Upload Attachment",
+  "uploadAcceptable": "Only These formats are acceptable: PDF, jpg, png, docx, pptx, rar, zip, excel avi, mp4, mkv",
+  "uploadAcceptableSize": "Size of an attachment must be lower than 5 MB."
 }
