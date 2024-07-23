@@ -352,7 +352,7 @@ const AssessmentExportContainer = () => {
   useEffect(() => {
     setTimeout(() => {
       setShowSpinner(false);
-    }, 2000)
+    }, 2000);
   }, []);
 
   return (
@@ -670,7 +670,6 @@ const AssessmentExportContainer = () => {
                     </Table>
                   </TableContainer>
                   <Box
-                    sx={{ display: { xs: "none", sm: "none", md: "block" } }}
                     height={subject?.attributes?.length > 2 ? "400px" : "300px"}
                   >
                     {subject?.attributes?.length > 2 ? (

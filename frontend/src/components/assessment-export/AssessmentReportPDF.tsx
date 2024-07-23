@@ -9,6 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
 import { IMaturityLevel, ISubject } from "@/types";
+import useScreenResize from "@/utils/useScreenResize";
 
 const styles = StyleSheet.create({
   page: {
@@ -143,11 +144,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
   useEffect(() => {
     const generateImages = async () => {
       // Select all recharts-wrapper and gauge elements
-      const chartInstances = document.querySelectorAll(".recharts-wrapper");
-      const gaugeInstances = document.querySelectorAll(".gauge");
-      const tableInstances = document.querySelectorAll(".checkbox-table");
-
-      // Function to generate image from element's parentNode or parentNode.parentNode
       const generateImageFromElement = async (
         element: Element,
         isGauge: boolean,
@@ -166,25 +162,34 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
         }
       };
 
-      // Create promises to generate images for all chart and gauge instances
-      const chartPromises = Array.from(chartInstances).map((instance) =>
-        generateImageFromElement(instance, false, true)
-      );
+      const chartInstances = document.querySelectorAll(".recharts-wrapper");
+      const gaugeInstances = document.querySelectorAll(".gauge");
       const gaugePromises = Array.from(gaugeInstances).map((instance) =>
         generateImageFromElement(instance, true, true)
       );
+      const chartPromises = Array.from(chartInstances).map((instance) =>
+        generateImageFromElement(instance, false, true)
+      );
+      const chartImageUrls = await Promise.all(chartPromises);
+
+      const gaugeImageUrls = await Promise.all(gaugePromises);
+      setMaturityGaugeImages(gaugeImageUrls.filter(Boolean) as string[]);
+      setChartImages(chartImageUrls.filter(Boolean) as string[]);
+
+      if (window.innerWidth < 600) return;
+
+      // Create promises to generate images for all chart and gauge instances
+
+      const tableInstances = document.querySelectorAll(".checkbox-table");
+
       const tablePromises = Array.from(tableInstances).map((instance) =>
         generateImageFromElement(instance, true, false)
       );
 
       // Wait for all image promises to resolve
-      const chartImageUrls = await Promise.all(chartPromises);
-      const gaugeImageUrls = await Promise.all(gaugePromises);
       const tableImageUrls = await Promise.all(tablePromises);
 
       // Update state with non-null image URLs
-      setChartImages(chartImageUrls.filter(Boolean) as string[]);
-      setMaturityGaugeImages(gaugeImageUrls.filter(Boolean) as string[]);
       setTableImages(tableImageUrls.filter(Boolean) as string[]);
     };
 
@@ -322,7 +327,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                   <Text style={styles.tableCell}>{maturityLevel?.index}</Text>
                   <Text style={styles.tableCell}>
                     {" "}
-                    {maturityGaugeImages && (
+                    {maturityGaugeImages.length !== 0 && (
                       <Image
                         style={styles.image}
                         src={maturityGaugeImages[index]}
@@ -338,10 +343,10 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
           {subjects?.map((subject: ISubject, index: number) => (
             <>
               <Text style={styles.title}>{subject.title}</Text>
-              {tableImages && (
+              {tableImages.length !== 0 && (
                 <Image style={styles.chart} src={tableImages[index]} />
               )}
-              {chartImages && (
+              {chartImages.length !== 0 && (
                 <Image style={styles.chart} src={chartImages[index]} />
               )}
             </>
