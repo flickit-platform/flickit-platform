@@ -70,6 +70,7 @@ const SubjectRadial: React.FC<SubjectRadialProps> = ({
           label={{ position: "middle", fill: "#fff", fontSize: "1.75rem" }}
           background
           name="name"
+          isAnimationActive={false}
         />
       </BarChart>
     </ResponsiveContainer>

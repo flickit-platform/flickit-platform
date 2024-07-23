@@ -117,8 +117,7 @@ const AssessmentReportContainer = (props: any) => {
                   <Box sx={{ py: "0.6rem" }}>
                     <IconButton
                       data-cy="more-action-btn"
-                      disabled={!manageable}
-                      component={manageable ? Link : "div"}
+                      component={Link}
                       to={`/${spaceId}/assessments/1/assessmentDocument/${assessmentId}`}
                     >
                       <ArticleRounded

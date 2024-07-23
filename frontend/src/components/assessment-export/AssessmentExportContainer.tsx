@@ -18,6 +18,7 @@ import {
 } from "@types";
 import {
   Checkbox,
+  CircularProgress,
   IconButton,
   Paper,
   Table,
@@ -32,9 +33,12 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AssessmentExportTitle from "./AssessmentExportTitle";
 import { DownloadRounded } from "@mui/icons-material";
-import AssessmentSubjectRadarChart from "../assessment-report/AssessmenetSubjectRadarChart";
+import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import AssessmentReportPDF from "./AssessmentReportPDF";
+import { useEffect, useState } from "react";
 
 const tempData = {
   assessment: {
@@ -343,6 +347,14 @@ const AssessmentExportContainer = () => {
     toastErrorOptions: { filterByStatus: [404] },
   });
 
+  const [showSpinner, setShowSpinner] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSpinner(false);
+    }, 2000)
+  }, []);
+
   return (
     <QueryBatchData
       queryBatchData={[AssessmentReport, fetchPathInfo, AssessmentInfo]}
@@ -382,11 +394,29 @@ const AssessmentExportContainer = () => {
                   >
                     <Trans i18nKey="assessmentDocument" />
                   </Typography>
-                  <IconButton data-cy="more-action-btn">
-                    <DownloadRounded
-                      sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
-                    />
-                  </IconButton>
+                  <PDFDownloadLink
+                    document={
+                      <AssessmentReportPDF data={data} progress={progress} />
+                    }
+                    fileName="assessment_report.pdf"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {({ loading }: any) =>
+                      loading || showSpinner ? (
+                        <IconButton data-cy="more-action-btn">
+                          <CircularProgress
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                          />
+                        </IconButton>
+                      ) : (
+                        <IconButton data-cy="more-action-btn">
+                          <DownloadRounded
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                          />
+                        </IconButton>
+                      )
+                    }
+                  </PDFDownloadLink>
                 </Box>
               </Grid>
             </Grid>
@@ -474,7 +504,6 @@ const AssessmentExportContainer = () => {
                           <TableCell>{maturityLevel?.value}</TableCell>
                           <TableCell>{maturityLevel?.index}</TableCell>
                           <TableCell>
-                            
                             <Gauge
                               level_value={maturityLevel.value ?? 0}
                               maturity_level_status={maturityLevel.title}
@@ -485,6 +514,7 @@ const AssessmentExportContainer = () => {
                               hideGuidance={true}
                               height={160}
                               width={200}
+                              className="gauge"
                             />
                           </TableCell>
                         </TableRow>
@@ -549,7 +579,11 @@ const AssessmentExportContainer = () => {
               <Typography variant="titleLarge" gutterBottom>
                 Overall Scores by Subject
               </Typography>
-              <TableContainer component={Paper} sx={{ marginBlock: 2 }}>
+              <TableContainer
+                component={Paper}
+                sx={{ marginBlock: 2 }}
+                className="checkbox-table"
+              >
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -593,7 +627,11 @@ const AssessmentExportContainer = () => {
                   <Typography variant="titleLarge" gutterBottom>
                     {subject?.title}
                   </Typography>
-                  <TableContainer component={Paper} sx={{ marginBlock: 2 }}>
+                  <TableContainer
+                    component={Paper}
+                    sx={{ marginBlock: 2 }}
+                    className="checkbox-table"
+                  >
                     <Table>
                       <TableHead>
                         <TableRow>

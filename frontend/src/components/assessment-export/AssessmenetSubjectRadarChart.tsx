@@ -103,7 +103,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
           stroke="#9CCAFF"
           fill="#9CCAFF"
           fillOpacity={0.5}
-          isAnimationActive={true}
+          isAnimationActive={false}
         />
         <Legend wrapperStyle={{ paddingTop: 20 }} />
       </RadarChart>
