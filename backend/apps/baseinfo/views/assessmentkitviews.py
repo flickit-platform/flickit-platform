@@ -17,19 +17,10 @@ from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitT
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 
-
-
 class AssessmentKitListOptionsApi(APIView):
     def get(self, request):
         assessment_kit_options = AssessmentKit.objects.filter(is_active=True).values('id', 'title')
         return Response({'results': assessment_kit_options})
-
-
-class AssessmentKitLikeApi(APIView):
-    @transaction.atomic
-    def post(self, request, assessment_kit_id):
-        assessment_kit = assessmentkitservice.like_assessment_kit(request.user, assessment_kit_id)
-        return Response({'likes': assessment_kit.likes.count()})
 
 
 class LoadAssessmentKitInfoEditableApi(APIView):

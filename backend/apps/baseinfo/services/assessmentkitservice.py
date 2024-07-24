@@ -35,16 +35,6 @@ def get_current_user_is_coordinator(assessment_kit: AssessmentKit, current_user_
     return False
 
 
-@transaction.atomic
-def like_assessment_kit(user, assessment_kit_id):
-    assessment_kit = load_assessment_kit(assessment_kit_id)
-    deleted_rows_number = AssessmentKitLike.objects.filter(user=user.id, assessment_kit_id=assessment_kit.id).delete()[
-        0]
-    if deleted_rows_number == 0:
-        AssessmentKitLike.objects.create(user=user, assessment_kit=assessment_kit)
-    return assessment_kit
-
-
 def get_maturity_level_with_assessment_kit(assessment_kit_id):
     try:
         kit = AssessmentKit.objects.get(id=assessment_kit_id)
@@ -52,8 +42,6 @@ def get_maturity_level_with_assessment_kit(assessment_kit_id):
         return False
     result = MaturityLevel.objects.filter(kit_version=kit.kit_version_id)
     return result
-
-
 
 
 def get_assessment_kit(assessment_kit_id):

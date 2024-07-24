@@ -8,6 +8,5 @@ from baseinfo.views import expertgroupviews
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path("assessmentkits/like/<str:assessment_kit_id>/", assessmentkitviews.AssessmentKitLikeApi.as_view()),
     path("assessmentkits/options/select/", assessmentkitviews.AssessmentKitListOptionsApi.as_view()),
 ]

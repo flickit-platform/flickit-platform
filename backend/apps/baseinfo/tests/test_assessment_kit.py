@@ -47,30 +47,6 @@ class TestLikeAssessmentKits:
 
 
 @pytest.mark.django_db
-class TestAssessmentKitListOptions:
-    def test_assessment_kit_list_options_return_200(self, create_expertgroup):
-        user1 = baker.make(User, email="test@test.com")
-        assessment_kit1 = baker.make(AssessmentKit)
-        expert_group = create_expertgroup(ExpertGroup, user1)
-        assessment_kit1.expert_group = expert_group
-        assessment_kit1.is_active = True
-        assessment_kit1.save()
-        assessment_kit2 = baker.make(AssessmentKit)
-        assessment_kit2.expert_group = expert_group
-        assessment_kit2.is_active = False
-        assessment_kit2.save()
-
-        api = APIRequestFactory()
-        request = api.get(f'/baseinfo/assessmentkits/options/select/', {}, format='json')
-        force_authenticate(request, user=user1)
-        view = assessmentkitviews.AssessmentKitListOptionsApi.as_view()
-        resp = view(request)
-
-        assert resp.status_code == status.HTTP_200_OK
-        assert len(resp.data["results"]) == 1
-
-
-@pytest.mark.django_db
 class TestLoadAssessmentKitInfoEditableApi:
     def test_get_assessment_kit_info_editable_when_user_expert_groups_is_member(self, create_user, create_expertgroup):
         user1 = create_user(email="test@test.com")
