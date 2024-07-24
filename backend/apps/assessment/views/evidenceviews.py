@@ -38,6 +38,10 @@ class EvidencesApi(APIView):
 class EvidenceApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, evidence_id):
+        result = evidence_services.evidence_get_by_id(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
+
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={201: ""})
     def put(self, request, evidence_id):
