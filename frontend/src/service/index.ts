@@ -884,8 +884,10 @@ export const createService = (
 
       return axios.post(`/api/v1/expert-groups/`, data, {
         ...(config ?? {}),
+        responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
+
         },
       });
     },
@@ -1057,17 +1059,21 @@ export const createService = (
     ) {
         const { evidence_id } = args ?? {};
 
-        return axios.get(`/api/v1/evidences/${evidence_id}/attachments`, {
+        return axios.get(`/api/v1/evidences/${evidence_id}/attachments/`, {
             ...(config ?? {}),
         });
     },
       addEvidenceAttachments(
-          args: {evidence_id:string },
+          args: {evidenceId: 'string', data: {}},
           config: AxiosRequestConfig<any> | undefined
       ) {
-          const { evidence_id } = args ?? {};
-          return axios.post(`/api/v1/evidences/${evidence_id}/attachments`, {
+          const { evidenceId, data} = args ?? {};
+          return axios.post(`/api/v1/evidences/${evidenceId}/attachments/`, data,{
               ...(config ?? {}),
+              responseType: "blob",
+              headers: {
+                  "Content-Type": "multipart/form-data",
+              }
           });
       },
     fetchConfidenceLevelsList(

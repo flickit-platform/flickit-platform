@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useMemo} from "react";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
@@ -25,7 +25,7 @@ import {useServiceContext} from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import {ICustomError} from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import {Collapse, DialogTitle, FormControl, Grid} from "@mui/material";
+import {Collapse, DialogTitle, FormControl, Grid, TextareaAutosize} from "@mui/material";
 import {FormProvider, useForm, useFormContext} from "react-hook-form";
 import {styles} from "@styles";
 import Title from "@common/Title";
@@ -73,7 +73,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuItem from "@mui/material/MenuItem";
-
+import TextField from "@mui/material/TextField";
+import Dropzone, {useDropzone} from 'react-dropzone'
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -1008,9 +1009,10 @@ const Evidence = (props: any) => {
                     expanded={expandedAttachmentsDialogs}
                     onClose={() => setExpandedAttachmentsDialogs(false)}
                     assessmentId={assessmentId}
+                    evidenceId={evidenceId}
                     title={<Trans i18nKey={"addNewMember"}/>}
-                    cancelText={<Trans i18nKey={"cancel"}/>}
-                    confirmText={<Trans i18nKey={"addToThisAssessment"}/>}
+                    cancelText={<Trans i18nKey={"uploadAnother"}/>}
+                    confirmText={<Trans i18nKey={"Upload attachment"}/>}
                     attachments={attachments}
                 />
                 <DeleteEvidenceDialog
@@ -1145,6 +1147,10 @@ const EvidenceDetail = (props: any) => {
             setAttachments(attachments)
         })()
     }, []);
+
+    useEffect(() => {
+        setEvidenceId(id)
+    }, [id]);
 
     return (
         <Box display="flex" flexDirection="column" width="100%">
@@ -1407,15 +1413,75 @@ const EvidenceDetail = (props: any) => {
         ;
 };
 
+const MyDropzone = (props: any) =>{
+
+    const {evidenceId} = props
+
+    const {service} = useServiceContext();
+    const abortController = useMemo(() => new AbortController(),[evidenceId] );
+
+
+    const addEvidenceAttachments = useQuery({
+        service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
+        runOnMount: false,
+    });
+
+
+
+    const handelsendFile = async (acceptedFiles :any) => {
+        if(acceptedFiles){
+            let data ={
+                id:evidenceId,
+                attachment: acceptedFiles,
+                description: ""
+            }
+            await addEvidenceAttachments.query({evidenceId,data})
+        }
+    }
+
+    const {
+        acceptedFiles,
+        fileRejections,
+        getRootProps,
+        getInputProps
+    } = useDropzone({
+        maxFiles:1
+    });
+
+    const theme = useTheme()
+    return (
+        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => handelsendFile(acceptedFiles) }>
+            {({getRootProps, getInputProps}) => (
+                <section style={{ cursor: "pointer" }}>
+                    <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <img src={UploadIcon}/>
+                        <Typography sx={{
+                            ...theme.typography.titleMedium,
+                            color: "#243342",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "5px"
+                        }}>
+                            <Trans i18nKey={"dragYourFile"}/><Typography
+                            sx={{...theme.typography.titleMedium, color: "#205F94"}}><Trans
+                            i18nKey={"locateIt"}/></Typography>
+                        </Typography></div>
+                </section>
+            )}
+        </Dropzone>
+    )
+}
+
 const EvidenceAttachmentsDialogs = (props: any) => {
 
     const {
         expanded, onClose, title, cancelText, confirmText, setChangeData,
-        assessmentId,attachments
+        assessmentId, attachments,evidenceId
     } = props;
 
     const theme = useTheme()
-
     return (
         <Dialog
             open={expanded}
@@ -1465,36 +1531,49 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     textAlign: "center",
                 }}
             >
-                <Box sx={{display: "flex", flexDirection: "column", py:"48px",gap:"48px"}}>
+                <Box sx={{display: "flex", flexDirection: "column", py: "48px", gap: "48px"}}>
                     <Box>
                         <Typography sx={{...theme.typography.headlineSmall, pb: "24px"}}>
-                            <Trans i18nKey={"uploadAttachment"} /> ( {attachments.length } of 5 )
+                            <Trans i18nKey={"uploadAttachment"}/> ( {attachments.length} of 5 )
                         </Typography>
-                        <Typography sx={{fontSize: "11px", color: "#73808C",maxWidth: "300px", textAlign: "left" }} >
-                          <Box sx={{display: "flex", gap: '2px'}}>
-                              <InfoOutlinedIcon
-                                  style={{color: "#73808C"}}
-                                  sx={{mr: 1,width: "12px", height: "12px"}}
-                              />
-                              <Trans i18nKey="uploadAcceptable" />
-                          </Box>
+                        <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left"}}>
+                            <Box sx={{display: "flex", gap: '2px'}}>
+                                <InfoOutlinedIcon
+                                    style={{color: "#73808C"}}
+                                    sx={{mr: 1, width: "12px", height: "12px"}}
+                                />
+                                <Trans i18nKey="uploadAcceptable"/>
+                            </Box>
 
                         </Typography>
-                        <Typography sx={{fontSize: "11px", color: "#73808C",maxWidth: "300px", textAlign: "left",paddingBottom: "1rem" }}>
+                        <Typography sx={{
+                            fontSize: "11px",
+                            color: "#73808C",
+                            maxWidth: "300px",
+                            textAlign: "left",
+                            paddingBottom: "1rem"
+                        }}>
                             <Box sx={{display: "flex", gap: '2px'}}>
-                            <InfoOutlinedIcon
-                                style={{color: "#73808C"}}
-                                sx={{mr: 1,width: "12px", height: "12px"}}
-                            />
-                            <Trans i18nKey="uploadAcceptableSize" />
+                                <InfoOutlinedIcon
+                                    style={{color: "#73808C"}}
+                                    sx={{mr: 1, width: "12px", height: "12px"}}
+                                />
+                                <Trans i18nKey="uploadAcceptableSize"/>
                             </Box>
                         </Typography>
-                        <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9",borderRadius: "32px" }}>
-                            <img src={UploadIcon} />
+                        <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
+                           <MyDropzone evidenceId={evidenceId} />
                         </Box>
                     </Box>
                     <Box>
-fff
+                        <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1.5rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
+                        <TextField
+                            id="outlined-multiline-static"
+                            multiline
+                            fullWidth
+                            variant="filled"
+                            placeholder={"Add description for this specific attachment up to 100 charachter"}
+                        />
                     </Box>
                 </Box>
 
