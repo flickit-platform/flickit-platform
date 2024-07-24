@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from common.restutil import ActionResult
-from baseinfo.services import expertgroupservice
 from baseinfo.models.assessmentkitmodels import AssessmentKitLike
 from baseinfo.serializers import assessmentkitserializers
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitTag, MaturityLevel
@@ -55,13 +54,6 @@ def get_maturity_level_with_assessment_kit(assessment_kit_id):
     return result
 
 
-def get_list_assessment_kit_for_expert_group(user, expert_group_id):
-    results = dict()
-    expert_group = expertgroupservice.load_expert_group(expert_group_id)
-    results['published'] = expert_group.assessmentkits.filter(is_active=True)
-    if expert_group.users.filter(id=user.id).exists():
-        results['unpublished'] = expert_group.assessmentkits.filter(is_active=False)
-    return results
 
 
 def get_assessment_kit(assessment_kit_id):

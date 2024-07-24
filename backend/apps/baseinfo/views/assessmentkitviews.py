@@ -17,19 +17,6 @@ from baseinfo.models.assessmentkitmodels import AssessmentKitDsl, AssessmentKitT
 from baseinfo.permissions import IsMemberExpertGroup, IsOwnerExpertGroup
 
 
-class AssessmentKitListForExpertGroupApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, expert_group_id):
-        results = assessmentkitservice.get_list_assessment_kit_for_expert_group(request.user, expert_group_id)
-        if len(results) == 2:
-            published = LoadAssessmentKitForExpertGroupSerilizer(results["published"], many=True).data
-            unpublished = LoadAssessmentKitForExpertGroupSerilizer(results["unpublished"], many=True).data
-            return Response({'results': {"published": published, "unpublished": unpublished}},
-                            status=status.HTTP_200_OK)
-        else:
-            published = LoadAssessmentKitForExpertGroupSerilizer(results["published"], many=True).data
-            return Response({'results': {"published": published}}, status=status.HTTP_200_OK)
 
 
 class AssessmentKitListOptionsApi(APIView):

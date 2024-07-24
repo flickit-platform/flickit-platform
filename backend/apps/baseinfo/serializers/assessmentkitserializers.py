@@ -1,12 +1,10 @@
 from rest_framework import serializers
 
-
 from baseinfo.models.assessmentkitmodels import AssessmentKit, AssessmentKitDsl, AssessmentKitTag, ExpertGroup, \
     MaturityLevel, LevelCompetence
 from baseinfo.models.basemodels import AssessmentSubject, Questionnaire
 from rest_framework.validators import UniqueValidator
 
-from baseinfo.serializers import expertgroupserializers
 from baseinfo.services import assessmentkitservice
 
 
@@ -57,12 +55,6 @@ class UpdateAssessmentKitSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
-class LoadAssessmentKitForExpertGroupSerilizer(serializers.ModelSerializer):
-    class Meta:
-        model = AssessmentKit
-        fields = ['id', 'title', "is_private", 'last_modification_date']
-
-
 class SimpleAssessmentKitTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKitTag
@@ -85,12 +77,6 @@ class LoadAssessmentKitInfoEditableSerilizer(serializers.ModelSerializer):
         model = AssessmentKit
         fields = ['id', 'title', 'summary', 'is_active', 'is_private', 'price', 'about', 'tags',
                   'current_user_is_coordinator']
-
-
-class SimpleExpertGroupDataForAssessmentKitSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ExpertGroup
-        fields = ['id', 'name']
 
 
 class SimpleAssessmentSubjectDataForAssessmentKitSerializer(serializers.ModelSerializer):
@@ -179,5 +165,3 @@ class LoadAssessmentKitDetailsForReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentKit
         fields = ['id', 'title', 'summary', 'maturity_level_count', 'expert_group']
-
-
