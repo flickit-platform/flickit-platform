@@ -38,13 +38,6 @@ class AssessmentKitListOptionsApi(APIView):
         return Response({'results': assessment_kit_options})
 
 
-class AssessmentKitTagViewSet(ModelViewSet):
-    serializer_class = AssessmentKitTagSerializer
-
-    def get_queryset(self):
-        return AssessmentKitTag.objects.all()
-
-
 class AssessmentKitLikeApi(APIView):
     @transaction.atomic
     def post(self, request, assessment_kit_id):
