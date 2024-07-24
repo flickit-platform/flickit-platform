@@ -1,6 +1,4 @@
 import requests
-from rest_framework import status
-
 from assessmentplatform.settings import ASSESSMENT_URL
 
 

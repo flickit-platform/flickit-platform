@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from assessment.services import assessment_core_services, assessment_core, assessment_services
+from assessment.services import assessment_core, assessment_services
 from rest_framework.permissions import IsAuthenticated
 
 
