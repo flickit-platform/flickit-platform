@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -58,14 +58,14 @@ const AssessmentSettingContainer = () => {
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
-    useEffect(() => {
-        (async ()=>{
-            let {manageable} = await AssessmentInfo.query()
-            if(!manageable){
-                return  navigate("*")
-            }
-        })()
-    }, [assessmentId]);
+  useEffect(() => {
+    (async () => {
+      let { manageable } = await AssessmentInfo.query()
+      if (!manageable) {
+        return navigate("*")
+      }
+    })()
+  }, [assessmentId]);
 
   useEffect(() => {
     (async () => {
@@ -112,8 +112,8 @@ const AssessmentSettingContainer = () => {
                 >
                   <Typography
                     color="#00365C"
-                    sx={{ fontSize: { xs: "2.125rem", sm: "3.5rem" } }}
-                    fontWeight={900}
+                    textAlign="left"
+                    variant="headlineLarge"
                   >
                     <Trans i18nKey="assessmentSettings" />
                   </Typography>
