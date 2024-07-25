@@ -592,6 +592,9 @@ const AnswerTemplate = (props: {
 
 const AnswerDetails = ({questionInfo}: any) => {
     const dialogProps = useDialog();
+
+    const [evidencesData,setEvidencesData]= useState<any[]>([])
+
     const evidencesQueryData = useQuery({
         service: (
             args = {questionId: questionInfo.id, assessmentId, page: 0, size: 10},
@@ -599,6 +602,14 @@ const AnswerDetails = ({questionInfo}: any) => {
         ) => service.fetchEvidences(args, config),
         toastError: true,
     });
+
+
+    useEffect(()=>{
+        (async ()=>{
+            let {items} = await evidencesQueryData.query()
+            setEvidencesData(items)
+        })()
+    },[])
 
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
@@ -704,6 +715,8 @@ const AnswerDetails = ({questionInfo}: any) => {
                         {...dialogProps}
                         questionInfo={questionInfo}
                         evidencesQueryData={evidencesQueryData}
+                        evidencesData={evidencesData}
+                        setEvidencesData={setEvidencesData}
                     />
                 </Box>
             </Box>
@@ -721,7 +734,7 @@ const Evidence = (props: any) => {
     const {service} = useServiceContext();
     const [evidenceId, setEvidenceId] = useState("")
     const {onClose: closeDialog, openDialog, ...rest} = props;
-    const {questionInfo, evidencesQueryData} = props;
+    const {questionInfo, evidencesQueryData, evidencesData, setEvidencesData} = props;
     const {assessmentId = ""} = useParams();
     const formMethods = useForm({shouldUnregister: true});
     const addEvidence = useQuery({
@@ -773,7 +786,8 @@ const Evidence = (props: any) => {
                     assessmentId,
                     type: value,
                 });
-                await await evidencesQueryData.query();
+                const {items} =  await evidencesQueryData.query();
+                setEvidencesData(items)
                 setValueCount("");
             }
         } catch (e) {
@@ -793,7 +807,8 @@ const Evidence = (props: any) => {
         try {
             await deleteEvidence.query();
             setExpandedDeleteDialog(false)
-            await evidencesQueryData.query();
+            const {items} =  await evidencesQueryData.query();
+            setEvidencesData(items)
         } catch (e) {
             const err = e as ICustomError;
             toastError(err);
@@ -985,14 +1000,12 @@ const Evidence = (props: any) => {
                 </form>
             </FormProvider>
             <Box mt={3}>
-                <QueryData
-                    {...evidencesQueryData}
-                    render={(data) => {
-                        const {items} = data;
-                        return items.map((item: any, index: number) => (
-                            <EvidenceDetail
+                {evidencesData && evidencesData.map((item: any, index: number) => (
+                                <EvidenceDetail
+                                key={index}
                                 setValue={setValue}
                                 item={item}
+                                setEvidencesData={setEvidencesData}
                                 setExpandedDeleteDialog={setExpandedDeleteDialog}
                                 setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
                                 setEvidenceId={setEvidenceId}
@@ -1002,17 +1015,15 @@ const Evidence = (props: any) => {
                                 questionInfo={questionInfo}
                                 assessmentId={assessmentId}
                             />
-                        ));
-                    }}
-                />
+                ))}
                 <EvidenceAttachmentsDialogs
                     expanded={expandedAttachmentsDialogs}
                     onClose={() => setExpandedAttachmentsDialogs(false)}
                     assessmentId={assessmentId}
                     evidenceId={evidenceId}
                     title={<Trans i18nKey={"addNewMember"}/>}
-                    cancelText={<Trans i18nKey={"uploadAnother"}/>}
-                    confirmText={<Trans i18nKey={"Upload attachment"}/>}
+                    uploadAnother={<Trans i18nKey={"uploadAnother"}/>}
+                    uploadAttachment={<Trans i18nKey={"uploadAttachment"}/>}
                     attachments={attachments}
                 />
                 <DeleteEvidenceDialog
@@ -1032,7 +1043,7 @@ const EvidenceDetail = (props: any) => {
     const {
         item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
         setExpandedDeleteDialog, setExpandedAttachmentsDialogs,
-        setAttachments, attachments
+        setAttachments, attachments, setEvidencesData
     } =
         props;
 
@@ -1076,7 +1087,9 @@ const EvidenceDetail = (props: any) => {
                     type: value,
                     id: id,
                 });
-                await await evidencesQueryData.query();
+               const {items} = await evidencesQueryData.query();
+                setEvidencesData(items)
+                setIsEditing(false)
                 setValueCount("");
             }
         } catch (e) {
@@ -1141,12 +1154,13 @@ const EvidenceDetail = (props: any) => {
         runOnMount: false,
     });
 
-    useEffect(() => {
-        (async () => {
-            let {attachments} = await fetchEvidenceAttachments.query()
-            setAttachments(attachments)
-        })()
-    }, []);
+    const expandedEvidenceBtm = async () =>{
+          setExpandedEvidenceBox(prev => !prev);
+          if(!expandedEvidenceBox){
+              let {attachments} = await fetchEvidenceAttachments.query()
+              setAttachments(attachments)
+          }
+    }
 
     useEffect(() => {
         setEvidenceId(id)
@@ -1338,7 +1352,7 @@ const EvidenceDetail = (props: any) => {
                                 <Box sx={{display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer"}}>
                                     <Typography>{description}</Typography>
                                     <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                        <Box onClick={() => setExpandedEvidenceBox(prev => !prev)}
+                                        <Box onClick={()=>expandedEvidenceBtm()}
                                              sx={{display: "flex"}}>
                                             <Typography sx={{...theme.typography.titleMedium}}><Trans
                                                 i18nKey={"addAttachments"}/></Typography>
@@ -1354,7 +1368,10 @@ const EvidenceDetail = (props: any) => {
                                              }} sx={{transition: "all 3s ease"}}>
                                             {
                                                 attachments.length <= 5 && (
-                                                    <Box onClick={() => setExpandedAttachmentsDialogs(true)}>
+                                                    <Box onClick={() => {
+                                                        setExpandedAttachmentsDialogs(true);
+                                                        setEvidenceId(id)
+                                                    }}>
                                                         <PreAttachment mainColor={evidenceBG?.borderColor}
                                                                        backgroundColor={evidenceBG?.background}/>
                                                     </Box>
@@ -1432,7 +1449,7 @@ const MyDropzone = (props: any) =>{
         if(acceptedFiles){
             let data ={
                 id:evidenceId,
-                attachment: acceptedFiles,
+                attachment: acceptedFiles[0],
                 description: ""
             }
             await addEvidenceAttachments.query({evidenceId,data})
@@ -1453,6 +1470,7 @@ const MyDropzone = (props: any) =>{
         <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => handelsendFile(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 <section style={{ cursor: "pointer" }}>
+                    <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
                     <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <img src={UploadIcon}/>
@@ -1468,6 +1486,7 @@ const MyDropzone = (props: any) =>{
                             sx={{...theme.typography.titleMedium, color: "#205F94"}}><Trans
                             i18nKey={"locateIt"}/></Typography>
                         </Typography></div>
+                    </Box>
                 </section>
             )}
         </Dropzone>
@@ -1477,7 +1496,7 @@ const MyDropzone = (props: any) =>{
 const EvidenceAttachmentsDialogs = (props: any) => {
 
     const {
-        expanded, onClose, title, cancelText, confirmText, setChangeData,
+        expanded, onClose, title, uploadAttachment, uploadAnother, setChangeData,
         assessmentId, attachments,evidenceId
     } = props;
 
@@ -1561,9 +1580,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                                 <Trans i18nKey="uploadAcceptableSize"/>
                             </Box>
                         </Typography>
-                        <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
                            <MyDropzone evidenceId={evidenceId} />
-                        </Box>
                     </Box>
                     <Box>
                         <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1.5rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
@@ -1587,17 +1604,19 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             fontWeight: 700,
                             color: "#004F83",
                             "&.MuiButton-root": {
-                                border: "unset",
+                                border: "1px solid #004F83",
+                                borderRadius: "100px",
+
                             },
                             "&.MuiButton-root:hover": {
                                 background: "unset",
-                                border: "unset",
+                                border: "1px solid #004F83",
                             },
                         }}
                         variant="outlined"
                         onClick={onClose}
                     >
-                        {cancelText}
+                        {uploadAnother}
                     </Button>
                     <Button
                         sx={{
@@ -1617,7 +1636,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         variant="contained"
                         // onClick={onConfirm}
                     >
-                        {confirmText}
+                        {uploadAttachment}
                     </Button>
                 </Box>
             </DialogContent>
