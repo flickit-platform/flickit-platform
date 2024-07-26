@@ -163,7 +163,7 @@ export const theme = createTheme({
       letterSpacing: "0",
     },
     displaySmall: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: primaryFontFamily,
       fontSize: "1rem",
       fontWeight: "normal",
       letterSpacing: "0",

@@ -10,6 +10,7 @@ import {
 import html2canvas from "html2canvas";
 import { IMaturityLevel, ISubject } from "@/types";
 import useScreenResize from "@/utils/useScreenResize";
+import { Trans } from "react-i18next";
 
 const styles = StyleSheet.create({
   page: {
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     color: "#000", // Header text color
   },
   tableCell: {
-    width: "25%", // Adjusted to three columns
+    width: "33.33%", // Adjusted to three columns
     borderStyle: "solid",
     borderColor: "#000",
     borderWidth: 1,
@@ -96,8 +97,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#000",
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
   },
   chart: {
     width: 540,
@@ -129,11 +130,13 @@ const styles = StyleSheet.create({
 });
 
 interface AssessmentReportPDFProps {
+  assessmentKitInfo: any;
   data: any;
   progress: any;
 }
 
 const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
+  assessmentKitInfo,
   data,
   progress,
 }) => {
@@ -182,6 +185,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
 
       const tableInstances = document.querySelectorAll(".checkbox-table");
 
+      console.log(tableInstances);
       const tablePromises = Array.from(tableInstances).map((instance) =>
         generateImageFromElement(instance, true, false)
       );
@@ -197,6 +201,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
     setTimeout(generateImages, 500); // Adjust timeout as needed
   }, []);
 
+  const { questionnaires, questionnairesCount } = assessmentKitInfo;
   const { status, assessment, subjects } = data || {};
   const { assessmentKit, maturityLevel, confidenceValue } = assessment || {};
   const { questionsCount, answersCount } = progress;
@@ -248,12 +253,27 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
       <Page size="A4" style={styles.page}>
         <Header />
         <View style={styles.section}>
-          <Text style={styles.titleLarge}>Evaluation Criteria</Text>
+          <Text style={styles.titleLarge}>
+            <Trans i18nKey="assessmentMethodology" />
+          </Text>
           <Text style={styles.displaySmall}>
-            In this evaluation, {subjects?.length} subjects:{" "}
-            {subjects?.map((elem: ISubject) => elem?.title)?.join(", ")} were
-            assessed. The table below provides a detailed definition of these
-            subjects and the qualitative features evaluated for each.
+            <Trans
+              i18nKey="assessmentMethodologyDescription"
+              values={{
+                title: assessment?.title,
+                subjects: subjects
+                  ?.map((elem: ISubject, index: number) =>
+                    index === 0
+                      ? elem?.title + "quality attributes"
+                      : index === 1
+                      ? elem?.title + "dynamics"
+                      : elem?.title
+                  )
+                  ?.join(", "),
+                maturityLevelsCount:
+                  assessment.assessmentKit.maturityLevelCount ?? 5,
+              }}
+            />
           </Text>
         </View>
         <Text
@@ -272,50 +292,22 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
       {/* Second Page */}
       <Page size="A4" style={styles.page}>
         <Header />
-
         <View style={styles.section}>
-          <Text style={styles.title}>
-            {" "}
-            Evaluation Subjects and Qualitative Features
-          </Text>
           <View style={styles.table}>
             {/* Table Header */}
             <View style={styles.tableRow}>
-              <Text style={styles.tableCellHeader}>Subject</Text>
-              <Text style={styles.tableCellHeader}>Explanation</Text>
-              <Text style={styles.tableCellHeader}>Qualitative Feature</Text>
-              <Text style={styles.tableCellHeader}>Explanation</Text>
-            </View>
-
-            {/* Table Body */}
-            {subjects?.map((subject: ISubject, index: number) => (
-              <>
-                {subject?.attributes?.map((feature, featureIndex) => (
-                  <View style={styles.tableRow} key={featureIndex}>
-                    <Text style={styles.tableCell}>
-                      {featureIndex === 0 ? subject?.title : ""}
-                    </Text>
-                    <Text style={styles.tableCell}>
-                      {featureIndex === 0 ? subject?.description : ""}
-                    </Text>
-                    <Text style={styles.tableCell}>{feature?.title}</Text>
-                    <Text style={styles.tableCell}>{feature?.description}</Text>
-                  </View>
-                ))}
-              </>
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.title}>Qualitative Classification</Text>
-          <View style={styles.table}>
-            {/* Table Header */}
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCellHeader}>Classification</Text>
-              <Text style={styles.tableCellHeader}>Score</Text>
-              <Text style={styles.tableCellHeader}>Description </Text>
-              <Text style={styles.tableCellHeader}> Level</Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="title" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="description" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="level" />
+              </Text>
             </View>
 
             {/* Table Body */}
@@ -324,7 +316,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                 <View key={index} style={styles.tableRow}>
                   <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
                   <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
-                  <Text style={styles.tableCell}>{maturityLevel?.index}</Text>
                   <Text style={styles.tableCell}>
                     {" "}
                     {maturityGaugeImages.length !== 0 && (
@@ -340,9 +331,146 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
           </View>
         </View>
         <View style={styles.section}>
+          <Text style={styles.title}>
+            <Trans i18nKey="assessmentFocus" />
+          </Text>
+          <Text style={styles.displaySmall}>
+            <Trans
+              i18nKey="assessmentFocusDescription"
+              values={{
+                subjectsCount: subjects.length,
+                subjects: subjects
+                  ?.map((elem: ISubject, index: number) =>
+                    index === subjects.length - 1
+                      ? " and " + elem?.title
+                      : index === 0
+                      ? elem?.title
+                      : ", " + elem?.title
+                  )
+                  ?.join(""),
+                attributesCount: subjects.reduce(
+                  (previousValue: number, currentValue: ISubject) => {
+                    return previousValue + currentValue.attributes.length;
+                  },
+                  0
+                ),
+              }}
+            />
+          </Text>
+          {subjects?.map((subject: ISubject) => (
+            <Text style={styles.displaySmall}>
+              <Trans
+                i18nKey="assessmentFocusDescriptionSubject"
+                values={{
+                  title: subject.title,
+                  description: subject.description,
+                }}
+              />
+            </Text>
+          ))}
+          <Text style={styles.displaySmall}>
+            {" "}
+            <Trans i18nKey="assessmentFocusDescriptionLastSection" />
+          </Text>
+          <View style={styles.table}>
+            {/* Table Header */}
+            <View style={styles.tableRow}>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="assessmentSubject" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="assessmentAttribute" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="description" />
+              </Text>
+            </View>
+
+            {/* Table Body */}
+            {subjects?.map((subject: ISubject, index: number) => (
+              <>
+                {subject?.attributes?.map((feature, featureIndex) => (
+                  <View style={styles.tableRow} key={featureIndex}>
+                    <Text style={styles.tableCell}>
+                      <Text>{featureIndex === 0 ? subject?.title : ""}</Text>
+                      <Text>
+                        {featureIndex === 0 ? subject?.description : ""}
+                      </Text>
+                    </Text>
+                    <Text style={styles.tableCell}>{feature?.title}</Text>
+                    <Text style={styles.tableCell}>{feature?.description}</Text>
+                  </View>
+                ))}
+              </>
+            ))}
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.title}>
+            <Trans i18nKey="questionnaires" />
+          </Text>
+          <Text style={styles.displaySmall}>
+            <Trans
+              i18nKey="questionnairesDescription"
+              values={{ questionnairesCount, questionsCount }}
+            />
+          </Text>
+          <View style={styles.table}>
+            {/* Table Header */}
+            <View style={styles.tableRow}>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="number" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="questionnaire" />
+              </Text>
+              <Text style={styles.tableCellHeader}>
+                {" "}
+                <Trans i18nKey="description" />
+              </Text>
+            </View>
+
+            {/* Table Body */}
+            {questionnaires?.map((questionnaire: ISubject, index: number) => (
+              <View style={styles.tableRow} key={index}>
+                <Text style={styles.tableCell}>{index + 1}</Text>
+                <Text style={styles.tableCell}>{questionnaire?.title}</Text>
+                <Text style={styles.tableCell}>{questionnaire?.description}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.section}>
           {subjects?.map((subject: ISubject, index: number) => (
             <>
-              <Text style={styles.title}>{subject.title}</Text>
+              <Text style={styles.title}>
+                {" "}
+                <Trans
+                  i18nKey="subjectStatusReport"
+                  values={{ title: subject?.title }}
+                />
+              </Text>
+              <Text style={styles.displaySmall}>
+                {" "}
+                <Trans
+                  i18nKey="subjectStatusReportDescription"
+                  values={{
+                    title: subject?.title,
+                    description: subject?.description,
+                    confidenceValue: Math?.ceil(subject?.confidenceValue ?? 0),
+                    maturityLevelValue: subject?.maturityLevel?.value,
+                    maturityLevelTitle: subject?.maturityLevel?.title,
+                    maturityLevelCount: assessmentKit.maturityLevelCount ?? 5,
+                    attributesCount: subject?.attributes?.length,
+                  }}
+                />
+              </Text>
               {tableImages.length !== 0 && (
                 <Image style={styles.chart} src={tableImages[index]} />
               )}
