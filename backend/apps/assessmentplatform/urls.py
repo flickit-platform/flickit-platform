@@ -3,12 +3,9 @@ from django.urls import include, path, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 
-from baseinfo.models.assessmentkitmodels import AssessmentKitDsl
 from assessmentplatform import settings
-from baseinfo.views import importassessmentkitviews
 
 admin.autodiscover()
 
