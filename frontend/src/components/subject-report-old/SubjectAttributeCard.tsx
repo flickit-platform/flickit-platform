@@ -218,7 +218,7 @@ const SUbjectAttributeCard = (props: any) => {
   );
 };
 
-const AttributeStatusBarContainer = (props: any) => {
+export const AttributeStatusBarContainer = (props: any) => {
   const { status, ml, cl, mn } = props;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[ml - 1];
@@ -227,7 +227,7 @@ const AttributeStatusBarContainer = (props: any) => {
       display={"flex"}
       sx={{
         // ml: { xs: -1.5, sm: -3, md: -4 },
-        flexDirection: { xs: "column", sm: "row" },
+        flexDirection: { xs: "column", md: "row" },
       }}
     >
       <Box display={"flex"} flex={1}>

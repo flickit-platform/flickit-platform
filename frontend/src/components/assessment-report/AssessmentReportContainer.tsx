@@ -118,7 +118,7 @@ const AssessmentReportContainer = (props: any) => {
                     <IconButton
                       data-cy="more-action-btn"
                       component={Link}
-                      to={`/${spaceId}/assessments/1/assessmentDocument/${assessmentId}`}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-kits/${assessmentKit.id}/`}
                     >
                       <ArticleRounded
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
