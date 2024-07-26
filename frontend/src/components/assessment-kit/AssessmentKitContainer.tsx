@@ -328,7 +328,10 @@ const AssessmentKit = (props: any) => {
                 >
                   <Trans i18nKey="createAssessment" />
                 </Button>
-                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={undefined} />
+                <AssessmentCEFromDialog
+                  {...dialogProps}
+                  onSubmitForm={undefined}
+                />
               </Box>
             </Box>
           </Grid>
@@ -355,7 +358,7 @@ const AssessmentKit = (props: any) => {
                       <Box
                         sx={{
                           background: colorCode,
-                          fontSize: "0.825rem",
+                          fontSize: "1rem",
                           py: { xs: "0.16rem", md: 1 },
                           px: { xs: 1, md: 4 },
                           fontWeight: "bold",
@@ -364,8 +367,8 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                                ? "0 8px 8px 0"
-                                : "0",
+                              ? "0 8px 8px 0"
+                              : "0",
                         }}
                       >
                         {item.title}
@@ -403,11 +406,15 @@ const AssessmentKit = (props: any) => {
                                 textJustify: "inter-word",
                               }}
                             >
-                              <Box component="span" fontWeight="bold">
+                              <Box
+                                component="span"
+                                fontSize="1rem"
+                                fontWeight="bold"
+                              >
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box component="span" fontSize="0.825rem">
+                              <Box component="span" fontSize="1rem">
                                 {att.description}
                               </Box>
                             </Typography>
