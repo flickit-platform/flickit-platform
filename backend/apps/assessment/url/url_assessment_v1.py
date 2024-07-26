@@ -2,11 +2,13 @@ from django.urls import path
 
 from assessment.views import (projectviews, reportviews, confidence_levels_views, assessment_views,
                               advice_views, assessment_user_roles_views, maturity_level_views, questionnaire_views,
-                              attributes_views)
+                              attributes_views,question_views)
 
 urlpatterns = [
     path("", projectviews.AssessmentProjectApi.as_view()),
     path("<uuid:assessment_id>/calculate/", maturity_level_views.MaturityLevelCalculateApi.as_view()),
+    path("<uuid:assessment_id>/questions/<int:question_id>/answer-history/",
+         question_views.AnswerHistoryApi.as_view()),
     path("<uuid:assessment_id>/questionnaires/<int:questionnaire_id>/",
          questionnaire_views.LoadQuestionsWithQuestionnairesApi.as_view()),
     path("<uuid:assessment_id>/subjects/<int:subject_id>/progress/", reportviews.SubjectProgressApi.as_view()),
