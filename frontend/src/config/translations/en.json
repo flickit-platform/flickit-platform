@@ -33,6 +33,7 @@
   "nextQuestion": "NEXT QUESTION",
   "howMyAnswerLook": "How my answer looks?",
   "goBackToQuestionnaires": "go back to questionnaires",
+  "spaceCreatedSuccessMessage": "{{title}} created successfully",
   "question": "Question",
   "createSpace": "Create space",
   "create": "Create",

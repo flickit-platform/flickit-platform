@@ -13,6 +13,8 @@ import { ICustomError } from "@utils/CustomError";
 import setServerFieldErrors from "@utils/setServerFieldError";
 import toastError from "@utils/toastError";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface ICreateSpaceDialogProps extends DialogProps {
   onClose: () => void;
@@ -24,12 +26,20 @@ interface ICreateSpaceDialogProps extends DialogProps {
 const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { id: spaceId } = data;
-  const defaultValues = type === "update" ? data : { title: "", code: nanoid(5) };
+  const defaultValues =
+    type === "update" ? data : { title: "", code: nanoid(5) };
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
+  const navigate = useNavigate();
 
   const close = () => {
     abortController.abort();
@@ -39,13 +49,25 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     setLoading(true);
     try {
+      let createdSpaceId = 1;
       type === "update"
-        ?( await service.updateSpace({ spaceId, data }, { signal: abortController.signal }) &&
-           await service.seenSpaceList({ spaceId },{})
-          )
-        : await service.createSpace(data, { signal: abortController.signal });
-
+        ? (await service.updateSpace(
+            { spaceId, data },
+            { signal: abortController.signal }
+          )) && (await service.seenSpaceList({ spaceId }, {}))
+        : await service
+            .createSpace(data, { signal: abortController.signal })
+            .then((res) => {
+              createdSpaceId = res.data.id;
+            });
+      navigate(`/${createdSpaceId}/assessments/1`);
       setLoading(false);
+      toast.success(
+        <Trans
+          i18nKey="spaceCreatedSuccessMessage"
+          values={{ title: data.title }}
+        />
+      );
       onSubmitForm();
       close();
     } catch (e) {
@@ -69,7 +91,11 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       title={
         <>
           <CreateNewFolderRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? <Trans i18nKey="updateSpace" /> : <Trans i18nKey="createSpace" />}
+          {type === "update" ? (
+            <Trans i18nKey="updateSpace" />
+          ) : (
+            <Trans i18nKey="createSpace" />
+          )}
         </>
       }
     >
@@ -97,7 +123,9 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) => formMethods.handleSubmit((data) => onSubmit(data, ...args))}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>
