@@ -404,6 +404,7 @@
   "goodJob": "Good job!",
   "allQuestionsHaveBeenAnswered": "All questions have been answered.",
   "allQuestionsInThisQuestionnaireHaveBeenAnswered": "All questions in this questionnaire have been answered. To have more accurate insights, you can complete other questionnaires as well.",
+  "allQuestionsInAllQuestionnaireHaveBeenAnswered": "All questions in every questionnaire have been answered. You can now view insights or choose to review other questionnaires.",
   "youAnsweredQuestionOf": "{{answeredQuestions}} out of {{totalQuestions}} questions have been answered",
   "advisable": "Advisable",
   "loadMore": "Load more",
