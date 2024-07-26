@@ -177,15 +177,15 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
 
       const gaugeImageUrls = await Promise.all(gaugePromises);
       setMaturityGaugeImages(gaugeImageUrls.filter(Boolean) as string[]);
-      setChartImages(chartImageUrls.filter(Boolean) as string[]);
 
       if (window.innerWidth < 600) return;
+
+      setChartImages(chartImageUrls.filter(Boolean) as string[]);
 
       // Create promises to generate images for all chart and gauge instances
 
       const tableInstances = document.querySelectorAll(".checkbox-table");
 
-      console.log(tableInstances);
       const tablePromises = Array.from(tableInstances).map((instance) =>
         generateImageFromElement(instance, true, false)
       );

@@ -486,7 +486,7 @@ const AssessmentExportContainer = () => {
                     />
                   </Typography>
                   <Box
-                    height={subject?.attributes?.length > 2 ? "400px" : "300px"}
+                    height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
                   >
                     {subject?.attributes?.length > 2 ? (
                       <AssessmentSubjectRadarChart

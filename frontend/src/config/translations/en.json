@@ -217,7 +217,7 @@
   "assessmentKits": "Assessment Kits",
   "assessmentKit": "Assessment Kit",
   "subjectStatusReport": "{{title}} Status Report",
-  "subjectStatusReportDescription": "One key aspect of this assessment is evaluating the maturity level of the {{title}}, which refers to {{description}}.<br/>With {{confidenceValue}}% confidence, the overall maturity level of the {{title}} has been estimated at {{maturityLevelValue}} out of {{maturityLevelCount}}, indicating that it is {{maturityLevelTitle}}.<br/>{{attributesCount}} attributes of the {{title}} have been evaluated in this assessment. For each attribute, both the maturity level and the confidence level have been documented. The radar chart below illustrates the maturity levels of these attributes.",
+  "subjectStatusReportDescription": "One key aspect of this assessment is evaluating the maturity level of the {{title}}, which refers to {{description}}.<br/>With {{confidenceValue}}% confidence, the overall maturity level of the {{title}} has been estimated at {{maturityLevelValue}} out of {{maturityLevelCount}}, indicating that it is {{maturityLevelTitle}}.<br/>{{attributesCount}} attributes of the {{title}} have been evaluated in this assessment. For each attribute, both the maturity level and the confidence level have been documented. The chart below illustrates the maturity levels of these attributes.",
   "document": "{{title}} Document",
   "assessmentMethodology": "Assessment Methodology",
   "assessmentFocus": "Assessment Focus",
