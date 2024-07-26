@@ -260,15 +260,6 @@ const AddMemberDialog = (props: {
           >
             {title}
           </Typography>
-          <Tooltip title={<Trans i18nKey={"addMemberParent"} />}>
-            <InfoOutlinedIcon
-              sx={{
-                width: "1.5rem",
-                height: "1.5rem",
-                color: "#fff",
-              }}
-            />
-          </Tooltip>
         </Box>
         <Box
           display="flex"

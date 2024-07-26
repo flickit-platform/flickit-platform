@@ -154,7 +154,7 @@ const AssessmentSettingContainer = () => {
               fetchAssessmentsUserListRoles={
                 fetchAssessmentsUserListRoles.query
               }
-              title={<Trans i18nKey={"addNewMember"} />}
+              title={<Trans i18nKey={"addNewRole"} />}
               cancelText={<Trans i18nKey={"cancel"} />}
               confirmText={<Trans i18nKey={"addToThisAssessment"} />}
               setChangeData={setChangeData}
