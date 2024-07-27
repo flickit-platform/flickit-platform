@@ -272,12 +272,4 @@ SWAGGER_SETTINGS = {
     }
 }
 
-DJOSER = {
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {
-        'user': 'account.serializers.userserializers.UserSerializer',
-        'current_user': 'account.serializers.userserializers.UserCustomSerializer',
-    },
 
-}
