@@ -228,6 +228,7 @@
   "assessmentFocusDescriptionSubject": "{{title}} refers to {{description}}.",
   "assessmentFocusDescriptionLastSection": "The following table provides a brief description of the subjects and their attributes.",
   "questionnairesDescription": "To measure the maturity level of each subject and its attributes, {{questionnairesCount}} questionnaires, including a total of {{questionsCount}} questions, are prepared. During the assessment process, each question will be scored. Each question may affect the score of one or more subject attributes. The following table presents these questionnaires.",
+  "questionnairesAssessmentKitDescription": "To measure the maturity level in this assessment kit, a bunch of questions are asked.These questions are categorized into the following {{questionnairesCount}} questionnaires.",
   "assessmentSettings": "Assessment Settings",
   "assessmentTitle": "Assessment title",
   "creator": "Creator",
