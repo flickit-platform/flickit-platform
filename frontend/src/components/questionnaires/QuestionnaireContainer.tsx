@@ -96,7 +96,7 @@ const QuestionnaireContainer = () => {
   );
 };
 
-const useQuestionnaire = () => {
+export const useQuestionnaire = () => {
   const { service } = useServiceContext();
   const [searchParams] = useSearchParams();
   const { assessmentId } = useParams();

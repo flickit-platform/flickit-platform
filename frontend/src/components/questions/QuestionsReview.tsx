@@ -22,6 +22,7 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import { ECustomErrorType, IAssessmentKitReportModel } from "@/types";
 import { customFontFamily } from "@/config/theme";
+import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 
 const QuestionsReview = () => {
   const { questionIndex, questionsInfo, assessmentStatus } =
@@ -64,6 +65,13 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
       }
     }
   }, [questionsInfo]);
+  const { assessmentTotalProgress } = useQuestionnaire();
+
+  const progress =
+    ((assessmentTotalProgress?.data?.answersCount || 0) /
+      (assessmentTotalProgress?.data?.questionsCount || 1)) *
+    100;
+
   return (
     <Box
       maxWidth={"1440px"}
@@ -139,18 +147,33 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                 >
                   <Trans i18nKey="allQuestionsHaveBeenAnswered" />
                 </Typography>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    opacity: 0.8,
-                    fontSize: "1rem",
-                    mb: 4,
-                    fontWeight: 600,
-                    color: "#0A2342",
-                  }}
-                >
-                  <Trans i18nKey="allQuestionsInThisQuestionnaireHaveBeenAnswered" />
-                </Typography>
+                {progress === 100 ? (
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      opacity: 0.8,
+                      fontSize: "1rem",
+                      mb: 4,
+                      fontWeight: 600,
+                      color: "#0A2342",
+                    }}
+                  >
+                    <Trans i18nKey="allQuestionsInAllQuestionnaireHaveBeenAnswered" />
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      opacity: 0.8,
+                      fontSize: "1rem",
+                      mb: 4,
+                      fontWeight: 600,
+                      color: "#0A2342",
+                    }}
+                  >
+                    <Trans i18nKey="allQuestionsInThisQuestionnaireHaveBeenAnswered" />
+                  </Typography>
+                )}
               </>
             )}
             {isEmpty && (
@@ -304,7 +327,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily={`${is_farsi ? "Vazirmatn" : customFontFamily}`}
+                      fontFamily={`${
+                        is_farsi ? "Vazirmatn" : customFontFamily
+                      }`}
                       fontWeight="bold"
                       letterSpacing={is_farsi ? "0" : ".05em"}
                     >
@@ -322,7 +347,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily={`${is_farsi ? "Vazirmatn" : customFontFamily}`}
+                        fontFamily={`${
+                          is_farsi ? "Vazirmatn" : customFontFamily
+                        }`}
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >

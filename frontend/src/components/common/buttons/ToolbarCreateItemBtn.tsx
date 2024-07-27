@@ -31,7 +31,7 @@ export const ToolbarCreateItemBtn = (props: IToolbarCreateItemBtnProps) => {
         },
       }}
     >
-      <Trans i18nKey={isSmallScreen ? "create" : text} />
+      <Trans i18nKey={text} />
     </Button>
   );
 };

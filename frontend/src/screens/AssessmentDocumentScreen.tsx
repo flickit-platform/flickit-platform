@@ -3,9 +3,9 @@ import useDocumentTitle from "@utils/useDocumentTitle";
 import AssessmentExportContainer from "@/components/assessment-export/AssessmentExportContainer";
 
 const AssessmentDocumentScreen = () => {
-    useDocumentTitle(`${t("assessmentDocument")}`);
+  useDocumentTitle(`${t("document", { title: "" })}`);
 
-    return <AssessmentExportContainer />;
+  return <AssessmentExportContainer />;
 };
 
 export default AssessmentDocumentScreen;
