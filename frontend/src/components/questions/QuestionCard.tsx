@@ -69,12 +69,14 @@ import {useTheme} from "@mui/material/styles";
 import arrowBtn from "../../assets/svg/arrow.svg"
 import UploadIcon from "../../assets/svg/UploadIcon.svg"
 import PreAttachment from "@components/questions/iconFiles/preAttachments";
+import IconFile from "@components/questions/iconFiles/iconFile";
 import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Dropzone, {useDropzone} from 'react-dropzone'
+import {toast} from "react-toastify";
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -593,24 +595,6 @@ const AnswerTemplate = (props: {
 const AnswerDetails = ({questionInfo}: any) => {
     const dialogProps = useDialog();
 
-    const [evidencesData,setEvidencesData]= useState<any[]>([])
-
-    const evidencesQueryData = useQuery({
-        service: (
-            args = {questionId: questionInfo.id, assessmentId, page: 0, size: 10},
-            config
-        ) => service.fetchEvidences(args, config),
-        toastError: true,
-    });
-
-
-    useEffect(()=>{
-        (async ()=>{
-            let {items} = await evidencesQueryData.query()
-            setEvidencesData(items)
-        })()
-    },[])
-
     const {service} = useServiceContext();
     const {assessmentId = ""} = useParams();
 
@@ -714,9 +698,6 @@ const AnswerDetails = ({questionInfo}: any) => {
                     <Evidence
                         {...dialogProps}
                         questionInfo={questionInfo}
-                        evidencesQueryData={evidencesQueryData}
-                        evidencesData={evidencesData}
-                        setEvidencesData={setEvidencesData}
                     />
                 </Box>
             </Box>
@@ -727,20 +708,43 @@ const AnswerDetails = ({questionInfo}: any) => {
 const Evidence = (props: any) => {
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
+    const [evidencesData,setEvidencesData]= useState<any[]>([])
     const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
-    const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<boolean>(false);
-    const [attachments, setAttachments] = useState<any[]>([]);
+    const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({expended:false,count:0});
+   const [getAttachmentData,setAttachmentData] = useState(false)
     const is_farsi = firstCharDetector(valueCount);
     const {service} = useServiceContext();
     const [evidenceId, setEvidenceId] = useState("")
     const {onClose: closeDialog, openDialog, ...rest} = props;
-    const {questionInfo, evidencesQueryData, evidencesData, setEvidencesData} = props;
+    const {questionInfo } = props;
     const {assessmentId = ""} = useParams();
     const formMethods = useForm({shouldUnregister: true});
+
+    const evidencesQueryData = useQuery({
+        service: (
+            args = {questionId: questionInfo.id, assessmentId, page: 0, size: 10},
+            config
+        ) => service.fetchEvidences(args, config),
+        toastError: true,
+    });
+
     const addEvidence = useQuery({
         service: (args, config) => service.addEvidence(args, config),
         runOnMount: false,
     });
+
+    const fetchEvidenceAttachments = useQuery({
+        service: (args , config) => service.fetchEvidenceAttachments(args, config),
+        runOnMount: false,
+    });
+
+    useEffect(()=>{
+        (async ()=>{
+            let {items} = await evidencesQueryData.query()
+            setEvidencesData(items)
+        })()
+    },[])
+
     const [value, setValue] = React.useState("POSITIVE");
     const [evidenceBG, setEvidenceBG] = useState<any>({
         background: "#EDFCFC",
@@ -814,6 +818,10 @@ const Evidence = (props: any) => {
             toastError(err);
         }
     };
+
+    const fetchAttachments = async (args) =>{
+        return fetchEvidenceAttachments.query({...args})
+    }
 
     return (
         <Box
@@ -1008,23 +1016,27 @@ const Evidence = (props: any) => {
                                 setEvidencesData={setEvidencesData}
                                 setExpandedDeleteDialog={setExpandedDeleteDialog}
                                 setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
+                                expandedAttachmentsDialogs={expandedAttachmentsDialogs}
                                 setEvidenceId={setEvidenceId}
-                                setAttachments={setAttachments}
-                                attachments={attachments}
+                                evidenceId={evidenceId}
                                 evidencesQueryData={evidencesQueryData}
                                 questionInfo={questionInfo}
                                 assessmentId={assessmentId}
+                                fetchAttachments={fetchAttachments}
+                                getAttachmentData={getAttachmentData}
+                                setAttachmentData={setAttachmentData}
                             />
                 ))}
                 <EvidenceAttachmentsDialogs
                     expanded={expandedAttachmentsDialogs}
-                    onClose={() => setExpandedAttachmentsDialogs(false)}
+                    onClose={() => setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs, expended: false})}
                     assessmentId={assessmentId}
                     evidenceId={evidenceId}
                     title={<Trans i18nKey={"addNewMember"}/>}
                     uploadAnother={<Trans i18nKey={"uploadAnother"}/>}
                     uploadAttachment={<Trans i18nKey={"uploadAttachment"}/>}
-                    attachments={attachments}
+                    fetchAttachments={fetchAttachments}
+                    setAttachmentData={setAttachmentData}
                 />
                 <DeleteEvidenceDialog
                     expanded={expandedDeleteDialog}
@@ -1042,10 +1054,10 @@ const Evidence = (props: any) => {
 const EvidenceDetail = (props: any) => {
     const {
         item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
-        setExpandedDeleteDialog, setExpandedAttachmentsDialogs,
-        setAttachments, attachments, setEvidencesData
-    } =
-        props;
+        setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
+        fetchAttachments,expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
+        evidenceId
+    } = props;
 
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
@@ -1072,6 +1084,7 @@ const EvidenceDetail = (props: any) => {
     const formContext = useFormContext();
     const {service} = useServiceContext();
     const [isEditing, setIsEditing] = useState(false)
+    const [attachments, setAttachments] = useState<any[]>([])
 
     const submitRef = useRef<any>(null)
 
@@ -1149,15 +1162,20 @@ const EvidenceDetail = (props: any) => {
     const theme = useTheme();
     const refBox = useRef<any>(null)
 
-    const fetchEvidenceAttachments = useQuery({
-        service: (args = {evidence_id: id}, config) => service.fetchEvidenceAttachments(args, config),
-        runOnMount: false,
-    });
+    useEffect(()=>{
+        (async ()=>{
+            if(getAttachmentData && id == evidenceId){
+                let {attachments} = await fetchAttachments({evidence_id: id})
+                setAttachments(attachments)
+                setAttachmentData(false)
+            }
+        })()
+    },[getAttachmentData])
 
     const expandedEvidenceBtm = async () =>{
           setExpandedEvidenceBox(prev => !prev);
           if(!expandedEvidenceBox){
-              let {attachments} = await fetchEvidenceAttachments.query()
+              let {attachments} = await fetchAttachments({evidence_id: id})
               setAttachments(attachments)
           }
     }
@@ -1165,6 +1183,18 @@ const EvidenceDetail = (props: any) => {
     useEffect(() => {
         setEvidenceId(id)
     }, [id]);
+
+
+    const downloadFile = ({link})=>{
+        const fileUrl = link;
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.target = "_blank"
+        a.download = "file_name.zip";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
 
     return (
         <Box display="flex" flexDirection="column" width="100%">
@@ -1365,18 +1395,28 @@ const EvidenceDetail = (props: any) => {
                                              style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
                                                  maxHeight: 0,
                                                  overflow: "hidden"
-                                             }} sx={{transition: "all 3s ease"}}>
-                                            {
-                                                attachments.length <= 5 && (
-                                                    <Box onClick={() => {
-                                                        setExpandedAttachmentsDialogs(true);
-                                                        setEvidenceId(id)
-                                                    }}>
-                                                        <PreAttachment mainColor={evidenceBG?.borderColor}
-                                                                       backgroundColor={evidenceBG?.background}/>
-                                                    </Box>
-                                                )
-                                            }
+                                             }} sx={{transition: "all 3s ease",display: "flex", gap: ".5rem"}}>
+                                                        {attachments.map((item,index)=>{
+                                                            return(
+                                                                <Box key={index} onClick={()=>downloadFile(item)}>
+                                                                    <IconFile mainColor={evidenceBG?.borderColor}
+                                                                              backgroundColor={evidenceBG?.background} />
+                                                                </Box>
+                                                            )
+                                                        })}
+                                            { attachments.length < 5 && (<>
+
+                                                        <Box onClick={() => {
+                                                            setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
+                                                            setEvidenceId(id)
+                                                        }}>
+                                                            <PreAttachment mainColor={evidenceBG?.borderColor}
+                                                                           backgroundColor={evidenceBG?.background}/>
+                                                        </Box>
+                                                </>
+
+                                                )}
+
                                         </Box>
                                     </Box>
                                 </Box>
@@ -1432,29 +1472,7 @@ const EvidenceDetail = (props: any) => {
 
 const MyDropzone = (props: any) =>{
 
-    const {evidenceId} = props
-
-    const {service} = useServiceContext();
-    const abortController = useMemo(() => new AbortController(),[evidenceId] );
-
-
-    const addEvidenceAttachments = useQuery({
-        service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
-        runOnMount: false,
-    });
-
-
-
-    const handelsendFile = async (acceptedFiles :any) => {
-        if(acceptedFiles){
-            let data ={
-                id:evidenceId,
-                attachment: acceptedFiles[0],
-                description: ""
-            }
-            await addEvidenceAttachments.query({evidenceId,data})
-        }
-    }
+    const { setDropZone } = props
 
     const {
         acceptedFiles,
@@ -1467,7 +1485,7 @@ const MyDropzone = (props: any) =>{
 
     const theme = useTheme()
     return (
-        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => handelsendFile(acceptedFiles) }>
+        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 <section style={{ cursor: "pointer" }}>
                     <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
@@ -1496,15 +1514,73 @@ const MyDropzone = (props: any) =>{
 const EvidenceAttachmentsDialogs = (props: any) => {
 
     const {
-        expanded, onClose, title, uploadAttachment, uploadAnother, setChangeData,
-        assessmentId, attachments,evidenceId
+        expanded, onClose, uploadAttachment, uploadAnother,
+        evidenceId, fetchAttachments, setAttachmentData
     } = props;
+    const MAX_DESK_TEXT = 100
+
+    const fetchEvidenceAttachments = useQuery({
+        service: (args = {evidence_id: evidenceId}, config) => service.fetchEvidenceAttachments(args, config),
+        runOnMount: false,
+    });
+
+    const {service} = useServiceContext();
+    const abortController = useMemo(() => new AbortController(),[evidenceId] );
+    const [desc,setDesc] = useState("")
+    const [getDropZone,setDropZone] = useState<any>(null)
+    const addEvidenceAttachments = useQuery({
+        service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
+        runOnMount: false,
+    });
+
+    const handelDescription = (e: any) =>{
+        if(e.target.value.length <= MAX_DESK_TEXT){
+            setDesc(e.target.value)
+        }else {
+            // toastError(t("max100character") as string);
+        }
+    }
+
+    const handelSendFile = async () => {
+        if(getDropZone){
+            let data ={
+                id:evidenceId,
+                attachment: getDropZone[0],
+                description: desc
+            }
+            //TODO
+            await addEvidenceAttachments.query({evidenceId,data})
+            let {attachments} = await fetchAttachments({evidence_id: evidenceId})
+            setAttachmentData(true)
+            setDropZone(null)
+            onClose()
+        }
+    }
+
+    const handelSendAnother = async () => {
+        if(getDropZone){
+            let data ={
+                id:evidenceId,
+                attachment: getDropZone[0],
+                description: desc
+            }
+            await addEvidenceAttachments.query({evidenceId,data})
+            setAttachmentData(true)
+            setDropZone(null)
+            if(expanded.count >= 5){
+                onClose()
+            }
+        }
+    }
 
     const theme = useTheme()
     return (
         <Dialog
-            open={expanded}
-            onClose={onClose}
+            open={expanded.expended}
+            onClose={()=> {
+                onClose();
+                setDropZone(null)
+            }}
             maxWidth={"sm"}
             // fullScreen={fullScreen}
             fullWidth
@@ -1550,10 +1626,10 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     textAlign: "center",
                 }}
             >
-                <Box sx={{display: "flex", flexDirection: "column", py: "48px", gap: "48px"}}>
+                <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px"}}>
                     <Box>
-                        <Typography sx={{...theme.typography.headlineSmall, pb: "24px"}}>
-                            <Trans i18nKey={"uploadAttachment"}/> ( {attachments.length} of 5 )
+                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"24px",paddingTop:"55px"}}>
+                            <Trans i18nKey={"uploadAttachment"}/> <Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
                         </Typography>
                         <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left"}}>
                             <Box sx={{display: "flex", gap: '2px'}}>
@@ -1580,14 +1656,15 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                                 <Trans i18nKey="uploadAcceptableSize"/>
                             </Box>
                         </Typography>
-                           <MyDropzone evidenceId={evidenceId} />
+                           <MyDropzone setDropZone={setDropZone} />
                     </Box>
                     <Box>
-                        <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1.5rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
+                        <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
                         <TextField
                             id="outlined-multiline-static"
                             multiline
                             fullWidth
+                            onChange={handelDescription}
                             variant="filled"
                             placeholder={"Add description for this specific attachment up to 100 charachter"}
                         />
@@ -1614,7 +1691,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="outlined"
-                        onClick={onClose}
+                        onClick={handelSendAnother}
                     >
                         {uploadAnother}
                     </Button>
@@ -1634,7 +1711,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="contained"
-                        // onClick={onConfirm}
+                        onClick={handelSendFile}
                     >
                         {uploadAttachment}
                     </Button>

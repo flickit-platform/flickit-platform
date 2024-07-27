@@ -432,5 +432,6 @@
   "dragYourFile": "Drag your file here or ",
   "locateIt": " Locate it ",
   "additionalInfo": "Additional info",
-  "uploadAnother": "Upload and add another file"
+  "uploadAnother": "Upload and add another file",
+  "max100character": "maximum 100 character"
 }
