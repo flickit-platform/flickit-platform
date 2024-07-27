@@ -819,7 +819,7 @@ const Evidence = (props: any) => {
         }
     };
 
-    const fetchAttachments = async (args) =>{
+    const fetchAttachments = async (args :any) =>{
         return fetchEvidenceAttachments.query({...args})
     }
 
@@ -1160,13 +1160,14 @@ const EvidenceDetail = (props: any) => {
 
 
     const theme = useTheme();
-    const refBox = useRef<any>(null)
+    // const refBox = useRef<any>(null)
 
     useEffect(()=>{
         (async ()=>{
             if(getAttachmentData && id == evidenceId){
                 let {attachments} = await fetchAttachments({evidence_id: id})
                 setAttachments(attachments)
+                setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs,count: attachments.length});
                 setAttachmentData(false)
             }
         })()
@@ -1185,7 +1186,7 @@ const EvidenceDetail = (props: any) => {
     }, [id]);
 
 
-    const downloadFile = ({link})=>{
+    const downloadFile = ({link} : {link: string})=>{
         const fileUrl = link;
         const a = document.createElement("a");
         a.href = fileUrl;
@@ -1388,14 +1389,16 @@ const EvidenceDetail = (props: any) => {
                                                 i18nKey={"addAttachments"}/></Typography>
                                             <img style={expandedEvidenceBox ? {
                                                 rotate: "180deg",
-                                                transition: "all .3s ease"
-                                            } : {rotate: "0deg", transition: "all .3s ease"}} src={arrowBtn}/>
+                                                transition: "all .2s ease"
+                                            } : {rotate: "0deg", transition: "all .2s ease"}} src={arrowBtn}/>
                                         </Box>
-                                        <Box ref={refBox}
-                                             style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
+                                        <Box
+                                            // ref={refBox}
+                                             // style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
+                                             style={expandedEvidenceBox ? {maxHeight: "40px"} : {
                                                  maxHeight: 0,
                                                  overflow: "hidden"
-                                             }} sx={{transition: "all 3s ease",display: "flex", gap: ".5rem"}}>
+                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem"}}>
                                                         {attachments.map((item,index)=>{
                                                             return(
                                                                 <Box key={index} onClick={()=>downloadFile(item)}>
@@ -1600,6 +1603,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     padding: "0!important",
                     background: "#004F83",
                     overflow: "hidden",
+                    position: "relative"
                 }}
             >
                 <Box
@@ -1613,6 +1617,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 >
                     <Trans i18nKey="uploadAttachment"/>
                 </Box>
+                    <ClearIcon
+                        onClick={onClose}
+                        style={{color: "#fff"}}
+                                   sx={{position: "absolute", width: "25px", height: "25px",right: "20px",top: "25px",
+                                   cursor: "pointer"
+                                   }} />
             </DialogContent>
             <DialogContent
                 sx={{
@@ -1628,8 +1638,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             >
                 <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px"}}>
                     <Box>
-                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"24px",paddingTop:"55px"}}>
-                            <Trans i18nKey={"uploadAttachment"}/> <Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
+                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"24px",paddingTop:"24px", gap: "5px"}}>
+                            <Trans i18nKey={"uploadAttachment"}/><Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
                         </Typography>
                         <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left"}}>
                             <Box sx={{display: "flex", gap: '2px'}}>
