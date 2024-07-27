@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import {
   Document,
   Page,
@@ -49,25 +49,40 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
   },
   subtitle: {
-    fontSize: 18,
-    margin: 12,
-  },
-  description: {
     fontSize: 12,
     margin: 12,
   },
+  description: {
+    fontSize: 10,
+    margin: 12,
+  },
   table: {
-    display: "flex",
-    width: "100%",
-    borderStyle: "solid",
-    borderColor: "#000",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 6,
     borderWidth: 1,
-    marginBottom: 10,
+    borderColor: "#404040",
+  },
+  container: {
+    flexDirection: "row",
+    borderBottomColor: "#404040",
+    borderBottomWidth: 1,
+    alignItems: "center",
+    height: 24,
+    fontStyle: "bold",
+  },
+  member: {
+    width: "75%",
+    borderRightColor: "#1a1a1a",
+    borderRightWidth: 1,
+  },
+  amount: {
+    width: "25%",
   },
   tableRow: {
     flexDirection: "row",
@@ -77,19 +92,24 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#000",
     borderWidth: 1,
-    padding: 5,
+    padding: 3,
     textAlign: "center",
     fontWeight: "bold",
     backgroundColor: "#ccc", // Header background color
     color: "#000", // Header text color
+    fontSize: 14
   },
   tableCell: {
     width: "33.33%", // Adjusted to three columns
     borderStyle: "solid",
     borderColor: "#000",
     borderWidth: 1,
-    padding: 5,
+    padding: 3,
     textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 12
   },
   divider: {
     marginVertical: 10,
@@ -104,12 +124,12 @@ const styles = StyleSheet.create({
     width: 540,
   },
   titleLarge: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
   },
   displaySmall: {
-    fontSize: 18,
+    fontSize: 12,
     marginBottom: 10,
   },
   tableHeader: {
@@ -266,8 +286,8 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                     index === 0
                       ? elem?.title + "quality attributes"
                       : index === 1
-                      ? elem?.title + "dynamics"
-                      : elem?.title
+                        ? elem?.title + " dynamics"
+                        : elem?.title
                   )
                   ?.join(", "),
                 maturityLevelsCount:
@@ -275,24 +295,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
               }}
             />
           </Text>
-        </View>
-        <Text
-          style={{
-            position: "absolute",
-            bottom: 30,
-            left: "50%",
-            transform: "translateX(-50%)",
-            fontSize: 10,
-          }}
-        >
-          Page 1 of 2
-        </Text>
-      </Page>
-
-      {/* Second Page */}
-      <Page size="A4" style={styles.page}>
-        <Header />
-        <View style={styles.section}>
           <View style={styles.table}>
             {/* Table Header */}
             <View style={styles.tableRow}>
@@ -313,25 +315,43 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             {/* Table Body */}
             {assessment?.assessmentKit?.maturityLevels.map(
               (maturityLevel: IMaturityLevel, index: number) => (
-                <View key={index} style={styles.tableRow}>
-                  <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
-                  <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
-                  <Text style={styles.tableCell}>
-                    {" "}
-                    {maturityGaugeImages.length !== 0 && (
-                      <Image
-                        style={styles.image}
-                        src={maturityGaugeImages[index]}
-                      />
-                    )}
-                  </Text>
-                </View>
+                <Fragment>
+                  <View key={index} style={styles.tableRow}>
+                    <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
+                    <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
+                    <Text style={styles.tableCell}>
+                      {" "}
+                      {maturityGaugeImages.length !== 0 && (
+                        <Image
+                          style={styles.image}
+                          src={maturityGaugeImages[index]}
+                        />
+                      )}
+                    </Text>
+                  </View></Fragment>
               )
             )}
           </View>
         </View>
+        <Text
+          style={{
+            position: "absolute",
+            bottom: 30,
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontSize: 10,
+          }}
+        >
+          Page 1 of 4
+        </Text>
+
+      </Page>
+
+      {/* Second Page */}
+      <Page size="A4" style={styles.page}>
+        <Header />
         <View style={styles.section}>
-          <Text style={styles.title}>
+          <Text style={styles.titleLarge}>
             <Trans i18nKey="assessmentFocus" />
           </Text>
           <Text style={styles.displaySmall}>
@@ -344,8 +364,8 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                     index === subjects.length - 1
                       ? " and " + elem?.title
                       : index === 0
-                      ? elem?.title
-                      : ", " + elem?.title
+                        ? elem?.title
+                        : ", " + elem?.title
                   )
                   ?.join(""),
                 attributesCount: subjects.reduce(
@@ -393,23 +413,41 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             {subjects?.map((subject: ISubject, index: number) => (
               <>
                 {subject?.attributes?.map((feature, featureIndex) => (
-                  <View style={styles.tableRow} key={featureIndex}>
-                    <Text style={styles.tableCell}>
-                      <Text>{featureIndex === 0 ? subject?.title : ""}</Text>
-                      <Text>
-                        {featureIndex === 0 ? subject?.description : ""}
+                  <Fragment>
+                    <View style={styles.tableRow} key={featureIndex}>
+                      <Text style={styles.tableCell}>
+                        <Text>{featureIndex === 0 ? subject?.title : ""}</Text>
+                        <Text>
+                          {featureIndex === 0 ? subject?.description : ""}
+                        </Text>
                       </Text>
-                    </Text>
-                    <Text style={styles.tableCell}>{feature?.title}</Text>
-                    <Text style={styles.tableCell}>{feature?.description}</Text>
-                  </View>
+                      <Text style={styles.tableCell}>{feature?.title}</Text>
+                      <Text style={styles.tableCell}>{feature?.description}</Text>
+                    </View>
+                  </Fragment>
                 ))}
               </>
             ))}
           </View>
         </View>
+        {/* <View style={styles.section}>{renderSubjectsTable()}</View> */}
+        <Text
+          style={{
+            position: "absolute",
+            bottom: 30,
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontSize: 10,
+          }}
+        >
+          Page 2 of 4
+        </Text>
+      </Page>
+      <Page size="A4" style={styles.page}>
+        <Header />
+
         <View style={styles.section}>
-          <Text style={styles.title}>
+          <Text style={styles.titleLarge}>
             <Trans i18nKey="questionnaires" />
           </Text>
           <Text style={styles.displaySmall}>
@@ -445,41 +483,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             ))}
           </View>
         </View>
-
-        <View style={styles.section}>
-          {subjects?.map((subject: ISubject, index: number) => (
-            <>
-              <Text style={styles.title}>
-                {" "}
-                <Trans
-                  i18nKey="subjectStatusReport"
-                  values={{ title: subject?.title }}
-                />
-              </Text>
-              <Text style={styles.displaySmall}>
-                {" "}
-                <Trans
-                  i18nKey="subjectStatusReportDescription"
-                  values={{
-                    title: subject?.title,
-                    description: subject?.description,
-                    confidenceValue: Math?.ceil(subject?.confidenceValue ?? 0),
-                    maturityLevelValue: subject?.maturityLevel?.value,
-                    maturityLevelTitle: subject?.maturityLevel?.title,
-                    maturityLevelCount: assessmentKit.maturityLevelCount ?? 5,
-                    attributesCount: subject?.attributes?.length,
-                  }}
-                />
-              </Text>
-              {tableImages.length !== 0 && (
-                <Image style={styles.chart} src={tableImages[index]} />
-              )}
-              {chartImages.length !== 0 && (
-                <Image style={styles.chart} src={chartImages[index]} />
-              )}
-            </>
-          ))}
-        </View>
         {/* <View style={styles.section}>{renderSubjectsTable()}</View> */}
         <Text
           style={{
@@ -490,9 +493,56 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             fontSize: 10,
           }}
         >
-          Page 2 of 2
+          Page 3 of 4
         </Text>
       </Page>
+      {subjects?.map((subject: ISubject, index: number) => (
+        <Page size="A4" style={styles.page}>
+          <Header />
+
+          <Text style={styles.titleLarge}>
+            {" "}
+            <Trans
+              i18nKey="subjectStatusReport"
+              values={{ title: subject?.title }}
+            />
+          </Text>
+          <Text style={styles.displaySmall}>
+            {" "}
+            <Trans
+              i18nKey="subjectStatusReportDescription"
+              values={{
+                title: subject?.title,
+                description: subject?.description,
+                confidenceValue: Math?.ceil(subject?.confidenceValue ?? 0),
+                maturityLevelValue: subject?.maturityLevel?.value,
+                maturityLevelTitle: subject?.maturityLevel?.title,
+                maturityLevelCount: assessmentKit.maturityLevelCount ?? 5,
+                attributesCount: subject?.attributes?.length,
+              }}
+            />
+          </Text>
+          {tableImages.length !== 0 && (
+            <Image style={styles.chart} src={tableImages[index]} />
+          )}
+          {chartImages.length !== 0 && (
+            <Image style={styles.chart} src={chartImages[index]} />
+          )}
+          <Text
+            style={{
+              position: "absolute",
+              bottom: 30,
+              left: "50%",
+              transform: "translateX(-50%)",
+              fontSize: 10,
+            }}
+          >
+            Page 4 of 4
+          </Text>
+        </Page>
+      ))}
+      {/* <View style={styles.section}>{renderSubjectsTable()}</View> */}
+
     </Document>
   );
 };
