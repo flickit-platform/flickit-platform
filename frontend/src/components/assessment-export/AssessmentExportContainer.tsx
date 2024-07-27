@@ -59,9 +59,9 @@ const AssessmentExportContainer = () => {
     runOnMount: true,
   });
 
-  const AssessmentInfo = useQuery<IAssessmentResponse>({
+  const progressInfo = useQuery<IAssessmentResponse>({
     service: (args = { assessmentId }, config) =>
-      service.AssessmentsLoad(args, config),
+      service.fetchAssessmentTotalProgress(args, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
@@ -93,7 +93,7 @@ const AssessmentExportContainer = () => {
       queryBatchData={[
         AssessmentReport,
         fetchPathInfo,
-        AssessmentInfo,
+        progressInfo,
         AssessmentKitInfo,
       ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentRoles />}
@@ -115,6 +115,7 @@ const AssessmentExportContainer = () => {
           assessment || {};
         const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
+        console.log(progress);
 
         const isLowerOrEqual = (score: any, threshold: any) => {
           const scores =
@@ -142,7 +143,7 @@ const AssessmentExportContainer = () => {
                       values={{ title: assessment?.title }}
                     />
                   </Typography>
-                  <PDFDownloadLink
+                  {/* <PDFDownloadLink
                     document={
                       <AssessmentReportPDF
                         data={data}
@@ -168,7 +169,7 @@ const AssessmentExportContainer = () => {
                         </IconButton>
                       )
                     }
-                  </PDFDownloadLink>
+                  </PDFDownloadLink> */}
                 </Box>
               </Grid>
             </Grid>
@@ -178,25 +179,9 @@ const AssessmentExportContainer = () => {
                 <Trans i18nKey="assessmentMethodology" />
               </Typography>
               <Typography variant="displaySmall" paragraph>
-                <Trans
-                  i18nKey="assessmentMethodologyDescription"
-                  values={{
-                    title: assessment?.title,
-                    subjects: subjects
-                      ?.map((elem: ISubject, index: number) =>
-                        index === 0
-                          ? elem?.title + " quality attributes"
-                          : index === 1
-                            ? elem?.title + " dynamics"
-                            : elem?.title
-                      )
-                      ?.join(", "),
-                    maturityLevelsCount:
-                      assessment.assessmentKit.maturityLevelCount ?? 5,
-                  }}
-                />
+                {assessmentKit.summary}
               </Typography>
-              <TableContainer
+              {/* <TableContainer
                 component={Paper}
                 sx={{ marginBlock: 2, overflow: "hidden" }}
               >
@@ -256,7 +241,7 @@ const AssessmentExportContainer = () => {
                     )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </TableContainer> */}
               <Typography variant="titleLarge" gutterBottom>
                 <Trans i18nKey="assessmentFocus" />
               </Typography>
@@ -270,8 +255,8 @@ const AssessmentExportContainer = () => {
                         index === subjects.length - 1
                           ? " and " + elem?.title
                           : index === 0
-                            ? elem?.title
-                            : ", " + elem?.title
+                          ? elem?.title
+                          : ", " + elem?.title
                       )
                       ?.join(""),
                     attributesCount: subjects.reduce(
@@ -414,52 +399,9 @@ const AssessmentExportContainer = () => {
                 </Table>
               </TableContainer>
               <Typography variant="titleLarge" gutterBottom>
-                Overall Scores by Subject
+                Overall Status Report
               </Typography>
-              <TableContainer component={Paper} sx={{ marginBlock: 2 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <strong></strong>
-                      </TableCell>
-                      {assessmentKit?.maturityLevels?.map(
-                        ({ title }: IMaturityLevel) => (
-                          <TableCell>
-                            <Typography variant="displaySmall">
-                              {title}
-                            </Typography>
-                          </TableCell>
-                        )
-                      )}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {subjects?.map(({ id, title, maturityLevel }: ISubject) => (
-                      <TableRow key={id}>
-                        <TableCell>
-                          <Typography variant="displaySmall">
-                            {title}
-                          </Typography>
-                        </TableCell>
-                        {assessmentKit?.maturityLevels?.map(
-                          ({ title }: IMaturityLevel) => (
-                            <TableCell>
-                              <Checkbox
-                                checked={isLowerOrEqual(
-                                  title,
-                                  maturityLevel?.title
-                                )}
-                                disabled
-                              />
-                            </TableCell>
-                          )
-                        )}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <br />
               {subjects?.map((subject: ISubject) => (
                 <>
                   <Typography variant="titleLarge" gutterBottom>
