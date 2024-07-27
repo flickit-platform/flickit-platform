@@ -367,8 +367,8 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                              ? "0 8px 8px 0"
-                              : "0",
+                                ? "0 8px 8px 0"
+                                : "0",
                         }}
                       >
                         {item.title}
@@ -429,6 +429,9 @@ const AssessmentKit = (props: any) => {
               <Title>
                 <Trans i18nKey="questionnaires" />
               </Title>
+              <Typography variant="body2" fontSize="1rem">
+                <Trans i18nKey="questionnairesAssessmentKitDescription" values={{ questionnairesCount }} />
+              </Typography>
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any) => {
                   return (
