@@ -185,10 +185,10 @@ const AssessmentExportContainer = () => {
                     subjects: subjects
                       ?.map((elem: ISubject, index: number) =>
                         index === 0
-                          ? elem?.title + "quality attributes"
+                          ? elem?.title + " quality attributes"
                           : index === 1
-                          ? elem?.title + "dynamics"
-                          : elem?.title
+                            ? elem?.title + " dynamics"
+                            : elem?.title
                       )
                       ?.join(", "),
                     maturityLevelsCount:
@@ -270,8 +270,8 @@ const AssessmentExportContainer = () => {
                         index === subjects.length - 1
                           ? " and " + elem?.title
                           : index === 0
-                          ? elem?.title
-                          : ", " + elem?.title
+                            ? elem?.title
+                            : ", " + elem?.title
                       )
                       ?.join(""),
                     attributesCount: subjects.reduce(
@@ -541,6 +541,7 @@ const AssessmentExportContainer = () => {
                               </Typography>
                             </TableCell>
                             <TableCell
+                              className="attribute--statusbar"
                               sx={{ maxWidth: 300, wordWrap: "break-word" }}
                             >
                               <AttributeStatusBarContainer
