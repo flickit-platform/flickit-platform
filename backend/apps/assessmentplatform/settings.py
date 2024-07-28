@@ -198,18 +198,12 @@ REST_FRAMEWORK = {
 ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
 ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 
-DEFAULT_FILE_STORAGE = 'assessmentplatform.custom_storage.MediaStorage'
-STATICFILES_STORAGE = 'assessmentplatform.custom_storage.StaticStorage'
-AWS_S3_SIGNATURE_VERSION = "s3v4"
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
-AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_ACCESS_KEY')
-AWS_S3_ENDPOINT_URL = os.environ.get('MINIO_API')
-AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL') == 'True'
-MINIO_MEDIA_BUCKET_NAME = os.environ.get('MINIO_MEDIA_BUCKET')
-MINIO_STATIC_BUCKET_NAME = os.environ.get('MINIO_STATIC_BUCKET')
-MINIO_QUERYSTRING_EXPIRE_MEDIA = os.environ.get('MINIO_QUERYSTRING_EXPIRE_MEDIA')
-MINIO_URL = os.environ.get('MINIO_URL')
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
+
 
 OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
