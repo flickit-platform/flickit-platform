@@ -195,7 +195,6 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
-DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
 ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 
