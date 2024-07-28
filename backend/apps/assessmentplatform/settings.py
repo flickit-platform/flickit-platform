@@ -134,7 +134,6 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    'import_export',
     'account',
     'baseinfo',
     'assessment',
