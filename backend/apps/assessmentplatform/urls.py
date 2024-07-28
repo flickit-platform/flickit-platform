@@ -12,9 +12,6 @@ admin.autodiscover()
 urlpatterns = [
     path(r'ht/', include('health_check.urls')),
     path("admin/", admin.site.urls),
-    path('authinfo/', include('djoser.urls')),
-    path('baseinfo/', include('baseinfo.urls')),
-    path('authinfo/', include('account.urls')),
     path('api/v1/assessment-kits/', include('baseinfo.url.url_assessment_kit_v1')),
     path('api/v2/assessment-kits/', include('baseinfo.url.url_assessment_kit_v2')),
     path('api/v1/assessment-kit-tags/', include('baseinfo.url.url_assessment_kit_tags_v1')),
