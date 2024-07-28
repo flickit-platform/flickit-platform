@@ -25,6 +25,8 @@ urlpatterns = [
     path("<uuid:assessment_id>/advice/", advice_views.AdviceView.as_view()),
     path("<uuid:assessment_id>/attributes/<int:attribute_id>/evidences/",
          attributes_views.EvidencesOfAttributeApi.as_view()),
+    path("<uuid:assessment_id>/export-report/attributes/<int:attribute_id>/",
+         reportviews.AssessmentAttributesReportExportApi.as_view()),
     path("<uuid:assessment_id>/invite/", assessment_views.InviteUsersAssessmentsApi.as_view()),
     path("<uuid:assessment_id>/invitees/", assessment_views.InviteesAssessmentsApi.as_view()),
 ]
