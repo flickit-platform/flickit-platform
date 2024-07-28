@@ -1,6 +1,6 @@
 import requests
 
-from assessmentplatform.settings import DSL_PARSER_URL_SERVICE, ASSESSMENT_URL
+from assessmentplatform.settings import  ASSESSMENT_URL
 
 
 def get_confidence_levels_in_assessment_core(request):
