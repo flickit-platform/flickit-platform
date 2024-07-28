@@ -17,6 +17,7 @@ import {
   ISubjectReport,
   PathInfo,
   RolesType,
+  TId,
 } from "@types";
 import {
   Checkbox,
@@ -42,6 +43,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import AssessmentReportPDF from "./AssessmentReportPDF";
 import { useEffect, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
+import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
@@ -80,7 +82,71 @@ const AssessmentExportContainer = () => {
     toastErrorOptions: { filterByStatus: [404] },
   });
 
+  const calculateMaturityLevelQuery = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.calculateMaturityLevel(args, config),
+    runOnMount: false,
+  });
+  const calculateConfidenceLevelQuery = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.calculateConfidenceLevel(args, config),
+    runOnMount: false,
+  });
+
+  const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const response = await service.fetchExportReport(
+        {
+          assessmentId,
+          attributeId,
+        },
+        undefined
+      );
+      return response;
+    } catch (error: any) {
+      if (error?.response?.data?.code == "CALCULATE_NOT_VALID") {
+        await calculateMaturityLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      if (error?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+        await calculateConfidenceLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
   const [showSpinner, setShowSpinner] = useState(true);
+
+  const [attributesData, setAttributesData] = useState<Record<string, any>>({});
+
+  const fetchAllAttributesData = async () => {
+    const attributesDataPromises: Promise<any>[] = [];
+    AssessmentReport.data?.subjects.forEach((subject: ISubject) => {
+      subject.attributes.forEach((attribute: IAttribute) => {
+        attributesDataPromises.push(
+          FetchAttributeData(assessmentId, attribute.id)
+        );
+      });
+    });
+
+    const allAttributesData = await Promise.all(attributesDataPromises);
+
+    // Transform the array of data into an object for easy lookup
+    const attributesDataMap: Record<string, any> = {};
+    AssessmentReport.data?.forEach((subject: ISubject) => {
+      subject.attributes.forEach((attribute: IAttribute, index: number) => {
+        attributesDataMap[attribute.id] = allAttributesData.shift();
+      });
+    });
+
+    setAttributesData(attributesDataMap);
+  };
+
+  useEffect(() => {
+    fetchAllAttributesData();
+  }, [AssessmentReport.data, assessmentId]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -178,9 +244,11 @@ const AssessmentExportContainer = () => {
               <Typography variant="titleLarge" gutterBottom>
                 <Trans i18nKey="assessmentMethodology" />
               </Typography>
-              <Typography variant="displaySmall" paragraph>
-                {assessmentKit.summary}
-              </Typography>
+              <Typography
+                variant="displaySmall"
+                paragraph
+                dangerouslySetInnerHTML={{ __html: assessmentKit.summary }}
+              ></Typography>
               {/* <TableContainer
                 component={Paper}
                 sx={{ marginBlock: 2, overflow: "hidden" }}
@@ -309,17 +377,23 @@ const AssessmentExportContainer = () => {
                         {subject?.attributes?.map(
                           (feature: IAttribute, featureIndex: number) => (
                             <TableRow key={featureIndex}>
-                              <TableCell>
-                                <Typography variant="titleMedium">
-                                  {featureIndex === 0 ? subject?.title : ""}
-                                </Typography>
-                                <br />
-                                <Typography variant="displaySmall">
-                                  {featureIndex === 0
-                                    ? subject?.description
-                                    : ""}
-                                </Typography>
-                              </TableCell>
+                              {featureIndex === 0 && (
+                                <TableCell
+                                  sx={{
+                                    borderRight:
+                                      "1px solid rgba(224, 224, 224, 1)",
+                                  }}
+                                  rowSpan={subject?.attributes?.length}
+                                >
+                                  <Typography variant="titleMedium">
+                                    {subject?.title}
+                                  </Typography>
+                                  <br />
+                                  <Typography variant="displaySmall">
+                                    {subject?.description}
+                                  </Typography>
+                                </TableCell>
+                              )}
                               <TableCell>
                                 {" "}
                                 <Typography variant="displaySmall">
@@ -399,8 +473,71 @@ const AssessmentExportContainer = () => {
                 </Table>
               </TableContainer>
               <Typography variant="titleLarge" gutterBottom>
-                Overall Status Report
+                <Trans i18nKey="overallStatusReport" />
               </Typography>
+              <Typography variant="displaySmall" paragraph>
+                <Trans
+                  i18nKey="overallStatusReportDescription"
+                  values={{
+                    maturityLevelTitle: assessment?.maturityLevel?.title,
+                    questionsCount: questionsCount,
+                    answersCount: answersCount,
+                    confidenceValue: Math?.ceil(confidenceValue ?? 0),
+                  }}
+                />
+              </Typography>
+              <Box
+                display="flex"
+                sx={{ flexDirection: { xs: "column", md: "row" } }}
+              >
+                <Box
+                  sx={{
+                    flex: { xs: "100%", md: "50%", lg: "60%" },
+                    height: subjects?.length > 2 ? "400px" : "300px",
+                  }}
+                >
+                  {subjects?.length > 2 ? (
+                    <AssessmentSubjectRadarChart
+                      data={subjects}
+                      maturityLevelsCount={
+                        assessmentKit.maturityLevelCount ?? 5
+                      }
+                      loading={false}
+                    />
+                  ) : (
+                    <AssessmentSubjectRadialChart
+                      data={subjects}
+                      maturityLevelsCount={
+                        assessmentKit.maturityLevelCount ?? 5
+                      }
+                      loading={false}
+                    />
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    ...styles.centerCVH,
+                    flex: { xs: "100%", md: "50%", lg: "40%" },
+                  }}
+                >
+                  <Gauge
+                    level_value={maturityLevel?.index ?? 0}
+                    maturity_level_status={maturityLevel?.title}
+                    maturity_level_number={assessmentKit?.maturityLevelCount}
+                    confidence_value={confidenceValue}
+                    confidence_text={t("withPercentConfidence")}
+                    isMobileScreen={false}
+                    hideGuidance={true}
+                    height={300}
+                    mb={-8}
+                    maturity_status_guide={t("overallMaturityLevelIs")}
+                  />
+                </Box>
+              </Box>
+              <br />
+              <Typography variant="displaySmall" gutterBottom>
+                <Trans i18nKey="subjectsSectionTitle" />
+              </Typography>{" "}
               <br />
               {subjects?.map((subject: ISubject) => (
                 <>
