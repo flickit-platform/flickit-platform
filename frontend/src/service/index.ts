@@ -1076,6 +1076,15 @@ export const createService = (
               }
           });
       },
+      RemoveEvidenceAttachments(
+          args: {evidenceId: string, attachmentId: string},
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { evidenceId, attachmentId} = args ?? {};
+          return axios.delete(`/api/v1/evidences/${evidenceId}/attachments/${attachmentId}/`,{
+              ...(config ?? {}),
+          });
+      },
     fetchConfidenceLevelsList(
       args: {},
       config: AxiosRequestConfig<any> | undefined

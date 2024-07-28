@@ -710,6 +710,7 @@ const Evidence = (props: any) => {
     const [valueCount, setValueCount] = useState("");
     const [evidencesData,setEvidencesData]= useState<any[]>([])
     const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
+    const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<boolean>(false);
     const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({expended:false,count:0});
    const [getAttachmentData,setAttachmentData] = useState(false)
     const is_farsi = firstCharDetector(valueCount);
@@ -807,6 +808,13 @@ const Evidence = (props: any) => {
         runOnMount: false,
     });
 
+    //Todo
+
+    const RemoveEvidenceAttachments = useQuery({
+        service: (args, config) => service.RemoveEvidenceAttachments(args, {}),
+        runOnMount: false,
+    });
+
     const deleteItem = async (e: any) => {
         try {
             await deleteEvidence.query();
@@ -816,6 +824,14 @@ const Evidence = (props: any) => {
         } catch (e) {
             const err = e as ICustomError;
             toastError(err);
+        }
+    };
+    const deleteAttachment = async ({id:attachmentId} : {id: string}) => {
+        try {
+                await RemoveEvidenceAttachments.query({evidenceId,attachmentId})
+                setAttachmentData(true)
+        } catch (e) {
+
         }
     };
 
@@ -1015,6 +1031,7 @@ const Evidence = (props: any) => {
                                 item={item}
                                 setEvidencesData={setEvidencesData}
                                 setExpandedDeleteDialog={setExpandedDeleteDialog}
+                                setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
                                 setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
                                 expandedAttachmentsDialogs={expandedAttachmentsDialogs}
                                 setEvidenceId={setEvidenceId}
@@ -1025,6 +1042,7 @@ const Evidence = (props: any) => {
                                 fetchAttachments={fetchAttachments}
                                 getAttachmentData={getAttachmentData}
                                 setAttachmentData={setAttachmentData}
+                                deleteAttachment={deleteAttachment}
                             />
                 ))}
                 <EvidenceAttachmentsDialogs
@@ -1038,11 +1056,19 @@ const Evidence = (props: any) => {
                     fetchAttachments={fetchAttachments}
                     setAttachmentData={setAttachmentData}
                 />
-                <DeleteEvidenceDialog
+                <DeleteDialog
                     expanded={expandedDeleteDialog}
                     onClose={() => setExpandedDeleteDialog(false)}
                     onConfirm={deleteItem}
                     title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}
+                    cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
+                    confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
+                />
+                <DeleteDialog
+                    expanded={expandedDeleteAttachmentDialog}
+                    onClose={() => setExpandedDeleteAttachmentDialog(false)}
+                    onConfirm={deleteAttachment}
+                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisAttachment"}/>}
                     cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
                     confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
                 />
@@ -1056,7 +1082,7 @@ const EvidenceDetail = (props: any) => {
         item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
         setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
         fetchAttachments,expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
-        evidenceId
+        setExpandedDeleteAttachmentDialog, evidenceId,deleteAttachment
     } = props;
 
     const LIMITED = 200;
@@ -1076,7 +1102,7 @@ const EvidenceDetail = (props: any) => {
         formMethods.reset();
     };
 
-    const {description, lastModificationTime, createdBy, id, type} = item;
+    const {description, lastModificationTime, createdBy, id, type , attachmentsCount} = item;
     const {displayName, pictureLink} = createdBy;
     const is_farsi = firstCharDetector(description);
     const [evidenceBG, setEvidenceBG] = useState<any>();
@@ -1164,7 +1190,8 @@ const EvidenceDetail = (props: any) => {
 
     useEffect(()=>{
         (async ()=>{
-            if(getAttachmentData && id == evidenceId){
+            console.log(id,evidenceId,"test evidenceId")
+            if(getAttachmentData ){
                 let {attachments} = await fetchAttachments({evidence_id: id})
                 setAttachments(attachments)
                 setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs,count: attachments.length});
@@ -1196,6 +1223,11 @@ const EvidenceDetail = (props: any) => {
         a.click();
         a.remove();
     }
+    // const removeFile = async ({id:attachmentId} : {id: string})=>{
+    //     setExpandedDeleteAttachmentDialog(true)
+    //     // await RemoveEvidenceAttachments.query({evidenceId,attachmentId})
+    //     // setAttachmentData(true)
+    // }
 
     return (
         <Box display="flex" flexDirection="column" width="100%">
@@ -1385,42 +1417,40 @@ const EvidenceDetail = (props: any) => {
                                     <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                         <Box onClick={()=>expandedEvidenceBtm()}
                                              sx={{display: "flex"}}>
-                                            <Typography sx={{...theme.typography.titleMedium}}><Trans
-                                                i18nKey={"addAttachments"}/></Typography>
+                                            {!attachmentsCount && <Typography sx={{...theme.typography.titleMedium}}><Trans
+                                                i18nKey={"addFirstAttachment"}/></Typography> }
+                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography.titleMedium,display: 'flex',gap: "5px"}}><Typography sx={{...theme.typography.titleMedium}}>{attachmentsCount}</Typography><Trans
+                                                i18nKey={`attachmentCount`}/></Typography> }
                                             <img style={expandedEvidenceBox ? {
                                                 rotate: "180deg",
                                                 transition: "all .2s ease"
                                             } : {rotate: "0deg", transition: "all .2s ease"}} src={arrowBtn}/>
                                         </Box>
-                                        <Box
+                                        <Grid
+                                             container
                                             // ref={refBox}
                                              // style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
-                                             style={expandedEvidenceBox ? {maxHeight: "40px"} : {
+                                             style={expandedEvidenceBox ? {} : {
                                                  maxHeight: 0,
                                                  overflow: "hidden"
-                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem"}}>
+                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem", }}>
                                                         {attachments.map((item,index)=>{
+                                                            // TODO
                                                             return(
-                                                                <Box key={index} onClick={()=>downloadFile(item)}>
-                                                                    <IconFile mainColor={evidenceBG?.borderColor}
-                                                                              backgroundColor={evidenceBG?.background} />
-                                                                </Box>
+                                                               < FileIcon item={item} deleteAttachment={deleteAttachment} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
                                             { attachments.length < 5 && (<>
-
-                                                        <Box onClick={() => {
+                                                        <Grid item xs={6} sm={4} md={3} onClick={() => {
                                                             setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
                                                             setEvidenceId(id)
                                                         }}>
                                                             <PreAttachment mainColor={evidenceBG?.borderColor}
                                                                            backgroundColor={evidenceBG?.background}/>
-                                                        </Box>
+                                                        </Grid>
                                                 </>
-
-                                                )}
-
-                                        </Box>
+                                            ) }
+                                        </Grid>
                                     </Box>
                                 </Box>
                                 <Typography
@@ -1472,6 +1502,41 @@ const EvidenceDetail = (props: any) => {
     )
         ;
 };
+
+const FileIcon =(props :any) =>{
+    const {evidenceBG,downloadFile,item, deleteAttachment } = props
+    console.log(item,"test item")
+    const [hover, setHover] = useState(false);
+
+    return(
+        <Box
+            position="relative"
+            display="inline-block"
+            onMouseEnter={()=>setHover(true)}
+            onMouseLeave={()=>setHover(false)}
+            sx={{ mr: 1 }}
+        >
+                <IconFile  deleteAttachment={deleteAttachment} downloadFile={downloadFile} item={item}
+                          mainColor={evidenceBG?.borderColor}
+                          backgroundColor={evidenceBG?.background} hover={hover} />
+            {hover && <Box
+                position="absolute"
+                top={0}
+                left={0}
+                width="40px"
+                height="40px"
+                bgcolor="rgba(0, 0, 0, 0.6)"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="9px"
+                sx={{cursor: "pointer"}}
+            >
+
+            </Box>}
+        </Box>
+    )
+}
 
 const MyDropzone = (props: any) =>{
 
@@ -1731,7 +1796,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     )
 }
 
-const DeleteEvidenceDialog = (props: any) => {
+const DeleteDialog = (props: any) => {
     const {expanded, onClose, onConfirm, title, cancelText, confirmText} =
         props;
     const fullScreen = useScreenResize("sm");
