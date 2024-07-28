@@ -262,13 +262,13 @@ const AssessmentExportContainer = () => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: 82,
-                  right: -28,
+                  top: "5.25rem",
+                  right: "-1.75rem",
                   transform: "rotate(45deg)",
                   transformOrigin: "top right",
                   backgroundColor: "#D81E5B",
                   color: "white",
-                  padding: "8px 32px",
+                  padding: "0.5rem 2rem",
                   borderRadius: "4px",
                   fontWeight: "bold",
                   zIndex: 1,
