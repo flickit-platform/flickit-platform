@@ -45,6 +45,7 @@ const AssessmentKitExpertViewContainer = () => {
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
+  const [update,setForceUpdate]= useState<boolean>(false)
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
@@ -77,7 +78,7 @@ const AssessmentKitExpertViewContainer = () => {
     if (!loaded) {
       AssessmentKitDetails();
     }
-  }, [loaded]);
+  }, [loaded,update]);
   useEffect(() => {
     setDocumentTitle(
       `${t("assessmentKit")}: ${assessmentKitTitle || ""}`,
@@ -151,20 +152,20 @@ const AssessmentKitExpertViewContainer = () => {
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
-          <UpdateAssessmentKitDialog {...dialogProps} />
-          <AssessmentKitSectionsTabs details={details} />
+          <UpdateAssessmentKitDialog setForceUpdate={setForceUpdate} {...dialogProps} />
+          <AssessmentKitSectionsTabs update={update}  details={details} />
         </Box>
       </Box>
     </Box>
   );
 };
-const AssessmentKitSectionsTabs = (props: { details: any }) => {
+const AssessmentKitSectionsTabs = (props: { details: any, update:boolean }) => {
   const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
   const [value, setValue] = useState("maturityLevels");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-  const { details } = props;
+  const { details, update } = props;
   return (
     <Box mt={6}>
       {details && (
@@ -198,27 +199,27 @@ const AssessmentKitSectionsTabs = (props: { details: any }) => {
             </TabList>
           </Box>
           <TabPanel value="subjects" sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}>
-            <AssessmentKitSubjects details={details.subjects} />
+            <AssessmentKitSubjects details={details.subjects} update={update} />
           </TabPanel>
           <TabPanel
             value="questionnaires"
             sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
           >
-            <AssessmentKitQuestionnaires details={details.questionnaires} />
+            <AssessmentKitQuestionnaires update={update} details={details.questionnaires} />
           </TabPanel>
           <TabPanel
             value="maturityLevels"
             sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
           >
-            <MaturityLevelsDetails maturity_levels={details?.maturityLevels} />
+            <MaturityLevelsDetails maturity_levels={details?.maturityLevels} update={update} />
           </TabPanel>
         </TabContext>
       )}
     </Box>
   );
 };
-const AssessmentKitSubjects = (props: { details: any[] }) => {
-  const { details } = props;
+const AssessmentKitSubjects = (props: { details: any[], update: boolean }) => {
+  const { details, update } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] =
     useState<any>();
@@ -237,7 +238,7 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
     if (subjectId) {
       fetchAssessmentKitSubjectDetail();
     }
-  }, [subjectId]);
+  }, [subjectId,update]);
   const fetchAssessmentKitSubjectDetail = async () => {
     try {
       const data = await fetchAssessmentKitSubjectDetailsQuery.query({
@@ -413,8 +414,8 @@ const AssessmentKitSubjects = (props: { details: any[] }) => {
     </Box>
   );
 };
-const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
-  const { details } = props;
+const AssessmentKitQuestionnaires = (props: { details: any[], update:boolean }) => {
+  const { details, update } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [questionnaireId, setQuestionnaireId] = useState<any>();
   const [questionnaireDetails, setQuestionnaireDetails] = useState<any>();
@@ -429,7 +430,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[] }) => {
     if (questionnaireId) {
       fetchAssessmentKitQuestionnaires();
     }
-  }, [questionnaireId]);
+  }, [questionnaireId,update]);
   const fetchAssessmentKitQuestionnaires = async () => {
     try {
       const data = await fetchAssessmentKitQuestionnairesQuery.query({
@@ -878,7 +879,7 @@ const AssessmentKitQuestionsList = (props: {
   );
 };
 const UpdateAssessmentKitDialog = (props: any) => {
-  const { onClose: closeDialog, ...rest } = props;
+  const { onClose: closeDialog,setForceUpdate, ...rest } = props;
   const [loading, setLoading] = useState(false);
 
   const { service } = useServiceContext();
@@ -915,6 +916,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
         { data: formattedData, assessmentKitId: assessmentKitId },
         { signal: abortController.signal }
       );
+      setForceUpdate((prev : boolean) => !prev)
       setLoading(false);
       close();
     } catch (e: any) {
@@ -981,6 +983,8 @@ const UpdateAssessmentKitDialog = (props: any) => {
             required={true}
             label={<Trans i18nKey="dsl" />}
             maxSize={convertToBytes(5, "MB")}
+            setSyntaxErrorObject={setSyntaxErrorObject}
+            setShowErrorLog={setShowErrorLog}
           />
         </Box>
       </Grid>
@@ -1612,7 +1616,7 @@ const QuestionnairesQuestionList = (props: any) => {
   );
 };
 const MaturityLevelsDetails = (props: any) => {
-  const { maturity_levels } = props;
+  const { maturity_levels, update } = props;
   const colorPallet = getMaturityLevelColors(
     maturity_levels ? maturity_levels.length : 5
   );
