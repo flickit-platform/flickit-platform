@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from assessment.services import assessment_core
+from assessment.services import assessment_report_services
 
 
 class SubjectProgressApi(APIView):
@@ -27,4 +28,14 @@ class AssessmentAttributesReportApi(APIView):
     @swagger_auto_schema(manual_parameters=[maturity_level_id_param])
     def get(self, request, assessment_id, attribute_id):
         result = assessment_core.get_assessment_attribute_report(request, assessment_id, attribute_id)
+        return Response(result["body"], result["status_code"])
+
+
+class AssessmentAttributesReportExportApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.get_assessment_attributes_report_export(request,
+                                                                                    assessment_id,
+                                                                                    attribute_id)
         return Response(result["body"], result["status_code"])
