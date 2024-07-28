@@ -311,7 +311,7 @@ const Actions = (props: {
   };
 
   const assessmentSetting = (e: any) => {
-    navigate(`assessmentsettings/${item.id}`, {
+    navigate(`${item.id}/assessment-settings/`, {
       state: item?.color || { code: "#073B4C", id: 6 },
     });
   };

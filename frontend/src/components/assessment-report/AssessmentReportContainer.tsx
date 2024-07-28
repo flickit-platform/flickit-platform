@@ -9,7 +9,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { AssessmentOverallStatus } from "./AssessmentOverallStatus";
 import LoadingSkeletonOfAssessmentReport from "@common/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
-import { IAssessmentReportModel } from "@types";
+import { IAssessmentReportModel, RolesType } from "@types";
 import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 import { AssessmentSummary } from "./AssessmentSummary";
 import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
@@ -52,13 +52,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -72,19 +72,27 @@ const AssessmentReportContainer = (props: any) => {
     }
   }, [queryData.errorObject]);
   const { spaceId } = useParams();
-
+  const fetchAssessmentsRoles = useQuery<RolesType>({
+    service: (args, config) => service.fetchAssessmentsRoles(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress]}
+      queryBatchData={[
+        queryData,
+        assessmentTotalProgress,
+        fetchAssessmentsRoles,
+      ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress]) => {
+      render={([data = {}, progress, roles]) => {
         const {
           status,
           assessment,
           subjects,
           topStrengths,
           topWeaknesses,
-          assessmentPermissions: { manageable },
+          assessmentPermissions: { manageable, exportable },
         } = data || {};
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
@@ -117,8 +125,9 @@ const AssessmentReportContainer = (props: any) => {
                   <Box sx={{ py: "0.6rem" }}>
                     <IconButton
                       data-cy="more-action-btn"
-                      component={Link}
-                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-kits/${assessmentKit.id}/`}
+                      disabled={!exportable}
+                      component={exportable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/${assessmentKit.id}/`}
                     >
                       <ArticleRounded
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
@@ -128,7 +137,7 @@ const AssessmentReportContainer = (props: any) => {
                       data-cy="more-action-btn"
                       disabled={!manageable}
                       component={manageable ? Link : "div"}
-                      to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
                     >
                       <SettingsIcon
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
@@ -269,7 +278,7 @@ const Actions = (props: { assessmentId: string; manageable: boolean }) => {
 
   const assessmentSetting = (e: any) => {
     navigate({
-      pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
     });
   };
   return (

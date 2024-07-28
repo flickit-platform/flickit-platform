@@ -609,6 +609,7 @@ export interface ISubject {
 
 interface IAssessmentPermissions {
   manageable: boolean;
+  exportable: boolean
 }
 
 export interface IAssessmentResponse {

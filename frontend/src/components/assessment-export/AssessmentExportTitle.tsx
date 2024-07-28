@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Title from "@common/TitleComponent";
 import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
+import { t } from "i18next";
 
 interface IAssessmentExportTitle {
   pathInfo: {
@@ -39,6 +40,10 @@ const AssessmentExportTitle = (props: IAssessmentExportTitle) => {
             },
             {
               title: assessment?.title,
+              to: `/${spaceId}/assessments/${page}/${assessment.id}/insights`,
+            },
+            {
+              title: t("assessmentDocument") as string,
             },
           ]}
           displayChip

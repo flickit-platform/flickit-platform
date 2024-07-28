@@ -155,7 +155,7 @@ const Actions = (props: { assessmentId: string; manageable: boolean }) => {
 
   const assessmentSetting = (e: any) => {
     navigate({
-      pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
     });
   };
   return (

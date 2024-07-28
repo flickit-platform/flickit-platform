@@ -100,11 +100,11 @@ const Routes = () => {
             element={<AssessmentsScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:page/assessmentsettings/:assessmentId"
+            path="/:spaceId/assessments/:page/:assessmentId/assessment-settings/"
             element={<AssessmentSettingScreen />}
           />
           <Route
-            path="/:spaceId/assessments/:page/:assessmentId/assessment-kits/:assessmentKitId"
+            path="/:spaceId/assessments/:page/:assessmentId/assessment-document/:assessmentKitId"
             element={<AssessmentDocumentScreen />}
           />
           <Route
