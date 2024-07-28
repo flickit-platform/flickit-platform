@@ -957,6 +957,17 @@ export const createService = (
       const { id } = args ?? {};
       return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
+      deleteExpertGroupImage(
+          args: {expertGroupId : number },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { expertGroupId } = args ?? {};
+
+          return axios.delete(`/api/v1/expert-groups/${expertGroupId}/picture/`
+              , {
+              ...(config ?? {}),
+          });
+      },
     seenExpertGroup(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined

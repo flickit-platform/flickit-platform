@@ -34,7 +34,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -53,6 +53,12 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
+import formatBytes from "@utils/formatBytes";
+import { error } from "console";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -109,7 +115,13 @@ const ExpertGroupContainer = () => {
               backLink="/"
               borderBottom
               pb={1}
-              avatar={<Avatar src={pictureLink} sx={{ mr: 1 }} />}
+              avatar={
+                <AvatarComponent
+                  queryData={queryData}
+                  picture={pictureLink}
+                  editable={editable}
+                />
+              }
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -117,9 +129,9 @@ const ExpertGroupContainer = () => {
                       title: t("expertGroups") as string,
                       to: `/user/expert-groups`,
                     },
-                      {
-                          title: title,
-                      },
+                    {
+                      title: title,
+                    },
                   ]}
                 />
               }
@@ -329,6 +341,168 @@ const ExpertGroupContainer = () => {
         );
       }}
     />
+  );
+};
+
+const AvatarComponent = (props: any) => {
+  const { title, picture, queryData, editable } = props;
+  const [hover, setHover] = useState(false);
+  const [image, setImage] = useState("");
+  const { expertGroupId = "" } = useParams();
+
+  const { service } = useServiceContext();
+
+  const handleFileChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as any);
+      };
+      reader.readAsDataURL(file);
+      let maxSize = 2097152;
+      if (file.size > maxSize) {
+        toastError(
+          t("maximumUploadFileSize", {
+            maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
+          }) as string
+        );
+      }
+    }
+    const pictureData = {
+      pictureFile: file,
+    };
+    await service.updateExpertGroupPicture(
+      { data: pictureData, id: expertGroupId },
+      undefined
+    );
+    await queryData.query();
+  };
+
+  const handleDelete = useQuery({
+    service: (args = { expertGroupId }, config) =>
+      service.deleteExpertGroupImage(args, config),
+    runOnMount: false,
+  });
+
+  const deletePicture = async () => {
+    try {
+      await handleDelete.query();
+      await queryData.query();
+    } catch (e: any) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  return editable ? (
+    <Box
+      position="relative"
+      display="inline-block"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      sx={{ mr: 1 }}
+    >
+      <Avatar
+        sx={(() => {
+          return {
+            bgcolor: (t) => t.palette.grey[800],
+            textDecoration: "none",
+            width: 50,
+            height: 50,
+          };
+        })()}
+        src={picture}
+      >
+        {title && !hover && title?.[0]?.toUpperCase()}
+      </Avatar>
+      {!hover && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            borderRadius: "50%",
+            bottom: -9,
+            right: 0,
+            bgcolor: "white",
+            width: "21px",
+            height: "21px",
+          }}
+        >
+          <EditIcon sx={{ color: "#000", width: "16px" }} />
+        </Box>
+      )}
+      {hover && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0, 0, 0, 0.6)"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="50%"
+          sx={{ cursor: "pointer" }}
+        >
+          {picture ? (
+            <>
+              <Tooltip title={"Delete Picture"}>
+                <DeleteIcon
+                  onClick={deletePicture}
+                  sx={{ color: "whitesmoke" }}
+                />
+              </Tooltip>
+              <Tooltip title={"Edit Picture"}>
+                <IconButton
+                  component="label"
+                  sx={{ padding: 0, color: "whitesmoke" }}
+                >
+                  <EditIcon />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    hidden
+                  />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <Tooltip title={"Add Picture"}>
+              <IconButton component="label" sx={{ color: "whitesmoke" }}>
+                <AddIcon />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  hidden
+                />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+      )}
+    </Box>
+  ) : (
+    <Box sx={{ mr: 1 }}>
+      <Avatar
+        sx={(() => {
+          return {
+            bgcolor: (t) => t.palette.grey[800],
+            textDecoration: "none",
+            width: 50,
+            height: 50,
+          };
+        })()}
+        src={picture}
+      >
+        {title && !hover && title?.[0]?.toUpperCase()}
+      </Avatar>
+    </Box>
   );
 };
 
