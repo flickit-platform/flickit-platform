@@ -136,13 +136,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'import_export',
-    'djoser',
     'account',
     'baseinfo',
     'assessment',
     'assessmentplatform',
     'drf_yasg',
-    'storages',
 ]
 
 MIDDLEWARE = (
