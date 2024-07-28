@@ -983,6 +983,8 @@ const UpdateAssessmentKitDialog = (props: any) => {
             required={true}
             label={<Trans i18nKey="dsl" />}
             maxSize={convertToBytes(5, "MB")}
+            setSyntaxErrorObject={setSyntaxErrorObject}
+            setShowErrorLog={setShowErrorLog}
           />
         </Box>
       </Grid>
