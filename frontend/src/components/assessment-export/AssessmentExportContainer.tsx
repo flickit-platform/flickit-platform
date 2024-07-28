@@ -392,7 +392,7 @@ const AssessmentExportContainer = () => {
                   </Link>
                 ))}
               </Box>
-              <Typography
+              <Typography 
                 component="div"
                 mt={4}
                 id="assessment-methodology"
@@ -410,7 +410,7 @@ const AssessmentExportContainer = () => {
               <Box paddingLeft={3}>
                 <Typography
                   component="div"
-                  mt={2}
+                  mt={4}
                   variant="titleLarge"
                   id="assessment-focus"
                   gutterBottom
@@ -642,7 +642,7 @@ const AssessmentExportContainer = () => {
               </Box>
               <Typography
                 component="div"
-                mt={4}
+                mt={6}
                 variant="headlineMedium"
                 id="overall-status-report"
                 gutterBottom
@@ -668,7 +668,7 @@ const AssessmentExportContainer = () => {
               >
                 <Box
                   sx={{
-                    flex: { xs: "100%", md: "50%", lg: "60%" },
+                    flex: { xs: "100%", md: "50%", lg: "60%", xl: "50%" },
                     height: subjects?.length > 2 ? "400px" : "300px",
                   }}
                 >
@@ -693,7 +693,7 @@ const AssessmentExportContainer = () => {
                 <Box
                   sx={{
                     ...styles.centerCVH,
-                    flex: { xs: "100%", md: "50%", lg: "40%" },
+                    flex: { xs: "100%", md: "50%", lg: "40%", xl: "50%" },
                   }}
                 >
                   <Gauge
@@ -718,7 +718,7 @@ const AssessmentExportContainer = () => {
                 <>
                   <Typography
                     component="div"
-                    mt={4}
+                    mt={6}
                     variant="headlineMedium"
                     id={`subject-${subject?.id}`}
                     gutterBottom
