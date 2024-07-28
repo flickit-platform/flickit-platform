@@ -74,7 +74,6 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL'),
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
@@ -135,7 +134,6 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    'import_export',
     'account',
     'baseinfo',
     'assessment',
