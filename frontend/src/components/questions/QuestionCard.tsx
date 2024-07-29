@@ -710,9 +710,9 @@ const Evidence = (props: any) => {
     const [valueCount, setValueCount] = useState("");
     const [evidencesData,setEvidencesData]= useState<any[]>([])
     const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
-    const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<boolean>(false);
+    const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({expended:false, id:""});
     const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({expended:false,count:0});
-   const [getAttachmentData,setAttachmentData] = useState(false)
+    const [getAttachmentData,setAttachmentData] = useState(false)
     const is_farsi = firstCharDetector(valueCount);
     const {service} = useServiceContext();
     const [evidenceId, setEvidenceId] = useState("")
@@ -815,7 +815,7 @@ const Evidence = (props: any) => {
         runOnMount: false,
     });
 
-    const deleteItem = async (e: any) => {
+    const deleteItem = async () => {
         try {
             await deleteEvidence.query();
             setExpandedDeleteDialog(false)
@@ -826,9 +826,13 @@ const Evidence = (props: any) => {
             toastError(err);
         }
     };
-    const deleteAttachment = async ({id:attachmentId} : {id: string}) => {
+    const deleteAttachment = async () => {
         try {
+                let attachmentId = expandedDeleteAttachmentDialog.id
                 await RemoveEvidenceAttachments.query({evidenceId,attachmentId})
+                setExpandedDeleteAttachmentDialog({...expandedDeleteAttachmentDialog,expended:false})
+                let {items} = await evidencesQueryData.query()
+                setEvidencesData(items)
                 setAttachmentData(true)
         } catch (e) {
 
@@ -1049,7 +1053,9 @@ const Evidence = (props: any) => {
                     expanded={expandedAttachmentsDialogs}
                     onClose={() => setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs, expended: false})}
                     assessmentId={assessmentId}
+                    setEvidencesData={setEvidencesData}
                     evidenceId={evidenceId}
+                    evidencesQueryData={evidencesQueryData}
                     title={<Trans i18nKey={"addNewMember"}/>}
                     uploadAnother={<Trans i18nKey={"uploadAnother"}/>}
                     uploadAttachment={<Trans i18nKey={"uploadAttachment"}/>}
@@ -1066,7 +1072,7 @@ const Evidence = (props: any) => {
                 />
                 <DeleteDialog
                     expanded={expandedDeleteAttachmentDialog}
-                    onClose={() => setExpandedDeleteAttachmentDialog(false)}
+                    onClose={() => setExpandedDeleteAttachmentDialog({...expandedAttachmentsDialogs,expended:false})}
                     onConfirm={deleteAttachment}
                     title={<Trans i18nKey={"areYouSureYouWantDeleteThisAttachment"}/>}
                     cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
@@ -1190,7 +1196,6 @@ const EvidenceDetail = (props: any) => {
 
     useEffect(()=>{
         (async ()=>{
-            console.log(id,evidenceId,"test evidenceId")
             if(getAttachmentData ){
                 let {attachments} = await fetchAttachments({evidence_id: id})
                 setAttachments(attachments)
@@ -1223,11 +1228,6 @@ const EvidenceDetail = (props: any) => {
         a.click();
         a.remove();
     }
-    // const removeFile = async ({id:attachmentId} : {id: string})=>{
-    //     setExpandedDeleteAttachmentDialog(true)
-    //     // await RemoveEvidenceAttachments.query({evidenceId,attachmentId})
-    //     // setAttachmentData(true)
-    // }
 
     return (
         <Box display="flex" flexDirection="column" width="100%">
@@ -1437,11 +1437,11 @@ const EvidenceDetail = (props: any) => {
                                                         {attachments.map((item,index)=>{
                                                             // TODO
                                                             return(
-                                                               < FileIcon item={item} deleteAttachment={deleteAttachment} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
+                                                               < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
                                             { attachments.length < 5 && (<>
-                                                        <Grid item xs={6} sm={4} md={3} onClick={() => {
+                                                        <Grid item onClick={() => {
                                                             setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
                                                             setEvidenceId(id)
                                                         }}>
@@ -1504,8 +1504,8 @@ const EvidenceDetail = (props: any) => {
 };
 
 const FileIcon =(props :any) =>{
-    const {evidenceBG,downloadFile,item, deleteAttachment } = props
-    console.log(item,"test item")
+    const {evidenceBG,downloadFile,item, setExpandedDeleteAttachmentDialog } = props
+
     const [hover, setHover] = useState(false);
 
     return(
@@ -1516,7 +1516,7 @@ const FileIcon =(props :any) =>{
             onMouseLeave={()=>setHover(false)}
             sx={{ mr: 1 }}
         >
-                <IconFile  deleteAttachment={deleteAttachment} downloadFile={downloadFile} item={item}
+                <IconFile  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item}
                           mainColor={evidenceBG?.borderColor}
                           backgroundColor={evidenceBG?.background} hover={hover} />
             {hover && <Box
@@ -1583,7 +1583,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
     const {
         expanded, onClose, uploadAttachment, uploadAnother,
-        evidenceId, fetchAttachments, setAttachmentData
+        evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData
     } = props;
     const MAX_DESK_TEXT = 100
 
@@ -1618,7 +1618,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             }
             //TODO
             await addEvidenceAttachments.query({evidenceId,data})
-            let {attachments} = await fetchAttachments({evidence_id: evidenceId})
+            const {items} =  await evidencesQueryData.query();
+            setEvidencesData(items)
             setAttachmentData(true)
             setDropZone(null)
             onClose()
@@ -1633,6 +1634,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 description: desc
             }
             await addEvidenceAttachments.query({evidenceId,data})
+            const {items} =  await evidencesQueryData.query();
+            setEvidencesData(items)
             setAttachmentData(true)
             setDropZone(null)
             if(expanded.count >= 5){
@@ -1802,7 +1805,7 @@ const DeleteDialog = (props: any) => {
     const fullScreen = useScreenResize("sm");
     return (
         <Dialog
-            open={expanded}
+            open={expanded.expended}
             onClose={onClose}
             maxWidth={"sm"}
             // fullScreen={fullScreen}
