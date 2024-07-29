@@ -219,7 +219,7 @@ const SUbjectAttributeCard = (props: any) => {
 };
 
 export const AttributeStatusBarContainer = (props: any) => {
-  const { status, ml, cl, mn } = props;
+  const { status, ml, cl, mn, document } = props;
   const colorPallet = getMaturityLevelColors(mn);
   const statusColor = colorPallet[ml - 1];
   return (
@@ -230,7 +230,7 @@ export const AttributeStatusBarContainer = (props: any) => {
         flexDirection: { xs: "column", md: "row" },
       }}
     >
-      <Box display={"flex"} flex={1}>
+      <Box display={"flex"} flex={document ? 0.5 : 1}>
         <Box width="100%">
           {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
           {(cl == 0 || cl) && <AttributeStatusBar cl={cl} mn={mn} />}
@@ -239,6 +239,7 @@ export const AttributeStatusBarContainer = (props: any) => {
       <Box
         sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }}
         minWidth={"245px"}
+        flex={document ? 0.5 : 0}
       >
         <Typography
           variant="h4"
@@ -266,8 +267,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -401,9 +402,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${
-                    is_passed ? statusColor : "#808080"
-                  }`,
+                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
+                    }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -601,7 +601,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             variant="body1"
                                             fontFamily="Roboto"
                                             fontWeight={"bold"}
-                                            dir={is_farsi ? "rtl" : "ltr" }
+                                            dir={is_farsi ? "rtl" : "ltr"}
                                             sx={{
                                               whiteSpace: "nowrap",
                                               overflow: "hidden",
@@ -628,8 +628,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                          ? `${answerOptionIndex}.${answerOptionTitle}`
-                                          : "---"
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -642,8 +642,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"}
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>

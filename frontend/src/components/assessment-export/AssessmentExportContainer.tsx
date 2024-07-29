@@ -39,7 +39,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AssessmentExportTitle from "./AssessmentExportTitle";
-import { DownloadRounded, FiberManualRecordRounded, TableChartRounded } from "@mui/icons-material";
+import { DownloadRounded, FiberManualRecordOutlined, FiberManualRecordRounded, TableChartRounded } from "@mui/icons-material";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
@@ -278,7 +278,7 @@ const AssessmentExportContainer = () => {
               >
                 Beta Version
               </Box>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} flexDirection="row-reverse">
                 <Grid item xs={12} md={4} display="flex" justifyContent="flex-start">
                   <Box
                     sx={{
@@ -310,14 +310,14 @@ const AssessmentExportContainer = () => {
                     </Link>
                     <Box display="flex" flexDirection="column" paddingLeft={2}>
                       <Link href="#assessment-focus" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <FiberManualRecordOutlined sx={{ fontSize: '0.5rem', marginRight: 1 }} />
 
                         <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
                           <Trans i18nKey="assessmentFocus" />
                         </Typography>
                       </Link>
                       <Link href="#questionnaires" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <FiberManualRecordOutlined sx={{ fontSize: '0.5rem', marginRight: 1 }} />
                         <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold' }}>
                           <Trans i18nKey="questionnaires" />
                         </Typography>
@@ -788,6 +788,7 @@ const AssessmentExportContainer = () => {
                                   ml={attribute?.maturityLevel?.value}
                                   cl={Math.ceil(attribute?.confidenceValue ?? 0)}
                                   mn={assessmentKit.maturityLevelCount ?? 5}
+                                  document
                                 />
                               </TableCell>
                             </TableRow>
