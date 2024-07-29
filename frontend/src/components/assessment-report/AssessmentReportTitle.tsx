@@ -50,7 +50,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
               to: `/${space?.id}/assessments/${page}`,
             },
             {
-              title: title,
+              title: `${title} ${t("insights")}`,
             },
           ]}
           displayChip

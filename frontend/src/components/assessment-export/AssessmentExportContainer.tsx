@@ -49,11 +49,14 @@ import { useEffect, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
 import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
+import setDocumentTitle from "@/utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
   const { assessmentKitId = "", assessmentId = "" } = useParams();
   const [errorObject, setErrorObject] = useState<any>(undefined);
+  const { config } = useConfigContext();
   const fetchAssessmentsRoles = useQuery<RolesType>({
     service: (args, config) => service.fetchAssessmentsRoles(args, config),
     toastError: false,
@@ -122,7 +125,6 @@ const AssessmentExportContainer = () => {
       return null;
     }
   };
-
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<Record<string, any>>({});
@@ -191,16 +193,13 @@ const AssessmentExportContainer = () => {
         const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
-        const isLowerOrEqual = (score: any, threshold: any) => {
-          const scores =
-            assessmentKit?.maturityLevels
-              ?.sort(
-                (elem1: IMaturityLevel, elem2: IMaturityLevel) =>
-                  elem1?.index - elem2?.index
-              )
-              ?.map((level: IMaturityLevel) => level?.title) || [];
-          return scores?.indexOf(score) <= scores?.indexOf(threshold);
-        };
+        useEffect(() => {
+          setDocumentTitle(
+            `${t("document", { title: assessment?.title })}`,
+            config.appTitle
+          );
+        }, [assessment]);
+      
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentExportTitle pathInfo={pathInfo} />
