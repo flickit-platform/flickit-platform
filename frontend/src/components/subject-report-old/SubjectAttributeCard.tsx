@@ -230,7 +230,7 @@ export const AttributeStatusBarContainer = (props: any) => {
         flexDirection: { xs: "column", md: "row" },
       }}
     >
-      <Box display={"flex"} flex={document ? 0.5 : 1}>
+      <Box display={"flex"} flex={document ? 0.8 : 1}>
         <Box width="100%">
           {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
           {(cl == 0 || cl) && <AttributeStatusBar cl={cl} mn={mn} />}
@@ -239,7 +239,7 @@ export const AttributeStatusBarContainer = (props: any) => {
       <Box
         sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }}
         minWidth={"245px"}
-        flex={document ? 0.5 : 0}
+        flex={document ? 0.2 : 0}
       >
         <Typography
           variant="h4"

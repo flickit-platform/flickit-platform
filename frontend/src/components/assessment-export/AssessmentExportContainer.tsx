@@ -626,7 +626,7 @@ const AssessmentExportContainer = () => {
               >
                 <Box
                   sx={{
-                    flex: { xs: "100%", md: "50%", lg: "60%", xl: "50%" },
+                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
                     height: subjects?.length > 2 ? "400px" : "300px",
                   }}
                 >
@@ -651,7 +651,7 @@ const AssessmentExportContainer = () => {
                 <Box
                   sx={{
                     ...styles.centerCVH,
-                    flex: { xs: "100%", md: "50%", lg: "40%", xl: "50%" },
+                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
                   }}
                 >
                   <Gauge
