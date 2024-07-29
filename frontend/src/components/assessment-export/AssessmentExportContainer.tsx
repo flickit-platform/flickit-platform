@@ -142,6 +142,20 @@ const AssessmentExportContainer = () => {
   };
 
   useEffect(() => {
+    const hash = window.location.hash.substring(1);
+    console.log(hash);
+    if (hash) {
+      const scrollToElement = () => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+      setTimeout(scrollToElement, 500);
+    }
+  }, []);
+
+  useEffect(() => {
     if (AssessmentReport.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculateMaturityLevelQuery.query().then(() => {
         AssessmentReport.query()
@@ -176,8 +190,6 @@ const AssessmentExportContainer = () => {
       acc[id] = data;
       return acc;
     }, {});
-
-    console.log(attributesDataObject[1539]);
     setAttributesData(attributesDataObject);
   };
 
