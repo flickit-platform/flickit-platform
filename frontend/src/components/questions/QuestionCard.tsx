@@ -77,6 +77,7 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Dropzone, {useDropzone} from 'react-dropzone'
 import {toast} from "react-toastify";
+import Skeleton from "@mui/material/Skeleton";
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -1031,6 +1032,7 @@ const Evidence = (props: any) => {
                                 key={index}
                                 setValue={setValue}
                                 item={item}
+                                evidencesData={evidencesData}
                                 setEvidencesData={setEvidencesData}
                                 setExpandedDeleteDialog={setExpandedDeleteDialog}
                                 setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
@@ -1086,9 +1088,9 @@ const EvidenceDetail = (props: any) => {
         item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
         setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
         fetchAttachments,expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
-        setExpandedDeleteAttachmentDialog, evidenceId,deleteAttachment
+        setExpandedDeleteAttachmentDialog, evidenceId,deleteAttachment, evidencesData
     } = props;
-
+    console.log(item,"test item")
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
     const [value, setValue] = React.useState<any>("POSITIVE");
@@ -1097,6 +1099,12 @@ const EvidenceDetail = (props: any) => {
         service: (args, config) => service.addEvidence(args, config),
         runOnMount: false,
     });
+
+    useEffect(()=>{
+        if(id === evidencesData[0].id){
+            setExpandedEvidenceBox(false)
+        }
+    },[evidencesData.length])
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -1115,6 +1123,7 @@ const EvidenceDetail = (props: any) => {
     const {service} = useServiceContext();
     const [isEditing, setIsEditing] = useState(false)
     const [attachments, setAttachments] = useState<any[]>([])
+    const [loadingFile, setLoadingFile] = useState<boolean>(false)
 
     const submitRef = useRef<any>(null)
 
@@ -1204,10 +1213,14 @@ const EvidenceDetail = (props: any) => {
     },[getAttachmentData])
 
     const expandedEvidenceBtm = async () =>{
+        setLoadingFile(true)
           setExpandedEvidenceBox(prev => !prev);
           if(!expandedEvidenceBox){
               let {attachments} = await fetchAttachments({evidence_id: id})
+              setLoadingFile(false)
               setAttachments(attachments)
+          }else{
+              setLoadingFile(false)
           }
     }
 
@@ -1432,13 +1445,22 @@ const EvidenceDetail = (props: any) => {
                                                  maxHeight: 0,
                                                  overflow: "hidden"
                                              }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem", }}>
-                                                        {attachments.map((item,index)=>{
+                                                        {
+                                                           loadingFile ?
+                                                               <>
+                                                               {[attachmentsCount].map(()=>{
+                                                                   return  <Skeleton variant="rounded" width={40} height={40} />
+                                                               })}
+
+                                                               </>
+                                                               :
+                                                            attachments.map((item,index)=>{
                                                             // TODO
                                                             return(
                                                                < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
-                                            { attachments.length < 5 && (<>
+                                                        { attachments.length < 5 && (<>
                                                         <Grid item onClick={() => {
                                                             setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
                                                             setEvidenceId(id)
