@@ -193,10 +193,8 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(
-        `/api/v1/path-info?${
-          assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${
-          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -323,6 +321,14 @@ export const createService = (
         {
           ...(config ?? {}),
         }
+      );
+    },
+    fetchAIReport(
+      { assessmentId, attributeId, data }: { assessmentId: string; attributeId: TId, data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`, data, config
       );
     },
     fetchAssessment(
@@ -957,17 +963,17 @@ export const createService = (
       const { id } = args ?? {};
       return axios.delete(`/api/v1/expert-groups/${id}/`, config);
     },
-      deleteExpertGroupImage(
-          args: {expertGroupId : number },
-          config: AxiosRequestConfig<any> | undefined
-      ) {
-          const { expertGroupId } = args ?? {};
+    deleteExpertGroupImage(
+      args: { expertGroupId: number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { expertGroupId } = args ?? {};
 
-          return axios.delete(`/api/v1/expert-groups/${expertGroupId}/picture/`
-              , {
-              ...(config ?? {}),
-          });
-      },
+      return axios.delete(`/api/v1/expert-groups/${expertGroupId}/picture/`
+        , {
+          ...(config ?? {}),
+        });
+    },
     seenExpertGroup(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -1055,15 +1061,15 @@ export const createService = (
       const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-            description,
-            type,
-          })
+          description,
+          type,
+        })
         : axios.post(`/api/v1/evidences/`, {
-            assessmentId: assessmentId,
-            questionId: questionId,
-            type: type,
-            description,
-          });
+          assessmentId: assessmentId,
+          questionId: questionId,
+          type: type,
+          description,
+        });
     },
     deleteEvidence(
       args: { id: TId },

@@ -31,8 +31,6 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
       const computedStyle = window.getComputedStyle(element);
       const lineHeight = parseFloat(computedStyle.lineHeight);
       const elementHeight = element.offsetHeight;
-      console.log(lineHeight);
-      console.log(elementHeight);
       setIsOverflowing(elementHeight > lineHeight);
     }
   }, [assessmentKit.summary]);

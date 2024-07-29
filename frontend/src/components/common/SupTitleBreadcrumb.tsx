@@ -37,7 +37,6 @@ const SupTitleBreadcrumb = (
         const disabled =
           (routes.length - 1 === index || !to) &&
           (!route.hasOwnProperty("disabled") || route.disabled);
-        console.log(route.title);
         const isActive = routes.length - 1 === index;
         return (
           <Box display="flex" flexDirection={"column"} key={index}>

@@ -103,14 +103,29 @@ const AssessmentExportContainer = () => {
 
   const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
     try {
-      const response = await service.fetchExportReport(
+      const response: any = await service.fetchExportReport(
         {
           assessmentId,
           attributeId,
         },
         undefined
-      );
-      return response;
+      )
+
+      const aiReponse = service.fetchAIReport(
+        {
+          assessmentId,
+          attributeId,
+          data: {
+            fileLink: response?.data?.downloadLink
+          }
+        },
+        undefined
+      ).then((res: any) => {
+
+        return res?.data?.content || ""
+      });
+
+      return aiReponse
     } catch (error: any) {
       setErrorObject(error?.response?.data);
       if (error?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -127,29 +142,27 @@ const AssessmentExportContainer = () => {
   };
   const [showSpinner, setShowSpinner] = useState(true);
 
-  const [attributesData, setAttributesData] = useState<Record<string, any>>({});
+  const [attributesData, setAttributesData] = useState<any>({});
 
   const fetchAllAttributesData = async () => {
-    const attributesDataPromises: Promise<any>[] = [];
-    AssessmentReport.data?.subjects.forEach((subject: ISubject) => {
-      subject.attributes.forEach((attribute: IAttribute) => {
-        attributesDataPromises.push(
-          FetchAttributeData(assessmentId, attribute.id)
-        );
-      });
-    });
+    const attributesDataPromises = AssessmentReport.data?.subjects.flatMap((subject) =>
+      subject.attributes.map((attribute) =>
+        FetchAttributeData(assessmentId, attribute.id).then(result => ({
+          id: attribute.id,
+          data: result,
+        }))
+      )
+    );
 
     const allAttributesData = await Promise.all(attributesDataPromises);
 
-    // Transform the array of data into an object for easy lookup
-    const attributesDataMap: Record<string, any> = {};
-    AssessmentReport.data?.forEach((subject: ISubject) => {
-      subject.attributes.forEach((attribute: IAttribute, index: number) => {
-        attributesDataMap[attribute.id] = allAttributesData.shift();
-      });
-    });
+    const attributesDataObject = allAttributesData.reduce((acc, { id, data }) => {
+      acc[id] = data;
+      return acc;
+    }, {});
 
-    setAttributesData(attributesDataMap);
+    console.log(attributesDataObject[1539]);
+    setAttributesData(attributesDataObject);
   };
 
   useEffect(() => {
@@ -199,7 +212,7 @@ const AssessmentExportContainer = () => {
             config.appTitle
           );
         }, [assessment]);
-      
+
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentExportTitle pathInfo={pathInfo} />
@@ -758,7 +771,7 @@ const AssessmentExportContainer = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {subject?.attributes?.map((attribute) => (
+                          {subject?.attributes?.map((attribute, index) => (
                             <TableRow key={attribute?.id}>
                               <TableCell
                                 sx={{
@@ -783,13 +796,17 @@ const AssessmentExportContainer = () => {
                                   borderRight: "1px solid rgba(224, 224, 224, 1)",
                                 }}
                               >
-                                <AttributeStatusBarContainer
-                                  status={attribute?.maturityLevel?.title}
-                                  ml={attribute?.maturityLevel?.value}
-                                  cl={Math.ceil(attribute?.confidenceValue ?? 0)}
-                                  mn={assessmentKit.maturityLevelCount ?? 5}
-                                  document
-                                />
+
+                                <Box display="flex" flexDirection="column" gap={2}>
+                                  <AttributeStatusBarContainer
+                                    status={attribute?.maturityLevel?.title}
+                                    ml={attribute?.maturityLevel?.value}
+                                    cl={Math.ceil(attribute?.confidenceValue ?? 0)}
+                                    mn={assessmentKit.maturityLevelCount ?? 5}
+                                    document
+                                  />
+                                  <Typography variant="displaySmall">{attributesData[attribute.id.toString()]}</Typography>
+                                </Box>
                               </TableCell>
                             </TableRow>
                           ))}
