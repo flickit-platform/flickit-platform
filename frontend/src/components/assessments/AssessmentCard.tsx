@@ -80,7 +80,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       if (!isCalculateValid) {
         const data = await calculateMaturityLevelQuery.query().catch(() => {
           setShow(true);
-          console.log("first");
         });
         setCalculateResault(data);
         if (data?.id) {

@@ -212,7 +212,6 @@ const AutocompleteBaseField = (
     const handleKeyDown = (event: any) => {
       if (event?.key === "Enter") {
         event.preventDefault();
-        console.log(inputValue);
 
         if (loadingButtonRef.current && inputValue && hasAddBtn) {
           loadingButtonRef.current.click();

@@ -133,7 +133,6 @@ const NotCompletedAlert = (props: {
 }) => {
   const { isCompleted, loading, hasStatus, isAccessDenied } = props;
 
-  console.log(isAccessDenied);
   return (
     <Box mt={2}>
       {loading ? (
