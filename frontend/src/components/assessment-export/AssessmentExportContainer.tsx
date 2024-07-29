@@ -280,24 +280,6 @@ const AssessmentExportContainer = () => {
                 Beta Version
               </Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={8}>
-                  <Typography
-                    component="div"
-                    mt={4}
-                    id="assessment-methodology"
-                    variant="headlineMedium"
-                    fontWeight={600}
-                    gutterBottom
-                  >
-                    <Trans i18nKey="assessmentMethodology" />
-                  </Typography>
-                  <Typography
-                    variant="displaySmall"
-                    paragraph
-                    dangerouslySetInnerHTML={{ __html: assessmentKitInfo?.about }}
-                  ></Typography>
-
-                </Grid>
                 <Grid item xs={12} md={4} display="flex" justifyContent="flex-start">
                   <Box
                     sx={{
@@ -358,6 +340,25 @@ const AssessmentExportContainer = () => {
                     ))}
                   </Box>
                 </Grid>
+                <Grid item xs={12} md={8}>
+                  <Typography
+                    component="div"
+                    mt={4}
+                    id="assessment-methodology"
+                    variant="headlineMedium"
+                    fontWeight={600}
+                    gutterBottom
+                  >
+                    <Trans i18nKey="assessmentMethodology" />
+                  </Typography>
+                  <Typography
+                    variant="displaySmall"
+                    paragraph
+                    dangerouslySetInnerHTML={{ __html: assessmentKitInfo?.about }}
+                  ></Typography>
+
+                </Grid>
+
                 <Box paddingLeft={3}>
                   <Typography
                     component="div"
