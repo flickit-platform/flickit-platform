@@ -142,8 +142,7 @@ const AssessmentExportContainer = () => {
   };
 
   useEffect(() => {
-    const hash = window.location.hash.substring(1);
-    console.log(hash);
+    const hash = window?.location?.hash?.substring(1);
     if (hash) {
       const scrollToElement = () => {
         const element = document.getElementById(hash);
@@ -156,29 +155,29 @@ const AssessmentExportContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (AssessmentReport.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
+    if (AssessmentReport?.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculateMaturityLevelQuery.query().then(() => {
         AssessmentReport.query()
       });
     }
     if (
-      AssessmentReport.errorObject?.response?.data?.code ==
+      AssessmentReport?.errorObject?.response?.data?.code ==
       "CONFIDENCE_CALCULATION_NOT_VALID"
     ) {
       calculateConfidenceLevelQuery.query().then(() => {
         AssessmentReport.query()
       });
     }
-  }, [AssessmentReport.errorObject]);
+  }, [AssessmentReport?.errorObject]);
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<any>({});
 
   const fetchAllAttributesData = async () => {
-    const attributesDataPromises = AssessmentReport.data?.subjects.flatMap((subject: any) =>
+    const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
       subject.attributes.map((attribute: any) =>
-        FetchAttributeData(assessmentId, attribute.id).then(result => ({
-          id: attribute.id,
+        FetchAttributeData(assessmentId, attribute?.id).then(result => ({
+          id: attribute?.id,
           data: result,
         }))
       )
@@ -186,7 +185,7 @@ const AssessmentExportContainer = () => {
 
     const allAttributesData = await Promise.all(attributesDataPromises);
 
-    const attributesDataObject = allAttributesData.reduce((acc, { id, data }) => {
+    const attributesDataObject = allAttributesData?.reduce((acc, { id, data }) => {
       acc[id] = data;
       return acc;
     }, {});
@@ -195,7 +194,7 @@ const AssessmentExportContainer = () => {
 
   useEffect(() => {
     fetchAllAttributesData();
-  }, [AssessmentReport.data, assessmentId]);
+  }, [AssessmentReport?.data, assessmentId]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -237,7 +236,7 @@ const AssessmentExportContainer = () => {
         useEffect(() => {
           setDocumentTitle(
             `${t("document", { title: assessment?.title })}`,
-            config.appTitle
+            config?.appTitle
           );
         }, [assessment]);
 
@@ -413,19 +412,19 @@ const AssessmentExportContainer = () => {
                     <Trans
                       i18nKey="assessmentFocusDescription"
                       values={{
-                        subjectsCount: subjects.length,
+                        subjectsCount: subjects?.length,
                         subjects: subjects
                           ?.map((elem: ISubject, index: number) =>
-                            index === subjects.length - 1
+                            index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
                                 ? elem?.title
                                 : ", " + elem?.title
                           )
                           ?.join(""),
-                        attributesCount: subjects.reduce(
+                        attributesCount: subjects?.reduce(
                           (previousValue: number, currentValue: ISubject) => {
-                            return previousValue + currentValue.attributes.length;
+                            return previousValue + currentValue?.attributes?.length;
                           },
                           0
                         ),
@@ -437,8 +436,8 @@ const AssessmentExportContainer = () => {
                       <Trans
                         i18nKey="assessmentFocusDescriptionSubject"
                         values={{
-                          title: subject.title,
-                          description: subject.description,
+                          title: subject?.title,
+                          description: subject?.description,
                         }}
                       />
                     </Typography>
@@ -675,7 +674,7 @@ const AssessmentExportContainer = () => {
                     <AssessmentSubjectRadarChart
                       data={subjects}
                       maturityLevelsCount={
-                        assessmentKit.maturityLevelCount ?? 5
+                        assessmentKit?.maturityLevelCount ?? 5
                       }
                       loading={false}
                     />
@@ -683,7 +682,7 @@ const AssessmentExportContainer = () => {
                     <AssessmentSubjectRadialChart
                       data={subjects}
                       maturityLevelsCount={
-                        assessmentKit.maturityLevelCount ?? 5
+                        assessmentKit?.maturityLevelCount ?? 5
                       }
                       loading={false}
                     />
@@ -740,7 +739,7 @@ const AssessmentExportContainer = () => {
                           maturityLevelValue: subject?.maturityLevel?.value,
                           maturityLevelTitle: subject?.maturityLevel?.title,
                           maturityLevelCount:
-                            assessmentKit.maturityLevelCount ?? 5,
+                            assessmentKit?.maturityLevelCount ?? 5,
                           attributesCount: subject?.attributes?.length,
                         }}
                       />
@@ -752,7 +751,7 @@ const AssessmentExportContainer = () => {
                         <AssessmentSubjectRadarChart
                           data={subject?.attributes}
                           maturityLevelsCount={
-                            assessmentKit.maturityLevelCount ?? 5
+                            assessmentKit?.maturityLevelCount ?? 5
                           }
                           loading={false}
                         />
@@ -760,7 +759,7 @@ const AssessmentExportContainer = () => {
                         <AssessmentSubjectRadialChart
                           data={subject?.attributes}
                           maturityLevelsCount={
-                            assessmentKit.maturityLevelCount ?? 5
+                            assessmentKit?.maturityLevelCount ?? 5
                           }
                           loading={false}
                         />
@@ -830,10 +829,10 @@ const AssessmentExportContainer = () => {
                                     status={attribute?.maturityLevel?.title}
                                     ml={attribute?.maturityLevel?.value}
                                     cl={Math.ceil(attribute?.confidenceValue ?? 0)}
-                                    mn={assessmentKit.maturityLevelCount ?? 5}
+                                    mn={assessmentKit?.maturityLevelCount ?? 5}
                                     document
                                   />
-                                  <Typography variant="displaySmall">{attributesData[attribute.id.toString()]}</Typography>
+                                  <Typography variant="displaySmall">{attributesData[attribute?.id?.toString()]}</Typography>
                                 </Box>
                               </TableCell>
                             </TableRow>
