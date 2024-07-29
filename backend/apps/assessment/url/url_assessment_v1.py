@@ -27,6 +27,8 @@ urlpatterns = [
          attributes_views.EvidencesOfAttributeApi.as_view()),
     path("<uuid:assessment_id>/export-report/attributes/<int:attribute_id>/",
          reportviews.AssessmentAttributesReportExportApi.as_view()),
+    path("<uuid:assessment_id>/ai-report/attributes/<int:attribute_id>/",
+         reportviews.AssessmentAttributesReportAiApi.as_view()),
     path("<uuid:assessment_id>/invite/", assessment_views.InviteUsersAssessmentsApi.as_view()),
     path("<uuid:assessment_id>/invitees/", assessment_views.InviteesAssessmentsApi.as_view()),
 ]
