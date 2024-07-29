@@ -39,7 +39,7 @@ const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
               to: `/${spaceId}/assessments/${page}`,
             },
             {
-              title: assessment?.title,
+              title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessment.id}/insights`,
             },
             {

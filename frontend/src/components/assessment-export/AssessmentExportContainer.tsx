@@ -39,7 +39,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AssessmentExportTitle from "./AssessmentExportTitle";
-import { DownloadRounded, FiberManualRecordRounded, TableChartRounded } from "@mui/icons-material";
+import { DownloadRounded, FiberManualRecordOutlined, FiberManualRecordRounded, TableChartRounded } from "@mui/icons-material";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
@@ -49,11 +49,14 @@ import { useEffect, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
 import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
+import setDocumentTitle from "@/utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
   const { assessmentKitId = "", assessmentId = "" } = useParams();
   const [errorObject, setErrorObject] = useState<any>(undefined);
+  const { config } = useConfigContext();
   const fetchAssessmentsRoles = useQuery<RolesType>({
     service: (args, config) => service.fetchAssessmentsRoles(args, config),
     toastError: false,
@@ -122,7 +125,6 @@ const AssessmentExportContainer = () => {
       return null;
     }
   };
-
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<Record<string, any>>({});
@@ -191,16 +193,13 @@ const AssessmentExportContainer = () => {
         const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
-        const isLowerOrEqual = (score: any, threshold: any) => {
-          const scores =
-            assessmentKit?.maturityLevels
-              ?.sort(
-                (elem1: IMaturityLevel, elem2: IMaturityLevel) =>
-                  elem1?.index - elem2?.index
-              )
-              ?.map((level: IMaturityLevel) => level?.title) || [];
-          return scores?.indexOf(score) <= scores?.indexOf(threshold);
-        };
+        useEffect(() => {
+          setDocumentTitle(
+            `${t("document", { title: assessment?.title })}`,
+            config.appTitle
+          );
+        }, [assessment]);
+      
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentExportTitle pathInfo={pathInfo} />
@@ -279,7 +278,7 @@ const AssessmentExportContainer = () => {
               >
                 Beta Version
               </Box>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} flexDirection="row-reverse">
                 <Grid item xs={12} md={4} display="flex" justifyContent="flex-start">
                   <Box
                     sx={{
@@ -311,14 +310,14 @@ const AssessmentExportContainer = () => {
                     </Link>
                     <Box display="flex" flexDirection="column" paddingLeft={2}>
                       <Link href="#assessment-focus" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <FiberManualRecordOutlined sx={{ fontSize: '0.5rem', marginRight: 1 }} />
 
                         <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
                           <Trans i18nKey="assessmentFocus" />
                         </Typography>
                       </Link>
                       <Link href="#questionnaires" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <FiberManualRecordOutlined sx={{ fontSize: '0.5rem', marginRight: 1 }} />
                         <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold' }}>
                           <Trans i18nKey="questionnaires" />
                         </Typography>
@@ -627,7 +626,7 @@ const AssessmentExportContainer = () => {
               >
                 <Box
                   sx={{
-                    flex: { xs: "100%", md: "50%", lg: "60%", xl: "50%" },
+                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
                     height: subjects?.length > 2 ? "400px" : "300px",
                   }}
                 >
@@ -652,7 +651,7 @@ const AssessmentExportContainer = () => {
                 <Box
                   sx={{
                     ...styles.centerCVH,
-                    flex: { xs: "100%", md: "50%", lg: "40%", xl: "50%" },
+                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
                   }}
                 >
                   <Gauge
@@ -789,6 +788,7 @@ const AssessmentExportContainer = () => {
                                   ml={attribute?.maturityLevel?.value}
                                   cl={Math.ceil(attribute?.confidenceValue ?? 0)}
                                   mn={assessmentKit.maturityLevelCount ?? 5}
+                                  document
                                 />
                               </TableCell>
                             </TableRow>

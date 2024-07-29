@@ -6,14 +6,14 @@ import { t } from "i18next";
 
 interface IAssessmentExportTitle {
   pathInfo: {
-      space: {
-          id: number,
-          title: string
-      },
-      assessment: {
-          id: string,
-          title: string
-      }
+    space: {
+      id: number,
+      title: string
+    },
+    assessment: {
+      id: string,
+      title: string
+    }
   };
 }
 
@@ -39,7 +39,7 @@ const AssessmentExportTitle = (props: IAssessmentExportTitle) => {
               to: `/${spaceId}/assessments/${page}`,
             },
             {
-              title: assessment?.title,
+              title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessment.id}/insights`,
             },
             {
