@@ -34,11 +34,12 @@ import {
   TableRow,
   Typography,
   Link,
+  Divider,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AssessmentExportTitle from "./AssessmentExportTitle";
-import { DownloadRounded } from "@mui/icons-material";
+import { DownloadRounded, FiberManualRecordRounded, TableChartRounded } from "@mui/icons-material";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
@@ -278,368 +279,326 @@ const AssessmentExportContainer = () => {
               >
                 Beta Version
               </Box>
-              <Box display="flex" flexDirection="column">
-                <Link
-                  href="#assessment-methodology"
-                  sx={{
-                    textDecoration: "none",
-                    opacity: 0.9,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  <Typography
-                    variant="titleSmall"
-                    gutterBottom
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4} display="flex" justifyContent="flex-start">
+                  <Box
                     sx={{
-                      textDecoration: "none",
-                      opacity: 0.9,
-                      fontWeight: "bold",
+                      position: 'sticky',
+                      top: '5.25rem',
+                      padding: '0.5rem 2rem',
+                      borderRadius: '4px',
+                      fontWeight: 'bold',
+                      zIndex: 1,
                     }}
+                  >
+                    <Typography
+                      component="div"
+                      mt={4}
+                      variant="titleMedium"
+                      gutterBottom
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <TableChartRounded fontSize="small" sx={{ marginRight: 1 }} />
+                      <Trans i18nKey="tableOfContents" />
+                    </Typography>
+                    <Divider />
+                    <Link href="#assessment-methodology" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                      <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                      <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                        <Trans i18nKey="assessmentMethodology" />
+                      </Typography>
+                    </Link>
+                    <Box display="flex" flexDirection="column" paddingLeft={2}>
+                      <Link href="#assessment-focus" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+
+                        <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                          <Trans i18nKey="assessmentFocus" />
+                        </Typography>
+                      </Link>
+                      <Link href="#questionnaires" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold' }}>
+                          <Trans i18nKey="questionnaires" />
+                        </Typography>
+                      </Link>
+                    </Box>
+                    <Link href="#overall-status-report" sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                      <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                      <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold' }}>
+                        <Trans i18nKey="overallStatusReport" />
+                      </Typography>
+                    </Link>
+                    {subjects?.map((subject) => (
+                      <Link key={subject?.id} href={`#subject-${subject?.id}`} sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+                        <FiberManualRecordRounded sx={{ fontSize: '0.5rem', marginRight: 1 }} />
+                        <Typography variant="titleSmall" gutterBottom sx={{ textDecoration: 'none', opacity: 0.9, fontWeight: 'bold' }}>
+                          <Trans i18nKey="subjectStatusReport" values={{ title: subject?.title }} />
+                        </Typography>
+                      </Link>
+                    ))}
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={8}>
+                  <Typography
+                    component="div"
+                    mt={4}
+                    id="assessment-methodology"
+                    variant="headlineMedium"
+                    fontWeight={600}
+                    gutterBottom
                   >
                     <Trans i18nKey="assessmentMethodology" />
                   </Typography>
-                </Link>
-                <Box display="flex" flexDirection="column" paddingLeft={2}>
-                  <Link
-                    href="#assessment-focus"
-                    sx={{
-                      textDecoration: "none",
-                      opacity: 0.9,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {" "}
-                    <Typography
-                      variant="titleSmall"
-                      gutterBottom
-                      sx={{
-                        textDecoration: "none",
-                        opacity: 0.9,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <Trans i18nKey="assessmentFocus" />
-                    </Typography>
-                  </Link>
-                  <Link
-                    href="#questionnaires"
-                    sx={{
-                      textDecoration: "none",
-                      opacity: 0.9,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {" "}
-                    <Typography
-                      variant="titleSmall"
-                      gutterBottom
-                      sx={{
-                        textDecoration: "none",
-                        opacity: 0.9,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <Trans i18nKey="questionnaires" />
-                    </Typography>
-                  </Link>
-                </Box>
-                <Link
-                  href="#overall-status-report"
-                  sx={{
-                    textDecoration: "none",
-                    opacity: 0.9,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
                   <Typography
-                    variant="titleSmall"
+                    variant="displaySmall"
+                    paragraph
+                    dangerouslySetInnerHTML={{ __html: assessmentKitInfo?.about }}
+                  ></Typography>
+
+                </Grid>
+
+                <Box paddingLeft={3}>
+                  <Typography
+                    component="div"
+                    mt={4}
+                    variant="titleLarge"
+                    id="assessment-focus"
                     gutterBottom
-                    sx={{
-                      textDecoration: "none",
-                      opacity: 0.9,
-                      fontWeight: "bold",
-                    }}
                   >
-                    <Trans i18nKey="overallStatusReport" />
+                    <Trans i18nKey="assessmentFocus" />
                   </Typography>
-                </Link>
-                {subjects?.map((subject: ISubject) => (
-                  <Link
-                    href={`#subject-${subject?.id}`}
-                    sx={{
-                      textDecoration: "none",
-                      opacity: 0.9,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {" "}
-                    <Typography
-                      variant="titleSmall"
-                      gutterBottom
-                      sx={{
-                        textDecoration: "none",
-                        opacity: 0.9,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <Trans
-                        i18nKey="subjectStatusReport"
-                        values={{ title: subject?.title }}
-                      />{" "}
-                    </Typography>
-                  </Link>
-                ))}
-              </Box>
-              <Typography 
-                component="div"
-                mt={4}
-                id="assessment-methodology"
-                variant="headlineMedium"
-                fontWeight={600}
-                gutterBottom
-              >
-                <Trans i18nKey="assessmentMethodology" />
-              </Typography>
-              <Typography
-                variant="displaySmall"
-                paragraph
-                dangerouslySetInnerHTML={{ __html: assessmentKitInfo?.about }}
-              ></Typography>
-              <Box paddingLeft={3}>
-                <Typography
-                  component="div"
-                  mt={4}
-                  variant="titleLarge"
-                  id="assessment-focus"
-                  gutterBottom
-                >
-                  <Trans i18nKey="assessmentFocus" />
-                </Typography>
-                <Typography variant="displaySmall" paragraph>
-                  <Trans
-                    i18nKey="assessmentFocusDescription"
-                    values={{
-                      subjectsCount: subjects.length,
-                      subjects: subjects
-                        ?.map((elem: ISubject, index: number) =>
-                          index === subjects.length - 1
-                            ? " and " + elem?.title
-                            : index === 0
-                            ? elem?.title
-                            : ", " + elem?.title
-                        )
-                        ?.join(""),
-                      attributesCount: subjects.reduce(
-                        (previousValue: number, currentValue: ISubject) => {
-                          return previousValue + currentValue.attributes.length;
-                        },
-                        0
-                      ),
-                    }}
-                  />
-                </Typography>{" "}
-                {subjects?.map((subject: ISubject) => (
                   <Typography variant="displaySmall" paragraph>
                     <Trans
-                      i18nKey="assessmentFocusDescriptionSubject"
+                      i18nKey="assessmentFocusDescription"
                       values={{
-                        title: subject.title,
-                        description: subject.description,
+                        subjectsCount: subjects.length,
+                        subjects: subjects
+                          ?.map((elem: ISubject, index: number) =>
+                            index === subjects.length - 1
+                              ? " and " + elem?.title
+                              : index === 0
+                                ? elem?.title
+                                : ", " + elem?.title
+                          )
+                          ?.join(""),
+                        attributesCount: subjects.reduce(
+                          (previousValue: number, currentValue: ISubject) => {
+                            return previousValue + currentValue.attributes.length;
+                          },
+                          0
+                        ),
                       }}
                     />
+                  </Typography>{" "}
+                  {subjects?.map((subject: ISubject) => (
+                    <Typography variant="displaySmall" paragraph>
+                      <Trans
+                        i18nKey="assessmentFocusDescriptionSubject"
+                        values={{
+                          title: subject.title,
+                          description: subject.description,
+                        }}
+                      />
+                    </Typography>
+                  ))}
+
+                  <Typography variant="displaySmall" paragraph>
+                    <Trans i18nKey="assessmentFocusDescriptionLastSection" />
                   </Typography>
-                ))}
-                <Typography variant="displaySmall" paragraph>
-                  <Trans i18nKey="assessmentFocusDescriptionLastSection" />
-                </Typography>
-                <TableContainer
-                  component={Paper}
-                  sx={{ marginBlock: 2, borderRadius: 4 }}
-                >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            border: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="assessmentSubject" />
-                          </Typography>{" "}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            border: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="assessmentAttribute" />
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            border: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="description" />
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {subjects?.map((subject: ISubject, index: number) => (
-                        <>
-                          {subject?.attributes?.map(
-                            (feature: IAttribute, featureIndex: number) => (
-                              <TableRow key={featureIndex}>
-                                {featureIndex === 0 && (
+
+                  <TableContainer
+                    component={Paper}
+                    sx={{ marginBlock: 2, borderRadius: 4 }}
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              border: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="assessmentSubject" />
+                            </Typography>{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              border: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="assessmentAttribute" />
+                            </Typography>
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              border: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="description" />
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {subjects?.map((subject: ISubject, index: number) => (
+                          <>
+                            {subject?.attributes?.map(
+                              (feature: IAttribute, featureIndex: number) => (
+                                <TableRow key={featureIndex}>
+                                  {featureIndex === 0 && (
+                                    <TableCell
+                                      sx={{
+                                        borderRight:
+                                          "1px solid rgba(224, 224, 224, 1)",
+                                      }}
+                                      rowSpan={subject?.attributes?.length}
+                                    >
+                                      <Typography variant="titleMedium">
+                                        {subject?.title}
+                                      </Typography>
+                                      <br />
+                                      <Typography variant="displaySmall">
+                                        {subject?.description}
+                                      </Typography>
+                                    </TableCell>
+                                  )}
                                   <TableCell
                                     sx={{
                                       borderRight:
                                         "1px solid rgba(224, 224, 224, 1)",
                                     }}
-                                    rowSpan={subject?.attributes?.length}
                                   >
-                                    <Typography variant="titleMedium">
-                                      {subject?.title}
-                                    </Typography>
-                                    <br />
+                                    {" "}
                                     <Typography variant="displaySmall">
-                                      {subject?.description}
+                                      {feature?.title}
                                     </Typography>
                                   </TableCell>
-                                )}
-                                <TableCell
-                                  sx={{
-                                    borderRight:
-                                      "1px solid rgba(224, 224, 224, 1)",
-                                  }}
-                                >
-                                  {" "}
-                                  <Typography variant="displaySmall">
-                                    {feature?.title}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell
-                                  sx={{
-                                    borderRight:
-                                      "1px solid rgba(224, 224, 224, 1)",
-                                  }}
-                                >
-                                  {" "}
-                                  <Typography variant="displaySmall">
-                                    {feature?.description}
-                                  </Typography>
-                                </TableCell>
-                              </TableRow>
-                            )
-                          )}
-                        </>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <Typography
-                  variant="titleLarge"
-                  gutterBottom
-                  component="div"
-                  mt={4}
-                >
-                  <Trans i18nKey="questionnaires" id="questionnaires" />
-                </Typography>
-                <Typography variant="displaySmall" paragraph>
-                  <Trans
-                    i18nKey="questionnairesDescription"
-                    values={{ questionnairesCount, questionsCount }}
-                  />
-                </Typography>
-                <TableContainer
-                  component={Paper}
-                  sx={{ marginBlock: 2, borderRadius: 4 }}
-                >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            borderRight: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="number" />
-                          </Typography>{" "}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            borderRight: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="questionnaire" />
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            backgroundColor: "#f5f5f5",
-                            borderRight: "1px solid rgba(224, 224, 224, 1)",
-                          }}
-                        >
-                          <Typography variant="titleMedium">
-                            <Trans i18nKey="description" />
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {questionnaires?.map(
-                        (questionnaire: any, index: number) => (
-                          <TableRow key={index}>
-                            <TableCell
-                              sx={{
-                                borderRight: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              {" "}
-                              <Typography variant="displaySmall">
-                                {index + 1}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                borderRight: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              {" "}
-                              <Typography variant="titleMedium">
-                                {questionnaire?.title}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                borderRight: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              {" "}
-                              <Typography variant="displaySmall">
-                                {questionnaire?.description}{" "}
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
+                                  <TableCell
+                                    sx={{
+                                      borderRight:
+                                        "1px solid rgba(224, 224, 224, 1)",
+                                    }}
+                                  >
+                                    {" "}
+                                    <Typography variant="displaySmall">
+                                      {feature?.description}
+                                    </Typography>
+                                  </TableCell>
+                                </TableRow>
+                              )
+                            )}
+                          </>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <Typography
+                    variant="titleLarge"
+                    gutterBottom
+                    component="div"
+                    mt={4}
+                    id="questionnaires"
+                  >
+                    <Trans i18nKey="questionnaires" />
+                  </Typography>
+                  <Typography variant="displaySmall" paragraph>
+                    <Trans
+                      i18nKey="questionnairesDescription"
+                      values={{ questionnairesCount, questionsCount }}
+                    />
+                  </Typography>
+                  <TableContainer
+                    component={Paper}
+                    sx={{ marginBlock: 2, borderRadius: 4 }}
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              borderRight: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="number" />
+                            </Typography>{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              borderRight: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="questionnaire" />
+                            </Typography>
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              backgroundColor: "#f5f5f5",
+                              borderRight: "1px solid rgba(224, 224, 224, 1)",
+                            }}
+                          >
+                            <Typography variant="titleMedium">
+                              <Trans i18nKey="description" />
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {questionnaires?.map(
+                          (questionnaire: any, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell
+                                sx={{
+                                  borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                }}
+                              >
+                                {" "}
+                                <Typography variant="displaySmall">
+                                  {index + 1}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                }}
+                              >
+                                {" "}
+                                <Typography variant="titleMedium">
+                                  {questionnaire?.title}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                }}
+                              >
+                                {" "}
+                                <Typography variant="displaySmall">
+                                  {questionnaire?.description}{" "}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+
+
+              </Grid>
+
               <Typography
                 component="div"
                 mt={6}
@@ -714,132 +673,134 @@ const AssessmentExportContainer = () => {
               <Typography variant="displaySmall" gutterBottom>
                 <Trans i18nKey="subjectsSectionTitle" />
               </Typography>{" "}
-              {subjects?.map((subject: ISubject) => (
-                <>
-                  <Typography
-                    component="div"
-                    mt={6}
-                    variant="headlineMedium"
-                    id={`subject-${subject?.id}`}
-                    gutterBottom
-                  >
-                    <Trans
-                      i18nKey="subjectStatusReport"
-                      values={{ title: subject?.title }}
-                    />
-                  </Typography>
-                  <Typography variant="displaySmall" paragraph>
-                    <Trans
-                      i18nKey="subjectStatusReportDescription"
-                      values={{
-                        title: subject?.title,
-                        description: subject?.description,
-                        confidenceValue: Math?.ceil(
-                          subject?.confidenceValue ?? 0
-                        ),
-                        maturityLevelValue: subject?.maturityLevel?.value,
-                        maturityLevelTitle: subject?.maturityLevel?.title,
-                        maturityLevelCount:
-                          assessmentKit.maturityLevelCount ?? 5,
-                        attributesCount: subject?.attributes?.length,
-                      }}
-                    />
-                  </Typography>
-                  <Box
-                    height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
-                  >
-                    {subject?.attributes?.length > 2 ? (
-                      <AssessmentSubjectRadarChart
-                        data={subject?.attributes}
-                        maturityLevelsCount={
-                          assessmentKit.maturityLevelCount ?? 5
-                        }
-                        loading={false}
+              {
+                subjects?.map((subject: ISubject) => (
+                  <>
+                    <Typography
+                      component="div"
+                      mt={6}
+                      variant="headlineMedium"
+                      id={`subject-${subject?.id}`}
+                      gutterBottom
+                    >
+                      <Trans
+                        i18nKey="subjectStatusReport"
+                        values={{ title: subject?.title }}
                       />
-                    ) : (
-                      <AssessmentSubjectRadialChart
-                        data={subject?.attributes}
-                        maturityLevelsCount={
-                          assessmentKit.maturityLevelCount ?? 5
-                        }
-                        loading={false}
+                    </Typography>
+                    <Typography variant="displaySmall" paragraph>
+                      <Trans
+                        i18nKey="subjectStatusReportDescription"
+                        values={{
+                          title: subject?.title,
+                          description: subject?.description,
+                          confidenceValue: Math?.ceil(
+                            subject?.confidenceValue ?? 0
+                          ),
+                          maturityLevelValue: subject?.maturityLevel?.value,
+                          maturityLevelTitle: subject?.maturityLevel?.title,
+                          maturityLevelCount:
+                            assessmentKit.maturityLevelCount ?? 5,
+                          attributesCount: subject?.attributes?.length,
+                        }}
                       />
-                    )}
-                  </Box>
-                  <TableContainer
-                    component={Paper}
-                    sx={{ marginBlock: 2, borderRadius: 4 }}
-                    className="checkbox-table"
-                  >
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            sx={{
-                              maxWidth: 140,
-                              backgroundColor: "#f5f5f5",
-                              borderRight: "1px solid rgba(224, 224, 224, 1)",
-                            }}
-                          >
-                            <Typography variant="titleMedium">
-                              <Trans i18nKey="attribute" />
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              maxWidth: 300,
-                              backgroundColor: "#f5f5f5",
-                              borderRight: "1px solid rgba(224, 224, 224, 1)",
-                            }}
-                          >
-                            <Typography variant="titleMedium">
-                              <Trans i18nKey="statusReport" />
-                            </Typography>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {subject?.attributes?.map((attribute) => (
-                          <TableRow key={attribute?.id}>
+                    </Typography>
+                    <Box
+                      height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
+                    >
+                      {subject?.attributes?.length > 2 ? (
+                        <AssessmentSubjectRadarChart
+                          data={subject?.attributes}
+                          maturityLevelsCount={
+                            assessmentKit.maturityLevelCount ?? 5
+                          }
+                          loading={false}
+                        />
+                      ) : (
+                        <AssessmentSubjectRadialChart
+                          data={subject?.attributes}
+                          maturityLevelsCount={
+                            assessmentKit.maturityLevelCount ?? 5
+                          }
+                          loading={false}
+                        />
+                      )}
+                    </Box>
+                    <TableContainer
+                      component={Paper}
+                      sx={{ marginBlock: 2, borderRadius: 4 }}
+                      className="checkbox-table"
+                    >
+                      <Table>
+                        <TableHead>
+                          <TableRow>
                             <TableCell
                               sx={{
                                 maxWidth: 140,
-                                wordWrap: "break-word",
+                                backgroundColor: "#f5f5f5",
                                 borderRight: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
                               <Typography variant="titleMedium">
-                                {attribute?.title}
-                              </Typography>
-                              <br />
-                              <Typography variant="displaySmall">
-                                {attribute?.description}
+                                <Trans i18nKey="attribute" />
                               </Typography>
                             </TableCell>
                             <TableCell
-                              className="attribute--statusbar"
                               sx={{
                                 maxWidth: 300,
-                                wordWrap: "break-word",
+                                backgroundColor: "#f5f5f5",
                                 borderRight: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
-                              <AttributeStatusBarContainer
-                                status={maturityLevel?.title}
-                                ml={maturityLevel?.value}
-                                cl={Math.ceil(confidenceValue ?? 0)}
-                                mn={assessmentKit.maturityLevelCount ?? 5}
-                              />
+                              <Typography variant="titleMedium">
+                                <Trans i18nKey="status" />
+                              </Typography>
                             </TableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </>
-              ))}
-            </Paper>
-          </Box>
+                        </TableHead>
+                        <TableBody>
+                          {subject?.attributes?.map((attribute) => (
+                            <TableRow key={attribute?.id}>
+                              <TableCell
+                                sx={{
+                                  maxWidth: 140,
+                                  wordWrap: "break-word",
+                                  borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                }}
+                              >
+                                <Typography variant="titleMedium">
+                                  {attribute?.title}
+                                </Typography>
+                                <br />
+                                <Typography variant="displaySmall">
+                                  {attribute?.description}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                className="attribute--statusbar"
+                                sx={{
+                                  maxWidth: 300,
+                                  wordWrap: "break-word",
+                                  borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                }}
+                              >
+                                <AttributeStatusBarContainer
+                                  status={attribute?.maturityLevel?.title}
+                                  ml={attribute?.maturityLevel?.value}
+                                  cl={Math.ceil(attribute?.confidenceValue ?? 0)}
+                                  mn={assessmentKit.maturityLevelCount ?? 5}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </>
+                ))
+              }
+            </Paper >
+          </Box >
         );
       }}
     />

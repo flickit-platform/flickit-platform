@@ -190,6 +190,7 @@
   "assessmentAttribute":"Assessment Attribute",
   "assessmentSubject":"Assessment Subject",
   "statusReport":"Status Subject",
+  "tableOfContents": "Table Of Contens",
   "attributesCount": "Attributes count",
   "editComparisonItems": "Edit comparison items",
   "comparisonResult": "Comparison result",
