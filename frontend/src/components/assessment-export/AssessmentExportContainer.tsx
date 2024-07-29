@@ -359,7 +359,7 @@ const AssessmentExportContainer = () => {
 
                 </Grid>
 
-                <Box paddingLeft={3}>
+                <Box paddingLeft={3} maxWidth="100%">
                   <Typography
                     component="div"
                     mt={4}
