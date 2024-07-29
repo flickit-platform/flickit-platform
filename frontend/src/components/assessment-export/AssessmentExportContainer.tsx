@@ -145,8 +145,8 @@ const AssessmentExportContainer = () => {
   const [attributesData, setAttributesData] = useState<any>({});
 
   const fetchAllAttributesData = async () => {
-    const attributesDataPromises = AssessmentReport.data?.subjects.flatMap((subject) =>
-      subject.attributes.map((attribute) =>
+    const attributesDataPromises = AssessmentReport.data?.subjects.flatMap((subject: any) =>
+      subject.attributes.map((attribute: any) =>
         FetchAttributeData(assessmentId, attribute.id).then(result => ({
           id: attribute.id,
           data: result,
