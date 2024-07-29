@@ -39,3 +39,15 @@ class AssessmentAttributesReportExportApi(APIView):
                                                                                     assessment_id,
                                                                                     attribute_id)
         return Response(result["body"], result["status_code"])
+
+
+class AssessmentAttributesReportAiApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.get_assessment_attributes_report_ai(request,
+                                                                                assessment_id,
+                                                                                attribute_id)
+        return Response(result["body"], result["status_code"])
