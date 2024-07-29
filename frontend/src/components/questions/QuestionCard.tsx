@@ -808,8 +808,6 @@ const Evidence = (props: any) => {
         runOnMount: false,
     });
 
-    //Todo
-
     const RemoveEvidenceAttachments = useQuery({
         service: (args, config) => service.RemoveEvidenceAttachments(args, {}),
         runOnMount: false,
@@ -1071,7 +1069,7 @@ const Evidence = (props: any) => {
                     confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
                 />
                 <DeleteDialog
-                    expanded={expandedDeleteAttachmentDialog}
+                    expanded={expandedDeleteAttachmentDialog.expended}
                     onClose={() => setExpandedDeleteAttachmentDialog({...expandedAttachmentsDialogs,expended:false})}
                     onConfirm={deleteAttachment}
                     title={<Trans i18nKey={"areYouSureYouWantDeleteThisAttachment"}/>}
@@ -1805,7 +1803,7 @@ const DeleteDialog = (props: any) => {
     const fullScreen = useScreenResize("sm");
     return (
         <Dialog
-            open={expanded.expended}
+            open={expanded}
             onClose={onClose}
             maxWidth={"sm"}
             // fullScreen={fullScreen}
