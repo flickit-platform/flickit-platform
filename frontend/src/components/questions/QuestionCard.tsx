@@ -1239,7 +1239,7 @@ const EvidenceDetail = (props: any) => {
         a.click();
         a.remove();
     }
-
+    const skeleton = Array.from(Array(attachmentsCount).keys())
     return (
         <Box display="flex" flexDirection="column" width="100%">
             <Box sx={{display: "flex", gap: 2, mb: 4}}>
@@ -1448,7 +1448,7 @@ const EvidenceDetail = (props: any) => {
                                                         {
                                                            loadingFile ?
                                                                <>
-                                                               {[attachmentsCount].map(()=>{
+                                                               {skeleton.map(()=>{
                                                                    return  <Skeleton variant="rounded" width={40} height={40} />
                                                                })}
 
