@@ -140,6 +140,22 @@ const AssessmentExportContainer = () => {
       return null;
     }
   };
+
+  useEffect(() => {
+    if (AssessmentReport.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
+      calculateMaturityLevelQuery.query().then(() => {
+        AssessmentReport.query()
+      });
+    }
+    if (
+      AssessmentReport.errorObject?.response?.data?.code ==
+      "CONFIDENCE_CALCULATION_NOT_VALID"
+    ) {
+      calculateConfidenceLevelQuery.query().then(() => {
+        AssessmentReport.query()
+      });
+    }
+  }, [AssessmentReport.errorObject]);
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<any>({});
