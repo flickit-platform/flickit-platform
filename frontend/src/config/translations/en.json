@@ -427,7 +427,7 @@
   "successCreatedAssessmentMessage": "This assessment is currently private.If you wish to make it visible to others, please visit the settings page.",
   "successCreatedAssessmentTitle": "{{title}} created successfully.",
   "addFirstAttachment": "Add first attachment",
-  "attachmentCount": "attachment exists (max 5)",
+  "attachmentCount": "include {{attachmentsCount}} attachments",
   "uploadAttachment": "Upload Attachment",
   "uploadAcceptable": "Only These formats are acceptable: PDF, jpg, png, docx, pptx, rar, zip, excel avi, mp4, mkv",
   "uploadAcceptableSize": "Size of an attachment must be lower than 5 MB.",

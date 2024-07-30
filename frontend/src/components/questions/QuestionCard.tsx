@@ -69,7 +69,7 @@ import {useTheme} from "@mui/material/styles";
 import arrowBtn from "../../assets/svg/arrow.svg"
 import UploadIcon from "../../assets/svg/UploadIcon.svg"
 import PreAttachment from "@components/questions/iconFiles/preAttachments";
-import IconFile from "@components/questions/iconFiles/iconFile";
+import FileSvg from "@components/questions/iconFiles/fileSvg";
 import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -1430,8 +1430,8 @@ const EvidenceDetail = (props: any) => {
                                              sx={{display: "flex"}}>
                                             {!attachmentsCount && <Typography sx={{...theme.typography.titleMedium}}><Trans
                                                 i18nKey={"addFirstAttachment"}/></Typography> }
-                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography.titleMedium,display: 'flex',gap: "5px"}}><Typography sx={{...theme.typography.titleMedium}}>{attachmentsCount}</Typography><Trans
-                                                i18nKey={`attachmentCount`}/></Typography> }
+                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography.titleMedium,display: 'flex',gap: "5px"}}>
+                                                {t("attachmentCount",{attachmentsCount})}</Typography> }
                                             <img style={expandedEvidenceBox ? {
                                                 rotate: "180deg",
                                                 transition: "all .2s ease"
@@ -1536,7 +1536,7 @@ const FileIcon =(props :any) =>{
             onMouseLeave={()=>setHover(false)}
             sx={{ mr: 1 }}
         >
-                <IconFile  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item}
+                <FileSvg  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item}
                           mainColor={evidenceBG?.borderColor}
                           backgroundColor={evidenceBG?.background} hover={hover} />
             {hover && <Box

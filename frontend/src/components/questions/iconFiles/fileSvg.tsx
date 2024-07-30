@@ -1,5 +1,14 @@
+import {useEffect} from "react";
 
-export default function IconFile ({mainColor, backgroundColor, hover,downloadFile,item,setExpandedDeleteAttachmentDialog}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,item:any,deleteAttachment:any}) {
+export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile,item,setExpandedDeleteAttachmentDialog}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,item:any,deleteAttachment:any}) {
+
+    const {link} = item
+
+    useEffect(()=>{
+    const Reg = new RegExp("(^|\\W)attachment($|\\W).*/")
+    let n = link.match(Reg)
+    },[])
+
     return (
         <div style={{position: 'relative'}}>
             <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
