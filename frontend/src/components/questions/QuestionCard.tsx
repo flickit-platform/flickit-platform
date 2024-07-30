@@ -1242,7 +1242,7 @@ const EvidenceDetail = (props: any) => {
     const skeleton = Array.from(Array(attachmentsCount).keys())
     return (
         <Box display="flex" flexDirection="column" width="100%">
-            <Box sx={{display: "flex", gap: 2, mb: 4}}>
+            <Box sx={{display: "flex", gap:{xs:"7px",sm:"1rem"}, mb: 4}}>
                 <Avatar
                     {...stringAvatar(displayName.toUpperCase())}
                     src={pictureLink}
@@ -1370,7 +1370,7 @@ const EvidenceDetail = (props: any) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Box sx={{display: "flex", gap: 1}}>
+                            <Box sx={{display: "flex",flexDirection:{xs:"column",sm:"row"}, gap: 1}}>
                                 <IconButton
                                     aria-label="edit"
                                     size="small"
@@ -1497,7 +1497,7 @@ const EvidenceDetail = (props: any) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Box sx={{display: "flex", gap: 1}}>
+                            <Box sx={{display: "flex",flexDirection:{xs:"column",sm:"row"}, gap: 1}}>
                                 <IconButton
                                     aria-label="edit"
                                     size="small"
