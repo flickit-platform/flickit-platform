@@ -788,15 +788,14 @@ const AssessmentExportContainer = () => {
                   }}
                 />
               </Typography>
-              <Box
-                display="flex"
-                sx={{ flexDirection: { xs: "column", md: "row" } }}
-              >
-                <Box
-                  sx={{
-                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
-                    height: subjects?.length > 2 ? "400px" : "300px",
-                  }}
+              <Grid container spacing={2}>
+                <Grid
+                  item
+                  xs={12}
+                  md={12}
+                  lg={6}
+                  xl={6}
+                  sx={{ height: "370px" }}
                 >
                   {subjects?.length > 2 ? (
                     <AssessmentSubjectRadarChart
@@ -815,12 +814,14 @@ const AssessmentExportContainer = () => {
                       loading={false}
                     />
                   )}
-                </Box>
-                <Box
-                  sx={{
-                    ...styles.centerCVH,
-                    flex: { xs: "100%", md: "50%", lg: "50%", xl: "50%" },
-                  }}
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  md={12}
+                  lg={6}
+                  xl={6}
+                  sx={{ ...styles.centerCVH }}
                 >
                   <Gauge
                     level_value={maturityLevel?.index ?? 0}
@@ -830,12 +831,12 @@ const AssessmentExportContainer = () => {
                     confidence_text={t("withPercentConfidence")}
                     isMobileScreen={false}
                     hideGuidance={true}
-                    height={300}
+                    height={370}
                     mb={-8}
                     maturity_status_guide={t("overallMaturityLevelIs")}
                   />
-                </Box>
-              </Box>
+                </Grid>
+              </Grid>
               <br />
               <Typography variant="displaySmall" gutterBottom>
                 <Trans i18nKey="subjectsSectionTitle" />
