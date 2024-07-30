@@ -78,6 +78,7 @@ import TextField from "@mui/material/TextField";
 import Dropzone, {useDropzone} from 'react-dropzone'
 import {toast} from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
+import FileType from "@components/questions/iconFiles/fileType";
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -1090,7 +1091,6 @@ const EvidenceDetail = (props: any) => {
         fetchAttachments,expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
         setExpandedDeleteAttachmentDialog, evidenceId,deleteAttachment, evidencesData
     } = props;
-    console.log(item,"test item")
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
     const [value, setValue] = React.useState<any>("POSITIVE");
@@ -1575,7 +1575,8 @@ const FileIcon =(props :any) =>{
 const MyDropzone = (props: any) =>{
 
     const { setDropZone, getDropZone } = props
-
+    const [dispalyFile,setDisplayFile] = useState<any>(null)
+    const [typeFile,setTypeFile] = useState<any>(null)
     const {
         acceptedFiles,
         fileRejections,
@@ -1585,17 +1586,32 @@ const MyDropzone = (props: any) =>{
         maxFiles:1
     });
 
+    useEffect(()=>{
+        if(getDropZone){
+            let file =  URL.createObjectURL(getDropZone[0])
+            setDisplayFile(file)
+            if(getDropZone[0].type.startsWith("image")){
+                setTypeFile(getDropZone[0].type.substring(0, getDropZone[0].type.indexOf("/")))
+            }
+            if(getDropZone[0].type === "application/pdf"){
+                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/",""))
+            }
+        }
+
+    },[getDropZone])
     const theme = useTheme()
     return (
-        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg",".png",".gif",".gif",".bmp"],"text/plain": ["*"], "application/pdf":["*"],
-            "application/x-zip-compressed":["*"], "application/x-rar-compressed":["*"], "application/tar":["*"],
+        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg",".png",".gif",".gif",".bmp"],"text/plain": [".plain"], "application/pdf":[".pdf"],
+            "application/x-zip-compressed":[".x-zip-compressed"], "application/x-rar-compressed":[".x-rar-compressed"], "application/tar":[".tar"],
             "application/vnd":[".openxmlformats-officedocument",".wordprocessingml", ".document",".oasis", ".opendocument", ".text", ".spreadsheetml","spreadsheet" ,".sheet"],
-            "application/x-zip":["*"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
+            "application/x-zip":[".x-zip"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 getDropZone?
-                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative"}}>
+                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
                         <Button sx={{position:"absolute",top:"15px",right:"15px",cursor: "pointer"}} onClick={()=>setDropZone(null)}>Remove</Button>
-
+                        {typeFile == "image" && <img style={{width:"60%",height:"80%"}} src={dispalyFile ? `${dispalyFile}` : "#"}/> }
+                        {typeFile == "pdf" &&  <section style={{width:"60%",height:"80%"}}><FileType name={"pdf"} /> </section>}
+                        <Typography sx={{...theme.typography.titleMedium}}>{getDropZone[0]?.name}</Typography>
                     </Box>
                     :
                     <section style={{ cursor: "pointer" }}>

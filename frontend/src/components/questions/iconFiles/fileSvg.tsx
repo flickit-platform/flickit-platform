@@ -1,4 +1,3 @@
-import {useEffect} from "react";
 
 export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,name:any,deleteAttachment:any,item:any}) {
 
