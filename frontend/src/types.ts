@@ -55,7 +55,6 @@ export interface IQuestionInfo {
   confidence_level?: any;
 }
 
-
 interface IPermissions {
   viewAssessment: boolean;
   viewEvidenceAttachment: boolean;
@@ -232,7 +231,7 @@ export interface IAssessmentResult {
   id: TId;
 }
 export interface IAssessmentResultModel
-  extends IDefaultModel<IAssessmentResult> { }
+  extends IDefaultModel<IAssessmentResult> {}
 
 export type TAssessmentResultsModel = string[];
 
@@ -310,7 +309,7 @@ export interface IQuestion {
 export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
-  permissions: IPermissions
+  permissions: IPermissions;
 }
 
 export interface IQuestionImpact {
@@ -343,7 +342,7 @@ export interface IQuestionsResult extends IAssessmentResult {
 }
 
 export interface IQuestionsResultsModel
-  extends IDefaultModel<IQuestionsResult> { }
+  extends IDefaultModel<IQuestionsResult> {}
 
 export interface IAssessment {
   id: TId;
@@ -371,7 +370,7 @@ export interface IMember {
   user: Omit<IUserInfo, "current_space" | "email">;
 }
 
-export interface IMemberModel extends IDefaultModel<IMember> { }
+export interface IMemberModel extends IDefaultModel<IMember> {}
 
 export interface ISubjectReport {
   id: TId;
@@ -528,6 +527,7 @@ export interface IAssessmentKitReportModel {
   id: number;
   title: string;
   summary: string;
+  about?: string;
   maturityLevelCount: number;
   expertGroup: IExpertGroup;
   maturityLevels: IMaturityLevel[];
@@ -648,7 +648,7 @@ export interface ISubject {
 
 interface IAssessmentPermissions {
   manageable: boolean;
-  exportable: boolean
+  exportable: boolean;
 }
 
 export interface IAssessmentResponse {
