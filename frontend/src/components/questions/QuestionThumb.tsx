@@ -9,11 +9,11 @@ export const QuestionThumb = (props: any) => {
     questionsInfo,
     question = {},
     questionIndex,
-    onClose = () => {},
+    onClose = () => { },
     link,
     isSubmitting,
   } = props;
-  const { total_number_of_questions } = questionsInfo;
+  const { total_number_of_questions, permissions } = questionsInfo;
 
   const navigate = useNavigate();
   return (
@@ -55,8 +55,8 @@ export const QuestionThumb = (props: any) => {
             onClose();
           }}
         >
-          {question.answer ||
-          (question.answer && question.answer.isNotApplicable) ? (
+          {question.answer || !permissions.answerQuestion ||
+            (question.answer && question.answer.isNotApplicable) ? (
             <Trans i18nKey="edit" />
           ) : (
             <Trans i18nKey="submitAnAnswer" />

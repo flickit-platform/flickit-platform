@@ -54,10 +54,48 @@ export interface IQuestionInfo {
   is_not_applicable?: boolean;
   confidence_level?: any;
 }
+
+
+interface IPermissions {
+  viewAssessment: boolean;
+  viewEvidenceAttachment: boolean;
+  answerQuestion: boolean;
+  viewQuestionnaireQuestions: boolean;
+  deleteEvidenceAttachment: boolean;
+  viewAssessmentUserList: boolean;
+  viewAnswerHistory: boolean;
+  calculateAssessment: boolean;
+  viewAssessmentList: boolean;
+  deleteEvidence: boolean;
+  viewSubjectReport: boolean;
+  addEvidence: boolean;
+  viewAssessmentReport: boolean;
+  deleteAssessment: boolean;
+  updateUserAssessmentRole: boolean;
+  calculateConfidence: boolean;
+  updateAssessment: boolean;
+  grantUserAssessmentRole: boolean;
+  createAdvice: boolean;
+  viewEvidenceList: boolean;
+  viewAssessmentProgress: boolean;
+  deleteUserAssessmentRole: boolean;
+  viewAttributeEvidenceList: boolean;
+  viewAssessmentInviteeList: boolean;
+  viewSubjectProgress: boolean;
+  updateEvidence: boolean;
+  viewAttributeScoreDetail: boolean;
+  viewAssessmentQuestionnaireList: boolean;
+  viewEvidence: boolean;
+  createAssessment: boolean;
+  addEvidenceAttachment: boolean;
+  exportAssessmentReport: boolean;
+}
+
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
   questions: IQuestionInfo[];
+  permissions: IPermissions;
 };
 
 export type TAnswer = {
@@ -194,7 +232,7 @@ export interface IAssessmentResult {
   id: TId;
 }
 export interface IAssessmentResultModel
-  extends IDefaultModel<IAssessmentResult> {}
+  extends IDefaultModel<IAssessmentResult> { }
 
 export type TAssessmentResultsModel = string[];
 
@@ -272,6 +310,7 @@ export interface IQuestion {
 export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
+  permissions: IPermissions
 }
 
 export interface IQuestionImpact {
@@ -304,7 +343,7 @@ export interface IQuestionsResult extends IAssessmentResult {
 }
 
 export interface IQuestionsResultsModel
-  extends IDefaultModel<IQuestionsResult> {}
+  extends IDefaultModel<IQuestionsResult> { }
 
 export interface IAssessment {
   id: TId;
@@ -332,7 +371,7 @@ export interface IMember {
   user: Omit<IUserInfo, "current_space" | "email">;
 }
 
-export interface IMemberModel extends IDefaultModel<IMember> {}
+export interface IMemberModel extends IDefaultModel<IMember> { }
 
 export interface ISubjectReport {
   id: TId;

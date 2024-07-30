@@ -8,7 +8,8 @@ interface IPermissionControl {
   loading?: boolean;
 }
 
-const PermissionControl = (props: PropsWithChildren<IPermissionControl>) => {
+const PermissionControl = (props: PropsWithChildren<any>) => {
+  console.log(props)
   const { children, error, loading } = props;
 
   if (loading) {

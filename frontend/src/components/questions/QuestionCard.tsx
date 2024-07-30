@@ -149,15 +149,15 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={
                 is_farsi
                   ? {
-                      pt: 0.5,
-                      fontSize: "2rem",
-                      fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
-                      direction: "rtl",
-                    }
+                    pt: 0.5,
+                    fontSize: "2rem",
+                    fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
+                    direction: "rtl",
+                  }
                   : {
-                      pt: 0.5,
-                      fontSize: "2rem",
-                    }
+                    pt: 0.5,
+                    fontSize: "2rem",
+                  }
               }
             >
               {title.split("\n").map((line, index) => (
@@ -197,7 +197,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             py: { xs: 1.5, sm: 2.5 },
           }}
         >
-          <SubmitOnSelectCheckBox />
+          <SubmitOnSelectCheckBox disabled={!questionsInfo?.permissions?.answerQuestion} />
           <Box
             sx={{
               display: "flex",
@@ -223,7 +223,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         <Typography
                           sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
-                          <Trans i18nKey={"youSelected"} />
+                          <Trans i18nKey={"selectedConfidenceLevel"} />
                           <Typography
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
@@ -231,7 +231,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             {labels[selcetedConfidenceLevel - 1]?.title}
                           </Typography>
 
-                          <Trans i18nKey={"asYourConfidenceLevel"} />
                         </Typography>
                       </Box>
                     ) : (
@@ -242,11 +241,12 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          <Trans i18nKey={questionsInfo?.permissions?.answerQuestion ? "selcetConfidenceLevel" : "confidenceLevel"} />
                         </Typography>
                       </Box>
                     )}
                     <Rating
+                      disabled={!questionsInfo?.permissions?.answerQuestion}
                       value={
                         selcetedConfidenceLevel !== null
                           ? selcetedConfidenceLevel
@@ -322,7 +322,7 @@ const AnswerTemplate = (props: {
     selcetedConfidenceLevel,
   } = props;
   const { options, answer } = questionInfo;
-  const { total_number_of_questions } = questionsInfo;
+  const { total_number_of_questions, permissions } = questionsInfo;
   const { service } = useServiceContext();
   const dispatch = useQuestionDispatch();
   const { assessmentId = "", questionnaireId } = useParams();
@@ -362,22 +362,24 @@ const AnswerTemplate = (props: {
   const submitQuestion = async () => {
     dispatch(questionActions.setIsSubmitting(true));
     try {
-      const res = await service.submitAnswer(
-        {
-          assessmentId,
-          data: {
-            questionnaireId: questionnaireId,
-            questionId: questionInfo?.id,
-            answerOptionId: value?.id || null,
-            isNotApplicable: notApplicable,
-            confidenceLevelId:
-              value?.id || submitOnAnswerSelection || notApplicable
-                ? selcetedConfidenceLevel
-                : null,
+      if (permissions.answerQuestion) {
+        const res = await service.submitAnswer(
+          {
+            assessmentId,
+            data: {
+              questionnaireId: questionnaireId,
+              questionId: questionInfo?.id,
+              answerOptionId: value?.id || null,
+              isNotApplicable: notApplicable,
+              confidenceLevelId:
+                value?.id || submitOnAnswerSelection || notApplicable
+                  ? selcetedConfidenceLevel
+                  : null,
+            },
           },
-        },
-        { signal: abortController.current.signal }
-      );
+          { signal: abortController.current.signal }
+        );
+      }
       dispatch(questionActions.setIsSubmitting(false));
       dispatch(
         questionActions.setQuestionInfo({
@@ -462,7 +464,7 @@ const AnswerTemplate = (props: {
                   value={option}
                   selected={templateValue === value?.index}
                   onChange={onChange}
-                  disabled={isSubmitting || notApplicable}
+                  disabled={isSubmitting || notApplicable || !permissions.answerQuestion}
                   sx={{
                     letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                     color: "white",
@@ -474,6 +476,9 @@ const AnswerTemplate = (props: {
                     boxShadow: "0 0 2px white",
                     borderWidth: "2px",
                     borderColor: "transparent",
+                    "&.Mui-disabled": {
+                      color: "#ffffff78"
+                    },
                     "&.Mui-selected": {
                       "&:hover": {
                         backgroundColor: "#0ec586",
@@ -492,20 +497,17 @@ const AnswerTemplate = (props: {
                   <Checkbox
                     disableRipple={true}
                     checked={templateValue === value?.index}
-                    disabled
                     sx={{
                       position: "absoulte",
                       zIndex: 1,
-                      color: "white",
                       p: 0,
+                      color: notApplicable || !permissions.answerQuestion ? "gray" : "white",
                       mr: "8px",
                       ml: "8px",
                       opacity: 0.8,
                       "& svg": { fontSize: { xs: "2.1rem", sm: "2.5rem" } },
                       "&.Mui-checked": { color: "white", opacity: 1 },
-                      "&.Mui-disabled": {
-                        color: notApplicable ? "gray" : "white",
-                      },
+
                     }}
                   />
                   {templateValue}. {title}
@@ -545,9 +547,9 @@ const AnswerTemplate = (props: {
           sx={
             is_farsi
               ? {
-                  fontSize: "1.2rem",
-                  mr: "auto",
-                }
+                fontSize: "1.2rem",
+                mr: "auto",
+              }
               : { fontSize: "1.2rem", ml: "auto" }
           }
           onClick={submitQuestion}
@@ -926,10 +928,10 @@ const Evidence = (props: any) => {
                   is_farsi
                     ? { position: "absolute", top: 15, left: 5 }
                     : {
-                        position: "absolute",
-                        top: 15,
-                        right: 5,
-                      }
+                      position: "absolute",
+                      top: 15,
+                      right: 5,
+                    }
                 }
               ></Grid>
             </Grid>
@@ -1330,20 +1332,20 @@ const QuestionGuide = (props: any) => {
               <Typography variant="body2">
                 {hint.startsWith("\n")
                   ? hint
-                      .substring(1)
-                      .split("\n")
-                      .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))
-                  : hint.split("\n").map((line: string, index: number) => (
+                    .substring(1)
+                    .split("\n")
+                    .map((line: string, index: number) => (
                       <React.Fragment key={index}>
                         {line}
                         <br />
                       </React.Fragment>
-                    ))}
+                    ))
+                  : hint.split("\n").map((line: string, index: number) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
               </Typography>
             </Box>
           </Box>
