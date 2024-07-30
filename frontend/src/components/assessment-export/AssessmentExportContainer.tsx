@@ -236,7 +236,7 @@ const AssessmentExportContainer = () => {
         progress,
         questionnaireData = {},
       ]) => {
-        const { questionnaires, questionnairesCount } = questionnaireData;
+        const { items } = questionnaireData;
         const {
           assessment,
           subjects,
@@ -679,7 +679,15 @@ const AssessmentExportContainer = () => {
                   <Typography variant="displaySmall" paragraph>
                     <Trans
                       i18nKey="questionnairesDescription"
-                      values={{ questionnairesCount, questionsCount }}
+                      values={{
+                        questionnairesCount: items?.length,
+                        questionsCount: items?.reduce(
+                          (previousValue: number, currentValue: any) => {
+                            return previousValue + currentValue?.questionCount;
+                          },
+                          0
+                        ),
+                      }}
                     />
                   </Typography>
                   <TableContainer
@@ -722,7 +730,7 @@ const AssessmentExportContainer = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {questionnaires?.map(
+                        {items?.map(
                           (questionnaire: any, index: number) => (
                             <TableRow key={index}>
                               <TableCell
