@@ -43,7 +43,7 @@ def evidence_add_attachments(request, evidence_id):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments',
         files={'attachment': (file.name, file, file.content_type)},
-        json=request.data,
+        data=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
