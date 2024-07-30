@@ -95,7 +95,7 @@ export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
   questions: IQuestionInfo[];
-  permissions: IPermissions;
+  permissions?: IPermissions;
 };
 
 export type TAnswer = {
