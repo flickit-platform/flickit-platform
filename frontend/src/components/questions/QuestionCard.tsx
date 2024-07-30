@@ -1725,7 +1725,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         textAlign: "center",
                         color: "#fff",
                         py: "24px",
-                        ...theme.typography.headlineMedium
+                        ...theme.typography.headlineSmall,
+                        sm:{...theme.typography.headlineMedium}
                     }}
                 >
                     <Trans i18nKey="uploadAttachment"/>
@@ -1733,7 +1734,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     <ClearIcon
                         onClick={onClose}
                         style={{color: "#fff"}}
-                                   sx={{position: "absolute", width: "25px", height: "25px",right: "20px",top: "25px",
+                                   sx={{position: "absolute", width: "25px", height: "25px",right: "17px",top: "25px",
                                    cursor: "pointer"
                                    }} />
             </DialogContent>
@@ -1749,9 +1750,9 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     textAlign: "center",
                 }}
             >
-                <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px"}}>
+                <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px",marginTop:"25px",width:"90%"}}>
                     <Box>
-                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"24px",paddingTop:"24px", gap: "5px"}}>
+                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"20px",paddingTop:"35px", gap: "5px"}}>
                             <Trans i18nKey={"uploadAttachment"}/><Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
                         </Typography>
                         <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left"}}>
