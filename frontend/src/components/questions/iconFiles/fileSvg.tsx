@@ -1,13 +1,6 @@
 import {useEffect} from "react";
 
-export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile,item,setExpandedDeleteAttachmentDialog}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,item:any,deleteAttachment:any}) {
-
-    const {link} = item
-
-    useEffect(()=>{
-    const Reg = new RegExp("(^|\\W)attachment($|\\W).*/")
-    let n = link.match(Reg)
-    },[])
+export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,name:any,deleteAttachment:any,item:any}) {
 
     return (
         <div style={{position: 'relative'}}>
@@ -50,8 +43,8 @@ export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile
                     </div>
                 </div>
             )}
-            <p style={{position: 'absolute', color: "white", top: "15px", left: "2px", fontSize: '9px'}}
-               color={"#fff"}>salam</p>
+            <p style={{position: 'absolute', color: "white", top: "15px", left: "3px", fontSize: '9px'}}
+               color={"#fff"}>{name.substring(0,6)}...</p>
         </div>
 
     )

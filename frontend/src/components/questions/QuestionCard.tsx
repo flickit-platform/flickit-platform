@@ -1449,15 +1449,15 @@ const EvidenceDetail = (props: any) => {
                                                            loadingFile ?
                                                                <>
                                                                {skeleton.map(()=>{
-                                                                   return  <Skeleton variant="rounded" width={40} height={40} />
+                                                                   return  <Skeleton animation="wave"  variant="rounded" width={40} height={40} />
                                                                })}
 
                                                                </>
                                                                :
                                                             attachments.map((item,index)=>{
-                                                            // TODO
+                                                                console.log(item,"test itemsss")
                                                             return(
-                                                               < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
+                                                                    < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
                                                         { attachments.length < 5 && (<>
@@ -1470,7 +1470,11 @@ const EvidenceDetail = (props: any) => {
                                                         </Grid>
                                                 </>
                                             ) }
+
                                         </Grid>
+                                        {attachments.length == 5 && <Box>
+                                           <Typography sx={{fontSize: "12px",color:"#821237"}}>max file to attach 5</Typography>
+                                        </Box>}
                                     </Box>
                                 </Box>
                                 <Typography
@@ -1528,15 +1532,22 @@ const FileIcon =(props :any) =>{
 
     const [hover, setHover] = useState(false);
 
+    const {link}= item
+    let reg = new RegExp("\\/([^\\/?]+)\\?")
+    let name = link.match(reg)[1]
+
     return(
+        <Tooltip title={<>
+          <Typography>{name}</Typography>
+          <Typography>{item.description}</Typography>
+        </>}>
         <Box
             position="relative"
             display="inline-block"
             onMouseEnter={()=>setHover(true)}
             onMouseLeave={()=>setHover(false)}
-            sx={{ mr: 1 }}
         >
-                <FileSvg  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item}
+                <FileSvg  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item} name={name}
                           mainColor={evidenceBG?.borderColor}
                           backgroundColor={evidenceBG?.background} hover={hover} />
             {hover && <Box
@@ -1552,9 +1563,9 @@ const FileIcon =(props :any) =>{
                 borderRadius="9px"
                 sx={{cursor: "pointer"}}
             >
-
             </Box>}
         </Box>
+        </Tooltip>
     )
 }
 
