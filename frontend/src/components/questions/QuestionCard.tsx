@@ -1746,7 +1746,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     <Trans i18nKey="uploadAttachment"/>
                 </Box>
                     <ClearIcon
-                        onClick={onClose}
+                        onClick={()=>{onClose();setDropZone(null)}}
                         style={{color: "#fff"}}
                                    sx={{position: "absolute", width: "25px", height: "25px",right: "17px",top: "25px",
                                    cursor: "pointer"
@@ -1765,7 +1765,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 }}
             >
                 <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px",marginTop:"25px",width:"90%"}}>
-                    <Box>
+                    <Box sx={{mx:"auto", width:"100%"}}>
                         <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"20px",paddingTop:"35px", gap: "5px"}}>
                             <Trans i18nKey={"uploadAttachment"}/><Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
                         </Typography>
@@ -1796,7 +1796,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         </Typography>
                            <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
                     </Box>
-                    <Box>
+                    <Box sx={{width:{xs:"100%",sm:"70%"}, mx:"auto"}}>
                         <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
                         <TextField
                            sx={{
