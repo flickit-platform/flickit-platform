@@ -89,14 +89,14 @@ export const QuestionContainer = () => {
   ) : null;
 };
 
-export const SubmitOnSelectCheckBox = () => {
+export const SubmitOnSelectCheckBox = (props: any) => {
   const { submitOnAnswerSelection } = useQuestionContext();
   const dispatch = useQuestionDispatch();
   const isSmallerScreen = useScreenResize("sm");
 
   return (
     <FormControlLabel
-      sx={{ mr: 0, color: "#fff" }}
+      sx={{ mr: 0, color: "#fff", display: props?.disabled ? "none" : "block" }}
       data-cy="automatic-submit-check"
       control={
         <Checkbox

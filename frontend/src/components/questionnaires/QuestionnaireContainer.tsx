@@ -52,7 +52,7 @@ const QuestionnaireContainer = () => {
     100;
 
   return (
-    <PermissionControl error={[questionnaireQueryData.errorObject]}>
+    <PermissionControl error={[questionnaireQueryData.errorObject?.response?.data]}>
       <Box>
         <QueryData
           {...fetchPathInfo}

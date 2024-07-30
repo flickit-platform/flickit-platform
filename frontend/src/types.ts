@@ -54,10 +54,47 @@ export interface IQuestionInfo {
   is_not_applicable?: boolean;
   confidence_level?: any;
 }
+
+interface IPermissions {
+  viewAssessment: boolean;
+  viewEvidenceAttachment: boolean;
+  answerQuestion: boolean;
+  viewQuestionnaireQuestions: boolean;
+  deleteEvidenceAttachment: boolean;
+  viewAssessmentUserList: boolean;
+  viewAnswerHistory: boolean;
+  calculateAssessment: boolean;
+  viewAssessmentList: boolean;
+  deleteEvidence: boolean;
+  viewSubjectReport: boolean;
+  addEvidence: boolean;
+  viewAssessmentReport: boolean;
+  deleteAssessment: boolean;
+  updateUserAssessmentRole: boolean;
+  calculateConfidence: boolean;
+  updateAssessment: boolean;
+  grantUserAssessmentRole: boolean;
+  createAdvice: boolean;
+  viewEvidenceList: boolean;
+  viewAssessmentProgress: boolean;
+  deleteUserAssessmentRole: boolean;
+  viewAttributeEvidenceList: boolean;
+  viewAssessmentInviteeList: boolean;
+  viewSubjectProgress: boolean;
+  updateEvidence: boolean;
+  viewAttributeScoreDetail: boolean;
+  viewAssessmentQuestionnaireList: boolean;
+  viewEvidence: boolean;
+  createAssessment: boolean;
+  addEvidenceAttachment: boolean;
+  exportAssessmentReport: boolean;
+}
+
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
   questions: IQuestionInfo[];
+  permissions?: IPermissions;
 };
 
 export type TAnswer = {
@@ -272,6 +309,7 @@ export interface IQuestion {
 export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
+  permissions: IPermissions;
 }
 
 export interface IQuestionImpact {
@@ -489,6 +527,7 @@ export interface IAssessmentKitReportModel {
   id: number;
   title: string;
   summary: string;
+  about?: string;
   maturityLevelCount: number;
   expertGroup: IExpertGroup;
   maturityLevels: IMaturityLevel[];
@@ -609,7 +648,7 @@ export interface ISubject {
 
 interface IAssessmentPermissions {
   manageable: boolean;
-  exportable: boolean
+  exportable: boolean;
 }
 
 export interface IAssessmentResponse {
