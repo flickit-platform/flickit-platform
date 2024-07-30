@@ -427,7 +427,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         );
                       }}
                     >
-                      {question.answer || !questionsInfo.permissions.answerQuestion || question.is_not_applicable ? (
+                      {question.answer || !questionsInfo?.permissions?.answerQuestion || question.is_not_applicable ? (
                         <Trans i18nKey="edit" />
                       ) : (
                         <Trans i18nKey="submitAnAnswer" />
