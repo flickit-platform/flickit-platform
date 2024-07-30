@@ -1583,7 +1583,10 @@ const MyDropzone = (props: any) =>{
 
     const theme = useTheme()
     return (
-        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
+        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg",".png",".gif",".gif",".bmp"],"text/plain": ["*"], "application/pdf":["*"],
+            "application/x-zip-compressed":["*"], "application/x-rar-compressed":["*"], "application/tar":["*"],
+            "application/vnd":[".openxmlformats-officedocument",".wordprocessingml.document",".oasis", ".opendocument", ".text", ".spreadsheetml","spreadsheet" ,".sheet"],
+            "application/x-zip":["*"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 <section style={{ cursor: "pointer" }}>
                     <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
