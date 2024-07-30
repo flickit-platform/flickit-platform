@@ -436,5 +436,6 @@
   "additionalInfo": "Additional info (optional)",
   "uploadAnother": "Upload and add another file",
   "max100characters": "maximum 100 characters",
-  "attachmentRequired": "attachment file is required"
+  "attachmentRequired": "attachment file is required",
+  "evidenceIsLimited": "Each evidence is limited to five attachments. If you need to add more, simply create a new evidence and add continue from there."
 }

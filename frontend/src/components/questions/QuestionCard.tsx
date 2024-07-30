@@ -1469,11 +1469,15 @@ const EvidenceDetail = (props: any) => {
                                                         </Grid>
                                                 </>
                                             ) }
-
+                                            {attachments.length == 5 && <Box>
+                                                <Typography sx={{fontSize: "11px",color:"#821237", display:"flex",alignItems:"start", justifyContent:"center"}}>
+                                                    <InfoOutlinedIcon
+                                                        sx={{mr: 1, width: "15px", height: "15px"}}
+                                                    />
+                                                    <Trans i18nKey={"evidenceIsLimited"}/></Typography>
+                                            </Box>}
                                         </Grid>
-                                        {attachments.length == 5 && <Box>
-                                           <Typography sx={{fontSize: "12px",color:"#821237"}}>max file to attach 5</Typography>
-                                        </Box>}
+
                                     </Box>
                                 </Box>
                                 <Typography
@@ -1570,7 +1574,7 @@ const FileIcon =(props :any) =>{
 
 const MyDropzone = (props: any) =>{
 
-    const { setDropZone } = props
+    const { setDropZone, getDropZone } = props
 
     const {
         acceptedFiles,
@@ -1585,27 +1589,33 @@ const MyDropzone = (props: any) =>{
     return (
         <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg",".png",".gif",".gif",".bmp"],"text/plain": ["*"], "application/pdf":["*"],
             "application/x-zip-compressed":["*"], "application/x-rar-compressed":["*"], "application/tar":["*"],
-            "application/vnd":[".openxmlformats-officedocument",".wordprocessingml.document",".oasis", ".opendocument", ".text", ".spreadsheetml","spreadsheet" ,".sheet"],
+            "application/vnd":[".openxmlformats-officedocument",".wordprocessingml", ".document",".oasis", ".opendocument", ".text", ".spreadsheetml","spreadsheet" ,".sheet"],
             "application/x-zip":["*"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
-                <section style={{ cursor: "pointer" }}>
-                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
-                    <div {...getRootProps()}>
+                getDropZone?
+                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative"}}>
+                        <Button sx={{position:"absolute",top:"15px",right:"15px",cursor: "pointer"}} onClick={()=>setDropZone(null)}>Remove</Button>
+
+                    </Box>
+                    :
+                    <section style={{ cursor: "pointer" }}>
+                        <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
+                        <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <img src={UploadIcon}/>
-                        <Typography sx={{
-                            ...theme.typography.titleMedium,
-                            color: "#243342",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "5px"
-                        }}>
-                            <Trans i18nKey={"dragYourFile"}/><Typography
-                            sx={{...theme.typography.titleMedium, color: "#205F94"}}><Trans
-                            i18nKey={"locateIt"}/></Typography>
+                                <Typography sx={{
+                                ...theme.typography.titleMedium,
+                                color: "#243342",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "5px"
+                            }}>
+                        <Trans i18nKey={"dragYourFile"}/><Typography
+                        sx={{...theme.typography.titleMedium, color: "#205F94"}}><Trans
+                        i18nKey={"locateIt"}/></Typography>
                         </Typography></div>
-                    </Box>
+                        </Box>
                 </section>
             )}
         </Dropzone>
@@ -1784,7 +1794,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                                 <Trans i18nKey="uploadAcceptableSize"/>
                             </Box>
                         </Typography>
-                           <MyDropzone setDropZone={setDropZone} />
+                           <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
                     </Box>
                     <Box>
                         <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
