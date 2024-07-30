@@ -1576,7 +1576,7 @@ const MyDropzone = (props: any) =>{
         <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg"], "application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 <section style={{ cursor: "pointer" }}>
-                    <Box sx={{height: "258px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
+                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
                     <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <img src={UploadIcon}/>
@@ -1615,6 +1615,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     const {service} = useServiceContext();
     const abortController = useMemo(() => new AbortController(),[evidenceId] );
     const [desc,setDesc] = useState("")
+    const [error,setError] = useState(false)
     const [getDropZone,setDropZone] = useState<any>(null)
     const addEvidenceAttachments = useQuery({
         service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
@@ -1622,15 +1623,16 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     });
 
     const handelDescription = (e: any) =>{
-        if(e.target.value.length <= MAX_DESK_TEXT){
+        if(e.target.value.length < MAX_DESK_TEXT){
             setDesc(e.target.value)
+            setError(false)
         }else {
-            // toastError(t("max100character") as string);
+            setError(true)
         }
     }
 
     const handelSendFile = async () => {
-        if(getDropZone){
+        if(getDropZone && !error){
             let data ={
                 id:evidenceId,
                 attachment: getDropZone[0],
@@ -1644,10 +1646,16 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             setDropZone(null)
             onClose()
         }
+        if(!getDropZone){
+            return toast(t("attachmentRequired"),{type:"error"})
+        }
+        if(error){
+            return toast(t("max100characters"),{type:"error"})
+        }
     }
 
     const handelSendAnother = async () => {
-        if(getDropZone){
+        if(getDropZone && !error){
             let data ={
                 id:evidenceId,
                 attachment: getDropZone[0],
@@ -1661,6 +1669,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             if(expanded.count >= 5){
                 onClose()
             }
+        }
+        if(!getDropZone){
+            return toast(t("attachmentRequired"),{type:"error"})
+        }
+        if(error){
+            return toast(t("max100characters"),{type:"error"})
         }
     }
 
@@ -1759,12 +1773,23 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     <Box>
                         <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
                         <TextField
+                           sx={{
+                               overflow: "auto",
+                           }}
+                            rows={3}
                             id="outlined-multiline-static"
                             multiline
                             fullWidth
+                            value={desc}
                             onChange={handelDescription}
-                            variant="filled"
+                            variant="standard"
+                            inputProps={{
+                               sx: {  fontSize: "13px", marginTop: "4px", background : "rgba(0,0,0,0.06)",padding : "5px"
+                               }
+                           }}
                             placeholder={"Add description for this specific attachment up to 100 charachter"}
+                            error={error}
+                            helperText={error && "maximum 100"}
                         />
                     </Box>
                 </Box>

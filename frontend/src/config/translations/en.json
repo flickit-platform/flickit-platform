@@ -433,7 +433,8 @@
   "uploadAcceptableSize": "Size of an attachment must be lower than 5 MB.",
   "dragYourFile": "Drag your file here or ",
   "locateIt": " Locate it ",
-  "additionalInfo": "Additional info",
+  "additionalInfo": "Additional info (optional)",
   "uploadAnother": "Upload and add another file",
-  "max100character": "maximum 100 character"
+  "max100characters": "maximum 100 characters",
+  "attachmentRequired": "attachment file is required"
 }
