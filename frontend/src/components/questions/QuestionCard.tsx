@@ -1400,8 +1400,8 @@ const EvidenceDetail = (props: any) => {
                     <>
                         <Box
                             sx={{
-                                px: "32px",
-                                py: "16px",
+                                px:{xs: "12px",sm:"32px"},
+                                py:{xs: "8px",sm:"16px"},
                                 height: "fit-content",
                                 display: "flex",
                                 flexDirection: "column",
@@ -1428,7 +1428,7 @@ const EvidenceDetail = (props: any) => {
                                     <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                         <Box onClick={()=>expandedEvidenceBtm()}
                                              sx={{display: "flex"}}>
-                                            {!attachmentsCount && <Typography sx={{...theme.typography.titleMedium}}><Trans
+                                            {!attachmentsCount && <Typography sx={{...theme.typography.titleMedium,fontSize:{xs:"10px",sm:"unset"}}}><Trans
                                                 i18nKey={"addFirstAttachment"}/></Typography> }
                                             {attachmentsCount >= 1 && <Typography sx={{...theme.typography.titleMedium,display: 'flex',gap: "5px"}}>
                                                 {t("attachmentCount",{attachmentsCount})}</Typography> }
@@ -1455,7 +1455,6 @@ const EvidenceDetail = (props: any) => {
                                                                </>
                                                                :
                                                             attachments.map((item,index)=>{
-                                                                console.log(item,"test itemsss")
                                                             return(
                                                                     < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
@@ -1655,6 +1654,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             setEvidencesData(items)
             setAttachmentData(true)
             setDropZone(null)
+            setDesc("")
             onClose()
         }
         if(!getDropZone){
@@ -1677,6 +1677,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             setEvidencesData(items)
             setAttachmentData(true)
             setDropZone(null)
+            setDesc("")
             if(expanded.count >= 5){
                 onClose()
             }
