@@ -362,7 +362,7 @@ const AnswerTemplate = (props: {
   const submitQuestion = async () => {
     dispatch(questionActions.setIsSubmitting(true));
     try {
-      if (permissions.answerQuestion) {
+      if (permissions?.answerQuestion) {
         const res = await service.submitAnswer(
           {
             assessmentId,
@@ -464,7 +464,7 @@ const AnswerTemplate = (props: {
                   value={option}
                   selected={templateValue === value?.index}
                   onChange={onChange}
-                  disabled={isSubmitting || notApplicable || !permissions.answerQuestion}
+                  disabled={isSubmitting || notApplicable || !permissions?.answerQuestion}
                   sx={{
                     letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                     color: "white",
@@ -501,7 +501,7 @@ const AnswerTemplate = (props: {
                       position: "absoulte",
                       zIndex: 1,
                       p: 0,
-                      color: notApplicable || !permissions.answerQuestion ? "gray" : "white",
+                      color: notApplicable || !permissions?.answerQuestion ? "gray" : "white",
                       mr: "8px",
                       ml: "8px",
                       opacity: 0.8,
