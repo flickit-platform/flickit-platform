@@ -79,6 +79,7 @@ import Dropzone, {useDropzone} from 'react-dropzone'
 import {toast} from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
+import {primaryFontFamily, theme} from "@config/theme";
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -602,8 +603,8 @@ const AnswerDetails = ({questionInfo}: any) => {
 
     return (
         <Box mt={2} width="100%">
-            <Title px={1} size="small">
-                <Trans i18nKey="answerEvidences"/>
+            <Title px={1} >
+                <Trans  sx={{...theme.typography.headlinelarge}} i18nKey="answerEvidences"/>
             </Title>
             <Box
                 mt={2}
@@ -750,29 +751,29 @@ const Evidence = (props: any) => {
 
     const [value, setValue] = React.useState("POSITIVE");
     const [evidenceBG, setEvidenceBG] = useState<any>({
-        background: "#EDFCFC",
-        borderColor: "#004F83",
+        background: "rgba(32, 95, 148, 0.08)",
+        borderColor: "#205F94",
         borderHover: "#117476",
     });
     useEffect(() => {
         if (value === null) {
             setEvidenceBG({
-                background: "#EDF4FC",
-                borderColor: "#0A2342",
+                background: "rgba(25, 28, 31, 0.08)",
+                borderColor: "#191C1F",
                 borderHover: "#061528",
             });
         }
         if (value === "POSITIVE") {
             setEvidenceBG({
-                background: "#EDFCFC",
-                borderColor: "#004F83",
+                background: "rgba(32, 95, 148, 0.08)",
+                borderColor: "#205F94",
                 borderHover: "#117476",
             });
         }
         if (value === "NEGATIVE") {
             setEvidenceBG({
-                background: "#FDF1F5",
-                borderColor: "#D81E5B",
+                background: "rgba(139, 0, 53, 0.08)",
+                borderColor: "#8B0035",
                 borderHover: "#821237",
             });
         }
@@ -881,12 +882,13 @@ const Evidence = (props: any) => {
                                     label={<Trans i18nKey="negativeEvidence"/>}
                                     value="NEGATIVE"
                                     sx={{
-                                        fontSize: "1rem",
                                         display: "flex",
                                         flex: 1,
                                         "&.Mui-selected": {
                                             color: `${evidenceBG.borderColor}  !important`,
                                         },
+                                        ...theme.typography.headlineSmall,
+                                        fontSize: {xs: "1rem !important"},
                                     }}
                                 />
                                 <Tab
@@ -908,23 +910,26 @@ const Evidence = (props: any) => {
                                         </Box>
                                     }
                                     sx={{
-                                        fontSize: "1rem",
                                         display: "flex",
                                         flex: 1,
                                         "&.Mui-selected": {
                                             color: `${evidenceBG.borderColor}  !important`,
                                         },
+                                        ...theme.typography.headlineSmall,
+                                        fontSize: {xs: "1rem !important"},
                                     }}
                                     value={null}
                                 />
                                 <Tab
                                     label={<Trans i18nKey="positiveEvidence"/>}
                                     sx={{
-                                        fontSize: "1rem",
+
                                         display: "flex",
                                         flex: 1,
                                         "&.Mui-selected": {
                                             color: `${evidenceBG.borderColor}  !important`,
+                                            ...theme.typography.headlineSmall,
+                                            fontSize: {xs: "1rem !important"},
                                         },
                                     }}
                                     value="POSITIVE"
@@ -1176,22 +1181,22 @@ const EvidenceDetail = (props: any) => {
     useEffect(() => {
         if (type === null) {
             setEvidenceBG({
-                background: "#EDF4FC",
-                borderColor: "#0A2342",
+                background: "rgba(25, 28, 31, 0.08)",
+                borderColor: "#191C1F",
                 borderHover: "#061528",
             });
         }
         if (type === "Positive") {
             setEvidenceBG({
-                background: "#EDFCFC",
-                borderColor: "#004F83",
+                background: "rgba(32, 95, 148, 0.08)",
+                borderColor: "#205F94",
                 borderHover: "#117476",
             });
         }
         if (type === "Negative") {
             setEvidenceBG({
-                background: "#FDF1F5",
-                borderColor: "#D81E5B",
+                background: "rgba(139, 0, 53, 0.08)",
+                borderColor: "#8B0035",
                 borderHover: "#821237",
             });
         }
@@ -1258,7 +1263,8 @@ const EvidenceDetail = (props: any) => {
                                     flexDirection: "column",
                                     height: "fit-content",
                                     width: "60%",
-                                    borderRadius: "16px"
+                                    borderRadius: "16px",
+                                    border: `1px solid ${evidenceBG.borderColor}`
                                 }}
                             >
                                 <Grid
@@ -1413,6 +1419,7 @@ const EvidenceDetail = (props: any) => {
                                 gap: "16px",
                                 direction: `${is_farsi ? "rtl" : "ltr"}`,
                                 textAlign: `${is_farsi ? "right" : "left"}`,
+                                border: `1px solid ${evidenceBG?.borderColor}`
                             }}
                         >
                             <Box
@@ -1424,13 +1431,13 @@ const EvidenceDetail = (props: any) => {
                                 }}
                             >
                                 <Box sx={{display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer"}}>
-                                    <Typography>{description}</Typography>
+                                    <Typography sx={{...theme?.typography?.bodyLarge}} >{description}</Typography>
                                     <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                         <Box onClick={()=>expandedEvidenceBtm()}
                                              sx={{display: "flex"}}>
-                                            {!attachmentsCount && <Typography sx={{...theme.typography.titleMedium,fontSize:{xs:"10px",sm:"unset"}}}><Trans
-                                                i18nKey={"addFirstAttachment"}/></Typography> }
-                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography.titleMedium,display: 'flex',gap: "5px"}}>
+                                            {!attachmentsCount && <Typography sx={{...theme.typography?.titleMedium,fontSize:{xs:"10px",sm:"unset"}}}><Trans
+                                                i18nKey={"addAttachment"}/></Typography> }
+                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography?.titleMedium,display: 'flex',gap: "5px"}}>
                                                 {t("attachmentCount",{attachmentsCount})}</Typography> }
                                             <img style={expandedEvidenceBox ? {
                                                 rotate: "180deg",
@@ -1540,6 +1547,8 @@ const FileIcon =(props :any) =>{
     const {link}= item
     let reg = new RegExp("\\/([^\\/?]+)\\?")
     let name = link.match(reg)[1]
+    const exp = name.substring(name.indexOf('.'))
+
     return(
         <Tooltip title={<>
           <Typography>{name}</Typography>
@@ -1551,9 +1560,13 @@ const FileIcon =(props :any) =>{
             onMouseEnter={()=>setHover(true)}
             onMouseLeave={()=>setHover(false)}
         >
-                <FileSvg evidenceId={evidenceId} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item} name={name}
+                <FileSvg  evidenceId={evidenceId} setEvidenceId={setEvidenceId}
+                          setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
+                          downloadFile={downloadFile} item={item} name={name}
                           mainColor={evidenceBG?.borderColor}
-                          backgroundColor={evidenceBG?.background} hover={hover} />
+                          backgroundColor={evidenceBG?.background} hover={hover}
+                          exp={exp}
+                />
             {hover && <Box
                 position="absolute"
                 top={0}
@@ -1564,7 +1577,7 @@ const FileIcon =(props :any) =>{
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                borderRadius="9px"
+                borderRadius="6px"
                 sx={{cursor: "pointer"}}
             >
             </Box>}
