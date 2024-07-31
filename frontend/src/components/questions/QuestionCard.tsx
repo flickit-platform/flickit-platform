@@ -1444,22 +1444,23 @@ const EvidenceDetail = (props: any) => {
                                              style={expandedEvidenceBox ? {} : {
                                                  maxHeight: 0,
                                                  overflow: "hidden"
-                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem", }}>
-                                                        {
-                                                           loadingFile ?
-                                                               <>
-                                                               {skeleton.map(()=>{
-                                                                   return  <Skeleton animation="wave"  variant="rounded" width={40} height={40} />
-                                                               })}
+                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem",flexDirection:"column" }}>
+                                            <Box item sx={{display: "flex", gap: ".5rem",flexWrap:"wrap",}}>
+                                                {
+                                                    loadingFile ?
+                                                        <>
+                                                            {skeleton.map(()=>{
+                                                                return  <Skeleton animation="wave"  variant="rounded" width={40} height={40} />
+                                                            })}
 
-                                                               </>
-                                                               :
-                                                            attachments.map((item,index)=>{
+                                                        </>
+                                                        :
+                                                        attachments.map((item,index)=>{
                                                             return(
-                                                                    < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
+                                                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
-                                                        { attachments.length < 5 && (<>
+                                                { attachments.length < 5 && (<>
                                                         <Grid item onClick={() => {
                                                             setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
                                                             setEvidenceId(id)
@@ -1467,10 +1468,11 @@ const EvidenceDetail = (props: any) => {
                                                             <PreAttachment mainColor={evidenceBG?.borderColor}
                                                                            backgroundColor={evidenceBG?.background}/>
                                                         </Grid>
-                                                </>
-                                            ) }
+                                                    </>
+                                                ) }
+                                            </Box>
                                             {attachments.length == 5 && <Box>
-                                                <Typography sx={{fontSize: "11px",color:"#821237", display:"flex",alignItems:"start", justifyContent:"center"}}>
+                                                <Typography sx={{fontSize: "11px",color:"#821237", display:"flex",alignItems:"start", justifyContent:"center",textAlign:"justify",width:{xs:"150px",sm:"250px"}}}>
                                                     <InfoOutlinedIcon
                                                         sx={{mr: 1, width: "15px", height: "15px"}}
                                                     />
