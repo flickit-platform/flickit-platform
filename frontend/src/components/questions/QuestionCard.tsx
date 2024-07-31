@@ -1643,7 +1643,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         expanded, onClose, uploadAttachment, uploadAnother,
         evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData
     } = props;
-    const MAX_DESK_TEXT = 100
+    const MAX_DESC_TEXT = 100
+    const MIN_DESC_TEXT = 3
 
     const fetchEvidenceAttachments = useQuery({
         service: (args = {evidence_id: evidenceId}, config) => service.fetchEvidenceAttachments(args, config),
@@ -1660,8 +1661,17 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         runOnMount: false,
     });
 
+
+    useEffect(()=> {
+        if(getDropZone){
+            if(getDropZone[0].size > 5242880){
+                toast(t("uploadAcceptableSize"),{type:"error"})
+            }
+        }
+    },[getDropZone])
+
     const handelDescription = (e: any) =>{
-        if(e.target.value.length < MAX_DESK_TEXT){
+        if(e.target.value.length < MAX_DESC_TEXT){
             setDesc(e.target.value)
             setError(false)
         }else {
@@ -1669,52 +1679,42 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         }
     }
 
-    const handelSendFile = async () => {
-        if(getDropZone && !error){
-            let data ={
-                id:evidenceId,
-                attachment: getDropZone[0],
-                description: desc
+    const handelSendFile = async (recognize) => {
+        if(desc.length > 1 && desc.length < 3){
+           return setError(true)
+        }
+        if(!getDropZone) {
+           return toast(t("attachmentRequired"),{type:"error"})
+        }
+        if(error && desc.length >= 100 ) {
+           return toast(t("max100characters"),{type:"error"})
+        }
+        if(getDropZone[0].size > 5242880) {
+           return toast(t("uploadAcceptableSize"),{type:"error"})
+        }
+        if(expanded.count >= 5) {
+           return toast("Each evidence can have up to 5 attachments.",{type:"error"})
+        }
+        try {
+            if (getDropZone && !error) {
+                let data = {
+                    id: evidenceId,
+                    attachment: getDropZone[0],
+                    description: desc
+                }
+                await addEvidenceAttachments.query({evidenceId,data})
+                const {items} =  await evidencesQueryData.query();
+                setEvidencesData(items)
+                setAttachmentData(true)
+                setDropZone(null)
+                setDesc("")
+                if ( recognize == "self" ) {
+                   onClose()
+                }
             }
-            //TODO
-            await addEvidenceAttachments.query({evidenceId,data})
-            const {items} =  await evidencesQueryData.query();
-            setEvidencesData(items)
-            setAttachmentData(true)
-            setDropZone(null)
-            setDesc("")
-            onClose()
-        }
-        if(!getDropZone){
-            return toast(t("attachmentRequired"),{type:"error"})
-        }
-        if(error){
-            return toast(t("max100characters"),{type:"error"})
-        }
-    }
-
-    const handelSendAnother = async () => {
-        if(getDropZone && !error){
-            let data ={
-                id:evidenceId,
-                attachment: getDropZone[0],
-                description: desc
-            }
-            await addEvidenceAttachments.query({evidenceId,data})
-            const {items} =  await evidencesQueryData.query();
-            setEvidencesData(items)
-            setAttachmentData(true)
-            setDropZone(null)
-            setDesc("")
-            if(expanded.count >= 5){
-                onClose()
-            }
-        }
-        if(!getDropZone){
-            return toast(t("attachmentRequired"),{type:"error"})
-        }
-        if(error){
-            return toast(t("max100characters"),{type:"error"})
+        } catch (e:any) {
+            const err = e as ICustomError;
+            toastError(err);
         }
     }
 
@@ -1830,7 +1830,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                            }}
                             placeholder={"Add description for this specific attachment up to 100 charachter"}
                             error={error}
-                            helperText={error && "maximum 100"}
+                            helperText={desc.length >= 1 && error && desc.length <=3 ? "Please enter at least 3 characters" : desc.length >=1 && error && "maximum 100 characters"}
                         />
                     </Box>
                 </Box>
@@ -1855,7 +1855,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="outlined"
-                        onClick={handelSendAnother}
+                        onClick={()=>handelSendFile("another")}
                     >
                         {uploadAnother}
                     </Button>
@@ -1875,7 +1875,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="contained"
-                        onClick={handelSendFile}
+                        onClick={()=>handelSendFile("self")}
                     >
                         {uploadAttachment}
                     </Button>
