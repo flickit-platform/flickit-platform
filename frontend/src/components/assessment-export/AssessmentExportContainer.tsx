@@ -89,13 +89,6 @@ const AssessmentExportContainer = () => {
     toastErrorOptions: { filterByStatus: [404] },
   });
 
-  const AssessmentKitInfo = useQuery({
-    service: (args = { id: assessmentKitId }, config) =>
-      service.fetchAssessmentKit(args, config),
-    toastError: false,
-    toastErrorOptions: { filterByStatus: [404] },
-  });
-
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId }, config) =>
       service.calculateMaturityLevel(args, config),
