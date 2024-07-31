@@ -1,5 +1,5 @@
 
-export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,name:any,deleteAttachment:any,item:any}) {
+export default function FileSvg ({mainColor,evidenceId,setEvidenceId, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,name:any,deleteAttachment:any,item:any}) {
 
     return (
         <div style={{position: 'relative'}}>
@@ -27,7 +27,10 @@ export default function FileSvg ({mainColor, backgroundColor, hover,downloadFile
                 </div>
             )}
             {hover && (
-                <div  onClick={()=>setExpandedDeleteAttachmentDialog({expended:true,id:item.id})} style={{position:'absolute',width:"20px",height:"20px",top:"-8px",
+                <div  onClick={()=> {
+                    setEvidenceId(evidenceId)
+                    setExpandedDeleteAttachmentDialog({expended: true, id: item.id})
+                }} style={{position:'absolute',width:"20px",height:"20px",top:"-8px",
                     right:"-8px",zIndex:1,borderRadius:"100%", background:mainColor}}>
                     <div style={{
                         width: "20px", height: "20px", borderRadius: "100%",

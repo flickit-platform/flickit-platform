@@ -1203,14 +1203,14 @@ const EvidenceDetail = (props: any) => {
 
     useEffect(()=>{
         (async ()=>{
-            if(getAttachmentData ){
+            if(getAttachmentData && evidenceId == id ){
                 let {attachments} = await fetchAttachments({evidence_id: id})
                 setAttachments(attachments)
-                setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs,count: attachments.length});
+                setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs,count: attachmentsCount});
                 setAttachmentData(false)
             }
         })()
-    },[getAttachmentData])
+    },[getAttachmentData,evidenceId])
 
     const expandedEvidenceBtm = async () =>{
         setLoadingFile(true)
@@ -1456,7 +1456,7 @@ const EvidenceDetail = (props: any) => {
                                                                :
                                                             attachments.map((item,index)=>{
                                                             return(
-                                                                    < FileIcon item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
+                                                                    < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
                                                             )
                                                         })}
                                                         { attachments.length < 5 && (<>
@@ -1531,14 +1531,13 @@ const EvidenceDetail = (props: any) => {
 };
 
 const FileIcon =(props :any) =>{
-    const {evidenceBG,downloadFile,item, setExpandedDeleteAttachmentDialog } = props
+    const {evidenceBG,setEvidenceId,evidenceId, downloadFile,item, setExpandedDeleteAttachmentDialog } = props
 
     const [hover, setHover] = useState(false);
 
     const {link}= item
     let reg = new RegExp("\\/([^\\/?]+)\\?")
     let name = link.match(reg)[1]
-    console.log(item,"test item")
     return(
         <Tooltip title={<>
           <Typography>{name}</Typography>
@@ -1550,7 +1549,7 @@ const FileIcon =(props :any) =>{
             onMouseEnter={()=>setHover(true)}
             onMouseLeave={()=>setHover(false)}
         >
-                <FileSvg  setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item} name={name}
+                <FileSvg evidenceId={evidenceId} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} downloadFile={downloadFile} item={item} name={name}
                           mainColor={evidenceBG?.borderColor}
                           backgroundColor={evidenceBG?.background} hover={hover} />
             {hover && <Box
