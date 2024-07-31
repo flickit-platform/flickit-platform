@@ -184,6 +184,10 @@ const AssessmentExportContainer = () => {
         )
     );
 
+    if (attributesDataPromises === undefined) {
+      setAttributesData({});
+      return;
+    }
     const allAttributesData = await Promise.all(attributesDataPromises);
 
     const attributesDataObject = allAttributesData?.reduce(
@@ -718,45 +722,40 @@ const AssessmentExportContainer = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {items?.map(
-                          (questionnaire: any, index: number) => (
-                            <TableRow key={index}>
-                              <TableCell
-                                sx={{
-                                  borderRight:
-                                    "1px solid rgba(224, 224, 224, 1)",
-                                }}
-                              >
-                                {" "}
-                                <Typography variant="displaySmall">
-                                  {index + 1}
-                                </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{
-                                  borderRight:
-                                    "1px solid rgba(224, 224, 224, 1)",
-                                }}
-                              >
-                                {" "}
-                                <Typography variant="titleMedium">
-                                  {questionnaire?.title}
-                                </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{
-                                  borderRight:
-                                    "1px solid rgba(224, 224, 224, 1)",
-                                }}
-                              >
-                                {" "}
-                                <Typography variant="displaySmall">
-                                  {questionnaire?.description}{" "}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
-                          )
-                        )}
+                        {items?.map((questionnaire: any, index: number) => (
+                          <TableRow key={index}>
+                            <TableCell
+                              sx={{
+                                borderRight: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              {" "}
+                              <Typography variant="displaySmall">
+                                {index + 1}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                borderRight: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              {" "}
+                              <Typography variant="titleMedium">
+                                {questionnaire?.title}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                borderRight: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              {" "}
+                              <Typography variant="displaySmall">
+                                {questionnaire?.description}{" "}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
                   </TableContainer>
