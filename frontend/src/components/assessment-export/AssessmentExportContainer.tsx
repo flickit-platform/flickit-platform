@@ -176,7 +176,7 @@ const AssessmentExportContainer = () => {
   const fetchAllAttributesData = async () => {
     const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
       (subject: any) =>
-        subject.attributes.map((attribute: any) =>
+        subject?.attributes?.map((attribute: any) =>
           FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
             id: attribute?.id,
             data: result,
@@ -184,11 +184,7 @@ const AssessmentExportContainer = () => {
         )
     );
 
-    if (attributesDataPromises === undefined) {
-      setAttributesData({});
-      return;
-    }
-    const allAttributesData = await Promise.all(attributesDataPromises);
+    const allAttributesData = attributesDataPromises ? await Promise.all(attributesDataPromises) : [];
 
     const attributesDataObject = allAttributesData?.reduce(
       (acc, { id, data }) => {
@@ -554,7 +550,8 @@ const AssessmentExportContainer = () => {
                     />
                   </Typography>{" "}
                   {subjects?.map((subject: ISubject) => (
-                    <Typography variant="displaySmall" paragraph>
+                    <Typography variant="displaySmall" paragraph key={subject?.id}
+                    >
                       <Trans
                         i18nKey="assessmentFocusDescriptionSubject"
                         values={{
@@ -606,57 +603,55 @@ const AssessmentExportContainer = () => {
                           </TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody>
-                        {subjects?.map((subject: ISubject, index: number) => (
-                          <>
-                            {subject?.attributes?.map(
-                              (feature: IAttribute, featureIndex: number) => (
-                                <TableRow key={featureIndex}>
-                                  {featureIndex === 0 && (
-                                    <TableCell
-                                      sx={{
-                                        borderRight:
-                                          "1px solid rgba(224, 224, 224, 1)",
-                                      }}
-                                      rowSpan={subject?.attributes?.length}
-                                    >
-                                      <Typography variant="titleMedium">
-                                        {subject?.title}
-                                      </Typography>
-                                      <br />
-                                      <Typography variant="displaySmall">
-                                        {subject?.description}
-                                      </Typography>
-                                    </TableCell>
-                                  )}
+                      {subjects?.map((subject: ISubject, index: number) => (
+                        <TableBody key={subject?.id}>
+                          {subject?.attributes?.map(
+                            (feature: IAttribute, featureIndex: number) => (
+                              <TableRow key={featureIndex}>
+                                {featureIndex === 0 && (
                                   <TableCell
                                     sx={{
                                       borderRight:
                                         "1px solid rgba(224, 224, 224, 1)",
                                     }}
+                                    rowSpan={subject?.attributes?.length}
                                   >
-                                    {" "}
+                                    <Typography variant="titleMedium">
+                                      {subject?.title}
+                                    </Typography>
+                                    <br />
                                     <Typography variant="displaySmall">
-                                      {feature?.title}
+                                      {subject?.description}
                                     </Typography>
                                   </TableCell>
-                                  <TableCell
-                                    sx={{
-                                      borderRight:
-                                        "1px solid rgba(224, 224, 224, 1)",
-                                    }}
-                                  >
-                                    {" "}
-                                    <Typography variant="displaySmall">
-                                      {feature?.description}
-                                    </Typography>
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            )}
-                          </>
-                        ))}
-                      </TableBody>
+                                )}
+                                <TableCell
+                                  sx={{
+                                    borderRight:
+                                      "1px solid rgba(224, 224, 224, 1)",
+                                  }}
+                                >
+                                  {" "}
+                                  <Typography variant="displaySmall">
+                                    {feature?.title}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell
+                                  sx={{
+                                    borderRight:
+                                      "1px solid rgba(224, 224, 224, 1)",
+                                  }}
+                                >
+                                  {" "}
+                                  <Typography variant="displaySmall">
+                                    {feature?.description}
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            )
+                          )}
+                        </TableBody>
+                      ))}
                     </Table>
                   </TableContainer>
                   <Typography
@@ -833,11 +828,13 @@ const AssessmentExportContainer = () => {
                 </Grid>
               </Grid>
               <br />
+              <br />
               <Typography variant="displaySmall" gutterBottom>
                 <Trans i18nKey="subjectsSectionTitle" />
               </Typography>{" "}
               {subjects?.map((subject: ISubject) => (
-                <>
+                <div key={subject?.id}
+                >
                   <Typography
                     component="div"
                     mt={6}
@@ -970,7 +967,7 @@ const AssessmentExportContainer = () => {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                </>
+                </div>
               ))}
             </Paper>
           </Box>

@@ -44,7 +44,6 @@ const SubjectRadar = (props: any) => {
             return (
               <Text
                 {...rest}
-                verticalAnchor="middle"
                 y={y + (y - cy) / 15}
                 x={x + (x - cx) / 15}
                 fontSize="1.25rem"
