@@ -63,11 +63,6 @@ const AssessmentExportContainer = () => {
   const { assessmentKitId = "", assessmentId = "" } = useParams();
   const [errorObject, setErrorObject] = useState<any>(undefined);
   const { config } = useConfigContext();
-  const fetchAssessmentsRoles = useQuery<RolesType>({
-    service: (args, config) => service.fetchAssessmentsRoles(args, config),
-    toastError: false,
-    toastErrorOptions: { filterByStatus: [404] },
-  });
 
   const fetchPathInfo = useQuery<PathInfo>({
     service: (args, config) =>
