@@ -127,7 +127,7 @@ const AssessmentReportContainer = (props: any) => {
                       data-cy="more-action-btn"
                       disabled={!exportable}
                       component={exportable ? Link : "div"}
-                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/${assessmentKit.id}/`}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
                     >
                       <ArticleRounded
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}

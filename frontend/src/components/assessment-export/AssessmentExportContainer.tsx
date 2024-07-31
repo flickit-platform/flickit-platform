@@ -60,7 +60,7 @@ import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
-  const { assessmentKitId = "", assessmentId = "" } = useParams();
+  const { assessmentId = "" } = useParams();
   const [errorObject, setErrorObject] = useState<any>(undefined);
   const { config } = useConfigContext();
 
@@ -538,8 +538,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
