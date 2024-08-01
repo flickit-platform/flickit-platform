@@ -123,9 +123,7 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={formMethods.handleSubmit(onSubmit)}
         />
       </FormProviderWithForm>
     </CEDialog>
