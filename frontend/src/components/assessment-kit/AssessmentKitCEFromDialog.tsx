@@ -95,7 +95,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      toastError(err);
+      toastError(err.response?.data.message);
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
@@ -218,9 +218,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           hasBackBtn={true}
           onBack={handleBack}
           hasViewBtn={true}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={formMethods.handleSubmit(onSubmit)}
         />
       </Box>
       <Box

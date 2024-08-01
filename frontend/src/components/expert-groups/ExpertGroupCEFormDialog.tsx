@@ -96,7 +96,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       const err = e as ICustomError;
       setLoading(false);
       setServerFieldErrors(err, formMethods);
-      toastError(err);
+      toastError(err.response?.data.message);
     }
   };
 
@@ -172,9 +172,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
           loading={loading}
           type={type}
           hasViewBtn={hideSubmitAndView ? false : true}
-          onSubmit={(...args) =>
-            formMethods.handleSubmit((data) => onSubmit(data, ...args))
-          }
+          onSubmit={formMethods.handleSubmit(onSubmit)}
         />
       </FormProviderWithForm>
     </CEDialog>
