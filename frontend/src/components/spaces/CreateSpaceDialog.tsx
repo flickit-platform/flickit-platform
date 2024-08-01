@@ -73,7 +73,8 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
-      toastError(err);
+      console.log(err)
+      toastError(err.response?.data.message);
       setServerFieldErrors(err, formMethods);
     }
   };
