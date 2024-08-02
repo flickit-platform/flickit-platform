@@ -623,11 +623,19 @@ const AnswerDetails = ({ questionInfo, type }: any) => {
 
   return (
     <Box mt={2} width="100%">
-      <Title px={1} size="small">
-        <Trans
-          i18nKey={type === "evidence" ? "answerEvidences" : "answerHistory"}
-        />
-      </Title>
+      {((queryData?.data?.items?.length && type === "history") ||
+        type === "evidence") && (
+        <>
+          <Title px={1} size="small">
+            <Trans
+              i18nKey={
+                type === "evidence" ? "answerEvidences" : "answerHistory"
+              }
+            />
+          </Title>
+          <Divider sx={{ width: "100%", marginBottom: 2 }} />
+        </>
+      )}
       <Box
         mt={2}
         display={"flex"}
@@ -738,8 +746,6 @@ const AnswerDetails = ({ questionInfo, type }: any) => {
               wordBreak: "break-word",
             }}
           >
-            <Divider sx={{ width: "100%", marginBottom: 2 }} />
-
             {queryData.data?.items.map((item: IAnswerHistory) => {
               return (
                 <Box width="100%">
