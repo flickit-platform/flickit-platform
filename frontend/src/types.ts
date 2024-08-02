@@ -656,3 +656,9 @@ export interface IAssessmentResponse {
   subjects: ISubject[];
   assessmentPermissions: IAssessmentPermissions;
 }
+
+export interface IAnswerHistory {
+  answer: TAnswer;
+  creationTime: string;
+  createdBy: IUserInfo;
+}
