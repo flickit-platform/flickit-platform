@@ -756,7 +756,7 @@ const AnswerDetails = ({ questionInfo, type }: any) => {
 };
 
 const AnswerHistoryItem = (props: any) => {
-  const { item } = props;
+  const { item }: { item: IAnswerHistory } = props;
   return (
     <Box
       display="flex"
@@ -764,7 +764,8 @@ const AnswerHistoryItem = (props: any) => {
       px={1}
       width="100%"
       justifyContent="space-between"
-      alignItems={{ xs: "center", md: "flex-start" }}
+      alignItems="center"
+      gap={{ xs: 2, md: 0 }}
     >
       <Box sx={{ ...styles.centerV }} gap={2} width="200px">
         <Avatar
@@ -778,64 +779,73 @@ const AnswerHistoryItem = (props: any) => {
           {item?.createdBy?.displayName}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-        gap={1.5}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-          gap={1.5}
-        >
-          <Typography variant="titleSmall">
-            <Trans i18nKey="confidence" />:
+      {item.answer.isNotApplicable ? (
+        <Box sx={{ ...styles.centerV }}>
+          <Typography variant="titleMedium" color="#1B4D7E">
+            <Trans i18nKey="questionIsMarkedAsNotApplicable" />:
           </Typography>
-          <Rating
-            disabled={true}
-            value={
-              item?.answer?.confidenceLevel?.id !== null
-                ? (item?.answer?.confidenceLevel?.id as number)
-                : null
-            }
-            size="medium"
-            icon={
-              <RadioButtonCheckedRoundedIcon
-                sx={{ mx: 0.25, color: "#42a5f5" }}
-                fontSize="inherit"
-              />
-            }
-            emptyIcon={
-              <RadioButtonUncheckedRoundedIcon
-                style={{ opacity: 0.55 }}
-                fontSize="inherit"
-              />
-            }
-          />
         </Box>
+      ) : (
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
           }}
           gap={1.5}
         >
-          <Typography variant="titleSmall">
-            <Trans i18nKey="selectedOption" />:
-          </Typography>
-          <Typography variant="bodyMedium" maxWidth="400px">
-            2.Partial
-            {/* {item?.answer?.selectedOption?.index +
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="confidence" />:
+            </Typography>
+            <Rating
+              disabled={true}
+              value={
+                item?.answer?.confidenceLevel?.id !== null
+                  ? (item?.answer?.confidenceLevel?.id as number)
+                  : null
+              }
+              size="medium"
+              icon={
+                <RadioButtonCheckedRoundedIcon
+                  sx={{ mx: 0.25, color: "#42a5f5" }}
+                  fontSize="inherit"
+                />
+              }
+              emptyIcon={
+                <RadioButtonUncheckedRoundedIcon
+                  style={{ opacity: 0.55 }}
+                  fontSize="inherit"
+                />
+              }
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="selectedOption" />:
+            </Typography>
+            <Typography variant="bodyMedium" maxWidth="400px">
+              2.Partial
+              {/* {item?.answer?.selectedOption?.index +
           "." +
           item?.answer?.selectedOption?.title} */}
-          </Typography>
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-      <Box>
+      )}
+
+      <Box height="8vh" justifyContent="flex-start">
         <Typography variant="bodyMedium">
           {format(
             new Date(
