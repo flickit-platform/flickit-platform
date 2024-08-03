@@ -4,29 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from assessment.services import assessment_core, assessment_core_services
-
-
-class AssessmentProgressApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, assessment_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_assessment_progress(assessments_details["body"])
-        return Response(result["body"], result["status_code"])
-
-
-class AssessmentSubjectReportApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, assessment_id, subject_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_subject_report(request, assessments_details["body"], subject_id)
-        return Response(result["body"], result["status_code"])
+from assessment.services import assessment_core
+from assessment.services import assessment_report_services
 
 
 class SubjectProgressApi(APIView):
@@ -36,17 +15,6 @@ class SubjectProgressApi(APIView):
         result = assessment_core.get_subject_progress(request,
                                                       assessment_id,
                                                       subject_id)
-        return Response(result["body"], result["status_code"])
-
-
-class AssessmentReportApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, assessment_id):
-        assessments_details = assessment_core_services.load_assessment_details_with_id(request, assessment_id)
-        if not assessments_details["Success"]:
-            return Response(assessments_details["body"], assessments_details["status_code"])
-        result = assessment_core.get_assessment_report(assessments_details["body"], request)
         return Response(result["body"], result["status_code"])
 
 
@@ -60,4 +28,26 @@ class AssessmentAttributesReportApi(APIView):
     @swagger_auto_schema(manual_parameters=[maturity_level_id_param])
     def get(self, request, assessment_id, attribute_id):
         result = assessment_core.get_assessment_attribute_report(request, assessment_id, attribute_id)
+        return Response(result["body"], result["status_code"])
+
+
+class AssessmentAttributesReportExportApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.get_assessment_attributes_report_export(request,
+                                                                                    assessment_id,
+                                                                                    attribute_id)
+        return Response(result["body"], result["status_code"])
+
+
+class AssessmentAttributesReportAiApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.get_assessment_attributes_report_ai(request,
+                                                                                assessment_id,
+                                                                                attribute_id)
         return Response(result["body"], result["status_code"])

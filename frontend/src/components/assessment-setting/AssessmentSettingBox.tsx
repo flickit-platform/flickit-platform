@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Trans } from "react-i18next";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styles } from "@styles";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -220,6 +220,7 @@ export const AssessmentSettingMemberBox = (props: {
   openModal: () => void;
   openRemoveModal: (id: string, name: string) => void;
   setChangeData?: any;
+  changeData?: any;
 }) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -230,7 +231,17 @@ export const AssessmentSettingMemberBox = (props: {
     setChangeData,
     openModal,
     openRemoveModal,
+    changeData,
   } = props;
+
+  const inviteesMemberList = useQuery({
+    service: (args, config) =>
+      service.fetchAssessmentMembersInvitees({ assessmentId }, config),
+  });
+
+  useEffect(() => {
+    inviteesMemberList.query();
+  }, [changeData]);
 
   // const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -264,6 +275,22 @@ export const AssessmentSettingMemberBox = (props: {
       label: "Role",
       align: "right",
       minWidth: "20vw",
+      position: "center",
+    },
+  ];
+
+  const inviteesColumns: readonly Column[] = [
+    {
+      id: "email",
+      label: "Email",
+      minWidth: "30vw",
+      position: "center",
+    },
+    {
+      id: "role",
+      label: "Role",
+      align: "right",
+      minWidth: "30vw",
       position: "center",
     },
   ];
@@ -321,7 +348,7 @@ export const AssessmentSettingMemberBox = (props: {
             fontWeight={700}
             lineHeight={"normal"}
           >
-            <Trans i18nKey={`member`} />
+            <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
             sx={{
@@ -352,7 +379,7 @@ export const AssessmentSettingMemberBox = (props: {
                 fontSize: { xs: "0.7rem", sm: "0.85rem" },
               }}
             >
-              <Trans i18nKey={"addMember"} />
+              <Trans i18nKey={"addRole"} />
             </Typography>
           </Button>
         </Box>
@@ -415,7 +442,11 @@ export const AssessmentSettingMemberBox = (props: {
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: any) => {
                     return (
-                      <TableRow tabIndex={-1} key={row.id} sx={{ background: !row.editable ? "#ebe8e85c" : "" }}>
+                      <TableRow
+                        tabIndex={-1}
+                        key={row.id}
+                        sx={{ background: !row.editable ? "#ebe8e85c" : "" }}
+                      >
                         <TableCell
                           sx={{
                             display: "flex",
@@ -461,18 +492,19 @@ export const AssessmentSettingMemberBox = (props: {
                               >
                                 {row.displayName}
                               </Typography>
-                              {!row.editable && <Chip
-                                sx={{
-                                  mr: 1,
-                                  opacity: 0.7,
-                                  color: "#9A003C",
-                                  borderColor: "#9A003C",
-                                }}
-                                label={<Trans i18nKey={"owner"} />}
-                                size="small"
-                                variant="outlined"
-                              />}
-
+                              {!row.editable && (
+                                <Chip
+                                  sx={{
+                                    mr: 1,
+                                    opacity: 0.7,
+                                    color: "#9A003C",
+                                    borderColor: "#9A003C",
+                                  }}
+                                  label={<Trans i18nKey={"owner"} />}
+                                  size="small"
+                                  variant="outlined"
+                                />
+                              )}
                             </Box>
                           </Box>
                           <Box
@@ -521,7 +553,12 @@ export const AssessmentSettingMemberBox = (props: {
                                 lg={8}
                                 sx={{ minWidth: { xs: "100%", md: "160px" } }}
                               >
-                                <Tooltip disableHoverListener={row.editable} title={<Trans i18nKey="spaceOwnerRoleIsNotEditable" />}>
+                                <Tooltip
+                                  disableHoverListener={row.editable}
+                                  title={
+                                    <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
+                                  }
+                                >
                                   <Select
                                     labelId="demo-multiple-name-label"
                                     id="demo-multiple-name"
@@ -535,22 +572,26 @@ export const AssessmentSettingMemberBox = (props: {
                                       ".MuiOutlinedInput-notchedOutline": {
                                         border: 0,
                                       },
-                                      border: row.editable ? "1px solid #2974B4" : "1px solid #2974b442",
+                                      border: row.editable
+                                        ? "1px solid #2974B4"
+                                        : "1px solid #2974b442",
                                       fontSize: "0.875rem",
                                       borderRadius: "0.5rem",
                                       "&.MuiOutlinedInput-notchedOutline": {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
-                                        fill: row.editable ? "#2974B4 !important" : "#2974b442 !important",
+                                        fill: row.editable
+                                          ? "#2974B4 !important"
+                                          : "#2974b442 !important",
                                       },
                                       "& .MuiSelect-select": {
                                         padding: "4px 5px",
@@ -590,13 +631,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor: "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor: "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -615,11 +658,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -639,7 +682,8 @@ export const AssessmentSettingMemberBox = (props: {
                                               </div>
                                             </Box>
                                             {listOfRoles &&
-                                              listOfRoles.length > index + 1 && (
+                                              listOfRoles.length >
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -656,8 +700,12 @@ export const AssessmentSettingMemberBox = (props: {
                                 </Tooltip>
                               </Grid>
                             </FormControl>
-                            <Tooltip disableHoverListener={row.editable} title={<Trans i18nKey="spaceOwnerRoleIsNotEditable" />}>
-
+                            <Tooltip
+                              disableHoverListener={row.editable}
+                              title={
+                                <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
+                              }
+                            >
                               <Box
                                 width="30%"
                                 display="flex"
@@ -684,6 +732,319 @@ export const AssessmentSettingMemberBox = (props: {
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider sx={{ width: "100%", marginBlock: "24px" }} />
+
+        {inviteesMemberList?.data?.items?.length > 0 && (
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "flex-start", sm: "center" },
+                position: "relative",
+                gap: "10px",
+              }}
+            >
+              <Typography
+                color="#9DA7B3"
+                sx={{ fontSize: "2rem" }}
+                fontWeight={700}
+                lineHeight={"normal"}
+              >
+                <Trans i18nKey={`invitees`} />
+              </Typography>
+            </Box>
+            <Divider sx={{ width: "100%", marginTop: "24px" }} />
+            <TableContainer
+              sx={{
+                maxHeight: 840,
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+              }}
+            >
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead
+                  sx={{ width: "100%", overflow: "hidden" }}
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 3,
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  <TableRow
+                    sx={{
+                      display: "inline",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
+                  >
+                    {inviteesColumns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        sx={{
+                          minWidth: {
+                            xs: "10rem",
+                            sm: "10rem",
+                            md: column.minWidth,
+                          },
+                          textAlign: { xs: column.position, lg: "center" },
+                          display: {
+                            xs: column.display,
+                            md: "inline-block",
+                            color: "#9DA7B3",
+                            border: "none",
+                            fontSize: "1rem",
+                          },
+                        }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <Divider sx={{ width: "100%" }} />
+                </TableHead>
+                <TableBody>
+                  {inviteesMemberList?.data?.items
+                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row: any) => {
+                      return (
+                        <TableRow tabIndex={-1} key={row.id}>
+                          <TableCell
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              border: "none",
+                              gap: { xs: "0px", md: "1.3rem" },
+                              paddingX: { xs: "0px", md: "1rem" },
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                m: 1,
+                                textAlign: "center",
+                                display: "inline-flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                width: { xs: "10rem", md: "30vw" },
+
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                  whiteSpace: "nowrap",
+                                  color: "#1B1B1E",
+                                  fontSize: "0.875",
+                                  wight: 300,
+                                }}
+                              >
+                                {row.email}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: { xs: "0px", md: ".7rem" },
+                                width: { xs: "10rem", md: "28vw" },
+                              }}
+                            >
+                              <FormControl
+                                sx={{
+                                  m: 1,
+                                  width: "100%",
+                                  textAlign: "center",
+                                  padding: "6px, 12px, 6px, 12px",
+                                  display: "inline-flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
+                                <Grid
+                                  item
+                                  lg={8}
+                                  sx={{ minWidth: { xs: "100%", md: "160px" } }}
+                                >
+                                  <Select
+                                    labelId="demo-multiple-name-label"
+                                    id="demo-multiple-name"
+                                    value={row?.role?.title}
+                                    onChange={handleChange}
+                                    name={row}
+                                    MenuProps={MenuProps}
+                                    sx={{
+                                      width: "100%",
+                                      boxShadow: "none",
+                                      ".MuiOutlinedInput-notchedOutline": {
+                                        border: 0,
+                                      },
+                                      border: row.editable
+                                        ? "1px solid #2974B4"
+                                        : "1px solid #2974b442",
+                                      fontSize: "0.875rem",
+                                      borderRadius: "0.5rem",
+                                      "&.MuiOutlinedInput-notchedOutline": {
+                                        border: 0,
+                                      },
+                                      "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                                        {
+                                          border: 0,
+                                        },
+                                      "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                        {
+                                          border: 0,
+                                        },
+                                      ".MuiSvgIcon-root": {
+                                        fill: row.editable
+                                          ? "#2974B4 !important"
+                                          : "#2974b442 !important",
+                                      },
+                                      "& .MuiSelect-select": {
+                                        padding: "4px 5px",
+                                      },
+                                    }}
+                                    IconComponent={KeyboardArrowDownIcon}
+                                    inputProps={{
+                                      renderValue: () => row?.role?.title,
+                                    }}
+                                    disabled={!row.editable}
+                                  >
+                                    <Box
+                                      sx={{
+                                        paddingY: "16px",
+                                        color: "#9DA7B3",
+                                        textAlign: "center",
+                                        borderBottom: "1px solid #9DA7B3",
+                                      }}
+                                    >
+                                      <Typography sx={{ fontSize: "0.875rem" }}>
+                                        <Trans i18nKey={"chooseARole"} />
+                                      </Typography>
+                                    </Box>
+                                    {listOfRoles &&
+                                      listOfRoles.map(
+                                        (role: any, index: number) => (
+                                          <MenuItem
+                                            style={{ display: "block" }}
+                                            key={role.title}
+                                            value={role}
+                                            sx={{
+                                              paddingY: "0px",
+                                              maxHeight: "200px",
+                                              ...(role.id === row.role.id && {
+                                                backgroundColor: "#9CCAFF",
+                                              }),
+                                              "&.MuiMenuItem-root:hover": {
+                                                ...(role.id === row.role.id
+                                                  ? {
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
+                                                  : {
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
+                                              },
+                                            }}
+                                          >
+                                            <Box
+                                              sx={{
+                                                maxWidth: "240px",
+                                                color: "#000",
+                                                fontSize: "0.875rem",
+                                                lineHeight: "21px",
+                                                fontWeight: 500,
+                                                paddingY: "1rem",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{
+                                                  fontSize: "0.875rem",
+                                                  ...(role.id === row.role.id
+                                                    ? {
+                                                        color: "#004F83",
+                                                      }
+                                                    : {
+                                                        color: "#1B1B1E",
+                                                      }),
+                                                }}
+                                              >
+                                                {role.title}
+                                              </Typography>
+
+                                              <div
+                                                style={{
+                                                  color: "#000",
+                                                  fontSize: "0.875rem",
+                                                  lineHeight: "21px",
+                                                  fontWeight: 300,
+                                                  whiteSpace: "break-spaces",
+                                                  paddingTop: "1rem",
+                                                }}
+                                              >
+                                                {role.description}
+                                              </div>
+                                            </Box>
+                                            {listOfRoles &&
+                                              listOfRoles.length >
+                                                index + 1 && (
+                                                <Box
+                                                  sx={{
+                                                    height: "0.5px",
+                                                    width: "80%",
+                                                    backgroundColor: "#9DA7B3",
+                                                    mx: "auto",
+                                                  }}
+                                                ></Box>
+                                              )}
+                                          </MenuItem>
+                                        )
+                                      )}
+                                  </Select>
+                                </Grid>
+                              </FormControl>
+                              {/* <Tooltip
+                              disableHoverListener={row.editable}
+                              title={
+                                <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
+                              }
+                            >
+                              <Box
+                                width="30%"
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                              >
+                                <IconButton
+                                  sx={{ "&:hover": { color: "#d32f2f" } }}
+                                  size="small"
+                                  disabled={!row.editable}
+                                  onClick={() =>
+                                    openRemoveModal(row.displayName, row.id)
+                                  }
+                                >
+                                  <DeleteRoundedIcon />
+                                </IconButton>{" "}
+                              </Box>
+                            </Tooltip> */}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
       </Box>
     </Box>
   );

@@ -56,7 +56,7 @@ const toastError = (
     const customError = err as ICustomError;
     status = customError.response?.status;
     data = customError.response?.data;
-    type = customError.code as ECustomErrorType; 
+    type = customError.code as ECustomErrorType;
     message = customError.message;
   }
 
@@ -88,7 +88,8 @@ const toastError = (
   if (
     status === 401 ||
     type === ECustomErrorType.INVALID_TOKEN ||
-    type === ECustomErrorType.CANCELED
+    type === ECustomErrorType.CANCELED ||
+    type === undefined
   ) {
     return;
   }

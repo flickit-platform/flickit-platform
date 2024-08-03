@@ -4,20 +4,20 @@ import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import { t } from "i18next";
 
-interface IAssessmentAccessManagementTitle {
+interface IAssessmentExportTitle {
   pathInfo: {
     space: {
-      id: number;
-      title: string;
-    };
+      id: number,
+      title: string
+    },
     assessment: {
-      id: string;
-      title: string;
-    };
+      id: string,
+      title: string
+    }
   };
 }
 
-const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
+const AssessmentExportTitle = (props: IAssessmentExportTitle) => {
   const { pathInfo } = props;
   const { spaceId, page } = useParams();
   const { space, assessment } = pathInfo;
@@ -43,7 +43,7 @@ const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
               to: `/${spaceId}/assessments/${page}/${assessment.id}/insights`,
             },
             {
-              title: t("assessmentSettings") as string,
+              title: t("assessmentDocument") as string,
             },
           ]}
           displayChip
@@ -53,4 +53,4 @@ const AssessmentSettingTitle = (props: IAssessmentAccessManagementTitle) => {
   );
 };
 
-export default AssessmentSettingTitle;
+export default AssessmentExportTitle;

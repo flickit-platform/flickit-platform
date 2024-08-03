@@ -54,24 +54,61 @@ export interface IQuestionInfo {
   is_not_applicable?: boolean;
   confidence_level?: any;
 }
+
+interface IPermissions {
+  viewAssessment: boolean;
+  viewEvidenceAttachment: boolean;
+  answerQuestion: boolean;
+  viewQuestionnaireQuestions: boolean;
+  deleteEvidenceAttachment: boolean;
+  viewAssessmentUserList: boolean;
+  viewAnswerHistory: boolean;
+  calculateAssessment: boolean;
+  viewAssessmentList: boolean;
+  deleteEvidence: boolean;
+  viewSubjectReport: boolean;
+  addEvidence: boolean;
+  viewAssessmentReport: boolean;
+  deleteAssessment: boolean;
+  updateUserAssessmentRole: boolean;
+  calculateConfidence: boolean;
+  updateAssessment: boolean;
+  grantUserAssessmentRole: boolean;
+  createAdvice: boolean;
+  viewEvidenceList: boolean;
+  viewAssessmentProgress: boolean;
+  deleteUserAssessmentRole: boolean;
+  viewAttributeEvidenceList: boolean;
+  viewAssessmentInviteeList: boolean;
+  viewSubjectProgress: boolean;
+  updateEvidence: boolean;
+  viewAttributeScoreDetail: boolean;
+  viewAssessmentQuestionnaireList: boolean;
+  viewEvidence: boolean;
+  createAssessment: boolean;
+  addEvidenceAttachment: boolean;
+  exportAssessmentReport: boolean;
+}
+
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
   questions: IQuestionInfo[];
+  permissions?: IPermissions;
 };
 
 export type TAnswer = {
   confidenceLevel?: {
-    id : TId,
-    title:string
-  },
-  isNotApplicable?: boolean,
-  selectedOption?:{
-    id: TId,
-    index: number
-    title: string
-  },
-  id?:TId;
+    id: TId;
+    title: string;
+  };
+  isNotApplicable?: boolean;
+  selectedOption?: {
+    id: TId;
+    index: number;
+    title: string;
+  };
+  id?: TId;
   index?: string | number;
   caption?: string;
   evidences?: TEvidences;
@@ -150,7 +187,7 @@ export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
-  index?: number;
+  index: number;
 }
 
 export interface IImage {
@@ -177,7 +214,7 @@ export interface IAssessmentKitModel {
 }
 export interface IAssessmentKitList {
   id: TId;
-  title?: string,
+  title?: string;
   maturityLevelsCount: number;
 }
 
@@ -227,8 +264,8 @@ export interface ISpaceModel {
 }
 
 export interface ISpacesModel extends IDefaultModel<ISpaceModel> {
-  size?: number
-  total?: number
+  size?: number;
+  total?: number;
 }
 export interface IAssessmentReport {
   assessment_kit: Omit<
@@ -272,6 +309,7 @@ export interface IQuestion {
 export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
+  permissions: IPermissions;
 }
 
 export interface IQuestionImpact {
@@ -466,7 +504,7 @@ export interface ICompareResultModel {
 interface AssessmentKitStatsSubjects {
   title: string;
 }
-export interface AssessmentKitStatsExpertGroup {
+export interface IExpertGroup {
   id: number;
   title: string;
   picture?: string;
@@ -489,8 +527,10 @@ export interface IAssessmentKitReportModel {
   id: number;
   title: string;
   summary: string;
+  about?: string;
   maturityLevelCount: number;
-  expertGroup: AssessmentKitStatsExpertGroup;
+  expertGroup: IExpertGroup;
+  maturityLevels: IMaturityLevel[];
 }
 
 export interface IAssessmentReportModel {
@@ -547,8 +587,32 @@ export interface AssessmentKitStatsType {
   likes: number;
   assessmentCounts: number;
   subjects: AssessmentKitStatsSubjects[];
-  expertGroup: AssessmentKitStatsExpertGroup[];
+  expertGroup: IExpertGroup[];
 }
+
+export interface IAssessmentKitInfo {
+  id: TId;
+  title: string;
+  summary: string;
+  about: string;
+  published: boolean;
+  isPrivate: boolean;
+  creationTime: string;
+  lastModificationTime: string;
+  like: {
+    count: number;
+    liked: boolean;
+  };
+  assessmentsCount: number;
+  subjectsCount: number;
+  questionnairesCount: number;
+  expertGroupId: number;
+  subjects: ISubject[];
+  questionnaires: IQuestionnaire[];
+  maturityLevels: IMaturityLevel[];
+  tags: { id: TId; title: string }[];
+}
+
 export interface AssessmentKitDetailsType {
   maturityLevel: AssessmentKitDetailsMaturityLevel;
   subjects: { id: number; title: string; index: number }[];
@@ -565,9 +629,30 @@ export interface IDynamicGaugeSVGProps {
 }
 
 export interface RolesType {
-  items:{
+  items: {
     id: number;
     title: string;
-    description: string
-  }[]
+    description: string;
+  }[];
+}
+
+export interface ISubject {
+  id: number;
+  title: string;
+  index: number;
+  description: string;
+  confidenceValue: number | null;
+  maturityLevel: IMaturityLevel;
+  attributes: IAttribute[];
+}
+
+interface IAssessmentPermissions {
+  manageable: boolean;
+  exportable: boolean;
+}
+
+export interface IAssessmentResponse {
+  assessment: IAssessmentReportModel;
+  subjects: ISubject[];
+  assessmentPermissions: IAssessmentPermissions;
 }

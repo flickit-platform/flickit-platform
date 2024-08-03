@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -23,6 +23,7 @@ import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSet
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedRemoveModal, setExpandedRemoveModal] = useState<{
     display: boolean;
@@ -57,6 +58,14 @@ const AssessmentSettingContainer = () => {
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
+  useEffect(() => {
+    (async () => {
+      let { manageable } = await AssessmentInfo.query()
+      if (!manageable) {
+        return navigate("*")
+      }
+    })()
+  }, [assessmentId]);
 
   useEffect(() => {
     (async () => {
@@ -94,7 +103,7 @@ const AssessmentSettingContainer = () => {
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentSettingTitle pathInfo={pathInfo} />
-            <Grid container columns={12}  mb={5}>
+            <Grid container columns={12} mb={5}>
               <Grid item sm={12} xs={12}>
                 <Box
                   sx={{ ...styles.centerV }}
@@ -103,8 +112,8 @@ const AssessmentSettingContainer = () => {
                 >
                   <Typography
                     color="#00365C"
-                    sx={{ fontSize: { xs: "2.125rem", sm: "3.5rem" } }}
-                    fontWeight={900}
+                    textAlign="left"
+                    variant="headlineLarge"
                   >
                     <Trans i18nKey="assessmentSettings" />
                   </Typography>
@@ -132,6 +141,7 @@ const AssessmentSettingContainer = () => {
                   openModal={handleClickOpen}
                   openRemoveModal={handleOpenRemoveModal}
                   setChangeData={setChangeData}
+                  changeData={changeData}
                 />
               </Grid>
             </Grid>
@@ -144,7 +154,7 @@ const AssessmentSettingContainer = () => {
               fetchAssessmentsUserListRoles={
                 fetchAssessmentsUserListRoles.query
               }
-              title={<Trans i18nKey={"addNewMember"} />}
+              title={<Trans i18nKey={"addNewRole"} />}
               cancelText={<Trans i18nKey={"cancel"} />}
               confirmText={<Trans i18nKey={"addToThisAssessment"} />}
               setChangeData={setChangeData}

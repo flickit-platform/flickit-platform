@@ -80,7 +80,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       if (!isCalculateValid) {
         const data = await calculateMaturityLevelQuery.query().catch(() => {
           setShow(true);
-          console.log("first");
         });
         setCalculateResault(data);
         if (data?.id) {
@@ -311,7 +310,7 @@ const Actions = (props: {
   };
 
   const assessmentSetting = (e: any) => {
-    navigate(`assessmentsettings/${item.id}`, {
+    navigate(`${item.id}/assessment-settings/`, {
       state: item?.color || { code: "#073B4C", id: 6 },
     });
   };

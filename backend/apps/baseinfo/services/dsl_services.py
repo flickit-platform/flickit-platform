@@ -1,7 +1,5 @@
 import requests
-from assessmentplatform.settings import DSL_PARSER_URL_SERVICE, ASSESSMENT_URL
-from baseinfo.models.assessmentkitmodels import ExpertGroup
-from rest_framework import status
+from assessmentplatform.settings import  ASSESSMENT_URL
 
 
 def upload_dsl_assessment(request):
@@ -16,6 +14,7 @@ def upload_dsl_assessment(request):
 
 
 def download_dsl_assessment(assessment_kit_id, request):
-    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/dsl-download-link',
-                            headers={'Authorization': request.headers['Authorization']})
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/dsl-download-link',
+        headers={'Authorization': request.headers['Authorization']})
     return {"Success": False, "body": response.json(), "status_code": response.status_code}

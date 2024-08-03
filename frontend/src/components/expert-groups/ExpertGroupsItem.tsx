@@ -25,6 +25,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
+import React, {useState} from "react";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -75,15 +76,16 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }}
           avatar={
             <Avatar
-              component={Link}
-              to={`${id}`}
-              sx={(() => {
-                return {
-                  bgcolor: (t) => t.palette.grey[800],
-                  textDecoration: "none",
-                };
-              })()}
-              src={picture}
+                component={Link}
+                to={`${id}`}
+                sx={(() => {
+                  return {
+                    bgcolor: (t) => t.palette.grey[800],
+                    textDecoration: "none",
+                    width: 50,height: 50
+                  };
+                })()}
+                src={picture}
             >
               {title?.[0]?.toUpperCase()}
             </Avatar>

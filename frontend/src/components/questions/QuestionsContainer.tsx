@@ -107,12 +107,13 @@ const useQuestions = () => {
   });
   useEffect(() => {
     if (questionsResultQueryData.loaded) {
-      const { items = [] } = questionsResultQueryData.data;
+      const { items = [], permissions } = questionsResultQueryData.data;
       dispatch(
         questionActions.setQuestionsInfo({
           total_number_of_questions: items.length,
           resultId: "",
           questions: items,
+          permissions: permissions
         })
       );
     }
@@ -121,12 +122,13 @@ const useQuestions = () => {
     try {
       const response = await questionsResultQueryData.query();
       if (response) {
-        const { items = [] } = response;
+        const { items = [], permissions } = response;
         dispatch(
           questionActions.setQuestionsInfo({
             total_number_of_questions: items.length,
             resultId: "",
             questions: items,
+            permissions: permissions
           })
         );
       }

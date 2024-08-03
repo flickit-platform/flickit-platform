@@ -2,10 +2,11 @@ from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from django.core.exceptions import SuspiciousOperation
 
 from account.services.oauth_service import get_user_object, create_user
-from account.services.space_invite_services import check_invitations_spaces
+from account.services.invitations_services import check_invitations
 import logging
 
 LOGGER = logging.getLogger(__name__)
+
 
 class MyOIDCAB(OIDCAuthenticationBackend):
 
@@ -16,7 +17,7 @@ class MyOIDCAB(OIDCAuthenticationBackend):
         last_name = claims.get('family_name', '')
         display_name = first_name + ' ' + last_name
         user_id = create_user(email, display_name, user_id)
-        check_invitations_spaces(user_id=user_id)
+        check_invitations(user_id=user_id)
         user = get_user_object(claims)
         return user
 

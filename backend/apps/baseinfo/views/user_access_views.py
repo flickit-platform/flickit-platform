@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from assessment.serializers.user_access_serializers import InviteUserWithEmailSerializer
-from baseinfo.permissions import IsOwnerExpertGroup
 from baseinfo.services import user_access_services
 
 
@@ -33,8 +32,6 @@ class AssessmentKitUsersAccessApi(APIView):
 
 
 class DeleteUserAccessToAssessmentKitApi(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerExpertGroup]
-
     def delete(self, request, assessment_kit_id, user_id):
         result = user_access_services.delete_user_in_assessment_kit(assessment_kit_id=assessment_kit_id,
                                                                     authorization_header=request.headers[

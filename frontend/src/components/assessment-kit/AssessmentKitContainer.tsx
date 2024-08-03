@@ -328,7 +328,10 @@ const AssessmentKit = (props: any) => {
                 >
                   <Trans i18nKey="createAssessment" />
                 </Button>
-                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={undefined} />
+                <AssessmentCEFromDialog
+                  {...dialogProps}
+                  onSubmitForm={undefined}
+                />
               </Box>
             </Box>
           </Grid>
@@ -355,7 +358,7 @@ const AssessmentKit = (props: any) => {
                       <Box
                         sx={{
                           background: colorCode,
-                          fontSize: "0.825rem",
+                          fontSize: "1rem",
                           py: { xs: "0.16rem", md: 1 },
                           px: { xs: 1, md: 4 },
                           fontWeight: "bold",
@@ -403,11 +406,15 @@ const AssessmentKit = (props: any) => {
                                 textJustify: "inter-word",
                               }}
                             >
-                              <Box component="span" fontWeight="bold">
+                              <Box
+                                component="span"
+                                fontSize="1rem"
+                                fontWeight="bold"
+                              >
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box component="span" fontSize="0.825rem">
+                              <Box component="span" fontSize="1rem">
                                 {att.description}
                               </Box>
                             </Typography>
@@ -422,6 +429,9 @@ const AssessmentKit = (props: any) => {
               <Title>
                 <Trans i18nKey="questionnaires" />
               </Title>
+              <Typography variant="body2" fontSize="1rem">
+                <Trans i18nKey="questionnairesAssessmentKitDescription" values={{ questionnairesCount }} />
+              </Typography>
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any) => {
                   return (

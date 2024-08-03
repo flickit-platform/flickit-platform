@@ -264,7 +264,7 @@ export const AssessmentSubjectAccordion = (
             sx={{ marginInline: { lg: 4 }, marginBlock: { lg: 10 } }}
           />
 
-          <Grid item xs={12} sm={12} md={12} lg={4.7}>
+          <Grid item xs={12} sm={12} md={12} lg={4.6}>
             <Box display="flex" flexDirection="column">
               <Box
                 display="flex"

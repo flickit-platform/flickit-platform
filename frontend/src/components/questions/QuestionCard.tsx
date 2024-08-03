@@ -1,11 +1,11 @@
-import React, {useEffect, useRef, useState, useMemo} from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import zip from "@assets/svg/ZIP.svg";
@@ -19,29 +19,29 @@ import {
     useQuestionContext,
     useQuestionDispatch,
 } from "@/providers/QuestionProvider";
-import {IQuestionInfo, TAnswer, TQuestionsInfo} from "@types";
-import {Trans} from "react-i18next";
-import {LoadingButton} from "@mui/lab";
-import {useServiceContext} from "@providers/ServiceProvider";
+import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
+import { Trans } from "react-i18next";
+import { LoadingButton } from "@mui/lab";
+import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
-import {ICustomError} from "@utils/CustomError";
+import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import {Collapse, DialogTitle, FormControl, Grid, TextareaAutosize} from "@mui/material";
-import {FormProvider, useForm, useFormContext} from "react-hook-form";
-import {styles} from "@styles";
+import { Collapse, DialogTitle, FormControl, Grid, TextareaAutosize } from "@mui/material";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { styles } from "@styles";
 import Title from "@common/Title";
-import {InputFieldUC} from "@common/fields/InputField";
+import { InputFieldUC } from "@common/fields/InputField";
 import ListItem from "@mui/material/ListItem";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ListItemText from "@mui/material/ListItemText";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
-import {t} from "i18next";
-import {useQuery} from "@utils/useQuery";
+import { t } from "i18next";
+import { useQuery } from "@utils/useQuery";
 import formatDate from "@utils/formatDate";
 import useMenu from "@/utils/useMenu";
 import MoreActions from "../common/MoreActions";
-import {SubmitOnSelectCheckBox} from "./QuestionContainer";
+import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import languageDetector from "@utils/languageDetector";
@@ -63,10 +63,10 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useScreenResize from "@utils/useScreenResize";
-import {useConfigContext} from "@/providers/ConfgProvider";
+import { useConfigContext } from "@/providers/ConfgProvider";
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import arrowBtn from "../../assets/svg/arrow.svg"
 import UploadIcon from "../../assets/svg/UploadIcon.svg"
 import PreAttachment from "@components/questions/iconFiles/preAttachments";
@@ -76,11 +76,11 @@ import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import Dropzone, {useDropzone} from 'react-dropzone'
-import {toast} from "react-toastify";
+import Dropzone, { useDropzone } from 'react-dropzone'
+import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import {primaryFontFamily, theme} from "@config/theme";
+import { primaryFontFamily, theme } from "@config/theme";
 
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
@@ -88,14 +88,14 @@ interface IQuestionCardProps {
 }
 
 export const QuestionCard = (props: IQuestionCardProps) => {
-    const {questionInfo, questionsInfo} = props;
-    const {answer, title, hint, mayNotBeApplicable} = questionInfo;
-    const {questionIndex} = useQuestionContext();
+    const { questionInfo, questionsInfo } = props;
+    const { answer, title, hint, mayNotBeApplicable } = questionInfo;
+    const { questionIndex } = useQuestionContext();
     const abortController = useRef(new AbortController());
     const [notApplicable, setNotApplicable] = useState<boolean>(false);
     const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
-    const {service} = useServiceContext();
-    const {config} = useConfigContext();
+    const { service } = useServiceContext();
+    const { config } = useConfigContext();
 
     useEffect(() => {
         return () => {
@@ -124,14 +124,14 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             service.fetchConfidenceLevelsList(args, config),
         toastError: false,
     });
-    const {selcetedConfidenceLevel} = useQuestionContext();
+    const { selcetedConfidenceLevel } = useQuestionContext();
     const dispatch = useQuestionDispatch();
     return (
         <Box>
             <Paper
                 sx={{
-                    px: {xs: 2.5, sm: 4, md: 5},
-                    py: {xs: 3, sm: 5},
+                    px: { xs: 2.5, sm: 4, md: 5 },
+                    py: { xs: 3, sm: 5 },
                     backgroundColor: `${notApplicable ? "#000000cc" : "#273248"}`,
                     flex: 1,
                     backgroundImage: `url(${QASvg})`,
@@ -141,8 +141,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     backgroundPosition: "-140px -140px",
                     position: "relative",
                     overflow: "hidden",
-                    my: {xs: 2, md: 5},
-                    mx: {xs: 2, sm: "auto"},
+                    my: { xs: 2, md: 5 },
+                    mx: { xs: 2, sm: "auto" },
                     mb: "0 !important",
                     maxWidth: "1376px",
                     borderRadius: "8px 8px 0 0",
@@ -155,11 +155,11 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             variant="subLarge"
                             sx={
                                 is_farsi
-                                    ? {color: "white", opacity: 0.65, direction: "rtl"}
-                                    : {color: "white", opacity: 0.65}
+                                    ? { color: "white", opacity: 0.65, direction: "rtl" }
+                                    : { color: "white", opacity: 0.65 }
                             }
                         >
-                            <Trans i18nKey="question"/>
+                            <Trans i18nKey="question" />
                         </Typography>
                         <Typography
                             variant="h4"
@@ -169,7 +169,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                                     ? {
                                         pt: 0.5,
                                         fontSize: "2rem",
-                                        fontFamily: {xs: "Vazirmatn", lg: "Vazirmatn"},
+                                        fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
                                         direction: "rtl",
                                     }
                                     : {
@@ -181,13 +181,13 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             {title.split("\n").map((line, index) => (
                                 <React.Fragment key={index}>
                                     {line}
-                                    <br/>
+                                    <br />
                                 </React.Fragment>
                             ))}
                         </Typography>
                     </Box>
-                    <Box sx={{direction: `${is_farsi ? "rtl" : "ltr"}`}}>
-                        {hint && <QuestionGuide hint={hint}/>}
+                    <Box sx={{ direction: `${is_farsi ? "rtl" : "ltr"}` }}>
+                        {hint && <QuestionGuide hint={hint} />}
                     </Box>
                     <AnswerTemplate
                         abortController={abortController}
@@ -203,24 +203,24 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     />
                 </Box>
             </Paper>
-            <Box sx={{px: {xs: 2, sm: 0}}}>
+            <Box sx={{ px: { xs: 2, sm: 0 } }}>
                 <Box
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
                         background: `${notApplicable ? "#273248" : "#000000cc"}`,
-                        flexDirection: {xs: "column", md: "row"},
+                        flexDirection: { xs: "column", md: "row" },
                         borderRadius: " 0 0 8px 8px ",
-                        px: {xs: 1.75, sm: 2, md: 2.5},
-                        py: {xs: 1.5, sm: 2.5},
+                        px: { xs: 1.75, sm: 2, md: 2.5 },
+                        py: { xs: 1.5, sm: 2.5 },
                     }}
                 >
-                    <SubmitOnSelectCheckBox/>
+                    <SubmitOnSelectCheckBox disabled={!questionsInfo?.permissions?.answerQuestion} />
                     <Box
                         sx={{
                             display: "flex",
                             alignItems: "center",
-                            flexDirection: {xs: "column", md: "row"},
+                            flexDirection: { xs: "column", md: "row" },
                         }}
                     >
                         <QueryData
@@ -237,19 +237,18 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                                         }}
                                     >
                                         {selcetedConfidenceLevel !== null ? (
-                                            <Box sx={{mr: 2, color: "#fff"}}>
+                                            <Box sx={{ mr: 2, color: "#fff" }}>
                                                 <Typography
-                                                    sx={{display: "flex", fontSize: {xs: ".85rem"}}}
+                                                    sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                                                 >
-                                                    <Trans i18nKey={"youSelected"}/>
+                                                    <Trans i18nKey={questionsInfo?.permissions?.answerQuestion ? "selcetConfidenceLevel" : "confidenceLevel"} />
                                                     <Typography
                                                         fontWeight={900}
-                                                        sx={{borderBottom: "1px solid", mx: 1}}
+                                                        sx={{ borderBottom: "1px solid", mx: 1 }}
                                                     >
                                                         {labels[selcetedConfidenceLevel - 1]?.title}
                                                     </Typography>
 
-                                                    <Trans i18nKey={"asYourConfidenceLevel"}/>
                                                 </Typography>
                                             </Box>
                                         ) : (
@@ -260,11 +259,12 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                                                 }}
                                             >
                                                 <Typography>
-                                                    <Trans i18nKey={"selcetYourConfidenceLevel"}/>
+                                                    <Trans i18nKey={"selcetYourConfidenceLevel"} />
                                                 </Typography>
                                             </Box>
                                         )}
                                         <Rating
+                                            disabled={!questionsInfo?.permissions?.answerQuestion}
                                             value={
                                                 selcetedConfidenceLevel !== null
                                                     ? selcetedConfidenceLevel
@@ -278,14 +278,14 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                                             }}
                                             icon={
                                                 <RadioButtonCheckedRoundedIcon
-                                                    sx={{mx: 0.25, color: "#42a5f5"}}
+                                                    sx={{ mx: 0.25, color: "#42a5f5" }}
                                                     fontSize="inherit"
                                                 />
                                             }
                                             emptyIcon={
                                                 <RadioButtonUncheckedRoundedIcon
-                                                    style={{opacity: 0.55}}
-                                                    sx={{mx: 0.25, color: "#fff"}}
+                                                    style={{ opacity: 0.55 }}
+                                                    sx={{ mx: 0.25, color: "#fff" }}
                                                     fontSize="inherit"
                                                 />
                                             }
@@ -302,11 +302,11 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     justifyContent="space-between"
                     mt={3}
                     sx={{
-                        flexDirection: {xs: "column", md: "row"},
-                        alignItems: {xs: "stretch", md: "flex-end"},
+                        flexDirection: { xs: "column", md: "row" },
+                        alignItems: { xs: "stretch", md: "flex-end" },
                     }}
                 >
-                    <AnswerDetails questionInfo={questionInfo}/>
+                    <AnswerDetails questionInfo={questionInfo} />
                 </Box>
             </Box>
         </Box>
@@ -325,7 +325,7 @@ const AnswerTemplate = (props: {
     setDisabledConfidence: any;
     selcetedConfidenceLevel: any;
 }) => {
-    const {submitOnAnswerSelection, isSubmitting, evidences} =
+    const { submitOnAnswerSelection, isSubmitting, evidences } =
         useQuestionContext();
     const {
         questionInfo,
@@ -339,11 +339,11 @@ const AnswerTemplate = (props: {
         setDisabledConfidence,
         selcetedConfidenceLevel,
     } = props;
-    const {options, answer} = questionInfo;
-    const {total_number_of_questions} = questionsInfo;
-    const {service} = useServiceContext();
+    const { options, answer } = questionInfo;
+    const { total_number_of_questions, permissions } = questionsInfo;
+    const { service } = useServiceContext();
     const dispatch = useQuestionDispatch();
-    const {assessmentId = "", questionnaireId} = useParams();
+    const { assessmentId = "", questionnaireId } = useParams();
     const [value, setValue] = useState<TAnswer | null>(
         answer?.selectedOption || null
     );
@@ -380,22 +380,25 @@ const AnswerTemplate = (props: {
     const submitQuestion = async () => {
         dispatch(questionActions.setIsSubmitting(true));
         try {
-            const res = await service.submitAnswer(
-                {
-                    assessmentId,
-                    data: {
-                        questionnaireId: questionnaireId,
-                        questionId: questionInfo?.id,
-                        answerOptionId: value?.id || null,
-                        isNotApplicable: notApplicable,
-                        confidenceLevelId:
-                            value?.id || submitOnAnswerSelection || notApplicable
-                                ? selcetedConfidenceLevel
-                                : null,
+            if (permissions && permissions.answerQuestion) {
+                const res = await service.submitAnswer(
+                    {
+                        assessmentId,
+                        data: {
+                            questionnaireId: questionnaireId,
+                            questionId: questionInfo?.id,
+                            answerOptionId: value?.id || null,
+                            isNotApplicable: notApplicable,
+                            confidenceLevelId:
+                                value?.id || submitOnAnswerSelection || notApplicable
+                                    ? selcetedConfidenceLevel
+                                    : null,
+                        },
                     },
-                },
-                {signal: abortController.current.signal}
-            );
+                    { signal: abortController.current.signal }
+                );
+            }
+
             dispatch(questionActions.setIsSubmitting(false));
             dispatch(
                 questionActions.setQuestionInfo({
@@ -409,7 +412,7 @@ const AnswerTemplate = (props: {
             );
             if (isLastQuestion) {
                 dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
-                navigate(`../completed`, {replace: true});
+                navigate(`../completed`, { replace: true });
                 return;
             }
             if (value) {
@@ -427,7 +430,8 @@ const AnswerTemplate = (props: {
             const err = e as ICustomError;
             toastError(err);
         }
-    };
+    }
+
 
     useEffect(() => {
         if (
@@ -453,24 +457,24 @@ const AnswerTemplate = (props: {
                 display={"flex"}
                 justifyContent="flex-start"
                 mt={4}
-                sx={is_farsi ? {direction: "rtl"} : {}}
+                sx={is_farsi ? { direction: "rtl" } : {}}
             >
                 <Box
                     display={"flex"}
                     sx={{
-                        flexDirection: {xs: "column", md: "row"},
-                        width: {xs: "100%", sm: "80%", md: "auto"},
+                        flexDirection: { xs: "column", md: "row" },
+                        width: { xs: "100%", sm: "80%", md: "auto" },
                     }}
                     flexWrap={"wrap"}
                 >
                     {options?.map((option: any) => {
-                        const {index: templateValue, title} = option || {};
+                        const { index: templateValue, title } = option || {};
                         return (
                             <Box
                                 key={option.value}
                                 mb={2}
                                 mr={2}
-                                sx={{minWidth: {xs: "180px", sm: "320px"}}}
+                                sx={{ minWidth: { xs: "180px", sm: "320px" } }}
                             >
                                 <ToggleButton
                                     data-cy="answer-option"
@@ -480,13 +484,12 @@ const AnswerTemplate = (props: {
                                     value={option}
                                     selected={templateValue === value?.index}
                                     onChange={onChange}
-                                    disabled={isSubmitting || notApplicable}
-                                    sx={{
+                                    disabled={isSubmitting || notApplicable || !permissions.answerQuestion} sx={{
                                         letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                                         color: "white",
-                                        p: {xs: 0.6, sm: 1},
+                                        p: { xs: 0.6, sm: 1 },
                                         textAlign: "left",
-                                        fontSize: {xs: "1.15rem", sm: "1.3rem"},
+                                        fontSize: { xs: "1.15rem", sm: "1.3rem" },
                                         fontFamily: `${is_farsi ? "Vazirmatn" : customElements}`,
                                         justifyContent: "flex-start",
                                         boxShadow: "0 0 2px white",
@@ -505,6 +508,9 @@ const AnswerTemplate = (props: {
                                             zIndex: 2,
                                             position: "relative",
                                         },
+                                        "&.Mui-disabled": {
+                                            color: "#ffffff78"
+                                        },
                                     }}
                                 >
                                     <Checkbox
@@ -519,10 +525,10 @@ const AnswerTemplate = (props: {
                                             mr: "8px",
                                             ml: "8px",
                                             opacity: 0.8,
-                                            "& svg": {fontSize: {xs: "2.1rem", sm: "2.5rem"}},
-                                            "&.Mui-checked": {color: "white", opacity: 1},
+                                            "& svg": { fontSize: { xs: "2.1rem", sm: "2.5rem" } },
+                                            "&.Mui-checked": { color: "white", opacity: 1 },
                                             "&.Mui-disabled": {
-                                                color: notApplicable ? "gray" : "white",
+                                                color: notApplicable || !permissions?.answerQuestion ? "gray" : "white",
                                             },
                                         }}
                                     />
@@ -534,21 +540,21 @@ const AnswerTemplate = (props: {
                 </Box>
             </Box>
             {notApplicable && (
-                <Box sx={{display: "flex", alignItems: "center"}}>
-                    <WarningAmberRoundedIcon color="error"/>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <WarningAmberRoundedIcon color="error" />
                     <Typography
                         variant="subtitle2"
                         color="error"
-                        sx={{ml: "4px", mt: "4px"}}
+                        sx={{ ml: "4px", mt: "4px" }}
                     >
-                        <Trans i18nKey={"theOptionSelectionIsDisabled"}/>
+                        <Trans i18nKey={"theOptionSelectionIsDisabled"} />
                     </Typography>
                 </Box>
             )}
             <Box
                 sx={{
-                    mt: {xs: 4, md: 1},
-                    mr: {xs: 0, md: 2},
+                    mt: { xs: 4, md: 1 },
+                    mr: { xs: 0, md: 2 },
                     display: "flex",
                     flexDirection: "row-reverse",
                     // ml: "auto",
@@ -566,15 +572,15 @@ const AnswerTemplate = (props: {
                                 fontSize: "1.2rem",
                                 mr: "auto",
                             }
-                            : {fontSize: "1.2rem", ml: "auto"}
+                            : { fontSize: "1.2rem", ml: "auto" }
                     }
                     onClick={submitQuestion}
                 >
-                    <Trans i18nKey={"nextQuestion"}/>
+                    <Trans i18nKey={"nextQuestion"} />
                 </LoadingButton>
                 {may_not_be_applicable && (
                     <FormControlLabel
-                        sx={{color: "#0288d1"}}
+                        sx={{ color: "#0288d1" }}
                         data-cy="automatic-submit-check"
                         control={
                             <Checkbox
@@ -588,7 +594,7 @@ const AnswerTemplate = (props: {
                                 }}
                             />
                         }
-                        label={<Trans i18nKey={"notApplicable"}/>}
+                        label={<Trans i18nKey={"notApplicable"} />}
                     />
                 )}
             </Box>
@@ -596,21 +602,22 @@ const AnswerTemplate = (props: {
     );
 };
 
-const AnswerDetails = ({questionInfo}: any) => {
+
+const AnswerDetails = ({ questionInfo }: any) => {
     const dialogProps = useDialog();
 
-    const {service} = useServiceContext();
-    const {assessmentId = ""} = useParams();
+    const { service } = useServiceContext();
+    const { assessmentId = "" } = useParams();
 
     return (
         <Box mt={2} width="100%">
             <Title px={1} >
-                <Trans  sx={{...theme.typography.headlinelarge}} i18nKey="answerEvidences"/>
+                <Trans sx={{ ...theme.typography.headlineLarge }} i18nKey="answerEvidences" />
             </Title>
             <Box
                 mt={2}
                 display={"flex"}
-                sx={{cursor: "pointer"}}
+                sx={{ cursor: "pointer" }}
                 alignItems="center"
                 position={"relative"}
                 width="100%"
@@ -619,7 +626,7 @@ const AnswerDetails = ({questionInfo}: any) => {
             <Box
                 sx={{
                     flex: 1,
-                    mr: {xs: 0, md: 4},
+                    mr: { xs: 0, md: 4 },
                     position: "relative",
                     display: "flex",
                     flexDirection: "column",
@@ -712,22 +719,22 @@ const AnswerDetails = ({questionInfo}: any) => {
 const Evidence = (props: any) => {
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
-    const [evidencesData,setEvidencesData]= useState<any[]>([])
+    const [evidencesData, setEvidencesData] = useState<any[]>([])
     const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
-    const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({expended:false, id:""});
-    const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({expended:false,count:0});
-    const [getAttachmentData,setAttachmentData] = useState(false)
+    const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({ expended: false, id: "" });
+    const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({ expended: false, count: 0 });
+    const [getAttachmentData, setAttachmentData] = useState(false)
     const is_farsi = firstCharDetector(valueCount);
-    const {service} = useServiceContext();
+    const { service } = useServiceContext();
     const [evidenceId, setEvidenceId] = useState("")
-    const {onClose: closeDialog, openDialog, ...rest} = props;
-    const {questionInfo } = props;
-    const {assessmentId = ""} = useParams();
-    const formMethods = useForm({shouldUnregister: true});
+    const { onClose: closeDialog, openDialog, ...rest } = props;
+    const { questionInfo } = props;
+    const { assessmentId = "" } = useParams();
+    const formMethods = useForm({ shouldUnregister: true });
 
     const evidencesQueryData = useQuery({
         service: (
-            args = {questionId: questionInfo.id, assessmentId, page: 0, size: 10},
+            args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
             config
         ) => service.fetchEvidences(args, config),
         toastError: true,
@@ -739,16 +746,16 @@ const Evidence = (props: any) => {
     });
 
     const fetchEvidenceAttachments = useQuery({
-        service: (args , config) => service.fetchEvidenceAttachments(args, config),
+        service: (args, config) => service.fetchEvidenceAttachments(args, config),
         runOnMount: false,
     });
 
-    useEffect(()=>{
-        (async ()=>{
-            let {items} = await evidencesQueryData.query()
+    useEffect(() => {
+        (async () => {
+            let { items } = await evidencesQueryData.query()
             setEvidencesData(items)
         })()
-    },[])
+    }, [])
 
     const [value, setValue] = React.useState("POSITIVE");
     const [evidenceBG, setEvidenceBG] = useState<any>({
@@ -795,7 +802,7 @@ const Evidence = (props: any) => {
                     assessmentId,
                     type: value,
                 });
-                const {items} =  await evidencesQueryData.query();
+                const { items } = await evidencesQueryData.query();
                 setEvidencesData(items)
                 setValueCount("");
             }
@@ -808,7 +815,7 @@ const Evidence = (props: any) => {
     };
 
     const deleteEvidence = useQuery({
-        service: (args = {id: evidenceId}, config) => service.deleteEvidence(args, config),
+        service: (args = { id: evidenceId }, config) => service.deleteEvidence(args, config),
         runOnMount: false,
     });
 
@@ -821,7 +828,7 @@ const Evidence = (props: any) => {
         try {
             await deleteEvidence.query();
             setExpandedDeleteDialog(false)
-            const {items} =  await evidencesQueryData.query();
+            const { items } = await evidencesQueryData.query();
             setEvidencesData(items)
         } catch (e) {
             const err = e as ICustomError;
@@ -830,19 +837,19 @@ const Evidence = (props: any) => {
     };
     const deleteAttachment = async () => {
         try {
-                let attachmentId = expandedDeleteAttachmentDialog.id
-                await RemoveEvidenceAttachments.query({evidenceId,attachmentId})
-                setExpandedDeleteAttachmentDialog({...expandedDeleteAttachmentDialog,expended:false})
-                let {items} = await evidencesQueryData.query()
-                setEvidencesData(items)
-                setAttachmentData(true)
+            let attachmentId = expandedDeleteAttachmentDialog.id
+            await RemoveEvidenceAttachments.query({ evidenceId, attachmentId })
+            setExpandedDeleteAttachmentDialog({ ...expandedDeleteAttachmentDialog, expended: false })
+            let { items } = await evidencesQueryData.query()
+            setEvidencesData(items)
+            setAttachmentData(true)
         } catch (e) {
 
         }
     };
 
-    const fetchAttachments = async (args :any) =>{
-        return fetchEvidenceAttachments.query({...args})
+    const fetchAttachments = async (args: any) => {
+        return fetchEvidenceAttachments.query({ ...args })
     }
 
     return (
@@ -850,12 +857,12 @@ const Evidence = (props: any) => {
             display={"flex"}
             flexDirection={"column"}
             width="100%"
-            sx={{width: {md: "80%"}}}
+            sx={{ width: { md: "80%" } }}
         >
             <FormProvider {...formMethods}>
                 <form
                     onSubmit={formMethods.handleSubmit(onSubmit)}
-                    style={{flex: 1, display: "flex", flexDirection: "column"}}
+                    style={{ flex: 1, display: "flex", flexDirection: "column" }}
                 >
                     <Grid
                         container
@@ -880,7 +887,7 @@ const Evidence = (props: any) => {
                                 }}
                             >
                                 <Tab
-                                    label={<Trans i18nKey="negativeEvidence"/>}
+                                    label={<Trans i18nKey="negativeEvidence" />}
                                     value="NEGATIVE"
                                     sx={{
                                         display: "flex",
@@ -889,7 +896,7 @@ const Evidence = (props: any) => {
                                             color: `${evidenceBG.borderColor}  !important`,
                                         },
                                         ...theme.typography.headlineSmall,
-                                        fontSize: {xs: "1rem !important"},
+                                        fontSize: { xs: "1rem !important" },
                                     }}
                                 />
                                 <Tab
@@ -901,11 +908,11 @@ const Evidence = (props: any) => {
                                                 alignItems: "center",
                                             }}
                                         >
-                                            <Trans i18nKey="comment"/>
+                                            <Trans i18nKey="comment" />
                                             {value == null && (
                                                 <InfoOutlinedIcon
-                                                    style={{color: evidenceBG.borderColor}}
-                                                    sx={{ml: 1}}
+                                                    style={{ color: evidenceBG.borderColor }}
+                                                    sx={{ ml: 1 }}
                                                 />
                                             )}
                                         </Box>
@@ -917,12 +924,12 @@ const Evidence = (props: any) => {
                                             color: `${evidenceBG.borderColor}  !important`,
                                         },
                                         ...theme.typography.headlineSmall,
-                                        fontSize: {xs: "1rem !important"},
+                                        fontSize: { xs: "1rem !important" },
                                     }}
                                     value={null}
                                 />
                                 <Tab
-                                    label={<Trans i18nKey="positiveEvidence"/>}
+                                    label={<Trans i18nKey="positiveEvidence" />}
                                     sx={{
 
                                         display: "flex",
@@ -930,7 +937,7 @@ const Evidence = (props: any) => {
                                         "&.Mui-selected": {
                                             color: `${evidenceBG.borderColor}  !important`,
                                             ...theme.typography.headlineSmall,
-                                            fontSize: {xs: "1rem !important"},
+                                            fontSize: { xs: "1rem !important" },
                                         },
                                     }}
                                     value="POSITIVE"
@@ -957,7 +964,7 @@ const Evidence = (props: any) => {
                                 isFarsi={is_farsi}
                             />
                             <Typography
-                                style={is_farsi ? {left: 20} : {right: 20}}
+                                style={is_farsi ? { left: 20 } : { right: 20 }}
                                 sx={{
                                     position: "absolute",
                                     top: 20,
@@ -983,8 +990,8 @@ const Evidence = (props: any) => {
                                     }}
                                 >
                                     <InfoOutlinedIcon
-                                        style={{color: "#0A2342"}}
-                                        sx={{mr: 1}}
+                                        style={{ color: "#0A2342" }}
+                                        sx={{ mr: 1 }}
                                     />
                                     <Typography
                                         sx={{
@@ -992,7 +999,7 @@ const Evidence = (props: any) => {
                                             fontWeight: 300,
                                         }}
                                     >
-                                        <Trans i18nKey="commentsWillNotBeShown"/>
+                                        <Trans i18nKey="commentsWillNotBeShown" />
                                     </Typography>
                                 </Box>
                             )}
@@ -1001,7 +1008,7 @@ const Evidence = (props: any) => {
                                 xs={12}
                                 sx={
                                     is_farsi
-                                        ? {position: "absolute", top: 15, left: 5}
+                                        ? { position: "absolute", top: 15, left: 5 }
                                         : {
                                             position: "absolute",
                                             top: 15,
@@ -1026,7 +1033,7 @@ const Evidence = (props: any) => {
                                 variant="contained"
                                 loading={evidencesQueryData.loading}
                             >
-                                <AddRoundedIcon fontSize="large"/>
+                                <AddRoundedIcon fontSize="large" />
                             </LoadingButton>
 
                         </Box>
@@ -1035,37 +1042,37 @@ const Evidence = (props: any) => {
             </FormProvider>
             <Box mt={3}>
                 {evidencesData && evidencesData.map((item: any, index: number) => (
-                                <EvidenceDetail
-                                key={index}
-                                setValue={setValue}
-                                item={item}
-                                evidencesData={evidencesData}
-                                setEvidencesData={setEvidencesData}
-                                setExpandedDeleteDialog={setExpandedDeleteDialog}
-                                setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
-                                setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
-                                expandedAttachmentsDialogs={expandedAttachmentsDialogs}
-                                setEvidenceId={setEvidenceId}
-                                evidenceId={evidenceId}
-                                evidencesQueryData={evidencesQueryData}
-                                questionInfo={questionInfo}
-                                assessmentId={assessmentId}
-                                fetchAttachments={fetchAttachments}
-                                getAttachmentData={getAttachmentData}
-                                setAttachmentData={setAttachmentData}
-                                deleteAttachment={deleteAttachment}
-                            />
+                    <EvidenceDetail
+                        key={index}
+                        setValue={setValue}
+                        item={item}
+                        evidencesData={evidencesData}
+                        setEvidencesData={setEvidencesData}
+                        setExpandedDeleteDialog={setExpandedDeleteDialog}
+                        setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
+                        setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
+                        expandedAttachmentsDialogs={expandedAttachmentsDialogs}
+                        setEvidenceId={setEvidenceId}
+                        evidenceId={evidenceId}
+                        evidencesQueryData={evidencesQueryData}
+                        questionInfo={questionInfo}
+                        assessmentId={assessmentId}
+                        fetchAttachments={fetchAttachments}
+                        getAttachmentData={getAttachmentData}
+                        setAttachmentData={setAttachmentData}
+                        deleteAttachment={deleteAttachment}
+                    />
                 ))}
                 <EvidenceAttachmentsDialogs
                     expanded={expandedAttachmentsDialogs}
-                    onClose={() => setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs, expended: false})}
+                    onClose={() => setExpandedAttachmentsDialogs({ ...expandedAttachmentsDialogs, expended: false })}
                     assessmentId={assessmentId}
                     setEvidencesData={setEvidencesData}
                     evidenceId={evidenceId}
                     evidencesQueryData={evidencesQueryData}
-                    title={<Trans i18nKey={"addNewMember"}/>}
-                    uploadAnother={<Trans i18nKey={"uploadAnother"}/>}
-                    uploadAttachment={<Trans i18nKey={"uploadAttachment"}/>}
+                    title={<Trans i18nKey={"addNewMember"} />}
+                    uploadAnother={<Trans i18nKey={"uploadAnother"} />}
+                    uploadAttachment={<Trans i18nKey={"uploadAttachment"} />}
                     fetchAttachments={fetchAttachments}
                     setAttachmentData={setAttachmentData}
                 />
@@ -1073,17 +1080,17 @@ const Evidence = (props: any) => {
                     expanded={expandedDeleteDialog}
                     onClose={() => setExpandedDeleteDialog(false)}
                     onConfirm={deleteItem}
-                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"}/>}
-                    cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
-                    confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
+                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"} />}
+                    cancelText={<Trans i18nKey={"letMeSeeItAgain"} />}
+                    confirmText={<Trans i18nKey={"yesDeleteIt"} />}
                 />
                 <DeleteDialog
                     expanded={expandedDeleteAttachmentDialog.expended}
-                    onClose={() => setExpandedDeleteAttachmentDialog({...expandedAttachmentsDialogs,expended:false})}
+                    onClose={() => setExpandedDeleteAttachmentDialog({ ...expandedAttachmentsDialogs, expended: false })}
                     onConfirm={deleteAttachment}
-                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisAttachment"}/>}
-                    cancelText={<Trans i18nKey={"letMeSeeItAgain"}/>}
-                    confirmText={<Trans i18nKey={"yesDeleteIt"}/>}
+                    title={<Trans i18nKey={"areYouSureYouWantDeleteThisAttachment"} />}
+                    cancelText={<Trans i18nKey={"letMeSeeItAgain"} />}
+                    confirmText={<Trans i18nKey={"yesDeleteIt"} />}
                 />
             </Box>
         </Box>
@@ -1094,8 +1101,8 @@ const EvidenceDetail = (props: any) => {
     const {
         item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
         setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
-        fetchAttachments,expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
-        setExpandedDeleteAttachmentDialog, evidenceId,deleteAttachment, evidencesData
+        fetchAttachments, expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
+        setExpandedDeleteAttachmentDialog, evidenceId, deleteAttachment, evidencesData
     } = props;
     const LIMITED = 200;
     const [valueCount, setValueCount] = useState("");
@@ -1106,11 +1113,11 @@ const EvidenceDetail = (props: any) => {
         runOnMount: false,
     });
 
-    useEffect(()=>{
-        if(id === evidencesData[0].id){
+    useEffect(() => {
+        if (id === evidencesData[0].id) {
             setExpandedEvidenceBox(false)
         }
-    },[evidencesData.length])
+    }, [evidencesData.length])
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -1120,20 +1127,20 @@ const EvidenceDetail = (props: any) => {
         formMethods.reset();
     };
 
-    const {description, lastModificationTime, createdBy, id, type , attachmentsCount} = item;
-    const {displayName, pictureLink} = createdBy;
+    const { description, lastModificationTime, createdBy, id, type, attachmentsCount } = item;
+    const { displayName, pictureLink } = createdBy;
     const is_farsi = firstCharDetector(description);
     const [evidenceBG, setEvidenceBG] = useState<any>();
 
     const formContext = useFormContext();
-    const {service} = useServiceContext();
+    const { service } = useServiceContext();
     const [isEditing, setIsEditing] = useState(false)
     const [attachments, setAttachments] = useState<any[]>([])
     const [loadingFile, setLoadingFile] = useState<boolean>(false)
 
     const submitRef = useRef<any>(null)
 
-    const formMethods = useForm({shouldUnregister: true});
+    const formMethods = useForm({ shouldUnregister: true });
 
     const onSubmit = async (data: any) => {
         try {
@@ -1145,7 +1152,7 @@ const EvidenceDetail = (props: any) => {
                     type: value,
                     id: id,
                 });
-               const {items} = await evidencesQueryData.query();
+                const { items } = await evidencesQueryData.query();
                 setEvidencesData(items)
                 setIsEditing(false)
                 setValueCount("");
@@ -1207,27 +1214,27 @@ const EvidenceDetail = (props: any) => {
     const theme = useTheme();
     // const refBox = useRef<any>(null)
 
-    useEffect(()=>{
-        (async ()=>{
-            if(getAttachmentData && evidenceId == id ){
-                let {attachments} = await fetchAttachments({evidence_id: id})
+    useEffect(() => {
+        (async () => {
+            if (getAttachmentData && evidenceId == id) {
+                let { attachments } = await fetchAttachments({ evidence_id: id })
                 setAttachments(attachments)
-                setExpandedAttachmentsDialogs({...expandedAttachmentsDialogs,count: attachmentsCount});
+                setExpandedAttachmentsDialogs({ ...expandedAttachmentsDialogs, count: attachmentsCount });
                 setAttachmentData(false)
             }
         })()
-    },[getAttachmentData,evidenceId])
+    }, [getAttachmentData, evidenceId])
 
-    const expandedEvidenceBtm = async () =>{
+    const expandedEvidenceBtm = async () => {
         setLoadingFile(true)
-          setExpandedEvidenceBox(prev => !prev);
-          if(!expandedEvidenceBox){
-              let {attachments} = await fetchAttachments({evidence_id: id})
-              setLoadingFile(false)
-              setAttachments(attachments)
-          }else{
-              setLoadingFile(false)
-          }
+        setExpandedEvidenceBox(prev => !prev);
+        if (!expandedEvidenceBox) {
+            let { attachments } = await fetchAttachments({ evidence_id: id })
+            setLoadingFile(false)
+            setAttachments(attachments)
+        } else {
+            setLoadingFile(false)
+        }
     }
 
     useEffect(() => {
@@ -1235,7 +1242,7 @@ const EvidenceDetail = (props: any) => {
     }, [id]);
 
 
-    const downloadFile = ({link} : {link: string})=>{
+    const downloadFile = ({ link }: { link: string }) => {
         const fileUrl = link;
         const a = document.createElement("a");
         a.href = fileUrl;
@@ -1248,11 +1255,11 @@ const EvidenceDetail = (props: any) => {
     const skeleton = Array.from(Array(attachmentsCount).keys())
     return (
         <Box display="flex" flexDirection="column" width="100%">
-            <Box sx={{display: "flex", gap:{xs:"7px",sm:"1rem"}, mb: 4}}>
+            <Box sx={{ display: "flex", gap: { xs: "7px", sm: "1rem" }, mb: 4 }}>
                 <Avatar
                     {...stringAvatar(displayName.toUpperCase())}
                     src={pictureLink}
-                    sx={{width: 56, height: 56}}
+                    sx={{ width: 56, height: 56 }}
                 ></Avatar>
                 {isEditing ?
                     <>
@@ -1288,7 +1295,7 @@ const EvidenceDetail = (props: any) => {
                                                     color: evidenceBG.borderColor
                                                 }}
                                             >
-                                                <Trans i18nKey="editing"/>
+                                                <Trans i18nKey="editing" />
                                             </Typography>
                                         )}
 
@@ -1312,7 +1319,7 @@ const EvidenceDetail = (props: any) => {
                                             isEditing={isEditing}
                                         />
                                         <Typography
-                                            style={is_farsi ? {left: 20} : {right: 20}}
+                                            style={is_farsi ? { left: 20 } : { right: 20 }}
                                             sx={{
                                                 position: "absolute",
                                                 top: 40,
@@ -1338,8 +1345,8 @@ const EvidenceDetail = (props: any) => {
                                                 }}
                                             >
                                                 <InfoOutlinedIcon
-                                                    style={{color: "#0A2342"}}
-                                                    sx={{mr: 1}}
+                                                    style={{ color: "#0A2342" }}
+                                                    sx={{ mr: 1 }}
                                                 />
                                                 <Typography
                                                     sx={{
@@ -1347,7 +1354,7 @@ const EvidenceDetail = (props: any) => {
                                                         fontWeight: 300,
                                                     }}
                                                 >
-                                                    <Trans i18nKey="commentsWillNotBeShown"/>
+                                                    <Trans i18nKey="commentsWillNotBeShown" />
                                                 </Typography>
                                             </Box>
                                         )}
@@ -1356,7 +1363,7 @@ const EvidenceDetail = (props: any) => {
                                             xs={12}
                                             sx={
                                                 is_farsi
-                                                    ? {position: "absolute", top: 15, left: 5}
+                                                    ? { position: "absolute", top: 15, left: 5 }
                                                     : {
                                                         position: "absolute",
                                                         top: 15,
@@ -1366,7 +1373,7 @@ const EvidenceDetail = (props: any) => {
                                         ></Grid>
                                     </Grid>
                                 </Grid>
-                                <IconButton ref={submitRef} type={"submit"} sx={{display: "none",}}/>
+                                <IconButton ref={submitRef} type={"submit"} sx={{ display: "none", }} />
                             </form>
                         </FormProvider>
                         <Box
@@ -1377,7 +1384,7 @@ const EvidenceDetail = (props: any) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Box sx={{display: "flex",flexDirection:{xs:"column",sm:"row"}, gap: 1}}>
+                            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 1 }}>
                                 <IconButton
                                     aria-label="edit"
                                     size="small"
@@ -1387,17 +1394,17 @@ const EvidenceDetail = (props: any) => {
                                     }}
                                     onClick={EditEvidence}
                                 >
-                                    <DoneIcon fontSize="small" style={{color: evidenceBG?.borderColor}}/>
+                                    <DoneIcon fontSize="small" style={{ color: evidenceBG?.borderColor }} />
                                 </IconButton>
                                 <IconButton
                                     aria-label="delete"
                                     size="small"
-                                    sx={{boxShadow: 2, p: 1}}
+                                    sx={{ boxShadow: 2, p: 1 }}
                                     onClick={onUpdate}
                                 >
                                     <ClearIcon
                                         fontSize="small"
-                                        style={{color: "#D81E5B"}}
+                                        style={{ color: "#D81E5B" }}
                                     />
                                 </IconButton>
                             </Box>
@@ -1407,8 +1414,8 @@ const EvidenceDetail = (props: any) => {
                     <>
                         <Box
                             sx={{
-                                px:{xs: "12px",sm:"32px"},
-                                py:{xs: "8px",sm:"16px"},
+                                px: { xs: "12px", sm: "32px" },
+                                py: { xs: "8px", sm: "16px" },
                                 height: "fit-content",
                                 display: "flex",
                                 flexDirection: "column",
@@ -1426,65 +1433,65 @@ const EvidenceDetail = (props: any) => {
                             <Box
                                 sx={{
                                     display: "flex",
-                                    flexDirection: {xs: "column", sm: "row"},
+                                    flexDirection: { xs: "column", sm: "row" },
                                     alignItems: "flex-end",
-                                    gap: {xs: "24px", sm: "48px"},
+                                    gap: { xs: "24px", sm: "48px" },
                                 }}
                             >
-                                <Box sx={{display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer"}}>
-                                    <Typography sx={{...theme?.typography?.bodyLarge}} >{description}</Typography>
-                                    <Box sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                        <Box onClick={()=>expandedEvidenceBtm()}
-                                             sx={{display: "flex"}}>
-                                            {!attachmentsCount && <Typography sx={{...theme.typography?.titleMedium,fontSize:{xs:"10px",sm:"unset"}}}><Trans
-                                                i18nKey={"addAttachment"}/></Typography> }
-                                            {attachmentsCount >= 1 && <Typography sx={{...theme.typography?.titleMedium,display: 'flex',gap: "5px"}}>
-                                                {t("attachmentCount",{attachmentsCount})}</Typography> }
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer" }}>
+                                    <Typography sx={{ ...theme?.typography?.bodyLarge }} >{description}</Typography>
+                                    <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                        <Box onClick={() => expandedEvidenceBtm()}
+                                            sx={{ display: "flex" }}>
+                                            {!attachmentsCount && <Typography sx={{ ...theme.typography?.titleMedium, fontSize: { xs: "10px", sm: "unset" } }}><Trans
+                                                i18nKey={"addAttachment"} /></Typography>}
+                                            {attachmentsCount >= 1 && <Typography sx={{ ...theme.typography?.titleMedium, display: 'flex', gap: "5px" }}>
+                                                {t("attachmentCount", { attachmentsCount })}</Typography>}
                                             <img style={expandedEvidenceBox ? {
                                                 rotate: "180deg",
                                                 transition: "all .2s ease"
-                                            } : {rotate: "0deg", transition: "all .2s ease"}} src={arrowBtn}/>
+                                            } : { rotate: "0deg", transition: "all .2s ease" }} src={arrowBtn} />
                                         </Box>
                                         <Grid
-                                             container
+                                            container
                                             // ref={refBox}
-                                             // style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
-                                             style={expandedEvidenceBox ? {} : {
-                                                 maxHeight: 0,
-                                                 overflow: "hidden"
-                                             }} sx={{transition: "all .2s ease",display: "flex", gap: ".5rem",flexDirection:"column" }}>
-                                            <Box item sx={{display: "flex", gap: ".5rem",flexWrap:"wrap",}}>
+                                            // style={expandedEvidenceBox ? {maxHeight: refBox?.current.innerHeight && refBox?.current.innerHeight} : {
+                                            style={expandedEvidenceBox ? {} : {
+                                                maxHeight: 0,
+                                                overflow: "hidden"
+                                            }} sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
+                                            <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", }}>
                                                 {
                                                     loadingFile ?
                                                         <>
-                                                            {skeleton.map(()=>{
-                                                                return  <Skeleton animation="wave"  variant="rounded" width={40} height={40} />
+                                                            {skeleton.map(() => {
+                                                                return <Skeleton animation="wave" variant="rounded" width={40} height={40} />
                                                             })}
 
                                                         </>
                                                         :
-                                                        attachments.map((item,index)=>{
-                                                            return(
-                                                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index}   />
+                                                        attachments.map((item, index) => {
+                                                            return (
+                                                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index} />
                                                             )
                                                         })}
-                                                { attachments.length < 5 && (<>
-                                                        <Grid item onClick={() => {
-                                                            setExpandedAttachmentsDialogs({expended:true,count: attachments.length});
-                                                            setEvidenceId(id)
-                                                        }}>
-                                                            <PreAttachment mainColor={evidenceBG?.borderColor}
-                                                                           backgroundColor={evidenceBG?.background}/>
-                                                        </Grid>
-                                                    </>
-                                                ) }
+                                                {attachments.length < 5 && (<>
+                                                    <Grid item onClick={() => {
+                                                        setExpandedAttachmentsDialogs({ expended: true, count: attachments.length });
+                                                        setEvidenceId(id)
+                                                    }}>
+                                                        <PreAttachment mainColor={evidenceBG?.borderColor}
+                                                            backgroundColor={evidenceBG?.background} />
+                                                    </Grid>
+                                                </>
+                                                )}
                                             </Box>
                                             {attachments.length == 5 && <Box>
-                                                <Typography sx={{fontSize: "11px",color:"#821237", display:"flex",alignItems:"start", justifyContent:"center",textAlign:"justify",width:{xs:"150px",sm:"250px"}}}>
+                                                <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "150px", sm: "250px" } }}>
                                                     <InfoOutlinedIcon
-                                                        sx={{mr: 1, width: "15px", height: "15px"}}
+                                                        sx={{ mr: 1, width: "15px", height: "15px" }}
                                                     />
-                                                    <Trans i18nKey={"evidenceIsLimited"}/></Typography>
+                                                    <Trans i18nKey={"evidenceIsLimited"} /></Typography>
                                             </Box>}
                                         </Grid>
 
@@ -1493,7 +1500,7 @@ const EvidenceDetail = (props: any) => {
                                 <Typography
                                     fontSize="12px"
                                     variant="overline"
-                                    sx={{whiteSpace: "nowrap", lineHeight: "12px"}}
+                                    sx={{ whiteSpace: "nowrap", lineHeight: "12px" }}
                                 >
                                     {formatDate(lastModificationTime)}
                                 </Typography>
@@ -1507,19 +1514,19 @@ const EvidenceDetail = (props: any) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Box sx={{display: "flex",flexDirection:{xs:"column",sm:"row"}, gap: 1}}>
+                            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 1 }}>
                                 <IconButton
                                     aria-label="edit"
                                     size="small"
-                                    sx={{boxShadow: 2, p: 1}}
+                                    sx={{ boxShadow: 2, p: 1 }}
                                     onClick={onUpdate}
                                 >
-                                    <EditRoundedIcon fontSize="small" style={{color: "#004F83"}}/>
+                                    <EditRoundedIcon fontSize="small" style={{ color: "#004F83" }} />
                                 </IconButton>
                                 <IconButton
                                     aria-label="delete"
                                     size="small"
-                                    sx={{boxShadow: 2, p: 1}}
+                                    sx={{ boxShadow: 2, p: 1 }}
                                     onClick={() => {
                                         setExpandedDeleteDialog(true);
                                         setEvidenceId(id)
@@ -1527,7 +1534,7 @@ const EvidenceDetail = (props: any) => {
                                 >
                                     <DeleteRoundedIcon
                                         fontSize="small"
-                                        style={{color: "#D81E5B"}}
+                                        style={{ color: "#D81E5B" }}
                                     />
                                 </IconButton>
                             </Box>
@@ -1540,118 +1547,120 @@ const EvidenceDetail = (props: any) => {
         ;
 };
 
-const FileIcon =(props :any) =>{
-    const {evidenceBG,setEvidenceId,evidenceId, downloadFile,item, setExpandedDeleteAttachmentDialog } = props
+const FileIcon = (props: any) => {
+    const { evidenceBG, setEvidenceId, evidenceId, downloadFile, item, setExpandedDeleteAttachmentDialog } = props
 
     const [hover, setHover] = useState(false);
 
-    const {link}= item
+    const { link } = item
     let reg = new RegExp("\\/([^\\/?]+)\\?")
     let name = link.match(reg)[1]
     const exp = name.substring(name.indexOf('.'))
 
-    return(
+    return (
         <Tooltip title={<>
-          <Typography>{name}</Typography>
-          <Typography>{item?.description}</Typography>
+            <Typography>{name}</Typography>
+            <Typography>{item?.description}</Typography>
         </>}>
-        <Box
-            position="relative"
-            display="inline-block"
-            onMouseEnter={()=>setHover(true)}
-            onMouseLeave={()=>setHover(false)}
-        >
-                <FileSvg  evidenceId={evidenceId} setEvidenceId={setEvidenceId}
-                          setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
-                          downloadFile={downloadFile} item={item} name={name}
-                          mainColor={evidenceBG?.borderColor}
-                          backgroundColor={evidenceBG?.background} hover={hover}
-                          exp={exp}
-                />
-            {hover && <Box
-                position="absolute"
-                top={0}
-                left={0}
-                width="40px"
-                height="40px"
-                bgcolor="rgba(0, 0, 0, 0.6)"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                borderRadius="6px"
-                sx={{cursor: "pointer"}}
+            <Box
+                position="relative"
+                display="inline-block"
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
             >
-            </Box>}
-        </Box>
+                <FileSvg evidenceId={evidenceId} setEvidenceId={setEvidenceId}
+                    setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog}
+                    downloadFile={downloadFile} item={item} name={name}
+                    mainColor={evidenceBG?.borderColor}
+                    backgroundColor={evidenceBG?.background} hover={hover}
+                    exp={exp}
+                />
+                {hover && <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="40px"
+                    height="40px"
+                    bgcolor="rgba(0, 0, 0, 0.6)"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    borderRadius="6px"
+                    sx={{ cursor: "pointer" }}
+                >
+                </Box>}
+            </Box>
         </Tooltip>
     )
 }
 
-const MyDropzone = (props: any) =>{
+const MyDropzone = (props: any) => {
 
     const { setDropZone, getDropZone } = props
-    const [dispalyFile,setDisplayFile] = useState<any>(null)
-    const [typeFile,setTypeFile] = useState<any>(null)
+    const [dispalyFile, setDisplayFile] = useState<any>(null)
+    const [typeFile, setTypeFile] = useState<any>(null)
     const {
         acceptedFiles,
         fileRejections,
         getRootProps,
         getInputProps
     } = useDropzone({
-        maxFiles:1
+        maxFiles: 1
     });
 
-    useEffect(()=>{
-        if(getDropZone){
-            let file =  URL.createObjectURL(getDropZone[0])
+    useEffect(() => {
+        if (getDropZone) {
+            let file = URL.createObjectURL(getDropZone[0])
             setDisplayFile(file)
-            if(getDropZone[0].type.startsWith("image")){
+            if (getDropZone[0].type.startsWith("image")) {
                 setTypeFile(getDropZone[0].type.substring(0, getDropZone[0].type.indexOf("/")))
             }
-            if(getDropZone[0].type === "application/pdf"){
-                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/",""))
+            if (getDropZone[0].type === "application/pdf") {
+                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
             }
-            if(getDropZone[0].type === "application/zip"){
-                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/",""))
+            if (getDropZone[0].type === "application/zip") {
+                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
             }
         }
 
-    },[getDropZone])
+    }, [getDropZone])
     const theme = useTheme()
     return (
-        <Dropzone accept={{"image/jpeg": [".jpeg", ".jpg",".png",".gif",".gif",".bmp"],"text/plain": [".plain"], "application/pdf":[".pdf"],
-            "application/x-zip-compressed":[".x-zip-compressed"], "application/x-rar-compressed":[".x-rar-compressed"], "application/tar":[".tar"],
-            "application/vnd":[".openxmlformats-officedocument",".wordprocessingml", ".document",".oasis", ".opendocument", ".text", ".spreadsheetml","spreadsheet" ,".sheet"],
-            "application/x-zip":[".x-zip"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
-            {({getRootProps, getInputProps}) => (
-                getDropZone?
-                    <Box sx={{height: "199px", maxWidth: "280px" ,mx:"auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
-                        <Button sx={{position:"absolute",top:"15px",right:"15px",cursor: "pointer"}} onClick={()=>setDropZone(null)}>Remove</Button>
-                        {typeFile == "image" && <img style={{width:"60%",height:"80%"}} src={dispalyFile ? `${dispalyFile}` : "#"}/> }
-                        {typeFile == "pdf" &&  <section style={{width:"50%",height:"70%"}}><FileType name={"pdf"} /> </section>}
-                        {typeFile == "zip" &&  <img style={{width:"50%",height:"70%"}} src={dispalyFile ? `${zip}` : "#"}/> }
-                        <Typography sx={{...theme.typography.titleMedium}}>{getDropZone[0]?.name}</Typography>
+        <Dropzone accept={{
+            "image/jpeg": [".jpeg", ".jpg", ".png", ".gif", ".gif", ".bmp"], "text/plain": [".plain"], "application/pdf": [".pdf"],
+            "application/x-zip-compressed": [".x-zip-compressed"], "application/x-rar-compressed": [".x-rar-compressed"], "application/tar": [".tar"],
+            "application/vnd": [".openxmlformats-officedocument", ".wordprocessingml", ".document", ".oasis", ".opendocument", ".text", ".spreadsheetml", "spreadsheet", ".sheet"],
+            "application/x-zip": [".x-zip"], "application/zip": [".zip"]
+        }} onDrop={(acceptedFiles) => setDropZone(acceptedFiles)}>
+            {({ getRootProps, getInputProps }) => (
+                getDropZone ?
+                    <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                        <Button sx={{ position: "absolute", top: "15px", right: "15px", cursor: "pointer" }} onClick={() => setDropZone(null)}>Remove</Button>
+                        {typeFile == "image" && <img style={{ width: "60%", height: "80%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
+                        {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
+                        {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
+                        <Typography sx={{ ...theme.typography.titleMedium }}>{getDropZone[0]?.name}</Typography>
                     </Box>
                     :
                     <section style={{ cursor: "pointer" }}>
-                        <Box sx={{height: "199px", maxWidth: "280px", mx:"auto" , width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
-                        <div {...getRootProps()} style={{height:"100%",display:"flex",alignItems:"center",flexDirection:"column",justifyContent:"space-between",padding:"20px 0px"}}>
-                        <input {...getInputProps()} />
-                        <img src={UploadIcon} style={{width:"80px",height:"80px"}}/>
+                        <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px" }}>
+                            <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "space-between", padding: "20px 0px" }}>
+                                <input {...getInputProps()} />
+                                <img src={UploadIcon} style={{ width: "80px", height: "80px" }} />
                                 <Typography sx={{
-                                ...theme.typography.titleMedium,
-                                color: "#243342",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "5px"
-                            }}>
-                        <Trans i18nKey={"dragYourFile"}/><Typography
-                        sx={{...theme.typography.titleMedium, color: "#205F94"}}><Trans
-                        i18nKey={"locateIt"}/></Typography>
-                        </Typography></div>
+                                    ...theme.typography.titleMedium,
+                                    color: "#243342",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: "5px"
+                                }}>
+                                    <Trans i18nKey={"dragYourFile"} /><Typography
+                                        sx={{ ...theme.typography.titleMedium, color: "#205F94" }}><Trans
+                                            i18nKey={"locateIt"} /></Typography>
+                                </Typography></div>
                         </Box>
-                </section>
+                    </section>
             )}
         </Dropzone>
     )
@@ -1667,53 +1676,53 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     const MIN_DESC_TEXT = 3
 
     const fetchEvidenceAttachments = useQuery({
-        service: (args = {evidence_id: evidenceId}, config) => service.fetchEvidenceAttachments(args, config),
+        service: (args = { evidence_id: evidenceId }, config) => service.fetchEvidenceAttachments(args, config),
         runOnMount: false,
     });
 
-    const {service} = useServiceContext();
-    const abortController = useMemo(() => new AbortController(),[evidenceId] );
-    const [desc,setDesc] = useState("")
-    const [error,setError] = useState(false)
-    const [getDropZone,setDropZone] = useState<any>(null)
+    const { service } = useServiceContext();
+    const abortController = useMemo(() => new AbortController(), [evidenceId]);
+    const [desc, setDesc] = useState("")
+    const [error, setError] = useState(false)
+    const [getDropZone, setDropZone] = useState<any>(null)
     const addEvidenceAttachments = useQuery({
         service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
         runOnMount: false,
     });
 
 
-    useEffect(()=> {
-        if(getDropZone){
-            if(getDropZone[0].size > 5242880){
-                toast(t("uploadAcceptableSize"),{type:"error"})
+    useEffect(() => {
+        if (getDropZone) {
+            if (getDropZone[0].size > 5242880) {
+                toast(t("uploadAcceptableSize"), { type: "error" })
             }
         }
-    },[getDropZone])
+    }, [getDropZone])
 
-    const handelDescription = (e: any) =>{
-        if(e.target.value.length < MAX_DESC_TEXT){
+    const handelDescription = (e: any) => {
+        if (e.target.value.length < MAX_DESC_TEXT) {
             setDesc(e.target.value)
             setError(false)
-        }else {
+        } else {
             setError(true)
         }
     }
 
     const handelSendFile = async (recognize) => {
-        if(desc.length > 1 && desc.length < 3){
-           return setError(true)
+        if (desc.length > 1 && desc.length < 3) {
+            return setError(true)
         }
-        if(!getDropZone) {
-           return toast(t("attachmentRequired"),{type:"error"})
+        if (!getDropZone) {
+            return toast(t("attachmentRequired"), { type: "error" })
         }
-        if(error && desc.length >= 100 ) {
-           return toast(t("max100characters"),{type:"error"})
+        if (error && desc.length >= 100) {
+            return toast(t("max100characters"), { type: "error" })
         }
-        if(getDropZone[0].size > 5242880) {
-           return toast(t("uploadAcceptableSize"),{type:"error"})
+        if (getDropZone[0].size > 5242880) {
+            return toast(t("uploadAcceptableSize"), { type: "error" })
         }
-        if(expanded.count >= 5) {
-           return toast("Each evidence can have up to 5 attachments.",{type:"error"})
+        if (expanded.count >= 5) {
+            return toast("Each evidence can have up to 5 attachments.", { type: "error" })
         }
         try {
             if (getDropZone && !error) {
@@ -1722,17 +1731,17 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     attachment: getDropZone[0],
                     description: desc
                 }
-                await addEvidenceAttachments.query({evidenceId,data})
-                const {items} =  await evidencesQueryData.query();
+                await addEvidenceAttachments.query({ evidenceId, data })
+                const { items } = await evidencesQueryData.query();
                 setEvidencesData(items)
                 setAttachmentData(true)
                 setDropZone(null)
                 setDesc("")
-                if ( recognize == "self" ) {
-                   onClose()
+                if (recognize == "self") {
+                    onClose()
                 }
             }
-        } catch (e:any) {
+        } catch (e: any) {
             const err = e as ICustomError;
             toastError(err);
         }
@@ -1742,7 +1751,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     return (
         <Dialog
             open={expanded.expended}
-            onClose={()=> {
+            onClose={() => {
                 onClose();
                 setDropZone(null)
             }}
@@ -1763,7 +1772,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             <DialogContent
                 sx={{
                     // padding: "0!important",
-                    height:{sm: "84px"},
+                    height: { sm: "84px" },
                     background: "#004F83",
                     overflow: "hidden",
                     position: "relative",
@@ -1776,17 +1785,18 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         textAlign: "center",
                         color: "#fff",
                         ...theme.typography.headlineSmall,
-                        sm:{...theme.typography.headlineMedium}
+                        sm: { ...theme.typography.headlineMedium }
                     }}
                 >
-                    <Trans i18nKey="uploadAttachment"/>
+                    <Trans i18nKey="uploadAttachment" />
                 </Box>
-                    <ClearIcon
-                        onClick={()=>{onClose();setDropZone(null)}}
-                        style={{color: "#fff"}}
-                                   sx={{position: "absolute", width: "25px", height: "25px",right: "17px",top: "25px",
-                                   cursor: "pointer"
-                                   }} />
+                <ClearIcon
+                    onClick={() => { onClose(); setDropZone(null) }}
+                    style={{ color: "#fff" }}
+                    sx={{
+                        position: "absolute", width: "25px", height: "25px", right: "17px", top: "25px",
+                        cursor: "pointer"
+                    }} />
             </DialogContent>
             <DialogContent
                 sx={{
@@ -1798,21 +1808,21 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     justifyContent: "center",
                     alignItems: "center",
                     textAlign: "center",
-                    pt:"20px"
+                    pt: "20px"
                 }}
             >
-                <Box sx={{display: "flex", flexDirection: "column", gap: "20px",width:"90%"}}>
-                    <Box sx={{mx:"auto", width:"100%",height:"316px"}}>
-                        <Typography sx={{...theme.typography.headlineSmall,mx:"auto", display: "flex",justifyContent: "center",paddingBottom:"24px", gap: "5px"}}>
-                            <Trans i18nKey={"uploadAttachment"}/><Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "20px", width: "90%" }}>
+                    <Box sx={{ mx: "auto", width: "100%", height: "316px" }}>
+                        <Typography sx={{ ...theme.typography.headlineSmall, mx: "auto", display: "flex", justifyContent: "center", paddingBottom: "24px", gap: "5px" }}>
+                            <Trans i18nKey={"uploadAttachment"} /><Typography sx={{ ...theme.typography.headlineSmall }}>{expanded.count} of 5 </Typography>
                         </Typography>
-                        <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left",mx:"auto"}}>
-                            <Box sx={{display: "flex", gap: '2px',mx:"auto"}}>
+                        <Typography sx={{ fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left", mx: "auto" }}>
+                            <Box sx={{ display: "flex", gap: '2px', mx: "auto" }}>
                                 <InfoOutlinedIcon
-                                    style={{color: "#73808C"}}
-                                    sx={{mr: 1, width: "12px", height: "12px"}}
+                                    style={{ color: "#73808C" }}
+                                    sx={{ mr: 1, width: "12px", height: "12px" }}
                                 />
-                                <Trans i18nKey="uploadAcceptable"/>
+                                <Trans i18nKey="uploadAcceptable" />
                             </Box>
                         </Typography>
                         <Typography sx={{
@@ -1820,24 +1830,24 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             color: "#73808C",
                             maxWidth: "300px",
                             textAlign: "left",
-                            paddingBottom: "1rem",mx:"auto"
+                            paddingBottom: "1rem", mx: "auto"
                         }}>
-                            <Box sx={{display: "flex", gap: '2px'}}>
+                            <Box sx={{ display: "flex", gap: '2px' }}>
                                 <InfoOutlinedIcon
-                                    style={{color: "#73808C"}}
-                                    sx={{mr: 1, width: "12px", height: "12px"}}
+                                    style={{ color: "#73808C" }}
+                                    sx={{ mr: 1, width: "12px", height: "12px" }}
                                 />
-                                <Trans i18nKey="uploadAcceptableSize"/>
+                                <Trans i18nKey="uploadAcceptableSize" />
                             </Box>
                         </Typography>
-                           <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
+                        <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
                     </Box>
-                    <Box sx={{width:{xs:"100%",sm:"70%"}, mx:"auto"}}>
-                        <Typography sx={{...theme.typography.headlineSmall,color: "#243342",paddingBottom: "1rem"}}><Trans i18nKey={"additionalInfo"}/></Typography>
+                    <Box sx={{ width: { xs: "100%", sm: "70%" }, mx: "auto" }}>
+                        <Typography sx={{ ...theme.typography.headlineSmall, color: "#243342", paddingBottom: "1rem" }}><Trans i18nKey={"additionalInfo"} /></Typography>
                         <TextField
-                           sx={{
-                               overflow: "auto",
-                           }}
+                            sx={{
+                                overflow: "auto",
+                            }}
                             rows={3}
                             id="outlined-multiline-static"
                             multiline
@@ -1846,12 +1856,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             onChange={handelDescription}
                             variant="standard"
                             inputProps={{
-                               sx: {  fontSize: "13px", marginTop: "4px", background : "rgba(0,0,0,0.06)",padding : "5px"
-                               }
-                           }}
+                                sx: {
+                                    fontSize: "13px", marginTop: "4px", background: "rgba(0,0,0,0.06)", padding: "5px"
+                                }
+                            }}
                             placeholder={"Add description for this specific attachment up to 100 charachter"}
                             error={error}
-                            helperText={desc.length >= 1 && error && desc.length <=3 ? "Please enter at least 3 characters" : desc.length >=1 && error && "maximum 100 characters"}
+                            helperText={desc.length >= 1 && error && desc.length <= 3 ? "Please enter at least 3 characters" : desc.length >= 1 && error && "maximum 100 characters"}
                         />
                     </Box>
                 </Box>
@@ -1863,7 +1874,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     <Button
                         sx={{
                             ...theme.typography.titleMedium,
-                            fontSize: {xs: '0.7rem', sm: "1rem"},
+                            fontSize: { xs: '0.7rem', sm: "1rem" },
                             fontWeight: 700,
                             color: "#004F83",
                             "&.MuiButton-root": {
@@ -1877,14 +1888,14 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="outlined"
-                        onClick={()=>handelSendFile("another")}
+                        onClick={() => handelSendFile("another")}
                     >
                         {uploadAnother}
                     </Button>
                     <Button
                         sx={{
                             ...theme.typography.titleMedium,
-                            fontSize: {xs: '0.7rem', sm: "1rem"},
+                            fontSize: { xs: '0.7rem', sm: "1rem" },
                             fontWeight: 700,
                             "&.MuiButton-root": {
                                 color: "#EDFCFC",
@@ -1898,7 +1909,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             },
                         }}
                         variant="contained"
-                        onClick={()=>handelSendFile("self")}
+                        onClick={() => handelSendFile("self")}
                     >
                         {uploadAttachment}
                     </Button>
@@ -1909,7 +1920,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 }
 
 const DeleteDialog = (props: any) => {
-    const {expanded, onClose, onConfirm, title, cancelText, confirmText} =
+    const { expanded, onClose, onConfirm, title, cancelText, confirmText } =
         props;
     const fullScreen = useScreenResize("sm");
     return (
@@ -1943,9 +1954,9 @@ const DeleteDialog = (props: any) => {
                     gap: 6,
                 }}
             >
-                <Typography sx={{color: "#0A2342"}}>{title}</Typography>
+                <Typography sx={{ color: "#0A2342" }}>{title}</Typography>
 
-                <Box sx={{display: "flex", gap: 2}}>
+                <Box sx={{ display: "flex", gap: 2 }}>
                     <Button
                         sx={{
                             "&.MuiButton-root": {
@@ -1991,9 +2002,9 @@ const DeleteDialog = (props: any) => {
 const QuestionGuide = (props: any) => {
     const hasSetCollapse = useRef(false);
     const [collapse, setCollapse] = useState<boolean>(false);
-    const {service} = useServiceContext();
-    const {assessmentId = ""} = useParams();
-    const {hint} = props;
+    const { service } = useServiceContext();
+    const { assessmentId = "" } = useParams();
+    const { hint } = props;
     const is_farsi = languageDetector(hint);
     return (
         <Box>
@@ -2007,12 +2018,12 @@ const QuestionGuide = (props: any) => {
                                 alignItems: "center",
                             }}
                         >
-                            <InfoRoundedIcon sx={{mr: "4px"}}/>
-                            <Trans i18nKey="hint"/>
+                            <InfoRoundedIcon sx={{ mr: "4px" }} />
+                            <Trans i18nKey="hint" />
                         </Box>
                     }
                     size="small"
-                    sx={{cursor: "pointer", userSelect: "none"}}
+                    sx={{ cursor: "pointer", userSelect: "none" }}
                     onClick={() => setCollapse(!collapse)}
                     mb={1}
                 ></Title>
@@ -2020,7 +2031,7 @@ const QuestionGuide = (props: any) => {
                     <Box
                         sx={{
                             flex: 1,
-                            mr: {xs: 0, md: 4},
+                            mr: { xs: 0, md: 4 },
                             position: "relative",
                             display: "flex",
                             flexDirection: "column",
@@ -2046,13 +2057,13 @@ const QuestionGuide = (props: any) => {
                                         .map((line: string, index: number) => (
                                             <React.Fragment key={index}>
                                                 {line}
-                                                <br/>
+                                                <br />
                                             </React.Fragment>
                                         ))
                                     : hint.split("\n").map((line: string, index: number) => (
                                         <React.Fragment key={index}>
                                             {line}
-                                            <br/>
+                                            <br />
                                         </React.Fragment>
                                     ))}
                             </Typography>
@@ -2063,4 +2074,5 @@ const QuestionGuide = (props: any) => {
         </Box>
     );
 };
+
 type TAnswerTemplate = { caption: string; value: number }[];

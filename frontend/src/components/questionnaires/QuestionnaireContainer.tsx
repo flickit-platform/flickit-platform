@@ -52,7 +52,7 @@ const QuestionnaireContainer = () => {
     100;
 
   return (
-    <PermissionControl error={[questionnaireQueryData.errorObject]}>
+    <PermissionControl error={[questionnaireQueryData.errorObject?.response?.data]}>
       <Box>
         <QueryData
           {...fetchPathInfo}
@@ -96,7 +96,7 @@ const QuestionnaireContainer = () => {
   );
 };
 
-const useQuestionnaire = () => {
+export const useQuestionnaire = () => {
   const { service } = useServiceContext();
   const [searchParams] = useSearchParams();
   const { assessmentId } = useParams();
@@ -133,7 +133,6 @@ const NotCompletedAlert = (props: {
 }) => {
   const { isCompleted, loading, hasStatus, isAccessDenied } = props;
 
-  console.log(isAccessDenied);
   return (
     <Box mt={2}>
       {loading ? (

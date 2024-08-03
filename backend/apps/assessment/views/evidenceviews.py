@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
-from assessment.serializers import evidence_serializers
 from assessment.services import evidence_services, assessment_core_services
 
 
@@ -37,6 +36,10 @@ class EvidencesApi(APIView):
 
 class EvidenceApi(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, evidence_id):
+        result = evidence_services.evidence_get_by_id(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={201: ""})

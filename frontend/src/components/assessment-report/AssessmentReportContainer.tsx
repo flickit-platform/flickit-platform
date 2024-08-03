@@ -9,7 +9,7 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { AssessmentOverallStatus } from "./AssessmentOverallStatus";
 import LoadingSkeletonOfAssessmentReport from "@common/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
-import { IAssessmentReportModel } from "@types";
+import { IAssessmentReportModel, RolesType } from "@types";
 import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 import { AssessmentSummary } from "./AssessmentSummary";
 import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
@@ -19,6 +19,7 @@ import { styles } from "@styles";
 import MoreActions from "@common/MoreActions";
 import SettingsIcon from "@mui/icons-material/Settings";
 import useMenu from "@/utils/useMenu";
+import { ArticleRounded } from "@mui/icons-material";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -71,19 +72,27 @@ const AssessmentReportContainer = (props: any) => {
     }
   }, [queryData.errorObject]);
   const { spaceId } = useParams();
-
+  const fetchAssessmentsRoles = useQuery<RolesType>({
+    service: (args, config) => service.fetchAssessmentsRoles(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress]}
+      queryBatchData={[
+        queryData,
+        assessmentTotalProgress,
+        fetchAssessmentsRoles,
+      ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress]) => {
+      render={([data = {}, progress, roles]) => {
         const {
           status,
           assessment,
           subjects,
           topStrengths,
           topWeaknesses,
-          assessmentPermissions: { manageable },
+          assessmentPermissions: { manageable, exportable },
         } = data || {};
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
@@ -113,14 +122,22 @@ const AssessmentReportContainer = (props: any) => {
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Box
-                    sx={{ py: "0.6rem" }}
-                    component={manageable ? Link : "div"}
-                    to={`/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`}
-                  >
+                  <Box sx={{ py: "0.6rem" }}>
+                    <IconButton
+                      data-cy="more-action-btn"
+                      disabled={!exportable}
+                      component={exportable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
+                    >
+                      <ArticleRounded
+                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                      />
+                    </IconButton>
                     <IconButton
                       data-cy="more-action-btn"
                       disabled={!manageable}
+                      component={manageable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
                     >
                       <SettingsIcon
                         sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
@@ -261,7 +278,7 @@ const Actions = (props: { assessmentId: string; manageable: boolean }) => {
 
   const assessmentSetting = (e: any) => {
     navigate({
-      pathname: `/${spaceId}/assessments/1/assessmentsettings/${assessmentId}`,
+      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
     });
   };
   return (
