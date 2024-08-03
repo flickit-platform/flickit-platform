@@ -1,4 +1,4 @@
-FROM python:3.11.9-slim-buster AS builder
+FROM python:3.11.9-slim-bookworm AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc && \
 COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
-FROM python:3.11.9-slim-buster
+FROM python:3.11.9-slim-bookworm
 
 ENV HOME=/home/app \
     APP_HOME=/home/app/web
