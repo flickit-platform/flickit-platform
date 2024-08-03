@@ -2,7 +2,6 @@ import os
 import sentry_sdk
 from django.utils.translation import gettext_lazy as _
 
-
 sentry_sdk.init(
     dsn=os.environ.get('SENTRY_DSN'),
     traces_sample_rate=1.0,
@@ -73,7 +72,6 @@ if os.environ.get('GITHUB_WORKFLOW'):
             'PORT': '5432',
         }
     }
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
@@ -197,9 +195,8 @@ ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/vol/web/media'
-STATIC_ROOT = '/vol/web/static'
-
+MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_ROOT = BASE_DIR / '/static'
 
 OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
@@ -260,5 +257,3 @@ SWAGGER_SETTINGS = {
         }
     }
 }
-
-
