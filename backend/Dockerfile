@@ -1,32 +1,42 @@
-FROM python:3.10-alpine3.13
+FROM python:3.11.9-slim-buster AS builder
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /usr/src/app
 
-COPY . ./
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-WORKDIR /apps
+RUN apt-get update && apt-get install -y --no-install-recommends gcc && \
+    pip install --upgrade pip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+FROM python:3.11.9-slim-buster
+
+ENV HOME=/home/app \
+    APP_HOME=/home/app/web
+
+RUN apt-get update && apt-get install -y --no-install-recommends netcat && \
+    addgroup --system app && adduser --system --ingroup app && \
+    mkdir -p $APP_HOME/staticfiles $APP_HOME/mediafiles && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR $APP_HOME
+
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/* && rm -rf /wheels
+
+COPY ./scripts/run.sh ./run.sh
+RUN chmod +x ./run.sh
+
+COPY ./apps ./apps
+
+RUN chown -R app:app $APP_HOME
+
+USER app
+
 EXPOSE 8000
 
-USER root
-RUN echo -e "http://nl.alpinelinux.org/alpine/v3.13/main\nhttp://nl.alpinelinux.org/alpine/v3.13/community" > /etc/apk/repositories
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.13/main" > /etc/apk/repositories
-RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
-    apk add mailcap && \
-    apk add --update --no-cache postgresql-client && \
-    apk add --update --no-cache --virtual .tmp-deps \
-        build-base postgresql-dev musl-dev linux-headers && \
-    /py/bin/pip install -r /requirements.txt && \
-    apk del .tmp-deps && \
-    adduser --disabled-password --no-create-home assessmentplatform && \
-    mkdir -p /vol/web/static && \
-    mkdir -p /vol/web/media && \
-    chown -R assessmentplatform:assessmentplatform /vol && \
-    chmod -R 755 /vol && \
-    chmod -R +x /scripts
-
-ENV PATH="/scripts:/py/bin:$PATH"
-
-USER assessmentplatform
-
-CMD ["run.sh"]
+ENTRYPOINT ["./run.sh"]
