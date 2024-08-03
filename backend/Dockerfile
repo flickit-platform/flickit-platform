@@ -5,38 +5,44 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y --no-install-recommends gcc && \
-    pip install --upgrade pip && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    build-essential
 
-COPY ./requirements.txt .
+RUN pip install --upgrade pip
+COPY requirements.txt ./
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 FROM python:3.11.9-slim-bookworm
 
-ENV HOME=/home/app \
-    APP_HOME=/home/app/web
+RUN addgroup --system app && adduser --system --group app
+ENV HOME=/home \
+    APP_HOME=/home/apps
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat && \
-    addgroup --system app && adduser --system --ingroup app && \
-    mkdir -p $APP_HOME/staticfiles $APP_HOME/mediafiles && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p $APP_HOME
+RUN mkdir $APP_HOME/static
+RUN mkdir $APP_HOME/media
+WORKDIR $APP_HOME
 
 WORKDIR $APP_HOME
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    mailcap
 
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/* && rm -rf /wheels
 
-COPY ./scripts/run.sh ./run.sh
-RUN chmod +x ./run.sh
-
-COPY ./apps ./apps
+COPY apps $APP_HOME
+COPY scripts/run.sh $APP_HOME/run.sh
 
 RUN chown -R app:app $APP_HOME
 
-USER app
+RUN chmod +x $APP_HOME/run.sh
 
-EXPOSE 8000
+USER app
 
 ENTRYPOINT ["./run.sh"]

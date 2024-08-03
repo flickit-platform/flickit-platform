@@ -1,6 +1,8 @@
 import os
 import sentry_sdk
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
+
 
 sentry_sdk.init(
     dsn=os.environ.get('SENTRY_DSN'),
@@ -89,6 +91,7 @@ EXPIRATION_DAYS = 7
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
 PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
+
 
 CACHE_MIDDLEWARE_KEY_PREFIX = PROJECT_APP
 
@@ -195,8 +198,11 @@ ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_ROOT = BASE_DIR / '/static'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
