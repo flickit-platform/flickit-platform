@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import {useNavigate, useParams} from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
+import zip from "@assets/svg/ZIP.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
@@ -1610,6 +1611,9 @@ const MyDropzone = (props: any) =>{
             if(getDropZone[0].type === "application/pdf"){
                 setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/",""))
             }
+            if(getDropZone[0].type === "application/zip"){
+                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/",""))
+            }
         }
 
     },[getDropZone])
@@ -1621,18 +1625,19 @@ const MyDropzone = (props: any) =>{
             "application/x-zip":[".x-zip"],"application/zip": [".zip"]}} onDrop={(acceptedFiles) => setDropZone(acceptedFiles) }>
             {({getRootProps, getInputProps}) => (
                 getDropZone?
-                    <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
+                    <Box sx={{height: "199px", maxWidth: "280px" ,mx:"auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
                         <Button sx={{position:"absolute",top:"15px",right:"15px",cursor: "pointer"}} onClick={()=>setDropZone(null)}>Remove</Button>
                         {typeFile == "image" && <img style={{width:"60%",height:"80%"}} src={dispalyFile ? `${dispalyFile}` : "#"}/> }
-                        {typeFile == "pdf" &&  <section style={{width:"60%",height:"80%"}}><FileType name={"pdf"} /> </section>}
+                        {typeFile == "pdf" &&  <section style={{width:"50%",height:"70%"}}><FileType name={"pdf"} /> </section>}
+                        {typeFile == "zip" &&  <img style={{width:"50%",height:"70%"}} src={dispalyFile ? `${zip}` : "#"}/> }
                         <Typography sx={{...theme.typography.titleMedium}}>{getDropZone[0]?.name}</Typography>
                     </Box>
                     :
                     <section style={{ cursor: "pointer" }}>
-                        <Box sx={{height: "220px", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
-                        <div {...getRootProps()}>
+                        <Box sx={{height: "199px", maxWidth: "280px", mx:"auto" , width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px"}}>
+                        <div {...getRootProps()} style={{height:"100%",display:"flex",alignItems:"center",flexDirection:"column",justifyContent:"space-between",padding:"20px 0px"}}>
                         <input {...getInputProps()} />
-                        <img src={UploadIcon}/>
+                        <img src={UploadIcon} style={{width:"80px",height:"80px"}}/>
                                 <Typography sx={{
                                 ...theme.typography.titleMedium,
                                 color: "#243342",
@@ -1757,10 +1762,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         >
             <DialogContent
                 sx={{
-                    padding: "0!important",
+                    // padding: "0!important",
+                    height:{sm: "84px"},
                     background: "#004F83",
                     overflow: "hidden",
-                    position: "relative"
+                    position: "relative",
+                    py: "24px",
                 }}
             >
                 <Box
@@ -1768,7 +1775,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         background: "#004F83",
                         textAlign: "center",
                         color: "#fff",
-                        py: "24px",
                         ...theme.typography.headlineSmall,
                         sm:{...theme.typography.headlineMedium}
                     }}
@@ -1792,29 +1798,29 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     justifyContent: "center",
                     alignItems: "center",
                     textAlign: "center",
+                    pt:"20px"
                 }}
             >
-                <Box sx={{display: "flex", flexDirection: "column", py: "28px", gap: "20px",marginTop:"25px",width:"90%"}}>
-                    <Box sx={{mx:"auto", width:"100%"}}>
-                        <Typography sx={{...theme.typography.headlineSmall,display: "flex",justifyContent: "center",paddingBottom:"20px",paddingTop:"35px", gap: "5px"}}>
+                <Box sx={{display: "flex", flexDirection: "column", gap: "20px",width:"90%"}}>
+                    <Box sx={{mx:"auto", width:"100%",height:"316px"}}>
+                        <Typography sx={{...theme.typography.headlineSmall,mx:"auto", display: "flex",justifyContent: "center",paddingBottom:"24px", gap: "5px"}}>
                             <Trans i18nKey={"uploadAttachment"}/><Typography sx={{...theme.typography.headlineSmall}}>{expanded.count} of 5 </Typography>
                         </Typography>
-                        <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left"}}>
-                            <Box sx={{display: "flex", gap: '2px'}}>
+                        <Typography sx={{fontSize: "11px", color: "#73808C", maxWidth: "300px", textAlign: "left",mx:"auto"}}>
+                            <Box sx={{display: "flex", gap: '2px',mx:"auto"}}>
                                 <InfoOutlinedIcon
                                     style={{color: "#73808C"}}
                                     sx={{mr: 1, width: "12px", height: "12px"}}
                                 />
                                 <Trans i18nKey="uploadAcceptable"/>
                             </Box>
-
                         </Typography>
                         <Typography sx={{
                             fontSize: "11px",
                             color: "#73808C",
                             maxWidth: "300px",
                             textAlign: "left",
-                            paddingBottom: "1rem"
+                            paddingBottom: "1rem",mx:"auto"
                         }}>
                             <Box sx={{display: "flex", gap: '2px'}}>
                                 <InfoOutlinedIcon
@@ -1856,12 +1862,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 }}>
                     <Button
                         sx={{
+                            ...theme.typography.titleMedium,
                             fontSize: {xs: '0.7rem', sm: "1rem"},
                             fontWeight: 700,
                             color: "#004F83",
                             "&.MuiButton-root": {
                                 border: "1px solid #004F83",
-                                borderRadius: "100px",
+                                borderRadius: "4px",
 
                             },
                             "&.MuiButton-root:hover": {
@@ -1876,13 +1883,14 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     </Button>
                     <Button
                         sx={{
+                            ...theme.typography.titleMedium,
                             fontSize: {xs: '0.7rem', sm: "1rem"},
                             fontWeight: 700,
                             "&.MuiButton-root": {
                                 color: "#EDFCFC",
                                 border: "1px solid #004F83",
                                 background: "#004F83",
-                                borderRadius: "100px",
+                                borderRadius: "4px",
                             },
                             "&.MuiButton-root:hover": {
                                 background: "#004F83",
