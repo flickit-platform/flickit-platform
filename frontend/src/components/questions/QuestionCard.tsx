@@ -485,7 +485,7 @@ const AnswerTemplate = (props: {
                                     value={option}
                                     selected={templateValue === value?.index}
                                     onChange={onChange}
-                                    disabled={isSubmitting || notApplicable || !permissions.answerQuestion} sx={{
+                                    disabled={isSubmitting || notApplicable || !permissions?.answerQuestion} sx={{
                                         letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                                         color: "white",
                                         p: { xs: 0.6, sm: 1 },
@@ -1461,7 +1461,7 @@ const EvidenceDetail = (props: any) => {
                                                 maxHeight: 0,
                                                 overflow: "hidden"
                                             }} sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
-                                            <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", }}>
+                                            <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
                                                 {
                                                     loadingFile ?
                                                         <>
@@ -1717,7 +1717,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         }
     }
 
-    const handelSendFile = async (recognize) => {
+    const handelSendFile = async (recognize: any) => {
         if (description.length > 1 && description.length < 3) {
             return setError(true)
         }
