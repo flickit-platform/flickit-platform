@@ -37,7 +37,7 @@ export interface IDefaultModel<T extends any = any> {
 
 export interface IAnswerTemplate {
   title: string;
-  value: number;
+  index: number;
   id: TId;
 }
 
@@ -655,4 +655,10 @@ export interface IAssessmentResponse {
   assessment: IAssessmentReportModel;
   subjects: ISubject[];
   assessmentPermissions: IAssessmentPermissions;
+}
+
+export interface IAnswerHistory {
+  answer: TAnswer;
+  creationTime: string;
+  createdBy: IUserInfo;
 }

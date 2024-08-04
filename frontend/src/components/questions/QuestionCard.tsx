@@ -18,14 +18,21 @@ import {
   useQuestionContext,
   useQuestionDispatch,
 } from "@/providers/QuestionProvider";
-import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
+import { IAnswerHistory, IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import { Collapse, Grid } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Collapse,
+  Divider,
+  Grid,
+} from "@mui/material";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
@@ -63,6 +70,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useScreenResize from "@utils/useScreenResize";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import { format } from "date-fns";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -149,15 +159,15 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={
                 is_farsi
                   ? {
-                    pt: 0.5,
-                    fontSize: "2rem",
-                    fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
-                    direction: "rtl",
-                  }
+                      pt: 0.5,
+                      fontSize: "2rem",
+                      fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
+                      direction: "rtl",
+                    }
                   : {
-                    pt: 0.5,
-                    fontSize: "2rem",
-                  }
+                      pt: 0.5,
+                      fontSize: "2rem",
+                    }
               }
             >
               {title.split("\n").map((line, index) => (
@@ -197,7 +207,9 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             py: { xs: 1.5, sm: 2.5 },
           }}
         >
-          <SubmitOnSelectCheckBox disabled={!questionsInfo?.permissions?.answerQuestion} />
+          <SubmitOnSelectCheckBox
+            disabled={!questionsInfo?.permissions?.answerQuestion}
+          />
           <Box
             sx={{
               display: "flex",
@@ -230,7 +242,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                           >
                             {labels[selcetedConfidenceLevel - 1]?.title}
                           </Typography>
-
                         </Typography>
                       </Box>
                     ) : (
@@ -241,7 +252,13 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                          <Trans i18nKey={questionsInfo?.permissions?.answerQuestion ? "selcetConfidenceLevel" : "confidenceLevel"} />
+                          <Trans
+                            i18nKey={
+                              questionsInfo?.permissions?.answerQuestion
+                                ? "selcetConfidenceLevel"
+                                : "confidenceLevel"
+                            }
+                          />
                         </Typography>
                       </Box>
                     )}
@@ -278,17 +295,25 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             />
           </Box>
         </Box>
-
         <Box
           display={"flex"}
           justifyContent="space-between"
-          mt={3}
           sx={{
             flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "stretch", md: "flex-end" },
           }}
         >
-          <AnswerDetails questionInfo={questionInfo} />
+          <AnswerDetails questionInfo={questionInfo} type="history" />
+        </Box>
+        <Box
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "flex-end" },
+          }}
+        >
+          <AnswerDetails questionInfo={questionInfo} type="evidence" />
         </Box>
       </Box>
     </Box>
@@ -464,7 +489,11 @@ const AnswerTemplate = (props: {
                   value={option}
                   selected={templateValue === value?.index}
                   onChange={onChange}
-                  disabled={isSubmitting || notApplicable || !permissions?.answerQuestion}
+                  disabled={
+                    isSubmitting ||
+                    notApplicable ||
+                    !permissions?.answerQuestion
+                  }
                   sx={{
                     letterSpacing: `${is_farsi ? "0" : ".05em"}`,
                     color: "white",
@@ -477,7 +506,7 @@ const AnswerTemplate = (props: {
                     borderWidth: "2px",
                     borderColor: "transparent",
                     "&.Mui-disabled": {
-                      color: "#ffffff78"
+                      color: "#ffffff78",
                     },
                     "&.Mui-selected": {
                       "&:hover": {
@@ -501,13 +530,15 @@ const AnswerTemplate = (props: {
                       position: "absoulte",
                       zIndex: 1,
                       p: 0,
-                      color: notApplicable || !permissions?.answerQuestion ? "gray" : "white",
+                      color:
+                        notApplicable || !permissions?.answerQuestion
+                          ? "gray"
+                          : "white",
                       mr: "8px",
                       ml: "8px",
                       opacity: 0.8,
                       "& svg": { fontSize: { xs: "2.1rem", sm: "2.5rem" } },
                       "&.Mui-checked": { color: "white", opacity: 1 },
-
                     }}
                   />
                   {templateValue}. {title}
@@ -547,9 +578,9 @@ const AnswerTemplate = (props: {
           sx={
             is_farsi
               ? {
-                fontSize: "1.2rem",
-                mr: "auto",
-              }
+                  fontSize: "1.2rem",
+                  mr: "auto",
+                }
               : { fontSize: "1.2rem", ml: "auto" }
           }
           onClick={submitQuestion}
@@ -580,122 +611,248 @@ const AnswerTemplate = (props: {
   );
 };
 
-const AnswerDetails = ({ questionInfo }: any) => {
+const AnswerDetails = ({
+  questionInfo,
+  type,
+}: {
+  questionInfo: any;
+  type: string;
+}) => {
+  const [page, setPage] = useState(0);
+  const [data, setData] = useState<IAnswerHistory[]>([]);
+  const [expanded, setExpanded] = useState(true); // Track the expanded state
   const dialogProps = useDialog();
-  const evidencesQueryData = useQuery({
-    service: (
-      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
-      config
-    ) => service.fetchEvidences(args, config),
-    toastError: true,
-  });
-
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
+  const queryData = useQuery({
+    service: (
+      args = { questionId: questionInfo.id, assessmentId, page, size: 10 },
+      config
+    ) =>
+      type === "evidence"
+        ? service.fetchEvidences(args, config)
+        : service.fetchAnswersHistory(args, config),
+    toastError: true,
+  });
+
+  useEffect(() => {
+    if (queryData.data?.items) {
+      setData((prevData) => [...prevData, ...queryData.data.items]);
+    }
+  }, [queryData.data]);
+
+  const handleShowMore = () => {
+    setPage((prevPage) => prevPage + 1);
+    queryData.query({
+      questionId: questionInfo.id,
+      assessmentId,
+      page: page + 1,
+      size: 10,
+    });
+  };
+
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <Box mt={2} width="100%">
-      <Title px={1} size="small">
-        <Trans i18nKey="answerEvidences" />
-      </Title>
-      <Box
-        mt={2}
-        display={"flex"}
-        sx={{ cursor: "pointer" }}
-        alignItems="center"
-        position={"relative"}
-        width="100%"
-      ></Box>
+      {type === "history" && data.length === 0 ? (
+        <></>
+      ) : (
+        <Accordion
+          disableGutters
+          square
+          expanded={expanded}
+          onChange={handleAccordionChange}
+          sx={{ background: "transparent", boxShadow: "none" }}
+        >
+          <AccordionSummary
+            sx={{ display: "flex", alignItems: "center", padding: 0 }}
+          >
+            <Title px={1} size="small">
+              <Trans
+                i18nKey={
+                  type === "evidence" ? "answerEvidences" : "answerHistory"
+                }
+              />
+            </Title>
+            <IconButton>
+              {expanded ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+          </AccordionSummary>
+          <Divider sx={{ width: "100%", marginBottom: 2 }} />
+          <AccordionDetails>
+            {type === "evidence" ? (
+              <Box
+                display="flex"
+                alignItems={"baseline"}
+                sx={{
+                  flexDirection: "column",
+                  px: 2,
+                  width: "100%",
+                  alignItems: "center",
+                  wordBreak: "break-word",
+                }}
+              >
+                <Evidence
+                  {...dialogProps}
+                  questionInfo={questionInfo}
+                  evidencesQueryData={queryData}
+                />
+              </Box>
+            ) : (
+              data.length > 0 && (
+                <Box
+                  display="flex"
+                  alignItems={"baseline"}
+                  sx={{
+                    maxHeight: "46vh",
+                    overflow: "auto",
+                    flexDirection: "column",
+                    width: "100%",
+                    alignItems: "center",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {data.map((item: IAnswerHistory, index: number) => (
+                    <Box key={index} width="100%">
+                      <AnswerHistoryItem
+                        item={item}
+                        questionInfo={questionInfo}
+                      />
+                      <Divider sx={{ width: "100%", marginBlock: 2 }} />
+                    </Box>
+                  ))}
+                  {queryData?.data?.total >
+                    queryData?.data?.size * (queryData?.data?.page + 1) && (
+                    <Button onClick={handleShowMore}>
+                      <Trans i18nKey="showMore" />
+                    </Button>
+                  )}
+                </Box>
+              )
+            )}
+          </AccordionDetails>
+        </Accordion>
+      )}
+    </Box>
+  );
+};
+
+const AnswerHistoryItem = (props: any) => {
+  const {
+    item,
+    questionInfo,
+  }: { item: IAnswerHistory; questionInfo: IQuestionInfo } = props;
+  const { options } = questionInfo;
+  const selectedOption = options?.find(
+    (option: any) => option?.id === item?.answer?.selectedOption?.id
+  );
+  return (
+    <Box
+      display="flex"
+      flexDirection={{ xs: "column", md: "row" }}
+      px={1}
+      width="100%"
+      justifyContent="space-between"
+      alignItems={{ xs: "flex-start", md: "center" }}
+      gap={{ xs: 2, md: 0 }}
+    >
+      <Box sx={{ ...styles.centerV }} gap={2} width="200px">
+        <Avatar
+          src={item?.createdBy?.pictureLink ?? undefined}
+          sx={{
+            width: 64,
+            height: 64,
+          }}
+        ></Avatar>
+        <Typography variant="titleMedium" color="#1B4D7E">
+          {item?.createdBy?.displayName}
+        </Typography>
+      </Box>
+      {item.answer.isNotApplicable ? (
+        <Box sx={{ ...styles.centerV }}>
+          <Typography variant="titleMedium" color="#1B4D7E">
+            <Trans i18nKey="questionIsMarkedAsNotApplicable" />:
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+          gap={1.5}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="confidence" />:
+            </Typography>
+            <Rating
+              disabled={true}
+              value={
+                item?.answer?.confidenceLevel?.id !== null
+                  ? (item?.answer?.confidenceLevel?.id as number)
+                  : null
+              }
+              size="medium"
+              icon={
+                <RadioButtonCheckedRoundedIcon
+                  sx={{ mx: 0.25, color: "#42a5f5" }}
+                  fontSize="inherit"
+                />
+              }
+              emptyIcon={
+                <RadioButtonUncheckedRoundedIcon
+                  style={{ opacity: 0.55 }}
+                  fontSize="inherit"
+                />
+              }
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="selectedOption" />:
+            </Typography>
+            <Typography variant="bodyMedium" maxWidth="400px">
+              {selectedOption?.index}.{selectedOption?.title}
+            </Typography>
+          </Box>
+        </Box>
+      )}
 
       <Box
-        sx={{
-          flex: 1,
-          mr: { xs: 0, md: 4 },
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-        }}
+        height="8vh"
+        justifyContent="flex-start"
+        width={{ xs: "100%", md: "unset" }}
+        textAlign="right"
       >
-        {/* <Box mb={1.8}>
-          <Typography
-            variant="subLarge"
-            component={Link}
-            to="#"
-            sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
-          >
-            <Trans i18nKey="howSureAreYou" />
-          </Typography>
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-            }}
-          >
-            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-              <Typography>
-                <Trans i18nKey={"myConfidenceLevelOnThisQuestionIs"} />
-              </Typography>
-              <Box width="90px" sx={{ ml: { xs: 0, sm: 1 }, mt: { xs: 1, sm: 0 } }} position="relative" bottom="1px">
-                <FormControl fullWidth>
-                  <NativeSelect
-                    sx={{
-                      "&::before": {
-                        display: "none",
-                      },
-                      "&::after": {
-                        display: "none",
-                      },
-                      background: "#04a56e",
-                      fontSize: ".92rem",
-                      borderRadius: 1.5,
-                      "& select": {
-                        pl: 1.2,
-                        py: 0.5,
-                      },
-                      color: "white",
-                      "& option": {
-                        backgroundColor: "#424242 !important",
-                      },
-                      "& svg": {
-                        color: "white",
-                      },
-                    }}
-                    defaultValue={1}
-                    inputProps={{
-                      name: "confidenceLevel",
-                      id: "uncontrolled-native",
-                    }}
-                  >
-                    <option value={1}>1 of 5</option>
-                    <option value={2}>2 of 5</option>
-                    <option value={3}>3 of 5</option>
-                    <option value={4}>4 of 5</option>
-                    <option value={5}>5 of 5</option>
-                  </NativeSelect>
-                </FormControl>
-              </Box>
-            </Box>
-          </Box>
-        </Box> */}
-        <Box
-          display="flex"
-          alignItems={"baseline"}
-          sx={{
-            flexDirection: "column",
-            px: 2,
-            width: "100%",
-            alignItems: "center",
-            wordBreak: "break-word",
-          }}
-        >
-          <Evidence
-            {...dialogProps}
-            questionInfo={questionInfo}
-            evidencesQueryData={evidencesQueryData}
-          />
-        </Box>
+        <Typography variant="bodyMedium">
+          {format(
+            new Date(
+              new Date(item.creationTime).getTime() -
+                new Date(item.creationTime).getTimezoneOffset() * 60000
+            ),
+            "yyyy/MM/dd HH:mm"
+          ) +
+            " (" +
+            convertToRelativeTime(item.creationTime) +
+            ")"}
+        </Typography>
       </Box>
     </Box>
   );
@@ -928,10 +1085,10 @@ const Evidence = (props: any) => {
                   is_farsi
                     ? { position: "absolute", top: 15, left: 5 }
                     : {
-                      position: "absolute",
-                      top: 15,
-                      right: 5,
-                    }
+                        position: "absolute",
+                        top: 15,
+                        right: 5,
+                      }
                 }
               ></Grid>
             </Grid>
@@ -1332,20 +1489,20 @@ const QuestionGuide = (props: any) => {
               <Typography variant="body2">
                 {hint.startsWith("\n")
                   ? hint
-                    .substring(1)
-                    .split("\n")
-                    .map((line: string, index: number) => (
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : hint.split("\n").map((line: string, index: number) => (
                       <React.Fragment key={index}>
                         {line}
                         <br />
                       </React.Fragment>
-                    ))
-                  : hint.split("\n").map((line: string, index: number) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
+                    ))}
               </Typography>
             </Box>
           </Box>
