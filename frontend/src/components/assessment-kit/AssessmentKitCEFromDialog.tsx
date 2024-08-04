@@ -95,7 +95,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      toastError(err.response?.data.message);
+      toastError(err);
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();

@@ -287,6 +287,7 @@ const Actions = (props: any) => {
       await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
+      console.log(err)
       toastError(err);
     }
   };

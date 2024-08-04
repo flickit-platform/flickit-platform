@@ -96,7 +96,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       const err = e as ICustomError;
       setLoading(false);
       setServerFieldErrors(err, formMethods);
-      toastError(err.response?.data.message);
+      toastError(err);
     }
   };
 

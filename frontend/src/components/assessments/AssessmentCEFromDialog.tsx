@@ -109,7 +109,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
-      toastError(err.response?.data.message);
+      toastError(err);
       return () => {
         abortController.abort();
       };
