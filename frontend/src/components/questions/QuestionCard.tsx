@@ -1461,7 +1461,7 @@ const EvidenceDetail = (props: any) => {
                                                 maxHeight: 0,
                                                 overflow: "hidden"
                                             }} sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
-                                            <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+                                            <Box sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
                                                 {
                                                     loadingFile ?
                                                         skeleton.map((item,index) => {
