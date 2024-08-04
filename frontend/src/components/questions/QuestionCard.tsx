@@ -1688,7 +1688,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
     const { service } = useServiceContext();
     const abortController = useMemo(() => new AbortController(), [evidenceId]);
-    const [desc, setDesc] = useState("")
+    const [description, setDescription] = useState("")
     const [error, setError] = useState(false)
     const [getDropZone, setDropZone] = useState<any>(null)
     const addEvidenceAttachments = useQuery({
@@ -1707,7 +1707,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
     const handelDescription = (e: any) => {
         if (e.target.value.length < MAX_DESC_TEXT) {
-            setDesc(e.target.value)
+            setDescription(e.target.value)
             setError(false)
         } else {
             setError(true)
@@ -1715,13 +1715,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     }
 
     const handelSendFile = async (recognize) => {
-        if (desc.length > 1 && desc.length < 3) {
+        if (description.length > 1 && description.length < 3) {
             return setError(true)
         }
         if (!getDropZone) {
             return toast(t("attachmentRequired"), { type: "error" })
         }
-        if (error && desc.length >= 100) {
+        if (error && description.length >= 100) {
             return toast(t("max100characters"), { type: "error" })
         }
         if (getDropZone[0].size > 2097152) {
@@ -1735,14 +1735,14 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 let data = {
                     id: evidenceId,
                     attachment: getDropZone[0],
-                    description: desc
+                    description: description
                 }
                 await addEvidenceAttachments.query({ evidenceId, data })
                 const { items } = await evidencesQueryData.query();
                 setEvidencesData(items)
                 setAttachmentData(true)
                 setDropZone(null)
-                setDesc("")
+                setDescription("")
                 if (recognize == "self") {
                     onClose()
                 }
@@ -1859,7 +1859,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             id="outlined-multiline-static"
                             multiline
                             fullWidth
-                            value={desc}
+                            value={description}
                             onChange={handelDescription}
                             variant="standard"
                             inputProps={{
@@ -1869,7 +1869,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             }}
                             placeholder={"Add description for this specific attachment up to 100 charachter"}
                             error={error}
-                            helperText={desc.length >= 1 && error && desc.length <= 3 ? "Please enter at least 3 characters" : desc.length >= 1 && error && "maximum 100 characters"}
+                            helperText={description.length >= 1 && error && description.length <= 3 ? "Please enter at least 3 characters" : description.length >= 1 && error && "maximum 100 characters"}
                         />
                     </Box>
                 </Box>
