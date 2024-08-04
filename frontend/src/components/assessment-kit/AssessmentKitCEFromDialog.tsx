@@ -82,20 +82,20 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       const { data: res } =
         type === "update"
           ? await service.updateAssessmentKit(
-              { data: formattedData, assessmentKitId: id },
-              { signal: abortController.signal }
-            )
+            { data: formattedData, assessmentKitId: id },
+            { signal: abortController.signal }
+          )
           : await service.createAssessmentKit(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+            { data: formattedData },
+            { signal: abortController.signal }
+          );
       setLoading(false);
       onSubmitForm();
       close();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      toastError(err);
+      toastError(err.response?.data.message);
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();

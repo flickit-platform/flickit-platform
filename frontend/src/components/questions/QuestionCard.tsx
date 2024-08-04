@@ -19,14 +19,14 @@ import {
     useQuestionContext,
     useQuestionDispatch,
 } from "@/providers/QuestionProvider";
-import { IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
+import { IAnswerHistory, IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
 import { Trans } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import { Collapse, DialogTitle, FormControl, Grid, TextareaAutosize } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Collapse, DialogTitle, Divider, FormControl, Grid, TextareaAutosize } from "@mui/material";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
@@ -83,6 +83,7 @@ import FileType from "@components/questions/iconFiles/fileType";
 import { primaryFontFamily, theme } from "@config/theme";
 import {AcceptFile} from "@utils/acceptFile"
 import formatBytes from "@utils/formatBytes";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
     questionsInfo: TQuestionsInfo;
@@ -297,18 +298,26 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         />
                     </Box>
                 </Box>
-
                 <Box
-                    display={"flex"}
-                    justifyContent="space-between"
-                    mt={3}
-                    sx={{
-                        flexDirection: { xs: "column", md: "row" },
-                        alignItems: { xs: "stretch", md: "flex-end" },
-                    }}
-                >
-                    <AnswerDetails questionInfo={questionInfo} />
-                </Box>
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "flex-end" },
+          }}
+        >
+          <AnswerDetails questionInfo={questionInfo} type="history" />
+        </Box>
+        <Box
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "flex-end" },
+          }}
+        >
+          <AnswerDetails questionInfo={questionInfo} type="evidence" />
+          </Box>
             </Box>
         </Box>
     );
@@ -603,118 +612,251 @@ const AnswerTemplate = (props: {
     );
 };
 
+const AnswerDetails = ({
+  questionInfo,
+  type,
+}: {
+  questionInfo: any;
+  type: string;
+}) => {
+  const [page, setPage] = useState(0);
+  const [data, setData] = useState<IAnswerHistory[]>([]);
+  const [expanded, setExpanded] = useState(true); // Track the expanded state
+  const dialogProps = useDialog();
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
 
-const AnswerDetails = ({ questionInfo }: any) => {
-    const dialogProps = useDialog();
+  const queryData = useQuery({
+    service: (
+      args = { questionId: questionInfo.id, assessmentId, page, size: 10 },
+      config
+    ) =>
+      type === "evidence"
+        ? service.fetchEvidences(args, config)
+        : service.fetchAnswersHistory(args, config),
+    toastError: true,
+  });
 
-    const { service } = useServiceContext();
-    const { assessmentId = "" } = useParams();
+  useEffect(() => {
+    if (queryData.data?.items) {
+      setData((prevData) => [...prevData, ...queryData.data.items]);
+    }
+  }, [queryData.data]);
 
-    return (
-        <Box mt={2} width="100%">
-            <Title px={1} >
-                <Trans sx={{ ...theme.typography.headlineLarge }} i18nKey="answerEvidences" />
+  const handleShowMore = () => {
+    setPage((prevPage) => prevPage + 1);
+    queryData.query({
+      questionId: questionInfo.id,
+      assessmentId,
+      page: page + 1,
+      size: 10,
+    });
+  };
+
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <Box mt={2} width="100%">
+      {type === "history" && data.length === 0 ? (
+        <></>
+      ) : (
+        <Accordion
+          disableGutters
+          square
+          expanded={expanded}
+          onChange={handleAccordionChange}
+          sx={{ background: "transparent", boxShadow: "none" }}
+        >
+          <AccordionSummary
+            sx={{ display: "flex", alignItems: "center", padding: 0 }}
+          >
+            <Title px={1} size="small">
+              <Trans
+                i18nKey={
+                  type === "evidence" ? "answerEvidences" : "answerHistory"
+                }
+              />
             </Title>
-            <Box
-                mt={2}
-                display={"flex"}
-                sx={{ cursor: "pointer" }}
-                alignItems="center"
-                position={"relative"}
-                width="100%"
-            ></Box>
-
-            <Box
+            <IconButton>
+              {expanded ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+          </AccordionSummary>
+          <Divider sx={{ width: "100%", marginBottom: 2 }} />
+          <AccordionDetails>
+            {type === "evidence" ? (
+              <Box
+                display="flex"
+                alignItems={"baseline"}
                 sx={{
-                    flex: 1,
-                    mr: { xs: 0, md: 4 },
-                    position: "relative",
-                    display: "flex",
+                  flexDirection: "column",
+                  px: 2,
+                  width: "100%",
+                  alignItems: "center",
+                  wordBreak: "break-word",
+                }}
+              >
+                <Evidence
+                  {...dialogProps}
+                  questionInfo={questionInfo}
+                  evidencesQueryData={queryData}
+                />
+              </Box>
+            ) : (
+              data.length > 0 && (
+                <Box
+                  display="flex"
+                  alignItems={"baseline"}
+                  sx={{
+                    maxHeight: "46vh",
+                    overflow: "auto",
                     flexDirection: "column",
                     width: "100%",
-                }}
-            >
-                {/* <Box mb={1.8}>
-          <Typography
-            variant="subLarge"
-            component={Link}
-            to="#"
-            sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
-          >
-            <Trans i18nKey="howSureAreYou" />
-          </Typography>
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-            }}
-          >
-            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-              <Typography>
-                <Trans i18nKey={"myConfidenceLevelOnThisQuestionIs"} />
-              </Typography>
-              <Box width="90px" sx={{ ml: { xs: 0, sm: 1 }, mt: { xs: 1, sm: 0 } }} position="relative" bottom="1px">
-                <FormControl fullWidth>
-                  <NativeSelect
-                    sx={{
-                      "&::before": {
-                        display: "none",
-                      },
-                      "&::after": {
-                        display: "none",
-                      },
-                      background: "#04a56e",
-                      fontSize: ".92rem",
-                      borderRadius: 1.5,
-                      "& select": {
-                        pl: 1.2,
-                        py: 0.5,
-                      },
-                      color: "white",
-                      "& option": {
-                        backgroundColor: "#424242 !important",
-                      },
-                      "& svg": {
-                        color: "white",
-                      },
-                    }}
-                    defaultValue={1}
-                    inputProps={{
-                      name: "confidenceLevel",
-                      id: "uncontrolled-native",
-                    }}
-                  >
-                    <option value={1}>1 of 5</option>
-                    <option value={2}>2 of 5</option>
-                    <option value={3}>3 of 5</option>
-                    <option value={4}>4 of 5</option>
-                    <option value={5}>5 of 5</option>
-                  </NativeSelect>
-                </FormControl>
-              </Box>
-            </Box>
-          </Box>
-        </Box> */}
-                <Box
-                    display="flex"
-                    alignItems={"baseline"}
-                    sx={{
-                        flexDirection: "column",
-                        px: 2,
-                        width: "100%",
-                        alignItems: "center",
-                        wordBreak: "break-word",
-                    }}
+                    alignItems: "center",
+                    wordBreak: "break-word",
+                  }}
                 >
-                    <Evidence
-                        {...dialogProps}
+                  {data.map((item: IAnswerHistory, index: number) => (
+                    <Box key={index} width="100%">
+                      <AnswerHistoryItem
+                        item={item}
                         questionInfo={questionInfo}
-                    />
+                      />
+                      <Divider sx={{ width: "100%", marginBlock: 2 }} />
+                    </Box>
+                  ))}
+                  {queryData?.data?.total >
+                    queryData?.data?.size * (queryData?.data?.page + 1) && (
+                    <Button onClick={handleShowMore}>
+                      <Trans i18nKey="showMore" />
+                    </Button>
+                  )}
                 </Box>
-            </Box>
+              )
+            )}
+          </AccordionDetails>
+        </Accordion>
+      )}
+    </Box>
+  );
+};
+
+const AnswerHistoryItem = (props: any) => {
+  const {
+    item,
+    questionInfo,
+  }: { item: IAnswerHistory; questionInfo: IQuestionInfo } = props;
+  const { options } = questionInfo;
+  const selectedOption = options?.find(
+    (option: any) => option?.id === item?.answer?.selectedOption?.id
+  );
+  return (
+    <Box
+      display="flex"
+      flexDirection={{ xs: "column", md: "row" }}
+      px={1}
+      width="100%"
+      justifyContent="space-between"
+      alignItems={{ xs: "flex-start", md: "center" }}
+      gap={{ xs: 2, md: 0 }}
+    >
+      <Box sx={{ ...styles.centerV }} gap={2} width="200px">
+        <Avatar
+          src={item?.createdBy?.pictureLink ?? undefined}
+          sx={{
+            width: 64,
+            height: 64,
+          }}
+        ></Avatar>
+        <Typography variant="titleMedium" color="#1B4D7E">
+          {item?.createdBy?.displayName}
+        </Typography>
+      </Box>
+      {item.answer.isNotApplicable ? (
+        <Box sx={{ ...styles.centerV }}>
+          <Typography variant="titleMedium" color="#1B4D7E">
+            <Trans i18nKey="questionIsMarkedAsNotApplicable" />:
+          </Typography>
         </Box>
-    );
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+          gap={1.5}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="confidence" />:
+            </Typography>
+            <Rating
+              disabled={true}
+              value={
+                item?.answer?.confidenceLevel?.id !== null
+                  ? (item?.answer?.confidenceLevel?.id as number)
+                  : null
+              }
+              size="medium"
+              icon={
+                <RadioButtonCheckedRoundedIcon
+                  sx={{ mx: 0.25, color: "#42a5f5" }}
+                  fontSize="inherit"
+                />
+              }
+              emptyIcon={
+                <RadioButtonUncheckedRoundedIcon
+                  style={{ opacity: 0.55 }}
+                  fontSize="inherit"
+                />
+              }
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            gap={1.5}
+          >
+            <Typography variant="titleSmall">
+              <Trans i18nKey="selectedOption" />:
+            </Typography>
+            <Typography variant="bodyMedium" maxWidth="400px">
+              {selectedOption?.index}.{selectedOption?.title}
+            </Typography>
+          </Box>
+        </Box>
+      )}
+
+      <Box
+        height="8vh"
+        justifyContent="flex-start"
+        width={{ xs: "100%", md: "unset" }}
+        textAlign="right"
+      >
+        <Typography variant="bodyMedium">
+          {format(
+            new Date(
+              new Date(item.creationTime).getTime() -
+                new Date(item.creationTime).getTimezoneOffset() * 60000
+            ),
+            "yyyy/MM/dd HH:mm"
+          ) +
+            " (" +
+            convertToRelativeTime(item.creationTime) +
+            ")"}
+        </Typography>
+      </Box>
+    </Box>
+  );
 };
 
 const Evidence = (props: any) => {

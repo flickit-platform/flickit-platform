@@ -78,7 +78,6 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
                   <text
                     key={index}
                     {...rest}
-                    verticalAnchor="middle"
                     y={y + (y - cy) / 15 + index * 12} 
                     x={x + (x - cx) / 15}
                     style={{ ...theme.typography.labelSmall }}

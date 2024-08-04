@@ -102,11 +102,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
               loading={loading}
               onClick={(e: any) => {
                 e.preventDefault();
-                if(e) {
-                  onSubmit?.(e);
-                }else {
-                  onSubmit?.(e)?.();
-                }
+                onSubmit?.(e)?.();
               }}
             >
               <Trans i18nKey={submitButtonLabel as string} />

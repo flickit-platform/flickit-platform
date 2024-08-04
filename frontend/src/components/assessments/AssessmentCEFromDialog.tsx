@@ -109,7 +109,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       setLoading(false);
       setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
-      toastError(err);
+      toastError(err.response?.data.message);
       return () => {
         abortController.abort();
       };
@@ -158,9 +158,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             closeDialog={close}
             loading={loading}
             type={type}
-            onSubmit={(...args) =>
-              formMethods.handleSubmit((data) => onSubmit(data, ...args))
-            }
+            onSubmit={formMethods.handleSubmit(onSubmit)}
           />
         </FormProviderWithForm>
       ) : (
