@@ -1644,11 +1644,11 @@ const MyDropzone = (props: any) => {
             {({ getRootProps, getInputProps }) => (
                 getDropZone ?
                     <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                        <Button sx={{ position: "absolute", top: "15px", right: "15px", cursor: "pointer" }} onClick={() => setDropZone(null)}>Remove</Button>
-                        {typeFile == "image" && <img style={{ width: "60%", height: "80%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
+                        <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer",fontSize:"13px" }} onClick={() => setDropZone(null)}>Remove</Button>
+                        {typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
                         {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
                         {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-                        <Typography sx={{ ...theme.typography.titleMedium }}>{getDropZone[0]?.name}</Typography>
+                        <Typography sx={{ ...theme.typography.titleMedium }}>{getDropZone[0]?.name.length > 14 ? getDropZone[0]?.name.substring(0,10) + "..." + getDropZone[0]?.name.substring(getDropZone[0]?.name.indexOf(".")) : getDropZone[0]?.name}</Typography>
                     </Box>
                     :
                     <section style={{ cursor: "pointer" }}>
@@ -1821,7 +1821,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 }}
             >
                 <Box sx={{ display: "flex", flexDirection: "column", gap: "20px", width: "90%" }}>
-                    <Box sx={{ mx: "auto", width: "100%", height: "316px" }}>
+                    {/*<Box sx={{ mx: "auto", width: "100%", height: "316px" }}>*/}
+                    <Box sx={{ mx: "auto", width: "100%", height: "auto" }}>
                         <Typography sx={{ ...theme.typography.headlineSmall, mx: "auto", display: "flex", justifyContent: "center", paddingBottom: "24px", gap: "5px" }}>
                             <Trans i18nKey={"uploadAttachment"} /><Typography sx={{ ...theme.typography.headlineSmall }}>{expanded.count} of 5 </Typography>
                         </Typography>
