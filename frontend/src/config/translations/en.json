@@ -456,7 +456,7 @@
   "attachmentCount": "includes {{attachmentsCount}} attachments",
   "uploadAttachment": "Upload Attachment",
   "uploadAcceptable": "Only These formats are acceptable: PDF, jpg, png, docx, pptx, rar, zip, excel avi, mp4, mkv",
-  "uploadAcceptableSize": "Size of an attachment must be lower than 5 MB.",
+  "uploadAcceptableSize": "Size of an attachment must be lower than 2 MB.",
   "dragYourFile": "Drag your file here or ",
   "locateIt": " Locate it ",
   "additionalInfo": "Additional info (optional)",

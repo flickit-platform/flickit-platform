@@ -82,6 +82,7 @@ import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
 import { primaryFontFamily, theme } from "@config/theme";
 import {AcceptFile} from "@utils/acceptFile"
+import formatBytes from "@utils/formatBytes";
 interface IQuestionCardProps {
     questionInfo: IQuestionInfo;
     questionsInfo: TQuestionsInfo;
@@ -1599,6 +1600,8 @@ const MyDropzone = (props: any) => {
     const { setDropZone, getDropZone } = props
     const [dispalyFile, setDisplayFile] = useState<any>(null)
     const [typeFile, setTypeFile] = useState<any>(null)
+    const MAX_SIZE = 2097152
+
     const {
         acceptedFiles,
         fileRejections,
@@ -1629,7 +1632,7 @@ const MyDropzone = (props: any) => {
         <Dropzone accept={{
             ...AcceptFile
         }} onDrop={(acceptedFiles) => {
-            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > 2097152) {
+            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
                 return toast(t("uploadAcceptableSize"), { type: "error" })
             }
             if(acceptedFiles?.length && acceptedFiles.length >= 1){
@@ -1680,7 +1683,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     } = props;
     const MAX_DESC_TEXT = 100
     const MIN_DESC_TEXT = 3
-
+    const MAX_SIZE = 2097152
     const fetchEvidenceAttachments = useQuery({
         service: (args = { evidence_id: evidenceId }, config) => service.fetchEvidenceAttachments(args, config),
         runOnMount: false,
@@ -1724,7 +1727,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         if (error && description.length >= 100) {
             return toast(t("max100characters"), { type: "error" })
         }
-        if (getDropZone[0].size > 2097152) {
+
+        if (getDropZone[0].size > MAX_SIZE) {
             return toast(t("uploadAcceptableSize"), { type: "error" })
         }
         if (expanded.count >= 5) {
