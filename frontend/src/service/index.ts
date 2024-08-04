@@ -958,8 +958,10 @@ export const createService = (
 
       return axios.post(`/api/v1/expert-groups/`, data, {
         ...(config ?? {}),
+        responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
+
         },
       });
     },
@@ -1135,6 +1137,38 @@ export const createService = (
         },
       });
     },
+    fetchEvidenceAttachments(
+        args: {evidence_id:string },
+        config: AxiosRequestConfig<any> | undefined
+    ) {
+        const { evidence_id } = args ?? {};
+
+        return axios.get(`/api/v1/evidences/${evidence_id}/attachments/`, {
+            ...(config ?? {}),
+        });
+    },
+      addEvidenceAttachments(
+          args: {evidenceId: 'string', data: {}},
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { evidenceId, data} = args ?? {};
+          return axios.post(`/api/v1/evidences/${evidenceId}/attachments/`, data,{
+              ...(config ?? {}),
+              responseType: "blob",
+              headers: {
+                  "Content-Type": "multipart/form-data",
+              }
+          });
+      },
+      RemoveEvidenceAttachments(
+          args: {evidenceId: string, attachmentId: string},
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { evidenceId, attachmentId} = args ?? {};
+          return axios.delete(`/api/v1/evidences/${evidenceId}/attachments/${attachmentId}/`,{
+              ...(config ?? {}),
+          });
+      },
     fetchConfidenceLevelsList(
       args: {},
       config: AxiosRequestConfig<any> | undefined

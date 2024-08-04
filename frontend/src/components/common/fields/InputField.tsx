@@ -27,6 +27,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   setValueCount?: any,
   hasCounter?: boolean,
   isFarsi?: boolean,
+  isEditing?: boolean,
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -44,6 +45,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     setValueCount,
     hasCounter,
     isFarsi,
+    isEditing,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -106,6 +108,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
+          paddingTop: isEditing ? "32px" : ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
@@ -126,10 +129,10 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
               ),
             }
           : {  style:hasCounter ? isFarsi ? {
-                paddingLeft: 90,
+                paddingLeft: 60,
                 minHeight: "110px"
               }:{
-                paddingRight: 90,
+                paddingRight: 60,
                 minHeight: "110px"
               } : {} }
       }
