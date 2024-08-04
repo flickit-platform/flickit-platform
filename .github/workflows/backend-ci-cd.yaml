@@ -25,95 +25,20 @@ jobs:
         run: docker build -t backend ./backend
 
 
-#  Backend_Test:
-#    needs: Build_Backend
-#    runs-on: ubuntu-latest
-#
-#    services:
-#      postgres:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_DB: github_actions
-#        ports:
-#          - 5432:5432
-#        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Set up Python 3.10
-#      uses: actions/setup-python@v2
-#      with:
-#        python-version: '3.10'
-#    - name: Install dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install -r backend/requirements.txt
-#    - name: Run migrations
-#      env:
-#        SECRET_KEY: test-secret-key
-#        DEBUG_VALUE: False
-#      run: python backend/apps/manage.py migrate
-#    - name: Run tests
-#      env:
-#        SECRET_KEY: test-secret-key
-#        DEBUG_VALUE: False
-#      run: pytest backend/apps
-
-
-  # Sonar:
-  #   needs: [Backend_Test]
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     postgres:
-  #       image: postgres:latest
-  #       env:
-  #         POSTGRES_USER: postgres
-  #         POSTGRES_PASSWORD: postgres
-  #         POSTGRES_DB: github_actions
-  #       ports:
-  #         - 5432:5432
-  #       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: '3.10'
-  #   - name: Install dependencies
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       pip install -r backend/requirements.txt
-  #   - name: Install coverage
-  #     run: |
-  #       pip install coverage
-  #   - name: Run migrations
-  #     env: 
-  #       SECRET_KEY: test-secret-key
-  #       DEBUG_VALUE: False
-  #     run: python backend/apps/manage.py migrate
-
-  #   - name: Run tests with coverage
-  #     env: 
-  #       SECRET_KEY: test-secret-key
-  #       DEBUG_VALUE: False
-  #     run: |
-  #       coverage run --omit='*/tests/*','*/migrations/*'  -m  pytest backend/apps
-  #       coverage report
-  #       coverage xml
-  #   - name: SonarCloud Scan
-  #     uses: sonarsource/sonarcloud-github-action@master
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-  #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #       COVERAGE_REPORT_PATH: 'coverage.xml'
-
+  Sonar:
+   needs: Build_Backend
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     - name: SonarCloud Scan
+       uses: SonarSource/sonarcloud-github-action@master
+       env:
+         GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   Backend_Push_Latest_Image:
     if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
-    needs: Build_Backend
+    needs: Sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -143,7 +68,7 @@ jobs:
 
   Backend_Push_Image:
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
-    needs: Build_Backend
+    needs: Sonar
     runs-on: ubuntu-latest
     outputs:
       TAG: ${{ steps.TAG.outputs.tag }}
