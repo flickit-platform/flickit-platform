@@ -51,6 +51,7 @@ const toastError = (
     const axiosError = err as AxiosError;
     status = axiosError.response?.status;
     data = axiosError.response?.data;
+    type = axiosError.code as ECustomErrorType;
     message = axiosError.message;
   } else {
     const customError = err as ICustomError;
