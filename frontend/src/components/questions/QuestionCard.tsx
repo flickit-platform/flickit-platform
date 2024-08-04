@@ -1464,8 +1464,8 @@ const EvidenceDetail = (props: any) => {
                                             <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
                                                 {
                                                     loadingFile ?
-                                                        skeleton.map(() => {
-                                                                return <Skeleton animation="wave" variant="rounded" width={40} height={40} />
+                                                        skeleton.map((item,index) => {
+                                                                return <Skeleton key={index} animation="wave" variant="rounded" width={40} height={40} />
                                                             })
                                                         :
                                                         attachments.map((item, index) => {
@@ -1545,7 +1545,7 @@ const EvidenceDetail = (props: any) => {
         ;
 };
 
-const FileIcon = (props: any) => {
+const FileIcon = (props: any): any => {
     const { evidenceBG, setEvidenceId, evidenceId, downloadFile, item, setExpandedDeleteAttachmentDialog } = props
 
     const [hover, setHover] = useState(false);
