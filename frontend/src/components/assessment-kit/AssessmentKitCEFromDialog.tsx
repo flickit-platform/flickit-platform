@@ -82,13 +82,13 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       const { data: res } =
         type === "update"
           ? await service.updateAssessmentKit(
-              { data: formattedData, assessmentKitId: id },
-              { signal: abortController.signal }
-            )
+            { data: formattedData, assessmentKitId: id },
+            { signal: abortController.signal }
+          )
           : await service.createAssessmentKit(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+            { data: formattedData },
+            { signal: abortController.signal }
+          );
       setLoading(false);
       onSubmitForm();
       close();
@@ -218,7 +218,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           hasBackBtn={true}
           onBack={handleBack}
           hasViewBtn={true}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </Box>
       <Box

@@ -80,13 +80,13 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       const { data: res } =
         type === "update"
           ? await service.updateExpertGroup(
-              { data: formattedUpdateData, id },
-              { signal: abortController.signal }
-            )
+            { data: formattedUpdateData, id },
+            { signal: abortController.signal }
+          )
           : await service.createExpertGroup(
-              { data: formattedData },
-              { signal: abortController.signal }
-            );
+            { data: formattedData },
+            { signal: abortController.signal }
+          );
       type === "update" && (await seenExpertGroupQuery.query());
       setLoading(false);
       onSubmitForm();
@@ -172,7 +172,9 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
           loading={loading}
           type={type}
           hasViewBtn={hideSubmitAndView ? false : true}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>

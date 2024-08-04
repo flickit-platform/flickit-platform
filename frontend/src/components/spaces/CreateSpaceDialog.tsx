@@ -52,14 +52,14 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       let createdSpaceId = 1;
       type === "update"
         ? (await service.updateSpace(
-            { spaceId, data },
-            { signal: abortController.signal }
-          )) && (await service.seenSpaceList({ spaceId }, {}))
+          { spaceId, data },
+          { signal: abortController.signal }
+        )) && (await service.seenSpaceList({ spaceId }, {}))
         : await service
-            .createSpace(data, { signal: abortController.signal })
-            .then((res) => {
-              createdSpaceId = res.data.id;
-            });
+          .createSpace(data, { signal: abortController.signal })
+          .then((res) => {
+            createdSpaceId = res.data.id;
+          });
       navigate(`/${createdSpaceId}/assessments/1`);
       setLoading(false);
       toast.success(
@@ -124,7 +124,9 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={(...args) =>
+            formMethods.handleSubmit((data) => onSubmit(data, ...args))
+          }
         />
       </FormProviderWithForm>
     </CEDialog>
