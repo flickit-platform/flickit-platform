@@ -465,6 +465,7 @@
   "attachmentRequired": "attachment file is required",
   "evidenceIsLimited": "Each evidence is limited to five attachments. If you need to add more, simply create a new evidence and add continue from there.",
   "successCreatedAssessmentMessage": "For now, you're the only one who can see this assessment. You can grant access to others via the setting page.",
+  "thisFileNotAcceptable": "this file not acceptable",
   "successCreatedAssessmentTitleFirstPart": "The ",
   "successCreatedAssessmentTitleSecondPart": " created successfully"
 }

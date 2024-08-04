@@ -1631,7 +1631,16 @@ const MyDropzone = (props: any) => {
             "application/x-zip-compressed": [".x-zip-compressed"], "application/x-rar-compressed": [".x-rar-compressed"], "application/tar": [".tar"],
             "application/vnd": [".openxmlformats-officedocument", ".wordprocessingml", ".document", ".oasis", ".opendocument", ".text", ".spreadsheetml", "spreadsheet", ".sheet"],
             "application/x-zip": [".x-zip"], "application/zip": [".zip"]
-        }} onDrop={(acceptedFiles) => setDropZone(acceptedFiles)}>
+        }} onDrop={(acceptedFiles) => {
+            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > 5242880) {
+                return toast(t("uploadAcceptableSize"), { type: "error" })
+            }
+            if(acceptedFiles?.length && acceptedFiles.length >= 1){
+                setDropZone(acceptedFiles)
+            }else {
+                return toast(t("thisFileNotAcceptable"), { type: "error" })
+            }
+        }}>
             {({ getRootProps, getInputProps }) => (
                 getDropZone ?
                     <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -1693,7 +1702,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
     useEffect(() => {
         if (getDropZone) {
-            if (getDropZone[0].size > 5242880) {
+            if (getDropZone[0]?.size && getDropZone[0]?.size > 5242880) {
                 toast(t("uploadAcceptableSize"), { type: "error" })
             }
         }
