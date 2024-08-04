@@ -1464,12 +1464,9 @@ const EvidenceDetail = (props: any) => {
                                             <Box item sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
                                                 {
                                                     loadingFile ?
-                                                        <>
-                                                            {skeleton.map(() => {
+                                                        skeleton.map(() => {
                                                                 return <Skeleton animation="wave" variant="rounded" width={40} height={40} />
-                                                            })}
-
-                                                        </>
+                                                            })
                                                         :
                                                         attachments.map((item, index) => {
                                                             return (
