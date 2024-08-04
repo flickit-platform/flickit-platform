@@ -757,7 +757,7 @@ const AnswerHistoryItem = (props: any) => {
       px={1}
       width="100%"
       justifyContent="space-between"
-      alignItems="center"
+      alignItems={{ xs: "flex-start", md: "center" }}
       gap={{ xs: 2, md: 0 }}
     >
       <Box sx={{ ...styles.centerV }} gap={2} width="200px">
@@ -835,7 +835,12 @@ const AnswerHistoryItem = (props: any) => {
         </Box>
       )}
 
-      <Box height="8vh" justifyContent="flex-start">
+      <Box
+        height="8vh"
+        justifyContent="flex-start"
+        width={{ xs: "100%", md: "unset" }}
+        textAlign="right"
+      >
         <Typography variant="bodyMedium">
           {format(
             new Date(
