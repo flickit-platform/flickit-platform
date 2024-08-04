@@ -1,5 +1,5 @@
 
-export default function FileSvg ({mainColor,evidenceId,setEvidenceId, exp, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}: {mainColor: string, backgroundColor: string, hover:boolean,downloadFile:any,name:any,deleteAttachment:any,item:any}) {
+export default function FileSvg ({mainColor,evidenceId,setEvidenceId, exp, backgroundColor, hover,downloadFile,name,setExpandedDeleteAttachmentDialog,item}:any) {
 
     return (
         <div style={{position: 'relative'}}>
