@@ -470,5 +470,6 @@
   "successCreatedAssessmentMessage": "For now, you're the only one who can see this assessment. You can grant access to others via the setting page.",
   "thisFileNotAcceptable": "this file not acceptable",
   "successCreatedAssessmentTitleFirstPart": "The ",
-  "successCreatedAssessmentTitleSecondPart": " created successfully"
+  "successCreatedAssessmentTitleSecondPart": " created successfully",
+  "noOptionSelected": "No option is selected."
 }
