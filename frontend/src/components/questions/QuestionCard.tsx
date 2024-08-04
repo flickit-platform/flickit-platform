@@ -1632,7 +1632,7 @@ const MyDropzone = (props: any) => {
             "application/vnd": [".openxmlformats-officedocument", ".wordprocessingml", ".document", ".oasis", ".opendocument", ".text", ".spreadsheetml", "spreadsheet", ".sheet"],
             "application/x-zip": [".x-zip"], "application/zip": [".zip"]
         }} onDrop={(acceptedFiles) => {
-            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > 5242880) {
+            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > 2097152) {
                 return toast(t("uploadAcceptableSize"), { type: "error" })
             }
             if(acceptedFiles?.length && acceptedFiles.length >= 1){
@@ -1702,7 +1702,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
     useEffect(() => {
         if (getDropZone) {
-            if (getDropZone[0]?.size && getDropZone[0]?.size > 5242880) {
+            if (getDropZone[0]?.size && getDropZone[0]?.size > 2097152) {
                 toast(t("uploadAcceptableSize"), { type: "error" })
             }
         }
@@ -1727,7 +1727,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         if (error && desc.length >= 100) {
             return toast(t("max100characters"), { type: "error" })
         }
-        if (getDropZone[0].size > 5242880) {
+        if (getDropZone[0].size > 2097152) {
             return toast(t("uploadAcceptableSize"), { type: "error" })
         }
         if (expanded.count >= 5) {
