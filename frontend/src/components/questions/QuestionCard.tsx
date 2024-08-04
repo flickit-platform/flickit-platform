@@ -25,7 +25,14 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import { Collapse, Divider, Grid } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Collapse,
+  Divider,
+  Grid,
+} from "@mui/material";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
@@ -65,6 +72,7 @@ import useScreenResize from "@utils/useScreenResize";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { format } from "date-fns";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -290,7 +298,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         <Box
           display={"flex"}
           justifyContent="space-between"
-          mt={3}
           sx={{
             flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "stretch", md: "flex-end" },
@@ -301,7 +308,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         <Box
           display={"flex"}
           justifyContent="space-between"
-          mt={3}
           sx={{
             flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "stretch", md: "flex-end" },
@@ -605,11 +611,23 @@ const AnswerTemplate = (props: {
   );
 };
 
-const AnswerDetails = ({ questionInfo, type }: any) => {
+const AnswerDetails = ({
+  questionInfo,
+  type,
+}: {
+  questionInfo: any;
+  type: string;
+}) => {
+  const [page, setPage] = useState(0);
+  const [data, setData] = useState<IAnswerHistory[]>([]);
+  const [expanded, setExpanded] = useState(true); // Track the expanded state
   const dialogProps = useDialog();
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
   const queryData = useQuery({
     service: (
-      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
+      args = { questionId: questionInfo.id, assessmentId, page, size: 10 },
       config
     ) =>
       type === "evidence"
@@ -618,151 +636,120 @@ const AnswerDetails = ({ questionInfo, type }: any) => {
     toastError: true,
   });
 
-  const { service } = useServiceContext();
-  const { assessmentId = "" } = useParams();
+  useEffect(() => {
+    if (queryData.data?.items) {
+      setData((prevData) => [...prevData, ...queryData.data.items]);
+    }
+  }, [queryData.data]);
+
+  const handleShowMore = () => {
+    setPage((prevPage) => prevPage + 1);
+    queryData.query({
+      questionId: questionInfo.id,
+      assessmentId,
+      page: page + 1,
+      size: 10,
+    });
+  };
+
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <Box mt={2} width="100%">
-      {((queryData?.data?.items?.length && type === "history") ||
-        type === "evidence") && (
-        <>
-          <Title px={1} size="small">
-            <Trans
-              i18nKey={
-                type === "evidence" ? "answerEvidences" : "answerHistory"
-              }
-            />
-          </Title>
+      {type === "history" && data.length === 0 ? (
+        <></>
+      ) : (
+        <Accordion
+          disableGutters
+          square
+          expanded={expanded}
+          onChange={handleAccordionChange}
+          sx={{ background: "transparent", boxShadow: "none" }}
+        >
+          <AccordionSummary
+            sx={{ display: "flex", alignItems: "center", padding: 0 }}
+          >
+            <Title px={1} size="small">
+              <Trans
+                i18nKey={
+                  type === "evidence" ? "answerEvidences" : "answerHistory"
+                }
+              />
+            </Title>
+            <IconButton>
+              {expanded ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+          </AccordionSummary>
           <Divider sx={{ width: "100%", marginBottom: 2 }} />
-        </>
-      )}
-      <Box
-        mt={2}
-        display={"flex"}
-        sx={{ cursor: "pointer" }}
-        alignItems="center"
-        position={"relative"}
-        width="100%"
-      ></Box>
-
-      <Box
-        sx={{
-          flex: 1,
-          mr: { xs: 0, md: 4 },
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-        }}
-      >
-        {/* <Box mb={1.8}>
-          <Typography
-            variant="subLarge"
-            component={Link}
-            to="#"
-            sx={{ color: "white", opacity: 0.5, textDecoration: "none" }}
-          >
-            <Trans i18nKey="howSureAreYou" />
-          </Typography>
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-            }}
-          >
-            <Box display="flex" alignItems={"baseline"} sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-              <Typography>
-                <Trans i18nKey={"myConfidenceLevelOnThisQuestionIs"} />
-              </Typography>
-              <Box width="90px" sx={{ ml: { xs: 0, sm: 1 }, mt: { xs: 1, sm: 0 } }} position="relative" bottom="1px">
-                <FormControl fullWidth>
-                  <NativeSelect
-                    sx={{
-                      "&::before": {
-                        display: "none",
-                      },
-                      "&::after": {
-                        display: "none",
-                      },
-                      background: "#04a56e",
-                      fontSize: ".92rem",
-                      borderRadius: 1.5,
-                      "& select": {
-                        pl: 1.2,
-                        py: 0.5,
-                      },
-                      color: "white",
-                      "& option": {
-                        backgroundColor: "#424242 !important",
-                      },
-                      "& svg": {
-                        color: "white",
-                      },
-                    }}
-                    defaultValue={1}
-                    inputProps={{
-                      name: "confidenceLevel",
-                      id: "uncontrolled-native",
-                    }}
-                  >
-                    <option value={1}>1 of 5</option>
-                    <option value={2}>2 of 5</option>
-                    <option value={3}>3 of 5</option>
-                    <option value={4}>4 of 5</option>
-                    <option value={5}>5 of 5</option>
-                  </NativeSelect>
-                </FormControl>
+          <AccordionDetails>
+            {type === "evidence" ? (
+              <Box
+                display="flex"
+                alignItems={"baseline"}
+                sx={{
+                  flexDirection: "column",
+                  px: 2,
+                  width: "100%",
+                  alignItems: "center",
+                  wordBreak: "break-word",
+                }}
+              >
+                <Evidence
+                  {...dialogProps}
+                  questionInfo={questionInfo}
+                  evidencesQueryData={queryData}
+                />
               </Box>
-            </Box>
-          </Box>
-        </Box> */}
-        {type == "evidence" ? (
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-              px: 2,
-              width: "100%",
-              alignItems: "center",
-              wordBreak: "break-word",
-            }}
-          >
-            <Evidence
-              {...dialogProps}
-              questionInfo={questionInfo}
-              evidencesQueryData={queryData}
-            />
-          </Box>
-        ) : (
-          <Box
-            display="flex"
-            alignItems={"baseline"}
-            sx={{
-              flexDirection: "column",
-              width: "100%",
-              alignItems: "center",
-              wordBreak: "break-word",
-            }}
-          >
-            {queryData.data?.items.map((item: IAnswerHistory) => {
-              return (
-                <Box width="100%">
-                  <AnswerHistoryItem item={item} />
-                  <Divider sx={{ width: "100%", marginBlock: 2 }} />
+            ) : (
+              data.length > 0 && (
+                <Box
+                  display="flex"
+                  alignItems={"baseline"}
+                  sx={{
+                    maxHeight: "46vh",
+                    overflow: "auto",
+                    flexDirection: "column",
+                    width: "100%",
+                    alignItems: "center",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {data.map((item: IAnswerHistory, index: number) => (
+                    <Box key={index} width="100%">
+                      <AnswerHistoryItem
+                        item={item}
+                        questionInfo={questionInfo}
+                      />
+                      <Divider sx={{ width: "100%", marginBlock: 2 }} />
+                    </Box>
+                  ))}
+                  {queryData?.data?.total >
+                    queryData?.data?.size * (queryData?.data?.page + 1) && (
+                    <Button onClick={handleShowMore}>
+                      <Trans i18nKey="showMore" />
+                    </Button>
+                  )}
                 </Box>
-              );
-            })}
-          </Box>
-        )}
-      </Box>
+              )
+            )}
+          </AccordionDetails>
+        </Accordion>
+      )}
     </Box>
   );
 };
 
 const AnswerHistoryItem = (props: any) => {
-  const { item }: { item: IAnswerHistory } = props;
+  const {
+    item,
+    questionInfo,
+  }: { item: IAnswerHistory; questionInfo: IQuestionInfo } = props;
+  const { options } = questionInfo;
+  const selectedOption = options?.find(
+    (option: any) => option?.id === item?.answer?.selectedOption?.id
+  );
   return (
     <Box
       display="flex"
@@ -842,10 +829,7 @@ const AnswerHistoryItem = (props: any) => {
               <Trans i18nKey="selectedOption" />:
             </Typography>
             <Typography variant="bodyMedium" maxWidth="400px">
-              2.Partial
-              {/* {item?.answer?.selectedOption?.index +
-          "." +
-          item?.answer?.selectedOption?.title} */}
+              {selectedOption?.index}.{selectedOption?.title}
             </Typography>
           </Box>
         </Box>

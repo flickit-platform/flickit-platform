@@ -37,7 +37,7 @@ export interface IDefaultModel<T extends any = any> {
 
 export interface IAnswerTemplate {
   title: string;
-  value: number;
+  index: number;
   id: TId;
 }
 
