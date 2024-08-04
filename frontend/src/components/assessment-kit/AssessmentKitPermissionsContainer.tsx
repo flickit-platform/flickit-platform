@@ -71,11 +71,16 @@ const AssessmentKitPermisson = (props: any) => {
     runOnMount: false,
   });
   const deleteMember = async (id: any) => {
-    await deleteMemberToKitPermissionQueryData.query({
-      assessmentKitId: assessmentKitId,
-      userId: id,
-    });
-    await query.query();
+    try {
+      await deleteMemberToKitPermissionQueryData.query({
+        assessmentKitId: assessmentKitId,
+        userId: id,
+      });
+      await query.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
   return (
     <Box>
