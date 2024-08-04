@@ -471,5 +471,6 @@
   "thisFileNotAcceptable": "this file not acceptable",
   "successCreatedAssessmentTitleFirstPart": "The ",
   "successCreatedAssessmentTitleSecondPart": " created successfully",
-  "noOptionSelected": "No option is selected."
+  "noOptionSelected": "No option is selected.",
+  "showMore":"Show More"
 }
