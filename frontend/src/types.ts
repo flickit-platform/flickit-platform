@@ -9,7 +9,7 @@ export enum ECustomErrorType {
   "NETWORK_CONNECTION" = "NETWORK_CONNECTION",
   "INVALID_TOKEN" = "INVALID_TOKEN",
   "NOT_FOUND" = "NOT_FOUND",
-  "CANCELED" = "CANCELED",
+  "CANCELED" = "ERR_CANCELED",
   "ACCESS_DENIED" = "ACCESS_DENIED",
   "ERR_BAD_REQUEST" = "ERR_BAD_REQUEST",
 }
@@ -231,7 +231,7 @@ export interface IAssessmentResult {
   id: TId;
 }
 export interface IAssessmentResultModel
-  extends IDefaultModel<IAssessmentResult> {}
+  extends IDefaultModel<IAssessmentResult> { }
 
 export type TAssessmentResultsModel = string[];
 
@@ -310,6 +310,7 @@ export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
   permissions: IPermissions;
+  total: number
 }
 
 export interface IQuestionImpact {
@@ -342,7 +343,7 @@ export interface IQuestionsResult extends IAssessmentResult {
 }
 
 export interface IQuestionsResultsModel
-  extends IDefaultModel<IQuestionsResult> {}
+  extends IDefaultModel<IQuestionsResult> { }
 
 export interface IAssessment {
   id: TId;
@@ -370,7 +371,7 @@ export interface IMember {
   user: Omit<IUserInfo, "current_space" | "email">;
 }
 
-export interface IMemberModel extends IDefaultModel<IMember> {}
+export interface IMemberModel extends IDefaultModel<IMember> { }
 
 export interface ISubjectReport {
   id: TId;
