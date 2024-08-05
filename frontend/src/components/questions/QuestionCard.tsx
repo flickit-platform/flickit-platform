@@ -1032,9 +1032,9 @@ const Evidence = (props: any) => {
                   ?
                   <Box sx={{display:"flex",justifyContent:"center",width:"100%",paddingBottom:'12px',whiteSpace:"nowrap"}}>
                       <Typography
-                      sx={{...theme.typography.headlineSmall,color:evidenceBG.borderColor,fontSize:{xs:"1.2rem",sm:"unset"}}}
+                      sx={{...theme.typography.headlineSmall,color:evidenceBG.borderColor,fontSize:{xs:"1.2rem",sm:"1.5rem"}}}
                       >
-                          {`New ${value.toLowerCase()} evidence (Attachments)`}
+                          {`${t("evidenceAttachmentType", {value: value.toLowerCase()})}`}
                       </Typography>
                   </Box>
                   :
@@ -1144,9 +1144,9 @@ const Evidence = (props: any) => {
                                   checked={getCreateAttachment}
                                   onChange={() => setCreateAttachment(prev => !prev)}
                                   sx={{
-                                      color: "#0288d1",
+                                      color: evidenceBG.borderColor,
                                       "&.Mui-checked": {
-                                          color: "#0288d1",
+                                          color: evidenceBG.borderColor,
                                       },
                                   }}
                               />
@@ -1229,12 +1229,13 @@ const Evidence = (props: any) => {
                               <Trans i18nKey={"back"} />
                           </LoadingButton>
                       </Box>
-                      <Box display={"flex"} justifyContent={"end"} mt={2}>
+                      <Box display={"flex"} justifyContent={"end"} mt={2} >
                           <LoadingButton
                               sx={{
                                   maxHeight: "40px",
                                   borderRadius: "4px",
                                   p: 2,
+                                  whiteSpace:"nowrap",
                                   width:{xs:"56px" ,sm:"160px"},
                                   background: evidenceBG.borderColor,
                                   "&:hover": {
@@ -1345,7 +1346,7 @@ const CreateEvidenceAttachment = (props:any)=>{
     const abortController = useMemo(() => new AbortController(), [evidenceJustCreatedId]);
 
     const MAX_SIZE = 2097152
-    const skeleton = Array.from(Array(5).keys())
+    const skeleton = Array.from(Array(4).keys())
 
     const addEvidenceAttachments = useQuery({
         service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
@@ -1414,11 +1415,19 @@ const CreateEvidenceAttachment = (props:any)=>{
                         <ControlBtn addEvidenceAttachments={addEvidenceAttachments} DiscardBtn={DiscardBtn} UploadAttachment={UploadAttachment} pallet={pallet} />
                     </Grid>
             </Grid>
-            <Box sx={{height:"50%",width:"100%"}}>
+            <Box sx={{height:"50%",width:"100%",pb:"20px"}}>
                 <Grid
                     container
                     sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
+                    <Grid item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px:"40px" }}>
+                        {!attachments.length && <Typography sx={{ ...theme.typography?.titleMedium, fontSize: { xs: "10px", sm: "unset" } }}><Trans
+                            i18nKey={"addAttachment"} /></Typography>}
+                        {attachments.length >= 1 && <Typography sx={{ ...theme.typography?.titleMedium, display: 'flex', gap: "5px" }}>
+                            {t("attachmentCount", { attachmentsCount : attachments.length })}</Typography>}
+                    </Grid>
+
                     <Grid  item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px:"40px" }}>
+
                         {
                             loadingFile ?
                                 skeleton.map((item, index) => {
