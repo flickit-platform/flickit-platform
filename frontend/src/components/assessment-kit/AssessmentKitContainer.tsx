@@ -28,6 +28,8 @@ import { t } from "i18next";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { ECustomErrorType } from "@/types";
+import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -35,10 +37,15 @@ const AssessmentKitContainer = () => {
   const assessmentKitQueryData = useQuery({
     service: (args = { id: assessmentKitId }, config) =>
       service.fetchAssessmentKit(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
   });
   const { config } = useConfigContext();
 
-  return (
+  return assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
+    assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND ? (
+    <ErrorNotFoundOrAccessDenied />
+  ) : (
     <QueryData
       {...assessmentKitQueryData}
       render={(data) => {
@@ -367,8 +374,8 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                                ? "0 8px 8px 0"
-                                : "0",
+                              ? "0 8px 8px 0"
+                              : "0",
                         }}
                       >
                         {item.title}
@@ -430,7 +437,10 @@ const AssessmentKit = (props: any) => {
                 <Trans i18nKey="questionnaires" />
               </Title>
               <Typography variant="body2" fontSize="1rem">
-                <Trans i18nKey="questionnairesAssessmentKitDescription" values={{ questionnairesCount }} />
+                <Trans
+                  i18nKey="questionnairesAssessmentKitDescription"
+                  values={{ questionnairesCount }}
+                />
               </Typography>
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any) => {
