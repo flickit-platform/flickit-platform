@@ -14,6 +14,7 @@ import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
 import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
+import { Typography } from "@mui/material";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
@@ -26,6 +27,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
     title,
     questionCount: number_of_questions,
     answerCount: number_of_answers,
+    description,
     progress = 0,
     subjects,
     nextQuestion,
@@ -69,6 +71,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 )}
               </Box>
             </Title>
+            <Typography variant="bodyLarge">{description}</Typography>
           </Box>
         </Box>
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
@@ -116,8 +119,7 @@ const ActionButtons = (props: {
   number_of_answers: number;
   nextQuestion: number;
 }) => {
-  const { id, progress, number_of_answers, nextQuestion, title } =
-    props;
+  const { id, progress, number_of_answers, nextQuestion, title } = props;
   return (
     <Box display="flex">
       {progress === 100 && (
