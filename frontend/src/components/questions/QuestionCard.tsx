@@ -1028,80 +1028,90 @@ const Evidence = (props: any) => {
             justifyContent={"end"}
             sx={styles.formGrid}
           >
-            <TabContext value={value}>
-              <TabList
-                onChange={handleChange}
-                sx={{
-                  width: "100%",
+              {changeInput
+                  ?
+                  <Box sx={{display:"flex",justifyContent:"center",width:"100%",paddingBottom:'12px',whiteSpace:"nowrap"}}>
+                      <Typography
+                      sx={{...theme.typography.headlineSmall,color:evidenceBG.borderColor,fontSize:{xs:"1.2rem",sm:"unset"}}}
+                      >
+                          {`New ${value.toLowerCase()} evidence (Attachments)`}
+                      </Typography>
+                  </Box>
+                  :
+                  <TabContext value={value}>
+                      <TabList
+                          onChange={handleChange}
+                          sx={{
+                              width: "100%",
+                              "&.MuiTabs-root": {
+                                  borderBottomColor: "transparent",
+                                  justifyContent: "space-between",
+                                  display: "flex",
+                              },
+                              ".MuiTabs-indicator": {
+                                  backgroundColor: evidenceBG.borderColor,
+                              },
+                          }}
+                      >
+                          <Tab
+                              label={<Trans i18nKey="negativeEvidence" />}
+                              value="NEGATIVE"
+                              sx={{
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                  },
+                                  ...theme.typography.headlineSmall,
+                                  fontSize: { xs: "1rem !important" },
+                              }}
+                          />
+                          <Tab
+                              label={
+                                  <Box
+                                      sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                      }}
+                                  >
+                                      <Trans i18nKey="comment" />
+                                      {value == null && (
+                                          <InfoOutlinedIcon
+                                              style={{ color: evidenceBG.borderColor }}
+                                              sx={{ ml: 1 }}
+                                          />
+                                      )}
+                                  </Box>
+                              }
+                              sx={{
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                  },
+                                  ...theme.typography.headlineSmall,
+                                  fontSize: { xs: "1rem !important" },
+                              }}
+                              value={null}
+                          />
+                          <Tab
+                              label={<Trans i18nKey="positiveEvidence" />}
+                              sx={{
 
-                  "&.MuiTabs-root": {
-                    borderBottomColor: "transparent",
-                    justifyContent: "space-between",
-                    display: "flex",
-                  },
-                  ".MuiTabs-indicator": {
-                    backgroundColor: evidenceBG.borderColor,
-                  },
-                }}
-              >
-                <Tab
-                  label={<Trans i18nKey="negativeEvidence" />}
-                  value="NEGATIVE"
-                  sx={{
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                    },
-                    ...theme.typography.headlineSmall,
-                    fontSize: { xs: "1rem !important" },
-                  }}
-                />
-                <Tab
-                  label={
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Trans i18nKey="comment" />
-                      {value == null && (
-                        <InfoOutlinedIcon
-                          style={{ color: evidenceBG.borderColor }}
-                          sx={{ ml: 1 }}
-                        />
-                      )}
-                    </Box>
-                  }
-                  sx={{
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                    },
-                    ...theme.typography.headlineSmall,
-                    fontSize: { xs: "1rem !important" },
-                  }}
-                  value={null}
-                />
-                <Tab
-                  label={<Trans i18nKey="positiveEvidence" />}
-                  sx={{
-
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                      ...theme.typography.headlineSmall,
-                      fontSize: { xs: "1rem !important" },
-                    },
-                  }}
-                  value="POSITIVE"
-                />
-              </TabList>
-            </TabContext>
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                      ...theme.typography.headlineSmall,
+                                      fontSize: { xs: "1rem !important" },
+                                  },
+                              }}
+                              value="POSITIVE"
+                          />
+                      </TabList>
+                  </TabContext>
+              }
               {changeInput ?
                   <Grid item  xs={12} position={"relative"}>
                     <CreateEvidenceAttachment fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
@@ -1324,7 +1334,7 @@ const Evidence = (props: any) => {
 
 const CreateEvidenceAttachment = (props:any)=>{
 
-    const {pallet, evidenceJustCreatedId, evidencesQueryData, setAttachmentData, fetchAttachments} = props
+    const { pallet, evidenceJustCreatedId, evidencesQueryData, setAttachmentData, fetchAttachments } = props
     const { service } = useServiceContext();
     const [getDropZone, setDropZone] = useState<any>(null)
     const [description, setDescription] = useState("")
@@ -1392,15 +1402,15 @@ const CreateEvidenceAttachment = (props:any)=>{
     }
 
     return (
-        <Box sx={{borderRadius:"16px",width:"100%",height:"232px",background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
-            <Grid direction={"row"} container sx={{height:"50%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                    <Grid item xs={4} sx={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+        <Box sx={{borderRadius:"16px",width:"100%",height: {xs : "auto",sm:"232px"},background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
+            <Grid direction={"row"} container sx={{height:"50%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center",gap:{xs:"15px",sm:"unset"}, padding:{xs:"20px 40px 40px",sm:"unset"}}}>
+                    <Grid  item xs={12} sm={4} sx={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                         <CreateDropZone pallet={pallet} setDropZone={setDropZone} getDropZone={getDropZone} />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={4}>
                         <DescriptionBox setDescription={setDescription}  description={description} setError={setError} error={error}/>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={4}>
                         <ControlBtn addEvidenceAttachments={addEvidenceAttachments} DiscardBtn={DiscardBtn} UploadAttachment={UploadAttachment} pallet={pallet} />
                     </Grid>
             </Grid>
@@ -1408,7 +1418,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                 <Grid
                     container
                     sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
-                    <Box sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+                    <Grid  item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px:"40px" }}>
                         {
                             loadingFile ?
                                 skeleton.map((item, index) => {
@@ -1421,7 +1431,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                                     )
                                 })
                         }
-                    </Box>
+                    </Grid>
                     {
                         attachments.length == 5 && <Box>
                         <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "150px", sm: "250px" } }}>
@@ -1442,7 +1452,7 @@ const ControlBtn = (props : any) =>{
     const { pallet, DiscardBtn,UploadAttachment, addEvidenceAttachments } = props
 
     return(
-        <Box sx={{ width:'100%',height:"100%",display:"flex",flexDirection: "column",justifyContent:"center",alignItems:"center",gap:"12px"}}>
+        <Box sx={{ width:'100%',height:"100%",display:"flex",flexDirection: {xs:"row",sm:"column"},justifyContent:"center",alignItems:"center",gap:"12px"}}>
             <LoadingButton
                 sx={{
                     maxHeight:"28px",
