@@ -1,6 +1,7 @@
 import os
 import sentry_sdk
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
 
 sentry_sdk.init(
@@ -74,7 +75,6 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -91,6 +91,7 @@ EXPIRATION_DAYS = 7
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
 PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
+
 
 CACHE_MIDDLEWARE_KEY_PREFIX = PROJECT_APP
 
@@ -197,9 +198,11 @@ ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/vol/web/media'
-STATIC_ROOT = '/vol/web/static'
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_ROOT = BASE_DIR / 'media'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
@@ -260,5 +263,3 @@ SWAGGER_SETTINGS = {
         }
     }
 }
-
-
