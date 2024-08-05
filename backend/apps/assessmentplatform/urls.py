@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/v1/assessment-kit-tags/', include('baseinfo.url.url_assessment_kit_tags_v1')),
     path('api/v1/assessments/', include('assessment.url.url_assessment_v1')),
     path('api/v2/assessments/', include('assessment.url.url_assessment_v2')),
+    path('api/v1/assessment-invites/', include('assessment.url.url_assessment_invites_v1')),
     path('api/v1/assessments-compare/', include('assessment.url.url_assessments_compare_v1')),
     path('api/v1/comparable-assessments/', include('assessment.url.url_comparable_assessments_v1')),
     path('api/v1/assessment-user-roles/', include('assessment.url.url_assessment_user_roles_v1')),
