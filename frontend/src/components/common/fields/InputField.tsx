@@ -97,6 +97,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       onChange={handleInputChange}
       sx={{
         background: pallet?.background,
+        borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderColor: pallet?.borderColor,
@@ -108,7 +109,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
-          paddingTop: isEditing ? "32px" : ""
+          paddingTop: isEditing && name == "evidenceDetail" ? "32px" : "",
+          paddingBottom: name == "evidence" ?  "52px"  :  ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
