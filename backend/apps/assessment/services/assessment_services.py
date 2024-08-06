@@ -78,8 +78,17 @@ def assessment_invitees(request, assessment_id):
 def assessment_invite_delete(request, invite_id):
     response = requests.delete(
         ASSESSMENT_URL + f'assessment-core/api/assessment-invites/{invite_id}',
-        params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def assessment_invite_edit(request, invite_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-invites/{invite_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
