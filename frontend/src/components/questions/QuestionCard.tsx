@@ -873,6 +873,8 @@ const Evidence = (props: any) => {
   const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({ expended: false, id: "" });
   const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({ expended: false, count: 0 });
   const [getAttachmentData, setAttachmentData] = useState(false)
+  const [getDropZone, setDropZone] = useState<any>(null)
+  const [description, setDescription] = useState("")
   const is_farsi = firstCharDetector(valueCount);
   const { service } = useServiceContext();
   const [evidenceId, setEvidenceId] = useState("")
@@ -1010,6 +1012,15 @@ const Evidence = (props: any) => {
     return fetchEvidenceAttachments.query({ ...args })
   }
 
+  const handelFinish = async () => {
+      const { items } = await evidencesQueryData.query();
+      setEvidencesData(items)
+      setChangeInput(false)
+      setDropZone(null)
+      setDescription("")
+      setCreateAttachment(false)
+  }
+
   return (
     <Box
       display={"flex"}
@@ -1034,7 +1045,7 @@ const Evidence = (props: any) => {
                       <Typography
                       sx={{...theme.typography.headlineSmall,color:evidenceBG.borderColor,fontSize:{xs:"1.2rem",sm:"1.5rem"}}}
                       >
-                          {`${t("evidenceAttachmentType", {value: value.toLowerCase()})}`}
+                          {`${t("evidenceAttachmentType", {value:value ? value.toLowerCase() : "comment"})}`}
                       </Typography>
                   </Box>
                   :
@@ -1114,7 +1125,7 @@ const Evidence = (props: any) => {
               }
               {changeInput ?
                   <Grid item  xs={12} position={"relative"}>
-                    <CreateEvidenceAttachment fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
+                    <CreateEvidenceAttachment description={description} getDropZone={getDropZone} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
                   </Grid>
                   :
                   <Grid item xs={12} position={"relative"}>
@@ -1210,25 +1221,25 @@ const Evidence = (props: any) => {
               }
               {changeInput ?
                   <Box sx={{display:"flex",gap:"10px"}}>
-                      <Box display={"flex"} justifyContent={"end"} mt={2}>
-                          <LoadingButton
-                              sx={{
-                                  maxHeight: '40px',
-                                  borderRadius: "4px",
-                                  p: 2,
-                                  width:{xs:"56px" ,sm:"160px"},
-                                  background: evidenceBG.borderColor,
-                                  "&:hover": {
-                                      background: evidenceBG.borderColor,
-                                  },
-                              }}
-                              type="submit"
-                              variant="contained"
-                              // loading={evidencesQueryData.loading}
-                          >
-                              <Trans i18nKey={"back"} />
-                          </LoadingButton>
-                      </Box>
+                      {/*<Box display={"flex"} justifyContent={"end"} mt={2}>*/}
+                      {/*    <LoadingButton*/}
+                      {/*        sx={{*/}
+                      {/*            maxHeight: '40px',*/}
+                      {/*            borderRadius: "4px",*/}
+                      {/*            p: 2,*/}
+                      {/*            width:{xs:"56px" ,sm:"160px"},*/}
+                      {/*            background: evidenceBG.borderColor,*/}
+                      {/*            "&:hover": {*/}
+                      {/*                background: evidenceBG.borderColor,*/}
+                      {/*            },*/}
+                      {/*        }}*/}
+                      {/*        type="submit"*/}
+                      {/*        variant="contained"*/}
+                      {/*        // loading={evidencesQueryData.loading}*/}
+                      {/*    >*/}
+                      {/*        <Trans i18nKey={"back"} />*/}
+                      {/*    </LoadingButton>*/}
+                      {/*</Box>*/}
                       <Box display={"flex"} justifyContent={"end"} mt={2} >
                           <LoadingButton
                               sx={{
@@ -1242,9 +1253,10 @@ const Evidence = (props: any) => {
                                       background: evidenceBG.borderColor,
                                   },
                               }}
-                              type="submit"
+                              // type="submit"
+                              onClick={handelFinish}
                               variant="contained"
-                              loading={evidencesQueryData.loading}
+                              loading={fetchEvidenceAttachments.loading}
                           >
                               <Trans i18nKey={"finish"} />
                           </LoadingButton>
@@ -1258,7 +1270,8 @@ const Evidence = (props: any) => {
                               borderRadius: "4px",
                               p: 2,
                               maxHeight:"40px",
-                              width: {xs:"56px",sm:"200px"} ,
+                              whiteSpace:"nowrap",
+                              width: {xs:"130px",sm:"170px"} ,
                               background: evidenceBG.borderColor,
                               "&:hover": {
                                   background: evidenceBG.borderColor,
@@ -1335,10 +1348,8 @@ const Evidence = (props: any) => {
 
 const CreateEvidenceAttachment = (props:any)=>{
 
-    const { pallet, evidenceJustCreatedId, evidencesQueryData, setAttachmentData, fetchAttachments } = props
+    const { pallet, evidenceJustCreatedId, evidencesQueryData, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, getDropZone} = props
     const { service } = useServiceContext();
-    const [getDropZone, setDropZone] = useState<any>(null)
-    const [description, setDescription] = useState("")
     const [attachments, setAttachments] = useState([])
     const [error, setError] = useState(false)
     const [loadingFile, setLoadingFile] = useState<boolean>(false)
@@ -1353,7 +1364,7 @@ const CreateEvidenceAttachment = (props:any)=>{
         runOnMount: false,
     });
 
-    const DiscardBtn = ()=>{
+    const DiscardBtn = () =>{
         setDropZone(null)
         setDescription("")
     }
@@ -1372,9 +1383,9 @@ const CreateEvidenceAttachment = (props:any)=>{
         if (getDropZone[0].size > MAX_SIZE) {
             return toast(t("uploadAcceptableSize"), { type: "error" })
         }
-        // if (expanded.count >= 5) {
-        //     return toast("Each evidence can have up to 5 attachments.", { type: "error" })
-        // }
+        if (attachments.length >= 5) {
+            return toast("Each evidence can have up to 5 attachments.", { type: "error" })
+        }
         try {
             if (getDropZone && !error) {
                 setLoadingFile(true)
@@ -1384,11 +1395,11 @@ const CreateEvidenceAttachment = (props:any)=>{
                     description: description
                 }
                 await addEvidenceAttachments.query({ evidenceId : evidenceJustCreatedId, data })
-                const { items } = await evidencesQueryData.query();
+                // const { items } = await evidencesQueryData.query();
+                // setEvidencesData(items)
                 let { attachments } = await fetchAttachments({ evidence_id: evidenceJustCreatedId })
                 setLoadingFile(false)
                 setAttachments(attachments)
-                // setEvidencesData(items)
                 setAttachmentData(true)
                 setDropZone(null)
                 setDescription("")
@@ -1426,7 +1437,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                             {t("attachmentCount", { attachmentsCount : attachments.length })}</Typography>}
                     </Grid>
 
-                    <Grid  item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px:"40px" }}>
+                    <Grid  item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "nowrap", px:"40px" }}>
 
                         {
                             loadingFile ?
@@ -1443,7 +1454,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                     </Grid>
                     {
                         attachments.length == 5 && <Box>
-                        <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "150px", sm: "250px" } }}>
+                        <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "90%", sm: "450px" },padding: "0px 40px" }}>
                             <InfoOutlinedIcon
                                 sx={{ mr: 1, width: "15px", height: "15px" }}
                             />
