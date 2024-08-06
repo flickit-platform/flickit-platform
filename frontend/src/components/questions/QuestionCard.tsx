@@ -1221,25 +1221,6 @@ const Evidence = (props: any) => {
               }
               {changeInput ?
                   <Box sx={{display:"flex",gap:"10px"}}>
-                      {/*<Box display={"flex"} justifyContent={"end"} mt={2}>*/}
-                      {/*    <LoadingButton*/}
-                      {/*        sx={{*/}
-                      {/*            maxHeight: '40px',*/}
-                      {/*            borderRadius: "4px",*/}
-                      {/*            p: 2,*/}
-                      {/*            width:{xs:"56px" ,sm:"160px"},*/}
-                      {/*            background: evidenceBG.borderColor,*/}
-                      {/*            "&:hover": {*/}
-                      {/*                background: evidenceBG.borderColor,*/}
-                      {/*            },*/}
-                      {/*        }}*/}
-                      {/*        type="submit"*/}
-                      {/*        variant="contained"*/}
-                      {/*        // loading={evidencesQueryData.loading}*/}
-                      {/*    >*/}
-                      {/*        <Trans i18nKey={"back"} />*/}
-                      {/*    </LoadingButton>*/}
-                      {/*</Box>*/}
                       <Box display={"flex"} justifyContent={"end"} mt={2} >
                           <LoadingButton
                               sx={{
@@ -1252,11 +1233,12 @@ const Evidence = (props: any) => {
                                   "&:hover": {
                                       background: evidenceBG.borderColor,
                                   },
+                                  ...theme.typography.titleMedium
                               }}
                               // type="submit"
                               onClick={handelFinish}
                               variant="contained"
-                              loading={fetchEvidenceAttachments.loading}
+                              loading={evidencesQueryData.loading}
                           >
                               <Trans i18nKey={"finish"} />
                           </LoadingButton>
@@ -1395,17 +1377,12 @@ const CreateEvidenceAttachment = (props:any)=>{
                     description: description
                 }
                 await addEvidenceAttachments.query({ evidenceId : evidenceJustCreatedId, data })
-                // const { items } = await evidencesQueryData.query();
-                // setEvidencesData(items)
                 let { attachments } = await fetchAttachments({ evidence_id: evidenceJustCreatedId })
                 setLoadingFile(false)
                 setAttachments(attachments)
                 setAttachmentData(true)
                 setDropZone(null)
                 setDescription("")
-                // if (recognize == "self") {
-                //     onClose()
-                // }
             }
         } catch (e: any) {
             const err = e as ICustomError;
