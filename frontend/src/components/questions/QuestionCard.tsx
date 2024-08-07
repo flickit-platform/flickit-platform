@@ -86,6 +86,8 @@ import formatBytes from "@utils/formatBytes";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import {evidenceAttachmentType} from "@utils/enumType";
+
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -872,7 +874,7 @@ const Evidence = (props: any) => {
   const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
   const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({ expended: false, id: "" });
   const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({ expended: false, count: 0 });
-  const [getAttachmentData, setAttachmentData] = useState(false)
+  const [getAttachmentData, setAttachmentData] = useState<boolean>(false)
   const [getDropZone, setDropZone] = useState<any>(null)
   const [description, setDescription] = useState("")
   const is_farsi = firstCharDetector(valueCount);
@@ -1068,7 +1070,7 @@ const Evidence = (props: any) => {
                       >
                           <Tab
                               label={<Trans i18nKey="negativeEvidence" />}
-                              value="NEGATIVE"
+                              value ={evidenceAttachmentType.negative}
                               sx={{
                                   display: "flex",
                                   flex: 1,
@@ -1083,9 +1085,10 @@ const Evidence = (props: any) => {
                               label={
                                   <Box
                                       sx={{
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
+                                          // display: "flex",
+                                          // justifyContent: "center",
+                                          // alignItems: "center",
+                                          ...styles.centerV,
                                       }}
                                   >
                                       <Trans i18nKey="comment" />
@@ -1120,7 +1123,7 @@ const Evidence = (props: any) => {
                                       fontSize: { xs: "1rem !important" },
                                   },
                               }}
-                              value="POSITIVE"
+                              value={evidenceAttachmentType.positive}
                           />
                       </TabList>
                   </TabContext>
@@ -1681,10 +1684,10 @@ const EvidenceDetail = (props: any) => {
     setIsEditing(prev => !prev)
 
     if (type === "Positive") {
-      setValue("POSITIVE");
+      setValue(evidenceAttachmentType.positive);
     }
     if (type === "Negative") {
-      setValue("NEGATIVE");
+      setValue(evidenceAttachmentType.negative);
     }
     if (type === null) {
       setValue(null);
