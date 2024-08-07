@@ -110,8 +110,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
-          paddingTop: isEditing && name == evidenceAttachmentInput.paddingTop,
-          paddingBottom: name == evidenceAttachmentInput.paddingBottom
+          paddingTop: isEditing && name ==  "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
+          paddingBottom: name ==  "evidence" ?  evidenceAttachmentInput.paddingBottom  :  ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}

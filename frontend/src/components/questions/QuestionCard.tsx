@@ -1008,7 +1008,8 @@ const Evidence = (props: any) => {
         }
       setAttachmentData(true)
     } catch (e) {
-        toastError(e)
+        const err = e as ICustomError;
+        toastError(err);
     }
   };
 
@@ -1438,7 +1439,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                                 :
                                 attachments.map((item, index) => {
                                     return (
-                                        < FileIcon evidenceId={evidenceJustCreatedId} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} key={index} />
+                                        < FileIcon setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} key={index} />
                                     )
                                 })
                         }

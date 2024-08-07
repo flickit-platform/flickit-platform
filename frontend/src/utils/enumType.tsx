@@ -1,6 +1,6 @@
 export enum evidenceAttachmentInput{
-    paddingTop = "evidenceDetail" ? "32px" : "",
-    paddingBottom = "evidence" ?  "52px"  :  "",
+    paddingTop =  "32px",
+    paddingBottom = "52px",
 }
 
 export enum evidenceAttachmentType{
