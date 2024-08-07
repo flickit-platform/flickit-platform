@@ -958,11 +958,11 @@ const Evidence = (props: any) => {
               });
                 if(getCreateAttachment) {
                     setChangeInput(true)
+                    setEvidenceJustCreatedId(id)
                 }else {
                     const { items } = await evidencesQueryData.query();
                     setEvidencesData(items)
                 }
-                setEvidenceJustCreatedId(id)
                 setValueCount("");
             }
         }
@@ -1000,11 +1000,13 @@ const Evidence = (props: any) => {
       let attachmentId = expandedDeleteAttachmentDialog.id
       await RemoveEvidenceAttachments.query({ evidenceId, attachmentId })
       setExpandedDeleteAttachmentDialog({ ...expandedDeleteAttachmentDialog, expended: false })
-      let { items } = await evidencesQueryData.query()
-      setEvidencesData(items)
+        if(!getCreateAttachment){
+            let { items } = await evidencesQueryData.query()
+            setEvidencesData(items)
+        }
       setAttachmentData(true)
     } catch (e) {
-
+        toastError(e)
     }
   };
 
@@ -1125,7 +1127,7 @@ const Evidence = (props: any) => {
               }
               {changeInput ?
                   <Grid item  xs={12} position={"relative"}>
-                    <CreateEvidenceAttachment description={description} getDropZone={getDropZone} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
+                    <CreateEvidenceAttachment setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} getAttachmentData={getAttachmentData} description={description} getDropZone={getDropZone} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
                   </Grid>
                   :
                   <Grid item xs={12} position={"relative"}>
@@ -1277,6 +1279,7 @@ const Evidence = (props: any) => {
             key={index}
             setValue={setValue}
             item={item}
+            changeInput={changeInput}
             evidencesData={evidencesData}
             setEvidencesData={setEvidencesData}
             setExpandedDeleteDialog={setExpandedDeleteDialog}
@@ -1306,6 +1309,7 @@ const Evidence = (props: any) => {
           uploadAttachment={<Trans i18nKey={"uploadAttachment"} />}
           fetchAttachments={fetchAttachments}
           setAttachmentData={setAttachmentData}
+          getCreateAttachment={getCreateAttachment}
         />
         <DeleteDialog
           expanded={expandedDeleteDialog}
@@ -1330,7 +1334,7 @@ const Evidence = (props: any) => {
 
 const CreateEvidenceAttachment = (props:any)=>{
 
-    const { pallet, evidenceJustCreatedId, evidencesQueryData, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, getDropZone} = props
+    const { pallet, evidenceJustCreatedId,setEvidenceId, setExpandedDeleteAttachmentDialog, evidencesQueryData, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, getDropZone , getAttachmentData} = props
     const { service } = useServiceContext();
     const [attachments, setAttachments] = useState([])
     const [error, setError] = useState(false)
@@ -1350,6 +1354,13 @@ const CreateEvidenceAttachment = (props:any)=>{
         setDropZone(null)
         setDescription("")
     }
+    useEffect(()=>{
+      (async  ()=> {
+          let {attachments} = await fetchAttachments({evidence_id: evidenceJustCreatedId})
+          setLoadingFile(false)
+          setAttachments(attachments)
+      })()
+    },[getAttachmentData])
 
     const UploadAttachment = async () =>{
         if (description.length > 1 && description.length < 3) {
@@ -1424,7 +1435,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                                 :
                                 attachments.map((item, index) => {
                                     return (
-                                        < FileIcon evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} key={index} />
+                                        < FileIcon evidenceId={evidenceJustCreatedId} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} key={index} />
                                     )
                                 })
                         }
@@ -1602,7 +1613,7 @@ const EvidenceDetail = (props: any) => {
     item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
     setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
     fetchAttachments, expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
-    setExpandedDeleteAttachmentDialog, evidenceId, deleteAttachment, evidencesData
+    setExpandedDeleteAttachmentDialog, evidenceId, changeInput, evidencesData
   } = props;
   const LIMITED = 200;
   const [valueCount, setValueCount] = useState("");
@@ -1614,10 +1625,10 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    if (id === evidencesData[0].id) {
+    if (id === evidencesData[0].id && !changeInput) {
       setExpandedEvidenceBox(false)
     }
-  }, [evidencesData.length])
+  }, [evidencesData.length,changeInput])
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -1740,7 +1751,6 @@ const EvidenceDetail = (props: any) => {
   useEffect(() => {
     setEvidenceId(id)
   }, [id]);
-
 
   const downloadFile = ({ link }: { link: string }) => {
     const fileUrl = link;
@@ -2175,7 +2185,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
   const {
     expanded, onClose, uploadAttachment, uploadAnother,
-    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData
+    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData,getCreateAttachment
   } = props;
   const MAX_DESC_TEXT = 100
   const MIN_DESC_TEXT = 3
@@ -2237,9 +2247,11 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           attachment: getDropZone[0],
           description: description
         }
-        await addEvidenceAttachments.query({ evidenceId, data })
-        const { items } = await evidencesQueryData.query();
-        setEvidencesData(items)
+          await addEvidenceAttachments.query({ evidenceId, data })
+          if(!getCreateAttachment){
+            const { items } = await evidencesQueryData.query();
+            setEvidencesData(items)
+        }
         setAttachmentData(true)
         setDropZone(null)
         setDescription("")
