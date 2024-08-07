@@ -119,6 +119,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
         paddingX="30px"
         width="100%"
       >
+        {/*TODO*/}
         {fetchRelatedEvidences?.data?.items?.map((item: any, index: number) => (
           <EvidanceDescription
             key={index}
@@ -158,6 +159,7 @@ const EvidanceDescription = ({
   textColor: string;
   item: any;
 }) => {
+  console.log(item,"test item")
   return (
     <>
       <Box display="flex" justifyContent="flex-start" alignItems="center">
