@@ -10,8 +10,6 @@ import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import zip from "@assets/svg/ZIP.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   EAssessmentStatus,
@@ -31,16 +29,11 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
-import ListItem from "@mui/material/ListItem";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ListItemText from "@mui/material/ListItemText";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { useQuery } from "@utils/useQuery";
 import formatDate from "@utils/formatDate";
-import useMenu from "@/utils/useMenu";
-import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
@@ -57,8 +50,6 @@ import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -72,17 +63,13 @@ import UploadIcon from "../../assets/svg/UploadIcon.svg"
 import PreAttachment from "@components/questions/iconFiles/preAttachments";
 import FileSvg from "@components/questions/iconFiles/fileSvg";
 import Tooltip from "@mui/material/Tooltip";
-import Select from "@mui/material/Select";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Dropzone, { useDropzone } from 'react-dropzone'
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { primaryFontFamily, theme } from "@config/theme";
+import { theme } from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile"
-import formatBytes from "@utils/formatBytes";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
@@ -99,7 +86,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
-  const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
+  const [setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
 
@@ -874,8 +861,8 @@ const Evidence = (props: any) => {
   const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
   const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({ expended: false, id: "" });
   const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({ expended: false, count: 0 });
-  const [getAttachmentData, setAttachmentData] = useState<boolean>(false)
-  const [getDropZone, setDropZone] = useState<any>(null)
+  const [attachmentData, setAttachmentData] = useState<boolean>(false)
+  const [dropZoneData, setDropZone] = useState<any>(null)
   const [description, setDescription] = useState("")
   const is_farsi = firstCharDetector(valueCount);
   const { service } = useServiceContext();
@@ -911,7 +898,7 @@ const Evidence = (props: any) => {
   }, [])
 
   const [value, setValue] = React.useState("POSITIVE");
-  const [getCreateAttachment,setCreateAttachment] = useState(false);
+  const [createAttachment,setCreateAttachment] = useState(false);
   const [changeInput,setChangeInput] = useState(false)
   const [evidenceJustCreatedId,setEvidenceJustCreatedId] = useState<string>("")
   const [evidenceBG, setEvidenceBG] = useState<any>({
@@ -958,7 +945,7 @@ const Evidence = (props: any) => {
                     assessmentId,
                     type: value,
               });
-                if(getCreateAttachment) {
+                if(createAttachment) {
                     setChangeInput(true)
                     setEvidenceJustCreatedId(id)
                 }else {
@@ -1002,7 +989,7 @@ const Evidence = (props: any) => {
       let attachmentId = expandedDeleteAttachmentDialog.id
       await RemoveEvidenceAttachments.query({ evidenceId, attachmentId })
       setExpandedDeleteAttachmentDialog({ ...expandedDeleteAttachmentDialog, expended: false })
-        if(!getCreateAttachment){
+        if(!createAttachment){
             let { items } = await evidencesQueryData.query()
             setEvidencesData(items)
         }
@@ -1131,7 +1118,7 @@ const Evidence = (props: any) => {
               }
               {changeInput ?
                   <Grid item  xs={12} position={"relative"}>
-                    <CreateEvidenceAttachment setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} getAttachmentData={getAttachmentData} description={description} getDropZone={getDropZone} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
+                    <CreateEvidenceAttachment setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} attachmentData={attachmentData} description={description} dropZoneData={dropZoneData} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
                   </Grid>
                   :
                   <Grid item xs={12} position={"relative"}>
@@ -1158,7 +1145,7 @@ const Evidence = (props: any) => {
                           data-cy="automatic-submit-check"
                           control={
                               <Checkbox
-                                  checked={getCreateAttachment}
+                                  checked={createAttachment}
                                   onChange={() => setCreateAttachment(prev => !prev)}
                                   sx={{
                                       color: evidenceBG.borderColor,
@@ -1296,7 +1283,7 @@ const Evidence = (props: any) => {
             questionInfo={questionInfo}
             assessmentId={assessmentId}
             fetchAttachments={fetchAttachments}
-            getAttachmentData={getAttachmentData}
+            attachmentData={attachmentData}
             setAttachmentData={setAttachmentData}
             deleteAttachment={deleteAttachment}
           />
@@ -1313,7 +1300,7 @@ const Evidence = (props: any) => {
           uploadAttachment={<Trans i18nKey={"uploadAttachment"} />}
           fetchAttachments={fetchAttachments}
           setAttachmentData={setAttachmentData}
-          getCreateAttachment={getCreateAttachment}
+          createAttachment={createAttachment}
         />
         <DeleteDialog
           expanded={expandedDeleteDialog}
@@ -1338,7 +1325,7 @@ const Evidence = (props: any) => {
 
 const CreateEvidenceAttachment = (props:any)=>{
 
-    const { pallet, evidenceJustCreatedId,setEvidenceId, setExpandedDeleteAttachmentDialog, evidencesQueryData, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, getDropZone , getAttachmentData} = props
+    const { pallet, evidenceJustCreatedId,setEvidenceId, setExpandedDeleteAttachmentDialog, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, dropZoneData , attachmentData} = props
     const { service } = useServiceContext();
     const [attachments, setAttachments] = useState([])
     const [error, setError] = useState(false)
@@ -1364,31 +1351,31 @@ const CreateEvidenceAttachment = (props:any)=>{
           setLoadingFile(false)
           setAttachments(attachments)
       })()
-    },[getAttachmentData])
+    },[attachmentData])
 
     const UploadAttachment = async () =>{
         if (description.length > 1 && description.length < 3) {
             return setError(true)
         }
-        if (!getDropZone) {
+        if (!dropZoneData) {
             return toast(t("attachmentRequired"), { type: "error" })
         }
         if (error && description.length >= 100) {
             return toast(t("max100characters"), { type: "error" })
         }
 
-        if (getDropZone[0].size > MAX_SIZE) {
+        if (dropZoneData[0].size > MAX_SIZE) {
             return toast(t("uploadAcceptableSize"), { type: "error" })
         }
         if (attachments.length >= 5) {
             return toast("Each evidence can have up to 5 attachments.", { type: "error" })
         }
         try {
-            if (getDropZone && !error) {
+            if (dropZoneData && !error) {
                 setLoadingFile(true)
                 let data = {
                     id: evidenceJustCreatedId,
-                    attachment: getDropZone[0],
+                    attachment: dropZoneData[0],
                     description: description
                 }
                 await addEvidenceAttachments.query({ evidenceId : evidenceJustCreatedId, data })
@@ -1409,7 +1396,7 @@ const CreateEvidenceAttachment = (props:any)=>{
         <Box sx={{borderRadius:"16px",width:"100%",height: {xs : "auto",sm:"232px"},background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
             <Grid direction={"row"} container sx={{height:"50%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center",gap:{xs:"15px",sm:"unset"}, padding:{xs:"20px 40px 40px",sm:"unset"}}}>
                     <Grid  item xs={12} sm={4} sx={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                        <CreateDropZone pallet={pallet} setDropZone={setDropZone} getDropZone={getDropZone} />
+                        <CreateDropZone pallet={pallet} setDropZone={setDropZone} dropZoneData={dropZoneData} />
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <DescriptionBox setDescription={setDescription}  description={description} setError={setError} error={error}/>
@@ -1439,7 +1426,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                                 :
                                 attachments.map((item, index) => {
                                     return (
-                                        < FileIcon setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} key={index} />
+                                        < FileIcon key={Math.floor(Math.random() * 10000 )} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} />
                                     )
                                 })
                         }
@@ -1516,7 +1503,7 @@ const DescriptionBox = (props:any) => {
             multiline
             fullWidth
             value={description}
-            onChange={handelDescription}
+            onChange={(e)=>handelDescription(e)}
             variant="standard"
             inputProps={{
                 sx: {
@@ -1532,36 +1519,28 @@ const DescriptionBox = (props:any) => {
 
 const CreateDropZone = (props: any) =>{
 
-    const { setDropZone, getDropZone, pallet } = props
+    const { setDropZone, dropZoneData, pallet } = props
     const [dispalyFile, setDisplayFile] = useState<any>(null)
     const [typeFile, setTypeFile] = useState<any>(null)
     const MAX_SIZE = 2097152
 
-    const {
-        acceptedFiles,
-        fileRejections,
-        getRootProps,
-        getInputProps
-    } = useDropzone({
-        maxFiles: 1
-    });
 
     useEffect(() => {
-        if (getDropZone) {
-            let file = URL.createObjectURL(getDropZone[0])
+        if (dropZoneData) {
+            let file = URL.createObjectURL(dropZoneData[0])
             setDisplayFile(file)
-            if (getDropZone[0].type.startsWith("image")) {
-                setTypeFile(getDropZone[0].type.substring(0, getDropZone[0].type.indexOf("/")))
+            if (dropZoneData[0].type.startsWith("image")) {
+                setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
             }
-            if (getDropZone[0].type === "application/pdf") {
-                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
+            if (dropZoneData[0].type === "application/pdf") {
+                setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
             }
-            if (getDropZone[0].type === "application/zip") {
-                setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
+            if (dropZoneData[0].type === "application/zip") {
+                setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
             }
         }
 
-    }, [getDropZone])
+    }, [dropZoneData])
     const theme = useTheme()
     return(
         <Dropzone accept={{
@@ -1577,20 +1556,20 @@ const CreateDropZone = (props: any) =>{
             }
         }}>
             {({ getRootProps, getInputProps }) => (
-                getDropZone ?
+                dropZoneData ?
                     <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
                         <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
                         {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
                         {typeFile == "pdf" && <section style={{ width: "40%", height: "60%",display:"flex",justifyContent:"center" }}><Box sx={{width:"36px",height:"57px"}}><FileType name={"pdf"} /></Box></section>}
-                        {/*{typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}*/}
-                        <Typography sx={{ ...theme.typography.titleSmall }}>{getDropZone[0]?.name.length > 14 ? getDropZone[0]?.name.substring(0, 10) + "..." + getDropZone[0]?.name.substring(getDropZone[0]?.name.indexOf(".")) : getDropZone[0]?.name}</Typography>
+                        {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+                        <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
                     </Box>
                     :
                     <section style={{ cursor: "pointer", width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
                         <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
                             <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px",gap:"10px" }}>
                                 <input {...getInputProps()} />
-                                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} />
+                                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
                                 <Typography sx={{
                                     ...theme.typography.labelSmall,
                                     color: "#243342",
@@ -1616,7 +1595,7 @@ const EvidenceDetail = (props: any) => {
   const {
     item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
     setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
-    fetchAttachments, expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
+    fetchAttachments, expandedAttachmentsDialogs, attachmentData, setAttachmentData,
     setExpandedDeleteAttachmentDialog, evidenceId, changeInput, evidencesData
   } = props;
   const LIMITED = 200;
@@ -1731,14 +1710,14 @@ const EvidenceDetail = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      if (getAttachmentData && evidenceId == id) {
+      if (attachmentData && evidenceId == id) {
         let { attachments } = await fetchAttachments({ evidence_id: id })
         setAttachments(attachments)
         setExpandedAttachmentsDialogs({ ...expandedAttachmentsDialogs, count: attachmentsCount });
         setAttachmentData(false)
       }
     })()
-  }, [getAttachmentData, evidenceId])
+  }, [attachmentData, evidenceId])
 
   const expandedEvidenceBtm = async () => {
     setLoadingFile(true)
@@ -1983,7 +1962,7 @@ const EvidenceDetail = (props: any) => {
                             :
                             attachments.map((item, index) => {
                               return (
-                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index} />
+                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={Math.floor(Math.random() * 10000)} />
                               )
                             })}
                         {attachments.length < 5 && (<>
@@ -2107,7 +2086,7 @@ const FileIcon = (props: any): any => {
 
 const MyDropzone = (props: any) => {
 
-  const { setDropZone, getDropZone } = props
+  const { setDropZone, dropZoneData } = props
   const [dispalyFile, setDisplayFile] = useState<any>(null)
   const [typeFile, setTypeFile] = useState<any>(null)
   const MAX_SIZE = 2097152
@@ -2122,21 +2101,21 @@ const MyDropzone = (props: any) => {
   });
 
   useEffect(() => {
-    if (getDropZone) {
-      let file = URL.createObjectURL(getDropZone[0])
+    if (dropZoneData) {
+      let file = URL.createObjectURL(dropZoneData[0])
       setDisplayFile(file)
-      if (getDropZone[0].type.startsWith("image")) {
-        setTypeFile(getDropZone[0].type.substring(0, getDropZone[0].type.indexOf("/")))
+      if (dropZoneData[0].type.startsWith("image")) {
+        setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
       }
-      if (getDropZone[0].type === "application/pdf") {
-        setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
+      if (dropZoneData[0].type === "application/pdf") {
+        setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
       }
-      if (getDropZone[0].type === "application/zip") {
-        setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
+      if (dropZoneData[0].type === "application/zip") {
+        setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
       }
     }
 
-  }, [getDropZone])
+  }, [dropZoneData])
   const theme = useTheme()
   return (
     <Dropzone accept={{
@@ -2152,13 +2131,13 @@ const MyDropzone = (props: any) => {
       }
     }}>
       {({ getRootProps, getInputProps }) => (
-        getDropZone ?
+          dropZoneData ?
           <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
             {typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
             {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
             {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-            <Typography sx={{ ...theme.typography.titleMedium }}>{getDropZone[0]?.name.length > 14 ? getDropZone[0]?.name.substring(0, 10) + "..." + getDropZone[0]?.name.substring(getDropZone[0]?.name.indexOf(".")) : getDropZone[0]?.name}</Typography>
+            <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer" }}>
@@ -2189,7 +2168,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
   const {
     expanded, onClose, uploadAttachment, uploadAnother,
-    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData,getCreateAttachment
+    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData,createAttachment
   } = props;
   const MAX_DESC_TEXT = 100
   const MIN_DESC_TEXT = 3
@@ -2203,7 +2182,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const abortController = useMemo(() => new AbortController(), [evidenceId]);
   const [description, setDescription] = useState("")
   const [error, setError] = useState(false)
-  const [getDropZone, setDropZone] = useState<any>(null)
+  const [dropZoneData, setDropZone] = useState<any>(null)
   const addEvidenceAttachments = useQuery({
     service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
     runOnMount: false,
@@ -2211,12 +2190,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
 
   useEffect(() => {
-    if (getDropZone) {
-      if (getDropZone[0]?.size && getDropZone[0]?.size > 2097152) {
+    if (dropZoneData) {
+      if (dropZoneData[0]?.size && dropZoneData[0]?.size > 2097152) {
         toast(t("uploadAcceptableSize"), { type: "error" })
       }
     }
-  }, [getDropZone])
+  }, [dropZoneData])
 
   const handelDescription = (e: any) => {
     if (e.target.value.length < MAX_DESC_TEXT) {
@@ -2231,28 +2210,28 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     if (description.length > 1 && description.length < 3) {
       return setError(true)
     }
-    if (!getDropZone) {
+    if (!dropZoneData) {
       return toast(t("attachmentRequired"), { type: "error" })
     }
     if (error && description.length >= 100) {
       return toast(t("max100characters"), { type: "error" })
     }
 
-    if (getDropZone[0].size > MAX_SIZE) {
+    if (dropZoneData[0].size > MAX_SIZE) {
       return toast(t("uploadAcceptableSize"), { type: "error" })
     }
     if (expanded.count >= 5) {
       return toast("Each evidence can have up to 5 attachments.", { type: "error" })
     }
     try {
-      if (getDropZone && !error) {
+      if (dropZoneData && !error) {
         let data = {
           id: evidenceId,
-          attachment: getDropZone[0],
+          attachment: dropZoneData[0],
           description: description
         }
           await addEvidenceAttachments.query({ evidenceId, data })
-          if(!getCreateAttachment){
+          if(!createAttachment){
             const { items } = await evidencesQueryData.query();
             setEvidencesData(items)
         }
@@ -2363,7 +2342,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <Trans i18nKey="uploadAcceptableSize" />
               </Box>
             </Typography>
-            <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
+            <MyDropzone setDropZone={setDropZone} dropZoneData={dropZoneData} />
           </Box>
           <Box sx={{ width: { xs: "100%", sm: "70%" }, mx: "auto" }}>
             <Typography sx={{ ...theme.typography.headlineSmall, color: "#243342", paddingBottom: "1rem" }}><Trans i18nKey={"additionalInfo"} /></Typography>
@@ -2376,7 +2355,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               multiline
               fullWidth
               value={description}
-              onChange={handelDescription}
+              onChange={(e)=>handelDescription(e)}
               variant="standard"
               inputProps={{
                 sx: {
