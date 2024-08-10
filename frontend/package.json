@@ -19,6 +19,8 @@
     "@mui/icons-material": "5.11.0",
     "@mui/lab": "5.0.0-alpha.119",
     "@mui/material": "5.11.8",
+    "@novu/node": "^2.0.0-canary.1",
+    "@novu/notification-center": "^2.0.0-canary.0",
     "@react-icons/all-files": "^4.1.0",
     "@react-pdf/renderer": "^3.4.4",
     "@sentry/react": "^7.99.0",
