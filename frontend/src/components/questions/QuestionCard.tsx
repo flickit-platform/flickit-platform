@@ -1539,20 +1539,25 @@ const DropZoneArea = (props: any) => {
 }
 
 
-const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: any) => {
-  if (dropZoneData) {
-    let file = URL.createObjectURL(dropZoneData[0])
-    setDisplayFile(file)
-    if (dropZoneData[0].type.startsWith("image")) {
-      setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
-    }
-    if (dropZoneData[0].type === "application/pdf") {
-      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+
+const checkTypeUpload = (dropZoneData : any,setDisplayFile : any,setTypeFile : any) =>{
+    if (dropZoneData) {
+        let file = URL.createObjectURL(dropZoneData[0])
+        setDisplayFile(file)
+        if (dropZoneData[0].type.startsWith("image")) {
+            setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
+        }
+        if (dropZoneData[0].type === "application/pdf") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
+        if (dropZoneData[0].type === "application/zip") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
     }
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
-  }
+
 }
 
 const CreateDropZone = (props: any) => {
@@ -1567,44 +1572,46 @@ const CreateDropZone = (props: any) => {
 
     checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
 
-  }, [dropZoneData])
-  const theme = useTheme()
-  return (
-    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
-      {({ getRootProps, getInputProps }: any) => (
-        dropZoneData ?
-          <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
-            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
-            {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
-            {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
-            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
-          </Box>
-          :
-          <section style={{ cursor: "pointer", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
-              <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px", gap: "10px" }}>
-                <input {...getInputProps()} />
-                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
-                <Typography sx={{
-                  ...theme.typography.labelSmall,
-                  color: "#243342",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}>
-                  <Trans i18nKey={"dragYourFile"} />
-                  <Typography sx={{
-                    ...theme.typography.labelSmall,
-                    color: "#2D80D2",
-                    display: "contents"
-                  }}><Trans i18nKey={"locateIt"} /></Typography>
-                </Typography></div>
-            </Box>
-          </section>
-      )}
-    </DropZoneArea>
-  )
+
+    }, [dropZoneData])
+    const theme = useTheme()
+    return(
+        <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
+            {({ getRootProps, getInputProps } : any) => (
+                dropZoneData ?
+                    <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
+                        <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
+                        {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
+                        {typeFile == "pdf" && <section style={{ width: "40%", height: "60%",display:"flex",justifyContent:"center" }}><Box sx={{width:"36px",height:"57px"}}><FileType name={"pdf"} /></Box></section>}
+                        {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+                        <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+                    </Box>
+                    :
+                    <section style={{ cursor: "pointer", width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
+                            <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px",gap:"10px" }}>
+                                <input {...getInputProps()} />
+                                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
+                                <Typography sx={{
+                                    ...theme.typography.labelSmall,
+                                    color: "#243342",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}>
+                                    <Trans i18nKey={"dragYourFile"} />
+                                  <Typography sx={{
+                                      ...theme.typography.labelSmall,
+                                      color: "#2D80D2",
+                                      display: "contents"
+                                  }}><Trans i18nKey={"locateIt"} /></Typography>
+                                </Typography></div>
+                        </Box>
+                    </section>
+            )}
+        </DropZoneArea>
+    )
+
 }
 
 const EvidenceDetail = (props: any) => {
@@ -1654,9 +1661,9 @@ const EvidenceDetail = (props: any) => {
 
   const onSubmit = async (data: any) => {
     try {
-      if (data.evidence.length <= LIMITED) {
+      if (data.evidenceDetail.length <= LIMITED) {
         await addEvidence.query({
-          description: data.evidence,
+          description: data.evidenceDetail,
           questionId: questionInfo.id,
           assessmentId,
           type: value,
@@ -1947,7 +1954,7 @@ const EvidenceDetail = (props: any) => {
                   gap: { xs: "24px", sm: "48px" },
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer" , width:{xs:"auto",sm:"250px"}}}>
                   <Typography sx={{ ...theme?.typography?.bodyLarge }} >{description}</Typography>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     <Box onClick={() => expandedEvidenceBtm()}
@@ -2061,8 +2068,7 @@ const FileIcon = (props: any): any => {
   const { link } = item
   let reg = new RegExp("\\/([^\\/?]+)\\?")
   let name = link.match(reg)[1]
-  const exp = name.substring(name.indexOf('.'))
-
+  const exp = name.substring(name.lastIndexOf('.'))
   return (
     <Tooltip title={<>
       <Typography>{name}</Typography>
