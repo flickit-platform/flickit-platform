@@ -47,6 +47,18 @@ import { format } from "date-fns";
 
 const drawerWidth = 240;
 
+const NotificationIndicator = ({ seen }: { seen: boolean }) => (
+  <Box
+    sx={{
+      minWidth: "4px",
+      height: "24px",
+      backgroundColor: seen ? "#6C8093" : "#2D80D2",
+      borderRadius: "2px",
+      marginRight: "8px",
+    }}
+  />
+);
+
 const UnseenNotificationItem = ({
   message,
   onNotificationClick,
@@ -73,15 +85,7 @@ const UnseenNotificationItem = ({
       }}
     >
       {/* Blue Indicator for Unseen Messages */}
-      <Box
-        sx={{
-          minWidth: "4px",
-          height: "24px",
-          backgroundColor: "#2D80D2",
-          borderRadius: "2px",
-          marginRight: "8px",
-        }}
-      />
+      <NotificationIndicator seen={false} />
 
       {/* Notification Content */}
       <Box
@@ -168,15 +172,7 @@ const SeenNotificationItem = ({
         },
       }}
     >
-      <Box
-        sx={{
-          minWidth: "4px",
-          height: "24px",
-          backgroundColor: "#6C8093",
-          borderRadius: "2px",
-          marginRight: "8px",
-        }}
-      />
+      <NotificationIndicator seen={true} />
 
       {/* Notification Content */}
       <Box
