@@ -443,7 +443,6 @@ const DetailExpend = (props: any) =>{
     )
 }
 
-
 const EvidanceDescription = ({
   number,
   color,
