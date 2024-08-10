@@ -183,7 +183,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     expanded, onClose,title, evidenceDialog
   } = props;
 
-    const [evidenceDetail,setEvidenceDetail] = useState<{ evidence: {}, question: {} }>({evidence: {}, question: {}})
+    const [evidenceDetail,setEvidenceDetail] = useState<any>({evidence: {}, question: {}})
     const [evidenceAttachment,setEvidenceAttachment] = useState([])
     const [evidenceBG,setEvidenceBG] = useState<any>({})
 
