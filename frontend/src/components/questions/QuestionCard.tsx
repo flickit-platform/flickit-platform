@@ -1426,7 +1426,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                                 :
                                 attachments.map((item, index) => {
                                     return (
-                                        < FileIcon key={Math.floor(Math.random() * 10000 )} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} />
+                                        < FileIcon key={index} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} />
                                     )
                                 })
                         }
@@ -1962,7 +1962,7 @@ const EvidenceDetail = (props: any) => {
                             :
                             attachments.map((item, index) => {
                               return (
-                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={Math.floor(Math.random() * 10000)} />
+                                < FileIcon evidenceId={id} setEvidenceId={setEvidenceId} item={item} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceBG={evidenceBG} downloadFile={downloadFile} key={index} />
                               )
                             })}
                         {attachments.length < 5 && (<>
