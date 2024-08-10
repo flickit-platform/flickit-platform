@@ -254,7 +254,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               minHeight:"84px",
               background: "#004F83",
               overflow: "auto",
-              position: "relative",
+              position: "sticky",
+              top: 0,
               py: "24px",
             }}
         >
