@@ -243,8 +243,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
       })()
   },[])
 
-    const downloadFile = ({ link }: { link: string }) => {
-        const fileUrl = link;
+    const downloadFile = ({ link }: any) => {
+        let fileUrl = link;
         const a = document.createElement("a");
         a.href = fileUrl;
         a.target = "_blank"
@@ -353,8 +353,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                                />
                            </Box>
                             <Box sx={{display:"flex",gap:"5px",flexDirection: "column"}}>
-                                <Typography onClick={downloadFile} style={{ color: evidenceBG.borderColor,...theme.typography.labelLarge,textAlign:"left", cursor: "pointer",textDecoration:"underline"}}
-                                    >{name.substring(0,20)}{name.length > 20 && "..."}</Typography>
+                               <Box onClick={downloadFile} ><Typography style={{ color: evidenceBG.borderColor,...theme.typography.labelLarge,textAlign:"left", cursor: "pointer",textDecoration:"underline"}}
+                               >{name.substring(0,20)}{name.length > 20 && "..."}</Typography></Box>
                                 <DetailExpend evidenceBG={evidenceBG} item={item} />
                             </Box>
                     </Box>
