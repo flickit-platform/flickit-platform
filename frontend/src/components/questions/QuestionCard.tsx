@@ -1539,7 +1539,7 @@ const DropZoneArea =(props: any)=>{
 }
 
 
-const checkTypeUpload = (dropZoneData,setDisplayFile,setTypeFile) =>{
+const checkTypeUpload = (dropZoneData : any,setDisplayFile : any,setTypeFile : any) =>{
     if (dropZoneData) {
         let file = URL.createObjectURL(dropZoneData[0])
         setDisplayFile(file)
