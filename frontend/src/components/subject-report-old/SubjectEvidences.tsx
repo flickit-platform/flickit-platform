@@ -5,7 +5,7 @@ import { styles } from "@styles";
 import Divider from "@mui/material/Divider";
 import React, {useEffect, useMemo, useState} from "react";
 import { useQuery } from "@utils/useQuery";
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import emptyPositiveState from "@assets/svg/emptyPositiveState.svg";
 import emptyNegativeState from "@assets/svg/emptyNegativeState.svg";
@@ -368,9 +368,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <Box sx={{width:"100%",background:"#C7CCD1",height:"0.5px"}}></Box>
                 {questionItems.map((questionItem,index)=>{
                     const {question} = evidenceDetail
+                    console.log(question,"test question")
                     return (<Box sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{questionItem}:</Typography>
-                            {index == 0 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{question?.answer?.description}</Typography>}
+                            {index == 0 && <Typography component={Link} to={
+                                `./../../questionnaires/${question?.questionnaire?.id}/${question?.index}`
+                            } sx={{...theme.typography.bodyMedium,color:"#2D80D2",textDecoration:"underline",cursor:"pointer"}}>{question?.questionnaire?.title}</Typography>}
                             {index == 1 && <Typography sx={{...theme.typography.bodyMedium,color:"#B8144B"}}>{question?.title}</Typography>}
                             <Box sx={{display:"flex", flexDirection:"column",gap:"8px"}}>
                                 {index == 2 &&  question?.options?.map((option, index)=>{
@@ -427,9 +430,9 @@ const DetailExpend = (props: any) =>{
             {expendedDetail && <Typography sx={{...theme.typography.labelSmall,color:"#6C8093",textAlign:"left"}} >BY {displayName}</Typography>}
             {expendedDetail && <Typography sx={{...theme.typography.bodySmall,color:"#6C8093",textAlign:"left",whiteSpace: "break-spaces" ,wordBreak:"break-word"}}>{item.description}</Typography>}
             <Box sx={{display: "flex",justifyContent: 'flex-start',alignItems: "center",gap:"3px",width:"100%"}}>
-                {expendedDetail ?  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"100px",textAlign:"left",textDecoration:"underline",cursor:"pointer"}}
+                {expendedDetail ?  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"fit-content",textAlign:"left",textDecoration:"underline",cursor:"pointer"}}
                     ><Trans i18nKey={"showMoreDetails"} /></Typography>
-                    :  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"100px",textAlign:"left", textDecoration:"underline",cursor:"pointer"}}
+                    :  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"fit-content",textAlign:"left", textDecoration:"underline",cursor:"pointer"}}
                     ><Trans i18nKey={"showLessDetails"}/></Typography>}
                 {<img style={expendedDetail ? {
                     rotate: "180deg",
