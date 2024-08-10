@@ -1393,8 +1393,8 @@ const CreateEvidenceAttachment = (props:any)=>{
     }
 
     return (
-        <Box sx={{borderRadius:"16px",width:"100%",height: {xs : "auto",sm:"232px"},background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
-            <Grid direction={"row"} container sx={{height:"50%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center",gap:{xs:"15px",sm:"unset"}, padding:{xs:"20px 40px 40px",sm:"unset"}}}>
+        <Box sx={{borderRadius:"16px",width:"100%",height: "auto",minHeight:"232px" ,background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
+            <Grid direction={"row"} container sx={{height:"50%",width:"100%",py:"20px !important",display:"flex",justifyContent:"center",alignItems:"center",gap:{xs:"15px",sm:"unset"}, padding:{xs:"20px 40px 40px",sm:"unset"}}}>
                     <Grid  item xs={12} sm={4} sx={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                         <CreateDropZone pallet={pallet} setDropZone={setDropZone} dropZoneData={dropZoneData} />
                     </Grid>
@@ -1405,7 +1405,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                         <ControlBtn addEvidenceAttachments={addEvidenceAttachments} DiscardBtn={DiscardBtn} UploadAttachment={UploadAttachment} pallet={pallet} />
                     </Grid>
             </Grid>
-            <Box sx={{height:"50%",width:"100%",pb:"20px"}}>
+            <Box sx={{height:"50%",width:"100%"}}>
                 <Grid
                     container
                     sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
@@ -1433,7 +1433,7 @@ const CreateEvidenceAttachment = (props:any)=>{
                     </Grid>
                     {
                         attachments.length == 5 && <Box>
-                        <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "90%", sm: "450px" },padding: "0px 40px" }}>
+                        <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "90%", sm: "450px" },padding: "0px 40px 20px" }}>
                             <InfoOutlinedIcon
                                 sx={{ mr: 1, width: "15px", height: "15px" }}
                             />
