@@ -1137,6 +1137,15 @@ export const createService = (
         },
       });
     },
+    loadEvidences(
+      args: { evidenceID: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { evidenceID } = args ?? {};
+      return axios.get(`/api/v1/evidences/${evidenceID}/`, {
+        ...(config ?? {}),
+      });
+    },
     fetchEvidenceAttachments(
         args: {evidence_id:string },
         config: AxiosRequestConfig<any> | undefined

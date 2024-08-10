@@ -472,5 +472,10 @@
   "successCreatedAssessmentTitleFirstPart": "The ",
   "successCreatedAssessmentTitleSecondPart": " created successfully",
   "noOptionSelected": "No option is selected.",
-  "showMore":"Show More"
+  "showMore":"Show More",
+  "showMoreDetails":"Show more details",
+  "showLessDetails":"Show less details",
+  "relatedQuestion":"Related question",
+  "close": "Close",
+  "evidenceDetails": "Evidence Details"
 }
