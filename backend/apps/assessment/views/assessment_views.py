@@ -62,3 +62,20 @@ class InviteesAssessmentsApi(APIView):
     def get(self, request, assessment_id):
         result = assessment_services.assessment_invitees(request, assessment_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentInvitesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, invite_id):
+        result = assessment_services.assessment_invite_delete(request, invite_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    @swagger_auto_schema(request_body=openapi.Schema(type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, invite_id):
+        result = assessment_services.assessment_invite_edit(request, invite_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

@@ -121,7 +121,11 @@ const Routes = () => {
           />
           {/* Questionnaires and questions related routes */}
           <Route
-            path="/:spaceId/assessments/:page/:assessmentId/questionnaires"
+            path="/:spaceId/assessments/:page/:assessmentId/questionnaires/:questionIndex"
+            element={<QuestionnairesScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:page/:assessmentId/questionnaires/"
             element={<QuestionnairesScreen />}
           />
           <Route

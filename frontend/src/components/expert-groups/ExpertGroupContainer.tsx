@@ -3,6 +3,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  CircularProgress,
   Collapse,
   Divider,
   Grid,
@@ -34,7 +35,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -265,10 +266,9 @@ const ExpertGroupContainer = () => {
                         {assessmentKitsCounts.filter(
                           (item: any) => item.published
                         ) &&
-                          `${
-                            assessmentKitsCounts.filter(
-                              (item: any) => item.published
-                            ).length
+                          `${assessmentKitsCounts.filter(
+                            (item: any) => item.published
+                          ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
@@ -314,10 +314,9 @@ const ExpertGroupContainer = () => {
                           {assessmentKitsCounts.filter(
                             (item: any) => !item.published
                           ) &&
-                            `${
-                              assessmentKitsCounts.filter(
-                                (item: any) => !item.published
-                              ).length
+                            `${assessmentKitsCounts.filter(
+                              (item: any) => !item.published
+                            ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -344,13 +343,17 @@ const ExpertGroupContainer = () => {
   );
 };
 
+
 const AvatarComponent = (props: any) => {
   const { title, picture, queryData, editable } = props;
   const [hover, setHover] = useState(false);
   const [image, setImage] = useState("");
+  const [profilePicture, setProfilePicture] = useState(picture);
+  const [isLoading, setIsLoading] = useState(false);
   const { expertGroupId = "" } = useParams();
-
   const { service } = useServiceContext();
+
+  useEffect(() => { setProfilePicture(picture); }, [picture]);
 
   const handleFileChange = async (event: any) => {
     const file = event.target.files[0];
@@ -362,21 +365,27 @@ const AvatarComponent = (props: any) => {
       reader.readAsDataURL(file);
       let maxSize = 2097152;
       if (file.size > maxSize) {
-        toastError(
-          t("maximumUploadFileSize", {
-            maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
-          }) as string
+        toastError(`Maximum upload file size is ${formatBytes(maxSize)}.`);
+        return;
+      }
+
+      setHover(false);
+      setProfilePicture("");
+      setIsLoading(true);
+
+      try {
+        const pictureData = { pictureFile: file };
+        const res = await service.updateExpertGroupPicture(
+          { data: pictureData, id: expertGroupId },
+          undefined
         );
+        setProfilePicture(res.data.pictureLink);
+        setIsLoading(false);
+      } catch (e: any) {
+        setIsLoading(false);
+        toastError(e as ICustomError);
       }
     }
-    const pictureData = {
-      pictureFile: file,
-    };
-    await service.updateExpertGroupPicture(
-      { data: pictureData, id: expertGroupId },
-      undefined
-    );
-    await queryData.query();
   };
 
   const handleDelete = useQuery({
@@ -387,15 +396,17 @@ const AvatarComponent = (props: any) => {
 
   const deletePicture = async () => {
     try {
+      setIsLoading(true);
       await handleDelete.query();
-      await queryData.query();
+      setProfilePicture("");
+      setIsLoading(false);
     } catch (e: any) {
-      const err = e as ICustomError;
-      toastError(err);
+      setIsLoading(false);
+      toastError(e as ICustomError);
     }
   };
 
-  return editable ? (
+  return (
     <Box
       position="relative"
       display="inline-block"
@@ -404,37 +415,30 @@ const AvatarComponent = (props: any) => {
       sx={{ mr: 1 }}
     >
       <Avatar
-        sx={(() => {
-          return {
-            bgcolor: (t) => t.palette.grey[800],
-            textDecoration: "none",
-            width: 50,
-            height: 50,
-          };
-        })()}
-        src={picture}
+        sx={{
+          bgcolor: (t) => t.palette.grey[800],
+          textDecoration: "none",
+          width: 50,
+          height: 50,
+          position: "relative",
+        }}
+        src={profilePicture}
       >
         {title && !hover && title?.[0]?.toUpperCase()}
       </Avatar>
-      {!hover && (
-        <Box
+      {isLoading && (
+        <CircularProgress
+          size={24}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             position: "absolute",
-            borderRadius: "50%",
-            bottom: -9,
-            right: 0,
-            bgcolor: "white",
-            width: "21px",
-            height: "21px",
+            top: "50%",
+            left: "50%",
+            marginTop: "-12px",
+            marginLeft: "-12px",
           }}
-        >
-          <EditIcon sx={{ color: "#000", width: "16px" }} />
-        </Box>
+        />
       )}
-      {hover && (
+      {!isLoading && hover && (
         <Box
           position="absolute"
           top={0}
@@ -448,7 +452,7 @@ const AvatarComponent = (props: any) => {
           borderRadius="50%"
           sx={{ cursor: "pointer" }}
         >
-          {picture ? (
+          {profilePicture ? (
             <>
               <Tooltip title={"Delete Picture"}>
                 <DeleteIcon
@@ -486,22 +490,6 @@ const AvatarComponent = (props: any) => {
           )}
         </Box>
       )}
-    </Box>
-  ) : (
-    <Box sx={{ mr: 1 }}>
-      <Avatar
-        sx={(() => {
-          return {
-            bgcolor: (t) => t.palette.grey[800],
-            textDecoration: "none",
-            width: 50,
-            height: 50,
-          };
-        })()}
-        src={picture}
-      >
-        {title && !hover && title?.[0]?.toUpperCase()}
-      </Avatar>
     </Box>
   );
 };
@@ -755,10 +743,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
