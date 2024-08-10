@@ -86,7 +86,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
-  const [setDisabledConfidence] = useState<boolean>(true);
+  const [,setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
 
