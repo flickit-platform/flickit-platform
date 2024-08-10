@@ -438,7 +438,6 @@ const DetailExpend = (props: any) =>{
                     transition: "all .2s ease",width:"17px"
                 } : { rotate: "0deg", transition: "all .2s ease",width:"17px" }} src={arrowBtn} />}
             </Box>
-
         </Box>
 
     )
