@@ -368,7 +368,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <Box sx={{width:"100%",background:"#C7CCD1",height:"0.5px"}}></Box>
                 {questionItems.map((questionItem,index)=>{
                     const {question} = evidenceDetail
-                    console.log(question,"test question")
                     return (<Box sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{questionItem}:</Typography>
                             {index == 0 && <Typography component={Link} to={
