@@ -25,7 +25,7 @@ import formatDate from "@utils/formatDate";
 import {linkInfo} from "@utils/linkInfo";
 import {FileIcon} from "@utils/fileIcon";
 import arrowBtn from "@/assets/svg/arrow.svg";
-import attachmentIcon from "@/assets/svg/attachmentIcon.svg";
+import attachmentIcon from "@/assets/svg/AttachmentIcon.svg";
 import {theme} from "@config/theme";
 
 export enum evidenceType {
@@ -478,7 +478,7 @@ const EvidanceDescription = ({
            </Typography>
        </Box>
           {item.attachmentsCount >= 1 && <Box sx={{display:"flex",justifyContent:"flex-start",alignItems:"center",pl:"30px"}}>
-              <img src={attachmentIcon} alt={attachmentIcon}/>
+              <img src={attachmentIcon} alt={"attachmentIcon"}/>
               <Typography sx={{...theme.typography.labelSmall,color:"#6C8093"}}>
                   {t("attachmentCount", { attachmentsCount })}
               </Typography>
