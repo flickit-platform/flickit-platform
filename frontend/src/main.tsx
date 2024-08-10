@@ -15,6 +15,8 @@ import { createRoot } from "react-dom/client";
 import keycloakService from "@/service/keycloakService";
 import * as Sentry from "@sentry/react";
 import "./assets/font/fonts.css";
+import { NovuProvider, NotificationCenter } from "@novu/notification-center";
+import { FaBell } from "react-icons/fa";
 
 {
   process.env.NODE_ENV !== "development" &&
@@ -49,7 +51,12 @@ const renderApp = () =>
                 <ConfigProvider>
                   <CssBaseline />
                   <ToastContainer {...toastDefaultConfig} />
-                  <App />
+                  <NovuProvider
+                    subscriberId="faa8b75a266bb0f3fb2529f1ed2260dc"
+                    applicationIdentifier="v95Dwkkrsc8z"
+                  >
+                    <App />
+                  </NovuProvider>
                 </ConfigProvider>
               </ServiceProvider>
             </AuthProvider>

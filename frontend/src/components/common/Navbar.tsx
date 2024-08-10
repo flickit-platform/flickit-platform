@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "@styles";
@@ -33,131 +33,59 @@ import { ISpacesModel } from "@types";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import keycloakService from "@/service//keycloakService";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { NotificationCenter, NovuProvider } from "@novu/notification-center";
+import { FaBell } from "react-icons/fa";
+
 const drawerWidth = 240;
 
 const Navbar = () => {
-  const { userInfo, dispatch } = useAuthContext();
+  const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
   const { spaceId } = useParams();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
+  const notificationCenterRef = useRef(null);
+  const bellButtonRef = useRef(null);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const { service } = useServiceContext();
-  const spacesQueryData = useQuery<ISpacesModel>({
-    service: (args, config) => service.fetchSpaces(args, config),
-    toastError: true,
-  });
-  const fetchPathInfo = useQuery({
-    service: (args, config) =>
-      service.fetchPathInfo({ spaceId, ...(args || {}) }, config),
-    runOnMount: false,
-  });
-  const fetchSpaceInfo = async () => {
-    try {
-      const res = await fetchPathInfo.query();
-      dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+
+  const toggleNotificationCenter = () => {
+    setNotificationCenterOpen(!notificationCenterOpen);
   };
-  useEffect(() => {
-    if (spaceId) {
-      fetchSpaceInfo();
+
+  const handleClickOutside = (event: any) => {
+    if (
+      notificationCenterRef.current &&
+      !(notificationCenterRef.current as HTMLButtonElement).contains(
+        event.target
+      ) &&
+      bellButtonRef.current &&
+      !(bellButtonRef.current as HTMLButtonElement).contains(event.target)
+    ) {
+      setNotificationCenterOpen(false);
     }
-  }, [spaceId]);
+  };
+
+  useEffect(() => {
+    if (notificationCenterOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [notificationCenterOpen]);
+
   const drawer = (
     <Box
       onClick={handleDrawerToggle}
       sx={{ pl: 1, pr: 1, textAlign: "center" }}
     >
-      <Typography
-        variant="h6"
-        sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
-        component={NavLink}
-        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces/1`}
-      >
-        <img
-          src={config.appLogoUrl}
-          alt={"logo"}
-          width={"224px"}
-          height={"40px"}
-        />
-      </Typography>
-      <Divider />
-      <List dense>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to="spaces/1"
-          >
-            <ListItemText primary={<Trans i18nKey="spaces" />} />
-          </ListItemButton>
-        </ListItem>
-        {spaceId && (
-          <QueryData
-            {...spacesQueryData}
-            render={(data) => {
-              const { items } = data;
-              return (
-                <Box>
-                  {items.slice(0, 5).map((space: any) => {
-                    return (
-                      <ListItem disablePadding key={space?.id}>
-                        <ListItemButton
-                          sx={{ textAlign: "left", borderRadius: 1.5 }}
-                          component={NavLink}
-                          to={`/${space?.id}/assessments/1`}
-                        >
-                          <ListItemText
-                            primary={
-                              <>
-                                {space?.title && (
-                                  <Typography
-                                    variant="caption"
-                                    textTransform={"none"}
-                                    sx={{
-                                      pl: 0.5,
-                                      ml: 0.5,
-                                      lineHeight: "1",
-                                      borderLeft: (t) =>
-                                        `1px solid ${t.palette.grey[300]}`,
-                                    }}
-                                  >
-                                    {space?.title}
-                                  </Typography>
-                                )}
-                              </>
-                            }
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })}
-                  <Divider />
-                </Box>
-              );
-            }}
-          />
-        )}
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to={`/compare`}
-          >
-            <ListItemText primary={<Trans i18nKey="compare" />} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to={`/assessment-kits`}
-          >
-            <ListItemText primary={<Trans i18nKey="assessmentKits" />} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      {/* Drawer content */}
     </Box>
   );
 
@@ -231,7 +159,16 @@ const Navbar = () => {
               <Trans i18nKey="assessmentKits" />
             </Button>
           </Box>
-          <Box ml="auto">
+          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
+            {/* Other buttons */}
+          </Box>
+          <Box ml="auto" sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              onClick={toggleNotificationCenter}
+              ref={bellButtonRef} // Attach the ref to the bell button
+            >
+              <FaBell size={20} color="grey" />
+            </IconButton>
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
         </Toolbar>
@@ -256,6 +193,15 @@ const Navbar = () => {
           {drawer}
         </Drawer>
       </Box>
+      {/* Notification Center */}
+      {notificationCenterOpen && (
+        <Box
+          ref={notificationCenterRef}
+          sx={{ position: "absolute", top: 60, right: 20, zIndex: 1300 }}
+        >
+          <NotificationCenter colorScheme="light" />
+        </Box>
+      )}
     </>
   );
 };
