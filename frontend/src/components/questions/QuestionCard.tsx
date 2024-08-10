@@ -2061,8 +2061,7 @@ const FileIcon = (props: any): any => {
   const { link } = item
   let reg = new RegExp("\\/([^\\/?]+)\\?")
   let name = link.match(reg)[1]
-  const exp = name.substring(name.indexOf('.'))
-
+  const exp = name.substring(name.lastIndexOf('.'))
   return (
     <Tooltip title={<>
       <Typography>{name}</Typography>
