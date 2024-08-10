@@ -368,16 +368,16 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <Box sx={{width:"100%",background:"#C7CCD1",height:"0.5px"}}></Box>
                 {questionItems.map((questionItem,index)=>{
                     const {question} = evidenceDetail
-                    return (<Box sx={{display:"flex",width:"100%"}}>
+                    return (<Box key={questionItem} sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{questionItem}:</Typography>
-                            {index == 0 && <Typography component={Link} to={
+                            {index == 0 && <Box component={Link} to={
                                 `./../../questionnaires/${question?.questionnaire?.id}/${question?.index}`
-                            } sx={{...theme.typography.bodyMedium,color:"#2D80D2",textDecoration:"underline",cursor:"pointer"}}>{question?.questionnaire?.title}</Typography>}
+                            } sx={{...theme.typography.bodyMedium,color:"#2D80D2",textDecoration:"underline",cursor:"pointer"}}>{question?.questionnaire?.title}</Box>}
                             {index == 1 && <Typography sx={{...theme.typography.bodyMedium,color:"#B8144B"}}>{question?.title}</Typography>}
                             <Box sx={{display:"flex", flexDirection:"column",gap:"8px"}}>
-                                {index == 2 &&  question?.options?.map((option, index)=>{
+                                {index == 2 &&  question?.options?.map((option :any, index: number)=>{
                                     return(
-                                        <Typography style={question?.answer?.selectedOption && question?.answer?.selectedOption.index == option.index ? {border:`1px solid ${evidenceBG.borderColor}`,background: evidenceBG.background}: {} } sx={{...theme.typography.bodyMedium,color:"#2B333B",textAlign:"left",width:"fit-content",borderRadius:"8px",px:"12px",py:"2px" }}>{option.index}.{option.title.toUpperCase()}</Typography>
+                                        <Typography key={option} style={question?.answer?.selectedOption && question?.answer?.selectedOption.index == option.index ? {border:`1px solid ${evidenceBG.borderColor}`,background: evidenceBG.background}: {} } sx={{...theme.typography.bodyMedium,color:"#2B333B",textAlign:"left",width:"fit-content",borderRadius:"8px",px:"12px",py:"2px" }}>{option.index}.{option.title.toUpperCase()}</Typography>
                                     )
                                 })}
                             </Box>
