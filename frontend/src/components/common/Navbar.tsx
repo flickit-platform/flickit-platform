@@ -59,7 +59,7 @@ const NotificationIndicator = ({ seen }: { seen: boolean }) => (
   />
 );
 
-const UnseenNotificationItem = ({
+const NotificationItem = ({
   message,
   onNotificationClick,
 }: {
@@ -76,16 +76,16 @@ const UnseenNotificationItem = ({
         justifyContent: "space-between",
         padding: "12px 16px",
         border: "0.5px solid #C7CCD1",
-        backgroundColor: "#F3F5F6",
+        backgroundColor: message.seen ? "#ffffff" : "#F3F5F6",
         cursor: "pointer",
-        position: "relative", // Added to position the red dot
+        position: "relative",
         "&:hover": {
           backgroundColor: "#f1f1f1",
         },
       }}
     >
       {/* Blue Indicator for Unseen Messages */}
-      <NotificationIndicator seen={false} />
+      <NotificationIndicator seen={message.seen} />
 
       {/* Notification Content */}
       <Box
@@ -142,80 +142,7 @@ const UnseenNotificationItem = ({
           height: "8px",
           backgroundColor: "#B8144B",
           borderRadius: "50%",
-        }}
-      />
-    </Box>
-  );
-};
-
-const SeenNotificationItem = ({
-  message,
-  onNotificationClick,
-}: {
-  message: IMessage;
-  onNotificationClick: () => void;
-}) => {
-  return (
-    <Box
-      onClick={onNotificationClick}
-      sx={{
-        marginBlock: "4px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "12px 16px",
-        border: "0.5px solid #C7CCD1",
-        backgroundColor: "#ffffff",
-        cursor: "pointer",
-        "&:hover": {
-          backgroundColor: "#f1f1f1",
-        },
-      }}
-    >
-      <NotificationIndicator seen={true} />
-
-      {/* Notification Content */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          variant="bodyMedium"
-          sx={{
-            color: "#2B333B",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {message.content as string}
-        </Typography>
-      </Box>
-
-      {/* Relative Time Ago */}
-      <Typography
-        variant="labelSmall"
-        sx={{
-          color: "#3D4D5C",
-          marginLeft: "8px",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {convertToRelativeTime(message.createdAt)}
-      </Typography>
-
-      {/* Arrow Icon */}
-      <ArrowForwardIos
-        sx={{
-          fontSize: "16px",
-          color: "#888888",
-          marginLeft: "8px",
+          display: message.seen ? "none" : "block",
         }}
       />
     </Box>
@@ -408,18 +335,8 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
             onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void,
             onNotificationClick: () => void
           ) => {
-            if (!message.seen) {
-              return (
-                <UnseenNotificationItem
-                  message={message}
-                  onNotificationClick={() =>
-                    handleNotificationClick(message, onNotificationClick)
-                  }
-                />
-              );
-            }
             return (
-              <SeenNotificationItem
+              <NotificationItem
                 message={message}
                 onNotificationClick={() =>
                   handleNotificationClick(message, onNotificationClick)
