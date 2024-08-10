@@ -1557,7 +1557,7 @@ const checkTypeUpload = (dropZoneData : any,setDisplayFile : any,setTypeFile : a
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
-  }
+
 }
 
 const CreateDropZone = (props: any) => {
