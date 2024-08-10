@@ -478,4 +478,8 @@
   "relatedQuestion":"Related question",
   "close": "Close",
   "evidenceDetails": "Evidence Details"
+  "needsToAddAttachments": "Needs to add attachments (after being created)",
+  "createEvidence": "Create evidence",
+  "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
+  "finish": "Finish"
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "@styles";
@@ -33,17 +33,279 @@ import { ISpacesModel } from "@types";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import keycloakService from "@/service//keycloakService";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { ButtonTypeEnum, IMessage, NotificationCenter, NovuProvider } from "@novu/notification-center";
+import { FaBell } from "react-icons/fa";
+import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
+import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import NotificationEmptyState from '@/assets/svg/notificationEmptyState.svg'
+
 const drawerWidth = 240;
+
+const UnseenNotificationItem = ({ message, onNotificationClick }: {
+  message: IMessage,
+  onNotificationClick: () => void
+}) => {
+  return (
+    <Box
+      onClick={onNotificationClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '8px 16px',
+        border: '0.5px solid #C7CCD1',
+        backgroundColor: '#F3F5F6',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: '#f1f1f1',
+        },
+      }}
+    >
+      {/* Blue Indicator for Unseen Messages */}
+      <Box
+        sx={{
+          minWidth: '4px',
+          height: '24px',
+          backgroundColor: '#2D80D2',
+          borderRadius: '2px',
+          marginRight: '8px',
+        }}
+      />
+
+      {/* Notification Content */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Typography
+          variant="titleSmall"
+          sx={{
+            color: '#2B333B',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {message.content as string}
+        </Typography>
+      </Box>
+
+      {/* Relative Time Ago */}
+      <Typography
+        variant="labelSmall"
+        sx={{
+          color: '#3D4D5C',
+          marginLeft: '8px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {convertToRelativeTime(message.createdAt)}
+      </Typography>
+
+      {/* Arrow Icon */}
+      <ArrowForwardIos
+        sx={{
+          fontSize: '16px',
+          color: '#2962FF',
+          marginLeft: '8px',
+        }}
+      />
+    </Box>
+  );
+};
+
+const SeenNotificationItem = ({ message, onNotificationClick }: {
+  message: IMessage,
+  onNotificationClick: () => void
+}) => {
+  return (
+    <Box
+      onClick={onNotificationClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '8px 16px',
+        border: '0.5px solid #C7CCD1',
+        backgroundColor: '#ffffff',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: '#f1f1f1',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          minWidth: '4px',
+          height: '24px',
+          backgroundColor: '#6C8093',
+          borderRadius: '2px',
+          marginRight: '8px',
+        }}
+      />
+
+      {/* Notification Content */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Typography
+          variant="bodyMedium"
+          sx={{
+            color: '#2B333B',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {message.content as string}
+        </Typography>
+      </Box>
+
+      {/* Relative Time Ago */}
+      <Typography
+        variant="labelSmall"
+        sx={{
+          color: '#3D4D5C',
+          marginLeft: '8px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {convertToRelativeTime(message.createdAt)}
+      </Typography>
+
+      {/* Arrow Icon */}
+      <ArrowForwardIos
+        sx={{
+          fontSize: '16px',
+          color: '#888888',
+          marginLeft: '8px',
+        }}
+      />
+    </Box>
+  );
+};
+
+const NotificationCenterComponent = () => {
+  const [selectedMessage, setSelectedMessage] = useState<IMessage | null>(null);
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
+
+  const handleNotificationClick = (message: IMessage, onNotificationClick: () => void) => {
+    setSelectedMessage(message);
+    onNotificationClick()
+  };
+
+  const handleBackClick = () => {
+    setSelectedMessage(null);
+  };
+
+  return (
+    <Box>
+      {selectedMessage ? (
+        // Full Message View
+        <Box
+          className="nc-layout-wrapper"
+          sx={{ width: 420, borderRadius: 1 }}
+        >
+          <Box
+            className="nc-header"
+            sx={{ display: "flex", height: "55px", alignItems: "center" }}
+          >
+
+            <Typography
+              className="nc-header-title"
+              sx={{
+                color: "#525266",
+                fontSize: "20px",
+                fontStyle: "normal",
+                fontWeight: 700,
+                lineHeight: "24px",
+                textAlign: "left"
+              }}
+            >
+              <IconButton onClick={handleBackClick} >
+                <ArrowBackIos
+                  sx={{
+                    fontSize: '16px',
+                  }}
+                />              </IconButton>
+              Notification Details
+            </Typography>
+          </Box>
+
+          <Box className="nc-notifications-list" sx={{ padding: 2 }}>
+            <Typography
+              sx={{
+                marginBottom: '10px',
+                color: '#555',
+                lineHeight: '1.5',
+                fontSize: '0.95rem',
+              }}
+            >
+              {selectedMessage.content as string}
+            </Typography>
+
+            <Typography
+              sx={{
+                marginBottom: '12px',
+                color: '#999',
+                fontSize: '0.875rem',
+              }}
+            >
+              {convertToRelativeTime(selectedMessage.createdAt)}
+            </Typography>
+
+          </Box>
+        </Box>
+      ) : (
+        // Notification List View
+        <NotificationCenter
+          colorScheme="light"
+          emptyState={
+            <Box width="100%" height="400px" sx={{ ...styles.centerCVH }} gap={1}>
+              <img
+                src={NotificationEmptyState}
+                alt={"No assesment here!"}
+              />
+              <Typography variant="bodyMedium" color="#2466A8">
+                Nothing new to see here yet!
+              </Typography>
+            </Box>}
+          listItem={(message: IMessage, onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void, onNotificationClick: () => void) => {
+            if (!message.seen) {
+              return <UnseenNotificationItem message={message} onNotificationClick={() => handleNotificationClick(message, onNotificationClick)} />;
+            }
+            return <SeenNotificationItem message={message} onNotificationClick={() => handleNotificationClick(message, onNotificationClick)} />;
+          }}
+        />
+      )
+      }
+    </Box >
+  );
+};
 
 const Navbar = () => {
   const { userInfo, dispatch } = useAuthContext();
   const { config } = useConfigContext();
   const { spaceId } = useParams();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
+  const notificationCenterRef = useRef(null);
+  const bellButtonRef = useRef(null);
   const { service } = useServiceContext();
+
   const spacesQueryData = useQuery<ISpacesModel>({
     service: (args, config) => service.fetchSpaces(args, config),
     toastError: true,
@@ -57,107 +319,52 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (spaceId) {
       fetchSpaceInfo();
     }
   }, [spaceId]);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const toggleNotificationCenter = () => {
+    setNotificationCenterOpen(!notificationCenterOpen);
+  };
+
+  const handleClickOutside = (event: any) => {
+    if (
+      notificationCenterRef.current &&
+      !(notificationCenterRef.current as HTMLButtonElement).contains(
+        event.target
+      ) &&
+      bellButtonRef.current &&
+      !(bellButtonRef.current as HTMLButtonElement).contains(event.target)
+    ) {
+      setNotificationCenterOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (notificationCenterOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [notificationCenterOpen]);
+
   const drawer = (
     <Box
       onClick={handleDrawerToggle}
       sx={{ pl: 1, pr: 1, textAlign: "center" }}
     >
-      <Typography
-        variant="h6"
-        sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
-        component={NavLink}
-        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces/1`}
-      >
-        <img
-          src={config.appLogoUrl}
-          alt={"logo"}
-          width={"224px"}
-          height={"40px"}
-        />
-      </Typography>
-      <Divider />
-      <List dense>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to="spaces/1"
-          >
-            <ListItemText primary={<Trans i18nKey="spaces" />} />
-          </ListItemButton>
-        </ListItem>
-        {spaceId && (
-          <QueryData
-            {...spacesQueryData}
-            render={(data) => {
-              const { items } = data;
-              return (
-                <Box>
-                  {items.slice(0, 5).map((space: any) => {
-                    return (
-                      <ListItem disablePadding key={space?.id}>
-                        <ListItemButton
-                          sx={{ textAlign: "left", borderRadius: 1.5 }}
-                          component={NavLink}
-                          to={`/${space?.id}/assessments/1`}
-                        >
-                          <ListItemText
-                            primary={
-                              <>
-                                {space?.title && (
-                                  <Typography
-                                    variant="caption"
-                                    textTransform={"none"}
-                                    sx={{
-                                      pl: 0.5,
-                                      ml: 0.5,
-                                      lineHeight: "1",
-                                      borderLeft: (t) =>
-                                        `1px solid ${t.palette.grey[300]}`,
-                                    }}
-                                  >
-                                    {space?.title}
-                                  </Typography>
-                                )}
-                              </>
-                            }
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })}
-                  <Divider />
-                </Box>
-              );
-            }}
-          />
-        )}
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to={`/compare`}
-          >
-            <ListItemText primary={<Trans i18nKey="compare" />} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", borderRadius: 1.5 }}
-            component={NavLink}
-            to={`/assessment-kits`}
-          >
-            <ListItemText primary={<Trans i18nKey="assessmentKits" />} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      {/* Drawer content */}
     </Box>
   );
 
@@ -231,7 +438,16 @@ const Navbar = () => {
               <Trans i18nKey="assessmentKits" />
             </Button>
           </Box>
-          <Box ml="auto">
+          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
+            {/* Other buttons */}
+          </Box>
+          <Box ml="auto" sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              onClick={toggleNotificationCenter}
+              ref={bellButtonRef} // Attach the ref to the bell button
+            >
+              <FaBell size={20} color="grey" />
+            </IconButton>
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
         </Toolbar>
@@ -256,6 +472,28 @@ const Navbar = () => {
           {drawer}
         </Drawer>
       </Box>
+      {/* Notification Center */}
+      {notificationCenterOpen && (
+        <Box
+          ref={notificationCenterRef}
+          sx={{ position: "absolute", top: 60, right: 20, zIndex: 1300 }}
+        >
+          <NotificationCenterComponent />
+          {/* <NotificationCenter
+            colorScheme="light"
+            listItem={(
+              message: IMessage,
+              onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void,
+              onNotificationClick: () => void
+            ) => {
+              if (!message.seen) {
+                return <UnseenNotificationItem message={message} onNotificationClick={onNotificationClick} />;
+              }
+              return <SeenNotificationItem message={message} onNotificationClick={onNotificationClick} />;
+            }}
+          /> */}
+        </Box>
+      )}
     </>
   );
 };

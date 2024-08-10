@@ -12,6 +12,7 @@ import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
 import { customFontFamily } from "@/config/theme";
+import {evidenceAttachmentInput} from "@utils/enumType";
 
 const InputField = () => {
   return <TextField />;
@@ -97,6 +98,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       onChange={handleInputChange}
       sx={{
         background: pallet?.background,
+        borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderColor: pallet?.borderColor,
@@ -108,7 +110,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
-          paddingTop: isEditing ? "32px" : ""
+          paddingTop: isEditing && name ==  "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
+          paddingBottom: name ==  "evidence" ?  evidenceAttachmentInput.paddingBottom  :  ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
