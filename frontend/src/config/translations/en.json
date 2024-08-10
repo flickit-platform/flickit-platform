@@ -472,5 +472,9 @@
   "successCreatedAssessmentTitleFirstPart": "The ",
   "successCreatedAssessmentTitleSecondPart": " created successfully",
   "noOptionSelected": "No option is selected.",
-  "showMore":"Show More"
+  "showMore":"Show More",
+  "needsToAddAttachments": "Needs to add attachments (after being created)",
+  "createEvidence": "Create evidence",
+  "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
+  "finish": "Finish"
 }

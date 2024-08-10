@@ -10,8 +10,6 @@ import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import zip from "@assets/svg/ZIP.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   EAssessmentStatus,
@@ -31,16 +29,11 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
-import ListItem from "@mui/material/ListItem";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ListItemText from "@mui/material/ListItemText";
 import toastError from "@utils/toastError";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { useQuery } from "@utils/useQuery";
 import formatDate from "@utils/formatDate";
-import useMenu from "@/utils/useMenu";
-import MoreActions from "../common/MoreActions";
 import { SubmitOnSelectCheckBox } from "./QuestionContainer";
 import QueryData from "../common/QueryData";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
@@ -57,8 +50,6 @@ import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -72,20 +63,18 @@ import UploadIcon from "../../assets/svg/UploadIcon.svg"
 import PreAttachment from "@components/questions/iconFiles/preAttachments";
 import FileSvg from "@components/questions/iconFiles/fileSvg";
 import Tooltip from "@mui/material/Tooltip";
-import Select from "@mui/material/Select";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Dropzone, { useDropzone } from 'react-dropzone'
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { primaryFontFamily, theme } from "@config/theme";
+import { theme } from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile"
-import formatBytes from "@utils/formatBytes";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import {evidenceAttachmentType} from "@utils/enumType";
+
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
   questionsInfo: TQuestionsInfo;
@@ -97,7 +86,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
-  const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
+  const [,setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
 
@@ -872,7 +861,9 @@ const Evidence = (props: any) => {
   const [expandedDeleteDialog, setExpandedDeleteDialog] = useState<boolean>(false);
   const [expandedDeleteAttachmentDialog, setExpandedDeleteAttachmentDialog] = useState<any>({ expended: false, id: "" });
   const [expandedAttachmentsDialogs, setExpandedAttachmentsDialogs] = useState<any>({ expended: false, count: 0 });
-  const [getAttachmentData, setAttachmentData] = useState(false)
+  const [attachmentData, setAttachmentData] = useState<boolean>(false)
+  const [dropZoneData, setDropZone] = useState<any>(null)
+  const [description, setDescription] = useState("")
   const is_farsi = firstCharDetector(valueCount);
   const { service } = useServiceContext();
   const [evidenceId, setEvidenceId] = useState("")
@@ -907,6 +898,9 @@ const Evidence = (props: any) => {
   }, [])
 
   const [value, setValue] = React.useState("POSITIVE");
+  const [createAttachment,setCreateAttachment] = useState(false);
+  const [changeInput,setChangeInput] = useState(false)
+  const [evidenceJustCreatedId,setEvidenceJustCreatedId] = useState<string>("")
   const [evidenceBG, setEvidenceBG] = useState<any>({
     background: "rgba(32, 95, 148, 0.08)",
     borderColor: "#205F94",
@@ -944,18 +938,24 @@ const Evidence = (props: any) => {
   //if there is a evidence we should use addEvidence service
   const onSubmit = async (data: any) => {
     try {
-      if (data.evidence.length <= LIMITED) {
-        await addEvidence.query({
-          description: data.evidence,
-          questionId: questionInfo.id,
-          assessmentId,
-          type: value,
-        });
-        const { items } = await evidencesQueryData.query();
-        setEvidencesData(items)
-        setValueCount("");
-      }
-    } catch (e) {
+            if (data.evidence.length <= LIMITED) {
+             let {id} = await addEvidence.query({
+                    description: data.evidence,
+                    questionId: questionInfo.id,
+                    assessmentId,
+                    type: value,
+              });
+                if(createAttachment) {
+                    setChangeInput(true)
+                    setEvidenceJustCreatedId(id)
+                }else {
+                    const { items } = await evidencesQueryData.query();
+                    setEvidencesData(items)
+                }
+                setValueCount("");
+            }
+        }
+    catch (e) {
       const err = e as ICustomError;
       toastError(err?.response?.data.description[0]);
     } finally {
@@ -989,16 +989,28 @@ const Evidence = (props: any) => {
       let attachmentId = expandedDeleteAttachmentDialog.id
       await RemoveEvidenceAttachments.query({ evidenceId, attachmentId })
       setExpandedDeleteAttachmentDialog({ ...expandedDeleteAttachmentDialog, expended: false })
-      let { items } = await evidencesQueryData.query()
-      setEvidencesData(items)
+        if(!createAttachment){
+            let { items } = await evidencesQueryData.query()
+            setEvidencesData(items)
+        }
       setAttachmentData(true)
     } catch (e) {
-
+        const err = e as ICustomError;
+        toastError(err);
     }
   };
 
   const fetchAttachments = async (args: any) => {
     return fetchEvidenceAttachments.query({ ...args })
+  }
+
+  const handelFinish = async () => {
+      const { items } = await evidencesQueryData.query();
+      setEvidencesData(items)
+      setChangeInput(false)
+      setDropZone(null)
+      setDescription("")
+      setCreateAttachment(false)
   }
 
   return (
@@ -1019,173 +1031,236 @@ const Evidence = (props: any) => {
             justifyContent={"end"}
             sx={styles.formGrid}
           >
-            <TabContext value={value}>
-              <TabList
-                onChange={handleChange}
-                sx={{
-                  width: "100%",
+              {changeInput
+                  ?
+                  <Box sx={{display:"flex",justifyContent:"center",width:"100%",paddingBottom:'12px',whiteSpace:"nowrap"}}>
+                      <Typography
+                      sx={{...theme.typography.headlineSmall,color:evidenceBG.borderColor,fontSize:{xs:"1.2rem",sm:"1.5rem"}}}
+                      >
+                          {`${t("evidenceAttachmentType", {value:value ? value.toLowerCase() : "comment"})}`}
+                      </Typography>
+                  </Box>
+                  :
+                  <TabContext value={value}>
+                      <TabList
+                          onChange={handleChange}
+                          sx={{
+                              width: "100%",
+                              "&.MuiTabs-root": {
+                                  borderBottomColor: "transparent",
+                                  justifyContent: "space-between",
+                                  display: "flex",
+                              },
+                              ".MuiTabs-indicator": {
+                                  backgroundColor: evidenceBG.borderColor,
+                              },
+                          }}
+                      >
+                          <Tab
+                              label={<Trans i18nKey="negativeEvidence" />}
+                              value ={evidenceAttachmentType.negative}
+                              sx={{
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                  },
+                                  ...theme.typography.headlineSmall,
+                                  fontSize: { xs: "1rem !important" },
+                              }}
+                          />
+                          <Tab
+                              label={
+                                  <Box
+                                      sx={{
+                                          // display: "flex",
+                                          // justifyContent: "center",
+                                          // alignItems: "center",
+                                          ...styles.centerV,
+                                      }}
+                                  >
+                                      <Trans i18nKey="comment" />
+                                      {value == null && (
+                                          <InfoOutlinedIcon
+                                              style={{ color: evidenceBG.borderColor }}
+                                              sx={{ ml: 1 }}
+                                          />
+                                      )}
+                                  </Box>
+                              }
+                              sx={{
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                  },
+                                  ...theme.typography.headlineSmall,
+                                  fontSize: { xs: "1rem !important" },
+                              }}
+                              value={null}
+                          />
+                          <Tab
+                              label={<Trans i18nKey="positiveEvidence" />}
+                              sx={{
 
-                  "&.MuiTabs-root": {
-                    borderBottomColor: "transparent",
-                    justifyContent: "space-between",
-                    display: "flex",
-                  },
-                  ".MuiTabs-indicator": {
-                    backgroundColor: evidenceBG.borderColor,
-                  },
-                }}
-              >
-                <Tab
-                  label={<Trans i18nKey="negativeEvidence" />}
-                  value="NEGATIVE"
-                  sx={{
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                    },
-                    ...theme.typography.headlineSmall,
-                    fontSize: { xs: "1rem !important" },
-                  }}
-                />
-                <Tab
-                  label={
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Trans i18nKey="comment" />
-                      {value == null && (
-                        <InfoOutlinedIcon
-                          style={{ color: evidenceBG.borderColor }}
-                          sx={{ ml: 1 }}
-                        />
+                                  display: "flex",
+                                  flex: 1,
+                                  "&.Mui-selected": {
+                                      color: `${evidenceBG.borderColor}  !important`,
+                                      ...theme.typography.headlineSmall,
+                                      fontSize: { xs: "1rem !important" },
+                                  },
+                              }}
+                              value={evidenceAttachmentType.positive}
+                          />
+                      </TabList>
+                  </TabContext>
+              }
+              {changeInput ?
+                  <Grid item  xs={12} position={"relative"}>
+                    <CreateEvidenceAttachment setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} attachmentData={attachmentData} description={description} dropZoneData={dropZoneData} setDropZone={setDropZone} setDescription={setDescription} fetchAttachments={fetchAttachments} setAttachmentData={setAttachmentData} evidencesQueryData={evidencesQueryData} evidenceJustCreatedId={evidenceJustCreatedId} pallet={evidenceBG}/>
+                  </Grid>
+                  :
+                  <Grid item xs={12} position={"relative"}>
+                      <InputFieldUC
+                          multiline
+                          minRows={3}
+                          maxRows={8}
+                          minLength={3}
+                          maxLength={200}
+                          autoFocus={false}
+                          defaultValue={""}
+                          pallet={evidenceBG}
+                          name="evidence"
+                          label={null}
+                          required={true}
+                          placeholder="Write down your evidence and comment here...."
+                          borderRadius={"16px"}
+                          setValueCount={setValueCount}
+                          hasCounter={true}
+                          isFarsi={is_farsi}
+                      />
+                      <FormControlLabel
+                          sx={{ color: "#0288d1",position: "absolute", bottom: "20px",left: "40px" }}
+                          data-cy="automatic-submit-check"
+                          control={
+                              <Checkbox
+                                  checked={createAttachment}
+                                  onChange={() => setCreateAttachment(prev => !prev)}
+                                  sx={{
+                                      color: evidenceBG.borderColor,
+                                      "&.Mui-checked": {
+                                          color: evidenceBG.borderColor,
+                                      },
+                                  }}
+                              />
+                          }
+                          label={<Typography sx={{...theme.typography.titleSmall,color: "#2B333B"}}><Trans i18nKey={"needsToAddAttachments"} /></Typography>}
+                      />
+                      <Typography
+                          style={is_farsi ? { left: 20 } : { right: 20 }}
+                          sx={{
+                              position: "absolute",
+                              top: 20,
+                              fontSize: ".875rem",
+                              fontWeight: 300,
+                              color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
+                          }}
+                      >
+                          {valueCount.length || 0} / {LIMITED}
+                      </Typography>
+                      {value == null && valueCount.length == 0 && (
+                          <Box
+                              sx={{
+                                  position: "absolute",
+                                  bottom: "8px",
+                                  right: "80px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  border: "1px solid #9DA7B3",
+                                  px: "6px",
+                                  py: "2px",
+                                  borderRadius: "16px 0 16px 16px",
+                              }}
+                          >
+                              <InfoOutlinedIcon
+                                  style={{ color: "#0A2342" }}
+                                  sx={{ mr: 1 }}
+                              />
+                              <Typography
+                                  sx={{
+                                      fontSize: ".875rem",
+                                      fontWeight: 300,
+                                  }}
+                              >
+                                  <Trans i18nKey="commentsWillNotBeShown" />
+                              </Typography>
+                          </Box>
                       )}
-                    </Box>
-                  }
-                  sx={{
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                    },
-                    ...theme.typography.headlineSmall,
-                    fontSize: { xs: "1rem !important" },
-                  }}
-                  value={null}
-                />
-                <Tab
-                  label={<Trans i18nKey="positiveEvidence" />}
-                  sx={{
+                      <Grid
+                          item
+                          xs={12}
+                          sx={
+                              is_farsi
+                                  ? { position: "absolute", top: 15, left: 5 }
+                                  : {
+                                      position: "absolute",
+                                      top: 15,
+                                      right: 5,
+                                  }
+                          }
+                      ></Grid>
+                  </Grid>
+              }
+              {changeInput ?
+                  <Box sx={{display:"flex",gap:"10px"}}>
+                      <Box display={"flex"} justifyContent={"end"} mt={2} >
+                          <LoadingButton
+                              sx={{
+                                  maxHeight: "40px",
+                                  borderRadius: "4px",
+                                  p: 2,
+                                  whiteSpace:"nowrap",
+                                  width:{xs:"56px" ,sm:"160px"},
+                                  background: evidenceBG.borderColor,
+                                  "&:hover": {
+                                      background: evidenceBG.borderColor,
+                                  },
+                                  ...theme.typography.titleMedium
+                              }}
+                              // type="submit"
+                              onClick={handelFinish}
+                              variant="contained"
+                              loading={evidencesQueryData.loading}
+                          >
+                              <Trans i18nKey={"finish"} />
+                          </LoadingButton>
+                      </Box>
+                  </Box>
+                  :
+                  <Box display={"flex"} justifyContent={"end"} mt={2}>
+                      <LoadingButton
+                          sx={{
+                              ml: "auto",
+                              borderRadius: "4px",
+                              p: 2,
+                              maxHeight:"40px",
+                              whiteSpace:"nowrap",
+                              width: {xs:"130px",sm:"170px"} ,
+                              background: evidenceBG.borderColor,
+                              "&:hover": {
+                                  background: evidenceBG.borderColor,
+                              },
+                          }}
+                          type="submit"
+                          variant="contained"
+                          loading={evidencesQueryData.loading}
+                      >
+                          <Trans i18nKey={"createEvidence"} />
+                      </LoadingButton>
+                  </Box>
+              }
 
-                    display: "flex",
-                    flex: 1,
-                    "&.Mui-selected": {
-                      color: `${evidenceBG.borderColor}  !important`,
-                      ...theme.typography.headlineSmall,
-                      fontSize: { xs: "1rem !important" },
-                    },
-                  }}
-                  value="POSITIVE"
-                />
-              </TabList>
-            </TabContext>
-            <Grid item xs={12} position={"relative"}>
-              <InputFieldUC
-                multiline
-                minRows={3}
-                maxRows={8}
-                minLength={3}
-                maxLength={200}
-                autoFocus={false}
-                defaultValue={""}
-                pallet={evidenceBG}
-                name="evidence"
-                label={null}
-                required={true}
-                placeholder="Write down your evidence and comment here...."
-                borderRadius={"16px"}
-                setValueCount={setValueCount}
-                hasCounter={true}
-                isFarsi={is_farsi}
-              />
-              <Typography
-                style={is_farsi ? { left: 20 } : { right: 20 }}
-                sx={{
-                  position: "absolute",
-                  top: 20,
-                  fontSize: ".875rem",
-                  fontWeight: 300,
-                  color: valueCount.length > LIMITED ? "#D81E5B" : "#9DA7B3",
-                }}
-              >
-                {valueCount.length || 0} / {LIMITED}
-              </Typography>
-              {value == null && valueCount.length == 0 && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: "80px",
-                    display: "flex",
-                    alignItems: "center",
-                    border: "1px solid #9DA7B3",
-                    px: "6px",
-                    py: "2px",
-                    borderRadius: "16px 0 16px 16px",
-                  }}
-                >
-                  <InfoOutlinedIcon
-                    style={{ color: "#0A2342" }}
-                    sx={{ mr: 1 }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: ".875rem",
-                      fontWeight: 300,
-                    }}
-                  >
-                    <Trans i18nKey="commentsWillNotBeShown" />
-                  </Typography>
-                </Box>
-              )}
-              <Grid
-                item
-                xs={12}
-                sx={
-                  is_farsi
-                    ? { position: "absolute", top: 15, left: 5 }
-                    : {
-                      position: "absolute",
-                      top: 15,
-                      right: 5,
-                    }
-                }
-              ></Grid>
-            </Grid>
-            <Box display={"flex"} justifyContent={"end"} mt={2}>
-              <LoadingButton
-                sx={{
-                  ml: "auto",
-                  borderRadius: "100%",
-                  p: 2,
-                  minWidth: "56px",
-                  background: evidenceBG.borderColor,
-                  "&:hover": {
-                    background: evidenceBG.borderHover,
-                  },
-                }}
-                type="submit"
-                variant="contained"
-                loading={evidencesQueryData.loading}
-              >
-                <AddRoundedIcon fontSize="large" />
-              </LoadingButton>
-
-            </Box>
           </Grid>
         </form>
       </FormProvider>
@@ -1195,6 +1270,7 @@ const Evidence = (props: any) => {
             key={index}
             setValue={setValue}
             item={item}
+            changeInput={changeInput}
             evidencesData={evidencesData}
             setEvidencesData={setEvidencesData}
             setExpandedDeleteDialog={setExpandedDeleteDialog}
@@ -1207,7 +1283,7 @@ const Evidence = (props: any) => {
             questionInfo={questionInfo}
             assessmentId={assessmentId}
             fetchAttachments={fetchAttachments}
-            getAttachmentData={getAttachmentData}
+            attachmentData={attachmentData}
             setAttachmentData={setAttachmentData}
             deleteAttachment={deleteAttachment}
           />
@@ -1224,6 +1300,7 @@ const Evidence = (props: any) => {
           uploadAttachment={<Trans i18nKey={"uploadAttachment"} />}
           fetchAttachments={fetchAttachments}
           setAttachmentData={setAttachmentData}
+          createAttachment={createAttachment}
         />
         <DeleteDialog
           expanded={expandedDeleteDialog}
@@ -1246,12 +1323,296 @@ const Evidence = (props: any) => {
   );
 };
 
+const CreateEvidenceAttachment = (props:any)=>{
+
+    const { pallet, evidenceJustCreatedId,setEvidenceId, setExpandedDeleteAttachmentDialog, setAttachmentData, fetchAttachments, setDescription, setDropZone, description, dropZoneData , attachmentData} = props
+    const { service } = useServiceContext();
+    const [attachments, setAttachments] = useState([])
+    const [error, setError] = useState(false)
+    const [loadingFile, setLoadingFile] = useState<boolean>(false)
+
+    const abortController = useMemo(() => new AbortController(), [evidenceJustCreatedId]);
+
+    const MAX_SIZE = 2097152
+    const skeleton = Array.from(Array(4).keys())
+
+    const addEvidenceAttachments = useQuery({
+        service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
+        runOnMount: false,
+    });
+
+    const DiscardBtn = () =>{
+        setDropZone(null)
+        setDescription("")
+    }
+    useEffect(()=>{
+      (async  ()=> {
+          let {attachments} = await fetchAttachments({evidence_id: evidenceJustCreatedId})
+          setLoadingFile(false)
+          setAttachments(attachments)
+      })()
+    },[attachmentData])
+
+    const UploadAttachment = async () =>{
+        if (description.length > 1 && description.length < 3) {
+            return setError(true)
+        }
+        if (!dropZoneData) {
+            return toast(t("attachmentRequired"), { type: "error" })
+        }
+        if (error && description.length >= 100) {
+            return toast(t("max100characters"), { type: "error" })
+        }
+
+        if (dropZoneData[0].size > MAX_SIZE) {
+            return toast(t("uploadAcceptableSize"), { type: "error" })
+        }
+        if (attachments.length >= 5) {
+            return toast("Each evidence can have up to 5 attachments.", { type: "error" })
+        }
+        try {
+            if (dropZoneData && !error) {
+                setLoadingFile(true)
+                let data = {
+                    id: evidenceJustCreatedId,
+                    attachment: dropZoneData[0],
+                    description: description
+                }
+                await addEvidenceAttachments.query({ evidenceId : evidenceJustCreatedId, data })
+                let { attachments } = await fetchAttachments({ evidence_id: evidenceJustCreatedId })
+                setLoadingFile(false)
+                setAttachments(attachments)
+                setAttachmentData(true)
+                setDropZone(null)
+                setDescription("")
+            }
+        } catch (e: any) {
+            const err = e as ICustomError;
+            toastError(err);
+        }
+    }
+
+    return (
+        <Box sx={{borderRadius:"16px",width:"100%",height: "auto",minHeight:"232px" ,background: pallet?.background,border:`1px solid ${pallet?.borderColor}`}}>
+            <Grid direction={"row"} container sx={{height:"50%",width:"100%",py:"20px !important",display:"flex",justifyContent:"center",alignItems:"center",gap:{xs:"15px",sm:"unset"}, padding:{xs:"20px 40px 40px",sm:"unset"}}}>
+                    <Grid  item xs={12} sm={4} sx={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <CreateDropZone pallet={pallet} setDropZone={setDropZone} dropZoneData={dropZoneData} />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <DescriptionBox setDescription={setDescription}  description={description} setError={setError} error={error}/>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <ControlBtn addEvidenceAttachments={addEvidenceAttachments} DiscardBtn={DiscardBtn} UploadAttachment={UploadAttachment} pallet={pallet} />
+                    </Grid>
+            </Grid>
+            <Box sx={{height:"50%",width:"100%"}}>
+                <Grid
+                    container
+                    sx={{ transition: "all .2s ease", display: "flex", gap: ".5rem", flexDirection: "column" }}>
+                    <Grid item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px:"40px" }}>
+                        {!attachments.length && <Typography sx={{ ...theme.typography?.titleMedium, fontSize: { xs: "10px", sm: "unset" } }}><Trans
+                            i18nKey={"addAttachment"} /></Typography>}
+                        {attachments.length >= 1 && <Typography sx={{ ...theme.typography?.titleMedium, display: 'flex', gap: "5px" }}>
+                            {t("attachmentCount", { attachmentsCount : attachments.length })}</Typography>}
+                    </Grid>
+
+                    <Grid  item xs={12} sm={6} sx={{ display: "flex", gap: ".5rem", flexWrap: "nowrap", px:"40px" }}>
+
+                        {
+                            loadingFile ?
+                                skeleton.map((item, index) => {
+                                    return <Skeleton key={index} animation="wave" variant="rounded" width={40} height={40} />
+                                })
+                                :
+                                attachments.map((item, index) => {
+                                    return (
+                                        < FileIcon key={index} setEvidenceId={setEvidenceId} setExpandedDeleteAttachmentDialog={setExpandedDeleteAttachmentDialog} evidenceId={evidenceJustCreatedId} item={item}  evidenceBG={pallet} />
+                                    )
+                                })
+                        }
+                    </Grid>
+                    {
+                        attachments.length == 5 && <Box>
+                        <Typography sx={{ fontSize: "11px", color: "#821237", display: "flex", alignItems: "start", justifyContent: "center", textAlign: "justify", width: { xs: "90%", sm: "450px" },padding: "0px 40px 20px" }}>
+                            <InfoOutlinedIcon
+                                sx={{ mr: 1, width: "15px", height: "15px" }}
+                            />
+                            <Trans i18nKey={"evidenceIsLimited"} /></Typography>
+                    </Box>
+                    }
+                </Grid>
+            </Box>
+        </Box>
+    )
+}
+
+const ControlBtn = (props : any) =>{
+
+    const { pallet, DiscardBtn,UploadAttachment, addEvidenceAttachments } = props
+
+    return(
+        <Box sx={{ width:'100%',height:"100%",display:"flex",flexDirection: {xs:"row",sm:"column"},justifyContent:"center",alignItems:"center",gap:"12px"}}>
+            <LoadingButton
+                sx={{
+                    maxHeight:"28px",
+                    borderRadius: "4px",
+                    p: 2,
+                    minWidth: "56px",
+                    background: pallet.borderColor,
+                    whiteSpace: "nowrap",
+                    "&:hover": {
+                        background: pallet.borderColor,
+                    },
+                }}
+                onClick={UploadAttachment}
+                variant="contained"
+                loading={addEvidenceAttachments.loading}
+            >
+                <Trans i18nKey={"uploadAttachment"} />
+            </LoadingButton>
+            <Button onClick={DiscardBtn}>
+                <Typography sx={{...theme.typography.titleSmall,color:`${pallet.borderColor}`}}>
+                    <Trans i18nKey={"discard"} />
+                </Typography>
+            </Button>
+        </Box>
+    )
+}
+
+const DescriptionBox = (props:any) => {
+
+    const {setDescription, description, setError, error} = props
+
+    const MAX_DESC_TEXT = 100
+
+    const handelDescription = (e: any) => {
+        if (e.target.value.length < MAX_DESC_TEXT) {
+            setDescription(e.target.value)
+            setError(false)
+        } else {
+            setError(true)
+        }
+    }
+    return (
+        <TextField
+            sx={{
+                overflow: "auto",
+            }}
+            rows={3}
+            id="outlined-multiline-static"
+            multiline
+            fullWidth
+            value={description}
+            onChange={(e)=>handelDescription(e)}
+            variant="standard"
+            inputProps={{
+                sx: {
+                    fontSize: "13px", marginTop: "4px", background: "rgba(0,0,0,0.06)", padding: "5px"
+                }
+            }}
+            placeholder={"Add description for this specific attachment up to 100 charachter"}
+            error={error}
+            helperText={description.length >= 1 && error && description.length <= 3 ? "Please enter at least 3 characters" : description.length >= 1 && error && "maximum 100 characters"}
+        />
+    )
+}
+
+
+const DropZoneArea =(props: any)=>{
+    const {setDropZone ,MAX_SIZE, children} = props
+    return (
+        <Dropzone accept={{
+            ...AcceptFile
+        }} onDrop={(acceptedFiles) => {
+            if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
+                return toast(t("uploadAcceptableSize"), { type: "error" })
+            }
+            if (acceptedFiles?.length && acceptedFiles.length >= 1) {
+                setDropZone(acceptedFiles)
+            } else {
+                return toast(t("thisFileNotAcceptable"), { type: "error" })
+            }
+        }}>
+            {children}
+        </Dropzone>
+    )
+}
+
+
+const checkTypeUpload = (dropZoneData,setDisplayFile,setTypeFile) =>{
+    if (dropZoneData) {
+        let file = URL.createObjectURL(dropZoneData[0])
+        setDisplayFile(file)
+        if (dropZoneData[0].type.startsWith("image")) {
+            setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
+        }
+        if (dropZoneData[0].type === "application/pdf") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
+        if (dropZoneData[0].type === "application/zip") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
+    }
+}
+
+const CreateDropZone = (props: any) =>{
+
+    const { setDropZone, dropZoneData, pallet } = props
+    const [dispalyFile, setDisplayFile] = useState<any>(null)
+    const [typeFile, setTypeFile] = useState<any>(null)
+    const MAX_SIZE = 2097152
+
+
+    useEffect(() => {
+
+        checkTypeUpload(dropZoneData,setDisplayFile,setTypeFile)
+
+    }, [dropZoneData])
+    const theme = useTheme()
+    return(
+        <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
+            {({ getRootProps, getInputProps }) => (
+                dropZoneData ?
+                    <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
+                        <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
+                        {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
+                        {typeFile == "pdf" && <section style={{ width: "40%", height: "60%",display:"flex",justifyContent:"center" }}><Box sx={{width:"36px",height:"57px"}}><FileType name={"pdf"} /></Box></section>}
+                        {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+                        <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+                    </Box>
+                    :
+                    <section style={{ cursor: "pointer", width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
+                            <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px",gap:"10px" }}>
+                                <input {...getInputProps()} />
+                                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
+                                <Typography sx={{
+                                    ...theme.typography.labelSmall,
+                                    color: "#243342",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}>
+                                    <Trans i18nKey={"dragYourFile"} />
+                                  <Typography sx={{
+                                      ...theme.typography.labelSmall,
+                                      color: "#2D80D2",
+                                      display: "contents"
+                                  }}><Trans i18nKey={"locateIt"} /></Typography>
+                                </Typography></div>
+                        </Box>
+                    </section>
+            )}
+        </DropZoneArea>
+    )
+}
+
 const EvidenceDetail = (props: any) => {
   const {
     item, evidencesQueryData, questionInfo, assessmentId, setEvidenceId,
     setExpandedDeleteDialog, setExpandedAttachmentsDialogs, setEvidencesData,
-    fetchAttachments, expandedAttachmentsDialogs, getAttachmentData, setAttachmentData,
-    setExpandedDeleteAttachmentDialog, evidenceId, deleteAttachment, evidencesData
+    fetchAttachments, expandedAttachmentsDialogs, attachmentData, setAttachmentData,
+    setExpandedDeleteAttachmentDialog, evidenceId, changeInput, evidencesData
   } = props;
   const LIMITED = 200;
   const [valueCount, setValueCount] = useState("");
@@ -1263,10 +1624,10 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    if (id === evidencesData[0].id) {
+    if (id === evidencesData[0].id && !changeInput) {
       setExpandedEvidenceBox(false)
     }
-  }, [evidencesData.length])
+  }, [evidencesData.length,changeInput])
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -1319,10 +1680,10 @@ const EvidenceDetail = (props: any) => {
     setIsEditing(prev => !prev)
 
     if (type === "Positive") {
-      setValue("POSITIVE");
+      setValue(evidenceAttachmentType.positive);
     }
     if (type === "Negative") {
-      setValue("NEGATIVE");
+      setValue(evidenceAttachmentType.negative);
     }
     if (type === null) {
       setValue(null);
@@ -1365,14 +1726,14 @@ const EvidenceDetail = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      if (getAttachmentData && evidenceId == id) {
+      if (attachmentData && evidenceId == id) {
         let { attachments } = await fetchAttachments({ evidence_id: id })
         setAttachments(attachments)
         setExpandedAttachmentsDialogs({ ...expandedAttachmentsDialogs, count: attachmentsCount });
         setAttachmentData(false)
       }
     })()
-  }, [getAttachmentData, evidenceId])
+  }, [attachmentData, evidenceId])
 
   const expandedEvidenceBtm = async () => {
     setLoadingFile(true)
@@ -1389,7 +1750,6 @@ const EvidenceDetail = (props: any) => {
   useEffect(() => {
     setEvidenceId(id)
   }, [id]);
-
 
   const downloadFile = ({ link }: { link: string }) => {
     const fileUrl = link;
@@ -1457,7 +1817,7 @@ const EvidenceDetail = (props: any) => {
                       autoFocus={false}
                       defaultValue={description}
                       pallet={evidenceBG}
-                      name="evidence"
+                      name="evidenceDetail"
                       label={null}
                       required={true}
                       // placeholder={`${description}`}
@@ -1742,58 +2102,29 @@ const FileIcon = (props: any): any => {
 
 const MyDropzone = (props: any) => {
 
-  const { setDropZone, getDropZone } = props
+  const { setDropZone, dropZoneData } = props
   const [dispalyFile, setDisplayFile] = useState<any>(null)
   const [typeFile, setTypeFile] = useState<any>(null)
   const MAX_SIZE = 2097152
 
-  const {
-    acceptedFiles,
-    fileRejections,
-    getRootProps,
-    getInputProps
-  } = useDropzone({
-    maxFiles: 1
-  });
 
   useEffect(() => {
-    if (getDropZone) {
-      let file = URL.createObjectURL(getDropZone[0])
-      setDisplayFile(file)
-      if (getDropZone[0].type.startsWith("image")) {
-        setTypeFile(getDropZone[0].type.substring(0, getDropZone[0].type.indexOf("/")))
-      }
-      if (getDropZone[0].type === "application/pdf") {
-        setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
-      }
-      if (getDropZone[0].type === "application/zip") {
-        setTypeFile(getDropZone[0].type.substring(getDropZone[0].type.indexOf("/")).replace("/", ""))
-      }
-    }
 
-  }, [getDropZone])
+      checkTypeUpload(dropZoneData,setDisplayFile,setTypeFile)
+
+  }, [dropZoneData])
+
   const theme = useTheme()
   return (
-    <Dropzone accept={{
-      ...AcceptFile
-    }} onDrop={(acceptedFiles) => {
-      if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
-        return toast(t("uploadAcceptableSize"), { type: "error" })
-      }
-      if (acceptedFiles?.length && acceptedFiles.length >= 1) {
-        setDropZone(acceptedFiles)
-      } else {
-        return toast(t("thisFileNotAcceptable"), { type: "error" })
-      }
-    }}>
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
       {({ getRootProps, getInputProps }) => (
-        getDropZone ?
+          dropZoneData ?
           <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
             {typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
             {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
             {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-            <Typography sx={{ ...theme.typography.titleMedium }}>{getDropZone[0]?.name.length > 14 ? getDropZone[0]?.name.substring(0, 10) + "..." + getDropZone[0]?.name.substring(getDropZone[0]?.name.indexOf(".")) : getDropZone[0]?.name}</Typography>
+            <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer" }}>
@@ -1816,7 +2147,7 @@ const MyDropzone = (props: any) => {
             </Box>
           </section>
       )}
-    </Dropzone>
+    </DropZoneArea>
   )
 }
 
@@ -1824,7 +2155,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
   const {
     expanded, onClose, uploadAttachment, uploadAnother,
-    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData
+    evidenceId, evidencesQueryData, setAttachmentData, setEvidencesData,createAttachment
   } = props;
   const MAX_DESC_TEXT = 100
   const MIN_DESC_TEXT = 3
@@ -1838,7 +2169,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const abortController = useMemo(() => new AbortController(), [evidenceId]);
   const [description, setDescription] = useState("")
   const [error, setError] = useState(false)
-  const [getDropZone, setDropZone] = useState<any>(null)
+  const [dropZoneData, setDropZone] = useState<any>(null)
   const addEvidenceAttachments = useQuery({
     service: (args, config) => service.addEvidenceAttachments(args, { signal: abortController.signal }),
     runOnMount: false,
@@ -1846,12 +2177,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
 
   useEffect(() => {
-    if (getDropZone) {
-      if (getDropZone[0]?.size && getDropZone[0]?.size > 2097152) {
+    if (dropZoneData) {
+      if (dropZoneData[0]?.size && dropZoneData[0]?.size > 2097152) {
         toast(t("uploadAcceptableSize"), { type: "error" })
       }
     }
-  }, [getDropZone])
+  }, [dropZoneData])
 
   const handelDescription = (e: any) => {
     if (e.target.value.length < MAX_DESC_TEXT) {
@@ -1866,29 +2197,31 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     if (description.length > 1 && description.length < 3) {
       return setError(true)
     }
-    if (!getDropZone) {
+    if (!dropZoneData) {
       return toast(t("attachmentRequired"), { type: "error" })
     }
     if (error && description.length >= 100) {
       return toast(t("max100characters"), { type: "error" })
     }
 
-    if (getDropZone[0].size > MAX_SIZE) {
+    if (dropZoneData[0].size > MAX_SIZE) {
       return toast(t("uploadAcceptableSize"), { type: "error" })
     }
     if (expanded.count >= 5) {
       return toast("Each evidence can have up to 5 attachments.", { type: "error" })
     }
     try {
-      if (getDropZone && !error) {
+      if (dropZoneData && !error) {
         let data = {
           id: evidenceId,
-          attachment: getDropZone[0],
+          attachment: dropZoneData[0],
           description: description
         }
-        await addEvidenceAttachments.query({ evidenceId, data })
-        const { items } = await evidencesQueryData.query();
-        setEvidencesData(items)
+          await addEvidenceAttachments.query({ evidenceId, data })
+          if(!createAttachment){
+            const { items } = await evidencesQueryData.query();
+            setEvidencesData(items)
+        }
         setAttachmentData(true)
         setDropZone(null)
         setDescription("")
@@ -1996,7 +2329,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <Trans i18nKey="uploadAcceptableSize" />
               </Box>
             </Typography>
-            <MyDropzone setDropZone={setDropZone} getDropZone={getDropZone} />
+            <MyDropzone setDropZone={setDropZone} dropZoneData={dropZoneData} />
           </Box>
           <Box sx={{ width: { xs: "100%", sm: "70%" }, mx: "auto" }}>
             <Typography sx={{ ...theme.typography.headlineSmall, color: "#243342", paddingBottom: "1rem" }}><Trans i18nKey={"additionalInfo"} /></Typography>
@@ -2009,7 +2342,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               multiline
               fullWidth
               value={description}
-              onChange={handelDescription}
+              onChange={(e)=>handelDescription(e)}
               variant="standard"
               inputProps={{
                 sx: {
