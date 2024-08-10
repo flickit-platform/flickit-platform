@@ -52,8 +52,8 @@ const renderApp = () =>
                   <CssBaseline />
                   <ToastContainer {...toastDefaultConfig} />
                   <NovuProvider
-                    subscriberId="faa8b75a266bb0f3fb2529f1ed2260dc"
-                    applicationIdentifier="v95Dwkkrsc8z"
+                    subscriberId="edc2e295-2964-4cfb-a06a-5eb221586d29"
+                    applicationIdentifier="e_2m2IV56y-E"
                   >
                     <App />
                   </NovuProvider>

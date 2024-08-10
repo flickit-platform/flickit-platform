@@ -39,14 +39,35 @@ import { FaBell } from "react-icons/fa";
 const drawerWidth = 240;
 
 const Navbar = () => {
-  const { userInfo } = useAuthContext();
+  const { userInfo, dispatch } = useAuthContext();
   const { config } = useConfigContext();
   const { spaceId } = useParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
   const notificationCenterRef = useRef(null);
   const bellButtonRef = useRef(null);
+  const { service } = useServiceContext();
 
+  const spacesQueryData = useQuery<ISpacesModel>({
+    service: (args, config) => service.fetchSpaces(args, config),
+    toastError: true,
+  });
+  const fetchPathInfo = useQuery({
+    service: (args, config) =>
+      service.fetchPathInfo({ spaceId, ...(args || {}) }, config),
+    runOnMount: false,
+  });
+  const fetchSpaceInfo = async () => {
+    try {
+      const res = await fetchPathInfo.query();
+      dispatch(authActions.setCurrentSpace(res?.space));
+    } catch (e) { }
+  };
+  useEffect(() => {
+    if (spaceId) {
+      fetchSpaceInfo();
+    }
+  }, [spaceId]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
