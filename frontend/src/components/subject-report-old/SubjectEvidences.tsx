@@ -180,10 +180,40 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
 const EvidenceAttachmentsDialogs = (props: any) => {
 
   const {
-    expanded, onClose, uploadAttachment,title, evidenceDialog
+    expanded, onClose,title, evidenceDialog
   } = props;
+
     const [evidenceDetail,setEvidenceDetail] = useState<{ evidence: {}, question: {} }>({evidence: {}, question: {}})
     const [evidenceAttachment,setEvidenceAttachment] = useState([])
+    const [evidenceBG,setEvidenceBG] = useState<any>({})
+
+    useEffect(() => {
+        if (evidenceDetail?.evidence?.type === null) {
+            setEvidenceBG({
+                background: "rgba(25, 28, 31, 0.08)",
+                borderColor: "#191C1F",
+                borderHover: "#061528",
+            });
+        }
+        if (evidenceDetail?.evidence?.type === "Positive") {
+            setEvidenceBG({
+                background: "rgba(32, 95, 148, 0.08)",
+                borderColor: "#205F94",
+                borderHover: "#117476",
+            });
+        }
+        if (evidenceDetail?.evidence?.type === "Negative") {
+            setEvidenceBG({
+                background: "rgba(139, 0, 53, 0.08)",
+                borderColor: "#8B0035",
+                borderHover: "#821237",
+            });
+        }
+    }, [evidenceDetail?.evidence?.type]);
+
+
+
+
     const { service } = useServiceContext();
 
     const detailItems = ["Description", "Evidence type", "Creator", "Created", "Modified"]
@@ -223,8 +253,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         a.click();
         a.remove();
     }
-
-
 
   const theme = useTheme()
 
@@ -300,7 +328,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                     return (<Box sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{detailItem}:</Typography>
                             {index == 0 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{evidence?.description}</Typography>}
-                            {index == 1 && <Typography sx={{...theme.typography.bodyMedium,color:"#B8144B"}}>{evidence?.type}</Typography>}
+                            {index == 1 && <Typography sx={{...theme.typography.bodyMedium,color:evidenceBG.borderColor}}>{evidence?.type}</Typography>}
                             {index == 2 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{evidence?.createdBy?.displayName}</Typography>}
                             {index == 3 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{formatDate(evidence?.creationTime)}</Typography>}
                             {index == 4 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{formatDate(evidence?.lastModificationTime)}</Typography>}
@@ -315,8 +343,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                            <Box sx={{width:"70px",height:"100%"}}>
                                <FileIcon
                                    downloadFile={downloadFile} item={item} name={name}
-                                   mainColor={"#2D80D2"}
-                                   backgroundColor={"rgba(45,128,210,.5)"}
+                                   mainColor={evidenceBG.borderColor}
+                                   backgroundColor={evidenceBG.background}
                                    exp={exp}
                                    border={false}
                                    displayName={false}
@@ -325,9 +353,9 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                                />
                            </Box>
                             <Box sx={{display:"flex",gap:"5px",flexDirection: "column"}}>
-                                <Typography onClick={downloadFile} style={{ color: "#2466A8",...theme.typography.labelLarge,textAlign:"left", cursor: "pointer"}}
+                                <Typography onClick={downloadFile} style={{ color: evidenceBG.borderColor,...theme.typography.labelLarge,textAlign:"left", cursor: "pointer",textDecoration:"underline"}}
                                     >{name.substring(0,20)}{name.length > 20 && "..."}</Typography>
-                                <DetailExpend item={item} />
+                                <DetailExpend evidenceBG={evidenceBG} item={item} />
                             </Box>
                     </Box>
                     )
@@ -347,7 +375,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             <Box sx={{display:"flex", flexDirection:"column",gap:"8px"}}>
                                 {index == 2 &&  question?.options?.map((option, index)=>{
                                     return(
-                                        <Typography style={question?.answer?.selectedOption && question?.answer?.selectedOption.index == option.index ? {border:`1px solid blue`,background:"red"}: {} } sx={{...theme.typography.bodyMedium,color:"#2B333B",textAlign:"left",width:"fit-content",borderRadius:"8px",px:"12px",py:"2px" }}>{option.index}.{option.title.toUpperCase()}</Typography>
+                                        <Typography style={question?.answer?.selectedOption && question?.answer?.selectedOption.index == option.index ? {border:`1px solid ${evidenceBG.borderColor}`,background: evidenceBG.background}: {} } sx={{...theme.typography.bodyMedium,color:"#2B333B",textAlign:"left",width:"fit-content",borderRadius:"8px",px:"12px",py:"2px" }}>{option.index}.{option.title.toUpperCase()}</Typography>
                                     )
                                 })}
                             </Box>
@@ -391,7 +419,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
 const DetailExpend = (props: any) =>{
     const [expendedDetail,setExpendedDetail ] = useState(false)
-    const { item } = props
+    const { item , evidenceBG } = props
     const {createdBy: {displayName}} = item
     const theme = useTheme()
     return (
@@ -399,9 +427,9 @@ const DetailExpend = (props: any) =>{
             {expendedDetail && <Typography sx={{...theme.typography.labelSmall,color:"#6C8093",textAlign:"left"}} >BY {displayName}</Typography>}
             {expendedDetail && <Typography sx={{...theme.typography.bodySmall,color:"#6C8093",textAlign:"left",whiteSpace: "break-spaces" ,wordBreak:"break-word"}}>{item.description}</Typography>}
             <Box sx={{display: "flex",justifyContent: 'flex-start',alignItems: "center",gap:"3px",width:"100%"}}>
-                {expendedDetail ?  <Typography style={{...theme.typography.labelSmall ,color: "#2466A8" ,width:"100px",textAlign:"left"}}
+                {expendedDetail ?  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"100px",textAlign:"left",textDecoration:"underline",cursor:"pointer"}}
                     ><Trans i18nKey={"showMoreDetails"} /></Typography>
-                    :  <Typography style={{...theme.typography.labelSmall ,color: "#2466A8" ,width:"100px",textAlign:"left"}}
+                    :  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"100px",textAlign:"left", textDecoration:"underline",cursor:"pointer"}}
                     ><Trans i18nKey={"showLessDetails"}/></Typography>}
                 {<img style={expendedDetail ? {
                     rotate: "180deg",
