@@ -1571,7 +1571,7 @@ const CreateDropZone = (props: any) =>{
     const theme = useTheme()
     return(
         <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
-            {({ getRootProps, getInputProps }) => (
+            {({ getRootProps, getInputProps } : any) => (
                 dropZoneData ?
                     <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
                         <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
