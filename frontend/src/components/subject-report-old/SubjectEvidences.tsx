@@ -422,11 +422,11 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 const DetailExpend = (props: any) =>{
     const [expendedDetail,setExpendedDetail ] = useState(false)
     const { item , evidenceBG } = props
-    const {createdBy: {displayName}} = item
+    const {createdBy: {displayName},creationTime} = item
     const theme = useTheme()
     return (
         <Box sx={{whiteSpace:"nowrap",display: "flex",flexDirection:'column', gap:"8px"}} onClick={()=>setExpendedDetail(prev => !prev)}>
-            {expendedDetail && <Typography sx={{...theme.typography.labelSmall,color:"#6C8093",textAlign:"left"}} >BY {displayName}</Typography>}
+            {expendedDetail && <Typography sx={{...theme.typography.labelSmall,color:"#6C8093",textAlign:"left"}} >BY {displayName} / {formatDate(creationTime)}</Typography>}
             {expendedDetail && <Typography sx={{...theme.typography.bodySmall,color:"#6C8093",textAlign:"left",whiteSpace: "break-spaces" ,wordBreak:"break-word"}}>{item.description}</Typography>}
             <Box sx={{display: "flex",justifyContent: 'flex-start',alignItems: "center",gap:"3px",width:"100%"}}>
                 {expendedDetail ?  <Typography style={{...theme.typography.labelSmall ,color: evidenceBG.borderColor ,width:"fit-content",textAlign:"left",textDecoration:"underline",cursor:"pointer"}}
