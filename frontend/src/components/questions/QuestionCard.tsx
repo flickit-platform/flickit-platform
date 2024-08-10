@@ -1517,32 +1517,10 @@ const DescriptionBox = (props:any) => {
     )
 }
 
-const CreateDropZone = (props: any) =>{
 
-    const { setDropZone, dropZoneData, pallet } = props
-    const [dispalyFile, setDisplayFile] = useState<any>(null)
-    const [typeFile, setTypeFile] = useState<any>(null)
-    const MAX_SIZE = 2097152
-
-
-    useEffect(() => {
-        if (dropZoneData) {
-            let file = URL.createObjectURL(dropZoneData[0])
-            setDisplayFile(file)
-            if (dropZoneData[0].type.startsWith("image")) {
-                setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
-            }
-            if (dropZoneData[0].type === "application/pdf") {
-                setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-            }
-            if (dropZoneData[0].type === "application/zip") {
-                setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-            }
-        }
-
-    }, [dropZoneData])
-    const theme = useTheme()
-    return(
+const DropZoneArea =(props: any)=>{
+    const {setDropZone ,MAX_SIZE, children} = props
+    return (
         <Dropzone accept={{
             ...AcceptFile
         }} onDrop={(acceptedFiles) => {
@@ -1555,6 +1533,44 @@ const CreateDropZone = (props: any) =>{
                 return toast(t("thisFileNotAcceptable"), { type: "error" })
             }
         }}>
+            {children}
+        </Dropzone>
+    )
+}
+
+
+const checkTypeUpload = (dropZoneData,setDisplayFile,setTypeFile) =>{
+    if (dropZoneData) {
+        let file = URL.createObjectURL(dropZoneData[0])
+        setDisplayFile(file)
+        if (dropZoneData[0].type.startsWith("image")) {
+            setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
+        }
+        if (dropZoneData[0].type === "application/pdf") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
+        if (dropZoneData[0].type === "application/zip") {
+            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+        }
+    }
+}
+
+const CreateDropZone = (props: any) =>{
+
+    const { setDropZone, dropZoneData, pallet } = props
+    const [dispalyFile, setDisplayFile] = useState<any>(null)
+    const [typeFile, setTypeFile] = useState<any>(null)
+    const MAX_SIZE = 2097152
+
+
+    useEffect(() => {
+
+        checkTypeUpload(dropZoneData,setDisplayFile,setTypeFile)
+
+    }, [dropZoneData])
+    const theme = useTheme()
+    return(
+        <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
             {({ getRootProps, getInputProps }) => (
                 dropZoneData ?
                     <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
@@ -1587,7 +1603,7 @@ const CreateDropZone = (props: any) =>{
                         </Box>
                     </section>
             )}
-        </Dropzone>
+        </DropZoneArea>
     )
 }
 
@@ -2091,45 +2107,16 @@ const MyDropzone = (props: any) => {
   const [typeFile, setTypeFile] = useState<any>(null)
   const MAX_SIZE = 2097152
 
-  const {
-    acceptedFiles,
-    fileRejections,
-    getRootProps,
-    getInputProps
-  } = useDropzone({
-    maxFiles: 1
-  });
 
   useEffect(() => {
-    if (dropZoneData) {
-      let file = URL.createObjectURL(dropZoneData[0])
-      setDisplayFile(file)
-      if (dropZoneData[0].type.startsWith("image")) {
-        setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
-      }
-      if (dropZoneData[0].type === "application/pdf") {
-        setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-      }
-      if (dropZoneData[0].type === "application/zip") {
-        setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-      }
-    }
+
+      checkTypeUpload(dropZoneData,setDisplayFile,setTypeFile)
 
   }, [dropZoneData])
+
   const theme = useTheme()
   return (
-    <Dropzone accept={{
-      ...AcceptFile
-    }} onDrop={(acceptedFiles) => {
-      if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
-        return toast(t("uploadAcceptableSize"), { type: "error" })
-      }
-      if (acceptedFiles?.length && acceptedFiles.length >= 1) {
-        setDropZone(acceptedFiles)
-      } else {
-        return toast(t("thisFileNotAcceptable"), { type: "error" })
-      }
-    }}>
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
       {({ getRootProps, getInputProps }) => (
           dropZoneData ?
           <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -2160,7 +2147,7 @@ const MyDropzone = (props: any) => {
             </Box>
           </section>
       )}
-    </Dropzone>
+    </DropZoneArea>
   )
 }
 
