@@ -25,6 +25,8 @@ import formatDate from "@utils/formatDate";
 import {linkInfo} from "@utils/linkInfo";
 import {FileIcon} from "@utils/fileIcon";
 import arrowBtn from "@/assets/svg/arrow.svg";
+import attachmentIcon from "@/assets/svg/attachmentIcon.svg";
+import {theme} from "@config/theme";
 
 export enum evidenceType {
   positive = "POSITIVE",
@@ -136,7 +138,6 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
         paddingX="30px"
         width="100%"
       >
-        {/*TODO*/}
         {fetchRelatedEvidences?.data?.items?.map((item: any, index: number) => (
           <EvidanceDescription
             key={index}
@@ -426,24 +427,33 @@ const EvidanceDescription = ({
   item: any;
   setEvidenceDialog: any
 }) => {
+    const { attachmentsCount } = item
   return (
     <>
-      <Box display="flex" justifyContent="flex-start" alignItems="center" onClick={()=>setEvidenceDialog({expended:true,id:item.id})}>
-        <Typography display="flex" margin={2} color={textColor} fontWeight="bold">
-          {number}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            flex: 1,
-            whiteSpace: "pre-wrap",
-            textAlign: "justify",
-            wordBreak: "break-word",
-            unicodeBidi: "plaintext"
-          }}
-        >
-          {item?.description}
-        </Typography>
+      <Box sx={{cursor:"pointer"}} onClick={()=>setEvidenceDialog({expended:true,id:item.id})}>
+       <Box sx={{display:"flex", justifyContent:"flex-start",alignItems:"center"}}>
+           <Typography display="flex" margin={2} color={textColor} fontWeight="bold">
+               {number}
+           </Typography>
+           <Typography
+               variant="body1"
+               sx={{
+                   flex: 1,
+                   whiteSpace: "pre-wrap",
+                   textAlign: "justify",
+                   wordBreak: "break-word",
+                   unicodeBidi: "plaintext"
+               }}
+           >
+               {item?.description}
+           </Typography>
+       </Box>
+          {item.attachmentsCount >= 1 && <Box sx={{display:"flex",justifyContent:"flex-start",alignItems:"center",pl:"30px"}}>
+              <img src={attachmentIcon} alt={attachmentIcon}/>
+              <Typography sx={{...theme.typography.labelSmall,color:"#6C8093"}}>
+                  {t("attachmentCount", { attachmentsCount })}
+              </Typography>
+          </Box>}
       </Box>
       <Divider sx={{ width: "100%", backgroundColor: color }} />
     </>
