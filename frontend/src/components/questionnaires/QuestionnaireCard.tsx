@@ -14,7 +14,10 @@ import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
 import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
-import { Typography } from "@mui/material";
+import { Collapse, Typography } from "@mui/material";
+import languageDetector from "@/utils/languageDetector";
+import React, { useState } from "react";
+import { InfoRounded } from "@mui/icons-material";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
@@ -35,7 +38,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const isSmallScreen = useScreenResize("sm");
 
   return (
-    <Paper sx={{ height: "100%", mt: 3 }} data-cy="questionnaire-card">
+    <Paper sx={{ mt: 3 }} data-cy="questionnaire-card">
       <Box
         p="8px 6px"
         pl={"12px"}
@@ -71,7 +74,7 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 )}
               </Box>
             </Title>
-            <Typography variant="bodyLarge">{description}</Typography>
+            <QuestionDescription description={description} />
           </Box>
         </Box>
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
@@ -112,6 +115,79 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   );
 };
 
+const QuestionDescription = (props: any) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
+  const { description } = props;
+  const is_farsi = languageDetector(description);
+  return (
+    <Box>
+      <Box mt={1} width="100%">
+        <Title
+          sup={
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <InfoRounded sx={{ mr: "4px" }} />
+              <Trans i18nKey="description" />
+            </Box>
+          }
+          size="small"
+          sx={{ cursor: "pointer", userSelect: "none" }}
+          onClick={() => setCollapse(!collapse)}
+          mb={1}
+        ></Title>
+        <Collapse in={collapse}>
+          <Box
+            sx={{
+              flex: 1,
+              mr: { xs: 0, md: 4 },
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              border: "1px dashed #ffffff99",
+              borderRadius: "8px",
+              direction: `${is_farsi ? "rtl" : "ltr"}`,
+            }}
+          >
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              sx={{
+                width: "100%",
+              }}
+            >
+              <Typography variant="bodyLarge">
+                {description.startsWith("\n")
+                  ? description
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : description
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
+              </Typography>
+            </Box>
+          </Box>
+        </Collapse>
+      </Box>
+    </Box>
+  );
+};
 const ActionButtons = (props: {
   id: TId;
   title: string;
