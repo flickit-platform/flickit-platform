@@ -32,6 +32,5 @@ def get_assessment_attributes_report_export(request, assessment_id, attribute_id
 def get_assessment_attributes_report_ai(request, assessment_id, attribute_id):
     response = requests.post(ASSESSMENT_URL +
                              f'assessment-core/api/assessments/{assessment_id}/ai-report/attributes/{attribute_id}',
-                             json=request.data,
                              headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
