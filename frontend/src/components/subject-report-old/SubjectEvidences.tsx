@@ -285,6 +285,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               position: "sticky",
               top: 0,
               py: "24px",
+              zIndex:2
             }}
         >
           <Box
@@ -320,7 +321,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 justifyContent:"center",alignItems:"start",width:"100%", gap:"8px"
             }} >
                 <Typography sx={{...theme.typography.headlineSmall,color:"#2B333B"}}>Evidence</Typography>
-                {detailItems.map((detailItem,index)=>{
+                <Box sx={{width:"100%",background:"#C7CCD1",height:"0.5px"}}></Box>
+                {evidenceLoadQuery.loading || !Object.keys(evidenceDetail.evidence).length ?
+                    <Box sx={{ ...styles.centerVH }} height="auto" width="100%">
+                        <CircularProgress />
+                    </Box>
+                    :
+                    detailItems.map((detailItem,index)=>{
                     const {evidence} = evidenceDetail
                     return (<Box sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{detailItem}:</Typography>
@@ -330,7 +337,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                             {index == 3 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{formatDate(evidence?.creationTime)}</Typography>}
                             {index == 4 && <Typography sx={{...theme.typography.bodyMedium,color:"#2B333B"}}>{formatDate(evidence?.lastModificationTime)}</Typography>}
                         </Box>
-                )
+                    )
                 })}
                 <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:"30%",textAlign:"left"}} >Attachments:</Typography>
                 {evidenceAttachment.map((item,index)=>{
@@ -363,7 +370,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             }} >
                 <Typography sx={{...theme.typography.headlineSmall,color:"#2B333B"}}><Trans i18nKey={"relatedQuestion"} /></Typography>
                 <Box sx={{width:"100%",background:"#C7CCD1",height:"0.5px"}}></Box>
-                {questionItems.map((questionItem,index)=>{
+                    { evidenceAttachmentQuery.loading || !Object.keys(evidenceDetail.question).length ?
+                            <Box sx={{ ...styles.centerVH }} height="auto" width="100%">
+                                <CircularProgress />
+                            </Box>
+                            :
+                    questionItems.map((questionItem,index)=>{
                     const {question} = evidenceDetail
                     return (<Box key={questionItem} sx={{display:"flex",width:"100%"}}>
                             <Typography sx={{...theme.typography.titleMedium,color:"#2B333B",width:{xs:"45%",sm:"30%"},textAlign:"left"}} >{questionItem}:</Typography>
