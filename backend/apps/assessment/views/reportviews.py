@@ -39,3 +39,13 @@ class AssessmentAttributesReportAiApi(APIView):
                                                                                 assessment_id,
                                                                                 attribute_id)
         return Response(result["body"], result["status_code"])
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.assessment_attributes_report_ai_edit(request,
+                                                                                 assessment_id,
+                                                                                 attribute_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
