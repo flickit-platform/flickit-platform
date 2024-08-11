@@ -126,9 +126,7 @@ const QuestionDescription = (props: any) => {
           sup={
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                ...styles.centerV,
               }}
             >
               <InfoRounded sx={{ mr: "4px" }} />
@@ -161,26 +159,7 @@ const QuestionDescription = (props: any) => {
                 width: "100%",
               }}
             >
-              <Typography variant="bodyLarge">
-                {description.startsWith("\n")
-                  ? description
-                      .substring(1)
-                      .split("\n")
-                      .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))
-                  : description
-                      .split("\n")
-                      .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))}
-              </Typography>
+              <Typography variant="bodyLarge">{description}</Typography>
             </Box>
           </Box>
         </Collapse>
