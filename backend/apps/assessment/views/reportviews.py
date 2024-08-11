@@ -31,16 +31,6 @@ class AssessmentAttributesReportApi(APIView):
         return Response(result["body"], result["status_code"])
 
 
-class AssessmentAttributesReportExportApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, assessment_id, attribute_id):
-        result = assessment_report_services.get_assessment_attributes_report_export(request,
-                                                                                    assessment_id,
-                                                                                    attribute_id)
-        return Response(result["body"], result["status_code"])
-
-
 class AssessmentAttributesReportAiApi(APIView):
     permission_classes = [IsAuthenticated]
 
