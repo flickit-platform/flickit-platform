@@ -231,7 +231,7 @@ export interface IAssessmentResult {
   id: TId;
 }
 export interface IAssessmentResultModel
-  extends IDefaultModel<IAssessmentResult> { }
+  extends IDefaultModel<IAssessmentResult> {}
 
 export type TAssessmentResultsModel = string[];
 
@@ -310,7 +310,7 @@ export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
   permissions: IPermissions;
-  total: number
+  total: number;
 }
 
 export interface IQuestionImpact {
@@ -343,7 +343,7 @@ export interface IQuestionsResult extends IAssessmentResult {
 }
 
 export interface IQuestionsResultsModel
-  extends IDefaultModel<IQuestionsResult> { }
+  extends IDefaultModel<IQuestionsResult> {}
 
 export interface IAssessment {
   id: TId;
@@ -371,7 +371,7 @@ export interface IMember {
   user: Omit<IUserInfo, "current_space" | "email">;
 }
 
-export interface IMemberModel extends IDefaultModel<IMember> { }
+export interface IMemberModel extends IDefaultModel<IMember> {}
 
 export interface ISubjectReport {
   id: TId;
@@ -396,6 +396,7 @@ export interface IQuestionnairesInfo {
   last_updated?: string;
   nextQuestion: number;
   title: string;
+  description: string;
   subjects: { id: TId; title: string }[];
 }
 export interface IQuestionnairesModel extends ITotalProgress {
