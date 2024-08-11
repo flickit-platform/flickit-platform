@@ -124,11 +124,7 @@ const QuestionDescription = (props: any) => {
       <Box mt={1} width="100%">
         <Title
           sup={
-            <Box
-              sx={{
-                ...styles.centerV,
-              }}
-            >
+            <Box sx={{ ...styles.centerV }}>
               <InfoRounded sx={{ mr: "4px" }} />
               <Trans i18nKey="description" />
             </Box>

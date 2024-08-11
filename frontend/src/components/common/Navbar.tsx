@@ -33,42 +33,50 @@ import { ISpacesModel } from "@types";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import keycloakService from "@/service//keycloakService";
 import { useConfigContext } from "@/providers/ConfgProvider";
-import { ButtonTypeEnum, IMessage, NotificationCenter, NovuProvider } from "@novu/notification-center";
+import {
+  ButtonTypeEnum,
+  IMessage,
+  NotificationCenter,
+  NovuProvider,
+} from "@novu/notification-center";
 import { FaBell } from "react-icons/fa";
 import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
-import NotificationEmptyState from '@/assets/svg/notificationEmptyState.svg'
+import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 
 const drawerWidth = 240;
 
-const UnseenNotificationItem = ({ message, onNotificationClick }: {
-  message: IMessage,
-  onNotificationClick: () => void
+const UnseenNotificationItem = ({
+  message,
+  onNotificationClick,
+}: {
+  message: IMessage;
+  onNotificationClick: () => void;
 }) => {
   return (
     <Box
       onClick={onNotificationClick}
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 16px',
-        border: '0.5px solid #C7CCD1',
-        backgroundColor: '#F3F5F6',
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: '#f1f1f1',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "8px 16px",
+        border: "0.5px solid #C7CCD1",
+        backgroundColor: "#F3F5F6",
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "#f1f1f1",
         },
       }}
     >
       {/* Blue Indicator for Unseen Messages */}
       <Box
         sx={{
-          minWidth: '4px',
-          height: '24px',
-          backgroundColor: '#2D80D2',
-          borderRadius: '2px',
-          marginRight: '8px',
+          minWidth: "4px",
+          height: "24px",
+          backgroundColor: "#2D80D2",
+          borderRadius: "2px",
+          marginRight: "8px",
         }}
       />
 
@@ -76,20 +84,20 @@ const UnseenNotificationItem = ({ message, onNotificationClick }: {
       <Box
         sx={{
           flexGrow: 1,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          display: 'flex',
-          alignItems: 'center',
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          display: "flex",
+          alignItems: "center",
         }}
       >
         <Typography
           variant="titleSmall"
           sx={{
-            color: '#2B333B',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
+            color: "#2B333B",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
           }}
         >
           {message.content as string}
@@ -100,9 +108,9 @@ const UnseenNotificationItem = ({ message, onNotificationClick }: {
       <Typography
         variant="labelSmall"
         sx={{
-          color: '#3D4D5C',
-          marginLeft: '8px',
-          whiteSpace: 'nowrap',
+          color: "#3D4D5C",
+          marginLeft: "8px",
+          whiteSpace: "nowrap",
         }}
       >
         {convertToRelativeTime(message.createdAt)}
@@ -111,42 +119,45 @@ const UnseenNotificationItem = ({ message, onNotificationClick }: {
       {/* Arrow Icon */}
       <ArrowForwardIos
         sx={{
-          fontSize: '16px',
-          color: '#2962FF',
-          marginLeft: '8px',
+          fontSize: "16px",
+          color: "#2962FF",
+          marginLeft: "8px",
         }}
       />
     </Box>
   );
 };
 
-const SeenNotificationItem = ({ message, onNotificationClick }: {
-  message: IMessage,
-  onNotificationClick: () => void
+const SeenNotificationItem = ({
+  message,
+  onNotificationClick,
+}: {
+  message: IMessage;
+  onNotificationClick: () => void;
 }) => {
   return (
     <Box
       onClick={onNotificationClick}
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 16px',
-        border: '0.5px solid #C7CCD1',
-        backgroundColor: '#ffffff',
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: '#f1f1f1',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "8px 16px",
+        border: "0.5px solid #C7CCD1",
+        backgroundColor: "#ffffff",
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "#f1f1f1",
         },
       }}
     >
       <Box
         sx={{
-          minWidth: '4px',
-          height: '24px',
-          backgroundColor: '#6C8093',
-          borderRadius: '2px',
-          marginRight: '8px',
+          minWidth: "4px",
+          height: "24px",
+          backgroundColor: "#6C8093",
+          borderRadius: "2px",
+          marginRight: "8px",
         }}
       />
 
@@ -154,20 +165,20 @@ const SeenNotificationItem = ({ message, onNotificationClick }: {
       <Box
         sx={{
           flexGrow: 1,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          display: 'flex',
-          alignItems: 'center',
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          display: "flex",
+          alignItems: "center",
         }}
       >
         <Typography
           variant="bodyMedium"
           sx={{
-            color: '#2B333B',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
+            color: "#2B333B",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
           }}
         >
           {message.content as string}
@@ -178,9 +189,9 @@ const SeenNotificationItem = ({ message, onNotificationClick }: {
       <Typography
         variant="labelSmall"
         sx={{
-          color: '#3D4D5C',
-          marginLeft: '8px',
-          whiteSpace: 'nowrap',
+          color: "#3D4D5C",
+          marginLeft: "8px",
+          whiteSpace: "nowrap",
         }}
       >
         {convertToRelativeTime(message.createdAt)}
@@ -189,9 +200,9 @@ const SeenNotificationItem = ({ message, onNotificationClick }: {
       {/* Arrow Icon */}
       <ArrowForwardIos
         sx={{
-          fontSize: '16px',
-          color: '#888888',
-          marginLeft: '8px',
+          fontSize: "16px",
+          color: "#888888",
+          marginLeft: "8px",
         }}
       />
     </Box>
@@ -202,9 +213,12 @@ const NotificationCenterComponent = () => {
   const [selectedMessage, setSelectedMessage] = useState<IMessage | null>(null);
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
 
-  const handleNotificationClick = (message: IMessage, onNotificationClick: () => void) => {
+  const handleNotificationClick = (
+    message: IMessage,
+    onNotificationClick: () => void
+  ) => {
     setSelectedMessage(message);
-    onNotificationClick()
+    onNotificationClick();
   };
 
   const handleBackClick = () => {
@@ -215,15 +229,11 @@ const NotificationCenterComponent = () => {
     <Box>
       {selectedMessage ? (
         // Full Message View
-        <Box
-          className="nc-layout-wrapper"
-          sx={{ width: 420, borderRadius: 1 }}
-        >
+        <Box className="nc-layout-wrapper" sx={{ width: 420, borderRadius: 1 }}>
           <Box
             className="nc-header"
             sx={{ display: "flex", height: "55px", alignItems: "center" }}
           >
-
             <Typography
               className="nc-header-title"
               sx={{
@@ -232,15 +242,16 @@ const NotificationCenterComponent = () => {
                 fontStyle: "normal",
                 fontWeight: 700,
                 lineHeight: "24px",
-                textAlign: "left"
+                textAlign: "left",
               }}
             >
-              <IconButton onClick={handleBackClick} >
+              <IconButton onClick={handleBackClick}>
                 <ArrowBackIos
                   sx={{
-                    fontSize: '16px',
+                    fontSize: "16px",
                   }}
-                />              </IconButton>
+                />{" "}
+              </IconButton>
               Notification Details
             </Typography>
           </Box>
@@ -248,10 +259,10 @@ const NotificationCenterComponent = () => {
           <Box className="nc-notifications-list" sx={{ padding: 2 }}>
             <Typography
               sx={{
-                marginBottom: '10px',
-                color: '#555',
-                lineHeight: '1.5',
-                fontSize: '0.95rem',
+                marginBottom: "10px",
+                color: "#555",
+                lineHeight: "1.5",
+                fontSize: "0.95rem",
               }}
             >
               {selectedMessage.content as string}
@@ -259,14 +270,13 @@ const NotificationCenterComponent = () => {
 
             <Typography
               sx={{
-                marginBottom: '12px',
-                color: '#999',
-                fontSize: '0.875rem',
+                marginBottom: "12px",
+                color: "#999",
+                fontSize: "0.875rem",
               }}
             >
               {convertToRelativeTime(selectedMessage.createdAt)}
             </Typography>
-
           </Box>
         </Box>
       ) : (
@@ -274,25 +284,45 @@ const NotificationCenterComponent = () => {
         <NotificationCenter
           colorScheme="light"
           emptyState={
-            <Box width="100%" height="400px" sx={{ ...styles.centerCVH }} gap={1}>
-              <img
-                src={NotificationEmptyState}
-                alt={"No assesment here!"}
-              />
+            <Box
+              width="100%"
+              height="400px"
+              sx={{ ...styles.centerCVH }}
+              gap={1}
+            >
+              <img src={NotificationEmptyState} alt={"No assesment here!"} />
               <Typography variant="bodyMedium" color="#2466A8">
                 Nothing new to see here yet!
               </Typography>
-            </Box>}
-          listItem={(message: IMessage, onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void, onNotificationClick: () => void) => {
+            </Box>
+          }
+          listItem={(
+            message: IMessage,
+            onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void,
+            onNotificationClick: () => void
+          ) => {
             if (!message.seen) {
-              return <UnseenNotificationItem message={message} onNotificationClick={() => handleNotificationClick(message, onNotificationClick)} />;
+              return (
+                <UnseenNotificationItem
+                  message={message}
+                  onNotificationClick={() =>
+                    handleNotificationClick(message, onNotificationClick)
+                  }
+                />
+              );
             }
-            return <SeenNotificationItem message={message} onNotificationClick={() => handleNotificationClick(message, onNotificationClick)} />;
+            return (
+              <SeenNotificationItem
+                message={message}
+                onNotificationClick={() =>
+                  handleNotificationClick(message, onNotificationClick)
+                }
+              />
+            );
           }}
         />
-      )
-      }
-    </Box >
+      )}
+    </Box>
   );
 };
 
@@ -319,7 +349,7 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (spaceId) {
@@ -479,19 +509,6 @@ const Navbar = () => {
           sx={{ position: "absolute", top: 60, right: 20, zIndex: 1300 }}
         >
           <NotificationCenterComponent />
-          {/* <NotificationCenter
-            colorScheme="light"
-            listItem={(
-              message: IMessage,
-              onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void,
-              onNotificationClick: () => void
-            ) => {
-              if (!message.seen) {
-                return <UnseenNotificationItem message={message} onNotificationClick={onNotificationClick} />;
-              }
-              return <SeenNotificationItem message={message} onNotificationClick={onNotificationClick} />;
-            }}
-          /> */}
         </Box>
       )}
     </>
