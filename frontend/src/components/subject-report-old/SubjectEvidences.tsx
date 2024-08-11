@@ -311,11 +311,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               width:"100%",
               background: "#fff",
               overflow: "visible",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
               textAlign: "center",
+              ...styles.centerCVH,
               p: "32px"
             }}
         >
@@ -388,7 +385,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             </Box>
           <Box sx={{
             width: "100%", display: "flex",
-            justifyContent: "center"
+            justifyContent: "center",
+            color: "#EDFCFC",
           }}>
             <Button
                 sx={{
@@ -398,7 +396,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                   height: "40px",
                   fontWeight: 700,
                   "&.MuiButton-root": {
-                    color: "#EDFCFC",
+                    color: "inherit",
                     border: "1px solid #004F83",
                     background: "#004F83",
                     borderRadius: "4px",
