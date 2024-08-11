@@ -99,22 +99,11 @@ const AssessmentExportContainer = () => {
 
   const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
     try {
-      const response: any = await service.fetchExportReport(
-        {
-          assessmentId,
-          attributeId,
-        },
-        undefined
-      );
-
       const aiReponse = service
         .fetchAIReport(
           {
             assessmentId,
             attributeId,
-            data: {
-              fileLink: response?.data?.downloadLink,
-            },
           },
           undefined
         )
@@ -184,7 +173,9 @@ const AssessmentExportContainer = () => {
         )
     );
 
-    const allAttributesData = attributesDataPromises ? await Promise.all(attributesDataPromises) : [];
+    const allAttributesData = attributesDataPromises
+      ? await Promise.all(attributesDataPromises)
+      : [];
 
     const attributesDataObject = allAttributesData?.reduce(
       (acc, { id, data }) => {
@@ -534,8 +525,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                                ? elem?.title
-                                : ", " + elem?.title
+                              ? elem?.title
+                              : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -550,7 +541,10 @@ const AssessmentExportContainer = () => {
                     />
                   </Typography>{" "}
                   {subjects?.map((subject: ISubject) => (
-                    <Typography variant="displaySmall" paragraph key={subject?.id}
+                    <Typography
+                      variant="displaySmall"
+                      paragraph
+                      key={subject?.id}
                     >
                       <Trans
                         i18nKey="assessmentFocusDescriptionSubject"
@@ -833,8 +827,7 @@ const AssessmentExportContainer = () => {
                 <Trans i18nKey="subjectsSectionTitle" />
               </Typography>{" "}
               {subjects?.map((subject: ISubject) => (
-                <div key={subject?.id}
-                >
+                <div key={subject?.id}>
                   <Typography
                     component="div"
                     mt={6}
