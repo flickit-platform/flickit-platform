@@ -293,9 +293,27 @@ export const theme = createTheme({
           html {
             font-size: ${fontSize[0]};
           }
+          .css-1wscs19 {
+            width: unset !important
+          }
         }
         body {
           background: #EDEFF1;
+        }
+        .nc-footer {
+          display: none;
+        }
+        .nc-layout-wrapper {
+          background: #F9FAFB;
+          padding: 0;
+        }
+        .nc-header {
+          background: #E8EBEE;
+          border-radius: 7px 7px 0px 0px;
+          box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+        }
+        .mantine-1avyp1d {
+          stroke: rgba(0, 54, 92, 1);
         }
       `,
     },

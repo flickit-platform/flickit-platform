@@ -6,7 +6,7 @@ import { ServiceProvider } from "./providers/ServiceProvider";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "@config/theme";
 import { AppProvider } from "./providers/AppProvider";
-import { AuthProvider } from "./providers/AuthProvider";
+import { AuthProvider, useAuthContext } from "./providers/AuthProvider";
 import { ConfigProvider } from "./providers/ConfgProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +15,7 @@ import { createRoot } from "react-dom/client";
 import keycloakService from "@/service/keycloakService";
 import * as Sentry from "@sentry/react";
 import "./assets/font/fonts.css";
+import { NovuProvider } from "@novu/notification-center";
 
 {
   process.env.NODE_ENV !== "development" &&
@@ -30,16 +31,31 @@ import "./assets/font/fonts.css";
           blockAllMedia: false,
         }),
       ],
-      // Performance Monitoring
-      tracesSampleRate: 1.0, //  Capture 100% of the transactions
-      // Session Replay
-      replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-      replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+      tracesSampleRate: 1.0,
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
     });
 }
 
-const renderApp = () =>
-  createRoot(document.getElementById("root") as HTMLElement).render(
+const AppWithNovu = () => {
+  const { userInfo } = useAuthContext();
+
+  if (!userInfo) {
+    return null;
+  }
+
+  return (
+    <NovuProvider
+      subscriberId={userInfo.id.toString()}
+      applicationIdentifier="e_2m2IV56y-E"
+    >
+      <App />
+    </NovuProvider>
+  );
+};
+
+const renderApp = () => {
+  return createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Suspense fallback="loading...">
@@ -49,7 +65,7 @@ const renderApp = () =>
                 <ConfigProvider>
                   <CssBaseline />
                   <ToastContainer {...toastDefaultConfig} />
-                  <App />
+                  <AppWithNovu />
                 </ConfigProvider>
               </ServiceProvider>
             </AuthProvider>
@@ -58,5 +74,6 @@ const renderApp = () =>
       </BrowserRouter>
     </ThemeProvider>
   );
+}
 
 keycloakService.initKeycloak(renderApp);

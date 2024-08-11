@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 export default function FileType ({name}: {name:string}) {
     return (
         <section style={{ position:"relative"}}>
-            <svg width="80" height="130" viewBox="0 0 160 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="100%" height="100%" viewBox="0 0 160 192" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g opacity="0.5">
                     <path opacity="0.5" d="M111.734 39.385C107.36 39.3808 103.167 37.6421 100.075 34.5506C96.9819 31.459 95.2426 27.2673 95.2384 22.8952V0H21.5276C15.8181 0 10.3425 2.26732 6.30531 6.30308C2.2681 10.3388 0 15.8123 0 21.5198V151.246C0.00847855 156.948 2.2803 162.414 6.31659 166.443C10.3529 170.471 15.8237 172.734 21.5276 172.734H110.014C115.718 172.734 121.189 170.471 125.225 166.443C129.261 162.414 131.533 156.948 131.542 151.246V39.385H111.734Z" fill="#243342"/>
                 </g>
