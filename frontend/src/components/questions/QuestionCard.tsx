@@ -68,7 +68,7 @@ import Dropzone, { useDropzone } from 'react-dropzone'
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { theme } from "@config/theme";
+import {primaryFontFamily, secondaryFontFamily, theme} from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile"
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
@@ -1806,7 +1806,8 @@ const EvidenceDetail = (props: any) => {
                           top: 10,
                           left: 15,
                           zIndex: 1,
-                          color: evidenceBG.borderColor
+                          color: evidenceBG.borderColor,
+                          fontFamily: primaryFontFamily
                         }}
                       >
                         <Trans i18nKey="editing" />
@@ -2011,7 +2012,7 @@ const EvidenceDetail = (props: any) => {
                 <Typography
                   fontSize="12px"
                   variant="overline"
-                  sx={{ whiteSpace: "nowrap", lineHeight: "12px" }}
+                  sx={{ whiteSpace: "nowrap", lineHeight: "12px",fontFamily:primaryFontFamily }}
                 >
                   {formatDate(lastModificationTime)}
                 </Typography>
@@ -2070,8 +2071,8 @@ const FileIcon = (props: any): any => {
 
   return (
     <Tooltip title={<>
-      <Typography>{name}</Typography>
-      <Typography>{item?.description}</Typography>
+      <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>{name}</Typography>
+      <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>{item?.description}</Typography>
     </>}>
       <Box
         position="relative"
@@ -2314,9 +2315,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               <Box sx={{ display: "flex", gap: '2px', mx: "auto" }}>
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
-                  sx={{ mr: 1, width: "12px", height: "12px" }}
+                  sx={{ mr: 1, width: "12px", height: "12px", fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"
+                  }}
                 />
-                <Trans i18nKey="uploadAcceptable" />
+                  <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>
+                      <Trans i18nKey="uploadAcceptable" />
+                  </Typography>
               </Box>
             </Typography>
             <Typography sx={{
@@ -2326,12 +2330,14 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               textAlign: "left",
               paddingBottom: "1rem", mx: "auto"
             }}>
-              <Box sx={{ display: "flex", gap: '2px' }}>
+              <Box sx={{ display: "flex", gap: '2px'}}>
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
                   sx={{ mr: 1, width: "12px", height: "12px" }}
                 />
-                <Trans i18nKey="uploadAcceptableSize" />
+                  <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>
+                      <Trans  i18nKey="uploadAcceptableSize" />
+                  </Typography>
               </Box>
             </Typography>
             <MyDropzone setDropZone={setDropZone} dropZoneData={dropZoneData} />
