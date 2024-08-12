@@ -1532,8 +1532,7 @@ const DropZoneArea = (props: any) => {
   return (
     <Dropzone accept={{
       ...AcceptFile
-    }
-    } onDrop={(acceptedFiles) => {
+    }} onDrop={(acceptedFiles) => {
       if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
         return toast(t("uploadAcceptableSize"), { type: "error" })
       }
@@ -1790,8 +1789,9 @@ const EvidenceDetail = (props: any) => {
 
   const downloadFile = async ({ link }: { link: string }) => {
       try{
-          const response = await fetch(link)
-          const blob = await response.blob();
+          if(link){
+              let response = await fetch(link)
+              let blob = await response.blob();
               let reg = new RegExp("\\/([^\\/?]+)\\?")
               let name = link?.match(reg)[1]
               const a = document.createElement("a");
@@ -1801,6 +1801,7 @@ const EvidenceDetail = (props: any) => {
               document.body.appendChild(a);
               a.click();
               a.remove();
+          }
                  } catch (e){
               const err = e as ICustomError;
               toastError(err);
