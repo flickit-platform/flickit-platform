@@ -1107,9 +1107,9 @@ const Evidence = (props: any) => {
                       flex: 1,
                       "&.Mui-selected": {
                         color: `${evidenceBG.borderColor}  !important`,
-                        ...theme.typography.headlineSmall,
                         fontSize: { xs: "1rem !important" },
                       },
+                        ...theme.typography.headlineSmall,
                     }}
                     value={evidenceAttachmentType.positive}
                   />

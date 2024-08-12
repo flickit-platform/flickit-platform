@@ -11,7 +11,7 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import { customFontFamily } from "@/config/theme";
+import {customFontFamily, primaryFontFamily} from "@/config/theme";
 import {evidenceAttachmentInput} from "@utils/enumType";
 
 const InputField = () => {
@@ -62,16 +62,19 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     }
   }, [isFocused]);
   useEffect(() => {
+    if(inputRef.current.style.placeholder){
+      inputRef.current.style.placeholder.fontFamily = primaryFontFamily
+    }
     if (inputRef.current && isFocused) {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
       inputRef?.current?.focus();
     }
     if(inputRef.current && !isFocused){
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
   }, [inputRef.current?.value,isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
