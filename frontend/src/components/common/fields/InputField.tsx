@@ -11,7 +11,7 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import {customFontFamily, primaryFontFamily} from "@/config/theme";
+import {customFontFamily, primaryFontFamily, theme} from "@/config/theme";
 import {evidenceAttachmentInput} from "@utils/enumType";
 
 const InputField = () => {
@@ -29,6 +29,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   hasCounter?: boolean,
   isFarsi?: boolean,
   isEditing?: boolean,
+  valueCount?: string,
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -47,6 +48,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     hasCounter,
     isFarsi,
     isEditing,
+    valueCount,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -62,9 +64,6 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     }
   }, [isFocused]);
   useEffect(() => {
-    if(inputRef.current.style.placeholder){
-      inputRef.current.style.placeholder.fontFamily = primaryFontFamily
-    }
     if (inputRef.current && isFocused) {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
@@ -136,7 +135,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
             }
           : {  style:hasCounter ? isFarsi ? {
                 paddingLeft: 60,
-                minHeight: "110px"
+                minHeight: "110px", classes: { placeholder : {fontFamily:primaryFontFamily}}
               }:{
                 paddingRight: 60,
                 minHeight: "110px"
