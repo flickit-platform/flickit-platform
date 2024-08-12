@@ -47,7 +47,9 @@ const AppWithNovu = () => {
   return (
     <NovuProvider
       subscriberId={userInfo.id.toString()}
-      applicationIdentifier="e_2m2IV56y-E"
+      applicationIdentifier={import.meta.env.VITE_NOVU_APPLICATION_IDENTIFIER}
+      backendUrl={import.meta.env.VITE_NOVU_BACKEND_URL}
+      socketUrl={import.meta.env.VITE_NOVU_SOCKET_URL}
     >
       <App />
     </NovuProvider>
@@ -74,6 +76,6 @@ const renderApp = () => {
       </BrowserRouter>
     </ThemeProvider>
   );
-}
+};
 
 keycloakService.initKeycloak(renderApp);

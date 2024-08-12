@@ -14,13 +14,23 @@ import { theme } from "@config/theme";
 import { useEffect, useState } from "react";
 import QueryData from "@common/QueryData";
 import { useQuery } from "@utils/useQuery";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import emptyState from "@assets/svg/emptyState.svg";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
+import firstCharDetector from "@/utils/firstCharDetector";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
+import { toast } from "react-toastify";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  CancelRounded,
+  CheckCircleOutlineRounded,
+  EditRounded,
+} from "@mui/icons-material";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -31,6 +41,8 @@ const SUbjectAttributeCard = (props: any) => {
     maturityScores,
     confidenceValue,
     id,
+    attributesData,
+    updateAttributeAndData,
   } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
@@ -67,7 +79,15 @@ const SUbjectAttributeCard = (props: any) => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
-          sx={{ padding: "0 !important", alignItems: "flex-start", mr: 2 }}
+          sx={{
+            padding: "0 !important",
+            alignItems: "flex-start",
+            mr: 2,
+            "&.Mui-focusVisible": {
+              background: "#fff",
+            },
+          }}
+          onClick={(event) => event.stopPropagation()}
         >
           <Grid container spacing={2}>
             <Grid item md={11} xs={12}>
@@ -130,6 +150,51 @@ const SUbjectAttributeCard = (props: any) => {
                 <Typography fontSize="1.05rem" fontFamily="Roboto">
                   {description}
                 </Typography>
+              </Box>
+              <Box
+                mt={0.6}
+                sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+              >
+                {attributesData[id?.toString()] ? <OnHoverInput
+                  attributeId={id}
+                  // formMethods={formMethods}
+                  data={attributesData[id?.toString()]}
+                  title={<Trans i18nKey="insight" />}
+                  infoQuery={updateAttributeAndData}
+                  type="summary"
+                  editable={true}
+                /> :
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="4px"
+                  >
+                    <Typography
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
+                    </Typography>
+                    <Typography
+                      component={Link}
+                      to={`./../../questionnaires?subject_pk=${id}`}
+                      color="#2D80D2"
+                      variant="titleMedium"
+                      sx={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      questions
+                    </Typography>
+                    <Typography
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                    </Typography>
+                  </Box>}
+
               </Box>
             </Grid>
           </Grid>
@@ -752,6 +817,178 @@ export const MaturityLevelDetailsBar = (props: any) => {
         {score != null && Math.ceil(score)}
         {score != null ? "%" : ""}
       </Typography>
+    </Box>
+  );
+};
+
+const OnHoverInput = (props: any) => {
+  const [show, setShow] = useState<boolean>(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const handleMouseOver = () => {
+    editable && setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+  const { data, title, editable, type, attributeId, infoQuery } = props;
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [error, setError] = useState<any>({});
+  const [inputData, setInputData] = useState<string>("");
+  const handleCancel = () => {
+    setShow(false);
+    setInputData(data);
+    setError({});
+    setHasError(false);
+  };
+  useEffect(() => {
+    setInputData(data);
+  }, [data]);
+  const { assessmentKitId, assessmentId = "" } = useParams();
+  const { service } = useServiceContext();
+  const updateAssessmentKitQuery = useQuery({
+    service: (
+      args = {
+        attributeId: attributeId,
+        assessmentId: assessmentId,
+        data: { assessorInsight: inputData },
+      },
+      config
+    ) => service.updateAIReport(args, config),
+    runOnMount: false,
+    // toastError: true,
+  });
+  const updateAssessmentKit = async () => {
+    try {
+      const res = await infoQuery(attributeId, assessmentId, inputData);
+      res?.message && toast.success(res?.message);
+      setShow(false);
+    } catch (e) {
+      const err = e as ICustomError;
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
+      } else if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
+      }
+      setError(err);
+      setHasError(true);
+    }
+  };
+
+  return (
+    <Box>
+      <Box
+        my={1.5}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+        width="100%"
+      >
+        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
+          {title}
+        </Typography>
+
+        {editable && show ? (
+          <Box
+            sx={{ display: "flex", flexDirection: "column", width: "100% " }}
+          >
+            <OutlinedInput
+              error={hasError}
+              fullWidth
+              name={title}
+              defaultValue={data || ""}
+              onChange={(e) => setInputData(e.target.value)}
+              value={inputData}
+              required={true}
+              multiline={true}
+              sx={{
+                minHeight: "38px",
+                borderRadius: "4px",
+                paddingRight: "12px;",
+                fontWeight: "700",
+                fontSize: "0.875rem",
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    title="Submit Edit"
+                    edge="end"
+                    sx={{
+                      background: "#1976d299",
+                      borderRadius: "3px",
+                      height: "36px",
+                      margin: "3px",
+                    }}
+                    onClick={updateAssessmentKit}
+                  >
+                    <CheckCircleOutlineRounded sx={{ color: "#fff" }} />
+                  </IconButton>
+                  <IconButton
+                    title="Cancel Edit"
+                    edge="end"
+                    sx={{
+                      background: "#1976d299",
+                      borderRadius: "4px",
+                      height: "36px",
+                    }}
+                    onClick={handleCancel}
+                  >
+                    <CancelRounded sx={{ color: "#fff" }} />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            {hasError && (
+              <Typography color="#ba000d" variant="caption">
+                {error?.data?.[type]}
+              </Typography>
+            )}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              minHeight: "38px",
+              borderRadius: "4px",
+              paddingLeft: "8px;",
+              paddingRight: "12px;",
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              wordBreak: "break-word",
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
+            }}
+            onClick={() => setShow(!show)}
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+          >
+            <Typography variant="body2" fontWeight="700">
+              {data?.replace(/<\/?p>/g, "")}
+            </Typography>
+            {isHovering && (
+              <IconButton
+                title="Edit"
+                edge="end"
+                sx={{
+                  background: "#1976d299",
+                  borderRadius: "3px",
+                  height: "36px",
+                }}
+                onClick={() => setShow(!show)}
+              >
+                <EditRounded sx={{ color: "#fff" }} />
+              </IconButton>
+            )}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

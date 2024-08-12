@@ -1640,6 +1640,7 @@ const CreateDropZone = (props: any) => {
       )}
     </DropZoneArea>
   )
+
 }
 
 const EvidenceDetail = (props: any) => {
@@ -1690,9 +1691,9 @@ const EvidenceDetail = (props: any) => {
 
   const onSubmit = async (data: any) => {
     try {
-      if (data.evidence.length <= LIMITED) {
+      if (data.evidenceDetail.length <= LIMITED) {
         await addEvidence.query({
-          description: data.evidence,
+          description: data.evidenceDetail,
           questionId: questionInfo.id,
           assessmentId,
           type: value,
@@ -1994,7 +1995,7 @@ const EvidenceDetail = (props: any) => {
                   gap: { xs: "24px", sm: "48px" },
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "1.7rem", cursor: "pointer" , width:{xs:"auto",sm:"250px"}}}>
                   <Typography sx={{ ...theme?.typography?.bodyLarge }} >{description}</Typography>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     <Box onClick={() => expandedEvidenceBtm()}
@@ -2108,8 +2109,7 @@ const FileIcon = (props: any): any => {
   const { link } = item
   let reg = new RegExp("\\/([^\\/?]+)\\?")
   let name = link.match(reg)[1]
-  const exp = name.substring(name.indexOf('.'))
-
+  const exp = name.substring(name.lastIndexOf('.'))
   return (
     <Tooltip title={<>
       <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>{name}</Typography>
