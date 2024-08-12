@@ -14,6 +14,10 @@ import gif from "@assets/svg/GIF.svg";
 import png from "@assets/svg/PNG.svg";
 import bpm from "@assets/svg/BPM.svg";
 import jpeg from "@assets/svg/JPEG.svg";
+import doc from "@assets/svg/DOC.svg";
+import docx from "@assets/svg/DOCX.svg";
+import xls from "@assets/svg/XSL.svg";
+import rar from "@assets/svg/RAR.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -1527,8 +1531,13 @@ const DropZoneArea = (props: any) => {
   const { setDropZone, MAX_SIZE, children } = props
   return (
     <Dropzone accept={{
-      ...AcceptFile
-    }} onDrop={(acceptedFiles) => {
+      ...AcceptFile,
+    } ["application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.oasis.opendocument.spreadsheet"
+        ]
+    } onDrop={(acceptedFiles) => {
       if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
         return toast(t("uploadAcceptableSize"), { type: "error" })
       }
@@ -1560,6 +1569,21 @@ const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: an
     if (dropZoneData[0].type === "text/plain") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
+      if (dropZoneData[0].type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+          setTypeFile("docx")
+      }
+      if (dropZoneData[0].type === "application/msword") {
+          setTypeFile("doc")
+      }
+
+      if (dropZoneData[0].type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+          setTypeFile("xlsx")
+      }
+      if (dropZoneData[0].type === "application/vnd.oasis.opendocument.spreadsheet") {
+          setTypeFile("ods")
+      }   if (dropZoneData[0].type === "x-rar-compressed") {
+          setTypeFile("xrar")
+      }
   }
 }
 const CreateDropZone = (props: any) => {
@@ -1589,6 +1613,10 @@ const CreateDropZone = (props: any) => {
             {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
             {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
             {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+            {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+            {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+            {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+            {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
             <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
@@ -2149,6 +2177,10 @@ const MyDropzone = (props: any) => {
              {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
              {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
              {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+              {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+              {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+              {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+              {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
               <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
