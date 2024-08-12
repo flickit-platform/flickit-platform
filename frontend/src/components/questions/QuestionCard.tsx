@@ -1556,7 +1556,7 @@ const DropZoneArea = (props: any) => {
 const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: any) => {
   if (dropZoneData) {
     let file = URL.createObjectURL(dropZoneData[0])
-    setDisplayFile(file)
+    setDisplayFile(file && dropZoneData[0].type)
     if (dropZoneData[0].type.startsWith("image")) {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
@@ -1581,7 +1581,8 @@ const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: an
       }
       if (dropZoneData[0].type === "application/vnd.oasis.opendocument.spreadsheet") {
           setTypeFile("ods")
-      }   if (dropZoneData[0].type === "x-rar-compressed") {
+      }
+      if (dropZoneData[0].type === "x-rar-compressed") {
           setTypeFile("xrar")
       }
   }
