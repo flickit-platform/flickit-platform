@@ -1531,12 +1531,8 @@ const DropZoneArea = (props: any) => {
   const { setDropZone, MAX_SIZE, children } = props
   return (
     <Dropzone accept={{
-      ...AcceptFile,
-    } ["application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/vnd.oasis.opendocument.text",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/vnd.oasis.opendocument.spreadsheet"
-        ]
+      ...AcceptFile
+    }
     } onDrop={(acceptedFiles) => {
       if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
         return toast(t("uploadAcceptableSize"), { type: "error" })

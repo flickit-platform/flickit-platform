@@ -59,7 +59,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
   const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
   useEffect(() => {
-    if (isFocused && inputRef.current) {
+    if (isFocused && inputRef?.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
     }
   }, [isFocused]);
@@ -99,6 +99,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
+        "& ::placeholder" : {fontFamily: primaryFontFamily} ,
         background: pallet?.background,
         borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
@@ -135,7 +136,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
             }
           : {  style:hasCounter ? isFarsi ? {
                 paddingLeft: 60,
-                minHeight: "110px", classes: { placeholder : {fontFamily:primaryFontFamily}}
+                minHeight: "110px",
               }:{
                 paddingRight: 60,
                 minHeight: "110px"
