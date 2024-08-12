@@ -14,7 +14,7 @@ import { theme } from "@config/theme";
 import { useEffect, useState } from "react";
 import QueryData from "@common/QueryData";
 import { useQuery } from "@utils/useQuery";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
@@ -156,11 +156,9 @@ const SUbjectAttributeCard = (props: any) => {
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
                 onClick={(event) => {
                   event.stopPropagation();
-                  const accordion =
-                    event.currentTarget.closest(".MuiAccordion-root");
                 }}
               >
-                <OnHoverInput
+                {attributesData[id?.toString()] ? <OnHoverInput
                   attributeId={id}
                   // formMethods={formMethods}
                   data={attributesData[id?.toString()]}
@@ -168,7 +166,35 @@ const SUbjectAttributeCard = (props: any) => {
                   infoQuery={updateAttributeAndData}
                   type="summary"
                   editable={true}
-                />
+                /> :
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="4px"
+                  >
+                    <Typography
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
+                    </Typography>
+                    <Typography
+                      component={Link}
+                      to={`./../../questionnaires?subject_pk=${id}`}
+                      color="#2D80D2"
+                      variant="titleMedium"
+                      sx={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      questions
+                    </Typography>
+                    <Typography
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                    </Typography>
+                  </Box>}
+
               </Box>
             </Grid>
           </Grid>
@@ -306,8 +332,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -441,9 +467,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${
-                    is_passed ? statusColor : "#808080"
-                  }`,
+                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
+                    }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -668,8 +693,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                          ? `${answerOptionIndex}.${answerOptionTitle}`
-                                          : "---"
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -682,8 +707,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"}
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>
