@@ -298,10 +298,10 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     format(
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
-                          new Date(
-                            selectedMessage.createdAt
-                          ).getTimezoneOffset() *
-                            60000
+                        new Date(
+                          selectedMessage.createdAt
+                        ).getTimezoneOffset() *
+                        60000
                       ),
                       "yyyy/MM/dd HH:mm"
                     ) +
@@ -375,7 +375,7 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (spaceId) {
@@ -421,6 +421,95 @@ const Navbar = () => {
       sx={{ pl: 1, pr: 1, textAlign: "center" }}
     >
       {/* Drawer content */}
+      <Typography
+        variant="h6"
+        sx={{ my: 1, height: "40px", width: "100%", ...styles.centerVH }}
+        component={NavLink}
+        to={spaceId ? `/${spaceId}/assessments/1` : `/spaces/1`}
+      >
+        <img
+          src={config.appLogoUrl}
+          alt={"logo"}
+          width={"224px"}
+          height={"40px"}
+        />
+      </Typography>
+      <Divider />
+      <List dense>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to="spaces/1"
+          >
+            <ListItemText primary={<Trans i18nKey="spaces" />} />
+          </ListItemButton>
+        </ListItem>
+        {spaceId && (
+          <QueryData
+            {...spacesQueryData}
+            render={(data) => {
+              const { items } = data;
+              return (
+                <Box>
+                  {items.slice(0, 5).map((space: any) => {
+                    return (
+                      <ListItem disablePadding key={space?.id}>
+                        <ListItemButton
+                          sx={{ textAlign: "left", borderRadius: 1.5 }}
+                          component={NavLink}
+                          to={`/${space?.id}/assessments/1`}
+                        >
+                          <ListItemText
+                            primary={
+                              <>
+                                {space?.title && (
+                                  <Typography
+                                    variant="caption"
+                                    textTransform={"none"}
+                                    sx={{
+                                      pl: 0.5,
+                                      ml: 0.5,
+                                      lineHeight: "1",
+                                      borderLeft: (t) =>
+                                        `1px solid ${t.palette.grey[300]}`,
+                                    }}
+                                  >
+                                    {space?.title}
+                                  </Typography>
+                                )}
+                              </>
+                            }
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
+                  <Divider />
+                </Box>
+              );
+            }}
+          />
+        )}
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/compare`}
+          >
+            <ListItemText primary={<Trans i18nKey="compare" />} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", borderRadius: 1.5 }}
+            component={NavLink}
+            to={`/assessment-kits`}
+          >
+            <ListItemText primary={<Trans i18nKey="assessmentKits" />} />
+          </ListItemButton>
+        </ListItem>
+      </List>
     </Box>
   );
 

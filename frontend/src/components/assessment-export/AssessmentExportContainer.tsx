@@ -57,6 +57,7 @@ import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAcc
 import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
+import { Link as RouterLink } from "react-router-dom";
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
@@ -527,8 +528,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -977,9 +978,28 @@ const AssessmentExportContainer = () => {
                                   mn={assessmentKit?.maturityLevelCount ?? 5}
                                   document
                                 />
-                                <Typography variant="displaySmall">
-                                  {attributesData[attribute?.id?.toString()]}
-                                </Typography>
+                                {attributesData[attribute?.id?.toString()] ?
+                                  <Typography variant="displaySmall">
+                                    {attributesData[attribute?.id?.toString()]}
+                                  </Typography> :
+                                  <Typography variant="titleMedium" fontWeight={400} color="#243342">
+                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
+                                    <Box
+                                      component={RouterLink}
+                                      to={`./../questionnaires?subject_pk=${subject?.id}`}
+                                      sx={{
+                                        textDecoration: "none",
+                                        color: "#2D80D2"
+                                      }}
+                                    >
+                                      <Typography variant="titleMedium">
+                                        questions
+                                      </Typography>
+                                    </Box>{" "}
+                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />.
+                                  </Typography>}
+
+
                               </Box>
                             </TableCell>
                           </TableRow>
