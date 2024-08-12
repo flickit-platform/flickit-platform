@@ -50,7 +50,7 @@ import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AssessmentReportPDF from "./AssessmentReportPDF";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
 import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
@@ -58,6 +58,7 @@ import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
+import html2canvas from 'html2canvas';
 
 const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
@@ -191,8 +192,24 @@ const AssessmentExportContainer = () => {
   useEffect(() => {
     setTimeout(() => {
       setShowSpinner(false);
+      handleCopyAsImage()
     }, 2000);
   }, []);
+
+  const boxRef = useRef(null);
+
+  const handleCopyAsImage = async () => {
+    if (boxRef.current) {
+      const canvas = await html2canvas(boxRef.current);
+      canvas.toBlob((blob) => {
+        const item = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([item]).then(() => {
+          alert('Box content copied as an image!');
+        });
+      });
+    }
+  };
+
 
   return errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
     errorObject?.code === ECustomErrorType.NOT_FOUND ? (
@@ -862,6 +879,7 @@ const AssessmentExportContainer = () => {
                   </Typography>
                   <Box
                     height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
+                    ref={boxRef}
                   >
                     {subject?.attributes?.length > 2 ? (
                       <AssessmentSubjectRadarChart
@@ -937,7 +955,7 @@ const AssessmentExportContainer = () => {
                                 maxWidth: 300,
                                 wordWrap: "break-word",
                                 borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                position: "relative", // Add position relative to the TableCell
+                                position: "relative",
                               }}
                             >
                               <Box
