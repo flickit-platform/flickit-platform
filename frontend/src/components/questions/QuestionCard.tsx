@@ -1582,10 +1582,10 @@ const CreateDropZone = (props: any) => {
         dropZoneData ?
           <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
-              {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
-              {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
-              {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
-              {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+            {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+            {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+            {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+            {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
             {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
             {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
             {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
@@ -1763,19 +1763,23 @@ const EvidenceDetail = (props: any) => {
     setEvidenceId(id)
   }, [id]);
 
-  const downloadFile = ({ link }: { link: string }) => {
-      // let jsonBlob = new Blob(['{"name": "test"}'])
-      // const blobUrl = URL.createObjectURL(jsonBlob);
-    let fileUrl = link;
-    let reg = new RegExp("\\/([^\\/?]+)\\?")
-    let name = fileUrl?.match(reg)[1]
-    const a = document.createElement("a");
-    a.href = fileUrl;
-    a.target = "_blank"
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+  const downloadFile = async ({ link }: { link: string }) => {
+      try{
+          const response = await fetch(link)
+          const blob = await response.blob();
+              let reg = new RegExp("\\/([^\\/?]+)\\?")
+              let name = link?.match(reg)[1]
+              const a = document.createElement("a");
+              const urlBlob = URL.createObjectURL(blob)
+              a.download = name;
+              a.href = urlBlob;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+                 } catch (e){
+              const err = e as ICustomError;
+              toastError(err);
+      }
   }
   const skeleton = Array.from(Array(attachmentsCount).keys())
   return (
