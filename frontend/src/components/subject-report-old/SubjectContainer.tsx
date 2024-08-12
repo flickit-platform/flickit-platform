@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Hidden from "@mui/material/Hidden";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
@@ -16,7 +16,7 @@ import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { ISubjectReportModel } from "@types";
+import { ISubjectReportModel, TId } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
@@ -43,6 +43,82 @@ const SubjectContainer = () => {
     subjectProgressQueryData,
     fetchPathInfo,
   } = useSubject();
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  const [attributesData, setAttributesData] = useState<any>({});
+
+  const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const aiReponse = service
+        .fetchAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+        .then((res: any) => {
+          return res?.data?.content || "";
+        });
+
+      return aiReponse;
+    } catch (error: any) {
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
+  const fetchAllAttributesData = async () => {
+    const attributesDataPromises = subjectQueryData?.data?.attributes.map(
+      (attribute: any) =>
+        FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
+          id: attribute?.id,
+          data: result,
+        }))
+    );
+
+    const allAttributesData = attributesDataPromises
+      ? await Promise.all(attributesDataPromises)
+      : [];
+
+    const attributesDataObject = allAttributesData?.reduce(
+      (acc, { id, data }) => {
+        acc[id] = data;
+        return acc;
+      },
+      {}
+    );
+    setAttributesData(attributesDataObject);
+  };
+
+  const updateAttributeAndData = async (
+    attributeId: TId,
+    assessmentId: string,
+    newAttributeData: any
+  ) => {
+    const currentData = attributesData[attributeId];
+    if (currentData === newAttributeData) {
+      return;
+    }
+
+    const response = await service.updateAIReport(
+      {
+        assessmentId,
+        attributeId,
+        data: { assessorInsight: newAttributeData },
+      },
+      undefined
+    );
+
+    if (response?.data) {
+      setAttributesData((prevData: any) => ({
+        ...prevData,
+        [attributeId]: newAttributeData,
+      }));
+    }
+    return response;
+  };
 
   return (
     <QueryBatchData
@@ -63,11 +139,16 @@ const SubjectContainer = () => {
           maturityLevelsCount,
         } = data;
         const { isConfidenceValid, isCalculateValid, title } = subject;
-        const { question_count, answers_count } = subjectProgress;
-        const isComplete = question_count === answers_count;
-        const progress = ((answers_count || 0) / (question_count || 1)) * 100;
+        const { answerCount, questionCount } = subjectProgress;
+        const isComplete = questionCount === answerCount;
+        const progress = ((answerCount || 0) / (questionCount || 1)) * 100;
 
         const attributesNumber = attributes.length;
+        useEffect(() => {
+          if (progress === 100) {
+            fetchAllAttributesData();
+          }
+        }, [subjectQueryData?.data]);
         return (
           <Box>
             <SubjectTitle
@@ -80,8 +161,8 @@ const SubjectContainer = () => {
                 <QuestionnairesNotCompleteAlert
                   subjectName={subject?.title}
                   to={`./../../questionnaires?subject_pk=${subjectId}`}
-                  q={question_count}
-                  a={answers_count}
+                  q={questionCount}
+                  a={answerCount}
                   progress={progress}
                 />
               </Box>
@@ -141,6 +222,8 @@ const SubjectContainer = () => {
                 <Box>
                   <SubjectAttributeList
                     {...subjectQueryData}
+                    attributesData={attributesData}
+                    updateAttributeAndData={updateAttributeAndData}
                     loading={loading}
                   />
                 </Box>

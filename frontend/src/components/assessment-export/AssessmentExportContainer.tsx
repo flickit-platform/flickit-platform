@@ -188,10 +188,6 @@ const AssessmentExportContainer = () => {
   };
 
   useEffect(() => {
-    fetchAllAttributesData();
-  }, [AssessmentReport?.data, assessmentId]);
-
-  useEffect(() => {
     setTimeout(() => {
       setShowSpinner(false);
     }, 2000);
@@ -233,6 +229,12 @@ const AssessmentExportContainer = () => {
             config?.appTitle
           );
         }, [assessment]);
+
+        useEffect(() => {
+          if (questionsCount === answersCount) {
+            fetchAllAttributesData();
+          }
+        }, [AssessmentReport?.data, assessmentId]);
 
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
@@ -934,6 +936,7 @@ const AssessmentExportContainer = () => {
                                 maxWidth: 300,
                                 wordWrap: "break-word",
                                 borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                position: "relative", // Add position relative to the TableCell
                               }}
                             >
                               <Box
@@ -941,6 +944,30 @@ const AssessmentExportContainer = () => {
                                 flexDirection="column"
                                 gap={2}
                               >
+                                <Box
+                                  sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                    backgroundColor: "#D81E5B",
+                                    color: "white",
+                                    padding: "0.15rem 0.35rem",
+                                    borderRadius: "4px",
+                                    fontWeight: "bold",
+                                    zIndex: 1,
+                                    display: attributesData[
+                                      attribute?.id?.toString()
+                                    ]
+                                      ? "inline-block"
+                                      : "none",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <Typography variant="labelSmall">
+                                    <Trans i18nKey="AIGenerated" />
+                                  </Typography>
+                                </Box>
+
                                 <AttributeStatusBarContainer
                                   status={attribute?.maturityLevel?.title}
                                   ml={attribute?.maturityLevel?.value}

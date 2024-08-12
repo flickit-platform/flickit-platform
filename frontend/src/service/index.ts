@@ -334,6 +334,20 @@ export const createService = (
         config
       );
     },
+    updateAIReport(
+      {
+        data,
+        assessmentId,
+        attributeId,
+      }: { data: any; assessmentId: string; attributeId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.put(
+        `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`,
+        data,
+        config
+      );
+    },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined

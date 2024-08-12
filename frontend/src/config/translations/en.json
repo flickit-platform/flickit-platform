@@ -224,6 +224,7 @@
   "subjectStatusReportDescription": "One key aspect of this assessment is evaluating the maturity level of the <strong>{{title}}</strong>, which refers to <strong>{{description}}</strong>.<br/>With <strong>{{confidenceValue}}%</strong> confidence, the overall maturity level of the <strong>{{title}}</strong> has been estimated at <strong>{{maturityLevelValue}}</strong> out of <strong>{{maturityLevelCount}}</strong>, indicating that it is <strong>{{maturityLevelTitle}}</strong>. The status is determined using a weighted average algorithm applied to the scores of various subject attributes.<br/><strong>{{attributesCount}}</strong> attributes of the <strong>{{title}}</strong> have been evaluated in this assessment. For each attribute, both the maturity level and the confidence level have been documented. The chart below illustrates the maturity levels of these attributes.",
   "document": "{{title}} Document",
   "assessmentMethodology": "Assessment Methodology",
+  "AIGenerated": "AI Generated",
   "assessmentFocus": "Assessment Focus",
   "assessmentMethodologyDescription": "The {{title}}is a framework designed to estimate {{subjects}} based on the tools used in the development process. It assesses tools across {{maturityLevelsCount}} maturity levels, directly impacting {{subjects}}.",
   "assessmentFocusDescription": "This assessment focuses on <strong>{{subjectsCount}}</strong> key areas: <strong>{{subjects}}</strong>. A detailed analysis is conducted on <strong>{{attributesCount}}</strong> attributes related to these areas.",
