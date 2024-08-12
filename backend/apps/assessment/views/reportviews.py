@@ -34,6 +34,12 @@ class AssessmentAttributesReportApi(APIView):
 class AssessmentAttributesReportAiApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, assessment_id, attribute_id):
+        result = assessment_report_services.load_assessment_attributes_report_ai(request,
+                                                                                 assessment_id,
+                                                                                 attribute_id)
+        return Response(result["body"], result["status_code"])
+
     def post(self, request, assessment_id, attribute_id):
         result = assessment_report_services.get_assessment_attributes_report_ai(request,
                                                                                 assessment_id,
