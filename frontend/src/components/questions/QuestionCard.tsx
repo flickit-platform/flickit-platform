@@ -1792,15 +1792,17 @@ const EvidenceDetail = (props: any) => {
           if(link){
               let response = await fetch(link)
               let blob = await response.blob();
-              let reg = new RegExp("\\/([^\\/?]+)\\?")
-              let name = link?.match(reg)[1]
-              const a = document.createElement("a");
-              const urlBlob = URL.createObjectURL(blob)
-              a.download = name;
-              a.href = urlBlob;
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
+              if (blob){
+                  let reg = new RegExp("\\/([^\\/?]+)\\?")
+                  let name = link?.match(reg)[1]
+                  const a = document.createElement("a");
+                  const urlBlob = URL.createObjectURL(blob)
+                  a.download = name;
+                  a.href = urlBlob;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+              }
           }
                  } catch (e){
               const err = e as ICustomError;
