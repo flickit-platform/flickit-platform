@@ -874,7 +874,7 @@ const Evidence = (props: any) => {
 
   const evidencesQueryData = useQuery({
     service: (
-      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
+      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 50 },
       config
     ) => service.fetchEvidences(args, config),
     toastError: true,
@@ -1624,7 +1624,8 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    if (id === evidencesData[0].id && !changeInput) {
+    // if (id === evidencesData[0].id && !changeInput) {
+    if (!changeInput) {
       setExpandedEvidenceBox(false)
     }
   }, [evidencesData.length, changeInput])
@@ -1752,11 +1753,15 @@ const EvidenceDetail = (props: any) => {
   }, [id]);
 
   const downloadFile = ({ link }: { link: string }) => {
-    const fileUrl = link;
+      // let jsonBlob = new Blob(['{"name": "test"}'])
+      // const blobUrl = URL.createObjectURL(jsonBlob);
+    let fileUrl = link;
+    let reg = new RegExp("\\/([^\\/?]+)\\?")
+    let name = fileUrl?.match(reg)[1]
     const a = document.createElement("a");
     a.href = fileUrl;
     a.target = "_blank"
-    a.download = "file_name.zip";
+    a.download = name;
     document.body.appendChild(a);
     a.click();
     a.remove();
