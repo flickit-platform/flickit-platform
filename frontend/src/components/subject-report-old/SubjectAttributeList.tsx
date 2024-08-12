@@ -1,12 +1,12 @@
 import Box from "@mui/material/Box";
-import Title from "@common/Title"; 
+import Title from "@common/Title";
 import { Trans } from "react-i18next";
 import SubjectAttributeCard from "./SubjectAttributeCard";
 
 export const SubjectAttributeList = (props: any) => {
-  const { data } = props;
-  const { subject,attributes,maturityLevelsCount} = data;
-  const {title}=subject
+  const { data, attributesData, updateAttributeAndData } = props;
+  const { subject, attributes, maturityLevelsCount } = data;
+  const { title } = subject;
   return (
     <Box mt={15} id="attributes">
       <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="attributes">
@@ -19,6 +19,8 @@ export const SubjectAttributeList = (props: any) => {
               maturity_levels_count={maturityLevelsCount}
               {...result}
               key={result.id}
+              attributesData={attributesData}
+              updateAttributeAndData={updateAttributeAndData}
             />
           );
         })}

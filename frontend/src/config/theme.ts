@@ -294,7 +294,7 @@ export const theme = createTheme({
             font-size: ${fontSize[0]};
           }
           .css-1wscs19 {
-            width: unset !important
+            width: 340px !important
           }
         }
         body {
@@ -314,6 +314,10 @@ export const theme = createTheme({
         }
         .mantine-1avyp1d {
           stroke: rgba(0, 54, 92, 1);
+        }
+        .mantine-1dbkl0m {
+          background: #B8144B;
+          width: 20px
         }
       `,
     },
