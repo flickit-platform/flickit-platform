@@ -2451,7 +2451,7 @@ const DeleteDialog = (props: any) => {
               "&.MuiButton-root": {
                 color: "#0A2342",
                 border: "1px solid #0A2342",
-                borderRadius: "100px",
+                borderRadius: "4px",
               },
               "&.MuiButton-root:hover": {
                 background: "#CED3D9  ",
@@ -2469,7 +2469,7 @@ const DeleteDialog = (props: any) => {
                 color: "#FDF1F5",
                 border: "1px solid #D81E5B",
                 background: "#D81E5B",
-                borderRadius: "100px",
+                borderRadius: "4px",
               },
               "&.MuiButton-root:hover": {
                 background: "#AD1849  ",
