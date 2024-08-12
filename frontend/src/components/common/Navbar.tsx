@@ -240,7 +240,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                 }}
               >
                 <Typography variant="titleMedium">
-                  Welcome to new assessment!
+                  Welcome to the new assessment!
                 </Typography>
                 {/* Added padding to make room for the indicator */}
                 <Box
@@ -251,9 +251,10 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                   }}
                   gap={1}
                 >
-                  <Avatar sx={{ width: 24, height: 24 }}></Avatar>
+                  {/* <Avatar sx={{ width: 24, height: 24 }}></Avatar> */}
                   <Typography variant="bodyMedium">
-                    <Typography
+                    {(selectedMessage as any)?.content}
+                    {/* <Typography
                       variant="titleSmall"
                       component="span"
                       sx={{ fontWeight: "bold", color: "#2D80D2" }}
@@ -282,7 +283,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     >
                       {(selectedMessage?.payload?.data as any)?.role?.title}
                     </Typography>{" "}
-                    on the space!
+                    on the space! */}
                   </Typography>
                 </Box>
                 {/* Relative Time Ago */}
