@@ -9,6 +9,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import zip from "@assets/svg/ZIP.svg";
+import txt from "@assets/svg/TXT.svg";
+import gif from "@assets/svg/GIF.svg";
+import png from "@assets/svg/PNG.svg";
+import bpm from "@assets/svg/BPM.svg";
+import jpeg from "@assets/svg/JPEG.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -1544,7 +1549,7 @@ const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: an
     let file = URL.createObjectURL(dropZoneData[0])
     setDisplayFile(file)
     if (dropZoneData[0].type.startsWith("image")) {
-      setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
+      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
     if (dropZoneData[0].type === "application/pdf") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
@@ -1552,9 +1557,11 @@ const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: an
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
+    if (dropZoneData[0].type === "text/plain") {
+      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+    }
   }
 }
-
 const CreateDropZone = (props: any) => {
 
   const { setDropZone, dropZoneData, pallet } = props
@@ -1569,15 +1576,19 @@ const CreateDropZone = (props: any) => {
 
   }, [dropZoneData])
   const theme = useTheme()
-  return (
+    return (
     <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
       {({ getRootProps, getInputProps }: any) => (
         dropZoneData ?
           <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
+              {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+              {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+              {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+              {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
             {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
             {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+            {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
             <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
@@ -2119,7 +2130,6 @@ const MyDropzone = (props: any) => {
     checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
 
   }, [dropZoneData])
-
   const theme = useTheme()
   return (
     <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
@@ -2127,10 +2137,15 @@ const MyDropzone = (props: any) => {
         dropZoneData ?
           <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
-            {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
-            {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-            <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+             {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+             {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+             {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+             {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+             {/*{typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}*/}
+             {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
+             {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
+             {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+              <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer" }}>
