@@ -60,11 +60,12 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           .then((res) => {
             createdSpaceId = res.data.id;
           });
-      navigate(`/${createdSpaceId}/assessments/1`);
+      type !== "update" && navigate(`/${createdSpaceId}/assessments/1`);
       setLoading(false);
       toast.success(
         <Trans
-          i18nKey="spaceCreatedSuccessMessage"
+          i18nKey={type === "update"
+            ? "spaceUpdatedSuccessMessage" : "spaceCreatedSuccessMessage"}
           values={{ title: data.title }}
         />
       );

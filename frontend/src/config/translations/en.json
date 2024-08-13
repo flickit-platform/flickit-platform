@@ -34,6 +34,7 @@
   "howMyAnswerLook": "How my answer looks?",
   "goBackToQuestionnaires": "go back to questionnaires",
   "spaceCreatedSuccessMessage": "{{title}} created successfully",
+  "spaceUpdatedSuccessMessage": "{{title}} updated successfully",
   "question": "Question",
   "createSpace": "New Space",
   "create": "Create",
