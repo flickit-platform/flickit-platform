@@ -35,6 +35,7 @@
   "goBackToQuestionnaires": "go back to questionnaires",
   "spaceCreatedSuccessMessage": "{{title}} created successfully",
   "selectConfidenceLevel": "Select confidence level",
+  "spaceUpdatedSuccessMessage": "{{title}} updated successfully",
   "question": "Question",
   "createSpace": "New Space",
   "create": "Create",
