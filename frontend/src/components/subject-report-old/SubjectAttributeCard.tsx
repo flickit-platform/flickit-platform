@@ -169,7 +169,10 @@ const SUbjectAttributeCard = (props: any) => {
                 <Box
                   sx={{
                     zIndex: 1,
-                    display: attributesDataPolicy[id?.toString()]?.aiInsight
+                    display: attributesDataPolicy[id?.toString()]?.aiInsight || (attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
+                      "isValid"
+                    ) &&
+                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid)
                       ? "flex"
                       : "none",
                     justifyContent: "flex-start",
@@ -185,7 +188,11 @@ const SUbjectAttributeCard = (props: any) => {
                       fontWeight: "bold",
                     }}
                   >
-                    <Trans i18nKey="AIGenerated" />
+                    {(attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
+                      "isValid"
+                    ) &&
+                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid) ? <Trans i18nKey="outdated" /> : <Trans i18nKey="AIGenerated" />}
+
                   </Typography>
                 </Box>
 
@@ -222,10 +229,8 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )
                 )}
-                {attributesDataPolicy[id?.toString()]?.hasOwnProperty(
-                  "isValid"
-                ) &&
-                  !attributesDataPolicy[id?.toString()]?.isValid && (
+                {attributesDataPolicy[id?.toString()]?.assessorInsight &&
+                  !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
                       <Typography variant="displaySmall">
                         <Trans i18nKey="invalidInsight" />
@@ -237,7 +242,7 @@ const SUbjectAttributeCard = (props: any) => {
                           updateAttributeAndData(id, assessmentId, "", true)
                         }
                       >
-                        Regenarate
+                        <Trans i18nKey="regenerate" />
                       </Button>
                     </Box>
                   )}
@@ -378,8 +383,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -513,9 +518,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${
-                    is_passed ? statusColor : "#808080"
-                  }`,
+                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
+                    }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -740,8 +744,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                          ? `${answerOptionIndex}.${answerOptionTitle}`
-                                          : "---"
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -754,8 +758,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"}
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>

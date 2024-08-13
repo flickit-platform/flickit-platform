@@ -196,63 +196,86 @@ const AssessmentExportContainer = () => {
   const [ignoreIds, setIgnoreIds] = useState<any>([]);
   const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
-  const fetchAllAttributesData = async () => {
-    const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
-      (subject: any) =>
-        subject?.attributes?.map((attribute: any) =>
-          FetchAttributeData(assessmentId, attribute?.id).then((result) => {
-            if (ignoreIds.includes(attribute?.id)) return;
-            return {
-              id: attribute?.id,
-              data: result,
-            };
+  const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
+    try {
+      const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+        subject?.attributes
+          ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
+          .map(async (attribute: any) => {
+            try {
+              const result = await FetchAttributeData(assessmentId, attribute?.id);
+              return {
+                id: attribute?.id,
+                data: result,
+              };
+            } catch (error) {
+              console.error(`Failed to fetch data for attribute ${attribute?.id}:`, error);
+              return null;
+            }
           })
-        )
-    );
+      );
+      const allAttributesData = attributesDataPromises.length ? await Promise.all(attributesDataPromises) : [];
 
-    const allAttributesData = attributesDataPromises
-      ? await Promise.all(attributesDataPromises)
-      : [];
 
-    const attributesDataObject = allAttributesData?.reduce(
-      (acc, { id, data }) => {
-        acc[id] = data;
-        return acc;
-      },
-      {}
-    );
-
-    setAttributesData(attributesDataObject);
+      const attributesDataObject = allAttributesData?.reduce(
+        (acc, { id, data }) => {
+          acc[id] = data;
+          return acc;
+        },
+        {}
+      );
+      setAttributesData((prevData: any) => ({
+        ...prevData,
+        ...attributesDataObject
+      }));
+    } catch (error) {
+      console.error('Error fetching all attributes data:', error);
+    }
   };
 
   const loadAllAttributesData = async () => {
-    const attributesDataPolicyPromises =
-      AssessmentReport?.data?.subjects.flatMap((subject: any) =>
-        subject?.attributes?.map((attribute: any) =>
-          LoadAttributeData(assessmentId, attribute?.id).then((result) => {
-            if (!result.editable) {
-              setEditable(false);
-            }
-            if (
-              result?.editable === false &&
-              result?.assessorInsight === null &&
-              result?.aiInsight === null
-            ) {
-              setIgnoreIds((prevState: any) => [...prevState, attribute?.id]);
-              return;
-            }
-            return {
-              id: attribute?.id,
-              data: result,
-            };
-          })
-        )
-      );
+    const newIgnoreIds: any[] = [];
 
-    const allAttributesDataPolicy = attributesDataPolicyPromises
-      ? await Promise.all(attributesDataPolicyPromises)
-      : [];
+    const attributesDataPolicyPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+      subject?.attributes?.map(async (attribute: any) => {
+        const result = await LoadAttributeData(assessmentId, attribute?.id);
 
+        if (!result.editable) {
+          setEditable(false);
+        }
+
+        const shouldIgnore = !result.editable && result?.assessorInsight === null && result?.aiInsight === null;
+        if (shouldIgnore) {
+          newIgnoreIds.push(attribute?.id);
+          return null;
+        }
+
+        if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.aiInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        if (result?.assessorInsight?.insight) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.assessorInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        return {
+          id: attribute?.id,
+          data: result,
+        };
+      })
+    );
+
+    const allAttributesDataPolicy = attributesDataPolicyPromises ? await Promise.all(attributesDataPolicyPromises) : [];
+
+    // Process the fetched data
     const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
       (acc, { id, data }) => {
         acc[id] = data;
@@ -260,7 +283,11 @@ const AssessmentExportContainer = () => {
       },
       {}
     );
+
+    // Update states in one go
+    setIgnoreIds(newIgnoreIds);
     setAttributesDataPolicy(attributesDataPolicyObject);
+    return newIgnoreIds
   };
 
   useEffect(() => {
@@ -307,9 +334,15 @@ const AssessmentExportContainer = () => {
         }, [assessment]);
 
         useEffect(() => {
-          loadAllAttributesData();
-          if (questionsCount === answersCount && editable) {
-            fetchAllAttributesData();
+          const loadAndFetchData = async () => {
+            const ignoreIds = await loadAllAttributesData();
+            if (questionsCount === answersCount && editable) {
+              await fetchAllAttributesData(ignoreIds);
+            }
+          };
+
+          if (AssessmentReport?.data && assessmentId) {
+            loadAndFetchData();
           }
         }, [AssessmentReport?.data, assessmentId]);
 
@@ -604,8 +637,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
