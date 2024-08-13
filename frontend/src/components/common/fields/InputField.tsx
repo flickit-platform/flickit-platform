@@ -11,7 +11,7 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import { customFontFamily } from "@/config/theme";
+import {customFontFamily, primaryFontFamily, theme} from "@/config/theme";
 import {evidenceAttachmentInput} from "@utils/enumType";
 
 const InputField = () => {
@@ -29,6 +29,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   hasCounter?: boolean,
   isFarsi?: boolean,
   isEditing?: boolean,
+  valueCount?: string,
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -47,6 +48,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     hasCounter,
     isFarsi,
     isEditing,
+    valueCount,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -57,7 +59,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
   const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
   useEffect(() => {
-    if (isFocused && inputRef.current) {
+    if (isFocused && inputRef?.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
     }
   }, [isFocused]);
@@ -66,12 +68,12 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
       inputRef?.current?.focus();
     }
     if(inputRef.current && !isFocused){
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
   }, [inputRef.current?.value,isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +99,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
+        "& ::placeholder" : {fontFamily: primaryFontFamily} ,
         background: pallet?.background,
         borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
@@ -133,7 +136,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
             }
           : {  style:hasCounter ? isFarsi ? {
                 paddingLeft: 60,
-                minHeight: "110px"
+                minHeight: "110px",
               }:{
                 paddingRight: 60,
                 minHeight: "110px"
