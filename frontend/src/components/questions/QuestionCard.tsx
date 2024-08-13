@@ -9,6 +9,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import QASvg from "@assets/svg/qa.svg";
 import AnswerSvg from "@assets/svg/answer.svg";
 import zip from "@assets/svg/ZIP.svg";
+import txt from "@assets/svg/TXT.svg";
+import gif from "@assets/svg/GIF.svg";
+import png from "@assets/svg/PNG.svg";
+import bpm from "@assets/svg/BPM.svg";
+import jpeg from "@assets/svg/JPEG.svg";
+import doc from "@assets/svg/DOC.svg";
+import docx from "@assets/svg/DOCX.svg";
+import xls from "@assets/svg/XSL.svg";
+import rar from "@assets/svg/RAR.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -68,7 +77,7 @@ import Dropzone, { useDropzone } from 'react-dropzone'
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { theme } from "@config/theme";
+import {primaryFontFamily, secondaryFontFamily, theme} from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile"
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
@@ -874,7 +883,7 @@ const Evidence = (props: any) => {
 
   const evidencesQueryData = useQuery({
     service: (
-      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 10 },
+      args = { questionId: questionInfo.id, assessmentId, page: 0, size: 50 },
       config
     ) => service.fetchEvidences(args, config),
     toastError: true,
@@ -1107,9 +1116,9 @@ const Evidence = (props: any) => {
                       flex: 1,
                       "&.Mui-selected": {
                         color: `${evidenceBG.borderColor}  !important`,
-                        ...theme.typography.headlineSmall,
                         fontSize: { xs: "1rem !important" },
                       },
+                        ...theme.typography.headlineSmall,
                     }}
                     value={evidenceAttachmentType.positive}
                   />
@@ -1539,27 +1548,40 @@ const DropZoneArea = (props: any) => {
 }
 
 
-
-const checkTypeUpload = (dropZoneData : any,setDisplayFile : any,setTypeFile : any) =>{
-    if (dropZoneData) {
-        let file = URL.createObjectURL(dropZoneData[0])
-        setDisplayFile(file)
-        if (dropZoneData[0].type.startsWith("image")) {
-            setTypeFile(dropZoneData[0].type.substring(0, dropZoneData[0].type.indexOf("/")))
-        }
-        if (dropZoneData[0].type === "application/pdf") {
-            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-        }
-        if (dropZoneData[0].type === "application/zip") {
-            setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
-        }
+const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: any) => {
+  if (dropZoneData) {
+    let file = URL.createObjectURL(dropZoneData[0])
+    setDisplayFile(file && dropZoneData[0].type)
+    if (dropZoneData[0].type.startsWith("image")) {
+      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+    }
+    if (dropZoneData[0].type === "application/pdf") {
+      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
     }
+    if (dropZoneData[0].type === "text/plain") {
+      setTypeFile(dropZoneData[0].type.substring(dropZoneData[0].type.indexOf("/")).replace("/", ""))
+    }
+      if (dropZoneData[0].type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+          setTypeFile("docx")
+      }
+      if (dropZoneData[0].type === "application/msword") {
+          setTypeFile("doc")
+      }
 
+      if (dropZoneData[0].type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+          setTypeFile("xlsx")
+      }
+      if (dropZoneData[0].type === "application/vnd.oasis.opendocument.spreadsheet") {
+          setTypeFile("ods")
+      }
+      if (dropZoneData[0].type === "x-rar-compressed") {
+          setTypeFile("xrar")
+      }
+  }
 }
-
 const CreateDropZone = (props: any) => {
 
   const { setDropZone, dropZoneData, pallet } = props
@@ -1572,45 +1594,52 @@ const CreateDropZone = (props: any) => {
 
     checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
 
-
-    }, [dropZoneData])
-    const theme = useTheme()
-    return(
-        <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
-            {({ getRootProps, getInputProps } : any) => (
-                dropZoneData ?
-                    <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column",gap:'5px' }}>
-                        <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
-                        {typeFile == "image" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
-                        {typeFile == "pdf" && <section style={{ width: "40%", height: "60%",display:"flex",justifyContent:"center" }}><Box sx={{width:"36px",height:"57px"}}><FileType name={"pdf"} /></Box></section>}
-                        {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
-                        <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
-                    </Box>
-                    :
-                    <section style={{ cursor: "pointer", width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                        <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
-                            <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px",gap:"10px" }}>
-                                <input {...getInputProps()} />
-                                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
-                                <Typography sx={{
-                                    ...theme.typography.labelSmall,
-                                    color: "#243342",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}>
-                                    <Trans i18nKey={"dragYourFile"} />
-                                  <Typography sx={{
-                                      ...theme.typography.labelSmall,
-                                      color: "#2D80D2",
-                                      display: "contents"
-                                  }}><Trans i18nKey={"locateIt"} /></Typography>
-                                </Typography></div>
-                        </Box>
-                    </section>
-            )}
-        </DropZoneArea>
-    )
+  }, [dropZoneData])
+  const theme = useTheme()
+    return (
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
+      {({ getRootProps, getInputProps }: any) => (
+        dropZoneData ?
+          <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
+            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
+            {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+            {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+            {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+            {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+            {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
+            {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+            {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+            {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+            {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+            {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+            {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
+            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+          </Box>
+          :
+          <section style={{ cursor: "pointer", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: `.5px dashed ${pallet.borderColor}`, borderRadius: "16px" }}>
+              <div {...getRootProps()} style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 10px", gap: "10px" }}>
+                <input {...getInputProps()} />
+                <img src={UploadIcon} style={{ width: "36px", height: "36px" }} alt={"upload icon"} />
+                <Typography sx={{
+                  ...theme.typography.labelSmall,
+                  color: "#243342",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+                  <Trans i18nKey={"dragYourFile"} />
+                  <Typography sx={{
+                    ...theme.typography.labelSmall,
+                    color: "#2D80D2",
+                    display: "contents"
+                  }}><Trans i18nKey={"locateIt"} /></Typography>
+                </Typography></div>
+            </Box>
+          </section>
+      )}
+    </DropZoneArea>
+  )
 
 }
 
@@ -1631,7 +1660,8 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    if (id === evidencesData[0].id && !changeInput) {
+    // if (id === evidencesData[0].id && !changeInput) {
+    if (!changeInput) {
       setExpandedEvidenceBox(false)
     }
   }, [evidencesData.length, changeInput])
@@ -1758,15 +1788,27 @@ const EvidenceDetail = (props: any) => {
     setEvidenceId(id)
   }, [id]);
 
-  const downloadFile = ({ link }: { link: string }) => {
-    const fileUrl = link;
-    const a = document.createElement("a");
-    a.href = fileUrl;
-    a.target = "_blank"
-    a.download = "file_name.zip";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+  const downloadFile = async ({ link }: { link: string }) => {
+      try{
+          if(link){
+              let response = await fetch(link)
+              let blob = await response.blob();
+              if (blob){
+                  let reg = new RegExp("\\/([^\\/?]+)\\?")
+                  let name = link?.match(reg)[1]
+                  const a = document.createElement("a");
+                  const urlBlob = URL.createObjectURL(blob)
+                  a.download = name;
+                  a.href = urlBlob;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+              }
+          }
+                 } catch (e){
+              const err = e as ICustomError;
+              toastError(err);
+      }
   }
   const skeleton = Array.from(Array(attachmentsCount).keys())
   return (
@@ -1808,7 +1850,8 @@ const EvidenceDetail = (props: any) => {
                           top: 10,
                           left: 15,
                           zIndex: 1,
-                          color: evidenceBG.borderColor
+                          color: evidenceBG.borderColor,
+                          fontFamily: primaryFontFamily
                         }}
                       >
                         <Trans i18nKey="editing" />
@@ -2013,7 +2056,7 @@ const EvidenceDetail = (props: any) => {
                 <Typography
                   fontSize="12px"
                   variant="overline"
-                  sx={{ whiteSpace: "nowrap", lineHeight: "12px" }}
+                  sx={{ whiteSpace: "nowrap", lineHeight: "12px",fontFamily:primaryFontFamily }}
                 >
                   {formatDate(lastModificationTime)}
                 </Typography>
@@ -2071,8 +2114,8 @@ const FileIcon = (props: any): any => {
   const exp = name.substring(name.lastIndexOf('.'))
   return (
     <Tooltip title={<>
-      <Typography>{name}</Typography>
-      <Typography>{item?.description}</Typography>
+      <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>{name}</Typography>
+      <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>{item?.description}</Typography>
     </>}>
       <Box
         position="relative"
@@ -2119,7 +2162,6 @@ const MyDropzone = (props: any) => {
     checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
 
   }, [dropZoneData])
-
   const theme = useTheme()
   return (
     <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
@@ -2127,10 +2169,19 @@ const MyDropzone = (props: any) => {
         dropZoneData ?
           <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}
-            {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
-            {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-            <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+             {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+             {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+             {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+             {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+             {/*{typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}*/}
+             {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
+             {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
+             {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+              {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+              {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+              {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+              {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
+              <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer" }}>
@@ -2315,9 +2366,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               <Box sx={{ display: "flex", gap: '2px', mx: "auto" }}>
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
-                  sx={{ mr: 1, width: "12px", height: "12px" }}
+                  sx={{ mr: 1, width: "12px", height: "12px", fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"
+                  }}
                 />
-                <Trans i18nKey="uploadAcceptable" />
+                  <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>
+                      <Trans i18nKey="uploadAcceptable" />
+                  </Typography>
               </Box>
             </Typography>
             <Typography sx={{
@@ -2327,12 +2381,14 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               textAlign: "left",
               paddingBottom: "1rem", mx: "auto"
             }}>
-              <Box sx={{ display: "flex", gap: '2px' }}>
+              <Box sx={{ display: "flex", gap: '2px'}}>
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
                   sx={{ mr: 1, width: "12px", height: "12px" }}
                 />
-                <Trans i18nKey="uploadAcceptableSize" />
+                  <Typography sx={{fontFamily: secondaryFontFamily,fontSize: "11px",lineHeight: "12px",letterSpacing:"0.5px"}}>
+                      <Trans  i18nKey="uploadAcceptableSize" />
+                  </Typography>
               </Box>
             </Typography>
             <MyDropzone setDropZone={setDropZone} dropZoneData={dropZoneData} />
@@ -2457,7 +2513,7 @@ const DeleteDialog = (props: any) => {
               "&.MuiButton-root": {
                 color: "#0A2342",
                 border: "1px solid #0A2342",
-                borderRadius: "100px",
+                borderRadius: "4px",
               },
               "&.MuiButton-root:hover": {
                 background: "#CED3D9  ",
@@ -2475,7 +2531,7 @@ const DeleteDialog = (props: any) => {
                 color: "#FDF1F5",
                 border: "1px solid #D81E5B",
                 background: "#D81E5B",
-                borderRadius: "100px",
+                borderRadius: "4px",
               },
               "&.MuiButton-root:hover": {
                 background: "#AD1849  ",
