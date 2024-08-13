@@ -18,6 +18,7 @@ import doc from "@assets/svg/DOC.svg";
 import docx from "@assets/svg/DOCX.svg";
 import xls from "@assets/svg/XSL.svg";
 import rar from "@assets/svg/RAR.svg";
+import xtar from "@assets/svg/TAR.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -1580,6 +1581,9 @@ const checkTypeUpload = (dropZoneData: any, setDisplayFile: any, setTypeFile: an
       if (dropZoneData[0].type === "x-rar-compressed") {
           setTypeFile("xrar")
       }
+      if (dropZoneData[0].type === "application/x-tar") {
+          setTypeFile("xtar")
+      }
   }
 }
 const CreateDropZone = (props: any) => {
@@ -1613,7 +1617,8 @@ const CreateDropZone = (props: any) => {
             {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
             {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
             {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
-            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+            {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
+            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1660,19 +1665,10 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    // if (id === evidencesData[0].id && !changeInput) {
-    if (!changeInput) {
+    if (id === evidencesData[0].id && !changeInput) {
       setExpandedEvidenceBox(false)
     }
   }, [evidencesData.length, changeInput])
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  const cancelEditing = async (e: any) => {
-    formMethods.reset();
-  };
 
   const { description, lastModificationTime, createdBy, id, type, attachmentsCount } = item;
   const { displayName, pictureLink } = createdBy;
@@ -2181,7 +2177,8 @@ const MyDropzone = (props: any) => {
               {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
               {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
               {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
-              <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.indexOf(".")) : dropZoneData[0]?.name}</Typography>
+              {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
+              <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
           :
           <section style={{ cursor: "pointer" }}>
@@ -2292,14 +2289,17 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     }
   }
 
+  const closeDialog = () =>{
+      onClose();
+      setDropZone(null);
+      setDescription("")
+  }
+
   const theme = useTheme()
   return (
     <Dialog
       open={expanded.expended}
-      onClose={() => {
-        onClose();
-        setDropZone(null)
-      }}
+      onClose={closeDialog}
       maxWidth={"sm"}
       // fullScreen={fullScreen}
       fullWidth
@@ -2336,7 +2336,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           <Trans i18nKey="uploadAttachment" />
         </Box>
         <ClearIcon
-          onClick={() => { onClose(); setDropZone(null) }}
+          onClick={closeDialog}
           style={{ color: "#fff" }}
           sx={{
             position: "absolute", width: "25px", height: "25px", right: "17px", top: "25px",

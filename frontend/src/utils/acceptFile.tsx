@@ -9,6 +9,7 @@
     "application/zip": [".zip"],
      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
      "application/vnd.oasis.opendocument.text": [".odt"],
+     "application/msword": [".doc"],
      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : [".xlsx"],
      "application/vnd.oasis.opendocument.spreadsheet" : [".ods"]
  }
