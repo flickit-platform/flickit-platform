@@ -12,7 +12,7 @@ import zip from "@assets/svg/ZIP.svg";
 import txt from "@assets/svg/TXT.svg";
 import gif from "@assets/svg/GIF.svg";
 import png from "@assets/svg/PNG.svg";
-import bpm from "@assets/svg/BPM.svg";
+import bpm from "@assets/svg/BMP.svg";
 import jpeg from "@assets/svg/JPEG.svg";
 import doc from "@assets/svg/DOC.svg";
 import docx from "@assets/svg/DOCX.svg";
