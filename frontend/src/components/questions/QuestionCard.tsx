@@ -280,7 +280,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                          <Trans i18nKey={"selcetYourConfidenceLevel"} />
+                          <Trans i18nKey={"selectConfidenceLevel"} />
                         </Typography>
                       </Box>
                     )}
