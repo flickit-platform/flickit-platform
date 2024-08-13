@@ -691,11 +691,12 @@ const AnswerDetails = ({
           disableGutters
           square
           expanded={expanded}
-          onChange={handleAccordionChange}
+          // onChange={handleAccordionChange}
           sx={{ background: "transparent", boxShadow: "none" }}
         >
           <AccordionSummary
-            sx={{ display: "flex", alignItems: "center", padding: 0 }}
+            sx={{ display: "flex", alignItems: "center", padding: 0,width:"fit-content"}}
+            onClick={handleAccordionChange}
           >
             <Title px={1} size="small">
               <Trans
