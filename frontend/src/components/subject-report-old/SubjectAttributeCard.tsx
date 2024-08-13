@@ -25,7 +25,12 @@ import firstCharDetector from "@/utils/firstCharDetector";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { toast } from "react-toastify";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+} from "@mui/material";
 import {
   CancelRounded,
   CheckCircleOutlineRounded,
@@ -43,7 +48,10 @@ const SUbjectAttributeCard = (props: any) => {
     id,
     attributesData,
     updateAttributeAndData,
+    attributesDataPolicy,
+    editable,
   } = props;
+  const { assessmentId } = useParams();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
     false
@@ -158,43 +166,85 @@ const SUbjectAttributeCard = (props: any) => {
                   event.stopPropagation();
                 }}
               >
-                {attributesData[id?.toString()] ? <OnHoverInput
-                  attributeId={id}
-                  // formMethods={formMethods}
-                  data={attributesData[id?.toString()]}
-                  title={<Trans i18nKey="insight" />}
-                  infoQuery={updateAttributeAndData}
-                  type="summary"
-                  editable={true}
-                /> :
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="4px"
-                  >
-                    <Typography
-                      variant="titleMedium"
-                    >
-                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to={`./../../questionnaires?subject_pk=${id}`}
-                      color="#2D80D2"
-                      variant="titleMedium"
-                      sx={{
-                        textDecoration: "none",
-                      }}
-                    >
-                      questions
-                    </Typography>
-                    <Typography
-                      variant="titleMedium"
-                    >
-                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
-                    </Typography>
-                  </Box>}
-
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#D81E5B",
+                    color: "white",
+                    padding: "0.15rem 0.35rem",
+                    borderRadius: "4px",
+                    fontWeight: "bold",
+                    zIndex: 1,
+                    display:
+                      attributesDataPolicy[id?.toString()]?.aiInsight ||
+                      attributesDataPolicy[id?.toString()]?.assessorInsight
+                        ? "inline-block"
+                        : "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <Typography variant="labelSmall">
+                    {attributesDataPolicy[id?.toString()]?.aiInsight ? (
+                      <Trans i18nKey="AIGenerated" />
+                    ) : (
+                      <Trans i18nKey="AccessorInsight" />
+                    )}
+                  </Typography>
+                </Box>
+                {attributesData[id?.toString()] ? (
+                  <OnHoverInput
+                    attributeId={id}
+                    // formMethods={formMethods}
+                    data={attributesData[id?.toString()]}
+                    title={<Trans i18nKey="insight" />}
+                    infoQuery={updateAttributeAndData}
+                    type="summary"
+                    editable={attributesDataPolicy[id?.toString()]?.editable}
+                  />
+                ) : (
+                  editable && (
+                    <Box display="flex" alignItems="center" gap="4px">
+                      <Typography variant="titleMedium">
+                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
+                      </Typography>
+                      <Typography
+                        component={Link}
+                        to={`./../../questionnaires?subject_pk=${id}`}
+                        color="#2D80D2"
+                        variant="titleMedium"
+                        sx={{
+                          textDecoration: "none",
+                        }}
+                      >
+                        questions
+                      </Typography>
+                      <Typography variant="titleMedium">
+                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                      </Typography>
+                    </Box>
+                  )
+                )}
+                {attributesDataPolicy[id?.toString()]?.hasOwnProperty(
+                  "isValid"
+                ) &&
+                  !attributesDataPolicy[id?.toString()]?.isValid && (
+                    <Box sx={{ ...styles.centerV }} gap={2}>
+                      <Typography variant="displaySmall">
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() =>
+                          updateAttributeAndData(id, assessmentId, "", true)
+                        }
+                      >
+                        Regenarate
+                      </Button>
+                    </Box>
+                  )}
               </Box>
             </Grid>
           </Grid>
@@ -332,8 +382,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-      ? `${cl}%`
-      : "0%";
+    ? `${cl}%`
+    : "0%";
   return (
     <Box
       height={"38px"}
@@ -467,8 +517,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
-                    }`,
+                  borderLeft: `2px solid ${
+                    is_passed ? statusColor : "#808080"
+                  }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -693,8 +744,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"
+                                          ? `${answerOptionIndex}.${answerOptionTitle}`
+                                          : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -707,8 +758,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"}
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>
