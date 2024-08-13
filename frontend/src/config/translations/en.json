@@ -463,7 +463,7 @@
   "addAttachment": "Add attachment",
   "attachmentCount": "Includes {{attachmentsCount}} attachments",
   "uploadAttachment": "Upload Attachment",
-  "uploadAcceptable": "Only These formats are acceptable: PDF, jpg, png, docx, pptx, rar, zip, excel",
+  "uploadAcceptable": "Only These formats are acceptable: PDF, jpg, png, docx, doc, txt, rar, zip, excel",
   "uploadAcceptableSize": "Size of an attachment must be lower than 2 MB.",
   "dragYourFile": "Drag your file here or ",
   "locateIt": " Locate it ",
@@ -486,5 +486,7 @@
   "needsToAddAttachments": "Needs to add attachments (after being created)",
   "createEvidence": "Create evidence",
   "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
-  "finish": "Finish"
+  "finish": "Finish",
+  "atLeastCharacter": "at least 3 character",
+  "warning": "Warning"
 }
