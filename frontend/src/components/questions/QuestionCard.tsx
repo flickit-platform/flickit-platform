@@ -18,6 +18,7 @@ import doc from "@assets/svg/DOC.svg";
 import docx from "@assets/svg/DOCX.svg";
 import xls from "@assets/svg/XSL.svg";
 import rar from "@assets/svg/RAR.svg";
+import xtar from "@assets/svg/TAR.svg";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -93,6 +94,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
+import { downloadFile } from "@utils/downloadFile";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -690,11 +692,12 @@ const AnswerDetails = ({
           disableGutters
           square
           expanded={expanded}
-          onChange={handleAccordionChange}
+          // onChange={handleAccordionChange}
           sx={{ background: "transparent", boxShadow: "none" }}
         >
           <AccordionSummary
-            sx={{ display: "flex", alignItems: "center", padding: 0 }}
+            sx={{ display: "flex", alignItems: "center", padding: 0,width:"fit-content"}}
+            onClick={handleAccordionChange}
           >
             <Title px={1} size="small">
               <Trans
@@ -1166,11 +1169,11 @@ const Evidence = (props: any) => {
                     sx={{
                       display: "flex",
                       flex: 1,
-                      "&.Mui-selected": {
-                        color: `${evidenceBG.borderColor}  !important`,
-                        fontSize: { xs: "1rem !important" },
-                      },
+                        "&.Mui-selected": {
+                            color: `${evidenceBG.borderColor}  !important`,
+                        },
                       ...theme.typography.headlineSmall,
+                        fontSize: { xs: "1rem !important" },
                     }}
                     value={evidenceAttachmentType.positive}
                   />
@@ -1330,14 +1333,16 @@ const Evidence = (props: any) => {
                   sx={{
                     ml: "auto",
                     borderRadius: "4px",
-                    p: 2,
+                    py:2,
+                    px: 3,
                     maxHeight: "40px",
                     whiteSpace: "nowrap",
-                    width: { xs: "130px", sm: "170px" },
+                    width: { xs: "130px", sm: "220px" },
                     background: evidenceBG.borderColor,
                     "&:hover": {
                       background: evidenceBG.borderColor,
                     },
+                      ...theme.typography.titleMedium
                   }}
                   type="submit"
                   variant="contained"
@@ -1470,8 +1475,8 @@ const CreateEvidenceAttachment = (props: any) => {
   }, [attachmentData]);
 
   const UploadAttachment = async () => {
-    if (description.length > 1 && description.length < 3) {
-      return setError(true);
+    if (description.length >= 1 && description.length < 3) {
+      return toast(t("atLeastCharacter"), { type: "error" }) ;
     }
     if (!dropZoneData) {
       return toast(t("attachmentRequired"), { type: "error" });
@@ -1521,10 +1526,10 @@ const CreateEvidenceAttachment = (props: any) => {
         borderRadius: "16px",
         width: "100%",
         height: "auto",
-        minHeight: "232px",
         background: pallet?.background,
         border: `1px solid ${pallet?.borderColor}`,
       }}
+      style={attachments.length >= 1 ? {minHeight: "232px"} : {}}
     >
       <Grid
         direction={"row"}
@@ -1574,106 +1579,109 @@ const CreateEvidenceAttachment = (props: any) => {
           />
         </Grid>
       </Grid>
-      <Box sx={{ height: "50%", width: "100%" }}>
-        <Grid
-          container
-          sx={{
-            transition: "all .2s ease",
-            display: "flex",
-            gap: ".5rem",
-            flexDirection: "column",
-          }}
-        >
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px: "40px" }}
-          >
-            {!attachments.length && (
-              <Typography
-                sx={{
-                  ...theme.typography?.titleMedium,
-                  fontSize: { xs: "10px", sm: "unset" },
-                }}
-              >
-                <Trans i18nKey={"addAttachment"} />
-              </Typography>
-            )}
-            {attachments.length >= 1 && (
-              <Typography
-                sx={{
-                  ...theme.typography?.titleMedium,
-                  display: "flex",
-                  gap: "5px",
-                }}
-              >
-                {t("attachmentCount", { attachmentsCount: attachments.length })}
-              </Typography>
-            )}
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            sx={{
-              display: "flex",
-              gap: ".5rem",
-              flexWrap: "nowrap",
-              px: "40px",
-            }}
-          >
-            {loadingFile
-              ? skeleton.map((item, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      animation="wave"
-                      variant="rounded"
-                      width={40}
-                      height={40}
-                    />
-                  );
-                })
-              : attachments.map((item, index) => {
-                  return (
-                    <FileIcon
-                      key={index}
-                      setEvidenceId={setEvidenceId}
-                      setExpandedDeleteAttachmentDialog={
-                        setExpandedDeleteAttachmentDialog
-                      }
-                      evidenceId={evidenceJustCreatedId}
-                      item={item}
-                      evidenceBG={pallet}
-                    />
-                  );
-                })}
-          </Grid>
-          {attachments.length == 5 && (
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "11px",
-                  color: "#821237",
-                  display: "flex",
-                  alignItems: "start",
-                  justifyContent: "center",
-                  textAlign: "justify",
-                  width: { xs: "90%", sm: "450px" },
-                  padding: "0px 40px 20px",
-                }}
-              >
-                <InfoOutlinedIcon
-                  sx={{ mr: 1, width: "15px", height: "15px" }}
-                />
-                <Trans i18nKey={"evidenceIsLimited"} />
-              </Typography>
+        {attachments.length >= 1 &&
+            <Box sx={{ height: "50%", width: "100%" }}>
+                <Grid
+                    container
+                    sx={{
+                        transition: "all .2s ease",
+                        display: "flex",
+                        gap: ".5rem",
+                        flexDirection: "column",
+                    }}
+                >
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px: "40px" }}
+                    >
+                        {!attachments.length && (
+                            <Typography
+                                sx={{
+                                    ...theme.typography?.titleMedium,
+                                    fontSize: { xs: "10px", sm: "unset" },
+                                }}
+                            >
+                                <Trans i18nKey={"addAttachment"} />
+                            </Typography>
+                        )}
+                        {attachments.length >= 1 && (
+                            <Typography
+                                sx={{
+                                    ...theme.typography?.titleMedium,
+                                    display: "flex",
+                                    gap: "5px",
+                                }}
+                            >
+                                {t("attachmentCount", { attachmentsCount: attachments.length })}
+                            </Typography>
+                        )}
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        sx={{
+                            display: "flex",
+                            gap: ".5rem",
+                            flexWrap: "nowrap",
+                            px: "40px",
+                        }}
+                    >
+                        {loadingFile
+                            ? skeleton.map((item, index) => {
+                                return (
+                                    <Skeleton
+                                        key={index}
+                                        animation="wave"
+                                        variant="rounded"
+                                        width={40}
+                                        height={40}
+                                    />
+                                );
+                            })
+                            : attachments.map((item, index) => {
+                                return (
+                                    <FileIcon
+                                        key={index}
+                                        setEvidenceId={setEvidenceId}
+                                        setExpandedDeleteAttachmentDialog={
+                                            setExpandedDeleteAttachmentDialog
+                                        }
+                                        downloadFile={downloadFile}
+                                        evidenceId={evidenceJustCreatedId}
+                                        item={item}
+                                        evidenceBG={pallet}
+                                    />
+                                );
+                            })}
+                    </Grid>
+                    {attachments.length == 5 && (
+                        <Box>
+                            <Typography
+                                sx={{
+                                    fontSize: "11px",
+                                    color: "#821237",
+                                    display: "flex",
+                                    alignItems: "start",
+                                    justifyContent: "center",
+                                    textAlign: "justify",
+                                    width: { xs: "90%", sm: "450px" },
+                                    padding: "0px 40px 20px",
+                                    ...theme.typography.labelSmall
+                                }}
+                            >
+                                <InfoOutlinedIcon
+                                    sx={{ mr: 1, width: "15px", height: "15px" }}
+                                />
+                                <Trans i18nKey={"evidenceIsLimited"} />
+                            </Typography>
+                        </Box>
+                    )}
+                </Grid>
             </Box>
-          )}
-        </Grid>
-      </Box>
+        }
     </Box>
   );
 };
@@ -1705,6 +1713,7 @@ const ControlBtn = (props: any) => {
           "&:hover": {
             background: pallet.borderColor,
           },
+            ...theme.typography.titleSmall
         }}
         onClick={UploadAttachment}
         variant="contained"
@@ -1743,6 +1752,7 @@ const DescriptionBox = (props: any) => {
     <TextField
       sx={{
         overflow: "auto",
+          background:"transparent",
       }}
       rows={3}
       id="outlined-multiline-static"
@@ -1755,8 +1765,12 @@ const DescriptionBox = (props: any) => {
         sx: {
           fontSize: "13px",
           marginTop: "4px",
-          background: "rgba(0,0,0,0.06)",
+          background: "#fff",
           padding: "5px",
+          "&::placeholder": {
+            ...theme.typography.bodySmall,
+            color: "#000"
+          },
         },
       }}
       placeholder={
@@ -1777,7 +1791,7 @@ const DropZoneArea = (props: any) => {
   return (
     <Dropzone
       accept={{
-        ...AcceptFile,
+        ...AcceptFile
       }}
       onDrop={(acceptedFiles) => {
         if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
@@ -1855,6 +1869,9 @@ const checkTypeUpload = (
     if (dropZoneData[0].type === "x-rar-compressed") {
       setTypeFile("xrar");
     }
+    if (dropZoneData[0].type === "application/x-tar") {
+       setTypeFile("xtar")
+    }
   }
 };
 const CreateDropZone = (props: any) => {
@@ -1864,136 +1881,32 @@ const CreateDropZone = (props: any) => {
   const MAX_SIZE = 2097152;
 
   useEffect(() => {
-    checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile);
-  }, [dropZoneData]);
-  const theme = useTheme();
-  return (
-    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE}>
-      {({ getRootProps, getInputProps }: any) =>
-        dropZoneData ? (
-          <Box
-            sx={{
-              height: "68px",
-              maxWidth: "198px",
-              mx: "auto",
-              width: "100%",
-              border: "0.5px solid #C4C7C9",
-              borderRadius: "16px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              gap: "5px",
-            }}
-          >
-            <Button
-              sx={{
-                position: "absolute",
-                top: "3px",
-                right: "3px",
-                cursor: "pointer",
-                fontSize: "10px",
-              }}
-              onClick={() => setDropZone(null)}
-            >
-              Remove
-            </Button>
-            {typeFile == "gif" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${gif}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {typeFile == "png" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${png}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {typeFile == "bpm" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${bpm}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {(typeFile == "jpeg" || typeFile == "jpg") && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${jpeg}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {typeFile == "pdf" && (
-              <section
-                style={{
-                  width: "40%",
-                  height: "60%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Box sx={{ width: "36px", height: "57px" }}>
-                  <FileType name={"pdf"} />
-                </Box>
-              </section>
-            )}
-            {typeFile == "zip" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${zip}` : "#"}
-                alt="zip file"
-              />
-            )}
-            {typeFile == "plain" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${txt}` : "#"}
-                alt="txt file"
-              />
-            )}
-            {typeFile == "docx" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${docx}` : "#"}
-                alt="docx file"
-              />
-            )}
-            {typeFile == "doc" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${doc}` : "#"}
-                alt="doc file"
-              />
-            )}
-            {typeFile == "xrar" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${rar}` : "#"}
-                alt="rar file"
-              />
-            )}
-            {(typeFile == "xlsx" || typeFile == "ods") && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${xls}` : "#"}
-                alt="xls file"
-              />
-            )}
-            <Typography sx={{ ...theme.typography.titleSmall }}>
-              {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
-                  "..." +
-                  dropZoneData[0]?.name.substring(
-                    dropZoneData[0]?.name.indexOf(".")
-                  )
-                : dropZoneData[0]?.name}
-            </Typography>
+
+    checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
+
+  }, [dropZoneData])
+  const theme = useTheme()
+    return (
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
+      {({ getRootProps, getInputProps }: any) => (
+        dropZoneData ?
+          <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
+            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
+            {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+            {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+            {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+            {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+            {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
+            {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
+            {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+            {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+            {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+            {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+            {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
+            {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
+            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
-        ) : (
+         :
           <section
             style={{
               cursor: "pointer",
@@ -2002,6 +1915,7 @@ const CreateDropZone = (props: any) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              position: "relative"
             }}
           >
             <Box
@@ -2023,6 +1937,7 @@ const CreateDropZone = (props: any) => {
                   justifyContent: "space-between",
                   padding: "20px 10px",
                   gap: "10px",
+                  textAlign: "center"
                 }}
               >
                 <input {...getInputProps()} />
@@ -2053,6 +1968,37 @@ const CreateDropZone = (props: any) => {
                 </Typography>
               </div>
             </Box>
+              <Tooltip
+                  slotProps={{
+                      tooltip: {
+                          sx: {
+                              color: "#6C8093",
+                              backgroundColor: "#E2E5E9",
+                              borderRadius: "8px"
+                          },
+                      },
+                  }}
+                  title={
+                  <Box sx={{width:"auto", display:"flex",flexDirection:"column" ,gap: "5px" }}>
+                      <Box sx={{display: "flex", gap: "5px"}}>
+                          <InfoOutlinedIcon
+                              style={{ color: "#C7CCD1",width:"15px",height:"15px" }}
+                          />
+                          <Trans i18nKey={"uploadAcceptableSize"} />
+                      </Box>
+                      <Box sx={{display: "flex", gap: "5px"}}>
+                          <InfoOutlinedIcon
+                              style={{ color: "#C7CCD1",width:"15px",height:"15px" }}
+                          />
+                          <Trans i18nKey={"uploadAcceptable"} />
+                      </Box>
+                  </Box>
+              }>
+                  <InfoOutlinedIcon
+                      style={{ color: "#0A2342",width:"15px",height:"15px" }}
+                      sx={{ mr: 1,position:"absolute",top: {xs:"65%", sm:"50%"},right:"15px" }}
+                  />
+              </Tooltip>
           </section>
         )
       }
@@ -2090,19 +2036,10 @@ const EvidenceDetail = (props: any) => {
   });
 
   useEffect(() => {
-    // if (id === evidencesData[0].id && !changeInput) {
-    if (!changeInput) {
-      setExpandedEvidenceBox(false);
+    if (id === evidencesData[0].id && !changeInput) {
+      setExpandedEvidenceBox(false)
     }
   }, [evidencesData.length, changeInput]);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  const cancelEditing = async (e: any) => {
-    formMethods.reset();
-  };
 
   const {
     description,
@@ -2138,6 +2075,9 @@ const EvidenceDetail = (props: any) => {
         });
         const { items } = await evidencesQueryData.query();
         setEvidencesData(items);
+          if (!changeInput) {
+              setExpandedEvidenceBox(false)
+          }
         setIsEditing(false);
         setValueCount("");
       }
@@ -2227,16 +2167,6 @@ const EvidenceDetail = (props: any) => {
     setEvidenceId(id);
   }, [id]);
 
-  const downloadFile = async ({ link }: { link: string }) => {
-    const fileUrl = link;
-    const a = document.createElement("a");
-    a.href = fileUrl;
-    a.target = "_blank";
-    a.download = "file_name.zip";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  };
   const skeleton = Array.from(Array(attachmentsCount).keys());
   return (
     <Box display="flex" flexDirection="column" width="100%">
@@ -2732,122 +2662,27 @@ const MyDropzone = (props: any) => {
   }, [dropZoneData]);
   const theme = useTheme();
   return (
-    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE}>
-      {({ getRootProps, getInputProps }: any) =>
-        dropZoneData ? (
-          <Box
-            sx={{
-              height: "199px",
-              maxWidth: "280px",
-              mx: "auto",
-              width: "100%",
-              border: "1px solid #C4C7C9",
-              borderRadius: "32px",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Button
-              sx={{
-                position: "absolute",
-                top: "3px",
-                right: "3px",
-                cursor: "pointer",
-                fontSize: "13px",
-              }}
-              onClick={() => setDropZone(null)}
-            >
-              Remove
-            </Button>
-            {typeFile == "gif" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${gif}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {typeFile == "png" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${png}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {typeFile == "bpm" && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${bpm}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {(typeFile == "jpeg" || typeFile == "jpg") && (
-              <img
-                style={{ width: "25%", height: "50%" }}
-                src={dispalyFile ? `${jpeg}` : "#"}
-                alt={"gif"}
-              />
-            )}
-            {/*{typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}*/}
-            {typeFile == "pdf" && (
-              <section style={{ width: "50%", height: "70%" }}>
-                <FileType name={"pdf"} />{" "}
-              </section>
-            )}
-            {typeFile == "zip" && (
-              <img
-                style={{ width: "50%", height: "70%" }}
-                src={dispalyFile ? `${zip}` : "#"}
-              />
-            )}
-            {typeFile == "plain" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${txt}` : "#"}
-                alt="txt file"
-              />
-            )}
-            {typeFile == "xrar" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${rar}` : "#"}
-                alt="rar file"
-              />
-            )}
-            {typeFile == "docx" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${docx}` : "#"}
-                alt="docx file"
-              />
-            )}
-            {typeFile == "doc" && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${doc}` : "#"}
-                alt="doc file"
-              />
-            )}
-            {(typeFile == "xlsx" || typeFile == "ods") && (
-              <img
-                style={{ width: "40%", height: "60%" }}
-                src={dispalyFile ? `${xls}` : "#"}
-                alt="xls file"
-              />
-            )}
-            <Typography sx={{ ...theme.typography.titleMedium }}>
-              {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
-                  "..." +
-                  dropZoneData[0]?.name.substring(
-                    dropZoneData[0]?.name.indexOf(".")
-                  )
-                : dropZoneData[0]?.name}
-            </Typography>
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
+      {({ getRootProps, getInputProps }: any) => (
+        dropZoneData ?
+          <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
+             {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
+             {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
+             {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
+             {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+             {/*{typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}*/}
+             {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
+             {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
+             {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
+              {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
+              {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
+              {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
+              {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
+              {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
+              <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
-        ) : (
+         :
           <section style={{ cursor: "pointer" }}>
             <Box
               sx={{
@@ -2994,14 +2829,17 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     }
   };
 
-  const theme = useTheme();
+  const closeDialog = () =>{
+      onClose();
+      setDropZone(null);
+      setDescription("")
+  }
+
+  const theme = useTheme()
   return (
     <Dialog
       open={expanded.expended}
-      onClose={() => {
-        onClose();
-        setDropZone(null);
-      }}
+      onClose={closeDialog}
       maxWidth={"sm"}
       // fullScreen={fullScreen}
       fullWidth
@@ -3038,10 +2876,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           <Trans i18nKey="uploadAttachment" />
         </Box>
         <ClearIcon
-          onClick={() => {
-            onClose();
-            setDropZone(null);
-          }}
+          onClick={closeDialog}
           style={{ color: "#fff" }}
           sx={{
             position: "absolute",
@@ -3167,6 +3002,10 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             <TextField
               sx={{
                 overflow: "auto",
+                  "&::placeholder": {
+                      ...theme.typography.bodySmall,
+                      color: "#000"
+                  },
               }}
               rows={3}
               id="outlined-multiline-static"
@@ -3273,7 +3112,40 @@ const DeleteDialog = (props: any) => {
           msOverflowStyle: "none",
         },
       }}
+    >  <DialogContent
+        sx={{
+            // padding: "0!important",
+            height: { sm: "84px" },
+            background: "#B81430",
+            overflow: "hidden",
+            position: "relative",
+            py: "24px",
+        }}
     >
+        <Box
+            sx={{
+                background: "#B81430",
+                textAlign: "center",
+                color: "#fff",
+                ...theme.typography.headlineSmall,
+                sm: { ...theme.typography.headlineMedium },
+            }}
+        >
+            <Trans i18nKey="warning" />
+        </Box>
+        <ClearIcon
+            onClick={onClose}
+            style={{ color: "#fff" }}
+            sx={{
+                position: "absolute",
+                width: "25px",
+                height: "25px",
+                right: "17px",
+                top: "25px",
+                cursor: "pointer",
+            }}
+        />
+    </DialogContent>
       <DialogContent
         sx={{
           padding: "32px",
