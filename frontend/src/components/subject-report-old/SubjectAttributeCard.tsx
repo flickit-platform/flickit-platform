@@ -160,7 +160,7 @@ const SUbjectAttributeCard = (props: any) => {
                 </Typography>
               </Box>
               <Box
-                mt={0.6}
+                mt={1.5}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -172,7 +172,7 @@ const SUbjectAttributeCard = (props: any) => {
                     display: attributesDataPolicy[id?.toString()]?.aiInsight
                       ? "flex"
                       : "none",
-                    justifyContent: "flex-end",
+                    justifyContent: "flex-start",
                   }}
                 >
                   <Typography

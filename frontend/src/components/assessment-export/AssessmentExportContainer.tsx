@@ -1038,7 +1038,7 @@ const AssessmentExportContainer = () => {
                                     ]?.aiInsight
                                       ? "flex"
                                       : "none",
-                                    justifyContent: "flex-end",
+                                    justifyContent: "flex-start",
                                   }}
                                 >
                                   <Typography
@@ -1056,7 +1056,7 @@ const AssessmentExportContainer = () => {
                                 </Box>
 
                                 {attributesData[attribute?.id?.toString()] ? (
-                                  <Typography variant="displaySmall" mt="10px">
+                                  <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}
                                   </Typography>
                                 ) : (
@@ -1065,7 +1065,6 @@ const AssessmentExportContainer = () => {
                                       variant="titleMedium"
                                       fontWeight={400}
                                       color="#243342"
-                                      mt="10px"
                                     >
                                       <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
                                       <Box
