@@ -35,6 +35,7 @@ import {
   CancelRounded,
   CheckCircleOutlineRounded,
   EditRounded,
+  InfoOutlined,
 } from "@mui/icons-material";
 
 const SUbjectAttributeCard = (props: any) => {
@@ -169,11 +170,7 @@ const SUbjectAttributeCard = (props: any) => {
                 <Box
                   sx={{
                     zIndex: 1,
-                    display: attributesDataPolicy[id?.toString()]?.aiInsight || (attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
-                      "isValid"
-                    ) &&
-                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid)
-                      ? "flex"
+                    display: attributesDataPolicy[id?.toString()]?.aiInsight ? "flex"
                       : "none",
                     justifyContent: "flex-start",
                   }}
@@ -188,10 +185,7 @@ const SUbjectAttributeCard = (props: any) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {(attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
-                      "isValid"
-                    ) &&
-                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid) ? <Trans i18nKey="outdated" /> : <Trans i18nKey="AIGenerated" />}
+                    <Trans i18nKey="AIGenerated" />
 
                   </Typography>
                 </Box>
@@ -232,9 +226,43 @@ const SUbjectAttributeCard = (props: any) => {
                 {attributesDataPolicy[id?.toString()]?.assessorInsight &&
                   !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
-                      <Typography variant="displaySmall">
-                        <Trans i18nKey="invalidInsight" />
-                      </Typography>
+                      <Box
+                        sx={{
+                          zIndex: 1,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                        }}
+                      >
+                        <Typography
+                          variant="labelSmall"
+                          sx={{
+                            backgroundColor: "#d85e1e",
+                            color: "white",
+                            padding: "0.35rem 0.35rem",
+                            borderRadius: "4px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Trans i18nKey="Outdated" />
+
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          backgroundColor: "rgba(255, 249, 196, 0.31)",
+                          padding: 1,
+                          borderRadius: 2,
+                          marginInline: 4,
+                          maxWidth: "80%",
+                        }}
+                      >
+                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                        <Typography variant="bodyLarge" textAlign="left">
+                          <Trans i18nKey="invalidInsight" />
+                        </Typography>
+                      </Box>
                       <Button
                         variant="contained"
                         size="small"
@@ -330,7 +358,7 @@ const SUbjectAttributeCard = (props: any) => {
           </Box>
         </AccordionDetails>
       </Accordion>
-    </Paper>
+    </Paper >
   );
 };
 
