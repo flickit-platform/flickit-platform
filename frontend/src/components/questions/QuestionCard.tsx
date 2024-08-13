@@ -1778,7 +1778,7 @@ const DropZoneArea = (props: any) => {
   return (
     <Dropzone
       accept={{
-        ...AcceptFile,
+        ...AcceptFile
       }}
       onDrop={(acceptedFiles) => {
         if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
@@ -1893,7 +1893,7 @@ const CreateDropZone = (props: any) => {
             {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
             <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
-        ) : (
+         :
           <section
             style={{
               cursor: "pointer",
@@ -2643,7 +2643,7 @@ const MyDropzone = (props: any) => {
               {typeFile == "xtar"  && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
               <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
           </Box>
-        ) : (
+         :
           <section style={{ cursor: "pointer" }}>
             <Box
               sx={{
