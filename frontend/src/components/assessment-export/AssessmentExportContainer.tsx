@@ -50,7 +50,7 @@ import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AssessmentReportPDF from "./AssessmentReportPDF";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
 import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
@@ -58,8 +58,37 @@ import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
+import html2canvas from 'html2canvas';
+import { FaClipboard } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+
+const handleCopyAsImage = async (element: HTMLDivElement | null, setLoading: (loading: boolean) => void) => {
+  if (element) {
+    setLoading(true); // Set loading to true when starting the operation
+    try {
+      const canvas = await html2canvas(element);
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          toast.success('Chart content copied as an image!')
+        } else {
+          console.error('Failed to create blob from canvas.');
+        }
+      });
+    } catch (err) {
+      console.error('Failed to copy image to clipboard:', err);
+    } finally {
+      setLoading(false); // Set loading to false when the operation completes
+    }
+  }
+};
+
 
 const AssessmentExportContainer = () => {
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [errorObject, setErrorObject] = useState<any>(undefined);
@@ -190,7 +219,9 @@ const AssessmentExportContainer = () => {
     }
   }, [AssessmentReport?.errorObject]);
   const [showSpinner, setShowSpinner] = useState(true);
-
+  const handleCopyClick = (id: string) => {
+    handleCopyAsImage(refs.current[id] || null, (loading) => setLoadingId(loading ? id : null));
+  };
   const [attributesData, setAttributesData] = useState<any>({});
   const [editable, setEditable] = useState<any>(true);
   const [ignoreIds, setIgnoreIds] = useState<any>([]);
@@ -295,6 +326,14 @@ const AssessmentExportContainer = () => {
       setShowSpinner(false);
     }, 2000);
   }, []);
+
+  const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  const handleSetRef = useCallback((id: string) => (element: HTMLDivElement | null) => {
+    refs.current[id] = element;
+  }, []);
+
+
 
   return errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
     errorObject?.code === ECustomErrorType.NOT_FOUND ? (
@@ -891,25 +930,34 @@ const AssessmentExportContainer = () => {
                   md={12}
                   lg={6}
                   xl={6}
-                  sx={{ height: "370px" }}
                 >
-                  {subjects?.length > 2 ? (
-                    <AssessmentSubjectRadarChart
-                      data={subjects}
-                      maturityLevelsCount={
-                        assessmentKit?.maturityLevelCount ?? 5
-                      }
-                      loading={false}
-                    />
-                  ) : (
-                    <AssessmentSubjectRadialChart
-                      data={subjects}
-                      maturityLevelsCount={
-                        assessmentKit?.maturityLevelCount ?? 5
-                      }
-                      loading={false}
-                    />
-                  )}
+                  <IconButton
+                    size="small"
+                    onClick={() => handleCopyClick('globalChart')}
+                    disabled={loadingId === 'globalChart'}
+                  >
+                    {loadingId === 'globalChart' ? <CircularProgress size={24} /> : <FaClipboard />}
+                  </IconButton>
+                  <Box sx={{ height: "370px" }} ref={handleSetRef('globalChart')}
+                  >
+                    {subjects?.length > 2 ? (
+                      <AssessmentSubjectRadarChart
+                        data={subjects}
+                        maturityLevelsCount={
+                          assessmentKit?.maturityLevelCount ?? 5
+                        }
+                        loading={false}
+                      />
+                    ) : (
+                      <AssessmentSubjectRadialChart
+                        data={subjects}
+                        maturityLevelsCount={
+                          assessmentKit?.maturityLevelCount ?? 5
+                        }
+                        loading={false}
+                      />
+                    )}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -917,20 +965,31 @@ const AssessmentExportContainer = () => {
                   md={12}
                   lg={6}
                   xl={6}
-                  sx={{ ...styles.centerCVH }}
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-end"
                 >
-                  <Gauge
-                    level_value={maturityLevel?.index ?? 0}
-                    maturity_level_status={maturityLevel?.title}
-                    maturity_level_number={assessmentKit?.maturityLevelCount}
-                    confidence_value={confidenceValue}
-                    confidence_text={t("withPercentConfidence")}
-                    isMobileScreen={false}
-                    hideGuidance={true}
-                    height={370}
-                    mb={-8}
-                    maturity_status_guide={t("overallMaturityLevelIs")}
-                  />
+                  <IconButton
+                    size="small"
+                    onClick={() => handleCopyClick('gauge')}
+                    disabled={loadingId === 'gauge'}
+                  >
+                    {loadingId === 'gauge' ? <CircularProgress size={24} /> : <FaClipboard />}
+                  </IconButton>
+                  <Box ref={handleSetRef('gauge')}>
+                    <Gauge
+                      level_value={maturityLevel?.index ?? 0}
+                      maturity_level_status={maturityLevel?.title}
+                      maturity_level_number={assessmentKit?.maturityLevelCount}
+                      confidence_value={confidenceValue}
+                      confidence_text={t("withPercentConfidence")}
+                      isMobileScreen={false}
+                      hideGuidance={true}
+                      height={370}
+                      mb={-8}
+                      maturity_status_guide={t("overallMaturityLevelIs")}
+
+                    /></Box>
                 </Grid>
               </Grid>
               <br />
@@ -970,25 +1029,36 @@ const AssessmentExportContainer = () => {
                     />
                   </Typography>
                   <Box
-                    height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
+
+                    display="flex"
+                    alignItems="flex-start"
                   >
-                    {subject?.attributes?.length > 2 ? (
-                      <AssessmentSubjectRadarChart
-                        data={subject?.attributes}
-                        maturityLevelsCount={
-                          assessmentKit?.maturityLevelCount ?? 5
-                        }
-                        loading={false}
-                      />
-                    ) : (
-                      <AssessmentSubjectRadialChart
-                        data={subject?.attributes}
-                        maturityLevelsCount={
-                          assessmentKit?.maturityLevelCount ?? 5
-                        }
-                        loading={false}
-                      />
-                    )}
+                    <Box height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
+                      ref={handleSetRef(subject?.id.toString() || '')} flex={1}>
+                      {subject?.attributes?.length > 2 ? (
+                        <AssessmentSubjectRadarChart
+                          data={subject?.attributes}
+                          maturityLevelsCount={
+                            assessmentKit?.maturityLevelCount ?? 5
+                          }
+                          loading={false}
+                        />
+                      ) : (
+                        <AssessmentSubjectRadialChart
+                          data={subject?.attributes}
+                          maturityLevelsCount={
+                            assessmentKit?.maturityLevelCount ?? 5
+                          }
+                          loading={false}
+                        />
+                      )}</Box>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopyClick(subject?.id.toString() || '')}
+                      disabled={loadingId === subject?.id.toString()}
+                    >
+                      {loadingId === subject?.id.toString() ? <CircularProgress size={24} /> : <FaClipboard />}
+                    </IconButton>
                   </Box>
                   <TableContainer
                     component={Paper}
@@ -1046,7 +1116,7 @@ const AssessmentExportContainer = () => {
                                 maxWidth: 300,
                                 wordWrap: "break-word",
                                 borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                position: "relative", // Add position relative to the TableCell
+                                position: "relative",
                               }}
                             >
                               <Box
@@ -1054,15 +1124,29 @@ const AssessmentExportContainer = () => {
                                 flexDirection="column"
                                 gap={0.5}
                               >
-                                <AttributeStatusBarContainer
-                                  status={attribute?.maturityLevel?.title}
-                                  ml={attribute?.maturityLevel?.value}
-                                  cl={Math.ceil(
-                                    attribute?.confidenceValue ?? 0
-                                  )}
-                                  mn={assessmentKit?.maturityLevelCount ?? 5}
-                                  document
-                                />
+                                <Box display="flex" alignItems="flex-start">
+                                  <Box ref={handleSetRef(attribute?.id.toString() || '')}
+                                    flex={1}
+                                  >
+                                    <AttributeStatusBarContainer
+                                      status={attribute?.maturityLevel?.title}
+                                      ml={attribute?.maturityLevel?.value}
+                                      cl={Math.ceil(
+                                        attribute?.confidenceValue ?? 0
+                                      )}
+                                      mn={assessmentKit?.maturityLevelCount ?? 5}
+                                      document
+                                    />
+                                  </Box>
+                                  <IconButton
+                                    size="small"
+                                    onClick={() => handleCopyClick(attribute?.id.toString() || '')}
+                                    disabled={loadingId === attribute?.id.toString()} // Disable button when loading
+                                  >
+                                    {loadingId === attribute?.id.toString() ? <CircularProgress size={24} /> : <FaClipboard />}
+                                  </IconButton>
+                                </Box>
+
                                 <Box
                                   sx={{
                                     zIndex: 1,
