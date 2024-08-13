@@ -2031,6 +2031,9 @@ const EvidenceDetail = (props: any) => {
         });
         const { items } = await evidencesQueryData.query();
         setEvidencesData(items);
+          if (!changeInput) {
+              setExpandedEvidenceBox(false)
+          }
         setIsEditing(false);
         setValueCount("");
       }
