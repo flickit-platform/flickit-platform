@@ -1795,7 +1795,7 @@ const EvidenceDetail = (props: any) => {
               let blob = await response.blob();
               if (blob){
                   let reg = new RegExp("\\/([^\\/?]+)\\?")
-                  let name = link?.match(reg)[1]
+                  let name = (link as any)?.match(reg)[1]
                   const a = document.createElement("a");
                   const urlBlob = URL.createObjectURL(blob)
                   a.download = name;
