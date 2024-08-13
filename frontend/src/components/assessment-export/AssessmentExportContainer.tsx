@@ -1019,42 +1019,8 @@ const AssessmentExportContainer = () => {
                               <Box
                                 display="flex"
                                 flexDirection="column"
-                                gap={2}
+                                gap={0.5}
                               >
-                                <Box
-                                  sx={{
-                                    position: "absolute",
-                                    top: 0,
-                                    right: 0,
-                                    backgroundColor: "#D81E5B",
-                                    color: "white",
-                                    padding: "0.15rem 0.35rem",
-                                    borderRadius: "4px",
-                                    fontWeight: "bold",
-                                    zIndex: 1,
-                                    display:
-                                      attributesDataPolicy[
-                                        attribute?.id?.toString()
-                                      ]?.aiInsight ||
-                                      attributesDataPolicy[
-                                        attribute?.id?.toString()
-                                      ]?.assessorInsight
-                                        ? "inline-block"
-                                        : "none",
-                                    whiteSpace: "nowrap",
-                                  }}
-                                >
-                                  <Typography variant="labelSmall">
-                                    {attributesDataPolicy[
-                                      attribute?.id?.toString()
-                                    ]?.aiInsight ? (
-                                      <Trans i18nKey="AIGenerated" />
-                                    ) : (
-                                      <Trans i18nKey="AccessorInsight" />
-                                    )}
-                                  </Typography>
-                                </Box>
-
                                 <AttributeStatusBarContainer
                                   status={attribute?.maturityLevel?.title}
                                   ml={attribute?.maturityLevel?.value}
@@ -1064,6 +1030,31 @@ const AssessmentExportContainer = () => {
                                   mn={assessmentKit?.maturityLevelCount ?? 5}
                                   document
                                 />
+                                <Box
+                                  sx={{
+                                    zIndex: 1,
+                                    display: attributesDataPolicy[
+                                      attribute?.id?.toString()
+                                    ]?.aiInsight
+                                      ? "flex"
+                                      : "none",
+                                    justifyContent: "flex-start",
+                                  }}
+                                >
+                                  <Typography
+                                    variant="labelSmall"
+                                    sx={{
+                                      backgroundColor: "#D81E5B",
+                                      color: "white",
+                                      padding: "0.35rem 0.35rem",
+                                      borderRadius: "4px",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    <Trans i18nKey="AIGenerated" />
+                                  </Typography>
+                                </Box>
+
                                 {attributesData[attribute?.id?.toString()] ? (
                                   <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}

@@ -191,7 +191,7 @@ const SubjectContainer = () => {
       })
     );
 
-    if (response?.data) {
+    if (response?.status === 200) {
       setAttributesData((prevData: any) => ({
         ...prevData,
         [attributeId]: regenerate ? response?.data?.content : newAttributeData,
