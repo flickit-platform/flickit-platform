@@ -92,19 +92,23 @@ const SubjectContainer = () => {
     }
   };
 
-  const fetchAllAttributesData = async () => {
-    const attributesDataPromises = subjectQueryData?.data?.attributes.map(
-      (attribute: any) =>
-        FetchAttributeData(assessmentId, attribute?.id).then((result) => {
-          if (ignoreIds.includes(attribute?.id)) return;
+  const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
+    const attributesDataPromises = subjectQueryData?.data?.attributes
+      ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
+      .map(async (attribute: any) => {
+        try {
+          const result = await FetchAttributeData(assessmentId, attribute?.id);
           return {
             id: attribute?.id,
             data: result,
           };
-        })
-    );
+        } catch (error) {
+          console.error(`Failed to fetch data for attribute ${attribute?.id}:`, error);
+          return null;
+        }
+      });
 
-    const allAttributesData = attributesDataPromises
+    const allAttributesData = attributesDataPromises.length
       ? await Promise.all(attributesDataPromises)
       : [];
 
@@ -116,30 +120,50 @@ const SubjectContainer = () => {
       {}
     );
 
-    setAttributesData(attributesDataObject);
+    setAttributesData((prevData: any) => ({
+      ...prevData,
+      ...attributesDataObject
+    }));
   };
   const [ignoreIds, setIgnoreIds] = useState<any>([]);
 
   const loadAllAttributesData = async () => {
+    const newIgnoreIds: any[] = [];
+
     const attributesDataPolicyPromises = subjectQueryData?.data?.attributes.map(
-      (attribute: any) =>
-        LoadAttributeData(assessmentId, attribute?.id).then((result) => {
-          if (!result.editable) {
-            setEditable(false);
-          }
-          if (
-            result?.editable === false &&
-            result?.assessorInsight === null &&
-            result?.aiInsight === null
-          ) {
-            setIgnoreIds((prevState: any) => [...prevState, attribute?.id]);
-            return;
-          }
-          return {
-            id: attribute?.id,
-            data: result,
-          };
-        })
+      async (attribute: any) => {
+        const result = await LoadAttributeData(assessmentId, attribute?.id);
+
+        if (!result.editable) {
+          setEditable(false);
+        }
+
+        const shouldIgnore = !result.editable && result?.assessorInsight === null && result?.aiInsight === null;
+        if (shouldIgnore) {
+          newIgnoreIds.push(attribute?.id);
+          return null;
+        }
+
+        if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.aiInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        if (result?.assessorInsight?.insight) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.assessorInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+        return {
+          id: attribute?.id,
+          data: result,
+        };
+      }
     );
 
     const allAttributesDataPolicy = attributesDataPolicyPromises
@@ -154,6 +178,8 @@ const SubjectContainer = () => {
       {}
     );
     setAttributesDataPolicy(attributesDataPolicyObject);
+    return newIgnoreIds
+
   };
 
   const updateAttributeAndData = async (
@@ -169,20 +195,20 @@ const SubjectContainer = () => {
 
     const response = regenerate
       ? await service.fetchAIReport(
-          {
-            assessmentId,
-            attributeId,
-          },
-          undefined
-        )
+        {
+          assessmentId,
+          attributeId,
+        },
+        undefined
+      )
       : await service.updateAIReport(
-          {
-            assessmentId,
-            attributeId,
-            data: { assessorInsight: newAttributeData },
-          },
-          undefined
-        );
+        {
+          assessmentId,
+          attributeId,
+          data: { assessorInsight: newAttributeData },
+        },
+        undefined
+      );
 
     const res = await LoadAttributeData(assessmentId, attributeId).then(
       (result) => ({
@@ -229,9 +255,14 @@ const SubjectContainer = () => {
 
         const attributesNumber = attributes.length;
         useEffect(() => {
-          loadAllAttributesData();
-          if (progress === 100) {
-            fetchAllAttributesData();
+          const loadAndFetchData = async () => {
+            const ignoreIds = await loadAllAttributesData();
+            if (progress === 100) {
+              await fetchAllAttributesData(ignoreIds);
+            }
+          }
+          if (subjectQueryData?.data && assessmentId) {
+            loadAndFetchData();
           }
         }, [subjectQueryData?.data]);
         return (
@@ -365,7 +396,7 @@ const useSubject = () => {
       await calculateConfidenceLevelQuery.query();
       await subjectQueryData.query({ subjectId, assessmentId });
       await subjectProgressQueryData.query({ subjectId, assessmentId });
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (
