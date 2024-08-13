@@ -98,7 +98,7 @@ const SUbjectAttributeCard = (props: any) => {
           onClick={(event) => event.stopPropagation()}
         >
           <Grid container spacing={2}>
-            <Grid item md={11} xs={12}>
+            <Grid item md={12} xs={12}>
               <Box mb={1}>
                 <Title
                   textTransform={"uppercase"}
@@ -168,31 +168,27 @@ const SUbjectAttributeCard = (props: any) => {
               >
                 <Box
                   sx={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#D81E5B",
-                    color: "white",
-                    padding: "0.15rem 0.35rem",
-                    borderRadius: "4px",
-                    fontWeight: "bold",
                     zIndex: 1,
-                    display:
-                      attributesDataPolicy[id?.toString()]?.aiInsight ||
-                      attributesDataPolicy[id?.toString()]?.assessorInsight
-                        ? "inline-block"
-                        : "none",
-                    whiteSpace: "nowrap",
+                    display: attributesDataPolicy[id?.toString()]?.aiInsight
+                      ? "flex"
+                      : "none",
+                    justifyContent: "flex-end",
                   }}
                 >
-                  <Typography variant="labelSmall">
-                    {attributesDataPolicy[id?.toString()]?.aiInsight ? (
-                      <Trans i18nKey="AIGenerated" />
-                    ) : (
-                      <Trans i18nKey="AccessorInsight" />
-                    )}
+                  <Typography
+                    variant="labelSmall"
+                    sx={{
+                      backgroundColor: "#D81E5B",
+                      color: "white",
+                      padding: "0.35rem 0.35rem",
+                      borderRadius: "4px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Trans i18nKey="AIGenerated" />
                   </Typography>
                 </Box>
+
                 {attributesData[id?.toString()] ? (
                   <OnHoverInput
                     attributeId={id}
