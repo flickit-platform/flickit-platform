@@ -1167,11 +1167,11 @@ const Evidence = (props: any) => {
                     sx={{
                       display: "flex",
                       flex: 1,
-                      "&.Mui-selected": {
-                        color: `${evidenceBG.borderColor}  !important`,
-                        fontSize: { xs: "1rem !important" },
-                      },
+                        "&.Mui-selected": {
+                            color: `${evidenceBG.borderColor}  !important`,
+                        },
                       ...theme.typography.headlineSmall,
+                        fontSize: { xs: "1rem !important" },
                     }}
                     value={evidenceAttachmentType.positive}
                   />
@@ -1331,14 +1331,16 @@ const Evidence = (props: any) => {
                   sx={{
                     ml: "auto",
                     borderRadius: "4px",
-                    p: 2,
+                    py:2,
+                    px: 3,
                     maxHeight: "40px",
                     whiteSpace: "nowrap",
-                    width: { xs: "130px", sm: "170px" },
+                    width: { xs: "130px", sm: "220px" },
                     background: evidenceBG.borderColor,
                     "&:hover": {
                       background: evidenceBG.borderColor,
                     },
+                      ...theme.typography.titleMedium
                   }}
                   type="submit"
                   variant="contained"
@@ -2119,14 +2121,24 @@ const EvidenceDetail = (props: any) => {
   }, [id]);
 
   const downloadFile = async ({ link }: { link: string }) => {
-    const fileUrl = link;
-    const a = document.createElement("a");
-    a.href = fileUrl;
-    a.target = "_blank";
-    a.download = "file_name.zip";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+      try{
+          if(link){
+              const response = await fetch(link)
+              const blob = await response.blob();
+              let reg = new RegExp("\\/([^\\/?]+)\\?")
+              let name : any = link?.match(reg)
+              const a = document.createElement("a");
+              const urlBlob = URL.createObjectURL(blob)
+              a.download = name[1];
+              a.href = urlBlob;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+          }
+      } catch (e){
+          const err = e as ICustomError;
+          toastError(err);
+      }
   };
   const skeleton = Array.from(Array(attachmentsCount).keys());
   return (
