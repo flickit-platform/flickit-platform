@@ -128,6 +128,36 @@ const AssessmentExportContainer = () => {
     }
   };
 
+  const LoadAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const aiReponse = service
+        .loadAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+        .then((res: any) => {
+          return res?.data || "";
+        });
+
+      return aiReponse;
+    } catch (error: any) {
+      setErrorObject(error?.response?.data);
+      if (error?.response?.data?.code == "CALCULATE_NOT_VALID") {
+        await calculateMaturityLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      if (error?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+        await calculateConfidenceLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const hash = window?.location?.hash?.substring(1);
     if (hash) {
@@ -162,6 +192,7 @@ const AssessmentExportContainer = () => {
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<any>({});
+  const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
   const fetchAllAttributesData = async () => {
     const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
@@ -185,7 +216,31 @@ const AssessmentExportContainer = () => {
       },
       {}
     );
+
     setAttributesData(attributesDataObject);
+
+    const attributesDataPolicyPromises =
+      AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+        subject?.attributes?.map((attribute: any) =>
+          LoadAttributeData(assessmentId, attribute?.id).then((result) => ({
+            id: attribute?.id,
+            data: result,
+          }))
+        )
+      );
+
+    const allAttributesDataPolicy = attributesDataPolicyPromises
+      ? await Promise.all(attributesDataPolicyPromises)
+      : [];
+
+    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
+      (acc, { id, data }) => {
+        acc[id] = data;
+        return acc;
+      },
+      {}
+    );
+    setAttributesDataPolicy(attributesDataPolicyObject);
   };
 
   useEffect(() => {
@@ -528,8 +583,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                                ? elem?.title
-                                : ", " + elem?.title
+                              ? elem?.title
+                              : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -956,16 +1011,26 @@ const AssessmentExportContainer = () => {
                                     borderRadius: "4px",
                                     fontWeight: "bold",
                                     zIndex: 1,
-                                    display: attributesData[
-                                      attribute?.id?.toString()
-                                    ]
-                                      ? "inline-block"
-                                      : "none",
+                                    display:
+                                      attributesDataPolicy[
+                                        attribute?.id?.toString()
+                                      ]?.aiInsight ||
+                                      attributesDataPolicy[
+                                        attribute?.id?.toString()
+                                      ]?.assessorInsight
+                                        ? "inline-block"
+                                        : "none",
                                     whiteSpace: "nowrap",
                                   }}
                                 >
                                   <Typography variant="labelSmall">
-                                    <Trans i18nKey="AIGenerated" />
+                                    {attributesDataPolicy[
+                                      attribute?.id?.toString()
+                                    ]?.aiInsight ? (
+                                      <Trans i18nKey="AIGenerated" />
+                                    ) : (
+                                      <Trans i18nKey="AccessorInsight" />
+                                    )}
                                   </Typography>
                                 </Box>
 
@@ -978,28 +1043,43 @@ const AssessmentExportContainer = () => {
                                   mn={assessmentKit?.maturityLevelCount ?? 5}
                                   document
                                 />
-                                {attributesData[attribute?.id?.toString()] ?
+                                {attributesData[attribute?.id?.toString()] ? (
                                   <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}
-                                  </Typography> :
-                                  <Typography variant="titleMedium" fontWeight={400} color="#243342">
+                                  </Typography>
+                                ) : (
+                                  <Typography
+                                    variant="titleMedium"
+                                    fontWeight={400}
+                                    color="#243342"
+                                  >
                                     <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
                                     <Box
                                       component={RouterLink}
                                       to={`./../questionnaires?subject_pk=${subject?.id}`}
                                       sx={{
                                         textDecoration: "none",
-                                        color: "#2D80D2"
+                                        color: "#2D80D2",
                                       }}
                                     >
                                       <Typography variant="titleMedium">
                                         questions
                                       </Typography>
                                     </Box>{" "}
-                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />.
-                                  </Typography>}
-
-
+                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                                    .
+                                  </Typography>
+                                )}
+                                {attributesDataPolicy[
+                                  attribute?.id?.toString()
+                                ]?.hasOwnProperty("isValid") &&
+                                  !attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.isValid && (
+                                    <Typography variant="displaySmall">
+                                      <Trans i18nKey="invalidInsight" />
+                                    </Typography>
+                                  )}
                               </Box>
                             </TableCell>
                           </TableRow>

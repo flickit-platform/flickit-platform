@@ -4,7 +4,8 @@ import { Trans } from "react-i18next";
 import SubjectAttributeCard from "./SubjectAttributeCard";
 
 export const SubjectAttributeList = (props: any) => {
-  const { data, attributesData, updateAttributeAndData } = props;
+  const { data, attributesData, updateAttributeAndData, attributesDataPolicy } =
+    props;
   const { subject, attributes, maturityLevelsCount } = data;
   const { title } = subject;
   return (
@@ -20,6 +21,7 @@ export const SubjectAttributeList = (props: any) => {
               {...result}
               key={result.id}
               attributesData={attributesData}
+              attributesDataPolicy={attributesDataPolicy}
               updateAttributeAndData={updateAttributeAndData}
             />
           );
