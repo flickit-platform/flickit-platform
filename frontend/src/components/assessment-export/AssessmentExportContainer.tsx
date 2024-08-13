@@ -43,6 +43,7 @@ import {
   DownloadRounded,
   FiberManualRecordOutlined,
   FiberManualRecordRounded,
+  InfoOutlined,
   TableChartRounded,
 } from "@mui/icons-material";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
@@ -1201,15 +1202,46 @@ const AssessmentExportContainer = () => {
                                     </Typography>
                                   )
                                 )}
-                                {attributesDataPolicy[
-                                  attribute?.id?.toString()
-                                ]?.hasOwnProperty("isValid") &&
-                                  !attributesDataPolicy[
-                                    attribute?.id?.toString()
-                                  ]?.isValid && (
-                                    <Typography variant="displaySmall">
-                                      <Trans i18nKey="invalidInsight" />
-                                    </Typography>
+                                {attributesDataPolicy[attribute?.id?.toString()]?.assessorInsight &&
+                                  !attributesDataPolicy[attribute?.id?.toString()]?.assessorInsight?.isValid && (
+                                    <Box sx={{ ...styles.centerV }} gap={2}>
+                                      <Box
+                                        sx={{
+                                          zIndex: 1,
+                                          display: "flex",
+                                          justifyContent: "flex-start",
+                                        }}
+                                      >
+                                        <Typography
+                                          variant="labelSmall"
+                                          sx={{
+                                            backgroundColor: "#d85e1e",
+                                            color: "white",
+                                            padding: "0.35rem 0.35rem",
+                                            borderRadius: "4px",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          <Trans i18nKey="Outdated" />
+
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "flex-start",
+                                          backgroundColor: "rgba(255, 249, 196, 0.31)",
+                                          padding: 1,
+                                          borderRadius: 4,
+                                          maxWidth: "100%",
+                                        }}
+                                      >
+                                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                                        <Typography variant="bodyLarge" textAlign="left">
+                                          <Trans i18nKey="invalidInsight" />
+                                        </Typography>
+                                      </Box>
+                                    </Box>
                                   )}
                               </Box>
                             </TableCell>
