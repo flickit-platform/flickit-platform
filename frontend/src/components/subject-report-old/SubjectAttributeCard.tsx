@@ -49,6 +49,7 @@ const SUbjectAttributeCard = (props: any) => {
     attributesData,
     updateAttributeAndData,
     attributesDataPolicy,
+    editable,
   } = props;
   const { assessmentId } = useParams();
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -203,7 +204,7 @@ const SUbjectAttributeCard = (props: any) => {
                     editable={attributesDataPolicy[id?.toString()]?.editable}
                   />
                 ) : (
-                  attributesDataPolicy[id?.toString()]?.editable && (
+                  editable && (
                     <Box display="flex" alignItems="center" gap="4px">
                       <Typography variant="titleMedium">
                         <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />

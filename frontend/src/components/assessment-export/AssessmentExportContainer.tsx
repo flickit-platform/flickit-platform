@@ -192,16 +192,21 @@ const AssessmentExportContainer = () => {
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<any>({});
+  const [editable, setEditable] = useState<any>(true);
+  const [ignoreIds, setIgnoreIds] = useState<any>([]);
   const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
   const fetchAllAttributesData = async () => {
     const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
       (subject: any) =>
         subject?.attributes?.map((attribute: any) =>
-          FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
-            id: attribute?.id,
-            data: result,
-          }))
+          FetchAttributeData(assessmentId, attribute?.id).then((result) => {
+            if (ignoreIds.includes(attribute?.id)) return;
+            return {
+              id: attribute?.id,
+              data: result,
+            };
+          })
         )
     );
 
@@ -218,14 +223,29 @@ const AssessmentExportContainer = () => {
     );
 
     setAttributesData(attributesDataObject);
+  };
 
+  const loadAllAttributesData = async () => {
     const attributesDataPolicyPromises =
       AssessmentReport?.data?.subjects.flatMap((subject: any) =>
         subject?.attributes?.map((attribute: any) =>
-          LoadAttributeData(assessmentId, attribute?.id).then((result) => ({
-            id: attribute?.id,
-            data: result,
-          }))
+          LoadAttributeData(assessmentId, attribute?.id).then((result) => {
+            if (!result.editable) {
+              setEditable(false);
+            }
+            if (
+              result?.editable === false &&
+              result?.assessorInsight === null &&
+              result?.aiInsight === null
+            ) {
+              setIgnoreIds((prevState: any) => [...prevState, attribute?.id]);
+              return;
+            }
+            return {
+              id: attribute?.id,
+              data: result,
+            };
+          })
         )
       );
 
@@ -287,7 +307,8 @@ const AssessmentExportContainer = () => {
         }, [assessment]);
 
         useEffect(() => {
-          if (questionsCount === answersCount) {
+          loadAllAttributesData();
+          if (questionsCount === answersCount && editable) {
             fetchAllAttributesData();
           }
         }, [AssessmentReport?.data, assessmentId]);
@@ -1048,27 +1069,29 @@ const AssessmentExportContainer = () => {
                                     {attributesData[attribute?.id?.toString()]}
                                   </Typography>
                                 ) : (
-                                  <Typography
-                                    variant="titleMedium"
-                                    fontWeight={400}
-                                    color="#243342"
-                                  >
-                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
-                                    <Box
-                                      component={RouterLink}
-                                      to={`./../questionnaires?subject_pk=${subject?.id}`}
-                                      sx={{
-                                        textDecoration: "none",
-                                        color: "#2D80D2",
-                                      }}
+                                  editable && (
+                                    <Typography
+                                      variant="titleMedium"
+                                      fontWeight={400}
+                                      color="#243342"
                                     >
-                                      <Typography variant="titleMedium">
-                                        questions
-                                      </Typography>
-                                    </Box>{" "}
-                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
-                                    .
-                                  </Typography>
+                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
+                                      <Box
+                                        component={RouterLink}
+                                        to={`./../questionnaires?subject_pk=${subject?.id}`}
+                                        sx={{
+                                          textDecoration: "none",
+                                          color: "#2D80D2",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          questions
+                                        </Typography>
+                                      </Box>{" "}
+                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                                      .
+                                    </Typography>
+                                  )
                                 )}
                                 {attributesDataPolicy[
                                   attribute?.id?.toString()

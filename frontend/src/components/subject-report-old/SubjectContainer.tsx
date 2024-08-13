@@ -46,6 +46,7 @@ const SubjectContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
+  const [editable, setEditable] = useState<any>(true);
   const [attributesData, setAttributesData] = useState<any>({});
   const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
@@ -92,39 +93,6 @@ const SubjectContainer = () => {
   };
 
   const fetchAllAttributesData = async () => {
-    const ignoreIds: any = [];
-    const attributesDataPolicyPromises = subjectQueryData?.data?.attributes.map(
-      (attribute: any) =>
-        LoadAttributeData(assessmentId, attribute?.id).then((result) => {
-          if (
-            result?.editable === false &&
-            result?.assessorInsight === null &&
-            result?.aiInsight === null
-          ) {
-            ignoreIds.push(attribute?.id);
-            return;
-          }
-          return {
-            id: attribute?.id,
-            data: result,
-          };
-        })
-    );
-
-    const allAttributesDataPolicy = attributesDataPolicyPromises
-      ? await Promise.all(attributesDataPolicyPromises)
-      : [];
-
-    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
-      (acc, { id, data }) => {
-        acc[id] = data;
-        return acc;
-      },
-      {}
-    );
-
-    setAttributesDataPolicy(attributesDataPolicyObject);
-
     const attributesDataPromises = subjectQueryData?.data?.attributes.map(
       (attribute: any) =>
         FetchAttributeData(assessmentId, attribute?.id).then((result) => {
@@ -147,7 +115,45 @@ const SubjectContainer = () => {
       },
       {}
     );
+
     setAttributesData(attributesDataObject);
+  };
+  const [ignoreIds, setIgnoreIds] = useState<any>([]);
+
+  const loadAllAttributesData = async () => {
+    const attributesDataPolicyPromises = subjectQueryData?.data?.attributes.map(
+      (attribute: any) =>
+        LoadAttributeData(assessmentId, attribute?.id).then((result) => {
+          if (!result.editable) {
+            setEditable(false);
+          }
+          if (
+            result?.editable === false &&
+            result?.assessorInsight === null &&
+            result?.aiInsight === null
+          ) {
+            setIgnoreIds((prevState: any) => [...prevState, attribute?.id]);
+            return;
+          }
+          return {
+            id: attribute?.id,
+            data: result,
+          };
+        })
+    );
+
+    const allAttributesDataPolicy = attributesDataPolicyPromises
+      ? await Promise.all(attributesDataPolicyPromises)
+      : [];
+
+    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
+      (acc, { id, data }) => {
+        acc[id] = data;
+        return acc;
+      },
+      {}
+    );
+    setAttributesDataPolicy(attributesDataPolicyObject);
   };
 
   const updateAttributeAndData = async (
@@ -223,6 +229,7 @@ const SubjectContainer = () => {
 
         const attributesNumber = attributes.length;
         useEffect(() => {
+          loadAllAttributesData();
           if (progress === 100) {
             fetchAllAttributesData();
           }
@@ -304,6 +311,7 @@ const SubjectContainer = () => {
                     attributesDataPolicy={attributesDataPolicy}
                     updateAttributeAndData={updateAttributeAndData}
                     loading={loading}
+                    editable={editable}
                   />
                 </Box>
               </Box>
