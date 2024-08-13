@@ -227,6 +227,8 @@
   "document": "{{title}} Document",
   "assessmentMethodology": "Assessment Methodology",
   "AIGenerated": "AI Generated",
+  "invalidInsight": "This insight is invalid and it is conducted by other accessors",
+  "AccessorInsight": "Accessor Insight",
   "assessmentFocus": "Assessment Focus",
   "assessmentMethodologyDescription": "The {{title}}is a framework designed to estimate {{subjects}} based on the tools used in the development process. It assesses tools across {{maturityLevelsCount}} maturity levels, directly impacting {{subjects}}.",
   "assessmentFocusDescription": "This assessment focuses on <strong>{{subjectsCount}}</strong> key areas: <strong>{{subjects}}</strong>. A detailed analysis is conducted on <strong>{{attributesCount}}</strong> attributes related to these areas.",

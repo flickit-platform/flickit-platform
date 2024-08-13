@@ -325,6 +325,15 @@ export const createService = (
         }
       );
     },
+    loadAIReport(
+      { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`,
+        config
+      );
+    },
     fetchAIReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined

@@ -47,6 +47,7 @@ const SubjectContainer = () => {
   const { assessmentId = "" } = useParams();
 
   const [attributesData, setAttributesData] = useState<any>({});
+  const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
   const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
     try {
@@ -69,13 +70,70 @@ const SubjectContainer = () => {
     }
   };
 
+  const LoadAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const aiReponse = service
+        .loadAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+        .then((res: any) => {
+          return res?.data || "";
+        });
+
+      return aiReponse;
+    } catch (error: any) {
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
   const fetchAllAttributesData = async () => {
+    const ignoreIds: any = [];
+    const attributesDataPolicyPromises = subjectQueryData?.data?.attributes.map(
+      (attribute: any) =>
+        LoadAttributeData(assessmentId, attribute?.id).then((result) => {
+          if (
+            result?.editable === false &&
+            result?.assessorInsight === null &&
+            result?.aiInsight === null
+          ) {
+            ignoreIds.push(attribute?.id);
+            return;
+          }
+          return {
+            id: attribute?.id,
+            data: result,
+          };
+        })
+    );
+
+    const allAttributesDataPolicy = attributesDataPolicyPromises
+      ? await Promise.all(attributesDataPolicyPromises)
+      : [];
+
+    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
+      (acc, { id, data }) => {
+        acc[id] = data;
+        return acc;
+      },
+      {}
+    );
+
+    setAttributesDataPolicy(attributesDataPolicyObject);
+
     const attributesDataPromises = subjectQueryData?.data?.attributes.map(
       (attribute: any) =>
-        FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
-          id: attribute?.id,
-          data: result,
-        }))
+        FetchAttributeData(assessmentId, attribute?.id).then((result) => {
+          if (ignoreIds.includes(attribute?.id)) return;
+          return {
+            id: attribute?.id,
+            data: result,
+          };
+        })
     );
 
     const allAttributesData = attributesDataPromises
@@ -95,26 +153,46 @@ const SubjectContainer = () => {
   const updateAttributeAndData = async (
     attributeId: TId,
     assessmentId: string,
-    newAttributeData: any
+    newAttributeData: any,
+    regenerate: boolean
   ) => {
     const currentData = attributesData[attributeId];
     if (currentData === newAttributeData) {
       return;
     }
 
-    const response = await service.updateAIReport(
-      {
-        assessmentId,
-        attributeId,
-        data: { assessorInsight: newAttributeData },
-      },
-      undefined
+    const response = regenerate
+      ? await service.fetchAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+      : await service.updateAIReport(
+          {
+            assessmentId,
+            attributeId,
+            data: { assessorInsight: newAttributeData },
+          },
+          undefined
+        );
+
+    const res = await LoadAttributeData(assessmentId, attributeId).then(
+      (result) => ({
+        id: attributeId,
+        data: result,
+      })
     );
 
     if (response?.data) {
       setAttributesData((prevData: any) => ({
         ...prevData,
-        [attributeId]: newAttributeData,
+        [attributeId]: regenerate ? response?.data?.content : newAttributeData,
+      }));
+      setAttributesDataPolicy((prevData: any) => ({
+        ...prevData,
+        [attributeId]: res?.data,
       }));
     }
     return response;
@@ -223,6 +301,7 @@ const SubjectContainer = () => {
                   <SubjectAttributeList
                     {...subjectQueryData}
                     attributesData={attributesData}
+                    attributesDataPolicy={attributesDataPolicy}
                     updateAttributeAndData={updateAttributeAndData}
                     loading={loading}
                   />
