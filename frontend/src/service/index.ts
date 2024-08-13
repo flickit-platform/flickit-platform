@@ -325,6 +325,15 @@ export const createService = (
         }
       );
     },
+    loadAIReport(
+      { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`,
+        config
+      );
+    },
     fetchAIReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined
@@ -1143,6 +1152,15 @@ export const createService = (
           page,
           size,
         },
+      });
+    },
+    loadEvidences(
+      args: { evidenceID: TId },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { evidenceID } = args ?? {};
+      return axios.get(`/api/v1/evidences/${evidenceID}/`, {
+        ...(config ?? {}),
       });
     },
     fetchEvidenceAttachments(

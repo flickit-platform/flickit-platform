@@ -25,7 +25,12 @@ import firstCharDetector from "@/utils/firstCharDetector";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { toast } from "react-toastify";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+} from "@mui/material";
 import {
   CancelRounded,
   CheckCircleOutlineRounded,
@@ -43,7 +48,10 @@ const SUbjectAttributeCard = (props: any) => {
     id,
     attributesData,
     updateAttributeAndData,
+    attributesDataPolicy,
+    editable,
   } = props;
+  const { assessmentId } = useParams();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
     false
@@ -90,7 +98,7 @@ const SUbjectAttributeCard = (props: any) => {
           onClick={(event) => event.stopPropagation()}
         >
           <Grid container spacing={2}>
-            <Grid item md={11} xs={12}>
+            <Grid item md={12} xs={12}>
               <Box mb={1}>
                 <Title
                   textTransform={"uppercase"}
@@ -152,49 +160,92 @@ const SUbjectAttributeCard = (props: any) => {
                 </Typography>
               </Box>
               <Box
-                mt={0.6}
+                mt={1.5}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
                 onClick={(event) => {
                   event.stopPropagation();
                 }}
               >
-                {attributesData[id?.toString()] ? <OnHoverInput
-                  attributeId={id}
-                  // formMethods={formMethods}
-                  data={attributesData[id?.toString()]}
-                  title={<Trans i18nKey="insight" />}
-                  infoQuery={updateAttributeAndData}
-                  type="summary"
-                  editable={true}
-                /> :
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="4px"
+                <Box
+                  sx={{
+                    zIndex: 1,
+                    display: attributesDataPolicy[id?.toString()]?.aiInsight || (attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
+                      "isValid"
+                    ) &&
+                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid)
+                      ? "flex"
+                      : "none",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Typography
+                    variant="labelSmall"
+                    sx={{
+                      backgroundColor: "#D81E5B",
+                      color: "white",
+                      padding: "0.35rem 0.35rem",
+                      borderRadius: "4px",
+                      fontWeight: "bold",
+                    }}
                   >
-                    <Typography
-                      variant="titleMedium"
-                    >
-                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to={`./../../questionnaires?subject_pk=${id}`}
-                      color="#2D80D2"
-                      variant="titleMedium"
-                      sx={{
-                        textDecoration: "none",
-                      }}
-                    >
-                      questions
-                    </Typography>
-                    <Typography
-                      variant="titleMedium"
-                    >
-                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
-                    </Typography>
-                  </Box>}
+                    {(attributesDataPolicy[id?.toString()]?.assessorInsight?.hasOwnProperty(
+                      "isValid"
+                    ) &&
+                      !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid) ? <Trans i18nKey="outdated" /> : <Trans i18nKey="AIGenerated" />}
 
+                  </Typography>
+                </Box>
+
+                {attributesData[id?.toString()] ? (
+                  <OnHoverInput
+                    attributeId={id}
+                    // formMethods={formMethods}
+                    data={attributesData[id?.toString()]}
+                    title={<Trans i18nKey="insight" />}
+                    infoQuery={updateAttributeAndData}
+                    type="summary"
+                    editable={attributesDataPolicy[id?.toString()]?.editable}
+                  />
+                ) : (
+                  editable && (
+                    <Box display="flex" alignItems="center" gap="4px">
+                      <Typography variant="titleMedium">
+                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
+                      </Typography>
+                      <Typography
+                        component={Link}
+                        to={`./../../questionnaires?subject_pk=${id}`}
+                        color="#2D80D2"
+                        variant="titleMedium"
+                        sx={{
+                          textDecoration: "none",
+                        }}
+                      >
+                        questions
+                      </Typography>
+                      <Typography variant="titleMedium">
+                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                      </Typography>
+                    </Box>
+                  )
+                )}
+                {attributesDataPolicy[id?.toString()]?.assessorInsight &&
+                  !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid && (
+                    <Box sx={{ ...styles.centerV }} gap={2}>
+                      <Typography variant="displaySmall">
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() =>
+                          updateAttributeAndData(id, assessmentId, "", true)
+                        }
+                      >
+                        <Trans i18nKey="regenerate" />
+                      </Button>
+                    </Box>
+                  )}
               </Box>
             </Grid>
           </Grid>

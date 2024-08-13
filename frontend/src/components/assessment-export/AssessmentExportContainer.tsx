@@ -129,6 +129,36 @@ const AssessmentExportContainer = () => {
     }
   };
 
+  const LoadAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const aiReponse = service
+        .loadAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+        .then((res: any) => {
+          return res?.data || "";
+        });
+
+      return aiReponse;
+    } catch (error: any) {
+      setErrorObject(error?.response?.data);
+      if (error?.response?.data?.code == "CALCULATE_NOT_VALID") {
+        await calculateMaturityLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      if (error?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+        await calculateConfidenceLevelQuery.query();
+        fetchAllAttributesData();
+      }
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const hash = window?.location?.hash?.substring(1);
     if (hash) {
@@ -163,30 +193,102 @@ const AssessmentExportContainer = () => {
   const [showSpinner, setShowSpinner] = useState(true);
 
   const [attributesData, setAttributesData] = useState<any>({});
+  const [editable, setEditable] = useState<any>(true);
+  const [ignoreIds, setIgnoreIds] = useState<any>([]);
+  const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
-  const fetchAllAttributesData = async () => {
-    const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
-      (subject: any) =>
-        subject?.attributes?.map((attribute: any) =>
-          FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
-            id: attribute?.id,
-            data: result,
-          }))
-        )
+  const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
+    try {
+      const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+        subject?.attributes
+          ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
+          .map(async (attribute: any) => {
+            try {
+              const result = await FetchAttributeData(assessmentId, attribute?.id);
+              return {
+                id: attribute?.id,
+                data: result,
+              };
+            } catch (error) {
+              console.error(`Failed to fetch data for attribute ${attribute?.id}:`, error);
+              return null;
+            }
+          })
+      );
+      const allAttributesData = attributesDataPromises.length ? await Promise.all(attributesDataPromises) : [];
+
+
+      const attributesDataObject = allAttributesData?.reduce(
+        (acc, { id, data }) => {
+          acc[id] = data;
+          return acc;
+        },
+        {}
+      );
+      setAttributesData((prevData: any) => ({
+        ...prevData,
+        ...attributesDataObject
+      }));
+    } catch (error) {
+      console.error('Error fetching all attributes data:', error);
+    }
+  };
+
+  const loadAllAttributesData = async () => {
+    const newIgnoreIds: any[] = [];
+
+    const attributesDataPolicyPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+      subject?.attributes?.map(async (attribute: any) => {
+        const result = await LoadAttributeData(assessmentId, attribute?.id);
+
+        if (!result.editable) {
+          setEditable(false);
+        }
+
+        const shouldIgnore = !result.editable && result?.assessorInsight === null && result?.aiInsight === null;
+        if (shouldIgnore) {
+          newIgnoreIds.push(attribute?.id);
+          return null;
+        }
+
+        if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.aiInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        if (result?.assessorInsight?.insight) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.assessorInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        return {
+          id: attribute?.id,
+          data: result,
+        };
+      })
     );
 
-    const allAttributesData = attributesDataPromises
-      ? await Promise.all(attributesDataPromises)
-      : [];
+    const allAttributesDataPolicy = attributesDataPolicyPromises ? await Promise.all(attributesDataPolicyPromises) : [];
 
-    const attributesDataObject = allAttributesData?.reduce(
+    // Process the fetched data
+    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
       (acc, { id, data }) => {
         acc[id] = data;
         return acc;
       },
       {}
     );
-    setAttributesData(attributesDataObject);
+
+    // Update states in one go
+    setIgnoreIds(newIgnoreIds);
+    setAttributesDataPolicy(attributesDataPolicyObject);
+    return newIgnoreIds
   };
 
   useEffect(() => {
@@ -249,8 +351,15 @@ const AssessmentExportContainer = () => {
         }, [assessment]);
 
         useEffect(() => {
-          if (questionsCount === answersCount) {
-            fetchAllAttributesData();
+          const loadAndFetchData = async () => {
+            const ignoreIds = await loadAllAttributesData();
+            if (questionsCount === answersCount && editable) {
+              await fetchAllAttributesData(ignoreIds);
+            }
+          };
+
+          if (AssessmentReport?.data && assessmentId) {
+            loadAndFetchData();
           }
         }, [AssessmentReport?.data, assessmentId]);
 
@@ -961,32 +1070,8 @@ const AssessmentExportContainer = () => {
                               <Box
                                 display="flex"
                                 flexDirection="column"
-                                gap={2}
+                                gap={0.5}
                               >
-                                <Box
-                                  sx={{
-                                    position: "absolute",
-                                    top: 0,
-                                    right: 0,
-                                    backgroundColor: "#D81E5B",
-                                    color: "white",
-                                    padding: "0.15rem 0.35rem",
-                                    borderRadius: "4px",
-                                    fontWeight: "bold",
-                                    zIndex: 1,
-                                    display: attributesData[
-                                      attribute?.id?.toString()
-                                    ]
-                                      ? "inline-block"
-                                      : "none",
-                                    whiteSpace: "nowrap",
-                                  }}
-                                >
-                                  <Typography variant="labelSmall">
-                                    <Trans i18nKey="AIGenerated" />
-                                  </Typography>
-                                </Box>
-
                                 <AttributeStatusBarContainer
                                   status={attribute?.maturityLevel?.title}
                                   ml={attribute?.maturityLevel?.value}
@@ -996,28 +1081,70 @@ const AssessmentExportContainer = () => {
                                   mn={assessmentKit?.maturityLevelCount ?? 5}
                                   document
                                 />
-                                {attributesData[attribute?.id?.toString()] ?
+                                <Box
+                                  sx={{
+                                    zIndex: 1,
+                                    display: attributesDataPolicy[
+                                      attribute?.id?.toString()
+                                    ]?.aiInsight
+                                      ? "flex"
+                                      : "none",
+                                    justifyContent: "flex-start",
+                                  }}
+                                >
+                                  <Typography
+                                    variant="labelSmall"
+                                    sx={{
+                                      backgroundColor: "#D81E5B",
+                                      color: "white",
+                                      padding: "0.35rem 0.35rem",
+                                      borderRadius: "4px",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    <Trans i18nKey="AIGenerated" />
+                                  </Typography>
+                                </Box>
+
+                                {attributesData[attribute?.id?.toString()] ? (
                                   <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}
-                                  </Typography> :
-                                  <Typography variant="titleMedium" fontWeight={400} color="#243342">
-                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
-                                    <Box
-                                      component={RouterLink}
-                                      to={`./../questionnaires?subject_pk=${subject?.id}`}
-                                      sx={{
-                                        textDecoration: "none",
-                                        color: "#2D80D2"
-                                      }}
+                                  </Typography>
+                                ) : (
+                                  editable && (
+                                    <Typography
+                                      variant="titleMedium"
+                                      fontWeight={400}
+                                      color="#243342"
                                     >
-                                      <Typography variant="titleMedium">
-                                        questions
-                                      </Typography>
-                                    </Box>{" "}
-                                    <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />.
-                                  </Typography>}
-
-
+                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
+                                      <Box
+                                        component={RouterLink}
+                                        to={`./../questionnaires?subject_pk=${subject?.id}`}
+                                        sx={{
+                                          textDecoration: "none",
+                                          color: "#2D80D2",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          questions
+                                        </Typography>
+                                      </Box>{" "}
+                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                                      .
+                                    </Typography>
+                                  )
+                                )}
+                                {attributesDataPolicy[
+                                  attribute?.id?.toString()
+                                ]?.hasOwnProperty("isValid") &&
+                                  !attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.isValid && (
+                                    <Typography variant="displaySmall">
+                                      <Trans i18nKey="invalidInsight" />
+                                    </Typography>
+                                  )}
                               </Box>
                             </TableCell>
                           </TableRow>

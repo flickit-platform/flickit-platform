@@ -46,7 +46,9 @@ const SubjectContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
+  const [editable, setEditable] = useState<any>(true);
   const [attributesData, setAttributesData] = useState<any>({});
+  const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
   const FetchAttributeData = async (assessmentId: string, attributeId: TId) => {
     try {
@@ -69,16 +71,44 @@ const SubjectContainer = () => {
     }
   };
 
-  const fetchAllAttributesData = async () => {
-    const attributesDataPromises = subjectQueryData?.data?.attributes.map(
-      (attribute: any) =>
-        FetchAttributeData(assessmentId, attribute?.id).then((result) => ({
-          id: attribute?.id,
-          data: result,
-        }))
-    );
+  const LoadAttributeData = async (assessmentId: string, attributeId: TId) => {
+    try {
+      const aiReponse = service
+        .loadAIReport(
+          {
+            assessmentId,
+            attributeId,
+          },
+          undefined
+        )
+        .then((res: any) => {
+          return res?.data || "";
+        });
 
-    const allAttributesData = attributesDataPromises
+      return aiReponse;
+    } catch (error: any) {
+      console.error(`Error fetching data for attribute ${attributeId}:`, error);
+      return null;
+    }
+  };
+
+  const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
+    const attributesDataPromises = subjectQueryData?.data?.attributes
+      ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
+      .map(async (attribute: any) => {
+        try {
+          const result = await FetchAttributeData(assessmentId, attribute?.id);
+          return {
+            id: attribute?.id,
+            data: result,
+          };
+        } catch (error) {
+          console.error(`Failed to fetch data for attribute ${attribute?.id}:`, error);
+          return null;
+        }
+      });
+
+    const allAttributesData = attributesDataPromises.length
       ? await Promise.all(attributesDataPromises)
       : [];
 
@@ -89,32 +119,112 @@ const SubjectContainer = () => {
       },
       {}
     );
-    setAttributesData(attributesDataObject);
+
+    setAttributesData((prevData: any) => ({
+      ...prevData,
+      ...attributesDataObject
+    }));
+  };
+  const [ignoreIds, setIgnoreIds] = useState<any>([]);
+
+  const loadAllAttributesData = async () => {
+    const newIgnoreIds: any[] = [];
+
+    const attributesDataPolicyPromises = subjectQueryData?.data?.attributes.map(
+      async (attribute: any) => {
+        const result = await LoadAttributeData(assessmentId, attribute?.id);
+
+        if (!result.editable) {
+          setEditable(false);
+        }
+
+        const shouldIgnore = !result.editable && result?.assessorInsight === null && result?.aiInsight === null;
+        if (shouldIgnore) {
+          newIgnoreIds.push(attribute?.id);
+          return null;
+        }
+
+        if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.aiInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
+        if (result?.assessorInsight?.insight) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.assessorInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+        return {
+          id: attribute?.id,
+          data: result,
+        };
+      }
+    );
+
+    const allAttributesDataPolicy = attributesDataPolicyPromises
+      ? await Promise.all(attributesDataPolicyPromises)
+      : [];
+
+    const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
+      (acc, { id, data }) => {
+        acc[id] = data;
+        return acc;
+      },
+      {}
+    );
+    setAttributesDataPolicy(attributesDataPolicyObject);
+    return newIgnoreIds
+
   };
 
   const updateAttributeAndData = async (
     attributeId: TId,
     assessmentId: string,
-    newAttributeData: any
+    newAttributeData: any,
+    regenerate: boolean
   ) => {
     const currentData = attributesData[attributeId];
     if (currentData === newAttributeData) {
       return;
     }
 
-    const response = await service.updateAIReport(
-      {
-        assessmentId,
-        attributeId,
-        data: { assessorInsight: newAttributeData },
-      },
-      undefined
+    const response = regenerate
+      ? await service.fetchAIReport(
+        {
+          assessmentId,
+          attributeId,
+        },
+        undefined
+      )
+      : await service.updateAIReport(
+        {
+          assessmentId,
+          attributeId,
+          data: { assessorInsight: newAttributeData },
+        },
+        undefined
+      );
+
+    const res = await LoadAttributeData(assessmentId, attributeId).then(
+      (result) => ({
+        id: attributeId,
+        data: result,
+      })
     );
 
-    if (response?.data) {
+    if (response?.status === 200) {
       setAttributesData((prevData: any) => ({
         ...prevData,
-        [attributeId]: newAttributeData,
+        [attributeId]: regenerate ? response?.data?.content : newAttributeData,
+      }));
+      setAttributesDataPolicy((prevData: any) => ({
+        ...prevData,
+        [attributeId]: res?.data,
       }));
     }
     return response;
@@ -145,8 +255,14 @@ const SubjectContainer = () => {
 
         const attributesNumber = attributes.length;
         useEffect(() => {
-          if (progress === 100) {
-            fetchAllAttributesData();
+          const loadAndFetchData = async () => {
+            const ignoreIds = await loadAllAttributesData();
+            if (progress === 100) {
+              await fetchAllAttributesData(ignoreIds);
+            }
+          }
+          if (subjectQueryData?.data && assessmentId) {
+            loadAndFetchData();
           }
         }, [subjectQueryData?.data]);
         return (
@@ -223,8 +339,10 @@ const SubjectContainer = () => {
                   <SubjectAttributeList
                     {...subjectQueryData}
                     attributesData={attributesData}
+                    attributesDataPolicy={attributesDataPolicy}
                     updateAttributeAndData={updateAttributeAndData}
                     loading={loading}
+                    editable={editable}
                   />
                 </Box>
               </Box>
@@ -278,7 +396,7 @@ const useSubject = () => {
       await calculateConfidenceLevelQuery.query();
       await subjectQueryData.query({ subjectId, assessmentId });
       await subjectProgressQueryData.query({ subjectId, assessmentId });
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (
