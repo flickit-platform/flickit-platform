@@ -218,9 +218,10 @@ export const AssessmentSettingMemberBox = (props: {
   listOfUser: any[];
   fetchAssessmentsUserListRoles: () => void;
   openModal: () => void;
-  openRemoveModal: (id: string, name: string) => void;
+  openRemoveModal: (id: string, name: string, invited?: boolean) => void;
   setChangeData?: any;
   changeData?: any;
+  inviteesMemberList: any
 }) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -232,12 +233,8 @@ export const AssessmentSettingMemberBox = (props: {
     openModal,
     openRemoveModal,
     changeData,
+    inviteesMemberList
   } = props;
-
-  const inviteesMemberList = useQuery({
-    service: (args, config) =>
-      service.fetchAssessmentMembersInvitees({ assessmentId }, config),
-  });
 
   useEffect(() => {
     inviteesMemberList.query();
@@ -258,6 +255,11 @@ export const AssessmentSettingMemberBox = (props: {
   const editUserRole = useQuery({
     service: (args, config) =>
       service.editUserRole({ assessmentId, ...args }, config),
+    runOnMount: false,
+  });
+  const editUserRoleInvited = useQuery({
+    service: (args, config) =>
+      service.editUserRoleInvited(args , config),
     runOnMount: false,
   });
 
@@ -303,6 +305,21 @@ export const AssessmentSettingMemberBox = (props: {
       const { id: roleId } = value;
       const { id: userId } = name;
       await editUserRole.query({ userId, roleId });
+      setChangeData((prev: boolean) => !prev);
+      // await fetchAssessmentsUserListRoles()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+  const handleChangeInvitedUser = async (event: any) => {
+    try {
+      const {
+        target: { value, name },
+      } = event;
+      const { id: roleId } = value;
+      const { id } = name;
+      await editUserRoleInvited.query({ id, roleId });
       setChangeData((prev: boolean) => !prev);
       // await fetchAssessmentsUserListRoles()
     } catch (e) {
@@ -875,7 +892,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     labelId="demo-multiple-name-label"
                                     id="demo-multiple-name"
                                     value={row?.role?.title}
-                                    onChange={handleChange}
+                                    onChange={handleChangeInvitedUser}
                                     name={row}
                                     MenuProps={MenuProps}
                                     sx={{
@@ -913,7 +930,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                    disabled={!row.editable}
+                                    // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -1011,12 +1028,6 @@ export const AssessmentSettingMemberBox = (props: {
                                   </Select>
                                 </Grid>
                               </FormControl>
-                              {/* <Tooltip
-                              disableHoverListener={row.editable}
-                              title={
-                                <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
-                              }
-                            >
                               <Box
                                 width="30%"
                                 display="flex"
@@ -1026,15 +1037,12 @@ export const AssessmentSettingMemberBox = (props: {
                                 <IconButton
                                   sx={{ "&:hover": { color: "#d32f2f" } }}
                                   size="small"
-                                  disabled={!row.editable}
-                                  onClick={() =>
-                                    openRemoveModal(row.displayName, row.id)
-                                  }
+                                  // disabled={!row.editable}
+                                  onClick={() => openRemoveModal(row.email , row.id,true)}
                                 >
                                   <DeleteRoundedIcon />
                                 </IconButton>{" "}
                               </Box>
-                            </Tooltip> */}
                             </Box>
                           </TableCell>
                         </TableRow>
