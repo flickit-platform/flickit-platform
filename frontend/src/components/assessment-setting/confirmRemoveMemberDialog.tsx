@@ -25,7 +25,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
     });
 
     const RemoveMembersInvitees = useQuery({
-        service: (args : {invitedId : string} , config) =>
+        service: (args : any, config) =>
             service.RemoveAssessmentMembersInvitees(args, config),
     });
 
