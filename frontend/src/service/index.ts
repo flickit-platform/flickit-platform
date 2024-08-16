@@ -296,7 +296,7 @@ export const createService = (
       );
     },
       editUserRoleInvited(
-      args: { id : string, roleId : number } | any,
+      args: { id : string, roleId : number },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args;
