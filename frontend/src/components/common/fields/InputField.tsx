@@ -11,6 +11,8 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
+import {customFontFamily, primaryFontFamily, theme} from "@/config/theme";
+import {evidenceAttachmentInput} from "@utils/enumType";
 
 const InputField = () => {
   return <TextField />;
@@ -26,6 +28,8 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   setValueCount?: any,
   hasCounter?: boolean,
   isFarsi?: boolean,
+  isEditing?: boolean,
+  valueCount?: string,
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -43,6 +47,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     setValueCount,
     hasCounter,
     isFarsi,
+    isEditing,
+    valueCount,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -53,7 +59,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
   const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
   useEffect(() => {
-    if (isFocused && inputRef.current) {
+    if (isFocused && inputRef?.current) {
       inputRef?.current?.focus(); // Focus the input if isFocused prop is true
     }
   }, [isFocused]);
@@ -62,16 +68,20 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
       inputRef?.current?.focus();
     }
-  }, [inputRef.current?.value]);
+    if(inputRef.current && !isFocused){
+      inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
+      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
+    }
+  }, [inputRef.current?.value,isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
      setValueCount(event.target.value)
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
-      event.target.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      event.target.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
     }
     if (type === "password" && inputRef.current) {
       inputRef?.current?.focus();
@@ -89,7 +99,9 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
+        "& ::placeholder" : {fontFamily: primaryFontFamily} ,
         background: pallet?.background,
+        borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderColor: pallet?.borderColor,
@@ -101,6 +113,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
+          paddingTop: isEditing && name ==  "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
+          paddingBottom: name ==  "evidence" ?  evidenceAttachmentInput.paddingBottom  :  ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
@@ -121,10 +135,10 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
               ),
             }
           : {  style:hasCounter ? isFarsi ? {
-                paddingLeft: 90,
-                minHeight: "110px"
+                paddingLeft: 60,
+                minHeight: "110px",
               }:{
-                paddingRight: 90,
+                paddingRight: 60,
                 minHeight: "110px"
               } : {} }
       }

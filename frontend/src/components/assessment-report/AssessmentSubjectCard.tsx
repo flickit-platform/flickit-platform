@@ -1,24 +1,41 @@
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import BgLines1 from "@assets/svg/bgLines1.svg";
-import SubjectProgress from "@common/progress/SubjectProgress";
+import React, { useState, useEffect } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Divider,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { Button } from "@mui/material";
-import { getMaturityLevelColors, styles } from "@styles";
-import { ISubjectInfo, IMaturityLevel, TId } from "@types";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
-import StartRoundedIcon from "@mui/icons-material/StartRounded";
+import toastError from "@utils/toastError";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useEffect, useState } from "react";
-import toastError from "@utils/toastError";
-import { ICustomError } from "@utils/CustomError";
+import { Gauge } from "../common/charts/Gauge";
+import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+import { getMaturityLevelColors, styles } from "@styles";
+import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
+import { ICustomError } from "@/utils/CustomError";
+import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
+import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
+import { t } from "i18next";
+
 interface IAssessmentSubjectCardProps extends ISubjectInfo {
   colorCode: string;
   maturity_level?: IMaturityLevel;
+  confidenceValue?: number;
+  attributes?: any;
+  maturityLevelCount?: number;
 }
+
 interface IAssessmentSubjectProgress {
   id: TId;
   title: string;
@@ -26,200 +43,357 @@ interface IAssessmentSubjectProgress {
   answerCount: number;
 }
 
-export const AssessmentSubjectCard = (props: IAssessmentSubjectCardProps) => {
-  const { title, maturityLevel, id, colorCode, description = "" } = props;
+export const AssessmentSubjectAccordion = (
+  props: IAssessmentSubjectCardProps
+) => {
+  const {
+    title,
+    maturityLevel,
+    maturityLevelCount,
+    confidenceValue,
+    id,
+    colorCode,
+    attributes,
+    description = "",
+  } = props;
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [progress, setProgress] = useState<number>(0);
-  const [inProgress, setInProgress] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [subjectAttributes, setSubjectAttributes] = useState<any>([]);
+  const isMobileScreen = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("md")
+  );
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
       service.fetchSubjectProgress(args, config),
     runOnMount: false,
   });
+
   const fetchProgress = async () => {
     try {
-      setInProgress(true);
       const data = await subjectProgressQueryData.query();
       const { answerCount, questionCount } = data;
       const total_progress = ((answerCount ?? 0) / (questionCount ?? 1)) * 100;
       setProgress(total_progress);
-      setInProgress(false);
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err.response.data.message);
+      toastError(err);
     }
   };
+
   useEffect(() => {
     fetchProgress();
+    fetchAttributes();
   }, []);
-  function hexToRGBA(hex: string, alpha: number) {
-    // Remove the '#' if it's there
-    hex = hex.replace(/^#/, "");
 
-    // Parse the hex value to separate R, G, and B values
-    let bigint = parseInt(hex, 16);
-    let r = (bigint >> 16) & 255;
-    let g = (bigint >> 8) & 255;
-    let b = bigint & 255;
+  const fetchAttributes = async () => {
+    setSubjectAttributes(attributes);
+  };
 
-    // Return the RGBA value
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
+  const theme = useTheme();
+
+  const handleAccordionChange = (
+    event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
+    setExpanded(isExpanded);
+    if (isExpanded) {
+      fetchAttributes();
+    }
+  };
+
   return (
-    <Paper
+    <Accordion
+      expanded={expanded}
+      onChange={handleAccordionChange}
       sx={{
-        borderRadius: 3,
-        backgroundColor: hexToRGBA(colorCode, 0.1),
-        backgroundImage: `url(${BgLines1})`,
-        backgroundPosition: "30% 30%",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        borderRadius: "32px !important",
+        boxShadow: "0px 0px 8px 0px rgba(10, 35, 66, 0.25)",
         transition: "background-position .4s ease",
-        "&:hover": {
-          backgroundPosition: "0% 0%",
-        },
-        height: "100%",
         position: "relative",
       }}
-      elevation={2}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
         sx={{
+          borderTopLeftRadius: "32px !important",
+          borderTopRightRadius: "32px !important",
           textAlign: "center",
-          color: "#000000de",
-          px: { xs: 2, sm: 5 },
-          py: { xs: 3, sm: 5 },
-          height: "100%",
+          paddingBottom: 2,
+          backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
+          "& .MuiAccordionSummary-content": {
+            maxHeight: { md: "160px", lg: "160px" },
+            paddingLeft: { md: "1rem", lg: "1rem" },
+          },
         }}
       >
-        <Typography
-          variant="h4"
-          textTransform={"uppercase"}
-          letterSpacing={".13em"}
-          fontFamily="Oswald"
-          fontWeight={500}
-        >
-          {title}
-        </Typography>
-        <ReadMoreAboutSubject
-          colorCode={colorCode}
-          title={title}
-          description={description}
-        />
+        <Grid container alignItems="center">
+          <Grid
+            item
+            xs={12}
+            lg={description ? 2.4 : 3.4}
+            md={description ? 2.4 : 3.4}
+            sm={12}
+          >
+            <Box
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                textAlign: "center",
+                width: "100%",
+              }}
+            >
+              <Typography
+                color="#243342"
+                sx={{
+                  textTransform: "none",
+                  whiteSpace: "pre-wrap",
+                }}
+                variant="headlineMedium"
+              >
+                {title}
+              </Typography>
+            </Box>
+          </Grid>
 
-        <SubjectProgress inProgress={inProgress} progress={progress} />
+          {!isMobileScreen && (
+            <Grid
+              item
+              xs={12}
+              lg={description ? 5 : 4}
+              md={description ? 5 : 4}
+              sm={12}
+            >
+              <Box
+                sx={{
+                  maxHeight: "100px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  textAlign: "start",
+                  width: "100%",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                <Typography
+                  variant="titleMedium"
+                  fontWeight={400}
+                  color="#243342"
+                  sx={{ textTransform: "none", whiteSpace: "break-spaces" }}
+                >
+                  {description}
+                </Typography>
+              </Box>
+            </Grid>
+          )}
 
-        <SubjectStatus title={title} maturity_level={maturityLevel} />
+          {isMobileScreen && (
+            <Grid item xs={12} lg={2} md={2} sm={12}>
+              <SubjectStatus title={title} maturity_level={maturityLevel} />
+            </Grid>
+          )}
+          <Grid item xs={0} lg={0.2} md={0.2} sm={0}></Grid>
+          <Grid item xs={12} lg={1.7} md={1.7} sm={12}>
+            <Box
+              sx={{
+                ...styles.centerCVH,
+                gap: 2,
+                width: "100%",
+                mt: { xs: "-52px", sm: "-52px", md: "0" },
+              }}
+            >
+              <Typography variant="titleMedium" color="#243342">
+                <Trans i18nKey="withPercentConfidence" />
+              </Typography>
+              <ConfidenceLevel
+                inputNumber={confidenceValue}
+                displayNumber
+                variant="titleLarge"
+              />
+            </Box>
+          </Grid>
+          {!isMobileScreen && (
+            <Grid item xs={6} lg={2.7} md={2.7} sm={12}>
+              <SubjectStatus
+                title={title}
+                maturity_level={maturityLevel}
+                maturityLevelCount={maturityLevelCount}
+              />
+            </Grid>
+          )}
+          <Grid item xs={12} lg={12} md={12} sm={12} mb={2}>
+            <Typography variant="titleMedium" fontWeight={400}>
+              <Trans
+                i18nKey="subjectAccordionDetails"
+                values={{
+                  attributes: subjectAttributes.length,
+                  subjects: title,
+                }}
+              />
+            </Typography>
+          </Grid>
+        </Grid>
+      </AccordionSummary>
+      <AccordionDetails sx={{ padding: 0 }}>
+        <Grid container alignItems="center" padding={4}>
+          <Grid item xs={12} sm={12} md={12} lg={6.5}>
+            <Box
+              sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+              height={subjectAttributes.length > 2 ? "400px" : "300px"}
+            >
+              {subjectAttributes.length > 2 ? (
+                <AssessmentSubjectRadarChart
+                  data={subjectAttributes}
+                  maturityLevelsCount={maturityLevelCount ?? 5}
+                  loading={false}
+                />
+              ) : (
+                <AssessmentSubjectRadialChart
+                  data={subjectAttributes}
+                  maturityLevelsCount={maturityLevelCount ?? 5}
+                  loading={false}
+                />
+              )}
+            </Box>
+          </Grid>
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ marginInline: { lg: 4 }, marginBlock: { lg: 10 } }}
+          />
+
+          <Grid item xs={12} sm={12} md={12} lg={4.6}>
+            <Box display="flex" flexDirection="column">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                width="100%"
+                px="2rem"
+                marginBottom="10px"
+              >
+                <Typography variant="titleMedium" color="#73808C">
+                  Attribute
+                </Typography>
+                <Typography variant="titleMedium" color="#73808C">
+                  Status
+                </Typography>
+              </Box>
+              <Divider sx={{ width: "100%" }} />
+              <Box
+                maxHeight="400px"
+                overflow="auto"
+                gap="1.875rem"
+                paddingTop="1.875rem"
+                display="flex"
+                flexDirection="column"
+                paddingRight={2}
+                justifyContent="flex-start"
+              >
+                {subjectAttributes.map((element: any) => {
+                  return (
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      gap={1}
+                      key={element.id}
+                    >
+                      <Typography variant="titleMedium" color="#243342">
+                        {element.title}
+                      </Typography>
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <Typography
+                          sx={{
+                            color:
+                              getMaturityLevelColors(5)[
+                                element.maturityLevel.value - 1
+                              ],
+                          }}
+                          variant="titleMedium"
+                        >
+                          {element.maturityLevel.title}
+                        </Typography>
+                        <ConfidenceLevel
+                          inputNumber={element.confidenceValue}
+                        />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
         <Box mt="auto">
           <Button
-            variant="contained"
+            color="success"
+            variant="outlined"
             size="large"
             fullWidth
             component={Link}
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
-            startIcon={
-              progress === 0 ? <StartRoundedIcon /> : <QueryStatsRoundedIcon />
-            }
+            sx={{
+              borderRadius: 0,
+              borderBottomRightRadius: "32px",
+              borderBottomLeftRadius: "32px",
+              padding: 2,
+              textTransform: "none",
+              backgroundColor: "#D0E4FF",
+              borderColor: "#D0E4FF",
+              color: "#00365C",
+              "&:hover": {
+                backgroundColor: "#D0E4FF",
+                borderColor: "#D0E4FF",
+              },
+              ...theme.typography.headlineMedium,
+            }}
           >
-            <Trans i18nKey={"viewInsights"} />
+            <Trans i18nKey={"checkMoreDetails"} />
           </Button>
         </Box>
-      </Box>
-    </Paper>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
 const SubjectStatus = (
-  props: Pick<IAssessmentSubjectCardProps, "title" | "maturity_level">
-) => {
-  const { title, maturity_level } = props;
-  const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
-  const hasStats = maturity_level?.index ? true : false;
-  return (
-    <Box mt={8} mb={16} sx={{ ...styles.centerCH }} minHeight={"80px"}>
-      {
-        <>
-          <Typography textAlign={"center"}>
-            <Trans i18nKey="subjectStatusIs" values={{ title }} />{" "}
-            {hasStats && <Trans i18nKey="evaluatedAs" />}
-          </Typography>
-          <Typography
-            variant={hasStats ? "h3" : "h4"}
-            letterSpacing=".17em"
-            sx={{
-              fontWeight: "500",
-              borderBottom: colorPallet
-                ? `3px solid ${colorPallet}`
-                : undefined,
-              pl: 1,
-              pr: 1,
-            }}
-          >
-            {maturity_level?.title ? (
-              maturity_level?.title
-            ) : (
-              <Trans i18nKey="notEvaluated" />
-            )}
-          </Typography>
-        </>
-      }
-    </Box>
-  );
-};
-
-const ReadMoreAboutSubject = (
   props: Pick<
     IAssessmentSubjectCardProps,
-    "title" | "colorCode" | "description"
+    "title" | "maturity_level" | "maturityLevelCount"
   >
 ) => {
-  const { title, description } = props;
+  const { title, maturity_level, maturityLevelCount } = props;
+  const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
+  const hasStats = maturity_level?.index ? true : false;
+  const isMobileScreen = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("md")
+  );
   return (
     <Box
       sx={{
-        "&:hover .subj_desc": description && {
-          opacity: 1,
-          zIndex: 2,
-          transition: "opacity .2s .2s ease, z-index .2s .2s ease",
-        },
+        textAlign: "center",
+        marginBottom: isMobileScreen ? "unset" : -3,
       }}
     >
-      <Typography
-        variant="subSmall"
-        sx={{
-          opacity: 0.7,
-          letterSpacing: ".14em",
-          color: "#000000de",
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}
-        fontFamily="Roboto"
-      >
-        <Trans i18nKey="readAbout" /> {title}
-      </Typography>
-      <Box
-        className="subj_desc"
-        sx={{
-          transition: "opacity .2s .4s ease, z-index .2s .4s ease",
-          backgroundColor: "#000000cc",
-          opacity: 0,
-          zIndex: -1,
-          px: 2,
-          py: 4,
-          borderRadius: 2,
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "calc(100% - 25px)",
-          textAlign: "center",
-          color: "#F4F4F8",
-        }}
-      >
-        <Typography>{description}</Typography>
+      <Box>
+        {hasStats ? (
+          <Gauge
+            maturity_level_number={maturityLevelCount ?? 5}
+            isMobileScreen={isMobileScreen ? false : true}
+            maturity_level_status={maturity_level?.title ?? ""}
+            level_value={maturity_level?.index ?? 0}
+            hideGuidance={true}
+            height={getNumberBaseOnScreen(240, 240, 150, 150, 150)}
+            maturity_status_guide={t("subjectMaturityLevelIs")}
+            maturity_status_guide_variant="titleSmall"
+          />
+        ) : (
+          <Typography>
+            <Trans i18nKey="notEvaluated" />
+          </Typography>
+        )}
       </Box>
     </Box>
   );

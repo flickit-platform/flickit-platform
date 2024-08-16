@@ -14,11 +14,9 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
           p: { xs: 1, sm: 1, md: 4 },
           pt: {
             xs: "84px !important",
-            sm: "112px !important",
             minHeight: "100%",
           },
         }}
-        maxWidth="1440px"
         m="auto"
       >
         <Suspense

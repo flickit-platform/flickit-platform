@@ -9,8 +9,9 @@ export enum ECustomErrorType {
   "NETWORK_CONNECTION" = "NETWORK_CONNECTION",
   "INVALID_TOKEN" = "INVALID_TOKEN",
   "NOT_FOUND" = "NOT_FOUND",
-  "CANCELED" = "CANCELED",
+  "CANCELED" = "ERR_CANCELED",
   "ACCESS_DENIED" = "ACCESS_DENIED",
+  "ERR_BAD_REQUEST" = "ERR_BAD_REQUEST",
 }
 
 export enum ESystemStatus {
@@ -35,8 +36,8 @@ export interface IDefaultModel<T extends any = any> {
 }
 
 export interface IAnswerTemplate {
-  caption: string;
-  value: number;
+  title: string;
+  index: number;
   id: TId;
 }
 
@@ -44,26 +45,73 @@ export type TAnswerTemplates = IAnswerTemplate[];
 export interface IQuestionInfo {
   id: TId;
   index: number;
-  answer: null | TAnswer;
+  answer: TAnswer | null;
   title: string;
   questionResultId?: string | number;
-  answer_options?: TAnswerTemplates;
+  options?: TAnswerTemplates;
   hint?: string;
-  may_not_be_applicable?: boolean;
+  mayNotBeApplicable?: boolean;
   is_not_applicable?: boolean;
   confidence_level?: any;
 }
+
+interface IPermissions {
+  viewAssessment: boolean;
+  viewEvidenceAttachment: boolean;
+  answerQuestion: boolean;
+  viewQuestionnaireQuestions: boolean;
+  deleteEvidenceAttachment: boolean;
+  viewAssessmentUserList: boolean;
+  viewAnswerHistory: boolean;
+  calculateAssessment: boolean;
+  viewAssessmentList: boolean;
+  deleteEvidence: boolean;
+  viewSubjectReport: boolean;
+  addEvidence: boolean;
+  viewAssessmentReport: boolean;
+  deleteAssessment: boolean;
+  updateUserAssessmentRole: boolean;
+  calculateConfidence: boolean;
+  updateAssessment: boolean;
+  grantUserAssessmentRole: boolean;
+  createAdvice: boolean;
+  viewEvidenceList: boolean;
+  viewAssessmentProgress: boolean;
+  deleteUserAssessmentRole: boolean;
+  viewAttributeEvidenceList: boolean;
+  viewAssessmentInviteeList: boolean;
+  viewSubjectProgress: boolean;
+  updateEvidence: boolean;
+  viewAttributeScoreDetail: boolean;
+  viewAssessmentQuestionnaireList: boolean;
+  viewEvidence: boolean;
+  createAssessment: boolean;
+  addEvidenceAttachment: boolean;
+  exportAssessmentReport: boolean;
+}
+
 export type TQuestionsInfo = {
   total_number_of_questions: number;
   resultId: TId | undefined;
   questions: IQuestionInfo[];
+  permissions?: IPermissions;
 };
 
 export type TAnswer = {
-  id: TId;
-  index: string | number;
-  caption: string;
-  evidences: TEvidences;
+  confidenceLevel?: {
+    id: TId;
+    title: string;
+  };
+  isNotApplicable?: boolean;
+  selectedOption?: {
+    id: TId;
+    index: number;
+    title: string;
+  };
+  id?: TId;
+  index?: string | number;
+  caption?: string;
+  evidences?: TEvidences;
 };
 export type TEvidences = {
   created_by_id: TId;
@@ -87,12 +135,12 @@ export type TStatus =
 
 export interface IUserInfo {
   id: TId;
-  display_name: string;
+  displayName: string;
   email: string;
   // current_space: ISpaceInfo | null;
   is_expert?: boolean;
   bio?: string;
-  picture?: null | string;
+  pictureLink?: null | string;
   linkedin?: string | null;
   is_active?: boolean;
   default_space?: any;
@@ -114,7 +162,17 @@ export type TToastConfig = ToastOptions & {
   message: string | JSX.Element;
 };
 
+export interface IAttribute {
+  id: number;
+  title: string;
+  description: string;
+  index: number;
+  confidenceValue: number;
+  maturityLevel: IMaturityLevel;
+}
+
 export interface ISubjectInfo {
+  attributes?: IAttribute[];
   description: string;
   id: TId;
   image: string | null;
@@ -129,7 +187,7 @@ export interface IMaturityLevel {
   id: TId;
   title: string;
   value: number;
-  index?: number;
+  index: number;
 }
 
 export interface IImage {
@@ -156,7 +214,8 @@ export interface IAssessmentKitModel {
 }
 export interface IAssessmentKitList {
   id: TId;
-  maturity_levels_count: number;
+  title?: string;
+  maturityLevelsCount: number;
 }
 
 export interface IAssessmentKit {
@@ -164,7 +223,7 @@ export interface IAssessmentKit {
   description: string;
   id: TId;
   title: string;
-  assessment_kit?: IAssessmentKit;
+  kit?: IAssessmentKit;
 }
 
 export interface IAssessmentResult {
@@ -196,15 +255,18 @@ export interface IOwnerModel {
 export interface ISpaceModel {
   code: string;
   id: TId;
-  owner: IOwnerModel;
+  editable: boolean;
   title: string;
-  last_modification_date?: string;
-  members_number?: number;
-  assessment_numbers?: number;
+  lastModificationTime?: string;
+  membersCount?: number;
+  assessmentsCount?: number;
   is_default_space_for_current_user?: boolean;
 }
 
-export interface ISpacesModel extends IDefaultModel<ISpaceModel> {}
+export interface ISpacesModel extends IDefaultModel<ISpaceModel> {
+  size?: number;
+  total?: number;
+}
 export interface IAssessmentReport {
   assessment_kit: Omit<
     IAssessmentKitModel,
@@ -229,15 +291,6 @@ export interface ITotalProgressModel {
   total_progress: ITotalProgress;
   assessment_project_title: string;
 }
-export interface IAssessmentReportModel {
-  subjects_info: ISubjectInfo[];
-  status: TStatus;
-  most_significant_strength_atts: string[];
-  most_significant_weaknessness_atts: string[];
-  assessment_project: IAssessmentReport;
-  total_progress: ITotalProgress;
-  maturity_level_status: string;
-}
 
 export interface IQuestionnaireModel {
   code: string;
@@ -256,6 +309,8 @@ export interface IQuestion {
 export interface IQuestionsModel {
   items: IQuestion[];
   assessment_result_id: string;
+  permissions: IPermissions;
+  total: number;
 }
 
 export interface IQuestionImpact {
@@ -292,17 +347,18 @@ export interface IQuestionsResultsModel
 
 export interface IAssessment {
   id: TId;
-  last_modification_time: string;
+  lastModificationTime: string;
   status: TStatus;
   title: string;
   // code: string;
   color: IColor;
-  is_calculate_valid: boolean;
-  is_confidence_valid?: boolean;
+  isCalculateValid: boolean;
+  isConfidenceValid?: boolean;
   assessment_results: string[];
-  assessment_kit: IAssessmentKitList;
+  kit: IAssessmentKitList;
   // total_progress?: ITotalProgress;
-  result_maturity_level: IMaturityLevel;
+  maturityLevel: IMaturityLevel;
+  manageable?: boolean;
 }
 
 export interface IAssessmentModel extends IDefaultModel<IAssessment> {
@@ -340,6 +396,7 @@ export interface IQuestionnairesInfo {
   last_updated?: string;
   nextQuestion: number;
   title: string;
+  description: string;
   subjects: { id: TId; title: string }[];
 }
 export interface IQuestionnairesModel extends ITotalProgress {
@@ -449,9 +506,10 @@ export interface ICompareResultModel {
 interface AssessmentKitStatsSubjects {
   title: string;
 }
-interface AssessmentKitStatsExpertGroup {
+export interface IExpertGroup {
   id: number;
   title: string;
+  picture?: string;
 }
 
 type LevelCompetence = {
@@ -467,6 +525,49 @@ interface AssessmentKitDetailsMaturityLevel {
   competences: LevelCompetence[];
 }
 
+export interface IAssessmentKitReportModel {
+  id: number;
+  title: string;
+  summary: string;
+  about?: string;
+  maturityLevelCount: number;
+  expertGroup: IExpertGroup;
+  maturityLevels: IMaturityLevel[];
+}
+
+export interface IAssessmentReportModel {
+  id: string;
+  title: string;
+  assessmentKit: IAssessmentKitReportModel;
+  maturityLevel: IMaturityLevel;
+  confidenceValue: number;
+  isCalculateValid: boolean;
+  isConfidenceValid: boolean;
+  color: IColor;
+  creationTime: string;
+  lastModificationTime: string;
+}
+
+export interface ExpertGroupDetails {
+  id: number;
+  title: string;
+  bio: string;
+  about: string | JSX.Element;
+  picture: string;
+  pictureLink: string;
+  website: string;
+  editable: boolean;
+}
+
+type ModelValue = {
+  id: number;
+  title: string;
+};
+
+export interface PathInfo {
+  space?: ModelValue;
+  assessment?: ModelValue;
+}
 export interface AssessmentKitInfoType {
   id: number;
   title: string;
@@ -488,10 +589,78 @@ export interface AssessmentKitStatsType {
   likes: number;
   assessmentCounts: number;
   subjects: AssessmentKitStatsSubjects[];
-  expertGroup: AssessmentKitStatsExpertGroup[];
+  expertGroup: IExpertGroup[];
 }
+
+export interface IAssessmentKitInfo {
+  id: TId;
+  title: string;
+  summary: string;
+  about: string;
+  published: boolean;
+  isPrivate: boolean;
+  creationTime: string;
+  lastModificationTime: string;
+  like: {
+    count: number;
+    liked: boolean;
+  };
+  assessmentsCount: number;
+  subjectsCount: number;
+  questionnairesCount: number;
+  expertGroupId: number;
+  subjects: ISubject[];
+  questionnaires: IQuestionnaire[];
+  maturityLevels: IMaturityLevel[];
+  tags: { id: TId; title: string }[];
+}
+
 export interface AssessmentKitDetailsType {
   maturityLevel: AssessmentKitDetailsMaturityLevel;
   subjects: { id: number; title: string; index: number }[];
   questionnaires: { id: number; title: string; index: number }[];
+}
+
+export interface IDynamicGaugeSVGProps {
+  colorCode: string;
+  value: number;
+  confidence_value?: number | null;
+  height?: number;
+  width?: number | string;
+  className?: string;
+}
+
+export interface RolesType {
+  items: {
+    id: number;
+    title: string;
+    description: string;
+  }[];
+}
+
+export interface ISubject {
+  id: number;
+  title: string;
+  index: number;
+  description: string;
+  confidenceValue: number | null;
+  maturityLevel: IMaturityLevel;
+  attributes: IAttribute[];
+}
+
+interface IAssessmentPermissions {
+  manageable: boolean;
+  exportable: boolean;
+}
+
+export interface IAssessmentResponse {
+  assessment: IAssessmentReportModel;
+  subjects: ISubject[];
+  assessmentPermissions: IAssessmentPermissions;
+}
+
+export interface IAnswerHistory {
+  answer: TAnswer;
+  creationTime: string;
+  createdBy: IUserInfo;
 }

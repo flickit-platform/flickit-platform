@@ -1,12 +1,12 @@
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
-from assessment.serializers import evidence_serializers
 from assessment.services import evidence_services, assessment_core_services
 
 
@@ -37,6 +37,10 @@ class EvidencesApi(APIView):
 class EvidenceApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, evidence_id):
+        result = evidence_services.evidence_get_by_id(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
+
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={201: ""})
     def put(self, request, evidence_id):
@@ -50,3 +54,30 @@ class EvidenceApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+
+class EvidenceAttachmentsApi(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+    attachment_param = openapi.Parameter('attachment', openapi.IN_FORM, description="attachment file",
+                                         type=openapi.TYPE_FILE, required=True)
+    description_param = openapi.Parameter('description', openapi.IN_FORM, description="description",
+                                          type=openapi.TYPE_STRING, required=False)
+
+    @swagger_auto_schema(manual_parameters=[attachment_param, description_param], responses={201: ""})
+    def post(self, request, evidence_id):
+        result = evidence_services.evidence_add_attachments(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+    def get(self, request, evidence_id):
+        result = evidence_services.evidence_list_attachments(request, evidence_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class EvidenceAttachmentApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, evidence_id, attachment_id):
+        result = evidence_services.evidence_delete_attachment(request, evidence_id, attachment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

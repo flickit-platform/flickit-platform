@@ -23,7 +23,7 @@ export interface IAuthContext {
 }
 
 export const defaultUserInfo = {
-  display_name: "",
+  displayName: "",
   id: "",
   email: "",
   // current_space: null,

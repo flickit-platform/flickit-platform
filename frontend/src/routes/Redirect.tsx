@@ -23,7 +23,7 @@ const getWhereToGo = (location: Location, authContext: IAuthContext) => {
   }
   if (isRoot) {
     // If user has current space navigate to it otherwise navigate to spaces
-    return "/spaces";
+    return "/spaces/1";
   }
   return location.pathname;
 };

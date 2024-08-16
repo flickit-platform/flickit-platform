@@ -1,22 +1,27 @@
 import { useEffect } from "react";
-import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { AssessmentOverallStatus } from "./AssessmentOverallStatus";
-import { AssessmentMostSignificantAttributes } from "./AssessmentMostSignificantAttributes";
 import LoadingSkeletonOfAssessmentReport from "@common/loadings/LoadingSkeletonOfAssessmentReport";
 import AssessmentReportTitle from "./AssessmentReportTitle";
-import { IAssessmentReportModel } from "@types";
-import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
+import { IAssessmentReportModel, RolesType } from "@types";
+import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
+import { AssessmentSummary } from "./AssessmentSummary";
+import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
+import { AssessmentReportKit } from "./AssessmentReportKit";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
-import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
+import MoreActions from "@common/MoreActions";
+import SettingsIcon from "@mui/icons-material/Settings";
+import useMenu from "@/utils/useMenu";
+import { ArticleRounded } from "@mui/icons-material";
 
-const AssessmentReportContainer = () => {
+const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
 
@@ -43,11 +48,6 @@ const AssessmentReportContainer = () => {
         config
       ),
   });
-  const fetchPathInfo = useQuery({
-    service: (args, config) =>
-      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
-    runOnMount: true,
-  });
   const calculate = async () => {
     try {
       await calculateMaturityLevelQuery.query();
@@ -71,14 +71,29 @@ const AssessmentReportContainer = () => {
       calculateConfidenceLevel();
     }
   }, [queryData.errorObject]);
-
+  const { spaceId } = useParams();
+  const fetchAssessmentsRoles = useQuery<RolesType>({
+    service: (args, config) => service.fetchAssessmentsRoles(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
   return (
     <QueryBatchData
-      queryBatchData={[queryData, assessmentTotalProgress, fetchPathInfo]}
+      queryBatchData={[
+        queryData,
+        assessmentTotalProgress,
+        fetchAssessmentsRoles,
+      ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress = {}, pathInfo = {}]) => {
-        const { status, assessment, subjects, topStrengths, topWeaknesses } =
-          data || {};
+      render={([data = {}, progress, roles]) => {
+        const {
+          status,
+          assessment,
+          subjects,
+          topStrengths,
+          topWeaknesses,
+          assessmentPermissions: { manageable, exportable },
+        } = data || {};
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
@@ -87,162 +102,197 @@ const AssessmentReportContainer = () => {
 
         const totalProgress =
           ((answersCount || 0) / (questionsCount || 1)) * 100;
+        const totalAttributesLength = subjects.reduce(
+          (sum: any, subject: any) => {
+            return sum + (subject.attributes?.length || 0);
+          },
+          0
+        );
+
         return (
-          <Box m="auto" pb={3} maxWidth="1440px">
-            <AssessmentReportTitle
-              data={data}
-              colorCode={colorCode}
-              pathInfo={pathInfo}
-            />
-
-            <Box mt={3}>
-              <QuestionnairesNotCompleteAlert
-                progress={totalProgress}
-                to="./../questionnaires"
-                q={questionsCount}
-                a={answersCount}
-              />
-            </Box>
-
-            <Box mt={3}>
-              <Paper elevation={2} sx={{ borderRadius: 3, height: "100%" }}>
-                <Box
-                  py={2}
-                  sx={{
-                    px: 3,
-                    ...styles.centerV,
-                    flexDirection: { xs: "column" },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      ...styles.centerCV,
-                      textDecoration: "none",
-                    }}
-                    alignSelf="stretch"
+          <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
+            <AssessmentReportTitle data={data} colorCode={colorCode} />
+            <Grid container spacing={1} columns={12} mt={0}>
+              <Grid item sm={12} xs={12}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography
+                    color="#00365C"
+                    textAlign="left"
+                    variant="headlineLarge"
                   >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontSize: {
-                          xs: "1rem",
-                          sm: "1.1rem",
-                          md: "1.3rem",
-                          fontFamily: "Roboto",
-                        },
-                        marginBottom: "6px",
-                        fontWeight: "bold",
-                        textDecoration: "none",
-                        height: "100%",
-                        display: {
-                          xs: "block",
-                          sm: "block",
-                          md: "flex",
-                          lg: "flex",
-                        },
-                        alignItems: "center",
-                        alignSelf: "stretch",
-                      }}
+                    <Trans i18nKey="assessmentInsights" />
+                  </Typography>
+                  <Box sx={{ py: "0.6rem" }}>
+                    <IconButton
+                      data-cy="more-action-btn"
+                      disabled={!exportable}
+                      component={exportable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
                     >
-                      <Trans i18nKey="theAssessmentKitUsedInThisAssessmentIs" />{" "}
-                      <Box
-                        component={Link}
-                        to={`/assessment-kits/${assessmentKit?.id}`}
-                        sx={{
-                          color: (t) => t.palette.primary.dark,
-                          textDecoration: "none",
-                          ml: 0.5,
-                        }}
-                      >
-                        {assessmentKit?.title}
-                      </Box>
-                    </Typography>
-                    <Typography color="GrayText" variant="body2">
-                      {assessmentKit?.summary}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      ml: "auto",
-                      // mr: 2,
-                      textDecoration: "none",
-                    }}
-                    component={Link}
-                    to={`/user/expert-groups/${expertGroup?.id}`}
-                  >
-                    <Typography
-                      color="grayText"
-                      variant="subLarge"
-                      sx={{ fontSize: { xs: "0.6rem", md: "0.8rem" } }}
+                      <ArticleRounded
+                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                      />
+                    </IconButton>
+                    <IconButton
+                      data-cy="more-action-btn"
+                      disabled={!manageable}
+                      component={manageable ? Link : "div"}
+                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
                     >
-                      <Trans i18nKey="providedBy" />
-                    </Typography>
-                    <CardHeader
-                      sx={{ p: 0, ml: 1.8 }}
-                      titleTypographyProps={{
-                        sx: { textDecoration: "none" },
-                      }}
-                      avatar={
-                        <Avatar
-                          sx={{
-                            width: { xs: 30, sm: 40 },
-                            height: { xs: 30, sm: 40 },
-                          }}
-                          alt={expertGroup?.title}
-                          src={expertGroup?.picture || "/"}
-                        />
-                      }
-                      title={
-                        <Box
-                          component={"b"}
-                          sx={{ fontSize: { xs: "0.6rem", md: "0.95rem" } }}
-                          color="Gray"
-                        >
-                          {expertGroup?.title}
-                        </Box>
-                      }
-                    />
+                      <SettingsIcon
+                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                      />
+                    </IconButton>
                   </Box>
                 </Box>
-              </Paper>
-            </Box>
-            <Grid container spacing={3} columns={14} mt={0.2}>
-              <Grid item lg={8} md={14} sm={14} xs={14}>
-                <AssessmentOverallStatus
-                  status={status}
-                  subjects_info={subjects}
-                  maturity_level={maturityLevel}
-                  maturity_level_count={assessmentKit?.maturityLevelCount}
-                  confidence_value={confidenceValue}
-                />
+                <Grid container alignItems="stretch" spacing={2} mt={1}>
+                  <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={1}
+                      height="100%"
+                    >
+                      <Typography
+                        color="#73808C"
+                        marginX={4}
+                        variant="titleMedium"
+                      >
+                        <Trans i18nKey="general" />
+                      </Typography>
+                      <AssessmentSummary
+                        expertGroup={expertGroup}
+                        assessmentKit={assessment}
+                        data={data}
+                        progress={totalProgress}
+                        questionCount={questionsCount}
+                        answerCount={answersCount}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={1}
+                      height="100%"
+                    >
+                      <Typography
+                        color="#73808C"
+                        marginX={4}
+                        variant="titleMedium"
+                      >
+                        <Trans i18nKey="overallStatus" />
+                      </Typography>
+                      <AssessmentOverallStatus
+                        status={status}
+                        subjects_info={subjects}
+                        maturity_level={maturityLevel}
+                        maturity_level_count={assessmentKit?.maturityLevelCount}
+                        confidence_value={confidenceValue}
+                      />
+                    </Box>
+                  </Grid>
+                  {/* <Grid item lg={4} md={12} sm={12} xs={12}>
+                    <Box display="flex" flexDirection="column" gap={1}>
+                      <Typography color="#73808C" marginX={4}>
+                        <Trans i18nKey="subjectStatus" />
+                      </Typography>
+                      <AssessmentSubjectStatus subjects={subjects} />
+                    </Box>
+                  </Grid> */}
+                </Grid>
               </Grid>
-              <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes
-                  isWeakness={false}
-                  most_significant_items={topStrengths}
-                />
+
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box display="flex" flexDirection="column" gap={1}>
+                  <Typography color="#73808C" marginX={4} variant="titleMedium">
+                    <Trans i18nKey="assessmentKit" />
+                  </Typography>
+                  <AssessmentReportKit assessmentKit={assessmentKit} />
+                </Box>
               </Grid>
-              <Grid item lg={3} md={7} sm={14} xs={14}>
-                <AssessmentMostSignificantAttributes
-                  isWeakness={true}
-                  most_significant_items={topWeaknesses}
-                />
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box
+                  sx={{ ...styles.centerCV }}
+                  alignItems="flex-start"
+                  marginTop={6}
+                >
+                  <Typography color="#73808C" variant="headlineSmall">
+                    <Trans i18nKey="subjectReport" />
+                  </Typography>
+                  <Typography
+                    variant="titleMedium"
+                    fontWeight={400}
+                    color="#73808C"
+                  >
+                    <Trans
+                      i18nKey="overallStatusDetails"
+                      values={{
+                        attributes: totalAttributesLength,
+                        subjects: subjects?.length,
+                      }}
+                    />
+                  </Typography>
+                  <Divider sx={{ width: "100%", marginTop: 2 }} />
+                </Box>
               </Grid>
-              <Grid item sm={14} xs={14} id="subjects">
+              <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
                 <AssessmentSubjectList
+                  maturityLevelCount={assessmentKit?.maturityLevelCount ?? 5}
                   subjects={subjects}
                   colorCode={colorCode}
                 />
               </Grid>
-              <Grid item sm={14} xs={14} id="advices">
-                <AssessmentAdviceContainer subjects={subjects} />
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box
+                  sx={{ ...styles.centerCV }}
+                  alignItems="flex-start"
+                  marginTop={6}
+                  gap={2}
+                >
+                  <Typography color="#73808C" variant="headlineSmall">
+                    <Trans i18nKey="advices" />
+                  </Typography>
+                  <Divider sx={{ width: "100%" }} />
+                </Box>
+              </Grid>
+              <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
+                <AssessmentAdviceContainer
+                  subjects={subjects}
+                  assessment={assessment}
+                />
               </Grid>
             </Grid>
           </Box>
         );
       }}
+    />
+  );
+};
+
+const Actions = (props: { assessmentId: string; manageable: boolean }) => {
+  const { assessmentId, manageable } = props;
+  const navigate = useNavigate();
+  const { spaceId } = useParams();
+
+  const assessmentSetting = (e: any) => {
+    navigate({
+      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
+    });
+  };
+  return (
+    <MoreActions
+      {...useMenu()}
+      boxProps={{ py: "0.6rem" }}
+      fontSize="large"
+      items={[
+        manageable && {
+          icon: <SettingsIcon style={{ fontSize: "2rem" }} fontSize="large" />,
+          text: <Trans i18nKey="settings" />,
+          onClick: assessmentSetting,
+        },
+      ]}
     />
   );
 };

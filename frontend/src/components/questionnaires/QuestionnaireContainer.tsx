@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
@@ -6,8 +6,12 @@ import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { IQuestionnairesModel } from "@types";
-import Title from "@common/Title";
+import {
+  ECustomErrorType,
+  IAssessmentKitReportModel,
+  IQuestionnairesModel,
+} from "@types";
+import Title from "@common/TitleComponent";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
@@ -23,7 +27,22 @@ import AlertBox from "@common/AlertBox";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import QueryData from "../common/QueryData";
+import { useConfigContext } from "@/providers/ConfgProvider";
 const QuestionnaireContainer = () => {
+  const { service } = useServiceContext();
+  const { assessmentId = "" } = useParams();
+
+  const AssessmentInfo = useQuery({
+    service: (args = { assessmentId }, config) =>
+      service.AssessmentsLoad(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
+  });
+
+  const isPermitted = useMemo(() => {
+    return AssessmentInfo?.data?.viewable;
+  }, [AssessmentInfo]);
+
   const { questionnaireQueryData, assessmentTotalProgress, fetchPathInfo } =
     useQuestionnaire();
 
@@ -33,7 +52,7 @@ const QuestionnaireContainer = () => {
     100;
 
   return (
-    <PermissionControl error={[questionnaireQueryData.errorObject]}>
+    <PermissionControl error={[questionnaireQueryData.errorObject?.response?.data]}>
       <Box>
         <QueryData
           {...fetchPathInfo}
@@ -46,6 +65,7 @@ const QuestionnaireContainer = () => {
         <NotCompletedAlert
           isCompleted={progress == 100}
           hasStatus={false}
+          isAccessDenied={!isPermitted}
           loading={questionnaireQueryData.loading}
         />
         <Box
@@ -76,7 +96,7 @@ const QuestionnaireContainer = () => {
   );
 };
 
-const useQuestionnaire = () => {
+export const useQuestionnaire = () => {
   const { service } = useServiceContext();
   const [searchParams] = useSearchParams();
   const { assessmentId } = useParams();
@@ -109,8 +129,9 @@ const NotCompletedAlert = (props: {
   isCompleted: boolean;
   loading: boolean;
   hasStatus: boolean;
+  isAccessDenied: boolean;
 }) => {
-  const { isCompleted, loading, hasStatus } = props;
+  const { isCompleted, loading, hasStatus, isAccessDenied } = props;
 
   return (
     <Box mt={2}>
@@ -126,6 +147,7 @@ const NotCompletedAlert = (props: {
               component={Link}
               to="./../insights"
               startIcon={<AnalyticsRoundedIcon />}
+              sx={{ display: isAccessDenied ? "none" : "" }}
             >
               <Trans i18nKey="viewInsights" />
             </Button>
@@ -156,32 +178,38 @@ const QuestionnaireTitle = (props: any) => {
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
 
+  const { config } = useConfigContext();
+
   useEffect(() => {
-    setDocumentTitle(`${assessment?.title} ${t("questionnaires")}`);
+    setDocumentTitle(
+      `${assessment?.title} ${t("questionnaires")}`,
+      config.appTitle
+    );
   }, [assessment]);
 
   return (
     <Title
-      backLink={-1}
+      backLink="/"
+      size="large"
       sup={
         <SupTitleBreadcrumb
           routes={[
             {
               title: space?.title,
               to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
             },
             {
               title: assessment?.title,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              // icon: (
+              //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+              // ),
             },
           ]}
         />
       }
     >
-      <QuizRoundedIcon sx={{ mr: 1 }} />
+      {/* <QuizRoundedIcon sx={{ mr: 1 }} /> */}
       <Trans i18nKey="Questionnaires" />
     </Title>
   );

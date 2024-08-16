@@ -14,63 +14,50 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { t } from "i18next";
-import convertToAttributesChartData from "@utils/convertToAttributesChartData";
-import processData from "@utils/convertToAttributesChartData";
+import { convertToAssessmentsChartData } from "@utils/convertToAttributesChartData";
+import { convertToAttributesChartData } from "@utils/convertToAttributesChartData";
+import CompareBarChart from "./CompareBarChart";
 
 const CompareResultSubjectAttributesBarChart = (props: {
   data?: any;
-  base_infos: any;
+  isSubject: boolean;
+  assessments?: any;
 }) => {
-  const { data } = props;
+  const { data, isSubject, assessments } = props;
+
   const res = useMemo(() => {
-    return convertToAttributesChartData(data);
-  }, [data]);
+    if (!isSubject) {
+      let tempData = data;
+      tempData = { ...tempData, title: "assessment", id: 0 };
+      return convertToAssessmentsChartData(tempData, assessments);
+    }
+  }, [data, isSubject]);
+  
+  const attRes = useMemo(() => {
+    if (isSubject) {
+      return convertToAttributesChartData(data, assessments);
+    }
+  }, [data, isSubject]);
 
   return (
     <Box>
       <Typography
         sx={{
           fontSize: "1.05rem",
-          fontFamily: "Roboto",
           opacity: 0.7,
           mb: 0.5,
           mt: 2,
         }}
       >
-        <Trans i18nKey="attributes" />
+        <Trans i18nKey={data.title} />
       </Typography>
       <Box sx={{ overflowX: "auto", overflowY: "hidden" }}>
         <Box height="420px" minWidth="740px">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={res.reverse()}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 120,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                interval={0}
-                angle={-90}
-                textAnchor="end"
-                dataKey="title"
-                tick={<CustomAxisTick />}
-              />
-              <YAxis type="number" domain={[0, 5]} tickCount={6} />
-              <Tooltip />
-              {/* <Legend /> */}
-
-              <Bar
-                dataKey={"ml"}
-                name={"Maturity Level"}
-                fill={barColors[1]}
-                maxBarSize={40}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <CompareBarChart
+            isSubject={isSubject}
+            assessmentCount={assessments?.length}
+            data={isSubject ? attRes : res}
+          />
         </Box>
       </Box>
     </Box>

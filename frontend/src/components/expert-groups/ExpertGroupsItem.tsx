@@ -22,6 +22,10 @@ import useDialog from "@utils/useDialog";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import { useAuthContext } from "@providers/AuthProvider";
 import Tooltip from "@mui/material/Tooltip";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { ICustomError } from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import React, {useState} from "react";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -40,17 +44,31 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
     publishedKitsCount,
     editable,
   } = data || {};
-  function stringAvatar(name: string) {
-    if (name) {
-      return {
-        children: `${name.split("")[0]}`,
-      };
+  const { service } = useServiceContext();
+  const seenExpertGroupQuery = useQuery({
+    service: (args, config) => service.seenExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
+  const seenExpertGroup = async () => {
+    try {
+      await seenExpertGroupQuery.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      if (err.response?.data && err.response?.data.hasOwnProperty("message")) {
+        if (Array.isArray(err.response?.data?.message)) {
+          toastError(err.response?.data?.message[0]);
+        } else {
+          toastError(err);
+        }
+      }
     }
-  }
+  };
   return (
     <Box>
       <Card>
         <CardHeader
+          onClick={seenExpertGroup}
           titleTypographyProps={{
             component: Link,
             to: `/user/expert-groups/${id}`,
@@ -58,22 +76,26 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }}
           avatar={
             <Avatar
-              component={Link}
-              to={`${id}`}
-              sx={(() => {
-                return {
-                  bgcolor: (t) => t.palette.grey[800],
-                  textDecoration: "none",
-                };
-              })()}
-              src={picture}
+                component={Link}
+                to={`${id}`}
+                sx={(() => {
+                  return {
+                    bgcolor: (t) => t.palette.grey[800],
+                    textDecoration: "none",
+                    width: 50,height: 50
+                  };
+                })()}
+                src={picture}
             >
               {title?.[0]?.toUpperCase()}
             </Avatar>
           }
           action={
             !disableActions && (
-              <Actions editable={editable} expertGroup={data} />
+              <Actions
+                editable={editable}
+                expertGroup={data}
+              />
             )
           }
           title={
@@ -116,9 +138,10 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               },
             }}
           >
-            {members.map((user: any) => {
+            {members.map((user: any,index:number) => {
               return (
-                <Tooltip title={user?.displayName}>
+                <Tooltip key={index} title={user?.displayName}>
+                  <>
                   <Avatar
                     key={user.id}
                     sx={{ width: 28, height: 28, fontSize: ".8rem" }}
@@ -127,6 +150,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
                   >
                     {user?.displayName.split("")[0].toUpperCase()}
                   </Avatar>
+                  </>
                 </Tooltip>
               );
             })}
@@ -148,6 +172,11 @@ const Actions = (props: any) => {
       service.fetchUserExpertGroup(args, config),
     runOnMount: false,
   });
+  const deleteExpertGroupQuery = useQuery({
+    service: (args, config) => service.deleteExpertGroup({ id }, config),
+    runOnMount: false,
+    toastError: false,
+  });
   const dialogProps = useDialog();
 
   const openEditDialog = async (e: any) => {
@@ -156,6 +185,21 @@ const Actions = (props: any) => {
       data,
       type: "update",
     });
+  };
+  const deleteExpertGroup = async () => {
+    try {
+      await deleteExpertGroupQuery.query();
+      await fetchExpertGroups();
+    } catch (e) {
+      const err = e as ICustomError;
+      if (err.response?.data && err.response?.data.hasOwnProperty("message")) {
+        if (Array.isArray(err.response?.data?.message)) {
+          toastError(err.response?.data?.message[0]);
+        } else {
+          toastError(err);
+        }
+      }
+    }
   };
 
   return editable ? (
@@ -169,6 +213,11 @@ const Actions = (props: any) => {
             icon: <EditRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="edit" />,
             onClick: openEditDialog,
+          },
+          {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="delete" />,
+            onClick: deleteExpertGroup,
           },
         ]}
       />

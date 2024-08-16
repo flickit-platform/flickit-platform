@@ -14,15 +14,26 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import { useEffect, useState } from "react";
 
 const UserAccount = () => {
-  const { userInfo, dispatch } = useAuthContext();
+  const { dispatch } = useAuthContext();
   const { service } = useServiceContext();
   const userQueryData = useQuery({
-    service: (args, config) => service.getSignedInUser(args, config),
-    runOnMount: false,
+    service: (args, config) => service.getUserProfile(args, config),
+    runOnMount: true,
   });
-  const { display_name, email, bio, linkedin, picture } = userInfo;
+  const [userInfo, setUserInfo] = useState({
+    id: 1,
+    displayName: "",
+    email: "",
+    pictureLink: undefined,
+    linkedin: undefined,
+    bio: undefined,
+  });
+  useEffect(() => {
+    setUserInfo(userQueryData.data);
+  }, [userQueryData.loaded]);
   const dialogProps = useDialog();
   useDocumentTitle(`${t("userProfileT")}: ${getUserName(userInfo)}`);
 
@@ -52,25 +63,30 @@ const UserAccount = () => {
               height: "94px",
               border: "4px solid whitesmoke",
             }}
-            alt={display_name}
-            src={picture || "/"}
+            alt={userInfo?.displayName}
+            src={userInfo?.pictureLink || "/"}
           />
         </Box>
       </Box>
       <Box ml={"130px"} mt={1}>
         <Title
           textTransform={"capitalize"}
-          sub={<Box textTransform={"none"}>{email}</Box>}
+          sub={<Box textTransform={"none"}>{userInfo?.email}</Box>}
           toolbar={
             <>
-              <IconButton sx={{ ml: "auto", mb: 1.2, mr: 1.5 }} onClick={openDialog} color="primary" size="small">
+              <IconButton
+                sx={{ ml: "auto", mb: 1.2, mr: 1.5 }}
+                onClick={openDialog}
+                color="primary"
+                size="small"
+              >
                 <BorderColorRoundedIcon />
               </IconButton>
               <AccountCEFormDialog {...dialogProps} onSubmitForm={onSubmit} />
             </>
           }
         >
-          {display_name}
+          {userInfo?.displayName}
         </Title>
       </Box>
       <Box mt={8}>
@@ -86,13 +102,17 @@ const UserAccount = () => {
                 <Typography variant="subLarge">
                   <Trans i18nKey="linkedin" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{linkedin}</Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  {userInfo?.linkedin}
+                </Typography>
               </Box>
               <Box mt={2.5}>
                 <Typography variant="subLarge">
                   <Trans i18nKey="bio" />
                 </Typography>
-                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>{bio}</Typography>
+                <Typography sx={{ pt: 0.5, fontWeight: "bold" }}>
+                  {userInfo?.bio}
+                </Typography>
               </Box>
             </Grid>
           </Grid>

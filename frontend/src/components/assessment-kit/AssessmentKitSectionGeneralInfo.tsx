@@ -109,10 +109,10 @@ const AssessmentKitSectionGeneralInfo = (
       );
 
       await fetchAssessmentKitInfoQuery.query();
-      await handleCancel()
+      await handleCancel();
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err)
+      toastError(err);
     }
   };
   return (
@@ -309,10 +309,12 @@ const AssessmentKitSectionGeneralInfo = (
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          "&:hover": { border: "1px solid #1976d299" },
+                          "&:hover": {
+                            border: editable ? "1px solid #1976d299" : "unset",
+                          },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={() => handleMouseOver(editable??false)}
+                        onMouseOver={() => handleMouseOver(editable ?? false)}
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
@@ -321,7 +323,6 @@ const AssessmentKitSectionGeneralInfo = (
                               <Box
                                 sx={{
                                   background: "#00000014",
-                                  fontFamily: "Roboto",
                                   fontSize: "0.875rem",
                                   borderRadius: "8px",
                                   fontWeight: "700",
@@ -495,7 +496,7 @@ const OnHoverInput = (props: any) => {
       config
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
-    toastError: true,
+    // toastError: true,
   });
   const updateAssessmentKit = async () => {
     try {
@@ -504,6 +505,14 @@ const OnHoverInput = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
+      } else if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
+      }
       setError(err);
       setHasError(true);
     }
@@ -547,7 +556,6 @@ const OnHoverInput = (props: any) => {
                 minHeight: "38px",
                 borderRadius: "4px",
                 paddingRight: "12px;",
-                fontFamily: "Roboto",
                 fontWeight: "700",
                 fontSize: "0.875rem",
               }}
@@ -598,7 +606,10 @@ const OnHoverInput = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              wordBreak: "break-word",
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -689,7 +700,7 @@ const OnHoverStatus = (props: any) => {
               padding: 0.5,
               backgroundColor: selected ? "#2e7d32" : "transparent",
               color: selected ? "#fff" : "#000",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -702,7 +713,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize="0.75rem"
             >
               <Trans i18nKey="published" />
             </Typography>
@@ -712,7 +723,7 @@ const OnHoverStatus = (props: any) => {
             sx={{
               padding: 0.5,
               backgroundColor: !selected ? "gray" : "transparent",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -726,7 +737,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize=".75rem"
             >
               <Trans i18nKey="unpublished" />
             </Typography>
@@ -802,7 +813,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 padding: 0.5,
                 backgroundColor: selected ? "#7954B3;" : "transparent",
                 color: selected ? "#fff" : "#000",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -815,7 +826,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
+                fontSize=".75rem"
               >
                 <Trans i18nKey="private" />
               </Typography>
@@ -825,7 +836,7 @@ const OnHoverVisibilityStatus = (props: any) => {
               sx={{
                 padding: 0.5,
                 backgroundColor: !selected ? "gray" : "transparent",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -839,7 +850,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
+                fontSize=".75rem"
               >
                 <Trans i18nKey="public" />
               </Typography>
@@ -985,7 +996,9 @@ const OnHoverRichEditor = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -1134,7 +1147,9 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -1146,7 +1161,6 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                   <Box
                     sx={{
                       background: "#00000014",
-                      fontFamily: "Roboto",
                       fontSize: "0.875rem",
                       borderRadius: "8px",
                       fontWeight: "700",

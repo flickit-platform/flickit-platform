@@ -14,13 +14,13 @@ def get_expert_group_list(request):
 
 def create_expert_group(request):
     if "picture" in request.data:
-        file = request.data['picture']
+        file = request.data.get('picture')
         data = request.data
         data.pop('picture')
         response = requests.post(
             ASSESSMENT_URL + 'assessment-core/api/expert-groups',
             data=data,
-            files={'picture': file},
+            files={'picture': (file.name, file, file.content_type)},
             headers={'Authorization': request.headers['Authorization']})
     else:
         response = requests.post(
@@ -96,4 +96,44 @@ def get_assessment_kit_list_with_expert_group_id(request, expert_group_id):
         ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/assessment-kits',
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def expert_group_seen(request, expert_group_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/seen',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def update_expert_group(request, expert_group_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": "", "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def update_expert_group_picture(request, expert_group_id):
+    file = request.data.get('pictureFile')
+    data = request.data
+    data.pop('pictureFile')
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
+        data=data,
+        files={'pictureFile': (file.name, file, file.content_type)},
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_expert_group_picture(request, expert_group_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/expert-groups/{expert_group_id}/picture',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": "", "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}

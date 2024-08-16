@@ -20,6 +20,7 @@ import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const QuestionsTitle = (props: {
   data: IQuestionnaireModel;
@@ -35,16 +36,22 @@ const QuestionsTitle = (props: {
   const { spaceId, assessmentId, questionIndex, page } = useParams();
   const isComplete = questionIndex === "completed";
   const canFinishQuestionnaire = !isComplete && !isReview;
-  const { space, assessment, questionnaire } = pathInfo
+  const { space, assessment, questionnaire } = pathInfo;
+  const { config } = useConfigContext();
+
   useEffect(() => {
     if (isComplete) {
-      setDocumentTitle(`${questionnaire.title} ${t("questionnaireFinished")}`);
+      setDocumentTitle(
+        `${questionnaire.title} ${t("questionnaireFinished")}`,
+        config.appTitle
+      );
     }
   }, [questionnaire, isComplete]);
 
   return (
     <Box sx={{ pt: 1, pb: 0 }}>
       <Title
+        size="large"
         wrapperProps={{
           sx: {
             flexDirection: { xs: "column", md: "row" },
@@ -77,26 +84,26 @@ const QuestionsTitle = (props: {
             )}
           </Box>
         }
-        backLink={-1}
+        backLink={"/"}
         sup={
           <SupTitleBreadcrumb
             routes={[
               {
                 title: space?.title,
                 to: `/${spaceId}/assessments/${page}`,
-                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+                // icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
               {
                 title: `${assessment?.title} ${t("questionnaires")}`,
                 to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
-                icon: (
-                  <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-                ),
+                // icon: (
+                //   <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
+                // ),
               },
               {
                 title: questionnaire?.title,
                 to: `/${spaceId}/assessments/${page}/${assessmentId}/questionnaires`,
-                icon: <QuizRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+                // icon: <QuizRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
               },
             ]}
           />
@@ -105,13 +112,12 @@ const QuestionsTitle = (props: {
         {isReview ? (
           <>
             {questionnaire?.title}
-            <Typography
-              display="inline-block"
-              variant="h5"
-              sx={{ opacity: 0.6, marginLeft: 1, fontWeight: "bold" }}
+            <div style={{ marginInline: 4 }}></div>
+            <Title
+              size="large"
             >
               <Trans i18nKey="review" />
-            </Typography>
+            </Title>
           </>
         ) : (
           <>

@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import { styles, getMaturityLevelColors } from "@styles";
 import Title from "@common/Title";
-import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
@@ -26,6 +27,9 @@ import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { t } from "i18next";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
+import { useConfigContext } from "@/providers/ConfgProvider";
+import { ECustomErrorType } from "@/types";
+import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -33,13 +37,22 @@ const AssessmentKitContainer = () => {
   const assessmentKitQueryData = useQuery({
     service: (args = { id: assessmentKitId }, config) =>
       service.fetchAssessmentKit(args, config),
+    toastError: false,
+    toastErrorOptions: { filterByStatus: [404] },
   });
+  const { config } = useConfigContext();
 
-  return (
+  return assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
+    assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND ? (
+    <ErrorNotFoundOrAccessDenied />
+  ) : (
     <QueryData
       {...assessmentKitQueryData}
       render={(data) => {
-        setDocumentTitle(`${t("assessmentKit")}: ${data.title || ""}`);
+        setDocumentTitle(
+          `${t("assessmentKit")}: ${data.title || ""}`,
+          config.appTitle
+        );
         return (
           <AssessmentKit data={data} query={assessmentKitQueryData.query} />
         );
@@ -51,23 +64,34 @@ const AssessmentKitContainer = () => {
 const AssessmentKit = (props: any) => {
   const { data, query } = props;
   const { assessmentKitId } = useParams();
+
   const {
     title,
-    tags = [],
     summary = "",
     about = "",
-    likes_number = 0,
-    expert_group = {},
-    creation_time,
-    last_modification_date,
-    number_of_assessment,
-    subjects_with_desc = [],
+    published,
+    isPrivate,
+    creationTime,
+    lastModificationTime,
+    expertGroupId,
+    like,
+    assessmentsCount,
+    subjectsCount,
+    questionnairesCount,
+    subjects = [],
     questionnaires = [],
-    is_active,
-    maturity_levels,
+    maturityLevels,
+    tags = [],
+
+    // expert_group = {},
   } = data || {};
+  const { service } = useServiceContext();
+  const expertGroupQueryData = useQuery({
+    service: (args = { id: expertGroupId }, config) =>
+      service.fetchUserExpertGroup(args, config),
+  });
   const colorPallet = getMaturityLevelColors(
-    maturity_levels ? maturity_levels.length : 5
+    maturityLevels ? maturityLevels?.length : 5
   );
   const dialogProps = useDialog({
     context: {
@@ -107,14 +131,16 @@ const AssessmentKit = (props: any) => {
         <Box sx={{ color: "white" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Title
-              size="large"
+              size="medium"
               sup={
                 <SupTitleBreadcrumb
                   color="white"
+                  mouseCursor="pointer"
                   routes={[
                     {
                       title: t("assessmentKits") as string,
                       to: `/assessment-kits`,
+                      disabled: false,
                     },
                   ]}
                 />
@@ -142,32 +168,41 @@ const AssessmentKit = (props: any) => {
             >
               {title}
             </Title>
-            <Box
-              sx={{
-                borderRadius: 2,
-                opacity: 1,
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                ml: "auto",
-                textDecoration: "none",
-              }}
-              component={Link}
-              to={`/user/expert-groups/${expert_group.id}`}
-            >
-              <CardHeader
-                titleTypographyProps={{
-                  sx: { textDecoration: "none" },
-                  color: "white",
-                }}
-                avatar={<Avatar alt={expert_group?.name || "E"} src={"/"} />}
-                title={
-                  <Box component={"b"} fontSize=".95rem">
-                    {expert_group?.name}
+            <QueryData
+              {...expertGroupQueryData}
+              loading={false}
+              render={(data) => {
+                const { title, id, pictureLink } = data;
+                return (
+                  <Box
+                    sx={{
+                      borderRadius: 2,
+                      opacity: 1,
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      ml: "auto",
+                      textDecoration: "none",
+                    }}
+                    component={Link}
+                    to={`/user/expert-groups/${id}`}
+                  >
+                    <CardHeader
+                      titleTypographyProps={{
+                        sx: { textDecoration: "none" },
+                        color: "white",
+                      }}
+                      avatar={<Avatar alt={title} src={pictureLink} />}
+                      title={
+                        <Box component={"b"} fontSize=".95rem">
+                          {title}
+                        </Box>
+                      }
+                    />
                   </Box>
-                }
-              />
-            </Box>
+                );
+              }}
+            />
           </Box>
           <Box sx={{ ...styles.centerCVH, mt: 3 }}>
             <Box>
@@ -187,7 +222,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="used" />:{" "}
                 <Box component="span" color="black" textTransform={"lowercase"}>
-                  {number_of_assessment} <Trans i18nKey="times" />
+                  {assessmentsCount} <Trans i18nKey="times" />
                 </Box>
               </Box>
               <Box
@@ -203,7 +238,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(creation_time)}
+                  {formatDate(creationTime)}
                 </Box>
               </Box>
               <Box
@@ -219,16 +254,16 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(last_modification_date)}
+                  {formatDate(lastModificationTime)}
                 </Box>
               </Box>
             </Box>
-            <LikeAssessmentKit likes_number={likes_number} />
+            <LikeAssessmentKit likes={like} />
           </Box>
         </Box>
       </Box>
       <Box mt={15}>
-        {!is_active && (
+        {!published && (
           <Box my={5}>
             <AlertBox severity="warning">
               <Trans i18nKey="sorryYouCanCreateAssessmentWithThisAssessmentKit" />
@@ -268,7 +303,7 @@ const AssessmentKit = (props: any) => {
                     <Trans i18nKey="numberOfSubjects" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>
-                    {subjects_with_desc.length || 0}
+                    {subjectsCount || 0}
                   </Typography>
                 </Box>
                 <Box
@@ -278,7 +313,7 @@ const AssessmentKit = (props: any) => {
                     <Trans i18nKey="numberOfQuestionnaires" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>
-                    {questionnaires.length || 0}
+                    {questionnairesCount || 0}
                   </Typography>
                 </Box>
                 <Box
@@ -288,19 +323,22 @@ const AssessmentKit = (props: any) => {
                     <Trans i18nKey="numberOfMaturityLevels" />:
                   </Typography>
                   <Typography fontWeight={"bold"}>
-                    {maturity_levels.length || 0}
+                    {maturityLevels?.length || 0}
                   </Typography>
                 </Box>
                 <Button
                   fullWidth
                   variant="contained"
                   sx={{ mt: 6 }}
-                  disabled={!is_active}
+                  disabled={!published}
                   onClick={dialogProps.openDialog}
                 >
                   <Trans i18nKey="createAssessment" />
                 </Button>
-                <AssessmentCEFromDialog {...dialogProps} onSubmitForm={query} />
+                <AssessmentCEFromDialog
+                  {...dialogProps}
+                  onSubmitForm={undefined}
+                />
               </Box>
             </Box>
           </Grid>
@@ -315,27 +353,27 @@ const AssessmentKit = (props: any) => {
                 </Box>
               </Box>
             )}
-            {maturity_levels[0] && (
+            {maturityLevels && (
               <Box mb={8}>
                 <Title>
                   <Trans i18nKey="maturityLevels" />
                 </Title>
                 <Box mt={2} sx={{ display: "flex" }}>
-                  {maturity_levels.map((item: any, index: number) => {
-                    const colorCode = colorPallet[item.index-1];
+                  {maturityLevels.map((item: any, index: number) => {
+                    const colorCode = colorPallet[item.index - 1];
                     return (
                       <Box
                         sx={{
                           background: colorCode,
-                          fontSize: "14px",
-                          py: { xs: "2px", md: 1 },
+                          fontSize: "1rem",
+                          py: { xs: "0.16rem", md: 1 },
                           px: { xs: 1, md: 4 },
                           fontWeight: "bold",
                           color: "#fff",
                           borderRadius:
                             index === 0
                               ? "8px 0 0 8px"
-                              : index === maturity_levels.length - 1
+                              : index === maturityLevels?.length - 1
                               ? "0 8px 8px 0"
                               : "0",
                         }}
@@ -352,7 +390,7 @@ const AssessmentKit = (props: any) => {
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
-                {subjects_with_desc.map((subject: any) => {
+                {subjects.map((subject: any) => {
                   return (
                     <Box
                       component="li"
@@ -375,11 +413,15 @@ const AssessmentKit = (props: any) => {
                                 textJustify: "inter-word",
                               }}
                             >
-                              <Box component="span" fontWeight="bold">
+                              <Box
+                                component="span"
+                                fontSize="1rem"
+                                fontWeight="bold"
+                              >
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box component="span" fontSize={14}>
+                              <Box component="span" fontSize="1rem">
                                 {att.description}
                               </Box>
                             </Typography>
@@ -394,6 +436,12 @@ const AssessmentKit = (props: any) => {
               <Title>
                 <Trans i18nKey="questionnaires" />
               </Title>
+              <Typography variant="body2" fontSize="1rem">
+                <Trans
+                  i18nKey="questionnairesAssessmentKitDescription"
+                  values={{ questionnairesCount }}
+                />
+              </Typography>
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any) => {
                   return (
@@ -411,7 +459,7 @@ const AssessmentKit = (props: any) => {
   );
 };
 
-const LikeAssessmentKit = ({ likes_number }: any) => {
+const LikeAssessmentKit = ({ likes }: any) => {
   const { service } = useServiceContext();
   const { assessmentKitId } = useParams();
   const likeQueryData = useQuery({
@@ -438,11 +486,17 @@ const LikeAssessmentKit = ({ likes_number }: any) => {
       variant="contained"
       color="secondary"
       size="small"
-      startIcon={<ThumbUpOffAltRoundedIcon fontSize="inherit" />}
+      startIcon={
+        likeQueryData?.data?.liked ?? likes?.liked ? (
+          <FavoriteRoundedIcon />
+        ) : (
+          <FavoriteBorderRoundedIcon fontSize="inherit" />
+        )
+      }
       onClick={like}
       loading={likeQueryData.loading}
     >
-      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.count ?? likes_number}</Box>
+      <Box sx={{ mx: 0.6 }}>{likeQueryData?.data?.count ?? likes?.count}</Box>
     </LoadingButton>
   );
 };

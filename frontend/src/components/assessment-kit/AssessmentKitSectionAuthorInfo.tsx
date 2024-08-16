@@ -9,7 +9,9 @@ interface IAssessmentKitSectionAuthorInfo {
   data: any;
 }
 
-const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) => {
+const AssessmentKitSectionAuthorInfo = (
+  props: IAssessmentKitSectionAuthorInfo
+) => {
   const { data } = props;
   return (
     <Box my={3} mx={1.5}>
@@ -28,7 +30,7 @@ const AssessmentKitSectionAuthorInfo = (props: IAssessmentKitSectionAuthorInfo) 
             <AccountBoxRoundedIcon fontSize="inherit" />
           </Box>
           <Box py={1} ml={1}>
-            <Typography fontFamily="Roboto" fontWeight={"bold"}>
+            <Typography fontWeight={"bold"}>
               {data.assessmentkitInfos.authorInfos.name}
             </Typography>
             <Box sx={{ ...styles.centerV }}>

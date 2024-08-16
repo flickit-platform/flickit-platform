@@ -3,6 +3,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  CircularProgress,
   Collapse,
   Divider,
   Grid,
@@ -16,7 +17,7 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData, { useQueryDataContext } from "@common/QueryData";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import { styles } from "@styles";
 import { Trans } from "react-i18next";
@@ -34,7 +35,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -53,6 +54,12 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
+import formatBytes from "@utils/formatBytes";
+import { error } from "console";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -76,7 +83,7 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({});
+  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
   return (
     <QueryData
@@ -96,21 +103,35 @@ const ExpertGroupContainer = () => {
           editable,
           assessment_kits = [],
         } = data || {};
-        // const is_owner = data?.owner?.id === userInfo.id;
+        const is_member = expertGroupMembersQueryData.data?.items?.some(
+          (res: any) => {
+            return res.id === userInfo.id;
+          }
+        );
         const hasAccess = editable;
         setDocTitle(`${t("expertGroup")}: ${title || ""}`);
         return (
           <Box>
             <Title
+              backLink="/"
               borderBottom
               pb={1}
-              avatar={<Avatar src={pictureLink} sx={{ mr: 1 }} />}
+              avatar={
+                <AvatarComponent
+                  queryData={queryData}
+                  picture={pictureLink}
+                  editable={editable}
+                />
+              }
               sup={
                 <SupTitleBreadcrumb
                   routes={[
                     {
                       title: t("expertGroups") as string,
                       to: `/user/expert-groups`,
+                    },
+                    {
+                      title: title,
                     },
                   ]}
                 />
@@ -146,7 +167,7 @@ const ExpertGroupContainer = () => {
                     queryData={queryData}
                     hasAccess={editable}
                     dialogProps={createAssessmentKitDialogProps}
-                    is_member={editable}
+                    is_member={is_member}
                     is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
                   />
@@ -242,10 +263,13 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {assessmentKitsCounts?.published &&
-                          `${assessmentKitsCounts?.published.length} ${t(
-                            "publishedAssessmentKits"
-                          ).toLowerCase()}`}
+                        {assessmentKitsCounts.filter(
+                          (item: any) => item.published
+                        ) &&
+                          `${assessmentKitsCounts.filter(
+                            (item: any) => item.published
+                          ).length
+                          } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
                         <Box ml="auto">
@@ -287,10 +311,13 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {assessmentKitsCounts?.unpublished &&
-                            `${assessmentKitsCounts?.unpublished.length} ${t(
-                              "unpublishedAssessmentKits"
-                            ).toLowerCase()}`}
+                          {assessmentKitsCounts.filter(
+                            (item: any) => !item.published
+                          ) &&
+                            `${assessmentKitsCounts.filter(
+                              (item: any) => !item.published
+                            ).length
+                            } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
                     )}
@@ -313,6 +340,157 @@ const ExpertGroupContainer = () => {
         );
       }}
     />
+  );
+};
+
+
+const AvatarComponent = (props: any) => {
+  const { title, picture, queryData, editable } = props;
+  const [hover, setHover] = useState(false);
+  const [image, setImage] = useState("");
+  const [profilePicture, setProfilePicture] = useState(picture);
+  const [isLoading, setIsLoading] = useState(false);
+  const { expertGroupId = "" } = useParams();
+  const { service } = useServiceContext();
+
+  useEffect(() => { setProfilePicture(picture); }, [picture]);
+
+  const handleFileChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as any);
+      };
+      reader.readAsDataURL(file);
+      let maxSize = 2097152;
+      if (file.size > maxSize) {
+        toastError(`Maximum upload file size is ${formatBytes(maxSize)}.`);
+        return;
+      }
+
+      setHover(false);
+      setProfilePicture("");
+      setIsLoading(true);
+
+      try {
+        const pictureData = { pictureFile: file };
+        const res = await service.updateExpertGroupPicture(
+          { data: pictureData, id: expertGroupId },
+          undefined
+        );
+        setProfilePicture(res.data.pictureLink);
+        setIsLoading(false);
+      } catch (e: any) {
+        setIsLoading(false);
+        toastError(e as ICustomError);
+      }
+    }
+  };
+
+  const handleDelete = useQuery({
+    service: (args = { expertGroupId }, config) =>
+      service.deleteExpertGroupImage(args, config),
+    runOnMount: false,
+  });
+
+  const deletePicture = async () => {
+    try {
+      setIsLoading(true);
+      await handleDelete.query();
+      setProfilePicture("");
+      setIsLoading(false);
+    } catch (e: any) {
+      setIsLoading(false);
+      toastError(e as ICustomError);
+    }
+  };
+
+  return (
+    <Box
+      position="relative"
+      display="inline-block"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      sx={{ mr: 1 }}
+    >
+      <Avatar
+        sx={{
+          bgcolor: (t) => t.palette.grey[800],
+          textDecoration: "none",
+          width: 50,
+          height: 50,
+          position: "relative",
+        }}
+        src={profilePicture}
+      >
+        {title && !hover && title?.[0]?.toUpperCase()}
+      </Avatar>
+      {isLoading && (
+        <CircularProgress
+          size={24}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginTop: "-12px",
+            marginLeft: "-12px",
+          }}
+        />
+      )}
+      {!isLoading && hover && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0, 0, 0, 0.6)"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="50%"
+          sx={{ cursor: "pointer" }}
+        >
+          {profilePicture ? (
+            <>
+              <Tooltip title={"Delete Picture"}>
+                <DeleteIcon
+                  onClick={deletePicture}
+                  sx={{ color: "whitesmoke" }}
+                />
+              </Tooltip>
+              <Tooltip title={"Edit Picture"}>
+                <IconButton
+                  component="label"
+                  sx={{ padding: 0, color: "whitesmoke" }}
+                >
+                  <EditIcon />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    hidden
+                  />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <Tooltip title={"Add Picture"}>
+              <IconButton component="label" sx={{ color: "whitesmoke" }}>
+                <AddIcon />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  hidden
+                />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+      )}
+    </Box>
   );
 };
 
@@ -430,7 +608,7 @@ const ExpertGroupMembers = (props: any) => {
 };
 
 const Invitees = (props: any) => {
-  const { users, query,inviteeQuery, setOpenInvitees, openInvitees } = props;
+  const { users, query, inviteeQuery, setOpenInvitees, openInvitees } = props;
   const hasInvitees = users.length > 0;
   return (
     <Box>
@@ -510,7 +688,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query,inviteeQuery, userId, email, isInvitationExpired } = props;
+  const { query, inviteeQuery, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -531,6 +709,7 @@ const MemberActions = (props: any) => {
   const deleteItem = async (e: any) => {
     await deleteExpertGroupMember();
     await query();
+    await inviteeQuery();
   };
 
   const inviteMember = async () => {
@@ -541,14 +720,17 @@ const MemberActions = (props: any) => {
       });
       res?.message && toast.success(res.message);
       query();
-      inviteeQuery()
+      inviteeQuery();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.data || {}) {
-        if (Array.isArray(error.data.message)) {
-          toastError(error.data?.message[0]);
-        } else if (error.data?.message) {
-          toastError(error.data?.message);
+      if (
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else {
+          toastError(error);
         }
       }
     }
@@ -561,10 +743,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -630,11 +812,14 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.response.data || {}) {
-        if (Array.isArray(error.response.data.message)) {
-          toastError(error.response.data?.message[0]);
-        } else if (error.response.data?.message) {
-          toastError(error.response.data?.message);
+      if (
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else {
+          toastError(error);
         }
       }
     }
@@ -733,8 +918,8 @@ const AssessmentKitsList = (props: any) => {
             </Box>
           }
           isDataEmpty={(data) => {
-            const { results } = data;
-            const isEmpty = results;
+            const { items } = data;
+            const isEmpty = items;
             return isEmpty;
           }}
           renderLoading={() => (
@@ -745,31 +930,15 @@ const AssessmentKitsList = (props: any) => {
             </>
           )}
           render={(data = {}) => {
-            const { results } = data;
-            if (results) {
-              setAssessmentKitsCounts(results);
+            const { items } = data;
+            if (items) {
+              setAssessmentKitsCounts(items);
             }
             return (
               <>
-                {results?.published.map((assessment_kit: any) => {
-                  return (
-                    <AssessmentKitListItem
-                      link={
-                        is_member
-                          ? `assessment-kits/${assessment_kit?.id}`
-                          : `/assessment-kits/${assessment_kit?.id}`
-                      }
-                      key={assessment_kit?.id}
-                      data={assessment_kit}
-                      fetchAssessmentKits={assessmentKitQuery.query}
-                      hasAccess={hasAccess}
-                      is_member={is_member}
-                      is_active={true}
-                    />
-                  );
-                })}
-                {is_member &&
-                  results?.unpublished.map((assessment_kit: any) => {
+                {items
+                  ?.filter((item: any) => item.published)
+                  ?.map((assessment_kit: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
@@ -782,10 +951,30 @@ const AssessmentKitsList = (props: any) => {
                         fetchAssessmentKits={assessmentKitQuery.query}
                         hasAccess={hasAccess}
                         is_member={is_member}
-                        is_active={false}
+                        is_active={true}
                       />
                     );
                   })}
+                {is_member &&
+                  items
+                    ?.filter((item: any) => !item.published)
+                    ?.map((assessment_kit: any) => {
+                      return (
+                        <AssessmentKitListItem
+                          link={
+                            is_member
+                              ? `assessment-kits/${assessment_kit?.id}`
+                              : `/assessment-kits/${assessment_kit?.id}`
+                          }
+                          key={assessment_kit?.id}
+                          data={assessment_kit}
+                          fetchAssessmentKits={assessmentKitQuery.query}
+                          hasAccess={hasAccess}
+                          is_member={is_member}
+                          is_active={false}
+                        />
+                      );
+                    })}
               </>
             );
           }}
@@ -827,7 +1016,6 @@ const ExpertGroupMembersDetail = (props: any) => {
               mb={2}
               titleProps={{
                 fontSize: "1rem",
-                fontFamily: "Roboto",
                 textTransform: "unset",
                 letterSpacing: ".05rem",
               }}
@@ -843,7 +1031,7 @@ const ExpertGroupMembersDetail = (props: any) => {
           render={(data) => {
             const { items = [] } = data;
             const users = items.filter((user: any) => user.status === "ACTIVE");
-              setNumberOfMembers(users?.length);
+            setNumberOfMembers(users?.length);
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
@@ -854,7 +1042,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                         titleProps={{
                           textTransform: "none",
                           fontSize: ".95rem",
-                          fontFamily: "Roboto",
                           mb: 1,
                         }}
                       >
@@ -973,7 +1160,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                       titleProps={{
                         textTransform: "none",
                         fontSize: ".95rem",
-                        fontFamily: "Roboto",
                       }}
                     >
                       <Trans i18nKey="invitees" />

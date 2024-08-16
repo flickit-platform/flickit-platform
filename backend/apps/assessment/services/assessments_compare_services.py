@@ -32,6 +32,7 @@ def get_subject_progres(request, assessment_id, subject_id):
 
 def __get_maturity_level_details_for_assessment(maturity_level, maturity_level_count):
     maturity_level_details = dict()
+    maturity_level_details['id'] = maturity_level.id
     maturity_level_details['title'] = maturity_level.title
     maturity_level_details['value'] = maturity_level.value
     maturity_level_details['index'] = maturity_level.index
@@ -78,18 +79,15 @@ def __get_assessment_progres(assessment_progres: DictObject):
     return assessment_progres_details
 
 
-def __get_assessment_details(assessment: DictObject, assessment_progres: DictObject, top_weaknesses: list,
-                             top_strengths: list):
+def __get_assessment_details(assessment: DictObject, assessment_progres: DictObject):
     assessment_data = dict()
     assessment_data["id"] = assessment.id
     assessment_data["confidenceValue"] = assessment.confidenceValue
     assessment_data["title"] = assessment.title
     assessment_data["maturityLevel"] = __get_maturity_level_details_for_assessment(assessment.maturityLevel,
                                                                                    assessment.assessmentKit.maturityLevelCount)
-    assessment_data["assessmentKit"] = assessment.assessmentKit.title
+    assessment_data["assessmentKit"] = {"id": assessment.assessmentKit.id, "title": assessment.assessmentKit.title}
     assessment_data["progress"] = __get_assessment_progres(assessment_progres)
-    assessment_data["topStrengths"] = __get_top_strengths_for_assessment(top_strengths)
-    assessment_data["topWeaknesses"] = __get_top_weaknesses_for_assessment(top_weaknesses)
     return assessment_data
 
 
@@ -116,12 +114,28 @@ def __get_attributes_details_for_subject(subject_response, assessment, attribute
             attributes_details["title"] = attribute["title"]
             attributes_details["assessment"] = list()
             attributes_details["assessment"].append(
-                {"assessmentId": assessment.id, "maturityLevelValue": attribute["maturityLevel"]["value"]})
+                {"assessmentId": assessment.id,
+                 "maturityLevel": {
+                     "id": attribute["maturityLevel"]["id"],
+                     "title": attribute["maturityLevel"]["title"],
+                     "value": attribute["maturityLevel"]["value"],
+                     "index": attribute["maturityLevel"]["index"],
+                 }
+                 }
+            )
             attributes_list.append(attributes_details)
     else:
         for i in range(len(attributes_list)):
             attributes_list[i]["assessment"].append(
-                {"assessmentId": assessment.id, "maturityLevelValue": attributes[i]["maturityLevel"]["value"]})
+                {
+                    "assessmentId": assessment.id,
+                    "maturityLevel": {
+                        "id": attributes[i]["maturityLevel"]["id"],
+                        "title": attributes[i]["maturityLevel"]["title"],
+                        "value": attributes[i]["maturityLevel"]["value"],
+                        "index": attributes[i]["maturityLevel"]["index"],
+                    }
+                })
 
     return attributes_list
 
@@ -173,19 +187,18 @@ def get_subject_details(request, assessment, subjects, subjects_list):
 def get_assessment_details(request, assessment_id):
     result = assessment_report_services.get_assessment_report(request=request, assessment_id=assessment_id)
     assessment_report = DictObject(**result["body"])
-
     if result["status_code"] == 400:
         if assessment_report.code == "NOT_FOUND":
             return {"status": False}
         if assessment_report.code == "CONFIDENCE_CALCULATION_NOT_VALID":
-            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(assessment_id)
+            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(request, assessment_id)
             return get_assessment_details(request, assessment_id)
         elif assessment_report.code == "CALCULATE_NOT_VALID":
             maturity_level_services.calculate_maturity_level(request, assessment_id)
             return get_assessment_details(request, assessment_id)
     elif result["status_code"] == 200:
         if not assessment_report.assessment.isCalculateValid:
-            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(assessment_id)
+            confidence_levels_services.get_confidence_levels_calculate_in_assessment_core(request, assessment_id)
             return get_assessment_details(request, assessment_id)
         elif not assessment_report.assessment.isConfidenceValid:
             maturity_level_services.calculate_maturity_level(request, assessment_id)
@@ -195,8 +208,6 @@ def get_assessment_details(request, assessment_id):
     subjects = assessment_report.subjects
 
     assessment_details = __get_assessment_details(assessment=assessment_report.assessment,
-                                                  top_weaknesses=assessment_report.topWeaknesses,
-                                                  top_strengths=assessment_report.topStrengths,
                                                   assessment_progres=assessment_progres,
                                                   )
     return {"status": True, "assessment_details": assessment_details, "subjects": subjects,

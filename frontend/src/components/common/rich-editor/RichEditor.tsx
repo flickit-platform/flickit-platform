@@ -7,6 +7,7 @@ import Link from "@tiptap/extension-link";
 import { useRef, ChangeEvent, useState } from "react";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import firstCharDetector from "@/utils/firstCharDetector";
+import { customFontFamily } from "@/config/theme";
 
 interface IRichEditorProps {
   defaultValue?: string;
@@ -83,7 +84,7 @@ const RichEditor = (props: IRichEditorProps) => {
     event.target.dir = farsiPattern.test(firstCharacter) ? "rtl" : "ltr";
     event.target.style.fontFamily = farsiPattern.test(firstCharacter)
       ? "VazirMatn"
-      : "Roboto";
+      : customFontFamily;
   };
   return (
     <Box
@@ -94,7 +95,7 @@ const RichEditor = (props: IRichEditorProps) => {
           ? {
               ...(boxProps.sx || {}),
               direction: `${isFarsi ? "rtl" : "ltr"}`,
-              fontFamily: `  ${isFarsi ? "VazirMatn" : "Roboto"}`,
+              fontFamily: `  ${isFarsi ? "VazirMatn" : customFontFamily}`,
               position: "relative",
               marginTop: "0px !important",
               width: "100%",

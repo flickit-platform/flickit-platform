@@ -27,7 +27,7 @@ const AdviceSlider = (props: any) => {
           ...prev,
           {
             attributeId: attribute?.id,
-            maturityLevelId: maturityLevels[newValue - 1]?.maturity_level.id,
+            maturityLevelId: maturityLevels[newValue - 1]?.id,
           },
         ]);
       } else {
@@ -36,27 +36,25 @@ const AdviceSlider = (props: any) => {
           const updatedTarget = [...prev];
           updatedTarget[existingIndex] = {
             attributeId: attribute?.id,
-            maturityLevelId: maturityLevels[newValue - 1]?.maturity_level.id,
+            maturityLevelId: maturityLevels[newValue - 1]?.id,
           };
           return updatedTarget;
         });
       }
     }
   };
-  const colorPallet = getMaturityLevelColors(
-    subject?.maturity_level?.maturity_levels_count ?? 5
-  );
+  const colorPallet = getMaturityLevelColors(maturityLevels?.length ?? 5);
   return (
     <Box
       sx={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        px: {xs:3,sm:8},
+        px: { xs: 3, sm: 8 },
         width: "100%",
         margin: "0 auto",
-        flexDirection:{xs:"column",sm:"row"},
-        mb:{xs:4,sm:2}
+        flexDirection: { xs: "column", sm: "row" },
+        mb: { xs: 4, sm: 2 },
       }}
     >
       <Box sx={{ display: "contents" }}>
@@ -65,7 +63,7 @@ const AdviceSlider = (props: any) => {
             px: "10px",
             color: "#D81E5B",
             background: "#FDF1F5",
-            fontSize: "11px",
+            fontSize: ".75rem",
             border: "1px solid #D81E5B",
             borderRadius: "8px",
             textAlign: "center",
@@ -75,40 +73,44 @@ const AdviceSlider = (props: any) => {
         </Box>
         <Box
           sx={{
-            fontSize: "24px",
+            fontSize: "1.5rem",
             fontWeight: "500",
-            ml: {xs:0,sm:4},
-            width: {xs:"100%",sm:"240px"},
+            ml: { xs: 0, sm: 4 },
+            width: { xs: "100%", sm: "240px" },
             px: "8px",
-            textAlign:{xs:"center",sm:"left"}
+            textAlign: { xs: "center", sm: "left" },
           }}
         >
           {attribute.title}
         </Box>
       </Box>
 
-      <Box sx={{width:{xs:"100%",sm:"400px"}}} margin={"0 auto"} my={{xs:2,sm:6}}>
+      <Box
+        sx={{ width: { xs: "100%", sm: "400px" } }}
+        margin={"0 auto"}
+        my={{ xs: 2, sm: 6 }}
+      >
         <Box px={2}>
           <Slider
             defaultValue={defaultValue}
             min={1}
-            max={subject?.maturity_level?.maturity_levels_count ?? 5}
+            max={maturityLevels?.length ? maturityLevels?.length : 5}
             onChange={handleSliderChange}
             value={value}
             marks
             sx={{
               ".MuiSlider-thumb": {
-                color: "#1CC2C4",
+                color: "#004F83",
               },
               ".MuiSlider-track": {
                 border: "none",
                 height: "4px",
-                backgroundColor: "#1CC2C4",
+                backgroundColor: "#004F83",
               },
               ".MuiSlider-rail": {
                 opacity: 0.5,
                 height: "4px",
-                backgroundColor: "#1CC2C4 !important",
+                backgroundColor: "#004F83 !important",
               },
               ".MuiSlider-markActive": {
                 background: "rgba(237, 244, 252, 1)",
@@ -125,7 +127,13 @@ const AdviceSlider = (props: any) => {
           mr={"4%"}
           mt={"-10px"}
         >
-          <Box position={"relative"} left={`${(defaultValue - 1) * 25}%`}>
+          <Box
+            position={"relative"}
+            left={`${
+              ((defaultValue - 1) * 99) /
+              (maturityLevels?.length ? maturityLevels?.length - 1 : 4)
+            }%`}
+          >
             <svg
               width="20"
               height="9"
@@ -139,11 +147,14 @@ const AdviceSlider = (props: any) => {
           <Box
             sx={{
               position: "relative",
-              left: `${(defaultValue - 1) * 25}%`,
+              left: `${
+                ((defaultValue - 1) * 99) /
+                (maturityLevels?.length ? maturityLevels?.length - 1 : 4)
+              }%`,
               ml: "-25px",
               mt: "-5px",
               whiteSpace: "nowrap",
-              fontSize: "12px",
+              fontSize: ".75rem",
               fontWeight: "400",
               color: "#F9A03F",
             }}
@@ -164,7 +175,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: "#9DA7B3",
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "400",
           }}
         >
@@ -173,7 +184,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: colorPallet[currentState?.index - 1],
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "700",
           }}
         >
@@ -182,7 +193,7 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: "#9DA7B3",
-            fontSize: "11px",
+            fontSize: ".75rem",
             fontWeight: "400",
           }}
         >
@@ -192,14 +203,11 @@ const AdviceSlider = (props: any) => {
         <Box
           sx={{
             color: colorPallet[value ? value - 1 : defaultValue - 1],
-            fontSize: "16px",
+            fontSize: "1rem",
             fontWeight: "700",
           }}
         >
-          {
-            maturityLevels[value ? value - 1 : defaultValue - 1]?.maturity_level
-              .title
-          }
+          {maturityLevels[value ? value - 1 : defaultValue - 1]?.title}
         </Box>
       </Box>
     </Box>

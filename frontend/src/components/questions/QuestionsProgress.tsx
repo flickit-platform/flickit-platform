@@ -113,13 +113,13 @@ export const QuestionProgressItem = (props: any) => {
         height: "20px",
         cursor: questionIndex != question.index ? "pointer" : "auto",
         backgroundColor: (t: any) =>
-          question.answer || question.is_not_applicable
+          question?.answer?.selectedOption || question?.answer?.isNotApplicable
             ? `${t.palette.primary.main}`
             : "white",
         border: (t: any) => `3px solid white`,
         outline: (t: any) =>
           `${
-            question.answer || question.is_not_applicable
+              question?.answer?.selectedOption || question?.answer?.isNotApplicable
               ? t.palette.primary.main
               : "#a7caed"
           } solid 5px`,
@@ -142,10 +142,9 @@ export const QuestionProgressItem = (props: any) => {
             fontSize: question.index == questionIndex ? ".75rem" : ".7rem",
             textAlign: "center",
             lineHeight: "13px",
-            fontFamily: "Roboto",
             opacity: question.index == questionIndex ? 1 : 0.6,
             color:
-              question.answer || question.is_not_applicable ? `white` : "gray",
+                question?.answer?.selectedOption || question?.answer?.isNotApplicable ? `white` : "gray",
             transition: "opacity .1s ease",
           }}
           className="i-p-i-n"

@@ -4,7 +4,7 @@ const getUserName = (userInfo: IUserInfo) => {
   if (!userInfo) {
     return "";
   }
-  return userInfo.display_name || userInfo.email;
+  return userInfo.displayName || userInfo.email;
 };
 
 export default getUserName;

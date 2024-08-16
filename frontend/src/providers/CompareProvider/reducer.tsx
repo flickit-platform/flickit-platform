@@ -15,6 +15,11 @@ const appReducer = (
         ...prevState,
         assessment_kit: action.payload,
       };
+    case COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_LOADING:
+      return {
+        ...prevState,
+        loading: action.payload,
+      };
     default:
       return prevState;
   }

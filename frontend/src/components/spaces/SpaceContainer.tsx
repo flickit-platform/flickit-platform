@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -16,23 +17,53 @@ import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { styles,animations } from "@styles";
+import { styles, animations } from "@styles";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
   const { service } = useServiceContext();
+  const navigate = useNavigate();
+  const { page } = useParams();
+  const PAGESIZE: number = 10;
+
+  let pageNumber = Number(page);
+
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    navigate(`/spaces/${value}`);
+  };
+
   const spacesQueryData = useQuery<ISpacesModel>({
-    service: (args, config) => service.fetchSpaces(args, config),
+    service: (args = { size: PAGESIZE, page: pageNumber }, config) =>
+      service.fetchSpaces(args, config),
     toastError: true,
   });
 
-  const isEmpty = spacesQueryData?.data?.results?.length === 0;
+  useEffect(() => {
+    spacesQueryData.query({ size: PAGESIZE, page: pageNumber });
+  }, [pageNumber]);
+
+  const pageCount =
+    !spacesQueryData.data ||
+      !spacesQueryData?.data?.total ||
+      !spacesQueryData?.data?.size ||
+      spacesQueryData.data?.size === 0
+      ? 1
+      : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
+
+  const isEmpty = spacesQueryData?.data?.items?.length === 0;
 
   return (
     <SpaceLayout
       title={
-        <Title borderBottom={true}>
-          <FolderRoundedIcon sx={{ mr: 1 }} /> <Trans i18nKey="spaces" />
+        <Title borderBottom={true} size="large">
+          {/* <FolderRoundedIcon sx={{ mr: 1 }} /> */}
+          <Trans i18nKey="spaces" />
         </Title>
       }
     >
@@ -79,7 +110,7 @@ const SpaceContainer = () => {
             variant="h3"
             sx={{
               color: "#9DA7B3",
-              fontSize: "48px",
+              fontSize: "3rem",
               fontWeight: "900",
               width: "60%",
             }}
@@ -91,7 +122,7 @@ const SpaceContainer = () => {
             variant="h1"
             sx={{
               color: "#9DA7B3",
-              fontSize: "16px",
+              fontSize: "1rem",
               fontWeight: "500",
               width: "60%",
             }}
@@ -110,7 +141,7 @@ const SpaceContainer = () => {
                 },
               }}
             >
-              <Typography sx={{ fontSize: "20px" }} variant="button">
+              <Typography fontSize="1.25rem" variant="button">
                 <Trans i18nKey="createYourFirstSpace" />
               </Typography>
             </Button>
@@ -152,7 +183,23 @@ const SpaceContainer = () => {
           );
         }}
       />
-
+      <Stack
+        spacing={2}
+        sx={{
+          mt: 3,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Pagination
+          variant="outlined"
+          color="primary"
+          count={pageCount}
+          onChange={handleChangePage}
+          page={pageNumber}
+        />
+      </Stack>
       <CreateSpaceDialog
         {...dialogProps}
         onSubmitForm={spacesQueryData.query}

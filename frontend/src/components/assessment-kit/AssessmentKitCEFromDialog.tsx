@@ -95,9 +95,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
-      toastError(err.response.data.message);
+      toastError(err);
       setLoading(false);
-      setServerFieldErrors(err.response.data.message, formMethods);
+      setServerFieldErrors(err, formMethods);
       formMethods.clearErrors();
 
       return () => {
@@ -373,7 +373,7 @@ const IsPrivateSwitch = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"14px"}
+              fontSize="0.825rem"
             >
               <Trans i18nKey="private" />
             </Typography>
@@ -399,7 +399,7 @@ const IsPrivateSwitch = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"14px"}
+              fontSize="0.825rem"
             >
               <Trans i18nKey="public" />
             </Typography>

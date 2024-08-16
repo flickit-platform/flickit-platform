@@ -34,7 +34,6 @@ const SubjectProgress = (props: ISubjectProgressProps) => {
             sx={{
               mt: 1,
               opacity: 0.7,
-              fontFamily: "Oswald",
               fontWeight: 400,
               color: "#000000de",
             }}

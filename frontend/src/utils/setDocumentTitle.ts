@@ -1,7 +1,5 @@
-import { APP_LABEL } from "@config/constants";
-
-const setDocumentTitle = (str: string = "") => {
-  document.title = `${str}${str ? " | " : ""}${APP_LABEL}`;
+const setDocumentTitle = (str: string = "", appLabel: string = "") => {
+  document.title = `${str}${str ? " | " : ""}${appLabel}`;
 };
 
 export default setDocumentTitle;

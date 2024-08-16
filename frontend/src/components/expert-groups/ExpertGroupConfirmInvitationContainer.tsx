@@ -43,7 +43,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
           replace: true,
         });
       } else {
-        toastError(err?.response?.data?.message);
+        toastError(err);
       }
     }
   };
@@ -63,7 +63,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
               m: "auto",
             }}
           >
-            <Title size="small" textTransform={"none"} fontFamily="Roboto">
+            <Title size="small" textTransform={"none"}>
               <Trans i18nKey="youHaveBeenInvitedToExpertGroup" />
             </Title>
             <Box my={3}>

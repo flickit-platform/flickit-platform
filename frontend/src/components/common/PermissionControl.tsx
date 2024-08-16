@@ -8,7 +8,8 @@ interface IPermissionControl {
   loading?: boolean;
 }
 
-const PermissionControl = (props: PropsWithChildren<IPermissionControl>) => {
+const PermissionControl = (props: PropsWithChildren<any>) => {
+  console.log(props)
   const { children, error, loading } = props;
 
   if (loading) {
@@ -33,13 +34,13 @@ const getHasViewPermission = (error: (ICustomError | undefined) | (ICustomError 
       return true;
     }
     if (
-      error.findIndex((err) => err?.type === ECustomErrorType.ACCESS_DENIED || err?.type === ECustomErrorType.NOT_FOUND) !== -1
+      error.findIndex((err) => err?.code === ECustomErrorType.ACCESS_DENIED || err?.code === ECustomErrorType.NOT_FOUND) !== -1
     ) {
       return false;
     }
     return true;
   }
-  if (error.type === ECustomErrorType.ACCESS_DENIED || error.type === ECustomErrorType.NOT_FOUND) {
+  if (error.code === ECustomErrorType.ACCESS_DENIED || error.code === ECustomErrorType.NOT_FOUND) {
     return false;
   }
   return true;

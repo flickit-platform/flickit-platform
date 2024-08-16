@@ -46,7 +46,6 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
               : `2px solid ${colorPallet[ml - 1]}`,
           }}
           variant="h3"
-          fontFamily={"Oswald"}
           fontWeight="bold"
           letterSpacing={".1em"}
         >
@@ -132,7 +131,7 @@ const VerticalLevel = ({
       <Box
         sx={{
           mx: 1,
-          background: "#f5f5f5",
+          background: "#EDEFF1",
           width: "74px",
           height: "216px",
           borderRadius: "100px",

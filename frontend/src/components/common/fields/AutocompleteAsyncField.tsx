@@ -10,12 +10,15 @@ import {
   useFormContext,
 } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
+import { useServiceContext } from "@providers/ServiceProvider";
 import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 import forLoopComponent from "@utils/forLoopComponent";
 import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { filter } from "lodash";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   IAutocompleteAsyncFieldBase,
@@ -28,6 +31,9 @@ interface IAutocompleteAsyncFieldProps
     RegisterOptions<any, any>,
     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
   >;
+  filterFields?: string[];
+  createItemQuery?: any;
+  setError?: any;
 }
 
 const AutocompleteAsyncField = (
@@ -39,7 +45,11 @@ const AutocompleteAsyncField = (
     multiple,
     defaultValue = multiple ? undefined : null,
     required = false,
+    hasAddBtn = false,
     editable = false,
+    filterFields = ["title"],
+    createItemQuery,
+    setError,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -61,6 +71,10 @@ const AutocompleteAsyncField = (
             field={field}
             defaultValue={defaultValue}
             editable={editable}
+            hasAddBtn={hasAddBtn}
+            filterFields={filterFields}
+            createItemQuery={createItemQuery}
+            setError={setError}
           />
         );
       }}
@@ -79,6 +93,11 @@ interface IAutocompleteAsyncFieldBase
   required?: boolean;
   searchOnType?: boolean;
   editable?: boolean;
+  hasAddBtn?: boolean;
+  filterFields?: string[];
+  filterOptionsByProperty?: (option: any) => boolean;
+  createItemQuery?: any;
+  setError?: any;
 }
 
 const AutocompleteBaseField = (
@@ -91,7 +110,7 @@ const AutocompleteBaseField = (
     helperText,
     label,
     getOptionLabel = (option) =>
-      typeof option === "string" ? option : option?.title || null,
+      typeof option === "string" ? option : option?.[filterFields[0]] || null,
     filterSelectedOption = (options: readonly any[], value: any): any[] =>
       value
         ? options.filter((option) => option?.id != value?.id)
@@ -107,8 +126,13 @@ const AutocompleteBaseField = (
     errorObject,
     abortController,
     defaultValue,
+    hasAddBtn,
     searchOnType = true,
     multiple,
+    filterFields = ["title"],
+    filterOptionsByProperty = () => true,
+    createItemQuery,
+    setError,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -118,6 +142,12 @@ const AutocompleteBaseField = (
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
+  const { service } = useServiceContext();
+  const createSpaceQueryData = useQuery({
+    service: (args, config) => service.createSpace(args, config),
+    runOnMount: false,
+  });
+
   const [inputValue, setInputValue] = useState(
     () => getOptionLabel(defaultValue) || ""
   );
@@ -129,13 +159,23 @@ const AutocompleteBaseField = (
       }, 800),
     []
   );
+  const createSpaceQuery = async (option: any) => {
+    try {
+      setOpen(false);
+      const newOption: any = await createItemQuery(inputValue);
+      setOptions((prevOptions) => [...prevOptions, newOption]);
+      onChange(newOption);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     if (!searchOnType && !isFirstFetchRef.current) {
       return;
     }
 
-    if (getOptionLabel(value) == inputValue) {
+    if (getOptionLabel(value) === inputValue) {
       fetch("");
     } else {
       fetch(inputValue);
@@ -155,6 +195,47 @@ const AutocompleteBaseField = (
     };
   }, [loaded]);
 
+  const getFilteredOptions = (options: any[], params: any) => {
+    return options
+      .filter(filterOptionsByProperty)
+      .filter((option) =>
+        filterFields.some((field) =>
+          String(option[field])
+            ?.toLowerCase()
+            ?.includes(params.inputValue.toLowerCase())
+        )
+      );
+  };
+
+  const loadingButtonRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (event?.key === "Enter") {
+        event.preventDefault();
+
+        if (loadingButtonRef.current && inputValue && hasAddBtn) {
+          loadingButtonRef.current.click();
+          setOpen(false);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [inputValue, hasAddBtn]);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    // setOpen(true);
+  };
+
   return (
     <Autocomplete
       {...restFields}
@@ -162,6 +243,9 @@ const AutocompleteBaseField = (
       value={value || (multiple ? undefined : null)}
       multiple={multiple}
       loading={loading}
+      open={open}
+      onOpen={handleOpen}
+      onClose={handleClose}
       loadingText={
         options.length > 5 ? <LoadingComponent options={options} /> : undefined
       }
@@ -173,7 +257,8 @@ const AutocompleteBaseField = (
           return [{}];
         } else if (editable) {
           return options.filter(
-            (option: any) => !value.some((selectedOpts: any) => selectedOpts.id === option.id)
+            (option: any) =>
+              !value.some((selectedOpts: any) => selectedOpts.id === option.id)
           );
         } else {
           return options;
@@ -183,11 +268,42 @@ const AutocompleteBaseField = (
       disablePortal={false}
       includeInputInList
       filterSelectedOptions={true}
-      onChange={(event: any, newValue: any | null) => {
-        onChange(newValue);
+      filterOptions={(options, params) => {
+        const filtered = getFilteredOptions(options, params);
+
+        if (
+          params.inputValue !== "" &&
+          !filtered.some(
+            (option) => getOptionLabel(option) === params.inputValue
+          ) &&
+          hasAddBtn
+        ) {
+          filtered.push({
+            inputValue: params.inputValue,
+            title: `Add "${params.inputValue}"`,
+          });
+        }
+
+        return filtered;
       }}
-      onInputChange={(event, newInputValue) => {
+      onBlur={() => {
+        setOpen(false);
+      }}
+      onChange={(event: any, newValue: any | null) => {
+        if (newValue && newValue.inputValue) {
+          // handle the case where the "Add" button is clicked
+          onChange({ [filterFields[0]]: newValue.inputValue });
+        } else {
+          onChange(newValue);
+          setOpen(false);
+        }
+      }}
+      onInputChange={(event: any, newInputValue) => {
+        if (event?.key === "Enter") return;
         setInputValue(newInputValue);
+        if (setError) {
+          setError(undefined);
+        }
       }}
       renderInput={(params) => (
         <TextField
@@ -196,11 +312,31 @@ const AutocompleteBaseField = (
           label={label}
           fullWidth
           inputRef={ref}
-          error={hasError}
-          helperText={(errorMessage as ReactNode) || helperText}
+          error={hasError || errorObject?.response?.data.message}
+          helperText={
+            (errorMessage as ReactNode) ||
+            errorObject?.response?.data.message ||
+            helperText
+          }
           name={name}
         />
       )}
+      renderOption={(props, option) =>
+        option.inputValue ? (
+          <li {...props}>
+            <LoadingButton
+              fullWidth
+              onClick={createSpaceQuery}
+              sx={{ justifyContent: "start", textTransform: "none" }}
+              ref={loadingButtonRef}
+            >
+              Add "{option.inputValue}"
+            </LoadingButton>
+          </li>
+        ) : (
+          <li {...props}>{option?.[filterFields[0]]}</li>
+        )
+      }
       noOptionsText={
         error ? (
           <Box sx={{ ...styles.centerVH }}>
@@ -209,15 +345,6 @@ const AutocompleteBaseField = (
         ) : (
           noOptionsText
         )
-      }
-      renderOption={
-        error
-          ? () => (
-              <Box sx={{ ...styles.centerVH, color: "rgba(0, 0, 0, 0.6)" }}>
-                <ErrorDataLoading />
-              </Box>
-            )
-          : renderOption
       }
       {...rest}
     />

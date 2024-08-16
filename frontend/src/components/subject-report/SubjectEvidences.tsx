@@ -69,7 +69,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
         }
         alt="empty"
       />
-      <Typography variant="h5" color="#9DA7B3">
+      <Typography color="#9DA7B3">
         <Trans
           i18nKey={
             type === evidenceType.positive
@@ -90,11 +90,12 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
       width="90%"
       padding="16px 0px 0px 0px"
       border="1px solid"
-      borderColor={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
+      borderColor={type === evidenceType.positive ? "#9CCAFF" : "#EFA5BD"}
     >
       <Typography
-        variant="h5"
-        color={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
+        fontSize="1.25rem"
+        fontWeight={500}
+        color={type === evidenceType.positive ? "#004F83" : "#9A003C"}
       >
         <Trans
           i18nKey={
@@ -108,7 +109,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
         sx={{
           width: "100%",
           backgroundColor:
-            type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD",
+            type === evidenceType.positive ? "#9CCAFF" : "#EFA5BD",
         }}
       />
       <Box
@@ -124,8 +125,8 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
             key={index}
             number={index + 1}
             item={item}
-            color={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}
-            textColor={type === evidenceType.positive ? "#1CC2C4" : "#D81E5B"}
+            color={type === evidenceType.positive ? "#9CCAFF" : "#EFA5BD"}
+            textColor={type === evidenceType.positive ? "#004F83" : "#D81E5B"}
           />
         ))}
       </Box>
@@ -161,7 +162,12 @@ const EvidanceDescription = ({
   return (
     <>
       <Box display="flex" justifyContent="flex-start" alignItems="center">
-        <Typography display="flex" margin={2} color={textColor} fontWeight="bold">
+        <Typography
+          display="flex"
+          margin={2}
+          color={textColor}
+          fontWeight="bold"
+        >
           {number}
         </Typography>
         <Typography
@@ -171,6 +177,7 @@ const EvidanceDescription = ({
             whiteSpace: "pre-wrap",
             textAlign: "justify",
             wordBreak: "break-word",
+            unicodeBidi: "plaintext",
           }}
         >
           {item?.description}

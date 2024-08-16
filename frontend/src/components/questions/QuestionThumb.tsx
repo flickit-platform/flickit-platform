@@ -9,11 +9,11 @@ export const QuestionThumb = (props: any) => {
     questionsInfo,
     question = {},
     questionIndex,
-    onClose = () => {},
+    onClose = () => { },
     link,
     isSubmitting,
   } = props;
-  const { total_number_of_questions } = questionsInfo;
+  const { total_number_of_questions, permissions } = questionsInfo;
 
   const navigate = useNavigate();
   return (
@@ -23,19 +23,19 @@ export const QuestionThumb = (props: any) => {
           <Trans i18nKey={"question"} /> {questionIndex}/
           {total_number_of_questions}
         </Typography>
-        <Typography variant="h6" fontFamily={"Roboto"}>
-          {question?.title}
-        </Typography>
+        <Typography variant="h6">{question?.title}</Typography>
       </Box>
-      {question.answer && (
+      {question.answer?.selectedOption && (
         <Box mt={3}>
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
           </Typography>
-          <Typography variant="h6">{question.answer.caption}</Typography>
+          <Typography variant="h6">
+            {question.answer?.selectedOption?.title}
+          </Typography>
         </Box>
       )}
-      {question.is_not_applicable && (
+      {question.answer && question.answer.isNotApplicable && (
         <Box mt={3}>
           <Typography variant="subMedium" textTransform="uppercase">
             <Trans i18nKey={"yourAnswer"} />
@@ -55,7 +55,8 @@ export const QuestionThumb = (props: any) => {
             onClose();
           }}
         >
-          {question.answer || question.is_not_applicable ? (
+          {question.answer || !permissions.answerQuestion ||
+            (question.answer && question.answer.isNotApplicable) ? (
             <Trans i18nKey="edit" />
           ) : (
             <Trans i18nKey="submitAnAnswer" />
