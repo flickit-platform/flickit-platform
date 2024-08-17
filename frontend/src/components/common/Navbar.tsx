@@ -634,7 +634,7 @@ const Navbar = () => {
       {notificationCenterOpen && (
         <Box
           ref={notificationCenterRef}
-          sx={{ position: "absolute", top: 60, right: 20, zIndex: 1300 }}
+          sx={{ position: "fixed", top: 60, right: 20, zIndex: 1300 }}
         >
           <NotificationCenterComponent
             setNotificationCount={setNotificationCount}
