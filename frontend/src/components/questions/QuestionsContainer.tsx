@@ -54,7 +54,6 @@ const QuestionsContainer = (
   );
 };
 
-
 export const QuestionsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
@@ -94,12 +93,17 @@ export const useQuestions = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const dispatch = useQuestionDispatch();
   const { assessmentStatus } = useQuestionContext();
-  const { questionnaireId = "", assessmentId = "", questionIndex = 0 } = useParams();
+  const {
+    questionnaireId = "",
+    assessmentId = "",
+    questionIndex = 0,
+  } = useParams();
+  const pageSize = 50;
 
   const questionsResultQueryData = useQuery<IQuestionsModel>({
     service: (args, config) =>
       service.fetchQuestionsResult(
-        { questionnaireId, assessmentId, page: args.page, size: 50 },
+        { questionnaireId, assessmentId, page: args.page, size: pageSize },
         config
       ),
     runOnMount: false, // We'll handle the initial run ourselves
@@ -107,7 +111,10 @@ export const useQuestions = () => {
 
   const fetchPathInfo = useQuery({
     service: (args, config) =>
-      service.fetchPathInfo({ questionnaireId, assessmentId, ...(args || {}) }, config),
+      service.fetchPathInfo(
+        { questionnaireId, assessmentId, ...(args || {}) },
+        config
+      ),
     runOnMount: true,
   });
 
@@ -165,7 +172,7 @@ export const useQuestions = () => {
   useEffect(() => {
     const currentIndex = Number(questionIndex);
     if (currentIndex > questions.length && currentIndex <= totalQuestions) {
-      const newPage = Math.floor((currentIndex - 1) / 50);
+      const newPage = Math.floor((currentIndex - 1) / pageSize);
       if (newPage > page) {
         setPage(newPage);
         loadMoreQuestions(newPage);
@@ -173,11 +180,11 @@ export const useQuestions = () => {
     }
   }, [questionIndex, questions.length, totalQuestions]);
 
-  useEffect(() => {
-    if (assessmentStatus === EAssessmentStatus.DONE) {
-      loadMoreQuestions(page);
-    }
-  }, [assessmentStatus]);
+  // useEffect(() => {
+  //   if (assessmentStatus === EAssessmentStatus.DONE) {
+  //     loadMoreQuestions(page);
+  //   }
+  // }, [assessmentStatus]);
 
   return {
     questions,
