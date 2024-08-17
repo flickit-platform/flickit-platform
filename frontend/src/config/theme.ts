@@ -308,6 +308,7 @@ export const theme = createTheme({
           padding: 0;
         }
         .nc-header {
+          font-family: 'Ubuntu';
           background: #E8EBEE;
           border-radius: 7px 7px 0px 0px;
           box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
