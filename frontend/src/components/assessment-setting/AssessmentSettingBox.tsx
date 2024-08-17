@@ -903,7 +903,7 @@ export const AssessmentSettingMemberBox = (props: {
                                       },
                                       border: row.editable
                                         ? "1px solid #2974B4"
-                                        : "1px solid #2974b442",
+                                        : "1px solid #2974b4",
                                       fontSize: "0.875rem",
                                       borderRadius: "0.5rem",
                                       "&.MuiOutlinedInput-notchedOutline": {
@@ -920,7 +920,7 @@ export const AssessmentSettingMemberBox = (props: {
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
-                                          : "#2974b442 !important",
+                                          : "#2974b4 !important",
                                       },
                                       "& .MuiSelect-select": {
                                         padding: "4px 5px",
@@ -1029,7 +1029,7 @@ export const AssessmentSettingMemberBox = (props: {
                                 </Grid>
                               </FormControl>
                               <Box
-                                width="30%"
+                                // width="30%"
                                 display="flex"
                                 justifyContent="center"
                                 alignItems="center"
