@@ -186,8 +186,9 @@ const Actions = (props: any) => {
       type: "update",
     });
   };
-  const deleteExpertGroup = async () => {
+  const deleteExpertGroup = async (e:any) => {
     try {
+      e.stopPropagation()
       await deleteExpertGroupQuery.query();
       await fetchExpertGroups();
     } catch (e) {
@@ -217,7 +218,7 @@ const Actions = (props: any) => {
           {
             icon: <DeleteRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="delete" />,
-            onClick: deleteExpertGroup,
+            onClick: (e)=> deleteExpertGroup(e),
           },
         ]}
       />
