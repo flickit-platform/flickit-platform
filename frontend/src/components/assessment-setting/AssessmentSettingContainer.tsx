@@ -29,7 +29,8 @@ const AssessmentSettingContainer = () => {
     display: boolean;
     name: string;
     id: string;
-  }>({ display: false, name: "", id: "" });
+    invited?: boolean
+  }>({ display: false, name: "", id: "",invited: false });
   const [listOfUser, setListOfUser] = useState([]);
   const [changeData, setChangeData] = useState(false);
 
@@ -58,6 +59,10 @@ const AssessmentSettingContainer = () => {
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
+  const inviteesMemberList = useQuery({
+    service: (args, config) =>
+        service.fetchAssessmentMembersInvitees({ assessmentId }, config),
+  });
   useEffect(() => {
     (async () => {
       let { manageable } = await AssessmentInfo.query()
@@ -82,11 +87,11 @@ const AssessmentSettingContainer = () => {
     setExpanded(false);
   };
 
-  const handleOpenRemoveModal = (name: string, id: string) => {
-    setExpandedRemoveModal({ display: true, name, id });
+  const handleOpenRemoveModal = (name: string, id: string, invited?: boolean) => {
+    setExpandedRemoveModal({ display: true, name, id, invited });
   };
   const handleCloseRemoveModal = () => {
-    setExpandedRemoveModal({ display: false, name: "", id: "" });
+    setExpandedRemoveModal({ display: false, name: "", id: "", invited: false });
   };
 
   return (
@@ -138,6 +143,7 @@ const AssessmentSettingContainer = () => {
                   fetchAssessmentsUserListRoles={
                     fetchAssessmentsUserListRoles.query
                   }
+                  inviteesMemberList={inviteesMemberList}
                   openModal={handleClickOpen}
                   openRemoveModal={handleOpenRemoveModal}
                   setChangeData={setChangeData}
@@ -166,6 +172,7 @@ const AssessmentSettingContainer = () => {
               fetchAssessmentsUserListRoles={
                 fetchAssessmentsUserListRoles.query
               }
+              inviteesMemberList={inviteesMemberList}
               assessmentName={title}
               setChangeData={setChangeData}
             />

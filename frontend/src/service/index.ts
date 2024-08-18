@@ -144,6 +144,13 @@ export const createService = (
     ) {
       return axios.get(`/api/v1/assessments/${assessmentId}/invitees/`, config);
     },
+    RemoveAssessmentMembersInvitees(
+          args: { invitedId: string },
+          config: AxiosRequestConfig<any> | undefined
+    ) {
+          const {invitedId} = args
+          return axios.delete(`/api/v1/assessment-invites/${invitedId}/`, config);
+    },
     loadUserByEmail(
       args: { email: string },
       config: AxiosRequestConfig<any> | undefined
@@ -284,6 +291,17 @@ export const createService = (
       const { assessmentId, userId } = args;
       return axios.put(
         `/api/v1/assessments/${assessmentId}/assessment-user-roles/${userId}/`,
+        args,
+        config
+      );
+    },
+      editUserRoleInvited(
+      args: { id : string, roleId : number },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      const { id } = args;
+      return axios.put(
+              `/api/v1/assessment-invites/${id}/`,
         args,
         config
       );
