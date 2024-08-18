@@ -379,7 +379,7 @@ const AnswerTemplate = (props: {
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
   const isSelectedValueTheSameAsAnswer =
-    questionInfo?.answer?.index == value?.index;
+    questionInfo?.answer?.selectedOption?.index == value?.index;
   const changeHappened = useRef(false);
   const onChange = (
     event: React.MouseEvent<HTMLElement>,
