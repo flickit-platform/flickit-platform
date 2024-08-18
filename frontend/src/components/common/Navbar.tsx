@@ -101,6 +101,7 @@ const NotificationItem = ({
         <Typography
           variant="titleSmall"
           sx={{
+            fontWeight: message.seen ? 400 : 600,
             color: "#2B333B",
             overflow: "hidden",
             whiteSpace: "nowrap",
