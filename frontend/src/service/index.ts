@@ -994,7 +994,6 @@ export const createService = (
 
       return axios.post(`/api/v1/expert-groups/`, data, {
         ...(config ?? {}),
-        responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
         },
