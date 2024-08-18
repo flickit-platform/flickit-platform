@@ -301,8 +301,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                         new Date(selectedMessage.createdAt).getTime() -
                         new Date(
                           selectedMessage.createdAt
-                        ).getTimezoneOffset() *
-                        60000
+                        ).getTimezoneOffset() 
                       ),
                       "yyyy/MM/dd HH:mm"
                     ) +
