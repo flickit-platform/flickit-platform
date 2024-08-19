@@ -13,7 +13,7 @@ import {Trans} from "react-i18next";
 
 const ConfirmRemoveMemberDialog = (props: any) => {
     const { expandedRemoveDialog, onCloseRemoveDialog, assessmentId,assessmentName,
-        fetchAssessmentsUserListRoles,setChangeData
+        fetchAssessmentsUserListRoles,setChangeData, inviteesMemberList
     } = props;
 
     const {service} = useServiceContext();
@@ -24,12 +24,24 @@ const ConfirmRemoveMemberDialog = (props: any) => {
         runOnMount: false,
     });
 
+    const RemoveMembersInvitees = useQuery({
+        service: (args : any, config) =>
+            service.RemoveAssessmentMembersInvitees(args, config),
+    });
+
     const DeletePerson = async () => {
         try {
-            await deleteUserRole.query(expandedRemoveDialog?.id)
-            onCloseRemoveDialog()
-            setChangeData((prev : boolean) => !prev)
-            // await fetchAssessmentsUserListRoles()
+            if(expandedRemoveDialog.invited){
+              const invitedId = expandedRemoveDialog.id
+              await  RemoveMembersInvitees.query({invitedId})
+              await inviteesMemberList.query()
+              onCloseRemoveDialog()
+            }else {
+                await deleteUserRole.query(expandedRemoveDialog?.id)
+                onCloseRemoveDialog()
+                setChangeData((prev : boolean) => !prev)
+                // await fetchAssessmentsUserListRoles()
+            }
         } catch (e) {
             const err = e as ICustomError;
             toastError(err);

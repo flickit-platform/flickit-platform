@@ -101,6 +101,7 @@ const NotificationItem = ({
         <Typography
           variant="titleSmall"
           sx={{
+            fontWeight: message.seen ? 400 : 600,
             color: "#2B333B",
             overflow: "hidden",
             whiteSpace: "nowrap",
@@ -300,8 +301,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                         new Date(selectedMessage.createdAt).getTime() -
                         new Date(
                           selectedMessage.createdAt
-                        ).getTimezoneOffset() *
-                        60000
+                        ).getTimezoneOffset() 
                       ),
                       "yyyy/MM/dd HH:mm"
                     ) +
@@ -634,7 +634,7 @@ const Navbar = () => {
       {notificationCenterOpen && (
         <Box
           ref={notificationCenterRef}
-          sx={{ position: "absolute", top: 60, right: 20, zIndex: 1300 }}
+          sx={{ position: "fixed", top: 60, right: 20, zIndex: 1300 }}
         >
           <NotificationCenterComponent
             setNotificationCount={setNotificationCount}
