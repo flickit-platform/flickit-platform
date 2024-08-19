@@ -20,7 +20,12 @@ export const createService = (
 
   axios.interceptors.request.use(async (req: any) => {
     const accessToken = keycloakService.getToken();
-    (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
+    const hasTenantInUrl = req.url.includes("tenant");
+
+    if (!hasTenantInUrl) {
+      (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+
     localStorage.setItem("accessToken", JSON.stringify(accessToken));
     if (keycloakService._kc.isTokenExpired(5) && accessToken) {
       try {
@@ -33,7 +38,7 @@ export const createService = (
         keycloakService.doLogin();
       }
     }
-    if (!req.headers?.["Authorization"] && accessToken) {
+    if (!hasTenantInUrl && !req.headers?.["Authorization"] && accessToken) {
       (req as any).headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
@@ -145,11 +150,11 @@ export const createService = (
       return axios.get(`/api/v1/assessments/${assessmentId}/invitees/`, config);
     },
     RemoveAssessmentMembersInvitees(
-          args: { invitedId: string },
-          config: AxiosRequestConfig<any> | undefined
+      args: { invitedId: string },
+      config: AxiosRequestConfig<any> | undefined
     ) {
-          const {invitedId} = args
-          return axios.delete(`/api/v1/assessment-invites/${invitedId}/`, config);
+      const { invitedId } = args;
+      return axios.delete(`/api/v1/assessment-invites/${invitedId}/`, config);
     },
     loadUserByEmail(
       args: { email: string },
@@ -295,16 +300,12 @@ export const createService = (
         config
       );
     },
-      editUserRoleInvited(
-      args: { id : string, roleId : number },
+    editUserRoleInvited(
+      args: { id: string; roleId: number },
       config: AxiosRequestConfig<any> | undefined
     ) {
       const { id } = args;
-      return axios.put(
-              `/api/v1/assessment-invites/${id}/`,
-        args,
-        config
-      );
+      return axios.put(`/api/v1/assessment-invites/${id}/`, args, config);
     },
     loadAssessment(
       { rowId }: { rowId: any },

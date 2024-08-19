@@ -188,6 +188,7 @@ export interface IMaturityLevel {
   title: string;
   value: number;
   index: number;
+  description: string;
 }
 
 export interface IImage {
