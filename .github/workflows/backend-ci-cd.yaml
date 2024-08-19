@@ -65,7 +65,7 @@ jobs:
         run: darkube deploy --ref main --token ${DEPLOY_TOKEN} --app-id ${APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN_BACKEND_STAGE }}
-          APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}
+          APP_ID: ${{ secrets.APP_ID_BACKEND_STAGE }}
 
 
 
