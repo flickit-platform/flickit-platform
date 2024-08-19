@@ -59,33 +59,34 @@ import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 import { FaClipboard } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-
-const handleCopyAsImage = async (element: HTMLDivElement | null, setLoading: (loading: boolean) => void) => {
+const handleCopyAsImage = async (
+  element: HTMLDivElement | null,
+  setLoading: (loading: boolean) => void
+) => {
   if (element) {
     setLoading(true); // Set loading to true when starting the operation
     try {
       const canvas = await html2canvas(element);
       canvas.toBlob(async (blob) => {
         if (blob) {
-          const item = new ClipboardItem({ 'image/png': blob });
+          const item = new ClipboardItem({ "image/png": blob });
           await navigator.clipboard.write([item]);
-          toast.success('Chart content copied as an image!')
+          toast.success("Chart content copied as an image!");
         } else {
-          console.error('Failed to create blob from canvas.');
+          console.error("Failed to create blob from canvas.");
         }
       });
     } catch (err) {
-      console.error('Failed to copy image to clipboard:', err);
+      console.error("Failed to copy image to clipboard:", err);
     } finally {
       setLoading(false); // Set loading to false when the operation completes
     }
   }
 };
-
 
 const AssessmentExportContainer = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -221,7 +222,9 @@ const AssessmentExportContainer = () => {
   }, [AssessmentReport?.errorObject]);
   const [showSpinner, setShowSpinner] = useState(true);
   const handleCopyClick = (id: string) => {
-    handleCopyAsImage(refs.current[id] || null, (loading) => setLoadingId(loading ? id : null));
+    handleCopyAsImage(refs.current[id] || null, (loading) =>
+      setLoadingId(loading ? id : null)
+    );
   };
   const [attributesData, setAttributesData] = useState<any>({});
   const [editable, setEditable] = useState<any>(true);
@@ -230,24 +233,32 @@ const AssessmentExportContainer = () => {
 
   const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
     try {
-      const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
-        subject?.attributes
-          ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
-          .map(async (attribute: any) => {
-            try {
-              const result = await FetchAttributeData(assessmentId, attribute?.id);
-              return {
-                id: attribute?.id,
-                data: result,
-              };
-            } catch (error) {
-              console.error(`Failed to fetch data for attribute ${attribute?.id}:`, error);
-              return null;
-            }
-          })
+      const attributesDataPromises = AssessmentReport?.data?.subjects.flatMap(
+        (subject: any) =>
+          subject?.attributes
+            ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
+            .map(async (attribute: any) => {
+              try {
+                const result = await FetchAttributeData(
+                  assessmentId,
+                  attribute?.id
+                );
+                return {
+                  id: attribute?.id,
+                  data: result,
+                };
+              } catch (error) {
+                console.error(
+                  `Failed to fetch data for attribute ${attribute?.id}:`,
+                  error
+                );
+                return null;
+              }
+            })
       );
-      const allAttributesData = attributesDataPromises.length ? await Promise.all(attributesDataPromises) : [];
-
+      const allAttributesData = attributesDataPromises.length
+        ? await Promise.all(attributesDataPromises)
+        : [];
 
       const attributesDataObject = allAttributesData?.reduce(
         (acc, { id, data }) => {
@@ -258,54 +269,60 @@ const AssessmentExportContainer = () => {
       );
       setAttributesData((prevData: any) => ({
         ...prevData,
-        ...attributesDataObject
+        ...attributesDataObject,
       }));
     } catch (error) {
-      console.error('Error fetching all attributes data:', error);
+      console.error("Error fetching all attributes data:", error);
     }
   };
 
   const loadAllAttributesData = async () => {
     const newIgnoreIds: any[] = [];
 
-    const attributesDataPolicyPromises = AssessmentReport?.data?.subjects.flatMap((subject: any) =>
-      subject?.attributes?.map(async (attribute: any) => {
-        const result = await LoadAttributeData(assessmentId, attribute?.id);
+    const attributesDataPolicyPromises =
+      AssessmentReport?.data?.subjects.flatMap((subject: any) =>
+        subject?.attributes?.map(async (attribute: any) => {
+          const result = await LoadAttributeData(assessmentId, attribute?.id);
 
-        if (!result.editable) {
-          setEditable(false);
-        }
+          if (!result.editable) {
+            setEditable(false);
+          }
 
-        const shouldIgnore = !result.editable && result?.assessorInsight === null && result?.aiInsight === null;
-        if (shouldIgnore) {
-          newIgnoreIds.push(attribute?.id);
-          return null;
-        }
+          const shouldIgnore =
+            !result.editable &&
+            result?.assessorInsight === null &&
+            result?.aiInsight === null;
+          if (shouldIgnore) {
+            newIgnoreIds.push(attribute?.id);
+            return null;
+          }
 
-        if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
-          setAttributesData((prevData: any) => ({
-            ...prevData,
-            [attribute?.id]: result?.aiInsight?.insight,
-          }));
-          newIgnoreIds.push(attribute?.id);
-        }
+          if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+            setAttributesData((prevData: any) => ({
+              ...prevData,
+              [attribute?.id]: result?.aiInsight?.insight,
+            }));
+            newIgnoreIds.push(attribute?.id);
+          }
 
-        if (result?.assessorInsight?.insight) {
-          setAttributesData((prevData: any) => ({
-            ...prevData,
-            [attribute?.id]: result?.assessorInsight?.insight,
-          }));
-          newIgnoreIds.push(attribute?.id);
-        }
+          if (result?.assessorInsight?.insight) {
+            setAttributesData((prevData: any) => ({
+              ...prevData,
+              [attribute?.id]: result?.assessorInsight?.insight,
+            }));
+            newIgnoreIds.push(attribute?.id);
+          }
 
-        return {
-          id: attribute?.id,
-          data: result,
-        };
-      })
-    );
+          return {
+            id: attribute?.id,
+            data: result,
+          };
+        })
+      );
 
-    const allAttributesDataPolicy = attributesDataPolicyPromises ? await Promise.all(attributesDataPolicyPromises) : [];
+    const allAttributesDataPolicy = attributesDataPolicyPromises
+      ? await Promise.all(attributesDataPolicyPromises)
+      : [];
 
     // Process the fetched data
     const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
@@ -319,7 +336,7 @@ const AssessmentExportContainer = () => {
     // Update states in one go
     setIgnoreIds(newIgnoreIds);
     setAttributesDataPolicy(attributesDataPolicyObject);
-    return newIgnoreIds
+    return newIgnoreIds;
   };
 
   useEffect(() => {
@@ -330,11 +347,12 @@ const AssessmentExportContainer = () => {
 
   const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  const handleSetRef = useCallback((id: string) => (element: HTMLDivElement | null) => {
-    refs.current[id] = element;
-  }, []);
-
-
+  const handleSetRef = useCallback(
+    (id: string) => (element: HTMLDivElement | null) => {
+      refs.current[id] = element;
+    },
+    []
+  );
 
   return errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
     errorObject?.code === ECustomErrorType.NOT_FOUND ? (
@@ -648,13 +666,32 @@ const AssessmentExportContainer = () => {
                   >
                     <Trans i18nKey="assessmentMethodology" />
                   </Typography>
+                  <Typography variant="displaySmall">
+                    {assessment?.assessmentKit?.summary}
+                  </Typography>
                   <Typography
-                    variant="displaySmall"
-                    paragraph
-                    dangerouslySetInnerHTML={{
-                      __html: assessment?.assessmentKit?.about ?? "",
-                    }}
-                  ></Typography>
+                    variant="titleMedium"
+                    gutterBottom
+                    component="div"
+                  >
+                    Maturity Levels:
+                  </Typography>
+                  <Box component="ol" sx={{ paddingLeft: 6 }}>
+                    {assessment?.assessmentKit?.maturityLevels.map(
+                      (level, index) => (
+                        <Box
+                          component="li"
+                          key={index}
+                          sx={{ marginBottom: 1 }}
+                        >
+                          <Typography variant="displaySmall">
+                            <strong>{level.title}: </strong>
+                            {level.description}
+                          </Typography>
+                        </Box>
+                      )
+                    )}
+                  </Box>
                 </Grid>
 
                 <Box paddingLeft={3} maxWidth="100%">
@@ -677,8 +714,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                                ? elem?.title
-                                : ", " + elem?.title
+                              ? elem?.title
+                              : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -925,21 +962,21 @@ const AssessmentExportContainer = () => {
                 />
               </Typography>
               <Grid container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  md={12}
-                  lg={6}
-                  xl={6}
-                >
+                <Grid item xs={12} md={12} lg={6} xl={6}>
                   <IconButton
                     size="small"
-                    onClick={() => handleCopyClick('globalChart')}
-                    disabled={loadingId === 'globalChart'}
+                    onClick={() => handleCopyClick("globalChart")}
+                    disabled={loadingId === "globalChart"}
                   >
-                    {loadingId === 'globalChart' ? <CircularProgress size={24} /> : <FaClipboard />}
+                    {loadingId === "globalChart" ? (
+                      <CircularProgress size={24} />
+                    ) : (
+                      <FaClipboard />
+                    )}
                   </IconButton>
-                  <Box sx={{ height: "370px" }} ref={handleSetRef('globalChart')}
+                  <Box
+                    sx={{ height: "370px" }}
+                    ref={handleSetRef("globalChart")}
                   >
                     {subjects?.length > 2 ? (
                       <AssessmentSubjectRadarChart
@@ -972,12 +1009,16 @@ const AssessmentExportContainer = () => {
                 >
                   <IconButton
                     size="small"
-                    onClick={() => handleCopyClick('gauge')}
-                    disabled={loadingId === 'gauge'}
+                    onClick={() => handleCopyClick("gauge")}
+                    disabled={loadingId === "gauge"}
                   >
-                    {loadingId === 'gauge' ? <CircularProgress size={24} /> : <FaClipboard />}
+                    {loadingId === "gauge" ? (
+                      <CircularProgress size={24} />
+                    ) : (
+                      <FaClipboard />
+                    )}
                   </IconButton>
-                  <Box ref={handleSetRef('gauge')}>
+                  <Box ref={handleSetRef("gauge")}>
                     <Gauge
                       level_value={maturityLevel?.index ?? 0}
                       maturity_level_status={maturityLevel?.title}
@@ -989,8 +1030,8 @@ const AssessmentExportContainer = () => {
                       height={370}
                       mb={-8}
                       maturity_status_guide={t("overallMaturityLevelIs")}
-
-                    /></Box>
+                    />
+                  </Box>
                 </Grid>
               </Grid>
               <br />
@@ -1029,13 +1070,14 @@ const AssessmentExportContainer = () => {
                       }}
                     />
                   </Typography>
-                  <Box
-
-                    display="flex"
-                    alignItems="flex-start"
-                  >
-                    <Box height={subject?.attributes?.length > 2 ? "400px" : "30vh"}
-                      ref={handleSetRef(subject?.id.toString() || '')} flex={1}>
+                  <Box display="flex" alignItems="flex-start">
+                    <Box
+                      height={
+                        subject?.attributes?.length > 2 ? "400px" : "30vh"
+                      }
+                      ref={handleSetRef(subject?.id.toString() || "")}
+                      flex={1}
+                    >
                       {subject?.attributes?.length > 2 ? (
                         <AssessmentSubjectRadarChart
                           data={subject?.attributes}
@@ -1052,13 +1094,20 @@ const AssessmentExportContainer = () => {
                           }
                           loading={false}
                         />
-                      )}</Box>
+                      )}
+                    </Box>
                     <IconButton
                       size="small"
-                      onClick={() => handleCopyClick(subject?.id.toString() || '')}
+                      onClick={() =>
+                        handleCopyClick(subject?.id.toString() || "")
+                      }
                       disabled={loadingId === subject?.id.toString()}
                     >
-                      {loadingId === subject?.id.toString() ? <CircularProgress size={24} /> : <FaClipboard />}
+                      {loadingId === subject?.id.toString() ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        <FaClipboard />
+                      )}
                     </IconButton>
                   </Box>
                   <TableContainer
@@ -1126,7 +1175,10 @@ const AssessmentExportContainer = () => {
                                 gap={0.5}
                               >
                                 <Box display="flex" alignItems="flex-start">
-                                  <Box ref={handleSetRef(attribute?.id.toString() || '')}
+                                  <Box
+                                    ref={handleSetRef(
+                                      attribute?.id.toString() || ""
+                                    )}
                                     flex={1}
                                   >
                                     <AttributeStatusBarContainer
@@ -1135,16 +1187,28 @@ const AssessmentExportContainer = () => {
                                       cl={Math.ceil(
                                         attribute?.confidenceValue ?? 0
                                       )}
-                                      mn={assessmentKit?.maturityLevelCount ?? 5}
+                                      mn={
+                                        assessmentKit?.maturityLevelCount ?? 5
+                                      }
                                       document
                                     />
                                   </Box>
                                   <IconButton
                                     size="small"
-                                    onClick={() => handleCopyClick(attribute?.id.toString() || '')}
-                                    disabled={loadingId === attribute?.id.toString()} // Disable button when loading
+                                    onClick={() =>
+                                      handleCopyClick(
+                                        attribute?.id.toString() || ""
+                                      )
+                                    }
+                                    disabled={
+                                      loadingId === attribute?.id.toString()
+                                    } // Disable button when loading
                                   >
-                                    {loadingId === attribute?.id.toString() ? <CircularProgress size={24} /> : <FaClipboard />}
+                                    {loadingId === attribute?.id.toString() ? (
+                                      <CircularProgress size={24} />
+                                    ) : (
+                                      <FaClipboard />
+                                    )}
                                   </IconButton>
                                 </Box>
 
@@ -1202,8 +1266,11 @@ const AssessmentExportContainer = () => {
                                     </Typography>
                                   )
                                 )}
-                                {attributesDataPolicy[attribute?.id?.toString()]?.assessorInsight &&
-                                  !attributesDataPolicy[attribute?.id?.toString()]?.assessorInsight?.isValid && (
+                                {attributesDataPolicy[attribute?.id?.toString()]
+                                  ?.assessorInsight &&
+                                  !attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.assessorInsight?.isValid && (
                                     <Box sx={{ ...styles.centerV }} gap={2}>
                                       <Box
                                         sx={{
@@ -1223,21 +1290,27 @@ const AssessmentExportContainer = () => {
                                           }}
                                         >
                                           <Trans i18nKey="Outdated" />
-
                                         </Typography>
                                       </Box>
                                       <Box
                                         sx={{
                                           display: "flex",
                                           alignItems: "flex-start",
-                                          backgroundColor: "rgba(255, 249, 196, 0.31)",
+                                          backgroundColor:
+                                            "rgba(255, 249, 196, 0.31)",
                                           padding: 1,
                                           borderRadius: 4,
                                           maxWidth: "100%",
                                         }}
                                       >
-                                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                                        <Typography variant="bodyLarge" textAlign="left">
+                                        <InfoOutlined
+                                          color="primary"
+                                          sx={{ marginRight: 1 }}
+                                        />
+                                        <Typography
+                                          variant="bodyLarge"
+                                          textAlign="left"
+                                        >
                                           <Trans i18nKey="invalidInsight" />
                                         </Typography>
                                       </Box>
