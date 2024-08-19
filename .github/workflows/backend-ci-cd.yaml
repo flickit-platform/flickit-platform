@@ -55,14 +55,17 @@ jobs:
 
   Backend_Deploy_Latest:
     needs: Backend_Push_Latest_Image
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    container:
+      image: registry.hectora.cloud/hectora-public/darkube-cli:v1.1
+      env:
+        CONSOLE_API_BASE_URL: "https://api.hectora.cloud"
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DEPLOY_TOKEN} --app-id ${APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND_STAGE }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}    
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN_BACKEND_STAGE }}
+          APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}
 
 
 
@@ -97,14 +100,15 @@ jobs:
 
   Backend_Deploy:
     needs: Backend_Push_Image
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    container:
+      image: registry.hectora.cloud/hectora-public/darkube-cli:v1.1
+      env:
+        CONSOLE_API_BASE_URL: "https://api.hectora.cloud"
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DEPLOY_TOKEN} --app-id ${APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND }}
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN_BACKEND_PRODUCTION }}
+          APP_ID: ${{ secrets.APP_ID_BACKEND_PRODUCTION  }}
           TAG: ${{needs.Backend_Push_Image.outputs.TAG}}
-
-  
