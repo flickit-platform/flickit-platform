@@ -130,7 +130,14 @@ export const AssessmentSubjectAccordion = (
           },
         }}
       >
-        <Grid container alignItems="center">
+        <Grid
+          container
+          alignItems="center"
+          onClick={(e) => e.stopPropagation()}
+          component={Link}
+          to={progress === 100 ? `./${id}#insight` : `./${id}`}
+          sx={{ textDecoration: "none", color: "inherit" }}
+        >
           <Grid
             item
             xs={12}
