@@ -666,9 +666,13 @@ const AssessmentExportContainer = () => {
                   >
                     <Trans i18nKey="assessmentMethodology" />
                   </Typography>
-                  <Typography variant="displaySmall">
-                    {assessment?.assessmentKit?.summary}
-                  </Typography>
+                  <Typography
+                    variant="displaySmall"
+                    paragraph
+                    dangerouslySetInnerHTML={{
+                      __html: assessment?.assessmentKit?.about ?? "",
+                    }}
+                  ></Typography>
                   <Typography
                     variant="titleMedium"
                     gutterBottom
