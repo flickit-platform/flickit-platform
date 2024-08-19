@@ -43,26 +43,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:"${GITHUB_SHA:0:7}" ./backend
+        run: docker build -t ghcr.io/flickit-platform/flickit-platform:"${GITHUB_SHA:0:7}" ./backend
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: flickit-platform-dev
+          username: flickit-platform
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:"${GITHUB_SHA:0:7}"
+        run: docker push ghcr.io/flickit-platform/flickit-platform:"${GITHUB_SHA:0:7}"
 
   Backend_Deploy_Latest:
     needs: Backend_Push_Latest_Image
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    container:
+      image: registry.hectora.cloud/hectora-public/darkube-cli:v1.1
+      env:
+        CONSOLE_API_BASE_URL: "https://api.hectora.cloud"
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DEPLOY_TOKEN} --app-id ${APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND_STAGE }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND_STAGE }}    
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN_BACKEND_STAGE }}
+          APP_ID: ${{ secrets.APP_ID_BACKEND_STAGE }}
 
 
 
@@ -87,24 +90,25 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: flickit-platform-dev
+          username: flickit-platform
           password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: actions/checkout@v2
       - name: create image from repository
-        run: docker build -t ghcr.io/flickit-platform-dev/flickit-platform:${{ steps.TAG.outputs.tag }} ./backend
+        run: docker build -t ghcr.io/flickit-platform/flickit-platform:${{ steps.TAG.outputs.tag }} ./backend
       - name: push image to GitHub Container Registry
-        run: docker push ghcr.io/flickit-platform-dev/flickit-platform:${{ steps.TAG.outputs.tag }}
+        run: docker push ghcr.io/flickit-platform/flickit-platform:${{ steps.TAG.outputs.tag }}
 
   Backend_Deploy:
     needs: Backend_Push_Image
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    container:
+      image: registry.hectora.cloud/hectora-public/darkube-cli:v1.1
+      env:
+        CONSOLE_API_BASE_URL: "https://api.hectora.cloud"
     runs-on: ubuntu-latest
     steps:
       - name: Run script
-        run: darkube deploy --ref main --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+        run: darkube deploy --ref main --token ${DEPLOY_TOKEN} --app-id ${APP_ID}  --image-tag "${TAG}" --job-id "$GITHUB_RUN_ID" --stateless-app true
         env:
-          DARKUBE_DEPLOY_TOKEN: ${{ secrets.DARKUBE_DEPLOY_TOKEN_BACKEND }}
-          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID_BACKEND }}
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN_BACKEND_PRODUCTION }}
+          APP_ID: ${{ secrets.APP_ID_BACKEND_PRODUCTION  }}
           TAG: ${{needs.Backend_Push_Image.outputs.TAG}}
-
-  
