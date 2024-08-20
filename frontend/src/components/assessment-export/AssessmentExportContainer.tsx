@@ -60,7 +60,7 @@ import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
 import html2canvas from "html2canvas";
-import { FaClipboard } from "react-icons/fa";
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { toast } from "react-toastify";
 
 const handleCopyAsImage = async (
@@ -718,8 +718,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -975,7 +975,7 @@ const AssessmentExportContainer = () => {
                     {loadingId === "globalChart" ? (
                       <CircularProgress size={24} />
                     ) : (
-                      <FaClipboard />
+                      <ContentCopyOutlinedIcon fontSize="small"/>
                     )}
                   </IconButton>
                   <Box
@@ -1019,7 +1019,7 @@ const AssessmentExportContainer = () => {
                     {loadingId === "gauge" ? (
                       <CircularProgress size={24} />
                     ) : (
-                      <FaClipboard />
+                      <ContentCopyOutlinedIcon fontSize="small"/>
                     )}
                   </IconButton>
                   <Box ref={handleSetRef("gauge")}>
@@ -1110,7 +1110,7 @@ const AssessmentExportContainer = () => {
                       {loadingId === subject?.id.toString() ? (
                         <CircularProgress size={24} />
                       ) : (
-                        <FaClipboard />
+                        <ContentCopyOutlinedIcon fontSize="small"/>
                       )}
                     </IconButton>
                   </Box>
@@ -1211,7 +1211,7 @@ const AssessmentExportContainer = () => {
                                     {loadingId === attribute?.id.toString() ? (
                                       <CircularProgress size={24} />
                                     ) : (
-                                      <FaClipboard />
+                                      <ContentCopyOutlinedIcon fontSize="small"/>
                                     )}
                                   </IconButton>
                                 </Box>
