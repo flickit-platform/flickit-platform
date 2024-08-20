@@ -113,7 +113,23 @@ const SUbjectAttributeCard = (props: any) => {
                   </Typography>
                 </Title>
               </Box>
-              <Box sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+
+              <Box marginY={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+                <Typography
+                  variant="titleMedium"
+                  fontWeight={400}
+                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                >
+                  {description}
+                </Typography>
+              </Box>
+              <AttributeStatusBarContainer
+                status={maturityLevel?.title}
+                ml={maturityLevel?.index}
+                cl={Math.ceil(confidenceValue)}
+                mn={maturity_levels_count}
+              />
+              <Box mt={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
                 <Typography
                   variant="titleMedium"
                   sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
@@ -142,23 +158,8 @@ const SUbjectAttributeCard = (props: any) => {
                   <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
                 </Typography>
               </Box>
-              <Box marginY={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
-                <Typography
-                  variant="titleMedium"
-                  fontWeight={400}
-                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
-                >
-                  {description}
-                </Typography>
-              </Box>
-              <AttributeStatusBarContainer
-                status={maturityLevel?.title}
-                ml={maturityLevel?.index}
-                cl={Math.ceil(confidenceValue)}
-                mn={maturity_levels_count}
-              />
               <Box
-                mt={1.5}
+                mt={1}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -166,29 +167,6 @@ const SUbjectAttributeCard = (props: any) => {
               >
                 {attributesData[id?.toString()] ? (
                   <Box display="flex" alignItems="center" gap="4px">
-                    <Box
-                      sx={{
-                        ml: { xs: 0.75, sm: 1.5, md: 2 },
-                        zIndex: 1,
-                        display: attributesDataPolicy[id?.toString()]?.aiInsight
-                          ? "flex"
-                          : "none",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <Typography
-                        variant="labelSmall"
-                        sx={{
-                          backgroundColor: "#D81E5B",
-                          color: "white",
-                          padding: "0.35rem 0.35rem",
-                          borderRadius: "4px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <Trans i18nKey="AIGenerated" />
-                      </Typography>
-                    </Box>
                     <OnHoverInput
                       attributeId={id}
                       width={
@@ -226,6 +204,51 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )
                 )}
+                {attributesDataPolicy[id?.toString()]?.aiInsight && (
+                  <Box sx={{ ...styles.centerV }} gap={2}>
+                    <Box
+                      sx={{
+                        zIndex: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
+                        sx={{
+                          backgroundColor: "#d85e1e",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Trans i18nKey="AIGenerated" />
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        backgroundColor: "rgba(255, 249, 196, 0.31)",
+                        padding: 1,
+                        borderRadius: 2,
+                        maxWidth: "80%",
+                      }}
+                    >
+                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                      <Typography
+                        variant="titleMedium"
+                        fontWeight={400}
+                        textAlign="left"
+                      >
+                        <Trans i18nKey="invalidAIInsight" />
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+
                 {attributesDataPolicy[id?.toString()]?.assessorInsight &&
                   !attributesDataPolicy[id?.toString()]?.assessorInsight
                     ?.isValid && (
@@ -262,7 +285,11 @@ const SUbjectAttributeCard = (props: any) => {
                         }}
                       >
                         <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                        <Typography variant="titleMedium" fontWeight={400} textAlign="left">
+                        <Typography
+                          variant="titleMedium"
+                          fontWeight={400}
+                          textAlign="left"
+                        >
                           <Trans i18nKey="invalidInsight" />
                         </Typography>
                       </Box>
@@ -968,7 +995,7 @@ const OnHoverInput = (props: any) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        ml: { xs: 0.5, sm: 0.75, md: 1 }
+        ml: { xs: 0.5, sm: 0.75, md: 1 },
       }}
       width={props.width ? props.width : "100%"}
     >

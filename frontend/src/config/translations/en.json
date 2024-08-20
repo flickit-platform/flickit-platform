@@ -230,6 +230,7 @@
   "assessmentMethodology": "Assessment Methodology",
   "AIGenerated": "AI Generated",
   "invalidInsight": "This insight is no longer valid due to changes in some responses. You can request a new AI insight based on the latest result.",
+  "invalidAIInsight": "This analysis is produced by artificial intelligence. It is important to note that complete reliance on this information is not advisable.",
   "AccessorInsight": "Accessor Insight",
   "assessmentFocus": "Assessment Focus",
   "assessmentMethodologyDescription": "The {{title}}is a framework designed to estimate {{subjects}} based on the tools used in the development process. It assesses tools across {{maturityLevelsCount}} maturity levels, directly impacting {{subjects}}.",
