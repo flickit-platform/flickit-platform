@@ -102,38 +102,27 @@ const SUbjectAttributeCard = (props: any) => {
             <Grid item md={12} xs={12}>
               <Box mb={1}>
                 <Title
-                  textTransform={"uppercase"}
-                  fontWeight="bolder"
                   sx={{
                     opacity: 0.95,
                     letterSpacing: ".05em",
                     ml: { xs: 0.75, sm: 1.5, md: 2 },
                   }}
-                  fontFamily="Roboto"
                 >
-                  {title}
+                  <Typography variant="titleLarge" fontWeight={600}>
+                    {title}
+                  </Typography>
                 </Title>
               </Box>
-              <AttributeStatusBarContainer
-                status={maturityLevel?.title}
-                ml={maturityLevel?.index}
-                cl={Math.ceil(confidenceValue)}
-                mn={maturity_levels_count}
-              />
-              <Box mt={3}>
+              <Box sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
                 <Typography
-                  fontSize="1.15rem"
-                  fontFamily="Roboto"
-                  fontWeight={"bold"}
+                  variant="titleMedium"
                   sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
                 >
                   <Trans i18nKey={"withConfidence"} />
                   <Typography
                     component="span"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
+                    variant="titleMedium"
                     color="#3596A1"
-                    fontSize="1.12rem"
                     mx={1}
                   >
                     {Math.ceil(confidenceValue)}%
@@ -144,10 +133,8 @@ const SUbjectAttributeCard = (props: any) => {
                   />
                   <Typography
                     component="span"
-                    fontFamily="Roboto"
-                    fontWeight={"bold"}
                     color="#6035A1"
-                    fontSize="1.2rem"
+                    variant="titleMedium"
                   >
                     {" "}
                     {maturityLevel?.index}.{" "}
@@ -155,11 +142,21 @@ const SUbjectAttributeCard = (props: any) => {
                   <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
                 </Typography>
               </Box>
-              <Box mt={0.6} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
-                <Typography fontSize="1.05rem" fontFamily="Roboto">
+              <Box marginY={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+                <Typography
+                  variant="titleMedium"
+                  fontWeight={400}
+                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                >
                   {description}
                 </Typography>
               </Box>
+              <AttributeStatusBarContainer
+                status={maturityLevel?.title}
+                ml={maturityLevel?.index}
+                cl={Math.ceil(confidenceValue)}
+                mn={maturity_levels_count}
+              />
               <Box
                 mt={1.5}
                 sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
@@ -167,39 +164,45 @@ const SUbjectAttributeCard = (props: any) => {
                   event.stopPropagation();
                 }}
               >
-                <Box
-                  sx={{
-                    zIndex: 1,
-                    display: attributesDataPolicy[id?.toString()]?.aiInsight ? "flex"
-                      : "none",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <Typography
-                    variant="labelSmall"
-                    sx={{
-                      backgroundColor: "#D81E5B",
-                      color: "white",
-                      padding: "0.35rem 0.35rem",
-                      borderRadius: "4px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <Trans i18nKey="AIGenerated" />
-
-                  </Typography>
-                </Box>
-
                 {attributesData[id?.toString()] ? (
-                  <OnHoverInput
-                    attributeId={id}
-                    // formMethods={formMethods}
-                    data={attributesData[id?.toString()]}
-                    title={<Trans i18nKey="insight" />}
-                    infoQuery={updateAttributeAndData}
-                    type="summary"
-                    editable={attributesDataPolicy[id?.toString()]?.editable}
-                  />
+                  <Box display="flex" alignItems="center" gap="4px">
+                    <Box
+                      sx={{
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                        zIndex: 1,
+                        display: attributesDataPolicy[id?.toString()]?.aiInsight
+                          ? "flex"
+                          : "none",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
+                        sx={{
+                          backgroundColor: "#D81E5B",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Trans i18nKey="AIGenerated" />
+                      </Typography>
+                    </Box>
+                    <OnHoverInput
+                      attributeId={id}
+                      width={
+                        attributesDataPolicy[id?.toString()]?.aiInsight
+                          ? "90%"
+                          : "100%"
+                      }
+                      // formMethods={formMethods}
+                      data={attributesData[id?.toString()]}
+                      infoQuery={updateAttributeAndData}
+                      type="summary"
+                      editable={attributesDataPolicy[id?.toString()]?.editable}
+                    />
+                  </Box>
                 ) : (
                   editable && (
                     <Box display="flex" alignItems="center" gap="4px">
@@ -224,13 +227,15 @@ const SUbjectAttributeCard = (props: any) => {
                   )
                 )}
                 {attributesDataPolicy[id?.toString()]?.assessorInsight &&
-                  !attributesDataPolicy[id?.toString()]?.assessorInsight?.isValid && (
+                  !attributesDataPolicy[id?.toString()]?.assessorInsight
+                    ?.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
                       <Box
                         sx={{
                           zIndex: 1,
                           display: "flex",
                           justifyContent: "flex-start",
+                          ml: { xs: 0.75, sm: 1.5, md: 2 },
                         }}
                       >
                         <Typography
@@ -244,7 +249,6 @@ const SUbjectAttributeCard = (props: any) => {
                           }}
                         >
                           <Trans i18nKey="Outdated" />
-
                         </Typography>
                       </Box>
                       <Box
@@ -254,12 +258,11 @@ const SUbjectAttributeCard = (props: any) => {
                           backgroundColor: "rgba(255, 249, 196, 0.31)",
                           padding: 1,
                           borderRadius: 2,
-                          marginInline: 4,
                           maxWidth: "80%",
                         }}
                       >
                         <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                        <Typography variant="bodyLarge" textAlign="left">
+                        <Typography variant="titleMedium" fontWeight={400} textAlign="left">
                           <Trans i18nKey="invalidInsight" />
                         </Typography>
                       </Box>
@@ -358,7 +361,7 @@ const SUbjectAttributeCard = (props: any) => {
           </Box>
         </AccordionDetails>
       </Accordion>
-    </Paper >
+    </Paper>
   );
 };
 
@@ -411,8 +414,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-      ? `${cl}%`
-      : "0%";
+    ? `${cl}%`
+    : "0%";
   return (
     <Box
       height={"38px"}
@@ -546,8 +549,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
-                    }`,
+                  borderLeft: `2px solid ${
+                    is_passed ? statusColor : "#808080"
+                  }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -772,8 +776,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"
+                                          ? `${answerOptionIndex}.${answerOptionTitle}`
+                                          : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -786,8 +790,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"}
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>
@@ -958,116 +962,109 @@ const OnHoverInput = (props: any) => {
   };
 
   return (
-    <Box>
-      <Box
-        my={1.5}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-        width="100%"
-      >
-        <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
-          {title}
-        </Typography>
-
-        {editable && show ? (
-          <Box
-            sx={{ display: "flex", flexDirection: "column", width: "100% " }}
-          >
-            <OutlinedInput
-              error={hasError}
-              fullWidth
-              name={title}
-              defaultValue={data || ""}
-              onChange={(e) => setInputData(e.target.value)}
-              value={inputData}
-              required={true}
-              multiline={true}
-              sx={{
-                minHeight: "38px",
-                borderRadius: "4px",
-                paddingRight: "12px;",
-                fontWeight: "700",
-                fontSize: "0.875rem",
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    title="Submit Edit"
-                    edge="end"
-                    sx={{
-                      background: "#1976d299",
-                      borderRadius: "3px",
-                      height: "36px",
-                      margin: "3px",
-                    }}
-                    onClick={updateAssessmentKit}
-                  >
-                    <CheckCircleOutlineRounded sx={{ color: "#fff" }} />
-                  </IconButton>
-                  <IconButton
-                    title="Cancel Edit"
-                    edge="end"
-                    sx={{
-                      background: "#1976d299",
-                      borderRadius: "4px",
-                      height: "36px",
-                    }}
-                    onClick={handleCancel}
-                  >
-                    <CancelRounded sx={{ color: "#fff" }} />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            {hasError && (
-              <Typography color="#ba000d" variant="caption">
-                {error?.data?.[type]}
-              </Typography>
-            )}
-          </Box>
-        ) : (
-          <Box
+    <Box
+      my={1.5}
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        ml: { xs: 0.5, sm: 0.75, md: 1 }
+      }}
+      width={props.width ? props.width : "100%"}
+    >
+      {editable && show ? (
+        <Box sx={{ display: "flex", flexDirection: "column", width: "100% " }}>
+          <OutlinedInput
+            error={hasError}
+            fullWidth
+            name={title}
+            defaultValue={data || ""}
+            onChange={(e) => setInputData(e.target.value)}
+            value={inputData}
+            required={true}
+            multiline={true}
             sx={{
               minHeight: "38px",
               borderRadius: "4px",
-              paddingLeft: "8px;",
               paddingRight: "12px;",
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              wordBreak: "break-word",
-              "&:hover": {
-                border: editable ? "1px solid #1976d299" : "unset",
-              },
+              fontWeight: "700",
+              fontSize: "0.875rem",
             }}
-            onClick={() => setShow(!show)}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-          >
-            <Typography variant="body2" fontWeight="700">
-              {data?.replace(/<\/?p>/g, "")}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  title="Submit Edit"
+                  edge="end"
+                  sx={{
+                    background: "#1976d299",
+                    borderRadius: "3px",
+                    height: "36px",
+                    margin: "3px",
+                  }}
+                  onClick={updateAssessmentKit}
+                >
+                  <CheckCircleOutlineRounded sx={{ color: "#fff" }} />
+                </IconButton>
+                <IconButton
+                  title="Cancel Edit"
+                  edge="end"
+                  sx={{
+                    background: "#1976d299",
+                    borderRadius: "4px",
+                    height: "36px",
+                  }}
+                  onClick={handleCancel}
+                >
+                  <CancelRounded sx={{ color: "#fff" }} />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {hasError && (
+            <Typography color="#ba000d" variant="caption">
+              {error?.data?.[type]}
             </Typography>
-            {isHovering && (
-              <IconButton
-                title="Edit"
-                edge="end"
-                sx={{
-                  background: "#1976d299",
-                  borderRadius: "3px",
-                  height: "36px",
-                }}
-                onClick={() => setShow(!show)}
-              >
-                <EditRounded sx={{ color: "#fff" }} />
-              </IconButton>
-            )}
-          </Box>
-        )}
-      </Box>
+          )}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            minHeight: "38px",
+            borderRadius: "4px",
+            paddingLeft: "8px;",
+            paddingRight: "12px;",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            wordBreak: "break-word",
+            "&:hover": {
+              border: editable ? "1px solid #1976d299" : "unset",
+            },
+          }}
+          onClick={() => setShow(!show)}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        >
+          <Typography variant="titleMedium" fontWeight="400">
+            {data?.replace(/<\/?p>/g, "")}
+          </Typography>
+          {isHovering && (
+            <IconButton
+              title="Edit"
+              edge="end"
+              sx={{
+                background: "#1976d299",
+                borderRadius: "3px",
+                height: "36px",
+              }}
+              onClick={() => setShow(!show)}
+            >
+              <EditRounded sx={{ color: "#fff" }} />
+            </IconButton>
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
