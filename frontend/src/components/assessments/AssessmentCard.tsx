@@ -245,7 +245,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               data-cy="questionnaires-btn"
               variant={viewable ? "outlined" : "contained"}
             >
-                <Box sx={{position:"absolute",top:0,right:0,left:0,bottom:0,background:"rgba(102, 128, 153, 0.3)",zIndex:-1,width:`${calculatePercentage}%`}}></Box>
+                {calculatePercentage && <Box sx={{position:"absolute",top:0,right:0,left:0,bottom:0,background:"rgba(102, 128, 153, 0.3)",zIndex:-1,width:`${calculatePercentage}%`}}></Box>}
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
