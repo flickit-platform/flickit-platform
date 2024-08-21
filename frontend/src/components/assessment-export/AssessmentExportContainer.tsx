@@ -62,6 +62,7 @@ import { Link as RouterLink } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { FaClipboard } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Tooltip from "@mui/material/Tooltip";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -963,17 +964,19 @@ const AssessmentExportContainer = () => {
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12} lg={6} xl={6}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleCopyClick("globalChart")}
-                    disabled={loadingId === "globalChart"}
-                  >
-                    {loadingId === "globalChart" ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      <FaClipboard />
-                    )}
-                  </IconButton>
+                        <Tooltip title={"copy"}>
+                            <IconButton
+                                size="small"
+                                onClick={() => handleCopyClick("globalChart")}
+                                disabled={loadingId === "globalChart"}
+                            >
+                                {loadingId === "globalChart" ? (
+                                    <CircularProgress size={24} />
+                                ) : (
+                                    <FaClipboard />
+                                )}
+                            </IconButton>
+                        </Tooltip>
                   <Box
                     sx={{ height: "370px" }}
                     ref={handleSetRef("globalChart")}
@@ -1007,17 +1010,19 @@ const AssessmentExportContainer = () => {
                   flexDirection="column"
                   alignItems="flex-end"
                 >
-                  <IconButton
-                    size="small"
-                    onClick={() => handleCopyClick("gauge")}
-                    disabled={loadingId === "gauge"}
-                  >
-                    {loadingId === "gauge" ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      <FaClipboard />
-                    )}
-                  </IconButton>
+                    <Tooltip title={"copy"}>
+                        <IconButton
+                            size="small"
+                            onClick={() => handleCopyClick("gauge")}
+                            disabled={loadingId === "gauge"}
+                        >
+                            {loadingId === "gauge" ? (
+                                <CircularProgress size={24} />
+                            ) : (
+                                <FaClipboard />
+                            )}
+                        </IconButton>
+                    </Tooltip>
                   <Box ref={handleSetRef("gauge")}>
                     <Gauge
                       level_value={maturityLevel?.index ?? 0}
@@ -1096,6 +1101,7 @@ const AssessmentExportContainer = () => {
                         />
                       )}
                     </Box>
+                      <Tooltip title={"copy"}>
                     <IconButton
                       size="small"
                       onClick={() =>
@@ -1109,6 +1115,7 @@ const AssessmentExportContainer = () => {
                         <FaClipboard />
                       )}
                     </IconButton>
+                      </Tooltip>
                   </Box>
                   <TableContainer
                     component={Paper}
@@ -1193,6 +1200,7 @@ const AssessmentExportContainer = () => {
                                       document
                                     />
                                   </Box>
+                                    <Tooltip title={"copy"}>
                                   <IconButton
                                     size="small"
                                     onClick={() =>
@@ -1210,6 +1218,7 @@ const AssessmentExportContainer = () => {
                                       <FaClipboard />
                                     )}
                                   </IconButton>
+                                    </Tooltip>
                                 </Box>
 
                                 <Box
