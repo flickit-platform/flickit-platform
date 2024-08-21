@@ -63,6 +63,7 @@ import html2canvas from "html2canvas";
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
+import {FaClipboard} from "react-icons/fa";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
