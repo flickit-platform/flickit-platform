@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from django.http import FileResponse
-from baseinfo.services.dsl_conversion_service import DSLConverterService
+from baseinfo.services.dsl_conversion.dsl_conversion_service import DSLConverterService
 from baseinfo.serializers.dsl_serializers import ExcelFileUploadSerializer
 from io import BytesIO
 from drf_yasg.utils import swagger_auto_schema
@@ -42,7 +42,7 @@ class DSLConversionApi(APIView):
 
                 # Create an in-memory file response
                 response = FileResponse(BytesIO(zip_file_content), content_type='application/zip')
-                response['Content-Disposition'] = 'attachment; filename=kits_assessment.zip'
+                response['Content-Disposition'] = 'attachment; filename=kit.zip'
                 return response
 
             except ValueError as ve:
