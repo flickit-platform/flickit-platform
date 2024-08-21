@@ -60,7 +60,7 @@ import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
 import html2canvas from "html2canvas";
-import { FaClipboard } from "react-icons/fa";
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -667,9 +667,13 @@ const AssessmentExportContainer = () => {
                   >
                     <Trans i18nKey="assessmentMethodology" />
                   </Typography>
-                  <Typography variant="displaySmall">
-                    {assessment?.assessmentKit?.summary}
-                  </Typography>
+                  <Typography
+                    variant="displaySmall"
+                    paragraph
+                    dangerouslySetInnerHTML={{
+                      __html: assessment?.assessmentKit?.about ?? "",
+                    }}
+                  ></Typography>
                   <Typography
                     variant="titleMedium"
                     gutterBottom
@@ -715,8 +719,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -977,6 +981,7 @@ const AssessmentExportContainer = () => {
                                 )}
                             </IconButton>
                         </Tooltip>
+
                   <Box
                     sx={{ height: "370px" }}
                     ref={handleSetRef("globalChart")}
@@ -1023,6 +1028,7 @@ const AssessmentExportContainer = () => {
                             )}
                         </IconButton>
                     </Tooltip>
+
                   <Box ref={handleSetRef("gauge")}>
                     <Gauge
                       level_value={maturityLevel?.index ?? 0}
@@ -1112,7 +1118,7 @@ const AssessmentExportContainer = () => {
                       {loadingId === subject?.id.toString() ? (
                         <CircularProgress size={24} />
                       ) : (
-                        <FaClipboard />
+                        <ContentCopyOutlinedIcon fontSize="small"/>
                       )}
                     </IconButton>
                       </Tooltip>
@@ -1215,7 +1221,7 @@ const AssessmentExportContainer = () => {
                                     {loadingId === attribute?.id.toString() ? (
                                       <CircularProgress size={24} />
                                     ) : (
-                                      <FaClipboard />
+                                      <ContentCopyOutlinedIcon fontSize="small"/>
                                     )}
                                   </IconButton>
                                     </Tooltip>

@@ -25,6 +25,7 @@ interface ICreateSpaceDialogProps extends DialogProps {
 
 const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
   const [loading, setLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(true);
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -85,6 +86,26 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     };
   }, []);
 
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        setIsFocused(false)
+        setTimeout(() => {
+          setIsFocused(true)
+        }, 500);
+        formMethods.handleSubmit((data) => onSubmit(formMethods.getValues(), e))();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      abortController.abort();
+    };
+  }, []);
+
   return (
     <CEDialog
       {...rest}
@@ -112,11 +133,12 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
           </Grid> */}
           <Grid item xs={12}>
             <InputFieldUC
-              autoFocus={true}
+              // autoFocus={true}
               name="title"
               defaultValue={defaultValues.title || ""}
               required={true}
               label={<Trans i18nKey="title" />}
+              isFocused={isFocused}
             />
           </Grid>
         </Grid>

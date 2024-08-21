@@ -11,8 +11,8 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import {customFontFamily, primaryFontFamily, theme} from "@/config/theme";
-import {evidenceAttachmentInput} from "@utils/enumType";
+import { customFontFamily, primaryFontFamily, theme } from "@/config/theme";
+import { evidenceAttachmentInput } from "@utils/enumType";
 
 const InputField = () => {
   return <TextField />;
@@ -59,8 +59,11 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
   const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
   useEffect(() => {
+    console.log(isFocused)
     if (isFocused && inputRef?.current) {
-      inputRef?.current?.focus(); // Focus the input if isFocused prop is true
+      inputRef?.current?.focus();
+    } else {
+      inputRef?.current?.blur();
     }
   }, [isFocused]);
   useEffect(() => {
@@ -69,15 +72,17 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
       inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
-      inputRef?.current?.focus();
+      // inputRef?.current?.focus();
     }
-    if(inputRef.current && !isFocused){
+    if (inputRef.current && !isFocused) {
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
       inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
-  }, [inputRef.current?.value,isFocused]);
+  }, [inputRef.current?.value, isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-     setValueCount(event.target.value)
+    if (setValueCount) {
+      setValueCount(event.target.value)
+    }
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
@@ -99,7 +104,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
-        "& ::placeholder" : {fontFamily: primaryFontFamily} ,
+        "& ::placeholder": { fontFamily: primaryFontFamily },
         background: pallet?.background,
         borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {
@@ -113,34 +118,36 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
-          paddingTop: isEditing && name ==  "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
-          paddingBottom: name ==  "evidence" ?  evidenceAttachmentInput.paddingBottom  :  ""
+          paddingTop: isEditing && name == "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
+          paddingBottom: name == "evidence" ? evidenceAttachmentInput.paddingBottom : ""
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
       InputProps={
         type === "password"
           ? {
-              endAdornment: (
-                <InputAdornment
-                  sx={{ cursor: "pointer" }}
-                  position="end"
-                  onClick={toggleShowPassword}
-                  onMouseDown={(e: any) => {
-                    e.preventDefault();
-                  }}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </InputAdornment>
-              ),
-            }
-          : {  style:hasCounter ? isFarsi ? {
-                paddingLeft: 60,
-                minHeight: "110px",
-              }:{
-                paddingRight: 60,
-                minHeight: "110px"
-              } : {} }
+            endAdornment: (
+              <InputAdornment
+                sx={{ cursor: "pointer" }}
+                position="end"
+                onClick={toggleShowPassword}
+                onMouseDown={(e: any) => {
+                  e.preventDefault();
+                }}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </InputAdornment>
+            ),
+          }
+          : {
+            style: hasCounter ? isFarsi ? {
+              paddingLeft: 60,
+              minHeight: "110px",
+            } : {
+              paddingRight: 60,
+              minHeight: "110px"
+            } : {}
+          }
       }
       error={hasError}
       helperText={(errorMessage as ReactNode) || helperText}
