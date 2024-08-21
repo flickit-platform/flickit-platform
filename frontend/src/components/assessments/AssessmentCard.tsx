@@ -21,7 +21,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { IAssessment, TId, TQueryFunction } from "@types";
+import { IAssessment, TId, IQuestionnairesModel, TQueryFunction } from "@types";
 import { TDialogProps } from "@utils/useDialog";
 import Button from "@mui/material/Button";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
@@ -46,6 +46,7 @@ import { Chip } from "@mui/material";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
+  const [calculatePercentage, setCalculatePercentage] = useState<any>();
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
@@ -97,8 +98,19 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       // setErrorObject(err);
     }
   };
+    const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
+        service: (args, config) =>
+            service.fetchAssessmentTotalProgress(
+                { assessmentId : id, ...(args || {}) },
+                config
+            ),});
   useEffect(() => {
     fetchAssessments();
+      (async ()=>{
+          const  {answersCount , questionsCount} = await assessmentTotalProgress.query()
+          const calc = (answersCount / questionsCount ) * 100
+          setCalculatePercentage(calc.toFixed(2))
+      })()
   }, [isCalculateValid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
@@ -227,11 +239,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 e.stopPropagation();
               }}
               component={Link}
+              sx={{position:"relative",background:"transparent",zIndex:1}}
               state={location}
               to={`${item.id}/questionnaires`}
               data-cy="questionnaires-btn"
               variant={viewable ? "outlined" : "contained"}
             >
+                <Box sx={{position:"absolute",top:0,right:0,left:0,bottom:0,background:"rgba(102, 128, 153, 0.3)",zIndex:-1,width:`${calculatePercentage}%`}}></Box>
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
