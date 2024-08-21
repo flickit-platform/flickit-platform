@@ -490,5 +490,9 @@
   "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
-  "warning": "Warning"
+  "warning": "Warning",
+  "memberCount": "member count",
+  "assessmentsCount": "assessments count",
+  "spaceSetting": "space setting",
+  "moreAction": "more action"
 }

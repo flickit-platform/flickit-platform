@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import {Box, Divider, IconButton, Tooltip, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -122,27 +122,35 @@ const AssessmentReportContainer = (props: any) => {
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Box sx={{ py: "0.6rem" }}>
-                    <IconButton
-                      data-cy="more-action-btn"
-                      disabled={!exportable}
-                      component={exportable ? Link : "div"}
-                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
-                    >
-                      <ArticleRounded
-                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
-                      />
-                    </IconButton>
-                    <IconButton
-                      data-cy="more-action-btn"
-                      disabled={!manageable}
-                      component={manageable ? Link : "div"}
-                      to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
-                    >
-                      <SettingsIcon
-                        sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
-                      />
-                    </IconButton>
+                  <Box sx={{ py: "0.6rem",display:"flex" }}>
+                    <Tooltip title={<Trans i18nKey={"assessmentDocument"}/>}>
+                      <Box>
+                        <IconButton
+                            data-cy="more-action-btn"
+                            disabled={!exportable}
+                            component={exportable ? Link : "div"}
+                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
+                        >
+                          <ArticleRounded
+                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                          />
+                        </IconButton>
+                      </Box>
+                    </Tooltip>
+                    <Tooltip  title={<Trans i18nKey={"assessmentSettings"}/>}>
+                      <Box>
+                        <IconButton
+                            data-cy="more-action-btn"
+                            disabled={!manageable}
+                            component={manageable ? Link : "div"}
+                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
+                        >
+                          <SettingsIcon
+                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                          />
+                        </IconButton>
+                      </Box>
+                    </Tooltip>
                   </Box>
                 </Box>
                 <Grid container alignItems="stretch" spacing={2} mt={1}>
