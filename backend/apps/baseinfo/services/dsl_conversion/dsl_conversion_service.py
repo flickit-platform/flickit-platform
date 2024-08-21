@@ -130,6 +130,10 @@ class DSLConverterService:
             options_range_name = row[constants.SHEET_QUESTIONS_OPTIONS]
             description = row[constants.SHEET_QUESTIONS_DESCRIPTION] if pd.notna(
                 row[constants.SHEET_QUESTIONS_DESCRIPTION]) else constants.DEFAULT_DESCRIPTION
+            may_not_be_applicable = row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE] == 1 if pd.notna(
+                row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE]) else False
+            advisable = row[constants.SHEET_QUESTIONS_ADVISABLE] == 0 if pd.notna(
+                row[constants.SHEET_QUESTIONS_ADVISABLE]) else True
 
             # Filter options based on the option range name
             options_df = answer_options_df[
@@ -140,15 +144,6 @@ class DSLConverterService:
             # Structure the options string
             options_str = ', '.join([f'"{opt}"' for opt in options])
 
-            # Structure the affects strings
-            affects_str_list: List[str] = []
-            for column in questions_df.columns[constants.SHEET_QUESTIONS_START_AFFECTS_COLUMN_INDEX:]:
-                if pd.notna(row[column]):
-                    affects_str_list.append(
-                        f'affects {column} on level {row[constants.SHEET_QUESTIONS_MATURITY]} with values [{", ".join(map(str, option_values))}] with weight {int(row[column])}'
-                    )
-            affects_str = '\n    '.join(affects_str_list)
-
             # Build the DSL for the question
             question_dsl = (
                 f'question {question_code} {{\n'
@@ -156,9 +151,27 @@ class DSLConverterService:
                 f'    hint: "{description}"\n'
                 f'    title: "{title}"\n'
                 f'    options: {options_str}\n'
-                f'    {affects_str}\n'
-                f'}}'
             )
+
+            # Add advisable directly after options if it's false
+            if advisable:
+                question_dsl += f'        advisable: false\n'
+
+            # Add the affects strings
+            affects_str_list: List[str] = []
+            for column in questions_df.columns[constants.SHEET_QUESTIONS_START_AFFECTS_COLUMN_INDEX:]:
+                if pd.notna(row[column]):
+                    affects_str_list.append(
+                        f'affects {column} on level {row[constants.SHEET_QUESTIONS_MATURITY]} with values [{", ".join(map(str, option_values))}] with weight {int(row[column])}'
+                    )
+            affects_str = '\n    '.join(affects_str_list)
+            question_dsl += f'    {affects_str}\n'
+
+            # Add mayNotBeApplicable if applicable
+            if may_not_be_applicable:
+                question_dsl += f'    mayNotBeApplicable: true\n'
+
+            question_dsl += '}'
 
             # Group questions by questionnaire
             if questionnaire_name not in questions_by_questionnaire:
