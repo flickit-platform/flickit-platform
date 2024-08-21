@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -10,8 +11,10 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-class DSLConversionView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+class DSLConversionApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
         operation_description="Convert Excel file to DSL and return as a zipped file",
@@ -26,7 +29,7 @@ class DSLConversionView(APIView):
             500: "Internal Server Error",
         },
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = ExcelFileUploadSerializer(data=request.data)
 
         if serializer.is_valid():
