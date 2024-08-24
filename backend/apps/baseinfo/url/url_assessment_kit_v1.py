@@ -1,9 +1,10 @@
 from django.urls import path
 
-from baseinfo.views import (assessmentkitviews, commonviews, update_assessment_kit_views, user_access_views,
+from baseinfo.views import (assessmentkitviews, dsl_views, update_assessment_kit_views, user_access_views,
                             importassessmentkitviews, assessment_kit_views)
 
 urlpatterns = [
+    path("excel-to-dsl/", dsl_views.DSLConversionApi.as_view(), name='convert-dsl'),
     path("options/search/", assessment_kit_views.AssessmentKitsSearchApi.as_view()),
     path("upload-dsl/", importassessmentkitviews.ImportDslFileView.as_view()),
     path("create-by-dsl/", importassessmentkitviews.CreateAssessmentKitByDsl.as_view()),
