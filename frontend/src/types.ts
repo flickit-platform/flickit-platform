@@ -357,6 +357,7 @@ export interface IAssessment {
   isConfidenceValid?: boolean;
   assessment_results: string[];
   kit: IAssessmentKitList;
+  confidenceValue: number;
   // total_progress?: ITotalProgress;
   maturityLevel: IMaturityLevel;
   manageable?: boolean;
