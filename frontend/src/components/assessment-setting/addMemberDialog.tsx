@@ -684,6 +684,7 @@ const EmailField = ({
         createItemQuery={createItemQuery}
         errorObject={error}
         setError={setError}
+        clearOnBlur={false}
       />
     </Box>
   );
