@@ -1021,7 +1021,7 @@ const ExcelToDslButton = (props: {
         <Button color={"info"} variant="outlined" size="small" onClick={dialogProps.openDialog}>
           <Trans i18nKey="convertExcelToDsl" />
         </Button>
-        <AssessmentKitCEFromDialog {...dialogProps} />
+        <AssessmentKitCEFromDialog dialogProps={dialogProps} />
       </>
   )
 }

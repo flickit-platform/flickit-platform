@@ -971,10 +971,10 @@ const UpdateAssessmentKitDialog = (props: any) => {
         <Box width="100%" ml={2}>
           <UploadField
             accept={{ "application/zip": [".zip"] }}
-            uploadService={(args, config) =>
+            uploadService={(args: any, config: any) =>
               service.uploadAssessmentKitDSLFile(args, config)
             }
-            deleteService={(args, config) =>
+            deleteService={(args: any, config: any) =>
               service.deleteAssessmentKitDSL(args, config)
             }
             setIsValid={setIsValid}
