@@ -32,7 +32,7 @@ interface IAssessmentKitCEFromDialogProps extends DialogProps {
   context?: any;
 }
 
-const AssessmentKitCEFromDialog = (props: IDialogProps) => {
+const AssessmentKitCEFromDialog = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
