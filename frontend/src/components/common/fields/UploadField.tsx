@@ -47,7 +47,6 @@ interface IUploadFieldProps {
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
   setIsValid?: any;
-  zipped?:any;
 }
 
 const UploadField = (props: any) => {
@@ -96,11 +95,11 @@ interface IUploadProps {
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
   setIsValid?: any;
-  zipped?: any;
   setButtonStep?: any;
   setZippedData?: any;
   dslGuide?: boolean;
   dropNewFile?: any;
+  setConvertData?: any;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -121,10 +120,9 @@ const Uploader = (props: IUploadProps) => {
     setSyntaxErrorObject,
     setShowErrorLog,
     setIsValid,
-    zipped,
     setButtonStep,
     setZippedData,
-    dslGuide,
+    setConvertData,
     dropNewFile
   } = props;
 
@@ -155,7 +153,6 @@ const Uploader = (props: IUploadProps) => {
   };
 
   const [limitGuide, setLimitGuide] = useState<string>()
-  const [dslDownloadGuide, setDslDownloadGuide] = useState<string>()
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
       setTheState
@@ -164,9 +161,6 @@ const Uploader = (props: IUploadProps) => {
   useEffect(() => {
     if (maxSize) {
       setLimitGuide(t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
-    }
-    if(dslGuide){
-      setDslDownloadGuide(t("dslDownloadGuide") as string)
     }
     if (
       typeof defaultValue === "string" &&
@@ -179,9 +173,6 @@ const Uploader = (props: IUploadProps) => {
       });
     }
   }, []);
-  const downloadTemplate = ()=> {
-
-  }
 
   const uploadQueryProps = useQuery({
     service: uploadService || ((() => null) as any),
@@ -314,6 +305,7 @@ const Uploader = (props: IUploadProps) => {
                           fieldProps.onChange("");
                           setButtonStep(0)
                           setZippedData(null)
+                          setConvertData(null)
                           return;
                           // }
                           // if (uploadQueryProps.error) {
@@ -426,9 +418,6 @@ const Uploader = (props: IUploadProps) => {
         </Box>
       </Box>
       <FormHelperText>{limitGuide || errorMessage as string}</FormHelperText>
-      <FormHelperText>{dslDownloadGuide}{" "}<span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer"}}
-      onClick={downloadTemplate}
-      >here</span></FormHelperText>
     </FormControl>
   );
 };

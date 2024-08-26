@@ -23,7 +23,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
-// import JSZip from "jszip"
+
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
@@ -38,7 +38,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [convertData,setConvertData] = useState<any>()
+  const [convertData,setConvertData] = useState<any>(null)
   const [zipped,setZippedData] = useState<any>(null)
   const [dropNewFile,setDropNewFile] = useState<any>(null)
   const [buttonStep,setButtonStep] = useState<any>(0)
@@ -65,6 +65,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     closeDialog();
     setButtonStep(0)
     setZippedData(null)
+    setConvertData(null)
   };
   useEffect(() => {
     return () => {
@@ -121,6 +122,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           link.href = URL.createObjectURL(zipped)
           link.download = "kit"
           link.click()
+          close();
       }
   };
   const handleConvertDsl = async () => {
@@ -145,6 +147,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+    const downloadTemplate = ()=> {
+
+    }
+
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
       <Grid container spacing={ type != "convert" ? 2 : 0 } sx={styles.formGrid}>
@@ -154,15 +160,22 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           md={12}
           sx={{ display: `${activeStep === 0 ? "" : "none"}`}}
         >
+            {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
+                <Trans i18nKey={"dslDownloadGuide"} />
+                <span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer",paddingLeft:"4px"}}
+                      onClick={downloadTemplate}
+                >here</span>
+            </Box>
+            </Box> }
 
-            {type === "convert"  && buttonStep == 1 && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE" }}>
+            {type === "convert"  && buttonStep == 1 && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE", width:"fit-content",px:1 }}>
                 <Trans i18nKey={"dslReadyToDownload"} />
             </Box>
             </Box> }
             {type == "convert"
                 ?
                 <UploadField
-                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] ,"application/zip" : [".zip"] }}
+                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }}
                     uploadService={(args :any, config: any) =>{
                         setConvertData({args, config})
                         return service.convertExcelToDSLFile(args,config)
@@ -176,11 +189,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                     setSyntaxErrorObject={setSyntaxErrorObject}
                     setIsValid={setIsValid}
                     maxSize={convertToBytes(5, "MB")}
-                    zipped={zipped}
                     setZippedData={setZippedData}
                     setButtonStep={setButtonStep}
-                    dslGuide={true}
                     dropNewFile={dropNewFile}
+                    setConvertData={setConvertData}
                 />
                 :
                 <UploadField
