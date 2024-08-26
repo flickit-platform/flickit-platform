@@ -3251,7 +3251,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             gap: 2,
             padding: "16px",
           }}
-          justifyContent="flex-end"
+          justifyContent="center"
         >
           <Button onClick={() => handelSendFile("another")}>
             {uploadAnother}
@@ -3265,7 +3265,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   );
 };
 
-export const DeleteDialog = (props: any) => {
+const DeleteDialog = (props: any) => {
   const { expanded, onClose, onConfirm, title, cancelText, confirmText } =
     props;
   const fullScreen = useScreenResize("sm");
