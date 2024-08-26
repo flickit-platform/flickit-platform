@@ -100,6 +100,7 @@ interface IUploadProps {
   setButtonStep?: any;
   setZippedData?: any;
   dslGuide?: boolean;
+  dropNewFile?: any;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -123,7 +124,8 @@ const Uploader = (props: IUploadProps) => {
     zipped,
     setButtonStep,
     setZippedData,
-    dslGuide
+    dslGuide,
+    dropNewFile
   } = props;
 
   const { service } = useServiceContext();
@@ -190,17 +192,11 @@ const Uploader = (props: IUploadProps) => {
     service: deleteService || ((() => null) as any),
     runOnMount: false,
   });
-  useEffect(()=>{
-    if(zipped){
-      setMyFiles(zipped)
-    }
-  },[zipped])
 
 
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
       delete errors[fieldProps.name]
-
       if (acceptedFiles?.[0]) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -377,18 +373,18 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${(acceptedFiles[0] || file)?.name} - ${(acceptedFiles[0] || file)?.size
+                  title={`${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.name} - ${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size
                     ? formatBytes((acceptedFiles[0] || file)?.size)
                     : ""
                     }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
-                  primary={<>{(acceptedFiles[0] || file)?.name}</>}
+                  primary={<>{( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.name}</>}
                   secondary={
                     <>
-                      {(acceptedFiles[0] || file)?.size
-                        ? formatBytes((acceptedFiles[0] || file)?.size)
+                      {(dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.size
+                        ? formatBytes((dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size)
                         : null}
                     </>
                   }

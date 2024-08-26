@@ -40,6 +40,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [convertData,setConvertData] = useState<any>()
   const [zipped,setZippedData] = useState<any>(null)
+  const [dropNewFile,setDropNewFile] = useState<any>(null)
   const [buttonStep,setButtonStep] = useState<any>(0)
   const { service } = useServiceContext();
   const {
@@ -127,11 +128,16 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       let fileName = args?.file?.name.substring(0, args?.file?.name.lastIndexOf('.'))
       service.convertExcelToDSLFile(args,config).then((res: any) =>{
           const {data} = res
-          const file = new Blob(
+          const zipfile = new Blob(
               [data],
               {type: 'application/zip'});
-        setZippedData(file)
-        setButtonStep(1)
+          let file :any  = new File([zipfile], `${fileName}.zip`, {
+              type:"application/zip",
+              lastModified: new Date().getTime(),
+          });
+          setZippedData(zipfile)
+          setButtonStep(1)
+          setDropNewFile([file])
       })
   };
 
@@ -141,7 +147,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
 
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
-      <Grid container spacing={2} sx={styles.formGrid}>
+      <Grid container spacing={ type != "convert" ? 2 : 0 } sx={styles.formGrid}>
         <Grid
           item
           xs={12}
@@ -156,7 +162,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             {type == "convert"
                 ?
                 <UploadField
-                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }}
+                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] ,"application/zip" : [".zip"] }}
                     uploadService={(args :any, config: any) =>{
                         setConvertData({args, config})
                         return service.convertExcelToDSLFile(args,config)
@@ -174,6 +180,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                     setZippedData={setZippedData}
                     setButtonStep={setButtonStep}
                     dslGuide={true}
+                    dropNewFile={dropNewFile}
                 />
                 :
                 <UploadField
