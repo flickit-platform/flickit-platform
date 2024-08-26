@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
@@ -18,12 +18,12 @@ import AutocompleteAsyncField, {
 } from "@common/fields/AutocompleteAsyncField";
 import UploadField from "@common/fields/UploadField";
 import RichEditorField from "@common/fields/RichEditorField";
-import { Box, Button, Typography, Alert } from "@mui/material";
+import {Box, Button, Typography, Alert, DialogContentText} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
-
+// import JSZip from "jszip"
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
   onSubmitForm: () => void;
@@ -38,6 +38,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [convertData,setConvertData] = useState<any>()
+  const [zipped,setZippedData] = useState<any>(null)
+  const [buttonStep,setButtonStep] = useState<any>(0)
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
@@ -59,8 +62,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     setActiveStep(0);
     abortController.abort();
     closeDialog();
+    setButtonStep(0)
+    setZippedData(null)
   };
-
   useEffect(() => {
     return () => {
       abortController.abort();
@@ -110,6 +114,29 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
+  const handleDownloadDsl = () => {
+      if(zipped && buttonStep == 1){
+          const link = document.createElement("a")
+          link.href = URL.createObjectURL(zipped)
+          link.download = "dsl"
+          link.click()
+      }
+  };
+  const handleConvertDsl = async () => {
+      const {args,config} = convertData
+      let fileName = args?.file?.name.substring(0, args?.file?.name.lastIndexOf('.'))
+      const  response = await service.convertExcelToDSLFile(args,config)
+      const { data } = response
+      let blob = new Blob([data], { type: "text/csv;charset=utf-8,%EF%BB%BF" });
+      setZippedData(blob)
+      // const zip = new JSZip();
+      // const folder = zip.folder("dsl");
+      // zip.file(`${fileName}.ak`,blob,{binary:true})
+      // zip.generateAsync({type:"blob"}).then(content =>{
+      setButtonStep(1)
+      // setZippedData(content)
+    // })
+  };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -122,25 +149,54 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           item
           xs={12}
           md={12}
-          sx={{ display: `${activeStep === 0 ? "" : "none"}` }}
+          sx={{ display: `${activeStep === 0 ? "" : "none"}`}}
         >
-          <UploadField
-            accept={{ "application/zip": [".zip"] }}
-            uploadService={(args, config) =>
-              service.uploadAssessmentKitDSLFile(args, config)
+
+            {type === "convert"  && buttonStep == 1 && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE" }}>
+                <Trans i18nKey={"dslReadyToDownload"} />
+            </Box>
+            </Box> }
+            {type == "convert"
+                ?
+                <UploadField
+                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }}
+                    uploadService={(args, config) =>{
+                        setConvertData({args, config})
+                        return service.convertExcelToDSLFile(args,config)
+                    }
+                }
+                    name="dsl_id"
+                    param={expertGroupId}
+                    required={true}
+                    label={<Trans i18nKey="xlsx" />}
+                    setShowErrorLog={setShowErrorLog}
+                    setSyntaxErrorObject={setSyntaxErrorObject}
+                    setIsValid={setIsValid}
+                    maxSize={convertToBytes(5, "MB")}
+                    zipped={zipped}
+                    setZippedData={setZippedData}
+                    setButtonStep={setButtonStep}
+                    dslGuide={true}
+                />
+                :
+                <UploadField
+                    accept={{ "application/zip": [".zip"] }}
+                    uploadService={(args, config) =>
+                        service.uploadAssessmentKitDSLFile(args, config)
+                    }
+                    deleteService={(args, config) =>
+                        service.deleteAssessmentKitDSL(args, config)
+                    }
+                    name="dsl_id"
+                    param={expertGroupId}
+                    required={true}
+                    label={<Trans i18nKey="dsl" />}
+                    setShowErrorLog={setShowErrorLog}
+                    setSyntaxErrorObject={setSyntaxErrorObject}
+                    setIsValid={setIsValid}
+                    maxSize={convertToBytes(5, "MB")}
+                />
             }
-            deleteService={(args, config) =>
-              service.deleteAssessmentKitDSL(args, config)
-            }
-            name="dsl_id"
-            param={expertGroupId}
-            required={true}
-            label={<Trans i18nKey="dsl" />}
-            setShowErrorLog={setShowErrorLog}
-            setSyntaxErrorObject={setSyntaxErrorObject}
-            setIsValid={setIsValid}
-            maxSize={convertToBytes(5, "MB")}
-          />
         </Grid>
         <Grid
           item
@@ -233,14 +289,30 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         <Button onClick={close}>
           <Trans i18nKey="cancel" />
         </Button>
-        <Button
-          sx={{ ml: 2 }}
-          variant="contained"
-          onClick={handleNext}
-          disabled={!isValid}
-        >
-          <Trans i18nKey="next" />
-        </Button>
+          {type == "convert" && buttonStep == 0 &&  <Button
+              sx={{ml: 2}}
+              variant="contained"
+              onClick={handleConvertDsl}
+              disabled={!isValid}
+          >
+              <Trans i18nKey="convertToDsl"/>
+          </Button>}
+          {type == "convert" && buttonStep == 1 && <Button
+              sx={{ml: 2}}
+              variant="contained"
+              onClick={handleDownloadDsl}
+              disabled={!isValid}
+          >
+              <Trans i18nKey="download"/>
+          </Button>}
+          { type != "convert" && <Button
+              sx={{ml: 2}}
+              variant="contained"
+              onClick={handleNext}
+              disabled={!isValid}
+          >
+              <Trans i18nKey="next"/>
+          </Button>}
       </Box>
     </FormProviderWithForm>
   );
@@ -303,11 +375,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       title={
         <>
           <NoteAddRoundedIcon sx={{ mr: 1 }} />
-          {type === "update" ? (
-            <Trans i18nKey="updateAssessmentKit" />
-          ) : (
-            <Trans i18nKey="createAssessmentKit" />
-          )}
+          {type === "update" && <Trans i18nKey="updateAssessmentKit" />}
+          {type === "create" && <Trans i18nKey="createAssessmentKit" />}
+          {type === "convert" && <Trans i18nKey="convertExcelToDsl" />}
         </>
       }
     >

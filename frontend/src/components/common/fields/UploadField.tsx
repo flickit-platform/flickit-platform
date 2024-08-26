@@ -95,6 +95,10 @@ interface IUploadProps {
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
   setIsValid?: any
+  zipped?: any
+  setButtonStep?: number,
+  setZippedData?: any,
+  dslGuide?: boolean
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -114,7 +118,11 @@ const Uploader = (props: IUploadProps) => {
     param,
     setSyntaxErrorObject,
     setShowErrorLog,
-    setIsValid
+    setIsValid,
+    zipped,
+    setButtonStep,
+    setZippedData,
+    dslGuide
   } = props;
 
   const { service } = useServiceContext();
@@ -144,6 +152,7 @@ const Uploader = (props: IUploadProps) => {
   };
 
   const [limitGuide, setLimitGuide] = useState<string>()
+  const [dslDownloadGuide, setDslDownloadGuide] = useState<string>()
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
       setTheState
@@ -152,6 +161,9 @@ const Uploader = (props: IUploadProps) => {
   useEffect(() => {
     if (maxSize) {
       setLimitGuide(t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
+    }
+    if(dslGuide){
+      setDslDownloadGuide(t("dslDownloadGuide") as string)
     }
     if (
       typeof defaultValue === "string" &&
@@ -164,6 +176,9 @@ const Uploader = (props: IUploadProps) => {
       });
     }
   }, []);
+  const downloadTemplate = ()=> {
+
+  }
 
   const uploadQueryProps = useQuery({
     service: uploadService || ((() => null) as any),
@@ -174,6 +189,12 @@ const Uploader = (props: IUploadProps) => {
     service: deleteService || ((() => null) as any),
     runOnMount: false,
   });
+  useEffect(()=>{
+    if(zipped){
+      setMyFiles(zipped)
+    }
+  },[zipped])
+
 
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
@@ -294,6 +315,8 @@ const Uploader = (props: IUploadProps) => {
                           e.stopPropagation();
                           setMyFiles([]);
                           fieldProps.onChange("");
+                          setButtonStep(0)
+                          setZippedData(null)
                           return;
                           // }
                           // if (uploadQueryProps.error) {
@@ -406,6 +429,9 @@ const Uploader = (props: IUploadProps) => {
         </Box>
       </Box>
       <FormHelperText>{limitGuide || errorMessage as string}</FormHelperText>
+      <FormHelperText>{dslDownloadGuide}{" "}<span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer"}}
+      onClick={downloadTemplate}
+      >here</span></FormHelperText>
     </FormControl>
   );
 };

@@ -467,7 +467,7 @@ export interface IDialogContext {
   getViewLink?: (data: any) => string;
 }
 
-export type TDialogContextType = "update" | "create";
+export type TDialogContextType = "update" | "create" | "convert";
 
 export interface ICompareModel {
   assessment_project_compare_list: any[];

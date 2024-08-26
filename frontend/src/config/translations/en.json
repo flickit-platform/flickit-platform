@@ -491,5 +491,9 @@
   "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
-  "warning": "Warning"
+  "warning": "Warning",
+  "convertExcelToDsl": "Convert Excel to Dsl",
+  "convertToDsl": "Convert To Dsl",
+  "dslReadyToDownload": "Your DSL is ready to download!",
+  "dslDownloadGuide": "If you don’t have appropriate excel template, you can download it"
 }

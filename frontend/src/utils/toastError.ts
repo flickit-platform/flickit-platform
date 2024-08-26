@@ -79,6 +79,7 @@ const toastError = (
       data !== null &&
       Object.keys(data).length > 0 &&
       !data?.message &&
+      !data?.error &&
       !data?.detail &&
       !(data?.non_field_errors?.length > 0)
     ) {
@@ -96,7 +97,7 @@ const toastError = (
   }
 
   toast.error(
-    data?.message || data?.detail || data?.non_field_errors?.[0] || message
+      data?.error ||data?.message || data?.detail || data?.non_field_errors?.[0] || message
   );
 };
 

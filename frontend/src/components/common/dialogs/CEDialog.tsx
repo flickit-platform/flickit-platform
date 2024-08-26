@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
 import { TDialogContextType } from "@types";
 import { t } from "i18next";
+import {DialogContentText} from "@mui/material";
 
 interface ICEDialogProps extends Omit<DialogProps, "title"> {
   closeDialog?: () => void;
@@ -18,7 +19,7 @@ interface ICEDialogProps extends Omit<DialogProps, "title"> {
 }
 
 export const CEDialog = (props: PropsWithChildren<ICEDialogProps>) => {
-  const { closeDialog, title, children, ...rest } = props;
+  const { closeDialog, title, children,ContentText, ...rest } = props;
   const fullScreen = useScreenResize("sm");
 
   return (
