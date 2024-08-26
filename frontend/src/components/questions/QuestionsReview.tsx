@@ -21,7 +21,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import { ECustomErrorType, IAssessmentKitReportModel } from "@/types";
-import { customFontFamily } from "@/config/theme";
+import { primaryFontFamily } from "@/config/theme";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 
 const QuestionsReview = () => {
@@ -327,7 +327,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily={`${is_farsi ? "Vazirmatn" : customFontFamily
+                      fontFamily={`${is_farsi ? "Vazirmatn" : primaryFontFamily
                         }`}
                       fontWeight="bold"
                       letterSpacing={is_farsi ? "0" : ".05em"}
@@ -346,7 +346,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily={`${is_farsi ? "Vazirmatn" : customFontFamily
+                        fontFamily={`${is_farsi ? "Vazirmatn" : primaryFontFamily
                           }`}
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
