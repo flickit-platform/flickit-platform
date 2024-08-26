@@ -57,7 +57,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
             fullWidth
             sx={{
                 ".MuiDialog-paper": {
-                    borderRadius:"32px" ,
+                    borderRadius:"16px" ,
                 },
                 ".MuiDialog-paper::-webkit-scrollbar": {
                     display: "none",

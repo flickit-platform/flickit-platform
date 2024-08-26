@@ -2693,7 +2693,7 @@ const MyDropzone = (props: any) => {
                 mx: "auto",
                 width: "100%",
                 border: "1px solid #C4C7C9",
-                borderRadius: "32px",
+                borderRadius: "16px",
               }}
             >
               <div
@@ -2847,7 +2847,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius: "32px",
+          borderRadius: "16px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",
@@ -3106,7 +3106,7 @@ const DeleteDialog = (props: any) => {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius: "32px",
+          borderRadius: "16px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",

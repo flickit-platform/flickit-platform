@@ -214,7 +214,7 @@ const AddMemberDialog = (props: {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius: "32px",
+          borderRadius: "16px",
           maxWidth: "800px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {

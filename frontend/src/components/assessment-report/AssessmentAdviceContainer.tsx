@@ -79,7 +79,7 @@ const AssessmentAdviceContainer = (props: any) => {
         fullWidth
         sx={{
           ".MuiDialog-paper": {
-            borderRadius: { xs: 0, sm: "32px" },
+            borderRadius: { xs: 0, sm: "16px" },
           },
           ".MuiDialog-paper::-webkit-scrollbar": {
             display: "none",
@@ -112,7 +112,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 color: "#fff",
                 fontSize: "2rem",
                 fontWeight: "700",
-                borderRadius: "32px 32px 0 0",
+                borderRadius: "16px 16px 0 0",
               }}
             >
               <Trans i18nKey="setYourGoals" />
@@ -210,7 +210,7 @@ const AssessmentAdviceContainer = (props: any) => {
             </Box>
             <Box
               sx={{
-                borderRadius: { xs: 0, sm: "0 0 32px 32px" },
+                borderRadius: { xs: 0, sm: "0 0 16px 16px" },
                 background: "#fff",
                 py: 8,
                 maxHeight: "60vh",
