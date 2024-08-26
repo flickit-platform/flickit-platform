@@ -93,7 +93,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
           />
         </Typography>
 
-        <Box alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
+        <Box mt={2} alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
           <Button onClick={onCloseRemoveDialog}>
             <Trans i18nKey={"cancel"} />
           </Button>
