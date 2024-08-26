@@ -371,7 +371,7 @@ export const AssessmentSettingMemberBox = (props: {
           </Typography>
           <Button
             sx={{
-              borderRadius: 100,
+              borderRadius: "4px",
               backgroundColor: "#004F83",
               width: "fit-content",
               alignSelf: "end",

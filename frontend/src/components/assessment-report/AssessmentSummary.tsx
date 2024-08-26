@@ -90,12 +90,12 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
       <Button
         variant="contained"
         sx={{
-          borderRadius: "24px",
+          borderRadius: "4px",
           textTransform: "none",
           backgroundColor: "#00365C",
           borderColor: "#00365C",
           color: "#E1E3E5",
-          padding: "12px",
+          padding: "6px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#004F83",
