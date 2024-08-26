@@ -46,10 +46,11 @@ interface IUploadFieldProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?: any
+  setIsValid?: any;
+  zipped?:any;
 }
 
-const UploadField = (props: IUploadFieldProps) => {
+const UploadField = (props: any) => {
   const { name, required, defaultValue, ...rest } = props;
 
   const formMethods = useFormContext();
@@ -94,11 +95,11 @@ interface IUploadProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?: any
-  zipped?: any
-  setButtonStep?: number,
-  setZippedData?: any,
-  dslGuide?: boolean
+  setIsValid?: any;
+  zipped?: any;
+  setButtonStep?: any;
+  setZippedData?: any;
+  dslGuide?: boolean;
 }
 
 const Uploader = (props: IUploadProps) => {

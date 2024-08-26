@@ -154,7 +154,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                 ?
                 <UploadField
                     accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }}
-                    uploadService={(args, config) =>{
+                    uploadService={(args :any, config: any) =>{
                         setConvertData({args, config})
                         return service.convertExcelToDSLFile(args,config)
                     }
@@ -175,10 +175,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                 :
                 <UploadField
                     accept={{ "application/zip": [".zip"] }}
-                    uploadService={(args, config) =>
+                    uploadService={(args:any, config:any) =>
                         service.uploadAssessmentKitDSLFile(args, config)
                     }
-                    deleteService={(args, config) =>
+                    deleteService={(args:any, config:any) =>
                         service.deleteAssessmentKitDSL(args, config)
                     }
                     name="dsl_id"
