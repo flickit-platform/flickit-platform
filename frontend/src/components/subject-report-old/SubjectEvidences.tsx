@@ -274,7 +274,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           sx={{
               overflow:"auto",
             ".MuiDialog-paper": {
-              borderRadius: "32px",
+              borderRadius: "12px",
             },
             ".MuiDialog-paper::-webkit-scrollbar": {
               display: "none",

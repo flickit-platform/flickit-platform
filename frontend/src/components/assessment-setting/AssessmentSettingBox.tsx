@@ -62,18 +62,21 @@ export const AssessmentSettingGeneralBox = (props: {
 
   return (
     <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      textAlign="center"
+      maxHeight="100%"
+      gap={3}
+      py={4}
       sx={{
         ...styles.centerCVH,
-        px: { xs: "15px", sm: "51px" },
+        background: "#fff",
+        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+        borderRadius: "12px",
+        px: { xs: 2, sm: 3.75 },
       }}
-      gap={2}
-      textAlign="center"
-      height={"auto"}
-      // minHeight={"415px"}
-      width={"100%"}
-      bgcolor={"#FFF"}
-      borderRadius={"40.53px"}
-      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Typography
@@ -221,7 +224,7 @@ export const AssessmentSettingMemberBox = (props: {
   openRemoveModal: (id: string, name: string, invited?: boolean) => void;
   setChangeData?: any;
   changeData?: any;
-  inviteesMemberList: any
+  inviteesMemberList: any;
 }) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -233,7 +236,7 @@ export const AssessmentSettingMemberBox = (props: {
     openModal,
     openRemoveModal,
     changeData,
-    inviteesMemberList
+    inviteesMemberList,
   } = props;
 
   useEffect(() => {
@@ -258,8 +261,7 @@ export const AssessmentSettingMemberBox = (props: {
     runOnMount: false,
   });
   const editUserRoleInvited = useQuery({
-    service: (args, config) =>
-      service.editUserRoleInvited(args , config),
+    service: (args, config) => service.editUserRoleInvited(args, config),
     runOnMount: false,
   });
 
@@ -335,20 +337,20 @@ export const AssessmentSettingMemberBox = (props: {
 
   return (
     <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="left"
+      justifyContent="left"
+      textAlign="left"
+      maxHeight="100%"
+      gap={3}
+      py={4}
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        px: { xs: "15px", sm: "51px" },
+        background: "#fff",
+        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+        borderRadius: "12px",
+        px: { xs: 2, sm: 3.75 },
       }}
-      gap={2}
-      textAlign="center"
-      height={"auto"}
-      minHeight={"350px"}
-      width={"100%"}
-      bgcolor={"#FFF"}
-      borderRadius={"40.53px"}
-      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Box
@@ -369,7 +371,7 @@ export const AssessmentSettingMemberBox = (props: {
           </Typography>
           <Button
             sx={{
-              borderRadius: 100,
+              borderRadius: "4px",
               backgroundColor: "#004F83",
               width: "fit-content",
               alignSelf: "end",
@@ -846,7 +848,6 @@ export const AssessmentSettingMemberBox = (props: {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 width: { xs: "10rem", md: "30vw" },
-
                               }}
                             >
                               <Typography
@@ -1038,7 +1039,9 @@ export const AssessmentSettingMemberBox = (props: {
                                   sx={{ "&:hover": { color: "#d32f2f" } }}
                                   size="small"
                                   // disabled={!row.editable}
-                                  onClick={() => openRemoveModal(row.email , row.id,true)}
+                                  onClick={() =>
+                                    openRemoveModal(row.email, row.id, true)
+                                  }
                                 >
                                   <DeleteRoundedIcon />
                                 </IconButton>{" "}

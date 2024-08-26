@@ -17,7 +17,7 @@ import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@utils/useScreenResize";
-import { customFontFamily } from "@/config/theme";
+import { primaryFontFamily } from "@/config/theme";
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -79,7 +79,7 @@ const AssessmentAdviceContainer = (props: any) => {
         fullWidth
         sx={{
           ".MuiDialog-paper": {
-            borderRadius: { xs: 0, sm: "32px" },
+            borderRadius: { xs: 0, sm: "12px" },
           },
           ".MuiDialog-paper::-webkit-scrollbar": {
             display: "none",
@@ -112,7 +112,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 color: "#fff",
                 fontSize: "2rem",
                 fontWeight: "700",
-                borderRadius: "32px 32px 0 0",
+                borderRadius: "12px 12px 0 0",
               }}
             >
               <Trans i18nKey="setYourGoals" />
@@ -146,7 +146,7 @@ const AssessmentAdviceContainer = (props: any) => {
                   width: "fit-content",
                   justifyContent: "space-between",
                   alignItems: "baseline",
-                  gap: "16px",
+                  gap: "12px",
                   my: 4,
                 }}
               >
@@ -210,7 +210,7 @@ const AssessmentAdviceContainer = (props: any) => {
             </Box>
             <Box
               sx={{
-                borderRadius: { xs: 0, sm: "0 0 32px 32px" },
+                borderRadius: { xs: 0, sm: "0 0 12px 12px" },
                 background: "#fff",
                 py: 8,
                 maxHeight: "60vh",
@@ -241,7 +241,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     color: "#004F83",
                     px: 2,
                     py: 1,
-                    borderRadius: "16px",
+                    borderRadius: "12px",
                     fontSize: "1rem",
                     fontWeight: "700",
                     width: "fit-content",
@@ -258,7 +258,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     color: "#EDFCFC",
                     px: 2,
                     py: 1,
-                    borderRadius: "16px",
+                    borderRadius: "12px",
                     fontSize: "1rem",
                     fontWeight: "700",
                     width: "fit-content",
@@ -338,7 +338,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 color: "#EDFCFC",
                 px: 5,
                 py: 1,
-                borderRadius: "16px",
+                borderRadius: "12px",
                 fontSize: "1rem",
                 fontWeight: "700",
                 width: "fit-content",
@@ -536,7 +536,7 @@ const AssessmentAdviceContainer = (props: any) => {
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",
-                            fontFamily: `${isFarsi ? "Vazirmatn" : customFontFamily}`,
+                            fontFamily: `${isFarsi ? "Vazirmatn" : primaryFontFamily}`,
                           }}
                         >
                           {attribute.title}

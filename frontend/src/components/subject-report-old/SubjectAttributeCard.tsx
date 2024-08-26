@@ -183,7 +183,7 @@ const SUbjectAttributeCard = (props: any) => {
                   </Box>
                 ) : (
                   editable && (
-                    <Box display="flex" alignItems="center" gap="4px">
+                    <Box display="flex" alignItems="center" gap="4px" ml={2}>
                       <Typography variant="titleMedium">
                         <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
                       </Typography>
@@ -668,12 +668,11 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               >
                                 <Box sx={{ width: "40%" }}>
                                   <Typography
+                                    variant="titleSmall"
                                     sx={{
                                       pb: "4px",
                                       color: "#767676",
                                       display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
                                     }}
                                     textAlign={"center"}
                                   >
@@ -682,12 +681,11 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                 </Box>
                                 <Box sx={{ width: "10%" }}>
                                   <Typography
+                                    variant="titleSmall"
                                     sx={{
                                       pb: "4px",
                                       color: "#767676",
                                       display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
                                     }}
                                     textAlign={"center"}
                                   >
@@ -700,9 +698,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                       pb: "4px",
                                       color: "#767676",
                                       display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
                                     }}
+                                    variant="titleSmall"
                                     textAlign={"center"}
                                   >
                                     <Trans i18nKey="answer" />
@@ -714,9 +711,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                       pb: "4px",
                                       color: "#767676",
                                       display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
                                     }}
+                                    variant="titleSmall"
                                     textAlign={"center"}
                                   >
                                     <Trans i18nKey="score" />
@@ -728,9 +724,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                       pb: "4px",
                                       color: "#767676",
                                       display: "block",
-                                      fontFamily: "Roboto",
-                                      fontSize: "0.8rem",
                                     }}
+                                    variant="titleSmall"
                                     textAlign={"center"}
                                   >
                                     <Trans i18nKey="weightedScore" />
@@ -766,16 +761,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                       <Box sx={{ width: "40%" }}>
                                         <Typography
                                           display="flex"
-                                          variant="body1"
-                                          fontFamily="Roboto"
-                                          fontWeight={"bold"}
+                                          variant="titleMedium"
                                           textAlign={"left"}
                                         >
                                           {questionIndex}.
                                           <Typography
-                                            variant="body1"
-                                            fontFamily="Roboto"
-                                            fontWeight={"bold"}
+                                            variant="titleMedium"
                                             dir={is_farsi ? "rtl" : "ltr"}
                                             sx={{
                                               whiteSpace: "nowrap",
@@ -790,9 +781,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     </CustomWidthTooltip>
                                     <Box sx={{ width: "10%" }}>
                                       <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
+                                        variant="titleMedium"
                                         textAlign={"center"}
                                       >
                                         {questionWeight}
@@ -809,9 +798,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     >
                                       <Box sx={{ width: "25%" }}>
                                         <Typography
-                                          variant="body1"
-                                          fontFamily="Roboto"
-                                          fontWeight={"bold"}
+                                          variant="titleMedium"
                                           textAlign={"center"}
                                         >
                                           {answerIsNotApplicable
@@ -824,9 +811,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     </Tooltip>
                                     <Box sx={{ width: "10%" }}>
                                       <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
+                                        variant="titleMedium"
                                         textAlign={"center"}
                                       >
                                         {answerIsNotApplicable
@@ -836,9 +821,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     </Box>
                                     <Box sx={{ width: "15%" }}>
                                       <Typography
-                                        variant="body1"
-                                        fontFamily="Roboto"
-                                        fontWeight={"bold"}
+                                        variant="titleMedium"
                                         textAlign={"center"}
                                       >
                                         {answerIsNotApplicable

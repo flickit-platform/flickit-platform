@@ -122,7 +122,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           pt: 3,
           pb: 3,
           px: 2,
-          borderRadius: "16px",
+          borderRadius: "12px",
           ...styles.centerCH,
           minHeight: "300px",
           height: "100%",

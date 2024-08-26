@@ -1221,7 +1221,7 @@ const Evidence = (props: any) => {
                   label={null}
                   required={true}
                   placeholder="Write down your evidence and comment here...."
-                  borderRadius={"16px"}
+                  borderRadius={"12px"}
                   setValueCount={setValueCount}
                   hasCounter={true}
                   isFarsi={is_farsi}
@@ -1277,7 +1277,7 @@ const Evidence = (props: any) => {
                       border: "1px solid #9DA7B3",
                       px: "6px",
                       py: "2px",
-                      borderRadius: "16px 0 16px 16px",
+                      borderRadius: "12px 0 12px 12px",
                     }}
                   >
                     <InfoOutlinedIcon
@@ -1530,7 +1530,7 @@ const CreateEvidenceAttachment = (props: any) => {
   return (
     <Box
       sx={{
-        borderRadius: "16px",
+        borderRadius: "12px",
         width: "100%",
         height: "auto",
         background: pallet?.background,
@@ -2050,7 +2050,7 @@ const CreateDropZone = (props: any) => {
                 mx: "auto",
                 width: "100%",
                 border: `.5px dashed ${pallet.borderColor}`,
-                borderRadius: "16px",
+                borderRadius: "12px",
               }}
             >
               <div
@@ -2332,7 +2332,7 @@ const EvidenceDetail = (props: any) => {
                   flexDirection: "column",
                   height: "fit-content",
                   width: "60%",
-                  borderRadius: "16px",
+                  borderRadius: "12px",
                   border: `1px solid ${evidenceBG.borderColor}`,
                 }}
               >
@@ -2368,7 +2368,7 @@ const EvidenceDetail = (props: any) => {
                       label={null}
                       required={true}
                       // placeholder={`${description}`}
-                      borderRadius={"16px"}
+                      borderRadius={"12px"}
                       setValueCount={setValueCount}
                       hasCounter={true}
                       isFarsi={is_farsi}
@@ -2398,7 +2398,7 @@ const EvidenceDetail = (props: any) => {
                           border: "1px solid #9DA7B3",
                           px: "6px",
                           py: "2px",
-                          borderRadius: "16px 0 16px 16px",
+                          borderRadius: "12px 0 12px 12px",
                         }}
                       >
                         <InfoOutlinedIcon
@@ -2939,7 +2939,7 @@ const MyDropzone = (props: any) => {
                 mx: "auto",
                 width: "100%",
                 border: "1px solid #C4C7C9",
-                borderRadius: "32px",
+                borderRadius: "12px",
               }}
             >
               <div
