@@ -118,7 +118,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       if(zipped && buttonStep == 1){
           const link = document.createElement("a")
           link.href = URL.createObjectURL(zipped)
-          link.download = "dsl"
+          link.download = "kit"
           link.click()
       }
   };
@@ -127,15 +127,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       let fileName = args?.file?.name.substring(0, args?.file?.name.lastIndexOf('.'))
       const  response = await service.convertExcelToDSLFile(args,config)
       const { data } = response
-      let blob = new Blob([data], { type: "text/csv;charset=utf-8,%EF%BB%BF" });
+      let blob = new Blob([data], { type: "application/zip"});
       setZippedData(blob)
-      // const zip = new JSZip();
-      // const folder = zip.folder("dsl");
-      // zip.file(`${fileName}.ak`,blob,{binary:true})
-      // zip.generateAsync({type:"blob"}).then(content =>{
       setButtonStep(1)
-      // setZippedData(content)
-    // })
   };
 
   const handleBack = () => {
