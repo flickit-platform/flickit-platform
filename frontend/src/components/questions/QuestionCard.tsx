@@ -3300,7 +3300,7 @@ const DeleteDialog = (props: any) => {
       >
         <Typography sx={{ color: "#0A2342" }}>{title}</Typography>
 
-        <Box alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
+        <Box mt={2} alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
           <Button onClick={onClose}>{cancelText}</Button>
           <Button variant="contained" onClick={onConfirm}>
             {confirmText}
