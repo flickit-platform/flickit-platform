@@ -181,15 +181,15 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={
                 is_farsi
                   ? {
-                    pt: 0.5,
-                    fontSize: "2rem",
-                    fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
-                    direction: "rtl",
-                  }
+                      pt: 0.5,
+                      fontSize: "2rem",
+                      fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
+                      direction: "rtl",
+                    }
                   : {
-                    pt: 0.5,
-                    fontSize: "2rem",
-                  }
+                      pt: 0.5,
+                      fontSize: "2rem",
+                    }
               }
             >
               {title.split("\n").map((line, index) => (
@@ -317,7 +317,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             />
           </Box>
         </Box>
-        {questionsInfo?.permissions?.viewAnswerHistory &&
+        {questionsInfo?.permissions?.viewAnswerHistory && (
           <Box
             display={"flex"}
             justifyContent="space-between"
@@ -328,7 +328,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           >
             <AnswerDetails questionInfo={questionInfo} type="history" />
           </Box>
-        }
+        )}
         <Box
           display={"flex"}
           justifyContent="space-between"
@@ -607,9 +607,9 @@ const AnswerTemplate = (props: {
           sx={
             is_farsi
               ? {
-                fontSize: "1.2rem",
-                mr: "auto",
-              }
+                  fontSize: "1.2rem",
+                  mr: "auto",
+                }
               : { fontSize: "1.2rem", ml: "auto" }
           }
           onClick={submitQuestion}
@@ -698,7 +698,12 @@ const AnswerDetails = ({
           sx={{ background: "transparent", boxShadow: "none" }}
         >
           <AccordionSummary
-            sx={{ display: "flex", alignItems: "center", padding: 0, width: "fit-content" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: 0,
+              width: "fit-content",
+            }}
             onClick={handleAccordionChange}
           >
             <Title px={1} size="small">
@@ -757,10 +762,10 @@ const AnswerDetails = ({
                   ))}
                   {queryData?.data?.total >
                     queryData?.data?.size * (queryData?.data?.page + 1) && (
-                      <Button onClick={handleShowMore}>
-                        <Trans i18nKey="showMore" />
-                      </Button>
-                    )}
+                    <Button onClick={handleShowMore}>
+                      <Trans i18nKey="showMore" />
+                    </Button>
+                  )}
                 </Box>
               )
             )}
@@ -888,7 +893,7 @@ const AnswerHistoryItem = (props: any) => {
           {format(
             new Date(
               new Date(item.creationTime).getTime() -
-              new Date(item.creationTime).getTimezoneOffset() * 60000
+                new Date(item.creationTime).getTimezoneOffset() * 60000
             ),
             "yyyy/MM/dd HH:mm"
           ) +
@@ -1296,10 +1301,10 @@ const Evidence = (props: any) => {
                     is_farsi
                       ? { position: "absolute", top: 15, left: 5 }
                       : {
-                        position: "absolute",
-                        top: 15,
-                        right: 5,
-                      }
+                          position: "absolute",
+                          top: 15,
+                          right: 5,
+                        }
                   }
                 ></Grid>
               </Grid>
@@ -1344,7 +1349,7 @@ const Evidence = (props: any) => {
                     "&:hover": {
                       background: evidenceBG.borderColor,
                     },
-                    ...theme.typography.titleMedium
+                    ...theme.typography.titleMedium,
                   }}
                   type="submit"
                   variant="contained"
@@ -1408,8 +1413,8 @@ const Evidence = (props: any) => {
           onClose={() => setExpandedDeleteDialog(false)}
           onConfirm={deleteItem}
           title={<Trans i18nKey={"areYouSureYouWantDeleteThisEvidence"} />}
-          cancelText={<Trans i18nKey={"letMeSeeItAgain"} />}
-          confirmText={<Trans i18nKey={"yesDeleteIt"} />}
+          cancelText={<Trans i18nKey={"cancel"} />}
+          confirmText={<Trans i18nKey={"confirm"} />}
         />
         <DeleteDialog
           expanded={expandedDeleteAttachmentDialog.expended}
@@ -1581,7 +1586,7 @@ const CreateEvidenceAttachment = (props: any) => {
           />
         </Grid>
       </Grid>
-      {attachments.length >= 1 &&
+      {attachments.length >= 1 && (
         <Box sx={{ height: "50%", width: "100%" }}>
           <Grid
             container
@@ -1596,7 +1601,12 @@ const CreateEvidenceAttachment = (props: any) => {
               item
               xs={12}
               sm={6}
-              sx={{ display: "flex", gap: ".5rem", flexWrap: "wrap", px: "40px" }}
+              sx={{
+                display: "flex",
+                gap: ".5rem",
+                flexWrap: "wrap",
+                px: "40px",
+              }}
             >
               {!attachments.length && (
                 <Typography
@@ -1616,7 +1626,9 @@ const CreateEvidenceAttachment = (props: any) => {
                     gap: "5px",
                   }}
                 >
-                  {t("attachmentCount", { attachmentsCount: attachments.length })}
+                  {t("attachmentCount", {
+                    attachmentsCount: attachments.length,
+                  })}
                 </Typography>
               )}
             </Grid>
@@ -1633,31 +1645,31 @@ const CreateEvidenceAttachment = (props: any) => {
             >
               {loadingFile
                 ? skeleton.map((item, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      animation="wave"
-                      variant="rounded"
-                      width={40}
-                      height={40}
-                    />
-                  );
-                })
+                    return (
+                      <Skeleton
+                        key={index}
+                        animation="wave"
+                        variant="rounded"
+                        width={40}
+                        height={40}
+                      />
+                    );
+                  })
                 : attachments.map((item, index) => {
-                  return (
-                    <FileIcon
-                      key={index}
-                      setEvidenceId={setEvidenceId}
-                      setExpandedDeleteAttachmentDialog={
-                        setExpandedDeleteAttachmentDialog
-                      }
-                      downloadFile={downloadFile}
-                      evidenceId={evidenceJustCreatedId}
-                      item={item}
-                      evidenceBG={pallet}
-                    />
-                  );
-                })}
+                    return (
+                      <FileIcon
+                        key={index}
+                        setEvidenceId={setEvidenceId}
+                        setExpandedDeleteAttachmentDialog={
+                          setExpandedDeleteAttachmentDialog
+                        }
+                        downloadFile={downloadFile}
+                        evidenceId={evidenceJustCreatedId}
+                        item={item}
+                        evidenceBG={pallet}
+                      />
+                    );
+                  })}
             </Grid>
             {attachments.length == 5 && (
               <Box>
@@ -1671,7 +1683,7 @@ const CreateEvidenceAttachment = (props: any) => {
                     textAlign: "justify",
                     width: { xs: "90%", sm: "450px" },
                     padding: "0px 40px 20px",
-                    ...theme.typography.labelSmall
+                    ...theme.typography.labelSmall,
                   }}
                 >
                   <InfoOutlinedIcon
@@ -1683,7 +1695,7 @@ const CreateEvidenceAttachment = (props: any) => {
             )}
           </Grid>
         </Box>
-      }
+      )}
     </Box>
   );
 };
@@ -1715,7 +1727,7 @@ const ControlBtn = (props: any) => {
           "&:hover": {
             background: pallet.borderColor,
           },
-          ...theme.typography.titleSmall
+          ...theme.typography.titleSmall,
         }}
         onClick={UploadAttachment}
         variant="contained"
@@ -1771,7 +1783,7 @@ const DescriptionBox = (props: any) => {
           padding: "5px",
           "&::placeholder": {
             ...theme.typography.bodySmall,
-            color: "#000"
+            color: "#000",
           },
         },
       }}
@@ -1793,7 +1805,7 @@ const DropZoneArea = (props: any) => {
   return (
     <Dropzone
       accept={{
-        ...AcceptFile
+        ...AcceptFile,
       }}
       onDrop={(acceptedFiles) => {
         if (acceptedFiles[0]?.size && acceptedFiles[0]?.size > MAX_SIZE) {
@@ -1872,7 +1884,7 @@ const checkTypeUpload = (
       setTypeFile("xrar");
     }
     if (dropZoneData[0].type === "application/x-tar") {
-      setTypeFile("xtar")
+      setTypeFile("xtar");
     }
   }
 };
@@ -1883,32 +1895,143 @@ const CreateDropZone = (props: any) => {
   const MAX_SIZE = 2097152;
 
   useEffect(() => {
-
-    checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile)
-
-  }, [dropZoneData])
-  const theme = useTheme()
+    checkTypeUpload(dropZoneData, setDisplayFile, setTypeFile);
+  }, [dropZoneData]);
+  const theme = useTheme();
   return (
-    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
-      {({ getRootProps, getInputProps }: any) => (
-        dropZoneData ?
-          <Box sx={{ height: "68px", maxWidth: "198px", mx: "auto", width: "100%", border: "0.5px solid #C4C7C9", borderRadius: "16px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: '5px' }}>
-            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "10px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
-            {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
-            {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
-            {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
-            {typeFile == "pdf" && <section style={{ width: "40%", height: "60%", display: "flex", justifyContent: "center" }}><Box sx={{ width: "36px", height: "57px" }}><FileType name={"pdf"} /></Box></section>}
-            {typeFile == "zip" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${zip}` : "#"} alt="zip file" />}
-            {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
-            {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
-            {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
-            {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
-            {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
-            {typeFile == "xtar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
-            <Typography sx={{ ...theme.typography.titleSmall }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE}>
+      {({ getRootProps, getInputProps }: any) =>
+        dropZoneData ? (
+          <Box
+            sx={{
+              height: "68px",
+              maxWidth: "198px",
+              mx: "auto",
+              width: "100%",
+              border: "0.5px solid #C4C7C9",
+              borderRadius: "16px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "5px",
+            }}
+          >
+            <Button
+              sx={{
+                position: "absolute",
+                top: "3px",
+                right: "3px",
+                cursor: "pointer",
+                fontSize: "10px",
+              }}
+              onClick={() => setDropZone(null)}
+            >
+              Remove
+            </Button>
+            {typeFile == "gif" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${gif}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {typeFile == "png" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${png}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {typeFile == "bpm" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${bpm}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {(typeFile == "jpeg" || typeFile == "jpg") && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${jpeg}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {typeFile == "pdf" && (
+              <section
+                style={{
+                  width: "40%",
+                  height: "60%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Box sx={{ width: "36px", height: "57px" }}>
+                  <FileType name={"pdf"} />
+                </Box>
+              </section>
+            )}
+            {typeFile == "zip" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${zip}` : "#"}
+                alt="zip file"
+              />
+            )}
+            {typeFile == "plain" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${txt}` : "#"}
+                alt="txt file"
+              />
+            )}
+            {typeFile == "docx" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${docx}` : "#"}
+                alt="docx file"
+              />
+            )}
+            {typeFile == "doc" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${doc}` : "#"}
+                alt="doc file"
+              />
+            )}
+            {typeFile == "xrar" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${rar}` : "#"}
+                alt="rar file"
+              />
+            )}
+            {(typeFile == "xlsx" || typeFile == "ods") && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${xls}` : "#"}
+                alt="xls file"
+              />
+            )}
+            {typeFile == "xtar" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${xtar}` : "#"}
+                alt="xtar file"
+              />
+            )}
+            <Typography sx={{ ...theme.typography.titleSmall }}>
+              {dropZoneData[0]?.name.length > 14
+                ? dropZoneData[0]?.name.substring(0, 10) +
+                  "..." +
+                  dropZoneData[0]?.name.substring(
+                    dropZoneData[0]?.name.lastIndexOf(".")
+                  )
+                : dropZoneData[0]?.name}
+            </Typography>
           </Box>
-          :
+        ) : (
           <section
             style={{
               cursor: "pointer",
@@ -1917,7 +2040,7 @@ const CreateDropZone = (props: any) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              position: "relative"
+              position: "relative",
             }}
           >
             <Box
@@ -1939,7 +2062,7 @@ const CreateDropZone = (props: any) => {
                   justifyContent: "space-between",
                   padding: "20px 10px",
                   gap: "10px",
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 <input {...getInputProps()} />
@@ -1976,33 +2099,54 @@ const CreateDropZone = (props: any) => {
                   sx: {
                     color: "#6C8093",
                     backgroundColor: "#E2E5E9",
-                    borderRadius: "8px"
+                    borderRadius: "8px",
                   },
                 },
               }}
               title={
-                <Box sx={{ width: "auto", display: "flex", flexDirection: "column", gap: "5px" }}>
+                <Box
+                  sx={{
+                    width: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                  }}
+                >
                   <Box sx={{ display: "flex", gap: "5px" }}>
                     <InfoOutlinedIcon
-                      style={{ color: "#C7CCD1", width: "15px", height: "15px" }}
+                      style={{
+                        color: "#C7CCD1",
+                        width: "15px",
+                        height: "15px",
+                      }}
                     />
                     <Trans i18nKey={"uploadAcceptableSize"} />
                   </Box>
                   <Box sx={{ display: "flex", gap: "5px" }}>
                     <InfoOutlinedIcon
-                      style={{ color: "#C7CCD1", width: "15px", height: "15px" }}
+                      style={{
+                        color: "#C7CCD1",
+                        width: "15px",
+                        height: "15px",
+                      }}
                     />
                     <Trans i18nKey={"uploadAcceptable"} />
                   </Box>
                 </Box>
-              }>
+              }
+            >
               <InfoOutlinedIcon
                 style={{ color: "#0A2342", width: "15px", height: "15px" }}
-                sx={{ mr: 1, position: "absolute", top: { xs: "65%", sm: "50%" }, right: "15px" }}
+                sx={{
+                  mr: 1,
+                  position: "absolute",
+                  top: { xs: "65%", sm: "50%" },
+                  right: "15px",
+                }}
               />
             </Tooltip>
           </section>
-      )
+        )
       }
     </DropZoneArea>
   );
@@ -2039,7 +2183,7 @@ const EvidenceDetail = (props: any) => {
 
   useEffect(() => {
     if (id === evidencesData[0].id && !changeInput) {
-      setExpandedEvidenceBox(false)
+      setExpandedEvidenceBox(false);
     }
   }, [evidencesData.length, changeInput]);
 
@@ -2078,7 +2222,7 @@ const EvidenceDetail = (props: any) => {
         const { items } = await evidencesQueryData.query();
         setEvidencesData(items);
         if (!changeInput) {
-          setExpandedEvidenceBox(false)
+          setExpandedEvidenceBox(false);
         }
         setIsEditing(false);
         setValueCount("");
@@ -2278,10 +2422,10 @@ const EvidenceDetail = (props: any) => {
                         is_farsi
                           ? { position: "absolute", top: 15, left: 5 }
                           : {
-                            position: "absolute",
-                            top: 15,
-                            right: 5,
-                          }
+                              position: "absolute",
+                              top: 15,
+                              right: 5,
+                            }
                       }
                     ></Grid>
                   </Grid>
@@ -2410,9 +2554,9 @@ const EvidenceDetail = (props: any) => {
                         style={
                           expandedEvidenceBox
                             ? {
-                              rotate: "180deg",
-                              transition: "all .2s ease",
-                            }
+                                rotate: "180deg",
+                                transition: "all .2s ease",
+                              }
                             : { rotate: "0deg", transition: "all .2s ease" }
                         }
                         src={arrowBtn}
@@ -2426,9 +2570,9 @@ const EvidenceDetail = (props: any) => {
                         expandedEvidenceBox
                           ? {}
                           : {
-                            maxHeight: 0,
-                            overflow: "hidden",
-                          }
+                              maxHeight: 0,
+                              overflow: "hidden",
+                            }
                       }
                       sx={{
                         transition: "all .2s ease",
@@ -2442,31 +2586,31 @@ const EvidenceDetail = (props: any) => {
                       >
                         {loadingFile
                           ? skeleton.map((item, index) => {
-                            return (
-                              <Skeleton
-                                key={index}
-                                animation="wave"
-                                variant="rounded"
-                                width={40}
-                                height={40}
-                              />
-                            );
-                          })
+                              return (
+                                <Skeleton
+                                  key={index}
+                                  animation="wave"
+                                  variant="rounded"
+                                  width={40}
+                                  height={40}
+                                />
+                              );
+                            })
                           : attachments.map((item, index) => {
-                            return (
-                              <FileIcon
-                                evidenceId={id}
-                                setEvidenceId={setEvidenceId}
-                                item={item}
-                                setExpandedDeleteAttachmentDialog={
-                                  setExpandedDeleteAttachmentDialog
-                                }
-                                evidenceBG={evidenceBG}
-                                downloadFile={downloadFile}
-                                key={index}
-                              />
-                            );
-                          })}
+                              return (
+                                <FileIcon
+                                  evidenceId={id}
+                                  setEvidenceId={setEvidenceId}
+                                  item={item}
+                                  setExpandedDeleteAttachmentDialog={
+                                    setExpandedDeleteAttachmentDialog
+                                  }
+                                  evidenceBG={evidenceBG}
+                                  downloadFile={downloadFile}
+                                  key={index}
+                                />
+                              );
+                            })}
                         {attachments.length < 5 && (
                           <>
                             <Grid
@@ -2664,27 +2808,129 @@ const MyDropzone = (props: any) => {
   }, [dropZoneData]);
   const theme = useTheme();
   return (
-    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE} >
-      {({ getRootProps, getInputProps }: any) => (
-        dropZoneData ?
-          <Box sx={{ height: "199px", maxWidth: "280px", mx: "auto", width: "100%", border: "1px solid #C4C7C9", borderRadius: "32px", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-            <Button sx={{ position: "absolute", top: "3px", right: "3px", cursor: "pointer", fontSize: "13px" }} onClick={() => setDropZone(null)}>Remove</Button>
-            {typeFile == "gif" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${gif}` : "#"} alt={"gif"} />}
-            {typeFile == "png" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${png}` : "#"} alt={"gif"} />}
-            {typeFile == "bpm" && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${bpm}` : "#"} alt={"gif"} />}
-            {(typeFile == "jpeg" || typeFile == "jpg") && <img style={{ width: "25%", height: "50%" }} src={dispalyFile ? `${jpeg}` : "#"} alt={"gif"} />}
+    <DropZoneArea setDropZone={setDropZone} MAX_SIZE={MAX_SIZE}>
+      {({ getRootProps, getInputProps }: any) =>
+        dropZoneData ? (
+          <Box
+            sx={{
+              height: "199px",
+              maxWidth: "280px",
+              mx: "auto",
+              width: "100%",
+              border: "1px solid #C4C7C9",
+              borderRadius: "32px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Button
+              sx={{
+                position: "absolute",
+                top: "3px",
+                right: "3px",
+                cursor: "pointer",
+                fontSize: "13px",
+              }}
+              onClick={() => setDropZone(null)}
+            >
+              Remove
+            </Button>
+            {typeFile == "gif" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${gif}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {typeFile == "png" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${png}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {typeFile == "bpm" && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${bpm}` : "#"}
+                alt={"gif"}
+              />
+            )}
+            {(typeFile == "jpeg" || typeFile == "jpg") && (
+              <img
+                style={{ width: "25%", height: "50%" }}
+                src={dispalyFile ? `${jpeg}` : "#"}
+                alt={"gif"}
+              />
+            )}
             {/*{typeFile == "image" && <img style={{ width: "60%", height: "60%" }} src={dispalyFile ? `${dispalyFile}` : "#"} />}*/}
-            {typeFile == "pdf" && <section style={{ width: "50%", height: "70%" }}><FileType name={"pdf"} /> </section>}
-            {typeFile == "zip" && <img style={{ width: "50%", height: "70%" }} src={dispalyFile ? `${zip}` : "#"} />}
-            {typeFile == "plain" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${txt}` : "#"} alt="txt file" />}
-            {typeFile == "xrar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${rar}` : "#"} alt="rar file" />}
-            {typeFile == "docx" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${docx}` : "#"} alt="docx file" />}
-            {typeFile == "doc" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${doc}` : "#"} alt="doc file" />}
-            {(typeFile == "xlsx" || typeFile == "ods") && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xls}` : "#"} alt="xls file" />}
-            {typeFile == "xtar" && <img style={{ width: "40%", height: "60%" }} src={dispalyFile ? `${xtar}` : "#"} alt="xtar file" />}
-            <Typography sx={{ ...theme.typography.titleMedium }}>{dropZoneData[0]?.name.length > 14 ? dropZoneData[0]?.name.substring(0, 10) + "..." + dropZoneData[0]?.name.substring(dropZoneData[0]?.name.lastIndexOf(".")) : dropZoneData[0]?.name}</Typography>
+            {typeFile == "pdf" && (
+              <section style={{ width: "50%", height: "70%" }}>
+                <FileType name={"pdf"} />{" "}
+              </section>
+            )}
+            {typeFile == "zip" && (
+              <img
+                style={{ width: "50%", height: "70%" }}
+                src={dispalyFile ? `${zip}` : "#"}
+              />
+            )}
+            {typeFile == "plain" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${txt}` : "#"}
+                alt="txt file"
+              />
+            )}
+            {typeFile == "xrar" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${rar}` : "#"}
+                alt="rar file"
+              />
+            )}
+            {typeFile == "docx" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${docx}` : "#"}
+                alt="docx file"
+              />
+            )}
+            {typeFile == "doc" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${doc}` : "#"}
+                alt="doc file"
+              />
+            )}
+            {(typeFile == "xlsx" || typeFile == "ods") && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${xls}` : "#"}
+                alt="xls file"
+              />
+            )}
+            {typeFile == "xtar" && (
+              <img
+                style={{ width: "40%", height: "60%" }}
+                src={dispalyFile ? `${xtar}` : "#"}
+                alt="xtar file"
+              />
+            )}
+            <Typography sx={{ ...theme.typography.titleMedium }}>
+              {dropZoneData[0]?.name.length > 14
+                ? dropZoneData[0]?.name.substring(0, 10) +
+                  "..." +
+                  dropZoneData[0]?.name.substring(
+                    dropZoneData[0]?.name.lastIndexOf(".")
+                  )
+                : dropZoneData[0]?.name}
+            </Typography>
           </Box>
-          :
+        ) : (
           <section style={{ cursor: "pointer" }}>
             <Box
               sx={{
@@ -2732,7 +2978,7 @@ const MyDropzone = (props: any) => {
               </div>
             </Box>
           </section>
-      )
+        )
       }
     </DropZoneArea>
   );
@@ -2834,10 +3080,10 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const closeDialog = () => {
     onClose();
     setDropZone(null);
-    setDescription("")
-  }
+    setDescription("");
+  };
 
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Dialog
       open={expanded.expended}
@@ -2846,9 +3092,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
       // fullScreen={fullScreen}
       fullWidth
       sx={{
-        ".MuiDialog-paper": {
-          borderRadius: "32px",
-        },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",
           scrollbarWidth: "none",
@@ -2856,40 +3099,9 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         },
       }}
     >
-      <DialogContent
-        sx={{
-          // padding: "0!important",
-          height: { sm: "84px" },
-          background: "#004F83",
-          overflow: "hidden",
-          position: "relative",
-          py: "24px",
-        }}
-      >
-        <Box
-          sx={{
-            background: "#004F83",
-            textAlign: "center",
-            color: "#fff",
-            ...theme.typography.headlineSmall,
-            sm: { ...theme.typography.headlineMedium },
-          }}
-        >
-          <Trans i18nKey="uploadAttachment" />
-        </Box>
-        <ClearIcon
-          onClick={closeDialog}
-          style={{ color: "#fff" }}
-          sx={{
-            position: "absolute",
-            width: "25px",
-            height: "25px",
-            right: "17px",
-            top: "25px",
-            cursor: "pointer",
-          }}
-        />
-      </DialogContent>
+      <DialogTitle textTransform="uppercase">
+        <Trans i18nKey="uploadAttachment" />
+      </DialogTitle>
       <DialogContent
         sx={{
           padding: "unset",
@@ -2897,10 +3109,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          pt: "20px",
         }}
       >
         <Box
@@ -2908,11 +3116,10 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             display: "flex",
             flexDirection: "column",
             gap: "20px",
-            width: "90%",
+            width: "100%",
           }}
         >
-          {/*<Box sx={{ mx: "auto", width: "100%", height: "316px" }}>*/}
-          <Box sx={{ mx: "auto", width: "100%", height: "auto" }}>
+          <Box sx={{ width: "100%", height: "auto" }}>
             <Typography
               sx={{
                 ...theme.typography.headlineSmall,
@@ -3006,7 +3213,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 overflow: "auto",
                 "&::placeholder": {
                   ...theme.typography.bodySmall,
-                  color: "#000"
+                  color: "#000",
                 },
               }}
               rows={3}
@@ -3043,48 +3250,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             display: "flex",
             gap: 2,
             padding: "16px",
-            justifyContent: "center",
           }}
+          justifyContent="center"
         >
-          <Button
-            sx={{
-              ...theme.typography.titleMedium,
-              fontSize: { xs: "0.7rem", sm: "1rem" },
-              fontWeight: 700,
-              color: "#004F83",
-              "&.MuiButton-root": {
-                border: "1px solid #004F83",
-                borderRadius: "4px",
-              },
-              "&.MuiButton-root:hover": {
-                background: "unset",
-                border: "1px solid #004F83",
-              },
-            }}
-            variant="outlined"
-            onClick={() => handelSendFile("another")}
-          >
+          <Button onClick={() => handelSendFile("another")}>
             {uploadAnother}
           </Button>
-          <Button
-            sx={{
-              ...theme.typography.titleMedium,
-              fontSize: { xs: "0.7rem", sm: "1rem" },
-              fontWeight: 700,
-              "&.MuiButton-root": {
-                color: "#EDFCFC",
-                border: "1px solid #004F83",
-                background: "#004F83",
-                borderRadius: "4px",
-              },
-              "&.MuiButton-root:hover": {
-                background: "#004F83",
-                border: "1px solid #004F83",
-              },
-            }}
-            variant="contained"
-            onClick={() => handelSendFile("self")}
-          >
+          <Button variant="contained" onClick={() => handelSendFile("self")}>
             {uploadAttachment}
           </Button>
         </Box>
@@ -3105,98 +3277,32 @@ const DeleteDialog = (props: any) => {
       // fullScreen={fullScreen}
       fullWidth
       sx={{
-        ".MuiDialog-paper": {
-          borderRadius: "32px",
-        },
         ".MuiDialog-paper::-webkit-scrollbar": {
           display: "none",
           scrollbarWidth: "none",
           msOverflowStyle: "none",
         },
       }}
-    >  <DialogContent
-      sx={{
-        // padding: "0!important",
-        height: { sm: "84px" },
-        background: "#B81430",
-        overflow: "hidden",
-        position: "relative",
-        py: "24px",
-      }}
     >
-        <Box
-          sx={{
-            background: "#B81430",
-            textAlign: "center",
-            color: "#fff",
-            ...theme.typography.headlineSmall,
-            sm: { ...theme.typography.headlineMedium },
-          }}
-        >
-          <Trans i18nKey="warning" />
-        </Box>
-        <ClearIcon
-          onClick={onClose}
-          style={{ color: "#fff" }}
-          sx={{
-            position: "absolute",
-            width: "25px",
-            height: "25px",
-            right: "17px",
-            top: "25px",
-            cursor: "pointer",
-          }}
-        />
-      </DialogContent>
+      {" "}
+      <DialogTitle textTransform="uppercase">
+        <Trans i18nKey="warning" />
+      </DialogTitle>
       <DialogContent
         sx={{
-          padding: "32px",
-          background: "#fff",
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-start",
           textAlign: "center",
-          gap: 6,
         }}
       >
         <Typography sx={{ color: "#0A2342" }}>{title}</Typography>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Button
-            sx={{
-              "&.MuiButton-root": {
-                color: "#0A2342",
-                border: "1px solid #0A2342",
-                borderRadius: "4px",
-              },
-              "&.MuiButton-root:hover": {
-                background: "#CED3D9  ",
-                border: "1px solid #0A2342",
-              },
-            }}
-            variant="outlined"
-            onClick={onClose}
-          >
-            {cancelText}
-          </Button>
-          <Button
-            sx={{
-              "&.MuiButton-root": {
-                color: "#FDF1F5",
-                border: "1px solid #D81E5B",
-                background: "#D81E5B",
-                borderRadius: "4px",
-              },
-              "&.MuiButton-root:hover": {
-                background: "#AD1849  ",
-                border: "1px solid #AD1849",
-              },
-            }}
-            variant="contained"
-            onClick={onConfirm}
-          >
+        <Box alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
+          <Button onClick={onClose}>{cancelText}</Button>
+          <Button variant="contained" onClick={onConfirm}>
             {confirmText}
           </Button>
         </Box>
@@ -3258,20 +3364,20 @@ const QuestionGuide = (props: any) => {
               <Typography variant="body2">
                 {hint.startsWith("\n")
                   ? hint
-                    .substring(1)
-                    .split("\n")
-                    .map((line: string, index: number) => (
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : hint.split("\n").map((line: string, index: number) => (
                       <React.Fragment key={index}>
                         {line}
                         <br />
                       </React.Fragment>
-                    ))
-                  : hint.split("\n").map((line: string, index: number) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
+                    ))}
               </Typography>
             </Box>
           </Box>
