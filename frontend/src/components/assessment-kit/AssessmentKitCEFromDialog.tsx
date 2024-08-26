@@ -125,11 +125,14 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const handleConvertDsl = async () => {
       const {args,config} = convertData
       let fileName = args?.file?.name.substring(0, args?.file?.name.lastIndexOf('.'))
-      const  response = await service.convertExcelToDSLFile(args,config)
-      const { data } = response
-      let blob = new Blob([data], { type: "application/zip"});
-      setZippedData(blob)
-      setButtonStep(1)
+      service.convertExcelToDSLFile(args,config).then((res: any) =>{
+          const {data} = res
+          const file = new Blob(
+              [data],
+              {type: 'application/zip'});
+        setZippedData(file)
+        setButtonStep(1)
+      })
   };
 
   const handleBack = () => {

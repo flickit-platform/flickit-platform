@@ -697,6 +697,7 @@ export const createService = (
               { file },
               {
                   ...config,
+                  responseType: "blob",
                   headers: {
                       "Content-Type": "multipart/form-data",
                   },
