@@ -125,7 +125,7 @@ const SubjectContainer = () => {
                       sx={{
                         background: "#fff",
                         boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-                        borderRadius: "16px",
+                        borderRadius: "12px",
                       }}
                     >
                       {/* <Typography>
@@ -149,7 +149,7 @@ const SubjectContainer = () => {
                   sx={{
                     background: "#fff",
                     boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-                    borderRadius: "16px",
+                    borderRadius: "12px",
                   }}
                 >
                   <Box height={"60vh"} mt={10}>

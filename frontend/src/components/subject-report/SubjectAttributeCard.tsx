@@ -58,7 +58,7 @@ const SUbjectAttributeCard = (props: any) => {
     <Accordion
       sx={{
         width: "100%",
-        borderRadius: "16px !important",
+        borderRadius: "12px !important",
         boxShadow: "0px 0px 8px 0px rgba(10, 35, 66, 0.25)",
         transition: "background-position .4s ease",
         position: "relative",
@@ -74,8 +74,8 @@ const SUbjectAttributeCard = (props: any) => {
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{
-          borderTopLeftRadius: "16px !important",
-          borderTopRightRadius: "16px !important",
+          borderTopLeftRadius: "12px !important",
+          borderTopRightRadius: "12px !important",
           textAlign: "center",
           backgroundColor: expandedAttribute ? "rgba(10, 35, 66, 0.07)" : "",
           "& .MuiAccordionSummary-content": {
@@ -471,7 +471,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
         onChange={handleChange(maturityLevel?.id)}
         sx={{
           width: "100%",
-          borderRadius: "16px !important",
+          borderRadius: "12px !important",
           transition: "background-position .4s ease",
           position: "relative",
           border: "1px solid #EDF4FC",
@@ -487,9 +487,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
           id="panel1bh-header"
           sx={{
             borderRadius:
-              expanded === maturityLevel?.id ? "" : "16px !important",
-            borderTopLeftRadius: "16px !important",
-            borderTopRightRadius: "16px !important",
+              expanded === maturityLevel?.id ? "" : "12px !important",
+            borderTopLeftRadius: "12px !important",
+            borderTopRightRadius: "12px !important",
             textAlign: "center",
             backgroundColor:
               expanded === maturityLevel?.id ? "#EDFCFC" : "#EDFCFC80",
