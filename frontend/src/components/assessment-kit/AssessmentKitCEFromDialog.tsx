@@ -23,15 +23,16 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
+import {IDialogProps} from "@types";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm: (args: any) => void;
+  onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
 
-const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
+const AssessmentKitCEFromDialog = (props: IDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
