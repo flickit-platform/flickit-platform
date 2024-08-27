@@ -17,6 +17,10 @@ class AssessmentInsightApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    def get(self, request, assessment_id):
+        result = assessment_insight_services.get_assessment_insights(request, assessment_id)
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class AssessmentSubjectInsightApi(APIView):
     permission_classes = [IsAuthenticated]
