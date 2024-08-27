@@ -18,12 +18,10 @@ import AutocompleteAsyncField, {
 } from "@common/fields/AutocompleteAsyncField";
 import UploadField from "@common/fields/UploadField";
 import RichEditorField from "@common/fields/RichEditorField";
-import {Box, Button, Typography, Alert, DialogContentText} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import {Box, Button, Typography, Alert} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
-import {IDialogProps} from "@types";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -40,7 +38,7 @@ const AssessmentKitCEFromDialog = (props: any) => {
   const [isValid, setIsValid] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [convertData,setConvertData] = useState<any>(null)
-  const [zipped,setZippedData] = useState<any>(null)
+  const [zippedData,setZippedData] = useState<any>(null)
   const [dropNewFile,setDropNewFile] = useState<any>(null)
   const [buttonStep,setButtonStep] = useState<any>(0)
   const { service } = useServiceContext();
@@ -118,9 +116,9 @@ const AssessmentKitCEFromDialog = (props: any) => {
     }
   };
   const handleDownloadDsl = () => {
-      if(zipped && buttonStep == 1){
+      if(zippedData && buttonStep == 1){
           const link = document.createElement("a")
-          link.href = URL.createObjectURL(zipped)
+          link.href = URL.createObjectURL(zippedData)
           link.download = "kit"
           link.click()
           close();
@@ -148,9 +146,9 @@ const AssessmentKitCEFromDialog = (props: any) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-    const downloadTemplate = ()=> {
-
-    }
+    // const downloadTemplate = ()=> {
+    //
+    // }
 
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
@@ -164,7 +162,7 @@ const AssessmentKitCEFromDialog = (props: any) => {
             {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
                 <Trans i18nKey={"dslDownloadGuide"} />
                 <span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer",paddingLeft:"4px"}}
-                      onClick={downloadTemplate}
+                      // onClick={downloadTemplate}
                 >here</span>
             </Box>
             </Box> }
