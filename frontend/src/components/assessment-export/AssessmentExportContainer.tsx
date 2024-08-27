@@ -978,7 +978,7 @@ const AssessmentExportContainer = () => {
                                 {loadingId === "globalChart" ? (
                                     <CircularProgress size={24} />
                                 ) : (
-                                    <FaClipboard size={24} />
+                                    <ContentCopyOutlinedIcon fontSize="small"/>
                                 )}
                             </IconButton>
                         </Tooltip>
@@ -1024,7 +1024,7 @@ const AssessmentExportContainer = () => {
                             {loadingId === "gauge" ? (
                                 <CircularProgress size={24} />
                             ) : (
-                                <FaClipboard size={24} />
+                                <ContentCopyOutlinedIcon fontSize="small"/>
                             )}
                         </IconButton>
                     </Tooltip>
@@ -1118,8 +1118,7 @@ const AssessmentExportContainer = () => {
                       {loadingId === subject?.id.toString() ? (
                         <CircularProgress size={24} />
                       ) : (
-                        <FaClipboard size={24} />
-
+                          <ContentCopyOutlinedIcon fontSize="small"/>
                       )}
                     </IconButton>
                       </Tooltip>
@@ -1222,8 +1221,7 @@ const AssessmentExportContainer = () => {
                                     {loadingId === attribute?.id.toString() ? (
                                       <CircularProgress size={24} />
                                     ) : (
-                                      <FaClipboard size={24} />
-                                    )}
+                                        <ContentCopyOutlinedIcon fontSize="small"/>                                    )}
                                   </IconButton>
                                     </Tooltip>
                                 </Box>
