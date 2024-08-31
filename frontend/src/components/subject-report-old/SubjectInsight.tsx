@@ -2,8 +2,8 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress"; 
-import { useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Button,
@@ -28,20 +28,19 @@ import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 
-export const AssessmentInsight = () => {
+export const SubjectInsight = () => {
   const { service } = useServiceContext();
-  const { assessmentId = "" } = useParams();
+  const { assessmentId = "", subjectId = "" } = useParams();
   const [aboutSection, setAboutSection] = useState<any>(null);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchAssessment = () => {
     service
-      .fetchAssessmentInsight({ assessmentId }, {})
+      .fetchSubjectInsight({ assessmentId, subjectId }, {})
       .then((res) => {
         const data = res.data;
         const selectedInsight = data.assessorInsight || data.defaultInsight;
-
         if (selectedInsight) {
           setAboutSection(selectedInsight);
           setEditable(data.editable ?? false);
@@ -51,13 +50,13 @@ export const AssessmentInsight = () => {
         console.error("Error fetching assessment insight:", error);
       })
       .finally(() => {
-        setLoading(false);
+        setLoading(false); 
       });
   };
 
   useEffect(() => {
     fetchAssessment();
-  }, [assessmentId, service]);
+  }, [subjectId, service]);
 
   return (
     <Box
@@ -68,13 +67,7 @@ export const AssessmentInsight = () => {
       textAlign="left"
       maxHeight="100%"
       gap={0.5}
-      py={2}
-      sx={{
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
-      }}
+      ml={3}
     >
       {loading ? (
         <Box
@@ -168,7 +161,7 @@ const OnHoverRichEditor = (props: any) => {
   const [show, setShow] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<any>({});
-  const { assessmentId = "" } = useParams();
+  const { assessmentId = "", subjectId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
 
@@ -189,8 +182,8 @@ const OnHoverRichEditor = (props: any) => {
   const onSubmit = async (data: any, event: any) => {
     event.preventDefault();
     try {
-      const { data: res } = await service.updateAssessmentInsight(
-        { assessmentId, data: { insight: data.insight } },
+      const { data: res } = await service.updateSubjectInsight(
+        { assessmentId, data: { insight: data.insight }, subjectId },
         { signal: abortController.current.signal }
       );
       await infoQuery();
