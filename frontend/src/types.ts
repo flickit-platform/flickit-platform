@@ -666,3 +666,15 @@ export interface IAnswerHistory {
   creationTime: string;
   createdBy: IUserInfo;
 }
+
+type insight = {
+  insight?: string;
+  isValid?: boolean;
+  creaationTime?: string;
+};
+
+export interface IAssessmentInsight {
+  defaultInsight: insight | null;
+  assessorInsight: insight | null;
+  editable?: boolean;
+}
