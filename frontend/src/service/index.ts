@@ -333,6 +333,22 @@ export const createService = (
         ...(config ?? {}),
       });
     },
+    fetchAssessmentInsight(
+      { assessmentId }: { assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/assessments/${assessmentId}/insight/`, {
+        ...(config ?? {}),
+      });
+    },
+    updateAssessmentInsight(
+      { assessmentId, data }: { assessmentId: string; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(`/api/v1/assessments/${assessmentId}/insight/`, data, {
+        ...(config ?? {}),
+      });
+    },
     fetchExportReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined
