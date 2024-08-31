@@ -12,7 +12,12 @@ class LoadQuestionnairesWithAssessmentApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, assessment_id):
+        permissions_result = assessment_permission_services.get_assessment_permissions_list(request, assessment_id)
+
         result = assessment_services.get_questionnaires_with_assessment_kit(request, assessment_id)
+        if result["status_code"] == 200 and permissions_result["status_code"] == 200:
+            result["body"]["permissions"] = permissions_result["body"]["permissions"]
+            return Response(data=result["body"], status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
 
