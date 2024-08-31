@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import { FormControl, SelectChangeEvent, Typography } from "@mui/material";
+import {
+  DialogTitle,
+  FormControl,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import { SelectHeight } from "@utils/selectHeight";
@@ -214,7 +219,6 @@ const AddMemberDialog = (props: {
       fullWidth
       sx={{
         ".MuiDialog-paper": {
-          borderRadius: "32px",
           maxWidth: "800px",
         },
         ".MuiDialog-paper::-webkit-scrollbar": {
@@ -224,6 +228,7 @@ const AddMemberDialog = (props: {
         },
       }}
     >
+      <DialogTitle textTransform="uppercase">{title}</DialogTitle>
       <DialogContent
         sx={{
           padding: "unset",
@@ -238,33 +243,10 @@ const AddMemberDialog = (props: {
         }}
       >
         <Box
-          sx={{
-            backgroundColor: "#004F83",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "baseline",
-            gap: "0.4rem",
-          }}
-        >
-          <Typography
-            variant={"h5"}
-            sx={{
-              color: "#EDF4FC",
-              fontsize: "2rem",
-              lineHeight: "36.77px",
-              fontWeight: 700,
-              paddingY: "24px",
-              letterSpacing: "1.3px",
-            }}
-          >
-            {title}
-          </Typography>
-        </Box>
-        <Box
           display="flex"
           alignItems="center"
-          justifyContent={"center"}
+          justifyContent={"flex-start"}
+          px={3}
           sx={{ gap: { xs: "0rem", sm: "1rem" } }}
           width="100%"
         >
@@ -273,7 +255,7 @@ const AddMemberDialog = (props: {
           >
             <Trans i18nKey={"add"} />
           </Typography>
-          <Box width="46%">
+          <Box width="50%">
             <FormProviderWithForm formMethods={formMethods}>
               <EmailField
                 memberOfSpace={memberOfSpace}
@@ -557,8 +539,8 @@ const AddMemberDialog = (props: {
               backgroundColor: "rgba(255, 249, 196, 0.31)",
               padding: 1,
               borderRadius: 2,
-              marginInline: 4,
-              maxWidth: "80%",
+              marginInline: 3,
+              maxWidth: "100%",
             }}
           >
             <InfoOutlinedIcon color="primary" sx={{ marginRight: 1 }} />
@@ -577,36 +559,13 @@ const AddMemberDialog = (props: {
             display: "flex",
             gap: 2,
             padding: "16px",
-            justifyContent: "center",
+            justifyContent: "flex-end",
           }}
         >
-          <Button
-            sx={{
-              fontSize: { xs: "0.7rem", sm: "1rem" },
-              fontWeight: 700,
-              color: "#004F83",
-              "&.MuiButton-root": {
-                border: "unset",
-              },
-              "&.MuiButton-root:hover": {
-                background: "unset",
-                border: "unset",
-              },
-            }}
-            variant="outlined"
-            onClick={closeDialog}
-          >
+          <Button onClick={closeDialog}>
             {cancelText}
           </Button>
           <LoadingButton
-            sx={{
-              fontSize: { xs: "0.7rem", sm: "1rem" },
-              fontWeight: 700,
-              color: "#EDFCFC",
-              border: "1px solid #004F83",
-              background: "#004F83",
-              borderRadius: "100px",
-            }}
             variant="contained"
             onClick={handleClick}
             loading={loading}
@@ -684,6 +643,7 @@ const EmailField = ({
         createItemQuery={createItemQuery}
         errorObject={error}
         setError={setError}
+        clearOnBlur={false}
       />
     </Box>
   );

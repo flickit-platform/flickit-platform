@@ -104,6 +104,7 @@ const AutocompleteBaseField = (
   props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">
 ) => {
   const {
+    clearOnBlur = true,
     editable,
     field,
     formatRequest = (request) => request,
@@ -159,7 +160,7 @@ const AutocompleteBaseField = (
       }, 800),
     []
   );
-  const createSpaceQuery = async (option: any) => {
+  const createSpaceQuery = async () => {
     try {
       setOpen(false);
       const newOption: any = await createItemQuery(inputValue);
@@ -236,6 +237,18 @@ const AutocompleteBaseField = (
     // setOpen(true);
   };
 
+  const handleBlur = () => {
+    if (
+      !clearOnBlur &&
+      inputValue &&
+      hasAddBtn &&
+      !options.some((opt) => getOptionLabel(opt) === inputValue)
+    ) {
+      createSpaceQuery();
+    }
+    setOpen(false);
+  };
+
   return (
     <Autocomplete
       {...restFields}
@@ -246,6 +259,7 @@ const AutocompleteBaseField = (
       open={open}
       onOpen={handleOpen}
       onClose={handleClose}
+      clearOnBlur={clearOnBlur}
       loadingText={
         options.length > 5 ? <LoadingComponent options={options} /> : undefined
       }
@@ -319,6 +333,7 @@ const AutocompleteBaseField = (
             helperText
           }
           name={name}
+          onBlur={handleBlur}
         />
       )}
       renderOption={(props, option) =>

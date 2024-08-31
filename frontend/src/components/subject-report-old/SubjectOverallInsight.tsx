@@ -31,12 +31,7 @@ const OverallInsightText = (props: any) => {
   const { title, maturityLevel, confidenceValue } = subject;
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
-      <Typography
-        fontFamily={"Roboto"}
-        fontWeight="500"
-        fontSize="1.3rem"
-        sx={{ opacity: 0.96 }}
-      >
+      <Typography variant="titleLarge" sx={{ opacity: 0.96 }}>
         {loading ? (
           <Skeleton height="60px" />
         ) : (
@@ -44,10 +39,8 @@ const OverallInsightText = (props: any) => {
             <Trans i18nKey="withConfidence" />{" "}
             <Typography
               component="span"
-              fontFamily={"Roboto"}
-              fontWeight="bold"
+              variant="titleLarge"
               sx={{ color: "#3596A1" }}
-              fontSize="1.15rem"
             >
               <Trans
                 i18nKey={"clOf"}
@@ -57,19 +50,13 @@ const OverallInsightText = (props: any) => {
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography
               component="span"
-              fontWeight="bold"
-              fontFamily={"Roboto"}
+              variant="titleLarge"
               sx={{ color: "#6035A1" }}
-              fontSize="1.15rem"
             >
               {maturityLevel.index} of {maturityLevelsCount}
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
-            <Typography
-              component="span"
-              fontFamily="Roboto"
-              fontWeight={"bold"}
-            >
+            <Typography component="span" variant="titleLarge">
               {maturityLevel.title}.
             </Typography>
             <Box>

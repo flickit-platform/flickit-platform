@@ -10,9 +10,9 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 
-export const customFontFamily =
-  '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
-export const customHeaderFamily = "Oswald, Roboto, Vazirmatn";
+// export const primaryFontFamily =
+//   '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
+// export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
 export const primaryFontFamily = "Ubuntu";
 export const secondaryFontFamily = "Sansation";
@@ -121,7 +121,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: customFontFamily,
+    fontFamily: primaryFontFamily,
     subSmall: {
       fontWeight: 500,
       lineHeight: 1.57,
@@ -169,7 +169,7 @@ export const theme = createTheme({
       letterSpacing: "0",
     },
     displayMedium: {
-      fontFamily: customFontFamily,
+      fontFamily: primaryFontFamily,
       fontSize: "1.75rem",
       fontWeight: "lighter",
       lineHeight: "2.25rem",
@@ -246,22 +246,22 @@ export const theme = createTheme({
       letterSpacing: "0.1px",
     },
     button: {
-      fontFamily: customHeaderFamily,
+      fontFamily: primaryFontFamily,
       letterSpacing: ".1em",
     },
     h3: {
-      fontFamily: customHeaderFamily,
+      fontFamily: primaryFontFamily,
     },
     h4: {
-      fontFamily: customHeaderFamily,
+      fontFamily: primaryFontFamily,
       opacity: 0.9,
     },
     h5: {
-      fontFamily: customHeaderFamily,
+      fontFamily: primaryFontFamily,
       opacity: 0.85,
     },
     h6: {
-      fontFamily: customHeaderFamily,
+      fontFamily: primaryFontFamily,
       letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,

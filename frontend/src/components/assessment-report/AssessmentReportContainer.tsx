@@ -20,6 +20,7 @@ import MoreActions from "@common/MoreActions";
 import SettingsIcon from "@mui/icons-material/Settings";
 import useMenu from "@/utils/useMenu";
 import { ArticleRounded } from "@mui/icons-material";
+import { AssessmentInsight } from "./AssessmentInsight";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -212,6 +213,14 @@ const AssessmentReportContainer = (props: any) => {
                 </Grid>
               </Grid>
 
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Box display="flex" flexDirection="column" gap={1}>
+                  <Typography color="#73808C" marginX={4} variant="titleMedium">
+                    <Trans i18nKey="insight" />
+                  </Typography>
+                  <AssessmentInsight />
+                </Box>
+              </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
                   <Typography color="#73808C" marginX={4} variant="titleMedium">

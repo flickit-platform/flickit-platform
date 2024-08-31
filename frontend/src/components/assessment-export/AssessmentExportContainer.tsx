@@ -60,10 +60,10 @@ import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 import { Link as RouterLink } from "react-router-dom";
 import html2canvas from "html2canvas";
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
-import {FaClipboard} from "react-icons/fa";
+import { FaClipboard } from "react-icons/fa";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -230,7 +230,9 @@ const AssessmentExportContainer = () => {
   };
   const [attributesData, setAttributesData] = useState<any>({});
   const [editable, setEditable] = useState<any>(true);
-  const [ignoreIds, setIgnoreIds] = useState<any>([]);
+  const [loadingAttributes, setLoadingAttributes] = useState<{
+    [id: string]: boolean;
+  }>({});
   const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
 
   const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
@@ -240,6 +242,12 @@ const AssessmentExportContainer = () => {
           subject?.attributes
             ?.filter((attribute: any) => !ignoreIds.includes(attribute?.id))
             .map(async (attribute: any) => {
+              // Set loading to true for the current attribute
+              setLoadingAttributes((prevLoading) => ({
+                ...prevLoading,
+                [attribute?.id]: true,
+              }));
+
               try {
                 const result = await FetchAttributeData(
                   assessmentId,
@@ -255,9 +263,16 @@ const AssessmentExportContainer = () => {
                   error
                 );
                 return null;
+              } finally {
+                // Set loading to false after data is fetched
+                setLoadingAttributes((prevLoading) => ({
+                  ...prevLoading,
+                  [attribute?.id]: false,
+                }));
               }
             })
       );
+
       const allAttributesData = attributesDataPromises.length
         ? await Promise.all(attributesDataPromises)
         : [];
@@ -269,6 +284,7 @@ const AssessmentExportContainer = () => {
         },
         {}
       );
+
       setAttributesData((prevData: any) => ({
         ...prevData,
         ...attributesDataObject,
@@ -284,6 +300,12 @@ const AssessmentExportContainer = () => {
     const attributesDataPolicyPromises =
       AssessmentReport?.data?.subjects.flatMap((subject: any) =>
         subject?.attributes?.map(async (attribute: any) => {
+          // Set loading to true for the current attribute
+          setLoadingAttributes((prevLoading) => ({
+            ...prevLoading,
+            [attribute?.id]: true,
+          }));
+
           const result = await LoadAttributeData(assessmentId, attribute?.id);
 
           if (!result.editable) {
@@ -326,7 +348,6 @@ const AssessmentExportContainer = () => {
       ? await Promise.all(attributesDataPolicyPromises)
       : [];
 
-    // Process the fetched data
     const attributesDataPolicyObject = allAttributesDataPolicy?.reduce(
       (acc, { id, data }) => {
         acc[id] = data;
@@ -335,12 +356,17 @@ const AssessmentExportContainer = () => {
       {}
     );
 
-    // Update states in one go
-    setIgnoreIds(newIgnoreIds);
+    // Update loading state for the fetched attributes
+    allAttributesDataPolicy.forEach(({ id }) => {
+      setLoadingAttributes((prevLoading) => ({
+        ...prevLoading,
+        [id]: false,
+      }));
+    });
+
     setAttributesDataPolicy(attributesDataPolicyObject);
     return newIgnoreIds;
   };
-
   useEffect(() => {
     setTimeout(() => {
       setShowSpinner(false);
@@ -720,8 +746,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                                ? elem?.title
-                                : ", " + elem?.title
+                              ? elem?.title
+                              : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -969,19 +995,19 @@ const AssessmentExportContainer = () => {
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12} lg={6} xl={6}>
-                        <Tooltip title={"copy"}>
-                            <IconButton
-                                size="small"
-                                onClick={() => handleCopyClick("globalChart")}
-                                disabled={loadingId === "globalChart"}
-                            >
-                                {loadingId === "globalChart" ? (
-                                    <CircularProgress size={24} />
-                                ) : (
-                                    <ContentCopyOutlinedIcon fontSize="small"/>
-                                )}
-                            </IconButton>
-                        </Tooltip>
+                  <Tooltip title={"copy"}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopyClick("globalChart")}
+                      disabled={loadingId === "globalChart"}
+                    >
+                      {loadingId === "globalChart" ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        <ContentCopyOutlinedIcon fontSize="small" />
+                      )}
+                    </IconButton>
+                  </Tooltip>
                   <Box
                     sx={{ height: "370px" }}
                     ref={handleSetRef("globalChart")}
@@ -1015,21 +1041,21 @@ const AssessmentExportContainer = () => {
                   flexDirection="column"
                   alignItems="flex-end"
                 >
-                    <Tooltip title={"copy"}>
-                        <IconButton
-                            size="small"
-                            onClick={() => handleCopyClick("gauge")}
-                            disabled={loadingId === "gauge"}
-                        >
-                            {loadingId === "gauge" ? (
-                                <CircularProgress size={24} />
-                            ) : (
-                                <ContentCopyOutlinedIcon fontSize="small"/>
-                            )}
-                        </IconButton>
-                    </Tooltip>
+                  <Tooltip title={"copy"}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopyClick("gauge")}
+                      disabled={loadingId === "gauge"}
+                    >
+                      {loadingId === "gauge" ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        <ContentCopyOutlinedIcon fontSize="small" />
+                      )}
+                    </IconButton>
+                  </Tooltip>
 
-                  <Box ref={handleSetRef("gauge")}>
+                  <Box ref={handleSetRef("gauge")} width="100%">
                     <Gauge
                       level_value={maturityLevel?.index ?? 0}
                       maturity_level_status={maturityLevel?.title}
@@ -1107,21 +1133,21 @@ const AssessmentExportContainer = () => {
                         />
                       )}
                     </Box>
-                      <Tooltip title={"copy"}>
-                    <IconButton
-                      size="small"
-                      onClick={() =>
-                        handleCopyClick(subject?.id.toString() || "")
-                      }
-                      disabled={loadingId === subject?.id.toString()}
-                    >
-                      {loadingId === subject?.id.toString() ? (
-                        <CircularProgress size={24} />
-                      ) : (
-                          <ContentCopyOutlinedIcon fontSize="small"/>
-                      )}
-                    </IconButton>
-                      </Tooltip>
+                    <Tooltip title={"copy"}>
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          handleCopyClick(subject?.id.toString() || "")
+                        }
+                        disabled={loadingId === subject?.id.toString()}
+                      >
+                        {loadingId === subject?.id.toString() ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          <ContentCopyOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                   <TableContainer
                     component={Paper}
@@ -1206,55 +1232,44 @@ const AssessmentExportContainer = () => {
                                       document
                                     />
                                   </Box>
-                                    <Tooltip title={"copy"}>
-                                  <IconButton
-                                    size="small"
-                                    onClick={() =>
-                                      handleCopyClick(
-                                        attribute?.id.toString() || ""
-                                      )
-                                    }
-                                    disabled={
-                                      loadingId === attribute?.id.toString()
-                                    } // Disable button when loading
-                                  >
-                                    {loadingId === attribute?.id.toString() ? (
-                                      <CircularProgress size={24} />
-                                    ) : (
-                                        <ContentCopyOutlinedIcon fontSize="small"/>                                    )}
-                                  </IconButton>
-                                    </Tooltip>
-                                </Box>
-
-                                <Box
-                                  sx={{
-                                    zIndex: 1,
-                                    display: attributesDataPolicy[
-                                      attribute?.id?.toString()
-                                    ]?.aiInsight
-                                      ? "flex"
-                                      : "none",
-                                    justifyContent: "flex-start",
-                                  }}
-                                >
-                                  <Typography
-                                    variant="labelSmall"
-                                    sx={{
-                                      backgroundColor: "#D81E5B",
-                                      color: "white",
-                                      padding: "0.35rem 0.35rem",
-                                      borderRadius: "4px",
-                                      fontWeight: "bold",
-                                    }}
-                                  >
-                                    <Trans i18nKey="AIGenerated" />
-                                  </Typography>
+                                  <Tooltip title={"copy"}>
+                                    <IconButton
+                                      size="small"
+                                      onClick={() =>
+                                        handleCopyClick(
+                                          attribute?.id.toString() || ""
+                                        )
+                                      }
+                                      disabled={
+                                        loadingId === attribute?.id.toString()
+                                      } // Disable button when loading
+                                    >
+                                      {loadingId ===
+                                      attribute?.id.toString() ? (
+                                        <CircularProgress size={24} />
+                                      ) : (
+                                        <ContentCopyOutlinedIcon fontSize="small" />
+                                      )}
+                                    </IconButton>
+                                  </Tooltip>
                                 </Box>
 
                                 {attributesData[attribute?.id?.toString()] ? (
                                   <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}
                                   </Typography>
+                                ) : loadingAttributes[
+                                    attribute?.id?.toString()
+                                  ] ? (
+                                  <Box display="flex" alignItems="center">
+                                    <CircularProgress
+                                      size={24}
+                                      sx={{ mr: 1 }}
+                                    />
+                                    <Typography variant="displaySmall">
+                                      <Trans i18nKey="generatingInsight" />
+                                    </Typography>
+                                  </Box>
                                 ) : (
                                   editable && (
                                     <Typography
@@ -1279,6 +1294,54 @@ const AssessmentExportContainer = () => {
                                       .
                                     </Typography>
                                   )
+                                )}
+                                {attributesDataPolicy[attribute?.id?.toString()]
+                                  ?.aiInsight && (
+                                  <Box sx={{ ...styles.centerV }} gap={2}>
+                                    <Box
+                                      sx={{
+                                        zIndex: 1,
+                                        display: "flex",
+                                        justifyContent: "flex-start",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="labelSmall"
+                                        sx={{
+                                          backgroundColor: "#d85e1e",
+                                          color: "white",
+                                          padding: "0.35rem 0.35rem",
+                                          borderRadius: "4px",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        <Trans i18nKey="AIGenerated" />
+                                      </Typography>
+                                    </Box>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "flex-start",
+                                        backgroundColor:
+                                          "rgba(255, 249, 196, 0.31)",
+                                        padding: 1,
+                                        borderRadius: 2,
+                                        maxWidth: "80%",
+                                      }}
+                                    >
+                                      <InfoOutlined
+                                        color="primary"
+                                        sx={{ marginRight: 1 }}
+                                      />
+                                      <Typography
+                                        variant="titleMedium"
+                                        fontWeight={400}
+                                        textAlign="left"
+                                      >
+                                        <Trans i18nKey="invalidAIInsight" />
+                                      </Typography>
+                                    </Box>
+                                  </Box>
                                 )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
                                   ?.assessorInsight &&
@@ -1322,7 +1385,8 @@ const AssessmentExportContainer = () => {
                                           sx={{ marginRight: 1 }}
                                         />
                                         <Typography
-                                          variant="bodyLarge"
+                                          variant="titleMedium"
+                                          fontWeight={400}
                                           textAlign="left"
                                         >
                                           <Trans i18nKey="invalidInsight" />
