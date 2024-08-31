@@ -21,6 +21,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import useMenu from "@/utils/useMenu";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
+import { secondaryFontFamily } from "@/config/theme";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -182,6 +183,7 @@ const AssessmentReportContainer = (props: any) => {
                         color="#73808C"
                         marginX={4}
                         variant="titleMedium"
+                        fontFamily={secondaryFontFamily}
                       >
                         <Trans i18nKey="overallStatus" />
                       </Typography>
