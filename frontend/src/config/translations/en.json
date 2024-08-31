@@ -492,7 +492,12 @@
   "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
-  "Note": "note",
+  "warning": "Warning",
+  "convertExcelToDsl": "Convert Excel to Dsl",
+  "convertToDsl": "Convert To Dsl",
+  "dslReadyToDownload": "Your DSL is ready to download!",
+  "dslDownloadGuide": "If you don’t have appropriate excel template, you can download it",
+  "note": "Note",
   "subjectBriefConclusion": "Suject brief conclusion",
   "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed."
 }

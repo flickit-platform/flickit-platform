@@ -111,7 +111,7 @@ const AssessmentReportContainer = (props: any) => {
         );
 
         return (
-          <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentReportTitle data={data} colorCode={colorCode} />
             <Grid container spacing={1} columns={12} mt={0}>
               <Grid item sm={12} xs={12}>

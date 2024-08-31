@@ -356,23 +356,14 @@ export const AssessmentSettingMemberBox = (props: {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
             position: "relative",
-            width: "100%",
+            width: "90%",
+            ml:"10%"
           }}
         >
-          <Typography
-            color="#9DA7B3"
-            sx={{
-              fontSize: "2rem",
-              flexGrow: 1,
-              textAlign: "center",
-              ml: { md: 15 }
-            }}
-            fontWeight={700}
-            lineHeight={"normal"}
-          >
+          <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
             <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
