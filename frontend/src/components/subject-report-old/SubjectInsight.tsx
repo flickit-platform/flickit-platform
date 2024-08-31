@@ -120,7 +120,7 @@ export const SubjectInsight = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "Outdated" : "warning"} />
+                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "Outdated" : "note"} />
                 </Typography>
               </Box>
               <Box
