@@ -139,6 +139,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
     toastError: false,
   });
   const { selcetedConfidenceLevel } = useQuestionContext();
+    console.log(selcetedConfidenceLevel,"selcetedConfidenceLevel")
   const dispatch = useQuestionDispatch();
   return (
     <Box>

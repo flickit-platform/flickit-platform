@@ -71,7 +71,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
     ((assessmentTotalProgress?.data?.answersCount || 0) /
       (assessmentTotalProgress?.data?.questionsCount || 1)) *
     100;
-
+  console.log(questions,"questionsquestions")
   return (
     <Box
       maxWidth={"1440px"}
