@@ -42,6 +42,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import { secondaryFontFamily } from "@/config/theme";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -79,12 +80,7 @@ export const AssessmentSettingGeneralBox = (props: {
       }}
     >
       <Box height={"100%"} width={"100%"}>
-        <Typography
-          color="#9DA7B3"
-          fontSize="2rem"
-          fontWeight={700}
-          lineHeight={"normal"}
-        >
+        <Typography color="#9DA7B3" variant="headlineMedium">
           <Trans i18nKey={`${"General"}`} />
         </Typography>
 
@@ -740,12 +736,7 @@ export const AssessmentSettingMemberBox = (props: {
                 gap: "10px",
               }}
             >
-              <Typography
-                color="#9DA7B3"
-                sx={{ fontSize: "2rem" }}
-                fontWeight={700}
-                lineHeight={"normal"}
-              >
+              <Typography color="#9DA7B3" variant="headlineMedium">
                 <Trans i18nKey={`invitees`} />
               </Typography>
             </Box>
