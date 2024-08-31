@@ -366,7 +366,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                            </Box>
                             <Box sx={{display:"flex",gap:"5px",flexDirection: "column"}}>
                                <Box onClick={()=>downloadFile(item)} ><Typography style={{ color: evidenceBG.borderColor,...theme.typography.labelLarge,textAlign:"left", cursor: "pointer",textDecoration:"underline"}}
-                               >{name.substring(0,20)}{name.length > 20 && "..."}</Typography></Box>
+                               >{name?.substring(0,20)}{name.length > 20 && "..."}</Typography></Box>
                                 <DetailExpend evidenceBG={evidenceBG} item={item} />
                             </Box>
                     </Box>
