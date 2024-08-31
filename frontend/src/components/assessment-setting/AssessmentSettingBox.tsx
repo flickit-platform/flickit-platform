@@ -356,50 +356,36 @@ export const AssessmentSettingMemberBox = (props: {
         <Box
           sx={{
             display: "flex",
-            justifyContent: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            alignItems: "center",
             position: "relative",
-            gap: "10px",
+            width: "100%",
           }}
         >
           <Typography
             color="#9DA7B3"
-            sx={{ fontSize: "2rem" }}
+            sx={{
+              fontSize: "2rem",
+              flexGrow: 1,
+              textAlign: "center",
+              ml: { md: 15 }
+            }}
             fontWeight={700}
             lineHeight={"normal"}
           >
             <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
-            sx={{
-              borderRadius: "4px",
-              backgroundColor: "#004F83",
-              width: "fit-content",
-              alignSelf: "end",
-              "&.MuiButtonBase-root:hover": {
-                bgcolor: "#004F83",
-              },
-              position: "absolute",
-              right: 0,
-              paddingX: "1.5rem",
-            }}
+            variant="contained"
             onClick={openModal}
+            sx={{ ml: "auto", display: "flex", alignItems: "center" }}
           >
             <AddIcon
               sx={{ width: "1.125rem", height: "1.125rem" }}
               fontSize="small"
               style={{ color: "#EDFCFC" }}
             />
-            <Typography
-              color="#EDFCFC"
-              fontWeight={500}
-              lineHeight={"normal"}
-              sx={{
-                lineHeight: "1.25rem",
-                fontSize: { xs: "0.7rem", sm: "0.85rem" },
-              }}
-            >
-              <Trans i18nKey={"addRole"} />
-            </Typography>
+            <Trans i18nKey={"addRole"} />
           </Button>
         </Box>
         <Divider sx={{ width: "100%", marginTop: "24px" }} />
@@ -600,13 +586,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -650,15 +636,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                      backgroundColor:
-                                                        "#9CCAFF",
-                                                      color: "#004F83",
-                                                    }
+                                                    backgroundColor:
+                                                      "#9CCAFF",
+                                                    color: "#004F83",
+                                                  }
                                                   : {
-                                                      backgroundColor:
-                                                        "#EFEDF0",
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                    backgroundColor:
+                                                      "#EFEDF0",
+                                                    color: "#1B1B1E",
+                                                  }),
                                               },
                                             }}
                                           >
@@ -677,11 +663,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                        color: "#004F83",
-                                                      }
+                                                      color: "#004F83",
+                                                    }
                                                     : {
-                                                        color: "#1B1B1E",
-                                                      }),
+                                                      color: "#1B1B1E",
+                                                    }),
                                                 }}
                                               >
                                                 {role.title}
@@ -702,7 +688,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                                index + 1 && (
+                                              index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -911,13 +897,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -931,7 +917,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                    // disabled={!row.editable}
+                                  // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -961,15 +947,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                      backgroundColor:
-                                                        "#9CCAFF",
-                                                      color: "#004F83",
-                                                    }
+                                                    backgroundColor:
+                                                      "#9CCAFF",
+                                                    color: "#004F83",
+                                                  }
                                                   : {
-                                                      backgroundColor:
-                                                        "#EFEDF0",
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                    backgroundColor:
+                                                      "#EFEDF0",
+                                                    color: "#1B1B1E",
+                                                  }),
                                               },
                                             }}
                                           >
@@ -988,11 +974,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                        color: "#004F83",
-                                                      }
+                                                      color: "#004F83",
+                                                    }
                                                     : {
-                                                        color: "#1B1B1E",
-                                                      }),
+                                                      color: "#1B1B1E",
+                                                    }),
                                                 }}
                                               >
                                                 {role.title}
@@ -1013,7 +999,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                                index + 1 && (
+                                              index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",

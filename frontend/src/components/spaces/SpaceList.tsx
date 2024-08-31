@@ -20,7 +20,7 @@ import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { primaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -145,7 +145,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             data-cy="space-card-link"
             onClick={changeCurrentSpaceAndNavigateToAssessments}
             sx={{
-              fontFamily: primaryFontFamily,
+              fontFamily: secondaryFontFamily,
               fontSize: "1.2rem",
               fontWeight: "bold",
               textDecoration: "none",
