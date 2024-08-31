@@ -5,6 +5,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Title from "@common/Title";
 import Typography from "@mui/material/Typography";
 import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
+import { SubjectInsight } from "./SubjectInsight";
 
 const SubjectOverallInsight = (props: any) => {
   return (
@@ -70,6 +71,10 @@ const OverallInsightText = (props: any) => {
           </>
         )}
       </Typography>
+      <Typography variant="headlineSmall" mx={4} mt={4}>
+        <Trans i18nKey="subjectBriefConclusion" />
+      </Typography>
+      <SubjectInsight />
       <Grid container pt={5} spacing={4}>
         <Grid item xs={12} sm={6} md={5} lg={4}>
           <MostSigItems
