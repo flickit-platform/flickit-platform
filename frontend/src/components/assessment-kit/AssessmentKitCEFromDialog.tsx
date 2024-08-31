@@ -124,10 +124,65 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           md={12}
           sx={{ display: `${activeStep === 0 ? "" : "none"}` }}
         >
+<<<<<<< HEAD
           <UploadField
             accept={{ "application/zip": [".zip"] }}
             uploadService={(args, config) =>
               service.uploadAssessmentKitDSLFile(args, config)
+=======
+            {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
+                <Trans i18nKey={"dslDownloadGuide"} />
+                <span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer",paddingLeft:"4px"}}
+                      // onClick={downloadTemplate}
+                >here</span>
+            </Box>
+            </Box> }
+
+            {type === "convert"  && buttonStep == 1 && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE", width:"fit-content",px:1 }}>
+                <Trans i18nKey={"dslReadyToDownload"} />
+            </Box>
+            </Box> }
+            {type == "convert"
+                ?
+                <UploadField
+                    accept={{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }}
+                    uploadService={(args :any, config: any) =>{
+                        setConvertData({args, config})
+                        return service.convertExcelToDSLFile(args,config)
+                    }
+                }
+                    name="dsl_id"
+                    param={expertGroupId}
+                    required={true}
+                    label={<Trans i18nKey="xlsx" />}
+                    setShowErrorLog={setShowErrorLog}
+                    setSyntaxErrorObject={setSyntaxErrorObject}
+                    setIsValid={setIsValid}
+                    maxSize={convertToBytes(5, "MB")}
+                    setZippedData={setZippedData}
+                    setButtonStep={setButtonStep}
+                    dropNewFile={dropNewFile}
+                    setConvertData={setConvertData}
+                />
+                :
+                <UploadField
+                    accept={{ "application/zip": [".zip"] }}
+                    uploadService={(args:any, config:any) =>
+                        service.uploadAssessmentKitDSLFile(args, config)
+                    }
+                    deleteService={(args:any, config:any) =>
+                        service.deleteAssessmentKitDSL(args, config)
+                    }
+                    name="dsl_id"
+                    param={expertGroupId}
+                    required={true}
+                    label={<Trans i18nKey="dsl" />}
+                    setShowErrorLog={setShowErrorLog}
+                    setSyntaxErrorObject={setSyntaxErrorObject}
+                    setIsValid={setIsValid}
+                    maxSize={convertToBytes(5, "MB")}
+                />
+>>>>>>> ad4b1a61 (OTAT-1547: display invitees correctly)
             }
             deleteService={(args, config) =>
               service.deleteAssessmentKitDSL(args, config)
