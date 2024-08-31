@@ -62,21 +62,18 @@ export const AssessmentSettingGeneralBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
         ...styles.centerCVH,
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      // minHeight={"415px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Typography
@@ -337,20 +334,20 @@ export const AssessmentSettingMemberBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="left"
-      justifyContent="left"
-      textAlign="left"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      minHeight={"350px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Box

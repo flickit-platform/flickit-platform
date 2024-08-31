@@ -159,13 +159,13 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           md={12}
           sx={{ display: `${activeStep === 0 ? "" : "none"}`}}
         >
-            {/* {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
+            {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
                 <Trans i18nKey={"dslDownloadGuide"} />
                 <span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer",paddingLeft:"4px"}}
                       // onClick={downloadTemplate}
                 >here</span>
             </Box>
-            </Box> } */}
+            </Box> }
 
             {type === "convert"  && buttonStep == 1 && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE", width:"fit-content",px:1 }}>
                 <Trans i18nKey={"dslReadyToDownload"} />

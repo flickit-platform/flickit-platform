@@ -247,7 +247,7 @@ export const theme = createTheme({
     },
     button: {
       fontFamily: primaryFontFamily,
-      letterSpacing: ".1em",
+      letterSpacing: ".05em",
     },
     h3: {
       fontFamily: primaryFontFamily,
@@ -262,7 +262,6 @@ export const theme = createTheme({
     },
     h6: {
       fontFamily: primaryFontFamily,
-      letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
     },
