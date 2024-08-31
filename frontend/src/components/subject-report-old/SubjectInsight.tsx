@@ -37,16 +37,16 @@ import { useForm } from "react-hook-form";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { format } from "date-fns";
 
-export const AssessmentInsight = () => {
+export const SubjectInsight = () => {
   const { service } = useServiceContext();
-  const { assessmentId = "" } = useParams();
+  const { assessmentId = "", subjectId = "" } = useParams();
   const [aboutSection, setAboutSection] = useState<any>(null);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchAssessment = () => {
     service
-      .fetchAssessmentInsight({ assessmentId }, {})
+      .fetchSubjectInsight({ assessmentId, subjectId }, {})
       .then((res) => {
         const data: IAssessmentInsight = res.data;
 
@@ -66,7 +66,7 @@ export const AssessmentInsight = () => {
   };
   useEffect(() => {
     fetchAssessment();
-  }, [assessmentId, service]);
+  }, [subjectId, service]);
 
   return (
     <Box
@@ -77,13 +77,7 @@ export const AssessmentInsight = () => {
       textAlign="left"
       maxHeight="100%"
       gap={0.5}
-      py={2}
-      sx={{
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
-      }}
+      ml={3}
     >
       {aboutSection ? (
         <>
@@ -168,7 +162,7 @@ const OnHoverRichEditor = (props: any) => {
   const [show, setShow] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<any>({});
-  const { assessmentId = "" } = useParams();
+  const { assessmentId = "", subjectId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
 
@@ -189,8 +183,8 @@ const OnHoverRichEditor = (props: any) => {
   const onSubmit = async (data: any, event: any) => {
     event.preventDefault();
     try {
-      const { data: res } = await service.updateAssessmentInsight(
-        { assessmentId, data: { insight: data.insight } },
+      const { data: res } = await service.updateSubjectInsight(
+        { assessmentId, data: { insight: data.insight }, subjectId },
         { signal: abortController.current.signal }
       );
       await infoQuery();

@@ -492,5 +492,6 @@
   "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
-  "warning": "Warning"
+  "warning": "Warning",
+  "subjectBriefConclusion": "Suject brief conclusion"
 }
