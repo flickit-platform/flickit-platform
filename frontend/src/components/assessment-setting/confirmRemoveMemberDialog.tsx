@@ -11,6 +11,8 @@ import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Trans } from "react-i18next";
 import { DialogTitle } from "@mui/material";
+import { Warning } from "@mui/icons-material";
+import { styles } from "@styles";
 
 const ConfirmRemoveMemberDialog = (props: any) => {
   const {
@@ -70,8 +72,11 @@ const ConfirmRemoveMemberDialog = (props: any) => {
         },
       }}
     >
-      <DialogTitle textTransform="uppercase">
-        <Trans i18nKey="warning" />
+      <DialogTitle textTransform="uppercase"  sx={{ ...styles.centerV }}>
+        <>
+          <Warning sx={{ mr: 1 }}/>
+          <Trans i18nKey="warning" />
+        </>
       </DialogTitle>
       <DialogContent
         sx={{

@@ -45,9 +45,7 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
               ? undefined
               : `2px solid ${colorPallet[ml - 1]}`,
           }}
-          variant="h3"
-          fontWeight="bold"
-          letterSpacing={".1em"}
+          variant="headlineLarge"
         >
           {loading ? <Skeleton width={"164px"} /> : status}
         </Typography>
@@ -109,7 +107,7 @@ const VerticalLevel = ({
         <Box
           sx={{
             position: "absolute",
-            top: "152px",
+            top: "172px",
             left: "32px",
             transform: "rotate(-90deg)",
             transformOrigin: "bottom left",
@@ -185,9 +183,8 @@ const VerticalLevel = ({
             transition: "transform .3s ease",
             minHeight: "76px",
             height: "100%",
-            transform: `translateY(-${
-              cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
-            }%)`,
+            transform: `translateY(-${cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
+              }%)`,
             borderRadius: "100px",
           }}
         ></Box>
