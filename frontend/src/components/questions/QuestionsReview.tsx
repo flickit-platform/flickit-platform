@@ -57,7 +57,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
   useEffect(() => {
     if (questionsInfo.questions) {
       const answeredQuestionsCount = questionsInfo.questions.filter(
-        (question) => question.answer !== null
+        (question) => question.answer && question.answer.selectedOption !== null
       ).length;
       setAnsweredQuestions(answeredQuestionsCount);
       if (answeredQuestionsCount === 0) {
@@ -71,7 +71,6 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
     ((assessmentTotalProgress?.data?.answersCount || 0) /
       (assessmentTotalProgress?.data?.questionsCount || 1)) *
     100;
-  console.log(questions,"questionsquestions")
   return (
     <Box
       maxWidth={"1440px"}
