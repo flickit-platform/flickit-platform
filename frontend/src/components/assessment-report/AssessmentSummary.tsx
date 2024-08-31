@@ -91,25 +91,22 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         variant="contained"
         sx={{
           borderRadius: "4px",
-          textTransform: "none",
           backgroundColor: "#00365C",
           borderColor: "#00365C",
-          color: "#E1E3E5",
-          padding: "6px",
+          paddingx: "6px",
           boxShadow: "none",
           "&:hover": {
             backgroundColor: "#004F83",
             borderColor: "#004F83",
           },
           width: { xl: "50%", lg: "56%", md: "90%", xs: "90%", sm: "90%" },
+
         }}
-        size="small"
+        size="large"
         component={Link}
         to="./../questionnaires"
       >
-        <Typography variant="titleLarge">
-          <Trans i18nKey="seeQuestionaires" />
-        </Typography>
+        <Trans i18nKey="seeQuestionaires" />
       </Button>
       <Box
         sx={{ ...styles.centerV }}

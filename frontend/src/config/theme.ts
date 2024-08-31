@@ -15,7 +15,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 // export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
 export const primaryFontFamily = "Ubuntu";
-export const secondaryFontFamily = "Sansation";
+export const secondaryFontFamily = "Oswald";
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -117,12 +117,13 @@ export const theme = createTheme({
       sm: 600,
       md: 960,
       lg: 1280,
-      xl: 1920,
+      xl: 1620,
     },
   },
   typography: {
     fontFamily: primaryFontFamily,
     subSmall: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
@@ -130,12 +131,14 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subMedium: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     subLarge: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
@@ -156,7 +159,7 @@ export const theme = createTheme({
       letterSpacing: "0",
     },
     headlineLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2.5rem",
       lineHeight: "2.7rem",
@@ -246,8 +249,7 @@ export const theme = createTheme({
       letterSpacing: "0.1px",
     },
     button: {
-      fontFamily: primaryFontFamily,
-      letterSpacing: ".1em",
+      fontFamily: secondaryFontFamily,
     },
     h3: {
       fontFamily: primaryFontFamily,
@@ -257,11 +259,11 @@ export const theme = createTheme({
       opacity: 0.9,
     },
     h5: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       opacity: 0.85,
     },
     h6: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       letterSpacing: "0.05em",
       lineHeight: 1.6,
       opacity: 0.85,
@@ -321,6 +323,11 @@ export const theme = createTheme({
           width: 20px
         }
       `,
+    },
+    MuiDialogTitle: {
+      defaultProps: {
+        fontFamily: secondaryFontFamily
+      }
     },
     MuiButtonGroup: {
       defaultProps: {

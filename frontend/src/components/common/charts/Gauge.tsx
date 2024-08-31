@@ -5,7 +5,7 @@ import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import PermissionRequired from "@common/charts/permissionRequired";
-import { primaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
 interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;
@@ -137,7 +137,7 @@ const Gauge = (props: IGaugeProps) => {
             </Typography>
           )}
           <Typography
-            sx={{ fontWeight: "bold", fontFamily: primaryFontFamily }}
+            sx={{ fontWeight: "bold", fontFamily: secondaryFontFamily }}
             variant="h6"
             color={colorCode}
             fontSize={fontSize}

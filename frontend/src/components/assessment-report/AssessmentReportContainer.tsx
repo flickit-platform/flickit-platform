@@ -227,7 +227,7 @@ const AssessmentReportContainer = (props: any) => {
                   alignItems="flex-start"
                   marginTop={6}
                 >
-                  <Typography color="#73808C" variant="headlineSmall">
+                  <Typography color="#73808C" variant="h5">
                     <Trans i18nKey="subjectReport" />
                   </Typography>
                   <Typography
@@ -260,7 +260,7 @@ const AssessmentReportContainer = (props: any) => {
                   marginTop={6}
                   gap={2}
                 >
-                  <Typography color="#73808C" variant="headlineSmall">
+                  <Typography color="#73808C" variant="h5">
                     <Trans i18nKey="advices" />
                   </Typography>
                   <Divider sx={{ width: "100%" }} />
