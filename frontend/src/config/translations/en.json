@@ -493,5 +493,6 @@
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
   "warning": "Warning",
-  "subjectBriefConclusion": "Suject brief conclusion"
+  "subjectBriefConclusion": "Suject brief conclusion",
+  "defaultInsightTemplate": ""
 }
