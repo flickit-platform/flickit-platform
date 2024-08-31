@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress"; 
+import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -50,7 +50,7 @@ export const SubjectInsight = () => {
         console.error("Error fetching assessment insight:", error);
       })
       .finally(() => {
-        setLoading(false); 
+        setLoading(false);
       });
   };
 
@@ -90,8 +90,8 @@ export const SubjectInsight = () => {
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000
+                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                  60000
                 ),
                 "yyyy/MM/dd HH:mm"
               ) +
@@ -100,7 +100,7 @@ export const SubjectInsight = () => {
                 ")"}
             </Typography>
           )}
-          {aboutSection.hasOwnProperty("isValid") && !aboutSection?.isValid && (
+          {(aboutSection.hasOwnProperty("isValid") || editable) && !aboutSection?.isValid && (
             <Box sx={{ ...styles.centerV }} gap={2} my={1}>
               <Box
                 sx={{
@@ -120,7 +120,7 @@ export const SubjectInsight = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  <Trans i18nKey="Outdated" />
+                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "Outdated" : "warning"} />
                 </Typography>
               </Box>
               <Box
@@ -139,7 +139,7 @@ export const SubjectInsight = () => {
                   fontWeight={400}
                   textAlign="left"
                 >
-                  <Trans i18nKey="invalidInsight" />
+                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "invalidInsight" : "defaultInsightTemplate"} />
                 </Typography>
               </Box>
             </Box>
