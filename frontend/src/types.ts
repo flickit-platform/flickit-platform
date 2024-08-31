@@ -455,7 +455,7 @@ export interface IQuestionnairesPageDataModel {
 
 export interface IDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: (args: any) => void;
+  onSubmitForm?: (args?: any) => void;
   openDialog?: any;
   context?: IDialogContext;
 }

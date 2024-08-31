@@ -25,7 +25,7 @@ import convertToBytes from "@/utils/convertToBytes";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm: any;
+  onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
