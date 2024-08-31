@@ -25,12 +25,12 @@ import convertToBytes from "@/utils/convertToBytes";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm: () => void;
+  onSubmitForm: any;
   openDialog?: any;
   context?: any;
 }
 
-const AssessmentKitCEFromDialog = (props: any) => {
+const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [showErrorLog, setShowErrorLog] = useState<boolean>(false);
   const [syntaxErrorObject, setSyntaxErrorObject] = useState<any>();
