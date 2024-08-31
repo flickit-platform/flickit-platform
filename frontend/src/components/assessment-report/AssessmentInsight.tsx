@@ -1,19 +1,9 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import {
-  AssessmentKitInfoType,
-  ExpertGroupDetails,
-  IAssessmentInsight,
-  IAssessmentKitReportModel,
-  ISubjectInfo,
-  PathInfo,
-} from "@types";
 import Typography from "@mui/material/Typography";
-import { getMaturityLevelColors, styles } from "@styles";
-import { Link, useParams } from "react-router-dom";
-import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import CircularProgress from "@mui/material/CircularProgress"; 
+import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import {
   Avatar,
   Button,
@@ -23,7 +13,6 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 import {
   CancelRounded,
   CheckCircleOutlineRounded,
@@ -36,6 +25,8 @@ import { ICustomError } from "@/utils/CustomError";
 import { useForm } from "react-hook-form";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { format } from "date-fns";
+import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import { styles } from "@styles";
 
 export const AssessmentInsight = () => {
   const { service } = useServiceContext();
@@ -48,8 +39,7 @@ export const AssessmentInsight = () => {
     service
       .fetchAssessmentInsight({ assessmentId }, {})
       .then((res) => {
-        const data: IAssessmentInsight = res.data;
-
+        const data = res.data;
         const selectedInsight = data.assessorInsight || data.defaultInsight;
 
         if (selectedInsight) {
@@ -64,6 +54,7 @@ export const AssessmentInsight = () => {
         setLoading(false);
       });
   };
+
   useEffect(() => {
     fetchAssessment();
   }, [assessmentId, service]);
@@ -85,7 +76,16 @@ export const AssessmentInsight = () => {
         px: { xs: 2, sm: 3.75 },
       }}
     >
-      {aboutSection ? (
+      {loading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <CircularProgress />
+        </Box>
+      ) : aboutSection ? (
         <>
           <OnHoverRichEditor
             data={aboutSection.insight}
@@ -162,7 +162,7 @@ export const AssessmentInsight = () => {
 };
 
 const OnHoverRichEditor = (props: any) => {
-  const { data, title, editable, infoQuery } = props;
+  const { data, editable, infoQuery } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
   const [show, setShow] = useState(false);

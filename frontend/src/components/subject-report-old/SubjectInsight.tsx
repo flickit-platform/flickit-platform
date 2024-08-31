@@ -1,19 +1,9 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import {
-  AssessmentKitInfoType,
-  ExpertGroupDetails,
-  IAssessmentInsight,
-  IAssessmentKitReportModel,
-  ISubjectInfo,
-  PathInfo,
-} from "@types";
 import Typography from "@mui/material/Typography";
-import { getMaturityLevelColors, styles } from "@styles";
+import CircularProgress from "@mui/material/CircularProgress"; 
 import { Link, useParams } from "react-router-dom";
-import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Button,
@@ -23,7 +13,6 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 import {
   CancelRounded,
   CheckCircleOutlineRounded,
@@ -36,6 +25,8 @@ import { ICustomError } from "@/utils/CustomError";
 import { useForm } from "react-hook-form";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { format } from "date-fns";
+import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
+import { styles } from "@styles";
 
 export const SubjectInsight = () => {
   const { service } = useServiceContext();
@@ -48,10 +39,8 @@ export const SubjectInsight = () => {
     service
       .fetchSubjectInsight({ assessmentId, subjectId }, {})
       .then((res) => {
-        const data: IAssessmentInsight = res.data;
-
+        const data = res.data;
         const selectedInsight = data.assessorInsight || data.defaultInsight;
-
         if (selectedInsight) {
           setAboutSection(selectedInsight);
           setEditable(data.editable ?? false);
@@ -61,9 +50,10 @@ export const SubjectInsight = () => {
         console.error("Error fetching assessment insight:", error);
       })
       .finally(() => {
-        setLoading(false);
+        setLoading(false); 
       });
   };
+
   useEffect(() => {
     fetchAssessment();
   }, [subjectId, service]);
@@ -79,7 +69,16 @@ export const SubjectInsight = () => {
       gap={0.5}
       ml={3}
     >
-      {aboutSection ? (
+      {loading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <CircularProgress />
+        </Box>
+      ) : aboutSection ? (
         <>
           <OnHoverRichEditor
             data={aboutSection.insight}
@@ -156,7 +155,7 @@ export const SubjectInsight = () => {
 };
 
 const OnHoverRichEditor = (props: any) => {
-  const { data, title, editable, infoQuery } = props;
+  const { data, editable, infoQuery } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
   const [show, setShow] = useState(false);
