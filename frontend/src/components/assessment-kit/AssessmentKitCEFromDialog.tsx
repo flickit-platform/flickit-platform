@@ -22,11 +22,10 @@ import {Box, Button, Typography, Alert} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
-import {IDialogProps} from "@types";
 
-interface IAssessmentKitCEFromDialogProps extends IDialogProps {
+interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm: (args?: any) => void;
+  onSubmitForm: any;
   openDialog?: any;
   context?: any;
 }
