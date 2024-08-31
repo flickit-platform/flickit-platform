@@ -42,6 +42,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import { secondaryFontFamily } from "@/config/theme";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -62,29 +63,21 @@ export const AssessmentSettingGeneralBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
         ...styles.centerCVH,
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      // minHeight={"415px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
-        <Typography
-          color="#9DA7B3"
-          fontSize="2rem"
-          fontWeight={700}
-          lineHeight={"normal"}
-        >
+        <Typography color="#9DA7B3" variant="headlineMedium">
           <Trans i18nKey={`${"General"}`} />
         </Typography>
 
@@ -337,42 +330,33 @@ export const AssessmentSettingMemberBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="left"
-      justifyContent="left"
-      textAlign="left"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      minHeight={"350px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
             position: "relative",
-            width: "100%",
+            width: "90%",
+            ml:"10%"
           }}
         >
-          <Typography
-            color="#9DA7B3"
-            sx={{
-              fontSize: "2rem",
-              flexGrow: 1,
-              textAlign: "center",
-              ml: { md: 15 }
-            }}
-            fontWeight={700}
-            lineHeight={"normal"}
-          >
+          <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
             <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
@@ -749,12 +733,7 @@ export const AssessmentSettingMemberBox = (props: {
                 gap: "10px",
               }}
             >
-              <Typography
-                color="#9DA7B3"
-                sx={{ fontSize: "2rem" }}
-                fontWeight={700}
-                lineHeight={"normal"}
-              >
+              <Typography color="#9DA7B3" variant="headlineMedium">
                 <Trans i18nKey={`invitees`} />
               </Typography>
             </Box>
