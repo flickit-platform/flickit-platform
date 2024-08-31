@@ -494,5 +494,5 @@
   "atLeastCharacter": "at least 3 character",
   "warning": "Warning",
   "subjectBriefConclusion": "Suject brief conclusion",
-  "defaultInsightTemplate": ""
+  "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed."
 }
