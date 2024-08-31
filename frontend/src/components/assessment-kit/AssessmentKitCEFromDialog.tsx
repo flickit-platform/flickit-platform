@@ -23,9 +23,9 @@ import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
 
-interface IAssessmentKitCEFromDialogProps extends DialogProps {
+interface IAssessmentKitCEFromDialogProps{
   onClose: () => void;
-  onSubmitForm?: () => void;
+  onSubmitForm: () => void;
   openDialog?: any;
   context?: any;
 }
