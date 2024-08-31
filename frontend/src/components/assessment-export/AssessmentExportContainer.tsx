@@ -684,7 +684,6 @@ const AssessmentExportContainer = () => {
                 <Grid item xs={12} md={8}>
                   <Typography
                     component="div"
-                    mt={4}
                     id="assessment-methodology"
                     variant="headlineMedium"
                     fontWeight={600}
