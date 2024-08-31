@@ -15,7 +15,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 // export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
 export const primaryFontFamily = "Ubuntu";
-export const secondaryFontFamily = "Oswald";
+export const secondaryFontFamily = "OpenSans";
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -152,7 +152,7 @@ export const theme = createTheme({
       letterSpacing: "-3%",
     },
     headlineMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2rem",
       lineHeight: "2.25rem",
