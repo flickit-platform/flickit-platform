@@ -100,19 +100,20 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       // setErrorObject(err);
     }
   };
-    const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
-        service: (args, config) =>
-            service.fetchAssessmentTotalProgress(
-                { assessmentId : id, ...(args || {}) },
-                config
-            ),});
+  const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
+    service: (args, config) =>
+      service.fetchAssessmentTotalProgress(
+        { assessmentId: id, ...(args || {}) },
+        config
+      ),
+  });
   useEffect(() => {
     fetchAssessments();
-      (async ()=>{
-          const  {answersCount , questionsCount} = await assessmentTotalProgress.query()
-          const calc = (answersCount / questionsCount ) * 100
-          setCalculatePercentage(calc.toFixed(2))
-      })()
+    (async () => {
+      const { answersCount, questionsCount } = await assessmentTotalProgress.query()
+      const calc = (answersCount / questionsCount) * 100
+      setCalculatePercentage(calc.toFixed(2))
+    })()
   }, [isCalculateValid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
@@ -232,7 +233,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <LoadingGauge />
             )}
           </Grid>
-          <Grid item xs={12} mt="-4rem">
+          <Grid item xs={12} mt="-2rem">
             <Typography
               variant="titleSmall"
               color="#243342"
@@ -257,13 +258,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 e.stopPropagation();
               }}
               component={Link}
-              sx={{position:"relative",background:"transparent",zIndex:1}}
+              sx={{ position: "relative", zIndex: 1 }}
               state={location}
               to={`${item.id}/questionnaires`}
               data-cy="questionnaires-btn"
               variant={viewable ? "outlined" : "contained"}
             >
-                <Box sx={{position:"absolute",top:0,right:0,left:0,bottom:0,background:"rgba(102, 128, 153, 0.3)",zIndex:-1,width: calculatePercentage ? `${calculatePercentage}%` : "0%", transition: "all 1s ease-in-out"}}></Box>
+              <Box sx={{ position: "absolute", top: 0, right: 0, left: 0, bottom: 0, background: viewable ? "rgba(102, 128, 153, 0.3)" : "rgb(16, 79, 141)", zIndex: -1, width: calculatePercentage ? `${calculatePercentage}%` : "0%", transition: "all 1s ease-in-out" }}></Box>
               <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
@@ -354,41 +355,41 @@ const Actions = (props: {
       items={
         hasStatus(item.status)
           ? [
-              // {
-              //   icon: <EditRoundedIcon fontSize="small" />,
-              //   text: <Trans i18nKey="edit" />,
-              //   onClick: openEditDialog,
-              // },
-              {
-                icon: <CompareRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="addToCompare" />,
-                onClick: addToCompare,
-              },
-              {
-                icon: <DeleteRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="delete" />,
-                onClick: deleteItem,
-                menuItemProps: { "data-cy": "delete-action-btn" },
-              },
-            ]
+            // {
+            //   icon: <EditRoundedIcon fontSize="small" />,
+            //   text: <Trans i18nKey="edit" />,
+            //   onClick: openEditDialog,
+            // },
+            {
+              icon: <CompareRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="addToCompare" />,
+              onClick: addToCompare,
+            },
+            {
+              icon: <DeleteRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="delete" />,
+              onClick: deleteItem,
+              menuItemProps: { "data-cy": "delete-action-btn" },
+            },
+          ]
           : [
-              // {
-              //   icon: <EditRoundedIcon fontSize="small" />,
-              //   text: <Trans i18nKey="edit" />,
-              //   onClick: openEditDialog,
-              // },
-              item?.manageable && {
-                icon: <SettingsIcon fontSize="small" />,
-                text: <Trans i18nKey="settings" />,
-                onClick: assessmentSetting,
-              },
-              item?.manageable && {
-                icon: <DeleteRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="delete" />,
-                onClick: deleteItem,
-                menuItemProps: { "data-cy": "delete-action-btn" },
-              },
-            ]
+            // {
+            //   icon: <EditRoundedIcon fontSize="small" />,
+            //   text: <Trans i18nKey="edit" />,
+            //   onClick: openEditDialog,
+            // },
+            item?.manageable && {
+              icon: <SettingsIcon fontSize="small" />,
+              text: <Trans i18nKey="settings" />,
+              onClick: assessmentSetting,
+            },
+            item?.manageable && {
+              icon: <DeleteRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="delete" />,
+              onClick: deleteItem,
+              menuItemProps: { "data-cy": "delete-action-btn" },
+            },
+          ]
       }
     />
   );
