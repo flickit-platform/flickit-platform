@@ -410,7 +410,7 @@ const AnswerTemplate = (props: {
     }
   }, [notApplicable]);
   useEffect(() => {
-    if (answer) {
+    if (answer && answer?.selectedOption) {
       setDisabledConfidence(false);
     }
   }, [answer]);
