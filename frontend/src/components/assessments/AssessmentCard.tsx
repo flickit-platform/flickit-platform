@@ -233,23 +233,25 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <LoadingGauge />
             )}
           </Grid>
-          <Grid item xs={12} mt="-2rem">
-            <Typography
-              variant="titleSmall"
-              color="#243342"
-              justifyContent="center"
-              alignItems="center"
-              display="flex"
-              gap="0.125rem"
-            >
-              <Trans i18nKey="withConfidence" />:
-              <ConfidenceLevel
-                displayNumber
-                inputNumber={Math.ceil(confidenceValue)}
-                variant="titleMedium"
-              ></ConfidenceLevel>
-            </Typography>
-          </Grid>
+          {viewable &&
+            <Grid item xs={12} mt="-4rem">
+              <Typography
+                variant="titleSmall"
+                color="#243342"
+                justifyContent="center"
+                alignItems="center"
+                display="flex"
+                gap="0.125rem"
+              >
+                <Trans i18nKey="withConfidence" />:
+                <ConfidenceLevel
+                  displayNumber
+                  inputNumber={Math.ceil(confidenceValue)}
+                  variant="titleMedium"
+                ></ConfidenceLevel>
+              </Typography>
+            </Grid>
+          }
           <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
             <Button
               startIcon={<QuizRoundedIcon />}
