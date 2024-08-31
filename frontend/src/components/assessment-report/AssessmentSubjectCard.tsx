@@ -108,7 +108,7 @@ export const AssessmentSubjectAccordion = (
       expanded={expanded}
       onChange={handleAccordionChange}
       sx={{
-        borderRadius: "32px !important",
+        borderRadius: "12px !important",
         boxShadow: "0px 0px 8px 0px rgba(10, 35, 66, 0.25)",
         transition: "background-position .4s ease",
         position: "relative",
@@ -119,8 +119,8 @@ export const AssessmentSubjectAccordion = (
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{
-          borderTopLeftRadius: "32px !important",
-          borderTopRightRadius: "32px !important",
+          borderTopLeftRadius: "12px !important",
+          borderTopRightRadius: "12px !important",
           textAlign: "center",
           paddingBottom: 2,
           backgroundColor: expanded ? "rgba(10, 35, 66, 0.07)" : "",
@@ -343,8 +343,8 @@ export const AssessmentSubjectAccordion = (
             to={progress === 100 ? `./${id}#insight` : `./${id}`}
             sx={{
               borderRadius: 0,
-              borderBottomRightRadius: "32px",
-              borderBottomLeftRadius: "32px",
+              borderBottomRightRadius: "12px",
+              borderBottomLeftRadius: "12px",
               padding: 2,
               textTransform: "none",
               backgroundColor: "#D0E4FF",

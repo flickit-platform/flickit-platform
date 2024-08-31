@@ -11,7 +11,7 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import { customFontFamily, primaryFontFamily, theme } from "@/config/theme";
+import { primaryFontFamily, theme } from "@/config/theme";
 import { evidenceAttachmentInput } from "@utils/enumType";
 
 const InputField = () => {
@@ -24,12 +24,12 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   maxLength?: number;
   isFocused?: boolean;
   pallet?: any;
-  borderRadius?: string
-  setValueCount?: any,
-  hasCounter?: boolean,
-  isFarsi?: boolean,
-  isEditing?: boolean,
-  valueCount?: string,
+  borderRadius?: string;
+  setValueCount?: any;
+  hasCounter?: boolean;
+  isFarsi?: boolean;
+  isEditing?: boolean;
+  valueCount?: string;
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -57,9 +57,14 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     formState: { errors },
   } = useFormContext();
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
-  const { hasError, errorMessage } = getFieldError(errors, name, minLength, maxLength);
+  const { hasError, errorMessage } = getFieldError(
+    errors,
+    name,
+    minLength,
+    maxLength
+  );
   useEffect(() => {
-    console.log(isFocused)
+    console.log(isFocused);
     if (isFocused && inputRef?.current) {
       inputRef?.current?.focus();
     } else {
@@ -71,22 +76,26 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
+      inputRef.current.style.fontFamily = isFarsi
+        ? "VazirMatn"
+        : primaryFontFamily;
       // inputRef?.current?.focus();
     }
     if (inputRef.current && !isFocused) {
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
+      inputRef.current.style.fontFamily = isFarsi
+        ? "VazirMatn"
+        : primaryFontFamily;
     }
   }, [inputRef.current?.value, isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (setValueCount) {
-      setValueCount(event.target.value)
+      setValueCount(event.target.value);
     }
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
-      event.target.style.fontFamily = isFarsi ? "VazirMatn" : customFontFamily;
+      event.target.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
     if (type === "password" && inputRef.current) {
       inputRef?.current?.focus();
@@ -118,36 +127,44 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
           "&.Mui-focused fieldset": {
             borderColor: pallet?.borderColor,
           },
-          paddingTop: isEditing && name == "evidenceDetail" ? evidenceAttachmentInput.paddingTop : "",
-          paddingBottom: name == "evidence" ? evidenceAttachmentInput.paddingBottom : ""
+          paddingTop:
+            isEditing && name == "evidenceDetail"
+              ? evidenceAttachmentInput.paddingTop
+              : "",
+          paddingBottom:
+            name == "evidence" ? evidenceAttachmentInput.paddingBottom : "",
         },
       }}
       InputLabelProps={{ ...InputLabelProps, required }}
       InputProps={
         type === "password"
           ? {
-            endAdornment: (
-              <InputAdornment
-                sx={{ cursor: "pointer" }}
-                position="end"
-                onClick={toggleShowPassword}
-                onMouseDown={(e: any) => {
-                  e.preventDefault();
-                }}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </InputAdornment>
-            ),
-          }
+              endAdornment: (
+                <InputAdornment
+                  sx={{ cursor: "pointer" }}
+                  position="end"
+                  onClick={toggleShowPassword}
+                  onMouseDown={(e: any) => {
+                    e.preventDefault();
+                  }}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </InputAdornment>
+              ),
+            }
           : {
-            style: hasCounter ? isFarsi ? {
-              paddingLeft: 60,
-              minHeight: "110px",
-            } : {
-              paddingRight: 60,
-              minHeight: "110px"
-            } : {}
-          }
+              style: hasCounter
+                ? isFarsi
+                  ? {
+                      paddingLeft: 60,
+                      minHeight: "110px",
+                    }
+                  : {
+                      paddingRight: 60,
+                      minHeight: "110px",
+                    }
+                : {},
+            }
       }
       error={hasError}
       helperText={(errorMessage as ReactNode) || helperText}

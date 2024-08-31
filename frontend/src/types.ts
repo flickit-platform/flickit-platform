@@ -357,6 +357,7 @@ export interface IAssessment {
   isConfidenceValid?: boolean;
   assessment_results: string[];
   kit: IAssessmentKitList;
+  confidenceValue: number;
   // total_progress?: ITotalProgress;
   maturityLevel: IMaturityLevel;
   manageable?: boolean;
@@ -664,4 +665,16 @@ export interface IAnswerHistory {
   answer: TAnswer;
   creationTime: string;
   createdBy: IUserInfo;
+}
+
+type insight = {
+  insight?: string;
+  isValid?: boolean;
+  creaationTime?: string;
+};
+
+export interface IAssessmentInsight {
+  defaultInsight: insight | null;
+  assessorInsight: insight | null;
+  editable?: boolean;
 }

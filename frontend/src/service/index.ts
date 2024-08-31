@@ -333,6 +333,49 @@ export const createService = (
         ...(config ?? {}),
       });
     },
+    fetchSubjectInsight(
+      { assessmentId, subjectId }: { assessmentId: string; subjectId: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/insight/subjects/${subjectId}/`,
+        {
+          ...(config ?? {}),
+        }
+      );
+    },
+    updateSubjectInsight(
+      {
+        assessmentId,
+        data,
+        subjectId,
+      }: { assessmentId: string; data: any; subjectId: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/insight/subjects/${subjectId}/`,
+        data,
+        {
+          ...(config ?? {}),
+        }
+      );
+    },
+    fetchAssessmentInsight(
+      { assessmentId }: { assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(`/api/v1/assessments/${assessmentId}/insight/`, {
+        ...(config ?? {}),
+      });
+    },
+    updateAssessmentInsight(
+      { assessmentId, data }: { assessmentId: string; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(`/api/v1/assessments/${assessmentId}/insight/`, data, {
+        ...(config ?? {}),
+      });
+    },
     fetchExportReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined

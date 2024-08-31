@@ -518,9 +518,7 @@ const Navbar = () => {
       <AppBar
         component="nav"
         sx={{
-          width: "calc(100% - 8px)",
-          margin: "4px",
-          borderRadius: "16px",
+          borderRadius: "0px",
           background: "white",
         }}
         data-cy="nav-bar"

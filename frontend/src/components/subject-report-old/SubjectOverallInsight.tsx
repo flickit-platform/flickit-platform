@@ -5,6 +5,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Title from "@common/Title";
 import Typography from "@mui/material/Typography";
 import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
+import { SubjectInsight } from "./SubjectInsight";
 
 const SubjectOverallInsight = (props: any) => {
   return (
@@ -31,12 +32,7 @@ const OverallInsightText = (props: any) => {
   const { title, maturityLevel, confidenceValue } = subject;
   return (
     <Box display="flex" flexDirection={"column"} flex={1}>
-      <Typography
-        fontFamily={"Roboto"}
-        fontWeight="500"
-        fontSize="1.3rem"
-        sx={{ opacity: 0.96 }}
-      >
+      <Typography variant="titleLarge" sx={{ opacity: 0.96 }}>
         {loading ? (
           <Skeleton height="60px" />
         ) : (
@@ -44,10 +40,8 @@ const OverallInsightText = (props: any) => {
             <Trans i18nKey="withConfidence" />{" "}
             <Typography
               component="span"
-              fontFamily={"Roboto"}
-              fontWeight="bold"
+              variant="titleLarge"
               sx={{ color: "#3596A1" }}
-              fontSize="1.15rem"
             >
               <Trans
                 i18nKey={"clOf"}
@@ -57,19 +51,13 @@ const OverallInsightText = (props: any) => {
             <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
             <Typography
               component="span"
-              fontWeight="bold"
-              fontFamily={"Roboto"}
+              variant="titleLarge"
               sx={{ color: "#6035A1" }}
-              fontSize="1.15rem"
             >
               {maturityLevel.index} of {maturityLevelsCount}
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
-            <Typography
-              component="span"
-              fontFamily="Roboto"
-              fontWeight={"bold"}
-            >
+            <Typography component="span" variant="titleLarge">
               {maturityLevel.title}.
             </Typography>
             <Box>
@@ -83,6 +71,10 @@ const OverallInsightText = (props: any) => {
           </>
         )}
       </Typography>
+      <Typography variant="headlineSmall" mx={4} mt={4}>
+        <Trans i18nKey="subjectBriefConclusion" />
+      </Typography>
+      <SubjectInsight />
       <Grid container pt={5} spacing={4}>
         <Grid item xs={12} sm={6} md={5} lg={4}>
           <MostSigItems
