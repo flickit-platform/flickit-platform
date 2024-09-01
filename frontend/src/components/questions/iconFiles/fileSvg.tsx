@@ -46,7 +46,7 @@ export default function FileSvg ({mainColor,evidenceId,setEvidenceId, exp, backg
                         </div>
                     )}
             <p style={{position: 'absolute', color: mainColor, top: "15px", left: "3px", fontSize: '9px'}}
-            >{name.substring(0,6)}...</p>
+            >{name?.substring(0,6)}...</p>
             <p style={{position: 'absolute', color: "#fff", bottom: "14px", right: "13px", fontSize: '6px'}}
             >{exp}</p>
         </div>

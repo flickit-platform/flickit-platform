@@ -42,6 +42,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import { secondaryFontFamily } from "@/config/theme";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -62,29 +63,21 @@ export const AssessmentSettingGeneralBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
         ...styles.centerCVH,
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      // minHeight={"415px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
-        <Typography
-          color="#9DA7B3"
-          fontSize="2rem"
-          fontWeight={700}
-          lineHeight={"normal"}
-        >
+        <Typography color="#9DA7B3" variant="headlineMedium">
           <Trans i18nKey={`${"General"}`} />
         </Typography>
 
@@ -337,69 +330,46 @@ export const AssessmentSettingMemberBox = (props: {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="left"
-      justifyContent="left"
-      textAlign="left"
-      maxHeight="100%"
-      gap={3}
-      py={4}
       sx={{
-        background: "#fff",
-        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-        borderRadius: "12px",
-        px: { xs: 2, sm: 3.75 },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        px: { xs: "15px", sm: "51px" },
       }}
+      gap={2}
+      textAlign="center"
+      height={"auto"}
+      minHeight={"350px"}
+      width={"100%"}
+      bgcolor={"#FFF"}
+      borderRadius={"40.53px"}
+      py={"32px"}
     >
       <Box height={"100%"} width={"100%"}>
         <Box
           sx={{
             display: "flex",
-            justifyContent: { xs: "flex-start", sm: "center" },
+            justifyContent: "center",
+            alignItems: "center",
             position: "relative",
-            gap: "10px",
+            width: "90%",
+            ml:"10%"
           }}
         >
-          <Typography
-            color="#9DA7B3"
-            sx={{ fontSize: "2rem" }}
-            fontWeight={700}
-            lineHeight={"normal"}
-          >
+          <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
             <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
-            sx={{
-              borderRadius: "4px",
-              backgroundColor: "#004F83",
-              width: "fit-content",
-              alignSelf: "end",
-              "&.MuiButtonBase-root:hover": {
-                bgcolor: "#004F83",
-              },
-              position: "absolute",
-              right: 0,
-              paddingX: "1.5rem",
-            }}
+            variant="contained"
             onClick={openModal}
+            sx={{ ml: "auto", display: "flex", alignItems: "center" }}
           >
             <AddIcon
               sx={{ width: "1.125rem", height: "1.125rem" }}
               fontSize="small"
               style={{ color: "#EDFCFC" }}
             />
-            <Typography
-              color="#EDFCFC"
-              fontWeight={500}
-              lineHeight={"normal"}
-              sx={{
-                lineHeight: "1.25rem",
-                fontSize: { xs: "0.7rem", sm: "0.85rem" },
-              }}
-            >
-              <Trans i18nKey={"addRole"} />
-            </Typography>
+            <Trans i18nKey={"addRole"} />
           </Button>
         </Box>
         <Divider sx={{ width: "100%", marginTop: "24px" }} />
@@ -600,13 +570,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -650,15 +620,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                      backgroundColor:
-                                                        "#9CCAFF",
-                                                      color: "#004F83",
-                                                    }
+                                                    backgroundColor:
+                                                      "#9CCAFF",
+                                                    color: "#004F83",
+                                                  }
                                                   : {
-                                                      backgroundColor:
-                                                        "#EFEDF0",
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                    backgroundColor:
+                                                      "#EFEDF0",
+                                                    color: "#1B1B1E",
+                                                  }),
                                               },
                                             }}
                                           >
@@ -677,11 +647,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                        color: "#004F83",
-                                                      }
+                                                      color: "#004F83",
+                                                    }
                                                     : {
-                                                        color: "#1B1B1E",
-                                                      }),
+                                                      color: "#1B1B1E",
+                                                    }),
                                                 }}
                                               >
                                                 {role.title}
@@ -702,7 +672,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                                index + 1 && (
+                                              index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -763,12 +733,7 @@ export const AssessmentSettingMemberBox = (props: {
                 gap: "10px",
               }}
             >
-              <Typography
-                color="#9DA7B3"
-                sx={{ fontSize: "2rem" }}
-                fontWeight={700}
-                lineHeight={"normal"}
-              >
+              <Typography color="#9DA7B3" variant="headlineMedium">
                 <Trans i18nKey={`invitees`} />
               </Typography>
             </Box>
@@ -911,13 +876,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                        {
-                                          border: 0,
-                                        },
+                                      {
+                                        border: 0,
+                                      },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -931,7 +896,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                    // disabled={!row.editable}
+                                  // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -961,15 +926,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                      backgroundColor:
-                                                        "#9CCAFF",
-                                                      color: "#004F83",
-                                                    }
+                                                    backgroundColor:
+                                                      "#9CCAFF",
+                                                    color: "#004F83",
+                                                  }
                                                   : {
-                                                      backgroundColor:
-                                                        "#EFEDF0",
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                    backgroundColor:
+                                                      "#EFEDF0",
+                                                    color: "#1B1B1E",
+                                                  }),
                                               },
                                             }}
                                           >
@@ -988,11 +953,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                        color: "#004F83",
-                                                      }
+                                                      color: "#004F83",
+                                                    }
                                                     : {
-                                                        color: "#1B1B1E",
-                                                      }),
+                                                      color: "#1B1B1E",
+                                                    }),
                                                 }}
                                               >
                                                 {role.title}
@@ -1013,7 +978,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                                index + 1 && (
+                                              index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",

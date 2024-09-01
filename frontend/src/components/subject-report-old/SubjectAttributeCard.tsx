@@ -416,9 +416,7 @@ export const AttributeStatusBarContainer = (props: any) => {
         flex={document ? 0.2 : 0}
       >
         <Typography
-          variant="h4"
-          fontWeight={"bold"}
-          letterSpacing=".15em"
+          variant="headlineLarge"
           sx={{
             borderLeft: `2px solid ${statusColor}`,
             pl: 1,
@@ -441,8 +439,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -576,9 +574,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${
-                    is_passed ? statusColor : "#808080"
-                  }`,
+                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
+                    }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -792,8 +789,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                          ? `${answerOptionIndex}.${answerOptionTitle}`
-                                          : "---"
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -804,8 +801,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"}
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>

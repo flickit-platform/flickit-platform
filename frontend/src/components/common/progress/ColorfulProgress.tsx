@@ -82,7 +82,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
       <Box display="flex" width="100%" alignItems="center" position="relative">
         <LinearProgress
           sx={{
-            borderRadius: 3,
+            borderRadius: "4px",
             width: "100%",
             height: progressHeight ? progressHeight : "12px",
             border:

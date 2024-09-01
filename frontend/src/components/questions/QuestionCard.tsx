@@ -107,7 +107,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const { questionIndex } = useQuestionContext();
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
-  const [, setDisabledConfidence] = useState<boolean>(true);
+  const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
 
@@ -276,16 +276,23 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       <Box
                         sx={{
                           mr: 2,
-                          color: "#fff",
+                          // color: "#fff",
+                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
+
                         }}
                       >
                         <Typography>
+                            {disabledConfidence ? (
                           <Trans i18nKey={"selectConfidenceLevel"} />
+                            ) : (
+                              <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
+                            )}
                         </Typography>
                       </Box>
                     )}
                     <Rating
-                      disabled={!questionsInfo?.permissions?.answerQuestion}
+                      // disabled={!questionsInfo?.permissions?.answerQuestion}
+                      disabled={disabledConfidence}
                       value={
                         selcetedConfidenceLevel !== null
                           ? selcetedConfidenceLevel
@@ -403,7 +410,7 @@ const AnswerTemplate = (props: {
     }
   }, [notApplicable]);
   useEffect(() => {
-    if (answer) {
+    if (answer && answer?.selectedOption) {
       setDisabledConfidence(false);
     }
   }, [answer]);
@@ -468,7 +475,7 @@ const AnswerTemplate = (props: {
       submitOnAnswerSelection &&
       value &&
       changeHappened.current
-      // && selcetedConfidenceLevel
+      && selcetedConfidenceLevel
     ) {
       submitQuestion();
     }
@@ -604,6 +611,7 @@ const AnswerTemplate = (props: {
           variant="contained"
           color={"info"}
           loading={isSubmitting}
+          disabled={(value || notApplicable) && !selcetedConfidenceLevel}
           sx={
             is_farsi
               ? {
@@ -2023,9 +2031,9 @@ const CreateDropZone = (props: any) => {
             )}
             <Typography sx={{ ...theme.typography.titleSmall }}>
               {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
+                ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
-                  dropZoneData[0]?.name.substring(
+                  dropZoneData[0]?.name?.substring(
                     dropZoneData[0]?.name.lastIndexOf(".")
                   )
                 : dropZoneData[0]?.name}
@@ -2730,8 +2738,8 @@ const FileIcon = (props: any): any => {
 
   const { link } = item;
   let reg = new RegExp("\\/([^\\/?]+)\\?");
-  let name = link.match(reg)[1];
-  const exp = name.substring(name.lastIndexOf("."));
+  let name = link?.match(reg)[1];
+  const exp = name?.substring(name.lastIndexOf("."));
   return (
     <Tooltip
       title={
@@ -2922,10 +2930,10 @@ const MyDropzone = (props: any) => {
             )}
             <Typography sx={{ ...theme.typography.titleMedium }}>
               {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
+                ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
-                  dropZoneData[0]?.name.substring(
-                    dropZoneData[0]?.name.lastIndexOf(".")
+                  dropZoneData[0]?.name?.substring(
+                    dropZoneData[0]?.name?.lastIndexOf(".")
                   )
                 : dropZoneData[0]?.name}
             </Typography>

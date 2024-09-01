@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress"; 
+import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -97,8 +97,8 @@ export const AssessmentInsight = () => {
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000
+                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                  60000
                 ),
                 "yyyy/MM/dd HH:mm"
               ) +
@@ -107,7 +107,7 @@ export const AssessmentInsight = () => {
                 ")"}
             </Typography>
           )}
-          {aboutSection.hasOwnProperty("isValid") && !aboutSection?.isValid && (
+          {(aboutSection.hasOwnProperty("isValid") || editable) && !aboutSection?.isValid && (
             <Box sx={{ ...styles.centerV }} gap={2} my={1}>
               <Box
                 sx={{
@@ -127,7 +127,7 @@ export const AssessmentInsight = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  <Trans i18nKey="Outdated" />
+                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "Outdated" : "note"} />
                 </Typography>
               </Box>
               <Box
@@ -146,7 +146,7 @@ export const AssessmentInsight = () => {
                   fontWeight={400}
                   textAlign="left"
                 >
-                  <Trans i18nKey="invalidInsight" />
+                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "invalidInsight" : "defaultInsightTemplate"} />
                 </Typography>
               </Box>
             </Box>

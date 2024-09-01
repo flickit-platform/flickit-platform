@@ -433,7 +433,7 @@ const AssessmentExportContainer = () => {
         }, [AssessmentReport?.data, assessmentId]);
 
         return (
-          <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentExportTitle pathInfo={pathInfo} />
             <Grid container columns={12} mb={5}>
               <Grid item sm={12} xs={12}>
@@ -686,7 +686,6 @@ const AssessmentExportContainer = () => {
                 <Grid item xs={12} md={8}>
                   <Typography
                     component="div"
-                    mt={4}
                     id="assessment-methodology"
                     variant="headlineMedium"
                     fontWeight={600}

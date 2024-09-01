@@ -106,7 +106,7 @@ const AssessmentSettingContainer = () => {
         const { items: listOfRoles } = roles;
 
         return (
-          <Box m="auto" pb={3} sx={{ px: { xl: 36, lg: 18, xs: 2, sm: 3 } }}>
+          <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentSettingTitle pathInfo={pathInfo} />
             <Grid container columns={12} mb={5}>
               <Grid item sm={12} xs={12}>
@@ -160,7 +160,7 @@ const AssessmentSettingContainer = () => {
               fetchAssessmentsUserListRoles={
                 fetchAssessmentsUserListRoles.query
               }
-              title={<Trans i18nKey={"addNewRole"} />}
+              title={<Trans i18nKey={"assignRole"} />}
               cancelText={<Trans i18nKey={"cancel"} />}
               confirmText={<Trans i18nKey={"addToThisAssessment"} />}
               setChangeData={setChangeData}

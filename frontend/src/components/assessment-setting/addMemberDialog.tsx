@@ -30,6 +30,9 @@ import AutocompleteAsyncField, {
   useConnectAutocompleteField,
 } from "../common/fields/AutocompleteAsyncField";
 import { LoadingButton } from "@mui/lab";
+import useScreenResize from "@/utils/useScreenResize";
+import { styles } from "@styles";
+import { NoteAddRounded, Settings } from "@mui/icons-material";
 
 export enum EUserInfo {
   "NAME" = "displayName",
@@ -145,10 +148,10 @@ const AddMemberDialog = (props: {
     try {
       addedEmailType === EUserType.NONE
         ? await inviteMemberToAssessment.query({
-            email: memberSelectedEmail,
-            assessmentId,
-            roleId: roleSelected.id,
-          })
+          email: memberSelectedEmail,
+          assessmentId,
+          roleId: roleSelected.id,
+        })
         : await addRoleMemberQueryData.query();
       // await fetchAssessmentsUserListRoles()
       setChangeData((prev: boolean) => !prev);
@@ -209,26 +212,21 @@ const AddMemberDialog = (props: {
       window.removeEventListener("keydown", handleEnterKeyDown, true);
     };
   }, []);
+  const fullScreen = useScreenResize("sm");
 
   return (
     <Dialog
       open={expanded}
       onClose={closeDialog}
-      maxWidth={"sm"}
-      // fullScreen={fullScreen}
       fullWidth
-      sx={{
-        ".MuiDialog-paper": {
-          maxWidth: "800px",
-        },
-        ".MuiDialog-paper::-webkit-scrollbar": {
-          display: "none",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        },
-      }}
+      maxWidth="md"
+      fullScreen={fullScreen}
     >
-      <DialogTitle textTransform="uppercase">{title}</DialogTitle>
+      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}> <>
+        <Settings sx={{ mr: 1 }} />
+        <Trans i18nKey="assignRole" />
+
+      </></DialogTitle>
       <DialogContent
         sx={{
           padding: "unset",
@@ -240,18 +238,20 @@ const AddMemberDialog = (props: {
           alignItems: "center",
           textAlign: "center",
           gap: 3,
+          p:1
         }}
       >
         <Box
           display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
           alignItems="center"
           justifyContent={"flex-start"}
           px={3}
           sx={{ gap: { xs: "0rem", sm: "1rem" } }}
           width="100%"
+          mt={1}
         >
           <Typography
-            sx={{ fontSize: { xs: "0.7rem", sm: "1rem" }, fontWeight: 500 }}
           >
             <Trans i18nKey={"add"} />
           </Typography>
@@ -265,271 +265,123 @@ const AddMemberDialog = (props: {
                 setAddedEmailType={setAddedEmailType}
               />
             </FormProviderWithForm>
-            {/* <FormControl
+          </Box>
+          <Typography
+          >
+            <Trans i18nKey={"as"} />
+          </Typography>
+          <FormControl
+            sx={{ width: "40%" }}
+          >
+            <Select
+              labelId="demo-multiple-name-label"
+              id="demo-multiple-name"
+              value={roleSelected?.title}
+              displayEmpty
+              onChange={handleChangeRole}
+              // disabled={memberSelected == "" ? true : false}
               sx={{
-                m: 1,
-                // width: '100%',
-                textAlign: "right",
-                padding: "6px, 12px, 6px, 12px",
-                minWidth: { xs: 90, sm: 150 },
-                maxWidth: { xs: 90, sm: 150 },
+
+                height: "40px",
+
               }}
+              IconComponent={KeyboardArrowDownIcon}
+              inputProps={{
+                renderValue: () =>
+                  roleSelected?.title == "" ? (
+                    <Box
+                      sx={{
+                        color: "#6C7B8E",
+                        fontSize: "0.6rem",
+                        textAlign: "left",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Trans i18nKey={"chooseARole"} />
+                    </Box>
+                  ) : (
+                    roleSelected.title
+                  ),
+              }}
+              MenuProps={MenuProps}
             >
-              <Select
-                labelId="demo-simple-select-autowidth-label"
-                id="demo-simple-select-autowidth-labelh"
-                value={memberSelected}
-                displayEmpty
-                onChange={handleChangeMember}
-                renderValue={
-                  memberSelected == ""
-                    ? () => (
-                        <Box
-                          sx={{
-                            color: "#6C7B8E",
-                            fontSize: "0.6rem",
-                            textAlign: "left",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          <Trans i18nKey={"chooseASpaceMember"} />
-                        </Box>
-                      )
-                    : undefined
-                }
+              <Box
                 sx={{
-                  boxShadow: "none",
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                  border: "1px solid #2974B4",
-                  borderRadius: "0.5rem",
-                  "&.MuiOutlinedInput-notchedOutline": { border: 0 },
-                  "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
-                  "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
-                  ".MuiSvgIcon-root": {
-                    fill: "#2974B4 !important",
-                  },
-                  "& .MuiSelect-select": {
-                    padding: "4px 5px",
-                  },
-                  height: "40px",
-                  fontSize: { xs: "0.7rem", sm: "1rem" },
+                  paddingY: "16px",
+                  color: "#9DA7B3",
+                  textAlign: "center",
+                  borderBottom: "1px solid #9DA7B3",
                 }}
-                IconComponent={KeyboardArrowDownIcon}
               >
-                <Box
-                  sx={{
-                    paddingY: "16px",
-                    color: "#9DA7B3",
-                    textAlign: "center",
-                    borderBottom: "1px solid #9DA7B3",
-                  }}
-                >
-                  <Typography sx={{ fontSize: "0.7rem", paddingX: "0.5rem" }}>
-                    <Trans i18nKey={"whoWantToAdd"} />
-                  </Typography>
-                </Box>
-                {memberOfSpace &&
-                  memberOfSpace.length > 0 &&
-                  memberOfSpace.map((member: any, index: number) => (
+                <Typography sx={{ fontSize: "0.875rem" }}>
+                  <Trans i18nKey={"chooseARole"} />
+                </Typography>
+              </Box>
+              {listOfRoles &&
+                listOfRoles.map((role: any, index: number) => {
+                  return (
                     <MenuItem
                       style={{ display: "block" }}
-                      key={member.id}
-                      value={member.id}
+                      key={role.title}
+                      value={role}
+                      id={role.id}
                       sx={{
-                        paddingY: "0px",
-                        maxHeight: "200px",
-                        gap: "20px",
                         "&.MuiMenuItem-root:hover": {
-                          backgroundColor: "#EFEDF0",
-                          color: "#1B1B1E",
+                          ...(roleSelected?.title == role.title
+                            ? {
+                              backgroundColor: "#9CCAFF",
+                              color: "#004F83",
+                            }
+                            : {
+                              backgroundColor: "#EFEDF0",
+                              color: "#1B1B1E",
+                            }),
                         },
+                        background:
+                          roleSelected?.title == role.title ? "#9CCAFF" : "",
                       }}
                     >
                       <Box
                         sx={{
-                          display: "flex",
-                          gap: { xs: "2px", sm: "10px" },
-                          justifyContent: "flex-start",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Avatar
-                          sx={{
-                            width: { xs: "1.3rem", sm: "2rem" },
-                            height: { xs: "1.3rem", sm: "2rem" },
-                            fontSize: { xs: "0.7rem", sm: "1rem" },
-                          }}
-                          {...stringAvatar(member.displayName.toUpperCase())}
-                          src={member.pictureLink}
-                        />
-                        <ListItem
-                          sx={{
-                            paddingX: "unset",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {member.displayName}
-                        </ListItem>
-                      </Box>
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl> */}
-          </Box>
-          <Typography
-            sx={{ fontSize: { xs: "0.7rem", sm: "1rem" }, fontWeight: 500 }}
-          >
-            <Trans i18nKey={"as"} />
-          </Typography>
-          <div>
-            <FormControl
-              sx={{
-                m: 1,
-                // width: '100%',
-                textAlign: "center",
-                padding: "6px, 12px, 6px, 12px",
-                minWidth: { xs: 120, sm: 200 },
-              }}
-            >
-              <Select
-                labelId="demo-multiple-name-label"
-                id="demo-multiple-name"
-                value={roleSelected?.title}
-                displayEmpty
-                onChange={handleChangeRole}
-                // disabled={memberSelected == "" ? true : false}
-                sx={{
-                  boxShadow: "none",
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                  border: "1px solid #2974B4",
-                  borderRadius: "0.5rem",
-                  "&.MuiOutlinedInput-notchedOutline": { border: 0 },
-                  "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
-                  "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
-                  ".MuiSvgIcon-root": {
-                    fill: "#2974B4 !important",
-                  },
-                  "& .MuiSelect-select": {
-                    padding: "4px 5px",
-                  },
-                  height: "40px",
-                  fontSize: { xs: "0.7rem", sm: "1rem" },
-                }}
-                IconComponent={KeyboardArrowDownIcon}
-                inputProps={{
-                  renderValue: () =>
-                    roleSelected?.title == "" ? (
-                      <Box
-                        sx={{
-                          color: "#6C7B8E",
-                          fontSize: "0.6rem",
-                          textAlign: "left",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        <Trans i18nKey={"chooseARole"} />
-                      </Box>
-                    ) : (
-                      roleSelected.title
-                    ),
-                }}
-                MenuProps={MenuProps}
-              >
-                <Box
-                  sx={{
-                    paddingY: "16px",
-                    color: "#9DA7B3",
-                    textAlign: "center",
-                    borderBottom: "1px solid #9DA7B3",
-                  }}
-                >
-                  <Typography sx={{ fontSize: "0.875rem" }}>
-                    <Trans i18nKey={"chooseARole"} />
-                  </Typography>
-                </Box>
-                {listOfRoles &&
-                  listOfRoles.map((role: any, index: number) => {
-                    return (
-                      <MenuItem
-                        style={{ display: "block" }}
-                        key={role.title}
-                        value={role}
-                        id={role.id}
-                        sx={{
                           maxWidth: "240px",
-                          "&.MuiMenuItem-root:hover": {
-                            ...(roleSelected?.title == role.title
-                              ? {
-                                  backgroundColor: "#9CCAFF",
-                                  color: "#004F83",
-                                }
-                              : {
-                                  backgroundColor: "#EFEDF0",
-                                  color: "#1B1B1E",
-                                }),
-                          },
-                          background:
-                            roleSelected?.title == role.title ? "#9CCAFF" : "",
+                          color: "#000",
+                          fontSize: "0.875rem",
+                          lineHeight: "21px",
+                          fontWeight: 500,
+                          paddingY: "1rem",
                         }}
                       >
-                        <Box
-                          sx={{
-                            maxWidth: "240px",
+                        <Typography>{role.title}</Typography>
+                        <div
+                          style={{
                             color: "#000",
                             fontSize: "0.875rem",
                             lineHeight: "21px",
-                            fontWeight: 500,
-                            paddingY: "1rem",
+                            fontWeight: 300,
+                            whiteSpace: "break-spaces",
+                            paddingTop: "1rem",
                           }}
                         >
-                          <Typography>{role.title}</Typography>
-                          <div
-                            style={{
-                              color: "#000",
-                              fontSize: "0.875rem",
-                              lineHeight: "21px",
-                              fontWeight: 300,
-                              whiteSpace: "break-spaces",
-                              paddingTop: "1rem",
-                            }}
-                          >
-                            {role.description}
-                          </div>
-                        </Box>
-                        {listOfRoles && listOfRoles.length > index + 1 && (
-                          <Box
-                            sx={{
-                              height: "0.5px",
-                              width: "80%",
-                              backgroundColor: "#9DA7B3",
-                              mx: "auto",
-                            }}
-                          ></Box>
-                        )}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </FormControl>
-          </div>
+                          {role.description}
+                        </div>
+                      </Box>
+                      {listOfRoles && listOfRoles.length > index + 1 && (
+                        <Box
+                          sx={{
+                            height: "0.5px",
+                            width: "80%",
+                            backgroundColor: "#9DA7B3",
+                            mx: "auto",
+                          }}
+                        ></Box>
+                      )}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
         </Box>
         {addedEmailType !== EUserType.DEFAULT && (
           <Box
