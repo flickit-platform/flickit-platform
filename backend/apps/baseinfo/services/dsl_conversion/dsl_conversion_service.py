@@ -45,7 +45,7 @@ class DSLConverterService:
     def convert_maturity_levels(self, df: pd.DataFrame) -> str:
         """Converts maturity levels to DSL."""
         df.columns = df.columns.str.strip()
-        levels = df[constants.SHEET_MATURITY_LEVELS_TITLE].tolist()
+        levels = df.iloc[:, 0].dropna().tolist()  # Reading the levels from the first column
         dsl: List[str] = []
         try:
             for index, row in df.iterrows():
@@ -53,12 +53,13 @@ class DSLConverterService:
                 description = row[constants.SHEET_MATURITY_LEVELS_DESCRIPTION]
                 value = index + 1
                 competence_list: List[str] = []
-                for i, level in enumerate(levels):
-                    if row[level] > 0:
+                for level in levels:
+                    if pd.notna(row.get(level)) and row[level] > 0:
                         competence_list.append(f"{level}:{row[level]}%")
+                level_name = levels[index] if index < len(levels) else title
                 competence_str = f"    competence: [{', '.join(competence_list)}]" if competence_list else ""
                 dsl.append(
-                    f'level {title} {{\n'
+                    f'level {level_name} {{\n'
                     f'    title: "{title}"\n'
                     f'    description: "{description}"\n'
                     f'    value: {value}\n'
