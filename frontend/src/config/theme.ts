@@ -14,7 +14,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 //   '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
 // export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
-export const primaryFontFamily = "Ubuntu";
+export const primaryFontFamily = "NotoSans";
 export const secondaryFontFamily = "OpenSans";
 
 declare module "@mui/material/styles/createPalette" {
@@ -310,7 +310,7 @@ export const theme = createTheme({
           padding: 0;
         }
         .nc-header {
-          font-family: 'Ubuntu';
+          font-family: 'OpenSans';
           background: #E8EBEE;
           border-radius: 7px 7px 0px 0px;
           box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
