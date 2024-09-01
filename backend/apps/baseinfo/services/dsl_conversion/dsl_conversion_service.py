@@ -127,9 +127,9 @@ class DSLConverterService:
         for _, row in questions_df.iterrows():
             question_code = row[constants.SHEET_QUESTIONS_CODE]
             questionnaire_name = row[constants.SHEET_QUESTIONS_QUESTIONARIES]
-            title = row[constants.SHEET_QUESTIONS_TITLE]
+            title = row[constants.SHEET_QUESTIONS_TITLE].replace('"', '\\"')
             options_range_name = row[constants.SHEET_QUESTIONS_OPTIONS]
-            description = row[constants.SHEET_QUESTIONS_DESCRIPTION] if pd.notna(
+            description = row[constants.SHEET_QUESTIONS_DESCRIPTION].replace('"', '\\"') if pd.notna(
                 row[constants.SHEET_QUESTIONS_DESCRIPTION]) else constants.DEFAULT_DESCRIPTION
             may_not_be_applicable = row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE] == 1 if pd.notna(
                 row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE]) else False
