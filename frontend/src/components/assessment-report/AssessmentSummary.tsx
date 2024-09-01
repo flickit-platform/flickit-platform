@@ -20,6 +20,7 @@ import MoreActions from "@common/MoreActions";
 import useMenu from "@utils/useMenu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { calculateFontSize } from "@/utils/calculateFontSize";
+import { secondaryFontFamily } from "@/config/theme";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
   expertGroup: IExpertGroup;
@@ -69,6 +70,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           }}
           color="#00365C"
           fontWeight={800}
+          fontFamily={secondaryFontFamily}
         >
           {assessmentKit?.title}
         </Typography>

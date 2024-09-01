@@ -2031,9 +2031,9 @@ const CreateDropZone = (props: any) => {
             )}
             <Typography sx={{ ...theme.typography.titleSmall }}>
               {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
+                ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
-                  dropZoneData[0]?.name.substring(
+                  dropZoneData[0]?.name?.substring(
                     dropZoneData[0]?.name.lastIndexOf(".")
                   )
                 : dropZoneData[0]?.name}
@@ -2738,8 +2738,8 @@ const FileIcon = (props: any): any => {
 
   const { link } = item;
   let reg = new RegExp("\\/([^\\/?]+)\\?");
-  let name = link.match(reg)[1];
-  const exp = name.substring(name.lastIndexOf("."));
+  let name = link?.match(reg)[1];
+  const exp = name?.substring(name.lastIndexOf("."));
   return (
     <Tooltip
       title={
@@ -2930,10 +2930,10 @@ const MyDropzone = (props: any) => {
             )}
             <Typography sx={{ ...theme.typography.titleMedium }}>
               {dropZoneData[0]?.name.length > 14
-                ? dropZoneData[0]?.name.substring(0, 10) +
+                ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
-                  dropZoneData[0]?.name.substring(
-                    dropZoneData[0]?.name.lastIndexOf(".")
+                  dropZoneData[0]?.name?.substring(
+                    dropZoneData[0]?.name?.lastIndexOf(".")
                   )
                 : dropZoneData[0]?.name}
             </Typography>

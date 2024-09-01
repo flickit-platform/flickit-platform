@@ -159,6 +159,7 @@ const AssessmentReportContainer = (props: any) => {
                         color="#73808C"
                         marginX={4}
                         variant="titleMedium"
+                        fontFamily={secondaryFontFamily}
                       >
                         <Trans i18nKey="general" />
                       </Typography>
@@ -209,7 +210,12 @@ const AssessmentReportContainer = (props: any) => {
 
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography color="#73808C" marginX={4} variant="titleMedium">
+                  <Typography
+                    color="#73808C"
+                    marginX={4}
+                    variant="titleMedium"
+                    fontFamily={secondaryFontFamily}
+                  >
                     <Trans i18nKey="insight" />
                   </Typography>
                   <AssessmentInsight />
@@ -217,7 +223,12 @@ const AssessmentReportContainer = (props: any) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography color="#73808C" marginX={4} variant="titleMedium">
+                  <Typography
+                    color="#73808C"
+                    marginX={4}
+                    variant="titleMedium"
+                    fontFamily={secondaryFontFamily}
+                  >
                     <Trans i18nKey="assessmentKit" />
                   </Typography>
                   <AssessmentReportKit assessmentKit={assessmentKit} />
@@ -232,11 +243,7 @@ const AssessmentReportContainer = (props: any) => {
                   <Typography color="#73808C" variant="h5">
                     <Trans i18nKey="subjectReport" />
                   </Typography>
-                  <Typography
-                    variant="titleMedium"
-                    fontWeight={400}
-                    color="#73808C"
-                  >
+                  <Typography variant="titleMedium" fontWeight={400}>
                     <Trans
                       i18nKey="overallStatusDetails"
                       values={{
