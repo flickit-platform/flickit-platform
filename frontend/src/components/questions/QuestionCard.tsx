@@ -108,6 +108,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const abortController = useRef(new AbortController());
   const [notApplicable, setNotApplicable] = useState<boolean>(false);
   const [disabledConfidence, setDisabledConfidence] = useState<boolean>(true);
+  const [confidenceLebels, setConfidenceLebels] = useState<any>([]);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
 
@@ -181,15 +182,15 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={
                 is_farsi
                   ? {
-                      pt: 0.5,
-                      fontSize: "2rem",
-                      fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
-                      direction: "rtl",
-                    }
+                    pt: 0.5,
+                    fontSize: "2rem",
+                    fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
+                    direction: "rtl",
+                  }
                   : {
-                      pt: 0.5,
-                      fontSize: "2rem",
-                    }
+                    pt: 0.5,
+                    fontSize: "2rem",
+                  }
               }
             >
               {title.split("\n").map((line, index) => (
@@ -214,6 +215,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             may_not_be_applicable={mayNotBeApplicable ?? false}
             setDisabledConfidence={setDisabledConfidence}
             selcetedConfidenceLevel={selcetedConfidenceLevel}
+            confidenceLebels={confidenceLebels}
           />
         </Box>
       </Paper>
@@ -245,6 +247,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               error={false}
               render={(data) => {
                 const labels = data.confidenceLevels;
+                setConfidenceLebels(labels)
                 return (
                   <Box
                     sx={{
@@ -282,11 +285,11 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                         }}
                       >
                         <Typography>
-                            {disabledConfidence ? (
-                          <Trans i18nKey={"selectConfidenceLevel"} />
-                            ) : (
-                              <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
-                            )}
+                          {disabledConfidence ? (
+                            <Trans i18nKey={"selectConfidenceLevel"} />
+                          ) : (
+                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
+                          )}
                         </Typography>
                       </Box>
                     )}
@@ -362,6 +365,7 @@ const AnswerTemplate = (props: {
   is_farsi: boolean | undefined;
   setDisabledConfidence: any;
   selcetedConfidenceLevel: any;
+  confidenceLebels: any
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
@@ -376,6 +380,7 @@ const AnswerTemplate = (props: {
     is_farsi,
     setDisabledConfidence,
     selcetedConfidenceLevel,
+    confidenceLebels
   } = props;
   const { options, answer } = questionInfo;
   const { total_number_of_questions, permissions } = questionsInfo;
@@ -444,7 +449,7 @@ const AnswerTemplate = (props: {
           answer: {
             selectedOption: value,
             isNotApplicable: notApplicable,
-            confidenceLevel: selcetedConfidenceLevel ?? null,
+            confidenceLevel: confidenceLebels[selcetedConfidenceLevel - 1] ?? null,
           } as TAnswer,
         })
       );
@@ -615,9 +620,9 @@ const AnswerTemplate = (props: {
           sx={
             is_farsi
               ? {
-                  fontSize: "1.2rem",
-                  mr: "auto",
-                }
+                fontSize: "1.2rem",
+                mr: "auto",
+              }
               : { fontSize: "1.2rem", ml: "auto" }
           }
           onClick={submitQuestion}
@@ -770,10 +775,10 @@ const AnswerDetails = ({
                   ))}
                   {queryData?.data?.total >
                     queryData?.data?.size * (queryData?.data?.page + 1) && (
-                    <Button onClick={handleShowMore}>
-                      <Trans i18nKey="showMore" />
-                    </Button>
-                  )}
+                      <Button onClick={handleShowMore}>
+                        <Trans i18nKey="showMore" />
+                      </Button>
+                    )}
                 </Box>
               )
             )}
@@ -901,7 +906,7 @@ const AnswerHistoryItem = (props: any) => {
           {format(
             new Date(
               new Date(item.creationTime).getTime() -
-                new Date(item.creationTime).getTimezoneOffset() * 60000
+              new Date(item.creationTime).getTimezoneOffset() * 60000
             ),
             "yyyy/MM/dd HH:mm"
           ) +
@@ -1309,10 +1314,10 @@ const Evidence = (props: any) => {
                     is_farsi
                       ? { position: "absolute", top: 15, left: 5 }
                       : {
-                          position: "absolute",
-                          top: 15,
-                          right: 5,
-                        }
+                        position: "absolute",
+                        top: 15,
+                        right: 5,
+                      }
                   }
                 ></Grid>
               </Grid>
@@ -1653,31 +1658,31 @@ const CreateEvidenceAttachment = (props: any) => {
             >
               {loadingFile
                 ? skeleton.map((item, index) => {
-                    return (
-                      <Skeleton
-                        key={index}
-                        animation="wave"
-                        variant="rounded"
-                        width={40}
-                        height={40}
-                      />
-                    );
-                  })
+                  return (
+                    <Skeleton
+                      key={index}
+                      animation="wave"
+                      variant="rounded"
+                      width={40}
+                      height={40}
+                    />
+                  );
+                })
                 : attachments.map((item, index) => {
-                    return (
-                      <FileIcon
-                        key={index}
-                        setEvidenceId={setEvidenceId}
-                        setExpandedDeleteAttachmentDialog={
-                          setExpandedDeleteAttachmentDialog
-                        }
-                        downloadFile={downloadFile}
-                        evidenceId={evidenceJustCreatedId}
-                        item={item}
-                        evidenceBG={pallet}
-                      />
-                    );
-                  })}
+                  return (
+                    <FileIcon
+                      key={index}
+                      setEvidenceId={setEvidenceId}
+                      setExpandedDeleteAttachmentDialog={
+                        setExpandedDeleteAttachmentDialog
+                      }
+                      downloadFile={downloadFile}
+                      evidenceId={evidenceJustCreatedId}
+                      item={item}
+                      evidenceBG={pallet}
+                    />
+                  );
+                })}
             </Grid>
             {attachments.length == 5 && (
               <Box>
@@ -2032,10 +2037,10 @@ const CreateDropZone = (props: any) => {
             <Typography sx={{ ...theme.typography.titleSmall }}>
               {dropZoneData[0]?.name.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
-                  "..." +
-                  dropZoneData[0]?.name?.substring(
-                    dropZoneData[0]?.name.lastIndexOf(".")
-                  )
+                "..." +
+                dropZoneData[0]?.name?.substring(
+                  dropZoneData[0]?.name.lastIndexOf(".")
+                )
                 : dropZoneData[0]?.name}
             </Typography>
           </Box>
@@ -2430,10 +2435,10 @@ const EvidenceDetail = (props: any) => {
                         is_farsi
                           ? { position: "absolute", top: 15, left: 5 }
                           : {
-                              position: "absolute",
-                              top: 15,
-                              right: 5,
-                            }
+                            position: "absolute",
+                            top: 15,
+                            right: 5,
+                          }
                       }
                     ></Grid>
                   </Grid>
@@ -2562,9 +2567,9 @@ const EvidenceDetail = (props: any) => {
                         style={
                           expandedEvidenceBox
                             ? {
-                                rotate: "180deg",
-                                transition: "all .2s ease",
-                              }
+                              rotate: "180deg",
+                              transition: "all .2s ease",
+                            }
                             : { rotate: "0deg", transition: "all .2s ease" }
                         }
                         src={arrowBtn}
@@ -2578,9 +2583,9 @@ const EvidenceDetail = (props: any) => {
                         expandedEvidenceBox
                           ? {}
                           : {
-                              maxHeight: 0,
-                              overflow: "hidden",
-                            }
+                            maxHeight: 0,
+                            overflow: "hidden",
+                          }
                       }
                       sx={{
                         transition: "all .2s ease",
@@ -2594,31 +2599,31 @@ const EvidenceDetail = (props: any) => {
                       >
                         {loadingFile
                           ? skeleton.map((item, index) => {
-                              return (
-                                <Skeleton
-                                  key={index}
-                                  animation="wave"
-                                  variant="rounded"
-                                  width={40}
-                                  height={40}
-                                />
-                              );
-                            })
+                            return (
+                              <Skeleton
+                                key={index}
+                                animation="wave"
+                                variant="rounded"
+                                width={40}
+                                height={40}
+                              />
+                            );
+                          })
                           : attachments.map((item, index) => {
-                              return (
-                                <FileIcon
-                                  evidenceId={id}
-                                  setEvidenceId={setEvidenceId}
-                                  item={item}
-                                  setExpandedDeleteAttachmentDialog={
-                                    setExpandedDeleteAttachmentDialog
-                                  }
-                                  evidenceBG={evidenceBG}
-                                  downloadFile={downloadFile}
-                                  key={index}
-                                />
-                              );
-                            })}
+                            return (
+                              <FileIcon
+                                evidenceId={id}
+                                setEvidenceId={setEvidenceId}
+                                item={item}
+                                setExpandedDeleteAttachmentDialog={
+                                  setExpandedDeleteAttachmentDialog
+                                }
+                                evidenceBG={evidenceBG}
+                                downloadFile={downloadFile}
+                                key={index}
+                              />
+                            );
+                          })}
                         {attachments.length < 5 && (
                           <>
                             <Grid
@@ -2931,10 +2936,10 @@ const MyDropzone = (props: any) => {
             <Typography sx={{ ...theme.typography.titleMedium }}>
               {dropZoneData[0]?.name.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
-                  "..." +
-                  dropZoneData[0]?.name?.substring(
-                    dropZoneData[0]?.name?.lastIndexOf(".")
-                  )
+                "..." +
+                dropZoneData[0]?.name?.substring(
+                  dropZoneData[0]?.name?.lastIndexOf(".")
+                )
                 : dropZoneData[0]?.name}
             </Typography>
           </Box>
@@ -3372,20 +3377,20 @@ const QuestionGuide = (props: any) => {
               <Typography variant="body2">
                 {hint.startsWith("\n")
                   ? hint
-                      .substring(1)
-                      .split("\n")
-                      .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))
-                  : hint.split("\n").map((line: string, index: number) => (
+                    .substring(1)
+                    .split("\n")
+                    .map((line: string, index: number) => (
                       <React.Fragment key={index}>
                         {line}
                         <br />
                       </React.Fragment>
-                    ))}
+                    ))
+                  : hint.split("\n").map((line: string, index: number) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
               </Typography>
             </Box>
           </Box>
