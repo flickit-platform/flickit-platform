@@ -747,6 +747,17 @@ export const createService = (
               }
           );
       },
+      fetchExcelToDSLSampleFile(
+          args: any | undefined,
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.get(
+              `/api/v1/assessment-kits/excel-to-dsl/sample/`,
+              {
+                  ...config
+              }
+          );
+      },
     deleteAssessmentKitDSL(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined

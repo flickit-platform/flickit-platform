@@ -22,6 +22,7 @@ import {Box, Button, Typography, Alert} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
+import {useQuery} from "@utils/useQuery";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -66,6 +67,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     setZippedData(null)
     setConvertData(null)
   };
+    const fetchSampleExecl = useQuery({
+        service: (args, config) =>
+            service.fetchExcelToDSLSampleFile(args, config),
+    });
+
   useEffect(() => {
     return () => {
       abortController.abort();
@@ -146,9 +152,24 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-    // const downloadTemplate = ()=> {
-    //
-    // }
+    const downloadTemplate = async ()=> {
+        try {
+            let {url} =  await fetchSampleExecl.query()
+            if(url){
+                const response = await fetch(url)
+                const blob = await response.blob()
+                const urlBlob = URL.createObjectURL(blob)
+                let link = document.createElement("a")
+                link.download = "sample_execl.xlsx";
+                link.href = urlBlob;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }
+        }catch (e){
+            console.log(e)
+        }
+    }
 
   const formContent = (
     <FormProviderWithForm formMethods={formMethods}>
@@ -162,7 +183,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             {type === "convert"  && buttonStep == 0 && !convertData && <Box sx={{pb:"10px"}}> <Box sx={{ ...styles.centerV,background:"#E8EBEE",width:"fit-content",px:1 }}>
                 <Trans i18nKey={"dslDownloadGuide"} />
                 <span style={{textDecoration:"underline",color:"#2D80D2",cursor:"pointer",paddingLeft:"4px"}}
-                      // onClick={downloadTemplate}
+                      onClick={downloadTemplate}
                 >here</span>
             </Box>
             </Box> }
