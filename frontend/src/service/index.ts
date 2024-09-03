@@ -730,6 +730,34 @@ export const createService = (
         }
       );
     },
+    convertExcelToDSLFile(
+          args: { file: any },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { file } = args ?? {};
+          return axios.post(
+              `/api/v1/assessment-kits/excel-to-dsl/`,
+              { file },
+              {
+                  ...config,
+                  responseType: "blob",
+                  headers: {
+                      "Content-Type": "multipart/form-data",
+                  },
+              }
+          );
+      },
+      fetchExcelToDSLSampleFile(
+          args: any | undefined,
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.get(
+              `/api/v1/assessment-kits/excel-to-dsl/sample/`,
+              {
+                  ...config
+              }
+          );
+      },
     deleteAssessmentKitDSL(
       args: { id: TId },
       config: AxiosRequestConfig<any> | undefined

@@ -310,9 +310,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             detailItems.map((detailItem, index) => {
               const { evidence } = evidenceDetail;
               return (
-                <Box
-                  sx={{ display: "flex", width: "100%", alignItems: "center" }}
-                >
+                <Box sx={{ display: "flex", width: "100%" }}>
                   <Typography
                     sx={{
                       ...theme.typography.titleMedium,
@@ -335,6 +333,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       sx={{
                         ...theme.typography.bodyMedium,
                         color: evidenceBG.borderColor,
+                        mt: "4px",
                       }}
                     >
                       {evidence?.type}
@@ -342,21 +341,33 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                   )}
                   {index == 2 && (
                     <Typography
-                      sx={{ ...theme.typography.bodyMedium, color: "#2B333B" }}
+                      sx={{
+                        ...theme.typography.bodyMedium,
+                        color: "#2B333B",
+                        mt: "4px",
+                      }}
                     >
                       {evidence?.createdBy?.displayName}
                     </Typography>
                   )}
                   {index == 3 && (
                     <Typography
-                      sx={{ ...theme.typography.bodyMedium, color: "#2B333B" }}
+                      sx={{
+                        ...theme.typography.bodyMedium,
+                        color: "#2B333B",
+                        mt: "4px",
+                      }}
                     >
                       {formatDate(evidence?.creationTime)}
                     </Typography>
                   )}
                   {index == 4 && (
                     <Typography
-                      sx={{ ...theme.typography.bodyMedium, color: "#2B333B" }}
+                      sx={{
+                        ...theme.typography.bodyMedium,
+                        color: "#2B333B",
+                        mt: "4px",
+                      }}
                     >
                       {formatDate(evidence?.lastModificationTime)}
                     </Typography>
@@ -452,11 +463,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             questionItems.map((questionItem, index) => {
               const { question } = evidenceDetail;
               return (
-                <Box
-                  alignItems="flex-start"
-                  key={questionItem}
-                  sx={{ display: "flex", width: "100%" }}
-                >
+                <Box key={questionItem} sx={{ display: "flex", width: "100%" }}>
                   <Typography
                     sx={{
                       ...theme.typography.titleMedium,
@@ -476,6 +483,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         color: "#2D80D2",
                         textDecoration: "underline",
                         cursor: "pointer",
+                        mt: "4px",
                       }}
                     >
                       {question?.questionnaire?.title}
@@ -483,7 +491,11 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                   )}
                   {index == 1 && (
                     <Typography
-                      sx={{ ...theme.typography.bodyMedium, color: "#B8144B" }}
+                      sx={{
+                        ...theme.typography.bodyMedium,
+                        color: "#B8144B",
+                        mt: "4px",
+                      }}
                     >
                       {question?.title}
                     </Typography>
