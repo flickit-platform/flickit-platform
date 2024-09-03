@@ -156,13 +156,10 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         try {
             let {url} =  await fetchSampleExecl.query()
             if(url){
-                const response = await fetch(url)
-                const blob = await response.blob()
-                const urlBlob = URL.createObjectURL(blob)
                 let link = document.createElement("a")
-                link.download = "sample_execl.xlsx";
-                link.href = urlBlob;
+                link.href = url;
                 document.body.appendChild(link);
+                link.target = "_blank"
                 link.click();
                 link.remove();
             }
