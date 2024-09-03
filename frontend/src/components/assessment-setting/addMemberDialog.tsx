@@ -238,8 +238,7 @@ const AddMemberDialog = (props: {
           alignItems: "center",
           textAlign: "center",
           gap: 3,
-          marginTop: 2,
-          p:2
+          p:1
         }}
       >
         <Box
@@ -250,6 +249,7 @@ const AddMemberDialog = (props: {
           px={3}
           sx={{ gap: { xs: "0rem", sm: "1rem" } }}
           width="100%"
+          mt={1}
         >
           <Typography
           >

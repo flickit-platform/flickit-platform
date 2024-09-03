@@ -14,7 +14,7 @@ sentry_sdk.init(
     profiles_sample_rate=1.0,
 )
 
-__version__ = "1.26.0-SNAPSHOT"
+__version__ = "1.27.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -219,6 +219,7 @@ OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT',
 OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
+EXCEL_SAMPLE_URL = os.environ.get('EXCEL_SAMPLE_URL', None)
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):

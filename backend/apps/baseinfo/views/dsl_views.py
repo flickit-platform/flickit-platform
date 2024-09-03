@@ -9,6 +9,7 @@ from baseinfo.serializers.dsl_serializers import ExcelFileUploadSerializer
 from io import BytesIO
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from assessmentplatform.settings import EXCEL_SAMPLE_URL
 
 
 class DSLConversionApi(APIView):
@@ -52,3 +53,10 @@ class DSLConversionApi(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DSLConversionFileSampleApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"url": EXCEL_SAMPLE_URL})

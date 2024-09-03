@@ -14,8 +14,8 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 //   '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
 // export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
-export const primaryFontFamily = "Ubuntu";
-export const secondaryFontFamily = "Sansation";
+export const primaryFontFamily = "NotoSans";
+export const secondaryFontFamily = "OpenSans";
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -117,12 +117,13 @@ export const theme = createTheme({
       sm: 600,
       md: 960,
       lg: 1280,
-      xl: 1920,
+      xl: 1620,
     },
   },
   typography: {
     fontFamily: primaryFontFamily,
     subSmall: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
@@ -130,12 +131,14 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subMedium: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     subLarge: {
+      fontFamily: primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
@@ -149,14 +152,14 @@ export const theme = createTheme({
       letterSpacing: "-3%",
     },
     headlineMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2rem",
       lineHeight: "2.25rem",
       letterSpacing: "0",
     },
     headlineLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2.5rem",
       lineHeight: "2.7rem",
@@ -246,7 +249,7 @@ export const theme = createTheme({
       letterSpacing: "0.1px",
     },
     button: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       letterSpacing: ".05em",
     },
     h3: {
@@ -257,11 +260,11 @@ export const theme = createTheme({
       opacity: 0.9,
     },
     h5: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       opacity: 0.85,
     },
     h6: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       lineHeight: 1.6,
       opacity: 0.85,
     },
@@ -307,7 +310,7 @@ export const theme = createTheme({
           padding: 0;
         }
         .nc-header {
-          font-family: 'Ubuntu';
+          font-family: 'OpenSans';
           background: #E8EBEE;
           border-radius: 7px 7px 0px 0px;
           box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
@@ -320,6 +323,11 @@ export const theme = createTheme({
           width: 20px
         }
       `,
+    },
+    MuiDialogTitle: {
+      defaultProps: {
+        fontFamily: secondaryFontFamily
+      }
     },
     MuiButtonGroup: {
       defaultProps: {
