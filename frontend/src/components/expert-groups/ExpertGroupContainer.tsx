@@ -438,34 +438,50 @@ const AvatarComponent = (props: any) => {
           }}
         />
       )}
-      {!isLoading && hover && (
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0, 0, 0, 0.6)"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          borderRadius="50%"
-          sx={{ cursor: "pointer" }}
-        >
+      {!isLoading  && (
+          <Box    position="absolute"
+                  top={0}
+                  left={0}
+                  width="100%"
+                  height="100%"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  borderRadius="50%"
+>
+            {hover &&  <Box
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                height="100%"
+                bgcolor="rgba(0, 0, 0, 0.6)"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="50%"
+                sx={{ cursor: "pointer" }}
+            />}
           {profilePicture ? (
             <>
-              <Tooltip title={"Delete Picture"}>
-                <DeleteIcon
-                  onClick={deletePicture}
-                  sx={{ color: "whitesmoke" }}
-                />
+               <Tooltip title={"Delete Picture"}>
+
+                     <IconButton
+                         component="label"
+                         sx={{ padding: 0, color: "whitesmoke" }}
+                     >
+                       {hover &&   <DeleteIcon
+                          onClick={deletePicture}
+                          sx={{ color: "whitesmoke" }}
+                        />}
+                      </IconButton>
               </Tooltip>
               <Tooltip title={"Edit Picture"}>
                 <IconButton
                   component="label"
                   sx={{ padding: 0, color: "whitesmoke" }}
                 >
-                  <EditIcon />
+                  {hover && <EditIcon /> }
                   <input
                     type="file"
                     accept="image/*"
@@ -478,7 +494,7 @@ const AvatarComponent = (props: any) => {
           ) : (
             <Tooltip title={"Add Picture"}>
               <IconButton component="label" sx={{ color: "whitesmoke" }}>
-                <AddIcon />
+                {hover && <AddIcon />}
                 <input
                   type="file"
                   accept="image/*"
