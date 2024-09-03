@@ -454,6 +454,7 @@
   "whoWantToAdd": "Who do you want to add?\n",
   "addMemberParent": "Only members of the space  can be added to an assessment.",
   "areYouSureYouWantDeleteThisMember": "Are you sure you want remove {{name}} from {{assessment}}?",
+  "areYouSureYouWantDeleteThisMemberInvited":  "Are you sure about canceling the invitation sent to {{name}} for a role in this assessment?",
   "letMeCheckAgain": "Let me check again",
   "yesContinue": "Yes, Continue",
   "ownerName": "Owner: ",

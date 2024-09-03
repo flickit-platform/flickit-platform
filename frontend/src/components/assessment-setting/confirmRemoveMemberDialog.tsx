@@ -89,13 +89,23 @@ const ConfirmRemoveMemberDialog = (props: any) => {
         }}
       >
         <Typography sx={{ color: "#0A2342" }}>
-          <Trans
-            i18nKey="areYouSureYouWantDeleteThisMember"
-            values={{
-              name: expandedRemoveDialog?.name,
-              assessment: assessmentName,
-            }}
-          />
+          {expandedRemoveDialog.invited
+              ?
+              <Trans
+                  i18nKey="areYouSureYouWantDeleteThisMemberInvited"
+                  values={{
+                    name: expandedRemoveDialog?.name
+                  }}
+              />
+              :
+              <Trans
+                  i18nKey="areYouSureYouWantDeleteThisMember"
+                  values={{
+                    name: expandedRemoveDialog?.name,
+                    assessment: assessmentName,
+                  }}
+              />
+          }
         </Typography>
 
         <Box mt={2} alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
