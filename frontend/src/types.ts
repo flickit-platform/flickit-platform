@@ -455,7 +455,7 @@ export interface IQuestionnairesPageDataModel {
 
 export interface IDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: (args: any) => void;
+  onSubmitForm?: (args?: any) => void;
   openDialog?: any;
   context?: IDialogContext;
 }
@@ -468,7 +468,7 @@ export interface IDialogContext {
   getViewLink?: (data: any) => string;
 }
 
-export type TDialogContextType = "update" | "create";
+export type TDialogContextType = "update" | "create" | "convert";
 
 export interface ICompareModel {
   assessment_project_compare_list: any[];

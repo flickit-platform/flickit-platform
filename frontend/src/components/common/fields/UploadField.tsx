@@ -46,10 +46,10 @@ interface IUploadFieldProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?: any
+  setIsValid?: any;
 }
 
-const UploadField = (props: IUploadFieldProps) => {
+const UploadField = (props: any) => {
   const { name, required, defaultValue, ...rest } = props;
 
   const formMethods = useFormContext();
@@ -94,7 +94,12 @@ interface IUploadProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
-  setIsValid?: any
+  setIsValid?: any;
+  setButtonStep?: any;
+  setZippedData?: any;
+  dslGuide?: boolean;
+  dropNewFile?: any;
+  setConvertData?: any;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -114,7 +119,11 @@ const Uploader = (props: IUploadProps) => {
     param,
     setSyntaxErrorObject,
     setShowErrorLog,
-    setIsValid
+    setIsValid,
+    setButtonStep,
+    setZippedData,
+    setConvertData,
+    dropNewFile
   } = props;
 
   const { service } = useServiceContext();
@@ -175,10 +184,10 @@ const Uploader = (props: IUploadProps) => {
     runOnMount: false,
   });
 
+
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
       delete errors[fieldProps.name]
-
       if (acceptedFiles?.[0]) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -294,6 +303,9 @@ const Uploader = (props: IUploadProps) => {
                           e.stopPropagation();
                           setMyFiles([]);
                           fieldProps.onChange("");
+                          setButtonStep(0)
+                          setZippedData(null)
+                          setConvertData(null)
                           return;
                           // }
                           // if (uploadQueryProps.error) {
@@ -353,18 +365,18 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${(acceptedFiles[0] || file)?.name} - ${(acceptedFiles[0] || file)?.size
+                  title={`${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.name} - ${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size
                     ? formatBytes((acceptedFiles[0] || file)?.size)
                     : ""
                     }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
-                  primary={<>{(acceptedFiles[0] || file)?.name}</>}
+                  primary={<>{( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.name}</>}
                   secondary={
                     <>
-                      {(acceptedFiles[0] || file)?.size
-                        ? formatBytes((acceptedFiles[0] || file)?.size)
+                      {(dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.size
+                        ? formatBytes((dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size)
                         : null}
                     </>
                   }

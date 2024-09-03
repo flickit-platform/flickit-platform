@@ -83,6 +83,11 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
+
+  const excelToDslDialogProps = useDialog({
+    context: { type: "convert"},
+  });
+
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
   return (
@@ -167,6 +172,7 @@ const ExpertGroupContainer = () => {
                     queryData={queryData}
                     hasAccess={editable}
                     dialogProps={createAssessmentKitDialogProps}
+                    excelToDslDialogProps={excelToDslDialogProps}
                     is_member={is_member}
                     is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
@@ -882,6 +888,7 @@ const AssessmentKitsList = (props: any) => {
     setAssessmentKitsCounts,
     is_member,
     is_expert,
+    excelToDslDialogProps
   } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
@@ -889,18 +896,22 @@ const AssessmentKitsList = (props: any) => {
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupAssessmentKits(args, config),
   });
+
   return (
     <>
       <Title
         inPageLink="assessment_kits"
         size="small"
         toolbar={
-          hasAccess && (
-            <CreateAssessmentKitButton
+        <Box sx={{display:"flex", gap:"8px"}}>
+          <ExcelToDslButton
+              dialogProps={excelToDslDialogProps}
+          />
+          {hasAccess && <CreateAssessmentKitButton
               onSubmitForm={assessmentKitQuery.query}
               dialogProps={dialogProps}
-            />
-          )
+          />}
+        </Box>
         }
       >
         <Trans i18nKey={"assessmentKits"} />
@@ -1000,6 +1011,20 @@ const CreateAssessmentKitButton = (props: {
   );
 };
 
+const ExcelToDslButton = (props: {
+  dialogProps: IDialogProps;
+}) =>{
+  const { dialogProps } = props;
+
+  return (
+      <>
+        <Button color={"info"} variant="outlined" size="small" onClick={dialogProps.openDialog}>
+          <Trans i18nKey="convertExcelToDsl" />
+        </Button>
+        <AssessmentKitCEFromDialog {...dialogProps} />
+      </>
+  )
+}
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
