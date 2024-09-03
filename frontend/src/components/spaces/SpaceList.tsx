@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Chip, CircularProgress, Typography } from "@mui/material";
+import {Avatar, Chip, CircularProgress, Tooltip, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -184,10 +184,13 @@ const SpaceCard = (props: ISpaceCardProps) => {
       </Box>
       <Box sx={{ display: "flex", ml: "auto" }}>
         <Box ml="auto" sx={{ ...styles.centerV }}>
+          <Tooltip title={<Trans i18nKey={"memberCount"} /> }>
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
-            <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-            <Typography fontWeight={"bold"}>{membersCount}</Typography>
+                <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+                <Typography fontWeight={"bold"}>{membersCount}</Typography>
           </Box>
+          </Tooltip>
+          <Tooltip title={<Trans i18nKey={"assessmentsCount"} /> }>
           <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
             <DescriptionRoundedIcon
               sx={{ mr: 0.5, opacity: 0.8 }}
@@ -195,6 +198,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             />
             <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
           </Box>
+          </Tooltip>
         </Box>
         <Box
           justifyContent={"flex-end"}
@@ -210,6 +214,8 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
+            <Tooltip title={<Trans i18nKey={"spaceSetting"} /> }>
+
             <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
               <IconButton
                 size="small"
@@ -219,18 +225,22 @@ const SpaceCard = (props: ISpaceCardProps) => {
                 <SettingsRoundedIcon />
               </IconButton>
             </Box>
-
-            <Actions
-              isActiveSpace={isActiveSpace}
-              dialogProps={dialogProps}
-              space={item}
-              fetchSpaces={fetchSpaces}
-              setUserInfo={setUserInfo}
-              isOwner={isOwner}
-              is_default_space_for_current_user={
-                is_default_space_for_current_user
-              }
-            />
+            </Tooltip>
+            <Tooltip title={"moreAction"}>
+              <Box>
+                <Actions
+                  isActiveSpace={isActiveSpace}
+                  dialogProps={dialogProps}
+                  space={item}
+                  fetchSpaces={fetchSpaces}
+                  setUserInfo={setUserInfo}
+                  isOwner={isOwner}
+                  is_default_space_for_current_user={
+                    is_default_space_for_current_user
+                  }
+                />
+              </Box>
+            </Tooltip>
           </>
         </Box>
       </Box>

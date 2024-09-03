@@ -62,6 +62,8 @@ import { Link as RouterLink } from "react-router-dom";
 import html2canvas from "html2canvas";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
+import Tooltip from "@mui/material/Tooltip";
+import { FaClipboard } from "react-icons/fa";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -992,17 +994,19 @@ const AssessmentExportContainer = () => {
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12} lg={6} xl={6}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleCopyClick("globalChart")}
-                    disabled={loadingId === "globalChart"}
-                  >
-                    {loadingId === "globalChart" ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      <ContentCopyOutlinedIcon fontSize="small" />
-                    )}
-                  </IconButton>
+                  <Tooltip title={"copy"}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopyClick("globalChart")}
+                      disabled={loadingId === "globalChart"}
+                    >
+                      {loadingId === "globalChart" ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        <ContentCopyOutlinedIcon fontSize="small" />
+                      )}
+                    </IconButton>
+                  </Tooltip>
                   <Box
                     sx={{ height: "370px" }}
                     ref={handleSetRef("globalChart")}
@@ -1036,17 +1040,20 @@ const AssessmentExportContainer = () => {
                   flexDirection="column"
                   alignItems="flex-end"
                 >
-                  <IconButton
-                    size="small"
-                    onClick={() => handleCopyClick("gauge")}
-                    disabled={loadingId === "gauge"}
-                  >
-                    {loadingId === "gauge" ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      <ContentCopyOutlinedIcon fontSize="small" />
-                    )}
-                  </IconButton>
+                  <Tooltip title={"copy"}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopyClick("gauge")}
+                      disabled={loadingId === "gauge"}
+                    >
+                      {loadingId === "gauge" ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        <ContentCopyOutlinedIcon fontSize="small" />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+
                   <Box ref={handleSetRef("gauge")} width="100%">
                     <Gauge
                       level_value={maturityLevel?.index ?? 0}
@@ -1125,19 +1132,21 @@ const AssessmentExportContainer = () => {
                         />
                       )}
                     </Box>
-                    <IconButton
-                      size="small"
-                      onClick={() =>
-                        handleCopyClick(subject?.id.toString() || "")
-                      }
-                      disabled={loadingId === subject?.id.toString()}
-                    >
-                      {loadingId === subject?.id.toString() ? (
-                        <CircularProgress size={24} />
-                      ) : (
-                        <ContentCopyOutlinedIcon fontSize="small" />
-                      )}
-                    </IconButton>
+                    <Tooltip title={"copy"}>
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          handleCopyClick(subject?.id.toString() || "")
+                        }
+                        disabled={loadingId === subject?.id.toString()}
+                      >
+                        {loadingId === subject?.id.toString() ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          <ContentCopyOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                   <TableContainer
                     component={Paper}
@@ -1222,23 +1231,26 @@ const AssessmentExportContainer = () => {
                                       document
                                     />
                                   </Box>
-                                  <IconButton
-                                    size="small"
-                                    onClick={() =>
-                                      handleCopyClick(
-                                        attribute?.id.toString() || ""
-                                      )
-                                    }
-                                    disabled={
-                                      loadingId === attribute?.id.toString()
-                                    } // Disable button when loading
-                                  >
-                                    {loadingId === attribute?.id.toString() ? (
-                                      <CircularProgress size={24} />
-                                    ) : (
-                                      <ContentCopyOutlinedIcon fontSize="small" />
-                                    )}
-                                  </IconButton>
+                                  <Tooltip title={"copy"}>
+                                    <IconButton
+                                      size="small"
+                                      onClick={() =>
+                                        handleCopyClick(
+                                          attribute?.id.toString() || ""
+                                        )
+                                      }
+                                      disabled={
+                                        loadingId === attribute?.id.toString()
+                                      } // Disable button when loading
+                                    >
+                                      {loadingId ===
+                                      attribute?.id.toString() ? (
+                                        <CircularProgress size={24} />
+                                      ) : (
+                                        <ContentCopyOutlinedIcon fontSize="small" />
+                                      )}
+                                    </IconButton>
+                                  </Tooltip>
                                 </Box>
 
                                 {attributesData[attribute?.id?.toString()] ? (
