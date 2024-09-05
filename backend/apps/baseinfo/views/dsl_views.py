@@ -14,7 +14,6 @@ from assessmentplatform.settings import EXCEL_SAMPLE_URL
 
 class DSLConversionApi(APIView):
     permission_classes = [IsAuthenticated]
-
     parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
@@ -48,6 +47,8 @@ class DSLConversionApi(APIView):
 
             except ValueError as ve:
                 return Response({"error": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+            except RuntimeError as re:
+                return Response({"error": str(re)}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 return Response({"error": f"An unexpected error occurred: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
