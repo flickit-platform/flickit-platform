@@ -104,7 +104,6 @@ const SUbjectAttributeCard = (props: any) => {
                 <Title
                   sx={{
                     opacity: 0.95,
-                    letterSpacing: ".05em",
                     ml: { xs: 0.75, sm: 1.5, md: 2 },
                   }}
                 >
@@ -492,7 +491,6 @@ export const AttributeStatusBar = (props: any) => {
           zIndex: 1,
           left: "12px",
           opacity: 0.8,
-          letterSpacing: { xs: ".09em", sm: ".15em" },
         }}
         textTransform="uppercase"
         variant="h6"
@@ -593,7 +591,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
-                letterSpacing=".15em"
                 sx={{
                   borderLeft: `2px solid ${
                     is_passed ? statusColor : "#808080"
@@ -908,7 +905,6 @@ export const MaturityLevelDetailsBar = (props: any) => {
           zIndex: 1,
           left: "12px",
           opacity: 0.8,
-          letterSpacing: { xs: ".09em", sm: ".15em" },
           fontSize: { xs: "12px", sm: "16px" },
           color: theme.palette.getContrastText(color),
         }}
