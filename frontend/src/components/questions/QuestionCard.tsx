@@ -29,7 +29,7 @@ import {
 } from "@/providers/QuestionProvider";
 import { IAnswerHistory, IQuestionInfo, TAnswer, TQuestionsInfo } from "@types";
 import { Trans } from "react-i18next";
-import { LoadingButton } from "@mui/lab";
+import { LoadingButton, TabPanel } from "@mui/lab";
 import { useServiceContext } from "@providers/ServiceProvider";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
@@ -44,6 +44,7 @@ import {
   FormControl,
   Grid,
   TextareaAutosize,
+  Tabs,
 } from "@mui/material";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { styles } from "@styles";
@@ -111,13 +112,16 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const [confidenceLebels, setConfidenceLebels] = useState<any>([]);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
+  const [activeTab, setActiveTab] = useState(0); // State to track the active tab
 
   useEffect(() => {
     return () => {
       abortController.current.abort();
     };
   }, []);
+
   const is_farsi = languageDetector(title);
+
   useEffect(() => {
     setDocumentTitle(
       `${t("question")} ${questionIndex}: ${title}`,
@@ -134,13 +138,25 @@ export const QuestionCard = (props: IQuestionCardProps) => {
       );
     }
   }, [title, answer?.confidenceLevel]);
+
   const ConfidenceListQueryData = useQuery({
     service: (args = {}, config) =>
       service.fetchConfidenceLevelsList(args, config),
     toastError: false,
   });
+
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
+  const [value, setValue] = useState("history");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Box>
       <Paper
@@ -165,45 +181,46 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         elevation={3}
       >
         <Box>
-          <Box>
-            <Typography
-              variant="subLarge"
-              sx={
-                is_farsi
-                  ? { color: "white", opacity: 0.65, direction: "rtl" }
-                  : { color: "white", opacity: 0.65 }
-              }
-            >
-              <Trans i18nKey="question" />
-            </Typography>
-            <Typography
-              variant="h4"
-              letterSpacing={is_farsi ? "0" : ".05em"}
-              sx={
-                is_farsi
-                  ? {
+          <Typography
+            variant="subLarge"
+            sx={
+              is_farsi
+                ? { color: "white", opacity: 0.65, direction: "rtl" }
+                : { color: "white", opacity: 0.65 }
+            }
+          >
+            <Trans i18nKey="question" />
+          </Typography>
+          <Typography
+            variant="h4"
+            letterSpacing={is_farsi ? "0" : ".05em"}
+            sx={
+              is_farsi
+                ? {
                     pt: 0.5,
                     fontSize: "2rem",
                     fontFamily: { xs: "Vazirmatn", lg: "Vazirmatn" },
                     direction: "rtl",
                   }
-                  : {
+                : {
                     pt: 0.5,
                     fontSize: "2rem",
                   }
-              }
-            >
-              {title.split("\n").map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </Typography>
-          </Box>
+            }
+          >
+            {title.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </Typography>
+
           <Box sx={{ direction: `${is_farsi ? "rtl" : "ltr"}` }}>
             {hint && <QuestionGuide hint={hint} />}
           </Box>
+
+          {/* Answer template */}
           <AnswerTemplate
             abortController={abortController}
             questionInfo={questionInfo}
@@ -219,137 +236,44 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           />
         </Box>
       </Paper>
-      <Box sx={{ px: { xs: 2, sm: 0 } }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            background: `${notApplicable ? "#273248" : "#000000cc"}`,
-            flexDirection: { xs: "column", md: "row" },
-            borderRadius: " 0 0 8px 8px ",
-            px: { xs: 1.75, sm: 2, md: 2.5 },
-            py: { xs: 1.5, sm: 2.5 },
-          }}
-        >
-          <SubmitOnSelectCheckBox
-            disabled={!questionsInfo?.permissions?.answerQuestion}
-          />
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: { xs: "column", md: "row" },
-            }}
+      <TabContext value={value}>
+        <Box sx={{ px: { xs: 2, sm: 0 }, mt: 2 }}>
+          <TabList
+            onChange={handleChange}
+            scrollButtons="auto"
+            variant="scrollable"
           >
-            <QueryData
-              {...ConfidenceListQueryData}
-              loading={false}
-              error={false}
-              render={(data) => {
-                const labels = data.confidenceLevels;
-                setConfidenceLebels(labels)
-                return (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {selcetedConfidenceLevel !== null ? (
-                      <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography
-                          sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
-                        >
-                          <Trans
-                            i18nKey={
-                              questionsInfo?.permissions?.answerQuestion
-                                ? "selcetConfidenceLevel"
-                                : "confidenceLevel"
-                            }
-                          />
-                          <Typography
-                            fontWeight={900}
-                            sx={{ borderBottom: "1px solid", mx: 1 }}
-                          >
-                            {labels[selcetedConfidenceLevel - 1]?.title}
-                          </Typography>
-                        </Typography>
-                      </Box>
-                    ) : (
-                      <Box
-                        sx={{
-                          mr: 2,
-                          // color: "#fff",
-                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
-
-                        }}
-                      >
-                        <Typography>
-                          {disabledConfidence ? (
-                            <Trans i18nKey={"selectConfidenceLevel"} />
-                          ) : (
-                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
-                          )}
-                        </Typography>
-                      </Box>
-                    )}
-                    <Rating
-                      // disabled={!questionsInfo?.permissions?.answerQuestion}
-                      disabled={disabledConfidence}
-                      value={
-                        selcetedConfidenceLevel !== null
-                          ? selcetedConfidenceLevel
-                          : null
-                      }
-                      size="medium"
-                      onChange={(event, newValue) => {
-                        dispatch(
-                          questionActions.setSelectedConfidenceLevel(newValue)
-                        );
-                      }}
-                      icon={
-                        <RadioButtonCheckedRoundedIcon
-                          sx={{ mx: 0.25, color: "#42a5f5" }}
-                          fontSize="inherit"
-                        />
-                      }
-                      emptyIcon={
-                        <RadioButtonUncheckedRoundedIcon
-                          style={{ opacity: 0.55 }}
-                          sx={{ mx: 0.25, color: "#fff" }}
-                          fontSize="inherit"
-                        />
-                      }
-                    />
-                  </Box>
-                );
-              }}
+            <Tab
+              sx={{ textTransform: "none", ...theme.typography.titleLarge }}
+              label={
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Trans i18nKey="Evidences" />
+                </Box>
+              }
+              value="evidences"
             />
-          </Box>
+            <Tab
+              sx={{ textTransform: "none", ...theme.typography.titleLarge }}
+              label={
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Trans i18nKey="answerHistory" />
+                </Box>
+              }
+              value="history"
+            />
+          </TabList>
         </Box>
-        {questionsInfo?.permissions?.viewAnswerHistory && (
-          <Box
-            display={"flex"}
-            justifyContent="space-between"
-            sx={{
-              flexDirection: { xs: "column", md: "row" },
-              alignItems: { xs: "stretch", md: "flex-end" },
-            }}
-          >
+        <TabPanel value="evidences">
+          <Box mt={2}>
+            <AnswerDetails questionInfo={questionInfo} type="evidence" />
+          </Box>
+        </TabPanel>
+        <TabPanel value="history">
+          <Box mt={2}>
             <AnswerDetails questionInfo={questionInfo} type="history" />
           </Box>
-        )}
-        <Box
-          display={"flex"}
-          justifyContent="space-between"
-          sx={{
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: { xs: "stretch", md: "flex-end" },
-          }}
-        >
-          <AnswerDetails questionInfo={questionInfo} type="evidence" />
-        </Box>
-      </Box>
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 };
@@ -365,7 +289,7 @@ const AnswerTemplate = (props: {
   is_farsi: boolean | undefined;
   setDisabledConfidence: any;
   selcetedConfidenceLevel: any;
-  confidenceLebels: any
+  confidenceLebels: any;
 }) => {
   const { submitOnAnswerSelection, isSubmitting, evidences } =
     useQuestionContext();
@@ -380,7 +304,7 @@ const AnswerTemplate = (props: {
     is_farsi,
     setDisabledConfidence,
     selcetedConfidenceLevel,
-    confidenceLebels
+    confidenceLebels,
   } = props;
   const { options, answer } = questionInfo;
   const { total_number_of_questions, permissions } = questionsInfo;
@@ -449,7 +373,8 @@ const AnswerTemplate = (props: {
           answer: {
             selectedOption: value,
             isNotApplicable: notApplicable,
-            confidenceLevel: confidenceLebels[selcetedConfidenceLevel - 1] ?? null,
+            confidenceLevel:
+              confidenceLebels[selcetedConfidenceLevel - 1] ?? null,
           } as TAnswer,
         })
       );
@@ -479,8 +404,8 @@ const AnswerTemplate = (props: {
     if (
       submitOnAnswerSelection &&
       value &&
-      changeHappened.current
-      && selcetedConfidenceLevel
+      changeHappened.current &&
+      selcetedConfidenceLevel
     ) {
       submitQuestion();
     }
@@ -620,9 +545,9 @@ const AnswerTemplate = (props: {
           sx={
             is_farsi
               ? {
-                fontSize: "1.2rem",
-                mr: "auto",
-              }
+                  fontSize: "1.2rem",
+                  mr: "auto",
+                }
               : { fontSize: "1.2rem", ml: "auto" }
           }
           onClick={submitQuestion}
@@ -699,91 +624,60 @@ const AnswerDetails = ({
   };
 
   return (
-    <Box mt={2} width="100%">
-      {type === "history" && data.length === 0 ? (
-        <></>
-      ) : (
-        <Accordion
-          disableGutters
-          square
-          expanded={expanded}
-          // onChange={handleAccordionChange}
-          sx={{ background: "transparent", boxShadow: "none" }}
+    <Box mt={2} width="100%" my={4}>
+      {type === "evidence" ? (
+        <Box
+          display="flex"
+          alignItems={"baseline"}
+          sx={{
+            flexDirection: "column",
+            px: 2,
+            width: "100%",
+            alignItems: "center",
+            wordBreak: "break-word",
+          }}
         >
-          <AccordionSummary
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              padding: 0,
-              width: "fit-content",
-            }}
-            onClick={handleAccordionChange}
-          >
-            <Title px={1} size="small">
-              <Trans
-                i18nKey={
-                  type === "evidence" ? "answerEvidences" : "answerHistory"
-                }
-              />
-            </Title>
-            <IconButton>
-              {expanded ? <ExpandLess /> : <ExpandMore />}
-            </IconButton>
-          </AccordionSummary>
-          <Divider sx={{ width: "100%", marginBottom: 2 }} />
-          <AccordionDetails>
-            {type === "evidence" ? (
-              <Box
-                display="flex"
-                alignItems={"baseline"}
-                sx={{
-                  flexDirection: "column",
-                  px: 2,
-                  width: "100%",
-                  alignItems: "center",
-                  wordBreak: "break-word",
-                }}
-              >
-                <Evidence
-                  {...dialogProps}
-                  questionInfo={questionInfo}
-                  evidencesQueryData={queryData}
-                />
-              </Box>
-            ) : (
-              data.length > 0 && (
-                <Box
-                  display="flex"
-                  alignItems={"baseline"}
-                  sx={{
-                    maxHeight: "46vh",
-                    overflow: "auto",
-                    flexDirection: "column",
-                    width: "100%",
-                    alignItems: "center",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {data.map((item: IAnswerHistory, index: number) => (
-                    <Box key={index} width="100%">
-                      <AnswerHistoryItem
-                        item={item}
-                        questionInfo={questionInfo}
-                      />
-                      <Divider sx={{ width: "100%", marginBlock: 2 }} />
-                    </Box>
-                  ))}
-                  {queryData?.data?.total >
-                    queryData?.data?.size * (queryData?.data?.page + 1) && (
-                      <Button onClick={handleShowMore}>
-                        <Trans i18nKey="showMore" />
-                      </Button>
-                    )}
-                </Box>
-              )
-            )}
-          </AccordionDetails>
-        </Accordion>
+          <Evidence
+            {...dialogProps}
+            questionInfo={questionInfo}
+            evidencesQueryData={queryData}
+          />
+        </Box>
+      ) : data.length > 0 ? (
+        <Box
+          display="flex"
+          alignItems={"baseline"}
+          sx={{
+            maxHeight: "46vh",
+            overflow: "auto",
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
+            wordBreak: "break-word",
+          }}
+        >
+          {data.map((item: IAnswerHistory, index: number) => (
+            <Box key={index} width="100%">
+              <AnswerHistoryItem item={item} questionInfo={questionInfo} />
+              <Divider sx={{ width: "100%", marginBlock: 2 }} />
+            </Box>
+          ))}
+          {queryData?.data?.total >
+            queryData?.data?.size * (queryData?.data?.page + 1) && (
+            <Button onClick={handleShowMore}>
+              <Trans i18nKey="showMore" />
+            </Button>
+          )}
+        </Box>
+      ) : (
+        <Box sx={{ ...styles.centerCVH }} textAlign="center" >
+          <Typography variant="displayMedium" color="#6C8093">
+            <Trans i18nKey="emptyAnswerHistoryTitle" />
+          </Typography>
+          <Typography variant="bodyLarge" color="#6C8093">
+            <Trans i18nKey="emptyAnswerHistoryDescription" />
+          </Typography>
+        </Box>
       )}
     </Box>
   );
@@ -906,7 +800,7 @@ const AnswerHistoryItem = (props: any) => {
           {format(
             new Date(
               new Date(item.creationTime).getTime() -
-              new Date(item.creationTime).getTimezoneOffset() * 60000
+                new Date(item.creationTime).getTimezoneOffset() * 60000
             ),
             "yyyy/MM/dd HH:mm"
           ) +
@@ -1314,10 +1208,10 @@ const Evidence = (props: any) => {
                     is_farsi
                       ? { position: "absolute", top: 15, left: 5 }
                       : {
-                        position: "absolute",
-                        top: 15,
-                        right: 5,
-                      }
+                          position: "absolute",
+                          top: 15,
+                          right: 5,
+                        }
                   }
                 ></Grid>
               </Grid>
@@ -1658,31 +1552,31 @@ const CreateEvidenceAttachment = (props: any) => {
             >
               {loadingFile
                 ? skeleton.map((item, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      animation="wave"
-                      variant="rounded"
-                      width={40}
-                      height={40}
-                    />
-                  );
-                })
+                    return (
+                      <Skeleton
+                        key={index}
+                        animation="wave"
+                        variant="rounded"
+                        width={40}
+                        height={40}
+                      />
+                    );
+                  })
                 : attachments.map((item, index) => {
-                  return (
-                    <FileIcon
-                      key={index}
-                      setEvidenceId={setEvidenceId}
-                      setExpandedDeleteAttachmentDialog={
-                        setExpandedDeleteAttachmentDialog
-                      }
-                      downloadFile={downloadFile}
-                      evidenceId={evidenceJustCreatedId}
-                      item={item}
-                      evidenceBG={pallet}
-                    />
-                  );
-                })}
+                    return (
+                      <FileIcon
+                        key={index}
+                        setEvidenceId={setEvidenceId}
+                        setExpandedDeleteAttachmentDialog={
+                          setExpandedDeleteAttachmentDialog
+                        }
+                        downloadFile={downloadFile}
+                        evidenceId={evidenceJustCreatedId}
+                        item={item}
+                        evidenceBG={pallet}
+                      />
+                    );
+                  })}
             </Grid>
             {attachments.length == 5 && (
               <Box>
@@ -2037,10 +1931,10 @@ const CreateDropZone = (props: any) => {
             <Typography sx={{ ...theme.typography.titleSmall }}>
               {dropZoneData[0]?.name.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
-                "..." +
-                dropZoneData[0]?.name?.substring(
-                  dropZoneData[0]?.name.lastIndexOf(".")
-                )
+                  "..." +
+                  dropZoneData[0]?.name?.substring(
+                    dropZoneData[0]?.name.lastIndexOf(".")
+                  )
                 : dropZoneData[0]?.name}
             </Typography>
           </Box>
@@ -2435,10 +2329,10 @@ const EvidenceDetail = (props: any) => {
                         is_farsi
                           ? { position: "absolute", top: 15, left: 5 }
                           : {
-                            position: "absolute",
-                            top: 15,
-                            right: 5,
-                          }
+                              position: "absolute",
+                              top: 15,
+                              right: 5,
+                            }
                       }
                     ></Grid>
                   </Grid>
@@ -2567,9 +2461,9 @@ const EvidenceDetail = (props: any) => {
                         style={
                           expandedEvidenceBox
                             ? {
-                              rotate: "180deg",
-                              transition: "all .2s ease",
-                            }
+                                rotate: "180deg",
+                                transition: "all .2s ease",
+                              }
                             : { rotate: "0deg", transition: "all .2s ease" }
                         }
                         src={arrowBtn}
@@ -2583,9 +2477,9 @@ const EvidenceDetail = (props: any) => {
                         expandedEvidenceBox
                           ? {}
                           : {
-                            maxHeight: 0,
-                            overflow: "hidden",
-                          }
+                              maxHeight: 0,
+                              overflow: "hidden",
+                            }
                       }
                       sx={{
                         transition: "all .2s ease",
@@ -2599,31 +2493,31 @@ const EvidenceDetail = (props: any) => {
                       >
                         {loadingFile
                           ? skeleton.map((item, index) => {
-                            return (
-                              <Skeleton
-                                key={index}
-                                animation="wave"
-                                variant="rounded"
-                                width={40}
-                                height={40}
-                              />
-                            );
-                          })
+                              return (
+                                <Skeleton
+                                  key={index}
+                                  animation="wave"
+                                  variant="rounded"
+                                  width={40}
+                                  height={40}
+                                />
+                              );
+                            })
                           : attachments.map((item, index) => {
-                            return (
-                              <FileIcon
-                                evidenceId={id}
-                                setEvidenceId={setEvidenceId}
-                                item={item}
-                                setExpandedDeleteAttachmentDialog={
-                                  setExpandedDeleteAttachmentDialog
-                                }
-                                evidenceBG={evidenceBG}
-                                downloadFile={downloadFile}
-                                key={index}
-                              />
-                            );
-                          })}
+                              return (
+                                <FileIcon
+                                  evidenceId={id}
+                                  setEvidenceId={setEvidenceId}
+                                  item={item}
+                                  setExpandedDeleteAttachmentDialog={
+                                    setExpandedDeleteAttachmentDialog
+                                  }
+                                  evidenceBG={evidenceBG}
+                                  downloadFile={downloadFile}
+                                  key={index}
+                                />
+                              );
+                            })}
                         {attachments.length < 5 && (
                           <>
                             <Grid
@@ -2936,10 +2830,10 @@ const MyDropzone = (props: any) => {
             <Typography sx={{ ...theme.typography.titleMedium }}>
               {dropZoneData[0]?.name.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
-                "..." +
-                dropZoneData[0]?.name?.substring(
-                  dropZoneData[0]?.name?.lastIndexOf(".")
-                )
+                  "..." +
+                  dropZoneData[0]?.name?.substring(
+                    dropZoneData[0]?.name?.lastIndexOf(".")
+                  )
                 : dropZoneData[0]?.name}
             </Typography>
           </Box>
@@ -3377,20 +3271,20 @@ const QuestionGuide = (props: any) => {
               <Typography variant="body2">
                 {hint.startsWith("\n")
                   ? hint
-                    .substring(1)
-                    .split("\n")
-                    .map((line: string, index: number) => (
+                      .substring(1)
+                      .split("\n")
+                      .map((line: string, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : hint.split("\n").map((line: string, index: number) => (
                       <React.Fragment key={index}>
                         {line}
                         <br />
                       </React.Fragment>
-                    ))
-                  : hint.split("\n").map((line: string, index: number) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
+                    ))}
               </Typography>
             </Box>
           </Box>

@@ -174,7 +174,7 @@ export const theme = createTheme({
     displayMedium: {
       fontFamily: primaryFontFamily,
       fontSize: "1.75rem",
-      fontWeight: "lighter",
+      fontWeight: "Bold",
       lineHeight: "2.25rem",
       letterSpacing: "0",
     },
