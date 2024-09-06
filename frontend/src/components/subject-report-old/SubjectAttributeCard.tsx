@@ -183,8 +183,29 @@ const SUbjectAttributeCard = (props: any) => {
                   </Box>
                 ) : (
                   editable && (
-                    <Box display="flex" alignItems="center" gap="4px" ml={2}>
-                      <Typography variant="titleMedium">
+                    <Box sx={{ ...styles.centerV }} gap={0.5} my={1}>
+                      <Box
+                        sx={{
+                          zIndex: 1,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          ml: { xs: 0.75, sm: 0.75, md: 1 },
+                        }}
+                      >
+                        <Typography
+                          variant="labelSmall"
+                          sx={{
+                            backgroundColor: "#d85e1e",
+                            color: "white",
+                            padding: "0.35rem 0.35rem",
+                            borderRadius: "4px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Trans i18nKey={"warning"} />
+                        </Typography>
+                      </Box>{" "}
+                      <Typography variant="titleMedium" fontWeight={400}>
                         <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />
                       </Typography>
                       <Typography
@@ -196,9 +217,9 @@ const SUbjectAttributeCard = (props: any) => {
                           textDecoration: "none",
                         }}
                       >
-                        questions
+                        the assessment question
                       </Typography>
-                      <Typography variant="titleMedium">
+                      <Typography variant="titleMedium" fontWeight={400}>
                         <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
                       </Typography>
                     </Box>
@@ -439,8 +460,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-      ? `${cl}%`
-      : "0%";
+    ? `${cl}%`
+    : "0%";
   return (
     <Box
       height={"38px"}
@@ -574,8 +595,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 fontWeight={"bold"}
                 letterSpacing=".15em"
                 sx={{
-                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
-                    }`,
+                  borderLeft: `2px solid ${
+                    is_passed ? statusColor : "#808080"
+                  }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -789,8 +811,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                         answerIsNotApplicable
                                           ? "NA"
                                           : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"
+                                          ? `${answerOptionIndex}.${answerOptionTitle}`
+                                          : "---"
                                       }
                                     >
                                       <Box sx={{ width: "25%" }}>
@@ -801,8 +823,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           {answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"}
+                                            ? `${answerOptionIndex}.${answerOptionTitle}`
+                                            : "---"}
                                         </Typography>
                                       </Box>
                                     </Tooltip>

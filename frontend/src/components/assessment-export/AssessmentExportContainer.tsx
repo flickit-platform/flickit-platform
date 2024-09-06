@@ -1271,27 +1271,53 @@ const AssessmentExportContainer = () => {
                                   </Box>
                                 ) : (
                                   editable && (
-                                    <Typography
-                                      variant="titleMedium"
-                                      fontWeight={400}
-                                      color="#243342"
+                                    <Box
+                                      sx={{ ...styles.centerV }}
+                                      gap={0.5}
+                                      my={1}
                                     >
-                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
                                       <Box
-                                        component={RouterLink}
-                                        to={`./../questionnaires?subject_pk=${subject?.id}`}
                                         sx={{
-                                          textDecoration: "none",
-                                          color: "#2D80D2",
+                                          zIndex: 1,
+                                          display: "flex",
+                                          justifyContent: "flex-start",
+                                          ml: { xs: 0.75, sm: 0.75, md: 1 },
                                         }}
                                       >
-                                        <Typography variant="titleMedium">
-                                          questions
+                                        <Typography
+                                          variant="labelSmall"
+                                          sx={{
+                                            backgroundColor: "#d85e1e",
+                                            color: "white",
+                                            padding: "0.35rem 0.35rem",
+                                            borderRadius: "4px",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          <Trans i18nKey={"warning"} />
                                         </Typography>
-                                      </Box>{" "}
-                                      <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
-                                      .
-                                    </Typography>
+                                      </Box>
+                                      <Typography
+                                        variant="titleMedium"
+                                        fontWeight={400}
+                                        color="#243342"
+                                      >
+                                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedFirstSection" />{" "}
+                                        <Box
+                                          component={RouterLink}
+                                          to={`./../questionnaires?subject_pk=${subject?.id}`}
+                                          sx={{
+                                            textDecoration: "none",
+                                            color: "#2D80D2",
+                                          }}
+                                        >
+                                          <Typography variant="titleMedium">
+                                            the assessment question
+                                          </Typography>
+                                        </Box>{" "}
+                                        <Trans i18nKey="questionsArentCompleteSoAICantBeGeneratedSecondSection" />
+                                      </Typography>
+                                    </Box>
                                   )
                                 )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
