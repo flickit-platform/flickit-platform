@@ -392,7 +392,7 @@ const SubjectStatus = (
             maturity_level_status={maturity_level?.title ?? ""}
             level_value={maturity_level?.index ?? 0}
             hideGuidance={true}
-            height={getNumberBaseOnScreen(240, 240, 150, 150, 150)}
+            height={getNumberBaseOnScreen(240, 240, 160, 160, 160)}
             maturity_status_guide={t("subjectMaturityLevelIs")}
             maturity_status_guide_variant="titleSmall"
           />
