@@ -46,11 +46,11 @@ class DSLConversionApi(APIView):
                 return response
 
             except ValueError as ve:
-                return Response({"error": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
             except RuntimeError as re:
-                return Response({"error": str(re)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": str(re)}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
-                return Response({"error": f"An unexpected error occurred: {str(e)}"},
+                return Response({"message": f"An unexpected error occurred: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
