@@ -2253,7 +2253,6 @@ const EvidenceDetail = (props: any) => {
       }
     } catch (e) {
       const err = e as ICustomError;
-      setLoadingEvidence(false)
       toastError(err?.response?.data.description[0]);
     } finally {
       formMethods.reset();
