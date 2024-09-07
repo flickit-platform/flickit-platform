@@ -1038,12 +1038,10 @@ const OnHoverInputTitleSetting = (props: any) => {
   };
   const { data, editable, infoQuery, formMethods, color } = props;
   const [hasError, setHasError] = useState<boolean>(false);
-  const [error, setError] = useState<any>({});
   const [inputData, setInputData] = useState<string>(data);
   const handleCancel = () => {
     setShow(false);
     setInputData(data);
-    setError({});
     setHasError(false);
   };
   const { assessmentId } = useParams();
@@ -1066,16 +1064,15 @@ const OnHoverInputTitleSetting = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
+      setHasError(true);
       if (Array.isArray(err.response?.data?.message)) {
         toastError(err.response?.data?.message[0]);
       } else if (
         err.response?.data &&
         err.response?.data.hasOwnProperty("message")
       ) {
-        toastError(error);
+        toastError(err.response?.data?.message);
       }
-      setError(err);
-      setHasError(true);
     }
   };
   const inputProps: React.HTMLProps<HTMLInputElement> = {
