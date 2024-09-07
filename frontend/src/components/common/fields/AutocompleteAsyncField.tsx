@@ -104,7 +104,6 @@ const AutocompleteBaseField = (
   props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">
 ) => {
   const {
-    clearOnBlur = true,
     editable,
     field,
     formatRequest = (request) => request,
@@ -239,10 +238,9 @@ const AutocompleteBaseField = (
 
   const handleBlur = () => {
     if (
-      !clearOnBlur &&
       inputValue &&
       hasAddBtn &&
-      !options.some((opt) => getOptionLabel(opt) === inputValue)
+      !optionsData.some((opt) => getOptionLabel(opt) === inputValue)
     ) {
       createSpaceQuery();
     }
@@ -259,7 +257,7 @@ const AutocompleteBaseField = (
       open={open}
       onOpen={handleOpen}
       onClose={handleClose}
-      clearOnBlur={clearOnBlur}
+      clearOnBlur={!hasAddBtn}
       loadingText={
         options.length > 5 ? <LoadingComponent options={options} /> : undefined
       }
