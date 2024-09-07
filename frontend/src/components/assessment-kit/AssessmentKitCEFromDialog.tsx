@@ -23,6 +23,7 @@ import Divider from "@mui/material/Divider";
 import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
 import {useQuery} from "@utils/useQuery";
+import {LoadingButton} from "@mui/lab";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -66,10 +67,15 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     setButtonStep(0)
     setZippedData(null)
     setConvertData(null)
+    setIsValid(false)
   };
     const fetchSampleExecl = useQuery({
         service: (args, config) =>
             service.fetchExcelToDSLSampleFile(args, config),
+    });
+    const convertExcelToDSLFile = useQuery({
+        service: (args, config) =>
+            service.convertExcelToDSLFile(args,config)
     });
 
   useEffect(() => {
@@ -133,7 +139,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const handleConvertDsl = async () => {
       const {args,config} = convertData
       let fileName = args?.file?.name.substring(0, args?.file?.name.lastIndexOf('.'))
-      service.convertExcelToDSLFile(args,config).then((res: any) =>{
+      convertExcelToDSLFile.query(args,config).then((res: any) =>{
           const {data} = res
           const zipfile = new Blob(
               [data],
@@ -322,14 +328,15 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         <Button onClick={close}>
           <Trans i18nKey="cancel" />
         </Button>
-          {type == "convert" && buttonStep == 0 &&  <Button
+          {type == "convert" && buttonStep == 0 &&  <LoadingButton
               sx={{ml: 2}}
               variant="contained"
               onClick={handleConvertDsl}
               disabled={!isValid}
+              loading={convertExcelToDSLFile.loading}
           >
               <Trans i18nKey="convertToDsl"/>
-          </Button>}
+          </LoadingButton>}
           {type == "convert" && buttonStep == 1 && <Button
               sx={{ml: 2}}
               variant="contained"
