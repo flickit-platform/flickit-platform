@@ -85,7 +85,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-          textAlign: "center",
+          textAlign: "left",
         }}
       >
         <Typography sx={{ color: "#0A2342" }}>
