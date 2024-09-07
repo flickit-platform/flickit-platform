@@ -16,19 +16,6 @@ class DSLConversionApi(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
-    @swagger_auto_schema(
-        operation_description="Convert Excel file to DSL and return as a zipped file",
-        request_body=ExcelFileUploadSerializer,
-        responses={
-            200: openapi.Response(
-                description="A zip file containing the DSL files",
-                content_type='application/zip',
-                schema=openapi.Schema(type=openapi.TYPE_FILE)
-            ),
-            400: "Bad Request",
-            500: "Internal Server Error",
-        },
-    )
     def post(self, request):
         serializer = ExcelFileUploadSerializer(data=request.data)
 
@@ -47,14 +34,14 @@ class DSLConversionApi(APIView):
 
             except ValueError as ve:
                 return Response({"message": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
-            except RuntimeError as re:
-                return Response({"message": str(re)}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 return Response({"message": f"An unexpected error occurred: {str(e)}"},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            errors = serializer.errors
+            # Extract the first error message from the error dictionary
+            first_error_message = list(errors.values())[0][0] if errors else "Invalid input."
+            return Response({"message": first_error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 class DSLConversionFileSampleApi(APIView):
     permission_classes = [IsAuthenticated]
