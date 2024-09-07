@@ -643,7 +643,7 @@ const DetailExpend = (props: any) => {
           width: "100%",
         }}
       >
-        {expendedDetail ? (
+        {!expendedDetail ? (
           <Typography
             style={{
               ...theme.typography.labelSmall,
