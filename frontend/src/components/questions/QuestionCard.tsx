@@ -96,6 +96,7 @@ import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
 import { downloadFile } from "@utils/downloadFile";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -862,6 +863,7 @@ const Evidence = (props: any) => {
   const [value, setValue] = React.useState("POSITIVE");
   const [createAttachment, setCreateAttachment] = useState(false);
   const [changeInput, setChangeInput] = useState(false);
+  const [loadingEvidence, setLoadingEvidence] = useState(false);
   const [evidenceJustCreatedId, setEvidenceJustCreatedId] =
     useState<string>("");
   const [evidenceBG, setEvidenceBG] = useState<any>({
@@ -1270,32 +1272,40 @@ const Evidence = (props: any) => {
         </form>
       </FormProvider>
       <Box mt={3}>
-        {evidencesData &&
-          evidencesData.map((item: any, index: number) => (
-            <EvidenceDetail
-              key={index}
-              setValue={setValue}
-              item={item}
-              changeInput={changeInput}
-              evidencesData={evidencesData}
-              setEvidencesData={setEvidencesData}
-              setExpandedDeleteDialog={setExpandedDeleteDialog}
-              setExpandedDeleteAttachmentDialog={
-                setExpandedDeleteAttachmentDialog
-              }
-              setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
-              expandedAttachmentsDialogs={expandedAttachmentsDialogs}
-              setEvidenceId={setEvidenceId}
-              evidenceId={evidenceId}
-              evidencesQueryData={evidencesQueryData}
-              questionInfo={questionInfo}
-              assessmentId={assessmentId}
-              fetchAttachments={fetchAttachments}
-              attachmentData={attachmentData}
-              setAttachmentData={setAttachmentData}
-              deleteAttachment={deleteAttachment}
-            />
-          ))}
+          {loadingEvidence
+              ?
+              <Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>
+                  <CircularProgress size="3.25rem" />
+              </Box>
+              :
+        evidencesData &&
+            evidencesData.map((item: any, index: number) => (
+              <EvidenceDetail
+                key={index}
+                setValue={setValue}
+                item={item}
+                setLoadingEvidence={setLoadingEvidence}
+                changeInput={changeInput}
+                evidencesData={evidencesData}
+                setEvidencesData={setEvidencesData}
+                setExpandedDeleteDialog={setExpandedDeleteDialog}
+                setExpandedDeleteAttachmentDialog={
+                  setExpandedDeleteAttachmentDialog
+                }
+                setExpandedAttachmentsDialogs={setExpandedAttachmentsDialogs}
+                expandedAttachmentsDialogs={expandedAttachmentsDialogs}
+                setEvidenceId={setEvidenceId}
+                evidenceId={evidenceId}
+                evidencesQueryData={evidencesQueryData}
+                questionInfo={questionInfo}
+                assessmentId={assessmentId}
+                fetchAttachments={fetchAttachments}
+                attachmentData={attachmentData}
+                setAttachmentData={setAttachmentData}
+                deleteAttachment={deleteAttachment}
+              />
+            ))
+          }
         <EvidenceAttachmentsDialogs
           expanded={expandedAttachmentsDialogs}
           onClose={() =>
@@ -2077,6 +2087,7 @@ const EvidenceDetail = (props: any) => {
     evidenceId,
     changeInput,
     evidencesData,
+    setLoadingEvidence
   } = props;
   const LIMITED = 200;
   const [valueCount, setValueCount] = useState("");
@@ -2139,6 +2150,7 @@ const EvidenceDetail = (props: any) => {
       toastError(err?.response?.data.description[0]);
     } finally {
       formMethods.reset();
+      setLoadingEvidence(false)
     }
   };
 
@@ -2158,6 +2170,7 @@ const EvidenceDetail = (props: any) => {
   };
 
   const EditEvidence = () => {
+      setLoadingEvidence(true)
     if (submitRef?.current) {
       submitRef?.current.click();
     }
