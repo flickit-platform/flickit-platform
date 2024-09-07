@@ -44,6 +44,7 @@ import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
+import { secondaryFontFamily } from "@/config/theme";
 
 const drawerWidth = 240;
 
@@ -194,6 +195,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                 fontWeight: 700,
                 lineHeight: "24px",
                 textAlign: "left",
+                fontFamily: secondaryFontFamily,
               }}
             >
               <IconButton onClick={handleBackClick}>
@@ -241,7 +243,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                 }}
               >
                 <Typography variant="titleMedium">
-                  Welcome to the new assessment!
+                  {(selectedMessage as any)?.payload?.title}
                 </Typography>
                 {/* Added padding to make room for the indicator */}
                 <Box
@@ -299,9 +301,9 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     format(
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
-                        new Date(
-                          selectedMessage.createdAt
-                        ).getTimezoneOffset() 
+                          new Date(
+                            selectedMessage.createdAt
+                          ).getTimezoneOffset()
                       ),
                       "yyyy/MM/dd HH:mm"
                     ) +
@@ -375,7 +377,7 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (spaceId) {
