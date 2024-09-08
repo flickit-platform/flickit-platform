@@ -12,7 +12,7 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
+import { IPermissions, IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
 import { Collapse, IconButton, Typography } from "@mui/material";
 import languageDetector from "@/utils/languageDetector";
@@ -21,10 +21,11 @@ import { InfoRounded } from "@mui/icons-material";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
+  permissions: IPermissions;
 }
 
 const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
-  const { data } = props;
+  const { data, permissions } = props;
   const {
     id,
     title,

@@ -3,10 +3,7 @@ import { QuestionnaireCard } from "./QuestionnaireCard";
 import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import {
-  TId,
-  TQueryFunction,
-} from "@types";
+import { TId, TQueryFunction } from "@types";
 import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
 import Box from "@mui/material/Box";
 import QANumberIndicator from "@common/QANumberIndicator";
@@ -84,13 +81,16 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
             isDataEmpty={(data) => data.questionaries_info?.length === 0}
             renderLoading={() => <LoadingSkeletonOfQuestionnaires />}
             render={(data) => {
-              const { items } = data;
+              const { items, permissions } = data;
               return (
                 <Grid container spacing={2}>
                   {items.map((data: any) => {
                     return (
                       <Grid item xl={4} md={6} sm={12} xs={12} key={data.id}>
-                        <QuestionnaireCard data={data} />
+                        <QuestionnaireCard
+                          data={data}
+                          permissions={permissions}
+                        />
                       </Grid>
                     );
                   })}
