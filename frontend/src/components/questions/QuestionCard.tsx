@@ -2079,7 +2079,7 @@ const CreateDropZone = (props: any) => {
               />
             )}
             <Typography sx={{ ...theme.typography.titleSmall }}>
-              {dropZoneData[0]?.name.length > 14
+              {dropZoneData[0]?.name?.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
                   dropZoneData[0]?.name?.substring(
@@ -2991,7 +2991,7 @@ const MyDropzone = (props: any) => {
               />
             )}
             <Typography sx={{ ...theme.typography.titleMedium }}>
-              {dropZoneData[0]?.name.length > 14
+              {dropZoneData[0]?.name?.length > 14
                 ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
                   dropZoneData[0]?.name?.substring(

@@ -429,7 +429,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       }}
                     >
                       {name?.substring(0, 20)}
-                      {name.length > 20 && "..."}
+                      {name?.length > 20 && "..."}
                     </Typography>
                   </Box>
                   <DetailExpend evidenceBG={evidenceBG} item={item} />
