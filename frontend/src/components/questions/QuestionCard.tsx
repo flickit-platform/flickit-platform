@@ -147,7 +147,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
 
   const { selcetedConfidenceLevel } = useQuestionContext();
   const dispatch = useQuestionDispatch();
-  const [value, setValue] = useState("history");
+  const [value, setValue] = useState("evidences");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
