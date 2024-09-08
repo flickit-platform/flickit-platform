@@ -323,7 +323,11 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                   </Typography>
                   {index == 0 && (
                     <Typography
-                      sx={{ ...theme.typography.bodyMedium, color: "#2B333B" }}
+                      sx={{
+                        ...theme.typography.bodyMedium,
+                        color: "#2B333B",
+                        mt: "4px",
+                      }}
                     >
                       {evidence?.description}
                     </Typography>
