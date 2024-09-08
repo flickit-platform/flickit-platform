@@ -12,7 +12,7 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import { IPermissions, IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
+import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
 import { Collapse, IconButton, Typography } from "@mui/material";
 import languageDetector from "@/utils/languageDetector";
@@ -21,12 +21,10 @@ import { InfoRounded } from "@mui/icons-material";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
-  permissions: IPermissions;
 }
 
 const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const { data } = props;
-  const { permissions }: { permissions: IPermissions } = props;
   const {
     id,
     title,
@@ -122,15 +120,13 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
               );
             })}
           </Box>
-          {permissions.viewQuestionnaireQuestions && (
-            <ActionButtons
-              id={id}
-              progress={progress}
-              number_of_answers={number_of_answers}
-              nextQuestion={nextQuestion}
-              title={title}
-            />
-          )}
+          <ActionButtons
+            id={id}
+            progress={progress}
+            number_of_answers={number_of_answers}
+            nextQuestion={nextQuestion}
+            title={title}
+          />
         </Box>
       </Box>
     </Paper>

@@ -317,10 +317,6 @@ const AssessmentExportContainer = () => {
             result?.assessorInsight === null &&
             result?.aiInsight === null;
           if (shouldIgnore) {
-            setLoadingAttributes((prevLoading) => ({
-              ...prevLoading,
-              [attribute?.id]: false,
-            }));
             newIgnoreIds.push(attribute?.id);
             return null;
           }
