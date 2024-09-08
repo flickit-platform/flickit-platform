@@ -226,7 +226,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
               </IconButton>
             </Box>
             </Tooltip>
-            <Tooltip title={"moreAction"}>
+            <Tooltip title={<Trans i18nKey={"moreAction"} />}>
               <Box>
                 <Actions
                   isActiveSpace={isActiveSpace}
