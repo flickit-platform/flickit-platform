@@ -184,7 +184,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
       </Box>
       <Box sx={{ display: "flex", ml: "auto" }}>
         <Box ml="auto" sx={{ ...styles.centerV }}>
-          <Tooltip title={<Trans i18nKey={"memberCount"} /> }>
+          <Tooltip title={<Trans i18nKey={"membersCount"} /> }>
           <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
                 <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
                 <Typography fontWeight={"bold"}>{membersCount}</Typography>
