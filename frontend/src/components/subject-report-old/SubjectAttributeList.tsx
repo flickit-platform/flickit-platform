@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Title from "@common/Title";
 import { Trans } from "react-i18next";
 import SubjectAttributeCard from "./SubjectAttributeCard";
+import { IPermissions } from "@/types";
 
 export const SubjectAttributeList = (props: any) => {
   const {
@@ -12,6 +13,7 @@ export const SubjectAttributeList = (props: any) => {
     editable,
   } = props;
   const { subject, attributes, maturityLevelsCount } = data;
+  const { permissions }: { permissions: IPermissions } = data;
   const { title } = subject;
   return (
     <Box mt={15} id="attributes">
@@ -29,6 +31,7 @@ export const SubjectAttributeList = (props: any) => {
               attributesDataPolicy={attributesDataPolicy}
               updateAttributeAndData={updateAttributeAndData}
               editable={editable}
+              permissions={permissions}
             />
           );
         })}
