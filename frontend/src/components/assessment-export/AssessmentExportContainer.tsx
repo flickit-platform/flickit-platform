@@ -306,45 +306,49 @@ const AssessmentExportContainer = () => {
             [attribute?.id]: true,
           }));
 
-          const result = await LoadAttributeData(assessmentId, attribute?.id);
+          try {
+            const result = await LoadAttributeData(assessmentId, attribute?.id);
 
-          if (!result.editable) {
-            setEditable(false);
-          }
+            if (!result.editable) {
+              setEditable(false);
+            }
 
-          const shouldIgnore =
-            !result.editable &&
-            result?.assessorInsight === null &&
-            result?.aiInsight === null;
-          if (shouldIgnore) {
+            const shouldIgnore =
+              !result.editable &&
+              result?.assessorInsight === null &&
+              result?.aiInsight === null;
+            if (shouldIgnore) {
+              newIgnoreIds.push(attribute?.id);
+              return null;
+            }
+
+            if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
+              setAttributesData((prevData: any) => ({
+                ...prevData,
+                [attribute?.id]: result?.aiInsight?.insight,
+              }));
+              newIgnoreIds.push(attribute?.id);
+            }
+
+            if (result?.assessorInsight?.insight) {
+              setAttributesData((prevData: any) => ({
+                ...prevData,
+                [attribute?.id]: result?.assessorInsight?.insight,
+              }));
+              newIgnoreIds.push(attribute?.id);
+            }
+
+            return {
+              id: attribute?.id,
+              data: result,
+            };
+          } catch {
             setLoadingAttributes((prevLoading) => ({
               ...prevLoading,
               [attribute?.id]: false,
             }));
-            newIgnoreIds.push(attribute?.id);
             return null;
           }
-
-          if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
-            setAttributesData((prevData: any) => ({
-              ...prevData,
-              [attribute?.id]: result?.aiInsight?.insight,
-            }));
-            newIgnoreIds.push(attribute?.id);
-          }
-
-          if (result?.assessorInsight?.insight) {
-            setAttributesData((prevData: any) => ({
-              ...prevData,
-              [attribute?.id]: result?.assessorInsight?.insight,
-            }));
-            newIgnoreIds.push(attribute?.id);
-          }
-
-          return {
-            id: attribute?.id,
-            data: result,
-          };
         })
       );
 
