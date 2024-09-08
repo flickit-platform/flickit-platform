@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import { Trans } from "react-i18next";
 import { t } from "i18next";
-import { styles } from "@styles";
+import { getMaturityLevelColors, styles } from "@styles";
 import {
   AssessmentKitInfoType,
   ECustomErrorType,
@@ -432,6 +432,12 @@ const AssessmentExportContainer = () => {
           }
         }, [AssessmentReport?.data, assessmentId]);
 
+        const colorPallet = getMaturityLevelColors(
+          assessment?.assessmentKit?.maturityLevels
+            ? assessment?.assessmentKit?.maturityLevels?.length
+            : 5
+        );
+
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
             <AssessmentExportTitle pathInfo={pathInfo} />
@@ -598,6 +604,34 @@ const AssessmentExportContainer = () => {
                         >
                           <Trans i18nKey="assessmentFocus" />
                         </Typography>
+                      </Link>{" "}
+                      <Link
+                        href="#maturity-levels"
+                        sx={{
+                          textDecoration: "none",
+                          opacity: 0.9,
+                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FiberManualRecordOutlined
+                          sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                        />
+
+                        <Typography
+                          variant="titleSmall"
+                          gutterBottom
+                          sx={{
+                            textDecoration: "none",
+                            opacity: 0.9,
+                            fontWeight: "bold",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Trans i18nKey="maturityLevels" />
+                        </Typography>
                       </Link>
                       <Link
                         href="#questionnaires"
@@ -700,29 +734,6 @@ const AssessmentExportContainer = () => {
                       __html: assessment?.assessmentKit?.about ?? "",
                     }}
                   ></Typography>
-                  <Typography
-                    variant="titleMedium"
-                    gutterBottom
-                    component="div"
-                  >
-                    Maturity Levels:
-                  </Typography>
-                  <Box component="ol" sx={{ paddingLeft: 6 }}>
-                    {assessment?.assessmentKit?.maturityLevels.map(
-                      (level, index) => (
-                        <Box
-                          component="li"
-                          key={index}
-                          sx={{ marginBottom: 1 }}
-                        >
-                          <Typography variant="displaySmall">
-                            <strong>{level.title}: </strong>
-                            {level.description}
-                          </Typography>
-                        </Box>
-                      )
-                    )}
-                  </Box>
                 </Grid>
 
                 <Box paddingLeft={3} maxWidth="100%">
@@ -783,103 +794,161 @@ const AssessmentExportContainer = () => {
                     sx={{ marginBlock: 2, borderRadius: 4 }}
                   >
                     <Table>
-                        {subjects?.map((subject: ISubject, index: number) => (
-                          <React.Fragment key={subject?.id}>
-                            <TableRow>
-                              <TableCell
-                                sx={{
-                                  backgroundColor: "#f9f9f9",
-                                  border: "1px solid rgba(224, 224, 224, 1)",
-                                }}
-                              >
-                                <Typography variant="titleMedium">
-                                  {subject?.title}
-                                </Typography>
-                                <br />
-                                <Typography variant="displaySmall">
-                                  {subject?.description}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
+                      {subjects?.map((subject: ISubject, index: number) => (
+                        <React.Fragment key={subject?.id}>
+                          <TableRow>
+                            <TableCell
+                              sx={{
+                                backgroundColor: "#f9f9f9",
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              <Typography variant="titleMedium">
+                                {subject?.title}
+                              </Typography>
+                              <br />
+                              <Typography variant="displaySmall">
+                                {subject?.description}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
 
-                            <TableRow>
-                              <TableCell
+                          <TableRow>
+                            <TableCell
+                              sx={{
+                                padding: 0,
+                                border: "none",
+                              }}
+                            >
+                              <Table
                                 sx={{
-                                  padding: 0,
-                                  border: "none",
+                                  borderCollapse: "collapse",
+                                  width: "100%",
                                 }}
                               >
-                                <Table
-                                  sx={{
-                                    borderCollapse: "collapse",
-                                    width: "100%",
-                                  }}
-                                >
-                                  <TableHead>
-                                    <TableRow>
-                                      <TableCell
-                                        sx={{
-                                          backgroundColor: "#f5f5f5",
-                                          border:
-                                            "1px solid rgba(224, 224, 224, 1)",
-                                        }}
-                                      >
-                                        <Typography variant="titleMedium">
-                                          {subject?.title}{" "}
-                                          <Trans i18nKey="attribute" />
-                                        </Typography>
-                                      </TableCell>
-                                      <TableCell
-                                        sx={{
-                                          backgroundColor: "#f5f5f5",
-                                          border:
-                                            "1px solid rgba(224, 224, 224, 1)",
-                                        }}
-                                      >
-                                        <Typography variant="titleMedium">
-                                          <Trans i18nKey="description" />
-                                        </Typography>
-                                      </TableCell>
-                                    </TableRow>
-                                  </TableHead>
-                                  <TableBody>
-                                    {subject?.attributes?.map(
-                                      (
-                                        feature: IAttribute,
-                                        featureIndex: number
-                                      ) => (
-                                        <TableRow key={featureIndex}>
-                                          <TableCell
-                                            sx={{
-                                              borderRight:
-                                                "1px solid rgba(224, 224, 224, 1)",
-                                            }}
-                                          >
-                                            <Typography variant="displaySmall">
-                                              {feature?.title}
-                                            </Typography>
-                                          </TableCell>
-                                          <TableCell
-                                            sx={{
-                                              borderRight:
-                                                "1px solid rgba(224, 224, 224, 1)",
-                                            }}
-                                          >
-                                            <Typography variant="displaySmall">
-                                              {feature?.description}
-                                            </Typography>
-                                          </TableCell>
-                                        </TableRow>
-                                      )
-                                    )}
-                                  </TableBody>
-                                </Table>
-                              </TableCell>
-                            </TableRow>
-                          </React.Fragment>
-                        ))}
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell
+                                      sx={{
+                                        backgroundColor: "#f5f5f5",
+                                        border:
+                                          "1px solid rgba(224, 224, 224, 1)",
+                                      }}
+                                    >
+                                      <Typography variant="titleMedium">
+                                        {subject?.title}{" "}
+                                        <Trans i18nKey="attribute" />
+                                      </Typography>
+                                    </TableCell>
+                                    <TableCell
+                                      sx={{
+                                        backgroundColor: "#f5f5f5",
+                                        border:
+                                          "1px solid rgba(224, 224, 224, 1)",
+                                      }}
+                                    >
+                                      <Typography variant="titleMedium">
+                                        <Trans i18nKey="description" />
+                                      </Typography>
+                                    </TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {subject?.attributes?.map(
+                                    (
+                                      feature: IAttribute,
+                                      featureIndex: number
+                                    ) => (
+                                      <TableRow key={featureIndex}>
+                                        <TableCell
+                                          sx={{
+                                            borderRight:
+                                              "1px solid rgba(224, 224, 224, 1)",
+                                          }}
+                                        >
+                                          <Typography variant="displaySmall">
+                                            {feature?.title}
+                                          </Typography>
+                                        </TableCell>
+                                        <TableCell
+                                          sx={{
+                                            borderRight:
+                                              "1px solid rgba(224, 224, 224, 1)",
+                                          }}
+                                        >
+                                          <Typography variant="displaySmall">
+                                            {feature?.description}
+                                          </Typography>
+                                        </TableCell>
+                                      </TableRow>
+                                    )
+                                  )}
+                                </TableBody>
+                              </Table>
+                            </TableCell>
+                          </TableRow>
+                        </React.Fragment>
+                      ))}
                     </Table>
                   </TableContainer>
+                  <Typography
+                    component="div"
+                    mt={4}
+                    variant="titleLarge"
+                    id="maturity-levels"
+                    gutterBottom
+                  >
+                    <Trans i18nKey="maturityLevels" />
+                  </Typography>
+                  <Typography variant="displaySmall" paragraph>
+                    <Trans i18nKey="maturityLevelsDescriptionLastSection" />
+                  </Typography>
+                  <Box mt={2} sx={{ display: "flex" }}>
+                    {assessment?.assessmentKit?.maturityLevels.map(
+                      (item: any, index: number) => {
+                        const colorCode = colorPallet[item.index - 1];
+                        return (
+                          <Box
+                            sx={{
+                              background: colorCode,
+                              fontSize: "1rem",
+                              py: { xs: "0.16rem", md: 1 },
+                              px: { xs: 1, md: 4 },
+                              fontWeight: "bold",
+                              color: "#fff",
+                              borderRadius:
+                                index === 0
+                                  ? "8px 0 0 8px"
+                                  : index ===
+                                    assessment?.assessmentKit?.maturityLevels
+                                      ?.length -
+                                      1
+                                  ? "0 8px 8px 0"
+                                  : "0",
+                            }}
+                          >
+                            {item.title}
+                          </Box>
+                        );
+                      }
+                    )}
+                  </Box>
+                  <Box component="ol" sx={{ paddingLeft: 6 }}>
+                    {assessment?.assessmentKit?.maturityLevels.map(
+                      (level, index) => (
+                        <Box
+                          component="li"
+                          key={index}
+                          sx={{ marginBottom: 1 }}
+                        >
+                          <Typography variant="displaySmall">
+                            <strong>{level.title}: </strong>
+                            {level.description}
+                          </Typography>
+                        </Box>
+                      )
+                    )}
+                  </Box>
                   <Typography
                     variant="titleLarge"
                     gutterBottom
@@ -917,7 +986,7 @@ const AssessmentExportContainer = () => {
                             }}
                           >
                             <Typography variant="titleMedium">
-                              <Trans i18nKey="number" />
+                              <Trans i18nKey="#" />
                             </Typography>{" "}
                           </TableCell>
                           <TableCell
