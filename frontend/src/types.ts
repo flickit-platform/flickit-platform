@@ -55,7 +55,7 @@ export interface IQuestionInfo {
   confidence_level?: any;
 }
 
-interface IPermissions {
+export interface IPermissions {
   viewAssessment: boolean;
   viewEvidenceAttachment: boolean;
   answerQuestion: boolean;
