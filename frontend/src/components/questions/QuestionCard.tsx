@@ -243,6 +243,114 @@ export const QuestionCard = (props: IQuestionCardProps) => {
           />
         </Box>
       </Paper>
+      <Box sx={{ px: { xs: 2, sm: 0 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            background: `${notApplicable ? "#273248" : "#000000cc"}`,
+            flexDirection: { xs: "column", md: "row" },
+            borderRadius: " 0 0 8px 8px ",
+            px: { xs: 1.75, sm: 2, md: 2.5 },
+            py: { xs: 1.5, sm: 2.5 },
+          }}
+        >
+          <SubmitOnSelectCheckBox
+            disabled={!questionsInfo?.permissions?.answerQuestion}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: { xs: "column", md: "row" },
+            }}
+          >
+            <QueryData
+              {...ConfidenceListQueryData}
+              loading={false}
+              error={false}
+              render={(data) => {
+                const labels = data.confidenceLevels;
+                setConfidenceLebels(labels);
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {selcetedConfidenceLevel !== null ? (
+                      <Box sx={{ mr: 2, color: "#fff" }}>
+                        <Typography
+                          sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
+                        >
+                          <Trans
+                            i18nKey={
+                              questionsInfo?.permissions?.answerQuestion
+                                ? "selcetConfidenceLevel"
+                                : "confidenceLevel"
+                            }
+                          />
+                          <Typography
+                            fontWeight={900}
+                            sx={{ borderBottom: "1px solid", mx: 1 }}
+                          >
+                            {labels[selcetedConfidenceLevel - 1]?.title}
+                          </Typography>
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          mr: 2,
+                          // color: "#fff",
+                          color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
+                        }}
+                      >
+                        <Typography>
+                          {disabledConfidence ? (
+                            <Trans i18nKey={"selectConfidenceLevel"} />
+                          ) : (
+                            <Trans i18nKey={"toContinueToSubmitAnAnswer"} />
+                          )}
+                        </Typography>
+                      </Box>
+                    )}
+                    <Rating
+                      // disabled={!questionsInfo?.permissions?.answerQuestion}
+                      disabled={disabledConfidence}
+                      value={
+                        selcetedConfidenceLevel !== null
+                          ? selcetedConfidenceLevel
+                          : null
+                      }
+                      size="medium"
+                      onChange={(event, newValue) => {
+                        dispatch(
+                          questionActions.setSelectedConfidenceLevel(newValue)
+                        );
+                      }}
+                      icon={
+                        <RadioButtonCheckedRoundedIcon
+                          sx={{ mx: 0.25, color: "#42a5f5" }}
+                          fontSize="inherit"
+                        />
+                      }
+                      emptyIcon={
+                        <RadioButtonUncheckedRoundedIcon
+                          style={{ opacity: 0.55 }}
+                          sx={{ mx: 0.25, color: "#fff" }}
+                          fontSize="inherit"
+                        />
+                      }
+                    />
+                  </Box>
+                );
+              }}
+            />
+          </Box>
+        </Box>
+      </Box>
       <TabContext value={value}>
         <Box sx={{ px: { xs: 2, sm: 0 }, mt: 2 }}>
           <TabList
@@ -3290,6 +3398,7 @@ const QuestionGuide = (props: any) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                color:"white"
               }}
             >
               <InfoRoundedIcon sx={{ mr: "4px" }} />
