@@ -25,7 +25,8 @@ interface IQuestionnaireCardProps {
 }
 
 const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
-  const { data, permissions } = props;
+  const { data } = props;
+  const { permissions }: { permissions: IPermissions } = props;
   const {
     id,
     title,
@@ -121,13 +122,15 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
               );
             })}
           </Box>
-          <ActionButtons
-            id={id}
-            progress={progress}
-            number_of_answers={number_of_answers}
-            nextQuestion={nextQuestion}
-            title={title}
-          />
+          {permissions.viewQuestionnaireQuestions && (
+            <ActionButtons
+              id={id}
+              progress={progress}
+              number_of_answers={number_of_answers}
+              nextQuestion={nextQuestion}
+              title={title}
+            />
+          )}
         </Box>
       </Box>
     </Paper>
