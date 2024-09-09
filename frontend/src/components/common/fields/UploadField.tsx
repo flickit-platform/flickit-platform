@@ -241,7 +241,7 @@ const Uploader = (props: IUploadProps) => {
     accept,
     maxSize,
     onDrop,
-    noClick: buttonStep== 0 ? false : true,
+    noClick: buttonStep == 0 ? false : true,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
@@ -277,7 +277,7 @@ const Uploader = (props: IUploadProps) => {
             `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
             border: (t) =>
-              `1px solid ${hasError ? t.palette.error.dark : "black"} `,
+                buttonStep == 0 ? `1px solid ${hasError ? t.palette.error.dark : "black"}`: "" ,
           },
           borderRadius: 1,
           cursor: "pointer",
