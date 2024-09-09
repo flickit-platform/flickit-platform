@@ -187,13 +187,23 @@ const AutocompleteBaseField = (
     let active = true;
     if (loaded && active) {
       const opt = filterSelectedOption(optionsData, value);
-      setOptions(opt);
+      setOptions(optionsData as any);
       defaultValue && onChange(defaultValue);
     }
     return () => {
       active = false;
     };
   }, [loaded]);
+
+  useEffect(() => {
+    const exactMatch = options.find(
+      (option) =>
+        getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+    );
+    if (exactMatch) {
+      onChange(exactMatch);
+    }
+  }, [inputValue, options]);
 
   const getFilteredOptions = (options: any[], params: any) => {
     return options
@@ -282,13 +292,18 @@ const AutocompleteBaseField = (
       filterSelectedOptions={true}
       filterOptions={(options, params) => {
         const filtered = getFilteredOptions(options, params);
+        const exactMatch = optionsData.find(
+          (option) =>
+            getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+        );
 
         if (
           params.inputValue !== "" &&
           !filtered.some(
             (option) => getOptionLabel(option) === params.inputValue
           ) &&
-          hasAddBtn
+          hasAddBtn &&
+          !exactMatch
         ) {
           filtered.push({
             inputValue: params.inputValue,
