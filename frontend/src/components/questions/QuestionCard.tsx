@@ -625,7 +625,10 @@ const AnswerDetails = ({
   };
 
   return (
-    <Box mt={2} width="100%" my={4}>
+      queryData.loading ?
+          <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
+            <CircularProgress/>
+          </Box> : <Box mt={2} width="100%" my={4}>
       {type === "evidence" ? (
         <Box
           display="flex"
@@ -637,20 +640,14 @@ const AnswerDetails = ({
             alignItems: "center",
             wordBreak: "break-word",
           }}
-        >{
-          queryData.loading?
-          <CircularProgress/>:
+        >
           <Evidence
           {...dialogProps}
           questionInfo={questionInfo}
           evidencesQueryData={queryData}
           />
-        }
         </Box>
-      ) : queryData.loading ?
-          <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
-            <CircularProgress/>
-          </Box> : data.length > 0 ? (
+      ) : data.length > 0 ? (
         <Box
           display="flex"
           alignItems={"baseline"}
