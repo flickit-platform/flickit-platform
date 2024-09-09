@@ -21,7 +21,7 @@ export interface IToastErrorOptions {
 
 const toastError = (
   err: ICustomError | AxiosError | string | true,
-  options?: IToastErrorOptions
+  options?: IToastErrorOptions,
 ) => {
   if (typeof err === "boolean" && err) {
     toast.error(t("someThingWentWrong") as string);
@@ -97,7 +97,11 @@ const toastError = (
   }
 
   toast.error(
-      data?.error ||data?.message || data?.detail || data?.non_field_errors?.[0] || message
+    data?.error ||
+      data?.message ||
+      data?.detail ||
+      data?.non_field_errors?.[0] ||
+      message,
   );
 };
 

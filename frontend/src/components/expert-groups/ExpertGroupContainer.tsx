@@ -85,7 +85,7 @@ const ExpertGroupContainer = () => {
   });
 
   const excelToDslDialogProps = useDialog({
-    context: { type: "convert"},
+    context: { type: "convert" },
   });
 
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
@@ -111,7 +111,7 @@ const ExpertGroupContainer = () => {
         const is_member = expertGroupMembersQueryData.data?.items?.some(
           (res: any) => {
             return res.id === userInfo.id;
-          }
+          },
         );
         const hasAccess = editable;
         setDocTitle(`${t("expertGroup")}: ${title || ""}`);
@@ -270,11 +270,12 @@ const ExpertGroupContainer = () => {
                         }}
                       >
                         {assessmentKitsCounts.filter(
-                          (item: any) => item.published
+                          (item: any) => item.published,
                         ) &&
-                          `${assessmentKitsCounts.filter(
-                            (item: any) => item.published
-                          ).length
+                          `${
+                            assessmentKitsCounts.filter(
+                              (item: any) => item.published,
+                            ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
@@ -318,11 +319,12 @@ const ExpertGroupContainer = () => {
                           }}
                         >
                           {assessmentKitsCounts.filter(
-                            (item: any) => !item.published
+                            (item: any) => !item.published,
                           ) &&
-                            `${assessmentKitsCounts.filter(
-                              (item: any) => !item.published
-                            ).length
+                            `${
+                              assessmentKitsCounts.filter(
+                                (item: any) => !item.published,
+                              ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -349,7 +351,6 @@ const ExpertGroupContainer = () => {
   );
 };
 
-
 const AvatarComponent = (props: any) => {
   const { title, picture, queryData, editable } = props;
   const [hover, setHover] = useState(false);
@@ -359,7 +360,9 @@ const AvatarComponent = (props: any) => {
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
 
-  useEffect(() => { setProfilePicture(picture); }, [picture]);
+  useEffect(() => {
+    setProfilePicture(picture);
+  }, [picture]);
 
   const handleFileChange = async (event: any) => {
     const file = event.target.files[0];
@@ -369,7 +372,7 @@ const AvatarComponent = (props: any) => {
         setImage(reader.result as any);
       };
       reader.readAsDataURL(file);
-      let maxSize = 2097152;
+      const maxSize = 2097152;
       if (file.size > maxSize) {
         toastError(`Maximum upload file size is ${formatBytes(maxSize)}.`);
         return;
@@ -383,7 +386,7 @@ const AvatarComponent = (props: any) => {
         const pictureData = { pictureFile: file };
         const res = await service.updateExpertGroupPicture(
           { data: pictureData, id: expertGroupId },
-          undefined
+          undefined,
         );
         setProfilePicture(res.data.pictureLink);
         setIsLoading(false);
@@ -444,50 +447,54 @@ const AvatarComponent = (props: any) => {
           }}
         />
       )}
-      {!isLoading  && (
-          <Box    position="absolute"
-                  top={0}
-                  left={0}
-                  width="100%"
-                  height="100%"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  borderRadius="50%"
->
-            {hover &&  <Box
-                position="absolute"
-                top={0}
-                left={0}
-                width="100%"
-                height="100%"
-                bgcolor="rgba(0, 0, 0, 0.6)"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                borderRadius="50%"
-                sx={{ cursor: "pointer" }}
-            />}
+      {!isLoading && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          width="100%"
+          height="100%"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="50%"
+        >
+          {hover && (
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              width="100%"
+              height="100%"
+              bgcolor="rgba(0, 0, 0, 0.6)"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="50%"
+              sx={{ cursor: "pointer" }}
+            />
+          )}
           {profilePicture ? (
             <>
-               <Tooltip title={"Delete Picture"}>
-
-                     <IconButton
-                         component="label"
-                         sx={{ padding: 0, color: "whitesmoke" }}
-                     >
-                       {hover &&   <DeleteIcon
-                          onClick={deletePicture}
-                          sx={{ color: "whitesmoke" }}
-                        />}
-                      </IconButton>
+              <Tooltip title={"Delete Picture"}>
+                <IconButton
+                  component="label"
+                  sx={{ padding: 0, color: "whitesmoke" }}
+                >
+                  {hover && (
+                    <DeleteIcon
+                      onClick={deletePicture}
+                      sx={{ color: "whitesmoke" }}
+                    />
+                  )}
+                </IconButton>
               </Tooltip>
               <Tooltip title={"Edit Picture"}>
                 <IconButton
                   component="label"
                   sx={{ padding: 0, color: "whitesmoke" }}
                 >
-                  {hover && <EditIcon /> }
+                  {hover && <EditIcon />}
                   <input
                     type="file"
                     accept="image/*"
@@ -717,7 +724,7 @@ const MemberActions = (props: any) => {
     service: (arg, config) =>
       service.deleteExpertGroupMember(
         { id: expertGroupId, userId: userId },
-        config
+        config,
       ),
     runOnMount: false,
     toastError: true,
@@ -765,10 +772,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-            icon: <EmailRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="resendInvitation" />,
-            onClick: inviteMember,
-          }
+              icon: <EmailRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="resendInvitation" />,
+              onClick: inviteMember,
+            }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -904,7 +911,7 @@ const AssessmentKitsList = (props: any) => {
     setAssessmentKitsCounts,
     is_member,
     is_expert,
-    excelToDslDialogProps
+    excelToDslDialogProps,
   } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
@@ -919,15 +926,15 @@ const AssessmentKitsList = (props: any) => {
         inPageLink="assessment_kits"
         size="small"
         toolbar={
-        <Box sx={{display:"flex", gap:"8px"}}>
-          <ExcelToDslButton
-              dialogProps={excelToDslDialogProps}
-          />
-          {hasAccess && <CreateAssessmentKitButton
-              onSubmitForm={assessmentKitQuery.query}
-              dialogProps={dialogProps}
-          />}
-        </Box>
+          <Box sx={{ display: "flex", gap: "8px" }}>
+            <ExcelToDslButton dialogProps={excelToDslDialogProps} />
+            {hasAccess && (
+              <CreateAssessmentKitButton
+                onSubmitForm={assessmentKitQuery.query}
+                dialogProps={dialogProps}
+              />
+            )}
+          </Box>
         }
       >
         <Trans i18nKey={"assessmentKits"} />
@@ -1027,20 +1034,23 @@ const CreateAssessmentKitButton = (props: {
   );
 };
 
-const ExcelToDslButton = (props: {
-  dialogProps: IDialogProps;
-}) =>{
+const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
   const { dialogProps } = props;
 
   return (
-      <>
-        <Button color={"info"} variant="outlined" size="small" onClick={dialogProps.openDialog}>
-          <Trans i18nKey="convertExcelToDsl" />
-        </Button>
-        <AssessmentKitCEFromDialog {...dialogProps} />
-      </>
-  )
-}
+    <>
+      <Button
+        color={"info"}
+        variant="outlined"
+        size="small"
+        onClick={dialogProps.openDialog}
+      >
+        <Trans i18nKey="convertExcelToDsl" />
+      </Button>
+      <AssessmentKitCEFromDialog {...dialogProps} />
+    </>
+  );
+};
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 

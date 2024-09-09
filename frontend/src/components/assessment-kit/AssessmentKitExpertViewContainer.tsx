@@ -45,7 +45,7 @@ const AssessmentKitExpertViewContainer = () => {
   const dialogProps = useDialog();
   const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
-  const [update,setForceUpdate]= useState<boolean>(false)
+  const [update, setForceUpdate] = useState<boolean>(false);
   const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
@@ -78,88 +78,96 @@ const AssessmentKitExpertViewContainer = () => {
     if (!loaded) {
       AssessmentKitDetails();
     }
-  }, [loaded,update]);
+  }, [loaded, update]);
   useEffect(() => {
     setDocumentTitle(
       `${t("assessmentKit")}: ${assessmentKitTitle || ""}`,
-      config.appTitle
+      config.appTitle,
     );
   }, [assessmentKitTitle]);
   return (
     <Box>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-          {expertGroup && <Title
-              backLink={"/"}
-              size="large"
-              wrapperProps={{
-                  sx: {
-                      flexDirection: { xs: "column", md: "row" },
-                      alignItems: { xs: "flex-start", md: "flex-end" },
+        {expertGroup && (
+          <Title
+            backLink={"/"}
+            size="large"
+            wrapperProps={{
+              sx: {
+                flexDirection: { xs: "column", md: "row" },
+                alignItems: { xs: "flex-start", md: "flex-end" },
+              },
+            }}
+            sup={
+              <SupTitleBreadcrumb
+                routes={[
+                  {
+                    title: t("expertGroups") as string,
+                    to: `/user/expert-groups`,
                   },
-              }}
-              sup={
-                  <SupTitleBreadcrumb
-                      routes={[
-                          {
-                              title: t("expertGroups") as string,
-                              to: `/user/expert-groups`,
-                          },
-                          {
-                              title: expertGroup?.title,
-                              to: `/user/expert-groups/${expertGroupId}`,
-                          },
-                          {
-                              title: assessmentKitTitle,
-                              to: `/user/expert-groups`,
-                          },
-                      ]}
-                      displayChip
-                  />
-              }
-              toolbar={
-                  <Box>
-                      <Button
-                          variant="contained"
-                          size="small"
-                          sx={{ ml: 2 }}
-                          onClick={() => {
-                              dialogProps.openDialog({});
-                          }}
-                      >
-                          <Typography mr={1} variant="button">
-                              <Trans i18nKey="updateDSL" />
-                          </Typography>
-                          <CloudUploadRoundedIcon />
-                      </Button>
-                      <Button
-                          variant="contained"
-                          size="small"
-                          sx={{ ml: 2 }}
-                          onClick={handleDownload}
-                      >
-                          <Typography mr={1} variant="button">
-                              <Trans i18nKey="downloadDSL" />
-                          </Typography>
-                          <CloudDownloadRoundedIcon />
-                      </Button>
-                  </Box>
-              }
+                  {
+                    title: expertGroup?.title,
+                    to: `/user/expert-groups/${expertGroupId}`,
+                  },
+                  {
+                    title: assessmentKitTitle,
+                    to: `/user/expert-groups`,
+                  },
+                ]}
+                displayChip
+              />
+            }
+            toolbar={
+              <Box>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ ml: 2 }}
+                  onClick={() => {
+                    dialogProps.openDialog({});
+                  }}
+                >
+                  <Typography mr={1} variant="button">
+                    <Trans i18nKey="updateDSL" />
+                  </Typography>
+                  <CloudUploadRoundedIcon />
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ ml: 2 }}
+                  onClick={handleDownload}
+                >
+                  <Typography mr={1} variant="button">
+                    <Trans i18nKey="downloadDSL" />
+                  </Typography>
+                  <CloudDownloadRoundedIcon />
+                </Button>
+              </Box>
+            }
           >
-              {assessmentKitTitle}
-          </Title>}
+            {assessmentKitTitle}
+          </Title>
+        )}
         <Box mt={3}>
           <AssessmentKitSectionGeneralInfo
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
           />
-          <UpdateAssessmentKitDialog setForceUpdate={setForceUpdate} {...dialogProps} />
-          <AssessmentKitSectionsTabs update={update}  details={details} />
+          <UpdateAssessmentKitDialog
+            setForceUpdate={setForceUpdate}
+            {...dialogProps}
+          />
+          <AssessmentKitSectionsTabs update={update} details={details} />
         </Box>
       </Box>
     </Box>
   );
 };
-const AssessmentKitSectionsTabs = (props: { details: any, update:boolean }) => {
+const AssessmentKitSectionsTabs = (props: {
+  details: any;
+  update: boolean;
+}) => {
   const { fetchAssessmentKitDetailsQuery } = useAssessmentKit();
   const [value, setValue] = useState("maturityLevels");
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -205,20 +213,26 @@ const AssessmentKitSectionsTabs = (props: { details: any, update:boolean }) => {
             value="questionnaires"
             sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
           >
-            <AssessmentKitQuestionnaires update={update} details={details.questionnaires} />
+            <AssessmentKitQuestionnaires
+              update={update}
+              details={details.questionnaires}
+            />
           </TabPanel>
           <TabPanel
             value="maturityLevels"
             sx={{ py: { xs: 1, sm: 3 }, px: 0.2 }}
           >
-            <MaturityLevelsDetails maturity_levels={details?.maturityLevels} update={update} />
+            <MaturityLevelsDetails
+              maturity_levels={details?.maturityLevels}
+              update={update}
+            />
           </TabPanel>
         </TabContext>
       )}
     </Box>
   );
 };
-const AssessmentKitSubjects = (props: { details: any[], update: boolean }) => {
+const AssessmentKitSubjects = (props: { details: any[]; update: boolean }) => {
   const { details, update } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] =
@@ -238,7 +252,7 @@ const AssessmentKitSubjects = (props: { details: any[], update: boolean }) => {
     if (subjectId) {
       fetchAssessmentKitSubjectDetail();
     }
-  }, [subjectId,update]);
+  }, [subjectId, update]);
   const fetchAssessmentKitSubjectDetail = async () => {
     try {
       const data = await fetchAssessmentKitSubjectDetailsQuery.query({
@@ -246,7 +260,7 @@ const AssessmentKitSubjects = (props: { details: any[], update: boolean }) => {
         subjectId: subjectId,
       });
       setAssessmentKitSubjectDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   return (
@@ -414,7 +428,10 @@ const AssessmentKitSubjects = (props: { details: any[], update: boolean }) => {
     </Box>
   );
 };
-const AssessmentKitQuestionnaires = (props: { details: any[], update:boolean }) => {
+const AssessmentKitQuestionnaires = (props: {
+  details: any[];
+  update: boolean;
+}) => {
   const { details, update } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [questionnaireId, setQuestionnaireId] = useState<any>();
@@ -430,7 +447,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[], update:boolean }) 
     if (questionnaireId) {
       fetchAssessmentKitQuestionnaires();
     }
-  }, [questionnaireId,update]);
+  }, [questionnaireId, update]);
   const fetchAssessmentKitQuestionnaires = async () => {
     try {
       const data = await fetchAssessmentKitQuestionnairesQuery.query({
@@ -438,7 +455,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[], update:boolean }) 
         questionnaireId: questionnaireId,
       });
       setQuestionnaireDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   return (
     <Box>
@@ -520,7 +537,7 @@ const AssessmentKitQuestionnaires = (props: { details: any[], update:boolean }) 
                       >
                         {subject}
                       </Typography>
-                    )
+                    ),
                   )}
                 </Box>
               </Grid>
@@ -575,7 +592,7 @@ const AssessmentKitQuestionsList = (props: {
         attributeId: attributeId,
       });
       setAttributesDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   const fetchMaturityLevelQuestions = async () => {
     try {
@@ -585,7 +602,7 @@ const AssessmentKitQuestionsList = (props: {
         maturityLevelId: value,
       });
       setMaturityLevelQuestions(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (isExpanded && attributeId) {
@@ -598,14 +615,14 @@ const AssessmentKitQuestionsList = (props: {
     setValue(newValue);
     setSelectedTabIndex(
       attributesDetails?.maturityLevels.findIndex(
-        (obj: any) => obj.id === newValue
-      )
+        (obj: any) => obj.id === newValue,
+      ),
     );
   };
   const colorPallet = getMaturityLevelColors(
     attributesDetails?.maturityLevels
       ? attributesDetails?.maturityLevels.length
-      : 5
+      : 5,
   );
   useEffect(() => {
     if (value) {
@@ -676,8 +693,9 @@ const AssessmentKitQuestionsList = (props: {
               onChange={handleTabChange}
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: `${colorPallet[selectedTabIndex ? selectedTabIndex : 0]
-                    } !important`,
+                  backgroundColor: `${
+                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                  } !important`,
                 },
               }}
             >
@@ -705,7 +723,7 @@ const AssessmentKitQuestionsList = (props: {
                       value={item.id}
                     />
                   );
-                }
+                },
               )}
             </Tabs>
           </Box>
@@ -879,7 +897,7 @@ const AssessmentKitQuestionsList = (props: {
   );
 };
 const UpdateAssessmentKitDialog = (props: any) => {
-  const { onClose: closeDialog,setForceUpdate, ...rest } = props;
+  const { onClose: closeDialog, setForceUpdate, ...rest } = props;
   const [loading, setLoading] = useState(false);
 
   const { service } = useServiceContext();
@@ -914,9 +932,9 @@ const UpdateAssessmentKitDialog = (props: any) => {
     try {
       const { data: res } = await service.updateAssessmentKitDSL(
         { data: formattedData, assessmentKitId: assessmentKitId },
-        { signal: abortController.signal }
+        { signal: abortController.signal },
       );
-      setForceUpdate((prev : boolean) => !prev)
+      setForceUpdate((prev: boolean) => !prev);
       setLoading(false);
       close();
     } catch (e: any) {
@@ -1308,7 +1326,7 @@ const QuestionnairesQuestionList = (props: any) => {
         questionId: questionId,
       });
       setQuestionsDetails(data);
-    } catch (e) { }
+    } catch (e) {}
   };
   function formatNumber(value: any) {
     // Check if the value is an integer (no decimal places)
@@ -1489,7 +1507,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                 values={{ index: index + 1 }}
                               />
                             </Typography>
-                          )
+                          ),
                         )}
                       </Box>
                     </Box>
@@ -1502,8 +1520,9 @@ const QuestionnairesQuestionList = (props: any) => {
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                borderTop: `${index !== 0 && "1px solid #D3D3D3"
-                                  }`,
+                                borderTop: `${
+                                  index !== 0 && "1px solid #D3D3D3"
+                                }`,
                                 py: 1,
                               }}
                             >
@@ -1535,7 +1554,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                         {affectedLevel.maturityLevel.index}
                                       </Typography>
                                     );
-                                  }
+                                  },
                                 )}
                               </Box>
                               <Box
@@ -1558,7 +1577,7 @@ const QuestionnairesQuestionList = (props: any) => {
                                         {affectedLevel.weight}
                                       </Typography>
                                     );
-                                  }
+                                  },
                                 )}
                               </Box>
                               <Box
@@ -1593,16 +1612,16 @@ const QuestionnairesQuestionList = (props: any) => {
                                                 {formatNumber(option.value)}
                                               </Typography>
                                             );
-                                          }
+                                          },
                                         )}
                                       </Box>
                                     );
-                                  }
+                                  },
                                 )}
                               </Box>
                             </Box>
                           );
-                        }
+                        },
                       )}
                     </Box>
                   </Box>
@@ -1618,7 +1637,7 @@ const QuestionnairesQuestionList = (props: any) => {
 const MaturityLevelsDetails = (props: any) => {
   const { maturity_levels, update } = props;
   const colorPallet = getMaturityLevelColors(
-    maturity_levels ? maturity_levels.length : 5
+    maturity_levels ? maturity_levels.length : 5,
   );
   return (
     <Box sx={{ background: "#fff", px: 4, py: 4, borderRadius: "8px" }}>

@@ -122,7 +122,7 @@ const FilterBySubject = (props: {
           searchParams.delete("subject_pk");
           return searchParams;
         },
-        { replace: true }
+        { replace: true },
       );
       setActiveFilterSubjectId(null);
     } else {
@@ -132,7 +132,7 @@ const FilterBySubject = (props: {
           searchParams.set("subject_pk", subjectId.toString());
           return searchParams;
         },
-        { replace: true }
+        { replace: true },
       );
       setActiveFilterSubjectId(subjectId.toString());
     }

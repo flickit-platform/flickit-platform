@@ -40,7 +40,7 @@ interface IAssessmentKitSectionAuthorInfo {
   setAssessmentKitTitle: any;
 }
 const AssessmentKitSectionGeneralInfo = (
-  props: IAssessmentKitSectionAuthorInfo
+  props: IAssessmentKitSectionAuthorInfo,
 ) => {
   const { setExpertGroup, setAssessmentKitTitle } = props;
   const { assessmentKitId } = useParams();
@@ -105,7 +105,7 @@ const AssessmentKitSectionGeneralInfo = (
           assessmentKitId: assessmentKitId || "",
           data: { tags: data?.tags?.map((t: any) => t.id) },
         },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
 
       await fetchAssessmentKitInfoQuery.query();
@@ -493,7 +493,7 @@ const OnHoverInput = (props: any) => {
         assessmentKitId: assessmentKitId,
         data: { [type]: inputData },
       },
-      config
+      config,
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
     // toastError: true,
@@ -658,7 +658,7 @@ const OnHoverStatus = (props: any) => {
         assessmentKitId: assessmentKitId,
         data: { published: data ? false : true },
       },
-      config
+      config,
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
     toastError: true,
@@ -764,7 +764,7 @@ const OnHoverVisibilityStatus = (props: any) => {
         assessmentKitId: assessmentKitId,
         data: { isPrivate: data ? false : true },
       },
-      config
+      config,
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
     toastError: true,
@@ -887,7 +887,7 @@ const OnHoverRichEditor = (props: any) => {
     setIsHovering(false);
   };
   const { data, title, infoQuery, editable } = props;
-  const [titleText, setTitleText] = useState<String>(data);
+  const [titleText, setTitleText] = useState<string>(data);
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const handleCancel = () => {
@@ -904,7 +904,7 @@ const OnHoverRichEditor = (props: any) => {
     try {
       const { data: res } = await service.updateAssessmentKitStats(
         { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       await infoQuery();
       await setShow(false);
@@ -1041,7 +1041,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
     setIsHovering(false);
   };
   const { data, title, infoQuery, editable } = props;
-  const [titleText, setTitleText] = useState<String>(data);
+  const [titleText, setTitleText] = useState<string>(data);
   const handleCancel = () => {
     setShow(false);
     setTitleText(data);
@@ -1054,7 +1054,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
     try {
       const { data: res } = await service.updateAssessmentKitStats(
         { assessmentKitId: assessmentKitId || "", data: { tags: data.about } },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       if (res) {
         handleCancel();

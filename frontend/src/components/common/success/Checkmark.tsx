@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import GreenCheckmark from '@/assets/img/greenCheckmark.gif'
-import GreenCheckmarkPng from '@/assets/img/greenCheckmark.png'
+import React, { useEffect, useState } from "react";
+import GreenCheckmark from "@/assets/img/greenCheckmark.gif";
+import GreenCheckmarkPng from "@/assets/img/greenCheckmark.png";
 
 const CheckmarkGif = () => {
   const [showGif, setShowGif] = useState(true);
@@ -8,7 +8,7 @@ const CheckmarkGif = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowGif(false);
-    }, 800); 
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);

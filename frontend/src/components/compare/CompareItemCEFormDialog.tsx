@@ -24,7 +24,7 @@ import AlertBox from "@common/AlertBox";
 import { useState } from "react";
 
 interface ICompareItemCEFormDialog
-  extends Omit<ICompareItemCEForm, "closeDialog"> { }
+  extends Omit<ICompareItemCEForm, "closeDialog"> {}
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
   const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
@@ -68,8 +68,7 @@ interface ICompareItemCEForm extends IDialogProps {
 }
 
 const CompareItemCEForm = (props: ICompareItemCEForm) => {
-
-  const PAGE_SIZE: number = 5
+  const PAGE_SIZE: number = 5;
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
 
@@ -88,8 +87,8 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
-  const [PageCount, setPageCount] = useState<number>(0)
-  const [total, setTotal] = useState<number>(0)
+  const [PageCount, setPageCount] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
@@ -114,10 +113,13 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
         const newAssessmentIds = addToAssessmentIds(
           data.assessmentIds?.id,
           assessmentIds,
-          index
+          index,
         );
         dispatch(
-          compareActions.setAssessmentKit([...assessment_kit, data?.assessment])
+          compareActions.setAssessmentKit([
+            ...assessment_kit,
+            data?.assessment,
+          ]),
         );
         closeDialog();
       }
@@ -136,9 +138,9 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
               searchParams: {
                 kitId: assessment_kit && assessment_kit[0]?.kit?.id,
                 size: PAGE_SIZE,
-                page: PageCount
+                page: PageCount,
               },
-              loadMore: PageCount
+              loadMore: PageCount,
             })}
             required={true}
             autoFocus={true}
@@ -147,7 +149,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             label={<Trans i18nKey="assessment" />}
             size="medium"
             selectedOptions={assessment_kit}
-            loadMore={total > ((PAGE_SIZE * PageCount) + PAGE_SIZE)}
+            loadMore={total > PAGE_SIZE * PageCount + PAGE_SIZE}
             loadMoreHandler={setPageCount}
             getTotalHandler={setTotal}
             MenuProps={MenuProps}
@@ -171,10 +173,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                         {option.title}
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
-                        <Chip
-                          label={option?.kit?.title}
-                          size="small"
-                        />
+                        <Chip label={option?.kit?.title} size="small" />
                       </Box>
                     </>
                   )}
@@ -198,7 +197,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
 const addToAssessmentIds = (
   assessmentId: TId,
   assessmentIds: TId[],
-  index: number
+  index: number,
 ) => {
   const newAssessmentIds: TId[] = assessmentIds;
   if (assessmentIds[index] && assessmentIds[index] == assessmentId) {

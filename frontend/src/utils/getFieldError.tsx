@@ -33,7 +33,7 @@ const getFieldError = (
   }>,
   name: string,
   minLength?: number,
-  maxLength?: number
+  maxLength?: number,
 ) => {
   const error = errors?.[name];
   const hasError = !!error?.type;

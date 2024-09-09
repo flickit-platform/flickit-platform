@@ -183,8 +183,9 @@ const VerticalLevel = ({
             transition: "transform .3s ease",
             minHeight: "76px",
             height: "100%",
-            transform: `translateY(-${cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
-              }%)`,
+            transform: `translateY(-${
+              cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
+            }%)`,
             borderRadius: "100px",
           }}
         ></Box>

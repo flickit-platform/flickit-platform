@@ -53,22 +53,25 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       let createdSpaceId = 1;
       type === "update"
         ? (await service.updateSpace(
-          { spaceId, data },
-          { signal: abortController.signal }
-        )) && (await service.seenSpaceList({ spaceId }, {}))
+            { spaceId, data },
+            { signal: abortController.signal },
+          )) && (await service.seenSpaceList({ spaceId }, {}))
         : await service
-          .createSpace(data, { signal: abortController.signal })
-          .then((res) => {
-            createdSpaceId = res.data.id;
-          });
+            .createSpace(data, { signal: abortController.signal })
+            .then((res) => {
+              createdSpaceId = res.data.id;
+            });
       type !== "update" && navigate(`/${createdSpaceId}/assessments/1`);
       setLoading(false);
       toast.success(
         <Trans
-          i18nKey={type === "update"
-            ? "spaceUpdatedSuccessMessage" : "spaceCreatedSuccessMessage"}
+          i18nKey={
+            type === "update"
+              ? "spaceUpdatedSuccessMessage"
+              : "spaceCreatedSuccessMessage"
+          }
           values={{ title: data.title }}
-        />
+        />,
       );
       onSubmitForm();
       close();
@@ -86,15 +89,16 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     };
   }, []);
 
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
-        setIsFocused(false)
+        setIsFocused(false);
         setTimeout(() => {
-          setIsFocused(true)
+          setIsFocused(true);
         }, 500);
-        formMethods.handleSubmit((data) => onSubmit(formMethods.getValues(), e))();
+        formMethods.handleSubmit((data) =>
+          onSubmit(formMethods.getValues(), e),
+        )();
       }
     };
 

@@ -30,10 +30,7 @@ const CompareResult = (props: ICompareResultProps) => {
   const { config } = useConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(
-      `${t("comparisonResultT")} `,
-      config.appTitle
-    );
+    setDocumentTitle(`${t("comparisonResultT")} `, config.appTitle);
   }, []);
 
   const [selectedSubject, setSelectedSubject] = useState(null);

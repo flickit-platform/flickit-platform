@@ -71,11 +71,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   };
   const fetchSampleExecl = useQuery({
     service: (args, config) => service.fetchExcelToDSLSampleFile(args, config),
-    runOnMount: false
+    runOnMount: false,
   });
   const convertExcelToDSLFile = useQuery({
     service: (args, config) => service.convertExcelToDSLFile(args, config),
-    runOnMount: false
+    runOnMount: false,
   });
 
   useEffect(() => {
@@ -100,11 +100,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         type === "update"
           ? await service.updateAssessmentKit(
               { data: formattedData, assessmentKitId: id },
-              { signal: abortController.signal }
+              { signal: abortController.signal },
             )
           : await service.createAssessmentKit(
               { data: formattedData },
-              { signal: abortController.signal }
+              { signal: abortController.signal },
             );
       setLoading(false);
       onSubmitForm();
@@ -138,14 +138,14 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   };
   const handleConvertDsl = async () => {
     const { args, config } = convertData;
-    let fileName = args?.file?.name.substring(
+    const fileName = args?.file?.name.substring(
       0,
-      args?.file?.name.lastIndexOf(".")
+      args?.file?.name.lastIndexOf("."),
     );
     service.convertExcelToDSLFile(args, config).then((res: any) => {
       const { data } = res;
       const zipfile = new Blob([data], { type: "application/zip" });
-      let file: any = new File([zipfile], `${fileName}.zip`, {
+      const file: any = new File([zipfile], `${fileName}.zip`, {
         type: "application/zip",
         lastModified: new Date().getTime(),
       });
@@ -161,9 +161,9 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
 
   const downloadTemplate = async () => {
     try {
-      let { url } = await fetchSampleExecl.query();
+      const { url } = await fetchSampleExecl.query();
       if (url) {
-        let link = document.createElement("a");
+        const link = document.createElement("a");
         link.href = url;
         document.body.appendChild(link);
         link.target = "_blank";

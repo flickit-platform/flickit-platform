@@ -132,7 +132,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   useEffect(() => {
     setDocumentTitle(
       `${t("question")} ${questionIndex}: ${title}`,
-      config.appTitle
+      config.appTitle,
     );
     setNotApplicable(answer?.isNotApplicable ?? false);
     if (answer?.confidenceLevel) {
@@ -140,8 +140,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         questionActions.setSelectedConfidenceLevel(
           answer?.confidenceLevel?.id
             ? answer?.confidenceLevel?.id
-            : answer?.confidenceLevel ?? null
-        )
+            : (answer?.confidenceLevel ?? null),
+        ),
       );
     }
   }, [title, answer?.confidenceLevel]);
@@ -327,7 +327,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                       size="medium"
                       onChange={(event, newValue) => {
                         dispatch(
-                          questionActions.setSelectedConfidenceLevel(newValue)
+                          questionActions.setSelectedConfidenceLevel(newValue),
                         );
                       }}
                       icon={
@@ -437,7 +437,7 @@ const AnswerTemplate = (props: {
   const dispatch = useQuestionDispatch();
   const { assessmentId = "", questionnaireId } = useParams();
   const [value, setValue] = useState<TAnswer | null>(
-    answer?.selectedOption || null
+    answer?.selectedOption || null,
   );
   const navigate = useNavigate();
   const isLastQuestion = questionIndex == total_number_of_questions;
@@ -446,7 +446,7 @@ const AnswerTemplate = (props: {
   const changeHappened = useRef(false);
   const onChange = (
     event: React.MouseEvent<HTMLElement>,
-    v: TAnswer | null
+    v: TAnswer | null,
   ) => {
     if (isSelectedValueTheSameAsAnswer) {
       changeHappened.current = true;
@@ -487,7 +487,7 @@ const AnswerTemplate = (props: {
                   : null,
             },
           },
-          { signal: abortController.current.signal }
+          { signal: abortController.current.signal },
         );
       }
 
@@ -501,7 +501,7 @@ const AnswerTemplate = (props: {
             confidenceLevel:
               confidenceLebels[selcetedConfidenceLevel - 1] ?? null,
           } as TAnswer,
-        })
+        }),
       );
       if (isLastQuestion) {
         dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
@@ -510,7 +510,7 @@ const AnswerTemplate = (props: {
       }
       if (value) {
         dispatch(
-          questionActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS)
+          questionActions.setAssessmentStatus(EAssessmentStatus.INPROGRESS),
         );
       }
       const newQuestionIndex = questionIndex + 1;
@@ -722,7 +722,7 @@ const AnswerDetails = ({
   const queryData = useQuery({
     service: (
       args = { questionId: questionInfo.id, assessmentId, page, size: 10 },
-      config
+      config,
     ) => service.fetchAnswersHistory(args, config),
     toastError: true,
     runOnMount: type === "history" ? true : false,
@@ -816,7 +816,7 @@ const AnswerHistoryItem = (props: any) => {
   }: { item: IAnswerHistory; questionInfo: IQuestionInfo } = props;
   const { options } = questionInfo;
   const selectedOption = options?.find(
-    (option: any) => option?.id === item?.answer?.selectedOption?.id
+    (option: any) => option?.id === item?.answer?.selectedOption?.id,
   );
   return (
     <Grid container spacing={2} px={1}>
@@ -926,9 +926,9 @@ const AnswerHistoryItem = (props: any) => {
           {format(
             new Date(
               new Date(item.creationTime).getTime() -
-                new Date(item.creationTime).getTimezoneOffset() * 60000
+                new Date(item.creationTime).getTimezoneOffset() * 60000,
             ),
-            "yyyy/MM/dd HH:mm"
+            "yyyy/MM/dd HH:mm",
           ) +
             " (" +
             convertToRelativeTime(item.creationTime) +
@@ -966,7 +966,7 @@ const Evidence = (props: any) => {
   const evidencesQueryData = useQuery({
     service: (
       args = { questionId: questionInfo.id, assessmentId, page: 0, size: 50 },
-      config
+      config,
     ) => service.fetchEvidences(args, config),
     toastError: true,
   });
@@ -983,7 +983,7 @@ const Evidence = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      let { items } = await evidencesQueryData.query();
+      const { items } = await evidencesQueryData.query();
       setEvidencesData(items);
     })();
   }, []);
@@ -1032,7 +1032,7 @@ const Evidence = (props: any) => {
   const onSubmit = async (data: any) => {
     try {
       if (data.evidence.length <= LIMITED) {
-        let { id } = await addEvidence.query({
+        const { id } = await addEvidence.query({
           description: data.evidence,
           questionId: questionInfo.id,
           assessmentId,
@@ -1079,14 +1079,14 @@ const Evidence = (props: any) => {
   };
   const deleteAttachment = async () => {
     try {
-      let attachmentId = expandedDeleteAttachmentDialog.id;
+      const attachmentId = expandedDeleteAttachmentDialog.id;
       await RemoveEvidenceAttachments.query({ evidenceId, attachmentId });
       setExpandedDeleteAttachmentDialog({
         ...expandedDeleteAttachmentDialog,
         expended: false,
       });
       if (!createAttachment) {
-        let { items } = await evidencesQueryData.query();
+        const { items } = await evidencesQueryData.query();
         setEvidencesData(items);
       }
       setAttachmentData(true);
@@ -1510,7 +1510,7 @@ const CreateEvidenceAttachment = (props: any) => {
 
   const abortController = useMemo(
     () => new AbortController(),
-    [evidenceJustCreatedId]
+    [evidenceJustCreatedId],
   );
 
   const MAX_SIZE = 2097152;
@@ -1528,7 +1528,7 @@ const CreateEvidenceAttachment = (props: any) => {
   };
   useEffect(() => {
     (async () => {
-      let { attachments } = await fetchAttachments({
+      const { attachments } = await fetchAttachments({
         evidence_id: evidenceJustCreatedId,
       });
       setLoadingFile(false);
@@ -1558,7 +1558,7 @@ const CreateEvidenceAttachment = (props: any) => {
     try {
       if (dropZoneData && !error) {
         setLoadingFile(true);
-        let data = {
+        const data = {
           id: evidenceJustCreatedId,
           attachment: dropZoneData[0],
           description: description,
@@ -1567,7 +1567,7 @@ const CreateEvidenceAttachment = (props: any) => {
           evidenceId: evidenceJustCreatedId,
           data,
         });
-        let { attachments } = await fetchAttachments({
+        const { attachments } = await fetchAttachments({
           evidence_id: evidenceJustCreatedId,
         });
         setLoadingFile(false);
@@ -1881,37 +1881,37 @@ const DropZoneArea = (props: any) => {
 const checkTypeUpload = (
   dropZoneData: any,
   setDisplayFile: any,
-  setTypeFile: any
+  setTypeFile: any,
 ) => {
   if (dropZoneData) {
-    let file = URL.createObjectURL(dropZoneData[0]);
+    const file = URL.createObjectURL(dropZoneData[0]);
     setDisplayFile(file && dropZoneData[0].type);
     if (dropZoneData[0].type.startsWith("image")) {
       setTypeFile(
         dropZoneData[0].type
           .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          .replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "application/pdf") {
       setTypeFile(
         dropZoneData[0].type
           .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          .replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(
         dropZoneData[0].type
           .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          .replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "text/plain") {
       setTypeFile(
         dropZoneData[0].type
           .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          .replace("/", ""),
       );
     }
     if (
@@ -2081,7 +2081,7 @@ const CreateDropZone = (props: any) => {
                 ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
                   dropZoneData[0]?.name?.substring(
-                    dropZoneData[0]?.name.lastIndexOf(".")
+                    dropZoneData[0]?.name.lastIndexOf("."),
                   )
                 : dropZoneData[0]?.name}
             </Typography>
@@ -2345,7 +2345,7 @@ const EvidenceDetail = (props: any) => {
   useEffect(() => {
     (async () => {
       if (attachmentData && evidenceId == id) {
-        let { attachments } = await fetchAttachments({ evidence_id: id });
+        const { attachments } = await fetchAttachments({ evidence_id: id });
         setAttachments(attachments);
         setExpandedAttachmentsDialogs({
           ...expandedAttachmentsDialogs,
@@ -2360,7 +2360,7 @@ const EvidenceDetail = (props: any) => {
     setLoadingFile(true);
     setExpandedEvidenceBox((prev) => !prev);
     if (!expandedEvidenceBox) {
-      let { attachments } = await fetchAttachments({ evidence_id: id });
+      const { attachments } = await fetchAttachments({ evidence_id: id });
       setLoadingFile(false);
       setAttachments(attachments);
     } else {
@@ -2797,8 +2797,8 @@ const FileIcon = (props: any): any => {
   const [hover, setHover] = useState(false);
 
   const { link } = item;
-  let reg = new RegExp("\\/([^\\/?]+)\\?");
-  let name = link?.match(reg)[1];
+  const reg = new RegExp("\\/([^\\/?]+)\\?");
+  const name = link?.match(reg)[1];
   const exp = name?.substring(name.lastIndexOf("."));
   return (
     <Tooltip
@@ -2993,7 +2993,7 @@ const MyDropzone = (props: any) => {
                 ? dropZoneData[0]?.name?.substring(0, 10) +
                   "..." +
                   dropZoneData[0]?.name?.substring(
-                    dropZoneData[0]?.name?.lastIndexOf(".")
+                    dropZoneData[0]?.name?.lastIndexOf("."),
                   )
                 : dropZoneData[0]?.name}
             </Typography>
@@ -3122,7 +3122,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     }
     try {
       if (dropZoneData && !error) {
-        let data = {
+        const data = {
           id: evidenceId,
           attachment: dropZoneData[0],
           description: description,

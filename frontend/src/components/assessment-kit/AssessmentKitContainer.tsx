@@ -42,8 +42,10 @@ const AssessmentKitContainer = () => {
   });
   const { config } = useConfigContext();
 
-  return assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
-    assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND ? (
+  return assessmentKitQueryData.errorObject?.response?.data?.code ===
+    ECustomErrorType.ACCESS_DENIED ||
+    assessmentKitQueryData.errorObject?.response?.data?.code ===
+      ECustomErrorType.NOT_FOUND ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <QueryData
@@ -51,7 +53,7 @@ const AssessmentKitContainer = () => {
       render={(data) => {
         setDocumentTitle(
           `${t("assessmentKit")}: ${data.title || ""}`,
-          config.appTitle
+          config.appTitle,
         );
         return (
           <AssessmentKit data={data} query={assessmentKitQueryData.query} />
@@ -91,7 +93,7 @@ const AssessmentKit = (props: any) => {
       service.fetchUserExpertGroup(args, config),
   });
   const colorPallet = getMaturityLevelColors(
-    maturityLevels ? maturityLevels?.length : 5
+    maturityLevels ? maturityLevels?.length : 5,
   );
   const dialogProps = useDialog({
     context: {
@@ -374,8 +376,8 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                              ? "0 8px 8px 0"
-                              : "0",
+                                ? "0 8px 8px 0"
+                                : "0",
                         }}
                       >
                         {item.title}
@@ -487,7 +489,7 @@ const LikeAssessmentKit = ({ likes }: any) => {
       color="secondary"
       size="small"
       startIcon={
-        likeQueryData?.data?.liked ?? likes?.liked ? (
+        (likeQueryData?.data?.liked ?? likes?.liked) ? (
           <FavoriteRoundedIcon />
         ) : (
           <FavoriteBorderRoundedIcon fontSize="inherit" />

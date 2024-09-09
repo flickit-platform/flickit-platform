@@ -74,7 +74,7 @@ const renderApp = () => {
           </AppProvider>
         </Suspense>
       </BrowserRouter>
-    </ThemeProvider>
+    </ThemeProvider>,
   );
 };
 

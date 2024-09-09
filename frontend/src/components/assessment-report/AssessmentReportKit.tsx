@@ -62,19 +62,19 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             xl:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-                80
+              80
                 ? "column"
                 : "row",
             lg:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-                60
+              60
                 ? "column"
                 : "row",
             md:
               assessmentKit.title.length +
                 assessmentKit.expertGroup.title.length >
-                40
+              40
                 ? "column"
                 : "row",
             xs: "column",

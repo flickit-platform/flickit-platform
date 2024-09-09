@@ -16,11 +16,11 @@ const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
   const [value, setValue] = useState("public");
   const publicAssessmentKitsQueryData = useQuery({
-    service: (args = { isPrivate: false  }, config) =>
+    service: (args = { isPrivate: false }, config) =>
       service.fetchAssessmentKits(args, config),
   });
   const privateAssessmentKitsQueryData = useQuery({
-    service: (args = { isPrivate: true  }, config) =>
+    service: (args = { isPrivate: true }, config) =>
       service.fetchAssessmentKits(args, config),
   });
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -75,13 +75,7 @@ const AssessmentKitsListContainer = () => {
                   <Grid container spacing={2}>
                     {items.map((assessmentKit: any) => {
                       return (
-                        <Grid
-                          item
-                          xs={12}
-                          md={4}
-                          lg={3}
-                          key={assessmentKit.id}
-                        >
+                        <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem
                             bg1={"#4568dc"}
                             bg2={"#b06ab3"}
@@ -122,13 +116,7 @@ const AssessmentKitsListContainer = () => {
                   <Grid container spacing={2}>
                     {items.map((assessmentKit: any) => {
                       return (
-                        <Grid
-                          item
-                          xs={12}
-                          md={4}
-                          lg={3}
-                          key={assessmentKit.id}
-                        >
+                        <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem
                             bg1={"#4568dc"}
                             bg2={"#b06ab3"}

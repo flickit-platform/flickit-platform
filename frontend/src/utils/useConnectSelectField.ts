@@ -10,19 +10,19 @@ const useConnectSelectField = (props: {
   url: string;
   searchParams?: Record<string, any>;
   filterOptions?: (options: any[]) => any[];
-  loadMore?: number
+  loadMore?: number;
 }) => {
   const {
     url,
     filterOptions = (options) => options,
     searchParams = {},
-    loadMore
+    loadMore,
   } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [defaultOption, setDefaultOption] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [totalItem,setTotalItem] = useState(0)
+  const [totalItem, setTotalItem] = useState(0);
   const { service } = useServiceContext();
 
   useEffect(() => {
@@ -41,11 +41,11 @@ const useConnectSelectField = (props: {
         data: { items, colors, default_color, total },
       } = await service.fetchOptions({ url }, { signal, params: searchParams });
       if (items) {
-        setTotalItem(total)
+        setTotalItem(total);
         if (Array.isArray(items)) {
-          if(loadMore){
-            setOptions(prev => [...prev,...items]);
-          }else{
+          if (loadMore) {
+            setOptions((prev) => [...prev, ...items]);
+          } else {
             setOptions(items);
           }
           setError(false);

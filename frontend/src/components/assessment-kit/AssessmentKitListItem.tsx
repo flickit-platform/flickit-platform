@@ -138,7 +138,7 @@ const Actions = (props: any) => {
 
   if (!fetchAssessmentKits) {
     console.warn(
-      "fetchAssessmentKits not provided. assessment kit list won't be updated on any action"
+      "fetchAssessmentKits not provided. assessment kit list won't be updated on any action",
     );
   }
 

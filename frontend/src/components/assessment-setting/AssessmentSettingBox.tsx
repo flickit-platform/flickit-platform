@@ -353,7 +353,7 @@ export const AssessmentSettingMemberBox = (props: {
             alignItems: "center",
             position: "relative",
             width: "90%",
-            ml:"10%"
+            ml: "10%",
           }}
         >
           <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
@@ -570,13 +570,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -620,15 +620,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -647,11 +647,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -672,7 +672,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                              index + 1 && (
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -683,7 +683,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                 ></Box>
                                               )}
                                           </MenuItem>
-                                        )
+                                        ),
                                       )}
                                   </Select>
                                 </Tooltip>
@@ -876,13 +876,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -896,7 +896,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                  // disabled={!row.editable}
+                                    // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -926,15 +926,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -953,11 +953,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -978,7 +978,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                              index + 1 && (
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -989,7 +989,7 @@ export const AssessmentSettingMemberBox = (props: {
                                                 ></Box>
                                               )}
                                           </MenuItem>
-                                        )
+                                        ),
                                       )}
                                   </Select>
                                 </Grid>
@@ -1052,7 +1052,7 @@ const OnHoverInputTitleSetting = (props: any) => {
         id: assessmentId,
         data: { title: inputData, colorId: color?.id || 6 },
       },
-      config
+      config,
     ) => service.updateAssessment(args, config),
     runOnMount: false,
     // toastError: true,

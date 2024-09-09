@@ -18,7 +18,7 @@ interface IQueryData<T> {
   errorObject: ICustomError | undefined;
   query?: (
     args?: any,
-    config?: AxiosRequestConfig<any> | undefined
+    config?: AxiosRequestConfig<any> | undefined,
   ) => Promise<any>;
   abortController?: AbortController;
 }
@@ -31,7 +31,7 @@ interface IQueryBatchDataProps<T> {
   renderLoading?: () => JSX.Element;
   renderError?: (
     err: (ICustomError | ICustomError[] | undefined)[] | undefined,
-    errorComponent: JSX.Element
+    errorComponent: JSX.Element,
   ) => JSX.Element;
   isDataEmpty?: (data?: (T | undefined)[]) => boolean;
   queryBatchData: IQueryData<T>[];
@@ -43,7 +43,7 @@ interface IQueryBatchDataProps<T> {
 }
 
 const QueryBatchData = <T extends any = any>(
-  props: IQueryBatchDataProps<T>
+  props: IQueryBatchDataProps<T>,
 ) => {
   const {
     render,
@@ -69,11 +69,13 @@ const QueryBatchData = <T extends any = any>(
     return renderLoading();
   }
   const accessDenied = errorObject.find((errorObj?: ICustomError) => {
-    return errorObj?.response?.data.code === ECustomErrorType.ACCESS_DENIED ||
+    return (
+      errorObj?.response?.data.code === ECustomErrorType.ACCESS_DENIED ||
       errorObj?.response?.data.code === ECustomErrorType.NOT_FOUND
-  })
+    );
+  });
   if (accessDenied) {
-    return <ErrorNotFoundOrAccessDenied />
+    return <ErrorNotFoundOrAccessDenied />;
   }
   if (error) {
     return renderError(errorObject, errorComponent);
@@ -94,7 +96,7 @@ export const defaultRenderError = (
     | ICustomError
     | (ICustomError | any | ICustomError[] | undefined)[]
     | undefined,
-  errorComponent: JSX.Element = <ErrorDataLoading />
+  errorComponent: JSX.Element = <ErrorDataLoading />,
 ): any => {
   if (!err) {
     return errorComponent;
@@ -104,7 +106,9 @@ export const defaultRenderError = (
       if (err[index]?.response?.data?.code == "CALCULATE_NOT_VALID") {
         return <ErrorRecalculating />;
       }
-      if (err[index]?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID") {
+      if (
+        err[index]?.response?.data?.code == "CONFIDENCE_CALCULATION_NOT_VALID"
+      ) {
         return <ErrorRecalculating />;
       }
     }
@@ -146,7 +150,7 @@ const reduceData = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
 };
 
 const reduceLoadings = <T extends any = any>(
-  queryBatchData: IQueryData<T>[]
+  queryBatchData: IQueryData<T>[],
 ) => {
   return queryBatchData.reduce((prevQuery, currentQuery) => ({
     ...currentQuery,
@@ -171,7 +175,7 @@ const reduceError = <T extends any = any>(queryBatchData: IQueryData<T>[]) => {
 };
 
 const reduceErrorObject = <T extends any = any>(
-  queryBatchData: IQueryData<any>[]
+  queryBatchData: IQueryData<any>[],
 ) => {
   return queryBatchData.map((query) => query.errorObject);
 };

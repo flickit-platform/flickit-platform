@@ -123,14 +123,14 @@ const Uploader = (props: IUploadProps) => {
     setButtonStep,
     setZippedData,
     setConvertData,
-    dropNewFile
+    dropNewFile,
   } = props;
 
   const { service } = useServiceContext();
   const defaultValueQuery = useQuery({
     service: (
       args = { url: defaultValue?.replace("https://flickit.org", "") },
-      config
+      config,
     ) => service.fetchImage(args, config),
     runOnMount: false,
   });
@@ -152,15 +152,19 @@ const Uploader = (props: IUploadProps) => {
     return [];
   };
 
-  const [limitGuide, setLimitGuide] = useState<string>()
+  const [limitGuide, setLimitGuide] = useState<string>();
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
-      setTheState
+      setTheState,
     );
 
   useEffect(() => {
     if (maxSize) {
-      setLimitGuide(t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
+      setLimitGuide(
+        t("maximumUploadFileSize", {
+          maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
+        }) as string,
+      );
     }
     if (
       typeof defaultValue === "string" &&
@@ -184,10 +188,9 @@ const Uploader = (props: IUploadProps) => {
     runOnMount: false,
   });
 
-
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
-      delete errors[fieldProps.name]
+      delete errors[fieldProps.name];
       if (acceptedFiles?.[0]) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -201,28 +204,30 @@ const Uploader = (props: IUploadProps) => {
               file: acceptedFiles?.[0],
               expertGroupId: param,
             });
-            setIsValid(true)
+            setIsValid(true);
             setMyFiles(acceptedFiles);
             fieldProps.onChange(res);
-          } catch (e : any) {
+          } catch (e: any) {
             const err = e as ICustomError;
             if (err?.response?.status === 422) {
               const responseObject = JSON.parse(err?.response?.data?.message);
-              setShowErrorLog(true)
+              setShowErrorLog(true);
               setSyntaxErrorObject(responseObject.errors);
-              setIsValid(false)
+              setIsValid(false);
             }
             if (err?.response?.status !== 422) {
-              if(e?.response?.data?.type == "application/json"){
-                const blob = new Blob([err.response?.data as any], { type: 'application/json' }).text();
-                blob.then((res : any) => {
-                  toastError(JSON.parse(res)?.message)
-                })
-              }else{
-                toastError(err)
+              if (e?.response?.data?.type == "application/json") {
+                const blob = new Blob([err.response?.data as any], {
+                  type: "application/json",
+                }).text();
+                blob.then((res: any) => {
+                  toastError(JSON.parse(res)?.message);
+                });
+              } else {
+                toastError(err);
               }
               setMyFiles([]);
-              setIsValid(false)
+              setIsValid(false);
               fieldProps.onChange("");
             }
           }
@@ -231,7 +236,7 @@ const Uploader = (props: IUploadProps) => {
         reader.readAsArrayBuffer(acceptedFiles[0]);
       }
     },
-    []
+    [],
   );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -242,12 +247,14 @@ const Uploader = (props: IUploadProps) => {
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
         const error = rejectedFiles[0].errors.find(
-          (e) => e.code === "file-too-large"
+          (e) => e.code === "file-too-large",
         );
         if (error) {
           errors[fieldProps.name] = {
             type: "maxSize",
-            message: (t("maximumUploadFileSize", { maxSize: maxSize ? formatBytes(maxSize) : "2 MB" }) as string)
+            message: t("maximumUploadFileSize", {
+              maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
+            }) as string,
           };
         } else {
           toastError(t("oneFileOnly") as string);
@@ -310,9 +317,9 @@ const Uploader = (props: IUploadProps) => {
                           e.stopPropagation();
                           setMyFiles([]);
                           fieldProps.onChange("");
-                          setButtonStep(0)
-                          setZippedData(null)
-                          setConvertData(null)
+                          setButtonStep(0);
+                          setZippedData(null);
+                          setConvertData(null);
                           return;
                           // }
                           // if (uploadQueryProps.error) {
@@ -372,18 +379,43 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.name} - ${( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size
-                    ? formatBytes((acceptedFiles[0] || file)?.size)
-                    : ""
-                    }`}
+                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${
+                    (
+                      (dropNewFile && dropNewFile[0]) ||
+                      acceptedFiles[0] ||
+                      file
+                    )?.size
+                      ? formatBytes((acceptedFiles[0] || file)?.size)
+                      : ""
+                  }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
-                  primary={<>{( dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.name}</>}
+                  primary={
+                    <>
+                      {
+                        (
+                          (dropNewFile && dropNewFile[0]) ||
+                          acceptedFiles[0] ||
+                          file
+                        )?.name
+                      }
+                    </>
+                  }
                   secondary={
                     <>
-                      {(dropNewFile && dropNewFile[0] || acceptedFiles[0] || file )?.size
-                        ? formatBytes((dropNewFile && dropNewFile[0] || acceptedFiles[0] || file)?.size)
+                      {(
+                        (dropNewFile && dropNewFile[0]) ||
+                        acceptedFiles[0] ||
+                        file
+                      )?.size
+                        ? formatBytes(
+                            (
+                              (dropNewFile && dropNewFile[0]) ||
+                              acceptedFiles[0] ||
+                              file
+                            )?.size,
+                          )
                         : null}
                     </>
                   }
@@ -424,7 +456,7 @@ const Uploader = (props: IUploadProps) => {
           )}
         </Box>
       </Box>
-      <FormHelperText>{limitGuide || errorMessage as string}</FormHelperText>
+      <FormHelperText>{limitGuide || (errorMessage as string)}</FormHelperText>
     </FormControl>
   );
 };

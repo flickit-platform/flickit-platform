@@ -2,7 +2,7 @@ import { COMPARE_ACTIONS_TYPE } from "./actions";
 
 const appReducer = (
   prevState: any,
-  action: { type: COMPARE_ACTIONS_TYPE; payload: any }
+  action: { type: COMPARE_ACTIONS_TYPE; payload: any },
 ) => {
   switch (action.type) {
     case COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_IDS:

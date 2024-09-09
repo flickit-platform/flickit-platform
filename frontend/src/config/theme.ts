@@ -326,8 +326,8 @@ export const theme = createTheme({
     },
     MuiDialogTitle: {
       defaultProps: {
-        fontFamily: secondaryFontFamily
-      }
+        fontFamily: secondaryFontFamily,
+      },
     },
     MuiButtonGroup: {
       defaultProps: {

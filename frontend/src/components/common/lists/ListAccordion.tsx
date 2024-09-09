@@ -22,13 +22,20 @@ const ListAccordion = (props: IListAccordion) => {
       }}
     >
       {items.map((item: any, index: number) => {
-        return <LiComponent render={(isExpanded) => renderItem(item, index, isExpanded)} key={index} />;
+        return (
+          <LiComponent
+            render={(isExpanded) => renderItem(item, index, isExpanded)}
+            key={index}
+          />
+        );
       })}
     </Box>
   );
 };
 
-const UnOrderedListAccordionItem = (props: { render: (expanded: boolean) => JSX.Element }) => {
+const UnOrderedListAccordionItem = (props: {
+  render: (expanded: boolean) => JSX.Element;
+}) => {
   const { render } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
 

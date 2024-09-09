@@ -3,13 +3,7 @@ import React from "react";
 import "./style.css";
 
 const GaugeComponent2 = (props: IDynamicGaugeSVGProps) => {
-  const {
-    colorCode,
-    value,
-    confidence_value,
-    height,
-    className,
-  } = props;
+  const { colorCode, value, confidence_value, height, className } = props;
   const progress = Math.ceil(((confidence_value ?? 0) / 100) * 60);
   return (
     <svg

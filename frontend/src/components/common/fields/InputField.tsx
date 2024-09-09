@@ -61,7 +61,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     errors,
     name,
     minLength,
-    maxLength
+    maxLength,
   );
   useEffect(() => {
     console.log(isFocused);

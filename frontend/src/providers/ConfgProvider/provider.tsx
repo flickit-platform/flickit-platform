@@ -40,12 +40,12 @@ export const ConfigProvider: React.FC<AppProviderProps> = ({ children }) => {
         payload: appTitle,
       });
       const metaDescription = document.querySelector(
-        'meta[name="description"]'
+        'meta[name="description"]',
       );
       if (metaDescription) {
         metaDescription.setAttribute(
           "content",
-          `The ${appTitle} makes it easy to evaluate software systems. You can publish your evaluation assessment kit or use available assessment kits and get helpful insights.`
+          `The ${appTitle} makes it easy to evaluate software systems. You can publish your evaluation assessment kit or use available assessment kits and get helpful insights.`,
         );
       }
 

@@ -67,7 +67,7 @@ import { FaClipboard } from "react-icons/fa";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
 ) => {
   if (element) {
     setLoading(true); // Set loading to true when starting the operation
@@ -139,7 +139,7 @@ const AssessmentExportContainer = () => {
             assessmentId,
             attributeId,
           },
-          undefined
+          undefined,
         )
         .then((res: any) => {
           return res?.data?.content || "";
@@ -169,7 +169,7 @@ const AssessmentExportContainer = () => {
             assessmentId,
             attributeId,
           },
-          undefined
+          undefined,
         )
         .then((res: any) => {
           return res?.data || "";
@@ -225,7 +225,7 @@ const AssessmentExportContainer = () => {
   const [showSpinner, setShowSpinner] = useState(true);
   const handleCopyClick = (id: string) => {
     handleCopyAsImage(refs.current[id] || null, (loading) =>
-      setLoadingId(loading ? id : null)
+      setLoadingId(loading ? id : null),
     );
   };
   const [attributesData, setAttributesData] = useState<any>({});
@@ -251,7 +251,7 @@ const AssessmentExportContainer = () => {
               try {
                 const result = await FetchAttributeData(
                   assessmentId,
-                  attribute?.id
+                  attribute?.id,
                 );
                 return {
                   id: attribute?.id,
@@ -260,7 +260,7 @@ const AssessmentExportContainer = () => {
               } catch (error) {
                 console.error(
                   `Failed to fetch data for attribute ${attribute?.id}:`,
-                  error
+                  error,
                 );
                 return null;
               } finally {
@@ -270,7 +270,7 @@ const AssessmentExportContainer = () => {
                   [attribute?.id]: false,
                 }));
               }
-            })
+            }),
       );
 
       const allAttributesData = attributesDataPromises.length
@@ -282,7 +282,7 @@ const AssessmentExportContainer = () => {
           acc[id] = data;
           return acc;
         },
-        {}
+        {},
       );
 
       setAttributesData((prevData: any) => ({
@@ -349,7 +349,7 @@ const AssessmentExportContainer = () => {
             }));
             return null;
           }
-        })
+        }),
       );
 
     const allAttributesDataPolicy = attributesDataPolicyPromises
@@ -361,7 +361,7 @@ const AssessmentExportContainer = () => {
         acc[id] = data;
         return acc;
       },
-      {}
+      {},
     );
 
     // Update loading state for the fetched attributes
@@ -387,7 +387,7 @@ const AssessmentExportContainer = () => {
     (id: string) => (element: HTMLDivElement | null) => {
       refs.current[id] = element;
     },
-    []
+    [],
   );
 
   return errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
@@ -423,7 +423,7 @@ const AssessmentExportContainer = () => {
         useEffect(() => {
           setDocumentTitle(
             `${t("document", { title: assessment?.title })}`,
-            config?.appTitle
+            config?.appTitle,
           );
         }, [assessment]);
 
@@ -443,7 +443,7 @@ const AssessmentExportContainer = () => {
         const colorPallet = getMaturityLevelColors(
           assessment?.assessmentKit?.maturityLevels
             ? assessment?.assessmentKit?.maturityLevels?.length
-            : 5
+            : 5,
         );
 
         return (
@@ -764,8 +764,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title,
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -774,7 +774,7 @@ const AssessmentExportContainer = () => {
                               previousValue + currentValue?.attributes?.length
                             );
                           },
-                          0
+                          0,
                         ),
                       }}
                     />
@@ -865,7 +865,7 @@ const AssessmentExportContainer = () => {
                                   {subject?.attributes?.map(
                                     (
                                       feature: IAttribute,
-                                      featureIndex: number
+                                      featureIndex: number,
                                     ) => (
                                       <TableRow key={featureIndex}>
                                         <TableCell
@@ -889,7 +889,7 @@ const AssessmentExportContainer = () => {
                                           </Typography>
                                         </TableCell>
                                       </TableRow>
-                                    )
+                                    ),
                                   )}
                                 </TableBody>
                               </Table>
@@ -928,17 +928,17 @@ const AssessmentExportContainer = () => {
                                 index === 0
                                   ? "8px 0 0 8px"
                                   : index ===
-                                    assessment?.assessmentKit?.maturityLevels
-                                      ?.length -
-                                      1
-                                  ? "0 8px 8px 0"
-                                  : "0",
+                                      assessment?.assessmentKit?.maturityLevels
+                                        ?.length -
+                                        1
+                                    ? "0 8px 8px 0"
+                                    : "0",
                             }}
                           >
                             {item.title}
                           </Box>
                         );
-                      }
+                      },
                     )}
                   </Box>
                   <Box component="ol" sx={{ paddingLeft: 6 }}>
@@ -954,7 +954,7 @@ const AssessmentExportContainer = () => {
                             {level.description}
                           </Typography>
                         </Box>
-                      )
+                      ),
                     )}
                   </Box>
                   <Typography
@@ -975,7 +975,7 @@ const AssessmentExportContainer = () => {
                           (previousValue: number, currentValue: any) => {
                             return previousValue + currentValue?.questionCount;
                           },
-                          0
+                          0,
                         ),
                       }}
                     />
@@ -1185,7 +1185,7 @@ const AssessmentExportContainer = () => {
                         title: subject?.title,
                         description: subject?.description,
                         confidenceValue: Math?.ceil(
-                          subject?.confidenceValue ?? 0
+                          subject?.confidenceValue ?? 0,
                         ),
                         maturityLevelValue: subject?.maturityLevel?.value,
                         maturityLevelTitle: subject?.maturityLevel?.title,
@@ -1304,7 +1304,7 @@ const AssessmentExportContainer = () => {
                                 <Box display="flex" alignItems="flex-start">
                                   <Box
                                     ref={handleSetRef(
-                                      attribute?.id.toString() || ""
+                                      attribute?.id.toString() || "",
                                     )}
                                     flex={1}
                                   >
@@ -1312,7 +1312,7 @@ const AssessmentExportContainer = () => {
                                       status={attribute?.maturityLevel?.title}
                                       ml={attribute?.maturityLevel?.value}
                                       cl={Math.ceil(
-                                        attribute?.confidenceValue ?? 0
+                                        attribute?.confidenceValue ?? 0,
                                       )}
                                       mn={
                                         assessmentKit?.maturityLevelCount ?? 5
@@ -1325,7 +1325,7 @@ const AssessmentExportContainer = () => {
                                       size="small"
                                       onClick={() =>
                                         handleCopyClick(
-                                          attribute?.id.toString() || ""
+                                          attribute?.id.toString() || "",
                                         )
                                       }
                                       disabled={

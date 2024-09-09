@@ -125,7 +125,7 @@ const DeleteAssessmentIconBtn = (props: {
 
   const handleClick = () => {
     const newAssessmentIds = assessmentIds.filter(
-      (assessmentId) => assessmentId != id
+      (assessmentId) => assessmentId != id,
     );
     dispatch(compareActions.setAssessmentKit(filteredData));
     if (newAssessmentIds.length === 0) {

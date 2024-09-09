@@ -38,7 +38,7 @@ const CompareResultContainer = () => {
     <QueryData
       {...compareResultQueryData}
       render={(data) => {
-        const { assessments, subjects } = data
+        const { assessments, subjects } = data;
         return (
           <Box>
             <Title

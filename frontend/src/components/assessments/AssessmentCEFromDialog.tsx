@@ -77,7 +77,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 colorId: color,
               },
             },
-            { signal: abortController.signal }
+            { signal: abortController.signal },
           )
         : await service
             .createAssessment(
@@ -89,7 +89,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                   colorId: color,
                 },
               },
-              { signal: abortController.signal }
+              { signal: abortController.signal },
             )
             .then((res: any) => {
               setCreatedKitId(res.data?.id);

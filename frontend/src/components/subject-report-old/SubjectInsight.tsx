@@ -90,60 +90,73 @@ export const SubjectInsight = () => {
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                  60000
+                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                      60000,
                 ),
-                "yyyy/MM/dd HH:mm"
+                "yyyy/MM/dd HH:mm",
               ) +
                 " (" +
                 convertToRelativeTime(aboutSection?.creationTime) +
                 ")"}
             </Typography>
           )}
-          {(aboutSection.hasOwnProperty("isValid") || editable) && !aboutSection?.isValid && (
-            <Box sx={{ ...styles.centerV }} gap={2} my={1}>
-              <Box
-                sx={{
-                  zIndex: 1,
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  ml: { xs: 0.75, sm: 0.75, md: 1 },
-                }}
-              >
-                <Typography
-                  variant="labelSmall"
+          {(aboutSection.hasOwnProperty("isValid") || editable) &&
+            !aboutSection?.isValid && (
+              <Box sx={{ ...styles.centerV }} gap={2} my={1}>
+                <Box
                   sx={{
-                    backgroundColor: "#d85e1e",
-                    color: "white",
-                    padding: "0.35rem 0.35rem",
-                    borderRadius: "4px",
-                    fontWeight: "bold",
+                    zIndex: 1,
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    ml: { xs: 0.75, sm: 0.75, md: 1 },
                   }}
                 >
-                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "Outdated" : "note"} />
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  backgroundColor: "rgba(255, 249, 196, 0.31)",
-                  padding: 1,
-                  borderRadius: 2,
-                  maxWidth: "100%",
-                }}
-              >
-                <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                <Typography
-                  variant="titleMedium"
-                  fontWeight={400}
-                  textAlign="left"
+                  <Typography
+                    variant="labelSmall"
+                    sx={{
+                      backgroundColor: "#d85e1e",
+                      color: "white",
+                      padding: "0.35rem 0.35rem",
+                      borderRadius: "4px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Trans
+                      i18nKey={
+                        aboutSection.hasOwnProperty("isValid")
+                          ? "Outdated"
+                          : "note"
+                      }
+                    />
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    backgroundColor: "rgba(255, 249, 196, 0.31)",
+                    padding: 1,
+                    borderRadius: 2,
+                    maxWidth: "100%",
+                  }}
                 >
-                  <Trans i18nKey={aboutSection.hasOwnProperty("isValid") ? "invalidInsight" : "defaultInsightTemplate"} />
-                </Typography>
+                  <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                  <Typography
+                    variant="titleMedium"
+                    fontWeight={400}
+                    textAlign="left"
+                  >
+                    <Trans
+                      i18nKey={
+                        aboutSection.hasOwnProperty("isValid")
+                          ? "invalidInsight"
+                          : "defaultInsightTemplate"
+                      }
+                    />
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          )}
+            )}
         </>
       ) : (
         <Typography variant="body2">
@@ -184,7 +197,7 @@ const OnHoverRichEditor = (props: any) => {
     try {
       const { data: res } = await service.updateSubjectInsight(
         { assessmentId, data: { insight: data.insight }, subjectId },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       await infoQuery();
       setShow(false);

@@ -9,7 +9,7 @@ export const QuestionThumb = (props: any) => {
     questionsInfo,
     question = {},
     questionIndex,
-    onClose = () => { },
+    onClose = () => {},
     link,
     isSubmitting,
   } = props;
@@ -55,8 +55,9 @@ export const QuestionThumb = (props: any) => {
             onClose();
           }}
         >
-          {question.answer || !permissions.answerQuestion ||
-            (question.answer && question.answer.isNotApplicable) ? (
+          {question.answer ||
+          !permissions.answerQuestion ||
+          (question.answer && question.answer.isNotApplicable) ? (
             <Trans i18nKey="edit" />
           ) : (
             <Trans i18nKey="submitAnAnswer" />
