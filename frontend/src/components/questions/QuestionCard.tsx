@@ -647,7 +647,10 @@ const AnswerDetails = ({
           />
         }
         </Box>
-      ) : data.length > 0 ? (
+      ) : queryData.loading ?
+          <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
+            <CircularProgress/>
+          </Box> : data.length > 0 ? (
         <Box
           display="flex"
           alignItems={"baseline"}
@@ -660,9 +663,7 @@ const AnswerDetails = ({
             wordBreak: "break-word",
           }}
         >
-         {queryData.loading?
-          <CircularProgress/>:
-          data.map((item: IAnswerHistory, index: number) => (
+         {data.map((item: IAnswerHistory, index: number) => (
             <Box key={index} width="100%">
               <AnswerHistoryItem item={item} questionInfo={questionInfo} />
               <Divider sx={{ width: "100%", marginBlock: 2 }} />
