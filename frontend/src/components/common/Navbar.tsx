@@ -65,7 +65,7 @@ const NotificationItem = ({
   onNotificationClick,
 }: {
   message;
-  onNotificationClick: () => void;
+  onNotificationClick;
 }) => {
   return (
     <Box
