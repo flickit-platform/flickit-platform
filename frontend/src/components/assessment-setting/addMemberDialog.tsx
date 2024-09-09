@@ -148,10 +148,10 @@ const AddMemberDialog = (props: {
     try {
       addedEmailType === EUserType.NONE
         ? await inviteMemberToAssessment.query({
-          email: memberSelectedEmail,
-          assessmentId,
-          roleId: roleSelected.id,
-        })
+            email: memberSelectedEmail,
+            assessmentId,
+            roleId: roleSelected.id,
+          })
         : await addRoleMemberQueryData.query();
       // await fetchAssessmentsUserListRoles()
       setChangeData((prev: boolean) => !prev);
@@ -222,11 +222,13 @@ const AddMemberDialog = (props: {
       maxWidth="md"
       fullScreen={fullScreen}
     >
-      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}> <>
-        <Settings sx={{ mr: 1 }} />
-        <Trans i18nKey="assignRole" />
-
-      </></DialogTitle>
+      <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
+        {" "}
+        <>
+          <Settings sx={{ mr: 1 }} />
+          <Trans i18nKey="assignRole" />
+        </>
+      </DialogTitle>
       <DialogContent
         sx={{
           padding: "unset",
@@ -238,7 +240,7 @@ const AddMemberDialog = (props: {
           alignItems: "center",
           textAlign: "center",
           gap: 3,
-          p:1
+          p: 1,
         }}
       >
         <Box
@@ -251,8 +253,7 @@ const AddMemberDialog = (props: {
           width="100%"
           mt={1}
         >
-          <Typography
-          >
+          <Typography>
             <Trans i18nKey={"add"} />
           </Typography>
           <Box width="50%">
@@ -266,13 +267,10 @@ const AddMemberDialog = (props: {
               />
             </FormProviderWithForm>
           </Box>
-          <Typography
-          >
+          <Typography>
             <Trans i18nKey={"as"} />
           </Typography>
-          <FormControl
-            sx={{ width: "40%" }}
-          >
+          <FormControl sx={{ width: "40%" }}>
             <Select
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
@@ -281,9 +279,7 @@ const AddMemberDialog = (props: {
               onChange={handleChangeRole}
               // disabled={memberSelected == "" ? true : false}
               sx={{
-
                 height: "40px",
-
               }}
               IconComponent={KeyboardArrowDownIcon}
               inputProps={{
@@ -331,13 +327,13 @@ const AddMemberDialog = (props: {
                         "&.MuiMenuItem-root:hover": {
                           ...(roleSelected?.title == role.title
                             ? {
-                              backgroundColor: "#9CCAFF",
-                              color: "#004F83",
-                            }
+                                backgroundColor: "#9CCAFF",
+                                color: "#004F83",
+                              }
                             : {
-                              backgroundColor: "#EFEDF0",
-                              color: "#1B1B1E",
-                            }),
+                                backgroundColor: "#EFEDF0",
+                                color: "#1B1B1E",
+                              }),
                         },
                         background:
                           roleSelected?.title == role.title ? "#9CCAFF" : "",
@@ -414,9 +410,7 @@ const AddMemberDialog = (props: {
             justifyContent: "flex-end",
           }}
         >
-          <Button onClick={closeDialog}>
-            {cancelText}
-          </Button>
+          <Button onClick={closeDialog}>{cancelText}</Button>
           <LoadingButton
             variant="contained"
             onClick={handleClick}
@@ -495,6 +489,7 @@ const EmailField = ({
         createItemQuery={createItemQuery}
         errorObject={error}
         setError={setError}
+        searchable={false}
       />
     </Box>
   );

@@ -35,25 +35,25 @@ const SpacesList = (props: ISpaceListProps) => {
   const { userInfo } = useAuthContext();
   const { id: userId } = userInfo;
 
-  const setUserInfo = (signal: AbortSignal) => {
-    service
-      .getSignedInUser(undefined, { signal })
-      .then(({ data }) => {
-        // dispatch(authActions.setUserInfo(data));
-      })
-      .catch((e) => {
-        const err = e as ICustomError;
-        toastError(err);
-      });
-  };
+  // const setUserInfo = (signal: AbortSignal) => {
+  //   // service
+  //   //   .getSignedInUser(undefined, { signal })
+  //   //   .then(({ data }) => {
+  //   //     // dispatch(authActions.setUserInfo(data));
+  //   //   })
+  //   //   .catch((e) => {
+  //   //     const err = e as ICustomError;
+  //   //     toastError(err);
+  //   //   });
+  // };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    setUserInfo(controller.signal);
-    return () => {
-      controller?.abort();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   // setUserInfo(controller.signal);
+  //   return () => {
+  //     controller?.abort();
+  //   };
+  // }, []);
 
   const { items = [] } = data || {};
 
@@ -69,7 +69,7 @@ const SpacesList = (props: ISpaceListProps) => {
               owner={item?.owner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
-              setUserInfo={setUserInfo}
+              // setUserInfo={setUserInfo}
             />
           );
         })}
@@ -84,11 +84,10 @@ interface ISpaceCardProps {
   owner: any;
   dialogProps: TDialogProps;
   fetchSpaces: TQueryFunction<ISpacesModel>;
-  setUserInfo: (signal: AbortSignal) => void;
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const { item, isActiveSpace, dialogProps, fetchSpaces, owner, setUserInfo } =
+  const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
     props;
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
@@ -233,7 +232,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
                   dialogProps={dialogProps}
                   space={item}
                   fetchSpaces={fetchSpaces}
-                  setUserInfo={setUserInfo}
                   isOwner={isOwner}
                   is_default_space_for_current_user={
                     is_default_space_for_current_user
@@ -294,7 +292,6 @@ const Actions = (props: any) => {
     try {
       await deleteSpace();
       await fetchSpaces();
-      await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
       console.log(err)
@@ -305,7 +302,6 @@ const Actions = (props: any) => {
     try {
       await leaveSpaceQuery.query();
       await fetchSpaces();
-      await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);

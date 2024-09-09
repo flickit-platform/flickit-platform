@@ -723,15 +723,13 @@ const AnswerDetails = ({
     service: (
       args = { questionId: questionInfo.id, assessmentId, page, size: 10 },
       config
-    ) =>
-      type === "evidence"
-        ? service.fetchEvidences(args, config)
-        : service.fetchAnswersHistory(args, config),
+    ) => service.fetchAnswersHistory(args, config),
     toastError: true,
+    runOnMount: type === "history" ? true : false,
   });
 
   useEffect(() => {
-    if (queryData.data?.items) {
+    if (queryData.data?.items && type === "history") {
       setData((prevData) => [...prevData, ...queryData.data.items]);
     }
   }, [queryData.data]);
@@ -767,7 +765,7 @@ const AnswerDetails = ({
           <Evidence
             {...dialogProps}
             questionInfo={questionInfo}
-            evidencesQueryData={queryData}
+            // evidencesQueryData={queryData}
             permissions={permissions}
           />
         </Box>
@@ -3398,7 +3396,7 @@ const QuestionGuide = (props: any) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                color:"white"
+                color: "white",
               }}
             >
               <InfoRoundedIcon sx={{ mr: "4px" }} />
