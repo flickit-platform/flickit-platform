@@ -64,7 +64,7 @@ const NotificationItem = ({
   message,
   onNotificationClick,
 }: {
-  message: IMessage;
+  message;
   onNotificationClick: () => void;
 }) => {
   return (
