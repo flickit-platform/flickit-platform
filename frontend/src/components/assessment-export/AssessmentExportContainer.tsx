@@ -1346,7 +1346,8 @@ const AssessmentExportContainer = () => {
                                   <Typography variant="displaySmall">
                                     {attributesData[attribute?.id?.toString()]}
                                   </Typography>
-                                ) : loadingAttributes[
+                                ) : editable &&
+                                  loadingAttributes[
                                     attribute?.id?.toString()
                                   ] ? (
                                   <Box display="flex" alignItems="center">
