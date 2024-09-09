@@ -71,9 +71,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   };
   const fetchSampleExecl = useQuery({
     service: (args, config) => service.fetchExcelToDSLSampleFile(args, config),
+    runOnMount: false
   });
   const convertExcelToDSLFile = useQuery({
     service: (args, config) => service.convertExcelToDSLFile(args, config),
+    runOnMount: false
   });
 
   useEffect(() => {
