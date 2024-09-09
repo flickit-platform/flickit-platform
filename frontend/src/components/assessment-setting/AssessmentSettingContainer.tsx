@@ -23,14 +23,14 @@ import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSet
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedRemoveModal, setExpandedRemoveModal] = useState<{
     display: boolean;
     name: string;
     id: string;
-    invited?: boolean
-  }>({ display: false, name: "", id: "",invited: false });
+    invited?: boolean;
+  }>({ display: false, name: "", id: "", invited: false });
   const [listOfUser, setListOfUser] = useState([]);
   const [changeData, setChangeData] = useState(false);
 
@@ -61,15 +61,16 @@ const AssessmentSettingContainer = () => {
   });
   const inviteesMemberList = useQuery({
     service: (args, config) =>
-        service.fetchAssessmentMembersInvitees({ assessmentId }, config),
+      service.fetchAssessmentMembersInvitees({ assessmentId }, config),
+    runOnMount: false,
   });
   useEffect(() => {
     (async () => {
-      let { manageable } = await AssessmentInfo.query()
+      let { manageable } = await AssessmentInfo.query();
       if (!manageable) {
-        return navigate("*")
+        return navigate("*");
       }
-    })()
+    })();
   }, [assessmentId]);
 
   useEffect(() => {
@@ -87,11 +88,20 @@ const AssessmentSettingContainer = () => {
     setExpanded(false);
   };
 
-  const handleOpenRemoveModal = (name: string, id: string, invited?: boolean) => {
+  const handleOpenRemoveModal = (
+    name: string,
+    id: string,
+    invited?: boolean
+  ) => {
     setExpandedRemoveModal({ display: true, name, id, invited });
   };
   const handleCloseRemoveModal = () => {
-    setExpandedRemoveModal({ display: false, name: "", id: "", invited: false });
+    setExpandedRemoveModal({
+      display: false,
+      name: "",
+      id: "",
+      invited: false,
+    });
   };
 
   return (

@@ -261,6 +261,7 @@ const SpaceField = ({ defaultValue }: { defaultValue: any }) => {
       data-cy="space"
       hasAddBtn={true}
       createItemQuery={createItemQuery}
+      searchable={false}
     />
   );
 };

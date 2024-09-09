@@ -50,6 +50,7 @@ const AutocompleteAsyncField = (
     filterFields = ["title"],
     createItemQuery,
     setError,
+    searchable,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -75,6 +76,7 @@ const AutocompleteAsyncField = (
             filterFields={filterFields}
             createItemQuery={createItemQuery}
             setError={setError}
+            searchable={searchable}
           />
         );
       }}
@@ -98,6 +100,7 @@ interface IAutocompleteAsyncFieldBase
   filterOptionsByProperty?: (option: any) => boolean;
   createItemQuery?: any;
   setError?: any;
+  searchable?: boolean;
 }
 
 const AutocompleteBaseField = (
@@ -133,6 +136,7 @@ const AutocompleteBaseField = (
     filterOptionsByProperty = () => true,
     createItemQuery,
     setError,
+    searchable = true,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -152,11 +156,19 @@ const AutocompleteBaseField = (
     () => getOptionLabel(defaultValue) || ""
   );
   const [options, setOptions] = useState<any[]>([]);
+  useEffect(() => {
+    if (!searchable) {
+      query?.();
+    }
+  }, []);
+
   const fetch = useMemo(
     () =>
-      throttle((request: any) => {
-        query?.({ query: formatRequest(request) });
-      }, 800),
+      searchable
+        ? throttle((request: any) => {
+            query?.({ query: formatRequest(request) });
+          }, 800)
+        : () => {},
     []
   );
   const createSpaceQuery = async () => {

@@ -36,15 +36,15 @@ const SpacesList = (props: ISpaceListProps) => {
   const { id: userId } = userInfo;
 
   const setUserInfo = (signal: AbortSignal) => {
-    service
-      .getSignedInUser(undefined, { signal })
-      .then(({ data }) => {
-        // dispatch(authActions.setUserInfo(data));
-      })
-      .catch((e) => {
-        const err = e as ICustomError;
-        toastError(err);
-      });
+    // service
+    //   .getSignedInUser(undefined, { signal })
+    //   .then(({ data }) => {
+    //     // dispatch(authActions.setUserInfo(data));
+    //   })
+    //   .catch((e) => {
+    //     const err = e as ICustomError;
+    //     toastError(err);
+    //   });
   };
 
   useEffect(() => {
