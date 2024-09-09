@@ -2933,7 +2933,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState(false);
   const [dropZoneData, setDropZone] = useState<any>(null);
-  const [reqBtn,setReqBtn]= useState("")
+  const [btnState,setBtnState]= useState("")
   const addEvidenceAttachments = useQuery({
     service: (args, config) =>
       service.addEvidenceAttachments(args, { signal: abortController.signal }),
@@ -2983,7 +2983,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           attachment: dropZoneData[0],
           description: description,
         };
-        setReqBtn(recognize)
+        setBtnState(recognize)
         await addEvidenceAttachments.query({ evidenceId, data });
         if (!createAttachment) {
           const { items } = await evidencesQueryData.query();
@@ -3180,7 +3180,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
         >
           <LoadingButton
               onClick={() => handelSendFile("another")} value={"another"}
-          loading={addEvidenceAttachments.loading && reqBtn == "another"}
+          loading={addEvidenceAttachments.loading && btnState == "another"}
           >
             {uploadAnother}
           </LoadingButton>
@@ -3188,7 +3188,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               variant="contained"
               onClick={() => handelSendFile("self")}
               value={"self"}
-              loading={addEvidenceAttachments.loading && reqBtn == "self"}
+              loading={addEvidenceAttachments.loading && btnState == "self"}
           >
             {uploadAttachment}
           </LoadingButton>
