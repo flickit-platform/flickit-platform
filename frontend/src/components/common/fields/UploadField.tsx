@@ -47,7 +47,6 @@ interface IUploadFieldProps {
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
   setIsValid?: any;
-  buttonStep?: number;
 }
 
 const UploadField = (props: any) => {
@@ -97,7 +96,6 @@ interface IUploadProps {
   setShowErrorLog?: any;
   setIsValid?: any;
   setButtonStep?: any;
-  buttonStep?: number;
   setZippedData?: any;
   dslGuide?: boolean;
   dropNewFile?: any;
@@ -123,7 +121,7 @@ const Uploader = (props: IUploadProps) => {
     setShowErrorLog,
     setIsValid,
     setButtonStep,
-    buttonStep,
+    disabled,
     setZippedData,
     setConvertData,
     dropNewFile
@@ -241,7 +239,7 @@ const Uploader = (props: IUploadProps) => {
     accept,
     maxSize,
     onDrop,
-    noClick: buttonStep == 0 ? false : true,
+    noClick: disabled == 0 ? false : true,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
@@ -277,7 +275,7 @@ const Uploader = (props: IUploadProps) => {
             `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
             border: (t) =>
-                buttonStep == 0 ? `1px solid ${hasError ? t.palette.error.dark : "black"}`: "" ,
+                disabled == 0 ? `1px solid ${hasError ? t.palette.error.dark : "black"}`: "" ,
           },
           borderRadius: 1,
           cursor: "pointer",
