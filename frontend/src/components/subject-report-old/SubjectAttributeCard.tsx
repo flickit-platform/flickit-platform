@@ -332,58 +332,70 @@ const SUbjectAttributeCard = (props: any) => {
         </AccordionSummary>
         <Divider sx={{ mx: 2 }} />
         <AccordionDetails sx={{ padding: "0 !important" }}>
-          <Typography
-            variant="h4"
-            mt={4}
-            mb={2}
-            sx={{
-              gap: "46px",
-              ...styles.centerVH,
-            }}
-          >
-            <Trans i18nKey={"relatedEvidences"} />
-          </Typography>
-          {emptyNegativeEvidence && emptyPositiveEvidence ? (
-            <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
-              <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-              <Typography variant="h5" color="#9DA7B3">
-                <Trans i18nKey={"noEvidence"} />
+          {permissions.viewEvidence && (
+            <>
+              <Typography
+                variant="h4"
+                mt={4}
+                mb={2}
+                sx={{
+                  gap: "46px",
+                  ...styles.centerVH,
+                }}
+              >
+                <Trans i18nKey={"relatedEvidences"} />
               </Typography>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                ...styles.centerVH,
-                paddingX: "10vw",
-              }}
-            >
-              <Grid container spacing={4} mt={1}>
-                {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.positive}
-                    setEmptyEvidence={setEmptyPositiveEvidence}
-                    setOpositeEvidenceLoading={setPositiveEvidenceLoading}
-                    opositeEvidenceLoading={negativeEvidenceLoading}
+              {emptyNegativeEvidence && emptyPositiveEvidence ? (
+                <Box
+                  width="100%"
+                  padding={4}
+                  gap={3}
+                  sx={{ ...styles.centerCVH }}
+                >
+                  <img
+                    style={{ maxWidth: "50vw" }}
+                    src={emptyState}
+                    alt="empty"
                   />
-                </Grid>
-                {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.negative}
-                    setEmptyEvidence={setEmptyNegativeEvidence}
-                    setOpositeEvidenceLoading={setNegativeEvidenceLoading}
-                    opositeEvidenceLoading={positiveEvidenceLoading}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+                  <Typography variant="h5" color="#9DA7B3">
+                    <Trans i18nKey={"noEvidence"} />
+                  </Typography>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    ...styles.centerVH,
+                    paddingX: "10vw",
+                  }}
+                >
+                  <Grid container spacing={4} mt={1}>
+                    {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+                    <Grid item lg={6} md={6} xs={12}>
+                      <RelatedEvidencesContainer
+                        expandedAttribute={expandedAttribute}
+                        attributeId={id}
+                        type={evidenceType.positive}
+                        setEmptyEvidence={setEmptyPositiveEvidence}
+                        setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                        opositeEvidenceLoading={negativeEvidenceLoading}
+                      />
+                    </Grid>
+                    {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+                    <Grid item lg={6} md={6} xs={12}>
+                      <RelatedEvidencesContainer
+                        expandedAttribute={expandedAttribute}
+                        attributeId={id}
+                        type={evidenceType.negative}
+                        setEmptyEvidence={setEmptyNegativeEvidence}
+                        setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                        opositeEvidenceLoading={positiveEvidenceLoading}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              )}
+            </>
           )}
-
           <Typography
             variant="h6"
             mt={4}
