@@ -140,7 +140,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         questionActions.setSelectedConfidenceLevel(
           answer?.confidenceLevel?.id
             ? answer?.confidenceLevel?.id
-            : answer?.confidenceLevel ?? null
+            : (answer?.confidenceLevel ?? null)
         )
       );
     }
@@ -681,16 +681,16 @@ const AnswerTemplate = (props: {
         </LoadingButton>
         {may_not_be_applicable && (
           <FormControlLabel
-            sx={{ color: "#0288d1" }}
+            sx={{ color: theme.palette.primary.main }}
             data-cy="automatic-submit-check"
             control={
               <Checkbox
                 checked={notApplicable}
                 onChange={(e) => notApplicableonChanhe(e)}
                 sx={{
-                  color: "#0288d1",
+                  color: theme.palette.primary.main,
                   "&.Mui-checked": {
-                    color: "#0288d1",
+                    color: theme.palette.primary.main,
                   },
                 }}
               />
@@ -995,9 +995,9 @@ const Evidence = (props: any) => {
   const [evidenceJustCreatedId, setEvidenceJustCreatedId] =
     useState<string>("");
   const [evidenceBG, setEvidenceBG] = useState<any>({
-    background: "rgba(32, 95, 148, 0.08)",
-    borderColor: "#205F94",
-    borderHover: "#117476",
+    background: theme.palette.primary.main,
+    borderColor:theme.palette.primary.dark,
+    borderHover: theme.palette.primary.light,
   });
   useEffect(() => {
     if (value === null) {
@@ -1266,7 +1266,7 @@ const Evidence = (props: any) => {
                   />
                   <FormControlLabel
                     sx={{
-                      color: "#0288d1",
+                      color: theme.palette.primary.main,
                       position: "absolute",
                       bottom: "20px",
                       left: "40px",

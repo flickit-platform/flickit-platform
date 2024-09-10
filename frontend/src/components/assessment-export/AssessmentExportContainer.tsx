@@ -64,6 +64,7 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
 import { FaClipboard } from "react-icons/fa";
+import { theme } from "@/config/theme";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -508,11 +509,11 @@ const AssessmentExportContainer = () => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "5.25rem",
+                  top: "5.5rem",
                   right: "-1.75rem",
                   transform: "rotate(45deg)",
                   transformOrigin: "top right",
-                  backgroundColor: "#D81E5B",
+                  backgroundColor: theme.palette.error.main,
                   color: "white",
                   padding: "0.5rem 2rem",
                   borderRadius: "4px",
@@ -522,7 +523,7 @@ const AssessmentExportContainer = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                Beta Version
+                <Trans i18nKey="betaVersion" />
               </Box>
               <Grid container spacing={2} flexDirection="row-reverse">
                 <Grid
@@ -764,8 +765,8 @@ const AssessmentExportContainer = () => {
                             index === subjects?.length - 1
                               ? " and " + elem?.title
                               : index === 0
-                              ? elem?.title
-                              : ", " + elem?.title
+                                ? elem?.title
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -928,11 +929,11 @@ const AssessmentExportContainer = () => {
                                 index === 0
                                   ? "8px 0 0 8px"
                                   : index ===
-                                    assessment?.assessmentKit?.maturityLevels
-                                      ?.length -
-                                      1
-                                  ? "0 8px 8px 0"
-                                  : "0",
+                                      assessment?.assessmentKit?.maturityLevels
+                                        ?.length -
+                                        1
+                                    ? "0 8px 8px 0"
+                                    : "0",
                             }}
                           >
                             {item.title}
@@ -1398,7 +1399,7 @@ const AssessmentExportContainer = () => {
                                           to={`./../questionnaires?subject_pk=${subject?.id}`}
                                           sx={{
                                             textDecoration: "none",
-                                            color: "#2D80D2",
+                                            color: theme.palette.primary.main,
                                           }}
                                         >
                                           <Typography variant="titleMedium">
