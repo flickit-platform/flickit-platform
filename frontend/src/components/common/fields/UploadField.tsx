@@ -204,7 +204,7 @@ const Uploader = (props: IUploadProps) => {
             setIsValid(true)
             setMyFiles(acceptedFiles);
             fieldProps.onChange(res);
-          } catch (e) {
+          } catch (e : any) {
             const err = e as ICustomError;
             if (err?.response?.status === 422) {
               const responseObject = JSON.parse(err?.response?.data?.message);
@@ -213,7 +213,14 @@ const Uploader = (props: IUploadProps) => {
               setIsValid(false)
             }
             if (err?.response?.status !== 422) {
-              toastError(err);
+              if(e?.response?.data?.type == "application/json"){
+                const blob = new Blob([err.response?.data as any], { type: 'application/json' }).text();
+                blob.then((res : any) => {
+                  toastError(JSON.parse(res)?.message)
+                })
+              }else{
+                toastError(err)
+              }
               setMyFiles([]);
               setIsValid(false)
               fieldProps.onChange("");

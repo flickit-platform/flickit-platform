@@ -50,6 +50,7 @@ const AutocompleteAsyncField = (
     filterFields = ["title"],
     createItemQuery,
     setError,
+    searchable,
     ...rest
   } = props;
   const { control, setValue } = useFormContext();
@@ -75,6 +76,7 @@ const AutocompleteAsyncField = (
             filterFields={filterFields}
             createItemQuery={createItemQuery}
             setError={setError}
+            searchable={searchable}
           />
         );
       }}
@@ -98,6 +100,7 @@ interface IAutocompleteAsyncFieldBase
   filterOptionsByProperty?: (option: any) => boolean;
   createItemQuery?: any;
   setError?: any;
+  searchable?: boolean;
 }
 
 const AutocompleteBaseField = (
@@ -133,6 +136,7 @@ const AutocompleteBaseField = (
     filterOptionsByProperty = () => true,
     createItemQuery,
     setError,
+    searchable = true,
     ...rest
   } = props;
   const { name, onChange, ref, value, ...restFields } = field;
@@ -152,11 +156,19 @@ const AutocompleteBaseField = (
     () => getOptionLabel(defaultValue) || ""
   );
   const [options, setOptions] = useState<any[]>([]);
+  useEffect(() => {
+    if (!searchable) {
+      query?.();
+    }
+  }, []);
+
   const fetch = useMemo(
     () =>
-      throttle((request: any) => {
-        query?.({ query: formatRequest(request) });
-      }, 800),
+      searchable
+        ? throttle((request: any) => {
+            query?.({ query: formatRequest(request) });
+          }, 800)
+        : () => {},
     []
   );
   const createSpaceQuery = async () => {
@@ -187,13 +199,23 @@ const AutocompleteBaseField = (
     let active = true;
     if (loaded && active) {
       const opt = filterSelectedOption(optionsData, value);
-      setOptions(opt);
+      setOptions(optionsData as any);
       defaultValue && onChange(defaultValue);
     }
     return () => {
       active = false;
     };
   }, [loaded]);
+
+  useEffect(() => {
+    const exactMatch = options.find(
+      (option) =>
+        getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+    );
+    if (exactMatch) {
+      onChange(exactMatch);
+    }
+  }, [inputValue, options]);
 
   const getFilteredOptions = (options: any[], params: any) => {
     return options
@@ -282,13 +304,18 @@ const AutocompleteBaseField = (
       filterSelectedOptions={true}
       filterOptions={(options, params) => {
         const filtered = getFilteredOptions(options, params);
+        const exactMatch = optionsData.find(
+          (option) =>
+            getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+        );
 
         if (
           params.inputValue !== "" &&
           !filtered.some(
             (option) => getOptionLabel(option) === params.inputValue
           ) &&
-          hasAddBtn
+          hasAddBtn &&
+          !exactMatch
         ) {
           filtered.push({
             inputValue: params.inputValue,
