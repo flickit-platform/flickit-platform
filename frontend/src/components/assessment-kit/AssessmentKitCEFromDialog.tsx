@@ -24,6 +24,7 @@ import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
 import { useQuery } from "@utils/useQuery";
 import { LoadingButton } from "@mui/lab";
+import { theme } from "@/config/theme";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -71,11 +72,11 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   };
   const fetchSampleExecl = useQuery({
     service: (args, config) => service.fetchExcelToDSLSampleFile(args, config),
-    runOnMount: false
+    runOnMount: false,
   });
   const convertExcelToDSLFile = useQuery({
     service: (args, config) => service.convertExcelToDSLFile(args, config),
-    runOnMount: false
+    runOnMount: false,
   });
 
   useEffect(() => {
@@ -199,7 +200,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                 <span
                   style={{
                     textDecoration: "underline",
-                    color: "#2D80D2",
+                    color: theme.palette.primary.main,
                     cursor: "pointer",
                     paddingLeft: "4px",
                   }}
