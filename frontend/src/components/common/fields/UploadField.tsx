@@ -100,6 +100,7 @@ interface IUploadProps {
   dslGuide?: boolean;
   dropNewFile?: any;
   setConvertData?: any;
+  disabled?: number
 }
 
 const Uploader = (props: IUploadProps) => {
