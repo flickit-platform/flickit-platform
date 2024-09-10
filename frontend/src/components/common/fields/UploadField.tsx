@@ -276,7 +276,7 @@ const Uploader = (props: IUploadProps) => {
             `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
             border: (t) =>
-                disabled == 0 && `1px solid ${hasError ? t.palette.error.dark : "black"}` ,
+                disabled == 0 ? `1px solid ${hasError ? t.palette.error.dark : "black"}` : "" ,
           },
           borderRadius: 1,
           cursor: "pointer",
