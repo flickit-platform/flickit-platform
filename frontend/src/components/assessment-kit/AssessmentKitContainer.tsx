@@ -42,8 +42,10 @@ const AssessmentKitContainer = () => {
   });
   const { config } = useConfigContext();
 
-  return assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
-    assessmentKitQueryData.errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND ? (
+  return assessmentKitQueryData.errorObject?.response?.data?.code ===
+    ECustomErrorType.ACCESS_DENIED ||
+    assessmentKitQueryData.errorObject?.response?.data?.code ===
+      ECustomErrorType.NOT_FOUND ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <QueryData
@@ -374,11 +376,39 @@ const AssessmentKit = (props: any) => {
                             index === 0
                               ? "8px 0 0 8px"
                               : index === maturityLevels?.length - 1
-                              ? "0 8px 8px 0"
-                              : "0",
+                                ? "0 8px 8px 0"
+                                : "0",
                         }}
                       >
                         {item.title}
+                      </Box>
+                    );
+                  })}
+                </Box>
+                <Box component="ul" mt={3}>
+                  {maturityLevels.map((item: any) => {
+                    return (
+                      <Box sx={{ ml: 4 }} component="li">
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            my: 2,
+                            textAlign: "justify",
+                            textJustify: "inter-word",
+                          }}
+                        >
+                          <Box
+                            component="span"
+                            fontSize="1rem"
+                            fontWeight="bold"
+                          >
+                            {item.title}
+                          </Box>
+                          :{" "}
+                          <Box component="span" fontSize="1rem">
+                            {item.description}
+                          </Box>
+                        </Typography>
                       </Box>
                     );
                   })}
@@ -487,7 +517,7 @@ const LikeAssessmentKit = ({ likes }: any) => {
       color="secondary"
       size="small"
       startIcon={
-        likeQueryData?.data?.liked ?? likes?.liked ? (
+        (likeQueryData?.data?.liked ?? likes?.liked) ? (
           <FavoriteRoundedIcon />
         ) : (
           <FavoriteBorderRoundedIcon fontSize="inherit" />
