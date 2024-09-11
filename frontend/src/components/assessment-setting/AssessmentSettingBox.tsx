@@ -1098,7 +1098,6 @@ const OnHoverInputTitleSetting = (props: any) => {
       textAlign: firstCharDetector(inputData) ? "right" : "left",
     },
   };
-
   return (
     <Box>
       <Box
