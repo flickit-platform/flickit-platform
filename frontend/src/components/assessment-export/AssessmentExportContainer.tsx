@@ -330,7 +330,7 @@ const AssessmentExportContainer = () => {
               }));
               newIgnoreIds.push(attribute?.id);
             }
-            
+
             if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
               setAttributesData((prevData: any) => ({
                 ...prevData,
@@ -1420,53 +1420,56 @@ const AssessmentExportContainer = () => {
                                   )
                                 )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
-                                  ?.aiInsight && (
-                                  <Box sx={{ ...styles.centerV }} gap={2}>
-                                    <Box
-                                      sx={{
-                                        zIndex: 1,
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                      }}
-                                    >
-                                      <Typography
-                                        variant="labelSmall"
+                                  ?.aiInsight &&
+                                  attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.aiInsight.isValid && (
+                                    <Box sx={{ ...styles.centerV }} gap={2}>
+                                      <Box
                                         sx={{
-                                          backgroundColor: "#d85e1e",
-                                          color: "white",
-                                          padding: "0.35rem 0.35rem",
-                                          borderRadius: "4px",
-                                          fontWeight: "bold",
+                                          zIndex: 1,
+                                          display: "flex",
+                                          justifyContent: "flex-start",
                                         }}
                                       >
-                                        <Trans i18nKey="AIGenerated" />
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        backgroundColor:
-                                          "rgba(255, 249, 196, 0.31)",
-                                        padding: 1,
-                                        borderRadius: 2,
-                                        maxWidth: "80%",
-                                      }}
-                                    >
-                                      <InfoOutlined
-                                        color="primary"
-                                        sx={{ marginRight: 1 }}
-                                      />
-                                      <Typography
-                                        variant="titleMedium"
-                                        fontWeight={400}
-                                        textAlign="left"
+                                        <Typography
+                                          variant="labelSmall"
+                                          sx={{
+                                            backgroundColor: "#d85e1e",
+                                            color: "white",
+                                            padding: "0.35rem 0.35rem",
+                                            borderRadius: "4px",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          <Trans i18nKey="AIGenerated" />
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "flex-start",
+                                          backgroundColor:
+                                            "rgba(255, 249, 196, 0.31)",
+                                          padding: 1,
+                                          borderRadius: 2,
+                                          maxWidth: "80%",
+                                        }}
                                       >
-                                        <Trans i18nKey="invalidAIInsight" />
-                                      </Typography>
+                                        <InfoOutlined
+                                          color="primary"
+                                          sx={{ marginRight: 1 }}
+                                        />
+                                        <Typography
+                                          variant="titleMedium"
+                                          fontWeight={400}
+                                          textAlign="left"
+                                        >
+                                          <Trans i18nKey="invalidAIInsight" />
+                                        </Typography>
+                                      </Box>
                                     </Box>
-                                  </Box>
-                                )}
+                                  )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
                                   ?.assessorInsight &&
                                   !attributesDataPolicy[
