@@ -592,7 +592,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
             sx={{
               display: "flex",
               width: "100%",
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: { xs: "column", md: "row" },
             }}
           >
             <Box display={"flex"} flex={1}>
@@ -605,7 +605,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 />
               </Box>
             </Box>
-            <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
+            <Box sx={{ ...styles.centerV, pl: 2, width:{xs:"100%",md:"30%"} }}>
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
@@ -916,7 +916,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
       }}
     >
       <Box
-        height="100%"
+        height="70%"
         width={width}
         sx={{
           background: `${score != null ? bg_color : ""}`,
