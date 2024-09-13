@@ -227,8 +227,7 @@ const SUbjectAttributeCard = (props: any) => {
                   )
                 )}
                 {attributesDataPolicy[id?.toString()]?.aiInsight &&
-                  attributesDataPolicy[id?.toString()]?.aiInsight
-                    .isValid && (
+                  attributesDataPolicy[id?.toString()]?.aiInsight.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
                       <Box
                         sx={{
@@ -273,50 +272,54 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )}
 
-                {attributesDataPolicy[id?.toString()]?.assessorInsight &&
+                {((attributesDataPolicy[id?.toString()]?.assessorInsight &&
                   !attributesDataPolicy[id?.toString()]?.assessorInsight
-                    ?.isValid && (
-                    <Box sx={{ ...styles.centerV }} gap={2}>
-                      <Box
+                    ?.isValid) ||
+                  (attributesDataPolicy[id?.toString()]?.aiInsight &&
+                    !attributesDataPolicy[id?.toString()]?.aiInsight
+                      ?.isValid)) && (
+                  <Box sx={{ ...styles.centerV }} gap={2}>
+                    <Box
+                      sx={{
+                        zIndex: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
                         sx={{
-                          zIndex: 1,
-                          display: "flex",
-                          justifyContent: "flex-start",
-                          ml: { xs: 0.75, sm: 1.5, md: 2 },
+                          backgroundColor: "#d85e1e",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
                         }}
                       >
-                        <Typography
-                          variant="labelSmall"
-                          sx={{
-                            backgroundColor: "#d85e1e",
-                            color: "white",
-                            padding: "0.35rem 0.35rem",
-                            borderRadius: "4px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          <Trans i18nKey="Outdated" />
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          backgroundColor: "rgba(255, 249, 196, 0.31)",
-                          padding: 1,
-                          borderRadius: 2,
-                          maxWidth: "80%",
-                        }}
+                        <Trans i18nKey="Outdated" />
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        backgroundColor: "rgba(255, 249, 196, 0.31)",
+                        padding: 1,
+                        borderRadius: 2,
+                        maxWidth: "80%",
+                      }}
+                    >
+                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                      <Typography
+                        variant="titleMedium"
+                        fontWeight={400}
+                        textAlign="left"
                       >
-                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                        <Typography
-                          variant="titleMedium"
-                          fontWeight={400}
-                          textAlign="left"
-                        >
-                          <Trans i18nKey="invalidInsight" />
-                        </Typography>
-                      </Box>
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                    </Box>
+                    {attributesDataPolicy[id?.toString()]?.editable && (
                       <Button
                         variant="contained"
                         size="small"
@@ -326,8 +329,9 @@ const SUbjectAttributeCard = (props: any) => {
                       >
                         <Trans i18nKey="regenerate" />
                       </Button>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
