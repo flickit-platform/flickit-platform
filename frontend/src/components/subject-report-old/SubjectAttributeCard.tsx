@@ -394,17 +394,19 @@ const SUbjectAttributeCard = (props: any) => {
           </Typography>
           <Box sx={{ pr: { xs: 2, sm: 6 } }}>
             {maturityScores
-              .map((item: any) => {
+              .map((item: any, index: number) => {
                 return (
-                  <MaturityLevelDetailsContainer
-                    maturity_score={item}
-                    totalml={maturityLevel?.index}
-                    mn={maturity_levels_count}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                    attributeId={id}
-                    permissions={permissions}
-                  />
+                  <div key={index}>
+                    <MaturityLevelDetailsContainer
+                      maturity_score={item}
+                      totalml={maturityLevel?.index}
+                      mn={maturity_levels_count}
+                      expanded={expanded}
+                      setExpanded={setExpanded}
+                      attributeId={id}
+                      permissions={permissions}
+                    />
+                  </div>
                 );
               })
               .reverse()}
@@ -462,8 +464,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -657,11 +659,11 @@ const MaturityLevelDetailsContainer = (props: any) => {
                       </Typography>
                     </Typography>
                     <Divider sx={{ my: 2 }} />
-                    {questionnaires.map((questionnaire: any) => {
+                    {questionnaires.map((questionnaire: any, index: number) => {
                       const { title, questionScores } = questionnaire;
 
                       return (
-                        <>
+                        <Box key={index}>
                           <Box>
                             <Typography
                               variant="body2"
@@ -760,106 +762,109 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                   </Box>
                                 </Box>
                                 <Divider sx={{ my: 1 }} />
-                                {questionScores.map((question: any) => {
-                                  const {
-                                    questionIndex,
-                                    questionTitle,
-                                    questionWeight,
-                                    answerOptionIndex,
-                                    answerOptionTitle,
-                                    answerIsNotApplicable,
-                                    answerScore,
-                                    weightedScore,
-                                  } = question;
+                                {questionScores.map(
+                                  (question: any, index: number) => {
+                                    const {
+                                      questionIndex,
+                                      questionTitle,
+                                      questionWeight,
+                                      answerOptionIndex,
+                                      answerOptionTitle,
+                                      answerIsNotApplicable,
+                                      answerScore,
+                                      weightedScore,
+                                    } = question;
 
-                                  let is_farsi =
-                                    languageDetector(questionTitle);
+                                    let is_farsi =
+                                      languageDetector(questionTitle);
 
-                                  return (
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        my: 1,
-                                      }}
-                                    >
-                                      <CustomWidthTooltip
-                                        title={`${questionIndex}.${questionTitle}`}
+                                    return (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "row",
+                                          my: 1,
+                                        }}
+                                        key={index}
                                       >
-                                        <Box sx={{ width: "40%" }}>
-                                          <Typography
-                                            display="flex"
-                                            variant="titleMedium"
-                                            textAlign={"left"}
-                                          >
-                                            {questionIndex}.
+                                        <CustomWidthTooltip
+                                          title={`${questionIndex}.${questionTitle}`}
+                                        >
+                                          <Box sx={{ width: "40%" }}>
                                             <Typography
+                                              display="flex"
                                               variant="titleMedium"
-                                              dir={is_farsi ? "rtl" : "ltr"}
-                                              sx={{
-                                                whiteSpace: "nowrap",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                              }}
+                                              textAlign={"left"}
                                             >
-                                              {questionTitle}
+                                              {questionIndex}.
+                                              <Typography
+                                                variant="titleMedium"
+                                                dir={is_farsi ? "rtl" : "ltr"}
+                                                sx={{
+                                                  whiteSpace: "nowrap",
+                                                  overflow: "hidden",
+                                                  textOverflow: "ellipsis",
+                                                }}
+                                              >
+                                                {questionTitle}
+                                              </Typography>
                                             </Typography>
+                                          </Box>
+                                        </CustomWidthTooltip>
+                                        <Box sx={{ width: "10%" }}>
+                                          <Typography
+                                            variant="titleMedium"
+                                            textAlign={"center"}
+                                          >
+                                            {questionWeight}
                                           </Typography>
                                         </Box>
-                                      </CustomWidthTooltip>
-                                      <Box sx={{ width: "10%" }}>
-                                        <Typography
-                                          variant="titleMedium"
-                                          textAlign={"center"}
+                                        <Tooltip
+                                          title={
+                                            answerIsNotApplicable
+                                              ? "NA"
+                                              : answerOptionTitle !== null
+                                                ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                : "---"
+                                          }
                                         >
-                                          {questionWeight}
-                                        </Typography>
-                                      </Box>
-                                      <Tooltip
-                                        title={
-                                          answerIsNotApplicable
-                                            ? "NA"
-                                            : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"
-                                        }
-                                      >
-                                        <Box sx={{ width: "25%" }}>
+                                          <Box sx={{ width: "25%" }}>
+                                            <Typography
+                                              variant="titleMedium"
+                                              textAlign={"center"}
+                                            >
+                                              {answerIsNotApplicable
+                                                ? "NA"
+                                                : answerOptionTitle !== null
+                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                  : "---"}
+                                            </Typography>
+                                          </Box>
+                                        </Tooltip>
+                                        <Box sx={{ width: "10%" }}>
                                           <Typography
                                             variant="titleMedium"
                                             textAlign={"center"}
                                           >
                                             {answerIsNotApplicable
-                                              ? "NA"
-                                              : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"}
+                                              ? "---"
+                                              : answerScore}
                                           </Typography>
                                         </Box>
-                                      </Tooltip>
-                                      <Box sx={{ width: "10%" }}>
-                                        <Typography
-                                          variant="titleMedium"
-                                          textAlign={"center"}
-                                        >
-                                          {answerIsNotApplicable
-                                            ? "---"
-                                            : answerScore}
-                                        </Typography>
+                                        <Box sx={{ width: "15%" }}>
+                                          <Typography
+                                            variant="titleMedium"
+                                            textAlign={"center"}
+                                          >
+                                            {answerIsNotApplicable
+                                              ? "---"
+                                              : weightedScore}
+                                          </Typography>
+                                        </Box>
                                       </Box>
-                                      <Box sx={{ width: "15%" }}>
-                                        <Typography
-                                          variant="titleMedium"
-                                          textAlign={"center"}
-                                        >
-                                          {answerIsNotApplicable
-                                            ? "---"
-                                            : weightedScore}
-                                        </Typography>
-                                      </Box>
-                                    </Box>
-                                  );
-                                })}
+                                    );
+                                  }
+                                )}
                               </Box>
                             </Box>
                             <Divider
@@ -870,7 +875,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               }}
                             />
                           </Box>
-                        </>
+                        </Box>
                       );
                     })}
                   </>

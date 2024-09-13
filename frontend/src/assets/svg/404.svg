@@ -131,8 +131,8 @@
 	.st124{opacity:0.5;}
 	.st125{fill:#FB7F3F;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 	.st126{fill:#D7F0FF;}
-	.st127{clip-path:url(#SVGID_39_);fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
-	.st128{clip-path:url(#SVGID_39_);}
+	.st127{clipPath:url(#SVGID_39_);fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st128{clipPath:url(#SVGID_39_);}
 </style>
 <g>
 	<g>
@@ -165,9 +165,9 @@
 		<clipPath id="SVGID_1_">
 			<use xlink:href="#SVGID_38_"  style="overflow:visible;"/>
 		</clipPath>
-		<polygon style="clip-path:url(#SVGID_1_);fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;" points="483,281 487.38,276.64 
+		<polygon style="clipPath:url(#SVGID_1_);fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;" points="483,281 487.38,276.64 
 			483.82,261.94 472.84,262.83 471,283 		"/>
-		<g style="clip-path:url(#SVGID_1_);">
+		<g style="clipPath:url(#SVGID_1_);">
 			<path class="st9" d="M467.12,277.18l5.32-17.68l18.35,0.13l-2.4,8.68c0,0-0.72,3.52-4.17,6.7c-3.45,3.18-4.51,5.29-4.51,5.29"/>
 			<path class="st9" d="M504.43,254.69c0,0-0.59,15.31,7.44,17.43c8.04,2.11,9.12-7.22,9.12-7.22s3.55-10.24,1.22-10.51
 				c-2.61-0.3-2.61,2.06-2.61,2.06l-0.22-8.31l-8.17-0.95L504.43,254.69z"/>

@@ -30,10 +30,7 @@ const CompareResult = (props: ICompareResultProps) => {
   const { config } = useConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(
-      `${t("comparisonResultT")} `,
-      config.appTitle
-    );
+    setDocumentTitle(`${t("comparisonResultT")} `, config.appTitle);
   }, []);
 
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -112,8 +109,9 @@ const CompareResultCommonBaseInfo = (props: { data: any }) => {
         }}
       />
       <Trans i18nKey={"whichHasNamed"} values={{ value: subjects.length }} />
-      {subjects.map((subject: any) => (
+      {subjects.map((subject: any, index: number) => (
         <MuiLink
+          key={index}
           href={`#${subject.title}`}
           sx={{
             mx: 0.6,

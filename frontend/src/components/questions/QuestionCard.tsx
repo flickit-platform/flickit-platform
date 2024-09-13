@@ -140,7 +140,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         questionActions.setSelectedConfidenceLevel(
           answer?.confidenceLevel?.id
             ? answer?.confidenceLevel?.id
-            : answer?.confidenceLevel ?? null
+            : (answer?.confidenceLevel ?? null)
         )
       );
     }
@@ -281,7 +281,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                   >
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography
+                        <Box
                           sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
                           <Trans
@@ -297,7 +297,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                           >
                             {labels[selcetedConfidenceLevel - 1]?.title}
                           </Typography>
-                        </Typography>
+                        </Box>
                       </Box>
                     ) : (
                       <Box
@@ -559,11 +559,11 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {options?.map((option: any) => {
+          {options?.map((option: any, index: number) => {
             const { index: templateValue, title } = option || {};
             return (
               <Box
-                key={option.value}
+                key={index}
                 mb={2}
                 mr={2}
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
