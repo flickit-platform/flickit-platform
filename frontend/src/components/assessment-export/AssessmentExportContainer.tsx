@@ -1470,57 +1470,64 @@ const AssessmentExportContainer = () => {
                                       </Box>
                                     </Box>
                                   )}
-                                {attributesDataPolicy[attribute?.id?.toString()]
-                                  ?.assessorInsight &&
+                                {((attributesDataPolicy[
+                                  attribute?.id?.toString()
+                                ]?.assessorInsight &&
                                   !attributesDataPolicy[
                                     attribute?.id?.toString()
-                                  ]?.assessorInsight?.isValid && (
-                                    <Box sx={{ ...styles.centerV }} gap={2}>
-                                      <Box
+                                  ]?.assessorInsight?.isValid) ||
+                                  (attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.aiInsight &&
+                                    !attributesDataPolicy[
+                                      attribute?.id?.toString()
+                                    ]?.aiInsight?.isValid)) && (
+                                  <Box sx={{ ...styles.centerV }} gap={2}>
+                                    <Box
+                                      sx={{
+                                        zIndex: 1,
+                                        display: "flex",
+                                        justifyContent: "flex-start",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="labelSmall"
                                         sx={{
-                                          zIndex: 1,
-                                          display: "flex",
-                                          justifyContent: "flex-start",
+                                          backgroundColor: "#d85e1e",
+                                          color: "white",
+                                          padding: "0.35rem 0.35rem",
+                                          borderRadius: "4px",
+                                          fontWeight: "bold",
                                         }}
                                       >
-                                        <Typography
-                                          variant="labelSmall"
-                                          sx={{
-                                            backgroundColor: "#d85e1e",
-                                            color: "white",
-                                            padding: "0.35rem 0.35rem",
-                                            borderRadius: "4px",
-                                            fontWeight: "bold",
-                                          }}
-                                        >
-                                          <Trans i18nKey="Outdated" />
-                                        </Typography>
-                                      </Box>
-                                      <Box
-                                        sx={{
-                                          display: "flex",
-                                          alignItems: "flex-start",
-                                          backgroundColor:
-                                            "rgba(255, 249, 196, 0.31)",
-                                          padding: 1,
-                                          borderRadius: 4,
-                                          maxWidth: "100%",
-                                        }}
-                                      >
-                                        <InfoOutlined
-                                          color="primary"
-                                          sx={{ marginRight: 1 }}
-                                        />
-                                        <Typography
-                                          variant="titleMedium"
-                                          fontWeight={400}
-                                          textAlign="left"
-                                        >
-                                          <Trans i18nKey="invalidInsight" />
-                                        </Typography>
-                                      </Box>
+                                        <Trans i18nKey="Outdated" />
+                                      </Typography>
                                     </Box>
-                                  )}
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "flex-start",
+                                        backgroundColor:
+                                          "rgba(255, 249, 196, 0.31)",
+                                        padding: 1,
+                                        borderRadius: 4,
+                                        maxWidth: "100%",
+                                      }}
+                                    >
+                                      <InfoOutlined
+                                        color="primary"
+                                        sx={{ marginRight: 1 }}
+                                      />
+                                      <Typography
+                                        variant="titleMedium"
+                                        fontWeight={400}
+                                        textAlign="left"
+                                      >
+                                        <Trans i18nKey="invalidInsight" />
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                )}
                               </Box>
                             </TableCell>
                           </TableRow>
