@@ -64,6 +64,7 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
 import { FaClipboard } from "react-icons/fa";
+import { theme } from "@/config/theme";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -322,6 +323,14 @@ const AssessmentExportContainer = () => {
               return null;
             }
 
+            if (!result.editable && result?.aiInsight?.insight) {
+              setAttributesData((prevData: any) => ({
+                ...prevData,
+                [attribute?.id]: result?.aiInsight?.insight,
+              }));
+              newIgnoreIds.push(attribute?.id);
+            }
+
             if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
               setAttributesData((prevData: any) => ({
                 ...prevData,
@@ -508,11 +517,11 @@ const AssessmentExportContainer = () => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "5.25rem",
+                  top: "5.5rem",
                   right: "-1.75rem",
                   transform: "rotate(45deg)",
                   transformOrigin: "top right",
-                  backgroundColor: "#D81E5B",
+                  backgroundColor: theme.palette.error.main,
                   color: "white",
                   padding: "0.5rem 2rem",
                   borderRadius: "4px",
@@ -522,7 +531,7 @@ const AssessmentExportContainer = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                Beta Version
+                <Trans i18nKey="betaVersion" />
               </Box>
               <Grid container spacing={2} flexDirection="row-reverse">
                 <Grid
@@ -765,7 +774,7 @@ const AssessmentExportContainer = () => {
                               ? " and " + elem?.title
                               : index === 0
                                 ? elem?.title
-                                : ", " + elem?.title,
+                                : ", " + elem?.title
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -1398,7 +1407,7 @@ const AssessmentExportContainer = () => {
                                           to={`./../questionnaires?subject_pk=${subject?.id}`}
                                           sx={{
                                             textDecoration: "none",
-                                            color: "#2D80D2",
+                                            color: theme.palette.primary.main,
                                           }}
                                         >
                                           <Typography variant="titleMedium">
@@ -1411,53 +1420,56 @@ const AssessmentExportContainer = () => {
                                   )
                                 )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
-                                  ?.aiInsight && (
-                                  <Box sx={{ ...styles.centerV }} gap={2}>
-                                    <Box
-                                      sx={{
-                                        zIndex: 1,
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                      }}
-                                    >
-                                      <Typography
-                                        variant="labelSmall"
+                                  ?.aiInsight &&
+                                  attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.aiInsight.isValid && (
+                                    <Box sx={{ ...styles.centerV }} gap={2}>
+                                      <Box
                                         sx={{
-                                          backgroundColor: "#d85e1e",
-                                          color: "white",
-                                          padding: "0.35rem 0.35rem",
-                                          borderRadius: "4px",
-                                          fontWeight: "bold",
+                                          zIndex: 1,
+                                          display: "flex",
+                                          justifyContent: "flex-start",
                                         }}
                                       >
-                                        <Trans i18nKey="AIGenerated" />
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        backgroundColor:
-                                          "rgba(255, 249, 196, 0.31)",
-                                        padding: 1,
-                                        borderRadius: 2,
-                                        maxWidth: "80%",
-                                      }}
-                                    >
-                                      <InfoOutlined
-                                        color="primary"
-                                        sx={{ marginRight: 1 }}
-                                      />
-                                      <Typography
-                                        variant="titleMedium"
-                                        fontWeight={400}
-                                        textAlign="left"
+                                        <Typography
+                                          variant="labelSmall"
+                                          sx={{
+                                            backgroundColor: "#d85e1e",
+                                            color: "white",
+                                            padding: "0.35rem 0.35rem",
+                                            borderRadius: "4px",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          <Trans i18nKey="AIGenerated" />
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "flex-start",
+                                          backgroundColor:
+                                            "rgba(255, 249, 196, 0.31)",
+                                          padding: 1,
+                                          borderRadius: 2,
+                                          maxWidth: "80%",
+                                        }}
                                       >
-                                        <Trans i18nKey="invalidAIInsight" />
-                                      </Typography>
+                                        <InfoOutlined
+                                          color="primary"
+                                          sx={{ marginRight: 1 }}
+                                        />
+                                        <Typography
+                                          variant="titleMedium"
+                                          fontWeight={400}
+                                          textAlign="left"
+                                        >
+                                          <Trans i18nKey="invalidAIInsight" />
+                                        </Typography>
+                                      </Box>
                                     </Box>
-                                  </Box>
-                                )}
+                                  )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
                                   ?.assessorInsight &&
                                   !attributesDataPolicy[

@@ -150,6 +150,14 @@ const SubjectContainer = () => {
           return null;
         }
 
+        if (!result.editable && result?.aiInsight?.insight) {
+          setAttributesData((prevData: any) => ({
+            ...prevData,
+            [attribute?.id]: result?.aiInsight?.insight,
+          }));
+          newIgnoreIds.push(attribute?.id);
+        }
+
         if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
           setAttributesData((prevData: any) => ({
             ...prevData,

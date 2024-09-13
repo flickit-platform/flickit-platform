@@ -276,7 +276,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   bottom: 0,
                   background: viewable
                     ? "rgba(102, 128, 153, 0.3)"
-                    : "rgb(16, 79, 141)",
+                    : "rgb(0, 41, 70)",
                   zIndex: -1,
                   width: calculatePercentage ? `${calculatePercentage}%` : "0%",
                   transition: "all 1s ease-in-out",

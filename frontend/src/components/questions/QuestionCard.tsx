@@ -140,8 +140,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         questionActions.setSelectedConfidenceLevel(
           answer?.confidenceLevel?.id
             ? answer?.confidenceLevel?.id
-            : (answer?.confidenceLevel ?? null),
-        ),
+            : (answer?.confidenceLevel ?? null)
+        )
       );
     }
   }, [title, answer?.confidenceLevel]);
@@ -681,16 +681,16 @@ const AnswerTemplate = (props: {
         </LoadingButton>
         {may_not_be_applicable && (
           <FormControlLabel
-            sx={{ color: "#0288d1" }}
+            sx={{ color: theme.palette.primary.main }}
             data-cy="automatic-submit-check"
             control={
               <Checkbox
                 checked={notApplicable}
                 onChange={(e) => notApplicableonChanhe(e)}
                 sx={{
-                  color: "#0288d1",
+                  color: theme.palette.primary.main,
                   "&.Mui-checked": {
-                    color: "#0288d1",
+                    color: theme.palette.primary.main,
                   },
                 }}
               />
@@ -748,7 +748,11 @@ const AnswerDetails = ({
     setExpanded(!expanded);
   };
 
-  return (
+  return queryData.loading ? (
+    <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
+      <CircularProgress />
+    </Box>
+  ) : (
     <Box mt={2} width="100%" my={4}>
       {type === "evidence" ? (
         <Box
@@ -995,9 +999,9 @@ const Evidence = (props: any) => {
   const [evidenceJustCreatedId, setEvidenceJustCreatedId] =
     useState<string>("");
   const [evidenceBG, setEvidenceBG] = useState<any>({
-    background: "rgba(32, 95, 148, 0.08)",
-    borderColor: "#205F94",
-    borderHover: "#117476",
+    background: theme.palette.primary.main,
+    borderColor: theme.palette.primary.dark,
+    borderHover: theme.palette.primary.light,
   });
   useEffect(() => {
     if (value === null) {
@@ -1266,7 +1270,7 @@ const Evidence = (props: any) => {
                   />
                   <FormControlLabel
                     sx={{
-                      color: "#0288d1",
+                      color: theme.palette.primary.main,
                       position: "absolute",
                       bottom: "20px",
                       left: "40px",
@@ -2251,6 +2255,8 @@ const EvidenceDetail = (props: any) => {
     id,
     type,
     attachmentsCount,
+    editable,
+    deletable,
   } = item;
   const { displayName, pictureLink } = createdBy;
   const is_farsi = firstCharDetector(description);
@@ -2746,7 +2752,7 @@ const EvidenceDetail = (props: any) => {
                   gap: 1,
                 }}
               >
-                {permissions.updateEvidence && (
+                {permissions.updateEvidence && editable && (
                   <IconButton
                     aria-label="edit"
                     size="small"
@@ -2759,7 +2765,7 @@ const EvidenceDetail = (props: any) => {
                     />
                   </IconButton>
                 )}
-                {permissions.deleteEvidence && (
+                {permissions.deleteEvidence && deletable && (
                   <IconButton
                     aria-label="delete"
                     size="small"
@@ -3078,6 +3084,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState(false);
   const [dropZoneData, setDropZone] = useState<any>(null);
+  const [btnState, setBtnState] = useState("");
   const addEvidenceAttachments = useQuery({
     service: (args, config) =>
       service.addEvidenceAttachments(args, { signal: abortController.signal }),
@@ -3127,6 +3134,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           attachment: dropZoneData[0],
           description: description,
         };
+        setBtnState(recognize);
         await addEvidenceAttachments.query({ evidenceId, data });
         if (!createAttachment) {
           const { items } = await evidencesQueryData.query();
@@ -3321,12 +3329,21 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           }}
           justifyContent="center"
         >
-          <Button onClick={() => handelSendFile("another")}>
+          <LoadingButton
+            onClick={() => handelSendFile("another")}
+            value={"another"}
+            loading={addEvidenceAttachments.loading && btnState == "another"}
+          >
             {uploadAnother}
-          </Button>
-          <Button variant="contained" onClick={() => handelSendFile("self")}>
+          </LoadingButton>
+          <LoadingButton
+            variant="contained"
+            onClick={() => handelSendFile("self")}
+            value={"self"}
+            loading={addEvidenceAttachments.loading && btnState == "self"}
+          >
             {uploadAttachment}
-          </Button>
+          </LoadingButton>
         </Box>
       </DialogContent>
     </Dialog>

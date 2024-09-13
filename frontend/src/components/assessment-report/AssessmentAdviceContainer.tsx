@@ -3,7 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import { Button, Divider, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  Button,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import EmptyAdvice from "@assets/img/emptyAdvice.gif";
 import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
@@ -17,7 +25,10 @@ import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@utils/useScreenResize";
-import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
+import { styles } from "@/config/styles";
+import { InfoOutlined } from "@mui/icons-material";
+
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -74,25 +85,28 @@ const AssessmentAdviceContainer = (props: any) => {
       <Dialog
         open={expanded}
         onClose={handleClose}
-        maxWidth={"md"}
-        fullScreen={fullScreen}
         fullWidth
-        sx={{
-          ".MuiDialog-paper": {
-            borderRadius: { xs: 0, sm: "12px" },
-          },
-          ".MuiDialog-paper::-webkit-scrollbar": {
-            display: "none",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          },
-        }}
+        maxWidth="md"
+        fullScreen={fullScreen}
       >
+        <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
+          {" "}
+          <>
+            <Trans i18nKey="setYourGoals" />
+          </>
+        </DialogTitle>
         <DialogContent
           sx={{
-            padding: "0!important",
-            background: "#004F83",
-            overflow: "hidden",
+            padding: "unset",
+            background: "#fff",
+            overflowX: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            gap: 3,
+            p: 2,
           }}
         >
           <Box
@@ -106,113 +120,29 @@ const AssessmentAdviceContainer = (props: any) => {
           >
             <Box
               sx={{
-                background: "#004F83",
-                py: 4,
-                textAlign: "center",
-                color: "#fff",
-                fontSize: "2rem",
-                fontWeight: "700",
-                borderRadius: "12px 12px 0 0",
-              }}
-            >
-              <Trans i18nKey="setYourGoals" />
-            </Box>
-            <Box
-              sx={{
-                background: "#EDF4FC",
                 display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                alignItems: "center",
+                alignItems: "flex-start",
+                background: theme.palette.primary.light,
+                padding: 1,
+                borderRadius: 2,
+                maxWidth: "100%",
               }}
             >
-              <Box
-                sx={{
-                  color: "#6C7B8E",
-                  fontSize: "1rem",
-                  fontWeight: "500",
-                  display: "flex",
-                  textAlign: "center",
-                  width: { xs: "100%", sm: "50%" },
-                  py: 2,
-                }}
+              <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+              <Typography
+                variant="titleSmall"
+                fontWeight={400}
+                textAlign="left"
               >
                 <Trans i18nKey="wichAttYouWant" />
-              </Box>
-              {/*
-              <Box
-                sx={{
-                  display: "flex",
-                  width: "fit-content",
-                  justifyContent: "space-between",
-                  alignItems: "baseline",
-                  gap: "12px",
-                  my: 4,
-                }}
-              >
-                {subjects.map((subject: any) => {
-                  const fetchAttributes = async (id: TId) => {
-                    try {
-                      const data = await subjectQueryData.query({
-                        subjectId: id,
-                        assessmentId: assessmentId,
-                      });
-                      setsubjectData((prev: any) => [...prev, data]);
-                    } catch (e) {}
-                  };
-                  useEffect(() => {
-                    if (subject.id) {
-                      fetchAttributes(subject.id);
-                    }
-                  }, [subject]);
-                  return (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Box sx={{             fontSize: "1rem",
-, fontWeight: "700" }}>
-                        {subject.title}
-                      </Box> 
-                       <Divider sx={{ my: 2 }} /> 
-                      <Box>
-                         <FormGroup>
-                          {subjectData.map((subject: any) => {
-                            subject?.attributes.map((attribute: any) => {
-                              return (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      sx={{
-                                        color: "#0A2342",
-                                        "&.Mui-checked": {
-                                          color: "#004F83",
-                                        },
-                                      }}
-                                    />
-                                  }
-                                  label={attribute.title}
-                                />
-                              );
-                            });
-                          })}
-                        </FormGroup> 
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </Box>
-*/}
+              </Typography>
             </Box>
+
             <Box
+            mt={2}
               sx={{
                 borderRadius: { xs: 0, sm: "0 0 12px 12px" },
                 background: "#fff",
-                py: 8,
                 maxHeight: "60vh",
                 overflow: "auto",
                 overflowX: "hidden",
@@ -232,48 +162,28 @@ const AssessmentAdviceContainer = (props: any) => {
                   />
                 )),
               )}
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                gap: 2,
+                padding: "16px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button onClick={handleClose}>
+                <Trans i18nKey="cancel" />
+              </Button>
 
-              <Box
-                sx={{ mt: "64px", display: "flex", justifyContent: "center" }}
+              <LoadingButton
+                variant="contained"
+                color="primary"
+                onClick={createAdvice}
+                loading={createAdviceQueryData.loading}
               >
-                <Button
-                  sx={{
-                    color: "#004F83",
-                    px: 2,
-                    py: 1,
-                    borderRadius: "12px",
-                    fontSize: "1rem",
-                    fontWeight: "700",
-                    width: "fit-content",
-                    mr: 2,
-                  }}
-                  onClick={handleClose}
-                >
-                  <Trans i18nKey="cancel" />
-                </Button>
-
-                <LoadingButton
-                  sx={{
-                    background: "#004F83",
-                    color: "#EDFCFC",
-                    px: 2,
-                    py: 1,
-                    borderRadius: "12px",
-                    fontSize: "1rem",
-                    fontWeight: "700",
-                    width: "fit-content",
-                    "&:hover": {
-                      backgroundColor: "rgba(28, 194, 196, 0.5)",
-                    },
-                  }}
-                  variant="contained"
-                  color="secondary"
-                  onClick={createAdvice}
-                  loading={createAdviceQueryData.loading}
-                >
-                  <Trans i18nKey="setTheseParameters" />
-                </LoadingButton>
-              </Box>
+                <Trans i18nKey="setTheseParameters" />
+              </LoadingButton>
             </Box>
           </Box>
         </DialogContent>
@@ -281,7 +191,7 @@ const AssessmentAdviceContainer = (props: any) => {
       <Box mt={6}>
         <Box
           sx={{
-            borderRadius: "24px",
+            borderRadius: "12px",
             border: `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
             width: { xs: "100%", sm: "60%" },
             p: 6,
@@ -292,8 +202,8 @@ const AssessmentAdviceContainer = (props: any) => {
             sx={{
               fontSize: "4rem",
               fontWeight: "700",
-              color: "#004F83",
-              textShadow: "0px 0px 11.2px rgba(28, 194, 196, 0.50)",
+              color: theme.palette.primary.main,
+              textShadow: `0px 0px 6px ${theme.palette.primary.light}`,
               textAlign: "center",
               display: "flex",
               justifyContent: "center",
@@ -334,18 +244,13 @@ const AssessmentAdviceContainer = (props: any) => {
             }}
           >
             <Button
+              variant="contained"
               sx={{
-                background: "#004F83",
-                color: "#EDFCFC",
                 px: 5,
                 py: 1,
-                borderRadius: "12px",
                 fontSize: "1rem",
                 fontWeight: "700",
                 width: "fit-content",
-                "&:hover": {
-                  backgroundColor: "rgba(28, 194, 196, 0.5)",
-                },
               }}
               onClick={handleClickOpen}
             >

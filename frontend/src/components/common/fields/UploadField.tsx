@@ -100,6 +100,7 @@ interface IUploadProps {
   dslGuide?: boolean;
   dropNewFile?: any;
   setConvertData?: any;
+  disabled?: boolean;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -121,6 +122,7 @@ const Uploader = (props: IUploadProps) => {
     setShowErrorLog,
     setIsValid,
     setButtonStep,
+    disabled = false,
     setZippedData,
     setConvertData,
     dropNewFile,
@@ -163,7 +165,7 @@ const Uploader = (props: IUploadProps) => {
       setLimitGuide(
         t("maximumUploadFileSize", {
           maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
-        }) as string,
+        }) as string
       );
     }
     if (
@@ -243,6 +245,7 @@ const Uploader = (props: IUploadProps) => {
     accept,
     maxSize,
     onDrop,
+    disabled: disabled,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
@@ -280,10 +283,12 @@ const Uploader = (props: IUploadProps) => {
             `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
             border: (t) =>
-              `1px solid ${hasError ? t.palette.error.dark : "black"} `,
+              disabled
+                ? `1px solid ${hasError ? t.palette.error.dark : "black"}`
+                : "",
           },
           borderRadius: 1,
-          cursor: "pointer",
+          cursor: disabled ? "default" : "pointer",
           width: "100%",
         }}
       >
@@ -414,7 +419,11 @@ const Uploader = (props: IUploadProps) => {
                               (dropNewFile && dropNewFile[0]) ||
                               acceptedFiles[0] ||
                               file
+<<<<<<< HEAD
                             )?.size,
+=======
+                            )?.size
+>>>>>>> main
                           )
                         : null}
                     </>

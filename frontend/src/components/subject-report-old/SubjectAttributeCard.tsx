@@ -226,50 +226,52 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )
                 )}
-                {attributesDataPolicy[id?.toString()]?.aiInsight && (
-                  <Box sx={{ ...styles.centerV }} gap={2}>
-                    <Box
-                      sx={{
-                        zIndex: 1,
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        ml: { xs: 0.75, sm: 1.5, md: 2 },
-                      }}
-                    >
-                      <Typography
-                        variant="labelSmall"
+                {attributesDataPolicy[id?.toString()]?.aiInsight &&
+                  attributesDataPolicy[id?.toString()]?.aiInsight
+                    .isValid && (
+                    <Box sx={{ ...styles.centerV }} gap={2}>
+                      <Box
                         sx={{
-                          backgroundColor: "#d85e1e",
-                          color: "white",
-                          padding: "0.35rem 0.35rem",
-                          borderRadius: "4px",
-                          fontWeight: "bold",
+                          zIndex: 1,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          ml: { xs: 0.75, sm: 1.5, md: 2 },
                         }}
                       >
-                        <Trans i18nKey="AIGenerated" />
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        backgroundColor: "rgba(255, 249, 196, 0.31)",
-                        padding: 1,
-                        borderRadius: 2,
-                        maxWidth: "80%",
-                      }}
-                    >
-                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                      <Typography
-                        variant="titleMedium"
-                        fontWeight={400}
-                        textAlign="left"
+                        <Typography
+                          variant="labelSmall"
+                          sx={{
+                            backgroundColor: "#d85e1e",
+                            color: "white",
+                            padding: "0.35rem 0.35rem",
+                            borderRadius: "4px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Trans i18nKey="AIGenerated" />
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          backgroundColor: "rgba(255, 249, 196, 0.31)",
+                          padding: 1,
+                          borderRadius: 2,
+                          maxWidth: "80%",
+                        }}
                       >
-                        <Trans i18nKey="invalidAIInsight" />
-                      </Typography>
+                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                        <Typography
+                          variant="titleMedium"
+                          fontWeight={400}
+                          textAlign="left"
+                        >
+                          <Trans i18nKey="invalidAIInsight" />
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                )}
+                  )}
 
                 {attributesDataPolicy[id?.toString()]?.assessorInsight &&
                   !attributesDataPolicy[id?.toString()]?.assessorInsight

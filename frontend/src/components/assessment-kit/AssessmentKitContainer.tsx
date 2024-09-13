@@ -385,6 +385,34 @@ const AssessmentKit = (props: any) => {
                     );
                   })}
                 </Box>
+                <Box component="ul" mt={3}>
+                  {maturityLevels.map((item: any) => {
+                    return (
+                      <Box sx={{ ml: 4 }} component="li">
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            my: 2,
+                            textAlign: "justify",
+                            textJustify: "inter-word",
+                          }}
+                        >
+                          <Box
+                            component="span"
+                            fontSize="1rem"
+                            fontWeight="bold"
+                          >
+                            {item.title}
+                          </Box>
+                          :{" "}
+                          <Box component="span" fontSize="1rem">
+                            {item.description}
+                          </Box>
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </Box>
               </Box>
             )}
             <Box mb={8}>

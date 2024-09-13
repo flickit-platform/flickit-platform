@@ -24,6 +24,7 @@ import { keyframes } from "@emotion/react";
 import convertToBytes from "@/utils/convertToBytes";
 import { useQuery } from "@utils/useQuery";
 import { LoadingButton } from "@mui/lab";
+import { theme } from "@/config/theme";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -199,7 +200,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                 <span
                   style={{
                     textDecoration: "underline",
-                    color: "#2D80D2",
+                    color: theme.palette.primary.main,
                     cursor: "pointer",
                     paddingLeft: "4px",
                   }}
@@ -247,6 +248,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
               maxSize={convertToBytes(5, "MB")}
               setZippedData={setZippedData}
               setButtonStep={setButtonStep}
+              disabled={buttonStep !== 0}
               dropNewFile={dropNewFile}
               setConvertData={setConvertData}
             />

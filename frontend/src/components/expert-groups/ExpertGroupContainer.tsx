@@ -1038,19 +1038,14 @@ const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
   const { dialogProps } = props;
 
   return (
-    <>
-      <Button
-        color={"info"}
-        variant="outlined"
-        size="small"
-        onClick={dialogProps.openDialog}
-      >
-        <Trans i18nKey="convertExcelToDsl" />
-      </Button>
-      <AssessmentKitCEFromDialog {...dialogProps} />
-    </>
-  );
-};
+      <>
+        <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
+          <Trans i18nKey="convertExcelToDsl" />
+        </Button>
+        <AssessmentKitCEFromDialog {...dialogProps} />
+      </>
+  )
+}
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
