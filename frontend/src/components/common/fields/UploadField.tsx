@@ -419,11 +419,7 @@ const Uploader = (props: IUploadProps) => {
                               (dropNewFile && dropNewFile[0]) ||
                               acceptedFiles[0] ||
                               file
-<<<<<<< HEAD
-                            )?.size,
-=======
                             )?.size
->>>>>>> main
                           )
                         : null}
                     </>
