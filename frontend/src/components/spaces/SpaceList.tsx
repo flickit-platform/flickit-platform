@@ -89,6 +89,7 @@ interface ISpaceCardProps {
 const SpaceCard = (props: ISpaceCardProps) => {
   const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
     props;
+  const [show,setShow] = useState<boolean>(false)
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
@@ -225,7 +226,12 @@ const SpaceCard = (props: ISpaceCardProps) => {
               </IconButton>
             </Box>
             </Tooltip>
-            <Tooltip title={<Trans i18nKey={"moreAction"} />}>
+            <Tooltip
+                open={show}
+                onMouseEnter={()=>setShow(true)}
+                onMouseLeave={()=>setShow(false)}
+                onClick={()=>setShow(false)}
+                title={<Trans i18nKey={"moreAction"} />}>
               <Box>
                 <Actions
                   isActiveSpace={isActiveSpace}
@@ -233,6 +239,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
                   space={item}
                   fetchSpaces={fetchSpaces}
                   isOwner={isOwner}
+                  setShow={setShow}
                   is_default_space_for_current_user={
                     is_default_space_for_current_user
                   }
@@ -255,6 +262,7 @@ const Actions = (props: any) => {
     setUserInfo,
     isOwner,
     is_default_space_for_current_user,
+    setShow
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -331,6 +339,7 @@ const Actions = (props: any) => {
           onClick: leaveSpace,
         },
       ]}
+      setShow={setShow}
     />
   );
 };

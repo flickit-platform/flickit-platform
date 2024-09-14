@@ -27,6 +27,7 @@ interface IMoreActionsProps {
     | undefined
     | false
   )[];
+    setShow: (i:boolean)=> void
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
@@ -40,6 +41,7 @@ const MoreActions = (props: IMoreActionsProps) => {
     items = [],
     hideInnerIconButton = false,
     fontSize = "inherit",
+    setShow
   } = props;
 
   const menuItems = items.filter((item) => !!item) as {
@@ -58,6 +60,7 @@ const MoreActions = (props: IMoreActionsProps) => {
             e.preventDefault();
             e.stopPropagation();
             !loading && openMenu(e);
+            setShow(false)
           }}
         >
           {loading ? (
