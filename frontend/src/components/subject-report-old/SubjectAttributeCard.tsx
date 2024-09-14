@@ -641,13 +641,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 return (
                   <>
                     <Typography variant="body2" display={"flex"}>
-                      <Trans i18nKey="maxPossibleScore" />
+                      <Trans i18nKey="maxPossibleScore" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {maxPossibleScore}
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="gainedScore" />
+                      <Trans i18nKey="gainedScore" />:
                       <Typography
                         variant="body2"
                         display={"flex"}
@@ -665,7 +665,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="questionsCount" />
+                      <Trans i18nKey="questionsCount" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {questionsCount}
                       </Typography>
@@ -821,7 +821,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           </Typography>
                                         </Box>
                                       </CustomWidthTooltip>
-                                      <Box sx={{ width: "10%" }}>
+                                      <Box sx={{ width: "10%", textAlign:"center" }}>
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -838,7 +838,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                               : "---"
                                         }
                                       >
-                                        <Box sx={{ width: "25%" }}>
+                                        <Box sx={{ width: "25%", textAlign:"center" }}>
                                           <Typography
                                             variant="titleMedium"
                                             textAlign={"center"}
@@ -851,7 +851,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           </Typography>
                                         </Box>
                                       </Tooltip>
-                                      <Box sx={{ width: "10%" }}>
+                                      <Box sx={{ width: "10%", textAlign:"center" }}>
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -861,7 +861,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             : answerScore}
                                         </Typography>
                                       </Box>
-                                      <Box sx={{ width: "15%" }}>
+                                      <Box sx={{ width: "15%", textAlign:"center" }}>
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
