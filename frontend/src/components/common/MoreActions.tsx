@@ -27,7 +27,7 @@ interface IMoreActionsProps {
     | undefined
     | false
   )[];
-    setShowTooltip?: (i:boolean)=> void
+    setShowTooltip?: (e :boolean)=> void
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
@@ -60,7 +60,7 @@ const MoreActions = (props: IMoreActionsProps) => {
             e.preventDefault();
             e.stopPropagation();
             !loading && openMenu(e);
-            setShowTooltip(false)
+            setShowTooltip?.(false)
           }}
         >
           {loading ? (
