@@ -89,7 +89,7 @@ interface ISpaceCardProps {
 const SpaceCard = (props: ISpaceCardProps) => {
   const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
     props;
-  const [show,setShow] = useState<boolean>(false)
+  const [showTooltip,setShowTooltip] = useState<boolean>(false)
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
@@ -227,10 +227,10 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
             </Tooltip>
             <Tooltip
-                open={show}
-                onMouseEnter={()=>setShow(true)}
-                onMouseLeave={()=>setShow(false)}
-                onClick={()=>setShow(false)}
+                open={showTooltip}
+                onMouseEnter={()=>setShowTooltip(true)}
+                onMouseLeave={()=>setShowTooltip(false)}
+                onClick={()=>setShowTooltip(false)}
                 title={<Trans i18nKey={"moreAction"} />}>
               <Box>
                 <Actions
@@ -239,7 +239,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
                   space={item}
                   fetchSpaces={fetchSpaces}
                   isOwner={isOwner}
-                  setShow={setShow}
+                  setShowTooltip={setShowTooltip}
                   is_default_space_for_current_user={
                     is_default_space_for_current_user
                   }
@@ -262,7 +262,7 @@ const Actions = (props: any) => {
     setUserInfo,
     isOwner,
     is_default_space_for_current_user,
-    setShow
+    setShowTooltip
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -339,7 +339,7 @@ const Actions = (props: any) => {
           onClick: leaveSpace,
         },
       ]}
-      setShow={setShow}
+      setShowTooltip={setShowTooltip}
     />
   );
 };
