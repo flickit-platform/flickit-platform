@@ -27,7 +27,7 @@ interface IMoreActionsProps {
     | undefined
     | false
   )[];
-    setShowTooltip: (i:boolean)=> void
+    setShowTooltip?: (i:boolean)=> void
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
