@@ -65,7 +65,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, assessment_kit, title, color } = data;
+    const { space, assessment_kit, title, shortTitle ,color } = data;
     setLoading(true);
     try {
       type === "update"
@@ -74,6 +74,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
               id: assessmentId,
               data: {
                 title,
+                shortTitle,
                 colorId: color,
               },
             },
@@ -86,6 +87,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                   spaceId: spaceId || space?.id,
                   assessmentKitId: assessment_kit?.id,
                   title: title,
+                  shortTitle,
                   colorId: color,
                 },
               },
@@ -142,6 +144,16 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 required={true}
                 label={<Trans i18nKey="title" />}
                 data-cy="title"
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <InputFieldUC
+                  autoFocus={false}
+                  defaultValue={defaultValues.title || ""}
+                  name="shortTitle"
+                  required={false}
+                  label={<Trans i18nKey="shortTitle" />}
+                  data-cy="title"
               />
             </Grid>
             <Grid item xs={12}>
