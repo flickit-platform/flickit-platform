@@ -51,13 +51,14 @@ export const AssessmentSettingGeneralBox = (props: {
   fetchPathInfo: () => void;
   color: any;
 }) => {
-  const { AssessmentInfo, AssessmentTitle, fetchPathInfo, color } = props;
+  const { AssessmentInfo, assessmentInfo, AssessmentTitle, fetchPathInfo, color } = props;
   const {
     createdBy: { displayName },
     creationTime,
     lastModificationTime,
     kit,
-  } = AssessmentInfo;
+    shortTitle
+  } = assessmentInfo;
 
   const title = ["creator", "created", "lastModified", "assessmentKit"];
   const formMethods = useForm({ shouldUnregister: true });
@@ -89,7 +90,7 @@ export const AssessmentSettingGeneralBox = (props: {
             marginBottom: "10px !important",
           }}
         />
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center",flexDirection:"column" }}>
           <Grid
             item
             xs={12}
@@ -124,12 +125,56 @@ export const AssessmentSettingGeneralBox = (props: {
               <OnHoverInputTitleSetting
                 formMethods={formMethods}
                 data={AssessmentTitle}
+                title={shortTitle}
                 infoQuery={fetchPathInfo}
                 editable={true}
                 color={color}
+                AssessmentInfo={AssessmentInfo}
               />
             </Box>
           </Grid>
+            { shortTitle && <Grid
+                item
+                xs={12}
+                sm={12}
+                md={8}
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
+                <Typography
+                    color="#9DA7B3"
+                    fontWeight={500}
+                    sx={{
+                        fontSize: { xs: "1rem", sm: "1.375rem" },
+                        whiteSpace: { xs: "wrap", sm: "nowrap" },
+                    }}
+                    lineHeight={"normal"}
+                >
+                    <Trans i18nKey="shortTitle" />:
+                </Typography>
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: { md: "350px" },
+                    }}
+                >
+                    <OnHoverInputShortTitleSetting
+                        formMethods={formMethods}
+                        data={shortTitle}
+                        title={AssessmentTitle}
+                        infoQuery={fetchPathInfo}
+                        AssessmentInfo={AssessmentInfo}
+                        editable={true}
+                        color={color}
+                    />
+                </Box>
+            </Grid>}
         </Box>
 
         <Divider
@@ -1054,7 +1099,7 @@ const OnHoverInputTitleSetting = (props: any) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, editable, infoQuery, formMethods, color } = props;
+  const { data, title, editable, infoQuery, formMethods, color, AssessmentInfo, } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [inputData, setInputData] = useState<string>(data);
   const handleCancel = () => {
@@ -1068,7 +1113,7 @@ const OnHoverInputTitleSetting = (props: any) => {
     service: (
       args = {
         id: assessmentId,
-        data: { title: inputData, colorId: color?.id || 6 },
+        data: { title: inputData,shortTitle:title, colorId: color?.id || 6 },
       },
       config
     ) => service.updateAssessment(args, config),
@@ -1080,6 +1125,189 @@ const OnHoverInputTitleSetting = (props: any) => {
       const res = await updateAssessmentQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
+      await AssessmentInfo();
+    } catch (e) {
+      const err = e as ICustomError;
+      setHasError(true);
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
+      } else if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(err.response?.data?.message);
+      }
+    }
+  };
+  const inputProps: React.HTMLProps<HTMLInputElement> = {
+    style: {
+      textAlign: firstCharDetector(inputData) ? "right" : "left",
+    },
+  };
+  return (
+    <Box>
+      <Box
+        my={1.5}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          position: "relative",
+          cursor: "pointer",
+        }}
+        width="100%"
+      >
+        {editable && show ? (
+          <Box
+            sx={{ display: "flex", flexDirection: "column", width: "100% " }}
+          >
+            <OutlinedInput
+              inputProps={inputProps}
+              error={hasError}
+              fullWidth
+              // name={title}
+              defaultValue={data || ""}
+              onChange={(e) => setInputData(e.target.value)}
+              value={inputData}
+              required={true}
+              multiline={true}
+              sx={{
+                minHeight: "38px",
+                borderRadius: "4px",
+                paddingRight: "12px;",
+                fontWeight: "700",
+                fontSize: "0.875rem",
+                "&.MuiOutlinedInput-notchedOutline": { border: 0 },
+                "&.MuiOutlinedInput-root:hover": {
+                  border: 0,
+                  outline: "none",
+                },
+                "& .MuiOutlinedInput-input:focused": {
+                  border: 0,
+                  outline: "none",
+                },
+                "&.MuiOutlinedInput-root.Mui-selected": {
+                  border: 0,
+                  outline: "none",
+                },
+                "&:hover": { border: "1px solid #79747E" },
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    title="Submit Edit"
+                    edge="end"
+                    sx={{
+                      background: "#49CED0",
+                      borderRadius: "2px",
+                      height: { xs: "26px", sm: "36px" },
+                      width: { xs: "26px", sm: "36px" },
+                      margin: "3px",
+                    }}
+                    onClick={updateAssessmentTitle}
+                  >
+                    <DoneIcon sx={{ color: "#fff" }} />
+                  </IconButton>
+                  <IconButton
+                    title="Cancel Edit"
+                    edge="end"
+                    sx={{
+                      background: "#E04B7C",
+                      borderRadius: "2px",
+                      height: { xs: "26px", sm: "36px" },
+                      width: { xs: "26px", sm: "36px" },
+                    }}
+                    onClick={handleCancel}
+                  >
+                    <CloseIcon sx={{ color: "#fff" }} />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            {/*{hasError && (*/}
+            {/*    <Typography color="#ba000d" variant="caption">*/}
+            {/*        {error?.data}*/}
+            {/*    </Typography>*/}
+            {/*)}*/}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              minHeight: "38px",
+              borderRadius: "4px",
+              paddingLeft: "8px;",
+              paddingRight: "12px;",
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              wordBreak: "break-word",
+              // "&:hover": {border: "1px solid #79747E"},
+            }}
+            onClick={() => setShow(!show)}
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+          >
+            <Typography
+              color="#004F83"
+              fontWeight={500}
+              sx={{ fontSize: { xs: "1rem", sm: "1.375rem" } }}
+              lineHeight={"normal"}
+            >
+              {data.replace(/<\/?p>/g, "")}
+            </Typography>
+            {isHovering && (
+              <EditRoundedIcon
+                sx={{ color: "#9DA7B3", position: "absolute", right: -10 }}
+                fontSize="small"
+                width={"32px"}
+                height={"32px"}
+                onClick={() => setShow(!show)}
+              />
+            )}
+          </Box>
+        )}
+      </Box>
+    </Box>
+  );
+};
+const OnHoverInputShortTitleSetting = (props: any) => {
+  const [show, setShow] = useState<boolean>(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const handleMouseOver = () => {
+    editable && setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+  const { data, title, editable, infoQuery, formMethods, color, AssessmentInfo } = props;
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [inputData, setInputData] = useState<string>(data);
+  const handleCancel = () => {
+    setShow(false);
+    setInputData(data);
+    setHasError(false);
+  };
+  const { assessmentId } = useParams();
+  const { service } = useServiceContext();
+  const updateAssessmentQuery = useQuery({
+    service: (
+      args = {
+        id: assessmentId,
+        data: { title ,shortTitle: inputData, colorId: color?.id || 6 },
+      },
+      config
+    ) => service.updateAssessment(args, config),
+    runOnMount: false,
+    // toastError: true,
+  });
+  const updateAssessmentTitle = async () => {
+    try {
+      const res = await updateAssessmentQuery.query();
+      res.message && toast.success(res.message);
+      await infoQuery();
+      await AssessmentInfo();
     } catch (e) {
       const err = e as ICustomError;
       setHasError(true);
