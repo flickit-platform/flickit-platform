@@ -88,23 +88,28 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
 
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        setIsFocused(false)
-        setTimeout(() => {
-          setIsFocused(true)
-        }, 500);
-        formMethods.handleSubmit((data) => onSubmit(formMethods.getValues(), e))();
-      }
-    };
+    if (openDialog) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+          setIsFocused(false);
+          setTimeout(() => {
+            setIsFocused(true);
+          }, 500);
+          formMethods.handleSubmit((data) =>
+            onSubmit(formMethods.getValues(), e)
+          )();
+        }
+      };
 
-    document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      abortController.abort();
-    };
-  }, []);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        abortController.abort();
+      };
+    }
+  }, [openDialog, formMethods, abortController]);
+
 
   return (
     <CEDialog
