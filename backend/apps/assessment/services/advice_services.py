@@ -10,3 +10,9 @@ def get_advice(request, assessment_id):
     result["body"] = response.json()
     result["status_code"] = response.status_code
     return result
+
+
+def get_advice_narration(request, assessment_id):
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/advice-narration',
+                            headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
