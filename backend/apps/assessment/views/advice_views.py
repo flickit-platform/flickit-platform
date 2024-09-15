@@ -13,3 +13,9 @@ class AdviceView(APIView):
         return Response(result["body"], result["status_code"])
 
 
+class AdviceNarrationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, assessment_id):
+        result = advice_services.get_advice_narration(request, assessment_id)
+        return Response(result["body"], result["status_code"])
