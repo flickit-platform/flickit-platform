@@ -48,6 +48,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
   AssessmentTitle: string;
+  assessmentInfo: any;
   fetchPathInfo: () => void;
   color: any;
 }) => {
