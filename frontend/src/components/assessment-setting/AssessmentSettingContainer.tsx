@@ -138,6 +138,7 @@ const AssessmentSettingContainer = () => {
             <Grid container columns={12} mb={"32px"}>
               <Grid item sm={12} xs={12}>
                 <AssessmentSettingGeneralBox
+                  AssessmentInfoQuery={AssessmentInfo.query}
                   AssessmentInfo={assessmentInfo}
                   AssessmentTitle={title}
                   fetchPathInfo={fetchPathInfo.query}
