@@ -32,7 +32,7 @@ class UploadAnalysisFileApi(APIView):
             )
         ],
         responses={
-            201: openapi.Response(
+            200: openapi.Response(
                 description="File uploaded successfully.",
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
