@@ -226,54 +226,8 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )
                 )}
-                {attributesDataPolicy[id?.toString()]?.aiInsight && (
-                  <Box sx={{ ...styles.centerV }} gap={2}>
-                    <Box
-                      sx={{
-                        zIndex: 1,
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        ml: { xs: 0.75, sm: 1.5, md: 2 },
-                      }}
-                    >
-                      <Typography
-                        variant="labelSmall"
-                        sx={{
-                          backgroundColor: "#d85e1e",
-                          color: "white",
-                          padding: "0.35rem 0.35rem",
-                          borderRadius: "4px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <Trans i18nKey="AIGenerated" />
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        backgroundColor: "rgba(255, 249, 196, 0.31)",
-                        padding: 1,
-                        borderRadius: 2,
-                        maxWidth: "80%",
-                      }}
-                    >
-                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                      <Typography
-                        variant="titleMedium"
-                        fontWeight={400}
-                        textAlign="left"
-                      >
-                        <Trans i18nKey="invalidAIInsight" />
-                      </Typography>
-                    </Box>
-                  </Box>
-                )}
-
-                {attributesDataPolicy[id?.toString()]?.assessorInsight &&
-                  !attributesDataPolicy[id?.toString()]?.assessorInsight
-                    ?.isValid && (
+                {attributesDataPolicy[id?.toString()]?.aiInsight &&
+                  attributesDataPolicy[id?.toString()]?.aiInsight.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
                       <Box
                         sx={{
@@ -293,7 +247,7 @@ const SUbjectAttributeCard = (props: any) => {
                             fontWeight: "bold",
                           }}
                         >
-                          <Trans i18nKey="Outdated" />
+                          <Trans i18nKey="AIGenerated" />
                         </Typography>
                       </Box>
                       <Box
@@ -312,9 +266,60 @@ const SUbjectAttributeCard = (props: any) => {
                           fontWeight={400}
                           textAlign="left"
                         >
-                          <Trans i18nKey="invalidInsight" />
+                          <Trans i18nKey="invalidAIInsight" />
                         </Typography>
                       </Box>
+                    </Box>
+                  )}
+
+                {((attributesDataPolicy[id?.toString()]?.assessorInsight &&
+                  !attributesDataPolicy[id?.toString()]?.assessorInsight
+                    ?.isValid) ||
+                  (attributesDataPolicy[id?.toString()]?.aiInsight &&
+                    !attributesDataPolicy[id?.toString()]?.aiInsight
+                      ?.isValid)) && (
+                  <Box sx={{ ...styles.centerV }} gap={2}>
+                    <Box
+                      sx={{
+                        zIndex: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
+                        sx={{
+                          backgroundColor: "#d85e1e",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Trans i18nKey="Outdated" />
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        backgroundColor: "rgba(255, 249, 196, 0.31)",
+                        padding: 1,
+                        borderRadius: 2,
+                        maxWidth: "80%",
+                      }}
+                    >
+                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                      <Typography
+                        variant="titleMedium"
+                        fontWeight={400}
+                        textAlign="left"
+                      >
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                    </Box>
+                    {attributesDataPolicy[id?.toString()]?.editable && (
                       <Button
                         variant="contained"
                         size="small"
@@ -324,66 +329,79 @@ const SUbjectAttributeCard = (props: any) => {
                       >
                         <Trans i18nKey="regenerate" />
                       </Button>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
         </AccordionSummary>
         <Divider sx={{ mx: 2 }} />
         <AccordionDetails sx={{ padding: "0 !important" }}>
-          <Typography
-            variant="h4"
-            mt={4}
-            mb={2}
-            sx={{
-              gap: "46px",
-              ...styles.centerVH,
-            }}
-          >
-            <Trans i18nKey={"relatedEvidences"} />
-          </Typography>
-          {emptyNegativeEvidence && emptyPositiveEvidence ? (
-            <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
-              <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-              <Typography variant="h5" color="#9DA7B3">
-                <Trans i18nKey={"noEvidence"} />
+          {permissions.viewEvidence && (
+            <>
+              <Typography
+                variant="h4"
+                mt={4}
+                mb={2}
+                sx={{
+                  gap: "46px",
+                  ...styles.centerVH,
+                }}
+              >
+                <Trans i18nKey={"relatedEvidences"} />
               </Typography>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                ...styles.centerVH,
-                paddingX: "10vw",
-              }}
-            >
-              <Grid container spacing={4} mt={1}>
-                {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.positive}
-                    setEmptyEvidence={setEmptyPositiveEvidence}
-                    setOpositeEvidenceLoading={setPositiveEvidenceLoading}
-                    opositeEvidenceLoading={negativeEvidenceLoading}
+              {emptyNegativeEvidence && emptyPositiveEvidence ? (
+                <Box
+                  width="100%"
+                  padding={4}
+                  gap={3}
+                  sx={{ ...styles.centerCVH }}
+                >
+                  <img
+                    style={{ maxWidth: "50vw" }}
+                    src={emptyState}
+                    alt="empty"
                   />
-                </Grid>
-                {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
-                <Grid item lg={6} md={6} xs={12}>
-                  <RelatedEvidencesContainer
-                    expandedAttribute={expandedAttribute}
-                    attributeId={id}
-                    type={evidenceType.negative}
-                    setEmptyEvidence={setEmptyNegativeEvidence}
-                    setOpositeEvidenceLoading={setNegativeEvidenceLoading}
-                    opositeEvidenceLoading={positiveEvidenceLoading}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+                  <Typography variant="h5" color="#9DA7B3">
+                    <Trans i18nKey={"noEvidence"} />
+                  </Typography>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    ...styles.centerVH,
+                    paddingX: "10vw",
+                  }}
+                >
+                  <Grid container spacing={4} mt={1}>
+                    {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
+                    <Grid item lg={6} md={6} xs={12}>
+                      <RelatedEvidencesContainer
+                        expandedAttribute={expandedAttribute}
+                        attributeId={id}
+                        type={evidenceType.positive}
+                        setEmptyEvidence={setEmptyPositiveEvidence}
+                        setOpositeEvidenceLoading={setPositiveEvidenceLoading}
+                        opositeEvidenceLoading={negativeEvidenceLoading}
+                      />
+                    </Grid>
+                    {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
+                    <Grid item lg={6} md={6} xs={12}>
+                      <RelatedEvidencesContainer
+                        expandedAttribute={expandedAttribute}
+                        attributeId={id}
+                        type={evidenceType.negative}
+                        setEmptyEvidence={setEmptyNegativeEvidence}
+                        setOpositeEvidenceLoading={setNegativeEvidenceLoading}
+                        opositeEvidenceLoading={positiveEvidenceLoading}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              )}
+            </>
           )}
-
           <Typography
             variant="h6"
             mt={4}
@@ -582,7 +600,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
             sx={{
               display: "flex",
               width: "100%",
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: { xs: "column", md: "row" },
             }}
           >
             <Box display={"flex"} flex={1}>
@@ -595,7 +613,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 />
               </Box>
             </Box>
-            <Box sx={{ ...styles.centerV, pl: 2 }} minWidth={"245px"}>
+            <Box
+              sx={{
+                ...styles.centerV,
+                pl: 2,
+                width: { xs: "100%", md: "30%" },
+              }}
+            >
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
@@ -629,13 +653,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 return (
                   <>
                     <Typography variant="body2" display={"flex"}>
-                      <Trans i18nKey="maxPossibleScore" />
+                      <Trans i18nKey="maxPossibleScore" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {maxPossibleScore}
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="gainedScore" />
+                      <Trans i18nKey="gainedScore" />:
                       <Typography
                         variant="body2"
                         display={"flex"}
@@ -653,17 +677,17 @@ const MaturityLevelDetailsContainer = (props: any) => {
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="questionsCount" />
+                      <Trans i18nKey="questionsCount" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {questionsCount}
                       </Typography>
                     </Typography>
                     <Divider sx={{ my: 2 }} />
-                    {questionnaires.map((questionnaire: any, index: number) => {
+                    {questionnaires.map((questionnaire: any) => {
                       const { title, questionScores } = questionnaire;
 
                       return (
-                        <Box key={index}>
+                        <>
                           <Box>
                             <Typography
                               variant="body2"
@@ -762,109 +786,126 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                   </Box>
                                 </Box>
                                 <Divider sx={{ my: 1 }} />
-                                {questionScores.map(
-                                  (question: any, index: number) => {
-                                    const {
-                                      questionIndex,
-                                      questionTitle,
-                                      questionWeight,
-                                      answerOptionIndex,
-                                      answerOptionTitle,
-                                      answerIsNotApplicable,
-                                      answerScore,
-                                      weightedScore,
-                                    } = question;
+                                {questionScores.map((question: any) => {
+                                  const {
+                                    questionIndex,
+                                    questionTitle,
+                                    questionWeight,
+                                    answerOptionIndex,
+                                    answerOptionTitle,
+                                    answerIsNotApplicable,
+                                    answerScore,
+                                    weightedScore,
+                                  } = question;
 
-                                    let is_farsi =
-                                      languageDetector(questionTitle);
+                                  let is_farsi =
+                                    languageDetector(questionTitle);
 
-                                    return (
+                                  return (
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        my: 1,
+                                      }}
+                                    >
+                                      <CustomWidthTooltip
+                                        title={`${questionIndex}.${questionTitle}`}
+                                      >
+                                        <Box sx={{ width: "40%" }}>
+                                          <Typography
+                                            display="flex"
+                                            variant="titleMedium"
+                                            textAlign={"left"}
+                                          >
+                                            {questionIndex}.
+                                            <Typography
+                                              variant="titleMedium"
+                                              dir={is_farsi ? "rtl" : "ltr"}
+                                              sx={{
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                              }}
+                                            >
+                                              {questionTitle}
+                                            </Typography>
+                                          </Typography>
+                                        </Box>
+                                      </CustomWidthTooltip>
                                       <Box
                                         sx={{
-                                          display: "flex",
-                                          flexDirection: "row",
-                                          my: 1,
+                                          width: "10%",
+                                          textAlign: "center",
                                         }}
-                                        key={index}
                                       >
-                                        <CustomWidthTooltip
-                                          title={`${questionIndex}.${questionTitle}`}
+                                        <Typography
+                                          variant="titleMedium"
+                                          textAlign={"center"}
                                         >
-                                          <Box sx={{ width: "40%" }}>
-                                            <Typography
-                                              display="flex"
-                                              variant="titleMedium"
-                                              textAlign={"left"}
-                                            >
-                                              {questionIndex}.
-                                              <Typography
-                                                variant="titleMedium"
-                                                dir={is_farsi ? "rtl" : "ltr"}
-                                                sx={{
-                                                  whiteSpace: "nowrap",
-                                                  overflow: "hidden",
-                                                  textOverflow: "ellipsis",
-                                                }}
-                                              >
-                                                {questionTitle}
-                                              </Typography>
-                                            </Typography>
-                                          </Box>
-                                        </CustomWidthTooltip>
-                                        <Box sx={{ width: "10%" }}>
+                                          {questionWeight}
+                                        </Typography>
+                                      </Box>
+                                      <Tooltip
+                                        title={
+                                          answerIsNotApplicable
+                                            ? "NA"
+                                            : answerOptionTitle !== null
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"
+                                        }
+                                      >
+                                        <Box
+                                          sx={{
+                                            width: "25%",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           <Typography
                                             variant="titleMedium"
                                             textAlign={"center"}
                                           >
-                                            {questionWeight}
-                                          </Typography>
-                                        </Box>
-                                        <Tooltip
-                                          title={
-                                            answerIsNotApplicable
+                                            {answerIsNotApplicable
                                               ? "NA"
                                               : answerOptionTitle !== null
                                                 ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                : "---"
-                                          }
+                                                : "---"}
+                                          </Typography>
+                                        </Box>
+                                      </Tooltip>
+                                      <Box
+                                        sx={{
+                                          width: "10%",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Typography
+                                          variant="titleMedium"
+                                          textAlign={"center"}
                                         >
-                                          <Box sx={{ width: "25%" }}>
-                                            <Typography
-                                              variant="titleMedium"
-                                              textAlign={"center"}
-                                            >
-                                              {answerIsNotApplicable
-                                                ? "NA"
-                                                : answerOptionTitle !== null
-                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                  : "---"}
-                                            </Typography>
-                                          </Box>
-                                        </Tooltip>
-                                        <Box sx={{ width: "10%" }}>
-                                          <Typography
-                                            variant="titleMedium"
-                                            textAlign={"center"}
-                                          >
-                                            {answerIsNotApplicable
-                                              ? "---"
-                                              : answerScore}
-                                          </Typography>
-                                        </Box>
-                                        <Box sx={{ width: "15%" }}>
-                                          <Typography
-                                            variant="titleMedium"
-                                            textAlign={"center"}
-                                          >
-                                            {answerIsNotApplicable
-                                              ? "---"
-                                              : weightedScore}
-                                          </Typography>
-                                        </Box>
+                                          {answerIsNotApplicable
+                                            ? "---"
+                                            : answerScore}
+                                        </Typography>
                                       </Box>
-                                    );
-                                  }
-                                )}
+                                      <Box
+                                        sx={{
+                                          width: "15%",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Typography
+                                          variant="titleMedium"
+                                          textAlign={"center"}
+                                        >
+                                          {answerIsNotApplicable
+                                            ? "---"
+                                            : weightedScore}
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+                                  );
+                                })}
                               </Box>
                             </Box>
                             <Divider
@@ -875,7 +916,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                               }}
                             />
                           </Box>
-                        </Box>
+                        </>
                       );
                     })}
                   </>
@@ -909,7 +950,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
       }}
     >
       <Box
-        height="100%"
+        height="70%"
         width={width}
         sx={{
           background: `${score != null ? bg_color : ""}`,

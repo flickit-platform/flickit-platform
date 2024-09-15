@@ -143,7 +143,7 @@ const NotCompletedAlert = (props: {
           action={
             <Button
               variant="contained"
-              color="info"
+              color="primary"
               component={Link}
               to="./../insights"
               startIcon={<AnalyticsRoundedIcon />}

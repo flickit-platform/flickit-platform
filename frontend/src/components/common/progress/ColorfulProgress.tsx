@@ -5,6 +5,7 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
+import { theme } from "@/config/theme";
 
 export enum ProgessBarTypes {
   Questioannaire = "questionnaire",
@@ -46,13 +47,13 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
   let percentColor: string;
   switch (color) {
     case "error":
-      percentColor = "#D81E5B";
+      percentColor = theme.palette.error.dark;
       break;
     case "warning":
-      percentColor = "orange";
+      percentColor = theme.palette.warning.dark;
       break;
     case "inherit":
-      percentColor = "#004F83";
+      percentColor = theme.palette.primary.dark;
       break;
     default:
       percentColor = "inherit";

@@ -120,7 +120,7 @@ const CompareSelectedAssessmentKitInfo = () => {
         <Button
           variant="contained"
           size="small"
-          color="info"
+          color="primary"
           onClick={makeNewComparison}
         >
           <Trans i18nKey="newComparison" />
