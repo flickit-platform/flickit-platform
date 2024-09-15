@@ -43,7 +43,6 @@ import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import { secondaryFontFamily } from "@/config/theme";
-import CircularProgress from "@mui/material/CircularProgress";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -151,7 +150,11 @@ export const AssessmentSettingGeneralBox = (props: {
           {title &&
             title.map((itemList: string, index: number) => {
               return (
-                <Grid item sx={{ display: "flex", justifyContent: "center" }}>
+                <Grid
+                  item
+                  sx={{ display: "flex", justifyContent: "center" }}
+                  key={index}
+                >
                   <Grid
                     item
                     xs={12}
@@ -249,6 +252,11 @@ export const AssessmentSettingMemberBox = (props: {
     position: string;
   }
 
+  const editUserRole = useQuery({
+    service: (args, config) =>
+      service.editUserRole({ assessmentId, ...args }, config),
+    runOnMount: false,
+  });
   const editUserRoleInvited = useQuery({
     service: (args, config) => service.editUserRoleInvited(args, config),
     runOnMount: false,
@@ -288,7 +296,21 @@ export const AssessmentSettingMemberBox = (props: {
     },
   ];
 
-
+  const handleChange = async (event: any) => {
+    try {
+      const {
+        target: { value, name },
+      } = event;
+      const { id: roleId } = value;
+      const { id: userId } = name;
+      await editUserRole.query({ userId, roleId });
+      setChangeData((prev: boolean) => !prev);
+      // await fetchAssessmentsUserListRoles()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
   const handleChangeInvitedUser = async (event: any) => {
     try {
       const {
@@ -335,7 +357,7 @@ export const AssessmentSettingMemberBox = (props: {
             alignItems: "center",
             position: "relative",
             width: "90%",
-            ml:"10%"
+            ml: "10%",
           }}
         >
           <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
@@ -405,164 +427,255 @@ export const AssessmentSettingMemberBox = (props: {
                   </TableCell>
                 ))}
               </TableRow>
-              <Divider sx={{ width: "100%" }} />
             </TableHead>
+
+            {/* Move the Divider outside the TableHead */}
             <TableBody>
+     
+
               {listOfUser.length > 0 &&
-                listOfUser
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: any) => {
-                    return (
-                      <TableRow
-                        tabIndex={-1}
-                        key={row.id}
-                        sx={{ background: !row.editable ? "#ebe8e85c" : "" }}
-                      >
-                        <TableCell
+                listOfUser.map((row: any) => (
+                  <TableRow
+                    tabIndex={-1}
+                    key={row.id}
+                    sx={{ background: !row.editable ? "#ebe8e85c" : "" }}
+                  >
+                    <TableCell
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                        border: "none",
+                        gap: { xs: "0px", md: "1.3rem" },
+                        paddingX: { xs: "0px", md: "1rem" },
+                      }}
+                    >
+                      <Box sx={{ width: "18vw" }}>
+                        <Box
                           sx={{
                             display: "flex",
-                            justifyContent: "space-evenly",
+                            justifyContent: { xs: "flex-start" },
                             alignItems: "center",
-                            border: "none",
-                            gap: { xs: "0px", md: "1.3rem" },
-                            paddingX: { xs: "0px", md: "1rem" },
+                            gap: ".5rem",
+                            paddingLeft: { lg: "30%" },
                           }}
                         >
-                          <Box
+                          <Avatar
+                            {...stringAvatar(row.displayName.toUpperCase())}
+                            src={row.pictureLink}
                             sx={{
-                              width: "18vw",
+                              width: 40,
+                              height: 40,
+                              display: { xs: "none", sm: "flex" },
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              fontSize: "0.875rem",
+                              color: "#1B1B1E",
+                              fontWeight: 500,
                             }}
                           >
-                            <Box
+                            {row.displayName}
+                          </Typography>
+                          {!row.editable && (
+                            <Chip
                               sx={{
-                                display: "flex",
-                                justifyContent: { xs: "flex-start" },
-                                alignItems: "center",
-                                gap: ".5rem",
-                                paddingLeft: { lg: "30%" },
+                                mr: 1,
+                                opacity: 0.7,
+                                color: "#9A003C",
+                                borderColor: "#9A003C",
                               }}
-                            >
-                              <Avatar
-                                {...stringAvatar(row.displayName.toUpperCase())}
-                                src={row.pictureLink}
-                                sx={{
-                                  width: 40,
-                                  height: 40,
-                                  display: { xs: "none", sm: "flex" },
-                                }}
-                              ></Avatar>
-                              <Typography
-                                sx={{
-                                  textOverflow: "ellipsis",
-                                  overflow: "hidden",
-                                  whiteSpace: "nowrap",
-                                  fontSize: "0.875rem",
-                                  color: "#1B1B1E",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {row.displayName}
-                              </Typography>
-                              {!row.editable && (
-                                <Chip
-                                  sx={{
-                                    mr: 1,
-                                    opacity: 0.7,
-                                    color: "#9A003C",
-                                    borderColor: "#9A003C",
-                                  }}
-                                  label={<Trans i18nKey={"owner"} />}
-                                  size="small"
-                                  variant="outlined"
-                                />
-                              )}
-                            </Box>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: { xs: "none", md: "flex" },
-                              justifyContent: "center",
-                              width: { xs: "5rem", md: "20vw" },
-                            }}
+                              label={<Trans i18nKey={"owner"} />}
+                              size="small"
+                              variant="outlined"
+                            />
+                          )}
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: { xs: "none", md: "flex" },
+                          justifyContent: "center",
+                          width: { xs: "5rem", md: "20vw" },
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            color: "#1B1B1E",
+                            fontSize: "0.875",
+                            wight: 300,
+                          }}
+                        >
+                          {row.email}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          gap: { xs: "0px", md: ".7rem" },
+                          width: { xs: "10.1rem", md: "20vw" },
+                        }}
+                      >
+                        <FormControl
+                          sx={{
+                            m: 1,
+                            width: "100%",
+                            textAlign: "center",
+                            padding: "6px, 12px, 6px, 12px",
+                            display: "inline-flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Grid
+                            item
+                            lg={8}
+                            sx={{ minWidth: { xs: "100%", md: "160px" } }}
                           >
-                            <Typography
-                              sx={{
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                color: "#1B1B1E",
-                                fontSize: "0.875",
-                                wight: 300,
-                              }}
-                            >
-                              {row.email}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "flex-end",
-                              alignItems: "center",
-                              gap: { xs: "0px", md: ".7rem" },
-                              width: { xs: "10.1rem", md: "20vw" },
-                            }}
-                          >
-                            <FormControl
-                              sx={{
-                                m: 1,
-                                width: "100%",
-                                textAlign: "center",
-                                padding: "6px, 12px, 6px, 12px",
-                                display: "inline-flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
-                              <Grid
-                                item
-                                lg={8}
-                                sx={{ minWidth: { xs: "100%", md: "160px" } }}
-                              >
-                                <Tooltip
-                                  disableHoverListener={row.editable}
-                                  title={
-                                    <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
-                                  }
-                                >
-                                     <SelectionRole row={row} listOfRoles={listOfRoles} MenuProps={MenuProps} setChangeData={setChangeData} assessmentId={assessmentId} />
-                                </Tooltip>
-                              </Grid>
-                            </FormControl>
                             <Tooltip
                               disableHoverListener={row.editable}
                               title={
                                 <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
                               }
                             >
-                              <Box
-                                width="30%"
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
+                              <Select
+                                labelId="demo-multiple-name-label"
+                                id="demo-multiple-name"
+                                value={row?.role?.title}
+                                onChange={handleChange}
+                                name={row}
+                                MenuProps={MenuProps}
+                                sx={{
+                                  width: "100%",
+                                  boxShadow: "none",
+                                  ".MuiOutlinedInput-notchedOutline": {
+                                    border: 0,
+                                  },
+                                  border: row.editable
+                                    ? "1px solid #2974B4"
+                                    : "1px solid #2974b442",
+                                  fontSize: "0.875rem",
+                                  borderRadius: "0.5rem",
+                                  "& .MuiSelect-select": {
+                                    padding: "4px 5px",
+                                  },
+                                }}
+                                IconComponent={KeyboardArrowDownIcon}
+                                inputProps={{
+                                  renderValue: () => row?.role?.title,
+                                }}
+                                disabled={!row.editable}
                               >
-                                <IconButton
-                                  sx={{ "&:hover": { color: "#d32f2f" } }}
-                                  size="small"
-                                  disabled={!row.editable}
-                                  onClick={() =>
-                                    openRemoveModal(row.displayName, row.id)
-                                  }
+                                <Box
+                                  sx={{
+                                    paddingY: "16px",
+                                    color: "#9DA7B3",
+                                    textAlign: "center",
+                                    borderBottom: "1px solid #9DA7B3",
+                                  }}
                                 >
-                                  <DeleteRoundedIcon />
-                                </IconButton>{" "}
-                              </Box>
+                                  <Typography sx={{ fontSize: "0.875rem" }}>
+                                    <Trans i18nKey={"chooseARole"} />
+                                  </Typography>
+                                </Box>
+                                {listOfRoles.map((role: any, index: number) => (
+                                  <MenuItem
+                                    key={role.title}
+                                    value={role}
+                                    sx={{
+                                      paddingY: "0px",
+                                      maxHeight: "200px",
+                                      ...(role.id === row.role.id && {
+                                        backgroundColor: "#9CCAFF",
+                                      }),
+                                    }}
+                                  >
+                                    <Box
+                                      sx={{
+                                        maxWidth: "240px",
+                                        color: "#000",
+                                        fontSize: "0.875rem",
+                                        lineHeight: "21px",
+                                        fontWeight: 500,
+                                        paddingY: "1rem",
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "0.875rem",
+                                          ...(role.id === row.role.id
+                                            ? { color: "#004F83" }
+                                            : { color: "#1B1B1E" }),
+                                        }}
+                                      >
+                                        {role.title}
+                                      </Typography>
+                                      <div
+                                        style={{
+                                          color: "#000",
+                                          fontSize: "0.875rem",
+                                          lineHeight: "21px",
+                                          fontWeight: 300,
+                                          whiteSpace: "break-spaces",
+                                          paddingTop: "1rem",
+                                        }}
+                                      >
+                                        {role.description}
+                                      </div>
+                                    </Box>
+                                    {listOfRoles.length > index + 1 && (
+                                      <Box
+                                        sx={{
+                                          height: "0.5px",
+                                          width: "80%",
+                                          backgroundColor: "#9DA7B3",
+                                          mx: "auto",
+                                        }}
+                                      />
+                                    )}
+                                  </MenuItem>
+                                ))}
+                              </Select>
                             </Tooltip>
+                          </Grid>
+                        </FormControl>
+                        <Tooltip
+                          disableHoverListener={row.editable}
+                          title={
+                            <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
+                          }
+                        >
+                          <Box
+                            width="30%"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <IconButton
+                              sx={{ "&:hover": { color: "#d32f2f" } }}
+                              size="small"
+                              disabled={!row.editable}
+                              onClick={() =>
+                                openRemoveModal(row.displayName, row.id)
+                              }
+                            >
+                              <DeleteRoundedIcon />
+                            </IconButton>
                           </Box>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -721,13 +834,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -741,7 +854,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                  // disabled={!row.editable}
+                                    // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -771,15 +884,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -798,11 +911,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -823,7 +936,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                              index + 1 && (
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -870,179 +983,6 @@ export const AssessmentSettingMemberBox = (props: {
     </Box>
   );
 };
-const SelectionRole = (props: any)=>{
-
-    const {row ,setChangeData, assessmentId, MenuProps, listOfRoles} = props
-    const { service } = useServiceContext();
-
-    const handleChange = async (event: any) => {
-        try {
-            const {
-                target: { value, name },
-            } = event;
-            const { id: roleId } = value;
-            const { id: userId } = name;
-            await editUserRole.query({ userId, roleId });
-            setChangeData((prev: boolean) => !prev);
-            // await fetchAssessmentsUserListRoles()
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
-
-    const editUserRole = useQuery({
-        service: (args, config) =>
-            service.editUserRole({ assessmentId, ...args }, config),
-        runOnMount: false,
-    });
-  return (
-      <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          value={row?.role?.title}
-          onChange={handleChange}
-          name={row}
-          MenuProps={MenuProps}
-          sx={{
-            width: "100%",
-            height:"100%",
-            boxShadow: "none",
-            ".MuiOutlinedInput-notchedOutline": {
-              border: 0,
-            },
-              border: editUserRole.loading
-                ? "1px solid #2974b442"
-                :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
-            fontSize: "0.875rem",
-            borderRadius: "0.5rem",
-            "&.MuiOutlinedInput-notchedOutline": {
-              border: 0,
-            },
-            "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                {
-                  border: 0,
-                },
-            "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  border: 0,
-                },
-            ".MuiSvgIcon-root": {
-              fill: editUserRole.loading
-                  ? "1px solid #2974b442"
-                  :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
-            },
-            "& .MuiSelect-select": {
-              padding: "4px 5px",
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center",
-            },
-          }}
-          IconComponent={KeyboardArrowDownIcon}
-          inputProps={{
-            renderValue: () => editUserRole.loading
-                 ? <CircularProgress style={{color:"#2974b442"}} size="1rem"/>
-                 : row?.role?.title
-          }}
-          disabled={!row.editable}
-      >
-        <Box
-            sx={{
-              paddingY: "16px",
-              color: "#9DA7B3",
-              textAlign: "center",
-              borderBottom: "1px solid #9DA7B3",
-            }}
-        >
-          <Typography sx={{ fontSize: "0.875rem" }}>
-            <Trans i18nKey={"chooseARole"} />
-          </Typography>
-        </Box>
-        {listOfRoles &&
-            listOfRoles.map(
-                (role: any, index: number) => (
-                    <MenuItem
-                        style={{ display: "block" }}
-                        key={role.title}
-                        value={role}
-                        sx={{
-                          paddingY: "0px",
-                          maxHeight: "200px",
-                          ...(role.id === row.role.id && {
-                            backgroundColor: "#9CCAFF",
-                          }),
-                          "&.MuiMenuItem-root:hover": {
-                            ...(role.id === row.role.id
-                                ? {
-                                  backgroundColor:
-                                      "#9CCAFF",
-                                  color: "#004F83",
-                                }
-                                : {
-                                  backgroundColor:
-                                      "#EFEDF0",
-                                  color: "#1B1B1E",
-                                }),
-                          },
-                        }}
-                    >
-                      <Box
-                          sx={{
-                            maxWidth: "240px",
-                            color: "#000",
-                            fontSize: "0.875rem",
-                            lineHeight: "21px",
-                            fontWeight: 500,
-                            paddingY: "1rem",
-                          }}
-                      >
-                        <Typography
-                            sx={{
-                              fontSize: "0.875rem",
-                              ...(role.id === row.role.id
-                                  ? {
-                                    color: "#004F83",
-                                  }
-                                  : {
-                                    color: "#1B1B1E",
-                                  }),
-                            }}
-                        >
-                          {role.title}
-                        </Typography>
-
-                        <div
-                            style={{
-                              color: "#000",
-                              fontSize: "0.875rem",
-                              lineHeight: "21px",
-                              fontWeight: 300,
-                              whiteSpace: "break-spaces",
-                              paddingTop: "1rem",
-                            }}
-                        >
-                          {role.description}
-                        </div>
-                      </Box>
-                      {listOfRoles &&
-                          listOfRoles.length >
-                          index + 1 && (
-                              <Box
-                                  sx={{
-                                    height: "0.5px",
-                                    width: "80%",
-                                    backgroundColor: "#9DA7B3",
-                                    mx: "auto",
-                                  }}
-                              ></Box>
-                          )}
-                    </MenuItem>
-                )
-            )}
-      </Select>
-  )
-}
 
 const OnHoverInputTitleSetting = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
@@ -1098,6 +1038,7 @@ const OnHoverInputTitleSetting = (props: any) => {
       textAlign: firstCharDetector(inputData) ? "right" : "left",
     },
   };
+
   return (
     <Box>
       <Box

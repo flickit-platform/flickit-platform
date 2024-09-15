@@ -23,20 +23,20 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
       sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}
     >
       <Box textAlign={"center"}>
-        <Typography textAlign={"center"}>
+        <Box textAlign={"center"}>
           {loading ? (
             <Skeleton width={"114px"} sx={{ margin: "auto" }} />
           ) : (
             <>
-              <Box>
+              <Typography textAlign={"center"}>
                 <Trans i18nKey="subjectStatusIs" values={{ title }} />
-              </Box>
-              <Box>
+              </Typography>
+              <Typography textAlign={"center"}>
                 <Trans i18nKey="evaluatedAs" />
-              </Box>
+              </Typography>
             </>
           )}
-        </Typography>
+        </Box>
         <Typography
           sx={{
             display: "inline-block",
@@ -183,8 +183,9 @@ const VerticalLevel = ({
             transition: "transform .3s ease",
             minHeight: "76px",
             height: "100%",
-            transform: `translateY(-${cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
-              }%)`,
+            transform: `translateY(-${
+              cl ? -0.7 * cl + 70 : mapToPercent[(cl || ml) as number] || "70"
+            }%)`,
             borderRadius: "100px",
           }}
         ></Box>

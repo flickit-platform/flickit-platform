@@ -412,17 +412,19 @@ const SUbjectAttributeCard = (props: any) => {
           </Typography>
           <Box sx={{ pr: { xs: 2, sm: 6 } }}>
             {maturityScores
-              .map((item: any) => {
+              .map((item: any, index: number) => {
                 return (
-                  <MaturityLevelDetailsContainer
-                    maturity_score={item}
-                    totalml={maturityLevel?.index}
-                    mn={maturity_levels_count}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                    attributeId={id}
-                    permissions={permissions}
-                  />
+                  <div key={index}>
+                    <MaturityLevelDetailsContainer
+                      maturity_score={item}
+                      totalml={maturityLevel?.index}
+                      mn={maturity_levels_count}
+                      expanded={expanded}
+                      setExpanded={setExpanded}
+                      attributeId={id}
+                      permissions={permissions}
+                    />
+                  </div>
                 );
               })
               .reverse()}
@@ -611,7 +613,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 />
               </Box>
             </Box>
-            <Box sx={{ ...styles.centerV, pl: 2, width:{xs:"100%",md:"30%"} }}>
+            <Box
+              sx={{
+                ...styles.centerV,
+                pl: 2,
+                width: { xs: "100%", md: "30%" },
+              }}
+            >
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
@@ -825,7 +833,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           </Typography>
                                         </Box>
                                       </CustomWidthTooltip>
-                                      <Box sx={{ width: "10%", textAlign:"center" }}>
+                                      <Box
+                                        sx={{
+                                          width: "10%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -842,7 +855,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                               : "---"
                                         }
                                       >
-                                        <Box sx={{ width: "25%", textAlign:"center" }}>
+                                        <Box
+                                          sx={{
+                                            width: "25%",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           <Typography
                                             variant="titleMedium"
                                             textAlign={"center"}
@@ -855,7 +873,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           </Typography>
                                         </Box>
                                       </Tooltip>
-                                      <Box sx={{ width: "10%", textAlign:"center" }}>
+                                      <Box
+                                        sx={{
+                                          width: "10%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -865,7 +888,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             : answerScore}
                                         </Typography>
                                       </Box>
-                                      <Box sx={{ width: "15%", textAlign:"center" }}>
+                                      <Box
+                                        sx={{
+                                          width: "15%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}

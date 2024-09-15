@@ -30,7 +30,7 @@ const CompareResultAssessmentsSection = (props: {
           flexWrap: "wrap",
         }}
       >
-        {data.map((item) => {
+        {data.map((item, index: number) => {
           return (
             <Box
               // item
@@ -39,6 +39,7 @@ const CompareResultAssessmentsSection = (props: {
                 // ...styles.compareResultBorder,
                 width: "300px",
               }}
+              key={index}
             >
               <Box
                 sx={{

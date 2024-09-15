@@ -811,101 +811,103 @@ const AssessmentExportContainer = () => {
                     sx={{ marginBlock: 2, borderRadius: 4 }}
                   >
                     <Table>
-                      {subjects?.map((subject: ISubject, index: number) => (
-                        <React.Fragment key={subject?.id}>
-                          <TableRow>
-                            <TableCell
-                              sx={{
-                                backgroundColor: "#f9f9f9",
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography variant="titleMedium">
-                                {subject?.title}
-                              </Typography>
-                              <br />
-                              <Typography variant="displaySmall">
-                                {subject?.description}
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-
-                          <TableRow>
-                            <TableCell
-                              sx={{
-                                padding: 0,
-                                border: "none",
-                              }}
-                            >
-                              <Table
+                      <TableBody>
+                        {subjects?.map((subject: ISubject, index: number) => (
+                          <React.Fragment key={subject?.id}>
+                            <TableRow>
+                              <TableCell
                                 sx={{
-                                  borderCollapse: "collapse",
-                                  width: "100%",
+                                  backgroundColor: "#f9f9f9",
+                                  border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
                               >
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell
-                                      sx={{
-                                        backgroundColor: "#f5f5f5",
-                                        border:
-                                          "1px solid rgba(224, 224, 224, 1)",
-                                      }}
-                                    >
-                                      <Typography variant="titleMedium">
-                                        {subject?.title}{" "}
-                                        <Trans i18nKey="attribute" />
-                                      </Typography>
-                                    </TableCell>
-                                    <TableCell
-                                      sx={{
-                                        backgroundColor: "#f5f5f5",
-                                        border:
-                                          "1px solid rgba(224, 224, 224, 1)",
-                                      }}
-                                    >
-                                      <Typography variant="titleMedium">
-                                        <Trans i18nKey="description" />
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {subject?.attributes?.map(
-                                    (
-                                      feature: IAttribute,
-                                      featureIndex: number
-                                    ) => (
-                                      <TableRow key={featureIndex}>
-                                        <TableCell
-                                          sx={{
-                                            borderRight:
-                                              "1px solid rgba(224, 224, 224, 1)",
-                                          }}
-                                        >
-                                          <Typography variant="displaySmall">
-                                            {feature?.title}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell
-                                          sx={{
-                                            borderRight:
-                                              "1px solid rgba(224, 224, 224, 1)",
-                                          }}
-                                        >
-                                          <Typography variant="displaySmall">
-                                            {feature?.description}
-                                          </Typography>
-                                        </TableCell>
-                                      </TableRow>
-                                    )
-                                  )}
-                                </TableBody>
-                              </Table>
-                            </TableCell>
-                          </TableRow>
-                        </React.Fragment>
-                      ))}
+                                <Typography variant="titleMedium">
+                                  {subject?.title}
+                                </Typography>
+                                <br />
+                                <Typography variant="displaySmall">
+                                  {subject?.description}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                              <TableCell
+                                sx={{
+                                  padding: 0,
+                                  border: "none",
+                                }}
+                              >
+                                <Table
+                                  sx={{
+                                    borderCollapse: "collapse",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell
+                                        sx={{
+                                          backgroundColor: "#f5f5f5",
+                                          border:
+                                            "1px solid rgba(224, 224, 224, 1)",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          {subject?.title}{" "}
+                                          <Trans i18nKey="attribute" />
+                                        </Typography>
+                                      </TableCell>
+                                      <TableCell
+                                        sx={{
+                                          backgroundColor: "#f5f5f5",
+                                          border:
+                                            "1px solid rgba(224, 224, 224, 1)",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          <Trans i18nKey="description" />
+                                        </Typography>
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {subject?.attributes?.map(
+                                      (
+                                        feature: IAttribute,
+                                        featureIndex: number
+                                      ) => (
+                                        <TableRow key={featureIndex}>
+                                          <TableCell
+                                            sx={{
+                                              borderRight:
+                                                "1px solid rgba(224, 224, 224, 1)",
+                                            }}
+                                          >
+                                            <Typography variant="displaySmall">
+                                              {feature?.title}
+                                            </Typography>
+                                          </TableCell>
+                                          <TableCell
+                                            sx={{
+                                              borderRight:
+                                                "1px solid rgba(224, 224, 224, 1)",
+                                            }}
+                                          >
+                                            <Typography variant="displaySmall">
+                                              {feature?.description}
+                                            </Typography>
+                                          </TableCell>
+                                        </TableRow>
+                                      )
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              </TableCell>
+                            </TableRow>
+                          </React.Fragment>
+                        ))}
+                      </TableBody>
                     </Table>
                   </TableContainer>
                   <Typography

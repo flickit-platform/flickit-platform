@@ -8,7 +8,7 @@
 	.st2{fill:#5E5E5E;}
 	.st3{fill:#FFFFFF;stroke:#E2E2E2;stroke-miterlimit:10;}
 	.st4{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st5{clip-path:url(#SVGID_2_);}
+	.st5{clipPath:url(#SVGID_2_);}
 	.st6{fill:#F2F2F2;}
 	.st7{fill:#BB0000;}
 	.st8{fill:#E9730D;}
