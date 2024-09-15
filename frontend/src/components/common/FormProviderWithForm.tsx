@@ -10,7 +10,7 @@ interface IFormProviderWithFormProps
 }
 
 const FormProviderWithForm = (
-  props: PropsWithChildren<IFormProviderWithFormProps>
+  props: PropsWithChildren<IFormProviderWithFormProps>,
 ) => {
   const { formMethods, onSubmit, ...rest } = props;
   return (

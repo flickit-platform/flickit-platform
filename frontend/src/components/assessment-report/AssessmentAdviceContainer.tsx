@@ -76,7 +76,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const fullScreen = useScreenResize("sm");
   const filteredMaturityLevels = useMemo(() => {
     const filteredData = assessment?.assessmentKit?.maturityLevels.sort(
-      (elem1: any, elem2: any) => elem1.index - elem2.index
+      (elem1: any, elem2: any) => elem1.index - elem2.index,
     );
     return filteredData;
   }, [assessment]);
@@ -160,7 +160,7 @@ const AssessmentAdviceContainer = (props: any) => {
                     target={target}
                     setTarget={setTarget}
                   />
-                ))
+                )),
               )}
             </Box>
             <Box

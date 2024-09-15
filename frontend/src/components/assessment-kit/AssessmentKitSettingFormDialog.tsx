@@ -36,7 +36,7 @@ interface IAssessmentKitSettingFormDialogProps extends DialogProps {
 }
 
 const AssessmentKitSettingFormDialog = (
-  props: IAssessmentKitSettingFormDialogProps
+  props: IAssessmentKitSettingFormDialogProps,
 ) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
@@ -79,11 +79,11 @@ const AssessmentKitSettingFormDialog = (
         type === "update"
           ? await service.updateAssessmentKit(
               { data: formattedData, assessmentKitId },
-              { signal: abortController.signal }
+              { signal: abortController.signal },
             )
           : await service.createAssessmentKit(
               { data: formattedData },
-              { signal: abortController.signal }
+              { signal: abortController.signal },
             );
       setLoading(false);
       onSubmitForm();

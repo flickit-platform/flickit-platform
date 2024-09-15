@@ -65,7 +65,7 @@ const PromptForm = (
       title: string;
       promptBody: (closeModal: () => void) => JSX.Element;
     };
-  }
+  },
 ) => {
   const { onClose, open, prompt } = props;
   const { promptBody, title } = prompt;

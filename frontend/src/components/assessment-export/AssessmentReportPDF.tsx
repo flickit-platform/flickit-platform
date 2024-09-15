@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     backgroundColor: "#ccc", // Header background color
     color: "#000", // Header text color
-    fontSize: 14
+    fontSize: 14,
   },
   tableCell: {
     width: "33.33%", // Adjusted to three columns
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: 12
+    fontSize: 12,
   },
   divider: {
     marginVertical: 10,
@@ -170,7 +170,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
       const generateImageFromElement = async (
         element: Element,
         isGauge: boolean,
-        needParentNode: boolean
+        needParentNode: boolean,
       ) => {
         const parentNode = needParentNode ? element.parentNode : element;
 
@@ -188,10 +188,10 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
       const chartInstances = document.querySelectorAll(".recharts-wrapper");
       const gaugeInstances = document.querySelectorAll(".gauge");
       const gaugePromises = Array.from(gaugeInstances).map((instance) =>
-        generateImageFromElement(instance, true, true)
+        generateImageFromElement(instance, true, true),
       );
       const chartPromises = Array.from(chartInstances).map((instance) =>
-        generateImageFromElement(instance, false, true)
+        generateImageFromElement(instance, false, true),
       );
       const chartImageUrls = await Promise.all(chartPromises);
 
@@ -207,7 +207,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
       const tableInstances = document.querySelectorAll(".checkbox-table");
 
       const tablePromises = Array.from(tableInstances).map((instance) =>
-        generateImageFromElement(instance, true, false)
+        generateImageFromElement(instance, true, false),
       );
 
       // Wait for all image promises to resolve
@@ -260,7 +260,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                 <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
                 <Text style={styles.tableCell}>{maturityLevel?.index}</Text>
               </View>
-            )
+            ),
           )}
         </View>
       </View>
@@ -287,7 +287,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                       ? elem?.title + "quality attributes"
                       : index === 1
                         ? elem?.title + " dynamics"
-                        : elem?.title
+                        : elem?.title,
                   )
                   ?.join(", "),
                 maturityLevelsCount:
@@ -328,8 +328,9 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                         />
                       )}
                     </Text>
-                  </View></Fragment>
-              )
+                  </View>
+                </Fragment>
+              ),
             )}
           </View>
         </View>
@@ -344,7 +345,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
         >
           Page 1 of 4
         </Text>
-
       </Page>
 
       {/* Second Page */}
@@ -365,14 +365,14 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                       ? " and " + elem?.title
                       : index === 0
                         ? elem?.title
-                        : ", " + elem?.title
+                        : ", " + elem?.title,
                   )
                   ?.join(""),
                 attributesCount: subjects.reduce(
                   (previousValue: number, currentValue: ISubject) => {
                     return previousValue + currentValue.attributes.length;
                   },
-                  0
+                  0,
                 ),
               }}
             />
@@ -422,7 +422,9 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                         </Text>
                       </Text>
                       <Text style={styles.tableCell}>{feature?.title}</Text>
-                      <Text style={styles.tableCell}>{feature?.description}</Text>
+                      <Text style={styles.tableCell}>
+                        {feature?.description}
+                      </Text>
                     </View>
                   </Fragment>
                 ))}
@@ -478,7 +480,9 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
               <View style={styles.tableRow} key={index}>
                 <Text style={styles.tableCell}>{index + 1}</Text>
                 <Text style={styles.tableCell}>{questionnaire?.title}</Text>
-                <Text style={styles.tableCell}>{questionnaire?.description}</Text>
+                <Text style={styles.tableCell}>
+                  {questionnaire?.description}
+                </Text>
               </View>
             ))}
           </View>
@@ -542,7 +546,6 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
         </Page>
       ))}
       {/* <View style={styles.section}>{renderSubjectsTable()}</View> */}
-
     </Document>
   );
 };

@@ -10,11 +10,7 @@ const PrivateRoutes = (props: PropsWithChildren<{}>) => {
     axios.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
     localStorage.setItem("accessToken", JSON.stringify(accessToken));
   }
-  return isAuthenticated  ? (
-    <Outlet />
-  ) : (
-    <Login />
-  );
+  return isAuthenticated ? <Outlet /> : <Login />;
 };
 
 export default PrivateRoutes;

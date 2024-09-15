@@ -29,7 +29,7 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
   useEffect(() => {
     setDocumentTitle(
       `${t("overallInsight", { title: title })}`,
-      config.appTitle
+      config.appTitle,
     );
   }, [title]);
 

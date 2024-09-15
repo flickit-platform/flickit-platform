@@ -43,7 +43,7 @@ const QuestionsTitle = (props: {
     if (isComplete) {
       setDocumentTitle(
         `${questionnaire.title} ${t("questionnaireFinished")}`,
-        config.appTitle
+        config.appTitle,
       );
     }
   }, [questionnaire, isComplete]);
@@ -113,9 +113,7 @@ const QuestionsTitle = (props: {
           <>
             {questionnaire?.title}
             <div style={{ marginInline: 4 }}></div>
-            <Title
-              size="large"
-            >
+            <Title size="large">
               <Trans i18nKey="review" />
             </Title>
           </>

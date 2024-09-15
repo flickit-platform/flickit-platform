@@ -60,7 +60,7 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
       const mlKey = `ml${i + 1}`;
       const mlTitleKey = `mlTitle${i + 1}`;
       const barName = data.find(
-        (attribute) => attribute[`assessmentTitle${i + 1}`]
+        (attribute) => attribute[`assessmentTitle${i + 1}`],
       )?.[`assessmentTitle${i + 1}`];
       if (barName) {
         bars.push(
@@ -70,7 +70,7 @@ const CompareBarChart: React.FC<CompareBarProps> = ({
             name={barName}
             fill={barColors[i % barColors.length]}
             type={mlTitleKey}
-          />
+          />,
         );
       }
     }

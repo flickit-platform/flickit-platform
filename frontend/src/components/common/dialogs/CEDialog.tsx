@@ -51,7 +51,7 @@ interface ICEDialogActionsProps extends PropsWithChildren<DialogActionsProps> {
   onSubmit?: (e: any, shouldView?: boolean) => any;
   onBack?: () => void;
   hasBackBtn?: boolean;
-  cancelLabel?: string
+  cancelLabel?: string;
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -130,11 +130,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             </LoadingButton>
           </Grid>
         )}
-        {children && (
-          <Grid item>
-            {children}
-          </Grid>
-        )}
+        {children && <Grid item>{children}</Grid>}
       </Grid>
     </DialogActions>
   );

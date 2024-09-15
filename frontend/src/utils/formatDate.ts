@@ -1,5 +1,5 @@
 const formatDate = (date: string | Date) => {
-  var d = new Date(date),
+  let d = new Date(date),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();

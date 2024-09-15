@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {Avatar, Chip, CircularProgress, Tooltip, Typography} from "@mui/material";
+import {
+  Avatar,
+  Chip,
+  CircularProgress,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -87,8 +93,7 @@ interface ISpaceCardProps {
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
-    props;
+  const { item, isActiveSpace, dialogProps, fetchSpaces, owner } = props;
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
@@ -119,7 +124,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         // dispatch(authActions.setUserInfo(data));
         navigate(`/${spaceId}/assessments/1`);
       })
-      .catch((e) => { });
+      .catch((e) => {});
   };
 
   return (
@@ -183,20 +188,20 @@ const SpaceCard = (props: ISpaceCardProps) => {
       </Box>
       <Box sx={{ display: "flex", ml: "auto" }}>
         <Box ml="auto" sx={{ ...styles.centerV }}>
-          <Tooltip title={<Trans i18nKey={"membersCount"} /> }>
-          <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
-                <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
-                <Typography fontWeight={"bold"}>{membersCount}</Typography>
-          </Box>
+          <Tooltip title={<Trans i18nKey={"membersCount"} />}>
+            <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
+              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <Typography fontWeight={"bold"}>{membersCount}</Typography>
+            </Box>
           </Tooltip>
-          <Tooltip title={<Trans i18nKey={"assessmentsCount"} /> }>
-          <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
-            <DescriptionRoundedIcon
-              sx={{ mr: 0.5, opacity: 0.8 }}
-              fontSize="small"
-            />
-            <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
-          </Box>
+          <Tooltip title={<Trans i18nKey={"assessmentsCount"} />}>
+            <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
+              <DescriptionRoundedIcon
+                sx={{ mr: 0.5, opacity: 0.8 }}
+                fontSize="small"
+              />
+              <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
+            </Box>
           </Tooltip>
         </Box>
         <Box
@@ -213,17 +218,16 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           )}
           <>
-            <Tooltip title={<Trans i18nKey={"spaceSetting"} /> }>
-
-            <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
-              <IconButton
-                size="small"
-                component={Link}
-                to={`/${spaceId}/setting`}
-              >
-                <SettingsRoundedIcon />
-              </IconButton>
-            </Box>
+            <Tooltip title={<Trans i18nKey={"spaceSetting"} />}>
+              <Box onClick={trackSeen} sx={{ ...styles.centerV }}>
+                <IconButton
+                  size="small"
+                  component={Link}
+                  to={`/${spaceId}/setting`}
+                >
+                  <SettingsRoundedIcon />
+                </IconButton>
+              </Box>
             </Tooltip>
             <Tooltip title={<Trans i18nKey={"moreAction"} />}>
               <Box>
@@ -294,7 +298,7 @@ const Actions = (props: any) => {
       await fetchSpaces();
     } catch (e) {
       const err = e as ICustomError;
-      console.log(err)
+      console.log(err);
       toastError(err);
     }
   };
@@ -325,11 +329,11 @@ const Actions = (props: any) => {
           onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
-        !isOwner && {
-          icon: <ExitToAppRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="leaveSpace" />,
-          onClick: leaveSpace,
-        },
+          !isOwner && {
+            icon: <ExitToAppRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="leaveSpace" />,
+            onClick: leaveSpace,
+          },
       ]}
     />
   );

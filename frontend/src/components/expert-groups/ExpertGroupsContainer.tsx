@@ -22,9 +22,12 @@ const ExpertGroupsContainer = () => {
   const { id } = userInfo || {};
   const { is_expert } = userInfo;
   const [pageNumber, setPageNumber] = useState(1);
-  const pageSize = 20
+  const pageSize = 20;
 
-  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
     setPageNumber(value);
   };
 

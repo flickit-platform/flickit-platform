@@ -53,7 +53,10 @@ const SubjectBar = (props: any) => {
         />
         <YAxis type="number" domain={[0, 5]} tickCount={5 + 1} />
         <Tooltip />
-        <Legend  layout="horizontal" wrapperStyle={{ position: 'absolute', bottom: '8px', left: '0%' }} />
+        <Legend
+          layout="horizontal"
+          wrapperStyle={{ position: "absolute", bottom: "8px", left: "0%" }}
+        />
         <Bar
           dataKey="ml"
           name={t("maturityLevel") as string}

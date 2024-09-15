@@ -3,4 +3,3 @@ export const BASE_URL =
     ? import.meta.env.VITE_LOCAL_BASE_URL
     : process.env.BASE_URL;
 export const APP_LABEL = import.meta.env.VITE_APP_TITLE;
-

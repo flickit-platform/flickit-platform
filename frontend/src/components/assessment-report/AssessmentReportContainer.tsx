@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {Box, Divider, IconButton, Tooltip, Typography} from "@mui/material";
+import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -47,7 +47,7 @@ const AssessmentReportContainer = (props: any) => {
     service: (args, config) =>
       service.fetchAssessmentTotalProgress(
         { assessmentId, ...(args || {}) },
-        config
+        config,
       ),
   });
   const calculate = async () => {
@@ -108,7 +108,7 @@ const AssessmentReportContainer = (props: any) => {
           (sum: any, subject: any) => {
             return sum + (subject.attributes?.length || 0);
           },
-          0
+          0,
         );
 
         return (
@@ -124,31 +124,31 @@ const AssessmentReportContainer = (props: any) => {
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Box sx={{ py: "0.6rem",display:"flex" }}>
-                    <Tooltip title={<Trans i18nKey={"assessmentDocument"}/>}>
+                  <Box sx={{ py: "0.6rem", display: "flex" }}>
+                    <Tooltip title={<Trans i18nKey={"assessmentDocument"} />}>
                       <Box>
                         <IconButton
-                            data-cy="more-action-btn"
-                            disabled={!exportable}
-                            component={exportable ? Link : "div"}
-                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
+                          data-cy="more-action-btn"
+                          disabled={!exportable}
+                          component={exportable ? Link : "div"}
+                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
                         >
                           <ArticleRounded
-                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
                           />
                         </IconButton>
                       </Box>
                     </Tooltip>
-                    <Tooltip  title={<Trans i18nKey={"assessmentSettings"}/>}>
+                    <Tooltip title={<Trans i18nKey={"assessmentSettings"} />}>
                       <Box>
                         <IconButton
-                            data-cy="more-action-btn"
-                            disabled={!manageable}
-                            component={manageable ? Link : "div"}
-                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
+                          data-cy="more-action-btn"
+                          disabled={!manageable}
+                          component={manageable ? Link : "div"}
+                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
                         >
                           <SettingsIcon
-                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
                           />
                         </IconButton>
                       </Box>

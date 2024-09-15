@@ -38,7 +38,7 @@ const Gauge = (props: IGaugeProps) => {
   const colorPallet = getMaturityLevelColors(maturity_level_number);
   const colorCode = colorPallet[level_value - 1];
   const GaugeComponent = lazy(
-    () => import(`./GaugeComponent${maturity_level_number}.tsx`)
+    () => import(`./GaugeComponent${maturity_level_number}.tsx`),
   );
   const confidenceValue = confidence_value ? confidence_value : 0;
   const calculateFontSize = (length: number): string => {
@@ -72,7 +72,7 @@ const Gauge = (props: IGaugeProps) => {
           <GaugeComponent
             confidence_value={confidence_value}
             colorCode={colorCode}
-            value={!!level_value ? level_value : -1}
+            value={level_value ? level_value : -1}
             height={height}
             className={className}
           />
@@ -84,7 +84,7 @@ const Gauge = (props: IGaugeProps) => {
           />
         )}
       </Suspense>
-      {!!level_value ? (
+      {level_value ? (
         <Box
           sx={{
             ...styles.centerCVH,

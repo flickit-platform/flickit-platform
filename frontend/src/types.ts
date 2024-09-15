@@ -432,7 +432,7 @@ export interface ISubjectReportModel extends IDefaultModel<ISubjectReport> {
 
 export type TQueryFunction<T extends any = any, A extends any = any> = (
   args?: A,
-  config?: AxiosRequestConfig<any> | undefined
+  config?: AxiosRequestConfig<any> | undefined,
 ) => Promise<T>;
 
 export type TQueryProps<T extends any = any, A extends any = any> = {
@@ -443,7 +443,7 @@ export type TQueryProps<T extends any = any, A extends any = any> = {
   errorObject: ICustomError | undefined;
   query: (
     args?: A | undefined,
-    config?: AxiosRequestConfig<any> | undefined
+    config?: AxiosRequestConfig<any> | undefined,
   ) => Promise<T>;
   abortController?: AbortController;
 };

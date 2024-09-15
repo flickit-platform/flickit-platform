@@ -28,7 +28,7 @@ const DefaultInfoItemComponent = (
     bg?: "white";
     itemBg?: string;
     action?: JSX.Element;
-  }>
+  }>,
 ) => {
   const { title, children, bg, itemBg, action } = props;
   return (
@@ -91,7 +91,7 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
         }}
       >
         {items.map(
-          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `
+          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `,
         )}
       </Box>
     </DefaultInfoItemComponent>
@@ -110,7 +110,7 @@ const renderInfo = (
     renderMap?: any;
     useTitleAsFallbackType?: boolean;
     bg?: "white";
-  } = {}
+  } = {},
 ) => {
   const {
     component: Component = DefaultInfoItemComponent,

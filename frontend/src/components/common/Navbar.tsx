@@ -64,8 +64,8 @@ const NotificationItem = ({
   message,
   onNotificationClick,
 }: {
-  message: IMessage;
-  onNotificationClick: () => void;
+  message;
+  onNotificationClick;
 }) => {
   return (
     <Box
@@ -161,7 +161,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
 
   const handleNotificationClick = (
     message: IMessage,
-    onNotificationClick: () => void
+    onNotificationClick: () => void,
   ) => {
     setSelectedMessage(message);
     onNotificationClick();
@@ -302,10 +302,10 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
                           new Date(
-                            selectedMessage.createdAt
-                          ).getTimezoneOffset()
+                            selectedMessage.createdAt,
+                          ).getTimezoneOffset(),
                       ),
-                      "yyyy/MM/dd HH:mm"
+                      "yyyy/MM/dd HH:mm",
                     ) +
                     ") "}
                 </Typography>
@@ -336,7 +336,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
           listItem={(
             message: IMessage,
             onActionButtonClick: (actionButtonType: ButtonTypeEnum) => void,
-            onNotificationClick: () => void
+            onNotificationClick: () => void,
           ) => {
             return (
               <NotificationItem
@@ -396,7 +396,7 @@ const Navbar = () => {
     if (
       notificationCenterRef.current &&
       !(notificationCenterRef.current as HTMLButtonElement).contains(
-        event.target
+        event.target,
       ) &&
       bellButtonRef.current &&
       !(bellButtonRef.current as HTMLButtonElement).contains(event.target)

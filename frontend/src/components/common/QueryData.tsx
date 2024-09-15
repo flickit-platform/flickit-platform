@@ -25,7 +25,7 @@ interface IQueryDataProps<T> {
     err:
       | ICustomError
       | (ICustomError | ICustomError[] | undefined)[]
-      | undefined
+      | undefined,
   ) => JSX.Element;
   isDataEmpty?: (data: T) => boolean;
   showEmptyError?: boolean;
@@ -103,7 +103,7 @@ export const useQueryDataContext = () => {
   const context = useContext(QueryDataContext);
   if (context === undefined) {
     throw new Error(
-      "useQueryDataContext must be used within a QueryData render method"
+      "useQueryDataContext must be used within a QueryData render method",
     );
   }
   return context;
@@ -131,7 +131,7 @@ const defaultIsDataEmpty = (data: any) => {
 
 export const defaultRenderError = (
   err: ICustomError | undefined,
-  errorComponent: JSX.Element = <ErrorDataLoading />
+  errorComponent: JSX.Element = <ErrorDataLoading />,
 ): any => {
   if (!err) {
     return errorComponent;

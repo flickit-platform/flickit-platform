@@ -6,7 +6,7 @@ export interface FieldErrorData {
 
 const setServerFieldErrors = (
   e: ICustomError | unknown,
-  formMethods: UseFormReturn<any>
+  formMethods: UseFormReturn<any>,
 ) => {
   const { response, status } = e as ICustomError;
   if (status !== 400 || !response || !response.data) {
@@ -22,7 +22,7 @@ const setServerFieldErrors = (
     formMethods.setError(
       key,
       { message: responseData[key][0], type: "server" },
-      index === 0 ? { shouldFocus: true } : undefined
+      index === 0 ? { shouldFocus: true } : undefined,
     );
   });
 };
