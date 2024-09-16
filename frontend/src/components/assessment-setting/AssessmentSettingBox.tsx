@@ -90,7 +90,7 @@ export const AssessmentSettingGeneralBox = (props: {
             marginBottom: "10px !important",
           }}
         />
-        <Box sx={{ display: "flex", justifyContent: "center",flexDirection: "column",alignItems:"center" }}>
+        <Grid sx={{ display: "flex", justifyContent: "center" }}>
           <Grid
             item
             xs={12}
@@ -134,50 +134,52 @@ export const AssessmentSettingGeneralBox = (props: {
               />
             </Box>
           </Grid>
-            {shortTitle && <Grid
-                item
-                xs={12}
-                sm={12}
-                md={8}
+        </Grid>
+        {shortTitle &&  <Grid sx={{ display: "flex", justifyContent: "center" }}>
+           <Grid
+              item
+              xs={12}
+              sm={12}
+              md={8}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+          >
+            <Typography
+                color="#9DA7B3"
+                fontWeight={500}
                 sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                  fontSize: { xs: "1rem", sm: "1.375rem" },
+                  whiteSpace: { xs: "wrap", sm: "nowrap" },
+                }}
+                lineHeight={"normal"}
+            >
+              <Trans i18nKey="shortTitle" />:
+            </Typography>
+
+            <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: { md: "350px" },
                 }}
             >
-                <Typography
-                    color="#9DA7B3"
-                    fontWeight={500}
-                    sx={{
-                        fontSize: { xs: "1rem", sm: "1.375rem" },
-                        whiteSpace: { xs: "wrap", sm: "nowrap" },
-                    }}
-                    lineHeight={"normal"}
-                >
-                    <Trans i18nKey="shortTitle" />:
-                </Typography>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: { md: "350px" },
-                    }}
-                >
-                    <OnHoverInputTitleSetting
-                        formMethods={formMethods}
-                        data={AssessmentTitle}
-                        shortTitle={shortTitle}
-                        infoQuery={fetchPathInfo}
-                        AssessmentInfoQuery={AssessmentInfoQuery}
-                        editable={true}
-                        color={color}
-                        type={"shortTitle"}
-                    />
-                </Box>
-            </Grid> }
-        </Box>
+              <OnHoverInputTitleSetting
+                  formMethods={formMethods}
+                  data={AssessmentTitle}
+                  shortTitle={shortTitle}
+                  infoQuery={fetchPathInfo}
+                  AssessmentInfoQuery={AssessmentInfoQuery}
+                  editable={true}
+                  color={color}
+                  type={"shortTitle"}
+              />
+            </Box>
+          </Grid>
+        </Grid>}
 
         <Divider
           sx={{ width: "100%", marginBottom: "24px", marginTop: "10px" }}
