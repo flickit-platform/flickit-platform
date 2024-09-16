@@ -24,6 +24,7 @@ urlpatterns = [
     path("<uuid:assessment_id>/calculate-confidence/", confidence_levels_views.CalculateConfidenceApi.as_view()),
     path("<uuid:assessment_id>/advice/", advice_views.AdviceView.as_view()),
     path("<uuid:assessment_id>/advice-narration/", advice_views.AdviceNarrationView.as_view()),
+    path("<uuid:assessment_id>/advice-narration-ai/", advice_views.AdviceNarrationAiView.as_view()),
     path("<uuid:assessment_id>/attributes/<int:attribute_id>/evidences/",
          attributes_views.EvidencesOfAttributeApi.as_view()),
     path("<uuid:assessment_id>/ai-report/attributes/<int:attribute_id>/",

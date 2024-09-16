@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -18,4 +20,35 @@ class AdviceNarrationView(APIView):
 
     def get(self, request, assessment_id):
         result = advice_services.get_advice_narration(request, assessment_id)
+        return Response(result["body"], result["status_code"])
+
+
+class AdviceNarrationAiView(APIView):
+    permission_classes = [IsAuthenticated]
+    @swagger_auto_schema(
+        operation_description="Get advice narration for a specific assessment.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['assessment_id']
+        ),
+        responses={
+            201: openapi.Response(
+                description="Advice narration retrieved successfully.",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'content': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='A message indicating that AI is disabled.',
+                            example='Ai Is Disabled'
+                        )
+                    }
+                )
+            ),
+            400: openapi.Response(description="Bad Request - Invalid input."),
+            500: openapi.Response(description="Internal Server Error - An error occurred while retrieving narration."),
+        }
+    )
+    def post(self, request, assessment_id):
+        result = advice_services.create_advice_narration(request, assessment_id)
         return Response(result["body"], result["status_code"])
