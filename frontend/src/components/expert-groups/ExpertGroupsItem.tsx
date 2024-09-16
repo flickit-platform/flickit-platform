@@ -181,7 +181,6 @@ const Actions = (props: any) => {
 
   const openEditDialog = async (e: any) => {
     const data = await fetchExpertGroup();
-    console.log(data,"test data")
     dialogProps.openDialog({
       data,
       type: "update",
