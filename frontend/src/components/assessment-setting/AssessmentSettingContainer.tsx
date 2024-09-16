@@ -20,6 +20,7 @@ import AddMemberDialog from "@components/assessment-setting/addMemberDialog";
 import ConfirmRemoveMemberDialog from "@components/assessment-setting/confirmRemoveMemberDialog";
 import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSettingTitle";
 import Addons from "@components/assessment-setting/Addons";
+import AddOnsDialog from "@components/assessment-setting/AddOnsDialog";
 
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
@@ -27,6 +28,12 @@ const AssessmentSettingContainer = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedRemoveModal, setExpandedRemoveModal] = useState<{
+    display: boolean;
+    name: string;
+    id: string;
+    invited?: boolean;
+  }>({ display: false, name: "", id: "", invited: false });
+  const [expandedAddOnsModal, setExpandedAddOnsModal] = useState<{
     display: boolean;
     name: string;
     id: string;
@@ -104,6 +111,11 @@ const AssessmentSettingContainer = () => {
       invited: false,
     });
   };
+    const handleCloseAddOnsModal = () => {
+        setExpandedAddOnsModal({
+            display: false
+        })
+    };
 
   return (
     <QueryBatchData
@@ -164,7 +176,7 @@ const AssessmentSettingContainer = () => {
             </Grid>
             <Grid container columns={12}>
               <Grid item sm={12} xs={12}>
-               <Addons/>
+               <Addons setExpandedAddOnsModal={setExpandedAddOnsModal}/>
               </Grid>
             </Grid>
             <AddMemberDialog
@@ -191,6 +203,15 @@ const AssessmentSettingContainer = () => {
               inviteesMemberList={inviteesMemberList}
               assessmentName={title}
               setChangeData={setChangeData}
+            />
+            <AddOnsDialog
+                expanded={expandedAddOnsModal}
+                onClose={handleCloseAddOnsModal}
+                assessmentId={assessmentId}
+                title={<Trans i18nKey={"addOnsConfig"} />}
+                cancelText={<Trans i18nKey={"cancel"} />}
+                confirmText={<Trans i18nKey={"addToThisAssessment"} />}
+                setChangeData={setChangeData}
             />
           </Box>
         );

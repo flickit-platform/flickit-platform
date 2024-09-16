@@ -7,8 +7,10 @@ import {Link} from "react-router-dom";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import {theme} from "@config/theme";
 import {styles} from "@styles";
+import {display} from "html2canvas/dist/types/css/property-descriptors/display";
 
-const Addons = () => {
+const Addons = (props: any) => {
+    const {setExpandedAddOnsModal} = props
     return (
         <Box
             sx={{
@@ -83,13 +85,15 @@ const Addons = () => {
                                             fontWeight={500}
                                             sx={{
                                                 display: "flex",
-                                                justifyContent: "center",
+                                                justifyContent: "space-between",
                                                 fontSize: { xs: "1rem", md: "1.375rem" },
-                                                width: { md: "100px" },
+                                                // width: { md: "100px" },
                                             }}
                                             lineHeight={"normal"}
                                         >
-                                           <Box sx={{...styles.centerVH,cursor:"pointer"}}>    <SettingsRoundedIcon /></Box>
+                                           <Box onClick={()=>setExpandedAddOnsModal({display: true})} sx={{...styles.centerVH,cursor:"pointer"}}>
+                                               <SettingsRoundedIcon />
+                                           </Box>
                                         </Typography>
                                     </Grid>
                                 </Grid>

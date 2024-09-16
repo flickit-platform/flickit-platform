@@ -511,5 +511,7 @@
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
   "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels.",
   "addOns": "Add-ons",
-  "qualityCode": "Quality Code"
+  "qualityCode": "Quality Code",
+  "addOnsConfig": "Add-ons config",
+  "factSheet": "Fact Sheet"
 }
