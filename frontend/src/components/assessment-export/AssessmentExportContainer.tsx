@@ -323,6 +323,14 @@ const AssessmentExportContainer = () => {
               return null;
             }
 
+            if (!result.editable && result?.aiInsight?.insight) {
+              setAttributesData((prevData: any) => ({
+                ...prevData,
+                [attribute?.id]: result?.aiInsight?.insight,
+              }));
+              newIgnoreIds.push(attribute?.id);
+            }
+
             if (result?.aiInsight?.insight && result?.aiInsight?.isValid) {
               setAttributesData((prevData: any) => ({
                 ...prevData,
@@ -458,7 +466,7 @@ const AssessmentExportContainer = () => {
                   alignItems="center"
                 >
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >
@@ -803,101 +811,103 @@ const AssessmentExportContainer = () => {
                     sx={{ marginBlock: 2, borderRadius: 4 }}
                   >
                     <Table>
-                      {subjects?.map((subject: ISubject, index: number) => (
-                        <React.Fragment key={subject?.id}>
-                          <TableRow>
-                            <TableCell
-                              sx={{
-                                backgroundColor: "#f9f9f9",
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography variant="titleMedium">
-                                {subject?.title}
-                              </Typography>
-                              <br />
-                              <Typography variant="displaySmall">
-                                {subject?.description}
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-
-                          <TableRow>
-                            <TableCell
-                              sx={{
-                                padding: 0,
-                                border: "none",
-                              }}
-                            >
-                              <Table
+                      <TableBody>
+                        {subjects?.map((subject: ISubject, index: number) => (
+                          <React.Fragment key={subject?.id}>
+                            <TableRow>
+                              <TableCell
                                 sx={{
-                                  borderCollapse: "collapse",
-                                  width: "100%",
+                                  backgroundColor: "#f9f9f9",
+                                  border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
                               >
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell
-                                      sx={{
-                                        backgroundColor: "#f5f5f5",
-                                        border:
-                                          "1px solid rgba(224, 224, 224, 1)",
-                                      }}
-                                    >
-                                      <Typography variant="titleMedium">
-                                        {subject?.title}{" "}
-                                        <Trans i18nKey="attribute" />
-                                      </Typography>
-                                    </TableCell>
-                                    <TableCell
-                                      sx={{
-                                        backgroundColor: "#f5f5f5",
-                                        border:
-                                          "1px solid rgba(224, 224, 224, 1)",
-                                      }}
-                                    >
-                                      <Typography variant="titleMedium">
-                                        <Trans i18nKey="description" />
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {subject?.attributes?.map(
-                                    (
-                                      feature: IAttribute,
-                                      featureIndex: number
-                                    ) => (
-                                      <TableRow key={featureIndex}>
-                                        <TableCell
-                                          sx={{
-                                            borderRight:
-                                              "1px solid rgba(224, 224, 224, 1)",
-                                          }}
-                                        >
-                                          <Typography variant="displaySmall">
-                                            {feature?.title}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell
-                                          sx={{
-                                            borderRight:
-                                              "1px solid rgba(224, 224, 224, 1)",
-                                          }}
-                                        >
-                                          <Typography variant="displaySmall">
-                                            {feature?.description}
-                                          </Typography>
-                                        </TableCell>
-                                      </TableRow>
-                                    )
-                                  )}
-                                </TableBody>
-                              </Table>
-                            </TableCell>
-                          </TableRow>
-                        </React.Fragment>
-                      ))}
+                                <Typography variant="titleMedium">
+                                  {subject?.title}
+                                </Typography>
+                                <br />
+                                <Typography variant="displaySmall">
+                                  {subject?.description}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                              <TableCell
+                                sx={{
+                                  padding: 0,
+                                  border: "none",
+                                }}
+                              >
+                                <Table
+                                  sx={{
+                                    borderCollapse: "collapse",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell
+                                        sx={{
+                                          backgroundColor: "#f5f5f5",
+                                          border:
+                                            "1px solid rgba(224, 224, 224, 1)",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          {subject?.title}{" "}
+                                          <Trans i18nKey="attribute" />
+                                        </Typography>
+                                      </TableCell>
+                                      <TableCell
+                                        sx={{
+                                          backgroundColor: "#f5f5f5",
+                                          border:
+                                            "1px solid rgba(224, 224, 224, 1)",
+                                        }}
+                                      >
+                                        <Typography variant="titleMedium">
+                                          <Trans i18nKey="description" />
+                                        </Typography>
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {subject?.attributes?.map(
+                                      (
+                                        feature: IAttribute,
+                                        featureIndex: number
+                                      ) => (
+                                        <TableRow key={featureIndex}>
+                                          <TableCell
+                                            sx={{
+                                              borderRight:
+                                                "1px solid rgba(224, 224, 224, 1)",
+                                            }}
+                                          >
+                                            <Typography variant="displaySmall">
+                                              {feature?.title}
+                                            </Typography>
+                                          </TableCell>
+                                          <TableCell
+                                            sx={{
+                                              borderRight:
+                                                "1px solid rgba(224, 224, 224, 1)",
+                                            }}
+                                          >
+                                            <Typography variant="displaySmall">
+                                              {feature?.description}
+                                            </Typography>
+                                          </TableCell>
+                                        </TableRow>
+                                      )
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              </TableCell>
+                            </TableRow>
+                          </React.Fragment>
+                        ))}
+                      </TableBody>
                     </Table>
                   </TableContainer>
                   <Typography
@@ -1412,58 +1422,10 @@ const AssessmentExportContainer = () => {
                                   )
                                 )}
                                 {attributesDataPolicy[attribute?.id?.toString()]
-                                  ?.aiInsight && (
-                                  <Box sx={{ ...styles.centerV }} gap={2}>
-                                    <Box
-                                      sx={{
-                                        zIndex: 1,
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                      }}
-                                    >
-                                      <Typography
-                                        variant="labelSmall"
-                                        sx={{
-                                          backgroundColor: "#d85e1e",
-                                          color: "white",
-                                          padding: "0.35rem 0.35rem",
-                                          borderRadius: "4px",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        <Trans i18nKey="AIGenerated" />
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        backgroundColor:
-                                          "rgba(255, 249, 196, 0.31)",
-                                        padding: 1,
-                                        borderRadius: 2,
-                                        maxWidth: "80%",
-                                      }}
-                                    >
-                                      <InfoOutlined
-                                        color="primary"
-                                        sx={{ marginRight: 1 }}
-                                      />
-                                      <Typography
-                                        variant="titleMedium"
-                                        fontWeight={400}
-                                        textAlign="left"
-                                      >
-                                        <Trans i18nKey="invalidAIInsight" />
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                )}
-                                {attributesDataPolicy[attribute?.id?.toString()]
-                                  ?.assessorInsight &&
-                                  !attributesDataPolicy[
+                                  ?.aiInsight &&
+                                  attributesDataPolicy[
                                     attribute?.id?.toString()
-                                  ]?.assessorInsight?.isValid && (
+                                  ]?.aiInsight.isValid && (
                                     <Box sx={{ ...styles.centerV }} gap={2}>
                                       <Box
                                         sx={{
@@ -1482,7 +1444,7 @@ const AssessmentExportContainer = () => {
                                             fontWeight: "bold",
                                           }}
                                         >
-                                          <Trans i18nKey="Outdated" />
+                                          <Trans i18nKey="AIGenerated" />
                                         </Typography>
                                       </Box>
                                       <Box
@@ -1492,8 +1454,8 @@ const AssessmentExportContainer = () => {
                                           backgroundColor:
                                             "rgba(255, 249, 196, 0.31)",
                                           padding: 1,
-                                          borderRadius: 4,
-                                          maxWidth: "100%",
+                                          borderRadius: 2,
+                                          maxWidth: "80%",
                                         }}
                                       >
                                         <InfoOutlined
@@ -1505,11 +1467,69 @@ const AssessmentExportContainer = () => {
                                           fontWeight={400}
                                           textAlign="left"
                                         >
-                                          <Trans i18nKey="invalidInsight" />
+                                          <Trans i18nKey="invalidAIInsight" />
                                         </Typography>
                                       </Box>
                                     </Box>
                                   )}
+                                {((attributesDataPolicy[
+                                  attribute?.id?.toString()
+                                ]?.assessorInsight &&
+                                  !attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.assessorInsight?.isValid) ||
+                                  (attributesDataPolicy[
+                                    attribute?.id?.toString()
+                                  ]?.aiInsight &&
+                                    !attributesDataPolicy[
+                                      attribute?.id?.toString()
+                                    ]?.aiInsight?.isValid)) && (
+                                  <Box sx={{ ...styles.centerV }} gap={2}>
+                                    <Box
+                                      sx={{
+                                        zIndex: 1,
+                                        display: "flex",
+                                        justifyContent: "flex-start",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="labelSmall"
+                                        sx={{
+                                          backgroundColor: "#d85e1e",
+                                          color: "white",
+                                          padding: "0.35rem 0.35rem",
+                                          borderRadius: "4px",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        <Trans i18nKey="Outdated" />
+                                      </Typography>
+                                    </Box>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "flex-start",
+                                        backgroundColor:
+                                          "rgba(255, 249, 196, 0.31)",
+                                        padding: 1,
+                                        borderRadius: 4,
+                                        maxWidth: "100%",
+                                      }}
+                                    >
+                                      <InfoOutlined
+                                        color="primary"
+                                        sx={{ marginRight: 1 }}
+                                      />
+                                      <Typography
+                                        variant="titleMedium"
+                                        fontWeight={400}
+                                        textAlign="left"
+                                      >
+                                        <Trans i18nKey="invalidInsight" />
+                                      </Typography>
+                                    </Box>
+                                  </Box>
+                                )}
                               </Box>
                             </TableCell>
                           </TableRow>

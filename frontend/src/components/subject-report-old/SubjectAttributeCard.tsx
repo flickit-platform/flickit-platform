@@ -226,54 +226,8 @@ const SUbjectAttributeCard = (props: any) => {
                     </Box>
                   )
                 )}
-                {attributesDataPolicy[id?.toString()]?.aiInsight && (
-                  <Box sx={{ ...styles.centerV }} gap={2}>
-                    <Box
-                      sx={{
-                        zIndex: 1,
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        ml: { xs: 0.75, sm: 1.5, md: 2 },
-                      }}
-                    >
-                      <Typography
-                        variant="labelSmall"
-                        sx={{
-                          backgroundColor: "#d85e1e",
-                          color: "white",
-                          padding: "0.35rem 0.35rem",
-                          borderRadius: "4px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <Trans i18nKey="AIGenerated" />
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        backgroundColor: "rgba(255, 249, 196, 0.31)",
-                        padding: 1,
-                        borderRadius: 2,
-                        maxWidth: "80%",
-                      }}
-                    >
-                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                      <Typography
-                        variant="titleMedium"
-                        fontWeight={400}
-                        textAlign="left"
-                      >
-                        <Trans i18nKey="invalidAIInsight" />
-                      </Typography>
-                    </Box>
-                  </Box>
-                )}
-
-                {attributesDataPolicy[id?.toString()]?.assessorInsight &&
-                  !attributesDataPolicy[id?.toString()]?.assessorInsight
-                    ?.isValid && (
+                {attributesDataPolicy[id?.toString()]?.aiInsight &&
+                  attributesDataPolicy[id?.toString()]?.aiInsight.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
                       <Box
                         sx={{
@@ -293,7 +247,7 @@ const SUbjectAttributeCard = (props: any) => {
                             fontWeight: "bold",
                           }}
                         >
-                          <Trans i18nKey="Outdated" />
+                          <Trans i18nKey="AIGenerated" />
                         </Typography>
                       </Box>
                       <Box
@@ -312,9 +266,60 @@ const SUbjectAttributeCard = (props: any) => {
                           fontWeight={400}
                           textAlign="left"
                         >
-                          <Trans i18nKey="invalidInsight" />
+                          <Trans i18nKey="invalidAIInsight" />
                         </Typography>
                       </Box>
+                    </Box>
+                  )}
+
+                {((attributesDataPolicy[id?.toString()]?.assessorInsight &&
+                  !attributesDataPolicy[id?.toString()]?.assessorInsight
+                    ?.isValid) ||
+                  (attributesDataPolicy[id?.toString()]?.aiInsight &&
+                    !attributesDataPolicy[id?.toString()]?.aiInsight
+                      ?.isValid)) && (
+                  <Box sx={{ ...styles.centerV }} gap={2}>
+                    <Box
+                      sx={{
+                        zIndex: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
+                        sx={{
+                          backgroundColor: "#d85e1e",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Trans i18nKey="Outdated" />
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        backgroundColor: "rgba(255, 249, 196, 0.31)",
+                        padding: 1,
+                        borderRadius: 2,
+                        maxWidth: "80%",
+                      }}
+                    >
+                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                      <Typography
+                        variant="titleMedium"
+                        fontWeight={400}
+                        textAlign="left"
+                      >
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                    </Box>
+                    {attributesDataPolicy[id?.toString()]?.editable && (
                       <Button
                         variant="contained"
                         size="small"
@@ -324,8 +329,9 @@ const SUbjectAttributeCard = (props: any) => {
                       >
                         <Trans i18nKey="regenerate" />
                       </Button>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
@@ -406,17 +412,19 @@ const SUbjectAttributeCard = (props: any) => {
           </Typography>
           <Box sx={{ pr: { xs: 2, sm: 6 } }}>
             {maturityScores
-              .map((item: any) => {
+              .map((item: any, index: number) => {
                 return (
-                  <MaturityLevelDetailsContainer
-                    maturity_score={item}
-                    totalml={maturityLevel?.index}
-                    mn={maturity_levels_count}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                    attributeId={id}
-                    permissions={permissions}
-                  />
+                  <div key={index}>
+                    <MaturityLevelDetailsContainer
+                      maturity_score={item}
+                      totalml={maturityLevel?.index}
+                      mn={maturity_levels_count}
+                      expanded={expanded}
+                      setExpanded={setExpanded}
+                      attributeId={id}
+                      permissions={permissions}
+                    />
+                  </div>
                 );
               })
               .reverse()}
@@ -474,8 +482,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -639,13 +647,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 return (
                   <>
                     <Typography variant="body2" display={"flex"}>
-                      <Trans i18nKey="maxPossibleScore" />
+                      <Trans i18nKey="maxPossibleScore" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {maxPossibleScore}
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="gainedScore" />
+                      <Trans i18nKey="gainedScore" />:
                       <Typography
                         variant="body2"
                         display={"flex"}
@@ -663,7 +671,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                       </Typography>
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
-                      <Trans i18nKey="questionsCount" />
+                      <Trans i18nKey="questionsCount" />:
                       <Typography variant="body2" fontWeight={"bold"} ml={2}>
                         {questionsCount}
                       </Typography>
@@ -819,7 +827,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           </Typography>
                                         </Box>
                                       </CustomWidthTooltip>
-                                      <Box sx={{ width: "10%" }}>
+                                      <Box
+                                        sx={{
+                                          width: "10%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -832,11 +845,16 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           answerIsNotApplicable
                                             ? "NA"
                                             : answerOptionTitle !== null
-                                            ? `${answerOptionIndex}.${answerOptionTitle}`
-                                            : "---"
+                                              ? `${answerOptionIndex}.${answerOptionTitle}`
+                                              : "---"
                                         }
                                       >
-                                        <Box sx={{ width: "25%" }}>
+                                        <Box
+                                          sx={{
+                                            width: "25%",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           <Typography
                                             variant="titleMedium"
                                             textAlign={"center"}
@@ -844,12 +862,17 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             {answerIsNotApplicable
                                               ? "NA"
                                               : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"}
+                                                ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                : "---"}
                                           </Typography>
                                         </Box>
                                       </Tooltip>
-                                      <Box sx={{ width: "10%" }}>
+                                      <Box
+                                        sx={{
+                                          width: "10%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}
@@ -859,7 +882,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             : answerScore}
                                         </Typography>
                                       </Box>
-                                      <Box sx={{ width: "15%" }}>
+                                      <Box
+                                        sx={{
+                                          width: "15%",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Typography
                                           variant="titleMedium"
                                           textAlign={"center"}

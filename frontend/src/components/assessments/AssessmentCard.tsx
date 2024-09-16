@@ -164,7 +164,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    border: "0.5px solid #00365C",
+                    border: `0.5px solid #2466A8`,
                     textTransform: "none",
                     color: "#101c32",
                     background: "transparent",

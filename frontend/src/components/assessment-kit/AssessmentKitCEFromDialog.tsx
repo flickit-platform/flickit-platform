@@ -248,6 +248,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
               maxSize={convertToBytes(5, "MB")}
               setZippedData={setZippedData}
               setButtonStep={setButtonStep}
+              disabled={buttonStep !== 0}
               dropNewFile={dropNewFile}
               setConvertData={setConvertData}
             />

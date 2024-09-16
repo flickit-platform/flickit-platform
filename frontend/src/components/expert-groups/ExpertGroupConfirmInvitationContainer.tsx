@@ -49,7 +49,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
   };
 
   const decline = () => {
-    navigate("/spaces");
+    navigate("/spaces/1", { replace: true });
   };
 
   return (

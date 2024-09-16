@@ -118,7 +118,7 @@ const AssessmentReportContainer = (props: any) => {
               <Grid item sm={12} xs={12}>
                 <Box display="flex" justifyContent="space-between">
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >

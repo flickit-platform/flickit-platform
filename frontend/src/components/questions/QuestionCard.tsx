@@ -281,7 +281,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                   >
                     {selcetedConfidenceLevel !== null ? (
                       <Box sx={{ mr: 2, color: "#fff" }}>
-                        <Typography
+                        <Box
                           sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
                           <Trans
@@ -297,7 +297,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                           >
                             {labels[selcetedConfidenceLevel - 1]?.title}
                           </Typography>
-                        </Typography>
+                        </Box>
                       </Box>
                     ) : (
                       <Box
@@ -559,11 +559,11 @@ const AnswerTemplate = (props: {
           }}
           flexWrap={"wrap"}
         >
-          {options?.map((option: any) => {
+          {options?.map((option: any, index: number) => {
             const { index: templateValue, title } = option || {};
             return (
               <Box
-                key={option.value}
+                key={index}
                 mb={2}
                 mr={2}
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
@@ -748,7 +748,11 @@ const AnswerDetails = ({
     setExpanded(!expanded);
   };
 
-  return (
+  return queryData.loading ? (
+    <Box sx={{ ...styles.centerVH }} height="30vh" width="100%">
+      <CircularProgress />
+    </Box>
+  ) : (
     <Box mt={2} width="100%" my={4}>
       {type === "evidence" ? (
         <Box
@@ -996,7 +1000,7 @@ const Evidence = (props: any) => {
     useState<string>("");
   const [evidenceBG, setEvidenceBG] = useState<any>({
     background: theme.palette.primary.main,
-    borderColor:theme.palette.primary.dark,
+    borderColor: theme.palette.primary.dark,
     borderHover: theme.palette.primary.light,
   });
   useEffect(() => {
@@ -2251,6 +2255,8 @@ const EvidenceDetail = (props: any) => {
     id,
     type,
     attachmentsCount,
+    editable,
+    deletable,
   } = item;
   const { displayName, pictureLink } = createdBy;
   const is_farsi = firstCharDetector(description);
@@ -2746,7 +2752,7 @@ const EvidenceDetail = (props: any) => {
                   gap: 1,
                 }}
               >
-                {permissions.updateEvidence && (
+                {permissions.updateEvidence && editable && (
                   <IconButton
                     aria-label="edit"
                     size="small"
@@ -2759,7 +2765,7 @@ const EvidenceDetail = (props: any) => {
                     />
                   </IconButton>
                 )}
-                {permissions.deleteEvidence && (
+                {permissions.deleteEvidence && deletable && (
                   <IconButton
                     aria-label="delete"
                     size="small"
@@ -3078,6 +3084,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState(false);
   const [dropZoneData, setDropZone] = useState<any>(null);
+  const [btnState, setBtnState] = useState("");
   const addEvidenceAttachments = useQuery({
     service: (args, config) =>
       service.addEvidenceAttachments(args, { signal: abortController.signal }),
@@ -3127,6 +3134,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           attachment: dropZoneData[0],
           description: description,
         };
+        setBtnState(recognize);
         await addEvidenceAttachments.query({ evidenceId, data });
         if (!createAttachment) {
           const { items } = await evidencesQueryData.query();
@@ -3321,12 +3329,21 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           }}
           justifyContent="center"
         >
-          <Button onClick={() => handelSendFile("another")}>
+          <LoadingButton
+            onClick={() => handelSendFile("another")}
+            value={"another"}
+            loading={addEvidenceAttachments.loading && btnState == "another"}
+          >
             {uploadAnother}
-          </Button>
-          <Button variant="contained" onClick={() => handelSendFile("self")}>
+          </LoadingButton>
+          <LoadingButton
+            variant="contained"
+            onClick={() => handelSendFile("self")}
+            value={"self"}
+            loading={addEvidenceAttachments.loading && btnState == "self"}
+          >
             {uploadAttachment}
-          </Button>
+          </LoadingButton>
         </Box>
       </DialogContent>
     </Dialog>

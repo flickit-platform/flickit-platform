@@ -77,7 +77,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
 
     setLoading(true);
     try {
-      const { data: res } =
+      const { status } =
         type === "update"
           ? await service.updateExpertGroup(
             { data: formattedUpdateData, id },
@@ -91,7 +91,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && res?.id && navigate(`${res.id}`);
+      shouldView && status == 200 && navigate(`${id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
