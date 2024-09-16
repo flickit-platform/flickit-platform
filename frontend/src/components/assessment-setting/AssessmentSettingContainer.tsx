@@ -19,6 +19,7 @@ import Box from "@mui/material/Box";
 import AddMemberDialog from "@components/assessment-setting/addMemberDialog";
 import ConfirmRemoveMemberDialog from "@components/assessment-setting/confirmRemoveMemberDialog";
 import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSettingTitle";
+import Addons from "@components/assessment-setting/Addons";
 
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
@@ -145,7 +146,7 @@ const AssessmentSettingContainer = () => {
                 />
               </Grid>
             </Grid>
-            <Grid container columns={12}>
+            <Grid container columns={12} mb={"32px"}>
               <Grid item sm={12} xs={12}>
                 <AssessmentSettingMemberBox
                   listOfRoles={listOfRoles}
@@ -159,6 +160,11 @@ const AssessmentSettingContainer = () => {
                   setChangeData={setChangeData}
                   changeData={changeData}
                 />
+              </Grid>
+            </Grid>
+            <Grid container columns={12}>
+              <Grid item sm={12} xs={12}>
+               <Addons/>
               </Grid>
             </Grid>
             <AddMemberDialog
