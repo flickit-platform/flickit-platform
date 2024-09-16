@@ -90,7 +90,7 @@ export const AssessmentSettingGeneralBox = (props: {
             marginBottom: "10px !important",
           }}
         />
-        <Box sx={{ display: "flex", justifyContent: "center",flexDirection: "column" }}>
+        <Box sx={{ display: "flex", justifyContent: "center",flexDirection: "column",alignItems:"center" }}>
           <Grid
             item
             xs={12}
