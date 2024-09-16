@@ -21,6 +21,20 @@ class AdviceNarrationView(APIView):
     def get(self, request, assessment_id):
         result = advice_services.get_advice_narration(request, assessment_id)
         return Response(result["body"], result["status_code"])
+    @swagger_auto_schema(
+        operation_description="create advice narration for assessor.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['assessment_id']
+        ),
+        responses={
+            201:""}
+    )
+    def post(self, request, assessment_id):
+        result = advice_services.create_advice_narration(request, assessment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
 
 
 class AdviceNarrationAiView(APIView):
@@ -50,5 +64,5 @@ class AdviceNarrationAiView(APIView):
         }
     )
     def post(self, request, assessment_id):
-        result = advice_services.create_advice_narration(request, assessment_id)
+        result = advice_services.create_advice_narration_ai(request, assessment_id)
         return Response(result["body"], result["status_code"])
