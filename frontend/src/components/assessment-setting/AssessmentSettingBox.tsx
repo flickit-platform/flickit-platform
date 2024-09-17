@@ -1059,7 +1059,7 @@ const OnHoverInputTitleSetting = (props: any) => {
     service: (
       args = {
         id: assessmentId,
-        data: { title: inputData, shortTitle: inputDataShortTitle, colorId: color?.id || 6 },
+        data: { title: inputData, shortTitle: inputDataShortTitle === "" ? null : inputDataShortTitle, colorId: color?.id || 6 },
       },
       config
     ) => service.updateAssessment(args, config),
@@ -1116,7 +1116,7 @@ const OnHoverInputTitleSetting = (props: any) => {
               error={hasError}
               fullWidth
               // name={title}
-              defaultValue={data || ""}
+              defaultValue={type == "title" ? inputData : inputDataShortTitle || ""}
               onChange={(e) => type == "title" ? setInputData(e.target.value) :
                 setInputDataShortTitle(e.target.value)
               }
@@ -1206,8 +1206,8 @@ const OnHoverInputTitleSetting = (props: any) => {
               sx={{ fontSize: { xs: "1rem", sm: "1.375rem" } }}
               lineHeight={"normal"}
             >
-              {type == "title" && data.replace(/<\/?p>/g, "")}
-              {type == "shortTitle" && shortTitle.replace(/<\/?p>/g, "")}
+              {type == "title" && data?.replace(/<\/?p>/g, "")}
+              {type == "shortTitle" && shortTitle?.replace(/<\/?p>/g, "")}
             </Typography>
             {isHovering && (
               <EditRoundedIcon
