@@ -579,7 +579,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
     <Box
       display={"flex"}
       sx={{
-        maxWidth: { xs: "100%", sm: "100%", md: "91%", lg: "92%" },
+        maxWidth: { xs: "100%", sm: "100%" },
         flexDirection: { xs: "column", sm: "row" },
       }}
     >
@@ -613,13 +613,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 />
               </Box>
             </Box>
-            <Box
-              sx={{
-                ...styles.centerV,
-                pl: 2,
-                width: { xs: "100%", md: "30%" },
-              }}
-            >
+            <Box sx={{ ...styles.centerV, pl: 2, width:{xs:"100%",md:"30%",lg:"19%"} }}>
               <Typography
                 variant="h4"
                 fontWeight={"bold"}
