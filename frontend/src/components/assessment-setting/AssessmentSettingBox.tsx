@@ -176,6 +176,7 @@ export const AssessmentSettingGeneralBox = (props: {
                 editable={true}
                 color={color}
                 type={"shortTitle"}
+                displayEdit={shortTitle === "" || shortTitle === null}
               />
             </Box>
           </Grid>
@@ -1044,7 +1045,7 @@ const OnHoverInputTitleSetting = (props: any) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, shortTitle, type, editable, infoQuery, formMethods, color, AssessmentInfoQuery } = props;
+  const { data, shortTitle, type, editable, infoQuery, formMethods, color, AssessmentInfoQuery, displayEdit } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [inputData, setInputData] = useState<string>(data);
   const [inputDataShortTitle, setInputDataShortTitle] = useState<string>(shortTitle);
@@ -1209,7 +1210,7 @@ const OnHoverInputTitleSetting = (props: any) => {
               {type == "title" && data?.replace(/<\/?p>/g, "")}
               {type == "shortTitle" && shortTitle?.replace(/<\/?p>/g, "")}
             </Typography>
-            {isHovering && (
+            {(isHovering || displayEdit) && (
               <EditRoundedIcon
                 sx={{ color: "#9DA7B3", position: "absolute", right: -10 }}
                 fontSize="small"
