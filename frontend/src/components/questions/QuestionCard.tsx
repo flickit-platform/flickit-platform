@@ -1893,29 +1893,29 @@ const checkTypeUpload = (
     if (dropZoneData[0].type.startsWith("image")) {
       setTypeFile(
         dropZoneData[0].type
-          .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          ?.substring(dropZoneData[0].type.indexOf("/"))
+          ?.replace("/", "")
       );
     }
     if (dropZoneData[0].type === "application/pdf") {
       setTypeFile(
         dropZoneData[0].type
-          .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          ?.substring(dropZoneData[0].type.indexOf("/"))
+          ?.replace("/", "")
       );
     }
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(
         dropZoneData[0].type
-          .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          ?.substring(dropZoneData[0].type.indexOf("/"))
+          ?.replace("/", "")
       );
     }
     if (dropZoneData[0].type === "text/plain") {
       setTypeFile(
         dropZoneData[0].type
-          .substring(dropZoneData[0].type.indexOf("/"))
-          .replace("/", "")
+          ?.substring(dropZoneData[0].type.indexOf("/"))
+          ?.replace("/", "")
       );
     }
     if (

@@ -126,7 +126,7 @@ const AssessmentSettingContainer = () => {
                   justifyContent="flex-start"
                 >
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >

@@ -466,7 +466,7 @@ const AssessmentExportContainer = () => {
                   alignItems="center"
                 >
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >
