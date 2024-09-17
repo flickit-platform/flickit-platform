@@ -107,7 +107,7 @@ const palette = createPalette({
   background: { secondary: "#EDF4FC", secondaryDark: "#121d33" },
   ml: { primary: "#6035A1" },
   cl: { primary: "#3596A1" },
-  error: { main: "#8A0F24", contrastText: "#fff", dark: "#5C0A18", light: "B81430" },
+  error: { main: "#8A0F24", contrastText: "#fff", dark: "#5C0A18", light: "#B81430" },
   success: { main: "#3D8F3D", contrastText: "#fff", dark: "#2E6B2E", light: "#4CB24C" },
   warning: { main: "#F89311", contrastText: "#fff" },
 });
