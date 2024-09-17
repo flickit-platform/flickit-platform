@@ -616,7 +616,7 @@ const OnHoverInput = (props: any) => {
             onMouseOut={handleMouseOut}
           >
             <Typography variant="body2" fontWeight="700">
-              {data.replace(/<\/?p>/g, "")}
+              {data?.replace(/<\/?p>/g, "")}
             </Typography>
             {isHovering && (
               <IconButton

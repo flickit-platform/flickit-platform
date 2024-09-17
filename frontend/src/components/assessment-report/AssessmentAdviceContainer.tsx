@@ -121,25 +121,26 @@ const AssessmentAdviceContainer = (props: any) => {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "center",
                 background: theme.palette.primary.light,
                 padding: 1,
                 borderRadius: 2,
                 maxWidth: "100%",
               }}
             >
-              <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+              <InfoOutlined sx={{ marginRight: 1, color: theme.palette.primary.contrastText }} />
               <Typography
                 variant="titleSmall"
                 fontWeight={400}
                 textAlign="left"
+                color="primary.contrastText"
               >
                 <Trans i18nKey="wichAttYouWant" />
               </Typography>
             </Box>
 
             <Box
-            mt={2}
+              mt={2}
               sx={{
                 borderRadius: { xs: 0, sm: "0 0 12px 12px" },
                 background: "#fff",
@@ -436,15 +437,13 @@ const AssessmentAdviceContainer = (props: any) => {
                             background:
                               attributeBGColorPallet[Math.ceil(index % 3)],
                             fontSize: "11px",
-                            border: `1px solid ${
-                              attributeColorPallet[Math.ceil(index % 3)]
-                            }`,
+                            border: `1px solid ${attributeColorPallet[Math.ceil(index % 3)]
+                              }`,
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",
-                            fontFamily: `${
-                              isFarsi ? "Vazirmatn" : primaryFontFamily
-                            }`,
+                            fontFamily: `${isFarsi ? "Vazirmatn" : primaryFontFamily
+                              }`,
                           }}
                         >
                           {attribute.title}

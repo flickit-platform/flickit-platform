@@ -349,7 +349,7 @@ export const AssessmentSubjectAccordion = (
               textTransform: "none",
               backgroundColor: "#D0E4FF",
               borderColor: "#D0E4FF",
-              color: "#00365C",
+              color: "primary",
               "&:hover": {
                 backgroundColor: "#D0E4FF",
                 borderColor: "#D0E4FF",
