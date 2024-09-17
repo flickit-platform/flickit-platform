@@ -42,7 +42,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
-import { secondaryFontFamily } from "@/config/theme";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import {theme} from "@config/theme";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -148,13 +149,14 @@ export const AssessmentSettingGeneralBox = (props: {
             }}
           >
             <Typography
-              color="#9DA7B3"
-              fontWeight={500}
-              sx={{
-                fontSize: { xs: "1rem", sm: "1.375rem" },
-                whiteSpace: { xs: "wrap", sm: "nowrap" },
-              }}
-              lineHeight={"normal"}
+                color="#9DA7B3"
+                fontWeight={500}
+                sx={{
+                  display:"flex",alignItems:"flex-end", gap:"6px",
+                  fontSize: { xs: "1rem", sm: "1.375rem" },
+                  whiteSpace: { xs: "wrap", sm: "nowrap" },
+                }}
+                lineHeight={"normal"}
             >
               <Trans i18nKey="shortTitle" />:
             </Typography>
@@ -181,6 +183,25 @@ export const AssessmentSettingGeneralBox = (props: {
             </Box>
           </Grid>
         </Grid>}
+        {shortTitle &&
+            <Grid sx={{ display: "flex", justifyContent: "center" }}>
+              <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={8}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+              >
+                  <Box sx={{display:"flex", justifyContent:"center",alignItems:"center",gap:"5px",color:"#9DA7B3", ...theme.typography.labelSmall}}>
+                    <InfoOutlined sx={{width:"17px"}}/>
+                    <Trans i18nKey={"shortTitleInfo"} />
+                 </Box>
+              </Grid>
+            </Grid>  }
 
         <Divider
           sx={{ width: "100%", marginBottom: "24px", marginTop: "10px" }}
