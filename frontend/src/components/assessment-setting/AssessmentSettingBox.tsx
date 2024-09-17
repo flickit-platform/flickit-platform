@@ -42,7 +42,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
-import { secondaryFontFamily } from "@/config/theme";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -151,12 +151,16 @@ export const AssessmentSettingGeneralBox = (props: {
                 color="#9DA7B3"
                 fontWeight={500}
                 sx={{
+                  display:"flex",alignItems:"flex-end", gap:"6px",
                   fontSize: { xs: "1rem", sm: "1.375rem" },
                   whiteSpace: { xs: "wrap", sm: "nowrap" },
                 }}
                 lineHeight={"normal"}
             >
               <Trans i18nKey="shortTitle" />:
+              <Tooltip arrow title={<Trans i18nKey={"shortTitleInfo"} />}>
+                <InfoOutlined sx={{width:"17px", cursor:"pointer"}}/>
+              </Tooltip>
             </Typography>
 
             <Box

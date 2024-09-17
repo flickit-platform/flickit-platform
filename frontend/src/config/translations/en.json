@@ -58,7 +58,7 @@
   "delete": "Delete",
   "code": "Code",
   "title": "Title",
-  "shortTitle": "Short Title",
+  "shortTitle": "Short title",
   "isIn": "is in",
   "shape": "shape",
   "assessmentKit": "Assessment Kit",
@@ -224,7 +224,7 @@
   "compare": "Compare",
   "reviewQuestions": "Review questions",
   "assessmentKits": "Assessment Kits",
-  "assessmentKit": "Assessment Kit",
+  "assessmentKit": "Assessment kit",
   "subjectStatusReport": "{{title}} Status Report",
   "subjectStatusReportDescription": "One key aspect of this assessment is evaluating the maturity level of the <strong>{{title}}</strong>, which refers to <strong>{{description}}</strong>.<br/>With <strong>{{confidenceValue}}%</strong> confidence, the overall maturity level of the <strong>{{title}}</strong> has been estimated at <strong>{{maturityLevelValue}}</strong> out of <strong>{{maturityLevelCount}}</strong>, indicating that it is <strong>{{maturityLevelTitle}}</strong>. The status is determined using a weighted average algorithm applied to the scores of various subject attributes.<br/><strong>{{attributesCount}}</strong> attributes of the <strong>{{title}}</strong> have been evaluated in this assessment. For each attribute, both the maturity level and the confidence level have been documented. The chart below illustrates the maturity levels of these attributes.",
   "document": "{{title}} Document",
@@ -510,5 +510,6 @@
   "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed.",
   "emptyAnswerHistoryTitle": "No answer has been recorded",
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
-  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels."
+  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels.",
+  "shortTitleInfo": "A very short title (a few characters) for addressing the product under assessment in reports."
 }
