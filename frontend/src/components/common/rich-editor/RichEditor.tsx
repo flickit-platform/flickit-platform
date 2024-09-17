@@ -80,7 +80,7 @@ const RichEditor = (props: IRichEditorProps) => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const farsiPattern =
       /[\u0600-\u06FF\uFB50-\uFBFF\u0590-\u05FF\u2000-\u206F]/;
-    const firstCharacter = event.target.value.charAt(0);
+    const firstCharacter = event.target.value?.charAt(0);
     event.target.dir = farsiPattern.test(firstCharacter) ? "rtl" : "ltr";
     event.target.style.fontFamily = farsiPattern.test(firstCharacter)
       ? "VazirMatn"
