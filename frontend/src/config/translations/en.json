@@ -510,5 +510,6 @@
   "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed.",
   "emptyAnswerHistoryTitle": "No answer has been recorded",
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
-  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels."
+  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels.",
+  "shortTitleHelperText": "A very short title (a few characters) for addressing the product under assessment in reports."
 }
