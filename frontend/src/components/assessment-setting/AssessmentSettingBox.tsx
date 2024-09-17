@@ -43,23 +43,23 @@ import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import { secondaryFontFamily } from "@/config/theme";
-import CircularProgress from "@mui/material/CircularProgress";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
+  AssessmentInfoQuery: any;
   AssessmentTitle: string;
   assessmentInfo: any;
   fetchPathInfo: () => void;
   color: any;
 }) => {
-  const { AssessmentInfo, assessmentInfo, AssessmentTitle, fetchPathInfo, color } = props;
+  const { AssessmentInfo, AssessmentInfoQuery, AssessmentTitle, fetchPathInfo, color } = props;
   const {
     createdBy: { displayName },
     creationTime,
     lastModificationTime,
     kit,
     shortTitle
-  } = assessmentInfo;
+  } = AssessmentInfo;
 
   const title = ["creator", "created", "lastModified", "assessmentKit"];
   const formMethods = useForm({ shouldUnregister: true });
@@ -91,7 +91,7 @@ export const AssessmentSettingGeneralBox = (props: {
             marginBottom: "10px !important",
           }}
         />
-        <Box sx={{ display: "flex", justifyContent: "center",flexDirection:"column" }}>
+        <Grid sx={{ display: "flex", justifyContent: "center" }}>
           <Grid
             item
             xs={12}
@@ -126,57 +126,62 @@ export const AssessmentSettingGeneralBox = (props: {
               <OnHoverInputTitleSetting
                 formMethods={formMethods}
                 data={AssessmentTitle}
-                title={shortTitle}
+                shortTitle={shortTitle}
                 infoQuery={fetchPathInfo}
+                AssessmentInfoQuery={AssessmentInfoQuery}
                 editable={true}
                 color={color}
-                AssessmentInfo={AssessmentInfo}
+                type={"title"}
               />
             </Box>
           </Grid>
-            { shortTitle && <Grid
-                item
-                xs={12}
-                sm={12}
-                md={8}
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
+        </Grid>
+        {<Grid sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={8}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              color="#9DA7B3"
+              fontWeight={500}
+              sx={{
+                fontSize: { xs: "1rem", sm: "1.375rem" },
+                whiteSpace: { xs: "wrap", sm: "nowrap" },
+              }}
+              lineHeight={"normal"}
             >
-                <Typography
-                    color="#9DA7B3"
-                    fontWeight={500}
-                    sx={{
-                        fontSize: { xs: "1rem", sm: "1.375rem" },
-                        whiteSpace: { xs: "wrap", sm: "nowrap" },
-                    }}
-                    lineHeight={"normal"}
-                >
-                    <Trans i18nKey="shortTitle" />:
-                </Typography>
+              <Trans i18nKey="shortTitle" />:
+            </Typography>
 
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: { md: "350px" },
-                    }}
-                >
-                    <OnHoverInputShortTitleSetting
-                        formMethods={formMethods}
-                        data={shortTitle}
-                        title={AssessmentTitle}
-                        infoQuery={fetchPathInfo}
-                        AssessmentInfo={AssessmentInfo}
-                        editable={true}
-                        color={color}
-                    />
-                </Box>
-            </Grid>}
-        </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: { md: "350px" },
+              }}
+            >
+              <OnHoverInputTitleSetting
+                formMethods={formMethods}
+                data={AssessmentTitle}
+                shortTitle={shortTitle}
+                infoQuery={fetchPathInfo}
+                AssessmentInfoQuery={AssessmentInfoQuery}
+                editable={true}
+                color={color}
+                type={"shortTitle"}
+                displayEdit={shortTitle === "" || shortTitle === null}
+              />
+            </Box>
+          </Grid>
+        </Grid>}
 
         <Divider
           sx={{ width: "100%", marginBottom: "24px", marginTop: "10px" }}
@@ -197,7 +202,11 @@ export const AssessmentSettingGeneralBox = (props: {
           {title &&
             title.map((itemList: string, index: number) => {
               return (
-                <Grid item sx={{ display: "flex", justifyContent: "center" }}>
+                <Grid
+                  item
+                  sx={{ display: "flex", justifyContent: "center" }}
+                  key={index}
+                >
                   <Grid
                     item
                     xs={12}
@@ -295,6 +304,11 @@ export const AssessmentSettingMemberBox = (props: {
     position: string;
   }
 
+  const editUserRole = useQuery({
+    service: (args, config) =>
+      service.editUserRole({ assessmentId, ...args }, config),
+    runOnMount: false,
+  });
   const editUserRoleInvited = useQuery({
     service: (args, config) => service.editUserRoleInvited(args, config),
     runOnMount: false,
@@ -334,7 +348,21 @@ export const AssessmentSettingMemberBox = (props: {
     },
   ];
 
-
+  const handleChange = async (event: any) => {
+    try {
+      const {
+        target: { value, name },
+      } = event;
+      const { id: roleId } = value;
+      const { id: userId } = name;
+      await editUserRole.query({ userId, roleId });
+      setChangeData((prev: boolean) => !prev);
+      // await fetchAssessmentsUserListRoles()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
   const handleChangeInvitedUser = async (event: any) => {
     try {
       const {
@@ -381,7 +409,7 @@ export const AssessmentSettingMemberBox = (props: {
             alignItems: "center",
             position: "relative",
             width: "90%",
-            ml:"10%"
+            ml: "10%",
           }}
         >
           <Typography ml="auto" color="#9DA7B3" variant="headlineMedium">
@@ -451,164 +479,255 @@ export const AssessmentSettingMemberBox = (props: {
                   </TableCell>
                 ))}
               </TableRow>
-              <Divider sx={{ width: "100%" }} />
             </TableHead>
+
+            {/* Move the Divider outside the TableHead */}
             <TableBody>
+
+
               {listOfUser.length > 0 &&
-                listOfUser
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: any) => {
-                    return (
-                      <TableRow
-                        tabIndex={-1}
-                        key={row.id}
-                        sx={{ background: !row.editable ? "#ebe8e85c" : "" }}
-                      >
-                        <TableCell
+                listOfUser.map((row: any) => (
+                  <TableRow
+                    tabIndex={-1}
+                    key={row.id}
+                    sx={{ background: !row.editable ? "#ebe8e85c" : "" }}
+                  >
+                    <TableCell
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                        border: "none",
+                        gap: { xs: "0px", md: "1.3rem" },
+                        paddingX: { xs: "0px", md: "1rem" },
+                      }}
+                    >
+                      <Box sx={{ width: "18vw" }}>
+                        <Box
                           sx={{
                             display: "flex",
-                            justifyContent: "space-evenly",
+                            justifyContent: { xs: "flex-start" },
                             alignItems: "center",
-                            border: "none",
-                            gap: { xs: "0px", md: "1.3rem" },
-                            paddingX: { xs: "0px", md: "1rem" },
+                            gap: ".5rem",
+                            paddingLeft: { lg: "30%" },
                           }}
                         >
-                          <Box
+                          <Avatar
+                            {...stringAvatar(row.displayName.toUpperCase())}
+                            src={row.pictureLink}
                             sx={{
-                              width: "18vw",
+                              width: 40,
+                              height: 40,
+                              display: { xs: "none", sm: "flex" },
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              fontSize: "0.875rem",
+                              color: "#1B1B1E",
+                              fontWeight: 500,
                             }}
                           >
-                            <Box
+                            {row.displayName}
+                          </Typography>
+                          {!row.editable && (
+                            <Chip
                               sx={{
-                                display: "flex",
-                                justifyContent: { xs: "flex-start" },
-                                alignItems: "center",
-                                gap: ".5rem",
-                                paddingLeft: { lg: "30%" },
+                                mr: 1,
+                                opacity: 0.7,
+                                color: "#9A003C",
+                                borderColor: "#9A003C",
                               }}
-                            >
-                              <Avatar
-                                {...stringAvatar(row.displayName.toUpperCase())}
-                                src={row.pictureLink}
-                                sx={{
-                                  width: 40,
-                                  height: 40,
-                                  display: { xs: "none", sm: "flex" },
-                                }}
-                              ></Avatar>
-                              <Typography
-                                sx={{
-                                  textOverflow: "ellipsis",
-                                  overflow: "hidden",
-                                  whiteSpace: "nowrap",
-                                  fontSize: "0.875rem",
-                                  color: "#1B1B1E",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {row.displayName}
-                              </Typography>
-                              {!row.editable && (
-                                <Chip
-                                  sx={{
-                                    mr: 1,
-                                    opacity: 0.7,
-                                    color: "#9A003C",
-                                    borderColor: "#9A003C",
-                                  }}
-                                  label={<Trans i18nKey={"owner"} />}
-                                  size="small"
-                                  variant="outlined"
-                                />
-                              )}
-                            </Box>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: { xs: "none", md: "flex" },
-                              justifyContent: "center",
-                              width: { xs: "5rem", md: "20vw" },
-                            }}
+                              label={<Trans i18nKey={"owner"} />}
+                              size="small"
+                              variant="outlined"
+                            />
+                          )}
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: { xs: "none", md: "flex" },
+                          justifyContent: "center",
+                          width: { xs: "5rem", md: "20vw" },
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            color: "#1B1B1E",
+                            fontSize: "0.875",
+                            wight: 300,
+                          }}
+                        >
+                          {row.email}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          gap: { xs: "0px", md: ".7rem" },
+                          width: { xs: "10.1rem", md: "20vw" },
+                        }}
+                      >
+                        <FormControl
+                          sx={{
+                            m: 1,
+                            width: "100%",
+                            textAlign: "center",
+                            padding: "6px, 12px, 6px, 12px",
+                            display: "inline-flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Grid
+                            item
+                            lg={8}
+                            sx={{ minWidth: { xs: "100%", md: "160px" } }}
                           >
-                            <Typography
-                              sx={{
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                color: "#1B1B1E",
-                                fontSize: "0.875",
-                                wight: 300,
-                              }}
-                            >
-                              {row.email}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "flex-end",
-                              alignItems: "center",
-                              gap: { xs: "0px", md: ".7rem" },
-                              width: { xs: "10.1rem", md: "20vw" },
-                            }}
-                          >
-                            <FormControl
-                              sx={{
-                                m: 1,
-                                width: "100%",
-                                textAlign: "center",
-                                padding: "6px, 12px, 6px, 12px",
-                                display: "inline-flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
-                              <Grid
-                                item
-                                lg={8}
-                                sx={{ minWidth: { xs: "100%", md: "160px" } }}
-                              >
-                                <Tooltip
-                                  disableHoverListener={row.editable}
-                                  title={
-                                    <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
-                                  }
-                                >
-                                     <SelectionRole row={row} listOfRoles={listOfRoles} MenuProps={MenuProps} setChangeData={setChangeData} assessmentId={assessmentId} />
-                                </Tooltip>
-                              </Grid>
-                            </FormControl>
                             <Tooltip
                               disableHoverListener={row.editable}
                               title={
                                 <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
                               }
                             >
-                              <Box
-                                width="30%"
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
+                              <Select
+                                labelId="demo-multiple-name-label"
+                                id="demo-multiple-name"
+                                value={row?.role?.title}
+                                onChange={handleChange}
+                                name={row}
+                                MenuProps={MenuProps}
+                                sx={{
+                                  width: "100%",
+                                  boxShadow: "none",
+                                  ".MuiOutlinedInput-notchedOutline": {
+                                    border: 0,
+                                  },
+                                  border: row.editable
+                                    ? "1px solid #2974B4"
+                                    : "1px solid #2974b442",
+                                  fontSize: "0.875rem",
+                                  borderRadius: "0.5rem",
+                                  "& .MuiSelect-select": {
+                                    padding: "4px 5px",
+                                  },
+                                }}
+                                IconComponent={KeyboardArrowDownIcon}
+                                inputProps={{
+                                  renderValue: () => row?.role?.title,
+                                }}
+                                disabled={!row.editable}
                               >
-                                <IconButton
-                                  sx={{ "&:hover": { color: "#d32f2f" } }}
-                                  size="small"
-                                  disabled={!row.editable}
-                                  onClick={() =>
-                                    openRemoveModal(row.displayName, row.id)
-                                  }
+                                <Box
+                                  sx={{
+                                    paddingY: "16px",
+                                    color: "#9DA7B3",
+                                    textAlign: "center",
+                                    borderBottom: "1px solid #9DA7B3",
+                                  }}
                                 >
-                                  <DeleteRoundedIcon />
-                                </IconButton>{" "}
-                              </Box>
+                                  <Typography sx={{ fontSize: "0.875rem" }}>
+                                    <Trans i18nKey={"chooseARole"} />
+                                  </Typography>
+                                </Box>
+                                {listOfRoles.map((role: any, index: number) => (
+                                  <MenuItem
+                                    key={role.title}
+                                    value={role}
+                                    sx={{
+                                      paddingY: "0px",
+                                      maxHeight: "200px",
+                                      ...(role.id === row.role.id && {
+                                        backgroundColor: "#9CCAFF",
+                                      }),
+                                    }}
+                                  >
+                                    <Box
+                                      sx={{
+                                        maxWidth: "240px",
+                                        color: "#000",
+                                        fontSize: "0.875rem",
+                                        lineHeight: "21px",
+                                        fontWeight: 500,
+                                        paddingY: "1rem",
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "0.875rem",
+                                          ...(role.id === row.role.id
+                                            ? { color: "#004F83" }
+                                            : { color: "#1B1B1E" }),
+                                        }}
+                                      >
+                                        {role.title}
+                                      </Typography>
+                                      <div
+                                        style={{
+                                          color: "#000",
+                                          fontSize: "0.875rem",
+                                          lineHeight: "21px",
+                                          fontWeight: 300,
+                                          whiteSpace: "break-spaces",
+                                          paddingTop: "1rem",
+                                        }}
+                                      >
+                                        {role.description}
+                                      </div>
+                                    </Box>
+                                    {listOfRoles.length > index + 1 && (
+                                      <Box
+                                        sx={{
+                                          height: "0.5px",
+                                          width: "80%",
+                                          backgroundColor: "#9DA7B3",
+                                          mx: "auto",
+                                        }}
+                                      />
+                                    )}
+                                  </MenuItem>
+                                ))}
+                              </Select>
                             </Tooltip>
+                          </Grid>
+                        </FormControl>
+                        <Tooltip
+                          disableHoverListener={row.editable}
+                          title={
+                            <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
+                          }
+                        >
+                          <Box
+                            width="30%"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <IconButton
+                              sx={{ "&:hover": { color: "#d32f2f" } }}
+                              size="small"
+                              disabled={!row.editable}
+                              onClick={() =>
+                                openRemoveModal(row.displayName, row.id)
+                              }
+                            >
+                              <DeleteRoundedIcon />
+                            </IconButton>
                           </Box>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -916,179 +1035,6 @@ export const AssessmentSettingMemberBox = (props: {
     </Box>
   );
 };
-const SelectionRole = (props: any)=>{
-
-    const {row ,setChangeData, assessmentId, MenuProps, listOfRoles} = props
-    const { service } = useServiceContext();
-
-    const handleChange = async (event: any) => {
-        try {
-            const {
-                target: { value, name },
-            } = event;
-            const { id: roleId } = value;
-            const { id: userId } = name;
-            await editUserRole.query({ userId, roleId });
-            setChangeData((prev: boolean) => !prev);
-            // await fetchAssessmentsUserListRoles()
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
-
-    const editUserRole = useQuery({
-        service: (args, config) =>
-            service.editUserRole({ assessmentId, ...args }, config),
-        runOnMount: false,
-    });
-  return (
-      <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          value={row?.role?.title}
-          onChange={handleChange}
-          name={row}
-          MenuProps={MenuProps}
-          sx={{
-            width: "100%",
-            height:"100%",
-            boxShadow: "none",
-            ".MuiOutlinedInput-notchedOutline": {
-              border: 0,
-            },
-              border: editUserRole.loading
-                ? "1px solid #2974b442"
-                :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
-            fontSize: "0.875rem",
-            borderRadius: "0.5rem",
-            "&.MuiOutlinedInput-notchedOutline": {
-              border: 0,
-            },
-            "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                {
-                  border: 0,
-                },
-            "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  border: 0,
-                },
-            ".MuiSvgIcon-root": {
-              fill: editUserRole.loading
-                  ? "1px solid #2974b442"
-                  :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
-            },
-            "& .MuiSelect-select": {
-              padding: "4px 5px",
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center",
-            },
-          }}
-          IconComponent={KeyboardArrowDownIcon}
-          inputProps={{
-            renderValue: () => editUserRole.loading
-                 ? <CircularProgress style={{color:"#2974b442"}} size="1rem"/>
-                 : row?.role?.title
-          }}
-          disabled={!row.editable}
-      >
-        <Box
-            sx={{
-              paddingY: "16px",
-              color: "#9DA7B3",
-              textAlign: "center",
-              borderBottom: "1px solid #9DA7B3",
-            }}
-        >
-          <Typography sx={{ fontSize: "0.875rem" }}>
-            <Trans i18nKey={"chooseARole"} />
-          </Typography>
-        </Box>
-        {listOfRoles &&
-            listOfRoles.map(
-                (role: any, index: number) => (
-                    <MenuItem
-                        style={{ display: "block" }}
-                        key={role.title}
-                        value={role}
-                        sx={{
-                          paddingY: "0px",
-                          maxHeight: "200px",
-                          ...(role.id === row.role.id && {
-                            backgroundColor: "#9CCAFF",
-                          }),
-                          "&.MuiMenuItem-root:hover": {
-                            ...(role.id === row.role.id
-                                ? {
-                                  backgroundColor:
-                                      "#9CCAFF",
-                                  color: "#004F83",
-                                }
-                                : {
-                                  backgroundColor:
-                                      "#EFEDF0",
-                                  color: "#1B1B1E",
-                                }),
-                          },
-                        }}
-                    >
-                      <Box
-                          sx={{
-                            maxWidth: "240px",
-                            color: "#000",
-                            fontSize: "0.875rem",
-                            lineHeight: "21px",
-                            fontWeight: 500,
-                            paddingY: "1rem",
-                          }}
-                      >
-                        <Typography
-                            sx={{
-                              fontSize: "0.875rem",
-                              ...(role.id === row.role.id
-                                  ? {
-                                    color: "#004F83",
-                                  }
-                                  : {
-                                    color: "#1B1B1E",
-                                  }),
-                            }}
-                        >
-                          {role.title}
-                        </Typography>
-
-                        <div
-                            style={{
-                              color: "#000",
-                              fontSize: "0.875rem",
-                              lineHeight: "21px",
-                              fontWeight: 300,
-                              whiteSpace: "break-spaces",
-                              paddingTop: "1rem",
-                            }}
-                        >
-                          {role.description}
-                        </div>
-                      </Box>
-                      {listOfRoles &&
-                          listOfRoles.length >
-                          index + 1 && (
-                              <Box
-                                  sx={{
-                                    height: "0.5px",
-                                    width: "80%",
-                                    backgroundColor: "#9DA7B3",
-                                    mx: "auto",
-                                  }}
-                              ></Box>
-                          )}
-                    </MenuItem>
-                )
-            )}
-      </Select>
-  )
-}
 
 const OnHoverInputTitleSetting = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
@@ -1100,9 +1046,10 @@ const OnHoverInputTitleSetting = (props: any) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, title, editable, infoQuery, formMethods, color, AssessmentInfo, } = props;
+  const { data, shortTitle, type, editable, infoQuery, formMethods, color, AssessmentInfoQuery, displayEdit } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [inputData, setInputData] = useState<string>(data);
+  const [inputDataShortTitle, setInputDataShortTitle] = useState<string>(shortTitle);
   const handleCancel = () => {
     setShow(false);
     setInputData(data);
@@ -1114,7 +1061,7 @@ const OnHoverInputTitleSetting = (props: any) => {
     service: (
       args = {
         id: assessmentId,
-        data: { title: inputData,shortTitle:title, colorId: color?.id || 6 },
+        data: { title: inputData, shortTitle: inputDataShortTitle === "" ? null : inputDataShortTitle, colorId: color?.id || 6 },
       },
       config
     ) => service.updateAssessment(args, config),
@@ -1126,7 +1073,7 @@ const OnHoverInputTitleSetting = (props: any) => {
       const res = await updateAssessmentQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-      await AssessmentInfo();
+      await AssessmentInfoQuery();
     } catch (e) {
       const err = e as ICustomError;
       setHasError(true);
@@ -1142,191 +1089,13 @@ const OnHoverInputTitleSetting = (props: any) => {
   };
   const inputProps: React.HTMLProps<HTMLInputElement> = {
     style: {
-      textAlign: firstCharDetector(inputData) ? "right" : "left",
+      textAlign: type == "title" ? firstCharDetector(inputData) ? "right" : "left" :
+        type == "shortTitle" ? firstCharDetector(inputDataShortTitle) ? "right" : "left" : "left"
+
+      ,
     },
-  };
-  return (
-    <Box>
-      <Box
-        my={1.5}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          position: "relative",
-          cursor: "pointer",
-        }}
-        width="100%"
-      >
-        {editable && show ? (
-          <Box
-            sx={{ display: "flex", flexDirection: "column", width: "100% " }}
-          >
-            <OutlinedInput
-              inputProps={inputProps}
-              error={hasError}
-              fullWidth
-              // name={title}
-              defaultValue={data || ""}
-              onChange={(e) => setInputData(e.target.value)}
-              value={inputData}
-              required={true}
-              multiline={true}
-              sx={{
-                minHeight: "38px",
-                borderRadius: "4px",
-                paddingRight: "12px;",
-                fontWeight: "700",
-                fontSize: "0.875rem",
-                "&.MuiOutlinedInput-notchedOutline": { border: 0 },
-                "&.MuiOutlinedInput-root:hover": {
-                  border: 0,
-                  outline: "none",
-                },
-                "& .MuiOutlinedInput-input:focused": {
-                  border: 0,
-                  outline: "none",
-                },
-                "&.MuiOutlinedInput-root.Mui-selected": {
-                  border: 0,
-                  outline: "none",
-                },
-                "&:hover": { border: "1px solid #79747E" },
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    title="Submit Edit"
-                    edge="end"
-                    sx={{
-                      background: "#49CED0",
-                      borderRadius: "2px",
-                      height: { xs: "26px", sm: "36px" },
-                      width: { xs: "26px", sm: "36px" },
-                      margin: "3px",
-                    }}
-                    onClick={updateAssessmentTitle}
-                  >
-                    <DoneIcon sx={{ color: "#fff" }} />
-                  </IconButton>
-                  <IconButton
-                    title="Cancel Edit"
-                    edge="end"
-                    sx={{
-                      background: "#E04B7C",
-                      borderRadius: "2px",
-                      height: { xs: "26px", sm: "36px" },
-                      width: { xs: "26px", sm: "36px" },
-                    }}
-                    onClick={handleCancel}
-                  >
-                    <CloseIcon sx={{ color: "#fff" }} />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            {/*{hasError && (*/}
-            {/*    <Typography color="#ba000d" variant="caption">*/}
-            {/*        {error?.data}*/}
-            {/*    </Typography>*/}
-            {/*)}*/}
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              minHeight: "38px",
-              borderRadius: "4px",
-              paddingLeft: "8px;",
-              paddingRight: "12px;",
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              wordBreak: "break-word",
-              // "&:hover": {border: "1px solid #79747E"},
-            }}
-            onClick={() => setShow(!show)}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-          >
-            <Typography
-              color="#004F83"
-              fontWeight={500}
-              sx={{ fontSize: { xs: "1rem", sm: "1.375rem" } }}
-              lineHeight={"normal"}
-            >
-              {data.replace(/<\/?p>/g, "")}
-            </Typography>
-            {isHovering && (
-              <EditRoundedIcon
-                sx={{ color: "#9DA7B3", position: "absolute", right: -10 }}
-                fontSize="small"
-                width={"32px"}
-                height={"32px"}
-                onClick={() => setShow(!show)}
-              />
-            )}
-          </Box>
-        )}
-      </Box>
-    </Box>
-  );
-};
-const OnHoverInputShortTitleSetting = (props: any) => {
-  const [show, setShow] = useState<boolean>(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
-    editable && setIsHovering(true);
   };
 
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
-  const { data, title, editable, infoQuery, formMethods, color, AssessmentInfo } = props;
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [inputData, setInputData] = useState<string>(data);
-  const handleCancel = () => {
-    setShow(false);
-    setInputData(data);
-    setHasError(false);
-  };
-  const { assessmentId } = useParams();
-  const { service } = useServiceContext();
-  const updateAssessmentQuery = useQuery({
-    service: (
-      args = {
-        id: assessmentId,
-        data: { title ,shortTitle: inputData, colorId: color?.id || 6 },
-      },
-      config
-    ) => service.updateAssessment(args, config),
-    runOnMount: false,
-    // toastError: true,
-  });
-  const updateAssessmentTitle = async () => {
-    try {
-      const res = await updateAssessmentQuery.query();
-      res.message && toast.success(res.message);
-      await infoQuery();
-      await AssessmentInfo();
-    } catch (e) {
-      const err = e as ICustomError;
-      setHasError(true);
-      if (Array.isArray(err.response?.data?.message)) {
-        toastError(err.response?.data?.message[0]);
-      } else if (
-        err.response?.data &&
-        err.response?.data.hasOwnProperty("message")
-      ) {
-        toastError(err.response?.data?.message);
-      }
-    }
-  };
-  const inputProps: React.HTMLProps<HTMLInputElement> = {
-    style: {
-      textAlign: firstCharDetector(inputData) ? "right" : "left",
-    },
-  };
   return (
     <Box>
       <Box
@@ -1349,9 +1118,11 @@ const OnHoverInputShortTitleSetting = (props: any) => {
               error={hasError}
               fullWidth
               // name={title}
-              defaultValue={data || ""}
-              onChange={(e) => setInputData(e.target.value)}
-              value={inputData}
+              defaultValue={type == "title" ? inputData : inputDataShortTitle || ""}
+              onChange={(e) => type == "title" ? setInputData(e.target.value) :
+                setInputDataShortTitle(e.target.value)
+              }
+              value={type == "title" ? inputData : inputDataShortTitle}
               required={true}
               multiline={true}
               sx={{
@@ -1437,9 +1208,10 @@ const OnHoverInputShortTitleSetting = (props: any) => {
               sx={{ fontSize: { xs: "1rem", sm: "1.375rem" } }}
               lineHeight={"normal"}
             >
-              {data.replace(/<\/?p>/g, "")}
+              {type == "title" && data?.replace(/<\/?p>/g, "")}
+              {type == "shortTitle" && shortTitle?.replace(/<\/?p>/g, "")}
             </Typography>
-            {isHovering && (
+            {(isHovering || displayEdit) && (
               <EditRoundedIcon
                 sx={{ color: "#9DA7B3", position: "absolute", right: -10 }}
                 fontSize="small"

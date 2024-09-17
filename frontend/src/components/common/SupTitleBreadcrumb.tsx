@@ -72,7 +72,7 @@ const SupTitleBreadcrumb = (
                     background: isActive
                       ? "#D0E4FF"
                       : "rgba(206, 211, 217, 0.4)",
-                    color: isActive ? "#00365C" : "#73808C",
+                    color: isActive ? "#2466A8" : "#73808C",
                     textTransform: "none",
                     borderRadius: "8px",
                     padding: "4px",

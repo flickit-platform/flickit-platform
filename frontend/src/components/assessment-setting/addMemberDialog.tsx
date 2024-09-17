@@ -178,9 +178,9 @@ const AddMemberDialog = (props: {
     const updateMemberSelected = async () => {
       try {
         const emailValue = await formMethods.getValues("email");
-        setMemberSelectedEmail(emailValue.email);
+        setMemberSelectedEmail(emailValue?.email);
         if (emailValue?.id) {
-          setMemberSelectedId(emailValue.id);
+          setMemberSelectedId(emailValue?.id);
           if (addedEmailType !== EUserType.EXISTED) {
             setAddedEmailType(EUserType.DEFAULT);
           }

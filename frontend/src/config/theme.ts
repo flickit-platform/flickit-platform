@@ -102,12 +102,13 @@ declare module "@mui/material/Typography" {
 }
 
 const palette = createPalette({
-  primary: { main: "#003B64", contrastText: "#FFFFFF", light: "#D0E4FF", dark: "#002035" },
-  secondary: { main: "#8B0035", contrastText: "#FFFFFF", light: "#FFD9DE", dark: "#400014" },
+  primary: { main: "#2466A8", contrastText: "#FFFFFF", light: "#2D80D2", dark: "#1B4D7E" },
+  secondary: { main: "#B8144B", contrastText: "#FFFFFF", light: "#E51A5E", dark: "#8A0F38" },
   background: { secondary: "#EDF4FC", secondaryDark: "#121d33" },
   ml: { primary: "#6035A1" },
   cl: { primary: "#3596A1" },
-  error: { main: "#6D0005", contrastText: "#fff" },
+  error: { main: "#8A0F24", contrastText: "#fff", dark: "#5C0A18", light: "#B81430" },
+  success: { main: "#3D8F3D", contrastText: "#fff", dark: "#2E6B2E", light: "#4CB24C" },
   warning: { main: "#F89311", contrastText: "#fff" },
 });
 

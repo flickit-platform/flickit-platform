@@ -157,9 +157,9 @@ const AssessmentKit = (props: any) => {
                     opacity: 0.9,
                   }}
                 >
-                  {tags.map((tag: any) => (
+                  {tags.map((tag: any, index: number) => (
                     <Chip
-                      key={tag.id}
+                      key={index}
                       label={tag.title}
                       size="small"
                       sx={{ mr: 0.4, background: "white" }}
@@ -365,6 +365,7 @@ const AssessmentKit = (props: any) => {
                     const colorCode = colorPallet[item.index - 1];
                     return (
                       <Box
+                        key={index}
                         sx={{
                           background: colorCode,
                           fontSize: "1rem",
@@ -420,21 +421,34 @@ const AssessmentKit = (props: any) => {
                 <Trans i18nKey={"subjects"} />
               </Title>
               <Box component="ul" mt={3}>
-                {subjects.map((subject: any) => {
+                {subjects.map((subject: any, index: number) => {
                   return (
                     <Box
                       component="li"
                       mb={2}
-                      key={subject.id}
-                      sx={{ fontSize: "1.2rem" }}
+                      key={index}
+                      sx={{ fontSize: "1.2rem", listStyleType: "disc", ml: 4 }} // Adds bullet point styling
                     >
                       <b>{subject.title}</b>: {subject.description}
                       <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
                         <Trans i18nKey="relatedAttributes" />
                       </Typography>
                       {subject?.attributes &&
-                        subject?.attributes?.map((att: any) => (
-                          <Box sx={{ ml: 4 }} component="li">
+                        subject?.attributes?.map((att: any, index: number) => (
+                          <Box
+                            sx={{
+                              ml: 4,
+                              position: "relative",
+                              "&:before": {
+                                content: '"•"',
+                                position: "absolute",
+                                left: "-1em",
+                                top: 0,
+                              },
+                            }}
+                            component="div"
+                            key={index}
+                          >
                             <Typography
                               variant="body2"
                               sx={{
@@ -473,9 +487,9 @@ const AssessmentKit = (props: any) => {
                 />
               </Typography>
               <Box component="ul" mt={3}>
-                {questionnaires.map((questionnaire: any) => {
+                {questionnaires.map((questionnaire: any, index: number) => {
                   return (
-                    <Box component="li" mb={2} key={questionnaire.id}>
+                    <Box component="li" mb={2} key={index}>
                       <b>{questionnaire.title}</b>: {questionnaire.description}
                     </Box>
                   );

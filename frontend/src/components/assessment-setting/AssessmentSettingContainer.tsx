@@ -127,7 +127,7 @@ const AssessmentSettingContainer = () => {
                   justifyContent="flex-start"
                 >
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >
@@ -139,8 +139,8 @@ const AssessmentSettingContainer = () => {
             <Grid container columns={12} mb={"32px"}>
               <Grid item sm={12} xs={12}>
                 <AssessmentSettingGeneralBox
-                  AssessmentInfo={AssessmentInfo.query}
-                  assessmentInfo={assessmentInfo}
+                  AssessmentInfoQuery={AssessmentInfo.query}
+                  AssessmentInfo={assessmentInfo}
                   AssessmentTitle={title}
                   fetchPathInfo={fetchPathInfo.query}
                   color={state}

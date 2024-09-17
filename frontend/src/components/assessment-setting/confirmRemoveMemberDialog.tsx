@@ -34,8 +34,9 @@ const ConfirmRemoveMemberDialog = (props: any) => {
   });
 
   const RemoveMembersInvitees = useQuery({
-    service: (args: any, config) =>
+    service: (args = { invitedId: "" }, config) =>
       service.RemoveAssessmentMembersInvitees(args, config),
+      runOnMount: false
   });
 
   const DeletePerson = async () => {
@@ -72,9 +73,9 @@ const ConfirmRemoveMemberDialog = (props: any) => {
         },
       }}
     >
-      <DialogTitle textTransform="uppercase"  sx={{ ...styles.centerV }}>
+      <DialogTitle textTransform="uppercase" sx={{ ...styles.centerV }}>
         <>
-          <Warning sx={{ mr: 1 }}/>
+          <Warning sx={{ mr: 1 }} />
           <Trans i18nKey="warning" />
         </>
       </DialogTitle>
@@ -89,23 +90,22 @@ const ConfirmRemoveMemberDialog = (props: any) => {
         }}
       >
         <Typography sx={{ color: "#0A2342" }}>
-          {expandedRemoveDialog.invited
-              ?
-              <Trans
-                  i18nKey="areYouSureYouWantDeleteThisMemberInvited"
-                  values={{
-                    name: expandedRemoveDialog?.name
-                  }}
-              />
-              :
-              <Trans
-                  i18nKey="areYouSureYouWantDeleteThisMember"
-                  values={{
-                    name: expandedRemoveDialog?.name,
-                    assessment: assessmentName,
-                  }}
-              />
-          }
+          {expandedRemoveDialog.invited ? (
+            <Trans
+              i18nKey="areYouSureYouWantDeleteThisMemberInvited"
+              values={{
+                name: expandedRemoveDialog?.name,
+              }}
+            />
+          ) : (
+            <Trans
+              i18nKey="areYouSureYouWantDeleteThisMember"
+              values={{
+                name: expandedRemoveDialog?.name,
+                assessment: assessmentName,
+              }}
+            />
+          )}
         </Typography>
 
         <Box mt={2} alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
