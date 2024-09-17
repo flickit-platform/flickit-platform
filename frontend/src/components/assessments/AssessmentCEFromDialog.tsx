@@ -154,7 +154,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 required={false}
                 label={<Trans i18nKey="shortTitle" />}
                 data-cy="title"
-                helperText={<Trans i18nKey="shortTitleHelperText" />}
+                helperText={<Trans i18nKey="shortTitleInfo" />}
               />
             </Grid>
             <Grid item xs={12}>
