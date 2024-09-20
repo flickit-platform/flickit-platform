@@ -12,7 +12,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import EmptyAdvice from "@assets/img/emptyAdvice.gif";
+import EmptyAdvice from "@assets/svg/lampComment.svg";
+import StarsAdvice from "@assets/svg/stars.svg";
 import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -28,6 +29,7 @@ import useScreenResize from "@utils/useScreenResize";
 import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 import { styles } from "@/config/styles";
 import { InfoOutlined } from "@mui/icons-material";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
@@ -128,7 +130,12 @@ const AssessmentAdviceContainer = (props: any) => {
                 maxWidth: "100%",
               }}
             >
-              <InfoOutlined sx={{ marginRight: 1, color: theme.palette.primary.contrastText }} />
+              <InfoOutlined
+                sx={{
+                  marginRight: 1,
+                  color: theme.palette.primary.contrastText,
+                }}
+              />
               <Typography
                 variant="titleSmall"
                 fontWeight={400}
@@ -189,76 +196,97 @@ const AssessmentAdviceContainer = (props: any) => {
           </Box>
         </DialogContent>
       </Dialog>
-      <Box mt={6}>
+      <Box mt={2}>
         <Box
           sx={{
             borderRadius: "12px",
-            border: `${adviceResult ? "none" : "1px solid #9DA7B3 "}`,
-            width: { xs: "100%", sm: "60%" },
+            border: `${adviceResult ? "none" : "1px solid #9DA7B3"}`,
             p: 6,
             margin: "0 auto",
+            display: `${adviceResult ? "none" : ""}`,
+            position: "relative",
+            background: "radial-gradient(circle, #2466A8, #1B4D7E)",
           }}
         >
           <Box
             sx={{
-              fontSize: "4rem",
-              fontWeight: "700",
-              color: theme.palette.primary.main,
-              textShadow: `0px 0px 6px ${theme.palette.primary.light}`,
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontFamily: secondaryFontFamily,
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)", // Center the lamp
             }}
           >
-            <Trans i18nKey="advisor" />
-            <Box sx={{ ml: 2 }}>
-              <img src={BetaSvg} alt="beta" />
-            </Box>
+            <img src={EmptyAdvice} alt="lamp" width="100%" />
+          </Box>
+
+          {/* Stars aligned to the top right */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: "0",
+              right: "0",
+            }}
+          >
+            <img src={StarsAdvice} alt="stars" width="100%" />
           </Box>
 
           <Box
             sx={{
-              fontSize: "1rem",
-              fontWeight: "400",
-              color: "#0A2342",
-              margin: "0 auto",
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: 12,
             }}
           >
-            <Trans i18nKey="theAdvisorService" />
+            {" "}
+            <Typography variant="headlineMedium" color="primary.contrastText">
+              <Trans i18nKey="noAdviceGeneratedYet" />
+            </Typography>
           </Box>
           <Box
             sx={{
-              margin: "0 auto",
-              width: "50%",
-              display: `${adviceResult ? "none" : "flex"}`,
+              ...styles.centerCVH,
+              mt: 4,
             }}
+            textAlign="center"
           >
-            <img src={EmptyAdvice} alt="advice" width="100%" />
+            <Typography
+              variant="bodyLarge"
+              color="primary.contrastText"
+              maxWidth="50vw"
+            >
+              <Trans i18nKey="theAdvisorService" />
+            </Typography>
           </Box>
+          {/* Button */}
           <Box
             sx={{
               display: `${adviceResult ? "none" : "flex"}`,
               justifyContent: "center",
               alignItems: "center",
+              mt: 3,
+              gap: 2,
             }}
           >
             <Button
-              variant="contained"
-              sx={{
-                px: 5,
-                py: 1,
-                fontSize: "1rem",
-                fontWeight: "700",
-                width: "fit-content",
-              }}
+              variant="outlined"
+              sx={{ borderColor: "white", color: "white" }}
               onClick={handleClickOpen}
             >
               <Trans i18nKey="createYourFirstAdvice" />
+            </Button>{" "}
+            <Button
+              variant="outlined"
+              sx={{ background: "white", display: "flex", gap: 1 }}
+              onClick={handleClickOpen}
+            >
+              <Trans i18nKey="useAdiceGenerator" />
+              <FaWandMagicSparkles />
             </Button>
           </Box>
         </Box>
+
         {adviceResult && (
           <>
             <Box
@@ -437,13 +465,15 @@ const AssessmentAdviceContainer = (props: any) => {
                             background:
                               attributeBGColorPallet[Math.ceil(index % 3)],
                             fontSize: "11px",
-                            border: `1px solid ${attributeColorPallet[Math.ceil(index % 3)]
-                              }`,
+                            border: `1px solid ${
+                              attributeColorPallet[Math.ceil(index % 3)]
+                            }`,
                             borderRadius: "8px",
                             m: "4px",
                             textAlign: "center",
-                            fontFamily: `${isFarsi ? "Vazirmatn" : primaryFontFamily
-                              }`,
+                            fontFamily: `${
+                              isFarsi ? "Vazirmatn" : primaryFontFamily
+                            }`,
                           }}
                         >
                           {attribute.title}
