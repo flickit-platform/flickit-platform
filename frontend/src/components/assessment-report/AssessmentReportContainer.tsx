@@ -280,7 +280,7 @@ const AssessmentReportContainer = (props: any) => {
                     alignItems="center"
                   >
                     <Trans i18nKey="adviceGenerator" />
-                    <Box sx={{ ml: 2, mt: 1 }}>
+                    <Box sx={{ ml: 1, mt: 1 }}>
                       <img src={BetaSvg} alt="beta" width={34} />
                     </Box>
                   </Typography>
