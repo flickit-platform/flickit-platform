@@ -335,7 +335,6 @@ export const AssessmentSubjectAccordion = (
         </Grid>
         <Box mt="auto">
           <Button
-            color="success"
             variant="outlined"
             size="large"
             fullWidth
