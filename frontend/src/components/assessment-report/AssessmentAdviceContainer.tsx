@@ -30,10 +30,12 @@ import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 import { styles } from "@/config/styles";
 import { InfoOutlined } from "@mui/icons-material";
 import { FaWandMagicSparkles } from "react-icons/fa6";
+import { AssessmentInsight } from "./AssessmentInsight";
 
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [isWritingAdvice, setIsWritingAdvice] = useState<boolean>(false);
   const [adviceResult, setAdviceResult] = useState<any>();
   const { assessmentId } = useParams();
 
@@ -200,10 +202,10 @@ const AssessmentAdviceContainer = (props: any) => {
         <Box
           sx={{
             borderRadius: "12px",
-            border: `${adviceResult ? "none" : "1px solid #9DA7B3"}`,
+            border: `${adviceResult || isWritingAdvice ? "none" : "1px solid #9DA7B3"}`,
             p: 6,
             margin: "0 auto",
-            display: `${adviceResult ? "none" : ""}`,
+            display: `${adviceResult || isWritingAdvice ? "none" : ""}`,
             position: "relative",
             background: "radial-gradient(circle, #2466A8, #1B4D7E)",
           }}
@@ -271,14 +273,28 @@ const AssessmentAdviceContainer = (props: any) => {
           >
             <Button
               variant="outlined"
-              sx={{ borderColor: "white", color: "white" }}
-              onClick={handleClickOpen}
+              sx={{
+                borderColor: "white",
+                color: "white",
+                "&:hover": {
+                  borderColor: "#d9dde3",
+                  color: "#d9dde3",
+                },
+              }}
+              onClick={() => setIsWritingAdvice(true)}
             >
-              <Trans i18nKey="createYourFirstAdvice" />
+              <Trans i18nKey="writeYourOwnAdvices" />
             </Button>{" "}
             <Button
               variant="outlined"
-              sx={{ background: "white", display: "flex", gap: 1 }}
+              sx={{
+                background: "white",
+                "&:hover": {
+                  background: "#d9dde3",
+                },
+                display: "flex",
+                gap: 1,
+              }}
               onClick={handleClickOpen}
             >
               <Trans i18nKey="useAdiceGenerator" />
@@ -287,6 +303,44 @@ const AssessmentAdviceContainer = (props: any) => {
           </Box>
         </Box>
 
+        {isWritingAdvice && (
+          <>
+            {" "}
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="left"
+              justifyContent="left"
+              textAlign="left"
+              maxHeight="100%"
+              gap={0.5}
+              py={2}
+              sx={{
+                background: "#fff",
+                boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+                borderRadius: "12px",
+                px: { xs: 2, sm: 3.75 },
+              }}
+            ></Box>
+            <Box
+              display="flex"
+              justifyContent="flex-end" // Align the button to the right
+              mt={2}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                }}
+                onClick={handleClickOpen}
+              >
+                <Trans i18nKey="useAdiceGenerator" />
+                <FaWandMagicSparkles />
+              </Button>
+            </Box>
+          </>
+        )}
         {adviceResult && (
           <>
             <Box
