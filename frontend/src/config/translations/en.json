@@ -400,13 +400,13 @@
   "wichAttYouWant": "Which attributes you want to change? The Advisor will try to provide most accurate advice based on your choices.",
   "setTheseParameters": "Set these parameters",
   "advisor": "Advisor",
-  "createYourFirstAdvice": " Create your first advice",
+  "writeYourOwnAdvices": " Write Your Own Advices",
   "advicesList": "Advices list",
   "number": "Number",
   "whatIsNow": "What is now",
   "whatShouldBe": "What should be",
   "targetedAttributes": "Targeted attributes",
-  "theAdvisorService": "The Advisor service provides you with some tips to help you improve your software score in different subjects and attributes. It considers your priorities that you tell it and tries to give advice with the most effectiveness and least effort to fulfill. Some advice affects more than attributes and subjects. You can always change your preferences and goals by setting new parameters for the advisor. There are many factors determining whether an advice is worth its costs and efforts for you. We are always here to see if you have any further questions, but the final decision is yours! Make it wise.",
+  "theAdvisorService": "Advices are the recommendations and steps that need to be taken to improve the situation, based on the performance and assessment results, and they will be outlined in this section. Advices can be Generated in 2 ways, by your own or getting a little help from us and AI!",
   "from": "from",
   "currentStage": "current stage",
   "to": "to",
@@ -511,5 +511,8 @@
   "emptyAnswerHistoryTitle": "No answer has been recorded",
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
   "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels.",
-  "shortTitleInfo": "A very short title (a few characters) for addressing the product under assessment in reports."
+  "shortTitleInfo": "A very short title (a few characters) for addressing the product under assessment in reports.",
+  "adviceGenerator": "Advice Generator",
+  "noAdviceGeneratedYet": "No Advice Generated Yet",
+  "useAdiceGenerator": "Use Advice Generator"
 }
