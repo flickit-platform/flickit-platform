@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import EmptyAdvice from "@assets/svg/lampComment.svg";
+import Setting from "@assets/svg/setting.svg";
 import StarsAdvice from "@assets/svg/Stars.svg";
 import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
@@ -93,12 +94,39 @@ const AssessmentAdviceContainer = (props: any) => {
         maxWidth="md"
         fullScreen={fullScreen}
       >
-        <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
-          {" "}
+        <DialogTitle
+          sx={{
+            ...styles.centerV,
+          }}
+        >
           <>
-            <Trans i18nKey="setYourGoals" />
+            <img
+              src={Setting}
+              alt="setting"
+              width="24px"
+              style={{ marginRight: "6px" }}
+            />
+            <Trans i18nKey="settingImprovementTargets" />
           </>
         </DialogTitle>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            background: "rgba(36, 102, 168, 0.08)",
+            color: "#6C7B8E",
+            paddingY: 1,
+            paddingX: 4,
+            maxWidth: "100%",
+            marginTop: "-8px",
+          }}
+        >
+          <Typography variant="titleMedium" fontWeight={400} textAlign="left">
+            <Trans i18nKey="wichAttYouWant" />
+          </Typography>
+        </Box>
+
         <DialogContent
           sx={{
             padding: "unset",
@@ -122,32 +150,6 @@ const AssessmentAdviceContainer = (props: any) => {
               margin: "0 auto",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                background: theme.palette.primary.light,
-                padding: 1,
-                borderRadius: 2,
-                maxWidth: "100%",
-              }}
-            >
-              <InfoOutlined
-                sx={{
-                  marginRight: 1,
-                  color: theme.palette.primary.contrastText,
-                }}
-              />
-              <Typography
-                variant="titleSmall"
-                fontWeight={400}
-                textAlign="left"
-                color="primary.contrastText"
-              >
-                <Trans i18nKey="wichAttYouWant" />
-              </Typography>
-            </Box>
-
             <Box
               mt={2}
               sx={{
