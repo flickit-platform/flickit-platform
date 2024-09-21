@@ -13,8 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import EmptyAdvice from "@assets/svg/lampComment.svg";
-import StarsAdvice from "@assets/svg/stars.svg";
 import Setting from "@assets/svg/setting.svg";
+import StarsAdvice from "@assets/svg/Stars.svg";
 import BetaSvg from "@assets/svg/beta.svg";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
