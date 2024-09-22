@@ -376,6 +376,23 @@ export const createService = (
         ...(config ?? {}),
       });
     },
+      fetchAdviceNarration(
+          { assessmentId }: { assessmentId: string },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.get(`/api/v1/assessments/${assessmentId}/advice-narration/
+`, {
+              ...(config ?? {}),
+          });
+      },
+      updateAdviceNarration(
+          { assessmentId, data }: { assessmentId: string; data: any },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          return axios.post(`/api/v1/assessments/${assessmentId}/advice-narration/`, data, {
+              ...(config ?? {}),
+          });
+      },
     fetchExportReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined

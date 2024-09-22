@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
@@ -23,11 +23,12 @@ import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import { secondaryFontFamily } from "@/config/theme";
 import BetaSvg from "@assets/svg/beta.svg";
+import {AssessmentReportNarrator} from "@components/assessment-report/assessmentReportNarrator";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
-
+  const [adviceComponent,setAdviceComponent]= useState<boolean>(false)
   const queryData = useQuery<IAssessmentReportModel>({
     service: (args, config) =>
       service.fetchAssessment({ assessmentId }, config),
@@ -80,15 +81,22 @@ const AssessmentReportContainer = (props: any) => {
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
+
+  const fetchAdviceNarration = useQuery<RolesType>({
+    service: (args, config) => service.fetchAdviceNarration({ assessmentId }, config),
+    toastError: false,
+  });
+
   return (
     <QueryBatchData
       queryBatchData={[
         queryData,
         assessmentTotalProgress,
         fetchAssessmentsRoles,
+        fetchAdviceNarration
       ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress, roles]) => {
+      render={([data = {}, progress, roles, narrationComponent]) => {
         const {
           status,
           assessment,
@@ -97,6 +105,11 @@ const AssessmentReportContainer = (props: any) => {
           topWeaknesses,
           assessmentPermissions: { manageable, exportable },
         } = data || {};
+
+        const selectedNarration = narrationComponent?.aiNarration || narrationComponent?.assessorNarration;
+        if (selectedNarration){
+          setAdviceComponent(true)
+        }
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
@@ -289,10 +302,14 @@ const AssessmentReportContainer = (props: any) => {
                 </Box>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
-                <AssessmentAdviceContainer
-                  subjects={subjects}
-                  assessment={assessment}
-                />
+               {/*todo*/}
+                {adviceComponent
+                    ? <AssessmentReportNarrator/>
+                    : <AssessmentAdviceContainer
+                        subjects={subjects}
+                        assessment={assessment}
+                    />
+                }
               </Grid>
             </Grid>
           </Box>

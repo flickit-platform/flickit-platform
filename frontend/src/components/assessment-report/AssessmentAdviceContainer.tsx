@@ -32,6 +32,7 @@ import { styles } from "@/config/styles";
 import { InfoOutlined } from "@mui/icons-material";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { AssessmentInsight } from "./AssessmentInsight";
+import {AssessmentReportNarrator} from "@components/assessment-report/assessmentReportNarrator";
 
 const AssessmentAdviceContainer = (props: any) => {
   const { subjects, assessment } = props;
@@ -305,25 +306,9 @@ const AssessmentAdviceContainer = (props: any) => {
           </Box>
         </Box>
 
-        {isWritingAdvice && (
-          <>
-            {" "}
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="left"
-              justifyContent="left"
-              textAlign="left"
-              maxHeight="100%"
-              gap={0.5}
-              py={2}
-              sx={{
-                background: "#fff",
-                boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
-                borderRadius: "12px",
-                px: { xs: 2, sm: 3.75 },
-              }}
-            ></Box>
+        {isWritingAdvice && !adviceResult &&(
+            <>
+            <AssessmentReportNarrator/>
             <Box
               display="flex"
               justifyContent="flex-end" // Align the button to the right
@@ -357,7 +342,7 @@ const AssessmentAdviceContainer = (props: any) => {
                 mb: 6,
               }}
             >
-              <Trans i18nKey="advicesList" />
+              <Trans i18nKey="improvementPoints" />
 
               <IconButton
                 title="Edit"
