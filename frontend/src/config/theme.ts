@@ -121,7 +121,7 @@ const palette = createPalette({
     main: "#8A0F24",
     contrastText: "#fff",
     dark: "#5C0A18",
-    light: "#B81430",
+    light: "#f68b9d",
   },
   success: {
     main: "#3D8F3D",
