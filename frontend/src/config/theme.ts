@@ -129,7 +129,7 @@ const palette = createPalette({
     dark: "#2E6B2E",
     light: "#4CB24C",
   },
-  warning: { main: "#F89311", contrastText: "#fff" },
+  warning: { main: "#CC7400", contrastText: "#fff", light: "#F4E7D7" },
 });
 
 export const theme = createTheme({
@@ -258,7 +258,7 @@ export const theme = createTheme({
       letterSpacing: "0.5px",
     },
     labelMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: secondaryFontFamily,
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: "1rem",
