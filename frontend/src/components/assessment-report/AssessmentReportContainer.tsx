@@ -21,7 +21,11 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import useMenu from "@/utils/useMenu";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
-import { secondaryFontFamily } from "@/config/theme";
+import {secondaryFontFamily, theme} from "@/config/theme";
+import BetaSvg from "@assets/svg/beta.svg";
+import {AssessmentReportNarrator} from "@components/assessment-report/AssessmentReportNarrator";
+import {LoadingButton} from "@mui/lab";
+import FaWandMagicSparkles from '@mui/icons-material/AutoFixHigh';
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -277,17 +281,39 @@ const AssessmentReportContainer = (props: any) => {
                   marginTop={6}
                   gap={2}
                 >
-                  <Typography color="#73808C" variant="h5">
-                    <Trans i18nKey="advices" />
-                  </Typography>
+
+                    <Box
+                      sx={{
+                       ...theme.typography.headlineSmall,
+                        textAlign: "center",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography color="#73808C" variant="h5">
+                        <Trans i18nKey="adviceGenerator" />
+                      </Typography>
+                      <Box sx={{ ml: 2,width:"33px",height:"33px" }}>
+                        <img style={{width:"100%",height:"100%"}} src={BetaSvg} alt="beta" />
+                      </Box>
+                    </Box>
                   <Divider sx={{ width: "100%" }} />
                 </Box>
               </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
-                <AssessmentAdviceContainer
-                  subjects={subjects}
-                  assessment={assessment}
-                />
+              <Grid  item lg={12} md={12} sm={12} xs={12} id="advices" sx={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                <AssessmentReportNarrator />
+                {/*<AssessmentAdviceContainer*/}
+                {/*  subjects={subjects}*/}
+                {/*  assessment={assessment}*/}
+                {/*/>*/}
+                <LoadingButton  variant="contained"
+                                color="primary"
+                                size="large"
+                                endIcon={<FaWandMagicSparkles/>}
+
+                sx={{display:"flex",marginLeft:"auto"}}
+                ><Trans i18nKey={"useAIAdviceGenerator"}/></LoadingButton>
               </Grid>
             </Grid>
           </Box>
