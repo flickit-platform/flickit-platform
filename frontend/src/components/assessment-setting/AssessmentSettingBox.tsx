@@ -52,13 +52,19 @@ export const AssessmentSettingGeneralBox = (props: {
   fetchPathInfo: () => void;
   color: any;
 }) => {
-  const { AssessmentInfo, AssessmentInfoQuery, AssessmentTitle, fetchPathInfo, color } = props;
+  const {
+    AssessmentInfo,
+    AssessmentInfoQuery,
+    AssessmentTitle,
+    fetchPathInfo,
+    color,
+  } = props;
   const {
     createdBy: { displayName },
     creationTime,
     lastModificationTime,
     kit,
-    shortTitle
+    shortTitle,
   } = AssessmentInfo;
 
   const title = ["creator", "created", "lastModified", "assessmentKit"];
@@ -136,53 +142,57 @@ export const AssessmentSettingGeneralBox = (props: {
             </Box>
           </Grid>
         </Grid>
-        {<Grid sx={{ display: "flex", justifyContent: "center" }}>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={8}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              color="#9DA7B3"
-              fontWeight={500}
-              sx={{
-                display: "flex", alignItems: "flex-end", gap: "6px",
-                fontSize: { xs: "1rem", sm: "1.375rem" },
-                whiteSpace: { xs: "wrap", sm: "nowrap" },
-              }}
-              lineHeight={"normal"}
-            >
-              <Trans i18nKey="shortTitle" />:
-            </Typography>
-
-            <Box
+        {
+          <Grid sx={{ display: "flex", justifyContent: "center" }}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={8}
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
-                width: { md: "350px" },
               }}
             >
-              <OnHoverInputTitleSetting
-                formMethods={formMethods}
-                data={AssessmentTitle}
-                shortTitle={shortTitle}
-                infoQuery={fetchPathInfo}
-                AssessmentInfoQuery={AssessmentInfoQuery}
-                editable={true}
-                color={color}
-                type={"shortTitle"}
-                displayEdit={shortTitle === "" || shortTitle === null}
-              />
-            </Box>
+              <Typography
+                color="#9DA7B3"
+                fontWeight={500}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  gap: "6px",
+                  fontSize: { xs: "1rem", sm: "1.375rem" },
+                  whiteSpace: { xs: "wrap", sm: "nowrap" },
+                }}
+                lineHeight={"normal"}
+              >
+                <Trans i18nKey="shortTitle" />:
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: { md: "350px" },
+                }}
+              >
+                <OnHoverInputTitleSetting
+                  formMethods={formMethods}
+                  data={AssessmentTitle}
+                  shortTitle={shortTitle}
+                  infoQuery={fetchPathInfo}
+                  AssessmentInfoQuery={AssessmentInfoQuery}
+                  editable={true}
+                  color={color}
+                  type={"shortTitle"}
+                  displayEdit={shortTitle === "" || shortTitle === null}
+                />
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>}
+        }
         <Grid sx={{ display: "flex", justifyContent: "center" }}>
           <Grid
             item
@@ -195,7 +205,16 @@ export const AssessmentSettingGeneralBox = (props: {
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "5px", color: "#9DA7B3", ...theme.typography.labelSmall }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "5px",
+                color: "#9DA7B3",
+                ...theme.typography.labelSmall,
+              }}
+            >
               <InfoOutlined sx={{ width: "17px" }} />
               <Trans i18nKey={"shortTitleInfo"} />
             </Box>
@@ -502,8 +521,6 @@ export const AssessmentSettingMemberBox = (props: {
 
             {/* Move the Divider outside the TableHead */}
             <TableBody>
-
-
               {listOfUser.length > 0 &&
                 listOfUser.map((row: any) => (
                   <TableRow
@@ -663,6 +680,8 @@ export const AssessmentSettingMemberBox = (props: {
                                     key={role.title}
                                     value={role}
                                     sx={{
+                                      display: "flex",
+                                      flexDirection: "column",
                                       paddingY: "0px",
                                       maxHeight: "200px",
                                       ...(role.id === row.role.id && {
@@ -905,13 +924,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -925,7 +944,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                  // disabled={!row.editable}
+                                    // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -955,15 +974,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -982,11 +1001,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -1007,7 +1026,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                              index + 1 && (
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -1065,10 +1084,21 @@ const OnHoverInputTitleSetting = (props: any) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, shortTitle, type, editable, infoQuery, formMethods, color, AssessmentInfoQuery, displayEdit } = props;
+  const {
+    data,
+    shortTitle,
+    type,
+    editable,
+    infoQuery,
+    formMethods,
+    color,
+    AssessmentInfoQuery,
+    displayEdit,
+  } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [inputData, setInputData] = useState<string>(data);
-  const [inputDataShortTitle, setInputDataShortTitle] = useState<string>(shortTitle);
+  const [inputDataShortTitle, setInputDataShortTitle] =
+    useState<string>(shortTitle);
   const handleCancel = () => {
     setShow(false);
     setInputData(data);
@@ -1080,7 +1110,11 @@ const OnHoverInputTitleSetting = (props: any) => {
     service: (
       args = {
         id: assessmentId,
-        data: { title: inputData, shortTitle: inputDataShortTitle === "" ? null : inputDataShortTitle, colorId: color?.id || 6 },
+        data: {
+          title: inputData,
+          shortTitle: inputDataShortTitle === "" ? null : inputDataShortTitle,
+          colorId: color?.id || 6,
+        },
       },
       config
     ) => service.updateAssessment(args, config),
@@ -1108,10 +1142,16 @@ const OnHoverInputTitleSetting = (props: any) => {
   };
   const inputProps: React.HTMLProps<HTMLInputElement> = {
     style: {
-      textAlign: type == "title" ? firstCharDetector(inputData) ? "right" : "left" :
-        type == "shortTitle" ? firstCharDetector(inputDataShortTitle) ? "right" : "left" : "left"
-
-      ,
+      textAlign:
+        type == "title"
+          ? firstCharDetector(inputData)
+            ? "right"
+            : "left"
+          : type == "shortTitle"
+            ? firstCharDetector(inputDataShortTitle)
+              ? "right"
+              : "left"
+            : "left",
     },
   };
 
@@ -1137,9 +1177,13 @@ const OnHoverInputTitleSetting = (props: any) => {
               error={hasError}
               fullWidth
               // name={title}
-              defaultValue={type == "title" ? inputData : inputDataShortTitle || ""}
-              onChange={(e) => type == "title" ? setInputData(e.target.value) :
-                setInputDataShortTitle(e.target.value)
+              defaultValue={
+                type == "title" ? inputData : inputDataShortTitle || ""
+              }
+              onChange={(e) =>
+                type == "title"
+                  ? setInputData(e.target.value)
+                  : setInputDataShortTitle(e.target.value)
               }
               value={type == "title" ? inputData : inputDataShortTitle}
               required={true}
