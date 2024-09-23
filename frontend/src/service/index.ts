@@ -784,13 +784,13 @@ export const createService = (
       );
     },
       FactSheetUpload(
-          args: { file: any,assessmentId:any },
+          args: { inputFile: any, assessment_id: any, analysisType: number },
           config: AxiosRequestConfig<any> | undefined
       ) {
-          const { file,assessmentId } = args ?? {};
+          const { assessment_id } = args ?? {};
           return axios.post(
-              `assessments/${assessmentId}/analysis-input/`,
-              { file },
+              `/api/v1/assessments/${assessment_id}/analysis-input/`,
+              args,
               {
                   ...config,
                   responseType: "blob",

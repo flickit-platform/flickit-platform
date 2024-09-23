@@ -15,6 +15,7 @@ import formatBytes from "@utils/formatBytes";
 import {ICustomError} from "@utils/CustomError";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
+import {toast} from "react-toastify";
 
 const AddOnsDialog = (props: any) => {
     const {expanded,onClose, title, assessmentId} = props
@@ -29,17 +30,20 @@ const AddOnsDialog = (props: any) => {
     }
 
     const UploadFile = useQuery({
-        service: (args={file ,assessmentId}, config) =>
-            service.FactSheetUpload(args, config),
+        service: ({file ,assessmentId :assessment_id}, config) =>
+            service.FactSheetUpload({inputFile:file , assessment_id, analysisType:1}, config),
     })
 
     const handleFileChange = async (event: any) => {
         const file = event.target.files[0];
         if (file) {
             try{
-                await UploadFile.query({file,assessmentId})
+            await UploadFile.query({file,assessmentId})
+            onClose()
+            toast("upload file successfully",{type:"success"})
             } catch(e) {
-                console.log(e)
+                const err = e as ICustomError;
+                toastError(err);
             }
         }
     };
