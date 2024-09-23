@@ -40,7 +40,7 @@ const SUbjectAttributeCard = (props: any) => {
   } = props;
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
-    false
+    false,
   );
   const [emptyPositiveEvidence, setEmptyPositiveEvidence] =
     useState<boolean>(false);
@@ -233,7 +233,7 @@ const AttributeSummary = (props: any) => {
   const colorPallet = getMaturityLevelColors(maturityLevelsCount);
   const statusColor = colorPallet[maturityLevelsCount - 1];
   const isMobileScreen = useMediaQuery((theme: any) =>
-    theme.breakpoints.down("sm")
+    theme.breakpoints.down("sm"),
   );
   return (
     <Grid container alignItems="center">
@@ -371,8 +371,8 @@ export const AttributeStatusBar = (props: any) => {
       ? `${(ml / mn) * 100}%`
       : "0%"
     : cl
-    ? `${cl}%`
-    : "0%";
+      ? `${cl}%`
+      : "0%";
   return (
     <Box
       height={"38px"}
@@ -432,7 +432,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
   const fetchAffectedQuestionsOnAttributeQueryData = useQuery({
     service: (
       args = { assessmentId, attributeId: attributeId, levelId: expanded },
-      config
+      config,
     ) => service.fetchAffectedQuestionsOnAttribute(args, config),
     runOnMount: false,
   });
@@ -818,7 +818,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                       weightedScore,
                                     } = question;
 
-                                    let is_farsi =
+                                    const is_farsi =
                                       languageDetector(questionTitle);
 
                                     return (
@@ -887,8 +887,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                             answerIsNotApplicable
                                               ? "NA"
                                               : answerOptionTitle !== null
-                                              ? `${answerOptionIndex}.${answerOptionTitle}`
-                                              : "---"
+                                                ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                : "---"
                                           }
                                         >
                                           <Box
@@ -905,8 +905,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                               {answerIsNotApplicable
                                                 ? "NA"
                                                 : answerOptionTitle !== null
-                                                ? `${answerOptionIndex}.${answerOptionTitle}`
-                                                : "---"}
+                                                  ? `${answerOptionIndex}.${answerOptionTitle}`
+                                                  : "---"}
                                             </Typography>
                                           </Box>
                                         </Tooltip>

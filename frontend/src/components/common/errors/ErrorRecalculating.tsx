@@ -16,11 +16,11 @@ const ErrorRecalculating = (props: IGettingThingsReadyLoadingProps) => {
         minWidth: { xs: "120px", sm: "360px" },
         maxWidth: "400px",
         px: { xs: 0.5, sm: 2 },
-        margin:"0 auto",
+        margin: "0 auto",
         ...(rest.sx || {}),
       }}
     >
-      <Box sx={{...styles.centerCH}}>
+      <Box sx={{ ...styles.centerCH }}>
         <Typography variant="h5">
           <Trans i18nKey="insightsAreRecalculating" />
         </Typography>

@@ -178,8 +178,8 @@ const Title = (props: ITitle) => {
               size === "small"
                 ? "subSmall"
                 : size === "large"
-                ? "subLarge"
-                : "subMedium"
+                  ? "subLarge"
+                  : "subMedium"
             }
           >
             {sub}

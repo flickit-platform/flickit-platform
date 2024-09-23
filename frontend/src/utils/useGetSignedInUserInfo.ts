@@ -11,7 +11,7 @@ import toastError from "@utils/toastError";
  *
  */
 const useGetSignedInUserInfo = (
-  props: { runOnMount: boolean } = { runOnMount: true }
+  props: { runOnMount: boolean } = { runOnMount: true },
 ) => {
   const { runOnMount } = props;
   const location = useLocation();

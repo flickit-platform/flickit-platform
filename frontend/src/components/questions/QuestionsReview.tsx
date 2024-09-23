@@ -57,7 +57,8 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
   useEffect(() => {
     if (questionsInfo.questions) {
       const answeredQuestionsCount = questionsInfo.questions.filter(
-        (question) => question.answer && question.answer.selectedOption !== null
+        (question) =>
+          question.answer && question.answer.selectedOption !== null,
       ).length;
       setAnsweredQuestions(answeredQuestionsCount);
       if (answeredQuestionsCount === 0) {
@@ -96,12 +97,12 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
             <Box mt="-28px" alignItems="center" display="flex">
               {answeredQuestions ===
                 questionsInfo?.total_number_of_questions && (
-                  <img
-                    style={{ width: "100%" }}
-                    src={doneSvg}
-                    alt="questionnaire done"
-                  />
-                )}
+                <img
+                  style={{ width: "100%" }}
+                  src={doneSvg}
+                  alt="questionnaire done"
+                />
+              )}
               {isEmpty && (
                 <img
                   style={{ width: "100%" }}
@@ -272,7 +273,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               component={Link}
               to={"./../../../insights"}
               sx={{ fontSize: "1rem", display: isPermitted ? "" : "none" }}
-            // sx={{borderRadius:"32px"}}
+              // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="insights" />
             </Button>
@@ -282,7 +283,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               component={Link}
               to={"./../../../questionnaires"}
               sx={{ fontSize: "1rem" }}
-            // sx={{borderRadius:"32px"}}
+              // sx={{borderRadius:"32px"}}
             >
               <Trans i18nKey="Choose another questionnaire" />
             </Button>
@@ -326,8 +327,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                     </Typography>
                     <Typography
                       variant="h6"
-                      fontFamily={`${is_farsi ? "Vazirmatn" : primaryFontFamily
-                        }`}
+                      fontFamily={`${
+                        is_farsi ? "Vazirmatn" : primaryFontFamily
+                      }`}
                       fontWeight="bold"
                       letterSpacing={is_farsi ? "0" : ".05em"}
                     >
@@ -345,8 +347,9 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       </Typography>
                       <Typography
                         variant="h6"
-                        fontFamily={`${is_farsi ? "Vazirmatn" : primaryFontFamily
-                          }`}
+                        fontFamily={`${
+                          is_farsi ? "Vazirmatn" : primaryFontFamily
+                        }`}
                         fontWeight="bold"
                         letterSpacing={is_farsi ? "0" : ".05em"}
                       >
@@ -422,11 +425,13 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         navigate(
                           isReviewPage
                             ? `./../${question.index}`
-                            : `../${question.index}`
+                            : `../${question.index}`,
                         );
                       }}
                     >
-                      {question.answer || !questionsInfo?.permissions?.answerQuestion || question.is_not_applicable ? (
+                      {question.answer ||
+                      !questionsInfo?.permissions?.answerQuestion ||
+                      question.is_not_applicable ? (
                         <Trans i18nKey="edit" />
                       ) : (
                         <Trans i18nKey="submitAnAnswer" />

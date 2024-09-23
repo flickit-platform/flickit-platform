@@ -104,7 +104,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
     service: (args, config) =>
       service.fetchAssessmentTotalProgress(
         { assessmentId: id, ...(args || {}) },
-        config
+        config,
       ),
   });
   useEffect(() => {

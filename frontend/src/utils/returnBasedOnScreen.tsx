@@ -11,7 +11,7 @@ export const getNumberBaseOnScreen = (
   sm: number,
   md: number,
   lg: number,
-  xl: number
+  xl: number,
 ): number => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));

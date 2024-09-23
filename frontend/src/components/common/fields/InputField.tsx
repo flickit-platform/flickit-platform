@@ -61,7 +61,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     errors,
     name,
     minLength,
-    maxLength
+    maxLength,
   );
   useEffect(() => {
     console.log(isFocused);
@@ -106,6 +106,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     <TextField
       {...rest}
       {...register(name, { required, minLength, maxLength })}
+      data-testid={`input-${name}`} 
       type={showPassword ? "text" : type}
       fullWidth
       size="small"

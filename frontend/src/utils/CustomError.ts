@@ -41,7 +41,7 @@ function CustomError(props: ICustomError): ICustomError {
   const responseData = response?.data as { message?: string } | undefined;
   const formattedMessage = getFormattedMessage(
     responseData?.message,
-    response?.status
+    response?.status,
   );
 
   const defaultAction =

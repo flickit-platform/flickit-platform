@@ -110,8 +110,8 @@ export const SubmitOnSelectCheckBox = (props: any) => {
           onChange={(e) => {
             dispatch(
               questionActions.setSubmitOnAnswerSelection(
-                e.target.checked || false
-              )
+                e.target.checked || false,
+              ),
             );
           }}
         />
@@ -131,7 +131,7 @@ export const SubmitOnSelectCheckBox = (props: any) => {
 
 const findQuestion = (
   questions: any[] = [],
-  questionIndex: string | undefined | number
+  questionIndex: string | undefined | number,
 ) => {
   return questionIndex
     ? questions.find((question) => question.index == Number(questionIndex))

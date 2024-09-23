@@ -7,13 +7,13 @@ import { t } from "i18next";
 interface IAssessmentExportTitle {
   pathInfo: {
     space: {
-      id: number,
-      title: string
-    },
+      id: number;
+      title: string;
+    };
     assessment: {
-      id: string,
-      title: string
-    }
+      id: string;
+      title: string;
+    };
   };
 }
 

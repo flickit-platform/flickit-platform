@@ -10,7 +10,7 @@ interface IAssessmentKitSectionAuthorInfo {
 }
 
 const AssessmentKitSectionAuthorInfo = (
-  props: IAssessmentKitSectionAuthorInfo
+  props: IAssessmentKitSectionAuthorInfo,
 ) => {
   const { data } = props;
   return (

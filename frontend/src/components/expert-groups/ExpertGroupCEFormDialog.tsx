@@ -80,13 +80,13 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       const { status } =
         type === "update"
           ? await service.updateExpertGroup(
-            { data: formattedUpdateData, id },
-            { signal: abortController.signal }
-          )
+              { data: formattedUpdateData, id },
+              { signal: abortController.signal },
+            )
           : await service.createExpertGroup(
-            { data: formattedData },
-            { signal: abortController.signal }
-          );
+              { data: formattedData },
+              { signal: abortController.signal },
+            );
       type === "update" && (await seenExpertGroupQuery.query());
       setLoading(false);
       onSubmitForm();

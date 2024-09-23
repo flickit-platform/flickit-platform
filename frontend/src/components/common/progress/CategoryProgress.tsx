@@ -1,5 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
-import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
+import LinearProgress, {
+  LinearProgressProps,
+} from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import QANumberIndicator from "../QANumberIndicator";
@@ -47,7 +49,11 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
         {isQuestionnaire && isSmallScreen ? (
           <QANumberIndicator q={q} a={a} />
         ) : (
-          <Typography fontWeight={"bold"} textTransform="uppercase" color={progressToColorMapColor[progress] || "#1976d2"}>
+          <Typography
+            fontWeight={"bold"}
+            textTransform="uppercase"
+            color={progressToColorMapColor[progress] || "#1976d2"}
+          >
             <Trans i18nKey={progressToLabelMap[progress] || "inprogress"} />
           </Typography>
         )}

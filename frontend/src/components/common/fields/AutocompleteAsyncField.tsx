@@ -37,7 +37,7 @@ interface IAutocompleteAsyncFieldProps
 }
 
 const AutocompleteAsyncField = (
-  props: IAutocompleteAsyncFieldProps & Omit<TQueryProps, "data">
+  props: IAutocompleteAsyncFieldProps & Omit<TQueryProps, "data">,
 ) => {
   const {
     name,
@@ -104,7 +104,7 @@ interface IAutocompleteAsyncFieldBase
 }
 
 const AutocompleteBaseField = (
-  props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">
+  props: IAutocompleteAsyncFieldBase & Omit<TQueryProps, "data">,
 ) => {
   const {
     editable,
@@ -153,7 +153,7 @@ const AutocompleteBaseField = (
   });
 
   const [inputValue, setInputValue] = useState(
-    () => getOptionLabel(defaultValue) || ""
+    () => getOptionLabel(defaultValue) || "",
   );
   const [options, setOptions] = useState<any[]>([]);
   useEffect(() => {
@@ -169,7 +169,7 @@ const AutocompleteBaseField = (
             query?.({ query: formatRequest(request) });
           }, 800)
         : () => {},
-    []
+    [],
   );
   const createSpaceQuery = async () => {
     try {
@@ -210,7 +210,7 @@ const AutocompleteBaseField = (
   useEffect(() => {
     const exactMatch = options.find(
       (option) =>
-        getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+        getOptionLabel(option).toLowerCase() === inputValue.toLowerCase(),
     );
     if (exactMatch) {
       onChange(exactMatch);
@@ -224,8 +224,8 @@ const AutocompleteBaseField = (
         filterFields.some((field) =>
           String(option[field])
             ?.toLowerCase()
-            ?.includes(params.inputValue.toLowerCase())
-        )
+            ?.includes(params.inputValue.toLowerCase()),
+        ),
       );
   };
 
@@ -292,7 +292,7 @@ const AutocompleteBaseField = (
         } else if (editable) {
           return options.filter(
             (option: any) =>
-              !value.some((selectedOpts: any) => selectedOpts.id === option.id)
+              !value.some((selectedOpts: any) => selectedOpts.id === option.id),
           );
         } else {
           return options;
@@ -306,13 +306,13 @@ const AutocompleteBaseField = (
         const filtered = getFilteredOptions(options, params);
         const exactMatch = optionsData.find(
           (option) =>
-            getOptionLabel(option).toLowerCase() === inputValue.toLowerCase()
+            getOptionLabel(option).toLowerCase() === inputValue.toLowerCase(),
         );
 
         if (
           params.inputValue !== "" &&
           !filtered.some(
-            (option) => getOptionLabel(option) === params.inputValue
+            (option) => getOptionLabel(option) === params.inputValue,
           ) &&
           hasAddBtn &&
           !exactMatch

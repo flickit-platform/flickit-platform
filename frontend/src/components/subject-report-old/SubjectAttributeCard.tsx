@@ -58,7 +58,7 @@ const SUbjectAttributeCard = (props: any) => {
   const { assessmentId } = useParams();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedAttribute, setExpandedAttribute] = useState<string | false>(
-    false
+    false,
   );
   const [emptyPositiveEvidence, setEmptyPositiveEvidence] =
     useState<boolean>(false);
@@ -524,7 +524,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
   const fetchAffectedQuestionsOnAttributeQueryData = useQuery({
     service: (
       args = { assessmentId, attributeId: attributeId, levelId: expanded },
-      config
+      config,
     ) => service.fetchAffectedQuestionsOnAttribute(args, config),
     runOnMount: false,
   });
@@ -779,7 +779,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                     weightedScore,
                                   } = question;
 
-                                  let is_farsi =
+                                  const is_farsi =
                                     languageDetector(questionTitle);
 
                                   return (
@@ -1001,7 +1001,7 @@ const OnHoverInput = (props: any) => {
         assessmentId: assessmentId,
         data: { assessorInsight: inputData },
       },
-      config
+      config,
     ) => service.updateAIReport(args, config),
     runOnMount: false,
     // toastError: true,

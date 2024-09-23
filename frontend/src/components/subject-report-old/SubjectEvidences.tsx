@@ -241,8 +241,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 
   useEffect(() => {
     (async () => {
-      let evidenceDetails = await evidenceLoadQuery.query();
-      let { attachments } = await evidenceAttachmentQuery.query();
+      const evidenceDetails = await evidenceLoadQuery.query();
+      const { attachments } = await evidenceAttachmentQuery.query();
       setEvidenceDetail(evidenceDetails);
       setEvidenceAttachment(attachments);
     })();
@@ -252,8 +252,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     try {
       const response = await fetch(link);
       const blob = await response.blob();
-      let reg = new RegExp("\\/([^\\/?]+)\\?");
-      let name = link?.match(reg)[1];
+      const reg = new RegExp("\\/([^\\/?]+)\\?");
+      const name = link?.match(reg)[1];
       const a = document.createElement("a");
       const urlBlob = URL.createObjectURL(blob);
       a.download = name;
@@ -391,7 +391,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             Attachments:
           </Typography>
           {evidenceAttachment.map((item, index) => {
-            let { name, exp } = linkInfo(item);
+            const { name, exp } = linkInfo(item);
             return (
               <Box
                 sx={{

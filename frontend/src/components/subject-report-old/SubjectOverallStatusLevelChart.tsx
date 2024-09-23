@@ -2,7 +2,7 @@ import VerticalLevelChart from "@common/charts/VerticalLevelChart";
 
 const SubjectOverallStatusLevelChart = (props: any) => {
   const { data = {}, loading } = props;
-  const { confidence_level_value: cl = 1, subject,maturityLevelsCount } = data;
+  const { confidence_level_value: cl = 1, subject, maturityLevelsCount } = data;
   const { title, maturityLevel, confidenceValue } = subject;
   return (
     <VerticalLevelChart

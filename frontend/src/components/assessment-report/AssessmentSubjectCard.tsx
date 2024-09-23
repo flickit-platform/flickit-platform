@@ -44,7 +44,7 @@ interface IAssessmentSubjectProgress {
 }
 
 export const AssessmentSubjectAccordion = (
-  props: IAssessmentSubjectCardProps
+  props: IAssessmentSubjectCardProps,
 ) => {
   const {
     title,
@@ -62,7 +62,7 @@ export const AssessmentSubjectAccordion = (
   const [expanded, setExpanded] = useState<boolean>(false);
   const [subjectAttributes, setSubjectAttributes] = useState<any>([]);
   const isMobileScreen = useMediaQuery((theme: any) =>
-    theme.breakpoints.down("md")
+    theme.breakpoints.down("md"),
   );
   const subjectProgressQueryData = useQuery<IAssessmentSubjectProgress>({
     service: (args = { subjectId: id, assessmentId }, config) =>
@@ -95,7 +95,7 @@ export const AssessmentSubjectAccordion = (
 
   const handleAccordionChange = (
     event: React.SyntheticEvent,
-    isExpanded: boolean
+    isExpanded: boolean,
   ) => {
     setExpanded(isExpanded);
     if (isExpanded) {
@@ -368,13 +368,13 @@ const SubjectStatus = (
   props: Pick<
     IAssessmentSubjectCardProps,
     "title" | "maturity_level" | "maturityLevelCount"
-  >
+  >,
 ) => {
   const { title, maturity_level, maturityLevelCount } = props;
   const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
   const hasStats = maturity_level?.index ? true : false;
   const isMobileScreen = useMediaQuery((theme: any) =>
-    theme.breakpoints.down("md")
+    theme.breakpoints.down("md"),
   );
   return (
     <Box

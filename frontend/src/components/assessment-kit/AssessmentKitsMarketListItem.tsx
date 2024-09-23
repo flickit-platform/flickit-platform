@@ -14,10 +14,9 @@ import { Trans } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
+  const HEIGHT_TITLE: number = 12;
 
-    const HEIGHT_TITLE : number = 12
-
-    return (
+  return (
     <Box
       sx={{
         minHeight: "280px",
@@ -74,7 +73,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         //     {data.likes || 0}
         //   </Box>
         // }
-        sx={{ width: "100%",height:`${HEIGHT_TITLE}vh` }}
+        sx={{ width: "100%", height: `${HEIGHT_TITLE}vh` }}
         sub={
           <Box
             sx={{
@@ -109,9 +108,9 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             textDecoration: "none",
             color: "#000000de",
             width: "100%",
-            display: '-webkit-box',
-            WebkitLineClamp: '2',
-            WebkitBoxOrient: 'vertical',
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
             overflow: "hidden",
             textOverflow: "ellipsis",
           }}
@@ -120,9 +119,12 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         </Box>
       </Title>
       <Box mt={4} mb={2}>
-          <Tooltip title={data?.summary.length > 55  && data?.summary}>
-              <Typography sx={{wordBreak:"break-word"}} >{`${data.summary?.substring(0, 55)} ${data?.summary.length > 55 ? "..." : ""}` || ""}</Typography>
-          </Tooltip>
+        <Tooltip title={data?.summary.length > 55 && data?.summary}>
+          <Typography sx={{ wordBreak: "break-word" }}>
+            {`${data.summary?.substring(0, 55)} ${data?.summary.length > 55 ? "..." : ""}` ||
+              ""}
+          </Typography>
+        </Tooltip>
       </Box>
       <Box mt="auto">
         <CardHeader

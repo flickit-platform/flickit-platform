@@ -51,7 +51,7 @@ interface ICEDialogActionsProps extends PropsWithChildren<DialogActionsProps> {
   onSubmit?: (e: any, shouldView?: boolean) => any;
   onBack?: () => void;
   hasBackBtn?: boolean;
-  cancelLabel?: string
+  cancelLabel?: string;
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -82,7 +82,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     >
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <Button onClick={onClose} data-cy="cancel">
+          <Button onClick={onClose} data-cy="cancel" data-testid="cancel">
             <Trans i18nKey={cancelLabel} />
           </Button>
         </Grid>
@@ -96,6 +96,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
         {!hideSubmitButton && (
           <Grid item>
             <LoadingButton
+              data-testid="submit"
               type="submit"
               data-cy="submit"
               variant="contained"
@@ -112,6 +113,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
         {hasViewBtn && (
           <Grid item>
             <LoadingButton
+              data-testid="submit-and-view"
               type="submit"
               variant="contained"
               color="success"
@@ -128,11 +130,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
             </LoadingButton>
           </Grid>
         )}
-        {children && (
-          <Grid item>
-            {children}
-          </Grid>
-        )}
+        {children && <Grid item>{children}</Grid>}
       </Grid>
     </DialogActions>
   );

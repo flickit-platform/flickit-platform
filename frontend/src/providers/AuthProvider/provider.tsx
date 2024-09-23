@@ -18,7 +18,7 @@ export interface IAuthContext {
   accessToken: string;
   loadingUserInfo: boolean;
   redirectRoute: string;
-  currentSpace:any;
+  currentSpace: any;
   dispatch: Dispatch<any>;
 }
 
@@ -57,7 +57,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
     accessToken: getAccessTokenFormStorage(),
     loadingUserInfo: true,
     userInfo: defaultUserInfo,
-    currentSpace:{},
+    currentSpace: {},
     redirectRoute: "",
     dispatch: () => {},
   });

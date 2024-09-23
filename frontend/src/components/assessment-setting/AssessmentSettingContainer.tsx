@@ -66,7 +66,7 @@ const AssessmentSettingContainer = () => {
   });
   useEffect(() => {
     (async () => {
-      let { manageable } = await AssessmentInfo.query();
+      const { manageable } = await AssessmentInfo.query();
       if (!manageable) {
         return navigate("*");
       }
@@ -91,7 +91,7 @@ const AssessmentSettingContainer = () => {
   const handleOpenRemoveModal = (
     name: string,
     id: string,
-    invited?: boolean
+    invited?: boolean,
   ) => {
     setExpandedRemoveModal({ display: true, name, id, invited });
   };
