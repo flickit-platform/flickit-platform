@@ -228,7 +228,7 @@ const ExpertGroupContainer = () => {
                         >
                           {website
                             ?.replace("https://", "")
-                            .replace("http://", "")}
+                            ?.replace("http://", "")}
                         </MLink>
                       </Box>
                     )}

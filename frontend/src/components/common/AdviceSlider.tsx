@@ -55,6 +55,7 @@ const AdviceSlider = (props: any) => {
         margin: "0 auto",
         flexDirection: { xs: "column", sm: "row" },
         mb: { xs: 4, sm: 2 },
+        textAlign: "start",
       }}
     >
       <Box sx={{ display: "contents" }}>
@@ -86,7 +87,7 @@ const AdviceSlider = (props: any) => {
       </Box>
 
       <Box
-        sx={{ width: { xs: "100%", sm: "400px" } }}
+        sx={{ width: { xs: "100%", sm: "400px" }, marginInline: "16px" }}
         margin={"0 auto"}
         my={{ xs: 2, sm: 6 }}
       >
@@ -98,24 +99,6 @@ const AdviceSlider = (props: any) => {
             onChange={handleSliderChange}
             value={value}
             marks
-            sx={{
-              ".MuiSlider-thumb": {
-                color: "#004F83",
-              },
-              ".MuiSlider-track": {
-                border: "none",
-                height: "4px",
-                backgroundColor: "#004F83",
-              },
-              ".MuiSlider-rail": {
-                opacity: 0.5,
-                height: "4px",
-                backgroundColor: "#004F83 !important",
-              },
-              ".MuiSlider-markActive": {
-                background: "rgba(237, 244, 252, 1)",
-              },
-            }}
           />
         </Box>
         <Box

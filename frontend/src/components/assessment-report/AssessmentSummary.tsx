@@ -68,7 +68,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
           sx={{
             textDecoration: "none",
           }}
-          color="#00365C"
+          color="primary"
           fontWeight={800}
           fontFamily={secondaryFontFamily}
         >
@@ -97,8 +97,8 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         variant="contained"
         sx={{
           borderRadius: "4px",
-          backgroundColor: "#00365C",
-          borderColor: "#00365C",
+          backgroundColor: "primary",
+          borderColor: "primary",
           paddingx: "6px",
           boxShadow: "none",
           "&:hover": {

@@ -376,6 +376,30 @@ export const createService = (
         ...(config ?? {}),
       });
     },
+    fetchAdviceNarration(
+      { assessmentId }: { assessmentId: string },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.get(
+        `/api/v1/assessments/${assessmentId}/advice-narration/
+`,
+        {
+          ...(config ?? {}),
+        }
+      );
+    },
+    updateAdviceNarration(
+      { assessmentId, data }: { assessmentId: string; data: any },
+      config: AxiosRequestConfig<any> | undefined
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/advice-narration/`,
+        data,
+        {
+          ...(config ?? {}),
+        }
+      );
+    },
     fetchExportReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
       config: AxiosRequestConfig<any> | undefined,
@@ -447,6 +471,27 @@ export const createService = (
           attributeLevelTargets,
         },
         config,
+      );
+    },
+    createAINarration(
+      {
+        assessmentId,
+        attributeLevelTargets,
+        adviceListItems,
+      }: {
+        assessmentId: string;
+        attributeLevelTargets: any;
+        adviceListItems: any;
+      },
+      config: AxiosRequestConfig<any> | undefined = {}
+    ) {
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/advice-narration-ai/`,
+        {
+          attributeLevelTargets,
+          adviceListItems,
+        },
+        config
       );
     },
     fetchSubjectProgress(
@@ -732,7 +777,7 @@ export const createService = (
     },
     convertExcelToDSLFile(
       args: { file: any },
-      config: AxiosRequestConfig<any> | undefined,
+      config: AxiosRequestConfig<any> | undefined
     ) {
       const { file } = args ?? {};
       return axios.post(
@@ -744,12 +789,12 @@ export const createService = (
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
     },
     fetchExcelToDSLSampleFile(
       args: any | undefined,
-      config: AxiosRequestConfig<any> | undefined,
+      config: AxiosRequestConfig<any> | undefined
     ) {
       return axios.get(`/api/v1/assessment-kits/excel-to-dsl/sample/`, {
         ...config,

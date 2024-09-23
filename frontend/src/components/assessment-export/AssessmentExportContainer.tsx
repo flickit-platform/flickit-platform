@@ -65,6 +65,8 @@ import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
 import { FaClipboard } from "react-icons/fa";
 import { theme } from "@/config/theme";
+import { FaWandMagicSparkles } from "react-icons/fa6";
+import AIGenerated from "../common/tags/AIGenerated";
 
 const handleCopyAsImage = async (
   element: HTMLDivElement | null,
@@ -466,7 +468,7 @@ const AssessmentExportContainer = () => {
                   alignItems="center"
                 >
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >
@@ -774,7 +776,7 @@ const AssessmentExportContainer = () => {
                               ? " and " + elem?.title
                               : index === 0
                                 ? elem?.title
-                                : ", " + elem?.title
+                                : ", " + elem?.title,
                           )
                           ?.join(""),
                         attributesCount: subjects?.reduce(
@@ -879,11 +881,11 @@ const AssessmentExportContainer = () => {
                                     ),
                                   )}
                                 </TableBody>
-                              </Table>
-                            </TableCell>
-                          </TableRow>
-                        </React.Fragment>
-                      ))}
+                              </TableCell>
+                            </TableRow>
+                          </React.Fragment>
+                        ))}
+                      </TableBody>
                     </Table>
                   </TableContainer>
                   <Typography
@@ -1403,26 +1405,7 @@ const AssessmentExportContainer = () => {
                                     attribute?.id?.toString()
                                   ]?.aiInsight.isValid && (
                                     <Box sx={{ ...styles.centerV }} gap={2}>
-                                      <Box
-                                        sx={{
-                                          zIndex: 1,
-                                          display: "flex",
-                                          justifyContent: "flex-start",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="labelSmall"
-                                          sx={{
-                                            backgroundColor: "#d85e1e",
-                                            color: "white",
-                                            padding: "0.35rem 0.35rem",
-                                            borderRadius: "4px",
-                                            fontWeight: "bold",
-                                          }}
-                                        >
-                                          <Trans i18nKey="AIGenerated" />
-                                        </Typography>
-                                      </Box>
+                                      <AIGenerated />
                                       <Box
                                         sx={{
                                           display: "flex",
