@@ -65,35 +65,37 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   }, []);
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    const { space, assessment_kit, title, color } = data;
+    const { space, assessment_kit, title, color, shortTitle } = data;
     setLoading(true);
     try {
       type === "update"
         ? await service.updateAssessment(
+          {
+            id: assessmentId,
+            data: {
+              title,
+              shortTitle,
+              colorId: color,
+            },
+          },
+          { signal: abortController.signal }
+        )
+        : await service
+          .createAssessment(
             {
-              id: assessmentId,
               data: {
-                title,
+                spaceId: spaceId || space?.id,
+                assessmentKitId: assessment_kit?.id,
+                title: title,
+                shortTitle: shortTitle === "" ? null : shortTitle || null,
                 colorId: color,
               },
             },
             { signal: abortController.signal }
           )
-        : await service
-            .createAssessment(
-              {
-                data: {
-                  spaceId: spaceId || space?.id,
-                  assessmentKitId: assessment_kit?.id,
-                  title: title,
-                  colorId: color,
-                },
-              },
-              { signal: abortController.signal }
-            )
-            .then((res: any) => {
-              setCreatedKitId(res.data?.id);
-            });
+          .then((res: any) => {
+            setCreatedKitId(res.data?.id);
+          });
       setLoading(false);
       setSubmittedTitle(title);
       setIsSubmitted(true);
@@ -144,6 +146,17 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 data-cy="title"
               />
             </Grid>
+            <Grid item xs={12} md={12}>
+              <InputFieldUC
+                autoFocus={false}
+                defaultValue={defaultValues.shortTitle || null}
+                name="shortTitle"
+                required={false}
+                label={<Trans i18nKey="shortTitle" />}
+                data-cy="title"
+                helperText={<Trans i18nKey="shortTitleInfo" />}
+              />
+            </Grid>
             <Grid item xs={12}>
               <SpaceField defaultValue={defaultValues?.space || data?.space} />
             </Grid>
@@ -188,9 +201,8 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             hideSubmitButton
           >
             <Link
-              to={`/${
-                spaceId || data.space?.id
-              }/assessments/1/${createdKitId}/assessment-settings/`}
+              to={`/${spaceId || data.space?.id
+                }/assessments/1/${createdKitId}/assessment-settings/`}
               style={{ textDecoration: "none" }}
             >
               <Button variant="contained">

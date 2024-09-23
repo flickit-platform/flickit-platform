@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import {Box, Divider, IconButton, Tooltip, Typography} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -22,11 +22,12 @@ import useMenu from "@/utils/useMenu";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import { secondaryFontFamily } from "@/config/theme";
+import BetaSvg from "@assets/svg/beta.svg";
+import { AssessmentReportNarrator } from "@components/assessment-report/assessmentReportNarrator";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
-
   const queryData = useQuery<IAssessmentReportModel>({
     service: (args, config) =>
       service.fetchAssessment({ assessmentId }, config),
@@ -95,7 +96,9 @@ const AssessmentReportContainer = (props: any) => {
           topStrengths,
           topWeaknesses,
           assessmentPermissions: { manageable, exportable },
+          permissions,
         } = data || {};
+
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
@@ -118,37 +121,37 @@ const AssessmentReportContainer = (props: any) => {
               <Grid item sm={12} xs={12}>
                 <Box display="flex" justifyContent="space-between">
                   <Typography
-                    color="#00365C"
+                    color="primary"
                     textAlign="left"
                     variant="headlineLarge"
                   >
                     <Trans i18nKey="assessmentInsights" />
                   </Typography>
-                  <Box sx={{ py: "0.6rem",display:"flex" }}>
-                    <Tooltip title={<Trans i18nKey={"assessmentDocument"}/>}>
+                  <Box sx={{ py: "0.6rem", display: "flex" }}>
+                    <Tooltip title={<Trans i18nKey={"assessmentDocument"} />}>
                       <Box>
                         <IconButton
-                            data-cy="more-action-btn"
-                            disabled={!exportable}
-                            component={exportable ? Link : "div"}
-                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
+                          data-cy="more-action-btn"
+                          disabled={!exportable}
+                          component={exportable ? Link : "div"}
+                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
                         >
                           <ArticleRounded
-                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
                           />
                         </IconButton>
                       </Box>
                     </Tooltip>
-                    <Tooltip  title={<Trans i18nKey={"assessmentSettings"}/>}>
+                    <Tooltip title={<Trans i18nKey={"assessmentSettings"} />}>
                       <Box>
                         <IconButton
-                            data-cy="more-action-btn"
-                            disabled={!manageable}
-                            component={manageable ? Link : "div"}
-                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
+                          data-cy="more-action-btn"
+                          disabled={!manageable}
+                          component={manageable ? Link : "div"}
+                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
                         >
                           <SettingsIcon
-                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
                           />
                         </IconButton>
                       </Box>
@@ -271,22 +274,27 @@ const AssessmentReportContainer = (props: any) => {
                 />
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Box
-                  sx={{ ...styles.centerCV }}
-                  alignItems="flex-start"
-                  marginTop={6}
-                  gap={2}
-                >
-                  <Typography color="#73808C" variant="h5">
-                    <Trans i18nKey="advices" />
+                <Box sx={{ ...styles.centerCV }} marginTop={6} gap={2}>
+                  <Typography
+                    color="#73808C"
+                    variant="h5"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Trans i18nKey="advice" />
+                    <Box sx={{ ml: 1, mt: 1 }}>
+                      <img src={BetaSvg} alt="beta" width={34} />
+                    </Box>
                   </Typography>
+
                   <Divider sx={{ width: "100%" }} />
                 </Box>
               </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12} id="advices">
+              <Grid item lg={12} md={12} sm={12} xs={12} id="advices" mt={2}>
                 <AssessmentAdviceContainer
                   subjects={subjects}
                   assessment={assessment}
+                  permissions={permissions}
                 />
               </Grid>
             </Grid>

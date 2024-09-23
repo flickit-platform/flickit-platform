@@ -38,6 +38,7 @@ import {
   InfoOutlined,
 } from "@mui/icons-material";
 import { IPermissions } from "@/types";
+import AIGenerated from "../common/tags/AIGenerated";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -229,27 +230,7 @@ const SUbjectAttributeCard = (props: any) => {
                 {attributesDataPolicy[id?.toString()]?.aiInsight &&
                   attributesDataPolicy[id?.toString()]?.aiInsight.isValid && (
                     <Box sx={{ ...styles.centerV }} gap={2}>
-                      <Box
-                        sx={{
-                          zIndex: 1,
-                          display: "flex",
-                          justifyContent: "flex-start",
-                          ml: { xs: 0.75, sm: 1.5, md: 2 },
-                        }}
-                      >
-                        <Typography
-                          variant="labelSmall"
-                          sx={{
-                            backgroundColor: "#d85e1e",
-                            color: "white",
-                            padding: "0.35rem 0.35rem",
-                            borderRadius: "4px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          <Trans i18nKey="AIGenerated" />
-                        </Typography>
-                      </Box>
+                      <AIGenerated />
                       <Box
                         sx={{
                           display: "flex",
@@ -579,7 +560,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
     <Box
       display={"flex"}
       sx={{
-        maxWidth: { xs: "100%", sm: "100%", md: "91%", lg: "92%" },
+        maxWidth: { xs: "100%", sm: "100%" },
         flexDirection: { xs: "column", sm: "row" },
       }}
     >
@@ -617,7 +598,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
               sx={{
                 ...styles.centerV,
                 pl: 2,
-                width: { xs: "100%", md: "30%" },
+                width: { xs: "100%", md: "30%", lg: "19%" },
               }}
             >
               <Typography
