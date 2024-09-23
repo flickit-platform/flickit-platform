@@ -19,13 +19,13 @@ import {toast} from "react-toastify";
 
 const AddOnsDialog = (props: any) => {
     const {expanded,onClose, title, assessmentId} = props
-    const uploadRef = useRef(null)
+    const uploadRef = useRef<any>(null)
 
     const { service } = useServiceContext();
 
     const handelUpload = () =>{
         if(uploadRef.current){
-            uploadRef?.current.click()
+            uploadRef?.current?.click()
         }
     }
 
