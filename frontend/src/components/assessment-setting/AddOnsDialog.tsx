@@ -24,8 +24,8 @@ const AddOnsDialog = (props: any) => {
     const { service } = useServiceContext();
 
     const handelUpload = () =>{
-        if(uploadRef){
-            uploadRef.current.click()
+        if(uploadRef.current){
+            uploadRef?.current.click()
         }
     }
 
@@ -42,8 +42,8 @@ const AddOnsDialog = (props: any) => {
             onClose()
             toast("upload file successfully",{type:"success"})
             } catch(e) {
-                const err = e as ICustomError;
-                toastError(err);
+             const err = e as ICustomError;
+             toastError(err);
             }
         }
     };

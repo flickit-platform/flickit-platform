@@ -112,7 +112,7 @@ const AssessmentSettingContainer = () => {
     });
   };
     const handleCloseAddOnsModal = () => {
-        setExpandedAddOnsModal({
+        setExpandedAddOnsModal({...expandedAddOnsModal,
             display: false
         })
     };
@@ -210,7 +210,6 @@ const AssessmentSettingContainer = () => {
                 assessmentId={assessmentId}
                 title={<Trans i18nKey={"addOnsConfig"} />}
                 cancelText={<Trans i18nKey={"cancel"} />}
-                confirmText={<Trans i18nKey={"addToThisAssessment"} />}
                 setChangeData={setChangeData}
             />
           </Box>
