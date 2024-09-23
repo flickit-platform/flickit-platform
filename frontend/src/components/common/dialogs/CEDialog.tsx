@@ -82,8 +82,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     >
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <Button onClick={onClose} data-cy="cancel" data-testid='cancel'
-          >
+          <Button onClick={onClose} data-cy="cancel" data-testid="cancel">
             <Trans i18nKey={cancelLabel} />
           </Button>
         </Grid>
@@ -97,7 +96,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
         {!hideSubmitButton && (
           <Grid item>
             <LoadingButton
-              data-testid='submit'
+              data-testid="submit"
               type="submit"
               data-cy="submit"
               variant="contained"
@@ -114,6 +113,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
         {hasViewBtn && (
           <Grid item>
             <LoadingButton
+              data-testid="submit-and-view"
               type="submit"
               variant="contained"
               color="success"
