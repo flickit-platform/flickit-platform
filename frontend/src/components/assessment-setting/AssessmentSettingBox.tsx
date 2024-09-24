@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import {
-  Chip,
+  Chip, CircularProgress,
   Divider,
   FormControl,
   IconButton,
@@ -624,44 +624,6 @@ export const AssessmentSettingMemberBox = (props: {
                             alignItems: "center",
                           }}
                         >
-                          <Grid
-                            item
-                            lg={8}
-                            sx={{ minWidth: { xs: "100%", md: "160px" } }}
-                          >
-                            <Typography
-                              sx={{
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                color: "#1B1B1E",
-                                fontSize: "0.875",
-                                wight: 300,
-                              }}
-                            >
-                              {row.email}
-                            </Typography>
-                          </Grid>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "flex-end",
-                              alignItems: "center",
-                              gap: { xs: "0px", md: ".7rem" },
-                              width: { xs: "10.1rem", md: "20vw" },
-                            }}
-                          >
-                            <FormControl
-                              sx={{
-                                m: 1,
-                                width: "100%",
-                                textAlign: "center",
-                                padding: "6px, 12px, 6px, 12px",
-                                display: "inline-flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
                               {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
                               <Grid
                                 item
@@ -674,144 +636,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
                                   }
                                 >
-                                  <Select
-                                    labelId="demo-multiple-name-label"
-                                    id="demo-multiple-name"
-                                    value={row?.role?.title}
-                                    onChange={handleChange}
-                                    name={row}
-                                    MenuProps={MenuProps}
-                                    sx={{
-                                      width: "100%",
-                                      boxShadow: "none",
-                                      ".MuiOutlinedInput-notchedOutline": {
-                                        border: 0,
-                                      },
-                                      border: row.editable
-                                        ? "1px solid #2974B4"
-                                        : "1px solid #2974b442",
-                                      fontSize: "0.875rem",
-                                      borderRadius: "0.5rem",
-                                      "&.MuiOutlinedInput-notchedOutline": {
-                                        border: 0,
-                                      },
-                                      "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
-                                      "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
-                                      ".MuiSvgIcon-root": {
-                                        fill: row.editable
-                                          ? "#2974B4 !important"
-                                          : "#2974b442 !important",
-                                      },
-                                      "& .MuiSelect-select": {
-                                        padding: "4px 5px",
-                                      },
-                                    }}
-                                    IconComponent={KeyboardArrowDownIcon}
-                                    inputProps={{
-                                      renderValue: () => row?.role?.title,
-                                    }}
-                                    disabled={!row.editable}
-                                  >
-                                    <Box
-                                      sx={{
-                                        paddingY: "16px",
-                                        color: "#9DA7B3",
-                                        textAlign: "center",
-                                        borderBottom: "1px solid #9DA7B3",
-                                      }}
-                                    >
-                                      <Typography sx={{ fontSize: "0.875rem" }}>
-                                        <Trans i18nKey={"chooseARole"} />
-                                      </Typography>
-                                    </Box>
-                                    {listOfRoles &&
-                                      listOfRoles.map(
-                                        (role: any, index: number) => (
-                                          <MenuItem
-                                            style={{ display: "block" }}
-                                            key={role.title}
-                                            value={role}
-                                            sx={{
-                                              paddingY: "0px",
-                                              maxHeight: "200px",
-                                              ...(role.id === row.role.id && {
-                                                backgroundColor: "#9CCAFF",
-                                              }),
-                                              "&.MuiMenuItem-root:hover": {
-                                                ...(role.id === row.role.id
-                                                  ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
-                                                  : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
-                                              },
-                                            }}
-                                          >
-                                            <Box
-                                              sx={{
-                                                maxWidth: "240px",
-                                                color: "#000",
-                                                fontSize: "0.875rem",
-                                                lineHeight: "21px",
-                                                fontWeight: 500,
-                                                paddingY: "1rem",
-                                              }}
-                                            >
-                                              <Typography
-                                                sx={{
-                                                  fontSize: "0.875rem",
-                                                  ...(role.id === row.role.id
-                                                    ? {
-                                                      color: "#004F83",
-                                                    }
-                                                    : {
-                                                      color: "#1B1B1E",
-                                                    }),
-                                                }}
-                                              >
-                                                {role.title}
-                                              </Typography>
-
-                                              <div
-                                                style={{
-                                                  color: "#000",
-                                                  fontSize: "0.875rem",
-                                                  lineHeight: "21px",
-                                                  fontWeight: 300,
-                                                  whiteSpace: "break-spaces",
-                                                  paddingTop: "1rem",
-                                                }}
-                                              >
-                                                {role.description}
-                                              </div>
-                                            </Box>
-                                            {listOfRoles &&
-                                              listOfRoles.length >
-                                              index + 1 && (
-                                                <Box
-                                                  sx={{
-                                                    height: "0.5px",
-                                                    width: "80%",
-                                                    backgroundColor: "#9DA7B3",
-                                                    mx: "auto",
-                                                  }}
-                                                ></Box>
-                                              )}
-                                          </MenuItem>
-                                        ),
-                                      )}
-                                  </Select>
+                                  <SelectionRole row={row} listOfRoles={listOfRoles} MenuProps={MenuProps} setChangeData={setChangeData} assessmentId={assessmentId} />
                                 </Tooltip>
                               </Grid>
                             </FormControl>
@@ -821,115 +646,6 @@ export const AssessmentSettingMemberBox = (props: {
                                 <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
                               }
                             >
-                              <Select
-                                labelId="demo-multiple-name-label"
-                                id="demo-multiple-name"
-                                value={row?.role?.title}
-                                onChange={handleChange}
-                                name={row}
-                                MenuProps={MenuProps}
-                                sx={{
-                                  width: "100%",
-                                  boxShadow: "none",
-                                  ".MuiOutlinedInput-notchedOutline": {
-                                    border: 0,
-                                  },
-                                  border: row.editable
-                                    ? "1px solid #2974B4"
-                                    : "1px solid #2974b442",
-                                  fontSize: "0.875rem",
-                                  borderRadius: "0.5rem",
-                                  "& .MuiSelect-select": {
-                                    padding: "4px 5px",
-                                  },
-                                }}
-                                IconComponent={KeyboardArrowDownIcon}
-                                inputProps={{
-                                  renderValue: () => row?.role?.title,
-                                }}
-                                disabled={!row.editable}
-                              >
-                                <Box
-                                  sx={{
-                                    paddingY: "16px",
-                                    color: "#9DA7B3",
-                                    textAlign: "center",
-                                    borderBottom: "1px solid #9DA7B3",
-                                  }}
-                                >
-                                  <Typography sx={{ fontSize: "0.875rem" }}>
-                                    <Trans i18nKey={"chooseARole"} />
-                                  </Typography>
-                                </Box>
-                                {listOfRoles.map((role: any, index: number) => (
-                                  <MenuItem
-                                    key={role.title}
-                                    value={role}
-                                    sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      paddingY: "0px",
-                                      maxHeight: "200px",
-                                      ...(role.id === row.role.id && {
-                                        backgroundColor: "#9CCAFF",
-                                      }),
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        maxWidth: "240px",
-                                        color: "#000",
-                                        fontSize: "0.875rem",
-                                        lineHeight: "21px",
-                                        fontWeight: 500,
-                                        paddingY: "1rem",
-                                      }}
-                                    >
-                                      <Typography
-                                        sx={{
-                                          fontSize: "0.875rem",
-                                          ...(role.id === row.role.id
-                                            ? { color: "#004F83" }
-                                            : { color: "#1B1B1E" }),
-                                        }}
-                                      >
-                                        {role.title}
-                                      </Typography>
-                                      <div
-                                        style={{
-                                          color: "#000",
-                                          fontSize: "0.875rem",
-                                          lineHeight: "21px",
-                                          fontWeight: 300,
-                                          whiteSpace: "break-spaces",
-                                          paddingTop: "1rem",
-                                        }}
-                                      >
-                                        {role.description}
-                                      </div>
-                                    </Box>
-                                    {listOfRoles.length > index + 1 && (
-                                      <Box
-                                        sx={{
-                                          height: "0.5px",
-                                          width: "80%",
-                                          backgroundColor: "#9DA7B3",
-                                          mx: "auto",
-                                        }}
-                                      />
-                                    )}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </Tooltip>
-                          </Box>
-                        </FormControl>
-                        <Tooltip
-                          disableHoverListener={row.editable}
-                          title={
-                            <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
-                          }
-                        >
                           <Box
                             width="30%"
                             display="flex"
@@ -1259,6 +975,181 @@ export const AssessmentSettingMemberBox = (props: {
     </Box>
   );
 };
+
+const SelectionRole = (props: any)=>{
+
+  const {row ,setChangeData, assessmentId, MenuProps, listOfRoles} = props
+  const { service } = useServiceContext();
+
+  const handleChange = async (event: any) => {
+    try {
+      const {
+        target: { value, name },
+      } = event;
+      const { id: roleId } = value;
+      const { id: userId } = name;
+      await editUserRole.query({ userId, roleId });
+      setChangeData((prev: boolean) => !prev);
+      // await fetchAssessmentsUserListRoles()
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const editUserRole = useQuery({
+    service: (args, config) =>
+        service.editUserRole({ assessmentId, ...args }, config),
+    runOnMount: false,
+  });
+  return (
+      <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          value={row?.role?.title}
+          onChange={handleChange}
+          name={row}
+          MenuProps={MenuProps}
+          sx={{
+            width: "100%",
+            height:"100%",
+            boxShadow: "none",
+            ".MuiOutlinedInput-notchedOutline": {
+              border: 0,
+            },
+            border: editUserRole.loading
+                ? "1px solid #2974b442"
+                :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
+            fontSize: "0.875rem",
+            borderRadius: "0.5rem",
+            "&.MuiOutlinedInput-notchedOutline": {
+              border: 0,
+            },
+            "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                {
+                  border: 0,
+                },
+            "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  border: 0,
+                },
+            ".MuiSvgIcon-root": {
+              fill: editUserRole.loading
+                  ? "1px solid #2974b442"
+                  :  row.editable ? "1px solid #2974B4" : "1px solid #2974b442" ,
+            },
+            "& .MuiSelect-select": {
+              padding: "4px 5px",
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",
+            },
+          }}
+          IconComponent={KeyboardArrowDownIcon}
+          inputProps={{
+            renderValue: () => editUserRole.loading
+                ? <CircularProgress style={{color:"#2974b442"}} size="1rem"/>
+                : row?.role?.title
+          }}
+          disabled={!row.editable}
+      >
+        <Box
+            sx={{
+              paddingY: "16px",
+              color: "#9DA7B3",
+              textAlign: "center",
+              borderBottom: "1px solid #9DA7B3",
+            }}
+        >
+          <Typography sx={{ fontSize: "0.875rem" }}>
+            <Trans i18nKey={"chooseARole"} />
+          </Typography>
+        </Box>
+        {listOfRoles &&
+            listOfRoles.map(
+                (role: any, index: number) => (
+                    <MenuItem
+                        style={{ display: "block" }}
+                        key={role.title}
+                        value={role}
+                        sx={{
+                          paddingY: "0px",
+                          maxHeight: "200px",
+                          ...(role.id === row.role.id && {
+                            backgroundColor: "#9CCAFF",
+                          }),
+                          "&.MuiMenuItem-root:hover": {
+                            ...(role.id === row.role.id
+                                ? {
+                                  backgroundColor:
+                                      "#9CCAFF",
+                                  color: "#004F83",
+                                }
+                                : {
+                                  backgroundColor:
+                                      "#EFEDF0",
+                                  color: "#1B1B1E",
+                                }),
+                          },
+                        }}
+                    >
+                      <Box
+                          sx={{
+                            maxWidth: "240px",
+                            color: "#000",
+                            fontSize: "0.875rem",
+                            lineHeight: "21px",
+                            fontWeight: 500,
+                            paddingY: "1rem",
+                          }}
+                      >
+                        <Typography
+                            sx={{
+                              fontSize: "0.875rem",
+                              ...(role.id === row.role.id
+                                  ? {
+                                    color: "#004F83",
+                                  }
+                                  : {
+                                    color: "#1B1B1E",
+                                  }),
+                            }}
+                        >
+                          {role.title}
+                        </Typography>
+
+                        <div
+                            style={{
+                              color: "#000",
+                              fontSize: "0.875rem",
+                              lineHeight: "21px",
+                              fontWeight: 300,
+                              whiteSpace: "break-spaces",
+                              paddingTop: "1rem",
+                            }}
+                        >
+                          {role.description}
+                        </div>
+                      </Box>
+                      {listOfRoles &&
+                          listOfRoles.length >
+                          index + 1 && (
+                              <Box
+                                  sx={{
+                                    height: "0.5px",
+                                    width: "80%",
+                                    backgroundColor: "#9DA7B3",
+                                    mx: "auto",
+                                  }}
+                              ></Box>
+                          )}
+                    </MenuItem>
+                )
+            )}
+      </Select>
+  )
+}
+
 
 const OnHoverInputTitleSetting = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
