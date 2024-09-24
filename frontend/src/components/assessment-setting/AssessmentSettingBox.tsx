@@ -624,24 +624,6 @@ export const AssessmentSettingMemberBox = (props: {
                             alignItems: "center",
                           }}
                         >
-                          <Grid
-                            item
-                            lg={8}
-                            sx={{ minWidth: { xs: "100%", md: "160px" } }}
-                          >
-                            <Typography
-                              sx={{
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                color: "#1B1B1E",
-                                fontSize: "0.875",
-                                wight: 300,
-                              }}
-                            >
-                              {row.email}
-                            </Typography>
-                          </Grid>
                           <Box
                             sx={{
                               display: "flex",
