@@ -43,8 +43,8 @@ const AssessmentContainer = () => {
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
-    (errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.code === ECustomErrorType.NOT_FOUND) ? (
+    (errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
+      errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND) ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
@@ -188,7 +188,7 @@ const AssessmentContainer = () => {
                 space={{ id: spaceId, title: currentSpace?.title }}
                 dialogProps={dialogProps}
               />
-              {pageCount > 1 && (
+              {pageCount > 1 && !isEmpty &&  (
                 <Stack
                   spacing={2}
                   sx={{
@@ -252,6 +252,7 @@ const useFetchAssessments = () => {
       setLoading(false);
     } catch (e) {
       const err = e as ICustomError;
+      console.log(err,"test err")
       toastError(err, { filterByStatus: [404] });
       setLoading(false);
       setError(true);
