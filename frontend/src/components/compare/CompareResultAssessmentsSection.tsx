@@ -6,6 +6,7 @@ import { ICompareResultBaseInfo } from "@types";
 import { Gauge } from "@common/charts/Gauge";
 import Title from "@common/Title";
 import { calcGridSizeBasedOnTheLengthOfAssessments } from "./utils";
+import { t } from "i18next";
 
 const CompareResultAssessmentsSection = (props: {
   data: ICompareResultBaseInfo[];
@@ -21,23 +22,37 @@ const CompareResultAssessmentsSection = (props: {
         mt: 1,
       }}
     >
-      <Grid container spacing={2}>
-        {data.map((item) => {
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        {data.map((item, index: number) => {
           return (
-            <Grid
-              item
-              xs={calcGridSizeBasedOnTheLengthOfAssessments(data.length)}
+            <Box
+              // item
+              // xs={4}
               sx={{
-                ...styles.compareResultBorder,
+                // ...styles.compareResultBorder,
+                width: "300px",
               }}
+              key={index}
             >
               <Box
                 sx={{
                   p: { xs: 0.5, sm: 1, md: 2 },
-                  ...styles.centerCH,
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  textAlign: "center",
+                  flexDirection: "column",
                 }}
               >
-                <Title>{item.assessment.title}</Title>
+                <Title>{item.title}</Title>
                 <Box
                   sx={{
                     ...styles.centerV,
@@ -47,28 +62,23 @@ const CompareResultAssessmentsSection = (props: {
                 >
                   <Gauge
                     maturity_level_number={
-                      item.assessment.assessment_kit.maturity_level_count
+                      item.maturityLevel.maturityLevelCount
                     }
-                    maturity_level_status={
-                      item.assessment.assessment_kit.maturity_level.title
-                    }
-                    level_value={
-                      item.assessment.assessment_kit.maturity_level.index
-                    }
+                    isMobileScreen={true}
+                    maturity_level_status={item.maturityLevel.title}
+                    level_value={item.maturityLevel.index}
+                    confidence_value={item.confidenceValue}
+                    confidence_text={t("confidence")}
+                    hideGuidance={true}
                     maxWidth="250px"
                     m="auto"
                   />
                 </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  sx={{ flexDirection: { xs: "column-reverse", lg: "row" } }}
-                ></Box>
               </Box>
-            </Grid>
+            </Box>
           );
         })}
-      </Grid>
+      </Box>
     </Box>
   );
 };

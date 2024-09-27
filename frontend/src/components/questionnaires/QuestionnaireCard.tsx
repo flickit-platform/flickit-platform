@@ -12,30 +12,37 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import { IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
+import { IPermissions, IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
+import { Collapse, IconButton, Typography } from "@mui/material";
+import languageDetector from "@/utils/languageDetector";
+import React, { useState } from "react";
+import { InfoRounded } from "@mui/icons-material";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
+  permissions: IPermissions;
 }
 
 const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
   const { data } = props;
+  const { permissions }: { permissions: IPermissions } = props;
   const {
     id,
     title,
-    questions_count: number_of_questions,
-    answers_count: number_of_answers,
+    questionCount: number_of_questions,
+    answerCount: number_of_answers,
+    description,
     progress = 0,
     subjects,
-
-    current_question_index,
+    nextQuestion,
   } = data || {};
-
   const isSmallScreen = useScreenResize("sm");
   const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
+  const [collapse, setCollapse] = useState<boolean>(false);
+
   return (
-    <Paper sx={{ height: "100%", mt: 3 }} data-cy="questionnaire-card">
+    <Paper sx={{ mt: 3 }} data-cy="questionnaire-card">
       <Box
         p="8px 6px"
         pl={is_farsi ? 0 : "12px"}
@@ -50,11 +57,24 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
             <Title
               // sub={last_updated && `${(<Trans i18nKey={"lastUpdated"} />)} ${last_updated}`}
               size="small"
-              fontFamily="Roboto"
               fontWeight={"bold"}
             >
               <Box flex="1" display="flex" alignItems={"flex-start"}>
                 {title}
+                {description && (
+                  <IconButton
+                    sx={{
+                      cursor: "pointer",
+                      userSelect: "none",
+                      marginInline: 1,
+                    }}
+                    onClick={() => setCollapse(!collapse)}
+                    size="small"
+                  >
+                    <InfoRounded />
+                  </IconButton>
+                )}
+
                 {!isSmallScreen && (
                   <Box
                     p="0 8px"
@@ -73,6 +93,10 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 )}
               </Box>
             </Title>
+            <QuestionDescription
+              description={description}
+              collapse={collapse}
+            />
           </Box>
         </Box>
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
@@ -101,29 +125,64 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
               );
             })}
           </Box>
-          <ActionButtons
-            id={id}
-            progress={progress}
-            number_of_answers={number_of_answers}
-            current_question_index={current_question_index}
-            title={title}
-          />
+          {permissions.viewQuestionnaireQuestions && (
+            <ActionButtons
+              id={id}
+              progress={progress}
+              number_of_answers={number_of_answers}
+              nextQuestion={nextQuestion}
+              title={title}
+            />
+          )}
         </Box>
       </Box>
     </Paper>
   );
 };
 
+const QuestionDescription = (props: any) => {
+  const { description, collapse } = props;
+  const is_farsi = languageDetector(description);
+  return (
+    <Box>
+      <Box mt={1} width="100%">
+        <Collapse in={collapse}>
+          <Box
+            sx={{
+              flex: 1,
+              mr: { xs: 0, md: 4 },
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              border: "1px dashed #ffffff99",
+              borderRadius: "8px",
+              direction: `${is_farsi ? "rtl" : "ltr"}`,
+            }}
+          >
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              sx={{
+                width: "100%",
+              }}
+            >
+              <Typography variant="bodyLarge">{description}</Typography>
+            </Box>
+          </Box>
+        </Collapse>
+      </Box>
+    </Box>
+  );
+};
 const ActionButtons = (props: {
   id: TId;
   title: string;
   progress: number;
   number_of_answers: number;
-  current_question_index: number;
+  nextQuestion: number;
 }) => {
-  const { id, progress, number_of_answers, current_question_index, title } =
-    props;
-
+  const { id, progress, number_of_answers, nextQuestion, title } = props;
   return (
     <Box display="flex">
       {progress === 100 && (
@@ -143,7 +202,7 @@ const ActionButtons = (props: {
       )}
       {progress < 100 && progress > 0 && (
         <ActionButton
-          to={`${id}/${current_question_index || number_of_answers + 1}`}
+          to={`${id}/${nextQuestion || number_of_answers + 1}`}
           text="continue"
           icon={<PlayArrowRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}

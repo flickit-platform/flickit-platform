@@ -3,6 +3,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  CircularProgress,
   Collapse,
   Divider,
   Grid,
@@ -16,7 +17,7 @@ import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData, { useQueryDataContext } from "@common/QueryData";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import { styles } from "@styles";
 import { Trans } from "react-i18next";
@@ -34,7 +35,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -53,6 +54,12 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
+import formatBytes from "@utils/formatBytes";
+import { error } from "console";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -64,7 +71,11 @@ const ExpertGroupContainer = () => {
   });
 
   const expertGroupMembersQueryData = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
+    service: (args = { id: expertGroupId, status: "ACTIVE" }, config) =>
+      service.fetchExpertGroupMembers(args, config),
+  });
+  const expertGroupMembersInviteeQueryData = useQuery({
+    service: (args = { id: expertGroupId, status: "PENDING" }, config) =>
       service.fetchExpertGroupMembers(args, config),
   });
 
@@ -72,14 +83,20 @@ const ExpertGroupContainer = () => {
   const createAssessmentKitDialogProps = useDialog({
     context: { type: "create", data: { expertGroupId } },
   });
-  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>({});
+
+  const excelToDslDialogProps = useDialog({
+    context: { type: "convert"},
+  });
+
+  const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
+  const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
   return (
     <QueryData
       {...queryData}
       render={(data) => {
         const {
-          name,
-          picture,
+          title,
+          pictureLink,
           website,
           about = "",
           number_of_members,
@@ -87,20 +104,30 @@ const ExpertGroupContainer = () => {
           users = [],
           bio,
           owner,
-          is_expert,
-          is_member,
-          is_owner,
+
+          editable,
           assessment_kits = [],
         } = data || {};
-        // const is_owner = data?.owner?.id === userInfo.id;
-        const hasAccess = is_expert;
-        setDocTitle(`${t("expertGroup")}: ${name || ""}`);
+        const is_member = expertGroupMembersQueryData.data?.items?.some(
+          (res: any) => {
+            return res.id === userInfo.id;
+          }
+        );
+        const hasAccess = editable;
+        setDocTitle(`${t("expertGroup")}: ${title || ""}`);
         return (
           <Box>
             <Title
+              backLink="/"
               borderBottom
               pb={1}
-              avatar={<Avatar src={picture} sx={{ mr: 1 }} />}
+              avatar={
+                <AvatarComponent
+                  queryData={queryData}
+                  picture={pictureLink}
+                  editable={editable}
+                />
+              }
               sup={
                 <SupTitleBreadcrumb
                   routes={[
@@ -108,18 +135,21 @@ const ExpertGroupContainer = () => {
                       title: t("expertGroups") as string,
                       to: `/user/expert-groups`,
                     },
+                    {
+                      title: title,
+                    },
                   ]}
                 />
               }
               toolbar={
-                is_owner ? (
+                editable ? (
                   <EditExpertGroupButton fetchExpertGroup={queryData.query} />
                 ) : (
                   <></>
                 )
               }
             >
-              {name}
+              {title}
             </Title>
             <Grid container spacing={3} sx={{ mt: 1 }}>
               <Grid item xs={12} md={8}>
@@ -140,17 +170,20 @@ const ExpertGroupContainer = () => {
                 <Box mt={5}>
                   <AssessmentKitsList
                     queryData={queryData}
-                    hasAccess={is_owner}
+                    hasAccess={editable}
                     dialogProps={createAssessmentKitDialogProps}
+                    excelToDslDialogProps={excelToDslDialogProps}
                     is_member={is_member}
-                    is_expert={is_expert}
+                    is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
                   />
                 </Box>
                 <Box mt={5}>
                   <ExpertGroupMembersDetail
                     queryData={expertGroupMembersQueryData}
-                    hasAccess={is_owner}
+                    inviteeQueryData={expertGroupMembersInviteeQueryData}
+                    hasAccess={editable}
+                    setNumberOfMembers={setNumberOfMembers}
                   />
                 </Box>
               </Grid>
@@ -195,7 +228,7 @@ const ExpertGroupContainer = () => {
                         >
                           {website
                             ?.replace("https://", "")
-                            .replace("http://", "")}
+                            ?.replace("http://", "")}
                         </MLink>
                       </Box>
                     )}
@@ -211,7 +244,7 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {number_of_members} {t("members").toLowerCase()}
+                        {numberOfMembers} {t("members").toLowerCase()}
                       </Typography>
                     </Box>
                     <Box
@@ -236,12 +269,15 @@ const ExpertGroupContainer = () => {
                           fontSize: "inherit",
                         }}
                       >
-                        {assessmentKitsCounts?.published &&
-                          `${assessmentKitsCounts?.published.length} ${t(
-                            "publishedAssessmentKits"
-                          ).toLowerCase()}`}
+                        {assessmentKitsCounts.filter(
+                          (item: any) => item.published
+                        ) &&
+                          `${assessmentKitsCounts.filter(
+                            (item: any) => item.published
+                          ).length
+                          } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
-                      {is_owner && (
+                      {editable && (
                         <Box ml="auto">
                           <IconButton
                             size="small"
@@ -258,7 +294,7 @@ const ExpertGroupContainer = () => {
                         </Box>
                       )}
                     </Box>
-                    {is_member && (
+                    {editable && (
                       <Box
                         sx={{
                           ...styles.centerV,
@@ -281,20 +317,24 @@ const ExpertGroupContainer = () => {
                             fontSize: "inherit",
                           }}
                         >
-                          {assessmentKitsCounts?.unpublished &&
-                            `${assessmentKitsCounts?.unpublished.length} ${t(
-                              "unpublishedAssessmentKits"
-                            ).toLowerCase()}`}
+                          {assessmentKitsCounts.filter(
+                            (item: any) => !item.published
+                          ) &&
+                            `${assessmentKitsCounts.filter(
+                              (item: any) => !item.published
+                            ).length
+                            } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
                     )}
                   </Box>
 
-                  {is_owner && (
+                  {editable && (
                     <Box>
                       <Divider sx={{ mt: 2, mb: 2 }} />
                       <ExpertGroupMembers
-                        {...expertGroupMembersQueryData}
+                        query={expertGroupMembersQueryData}
+                        inviteeQuery={expertGroupMembersInviteeQueryData}
                         hasAccess={hasAccess}
                       />
                     </Box>
@@ -306,6 +346,173 @@ const ExpertGroupContainer = () => {
         );
       }}
     />
+  );
+};
+
+
+const AvatarComponent = (props: any) => {
+  const { title, picture, queryData, editable } = props;
+  const [hover, setHover] = useState(false);
+  const [image, setImage] = useState("");
+  const [profilePicture, setProfilePicture] = useState(picture);
+  const [isLoading, setIsLoading] = useState(false);
+  const { expertGroupId = "" } = useParams();
+  const { service } = useServiceContext();
+
+  useEffect(() => { setProfilePicture(picture); }, [picture]);
+
+  const handleFileChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as any);
+      };
+      reader.readAsDataURL(file);
+      let maxSize = 2097152;
+      if (file.size > maxSize) {
+        toastError(`Maximum upload file size is ${formatBytes(maxSize)}.`);
+        return;
+      }
+
+      setHover(false);
+      setProfilePicture("");
+      setIsLoading(true);
+
+      try {
+        const pictureData = { pictureFile: file };
+        const res = await service.updateExpertGroupPicture(
+          { data: pictureData, id: expertGroupId },
+          undefined
+        );
+        setProfilePicture(res.data.pictureLink);
+        setIsLoading(false);
+      } catch (e: any) {
+        setIsLoading(false);
+        toastError(e as ICustomError);
+      }
+    }
+  };
+
+  const handleDelete = useQuery({
+    service: (args = { expertGroupId }, config) =>
+      service.deleteExpertGroupImage(args, config),
+    runOnMount: false,
+  });
+
+  const deletePicture = async () => {
+    try {
+      setIsLoading(true);
+      await handleDelete.query();
+      setProfilePicture("");
+      setIsLoading(false);
+    } catch (e: any) {
+      setIsLoading(false);
+      toastError(e as ICustomError);
+    }
+  };
+
+  return (
+    <Box
+      position="relative"
+      display="inline-block"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      sx={{ mr: 1 }}
+    >
+      <Avatar
+        sx={{
+          bgcolor: (t) => t.palette.grey[800],
+          textDecoration: "none",
+          width: 50,
+          height: 50,
+          position: "relative",
+        }}
+        src={profilePicture}
+      >
+        {title && !hover && title?.[0]?.toUpperCase()}
+      </Avatar>
+      {isLoading && (
+        <CircularProgress
+          size={24}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginTop: "-12px",
+            marginLeft: "-12px",
+          }}
+        />
+      )}
+      {!isLoading  && (
+          <Box    position="absolute"
+                  top={0}
+                  left={0}
+                  width="100%"
+                  height="100%"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  borderRadius="50%"
+>
+            {hover &&  <Box
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                height="100%"
+                bgcolor="rgba(0, 0, 0, 0.6)"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="50%"
+                sx={{ cursor: "pointer" }}
+            />}
+          {profilePicture ? (
+            <>
+               <Tooltip title={"Delete Picture"}>
+
+                     <IconButton
+                         component="label"
+                         sx={{ padding: 0, color: "whitesmoke" }}
+                     >
+                       {hover &&   <DeleteIcon
+                          onClick={deletePicture}
+                          sx={{ color: "whitesmoke" }}
+                        />}
+                      </IconButton>
+              </Tooltip>
+              <Tooltip title={"Edit Picture"}>
+                <IconButton
+                  component="label"
+                  sx={{ padding: 0, color: "whitesmoke" }}
+                >
+                  {hover && <EditIcon /> }
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    hidden
+                  />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <Tooltip title={"Add Picture"}>
+              <IconButton component="label" sx={{ color: "whitesmoke" }}>
+                {hover && <AddIcon />}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  hidden
+                />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+      )}
+    </Box>
   );
 };
 
@@ -348,100 +555,112 @@ const EditExpertGroupButton = (props: any) => {
 };
 
 const ExpertGroupMembers = (props: any) => {
-  const { hasAccess, ...rest } = props;
+  const { hasAccess, query, inviteeQuery } = props;
   const [openInvitees, setOpenInvitees] = useState(false);
   const [openAddMembers, setOpenAddMembers] = useState(false);
 
   return (
-    <QueryData
-      {...rest}
-      render={(data) => {
-        const { results = [] } = data;
-        const invitees = results.filter((user: any) => user.user === null);
-        const users = results.filter((user: any) => user.user !== null);
-        const hasInvitees = invitees.length > 0;
+    <Box>
+      <QueryData
+        {...query}
+        render={(data) => {
+          const { items = [] } = data;
 
-        return (
-          <Box>
-            <Typography
-              variant="h6"
-              display="flex"
-              alignItems={"center"}
-              component="a"
-              href="#members"
-              sx={{ textDecoration: "none", mb: 2, color: "inherit" }}
-            >
-              <Trans i18nKey="members" />
-            </Typography>
-            {hasAccess && (
-              <AddingNewMember
-                queryData={rest}
-                setOpenAddMembers={setOpenAddMembers}
-                openAddMembers={openAddMembers}
-              />
-            )}
-            {hasAccess && hasInvitees && (
-              <Box mb={2}>
+          const users = items.filter((user: any) => user.status === "ACTIVE");
+          return (
+            <Box>
+              <Typography
+                variant="h6"
+                display="flex"
+                alignItems={"center"}
+                component="a"
+                href="#members"
+                sx={{ textDecoration: "none", mb: 2, color: "inherit" }}
+              >
+                <Trans i18nKey="members" />
+              </Typography>
+              {hasAccess && (
+                <AddingNewMember
+                  queryData={query}
+                  inviteeQuery={inviteeQuery}
+                  setOpenAddMembers={setOpenAddMembers}
+                  openAddMembers={openAddMembers}
+                />
+              )}
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
+                <AvatarGroup>
+                  {users.map((user: any) => {
+                    return (
+                      <Avatar
+                        key={user.id}
+                        alt={user.title}
+                        title={user.title}
+                        src={user?.pictureLink || "/"}
+                      />
+                    );
+                  })}
+                </AvatarGroup>
+              </Box>
+            </Box>
+          );
+        }}
+      />
+      {hasAccess && (
+        <QueryData
+          {...inviteeQuery}
+          render={(data) => {
+            const { items = [] } = data;
+            return (
+              <Box my={2}>
                 <Invitees
-                  users={invitees}
-                  query={rest.query}
+                  users={items}
+                  query={query.query}
+                  inviteeQuery={inviteeQuery.query}
                   setOpenInvitees={setOpenInvitees}
                   openInvitees={openInvitees}
                 />
               </Box>
-            )}
-            <Box sx={{ display: "flex", flexWrap: "wrap", mt: 1.5 }}>
-              <AvatarGroup>
-                {users.map((user: any) => {
-                  const name = getUserName(user?.user);
-                  return (
-                    <Avatar
-                      key={user.id}
-                      alt={name}
-                      title={name}
-                      src={user?.picture || "/"}
-                    />
-                  );
-                })}
-              </AvatarGroup>
-            </Box>
-          </Box>
-        );
-      }}
-    />
+            );
+          }}
+        />
+      )}
+    </Box>
   );
 };
 
 const Invitees = (props: any) => {
-  const { users, query, setOpenInvitees, openInvitees } = props;
-
+  const { users, query, inviteeQuery, setOpenInvitees, openInvitees } = props;
+  const hasInvitees = users.length > 0;
   return (
     <Box>
-      <Typography
-        variant="h6"
-        display="flex"
-        alignItems={"center"}
-        sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
-        onClick={() => setOpenInvitees((state: boolean) => !state)}
-      >
-        <Trans i18nKey="invitees" />
-        <Box
-          sx={{
-            ...styles.centerV,
-            ml: "auto",
-          }}
+      {hasInvitees && (
+        <Typography
+          variant="h6"
+          display="flex"
+          alignItems={"center"}
+          sx={{ fontSize: ".9rem", opacity: 0.8, cursor: "pointer" }}
+          onClick={() => setOpenInvitees((state: boolean) => !state)}
         >
-          {openInvitees ? (
-            <MinimizeRoundedIcon fontSize="small" />
-          ) : (
-            <AddRoundedIcon fontSize="small" />
-          )}
-        </Box>
-      </Typography>
+          <Trans i18nKey="invited" />
+          <Box
+            sx={{
+              ...styles.centerV,
+              ml: "auto",
+            }}
+          >
+            {openInvitees ? (
+              <MinimizeRoundedIcon fontSize="small" />
+            ) : (
+              <AddRoundedIcon fontSize="small" />
+            )}
+          </Box>
+        </Typography>
+      )}
       <Collapse in={openInvitees}>
         <Box sx={{ display: "flex", flexWrap: "wrap", my: 1 }}>
           {users.map((user: any) => {
-            const { invite_email, invite_expiration_date, id } = user;
+            const { id, email, inviteExpirationDate, displayName } = user;
             return (
               <Box
                 key={user.id}
@@ -457,17 +676,17 @@ const Invitees = (props: any) => {
               >
                 <Box sx={{ ...styles.centerV }}>
                   <Box>
-                    <Avatar sx={{ width: 34, height: 34 }} alt={invite_email} />
+                    <Avatar sx={{ width: 34, height: 34 }} alt={displayName} />
                   </Box>
                   <Box ml={2}>
-                    {invite_email}
+                    {displayName}
                     <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
                       <EventBusyRoundedIcon
                         fontSize="small"
                         sx={{ mr: 0.7, opacity: 0.9 }}
                       />
                       <Typography variant="body2">
-                        {formatDate(invite_expiration_date)}
+                        {formatDate(inviteExpirationDate)}
                       </Typography>
                     </Box>
                   </Box>
@@ -475,8 +694,9 @@ const Invitees = (props: any) => {
                 <Box ml="auto" sx={{ ...styles.centerV }}>
                   <MemberActions
                     query={query}
+                    inviteeQuery={inviteeQuery}
                     userId={id}
-                    email={invite_email}
+                    email={email}
                     isInvitationExpired={true}
                   />
                 </Box>
@@ -490,7 +710,7 @@ const Invitees = (props: any) => {
 };
 
 const MemberActions = (props: any) => {
-  const { query, userId, email, isInvitationExpired } = props;
+  const { query, inviteeQuery, userId, email, isInvitationExpired } = props;
   const { expertGroupId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteExpertGroupMember, loading } = useQuery({
@@ -511,6 +731,7 @@ const MemberActions = (props: any) => {
   const deleteItem = async (e: any) => {
     await deleteExpertGroupMember();
     await query();
+    await inviteeQuery();
   };
 
   const inviteMember = async () => {
@@ -521,13 +742,17 @@ const MemberActions = (props: any) => {
       });
       res?.message && toast.success(res.message);
       query();
+      inviteeQuery();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.data || {}) {
-        if (Array.isArray(error.data.message)) {
-          toastError(error.data?.message[0]);
-        } else if (error.data?.message) {
-          toastError(error.data?.message);
+      if (
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else {
+          toastError(error);
         }
       }
     }
@@ -540,10 +765,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -556,7 +781,7 @@ const MemberActions = (props: any) => {
 };
 
 const AddingNewMember = (props: any) => {
-  const { queryData, setOpenAddMembers, openAddMembers } = props;
+  const { queryData, inviteeQuery, setOpenAddMembers, openAddMembers } = props;
 
   return (
     <Box>
@@ -582,15 +807,15 @@ const AddingNewMember = (props: any) => {
         </Box>
       </Typography>
       <Collapse in={openAddMembers}>
-        <AddMember queryData={queryData} />
+        <AddMember queryData={queryData} inviteeQuery={inviteeQuery} />
       </Collapse>
     </Box>
   );
 };
 
 const AddMember = (props: any) => {
-  const { queryData } = props;
-  const { query } = queryData;
+  const { queryData, inviteeQuery } = props;
+  const { query } = inviteeQuery;
   const inputRef = useRef<HTMLInputElement>(null);
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
@@ -609,11 +834,14 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.response.data || {}) {
-        if (Array.isArray(error.response.data.message)) {
-          toastError(error.response.data?.message[0]);
-        } else if (error.response.data?.message) {
-          toastError(error.response.data?.message);
+      if (
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else {
+          toastError(error);
         }
       }
     }
@@ -676,6 +904,7 @@ const AssessmentKitsList = (props: any) => {
     setAssessmentKitsCounts,
     is_member,
     is_expert,
+    excelToDslDialogProps
   } = props;
   const { expertGroupId } = useParams();
   const { service } = useServiceContext();
@@ -683,18 +912,22 @@ const AssessmentKitsList = (props: any) => {
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupAssessmentKits(args, config),
   });
+
   return (
     <>
       <Title
         inPageLink="assessment_kits"
         size="small"
         toolbar={
-          hasAccess && (
-            <CreateAssessmentKitButton
+        <Box sx={{display:"flex", gap:"8px"}}>
+          <ExcelToDslButton
+              dialogProps={excelToDslDialogProps}
+          />
+          {hasAccess && <CreateAssessmentKitButton
               onSubmitForm={assessmentKitQuery.query}
               dialogProps={dialogProps}
-            />
-          )
+          />}
+        </Box>
         }
       >
         <Trans i18nKey={"assessmentKits"} />
@@ -712,8 +945,8 @@ const AssessmentKitsList = (props: any) => {
             </Box>
           }
           isDataEmpty={(data) => {
-            const { results } = data;
-            const isEmpty = results;
+            const { items } = data;
+            const isEmpty = items;
             return isEmpty;
           }}
           renderLoading={() => (
@@ -724,31 +957,15 @@ const AssessmentKitsList = (props: any) => {
             </>
           )}
           render={(data = {}) => {
-            const { results } = data;
-            if (results) {
-              setAssessmentKitsCounts(results);
+            const { items } = data;
+            if (items) {
+              setAssessmentKitsCounts(items);
             }
             return (
               <>
-                {results?.published.map((assessment_kit: any) => {
-                  return (
-                    <AssessmentKitListItem
-                      link={
-                        is_member
-                          ? `assessment-kits/${assessment_kit?.id}`
-                          : `/assessment-kits/${assessment_kit?.id}`
-                      }
-                      key={assessment_kit?.id}
-                      data={assessment_kit}
-                      fetchAssessmentKits={assessmentKitQuery.query}
-                      hasAccess={hasAccess}
-                      is_member={is_member}
-                      is_active={true}
-                    />
-                  );
-                })}
-                {is_member &&
-                  results?.unpublished.map((assessment_kit: any) => {
+                {items
+                  ?.filter((item: any) => item.published)
+                  ?.map((assessment_kit: any) => {
                     return (
                       <AssessmentKitListItem
                         link={
@@ -761,10 +978,30 @@ const AssessmentKitsList = (props: any) => {
                         fetchAssessmentKits={assessmentKitQuery.query}
                         hasAccess={hasAccess}
                         is_member={is_member}
-                        is_active={false}
+                        is_active={true}
                       />
                     );
                   })}
+                {is_member &&
+                  items
+                    ?.filter((item: any) => !item.published)
+                    ?.map((assessment_kit: any) => {
+                      return (
+                        <AssessmentKitListItem
+                          link={
+                            is_member
+                              ? `assessment-kits/${assessment_kit?.id}`
+                              : `/assessment-kits/${assessment_kit?.id}`
+                          }
+                          key={assessment_kit?.id}
+                          data={assessment_kit}
+                          fetchAssessmentKits={assessmentKitQuery.query}
+                          hasAccess={hasAccess}
+                          is_member={is_member}
+                          is_active={false}
+                        />
+                      );
+                    })}
               </>
             );
           }}
@@ -790,8 +1027,22 @@ const CreateAssessmentKitButton = (props: {
   );
 };
 
+const ExcelToDslButton = (props: {
+  dialogProps: IDialogProps;
+}) =>{
+  const { dialogProps } = props;
+
+  return (
+      <>
+        <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
+          <Trans i18nKey="convertExcelToDsl" />
+        </Button>
+        <AssessmentKitCEFromDialog {...dialogProps} />
+      </>
+  )
+}
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, hasAccess } = props;
+  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
   return (
     <>
@@ -806,25 +1057,22 @@ const ExpertGroupMembersDetail = (props: any) => {
               mb={2}
               titleProps={{
                 fontSize: "1rem",
-                fontFamily: "Roboto",
                 textTransform: "unset",
                 letterSpacing: ".05rem",
               }}
             >
               <Trans i18nKey="addNewMember" />
             </Title>
-            <AddMember queryData={queryData} />
+            <AddMember queryData={queryData} inviteeQuery={inviteeQueryData} />
           </Box>
         )}
 
         <QueryData
           {...queryData}
           render={(data) => {
-            const { results = [] } = data;
-            const invitees = results.filter((user: any) => user.user === null);
-            const users = results.filter((user: any) => user.user !== null);
-            const hasInvitees = invitees.length > 0;
-
+            const { items = [] } = data;
+            const users = items.filter((user: any) => user.status === "ACTIVE");
+            setNumberOfMembers(users?.length);
             return (
               <Box mt={hasAccess ? 6 : 1}>
                 <Box>
@@ -835,7 +1083,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                         titleProps={{
                           textTransform: "none",
                           fontSize: ".95rem",
-                          fontFamily: "Roboto",
                           mb: 1,
                         }}
                       >
@@ -844,8 +1091,15 @@ const ExpertGroupMembersDetail = (props: any) => {
                     )}
                     <Grid container spacing={2}>
                       {users.map((member: any) => {
-                        const { user, id } = member;
-                        const name = getUserName(user);
+                        const {
+                          displayName,
+                          id,
+                          pictureLink,
+                          email,
+                          linkedin,
+                          bio,
+                        } = member;
+
                         return (
                           <Grid item xs={12} sm={6} md={4} key={id}>
                             <Box
@@ -875,8 +1129,8 @@ const ExpertGroupMembersDetail = (props: any) => {
                                       height: 58,
                                       border: "4px solid white",
                                     }}
-                                    alt={name}
-                                    src={user?.picture || "/"}
+                                    alt={displayName}
+                                    src={pictureLink || "/"}
                                   />
                                   <Title
                                     titleProps={{
@@ -895,18 +1149,18 @@ const ExpertGroupMembersDetail = (props: any) => {
                                     sub={
                                       <Box
                                         component="a"
-                                        href={user.linkedin}
+                                        href={linkedin}
                                         target="_blank"
                                         sx={{
                                           textDecoration: "none",
                                           color: "inherit",
                                         }}
                                       >
-                                        {user.linkedin}
+                                        {linkedin}
                                       </Box>
                                     }
                                   >
-                                    {name}
+                                    {displayName}
                                   </Title>
                                 </Box>
                                 <Box mt={1} px={1} py={1} pb={3}>
@@ -914,7 +1168,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                     variant="body2"
                                     textAlign={"center"}
                                   >
-                                    {user.bio}
+                                    {bio}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -928,83 +1182,89 @@ const ExpertGroupMembersDetail = (props: any) => {
                       })}
                     </Grid>
                   </Box>
-                  {hasInvitees && hasAccess && (
-                    <Box mt={4}>
-                      <Title
-                        size="small"
-                        titleProps={{
-                          textTransform: "none",
-                          fontSize: ".95rem",
-                          fontFamily: "Roboto",
-                        }}
-                      >
-                        <Trans i18nKey="invitees" />
-                      </Title>
-                      <Box mt={1}>
-                        {invitees.map((member: any) => {
-                          const {
-                            user,
-                            id,
-                            invite_email,
-                            invite_expiration_date,
-                          } = member;
-                          const name = invite_email;
-
-                          return (
-                            <Box
-                              key={id}
-                              sx={{
-                                ...styles.centerV,
-                                boxShadow: 1,
-                                borderRadius: 2,
-                                my: 1,
-                                py: 0.8,
-                                px: 1.5,
-                              }}
-                            >
-                              <Box sx={{ ...styles.centerV }}>
-                                <Box>
-                                  <Avatar sx={{ width: 34, height: 34 }}>
-                                    <PersonRoundedIcon />
-                                  </Avatar>
-                                </Box>
-                                <Box ml={2}>{name}</Box>
-                              </Box>
-                              <Box ml="auto" sx={{ ...styles.centerV }}>
-                                <Box
-                                  sx={{
-                                    ...styles.centerV,
-                                    opacity: 0.8,
-                                    px: 0.4,
-                                    mr: 2,
-                                  }}
-                                >
-                                  <EventBusyRoundedIcon
-                                    fontSize="small"
-                                    sx={{ mr: 0.5 }}
-                                  />
-                                  <Typography variant="body2">
-                                    {formatDate(invite_expiration_date)}
-                                  </Typography>
-                                </Box>
-                                <MemberActions
-                                  query={queryData.query}
-                                  userId={id}
-                                  isInvitationExpired={true}
-                                  email={invite_email}
-                                />
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    </Box>
-                  )}
                 </Box>
               </Box>
             );
           }}
         />
+        {hasAccess && (
+          <QueryData
+            {...inviteeQueryData}
+            render={(data) => {
+              const { items = [] } = data;
+              const hasInvitees = items.length > 0;
+              return (
+                <Box mt={4}>
+                  {hasInvitees && (
+                    <Title
+                      size="small"
+                      titleProps={{
+                        textTransform: "none",
+                        fontSize: ".95rem",
+                      }}
+                    >
+                      <Trans i18nKey="invitees" />
+                    </Title>
+                  )}
+                  <Box mt={1}>
+                    {items.map((member: any) => {
+                      const { id, email, inviteExpirationDate, displayName } =
+                        member;
+
+                      return (
+                        <Box
+                          key={id}
+                          sx={{
+                            ...styles.centerV,
+                            boxShadow: 1,
+                            borderRadius: 2,
+                            my: 1,
+                            py: 0.8,
+                            px: 1.5,
+                          }}
+                        >
+                          <Box sx={{ ...styles.centerV }}>
+                            <Box>
+                              <Avatar sx={{ width: 34, height: 34 }}>
+                                <PersonRoundedIcon />
+                              </Avatar>
+                            </Box>
+                            <Box ml={2}>{displayName}</Box>
+                          </Box>
+                          <Box ml="auto" sx={{ ...styles.centerV }}>
+                            <Box
+                              sx={{
+                                ...styles.centerV,
+                                opacity: 0.8,
+                                px: 0.4,
+                                mr: 2,
+                              }}
+                            >
+                              <EventBusyRoundedIcon
+                                fontSize="small"
+                                sx={{ mr: 0.5 }}
+                              />
+                              <Typography variant="body2">
+                                {formatDate(inviteExpirationDate)}
+                              </Typography>
+                            </Box>
+                            <MemberActions
+                              query={queryData.query}
+                              inviteeQuery={inviteeQueryData.query}
+                              userId={id}
+                              isInvitationExpired={true}
+                              email={email}
+                            />
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              );
+            }}
+          />
+        )}
       </Box>
     </>
   );

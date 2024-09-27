@@ -1,37 +1,41 @@
 import React, { useEffect } from "react";
-import Title from "@common/Title";
+import Title from "@common/TitleComponent";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import formatDate from "@utils/formatDate";
 import Typography from "@mui/material/Typography";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 interface IAssessmentReportTitle {
   data: any;
   colorCode: string;
-  pathInfo: any;
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
-  const { data, colorCode, pathInfo } = props;
+  const { data, colorCode } = props;
   const {
-    assessment: { title, last_modification_time, assessment_kit },
+    assessment: { title, lastModificationTime, assessmentKit, space },
   } = data;
   const { spaceId, page } = useParams();
-  const {space,assessment}=pathInfo
+  const { config } = useConfigContext();
 
   useEffect(() => {
-    setDocumentTitle(`${title} ${t("overallInsightsT")}`);
+    setDocumentTitle(
+      `${t("overallInsight", { title: title })}`,
+      config.appTitle
+    );
   }, [title]);
 
   return (
     <Title
+      backLink="/"
       wrapperProps={{
         sx: {
           flexDirection: { xs: "column", md: "row" },
@@ -43,56 +47,16 @@ const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
           routes={[
             {
               title: space?.title,
-              to: `/${spaceId}/assessments/${page}`,
-              icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
+              to: `/${space?.id}/assessments/${page}`,
             },
             {
-              title:assessment?.title,
-              icon: (
-                <DescriptionRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />
-              ),
+              title: `${title} ${t("insights")}`,
             },
           ]}
+          displayChip
         />
       }
-      toolbar={
-        <Box sx={{ mt: { xs: 1.5, md: 0 } }}>
-          <Typography variant="subLarge" sx={{ opacity: 0.6, ml: "auto" }}>
-            <Trans i18nKey="lastUpdated" /> {formatDate(last_modification_time)}
-          </Typography>
-        </Box>
-      }
-    >
-      <Box
-        sx={{
-          display: { xs: "block", md: "flex" },
-          alignItems: "center",
-        }}
-      >
-        <AnalyticsRoundedIcon
-          sx={{
-            mr: 0.5,
-            opacity: 0.8,
-            color: colorCode,
-            position: { xs: "relative", md: "static" },
-            top: "6px",
-          }}
-          fontSize="large"
-        />
-
-        <Box
-          sx={{
-            display: "inline-block",
-            mr: "8px",
-          }}
-        >
-          {title}
-        </Box>
-        <span style={{ opacity: 0.9 }}>
-          {assessment_kit.description || <Trans i18nKey="insights" />}
-        </span>
-      </Box>
-    </Title>
+    ></Title>
   );
 };
 

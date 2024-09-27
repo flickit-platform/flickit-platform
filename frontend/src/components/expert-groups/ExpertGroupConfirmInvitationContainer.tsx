@@ -24,7 +24,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
       service.fetchUserExpertGroup(args, config),
   });
   const confirmInvitationQueryData = useQuery({
-    service: (args = { token }, config) =>
+    service: (args = { token, expert_group_id: expertGroupId }, config) =>
       service.confirmExpertGroupInvitation(args, config),
     runOnMount: false,
   });
@@ -38,12 +38,18 @@ const ExpertGroupConfirmInvitationContainer = () => {
       toast.success("You have joined this expert group successfully.");
     } catch (e) {
       const err = e as ICustomError;
-      toastError(err);
+      if (err?.response?.data?.code === "ALREADY_EXISTS") {
+        navigate(`/user/expert-groups/${expertGroupId}`, {
+          replace: true,
+        });
+      } else {
+        toastError(err);
+      }
     }
   };
 
   const decline = () => {
-    navigate("/spaces");
+    navigate("/spaces/1", { replace: true });
   };
 
   return (
@@ -57,7 +63,7 @@ const ExpertGroupConfirmInvitationContainer = () => {
               m: "auto",
             }}
           >
-            <Title size="small" textTransform={"none"} fontFamily="Roboto">
+            <Title size="small" textTransform={"none"}>
               <Trans i18nKey="youHaveBeenInvitedToExpertGroup" />
             </Title>
             <Box my={3}>

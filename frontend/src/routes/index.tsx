@@ -12,8 +12,17 @@ const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
 const ExpertGroupConfirmInvitationScreen = lazy(
   () => import("../screens/ExpertGroupConfirmInvitationScreen")
 );
+const AssessmentSettingScreen = lazy(
+  () => import("../screens/AssessmentSettingScreen")
+);
+const AssessmentDocumentScreen = lazy(
+  () => import("../screens/AssessmentDocumentScreen")
+);
 const AssessmentReportScreen = lazy(
   () => import("../screens/AssessmentReportScreen")
+);
+const AssessmentAdviceScreen = lazy(
+  () => import("../screens/AssessmentAdviceScreen")
 );
 const SubjectReportScreen = lazy(
   () => import("../screens/SubjectReportScreen")
@@ -84,15 +93,27 @@ const Routes = () => {
           />
 
           {/* Spaces and assessments related routes */}
-          <Route path="/spaces" element={<SpacesScreen />} />
+          <Route path="/spaces/:page" element={<SpacesScreen />} />
           <Route path="/:spaceId/setting" element={<SpaceSettingScreen />} />
           <Route
             path="/:spaceId/assessments/:page"
             element={<AssessmentsScreen />}
           />
           <Route
+            path="/:spaceId/assessments/:page/:assessmentId/assessment-settings/"
+            element={<AssessmentSettingScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:page/:assessmentId/assessment-document/"
+            element={<AssessmentDocumentScreen />}
+          />
+          <Route
             path="/:spaceId/assessments/:page/:assessmentId/insights"
             element={<AssessmentReportScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:page/:assessmentId/advice"
+            element={<AssessmentAdviceScreen />}
           />
           <Route
             path="/:spaceId/assessments/:page/:assessmentId/insights/:subjectId"
@@ -100,7 +121,11 @@ const Routes = () => {
           />
           {/* Questionnaires and questions related routes */}
           <Route
-            path="/:spaceId/assessments/:page/:assessmentId/questionnaires"
+            path="/:spaceId/assessments/:page/:assessmentId/questionnaires/:questionIndex"
+            element={<QuestionnairesScreen />}
+          />
+          <Route
+            path="/:spaceId/assessments/:page/:assessmentId/questionnaires/"
             element={<QuestionnairesScreen />}
           />
           <Route

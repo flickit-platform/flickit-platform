@@ -12,6 +12,7 @@ import { useParams } from "react-router";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import toastError from "@utils/toastError";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import { useForm } from "react-hook-form";
@@ -31,6 +32,9 @@ import firstCharDetector from "@/utils/firstCharDetector";
 import { keyframes } from "@emotion/react";
 import { Link } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+
+import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
+
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
@@ -82,8 +86,8 @@ const AssessmentKitSectionGeneralInfo = (
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = (current_user_is_coordinator: boolean) => {
-    current_user_is_coordinator && setIsHovering(true);
+  const handleMouseOver = (editable: boolean) => {
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
@@ -92,6 +96,7 @@ const AssessmentKitSectionGeneralInfo = (
   const handleCancel = () => {
     setShow(false);
   };
+
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
     try {
@@ -102,10 +107,13 @@ const AssessmentKitSectionGeneralInfo = (
         },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        fetchAssessmentKitInfoQuery.query();
-      }
-    } catch {}
+
+      await fetchAssessmentKitInfoQuery.query();
+      await handleCancel();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
   return (
     <Box>
@@ -121,9 +129,32 @@ const AssessmentKitSectionGeneralInfo = (
             sx={{ mt: 1, borderRadius: 2 }}
           />
         }
-        render={([info = {}, stats = {}]) => {
-          setExpertGroup(stats?.expert_group);
-          setAssessmentKitTitle(info?.title);
+        render={([info, stats]) => {
+          const {
+            id,
+            title,
+            summary,
+            published,
+            isPrivate,
+            price,
+            about,
+            tags,
+            editable,
+          } = info as AssessmentKitInfoType;
+          const {
+            creationTime,
+            lastModificationTime,
+            questionnairesCount,
+            attributesCount,
+            questionsCount,
+            maturityLevelsCount,
+            likes,
+            assessmentCounts,
+            subjects,
+            expertGroup,
+          } = stats as AssessmentKitStatsType;
+          setExpertGroup(expertGroup);
+          setAssessmentKitTitle(title);
           return (
             <Grid container spacing={4}>
               <Grid item xs={12} md={7}>
@@ -137,39 +168,31 @@ const AssessmentKitSectionGeneralInfo = (
                 >
                   <OnHoverInput
                     formMethods={formMethods}
-                    data={info?.title}
+                    data={title}
                     title={<Trans i18nKey="title" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="title"
-                    current_user_is_coordinator={
-                      info?.current_user_is_coordinator
-                    }
+                    editable={editable}
                   />
                   <OnHoverInput
                     formMethods={formMethods}
-                    data={info?.summary}
+                    data={summary}
                     title={<Trans i18nKey="summary" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     type="summary"
-                    current_user_is_coordinator={
-                      info?.current_user_is_coordinator
-                    }
+                    editable={editable}
                   />
                   <OnHoverStatus
-                    data={info?.is_active}
+                    data={published}
                     title={<Trans i18nKey="status" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={
-                      info?.current_user_is_coordinator
-                    }
+                    editable={editable}
                   />
                   <OnHoverVisibilityStatus
-                    data={info?.is_private}
+                    data={isPrivate}
                     title={<Trans i18nKey="visibility" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={
-                      info?.current_user_is_coordinator
-                    }
+                    editable={editable}
                   />
                   <Box
                     sx={{
@@ -191,10 +214,10 @@ const AssessmentKitSectionGeneralInfo = (
                     </Typography>
                   </Box>
                   {/* <OnHoverAutocompleteAsyncField
-                    data={info?.tags}
+                    data={tags}
                     title={<Trans i18nKey="tags" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={current_user_is_coordinator}
+                    editable ={editable }
                   /> */}
 
                   <Box
@@ -212,7 +235,7 @@ const AssessmentKitSectionGeneralInfo = (
                     >
                       <Trans i18nKey="tags" />
                     </Typography>
-                    {info?.current_user_is_coordinator && show ? (
+                    {editable && show ? (
                       <FormProviderWithForm formMethods={formMethods}>
                         <Box
                           sx={{
@@ -229,7 +252,7 @@ const AssessmentKitSectionGeneralInfo = (
                             })}
                             name="tags"
                             multiple={true}
-                            defaultValue={info?.tags}
+                            defaultValue={tags}
                             searchOnType={false}
                             required={true}
                             label={""}
@@ -286,21 +309,20 @@ const AssessmentKitSectionGeneralInfo = (
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          "&:hover": { border: "1px solid #1976d299" },
+                          "&:hover": {
+                            border: editable ? "1px solid #1976d299" : "unset",
+                          },
                         }}
                         onClick={() => setShow(!show)}
-                        onMouseOver={() =>
-                          handleMouseOver(info?.current_user_is_coordinator)
-                        }
+                        onMouseOver={() => handleMouseOver(editable ?? false)}
                         onMouseOut={handleMouseOut}
                       >
                         <Box sx={{ display: "flex" }}>
-                          {info?.tags.map((tag: any, index: number) => {
+                          {tags.map((tag: any, index: number) => {
                             return (
                               <Box
                                 sx={{
                                   background: "#00000014",
-                                  fontFamily: "Roboto",
                                   fontSize: "0.875rem",
                                   borderRadius: "8px",
                                   fontWeight: "700",
@@ -334,12 +356,10 @@ const AssessmentKitSectionGeneralInfo = (
                   </Box>
 
                   <OnHoverRichEditor
-                    data={info?.about}
+                    data={about}
                     title={<Trans i18nKey="about" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
-                    current_user_is_coordinator={
-                      info?.current_user_is_coordinator
-                    }
+                    editable={editable}
                   />
                 </Box>
               </Grid>
@@ -352,23 +372,23 @@ const AssessmentKitSectionGeneralInfo = (
                     background: "white",
                   }}
                 >
-                  {stats?.creation_time && (
+                  {creationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.creation_time),
+                          item: formatDate(creationTime),
                           title: t("creationDate"),
                         }}
                       />
                     </Box>
                   )}
-                  {stats?.last_update_time && (
+                  {lastModificationTime && (
                     <Box my={1.5}>
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(stats?.last_update_time),
+                          item: formatDate(lastModificationTime),
                           title: t("lastUpdated"),
                         }}
                       />
@@ -379,7 +399,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.subjects.map((sub: any) => sub?.title),
+                        item: subjects.map((sub: any) => sub?.title),
                         title: t("subjects"),
                         type: "array",
                       }}
@@ -389,7 +409,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questionnaires_count,
+                        item: questionnairesCount,
                         title: t("questionnairesCount"),
                       }}
                     />
@@ -398,7 +418,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.attributes_count,
+                        item: attributesCount,
                         title: t("attributesCount"),
                       }}
                     />
@@ -407,7 +427,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.questions_count,
+                        item: questionsCount,
                         title: t("totalQuestionsCount"),
                       }}
                     />
@@ -416,7 +436,7 @@ const AssessmentKitSectionGeneralInfo = (
                     <InfoItem
                       bg="white"
                       info={{
-                        item: stats?.maturity_levels_count,
+                        item: maturityLevelsCount,
                         title: t("maturitylevels"),
                       }}
                     />
@@ -426,13 +446,13 @@ const AssessmentKitSectionGeneralInfo = (
                     <Box sx={{ display: "flex" }} mr={4}>
                       <FavoriteRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.likes_count}
+                        {likes}
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <ShoppingCartRoundedIcon color="primary" />
                       <Typography color="primary" ml={1}>
-                        {stats?.assessments_count}
+                        {assessmentCounts}
                       </Typography>
                     </Box>
                   </Box>
@@ -449,20 +469,13 @@ const OnHoverInput = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-    current_user_is_coordinator && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const {
-    data,
-    title,
-    current_user_is_coordinator,
-    infoQuery,
-    type,
-    formMethods,
-  } = props;
+  const { data, title, editable, infoQuery, type, formMethods } = props;
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const [inputData, setInputData] = useState<string>(data);
@@ -483,7 +496,7 @@ const OnHoverInput = (props: any) => {
       config
     ) => service.updateAssessmentKitStats(args, config),
     runOnMount: false,
-    toastError: true,
+    // toastError: true,
   });
   const updateAssessmentKit = async () => {
     try {
@@ -492,6 +505,14 @@ const OnHoverInput = (props: any) => {
       await infoQuery();
     } catch (e) {
       const err = e as ICustomError;
+      if (Array.isArray(err.response?.data?.message)) {
+        toastError(err.response?.data?.message[0]);
+      } else if (
+        err.response?.data &&
+        err.response?.data.hasOwnProperty("message")
+      ) {
+        toastError(error);
+      }
       setError(err);
       setHasError(true);
     }
@@ -517,7 +538,7 @@ const OnHoverInput = (props: any) => {
           {title}
         </Typography>
 
-        {current_user_is_coordinator && show ? (
+        {editable && show ? (
           <Box
             sx={{ display: "flex", flexDirection: "column", width: "100% " }}
           >
@@ -535,7 +556,6 @@ const OnHoverInput = (props: any) => {
                 minHeight: "38px",
                 borderRadius: "4px",
                 paddingRight: "12px;",
-                fontFamily: "Roboto",
                 fontWeight: "700",
                 fontSize: "0.875rem",
               }}
@@ -586,14 +606,17 @@ const OnHoverInput = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              wordBreak: "break-word",
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
           >
             <Typography variant="body2" fontWeight="700">
-              {data.replace(/<\/?p>/g, "")}
+              {data?.replace(/<\/?p>/g, "")}
             </Typography>
             {isHovering && (
               <IconButton
@@ -617,12 +640,12 @@ const OnHoverInput = (props: any) => {
 };
 
 const OnHoverStatus = (props: any) => {
-  const { data, title, infoQuery, current_user_is_coordinator } = props;
+  const { data, title, infoQuery, editable } = props;
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const [selected, setSelected] = useState<boolean>(data);
   const handleToggle = async (status: boolean) => {
-    if (current_user_is_coordinator) {
+    if (editable) {
       setSelected(status);
       if (status !== data) {
         await updateAssessmentKit();
@@ -633,7 +656,7 @@ const OnHoverStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_active: data ? false : true },
+        data: { published: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -677,7 +700,7 @@ const OnHoverStatus = (props: any) => {
               padding: 0.5,
               backgroundColor: selected ? "#2e7d32" : "transparent",
               color: selected ? "#fff" : "#000",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -690,7 +713,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize="0.75rem"
             >
               <Trans i18nKey="published" />
             </Typography>
@@ -700,7 +723,7 @@ const OnHoverStatus = (props: any) => {
             sx={{
               padding: 0.5,
               backgroundColor: !selected ? "gray" : "transparent",
-              cursor: "pointer",
+              cursor: editable ? "pointer" : "default",
               transition: "background-color 0.3s ease",
               animation: `${fadeIn} 0.5s ease`,
               borderRadius: "6px",
@@ -714,7 +737,7 @@ const OnHoverStatus = (props: any) => {
               fontWeight="700"
               textTransform={"uppercase"}
               sx={{ userSelect: "none" }}
-              fontSize={"12px"}
+              fontSize=".75rem"
             >
               <Trans i18nKey="unpublished" />
             </Typography>
@@ -725,12 +748,12 @@ const OnHoverStatus = (props: any) => {
   );
 };
 const OnHoverVisibilityStatus = (props: any) => {
-  const { data, title, infoQuery, current_user_is_coordinator } = props;
+  const { data, title, infoQuery, editable } = props;
   const { assessmentKitId, expertGroupId } = useParams();
   const { service } = useServiceContext();
   const [selected, setSelected] = useState<boolean>(data);
   const handleToggle = (status: boolean) => {
-    if (current_user_is_coordinator) {
+    if (editable) {
       setSelected(status);
       if (status !== data) updateAssessmentKit();
     }
@@ -739,7 +762,7 @@ const OnHoverVisibilityStatus = (props: any) => {
     service: (
       args = {
         assessmentKitId: assessmentKitId,
-        data: { is_private: data ? false : true },
+        data: { isPrivate: data ? false : true },
       },
       config
     ) => service.updateAssessmentKitStats(args, config),
@@ -790,7 +813,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 padding: 0.5,
                 backgroundColor: selected ? "#7954B3;" : "transparent",
                 color: selected ? "#fff" : "#000",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -803,7 +826,7 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
+                fontSize=".75rem"
               >
                 <Trans i18nKey="private" />
               </Typography>
@@ -813,7 +836,7 @@ const OnHoverVisibilityStatus = (props: any) => {
               sx={{
                 padding: 0.5,
                 backgroundColor: !selected ? "gray" : "transparent",
-                cursor: "pointer",
+                cursor: editable ? "pointer" : "default",
                 transition: "background-color 0.3s ease",
                 animation: `${fadeIn} 0.5s ease`,
                 borderRadius: "6px",
@@ -827,13 +850,13 @@ const OnHoverVisibilityStatus = (props: any) => {
                 fontWeight="700"
                 textTransform={"uppercase"}
                 sx={{ userSelect: "none" }}
-                fontSize={"12px"}
+                fontSize=".75rem"
               >
                 <Trans i18nKey="public" />
               </Typography>
             </Box>
           </Box>
-          {current_user_is_coordinator && selected && (
+          {editable && selected && (
             <Box sx={{ ml: 1 }}>
               <Tooltip title={<Trans i18nKey="managePermissions" />}>
                 <IconButton
@@ -857,13 +880,13 @@ const OnHoverRichEditor = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-    current_user_is_coordinator && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, title, infoQuery, current_user_is_coordinator } = props;
+  const { data, title, infoQuery, editable } = props;
   const [titleText, setTitleText] = useState<String>(data);
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
@@ -883,9 +906,8 @@ const OnHoverRichEditor = (props: any) => {
         { assessmentKitId: assessmentKitId || "", data: { about: data.about } },
         { signal: abortController.current.signal }
       );
-      if (res) {
-        infoQuery();
-      }
+      await infoQuery();
+      await setShow(false);
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
@@ -905,7 +927,7 @@ const OnHoverRichEditor = (props: any) => {
         <Typography variant="body2" mr={4} sx={{ minWidth: "64px !important" }}>
           {title}
         </Typography>
-        {current_user_is_coordinator && show ? (
+        {editable && show ? (
           <FormProviderWithForm formMethods={formMethods}>
             <Box
               sx={{
@@ -974,7 +996,9 @@ const OnHoverRichEditor = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -1010,13 +1034,13 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = () => {
-    current_user_is_coordinator && setIsHovering(true);
+    editable && setIsHovering(true);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const { data, title, infoQuery, current_user_is_coordinator } = props;
+  const { data, title, infoQuery, editable } = props;
   const [titleText, setTitleText] = useState<String>(data);
   const handleCancel = () => {
     setShow(false);
@@ -1053,7 +1077,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
         <Typography variant="body2" mr={4}>
           {title}
         </Typography>
-        {current_user_is_coordinator && show ? (
+        {editable && show ? (
           <FormProviderWithForm formMethods={formMethods}>
             <Box
               sx={{
@@ -1123,7 +1147,9 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              "&:hover": { border: "1px solid #1976d299" },
+              "&:hover": {
+                border: editable ? "1px solid #1976d299" : "unset",
+              },
             }}
             onClick={() => setShow(!show)}
             onMouseOver={handleMouseOver}
@@ -1135,7 +1161,6 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                   <Box
                     sx={{
                       background: "#00000014",
-                      fontFamily: "Roboto",
                       fontSize: "0.875rem",
                       borderRadius: "8px",
                       fontWeight: "700",

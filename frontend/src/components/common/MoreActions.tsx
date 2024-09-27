@@ -15,6 +15,7 @@ interface IMoreActionsProps {
   loading?: boolean;
   hideInnerIconButton?: boolean;
   anchorEl?: Element | ((element: Element) => Element) | null | undefined;
+  fontSize?: "inherit" | "small" | "large" | "medium";
   items: (
     | {
         icon?: JSX.Element;
@@ -26,10 +27,22 @@ interface IMoreActionsProps {
     | undefined
     | false
   )[];
+    setShowTooltip?: (e :boolean)=> void
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
-  const { boxProps = {}, openMenu, closeMenu, loading = false, open, anchorEl, items = [], hideInnerIconButton = false } = props;
+  const {
+    boxProps = {},
+    openMenu,
+    closeMenu,
+    loading = false,
+    open,
+    anchorEl,
+    items = [],
+    hideInnerIconButton = false,
+    fontSize = "inherit",
+    setShowTooltip
+  } = props;
 
   const menuItems = items.filter((item) => !!item) as {
     icon?: JSX.Element;
@@ -47,15 +60,30 @@ const MoreActions = (props: IMoreActionsProps) => {
             e.preventDefault();
             e.stopPropagation();
             !loading && openMenu(e);
+            setShowTooltip?.(false)
           }}
         >
-          {loading ? <CircularProgress size="20px" /> : <MoreVertIcon fontSize="small" />}
+          {loading ? (
+            <CircularProgress size="1.25rem" />
+          ) : (
+            <MoreVertIcon fontSize={fontSize ? fontSize : "small"} />
+          )}
         </IconButton>
       )}
 
-      <Menu open={open} onClose={closeMenu} anchorEl={anchorEl} PaperProps={{ sx: { minWidth: "160px" } }}>
+      <Menu
+        open={open}
+        onClose={closeMenu}
+        anchorEl={anchorEl}
+        PaperProps={{ sx: { minWidth: "160px" } }}
+      >
         {menuItems.map((item, index) => {
-          const { onClick = () => {}, icon, text, menuItemProps = {} } = item || {};
+          const {
+            onClick = () => {},
+            icon,
+            text,
+            menuItemProps = {},
+          } = item || {};
           return (
             <MenuItem
               key={index}

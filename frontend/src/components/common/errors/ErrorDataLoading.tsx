@@ -11,7 +11,7 @@ const ErrorDataLoading = (props: IErrorDataLoadingProps) => {
   const { ...rest } = props;
   return (
     <Box sx={{ ...styles.centerCVH }} pt="64px" pb="44px" {...rest}>
-      <ReportGmailerrorredRoundedIcon sx={{ fontSize: "64px", mb: "16px" }} />
+      <ReportGmailerrorredRoundedIcon sx={{ fontSize: "4rem", mb: "16px" }} />
       <Typography>
         <Trans i18nKey="someThingWentWrong" />
       </Typography>

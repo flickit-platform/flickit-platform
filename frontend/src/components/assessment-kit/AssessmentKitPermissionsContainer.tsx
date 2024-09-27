@@ -21,6 +21,7 @@ import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 const AssessmentKitPermissionsContainer = () => {
   const { service } = useServiceContext();
@@ -33,6 +34,8 @@ const AssessmentKitPermissionsContainer = () => {
     service: (args = { assessmentKitId: assessmentKitId }, config) =>
       service.assessmentKitMinInfo(args, config),
   });
+
+  const { config } = useConfigContext();
   return (
     <QueryBatchData
       queryBatchData={[
@@ -41,7 +44,8 @@ const AssessmentKitPermissionsContainer = () => {
       ]}
       render={([data = {}, info = {}]) => {
         setDocumentTitle(
-          `${t("assessmentKit")}: ${info?.expertGroup?.title || ""}`
+          `${t("assessmentKit")}: ${info?.expertGroup?.title || ""}`,
+          config.appTitle
         );
         return (
           <AssessmentKitPermisson
@@ -67,11 +71,16 @@ const AssessmentKitPermisson = (props: any) => {
     runOnMount: false,
   });
   const deleteMember = async (id: any) => {
-    await deleteMemberToKitPermissionQueryData.query({
-      assessmentKitId: assessmentKitId,
-      userId: id,
-    });
-    await query.query();
+    try {
+      await deleteMemberToKitPermissionQueryData.query({
+        assessmentKitId: assessmentKitId,
+        userId: id,
+      });
+      await query.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
   return (
     <Box>
@@ -113,7 +122,6 @@ const AssessmentKitPermisson = (props: any) => {
             mb={2}
             titleProps={{
               fontSize: "1rem",
-              fontFamily: "Roboto",
               textTransform: "unset",
               letterSpacing: ".05rem",
             }}
@@ -128,7 +136,6 @@ const AssessmentKitPermisson = (props: any) => {
             mb={2}
             titleProps={{
               fontSize: "1rem",
-              fontFamily: "Roboto",
               textTransform: "unset",
               letterSpacing: ".05rem",
             }}
@@ -200,11 +207,14 @@ const AddMember = (props: any) => {
       query();
     } catch (e) {
       const error = e as ICustomError;
-      if ("message" in error.response.data || {}) {
-        if (Array.isArray(error.response.data.messagee)) {
-          toastError(error.response.data.message[0]);
-        } else if (error.response.data.message) {
-          toastError(error.response.data.message);
+      if (
+        error.response?.data &&
+        error.response?.data.hasOwnProperty("message")
+      ) {
+        if (Array.isArray(error.response?.data?.message)) {
+          toastError(error.response?.data?.message[0]);
+        } else {
+          toastError(error);
         }
       }
     }

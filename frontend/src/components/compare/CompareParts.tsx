@@ -24,56 +24,62 @@ import { styles } from "@styles";
 import AlertBox from "@common/AlertBox";
 import PermissionControl from "@common/PermissionControl";
 import forLoopComponent from "@utils/forLoopComponent";
-import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
+import { Skeleton } from "@mui/material";
 
 const CompareParts = () => {
-  const { assessment_kit } = useCompareContext();
+  const { assessmentIds, assessment_kit, loading } = useCompareContext();
   return (
     <Box sx={{ pb: { xs: 6, sm: 0 } }}>
       <Box my={3}>
         <CompareSelectedAssessmentKitInfo />
       </Box>
       <Box position={"relative"}>
-        <>
-          <CompareButton
-            disabled={assessment_kit && assessment_kit?.length <= 1}
-          />
-          <Grid container spacing={3}>
-            {forLoopComponent(4, (index) => {
-              return (
-                <Grid item xs={12} md={6} key={index}>
-                  <ComparePartItem
-                    data={assessment_kit && assessment_kit[index]}
-                    index={index}
-                    disabled={
-                      assessment_kit && assessment_kit.length >= index
-                        ? false
-                        : true
-                    }
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </>
-
+        {loading ? (
+          <Skeleton height="90vh" sx={{ marginTop: "-20vh" }} />
+        ) : (
+          <>
+            <CompareButton
+              disabled={
+                (assessmentIds && assessmentIds?.length <= 1) ||
+                (assessment_kit && assessment_kit?.length <= 1)
+              }
+            />
+            <Grid container spacing={3}>
+              {forLoopComponent(4, (index) => {
+                return (
+                  <Grid item xs={12} md={6} key={index}>
+                    <ComparePartItem
+                      data={assessment_kit && assessment_kit[index]}
+                      index={index}
+                      disabled={
+                        (assessmentIds && assessmentIds?.length >= index) ||
+                        (assessment_kit && assessment_kit.length >= index)
+                          ? false
+                          : true
+                      }
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </>
+        )}
       </Box>
     </Box>
   );
 };
 
-
 const CompareButton = (props: { disabled?: boolean }) => {
   const { disabled = false } = props;
   const navigate = useNavigate();
-  const { assessment_kit } = useCompareContext();
+  const { assessment_kit, assessmentIds } = useCompareContext();
   const handleClick = () => {
     const id = assessment_kit.map((item: any) => item.id);
-    if (assessment_kit) {
+    if (assessment_kit || assessmentIds) {
       navigate({
         pathname: "result",
-        search: createSearchParams({ assessmentIds: id }).toString(),
+        search: createSearchParams({ assessment_id: id }).toString(),
       });
     }
   };
@@ -95,20 +101,26 @@ const CompareButton = (props: { disabled?: boolean }) => {
 };
 
 const CompareSelectedAssessmentKitInfo = () => {
-  const { assessment_kit } = useCompareContext();
+  const { assessment_kit, assessmentIds } = useCompareContext();
   const dispatch = useCompareDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const makeNewComparison = () => {
+    setSearchParams((searchParams) => {
+      searchParams.delete("assessment_id");
+      return searchParams;
+    });
     dispatch(compareActions.setAssessmentIds([]));
     dispatch(compareActions.setAssessmentKit([]));
   };
-  return assessment_kit ? (
+  return assessment_kit || assessmentIds ? (
     <AlertBox
       severity="info"
       action={
         <Button
           variant="contained"
           size="small"
-          color="info"
+          color="primary"
           onClick={makeNewComparison}
         >
           <Trans i18nKey="newComparison" />

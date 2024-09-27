@@ -21,7 +21,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { IAssessment, TId, TQueryFunction } from "@types";
+import { IAssessment, TId, IQuestionnairesModel, TQueryFunction } from "@types";
 import { TDialogProps } from "@utils/useDialog";
 import Button from "@mui/material/Button";
 import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
@@ -33,25 +33,37 @@ import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
 interface IAssessmentCardProps {
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & { manageable?: boolean } & {
+    viewable?: boolean;
+  };
+
   dialogProps: TDialogProps;
   deleteAssessment: TQueryFunction<any, TId>;
 }
+import SettingsIcon from "@mui/icons-material/Settings";
+import Tooltip from "@mui/material/Tooltip";
+import { Chip } from "@mui/material";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
+  const [calculatePercentage, setCalculatePercentage] = useState<any>();
   const [show, setShow] = useState<boolean | false>();
   const { item } = props;
   const abortController = useRef(new AbortController());
+
   const {
-    result_maturity_level,
-    is_calculate_valid,
-    is_confidence_valid,
-    assessment_kit,
+    maturityLevel,
+    isCalculateValid,
+    isConfidenceValid,
+    kit,
     id,
+    lastModificationTime,
+    viewable,
+    confidenceValue,
   } = item;
-  const hasML = hasMaturityLevel(result_maturity_level?.value);
-  const { maturity_levels_count } = assessment_kit;
+  const hasML = hasMaturityLevel(maturityLevel?.value);
+  const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();
   const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
@@ -68,11 +80,13 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
   const fetchAssessments = async () => {
     try {
-      setShow(is_calculate_valid);
-      if (!is_calculate_valid) {
-        const data = await calculateMaturityLevelQuery.query();
+      setShow(isCalculateValid);
+      if (!isCalculateValid) {
+        const data = await calculateMaturityLevelQuery.query().catch(() => {
+          setShow(true);
+        });
         setCalculateResault(data);
-        if (data.maturity_level?.id) {
+        if (data?.id) {
           setShow(true);
         }
       }
@@ -87,9 +101,22 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
       // setErrorObject(err);
     }
   };
+  const assessmentTotalProgress = useQuery<IQuestionnairesModel>({
+    service: (args, config) =>
+      service.fetchAssessmentTotalProgress(
+        { assessmentId: id, ...(args || {}) },
+        config
+      ),
+  });
   useEffect(() => {
     fetchAssessments();
-  }, [is_calculate_valid]);
+    (async () => {
+      const { answersCount, questionsCount } =
+        await assessmentTotalProgress.query();
+      const calc = (answersCount / questionsCount) * 100;
+      setCalculatePercentage(calc.toFixed(2));
+    })();
+  }, [isCalculateValid]);
   return (
     <Grid item lg={3} md={4} sm={6} xs={12}>
       <Paper
@@ -98,7 +125,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
           pt: 3,
           pb: 3,
           px: 2,
-          borderRadius: "16px",
+          borderRadius: "12px",
           ...styles.centerCH,
           minHeight: "300px",
           height: "100%",
@@ -114,14 +141,38 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
         <Grid container sx={{ textDecoration: "none", height: "100%" }}>
           <Grid item xs={12}>
             <Box
-              sx={{ textDecoration: "none" }}
+              sx={{
+                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               component={Link}
               to={
-                is_calculate_valid
+                isCalculateValid && viewable
                   ? `${item.id}/insights`
                   : `${item.id}/questionnaires`
               }
             >
+              <Tooltip title={kit?.title}>
+                <Chip
+                  label={kit?.title}
+                  size="small"
+                  sx={{
+                    maxWidth: "70%",
+                    width: "fit-content",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    border: `0.5px solid #2466A8`,
+                    textTransform: "none",
+                    color: "#101c32",
+                    background: "transparent",
+                  }}
+                  data-cy="assessment-card-title"
+                />
+              </Tooltip>
               <Typography
                 variant="h5"
                 color="CaptionText"
@@ -148,7 +199,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(item.last_modification_time)}
+                {formatDate(lastModificationTime)}
               </Typography>
             </Box>
           </Grid>
@@ -158,21 +209,24 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
             sx={{ ...styles.centerCH, textDecoration: "none" }}
             mt={2}
             component={Link}
-            to={hasML ? `${item.id}/insights` : `${item.id}/questionnaires`}
+            to={
+              hasML && viewable
+                ? `${item.id}/insights`
+                : `${item.id}/questionnaires`
+            }
           >
             {show ? (
               <Gauge
-                systemStatus={item?.status}
-                maturity_level_number={maturity_levels_count}
+                maturity_level_number={maturityLevelsCount}
                 level_value={
-                  calculateResault?.maturity_level
-                    ? calculateResault?.maturity_level?.index
-                    : result_maturity_level?.index
+                  calculateResault?.index
+                    ? calculateResault?.index
+                    : maturityLevel?.index
                 }
                 maturity_level_status={
-                  calculateResault?.maturity_level
-                    ? calculateResault?.maturity_level?.title
-                    : result_maturity_level?.title
+                  calculateResault?.title
+                    ? calculateResault?.title
+                    : maturityLevel?.title
                 }
                 maxWidth="275px"
                 mt="auto"
@@ -181,16 +235,66 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
               <LoadingGauge />
             )}
           </Grid>
-          <Grid item xs={12} sx={{ ...styles.centerCH }} mt={1}>
+          {viewable && (
+            <Grid item xs={12} mt="-4rem">
+              <Typography
+                variant="titleSmall"
+                color="#243342"
+                justifyContent="center"
+                alignItems="center"
+                display="flex"
+                gap="0.125rem"
+              >
+                <Trans i18nKey="withConfidence" />:
+                <ConfidenceLevel
+                  displayNumber
+                  inputNumber={Math.ceil(confidenceValue)}
+                  variant="titleMedium"
+                ></ConfidenceLevel>
+              </Typography>
+            </Grid>
+          )}
+          <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
             <Button
-              startIcon={
-                <QueryStatsRounded
-                  sx={{
-                    mr: `${is_farsi ? "-4px" : "8px"}`,
-                    ml: `${is_farsi ? "8px" : "-4px"}`,
-                  }}
-                />
-              }
+              startIcon={<QuizRoundedIcon />}
+              fullWidth
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+              }}
+              component={Link}
+              sx={{ position: "relative", zIndex: 1 }}
+              state={location}
+              to={`${item.id}/questionnaires`}
+              data-cy="questionnaires-btn"
+              variant={viewable ? "outlined" : "contained"}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                  background: viewable
+                    ? "rgba(102, 128, 153, 0.3)"
+                    : "rgb(0, 41, 70)",
+                  zIndex: -1,
+                  width: calculatePercentage ? `${calculatePercentage}%` : "0%",
+                  transition: "all 1s ease-in-out",
+                }}
+              ></Box>
+              <Trans i18nKey="questionnaires" />
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ ...styles.centerCH, display: viewable ? "block" : "none" }}
+            mt={1}
+          >
+            <Button
+              startIcon={<QueryStatsRounded />}
+              variant={"contained"}
               fullWidth
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
@@ -200,38 +304,20 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 }
               }}
               component={Link}
-              to={hasML ? `${item.id}/insights` : ""}
-              // variant={is_calculate_valid ? "contained" : undefined}
+              to={hasML && viewable ? `${item.id}/insights` : ""}
+              sx={{
+                backgroundColor: "#2e7d72",
+                background: viewable ? `#01221e` : "rgba(0,59,100, 12%)",
+                color: !viewable ? "rgba(10,35,66, 38%)" : "",
+                boxShadow: !viewable ? "none" : "",
+                "&:hover": {
+                  background: viewable ? `` : "rgba(0,59,100, 12%)",
+                  boxShadow: !viewable ? "none" : "",
+                },
+              }}
               data-cy="view-insights-btn"
             >
               <Trans i18nKey="insights" />
-            </Button>
-          </Grid>
-          <Grid item xs={12} mt={1} sx={{ ...styles.centerCH }}>
-            <Button
-              startIcon={
-                <QuizRoundedIcon
-                  sx={{
-                    mr: `${is_farsi ? "-4px" : "8px"}`,
-                    ml: `${is_farsi ? "8px" : "-4px"}`,
-                  }}
-                />
-              }
-              variant={"contained"}
-              fullWidth
-              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                e.stopPropagation();
-              }}
-              component={Link}
-              state={location}
-              to={`${item.id}/questionnaires`}
-              sx={{
-                backgroundColor: "#2e7d72",
-                background: `#01221e`,
-              }}
-              data-cy="questionnaires-btn"
-            >
-              <Trans i18nKey="questionnaires" />
             </Button>
           </Grid>
         </Grid>
@@ -242,7 +328,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
 
 const Actions = (props: {
   deleteAssessment: TQueryFunction<any, TId>;
-  item: IAssessment & { space: any };
+  item: IAssessment & { space: any } & { manageable?: boolean } & {
+    viewable?: boolean;
+  };
   dialogProps: TDialogProps;
   abortController: React.MutableRefObject<AbortController>;
 }) => {
@@ -272,6 +360,12 @@ const Actions = (props: {
     });
   };
 
+  const assessmentSetting = (e: any) => {
+    navigate(`${item.id}/assessment-settings/`, {
+      state: item?.color || { code: "#073B4C", id: 6 },
+    });
+  };
+
   return (
     <MoreActions
       {...useMenu()}
@@ -279,11 +373,11 @@ const Actions = (props: {
       items={
         hasStatus(item.status)
           ? [
-              {
-                icon: <EditRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="edit" />,
-                onClick: openEditDialog,
-              },
+              // {
+              //   icon: <EditRoundedIcon fontSize="small" />,
+              //   text: <Trans i18nKey="edit" />,
+              //   onClick: openEditDialog,
+              // },
               {
                 icon: <CompareRoundedIcon fontSize="small" />,
                 text: <Trans i18nKey="addToCompare" />,
@@ -297,12 +391,17 @@ const Actions = (props: {
               },
             ]
           : [
-              {
-                icon: <EditRoundedIcon fontSize="small" />,
-                text: <Trans i18nKey="edit" />,
-                onClick: openEditDialog,
+              // {
+              //   icon: <EditRoundedIcon fontSize="small" />,
+              //   text: <Trans i18nKey="edit" />,
+              //   onClick: openEditDialog,
+              // },
+              item?.manageable && {
+                icon: <SettingsIcon fontSize="small" />,
+                text: <Trans i18nKey="settings" />,
+                onClick: assessmentSetting,
               },
-              {
+              item?.manageable && {
                 icon: <DeleteRoundedIcon fontSize="small" />,
                 text: <Trans i18nKey="delete" />,
                 onClick: deleteItem,

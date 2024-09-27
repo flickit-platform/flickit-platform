@@ -21,9 +21,10 @@ import {
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import AlertBox from "@common/AlertBox";
+import { useState } from "react";
 
 interface ICompareItemCEFormDialog
-  extends Omit<ICompareItemCEForm, "closeDialog"> {}
+  extends Omit<ICompareItemCEForm, "closeDialog"> { }
 
 const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
   const { onClose, context, open, openDialog, onSubmitForm, ...rest } = props;
@@ -67,6 +68,19 @@ interface ICompareItemCEForm extends IDialogProps {
 }
 
 const CompareItemCEForm = (props: ICompareItemCEForm) => {
+
+  const PAGE_SIZE: number = 5
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      },
+    },
+  };
+
   const { closeDialog, context, open, index } = props;
   const { type, data } = context || {};
   const defaultValues = type === "update" ? data || {} : {};
@@ -74,6 +88,8 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
   const { assessmentIds, assessment_kit } = useCompareContext();
   const dispatch = useCompareDispatch();
   const { service } = useServiceContext();
+  const [PageCount, setPageCount] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
   const calculateMaturityLevelQuery = useQuery<any>({
     service: (args, config) => service.calculateMaturityLevel(args, config),
     runOnMount: false,
@@ -116,10 +132,13 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
         <Grid item xs={12}>
           <SelectFieldUC
             {...useConnectSelectField({
-              url: "/api/v1/assessments/",
+              url: "/api/v1/comparable-assessments/",
               searchParams: {
-                kit_id: assessment_kit && assessment_kit[0]?.assessment_kit?.id,
+                kitId: assessment_kit && assessment_kit[0]?.kit?.id,
+                size: PAGE_SIZE,
+                page: PageCount
               },
+              loadMore: PageCount
             })}
             required={true}
             autoFocus={true}
@@ -128,6 +147,11 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
             label={<Trans i18nKey="assessment" />}
             size="medium"
             selectedOptions={assessment_kit}
+            loadMore={total > ((PAGE_SIZE * PageCount) + PAGE_SIZE)}
+            loadMoreHandler={setPageCount}
+            getTotalHandler={setTotal}
+            MenuProps={MenuProps}
+            nullable={total >= 1 ? false : true}
             renderOption={(option = {}) => {
               return (
                 <MenuItem
@@ -148,7 +172,7 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                       </Title>
                       <Box ml="auto" sx={{ ...styles.centerV }}>
                         <Chip
-                          label={option?.assessment_kit?.title}
+                          label={option?.kit?.title}
                           size="small"
                         />
                       </Box>

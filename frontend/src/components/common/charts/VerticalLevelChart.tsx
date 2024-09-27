@@ -23,20 +23,20 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
       sx={{ ...(styles.centerCH as any), ...((rest.sx || {}) as any) }}
     >
       <Box textAlign={"center"}>
-        <Typography textAlign={"center"}>
+        <Box textAlign={"center"}>
           {loading ? (
             <Skeleton width={"114px"} sx={{ margin: "auto" }} />
           ) : (
             <>
-              <Box>
+              <Typography textAlign={"center"}>
                 <Trans i18nKey="subjectStatusIs" values={{ title }} />
-              </Box>
-              <Box>
+              </Typography>
+              <Typography textAlign={"center"}>
                 <Trans i18nKey="evaluatedAs" />
-              </Box>
+              </Typography>
             </>
           )}
-        </Typography>
+        </Box>
         <Typography
           sx={{
             display: "inline-block",
@@ -45,10 +45,7 @@ const VerticalLevelChart = (props: IVerticalLevelChartProps) => {
               ? undefined
               : `2px solid ${colorPallet[ml - 1]}`,
           }}
-          variant="h3"
-          fontFamily={"Oswald"}
-          fontWeight="bold"
-          letterSpacing={".1em"}
+          variant="headlineLarge"
         >
           {loading ? <Skeleton width={"164px"} /> : status}
         </Typography>
@@ -110,7 +107,7 @@ const VerticalLevel = ({
         <Box
           sx={{
             position: "absolute",
-            top: "152px",
+            top: "172px",
             left: "32px",
             transform: "rotate(-90deg)",
             transformOrigin: "bottom left",
@@ -132,7 +129,7 @@ const VerticalLevel = ({
       <Box
         sx={{
           mx: 1,
-          background: "#f5f5f5",
+          background: "#EDEFF1",
           width: "74px",
           height: "216px",
           borderRadius: "100px",

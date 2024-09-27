@@ -5,13 +5,16 @@ import {
   EAssessmentStatus,
   questionActions,
   useQuestionDispatch,
+  useQuestionContext,
 } from "@/providers/QuestionProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import LoadingSkeletonOfQuestions from "@common/loadings/LoadingSkeletonOfQuestions";
 import QuestionsTitle from "./QuestionsTitle";
 import QueryBatchData from "@common/QueryBatchData";
-import { IQuestionnaireModel, IQuestionsModel, TId } from "@types";
+import { IQuestion, IQuestionnaireModel, IQuestionsModel, TId } from "@types";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
 
 const QuestionsContainer = (
   props: PropsWithChildren<{ isReview?: boolean }>
@@ -55,14 +58,14 @@ export const QuestionsContainerC = (
   props: PropsWithChildren<{ isReview?: boolean }>
 ) => {
   const { children, isReview = false } = props;
-  const { questionsResultQueryData, questionnaireQueryData ,fetchPathInfo} = useQuestions();
+  const { questions, questionsResultQueryData, fetchPathInfo } = useQuestions();
 
   return (
     <QueryBatchData<IQuestionsModel | IQuestionnaireModel>
-      queryBatchData={[questionsResultQueryData, questionnaireQueryData,fetchPathInfo]}
-      loaded={questionnaireQueryData.loaded}
+      queryBatchData={[questionsResultQueryData, fetchPathInfo]}
+      loaded={questionsResultQueryData.loaded}
       renderLoading={() => <LoadingSkeletonOfQuestions />}
-      render={([data, questionnaireData,pathInfo={}]) => {
+      render={([questionnaireData, pathInfo = {}]) => {
         return (
           <Box>
             <Box py={1}>
@@ -82,49 +85,111 @@ export const QuestionsContainerC = (
   );
 };
 
-const useQuestions = () => {
+export const useQuestions = () => {
   const { service } = useServiceContext();
   const [resultId, setResultId] = useState<TId | undefined>(undefined);
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
   const dispatch = useQuestionDispatch();
+  const { assessmentStatus } = useQuestionContext();
   const {
     questionnaireId = "",
     assessmentId = "",
+    questionIndex = 0,
   } = useParams();
-  const questionnaireQueryData = useQuery<IQuestionnaireModel>({
-    service: (args, config) =>
-      service.fetchQuestionnaire({ questionnaireId }, config),
-  });
+  const pageSize = 50;
+
   const questionsResultQueryData = useQuery<IQuestionsModel>({
     service: (args, config) =>
       service.fetchQuestionsResult(
-        { questionnaireId, assessmentId, page: 0, size: 50 },
+        { questionnaireId, assessmentId, page: args.page, size: pageSize },
         config
       ),
+    runOnMount: false, // We'll handle the initial run ourselves
   });
+
   const fetchPathInfo = useQuery({
     service: (args, config) =>
-      service.fetchPathInfo({ assessmentId, ...(args || {}) }, config),
+      service.fetchPathInfo(
+        { questionnaireId, assessmentId, ...(args || {}) },
+        config
+      ),
     runOnMount: true,
   });
 
+  // Fetch the initial set of questions (page 0) on mount
   useEffect(() => {
-    if (questionsResultQueryData.loaded) {
-      const { items = [] } = questionsResultQueryData.data;
-      dispatch(
-        questionActions.setQuestionsInfo({
-          total_number_of_questions: items.length,
-          resultId: "",
-          questions: items,
-        })
-      );
+    const fetchInitialQuestions = async () => {
+      try {
+        const response = await questionsResultQueryData.query({ page: 0 });
+        if (response) {
+          const { items = [], permissions, total } = response;
+          setQuestions(items);
+          setTotalQuestions(total);
+          dispatch(
+            questionActions.setQuestionsInfo({
+              total_number_of_questions: total,
+              resultId: "",
+              questions: items,
+              permissions: permissions,
+            })
+          );
+          console.log("Initial questions loaded:", items);
+        }
+      } catch (e) {
+        console.error("Failed to load initial questions", e);
+        toastError(e as ICustomError);
+      }
+    };
+
+    fetchInitialQuestions();
+  }, []);
+
+  const loadMoreQuestions = async (newPage: number) => {
+    try {
+      const response = await questionsResultQueryData.query({ page: newPage });
+      if (response) {
+        const { items = [], permissions, total } = response;
+        setQuestions((prevQuestions) => [...prevQuestions, ...items]);
+        setTotalQuestions(total);
+        dispatch(
+          questionActions.setQuestionsInfo({
+            total_number_of_questions: total,
+            resultId: "",
+            questions: [...questions, ...items],
+            permissions: permissions,
+          })
+        );
+        console.log("More questions loaded:", items);
+      }
+    } catch (e) {
+      console.error("Failed to load more questions", e);
+      toastError(e as ICustomError);
     }
-  }, [questionsResultQueryData.loading]);
+  };
+
+  useEffect(() => {
+    const currentIndex = Number(questionIndex);
+    if (currentIndex > questions.length && currentIndex <= totalQuestions) {
+      const newPage = Math.floor((currentIndex - 1) / pageSize);
+      if (newPage > page) {
+        setPage(newPage);
+        loadMoreQuestions(newPage);
+      }
+    }
+  }, [questionIndex, questions.length, totalQuestions]);
+
+  // useEffect(() => {
+  //   if (assessmentStatus === EAssessmentStatus.DONE) {
+  //     loadMoreQuestions(page);
+  //   }
+  // }, [assessmentStatus]);
 
   return {
+    questions,
     questionsResultQueryData,
-    questionnaireQueryData,
-    fetchPathInfo
+    fetchPathInfo,
   };
 };
-
 export default QuestionsContainer;

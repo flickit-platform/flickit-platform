@@ -39,7 +39,7 @@ export const CEDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   );
 };
 
-interface ICEDialogActionsProps extends DialogActionsProps {
+interface ICEDialogActionsProps extends PropsWithChildren<DialogActionsProps> {
   loading: boolean;
   closeDialog?: () => void;
   onClose?: () => void;
@@ -51,6 +51,7 @@ interface ICEDialogActionsProps extends DialogActionsProps {
   onSubmit?: (e: any, shouldView?: boolean) => any;
   onBack?: () => void;
   hasBackBtn?: boolean;
+  cancelLabel?: string
 }
 
 export const CEDialogActions = (props: ICEDialogActionsProps) => {
@@ -65,7 +66,9 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
     hasViewBtn,
     hideSubmitButton = false,
     submitButtonLabel = type === "update" ? t("update") : t("create"),
+    cancelLabel = "cancel",
     submitAndViewButtonLabel,
+    children,
   } = props;
   const fullScreen = useScreenResize("sm");
   if (!onClose) {
@@ -80,7 +83,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
           <Button onClick={onClose} data-cy="cancel">
-            <Trans i18nKey="cancel" />
+            <Trans i18nKey={cancelLabel} />
           </Button>
         </Grid>
         {hasBackBtn && (
@@ -113,7 +116,7 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
               variant="contained"
               color="success"
               loading={loading}
-              data-cy="submit-ad-view"
+              data-cy="submit-and-view"
               onClick={(e: any) => {
                 e.preventDefault();
                 onSubmit?.(e, true)();
@@ -123,6 +126,11 @@ export const CEDialogActions = (props: ICEDialogActionsProps) => {
                 <Trans i18nKey={`${submitButtonLabel} ${t("andView")}`} />
               )}
             </LoadingButton>
+          </Grid>
+        )}
+        {children && (
+          <Grid item>
+            {children}
           </Grid>
         )}
       </Grid>

@@ -46,9 +46,10 @@ interface IUploadFieldProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
+  setIsValid?: any;
 }
 
-const UploadField = (props: IUploadFieldProps) => {
+const UploadField = (props: any) => {
   const { name, required, defaultValue, ...rest } = props;
 
   const formMethods = useFormContext();
@@ -93,6 +94,13 @@ interface IUploadProps {
   param?: string;
   setSyntaxErrorObject?: any;
   setShowErrorLog?: any;
+  setIsValid?: any;
+  setButtonStep?: any;
+  setZippedData?: any;
+  dslGuide?: boolean;
+  dropNewFile?: any;
+  setConvertData?: any;
+  disabled?: boolean;
 }
 
 const Uploader = (props: IUploadProps) => {
@@ -112,6 +120,12 @@ const Uploader = (props: IUploadProps) => {
     param,
     setSyntaxErrorObject,
     setShowErrorLog,
+    setIsValid,
+    setButtonStep,
+    disabled = false,
+    setZippedData,
+    setConvertData,
+    dropNewFile,
   } = props;
 
   const { service } = useServiceContext();
@@ -140,12 +154,20 @@ const Uploader = (props: IUploadProps) => {
     return [];
   };
 
+  const [limitGuide, setLimitGuide] = useState<string>();
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
       setTheState
     );
 
   useEffect(() => {
+    if (maxSize) {
+      setLimitGuide(
+        t("maximumUploadFileSize", {
+          maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
+        }) as string
+      );
+    }
     if (
       typeof defaultValue === "string" &&
       defaultValue &&
@@ -170,6 +192,7 @@ const Uploader = (props: IUploadProps) => {
 
   const onDrop = useCallback(
     (acceptedFiles: any, fileRejections: FileRejection[], event: DropEvent) => {
+      delete errors[fieldProps.name];
       if (acceptedFiles?.[0]) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -181,28 +204,38 @@ const Uploader = (props: IUploadProps) => {
           try {
             const res = await uploadQueryProps.query({
               file: acceptedFiles?.[0],
-              expert_group_id: param,
+              expertGroupId: param,
             });
+            setIsValid(true);
             setMyFiles(acceptedFiles);
             fieldProps.onChange(res);
           } catch (e: any) {
-            if (e.response.status === 422) {
-              const responseObject = JSON.parse(e.response.data.message);
-              setSyntaxErrorObject(responseObject.errors);
+            const err = e as ICustomError;
+            if (err?.response?.status === 422) {
+              const responseObject = JSON.parse(err?.response?.data?.message);
               setShowErrorLog(true);
+              setSyntaxErrorObject(responseObject.errors);
+              setIsValid(false);
             }
-            if (e.response.status !== 422) {
-              toastError(e as ICustomError);
+            if (err?.response?.status !== 422) {
+              if (e?.response?.data?.type == "application/json") {
+                const blob = new Blob([err.response?.data as any], {
+                  type: "application/json",
+                }).text();
+                blob.then((res: any) => {
+                  toastError(JSON.parse(res)?.message);
+                });
+              } else {
+                toastError(err);
+              }
               setMyFiles([]);
+              setIsValid(false);
               fieldProps.onChange("");
             }
           }
         };
 
         reader.readAsArrayBuffer(acceptedFiles[0]);
-      } else if (fileRejections.length > 0) {
-        const errorMessage = fileRejections[0].errors[0]?.message;
-        toastError(errorMessage);
       }
     },
     []
@@ -212,10 +245,23 @@ const Uploader = (props: IUploadProps) => {
     accept,
     maxSize,
     onDrop,
+    disabled: disabled,
     multiple: false,
     onDropRejected(rejectedFiles, event) {
-      if (rejectedFiles.length > 1) {
-        toastError(t("oneFileOnly") as string);
+      if (rejectedFiles.length > 0) {
+        const error = rejectedFiles[0].errors.find(
+          (e) => e.code === "file-too-large"
+        );
+        if (error) {
+          errors[fieldProps.name] = {
+            type: "maxSize",
+            message: t("maximumUploadFileSize", {
+              maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
+            }) as string,
+          };
+        } else {
+          toastError(t("oneFileOnly") as string);
+        }
       }
     },
     onError(err) {
@@ -237,10 +283,12 @@ const Uploader = (props: IUploadProps) => {
             `1px dashed ${hasError ? t.palette.error.main : "gray"}`,
           "&:hover": {
             border: (t) =>
-              `1px solid ${hasError ? t.palette.error.dark : "black"} `,
+              disabled
+                ? `1px solid ${hasError ? t.palette.error.dark : "black"}`
+                : "",
           },
           borderRadius: 1,
-          cursor: "pointer",
+          cursor: disabled ? "default" : "pointer",
           width: "100%",
         }}
       >
@@ -272,11 +320,13 @@ const Uploader = (props: IUploadProps) => {
                         aria-label="delete"
                         onClick={async (e) => {
                           e.stopPropagation();
-                          // if (!deleteService) {
-                            setMyFiles([]);
-                            fieldProps.onChange("");
-                            return;
-                          // }  
+                          setMyFiles([]);
+                          fieldProps.onChange("");
+                          setButtonStep(0);
+                          setZippedData(null);
+                          setConvertData(null);
+                          return;
+                          // }
                           // if (uploadQueryProps.error) {
                           //   setMyFiles([]);
                           //   return;
@@ -334,19 +384,43 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${(acceptedFiles[0] || file)?.name} - ${
-                    (acceptedFiles[0] || file)?.size
+                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${
+                    (
+                      (dropNewFile && dropNewFile[0]) ||
+                      acceptedFiles[0] ||
+                      file
+                    )?.size
                       ? formatBytes((acceptedFiles[0] || file)?.size)
                       : ""
                   }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
-                  primary={<>{(acceptedFiles[0] || file)?.name}</>}
+                  primary={
+                    <>
+                      {
+                        (
+                          (dropNewFile && dropNewFile[0]) ||
+                          acceptedFiles[0] ||
+                          file
+                        )?.name
+                      }
+                    </>
+                  }
                   secondary={
                     <>
-                      {(acceptedFiles[0] || file)?.size
-                        ? formatBytes((acceptedFiles[0] || file)?.size)
+                      {(
+                        (dropNewFile && dropNewFile[0]) ||
+                        acceptedFiles[0] ||
+                        file
+                      )?.size
+                        ? formatBytes(
+                            (
+                              (dropNewFile && dropNewFile[0]) ||
+                              acceptedFiles[0] ||
+                              file
+                            )?.size
+                          )
                         : null}
                     </>
                   }
@@ -387,7 +461,7 @@ const Uploader = (props: IUploadProps) => {
           )}
         </Box>
       </Box>
-      <FormHelperText>{errorMessage as string}</FormHelperText>
+      <FormHelperText>{limitGuide || (errorMessage as string)}</FormHelperText>
     </FormControl>
   );
 };

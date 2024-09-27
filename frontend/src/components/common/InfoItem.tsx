@@ -37,7 +37,6 @@ const DefaultInfoItemComponent = (
       variant="body2"
       sx={{
         ...styles.centerV,
-        fontFamily: "Roboto",
         background: bg || "#f5f2f2",
         py: 0.6,
         px: 1,

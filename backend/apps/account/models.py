@@ -5,6 +5,7 @@ from common.validators import validate_file_size
 
 from uuid import uuid4
 
+
 class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, display_name, **extra_fields):
@@ -12,8 +13,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email must be provided')
 
         user = self.model(
-            email = self.normalize_email(email),
-            display_name = display_name,
+            email=self.normalize_email(email),
+            display_name=display_name,
             **extra_fields
         )
 
@@ -40,24 +41,14 @@ class CustomUserManager(BaseUserManager):
         return self._create_user(email, password, display_name, **extra_fields)
 
 
-class Space(models.Model):
-    code = models.CharField(max_length=50, unique=True)
-    title = models.CharField(max_length=100)
-    users = models.ManyToManyField('User', through='UserAccess', related_name='spaces')
-    creation_time = models.DateTimeField(auto_now_add=True)
-    last_modification_date = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey('User', on_delete=models.PROTECT)
-    is_default_space = models.BooleanField(default=False)
-
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid4)
-    email = models.EmailField(unique=True, max_length=254, error_messages={'unique':"A user with this email address already exists."})
+    email = models.EmailField(unique=True, max_length=254,
+                              error_messages={'unique': "A user with this email address already exists."})
     is_active = models.BooleanField(default=True)
     display_name = models.CharField(max_length=255)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    current_space = models.ForeignKey(Space, on_delete=models.PROTECT, null=True)
-    default_space = models.OneToOneField(Space, on_delete=models.PROTECT, null=True, related_name="default_member")
     picture = models.ImageField(upload_to='user/images', null=True, validators=[validate_file_size])
     bio = models.CharField(null=True, max_length=400)
     linkedin = models.URLField(null=True, blank=True)
@@ -67,11 +58,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['display_name']
 
-class UserAccess(models.Model):
-    space = models.ForeignKey('Space', on_delete=models.CASCADE)
-    user =  models.ForeignKey('User', on_delete=models.CASCADE, null=True)
-    invite_email = models.EmailField(null = True)
-    invite_expiration_date = models.DateTimeField(null=True)
-
     class Meta:
-        unique_together = ('space', 'user')
+        db_table = 'fau_user'

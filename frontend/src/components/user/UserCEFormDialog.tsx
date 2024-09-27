@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import UploadField from "@common/fields/UploadField";
+import convertToBytes from "@/utils/convertToBytes";
 
 interface IUserCEFormDialogProps extends DialogProps {
   onClose: () => void;
@@ -54,10 +55,13 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
     }
     setLoading(true);
     try {
+      let tempData = { ...data }
+      tempData.linkedin === "" && delete tempData.linkedin
+      tempData.bio === "" && delete tempData.bio
       const { data: res } = await service.updateUserInfo(
         {
           id,
-          data: { email: defaultValues?.email, id: defaultValues?.id, ...data },
+          data: tempData,
         },
         { signal: abortController.signal }
       );
@@ -85,24 +89,25 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
     >
       <FormProviderWithForm formMethods={formMethods}>
         <Grid container spacing={2} sx={styles.formGrid}>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <UploadField
               accept={{
                 "image/jpeg": [".jpeg", ".jpg"],
                 "image/png": [".png"],
               }}
               defaultValueType="image"
-              defaultValue={defaultValues.picture}
+              defaultValue={defaultValues.pictureLink}
               shouldFetchFileInfo={true}
               name="picture"
               label={<Trans i18nKey="accountPicture" />}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
+              maxSize={convertToBytes(2, "MB")}
+              />
+          </Grid> */}
+          <Grid item xs={12} sm={12}>
             <InputFieldUC
               autoFocus={true}
-              defaultValue={defaultValues.display_name || ""}
-              name="display_name"
+              defaultValue={defaultValues.displayName || ""}
+              name="displayName"
               required={true}
               label={<Trans i18nKey="displayName" />}
             />

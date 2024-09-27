@@ -5,143 +5,103 @@ import Skeleton from "@mui/material/Skeleton";
 import Title from "@common/Title";
 import Typography from "@mui/material/Typography";
 import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
+import { Gauge } from "../common/charts/Gauge";
+import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+import { Divider } from "@mui/material";
+import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import { getMaturityLevelColors } from "@/config/styles";
+import { t } from 'i18next'
 
-const SubjectOverallInsight = (props: any) => {
-  return (
-    <Box>
-      <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-        <OverallInsightText {...props} />
-        <Box sx={{ pl: { xs: 0, sm: 3, md: 6 }, mt: { xs: 4, sm: 0 } }}>
-          <SubjectOverallStatusLevelChart {...props} />
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-const OverallInsightText = (props: any) => {
-  const { data = {}, loading } = props;
+const SubjectOverallInsight = ({ data }: any) => {
   const {
-    subject,
     attributes,
-    top_strengths,
-    top_weaknesses,
-    cl = 1,
+    subject,
+    topStrengths,
+    topWeaknesses,
+    maturityLevelsCount,
   } = data;
-  const { title, maturity_level } = subject;
+  const { maturityLevel, confidenceValue } = subject;
   return (
-    <Box display="flex" flexDirection={"column"} flex={1}>
-      <Typography
-        fontFamily={"Roboto"}
-        fontWeight="500"
-        fontSize="1.3rem"
-        sx={{ opacity: 0.96 }}
+    <Box
+      height="100%"
+      sx={{
+        background: "#fff",
+        boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)",
+        borderRadius: "12px",
+      }}
+    >
+      <Grid
+        container
+        spacing={2}
+        columns={12}
+        alignItems="center"
+        display="flex"
       >
-        {loading ? (
-          <Skeleton height="60px" />
-        ) : (
-          <>
-            <Trans i18nKey="withConfidence" />{" "}
-            <Typography
-              component="span"
-              fontFamily={"Roboto"}
-              fontWeight="bold"
-              sx={{ color: "#3596A1" }}
-              fontSize="1.15rem"
-            >
-              <Trans i18nKey={"clOf"} values={{ cl }} />
-            </Typography>{" "}
-            <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
-            <Typography
-              component="span"
-              fontWeight="bold"
-              fontFamily={"Roboto"}
-              sx={{ color: "#6035A1" }}
-              fontSize="1.15rem"
-            >
-              {maturity_level.index}.
-            </Typography>{" "}
-            <Trans i18nKey="meaning" values={{ title }} />{" "}
-            <Typography
-              component="span"
-              fontFamily="Roboto"
-              fontWeight={"bold"}
-            >
-              {maturity_level.title}.
-            </Typography>
-            <Box>
-              <Typography variant="body2">
-                <Trans i18nKey="attributesAreConsidered" values={{ length: attributes?.length }} />
-              </Typography>
-            </Box>
-          </>
-        )}
-      </Typography>
-      <Grid container pt={5} spacing={4}>
-        <Grid item xs={12} sm={6} md={5} lg={4}>
-          <MostSigItems
-            color="#005e00"
-            text="strengths"
-            loading={loading}
-            att={top_strengths}
-          />
+        <Grid item lg={7} md={12} sm={12} xs={12}>
+          <Box
+            maxHeight="260px"
+            overflow="auto"
+            border="1px solid #ddd"
+            borderRadius="2rem"
+            ml={{ lg: 4 }}
+            m={{ sm: 2, xs: 2 }}
+          >
+            <Grid container>
+              {attributes.map((element: any) => (
+                <Grid item lg={6} md={6} sm={12} xs={12} key={element.id}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    padding={2}
+                    margin={1}
+                    gap={1}
+                  >
+                    <Typography
+                      fontWeight="500"
+                      fontSize="1.5rem"
+                      textAlign="center"
+                    >
+                      {element.title}
+                    </Typography>
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                      <Typography
+                        sx={{
+                          color:
+                            getMaturityLevelColors(5)[
+                            element.maturityLevel.value - 1
+                            ],
+                        }}
+                        fontWeight="500"
+                        fontSize="1rem"
+                      >
+                        {element.maturityLevel.title}
+                      </Typography>
+                      <ConfidenceLevel inputNumber={element.confidenceValue} />
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={4}>
-          <MostSigItems
-            color="#b10202"
-            text="weaknesses"
-            loading={loading}
-            att={top_weaknesses}
+        <Grid item lg={5} md={12} sm={12} xs={12}>
+          <Gauge
+            level_value={maturityLevel?.value ?? 0}
+            maturity_level_status={maturityLevel?.title}
+            maturity_level_number={5}
+            confidence_value={confidenceValue}
+            confidence_text={t("withPercentConfidence")}
+            isMobileScreen={false}
+            hideGuidance={true}
+            height={getNumberBaseOnScreen(340, 440, 440, 360, 400)}
+            mb="-8%"
+            mt="8%"
           />
         </Grid>
       </Grid>
     </Box>
-  );
-};
-
-export const MostSigItems = ({
-  loading,
-  att,
-  items,
-  color,
-  text,
-}: {
-  loading: boolean;
-  att?: any[];
-  items?: string[];
-  color: string;
-  text: string;
-}) => {
-  return (
-    <>
-      <Title
-        fontSize={"1.1rem"}
-        borderBottom={true}
-        color={color}
-        letterSpacing={".08em"}
-      >
-        <Trans i18nKey={text} />
-      </Title>
-      <ul style={{ marginBlockStart: "8px", paddingInlineStart: "26px" }}>
-        {loading ? (
-          <MostSigItemLoadingSkeleton />
-        ) : (
-          (att || items)?.map((item: any, index: any) => {
-            return <li key={index}>{att ? item?.title : item}</li>;
-          })
-        )}
-      </ul>
-    </>
-  );
-};
-
-const MostSigItemLoadingSkeleton = () => {
-  return (
-    <>
-      {[1, 2, 3].map((k) => (
-        <Skeleton key={k} />
-      ))}
-    </>
   );
 };
 

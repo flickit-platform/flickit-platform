@@ -1,97 +1,71 @@
 import requests
-from rest_framework import status
 
 from assessmentplatform.settings import ASSESSMENT_URL
-from baseinfo.models.questionmodels import Question
-from account.models import User
 
 
-def add_evidences(assessments_details, validated_data, user_id, authorization_header):
-    result = dict()
-    if not Question.objects.filter(id=validated_data["question_id"]).filter(
-            questionnaire__assessment_kit=assessments_details["kitId"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-    data = {"description": validated_data["description"],
-            "assessmentId": assessments_details["assessmentId"],
-            "questionId": validated_data["question_id"],
-            }
+def add_evidences(request):
     response = requests.post(
-        ASSESSMENT_URL + 'assessment-core/api/evidences', json=data, headers={"Authorization": authorization_header})
-    response_body = response.json()
-
-    result["Success"] = True
-    result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/evidences',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def get_list_evidences(assessments_details, question_id, request):
-    result = dict()
-    if not Question.objects.filter(id=question_id).filter(
-            questionnaire__assessment_kit=assessments_details["kitId"]).exists():
-        result["Success"] = False
-        result["body"] = {"code": "NOT_FOUND", "message": "'question_id' does not exist"}
-        result["status_code"] = status.HTTP_400_BAD_REQUEST
-        return result
-    params = {"questionId": question_id,
-              "assessmentId": assessments_details["assessmentId"]
-              }
-    if "size" in request.query_params:
-        size = request.query_params["size"]
-        params["size"] = size
-
-    if "page" in request.query_params:
-        page = request.query_params["page"]
-        params["page"] = page
-
+def get_list_evidences(request):
     response = requests.get(
-        ASSESSMENT_URL + 'assessment-core/api/evidences', params=params)
-    response_body = response.json()
-    users_id = list()
-    if response.status_code == status.HTTP_200_OK:
-        for item in response_body["items"]:
-            users_id.append(item["createdById"])
-        users = User.objects.filter(id__in=users_id)
-        if response.status_code == status.HTTP_200_OK:
-            for i in range(len(response_body["items"])):
-                user = users.get(id=response_body["items"][i].pop("createdById"))
-                response_body["items"][i]["created_by"] = {"id": user.id, "display_name": user.display_name}
-                response_body["items"][i]["last_modification_date"] = response_body["items"][i].pop(
-                    "lastModificationTime")
-
-    result["Success"] = True
-    result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/evidences',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def edit_evidence(validated_data, evidence_id, authorization_header):
-    result = dict()
-    data = {
-        "description": validated_data["description"]
-    }
+def edit_evidence(request, evidence_id):
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}', json=data,
-        headers={"Authorization": authorization_header}
-    )
-    response_body = response.json()
-
-    result["Success"] = True
-    result["body"] = response_body
-    result["status_code"] = response.status_code
-    return result
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def delete_evidence(evidence_id):
-    result = dict()
-
+def delete_evidence(request, evidence_id):
     response = requests.delete(
-        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}')
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response}
 
-    result["Success"] = True
-    result["body"] = None
-    result["status_code"] = response.status_code
-    return result
+
+def evidence_add_attachments(request, evidence_id):
+    file = request.data.get('attachment')
+    data = request.data
+    data.pop('attachment')
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments',
+        files={'attachment': (file.name, file, file.content_type)},
+        data=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def evidence_list_attachments(request, evidence_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def evidence_delete_attachment(request, evidence_id, attachment_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}/attachments/{attachment_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def evidence_get_by_id(request, evidence_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/evidences/{evidence_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

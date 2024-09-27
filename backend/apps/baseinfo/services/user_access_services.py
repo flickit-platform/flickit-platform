@@ -35,7 +35,7 @@ def delete_user_in_assessment_kit(assessment_kit_id, authorization_header, user_
 
 
 def check_email_exists(email):
-    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/users/emails/{email}')
+    response = requests.get(ASSESSMENT_URL + f'assessment-core/api/users/email/{email}')
     if response.status_code == status.HTTP_200_OK:
         return {"Success": True, "body": response.json(), "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}

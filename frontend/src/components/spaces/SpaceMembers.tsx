@@ -31,9 +31,11 @@ import getUserName from "@utils/getUserName";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
+import stringAvatar from "@utils/stringAvatar";
+import { useConfigContext } from "@/providers/ConfgProvider";
 
 export const SpaceMembers = (props: any) => {
-  const { owner } = props;
+  const { editable } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { dispatch, userInfo } = useAuthContext();
@@ -41,6 +43,10 @@ export const SpaceMembers = (props: any) => {
   const user_id_ref = useRef<HTMLInputElement>(null);
   const spaceMembersQueryData = useQuery<IMemberModel>({
     service: (args, config) => service.fetchSpaceMembers({ spaceId }, config),
+  });
+  const spaceMembersInviteeQueryData = useQuery<IMemberModel>({
+    service: (args, config) =>
+      service.fetchSpaceMembersInvitees({ spaceId }, config),
   });
   const dialogProps = useDialog();
   const {
@@ -68,7 +74,7 @@ export const SpaceMembers = (props: any) => {
       service
         .getSignedInUser(undefined, { signal: controller.signal })
         .then(({ data }) => {
-          dispatch(authActions.setUserInfo(data));
+          // dispatch(authActions.setUserInfo(data));
         })
         .catch((e) => {});
     }
@@ -85,7 +91,6 @@ export const SpaceMembers = (props: any) => {
           mb={2}
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Roboto",
             textTransform: "unset",
             letterSpacing: ".05rem",
           }}
@@ -107,8 +112,8 @@ export const SpaceMembers = (props: any) => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (err.response.data.code === "user-is-member") {
-                  toastError(err.response.data.message);
+                if (err.response?.data.code === "user-is-member") {
+                  toastError(err);
                 } else {
                   dialogProps.openDialog({
                     type: "invite",
@@ -139,25 +144,14 @@ export const SpaceMembers = (props: any) => {
           size="small"
           titleProps={{
             fontSize: "1rem",
-            fontFamily: "Roboto",
             textTransform: "capitalize",
             letterSpacing: ".05rem",
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
-              <PeopleOutlineRoundedIcon
-                sx={{
-                  mr: `${is_farsi ? 0 : "4px"}`,
-                  ml: `${is_farsi ? "4px" : 0}`,
-                }}
-                fontSize="small"
-              />
-              <Typography fontFamily="Roboto" fontWeight={"bold"}>
-                {
-                  spaceMembersQueryData?.data?.results?.filter(
-                    (item: any) => !!item.user
-                  )?.length
-                }
+              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <Typography fontWeight={"bold"}>
+                {spaceMembersQueryData?.data?.items?.length}
               </Typography>
             </Box>
           }
@@ -182,16 +176,13 @@ export const SpaceMembers = (props: any) => {
             );
           }}
           render={(data) => {
-            const { results } = data;
-            const invitees = results.filter((item: any) => !item.user);
+            const { items } = data;
             return (
               <Box>
-                {results.map((member: any) => {
-                  const { user, id } = member;
-                  const name = getUserName(user);
-                  const isOwner = owner?.id == user?.id;
+                {items.map((member: any) => {
+                  const { displayName, id, pictureLink, isOwner } = member;
                   return (
-                    user && (
+                    displayName && (
                       <Box
                         key={id}
                         sx={{
@@ -205,18 +196,13 @@ export const SpaceMembers = (props: any) => {
                       >
                         <Box sx={{ ...styles.centerV }}>
                           <Box>
-                            <Avatar sx={{ width: 34, height: 34 }}>
-                              <PersonRoundedIcon />
-                            </Avatar>
+                            <Avatar
+                              {...stringAvatar(displayName.toUpperCase())}
+                              src={pictureLink}
+                              sx={{ width: 34, height: 34 }}
+                            ></Avatar>
                           </Box>
-                          <Box
-                            sx={{
-                              mr: `${is_farsi ? "16px" : 0}`,
-                              ml: `${is_farsi ? 0 : "16px"}`,
-                            }}
-                          >
-                            {name}
-                          </Box>
+                          <Box ml={2}>{displayName}</Box>
                         </Box>
                         <Box
                           ml={`${is_farsi ? 0 : "auto"}`}
@@ -234,6 +220,7 @@ export const SpaceMembers = (props: any) => {
                             <Actions
                               isOwner={isOwner}
                               member={member}
+                              editable={editable}
                               fetchSpaceMembers={spaceMembersQueryData.query}
                             />
                           }
@@ -242,107 +229,121 @@ export const SpaceMembers = (props: any) => {
                     )
                   );
                 })}
-                {invitees.length > 0 && (
+              </Box>
+            );
+          }}
+        />
+        <QueryData
+          {...spaceMembersInviteeQueryData}
+          renderLoading={() => {
+            return (
+              <>
+                {[1, 2, 3, 4, 5].map((item) => {
+                  return (
+                    <Skeleton
+                      key={item}
+                      variant="rectangular"
+                      sx={{ borderRadius: 2, height: "50px", mb: 1 }}
+                    />
+                  );
+                })}
+              </>
+            );
+          }}
+          render={(data) => {
+            const { items } = data;
+            return (
+              <Box>
+                {items.length > 0 && (
                   <Box mt={4}>
                     <Title
                       size="small"
                       titleProps={{
                         textTransform: "none",
                         fontSize: ".95rem",
-                        fontFamily: "Roboto",
                       }}
                     >
                       <Trans i18nKey="invitees" />
                     </Title>
                     <Box mt={1}>
-                      {invitees.map((member: any) => {
+                      {items.map((invitees: any) => {
                         const {
-                          user,
+                          createdBy,
+                          creationTime,
                           id,
-                          invite_email,
-                          invite_expiration_date,
-                        } = member;
-                        const name = getUserName(user) || invite_email;
-                        const isOwner = userId == user?.id;
+                          email,
+                          expirationDate,
+                        } = invitees;
+
+                        const expirationDateTime = new Date(
+                          expirationDate
+                        ).getTime();
+                        const timeNow = new Date().getTime();
+
+                        const name = email;
+                        const isOwner = userId == id;
 
                         return (
-                          !user && (
+                          <Box
+                            key={id}
+                            sx={{
+                              ...styles.centerV,
+                              boxShadow: 1,
+                              borderRadius: 2,
+                              flexDirection: { xs: "column", sm: "row" },
+                              my: 1,
+                              py: 0.8,
+                              px: 1.5,
+                            }}
+                          >
                             <Box
-                              key={id}
                               sx={{
                                 ...styles.centerV,
-                                boxShadow: 1,
-                                borderRadius: 2,
-                                my: 1,
-                                py: 0.8,
-                                px: 1.5,
+                                mr: { xs: "auto", sm: "0px" },
                               }}
                             >
-                              <Box sx={{ ...styles.centerV }}>
-                                <Box>
-                                  <Avatar sx={{ width: 34, height: 34 }}>
-                                    <PersonRoundedIcon />
-                                  </Avatar>
-                                </Box>
-                                <Box
-                                  sx={{
-                                    mr: `${is_farsi ? "16px" : 0}`,
-                                    ml: `${is_farsi ? 0 : "16px"}`,
-                                  }}
-                                >
-                                  {name}
-                                </Box>
+                              <Box>
+                                <Avatar sx={{ width: 34, height: 34 }}>
+                                  <PersonRoundedIcon />
+                                </Avatar>
                               </Box>
-                              <Box
-                                ml={`${is_farsi ? 0 : "auto"}`}
-                                mr={`${is_farsi ? "auto" : 0}`}
-                                sx={{ ...styles.centerV }}
-                              >
-                                <Box
-                                  sx={{
-                                    ...styles.centerV,
-                                    opacity: 0.8,
-                                    px: 0.4,
-                                    mr: `${is_farsi ? 0 : "16px"}`,
-                                    ml: `${is_farsi ? "16px" : 0}`,
-                                  }}
-                                >
-                                  <EventBusyRoundedIcon
-                                    fontSize="small"
-                                    sx={{
-                                      mr: `${is_farsi ? 0 : "4px"}`,
-                                      ml: `${is_farsi ? "4px" : 0}`,
-                                    }}
-                                  />
-                                  <Typography variant="body2">
-                                    {formatDate(invite_expiration_date)}
-                                  </Typography>
-                                </Box>
-                                {isOwner && (
-                                  <Chip
-                                    label={<Trans i18nKey="owner" />}
-                                    size="small"
-                                    sx={{
-                                      mr: `${is_farsi ? 0 : "12px"}`,
-                                      ml: `${is_farsi ? "12px" : 0}`,
-                                    }}
-                                  />
-                                )}
-                                {
-                                  <Actions
-                                    isOwner={isOwner}
-                                    member={member}
-                                    fetchSpaceMembers={
-                                      spaceMembersQueryData.query
-                                    }
-                                    isInvitationExpired={true}
-                                    isInvitees={true}
-                                    email={invite_email}
-                                  />
-                                }
-                              </Box>
+                              <Box ml={2}>{name}</Box>
                             </Box>
-                          )
+                            <Box ml="auto" sx={{ ...styles.centerV }}>
+                              <Box
+                                sx={{
+                                  ...styles.centerV,
+                                  opacity: 0.8,
+                                  px: 0.4,
+                                  mr: 2,
+                                }}
+                              >
+                                <EventBusyRoundedIcon
+                                  fontSize="small"
+                                  sx={{ mr: 0.5 }}
+                                />
+                                <Typography variant="body2">
+                                  {formatDate(expirationDate)}
+                                </Typography>
+                              </Box>
+                              {
+                                <Actions
+                                  isOwner={isOwner}
+                                  member={invitees}
+                                  fetchSpaceMembers={
+                                    spaceMembersInviteeQueryData.query
+                                  }
+                                  isInvitationExpired={
+                                    expirationDateTime <= timeNow
+                                  }
+                                  isInvitees={true}
+                                  email={email}
+                                  editable={editable}
+                                  inviteId ={id}
+                                />
+                              }
+                            </Box>
+                          </Box>
                         );
                       })}
                     </Box>
@@ -356,6 +357,7 @@ export const SpaceMembers = (props: any) => {
       <InviteSpaceMemberDialog
         {...dialogProps}
         spaceMembersQueryData={spaceMembersQueryData}
+        spaceMembersInviteeQueryData={spaceMembersInviteeQueryData}
         resetForm={resetForm}
       />
     </Box>
@@ -388,15 +390,29 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
 };
 
 const Actions = (props: any) => {
-  const { member, fetchSpaceMembers, isInvitees, isInvitationExpired, email } =
-    props;
+  const {
+    isOwner,
+    member,
+    fetchSpaceMembers,
+    isInvitees,
+    isInvitationExpired,
+    email,
+    editable,
+    inviteId
+  } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
   const { query: deleteSpaceMember, loading } = useQuery({
     service: (arg, config) =>
       service.deleteSpaceMember({ spaceId, memberId: member.id }, config),
     runOnMount: false,
-    toastError: true,
+    toastError: false,
+  });
+  const { query: deleteSpaceInvite, loading: inviteLoading } = useQuery({
+    service: (arg, config) =>
+      service.deleteSpaceInvite({ inviteId }, config),
+    runOnMount: false,
+    toastError: false,
   });
   const inviteMemberQueryData = useQuery({
     service: (args = { id: spaceId, data: { email } }, config) =>
@@ -405,8 +421,23 @@ const Actions = (props: any) => {
   });
 
   const deleteItem = async (e: any) => {
-    await deleteSpaceMember();
-    await fetchSpaceMembers();
+    try {
+      await deleteSpaceMember();
+      await fetchSpaceMembers();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const deleteItemInvite = async (e: any) => {
+    try {
+      await deleteSpaceInvite();
+      await fetchSpaceMembers();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
 
   const inviteMember = async () => {
@@ -424,23 +455,26 @@ const Actions = (props: any) => {
       {...useMenu()}
       loading={loading || inviteMemberQueryData.loading}
       items={[
-        isInvitees && isInvitationExpired
+        isInvitees && isInvitationExpired && editable
           ? {
               icon: <EmailRoundedIcon fontSize="small" />,
               text: <Trans i18nKey="resendInvitation" />,
               onClick: inviteMember,
             }
           : undefined,
-        isInvitees && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="cancelInvitation" />,
-          onClick: deleteItem,
-        },
-        !isInvitees && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="remove" />,
-          onClick: deleteItem,
-        },
+        isInvitees &&
+          editable && {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="cancelInvitation" />,
+            onClick: deleteItemInvite,
+          },
+        !isInvitees &&
+          !isOwner &&
+          editable && {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="remove" />,
+            onClick: deleteItem,
+          },
       ]}
     />
   );
@@ -449,10 +483,17 @@ const Actions = (props: any) => {
 const InviteSpaceMemberDialog = (
   props: {
     spaceMembersQueryData: TQueryProps;
+    spaceMembersInviteeQueryData: TQueryProps;
     resetForm: () => void;
   } & IDialogProps
 ) => {
-  const { spaceMembersQueryData, resetForm, ...rest } = props;
+  const { config } = useConfigContext();
+  const {
+    spaceMembersQueryData,
+    spaceMembersInviteeQueryData,
+    resetForm,
+    ...rest
+  } = props;
   const { spaceId } = useParams();
   const { service } = useServiceContext();
   const { query: inviteMemberQuery, loading } = useQuery({
@@ -468,6 +509,7 @@ const InviteSpaceMemberDialog = (
       resetForm();
       rest.onClose();
       spaceMembersQueryData.query();
+      spaceMembersInviteeQueryData.query();
     } catch (e) {
       toastError(e as ICustomError);
     }
@@ -482,8 +524,11 @@ const InviteSpaceMemberDialog = (
     >
       <Typography>
         <Trans
-          i18nKey="emailIsNotOnFlickitYet"
-          values={{ email: rest.context?.data?.email || "This user" }}
+          i18nKey="emailIsNotOnAppTitleYet"
+          values={{
+            email: rest.context?.data?.email || "This user",
+            title: config.appTitle,
+          }}
         />{" "}
         <Trans i18nKey={"wouldYouLikeToInviteThemToJoin"} />
       </Typography>

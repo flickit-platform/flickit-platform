@@ -3,10 +3,11 @@ import { Trans } from "react-i18next";
 import Title from "@common/Title";
 import QueryData from "@common/QueryData";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
+import AssessmentEmptyState from "@assets/svg/assessmentEmptyState.svg";
 import { useServiceContext } from "@providers/ServiceProvider";
 import useDialog from "@utils/useDialog";
 import { AssessmentsList } from "./AssessmentList";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { ICustomError } from "@utils/CustomError";
 import { useParams, useNavigate } from "react-router-dom";
 import { LoadingSkeletonOfAssessments } from "@common/loadings/LoadingSkeletonOfAssessments";
@@ -14,11 +15,12 @@ import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
 import { ECustomErrorType } from "@types";
 import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
-import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
+import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { styles } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 import IconButton from "@mui/material/IconButton";
@@ -26,6 +28,8 @@ import { Link } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
+import { animations } from "@styles";
+import AssessmentTitle from "./AssessmentTitle";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { currentSpace } = useAuthContext();
@@ -33,87 +37,138 @@ const AssessmentContainer = () => {
   const navigate = useNavigate();
   const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const { fetchAssessments, ...rest } = useFetchAssessments();
-  const { data, error, errorObject, size, total } = rest;
-  const isEmpty = data.length == 0;
+  const { data, error, errorObject, size, total, loading } = rest;
+  const isEmpty = data.length === 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     navigate(`/${spaceId}/assessments/${value}`);
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
-    (errorObject?.type === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.type === ECustomErrorType.NOT_FOUND) ? (
+    (errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
+      errorObject?.code === ECustomErrorType.NOT_FOUND) ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
-      <Title
-        borderBottom={true}
-        sup={
-          <SupTitleBreadcrumb
-            routes={[
-              {
-                title: currentSpace?.title || "",
-                sup: "spaces",
-                icon: <FolderRoundedIcon fontSize="inherit" sx={{ mr: 0.5 }} />,
-              },
-            ]}
-          />
-        }
-        toolbar={
-          <IconButton
-            size="small"
-            component={Link}
-            to={`/${spaceId}/setting`}
-            sx={{ ml: 2 }}
-          >
-            <SettingsRoundedIcon color="primary" />
-          </IconButton>
-        }
+      <AssessmentTitle data={currentSpace} />
+      <Title size="large"
+             toolbar={
+               <IconButton
+                   size="small"
+                   component={Link}
+                   to={`/${spaceId}/setting`}
+                   sx={{ ml: 2 }}
+               >
+                 <SettingsRoundedIcon />
+               </IconButton>
+             }
       >
         <Box>
-          <DescriptionRoundedIcon sx={{ mr: 1 }} />
+          {/* <DescriptionRoundedIcon sx={{ mr: 1 }} /> */}
           <Trans i18nKey="assessments" />
         </Box>
       </Title>
-
-      <Box
-        sx={{
-          background: "white",
-          py: 1,
-          px: 2,
-          ...styles.centerV,
-          borderRadius: 1,
-          my: 3,
-        }}
-      >
-        <Box ml={`${is_farsi ? 0 : "auto"}`} mr={`${is_farsi ? "auto" : 0}`}>
-          <ToolbarCreateItemBtn
-            data-cy="create-assessment-btn"
-            onClick={() =>
-              dialogProps.openDialog({
-                type: "create",
-                data: {
-                  space: { id: spaceId, title: currentSpace?.title },
-                },
-              })
-            }
-            icon={
-              <NoteAddRoundedIcon
-                sx={{
-                  mr: `${is_farsi ? "-4px" : "8px"}`,
-                  ml: `${is_farsi ? "8px" : "-4px"}`,
-                }}
-              />
-            }
-            shouldAnimate={isEmpty}
-            minWidth="195px"
-            text="createAssessment"
-            disabled={rest.loading}
-          />
+      {!isEmpty && (
+        <Box
+          sx={{
+            background: "white",
+            py: 1,
+            px: 2,
+            ...styles.centerV,
+            borderRadius: 1,
+            my: 3,
+          }}
+        >
+          <Box ml="auto">
+            <ToolbarCreateItemBtn
+              data-cy="create-assessment-btn"
+              onClick={() =>
+                dialogProps.openDialog({
+                  type: "create",
+                  data: {
+                    space: { id: spaceId, title: currentSpace?.title },
+                  },
+                })
+              }
+              icon={<NoteAddRoundedIcon />}
+              shouldAnimate={isEmpty}
+              minWidth="195px"
+              text="createAssessment"
+              disabled={rest.loading}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
+      {isEmpty && !loading && (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 6,
+            gap: 4,
+          }}
+        >
+          <img
+            src={AssessmentEmptyState}
+            alt={"No assesment here!"}
+            width="240px"
+          />
+          <Typography
+            textAlign="center"
+            variant="h3"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "3rem",
+              fontWeight: "900",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="noAssesmentHere" />
+          </Typography>
+          <Typography
+            textAlign="center"
+            variant="h1"
+            sx={{
+              color: "#9DA7B3",
+              fontSize: "1rem",
+              fontWeight: "500",
+              width: "60%",
+            }}
+          >
+            <Trans i18nKey="createAnAssessmentWith" />
+          </Typography>
+          <Box>
+            <Button
+              startIcon={<AddRoundedIcon />}
+              variant="contained"
+              sx={{
+                animation: `${animations.pomp} 1.6s infinite cubic-bezier(0.280, 0.840, 0.420, 1)`,
+                "&:hover": {
+                  animation: `${animations.noPomp}`,
+                },
+              }}
+              onClick={() =>
+                dialogProps.openDialog({
+                  type: "create",
+                  data: {
+                    space: { id: spaceId, title: currentSpace?.title },
+                  },
+                })
+              }
+            >
+              <Typography sx={{ fontSize: "1.25rem" }} variant="button">
+                <Trans i18nKey="newAssessment" />
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+      )}
+
       <QueryData
         {...rest}
-        renderLoading={() => <LoadingSkeletonOfAssessments />}
+        // renderLoading={() => <LoadingSkeletonOfAssessments />}
         emptyDataComponent={
           <ErrorEmptyData
             emptyMessage={<Trans i18nKey="nothingToSeeHere" />}

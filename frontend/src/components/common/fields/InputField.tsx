@@ -11,6 +11,8 @@ import React, {
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
+import { primaryFontFamily, theme } from "@/config/theme";
+import { evidenceAttachmentInput } from "@utils/enumType";
 
 const InputField = () => {
   return <TextField />;
@@ -19,7 +21,15 @@ const InputField = () => {
 interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   name: string;
   minLength?: number;
+  maxLength?: number;
   isFocused?: boolean;
+  pallet?: any;
+  borderRadius?: string;
+  setValueCount?: any;
+  hasCounter?: boolean;
+  isFarsi?: boolean;
+  isEditing?: boolean;
+  valueCount?: string;
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -29,8 +39,16 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     InputLabelProps,
     type,
     minLength,
+    maxLength,
     helperText,
     isFocused,
+    pallet,
+    borderRadius,
+    setValueCount,
+    hasCounter,
+    isFarsi,
+    isEditing,
+    valueCount,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,26 +57,45 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     formState: { errors },
   } = useFormContext();
   const [showPassword, toggleShowPassword] = usePasswordFieldAdornment();
-  const { hasError, errorMessage } = getFieldError(errors, name, minLength);
+  const { hasError, errorMessage } = getFieldError(
+    errors,
+    name,
+    minLength,
+    maxLength
+  );
   useEffect(() => {
-    if (isFocused && inputRef.current) {
-      inputRef?.current?.focus(); // Focus the input if isFocused prop is true
+    console.log(isFocused);
+    if (isFocused && inputRef?.current) {
+      inputRef?.current?.focus();
+    } else {
+      inputRef?.current?.blur();
     }
   }, [isFocused]);
   useEffect(() => {
-    if (inputRef.current&&isFocused) {
+    if (inputRef.current && isFocused) {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
       inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
-      inputRef.current.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
-      inputRef?.current?.focus();
+      inputRef.current.style.fontFamily = isFarsi
+        ? "VazirMatn"
+        : primaryFontFamily;
+      // inputRef?.current?.focus();
     }
-  }, [inputRef.current?.value]);
+    if (inputRef.current && !isFocused) {
+      inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
+      inputRef.current.style.fontFamily = isFarsi
+        ? "VazirMatn"
+        : primaryFontFamily;
+    }
+  }, [inputRef.current?.value, isFocused]);
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (setValueCount) {
+      setValueCount(event.target.value);
+    }
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
       event.target.dir = isFarsi ? "rtl" : "ltr";
-      event.target.style.fontFamily = isFarsi ? "VazirMatn" : "Roboto";
+      event.target.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
     if (type === "password" && inputRef.current) {
       inputRef?.current?.focus();
@@ -68,13 +105,36 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
   return (
     <TextField
       {...rest}
-      {...register(name, { required, minLength })}
+      {...register(name, { required, minLength, maxLength })}
       type={showPassword ? "text" : type}
       fullWidth
       size="small"
       variant="outlined"
       inputRef={inputRef}
       onChange={handleInputChange}
+      sx={{
+        "& ::placeholder": { fontFamily: primaryFontFamily },
+        background: pallet?.background,
+        borderRadius: borderRadius,
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: pallet?.borderColor,
+            borderRadius: borderRadius,
+          },
+          "&:hover fieldset": {
+            borderColor: pallet?.borderHover,
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: pallet?.borderColor,
+          },
+          paddingTop:
+            isEditing && name == "evidenceDetail"
+              ? evidenceAttachmentInput.paddingTop
+              : "",
+          paddingBottom:
+            name == "evidence" ? evidenceAttachmentInput.paddingBottom : "",
+        },
+      }}
       InputLabelProps={{ ...InputLabelProps, required }}
       InputProps={
         type === "password"
@@ -92,7 +152,19 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
                 </InputAdornment>
               ),
             }
-          : {}
+          : {
+              style: hasCounter
+                ? isFarsi
+                  ? {
+                      paddingLeft: 60,
+                      minHeight: "110px",
+                    }
+                  : {
+                      paddingRight: 60,
+                      minHeight: "110px",
+                    }
+                : {},
+            }
       }
       error={hasError}
       helperText={(errorMessage as ReactNode) || helperText}

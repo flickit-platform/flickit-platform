@@ -1,18 +1,20 @@
 import os
 import sentry_sdk
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
 
 sentry_sdk.init(
     dsn=os.environ.get('SENTRY_DSN'),
     traces_sample_rate=1.0,
+    environment=os.environ.get('SENTRY_ENVIRONMENT'),
     # Set profiles_sample_rate to 1.0 to profile 100%
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
 )
 
-__version__ = "1.9.0-SNAPSHOT"
+__version__ = "1.29.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -73,8 +75,6 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL'),
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -91,6 +91,7 @@ EXPIRATION_DAYS = 7
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
 PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
+
 
 CACHE_MIDDLEWARE_KEY_PREFIX = PROJECT_APP
 
@@ -120,6 +121,7 @@ TEMPLATES = [
 ]
 
 INSTALLED_APPS = [
+    "health_check",
     "django.contrib.admin",
     "django.contrib.auth",
     "mozilla_django_oidc",
@@ -133,14 +135,11 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    'import_export',
-    'djoser',
     'account',
     'baseinfo',
     'assessment',
     'assessmentplatform',
     'drf_yasg',
-    'storages',
 ]
 
 MIDDLEWARE = (
@@ -193,22 +192,17 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'assessmentplatform.exceptionhandlers.custom_exception_handler',
 }
 
-DSL_PARSER_URL_SERVICE = "http://dsl:8080/extract/"
 ASSESSMENT_SERVER_PORT = os.environ.get('ASSESSMENT_SERVER_PORT')
 ASSESSMENT_URL = f"http://assessment:{ASSESSMENT_SERVER_PORT}/"
 
-DEFAULT_FILE_STORAGE = 'assessmentplatform.custom_storage.MediaStorage'
-STATICFILES_STORAGE = 'assessmentplatform.custom_storage.StaticStorage'
-AWS_S3_SIGNATURE_VERSION = "s3v4"
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
-AWS_ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_ACCESS_KEY')
-AWS_S3_ENDPOINT_URL = os.environ.get('MINIO_API')
-AWS_S3_USE_SSL = os.environ.get('MINIO_USE_SSL') == 'True'
-MINIO_MEDIA_BUCKET_NAME = os.environ.get('MINIO_MEDIA_BUCKET')
-MINIO_STATIC_BUCKET_NAME = os.environ.get('MINIO_STATIC_BUCKET')
-MINIO_QUERYSTRING_EXPIRE_MEDIA = os.environ.get('MINIO_QUERYSTRING_EXPIRE_MEDIA')
-MINIO_URL = os.environ.get('MINIO_URL')
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_ROOT = BASE_DIR / 'media'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 OIDC_OP_JWKS_ENDPOINT = os.environ.get('OIDC_OP_JWKS_ENDPOINT',
                                        default='http://localhost:8080/realms/flickit/protocol/openid-connect/certs')
@@ -225,6 +219,7 @@ OIDC_OP_USER_ENDPOINT = os.environ.get('OIDC_OP_USER_ENDPOINT',
 OIDC_DRF_AUTH_BACKEND = "baseinfo.oidcbackend.MyOIDCAB"
 
 PRODUCTION_STATE = os.environ.get('PRODUCTION_STATE') == 'True'
+EXCEL_SAMPLE_URL = os.environ.get('EXCEL_SAMPLE_URL', None)
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
@@ -268,14 +263,4 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     }
-}
-
-DJOSER = {
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {
-        'user': 'account.serializers.userserializers.UserSerializer',
-        'current_user': 'account.serializers.userserializers.UserCustomSerializer',
-    },
-
 }

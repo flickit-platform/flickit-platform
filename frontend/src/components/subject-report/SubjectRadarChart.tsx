@@ -29,8 +29,7 @@ const SubjectRadarChart = (props: any) => {
 
 const SubjectRadar = (props: any) => {
   const { data: res = {}, loaded } = props;
-  const { subject } = res;
-  const {maturity_level}=subject
+  const { maturityLevelsCount } = res;
   const data = useMemo(() => {
     return convertToSubjectChartData(res);
   }, [loaded]);
@@ -45,9 +44,9 @@ const SubjectRadar = (props: any) => {
             return (
               <Text
                 {...rest}
-                verticalAnchor="middle"
                 y={y + (y - cy) / 15}
                 x={x + (x - cx) / 15}
+                fontSize="1.25rem"
               >
                 {payload.value}
               </Text>
@@ -56,19 +55,20 @@ const SubjectRadar = (props: any) => {
         />
         <PolarRadiusAxis
           angle={90}
-          domain={[0, maturity_level?.maturity_levels_count]}
+          domain={[0, maturityLevelsCount]}
           type="number"
-          tickCount={maturity_level?.maturity_levels_count + 1}
+          tickCount={maturityLevelsCount + 1}
+          tick={false}
         />
         {/* <Radar name="confidence level" dataKey="cl" stroke="#137681" fill="#3596A1" fillOpacity={0.5} /> */}
         <Radar
           name={t("maturityLevel") as string}
           dataKey="ml"
-          stroke="#491e8a"
-          fill="#6035A1"
+          stroke="#004F83"
+          fill="#004F83"
           fillOpacity={0.5}
         />
-        <Legend />
+        <Legend wrapperStyle={{ paddingTop: 20 }} />{" "}
       </RadarChart>
     </ResponsiveContainer>
   );
