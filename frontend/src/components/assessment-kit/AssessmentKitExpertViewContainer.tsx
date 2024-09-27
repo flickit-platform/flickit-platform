@@ -57,7 +57,6 @@ const AssessmentKitExpertViewContainer = () => {
     const data: AssessmentKitDetailsType =
       await fetchAssessmentKitDetailsQuery.query();
     setDetails(data);
-    setLoaded(true);
   };
   const handleDownload = async () => {
     try {
@@ -156,6 +155,8 @@ const AssessmentKitExpertViewContainer = () => {
           />
           <UpdateAssessmentKitDialog
             setForceUpdate={setForceUpdate}
+            setLoaded={setLoaded}
+            loaded={loaded}
             {...dialogProps}
           />
           <AssessmentKitSectionsTabs update={update} details={details} />
@@ -897,8 +898,7 @@ const AssessmentKitQuestionsList = (props: {
   );
 };
 const UpdateAssessmentKitDialog = (props: any) => {
-  const { onClose: closeDialog, setForceUpdate, ...rest } = props;
-  const [loading, setLoading] = useState(false);
+  const { onClose: closeDialog, setForceUpdate, setLoaded, loaded, ...rest } = props;
 
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -928,14 +928,14 @@ const UpdateAssessmentKitDialog = (props: any) => {
       kitDslId: dsl_id.kitDslId,
       ...restOfData,
     };
-    setLoading(true);
+    setLoaded(true);
     try {
       const { data: res } = await service.updateAssessmentKitDSL(
         { data: formattedData, assessmentKitId: assessmentKitId },
         { signal: abortController.signal },
       );
       setForceUpdate((prev: boolean) => !prev);
-      setLoading(false);
+      setLoaded(false);
       close();
     } catch (e: any) {
       const err = e as ICustomError;
@@ -956,7 +956,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
       ) {
         toastError(err.message);
       }
-      setLoading(false);
+      setLoaded(false);
       formMethods.clearErrors();
       return () => {
         abortController.abort();
@@ -1008,7 +1008,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
       </Grid>
       <CEDialogActions
         closeDialog={close}
-        loading={loading}
+        loading={loaded}
         type="submit"
         submitButtonLabel={t("saveChanges") as string}
         onSubmit={formMethods.handleSubmit(onSubmit)}
