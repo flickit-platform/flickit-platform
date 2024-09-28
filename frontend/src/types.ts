@@ -144,6 +144,7 @@ export interface IUserInfo {
   linkedin?: string | null;
   is_active?: boolean;
   default_space?: any;
+  subscriberHash?: string;
 }
 
 export interface ISpaceInfo {

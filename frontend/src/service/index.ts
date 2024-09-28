@@ -67,6 +67,9 @@ export const createService = (
     getSignedInUser(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/api/v1/users/me/`, config);
     },
+    getSubscriberHash(arg: any, config: AxiosRequestConfig<any> | undefined) {
+      return axios.get(`/api/v1/notification-platform-settings/`, config);
+    },
     getUserProfile(arg: any, config: AxiosRequestConfig<any> | undefined) {
       return axios.get(`/api/v1/user-profile/`, config);
     },
@@ -378,26 +381,26 @@ export const createService = (
     },
     fetchAdviceNarration(
       { assessmentId }: { assessmentId: string },
-      config: AxiosRequestConfig<any> | undefined
+      config: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.get(
         `/api/v1/assessments/${assessmentId}/advice-narration/
 `,
         {
           ...(config ?? {}),
-        }
+        },
       );
     },
     updateAdviceNarration(
       { assessmentId, data }: { assessmentId: string; data: any },
-      config: AxiosRequestConfig<any> | undefined
+      config: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.post(
         `/api/v1/assessments/${assessmentId}/advice-narration/`,
         data,
         {
           ...(config ?? {}),
-        }
+        },
       );
     },
     fetchExportReport(
@@ -483,7 +486,7 @@ export const createService = (
         attributeLevelTargets: any;
         adviceListItems: any;
       },
-      config: AxiosRequestConfig<any> | undefined = {}
+      config: AxiosRequestConfig<any> | undefined = {},
     ) {
       return axios.post(
         `/api/v1/assessments/${assessmentId}/advice-narration-ai/`,
@@ -491,7 +494,7 @@ export const createService = (
           attributeLevelTargets,
           adviceListItems,
         },
-        config
+        config,
       );
     },
     fetchSubjectProgress(
@@ -777,7 +780,7 @@ export const createService = (
     },
     convertExcelToDSLFile(
       args: { file: any },
-      config: AxiosRequestConfig<any> | undefined
+      config: AxiosRequestConfig<any> | undefined,
     ) {
       const { file } = args ?? {};
       return axios.post(
@@ -789,12 +792,12 @@ export const createService = (
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
     },
     fetchExcelToDSLSampleFile(
       args: any | undefined,
-      config: AxiosRequestConfig<any> | undefined
+      config: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.get(`/api/v1/assessment-kits/excel-to-dsl/sample/`, {
         ...config,
