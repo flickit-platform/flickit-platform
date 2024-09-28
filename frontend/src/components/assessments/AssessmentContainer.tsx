@@ -226,6 +226,7 @@ const useFetchAssessments = () => {
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
     undefined,
   );
+  const navigate = useNavigate();
   const { spaceId, page } = useParams();
   const { service } = useServiceContext();
   const abortController = useRef(new AbortController());
@@ -242,6 +243,10 @@ const useFetchAssessments = () => {
         { signal: abortController.current.signal },
       );
       if (res) {
+        const { size, total } = res
+        if(Math.ceil(total / size ) < parseInt(page ?? "1", 10)  ){
+          return navigate(`*`);
+        }
         setData(res);
         setError(false);
       } else {
