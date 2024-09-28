@@ -252,7 +252,6 @@ const useFetchAssessments = () => {
       setLoading(false);
     } catch (e) {
       const err = e as ICustomError;
-      console.log(err,"test err")
       toastError(err, { filterByStatus: [404] });
       setLoading(false);
       setError(true);
