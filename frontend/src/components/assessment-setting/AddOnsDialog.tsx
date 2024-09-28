@@ -16,9 +16,10 @@ import {ICustomError} from "@utils/CustomError";
 import {useQuery} from "@utils/useQuery";
 import {useServiceContext} from "@providers/ServiceProvider";
 import {toast} from "react-toastify";
+import {CEDialog, CEDialogActions} from "@common/dialogs/CEDialog";
 
 const AddOnsDialog = (props: any) => {
-    const {expanded,onClose, title, assessmentId} = props
+    const { onClose, title, assessmentId, ...rest } = props
     const uploadRef = useRef<any>(null)
 
     const { service } = useServiceContext();
@@ -49,52 +50,37 @@ const AddOnsDialog = (props: any) => {
     };
 
     return (
-        <Dialog
-            open={expanded.display}
-            onClose={onClose}
-            maxWidth={"sm"}
-            // fullScreen={fullScreen}
-            fullWidth
-            sx={{
-                ".MuiDialog-paper::-webkit-scrollbar": {
-                    display: "none",
-                    scrollbarWidth: "none",
-                    msOverflowStyle: "none",
-                },
-            }}
+        <CEDialog
+            {...rest}
+            closeDialog={onClose}
+            title={title}
         >
-            <DialogTitle textTransform="uppercase" sx={{ ...styles.centerV }}>
-                    {title}
-            </DialogTitle>
-            <DialogContent
+            <Box
                 sx={{
                     overflowX: "hidden",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    alignItems: "flex-start",
-                    textAlign: "left",
+                    alignItems: "flex-end",
+                    textAlign: "right",
                 }}
             >
-               <Box sx={{width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-                   <Typography><Trans i18nKey={"factSheet"} /></Typography>
+                <Box sx={{width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+                    <Typography><Trans i18nKey={"factSheet"} /></Typography>
                     <LoadingButton loading={UploadFile.loading} onClick={handelUpload} sx={{background:theme.palette.primary.main,color:"#fff",
                         "&:hover":{background:theme.palette.primary.main}}}>
                         <Trans i18nKey={"uploadAttachment"} />
                     </LoadingButton>
-                   <input accept="*/*" onChange={handleFileChange} ref={uploadRef} type={"file"} style={{display:"none"}}/>
-               </Box>
-
-                <Box mt={2} alignSelf="flex-end" sx={{ display: "flex", gap: 2 }}>
-                    <Button onClick={onClose}>
-                        <Trans i18nKey={"cancel"} />
-                    </Button>
-                    {/*<Button variant="contained" onClick={DeletePerson}>*/}
-                    {/*    <Trans i18nKey={"confirm"} />*/}
-                    {/*</Button>*/}
+                    <input accept="*/*" onChange={handleFileChange} ref={uploadRef} type={"file"} style={{display:"none"}}/>
                 </Box>
-            </DialogContent>
-        </Dialog>
+                <CEDialogActions
+                    closeDialog={onClose}
+                    loading={UploadFile.loading}
+                    hideSubmitButton={true}
+                >
+                </CEDialogActions>
+            </Box>
+        </CEDialog>
     );
 };
 

@@ -206,7 +206,7 @@ const AssessmentSettingContainer = () => {
               setChangeData={setChangeData}
             />
             <AddOnsDialog
-                expanded={expandedAddOnsModal}
+                open={expandedAddOnsModal.display}
                 onClose={handleCloseAddOnsModal}
                 assessmentId={assessmentId}
                 title={<Trans i18nKey={"addOnsConfig"} />}
