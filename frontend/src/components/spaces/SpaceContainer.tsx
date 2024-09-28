@@ -45,7 +45,9 @@ const SpaceContainer = () => {
   });
 
   useEffect(() => {
-    spacesQueryData.query({ size: PAGESIZE, page: pageNumber });
+    spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then(res => {
+      const { page , size, total } = res
+    });
   }, [pageNumber]);
 
   const pageCount =
@@ -56,7 +58,7 @@ const SpaceContainer = () => {
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
-  const isEmpty = spacesQueryData?.data?.items?.length === 0;
+  const isEmpty = spacesQueryData?.data?.items?.length === 0 && pageNumber < Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
   return (
     <SpaceLayout
