@@ -77,6 +77,7 @@ const AddOnsDialog = (props: any) => {
                     closeDialog={onClose}
                     loading={UploadFile.loading}
                     hideSubmitButton={true}
+                    type={"button"}
                 >
                 </CEDialogActions>
             </Box>
