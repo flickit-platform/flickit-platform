@@ -95,6 +95,8 @@ const handleCopyAsImage = async (
 
 const AssessmentExportContainer = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [aboutSection, setAboutSection] = useState<any>("");
+  const [aiGenerated, setAiGenerated] = useState<any>(false);
 
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -237,6 +239,12 @@ const AssessmentExportContainer = () => {
     [id: string]: boolean;
   }>({});
   const [attributesDataPolicy, setAttributesDataPolicy] = useState<any>({});
+
+  const fetchAdviceNarration = useQuery<any>({
+    service: (args, config) =>
+        service.fetchAdviceNarration({ assessmentId }, config),
+    toastError: false,
+  });
 
   const fetchAllAttributesData = async (ignoreIds: any[] = []) => {
     try {
@@ -391,6 +399,17 @@ const AssessmentExportContainer = () => {
       setShowSpinner(false);
     }, 2000);
   }, []);
+
+  useEffect(()=>{
+    (async ()=>{
+    const res = await fetchAdviceNarration.query()
+      const selectedNarration = res?.aiNarration || res?.assessorNarration;
+      if (selectedNarration) {
+        setAboutSection(selectedNarration?.narration);
+        res?.aiNarration && setAiGenerated(true)
+      }
+    })()
+  },[])
 
   const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -1498,6 +1517,27 @@ const AssessmentExportContainer = () => {
                   </TableContainer>
                 </div>
               ))}
+              <Box>
+                <Typography
+                    component="div"
+                    mt={6}
+                    variant="headlineMedium"
+                    id="recommendations"
+                    gutterBottom
+                >
+                  <Trans i18nKey="recommendations" />
+                </Typography>
+                  <Box
+                      component={Paper}
+                      sx={{ position:"relative", marginBlock: 2, borderRadius: 4 , padding: 2 }}
+                  >
+                    {aiGenerated && <Box sx={{ position: "absolute", top: -12, right: 8 }}>
+                      <AIGenerated />
+                    </Box>
+                    }
+                <Typography dangerouslySetInnerHTML={{__html: aboutSection ? aboutSection : "There is no recommendation yet!"}}></Typography>
+                </Box>
+              </Box>
             </Paper>
           </Box>
         );

@@ -520,5 +520,6 @@
   "useAdiceGenerator": "Use Advice Generator",
   "defaultAdviceValue": "WRITE YOUR OWN ADVICES...",
   "disabledAdviceValue": "Advice AI narration is unavailable: AI is Disabled!",
-  "generateAdviceViaAI": "Generate Advice Via AI"
+  "generateAdviceViaAI": "Generate Advice Via AI",
+  "recommendations": "Recommendations"
 }
