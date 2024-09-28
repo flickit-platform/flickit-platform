@@ -29,13 +29,13 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
+import toastError from "@/utils/toastError";
 
 export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [aboutSection, setAboutSection] = useState<any>(null);
   const [editable, setEditable] = useState(false);
-  const [AIDisabled, setAIDisabled] = useState(false);
   const [isAIGenerated, setIsAIGenerated] = useState(false);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
@@ -46,7 +46,6 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
       .then((res) => {
         const data = res.data;
         setEditable(data.editable ?? false);
-        setAIDisabled(!data.aiEnabled);
         if (data?.aiNarration?.narration) {
           setIsAIGenerated(true);
         }
@@ -86,13 +85,9 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
         position: "relative",
       }}
     >
-      {(isAIGenerated || (AIDisabled && !isWritingAdvice)) && (
+      {isAIGenerated && (
         <Box sx={{ position: "absolute", top: -12, right: 8 }}>
-          {AIDisabled ? (
-            <AIGenerated title="AIDisabled" type="error" icon={<></>} />
-          ) : (
-            <AIGenerated />
-          )}
+          <AIGenerated />
         </Box>
       )}
 
@@ -113,9 +108,7 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
                 ? aboutSection?.narration
                 : isWritingAdvice
                   ? `<p>${t("defaultAdviceValue")}</p>`
-                  : AIDisabled
-                    ? `<p>${t("disabledAdviceValue")}</p>`
-                    : `<p>${t("defaultAdviceValue")}</p>`
+                  : `<p>${t("defaultAdviceValue")}</p>`
             }
             editable={editable}
             infoQuery={fetchAssessment}
@@ -126,9 +119,9 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
                     new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000
+                      60000,
                 ),
-                "yyyy/MM/dd HH:mm"
+                "yyyy/MM/dd HH:mm",
               ) +
                 " (" +
                 convertToRelativeTime(aboutSection?.creationTime) +
@@ -171,14 +164,16 @@ const OnHoverRichEditor = (props: any) => {
     try {
       const { data: res } = await service.updateAdviceNarration(
         { assessmentId, data: { assessorNarration: data.narration } },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       await infoQuery();
       setShow(false);
     } catch (e) {
       const err = e as ICustomError;
+      console.log(err);
       setError(err);
       setHasError(true);
+      toastError(err);
     }
   };
 
