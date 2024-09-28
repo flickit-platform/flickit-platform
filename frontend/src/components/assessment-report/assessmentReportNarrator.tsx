@@ -36,7 +36,7 @@ export const AssessmentReportNarrator = ({
   setIsWritingAdvice,
   fetchAdviceNarration,
   setEmptyState,
-  setAIGenerated
+  setAIGenerated,
 }: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -57,7 +57,7 @@ export const AssessmentReportNarrator = ({
         setEditable(data.editable ?? false);
         if (data?.aiNarration?.narration) {
           setIsAIGenerated(true);
-          setAIGenerated(true)
+          setAIGenerated(true);
         }
         const selectedNarration = data?.aiNarration || data?.assessorNarration;
 
@@ -118,6 +118,8 @@ export const AssessmentReportNarrator = ({
             infoQuery={fetchAssessment}
             onEditing={onEditing}
             setEmptyState={setEmptyState}
+            setIsAIGenerated={setIsAIGenerated}
+            setAIGenerated={setAIGenerated}
           />
           {aboutSection?.creationTime && (
             <Typography variant="bodyMedium" mx={1}>
@@ -141,7 +143,16 @@ export const AssessmentReportNarrator = ({
 };
 
 const OnHoverRichEditor = (props: any) => {
-  const { data, editable, infoQuery, onEditing, query, setEmptyState } = props;
+  const {
+    data,
+    editable,
+    infoQuery,
+    onEditing,
+    query,
+    setEmptyState,
+    setIsAIGenerated,
+    setAIGenerated
+  } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
   const [show, setShow] = useState(false);
@@ -177,6 +188,8 @@ const OnHoverRichEditor = (props: any) => {
       setEmptyState(false);
       onEditing(false);
       setShow(false);
+      setIsAIGenerated(false)
+      setAIGenerated(false)
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
