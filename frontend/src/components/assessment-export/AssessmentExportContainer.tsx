@@ -242,7 +242,7 @@ const AssessmentExportContainer = () => {
 
   const fetchAdviceNarration = useQuery<any>({
     service: (args, config) =>
-        service.fetchAdviceNarration({ assessmentId }, config),
+      service.fetchAdviceNarration({ assessmentId }, config),
     toastError: false,
   });
 
@@ -419,7 +419,7 @@ const AssessmentExportContainer = () => {
         fetchPathInfo,
         progressInfo,
         questionnaireQueryData,
-        fetchAdviceNarration
+        fetchAdviceNarration,
       ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentRoles />}
       render={([
@@ -427,7 +427,7 @@ const AssessmentExportContainer = () => {
         pathInfo = {},
         progress,
         questionnaireData = {},
-        adviceSection
+        adviceSection,
       ]) => {
         const { items } = questionnaireData;
         const {
@@ -441,10 +441,11 @@ const AssessmentExportContainer = () => {
         const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
-        const selectedNarration = adviceSection?.aiNarration || adviceSection?.assessorNarration;
+        const selectedNarration =
+          adviceSection?.aiNarration || adviceSection?.assessorNarration;
         if (selectedNarration) {
           setAdviceNarration(selectedNarration?.narration);
-          adviceSection?.aiNarration && setAiGenerated(true)
+          adviceSection?.aiNarration && setAiGenerated(true);
         }
         useEffect(() => {
           setDocumentTitle(
@@ -1538,23 +1539,36 @@ const AssessmentExportContainer = () => {
                 </div>
               ))}
               <>
-              <Box sx={{display:"flex",flexDirection:{xs:"column",sm:"row"}, justifyContent:"space-between",alignItems:{xs:"flex-start",sm:"flex-end"}}}>
-                <Typography
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "space-between",
+                    alignItems: { xs: "flex-start", sm: "flex-end" },
+                  }}
+                >
+                  <Typography
                     component="div"
-                    mt={6}
+                    mt={4}
                     variant="headlineMedium"
                     id="recommendations"
                     gutterBottom
-                >
-                  <Trans i18nKey="recommendations" />
-                </Typography>
-                {aiGenerated && <Box>
-                  <AIGenerated />
-                </Box>}
-              </Box>
-                <Box sx={{ marginBlock: 2, borderRadius: 4 , padding: 2 }}>
-                   <Typography dangerouslySetInnerHTML={{__html: adviceNarration ? adviceNarration : "There is no recommendation yet!"}}></Typography>
+                  >
+                    <Trans i18nKey="recommendations" />
+                  </Typography>
+                  {aiGenerated && (
+                    <Box>
+                      <AIGenerated />
+                    </Box>
+                  )}
                 </Box>
+                <Typography
+                  dangerouslySetInnerHTML={{
+                    __html: adviceNarration
+                      ? adviceNarration
+                      : "There is no recommendation yet!",
+                  }}
+                ></Typography>
               </>
             </Paper>
           </Box>
