@@ -91,11 +91,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
-      if(data){
-        shouldView &&  navigate(`${data.id}`);
-      }else{
-        shouldView &&  navigate(`${id}`);
-      }
+      shouldView && navigate(`${data ? data.id : id}`)
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
