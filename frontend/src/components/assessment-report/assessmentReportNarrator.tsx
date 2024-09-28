@@ -29,6 +29,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
+import toastError from "@/utils/toastError";
 
 export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
   const { service } = useServiceContext();
@@ -169,8 +170,10 @@ const OnHoverRichEditor = (props: any) => {
       setShow(false);
     } catch (e) {
       const err = e as ICustomError;
+      console.log(err);
       setError(err);
       setHasError(true);
+      toastError(err);
     }
   };
 

@@ -253,34 +253,21 @@ const AssessmentAdviceContainer = (props: any) => {
                     >
                       <Trans i18nKey="writeYourOwnAdvices" />
                     </Button>{" "}
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        background: "white",
-                        "&:hover": {
-                          background: "#d9dde3",
-                        },
-                        display: "flex",
-                        gap: 1,
-                      }}
-                      onClick={handleClickOpen}
+                    <Tooltip
+                      title={
+                        !narrationComponent.aiEnabled && (
+                          <Trans i18nKey="AIDisabled" />
+                        )
+                      }
                     >
-                      <Trans i18nKey="useAdiceGenerator" />
-                      <FaWandMagicSparkles />
-                    </Button>
-                  </Box>
-                )}
-              </Box>
-            ) : (
-              !adviceResult && (
-                <>
-                  <AssessmentReportNarrator isWritingAdvice={isWritingAdvice} />
-                  {permissions?.createAdvice && (
-                    <Box display="flex" justifyContent="flex-end" mt={2}>
-                      <Tooltip title={<Trans i18nKey="AIDisabled" />}>
+                      <div>
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           sx={{
+                            background: "white",
+                            "&:hover": {
+                              background: "#d9dde3",
+                            },
                             display: "flex",
                             gap: 1,
                           }}
@@ -290,6 +277,38 @@ const AssessmentAdviceContainer = (props: any) => {
                           <Trans i18nKey="useAdiceGenerator" />
                           <FaWandMagicSparkles />
                         </Button>
+                      </div>
+                    </Tooltip>
+                  </Box>
+                )}
+              </Box>
+            ) : (
+              !adviceResult && (
+                <>
+                  <AssessmentReportNarrator isWritingAdvice={isWritingAdvice} />
+                  {permissions?.createAdvice && (
+                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                      <Tooltip
+                        title={
+                          !narrationComponent.aiEnabled && (
+                            <Trans i18nKey="AIDisabled" />
+                          )
+                        }
+                      >
+                        <div>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              display: "flex",
+                              gap: 1,
+                            }}
+                            onClick={handleClickOpen}
+                            disabled={!narrationComponent.aiEnabled}
+                          >
+                            <Trans i18nKey="useAdiceGenerator" />
+                            <FaWandMagicSparkles />
+                          </Button>
+                        </div>
                       </Tooltip>
                     </Box>
                   )}
