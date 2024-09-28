@@ -46,7 +46,7 @@ const SpaceContainer = () => {
 
   useEffect(() => {
     spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then(res => {
-      const { page , size, total } = res
+      const { size, total } = res
       if(Math.ceil(total / size ) < pageNumber){
         return navigate(`*`);
       }
