@@ -402,6 +402,7 @@
   "setTheseParameters": "Set these parameters",
   "advisor": "Advisor",
   "writeYourOwnAdvices": " Write Your Own Advices",
+  "writeYourOwnAdvices...":"Write your own advices...",
   "advicesList": "Advices list",
   "improvementPoints": "Improvement Points",
   "number": "Number",
@@ -517,7 +518,7 @@
   "shortTitleInfo": "A very short title (a few characters) for addressing the product under assessment in reports.",
   "adviceGenerator": "Advice Generator",
   "noAdviceGeneratedYet": "No Advice Generated Yet",
-  "useAdiceGenerator": "Use Advice Generator",
+  "useAdviceGenerator": "Use Advice Generator",
   "defaultAdviceValue": "WRITE YOUR OWN ADVICES...",
   "disabledAdviceValue": "Advice AI narration is unavailable: AI is Disabled!",
   "generateAdviceViaAI": "Generate Advice Via AI"

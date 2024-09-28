@@ -45,6 +45,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const [adviceResult, setAdviceResult] = useState<any>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [AIGenerated, setAIGenerated] = useState<boolean>(false);
+  const [emptyState, setEmptyState] = useState<boolean>(true);
 
   const { assessmentId = "" } = useParams();
 
@@ -143,11 +144,13 @@ const AssessmentAdviceContainer = (props: any) => {
       queryBatchData={[fetchAdviceNarration]}
       renderLoading={() => <Skeleton height={160} />}
       render={([narrationComponent]) => {
-        const adviceEmptyState = !(
-          narrationComponent?.aiNarration ||
-          narrationComponent?.assessorNarration
-        );
-
+        useEffect(() => {
+          const adviceEmptyState = !(
+            narrationComponent?.aiNarration ||
+            narrationComponent?.assessorNarration
+          );
+          setEmptyState(adviceEmptyState);
+        }, []);
         return (
           <>
             <AdviceDialog
@@ -160,7 +163,7 @@ const AssessmentAdviceContainer = (props: any) => {
               createAdvice={createAdvice}
               loading={createAdviceQueryData.loading}
             />
-            {adviceEmptyState && !isWritingAdvice && !AIGenerated ? (
+            {emptyState && !isWritingAdvice && !AIGenerated ? (
               <Box
                 sx={{
                   borderRadius: "12px",
@@ -274,7 +277,7 @@ const AssessmentAdviceContainer = (props: any) => {
                           onClick={handleClickOpen}
                           disabled={!narrationComponent.aiEnabled}
                         >
-                          <Trans i18nKey="useAdiceGenerator" />
+                          <Trans i18nKey="useAdviceGenerator" />
                           <FaWandMagicSparkles />
                         </Button>
                       </div>
@@ -285,8 +288,13 @@ const AssessmentAdviceContainer = (props: any) => {
             ) : (
               !adviceResult && (
                 <>
-                  <AssessmentReportNarrator isWritingAdvice={isWritingAdvice} />
-                  {permissions?.createAdvice && (
+                  <AssessmentReportNarrator
+                    isWritingAdvice={isWritingAdvice}
+                    setIsWritingAdvice={setIsWritingAdvice}
+                    setEmptyState={setEmptyState}
+                    setAIGenerated={setAIGenerated}
+                  />
+                  {permissions?.createAdvice && !isWritingAdvice && (
                     <Box display="flex" justifyContent="flex-end" mt={2}>
                       <Tooltip
                         title={
@@ -305,7 +313,13 @@ const AssessmentAdviceContainer = (props: any) => {
                             onClick={handleClickOpen}
                             disabled={!narrationComponent.aiEnabled}
                           >
-                            <Trans i18nKey="useAdiceGenerator" />
+                            <Trans
+                              i18nKey={
+                                AIGenerated
+                                  ? "regenerate"
+                                  : "useAdviceGenerator"
+                              }
+                            />
                             <FaWandMagicSparkles />
                           </Button>
                         </div>
@@ -499,17 +513,18 @@ const AssessmentAdviceContainer = (props: any) => {
                     color="primary"
                   />
                   {permissions?.createAdvice && (
-                    <Button
+                    <LoadingButton
                       variant="contained"
                       sx={{
                         display: "flex",
                         gap: 1,
                       }}
                       onClick={generateAdviceViaAI}
+                      loading={createAINarrationQueryData.loading}
                     >
                       <Trans i18nKey="generateAdviceViaAI" />
                       <FaWandMagicSparkles />
-                    </Button>
+                    </LoadingButton>
                   )}
                 </Box>
               </>
