@@ -46,6 +46,7 @@ const AppWithNovu = () => {
 
   return (
     <NovuProvider
+      subscriberHash={userInfo.subscriberHash}
       subscriberId={userInfo.id.toString()}
       applicationIdentifier={import.meta.env.VITE_NOVU_APPLICATION_IDENTIFIER}
       backendUrl={import.meta.env.VITE_NOVU_BACKEND_URL}

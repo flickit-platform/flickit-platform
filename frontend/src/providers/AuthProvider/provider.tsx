@@ -26,6 +26,7 @@ export const defaultUserInfo = {
   displayName: "",
   id: "",
   email: "",
+  subscriberHash: "",
   // current_space: null,
 };
 
