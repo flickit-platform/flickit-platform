@@ -750,6 +750,31 @@ const AssessmentExportContainer = () => {
                         </Typography>
                       </Link>
                     ))}
+                    <Link
+                      href="#recommendations"
+                      sx={{
+                        textDecoration: "none",
+                        opacity: 0.9,
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FiberManualRecordRounded
+                        sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                      />
+                      <Typography
+                        variant="titleSmall"
+                        gutterBottom
+                        sx={{
+                          textDecoration: "none",
+                          opacity: 0.9,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <Trans i18nKey="recommendations" />
+                      </Typography>
+                    </Link>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={8}>
