@@ -52,11 +52,11 @@ const AssessmentAdviceContainer = (props: any) => {
   const itemsPerPage = 5;
   const totalPages = useMemo(
     () => Math.ceil(adviceResult?.length / itemsPerPage),
-    [adviceResult]
+    [adviceResult],
   );
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
-    page: number
+    page: number,
   ) => {
     setCurrentPage(page);
   };
@@ -253,21 +253,32 @@ const AssessmentAdviceContainer = (props: any) => {
                     >
                       <Trans i18nKey="writeYourOwnAdvices" />
                     </Button>{" "}
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        background: "white",
-                        "&:hover": {
-                          background: "#d9dde3",
-                        },
-                        display: "flex",
-                        gap: 1,
-                      }}
-                      onClick={handleClickOpen}
+                    <Tooltip
+                      title={
+                        !narrationComponent.aiEnabled && (
+                          <Trans i18nKey="AIDisabled" />
+                        )
+                      }
                     >
-                      <Trans i18nKey="useAdiceGenerator" />
-                      <FaWandMagicSparkles />
-                    </Button>
+                      <div>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            background: "white",
+                            "&:hover": {
+                              background: "#d9dde3",
+                            },
+                            display: "flex",
+                            gap: 1,
+                          }}
+                          onClick={handleClickOpen}
+                          disabled={!narrationComponent.aiEnabled}
+                        >
+                          <Trans i18nKey="useAdiceGenerator" />
+                          <FaWandMagicSparkles />
+                        </Button>
+                      </div>
+                    </Tooltip>
                   </Box>
                 )}
               </Box>
@@ -276,22 +287,29 @@ const AssessmentAdviceContainer = (props: any) => {
                 <>
                   <AssessmentReportNarrator isWritingAdvice={isWritingAdvice} />
                   {permissions?.createAdvice && (
-                    <Box
-                      display="flex"
-                      justifyContent="flex-end" // Align the button to the right
-                      mt={2}
-                    >
-                      <Button
-                        variant="contained"
-                        sx={{
-                          display: "flex",
-                          gap: 1,
-                        }}
-                        onClick={handleClickOpen}
+                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                      <Tooltip
+                        title={
+                          !narrationComponent.aiEnabled && (
+                            <Trans i18nKey="AIDisabled" />
+                          )
+                        }
                       >
-                        <Trans i18nKey="useAdiceGenerator" />
-                        <FaWandMagicSparkles />
-                      </Button>
+                        <div>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              display: "flex",
+                              gap: 1,
+                            }}
+                            onClick={handleClickOpen}
+                            disabled={!narrationComponent.aiEnabled}
+                          >
+                            <Trans i18nKey="useAdiceGenerator" />
+                            <FaWandMagicSparkles />
+                          </Button>
+                        </div>
+                      </Tooltip>
                     </Box>
                   )}
                 </>
