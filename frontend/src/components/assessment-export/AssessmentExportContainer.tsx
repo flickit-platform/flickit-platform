@@ -95,8 +95,8 @@ const handleCopyAsImage = async (
 
 const AssessmentExportContainer = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [aboutSection, setAboutSection] = useState<any>("");
-  const [aiGenerated, setAiGenerated] = useState<any>(false);
+  const [adviceNarration, setAdviceNarration] = useState<string>("");
+  const [aiGenerated, setAiGenerated] = useState<boolean>(false);
 
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
@@ -400,17 +400,6 @@ const AssessmentExportContainer = () => {
     }, 2000);
   }, []);
 
-  useEffect(()=>{
-    (async ()=>{
-    const res = await fetchAdviceNarration.query()
-      const selectedNarration = res?.aiNarration || res?.assessorNarration;
-      if (selectedNarration) {
-        setAboutSection(selectedNarration?.narration);
-        res?.aiNarration && setAiGenerated(true)
-      }
-    })()
-  },[])
-
   const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const handleSetRef = useCallback(
@@ -430,6 +419,7 @@ const AssessmentExportContainer = () => {
         fetchPathInfo,
         progressInfo,
         questionnaireQueryData,
+        fetchAdviceNarration
       ]}
       renderLoading={() => <LoadingSkeletonOfAssessmentRoles />}
       render={([
@@ -437,6 +427,7 @@ const AssessmentExportContainer = () => {
         pathInfo = {},
         progress,
         questionnaireData = {},
+        adviceSection
       ]) => {
         const { items } = questionnaireData;
         const {
@@ -450,6 +441,11 @@ const AssessmentExportContainer = () => {
         const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
+        const selectedNarration = adviceSection?.aiNarration || adviceSection?.assessorNarration;
+        if (selectedNarration) {
+          setAdviceNarration(selectedNarration?.narration);
+          adviceSection?.aiNarration && setAiGenerated(true)
+        }
         useEffect(() => {
           setDocumentTitle(
             `${t("document", { title: assessment?.title })}`,
@@ -1535,7 +1531,7 @@ const AssessmentExportContainer = () => {
                       <AIGenerated />
                     </Box>
                     }
-                <Typography dangerouslySetInnerHTML={{__html: aboutSection ? aboutSection : "There is no recommendation yet!"}}></Typography>
+                <Typography dangerouslySetInnerHTML={{__html: adviceNarration ? adviceNarration : "There is no recommendation yet!"}}></Typography>
                 </Box>
               </Box>
             </Paper>
