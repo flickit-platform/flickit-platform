@@ -1513,7 +1513,8 @@ const AssessmentExportContainer = () => {
                   </TableContainer>
                 </div>
               ))}
-              <Box>
+              <>
+              <Box sx={{display:"flex",flexDirection:{xs:"column",sm:"row"}, justifyContent:"space-between",alignItems:{xs:"flex-start",sm:"flex-end"}}}>
                 <Typography
                     component="div"
                     mt={6}
@@ -1523,17 +1524,14 @@ const AssessmentExportContainer = () => {
                 >
                   <Trans i18nKey="recommendations" />
                 </Typography>
-                  <Box
-                      component={Paper}
-                      sx={{ position:"relative", marginBlock: 2, borderRadius: 4 , padding: 2 }}
-                  >
-                    {aiGenerated && <Box sx={{ position: "absolute", top: -12, right: 8 }}>
-                      <AIGenerated />
-                    </Box>
-                    }
-                <Typography dangerouslySetInnerHTML={{__html: adviceNarration ? adviceNarration : "There is no recommendation yet!"}}></Typography>
-                </Box>
+                {aiGenerated && <Box>
+                  <AIGenerated />
+                </Box>}
               </Box>
+                <Box sx={{ marginBlock: 2, borderRadius: 4 , padding: 2 }}>
+                   <Typography dangerouslySetInnerHTML={{__html: adviceNarration ? adviceNarration : "There is no recommendation yet!"}}></Typography>
+                </Box>
+              </>
             </Paper>
           </Box>
         );
