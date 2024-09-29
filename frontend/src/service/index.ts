@@ -828,6 +828,23 @@ export const createService = (
         config,
       );
     },
+      FactSheetUpload(
+          args: { inputFile: any, assessment_id: any, analysisType: number },
+          config: AxiosRequestConfig<any> | undefined
+      ) {
+          const { assessment_id } = args ?? {};
+          return axios.post(
+              `/api/v1/assessments/${assessment_id}/analysis-input/`,
+              args,
+              {
+                  ...config,
+                  responseType: "blob",
+                  headers: {
+                      "Content-Type": "multipart/form-data",
+                  },
+              }
+          );
+      },
     updateAssessmentKitDSL(
       args: { assessmentKitId?: TId; data: any },
       config: AxiosRequestConfig<any> | undefined,

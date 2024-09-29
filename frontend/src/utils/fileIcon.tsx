@@ -77,6 +77,7 @@ export const FileIcon = (props: any) => {
       {hover && (
         <div
           onClick={() => downloadFile(item)}
+          aria-hidden="true"
           style={{ position: "absolute", top: "7px", left: "7px", zIndex: 1 }}
         >
           <svg
@@ -99,6 +100,7 @@ export const FileIcon = (props: any) => {
             setEvidenceId(evidenceId);
             setExpandedDeleteAttachmentDialog({ expended: true, id: item.id });
           }}
+          aria-hidden="true"
           style={{
             position: "absolute",
             width: "20px",

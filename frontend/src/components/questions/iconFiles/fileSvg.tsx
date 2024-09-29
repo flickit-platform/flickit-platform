@@ -71,6 +71,7 @@ export default function FileSvg({
       {hover && (
         <div
           onClick={() => downloadFile(item)}
+          aria-hidden="true"
           style={{
             position: "absolute",
             top: "7px",
@@ -99,6 +100,7 @@ export default function FileSvg({
             setEvidenceId(evidenceId);
             setExpandedDeleteAttachmentDialog({ expended: true, id: item.id });
           }}
+          aria-hidden="true"
           style={{
             position: "absolute",
             width: "20px",

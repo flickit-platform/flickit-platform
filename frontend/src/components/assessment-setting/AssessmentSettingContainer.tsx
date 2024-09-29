@@ -19,6 +19,8 @@ import Box from "@mui/material/Box";
 import AddMemberDialog from "@components/assessment-setting/addMemberDialog";
 import ConfirmRemoveMemberDialog from "@components/assessment-setting/confirmRemoveMemberDialog";
 import AssessmentSettingTitle from "@components/assessment-setting/AssessmentSettingTitle";
+import Addons from "@components/assessment-setting/Addons";
+import AddOnsDialog from "@components/assessment-setting/AddOnsDialog";
 
 const AssessmentSettingContainer = () => {
   const { service } = useServiceContext();
@@ -26,6 +28,12 @@ const AssessmentSettingContainer = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedRemoveModal, setExpandedRemoveModal] = useState<{
+    display: boolean;
+    name: string;
+    id: string;
+    invited?: boolean;
+  }>({ display: false, name: "", id: "", invited: false });
+  const [expandedAddOnsModal, setExpandedAddOnsModal] = useState<{
     display: boolean;
     name: string;
     id: string;
@@ -103,6 +111,11 @@ const AssessmentSettingContainer = () => {
       invited: false,
     });
   };
+    const handleCloseAddOnsModal = () => {
+        setExpandedAddOnsModal({...expandedAddOnsModal,
+            display: false
+        })
+    };
 
   return (
     <QueryBatchData
@@ -146,7 +159,7 @@ const AssessmentSettingContainer = () => {
                 />
               </Grid>
             </Grid>
-            <Grid container columns={12}>
+            <Grid container columns={12} mb={"32px"}>
               <Grid item sm={12} xs={12}>
                 <AssessmentSettingMemberBox
                   listOfRoles={listOfRoles}
@@ -160,6 +173,11 @@ const AssessmentSettingContainer = () => {
                   setChangeData={setChangeData}
                   changeData={changeData}
                 />
+              </Grid>
+            </Grid>
+            <Grid container columns={12}>
+              <Grid item sm={12} xs={12}>
+               <Addons setExpandedAddOnsModal={setExpandedAddOnsModal}/>
               </Grid>
             </Grid>
             <AddMemberDialog
@@ -186,6 +204,14 @@ const AssessmentSettingContainer = () => {
               inviteesMemberList={inviteesMemberList}
               assessmentName={title}
               setChangeData={setChangeData}
+            />
+            <AddOnsDialog
+                open={expandedAddOnsModal.display}
+                onClose={handleCloseAddOnsModal}
+                assessmentId={assessmentId}
+                title={<Trans i18nKey={"addOnsConfig"} />}
+                cancelText={<Trans i18nKey={"cancel"} />}
+                setChangeData={setChangeData}
             />
           </Box>
         );
