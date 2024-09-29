@@ -67,7 +67,7 @@ export const QuestionProvider: FC<IQuestionProviderProps> = ({ children }) => {
   useEffect(() => {
     localStorage.setItem(
       `${subjectId}_questionIndex`,
-      JSON.stringify(state.questionIndex)
+      JSON.stringify(state.questionIndex),
     );
   }, [state.questionIndex]);
 
@@ -93,7 +93,7 @@ export const useQuestionContext = () => {
   const context = useContext(QuestionContext);
   if (context === undefined) {
     throw new Error(
-      "useQuestionContext must be used within a QuestionProvider"
+      "useQuestionContext must be used within a QuestionProvider",
     );
   }
   return context;
@@ -103,7 +103,7 @@ export const useQuestionDispatch = () => {
   const context = useContext(QuestionDispatchContext);
   if (context === undefined) {
     throw new Error(
-      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider",
     );
   }
   return context;

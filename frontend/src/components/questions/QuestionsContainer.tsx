@@ -17,7 +17,7 @@ import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 
 const QuestionsContainer = (
-  props: PropsWithChildren<{ isReview?: boolean }>
+  props: PropsWithChildren<{ isReview?: boolean }>,
 ) => {
   const { questionIndex } = useParams();
   const dispatch = useQuestionDispatch();
@@ -55,7 +55,7 @@ const QuestionsContainer = (
 };
 
 export const QuestionsContainerC = (
-  props: PropsWithChildren<{ isReview?: boolean }>
+  props: PropsWithChildren<{ isReview?: boolean }>,
 ) => {
   const { children, isReview = false } = props;
   const { questions, questionsResultQueryData, fetchPathInfo } = useQuestions();
@@ -104,7 +104,7 @@ export const useQuestions = () => {
     service: (args, config) =>
       service.fetchQuestionsResult(
         { questionnaireId, assessmentId, page: args.page, size: pageSize },
-        config
+        config,
       ),
     runOnMount: false, // We'll handle the initial run ourselves
   });
@@ -113,7 +113,7 @@ export const useQuestions = () => {
     service: (args, config) =>
       service.fetchPathInfo(
         { questionnaireId, assessmentId, ...(args || {}) },
-        config
+        config,
       ),
     runOnMount: true,
   });
@@ -133,7 +133,7 @@ export const useQuestions = () => {
               resultId: "",
               questions: items,
               permissions: permissions,
-            })
+            }),
           );
           console.log("Initial questions loaded:", items);
         }
@@ -159,7 +159,7 @@ export const useQuestions = () => {
             resultId: "",
             questions: [...questions, ...items],
             permissions: permissions,
-          })
+          }),
         );
         console.log("More questions loaded:", items);
       }

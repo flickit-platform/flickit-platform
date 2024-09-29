@@ -43,23 +43,24 @@ const AssessmentContainer = () => {
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
   return error &&
-    (errorObject?.code === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.code === ECustomErrorType.NOT_FOUND) ? (
+    (errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
+      errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND) ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <Box display="flex" flexDirection="column" m="auto">
       <AssessmentTitle data={currentSpace} />
-      <Title size="large"
-             toolbar={
-               <IconButton
-                   size="small"
-                   component={Link}
-                   to={`/${spaceId}/setting`}
-                   sx={{ ml: 2 }}
-               >
-                 <SettingsRoundedIcon />
-               </IconButton>
-             }
+      <Title
+        size="large"
+        toolbar={
+          <IconButton
+            size="small"
+            component={Link}
+            to={`/${spaceId}/setting`}
+            sx={{ ml: 2 }}
+          >
+            <SettingsRoundedIcon />
+          </IconButton>
+        }
       >
         <Box>
           {/* <DescriptionRoundedIcon sx={{ mr: 1 }} /> */}
@@ -187,7 +188,7 @@ const AssessmentContainer = () => {
                 space={{ id: spaceId, title: currentSpace?.title }}
                 dialogProps={dialogProps}
               />
-              {pageCount > 1 && (
+              {pageCount > 1 && !isEmpty &&  (
                 <Stack
                   spacing={2}
                   sx={{
@@ -223,7 +224,7 @@ const useFetchAssessments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
-    undefined
+    undefined,
   );
   const { spaceId, page } = useParams();
   const { service } = useServiceContext();
@@ -238,7 +239,7 @@ const useFetchAssessments = () => {
     try {
       const { data: res } = await service.fetchAssessments(
         { spaceId: spaceId, size: 4, page: parseInt(page ?? "1", 10) - 1 },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       if (res) {
         setData(res);
@@ -263,7 +264,7 @@ const useFetchAssessments = () => {
     try {
       const { data: res } = await service.deleteAssessment(
         { id },
-        { signal: abortController.current.signal }
+        { signal: abortController.current.signal },
       );
       fetchAssessments();
     } catch (e) {

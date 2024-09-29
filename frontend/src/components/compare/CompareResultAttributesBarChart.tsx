@@ -32,7 +32,7 @@ const CompareResultSubjectAttributesBarChart = (props: {
       return convertToAssessmentsChartData(tempData, assessments);
     }
   }, [data, isSubject]);
-  
+
   const attRes = useMemo(() => {
     if (isSubject) {
       return convertToAttributesChartData(data, assessments);

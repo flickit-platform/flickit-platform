@@ -26,7 +26,7 @@ interface ISupTitleBreadcrumbProps {
 }
 
 const SupTitleBreadcrumb = (
-  props: ISupTitleBreadcrumbProps & BreadcrumbsProps
+  props: ISupTitleBreadcrumbProps & BreadcrumbsProps,
 ) => {
   const { displayChip, mouseCursor = "auto", routes = [], ...rest } = props;
   const theme = useTheme();
@@ -53,8 +53,8 @@ const SupTitleBreadcrumb = (
                 color: rest?.color
                   ? rest.color
                   : disabled
-                  ? "GrayText"
-                  : "primary.dark",
+                    ? "GrayText"
+                    : "primary.dark",
                 "&:hover": {
                   textDecoration: "none",
                 },
@@ -94,7 +94,7 @@ const SupTitleBreadcrumb = (
  * fetch the passed arguments ids title
  */
 export const useSupTitleBreadcrumb = (
-  params: Record<string, string | undefined>
+  params: Record<string, string | undefined>,
 ) => {
   const { service } = useServiceContext();
 

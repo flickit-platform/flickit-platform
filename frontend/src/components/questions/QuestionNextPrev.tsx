@@ -4,7 +4,12 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
-import { EAssessmentStatus, questionActions, useQuestionContext, useQuestionDispatch } from "@/providers/QuestionProvider";
+import {
+  EAssessmentStatus,
+  questionActions,
+  useQuestionContext,
+  useQuestionDispatch,
+} from "@/providers/QuestionProvider";
 import { QuestionThumb } from "./QuestionThumb";
 
 interface IQuestionNextPrevProps {
@@ -15,8 +20,12 @@ interface IQuestionNextPrevProps {
 const QuestionNextPrev = (props: IQuestionNextPrevProps) => {
   const { isNext, hasNextQuestion } = props;
   const { questionsInfo, questionIndex, isSubmitting } = useQuestionContext();
-  const nextQuestion = isNext ? Number(questionIndex) + 1 : Number(questionIndex) - 1;
-  const question = questionsInfo?.questions?.find((question) => question.index == nextQuestion);
+  const nextQuestion = isNext
+    ? Number(questionIndex) + 1
+    : Number(questionIndex) - 1;
+  const question = questionsInfo?.questions?.find(
+    (question) => question.index == nextQuestion,
+  );
   const dispatch = useQuestionDispatch();
 
   return (
@@ -27,7 +36,9 @@ const QuestionNextPrev = (props: IQuestionNextPrevProps) => {
         position: "absolute",
         height: "calc(100% - 80px)",
         width: "calc(100% - 80px)",
-        transform: isNext ? "translateX(calc(100% - 40px))" : "translateX(calc(-100% + 40px))",
+        transform: isNext
+          ? "translateX(calc(100% - 40px))"
+          : "translateX(calc(-100% + 40px))",
         "&": isNext ? { right: 0 } : { left: 0 },
         display: "flex",
         alignItems: "center",
@@ -55,10 +66,20 @@ const QuestionNextPrev = (props: IQuestionNextPrevProps) => {
         color="#ffffff96"
         onClick={() => {
           if (!isSubmitting && isNext && !hasNextQuestion) {
-            dispatch(questionActions.setAssessmentStatus(EAssessmentStatus.DONE));
+            dispatch(
+              questionActions.setAssessmentStatus(EAssessmentStatus.DONE),
+            );
           }
         }}
-        to={isSubmitting ? "" : isNext ? (hasNextQuestion ? `../${questionIndex + 1}` : "../completed") : `../${questionIndex - 1}`}
+        to={
+          isSubmitting
+            ? ""
+            : isNext
+              ? hasNextQuestion
+                ? `../${questionIndex + 1}`
+                : "../completed"
+              : `../${questionIndex - 1}`
+        }
       >
         <Typography
           sx={{

@@ -41,7 +41,7 @@ interface SubjectRadarProps {
 
 const breakTextIntoLines = (text: string, maxLineLength: number) => {
   const words = text.split(" ");
-  let lines = [];
+  const lines = [];
   let currentLine = words[0];
 
   for (let i = 1; i < words.length; i++) {
@@ -62,7 +62,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
 }) => {
   const theme = useTheme();
   const chartData = useMemo(() => convertToAssessmentChartData(data), [data]);
-  const maxLineLength = 24; 
+  const maxLineLength = 24;
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -78,7 +78,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
                   <text
                     key={index}
                     {...rest}
-                    y={y + (y - cy) / 15 + index * 12} 
+                    y={y + (y - cy) / 15 + index * 12}
                     x={x + (x - cx) / 15}
                     style={{ ...theme.typography.labelSmall }}
                   >

@@ -45,6 +45,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const [adviceResult, setAdviceResult] = useState<any>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [AIGenerated, setAIGenerated] = useState<boolean>(false);
+  const [emptyState, setEmptyState] = useState<boolean>(true);
 
   const { assessmentId = "" } = useParams();
 
@@ -52,11 +53,11 @@ const AssessmentAdviceContainer = (props: any) => {
   const itemsPerPage = 5;
   const totalPages = useMemo(
     () => Math.ceil(adviceResult?.length / itemsPerPage),
-    [adviceResult]
+    [adviceResult],
   );
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
-    page: number
+    page: number,
   ) => {
     setCurrentPage(page);
   };
@@ -133,7 +134,7 @@ const AssessmentAdviceContainer = (props: any) => {
   const fullScreen = useScreenResize("sm");
   const filteredMaturityLevels = useMemo(() => {
     const filteredData = assessment?.assessmentKit?.maturityLevels.sort(
-      (elem1: any, elem2: any) => elem1.index - elem2.index
+      (elem1: any, elem2: any) => elem1.index - elem2.index,
     );
     return filteredData;
   }, [assessment]);
@@ -143,11 +144,13 @@ const AssessmentAdviceContainer = (props: any) => {
       queryBatchData={[fetchAdviceNarration]}
       renderLoading={() => <Skeleton height={160} />}
       render={([narrationComponent]) => {
-        const adviceEmptyState = !(
-          narrationComponent?.aiNarration ||
-          narrationComponent?.assessorNarration
-        );
-
+        useEffect(() => {
+          const adviceEmptyState = !(
+            narrationComponent?.aiNarration ||
+            narrationComponent?.assessorNarration
+          );
+          setEmptyState(adviceEmptyState);
+        }, []);
         return (
           <>
             <AdviceDialog
@@ -160,7 +163,7 @@ const AssessmentAdviceContainer = (props: any) => {
               createAdvice={createAdvice}
               loading={createAdviceQueryData.loading}
             />
-            {adviceEmptyState && !isWritingAdvice && !AIGenerated ? (
+            {emptyState && !isWritingAdvice && !AIGenerated ? (
               <Box
                 sx={{
                   borderRadius: "12px",
@@ -253,45 +256,74 @@ const AssessmentAdviceContainer = (props: any) => {
                     >
                       <Trans i18nKey="writeYourOwnAdvices" />
                     </Button>{" "}
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        background: "white",
-                        "&:hover": {
-                          background: "#d9dde3",
-                        },
-                        display: "flex",
-                        gap: 1,
-                      }}
-                      onClick={handleClickOpen}
+                    <Tooltip
+                      title={
+                        !narrationComponent.aiEnabled && (
+                          <Trans i18nKey="AIDisabled" />
+                        )
+                      }
                     >
-                      <Trans i18nKey="useAdiceGenerator" />
-                      <FaWandMagicSparkles />
-                    </Button>
+                      <div>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            background: "white",
+                            "&:hover": {
+                              background: "#d9dde3",
+                            },
+                            display: "flex",
+                            gap: 1,
+                          }}
+                          onClick={handleClickOpen}
+                          disabled={!narrationComponent.aiEnabled}
+                        >
+                          <Trans i18nKey="useAdviceGenerator" />
+                          <FaWandMagicSparkles />
+                        </Button>
+                      </div>
+                    </Tooltip>
                   </Box>
                 )}
               </Box>
             ) : (
               !adviceResult && (
                 <>
-                  <AssessmentReportNarrator isWritingAdvice={isWritingAdvice} />
-                  {permissions?.createAdvice && (
-                    <Box
-                      display="flex"
-                      justifyContent="flex-end" // Align the button to the right
-                      mt={2}
-                    >
-                      <Button
-                        variant="contained"
-                        sx={{
-                          display: "flex",
-                          gap: 1,
-                        }}
-                        onClick={handleClickOpen}
+                  <AssessmentReportNarrator
+                    isWritingAdvice={isWritingAdvice}
+                    setIsWritingAdvice={setIsWritingAdvice}
+                    setEmptyState={setEmptyState}
+                    setAIGenerated={setAIGenerated}
+                  />
+                  {permissions?.createAdvice && !isWritingAdvice && (
+                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                      <Tooltip
+                        title={
+                          !narrationComponent.aiEnabled && (
+                            <Trans i18nKey="AIDisabled" />
+                          )
+                        }
                       >
-                        <Trans i18nKey="useAdiceGenerator" />
-                        <FaWandMagicSparkles />
-                      </Button>
+                        <div>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              display: "flex",
+                              gap: 1,
+                            }}
+                            onClick={handleClickOpen}
+                            disabled={!narrationComponent.aiEnabled}
+                          >
+                            <Trans
+                              i18nKey={
+                                AIGenerated
+                                  ? "regenerate"
+                                  : "useAdviceGenerator"
+                              }
+                            />
+                            <FaWandMagicSparkles />
+                          </Button>
+                        </div>
+                      </Tooltip>
                     </Box>
                   )}
                 </>
@@ -481,17 +513,18 @@ const AssessmentAdviceContainer = (props: any) => {
                     color="primary"
                   />
                   {permissions?.createAdvice && (
-                    <Button
+                    <LoadingButton
                       variant="contained"
                       sx={{
                         display: "flex",
                         gap: 1,
                       }}
                       onClick={generateAdviceViaAI}
+                      loading={createAINarrationQueryData.loading}
                     >
                       <Trans i18nKey="generateAdviceViaAI" />
                       <FaWandMagicSparkles />
-                    </Button>
+                    </LoadingButton>
                   )}
                 </Box>
               </>

@@ -12,7 +12,6 @@ const GaugeComponent5 = (props: IDynamicGaugeSVGProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-
     >
       <path
         d="M12.0273 128.584C8.08787 129.864 3.82729 127.712 2.84597 123.688C-1.95956 103.982 -0.656548 83.2708 6.58098 64.322C8.05893 60.4525 12.5556 58.8518 16.3035 60.6154V60.6154C20.0514 62.379 21.6259 66.8387 20.1993 70.7274C14.5253 86.1941 13.469 102.984 17.1598 119.04C18.0877 123.077 15.9667 127.304 12.0273 128.584V128.584Z"
@@ -39,7 +38,6 @@ const GaugeComponent5 = (props: IDynamicGaugeSVGProps) => {
         fill={`${value === 5 ? colorCode : "black"}`}
         fillOpacity={`${value === 5 ? "0.9" : "0.1"}`}
       />
-   
     </svg>
   );
 };

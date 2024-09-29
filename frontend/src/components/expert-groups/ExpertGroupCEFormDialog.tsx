@@ -77,21 +77,21 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
 
     setLoading(true);
     try {
-      const { status } =
+      const { data } =
         type === "update"
           ? await service.updateExpertGroup(
-            { data: formattedUpdateData, id },
-            { signal: abortController.signal }
-          )
+              { data: formattedUpdateData, id },
+              { signal: abortController.signal },
+            )
           : await service.createExpertGroup(
-            { data: formattedData },
-            { signal: abortController.signal }
-          );
+              { data: formattedData },
+              { signal: abortController.signal },
+            );
       type === "update" && (await seenExpertGroupQuery.query());
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && status == 200 && navigate(`${id}`);
+      shouldView && navigate(`${data ? data.id : id}`)
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);

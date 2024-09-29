@@ -1,5 +1,5 @@
 const hasMaturityLevel = (value: number) => {
-  if (value!==null ) {
+  if (value !== null) {
     return true;
   }
   return false;

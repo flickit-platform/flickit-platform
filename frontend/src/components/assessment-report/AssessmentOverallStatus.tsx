@@ -19,7 +19,7 @@ interface IAssessmentOverallStatusProps {
 }
 
 export const AssessmentOverallStatus = (
-  props: IAssessmentOverallStatusProps
+  props: IAssessmentOverallStatusProps,
 ) => {
   const {
     status,

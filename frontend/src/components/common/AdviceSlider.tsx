@@ -18,7 +18,7 @@ const AdviceSlider = (props: any) => {
     if (newValue >= defaultValue) {
       setValue(newValue);
       const existingIndex = target.findIndex(
-        (item: any) => item.attributeId === attribute?.id
+        (item: any) => item.attributeId === attribute?.id,
       );
 
       if (existingIndex === -1) {

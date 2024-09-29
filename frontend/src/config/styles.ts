@@ -114,8 +114,8 @@ const buttons = {
 const compare = {
   compareResultBorder: style({
     "&:not(:last-of-type) > div": {
-      borderRight: {md:"1px solid #e7e7e7",sm:"transparent"},
-      borderBottom: {md:"transparent",sm:"",xs:"1px solid #e7e7e7"},
+      borderRight: { md: "1px solid #e7e7e7", sm: "transparent" },
+      borderBottom: { md: "transparent", sm: "", xs: "1px solid #e7e7e7" },
     },
   }),
 };
@@ -214,7 +214,7 @@ export const getMaturityLevelColors = (maturity_level_number: number) => {
 };
 export const getColorOfStatus = (
   status: TStatus,
-  fallBackColor: string = "#b7b7b7"
+  fallBackColor: string = "#b7b7b7",
 ) => {
   if (hasStatus(status)) {
     return statusColorMap[status as NonNullable<TStatus>];

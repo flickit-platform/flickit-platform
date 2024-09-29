@@ -10,49 +10,49 @@ const UserScreen = lazy(() => import("../screens/UserScreen"));
 
 const ExpertGroupScreen = lazy(() => import("../screens/ExpertGroupScreen"));
 const ExpertGroupConfirmInvitationScreen = lazy(
-  () => import("../screens/ExpertGroupConfirmInvitationScreen")
+  () => import("../screens/ExpertGroupConfirmInvitationScreen"),
 );
 const AssessmentSettingScreen = lazy(
-  () => import("../screens/AssessmentSettingScreen")
+  () => import("../screens/AssessmentSettingScreen"),
 );
 const AssessmentDocumentScreen = lazy(
-  () => import("../screens/AssessmentDocumentScreen")
+  () => import("../screens/AssessmentDocumentScreen"),
 );
 const AssessmentReportScreen = lazy(
-  () => import("../screens/AssessmentReportScreen")
+  () => import("../screens/AssessmentReportScreen"),
 );
 const AssessmentAdviceScreen = lazy(
-  () => import("../screens/AssessmentAdviceScreen")
+  () => import("../screens/AssessmentAdviceScreen"),
 );
 const SubjectReportScreen = lazy(
-  () => import("../screens/SubjectReportScreen")
+  () => import("../screens/SubjectReportScreen"),
 );
 const SpacesScreen = lazy(() => import("../screens/SpacesScreen"));
 const SpaceSettingScreen = lazy(() => import("../screens/SpaceSettingScreen"));
 const AssessmentsScreen = lazy(() => import("../screens/AssessmentsScreen"));
 const QuestionsScreen = lazy(() => import("../screens/QuestionsScreen"));
 const QuestionsReviewScreen = lazy(
-  () => import("../screens/QuestionsReviewScreen")
+  () => import("../screens/QuestionsReviewScreen"),
 );
 const QuestionScreen = lazy(() => import("../screens/QuestionScreen"));
 const QuestionnairesScreen = lazy(
-  () => import("../screens/QuestionnairesScreen")
+  () => import("../screens/QuestionnairesScreen"),
 );
 const CompareScreen = lazy(() => import("../screens/CompareScreen"));
 const CompareResultScreen = lazy(
-  () => import("../screens/CompareResultScreen")
+  () => import("../screens/CompareResultScreen"),
 );
 const AssessmentKitsScreen = lazy(
-  () => import("../screens/AssessmentKitsScreen")
+  () => import("../screens/AssessmentKitsScreen"),
 );
 const AssessmentKitExpertViewScreen = lazy(
-  () => import("../screens/AssessmentKitExpertViewScreen")
+  () => import("../screens/AssessmentKitExpertViewScreen"),
 );
 const AssessmentKitScreen = lazy(
-  () => import("../screens/AssessmentKitScreen")
+  () => import("../screens/AssessmentKitScreen"),
 );
 const AssessmentKitPermissionsScreen = lazy(
-  () => import("../screens/AssessmentKitPermissionsScreen")
+  () => import("../screens/AssessmentKitPermissionsScreen"),
 );
 /**
  * How does it work?

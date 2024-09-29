@@ -19,7 +19,9 @@ const ErrorEmptyData = (props: IErrorEmptyDataProps) => {
     img = useIllustration ? (
       <img src="/assets/svg/noData.svg" alt="noData" />
     ) : (
-      <HourglassEmptyRoundedIcon sx={{ fontSize: "4rem", mb: "16px", opacity: 0.8 }} />
+      <HourglassEmptyRoundedIcon
+        sx={{ fontSize: "4rem", mb: "16px", opacity: 0.8 }}
+      />
     ),
     suggests,
     hideMessage,
@@ -27,7 +29,13 @@ const ErrorEmptyData = (props: IErrorEmptyDataProps) => {
   } = props;
 
   return (
-    <Box sx={{ ...styles.centerCVH, opacity: 0.8 }} pt="64px" pb="44px" textAlign="center" {...rest}>
+    <Box
+      sx={{ ...styles.centerCVH, opacity: 0.8 }}
+      pt="64px"
+      pb="44px"
+      textAlign="center"
+      {...rest}
+    >
       {img}
       {!hideMessage && (
         <Typography variant="h5" textAlign="center">

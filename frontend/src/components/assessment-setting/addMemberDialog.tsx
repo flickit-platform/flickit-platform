@@ -70,7 +70,7 @@ const AddMemberDialog = (props: {
   } = props;
 
   const [addedEmailType, setAddedEmailType] = useState<string>(
-    EUserType.DEFAULT
+    EUserType.DEFAULT,
   );
   const [memberOfSpace, setMemberOfSpace] = useState<any[]>([]);
   const [memberSelectedId, setMemberSelectedId] = useState<any>("");
@@ -95,7 +95,7 @@ const AddMemberDialog = (props: {
         userId: memberSelectedId,
         roleId: roleSelected.id,
       },
-      config
+      config,
     ) => service.addRoleMember(args, config),
     runOnMount: false,
   });
@@ -103,7 +103,7 @@ const AddMemberDialog = (props: {
   const [loading, setLoading] = useState(false);
 
   const handleChangeMember = (
-    event: SelectChangeEvent<typeof memberOfSpace>
+    event: SelectChangeEvent<typeof memberOfSpace>,
   ) => {
     const {
       target: { value },
@@ -127,7 +127,7 @@ const AddMemberDialog = (props: {
         if (data) {
           const { items } = data;
           const filtredItems = items.filter((item: any) =>
-            listOfUser.some((userListItem: any) => item.id === userListItem.id)
+            listOfUser.some((userListItem: any) => item.id === userListItem.id),
           );
           setMemberOfSpace(filtredItems);
         }
@@ -198,7 +198,7 @@ const AddMemberDialog = (props: {
     const handleEnterKeyDown = (event: any) => {
       if (event.key === "Enter" && buttonRef.current) {
         const openDropdowns = document.querySelectorAll(
-          ".MuiAutocomplete-option"
+          ".MuiAutocomplete-option",
         );
         if (openDropdowns.length === 0) {
           buttonRef.current.click();
@@ -483,7 +483,7 @@ const EmailField = ({
         filterOptionsByProperty={(option) =>
           !option.isOwner &&
           !memberOfSpace.some(
-            (userListItem: any) => option.id === userListItem.id
+            (userListItem: any) => option.id === userListItem.id,
           )
         }
         createItemQuery={createItemQuery}

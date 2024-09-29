@@ -14,7 +14,7 @@ type TQuestionnairesNotCompleteAlertProps = {
 };
 
 const QuestionnairesNotCompleteAlert = (
-  props: TQuestionnairesNotCompleteAlertProps
+  props: TQuestionnairesNotCompleteAlertProps,
 ) => {
   const { subjectName, to, progress, q, a } = props;
   const location = useLocation();

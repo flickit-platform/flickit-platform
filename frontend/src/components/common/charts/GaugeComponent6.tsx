@@ -6,13 +6,12 @@ const GaugeComponent6 = (props: IDynamicGaugeSVGProps) => {
   const { colorCode, value, height, className } = props;
   return (
     <svg
-    width="100%"
+      width="100%"
       height={height}
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-
     >
       <path
         d="M12.0273 128.584C8.08787 129.864 3.82735 127.713 2.84611 123.688C-0.948702 108.125 -0.948702 91.8747 2.8461 76.3117C3.82735 72.2875 8.08787 70.1359 12.0273 71.4159C15.9667 72.6959 18.0878 76.9229 17.1599 80.9597C14.28 93.4889 14.28 106.511 17.1599 119.04C18.0878 123.077 15.9667 127.304 12.0273 128.584Z"
@@ -44,7 +43,6 @@ const GaugeComponent6 = (props: IDynamicGaugeSVGProps) => {
         fill={`${value === 6 ? colorCode : "black"}`}
         fillOpacity={`${value === 6 ? "0.9" : "0.1"}`}
       />
-  
     </svg>
   );
 };

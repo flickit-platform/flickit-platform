@@ -132,7 +132,7 @@ const Uploader = (props: IUploadProps) => {
   const defaultValueQuery = useQuery({
     service: (
       args = { url: defaultValue?.replace("https://flickit.org", "") },
-      config
+      config,
     ) => service.fetchImage(args, config),
     runOnMount: false,
   });
@@ -157,7 +157,7 @@ const Uploader = (props: IUploadProps) => {
   const [limitGuide, setLimitGuide] = useState<string>();
   const [myFiles, setMyFiles] =
     useState<(File | { src: string; name: string; type: string })[]>(
-      setTheState
+      setTheState,
     );
 
   useEffect(() => {
@@ -238,7 +238,7 @@ const Uploader = (props: IUploadProps) => {
         reader.readAsArrayBuffer(acceptedFiles[0]);
       }
     },
-    []
+    [],
   );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -250,7 +250,7 @@ const Uploader = (props: IUploadProps) => {
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
         const error = rejectedFiles[0].errors.find(
-          (e) => e.code === "file-too-large"
+          (e) => e.code === "file-too-large",
         );
         if (error) {
           errors[fieldProps.name] = {

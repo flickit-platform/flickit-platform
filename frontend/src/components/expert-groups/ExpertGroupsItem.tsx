@@ -25,7 +25,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -76,26 +76,24 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           }}
           avatar={
             <Avatar
-                component={Link}
-                to={`${id}`}
-                sx={(() => {
-                  return {
-                    bgcolor: (t) => t.palette.grey[800],
-                    textDecoration: "none",
-                    width: 50,height: 50
-                  };
-                })()}
-                src={picture}
+              component={Link}
+              to={`${id}`}
+              sx={(() => {
+                return {
+                  bgcolor: (t) => t.palette.grey[800],
+                  textDecoration: "none",
+                  width: 50,
+                  height: 50,
+                };
+              })()}
+              src={picture}
             >
               {title?.[0]?.toUpperCase()}
             </Avatar>
           }
           action={
             !disableActions && (
-              <Actions
-                editable={editable}
-                expertGroup={data}
-              />
+              <Actions editable={editable} expertGroup={data} />
             )
           }
           title={
@@ -138,18 +136,18 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
               },
             }}
           >
-            {members.map((user: any,index:number) => {
+            {members.map((user: any, index: number) => {
               return (
                 <Tooltip key={index} title={user?.displayName}>
                   <>
-                  <Avatar
-                    key={user.id}
-                    sx={{ width: 28, height: 28, fontSize: ".8rem" }}
-                    alt={user.displayName}
-                    title={user.displayName}
-                  >
-                    {user?.displayName.split("")[0].toUpperCase()}
-                  </Avatar>
+                    <Avatar
+                      key={user.id}
+                      sx={{ width: 28, height: 28, fontSize: ".8rem" }}
+                      alt={user.displayName}
+                      title={user.displayName}
+                    >
+                      {user?.displayName.split("")[0].toUpperCase()}
+                    </Avatar>
                   </>
                 </Tooltip>
               );
@@ -186,9 +184,9 @@ const Actions = (props: any) => {
       type: "update",
     });
   };
-  const deleteExpertGroup = async (e:any) => {
+  const deleteExpertGroup = async (e: any) => {
     try {
-      e.stopPropagation()
+      e.stopPropagation();
       await deleteExpertGroupQuery.query();
       await fetchExpertGroups();
     } catch (e) {
@@ -218,7 +216,7 @@ const Actions = (props: any) => {
           {
             icon: <DeleteRoundedIcon fontSize="small" />,
             text: <Trans i18nKey="delete" />,
-            onClick: (e)=> deleteExpertGroup(e),
+            onClick: (e) => deleteExpertGroup(e),
           },
         ]}
       />

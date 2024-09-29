@@ -8,7 +8,7 @@ import { ISubjectInfo } from "@types";
 interface IAssessmentSubjectListProps {
   subjects: ISubjectInfo[];
   colorCode: string;
-  maturityLevelCount?: number
+  maturityLevelCount?: number;
 }
 
 export const AssessmentSubjectList = (props: IAssessmentSubjectListProps) => {

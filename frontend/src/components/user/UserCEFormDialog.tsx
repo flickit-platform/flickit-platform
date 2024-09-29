@@ -15,7 +15,9 @@ import { Link, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import AutocompleteAsyncField, { useConnectAutocompleteField } from "@common/fields/AutocompleteAsyncField";
+import AutocompleteAsyncField, {
+  useConnectAutocompleteField,
+} from "@common/fields/AutocompleteAsyncField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -32,7 +34,13 @@ interface IUserCEFormDialogProps extends DialogProps {
 const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
   const [loading, setLoading] = useState(false);
   const { service } = useServiceContext();
-  const { onClose: closeDialog, onSubmitForm, context = {}, openDialog, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    onSubmitForm,
+    context = {},
+    openDialog,
+    ...rest
+  } = props;
   const { type, data = {} } = context;
   const { id } = data;
   const defaultValues = type === "update" ? data : {};
@@ -55,15 +63,15 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
     }
     setLoading(true);
     try {
-      let tempData = { ...data }
-      tempData.linkedin === "" && delete tempData.linkedin
-      tempData.bio === "" && delete tempData.bio
+      const tempData = { ...data };
+      tempData.linkedin === "" && delete tempData.linkedin;
+      tempData.bio === "" && delete tempData.bio;
       const { data: res } = await service.updateUserInfo(
         {
           id,
           data: tempData,
         },
-        { signal: abortController.signal }
+        { signal: abortController.signal },
       );
       setLoading(false);
       onSubmitForm();
@@ -113,13 +121,27 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
             />
           </Grid>
           <Grid item xs={12} sm={8}>
-            <InputFieldUC multiline defaultValue={defaultValues.bio || ""} name="bio" label={<Trans i18nKey="bio" />} />
+            <InputFieldUC
+              multiline
+              defaultValue={defaultValues.bio || ""}
+              name="bio"
+              label={<Trans i18nKey="bio" />}
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <InputFieldUC defaultValue={defaultValues.linkedin || ""} name="linkedin" label={<Trans i18nKey="linkedin" />} />
+            <InputFieldUC
+              defaultValue={defaultValues.linkedin || ""}
+              name="linkedin"
+              label={<Trans i18nKey="linkedin" />}
+            />
           </Grid>
         </Grid>
-        <CEDialogActions closeDialog={close} loading={loading} type={type} onSubmit={formMethods.handleSubmit(onSubmit)} />
+        <CEDialogActions
+          closeDialog={close}
+          loading={loading}
+          type={type}
+          onSubmit={formMethods.handleSubmit(onSubmit)}
+        />
       </FormProviderWithForm>
     </CEDialog>
   );

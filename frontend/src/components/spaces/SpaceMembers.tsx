@@ -56,7 +56,7 @@ export const SpaceMembers = (props: any) => {
   } = useQuery({
     service: (
       { id = spaceId, value = user_id_ref.current?.value }: any,
-      config
+      config,
     ) => service.addMemberToSpace({ spaceId: id, email: value }, config),
     runOnMount: false,
   });
@@ -272,7 +272,7 @@ export const SpaceMembers = (props: any) => {
                         } = invitees;
 
                         const expirationDateTime = new Date(
-                          expirationDate
+                          expirationDate,
                         ).getTime();
                         const timeNow = new Date().getTime();
 
@@ -335,7 +335,7 @@ export const SpaceMembers = (props: any) => {
                                   isInvitees={true}
                                   email={email}
                                   editable={editable}
-                                  inviteId ={id}
+                                  inviteId={id}
                                 />
                               }
                             </Box>
@@ -396,7 +396,7 @@ const Actions = (props: any) => {
     isInvitationExpired,
     email,
     editable,
-    inviteId
+    inviteId,
   } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
@@ -407,8 +407,7 @@ const Actions = (props: any) => {
     toastError: false,
   });
   const { query: deleteSpaceInvite, loading: inviteLoading } = useQuery({
-    service: (arg, config) =>
-      service.deleteSpaceInvite({ inviteId }, config),
+    service: (arg, config) => service.deleteSpaceInvite({ inviteId }, config),
     runOnMount: false,
     toastError: false,
   });
@@ -483,7 +482,7 @@ const InviteSpaceMemberDialog = (
     spaceMembersQueryData: TQueryProps;
     spaceMembersInviteeQueryData: TQueryProps;
     resetForm: () => void;
-  } & IDialogProps
+  } & IDialogProps,
 ) => {
   const { config } = useConfigContext();
   const {

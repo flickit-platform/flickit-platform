@@ -58,7 +58,7 @@ const SubjectContainer = () => {
             assessmentId,
             attributeId,
           },
-          undefined
+          undefined,
         )
         .then((res: any) => {
           return res?.data?.content || "";
@@ -79,7 +79,7 @@ const SubjectContainer = () => {
             assessmentId,
             attributeId,
           },
-          undefined
+          undefined,
         )
         .then((res: any) => {
           return res?.data || "";
@@ -105,7 +105,7 @@ const SubjectContainer = () => {
         } catch (error) {
           console.error(
             `Failed to fetch data for attribute ${attribute?.id}:`,
-            error
+            error,
           );
           return null;
         }
@@ -120,7 +120,7 @@ const SubjectContainer = () => {
         acc[id] = data;
         return acc;
       },
-      {}
+      {},
     );
 
     setAttributesData((prevData: any) => ({
@@ -177,7 +177,7 @@ const SubjectContainer = () => {
           id: attribute?.id,
           data: result,
         };
-      }
+      },
     );
 
     const allAttributesDataPolicy = attributesDataPolicyPromises
@@ -189,7 +189,7 @@ const SubjectContainer = () => {
         acc[id] = data;
         return acc;
       },
-      {}
+      {},
     );
     setAttributesDataPolicy(attributesDataPolicyObject);
     return newIgnoreIds;
@@ -199,7 +199,7 @@ const SubjectContainer = () => {
     attributeId: TId,
     assessmentId: string,
     newAttributeData: any,
-    regenerate: boolean
+    regenerate: boolean,
   ) => {
     const currentData = attributesData[attributeId];
     if (currentData === newAttributeData) {
@@ -212,7 +212,7 @@ const SubjectContainer = () => {
             assessmentId,
             attributeId,
           },
-          undefined
+          undefined,
         )
       : await service.updateAIReport(
           {
@@ -220,14 +220,14 @@ const SubjectContainer = () => {
             attributeId,
             data: { assessorInsight: newAttributeData },
           },
-          undefined
+          undefined,
         );
 
     const res = await LoadAttributeData(assessmentId, attributeId).then(
       (result) => ({
         id: attributeId,
         data: result,
-      })
+      }),
     );
 
     if (response?.status === 200) {

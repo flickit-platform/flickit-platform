@@ -29,11 +29,11 @@ const SpaceContainer = () => {
   const { page } = useParams();
   const PAGESIZE: number = 10;
 
-  let pageNumber = Number(page);
+  const pageNumber = Number(page);
 
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
-    value: number
+    value: number,
   ) => {
     navigate(`/spaces/${value}`);
   };
@@ -50,9 +50,9 @@ const SpaceContainer = () => {
 
   const pageCount =
     !spacesQueryData.data ||
-      !spacesQueryData?.data?.total ||
-      !spacesQueryData?.data?.size ||
-      spacesQueryData.data?.size === 0
+    !spacesQueryData?.data?.total ||
+    !spacesQueryData?.data?.size ||
+    spacesQueryData.data?.size === 0
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
