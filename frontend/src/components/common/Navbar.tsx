@@ -26,7 +26,6 @@ import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
-import LanguageIcon from "@mui/icons-material/Language";
 import QueryData from "@common/QueryData";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -46,6 +45,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
 import { secondaryFontFamily } from "@/config/theme";
+import LanguageSelector from "./LangSelector";
 
 const drawerWidth = 240;
 
@@ -302,9 +302,9 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     format(
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
-                          new Date(
-                            selectedMessage.createdAt,
-                          ).getTimezoneOffset(),
+                        new Date(
+                          selectedMessage.createdAt,
+                        ).getTimezoneOffset(),
                       ),
                       "yyyy/MM/dd HH:mm",
                     ) +
@@ -378,15 +378,13 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (spaceId) {
       fetchSpaceInfo();
     }
   }, [spaceId]);
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -537,11 +535,7 @@ const Navbar = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{
-              mr: `${is_farsi ? 0 : "16px"}`,
-              ml: `${is_farsi ? "16px" : 0}`,
-              display: { md: "none" },
-            }}
+            sx={{ mr: 2, display: { md: "none" } }}
           >
             <MenuIcon />
           </IconButton>
@@ -561,13 +555,8 @@ const Navbar = () => {
           >
             <img src={config.appLogoUrl} alt={"logo"} />
           </Typography>
-          <Box
-            sx={{
-              display: { xs: "none", md: "block" },
-              mr: `${is_farsi ? "24px" : 0}`,
-              ml: `${is_farsi ? 0 : "24px"}`,
-            }}
-          >
+          <LanguageSelector />
+          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <SpacesButton />
             <Button
               component={NavLink}
@@ -589,7 +578,7 @@ const Navbar = () => {
               size="small"
               startIcon={
                 <AssessmentRoundedIcon
-                  sx={{ mx: 1, opacity: 0.8, fontSize: "18px !important" }}
+                  sx={{ opacity: 0.8, fontSize: "18px !important" }}
                 />
               }
             >
@@ -687,7 +676,7 @@ const SpacesButton = () => {
     service: (args, config) => service.fetchSpaces(args, config),
     toastError: true,
   });
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
+
   return (
     <>
       <Button
@@ -703,7 +692,7 @@ const SpacesButton = () => {
         }}
         startIcon={
           <FolderRoundedIcon
-            sx={{ mx: 1, opacity: 0.8, fontSize: "18px !important" }}
+            sx={{ opacity: 0.8, fontSize: "18px !important" }}
           />
         }
         size="small"
@@ -734,13 +723,7 @@ const SpacesButton = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          sx: {
-            left: `${is_farsi ? "" : "165px !important"}`,
-            right: `${is_farsi ? "165px !important" : ""}`,
-            minWidth: "260px",
-          },
-        }}
+        PaperProps={{ sx: { left: "165px !important", minWidth: "260px" } }}
       >
         <QueryData
           {...spacesQueryData}
@@ -788,17 +771,11 @@ const SpacesButton = () => {
 const AccountDropDownButton = ({ userInfo }: any) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const currentLanguage = localStorage.getItem("lang");
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const changeLanguage = () => {
-    localStorage.setItem("lang", currentLanguage === "fa" ? "en" : "fa");
-    window.location.reload();
   };
 
   return (
@@ -809,11 +786,7 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           e.stopPropagation();
           handleClick(e);
         }}
-        sx={{
-          ...styles.activeNavbarLink,
-          mr: `${is_farsi ? "2px" : "8px"}`,
-          ml: `${is_farsi ? "8px" : "2px"}`,
-        }}
+        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
         size="small"
         endIcon={
           open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
@@ -860,12 +833,6 @@ const AccountDropDownButton = ({ userInfo }: any) => {
             {" "}
             <Trans i18nKey={"expertGroups"} />
           </ListItemText>
-        </MenuItem>
-        <MenuItem dense onClick={changeLanguage}>
-          <ListItemIcon>
-            <LanguageIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{currentLanguage === "fa" ? "EN" : "FA"}</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem
