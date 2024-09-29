@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Divider,
@@ -22,6 +22,9 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import SettingBox from "@common/settingBox";
+import Grid from "@mui/material/Grid";
+import {styles} from "@styles";
 
 const AssessmentKitPermissionsContainer = () => {
   const { service } = useServiceContext();
@@ -83,7 +86,7 @@ const AssessmentKitPermisson = (props: any) => {
     }
   };
   return (
-    <Box>
+      <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
       <Title
         inPageLink="assessmentKitPermissons"
         size="small"
@@ -110,79 +113,98 @@ const AssessmentKitPermisson = (props: any) => {
           />
         }
       >
-        <Trans
-          i18nKey={"assessmentKitPermissons"}
-          values={{ assessmentKit: title }}
-        />
-      </Title>
-      <Box mt={2} p={3} sx={{ borderRadius: 2, background: "white" }}>
-        <Box>
-          <Title
-            size="small"
-            mb={2}
-            titleProps={{
-              fontSize: "1rem",
-              textTransform: "unset",
-              letterSpacing: ".05rem",
-            }}
-          >
-            <Trans i18nKey="addNewUser" />
-          </Title>
-          <AddMember queryData={query} />
-        </Box>
-        <Box sx={{ mt: 4 }}>
-          <Title
-            size="small"
-            mb={2}
-            titleProps={{
-              fontSize: "1rem",
-              textTransform: "unset",
-              letterSpacing: ".05rem",
-            }}
-          >
-            <Trans i18nKey="users" />
-          </Title>
-          <Box>
-            {items.map((user: any, index: number) => {
-              return (
-                <Box key={index}>
-                  <Divider />
+          <Grid container columns={12} mb={5}>
+              <Grid item sm={12} xs={12}>
                   <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      py: 1,
-                    }}
+                      sx={{ ...styles.centerV }}
+                      gap={2}
+                      justifyContent="flex-start"
                   >
-                    <Box sx={{ display: "flex" }}>
-                      <Box mr={8}>{user?.name}</Box>
-                      <Box>{user?.email}</Box>
-                    </Box>
-                    <LoadingButton
-                      sx={{
-                        background: "#862123",
-                        py: 0.5,
-                        px: 1,
-                        borderRadius: "4px",
-                        color: "#fff",
-                      }}
-                      variant="contained"
-                      color="error"
-                      onClick={() => deleteMember(user.id)}
-                      loading={deleteMemberToKitPermissionQueryData.loading}
-                    >
-                      <Typography variant="button">
-                        <Trans i18nKey="remove" />
+                      <Typography
+                          color="primary"
+                          textAlign="left"
+                          variant="headlineLarge"
+                      >
+                          <Trans
+                              i18nKey={"assessmentKitPermissons"}
+                              values={{ assessmentKit: title }}
+                          />
                       </Typography>
-                    </LoadingButton>
                   </Box>
-                </Box>
-              );
-            })}
-          </Box>
-        </Box>
-      </Box>
+              </Grid>
+          </Grid>
+      </Title>
+        <SettingBox title={"members"} items={items} />
+        {/*todo*/}
+
+      {/*<Box mt={2} p={3} sx={{ borderRadius: 2, background: "white" }}>*/}
+      {/*  <Box>*/}
+      {/*    <Title*/}
+      {/*      size="small"*/}
+      {/*      mb={2}*/}
+      {/*      titleProps={{*/}
+      {/*        fontSize: "1rem",*/}
+      {/*        textTransform: "unset",*/}
+      {/*        letterSpacing: ".05rem",*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <Trans i18nKey="addNewUser" />*/}
+      {/*    </Title>*/}
+      {/*    <AddMember queryData={query} />*/}
+      {/*  </Box>*/}
+      {/*  <Box sx={{ mt: 4 }}>*/}
+      {/*    <Title*/}
+      {/*      size="small"*/}
+      {/*      mb={2}*/}
+      {/*      titleProps={{*/}
+      {/*        fontSize: "1rem",*/}
+      {/*        textTransform: "unset",*/}
+      {/*        letterSpacing: ".05rem",*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <Trans i18nKey="users" />*/}
+      {/*    </Title>*/}
+      {/*    <Box>*/}
+      {/*      {items.map((user: any, index: number) => {*/}
+      {/*        return (*/}
+      {/*          <Box key={index}>*/}
+      {/*            <Divider />*/}
+      {/*            <Box*/}
+      {/*              sx={{*/}
+      {/*                display: "flex",*/}
+      {/*                justifyContent: "space-between",*/}
+      {/*                alignItems: "center",*/}
+      {/*                py: 1,*/}
+      {/*              }}*/}
+      {/*            >*/}
+      {/*              <Box sx={{ display: "flex" }}>*/}
+      {/*                <Box mr={8}>{user?.name}</Box>*/}
+      {/*                <Box>{user?.email}</Box>*/}
+      {/*              </Box>*/}
+      {/*              <LoadingButton*/}
+      {/*                sx={{*/}
+      {/*                  background: "#862123",*/}
+      {/*                  py: 0.5,*/}
+      {/*                  px: 1,*/}
+      {/*                  borderRadius: "4px",*/}
+      {/*                  color: "#fff",*/}
+      {/*                }}*/}
+      {/*                variant="contained"*/}
+      {/*                color="error"*/}
+      {/*                onClick={() => deleteMember(user.id)}*/}
+      {/*                loading={deleteMemberToKitPermissionQueryData.loading}*/}
+      {/*              >*/}
+      {/*                <Typography variant="button">*/}
+      {/*                  <Trans i18nKey="remove" />*/}
+      {/*                </Typography>*/}
+      {/*              </LoadingButton>*/}
+      {/*            </Box>*/}
+      {/*          </Box>*/}
+      {/*        );*/}
+      {/*      })}*/}
+      {/*    </Box>*/}
+      {/*  </Box>*/}
+      {/*</Box>*/}
     </Box>
   );
 };
