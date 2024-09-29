@@ -50,7 +50,7 @@ const SpaceSettingContainer = () => {
             ]}
           />
         }
-        toolbar={editable?<EditSpaceButton fetchSpace={query} />:<div/>}
+        toolbar={editable ? <EditSpaceButton fetchSpace={query} /> : <div />}
         backLink={"/"}
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>

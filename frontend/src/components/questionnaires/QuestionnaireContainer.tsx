@@ -52,7 +52,9 @@ const QuestionnaireContainer = () => {
     100;
 
   return (
-    <PermissionControl error={[questionnaireQueryData.errorObject?.response?.data]}>
+    <PermissionControl
+      error={[questionnaireQueryData.errorObject?.response?.data]}
+    >
       <Box>
         <QueryData
           {...fetchPathInfo}
@@ -110,7 +112,7 @@ export const useQuestionnaire = () => {
     service: (args, config) =>
       service.fetchAssessmentTotalProgress(
         { assessmentId, ...(args || {}) },
-        config
+        config,
       ),
   });
   const fetchPathInfo = useQuery({
@@ -184,7 +186,7 @@ const QuestionnaireTitle = (props: any) => {
   useEffect(() => {
     setDocumentTitle(
       `${assessment?.title} ${t("questionnaires")}`,
-      config.appTitle
+      config.appTitle,
     );
   }, [assessment]);
 

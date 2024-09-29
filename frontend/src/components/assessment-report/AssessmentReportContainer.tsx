@@ -48,7 +48,7 @@ const AssessmentReportContainer = (props: any) => {
     service: (args, config) =>
       service.fetchAssessmentTotalProgress(
         { assessmentId, ...(args || {}) },
-        config
+        config,
       ),
   });
   const calculate = async () => {
@@ -111,7 +111,7 @@ const AssessmentReportContainer = (props: any) => {
           (sum: any, subject: any) => {
             return sum + (subject.attributes?.length || 0);
           },
-          0
+          0,
         );
 
         return (

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import QANumberIndicator from "../QANumberIndicator";
 import { styles } from "@styles";
+import { secondaryFontFamily } from "@/config/theme";
 
 interface IQuestionnaireProgress extends BoxProps {
   progress: number;
@@ -53,7 +54,7 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
         ) : (
           <Typography
             fontWeight={"bold"}
-            fontFamily={is_farsi?"Vazirmatn":"Roboto"}
+            fontFamily={is_farsi ? "Vazirmatn" : secondaryFontFamily}
             textTransform="uppercase"
             color={progressToColorMapColor[progress] || "#1976d2"}
           >

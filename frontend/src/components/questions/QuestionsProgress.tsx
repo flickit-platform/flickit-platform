@@ -87,7 +87,7 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           onClick={() => {
             if (!hasNextQuestion) {
               dispatch(
-                questionActions.setAssessmentStatus(EAssessmentStatus.DONE)
+                questionActions.setAssessmentStatus(EAssessmentStatus.DONE),
               );
             }
           }}
@@ -119,7 +119,8 @@ export const QuestionProgressItem = (props: any) => {
         border: (t: any) => `3px solid white`,
         outline: (t: any) =>
           `${
-              question?.answer?.selectedOption || question?.answer?.isNotApplicable
+            question?.answer?.selectedOption ||
+            question?.answer?.isNotApplicable
               ? t.palette.primary.main
               : "#a7caed"
           } solid 5px`,
@@ -144,7 +145,10 @@ export const QuestionProgressItem = (props: any) => {
             lineHeight: "13px",
             opacity: question.index == questionIndex ? 1 : 0.6,
             color:
-                question?.answer?.selectedOption || question?.answer?.isNotApplicable ? `white` : "gray",
+              question?.answer?.selectedOption ||
+              question?.answer?.isNotApplicable
+                ? `white`
+                : "gray",
             transition: "opacity .1s ease",
           }}
           className="i-p-i-n"

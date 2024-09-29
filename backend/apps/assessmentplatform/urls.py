@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/v1/space-assessments/', include('account.url.url_space_assessments_v1')),
     path('api/v1/space-invitations/', include('account.url.url_space_invitations_v1')),
     path('api/v1/tenant/', include('account.url.url_tenant_v1')),
+    path('api/v1/notification-platform-settings/', include('account.url.url_notify_settings_v1')),
 ]
 
 if settings.PRODUCTION_STATE == False:

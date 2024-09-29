@@ -31,4 +31,4 @@ def create_advice_narration(request, assessment_id):
                              headers={'Authorization': request.headers['Authorization']})
     if response.status_code == 201:
         return {"Success": True, "body": None, "status_code": response.status_code}
-    return {"Success": False, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

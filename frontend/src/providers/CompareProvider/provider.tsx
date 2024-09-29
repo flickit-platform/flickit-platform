@@ -50,10 +50,10 @@ export const CompareProvider: FC<ICompareProviderProps> = ({ children }) => {
           assessmentIdsParams.map(async (id) => {
             const { data } = await service.AssessmentsLoad(
               { assessmentId: id },
-              {}
+              {},
             );
             return data;
-          })
+          }),
         );
         dispatch({
           type: COMPARE_ACTIONS_TYPE.SET_ASSESSMENT_KIT,
@@ -103,7 +103,7 @@ export const useCompareDispatch = () => {
   const context = useContext(CompareDispatchContext);
   if (context === undefined) {
     throw new Error(
-      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider"
+      "useAdaptiveDispatch must be used within a AdaptiveProvider or WiseFormProvider",
     );
   }
   return context;

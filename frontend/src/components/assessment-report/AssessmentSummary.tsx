@@ -76,7 +76,11 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         </Typography>
       </Box>
       <Box
-        sx={{ ...styles.centerCVH, textDecoration: "none", color: "inherit !important" }}
+        sx={{
+          ...styles.centerCVH,
+          textDecoration: "none",
+          color: "inherit !important",
+        }}
         width={{ xl: "80%", lg: "90%", md: "90%", xs: "90%", sm: "90%" }}
         component={Link}
         to="./../questionnaires"
@@ -102,7 +106,6 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             borderColor: "#004F83",
           },
           width: { xl: "50%", lg: "56%", md: "90%", xs: "90%", sm: "90%" },
-
         }}
         size="large"
         component={Link}

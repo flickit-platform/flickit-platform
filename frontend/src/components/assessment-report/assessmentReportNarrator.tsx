@@ -29,26 +29,35 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
+import toastError from "@/utils/toastError";
 
-export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
+export const AssessmentReportNarrator = ({
+  isWritingAdvice,
+  setIsWritingAdvice,
+  fetchAdviceNarration,
+  setEmptyState,
+  setAIGenerated,
+}: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
   const [aboutSection, setAboutSection] = useState<any>(null);
   const [editable, setEditable] = useState(false);
-  const [AIDisabled, setAIDisabled] = useState(false);
   const [isAIGenerated, setIsAIGenerated] = useState(false);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
+  const onEditing = (editingMode: boolean) => {
+    setIsWritingAdvice(editingMode);
+  };
   const fetchAssessment = () => {
     service
       .fetchAdviceNarration({ assessmentId }, {})
       .then((res) => {
         const data = res.data;
         setEditable(data.editable ?? false);
-        setAIDisabled(!data.aiEnabled);
         if (data?.aiNarration?.narration) {
           setIsAIGenerated(true);
+          setAIGenerated(true);
         }
         const selectedNarration = data?.aiNarration || data?.assessorNarration;
 
@@ -86,13 +95,9 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
         position: "relative",
       }}
     >
-      {(isAIGenerated || (AIDisabled && !isWritingAdvice)) && (
+      {isAIGenerated && (
         <Box sx={{ position: "absolute", top: -12, right: 8 }}>
-          {AIDisabled ? (
-            <AIGenerated title="AIDisabled" type="error" icon={<></>} />
-          ) : (
-            <AIGenerated />
-          )}
+          <AIGenerated />
         </Box>
       )}
 
@@ -108,17 +113,13 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
       ) : (
         <>
           <OnHoverRichEditor
-            data={
-              aboutSection?.narration
-                ? aboutSection?.narration
-                : isWritingAdvice
-                  ? `<p>${t("defaultAdviceValue")}</p>`
-                  : AIDisabled
-                    ? `<p>${t("disabledAdviceValue")}</p>`
-                    : `<p>${t("defaultAdviceValue")}</p>`
-            }
+            data={aboutSection?.narration ? aboutSection?.narration : ""}
             editable={editable}
             infoQuery={fetchAssessment}
+            onEditing={onEditing}
+            setEmptyState={setEmptyState}
+            setIsAIGenerated={setIsAIGenerated}
+            setAIGenerated={setAIGenerated}
           />
           {aboutSection?.creationTime && (
             <Typography variant="bodyMedium" mx={1}>
@@ -126,9 +127,9 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
                     new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000
+                      60000,
                 ),
-                "yyyy/MM/dd HH:mm"
+                "yyyy/MM/dd HH:mm",
               ) +
                 " (" +
                 convertToRelativeTime(aboutSection?.creationTime) +
@@ -142,7 +143,16 @@ export const AssessmentReportNarrator = ({ isWritingAdvice }: any) => {
 };
 
 const OnHoverRichEditor = (props: any) => {
-  const { data, editable, infoQuery } = props;
+  const {
+    data,
+    editable,
+    infoQuery,
+    onEditing,
+    query,
+    setEmptyState,
+    setIsAIGenerated,
+    setAIGenerated
+  } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
   const [show, setShow] = useState(false);
@@ -161,24 +171,30 @@ const OnHoverRichEditor = (props: any) => {
   };
 
   const handleCancel = () => {
+    onEditing(false);
     setShow(false);
     setError({});
     setHasError(false);
   };
 
-  const onSubmit = async (data: any, event: any) => {
+  const onSubmit = async (payload: any, event: any) => {
     event.preventDefault();
     try {
       const { data: res } = await service.updateAdviceNarration(
-        { assessmentId, data: { assessorNarration: data.narration } },
-        { signal: abortController.current.signal }
+        { assessmentId, data: { assessorNarration: payload.narration } },
+        { signal: abortController.current.signal },
       );
       await infoQuery();
+      setEmptyState(false);
+      onEditing(false);
       setShow(false);
+      setIsAIGenerated(false)
+      setAIGenerated(false)
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
       setHasError(true);
+      toastError(err);
     }
   };
 
@@ -261,12 +277,21 @@ const OnHoverRichEditor = (props: any) => {
               border: editable ? "1px solid #1976d299" : "unset",
             },
           }}
-          onClick={() => setShow(!show)}
+          onClick={() => {
+            setShow(!show);
+            onEditing(true);
+          }}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         >
-          <Typography dangerouslySetInnerHTML={{ __html: data }} />
-          {isHovering && editable && (
+          {data ? (
+            <Typography dangerouslySetInnerHTML={{ __html: data }} />
+          ) : (
+            <Typography color="#73808C">
+              <Trans i18nKey="writeYourOwnAdvices..." />
+            </Typography>
+          )}
+          {((data === "" && editable) || (isHovering && editable)) && (
             <IconButton
               title="Edit"
               edge="end"
@@ -275,7 +300,10 @@ const OnHoverRichEditor = (props: any) => {
                 borderRadius: "3px",
                 height: "36px",
               }}
-              onClick={() => setShow(!show)}
+              onClick={() => {
+                setShow(!show);
+                onEditing(true);
+              }}
             >
               <EditRounded sx={{ color: "#fff" }} />
             </IconButton>

@@ -53,7 +53,7 @@ const AssessmentKitContainer = () => {
       render={(data) => {
         setDocumentTitle(
           `${t("assessmentKit")}: ${data.title || ""}`,
-          config.appTitle
+          config.appTitle,
         );
         return (
           <AssessmentKit data={data} query={assessmentKitQueryData.query} />
@@ -93,7 +93,7 @@ const AssessmentKit = (props: any) => {
       service.fetchUserExpertGroup(args, config),
   });
   const colorPallet = getMaturityLevelColors(
-    maturityLevels ? maturityLevels?.length : 5
+    maturityLevels ? maturityLevels?.length : 5,
   );
   const dialogProps = useDialog({
     context: {

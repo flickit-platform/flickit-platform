@@ -1,5 +1,13 @@
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Grid } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+  Grid,
+} from "@mui/material";
 import { PropsWithChildren } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -27,11 +35,19 @@ const InviteMemberDialog = (props: PropsWithChildren<ICEDialogProps>) => {
   const fullScreen = useScreenResize("sm");
 
   return (
-    <Dialog onClose={closeDialog} fullWidth maxWidth="md" fullScreen={fullScreen} {...rest}>
+    <Dialog
+      onClose={closeDialog}
+      fullWidth
+      maxWidth="md"
+      fullScreen={fullScreen}
+      {...rest}
+    >
       <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
         {title}
       </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>{children}</DialogContent>
+      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
+        {children}
+      </DialogContent>
       <DialogActions
         sx={{
           marginTop: fullScreen ? "auto" : 4,
