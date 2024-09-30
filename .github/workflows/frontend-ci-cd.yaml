@@ -17,26 +17,47 @@ on:
 
 
 
+
 jobs:
   Build_Frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: build
+      - name: Build
         run: docker build -t frontend ./frontend
 
-
+  Test:
+    needs: Build_Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install  # Install dependencies using npm
+      - name: Test and coverage
+        run: npm run test -- --coverage  # Run tests with Vitest and generate coverage
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lcov-report
+          path: ./frontend/coverage/lcov.info
 
   Sonar:
-   needs: Build_Frontend
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
-     - name: SonarCloud Scan
-       uses: SonarSource/sonarcloud-github-action@master
-       env:
-         GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: lcov-report  # Name of the artifact to download
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   Frontend_Push_Latest_Image:
     if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
