@@ -29,10 +29,11 @@ jobs:
   Test:
     needs: Build_Frontend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v2
-      - name: Change working directory
-        run: cd frontend  # Change to the frontend directory
       - name: Install dependencies
         run: npm install  # Install dependencies using npm
       - name: Test and coverage
