@@ -39,7 +39,7 @@ jobs:
       - name: Test and coverage
         run: npm run test -- --coverage  # Run tests with Vitest and generate coverage
       - name: Move coverage to workspace
-        run: mv coverage/coverage-final.json $GITHUB_WORKSPACE/coverage-final.json  # Move coverage file to workspace directory
+        run: mv coverage/lcov.info $GITHUB_WORKSPACE/lcov.info  # Move coverage file to workspace directory
 
   Sonar:
     needs: Test
