@@ -17,7 +17,6 @@ import FormProviderWithForm from "@common/FormProviderWithForm";
 import {styles} from "@styles";
 import {useForm} from "react-hook-form";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {toast} from "react-toastify";
 import {ICustomError} from "@utils/CustomError";
 import toastError from "@utils/toastError";
