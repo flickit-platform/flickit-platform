@@ -64,7 +64,6 @@ const AssessmentKitPermissionsContainer = () => {
 
 const AssessmentKitPermisson = (props: any) => {
   const { data, query, info } = props;
-  const { items } = data;
   const { id, title, expertGroup } = info;
 
   return (
@@ -116,7 +115,7 @@ const AssessmentKitPermisson = (props: any) => {
               </Grid>
           </Grid>
       </Title>
-        <SettingBox title={"members"} items={items} query={query}/>
+        <SettingBox title={"members"} data={data} query={query}/>
     </Box>
   );
 };

@@ -26,7 +26,7 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@utils/useQuery";
 
 const SettingBox = (props: any) => {
-    const { title, items, query } = props
+    const { title, query, data:{ items } } = props
     const[openModal,setOpenModal] = useState(false)
     const { service } = useServiceContext();
     const { assessmentKitId } = useParams();
