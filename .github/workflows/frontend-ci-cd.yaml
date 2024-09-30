@@ -17,26 +17,40 @@ on:
 
 
 
+
 jobs:
   Build_Frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: build
+      - name: Build
         run: docker build -t frontend ./frontend
 
-
+  Test:
+    needs: Build_Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Change working directory
+        run: cd frontend  # Change to the frontend directory
+      - name: Install dependencies
+        run: npm install  # Install dependencies using npm
+      - name: Test and coverage
+        run: npm run test -- --coverage  # Run tests with Vitest and generate coverage
+      - name: Move coverage to workspace
+        run: mv coverage/coverage-final.json $GITHUB_WORKSPACE/coverage-final.json  # Move coverage file to workspace directory
 
   Sonar:
-   needs: Build_Frontend
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
-     - name: SonarCloud Scan
-       uses: SonarSource/sonarcloud-github-action@master
-       env:
-         GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_COVERAGE_REPORT_PATH: $GITHUB_WORKSPACE/coverage-final.json  # Path to coverage file
 
   Frontend_Push_Latest_Image:
     if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
