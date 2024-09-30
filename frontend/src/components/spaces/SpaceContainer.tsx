@@ -45,7 +45,12 @@ const SpaceContainer = () => {
   });
 
   useEffect(() => {
-    spacesQueryData.query({ size: PAGESIZE, page: pageNumber });
+    spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then(res => {
+      const { size, total } = res
+      if(Math.ceil(total / size ) < pageNumber){
+        return navigate(`*`);
+      }
+    });
   }, [pageNumber]);
 
   const pageCount =
@@ -183,23 +188,24 @@ const SpaceContainer = () => {
           );
         }}
       />
-      <Stack
-        spacing={2}
-        sx={{
-          mt: 3,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      {!isEmpty && <Stack
+          spacing={2}
+          sx={{
+            mt: 3,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
       >
         <Pagination
-          variant="outlined"
-          color="primary"
-          count={pageCount}
-          onChange={handleChangePage}
-          page={pageNumber}
+            variant="outlined"
+            color="primary"
+            count={pageCount}
+            onChange={handleChangePage}
+            page={pageNumber}
         />
       </Stack>
+      }
       <CreateSpaceDialog
         {...dialogProps}
         onSubmitForm={spacesQueryData.query}
