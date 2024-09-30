@@ -89,7 +89,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup-test.ts",
     coverage: {
-      reporter: ["json"],
+      reporter: ["lcov", "json"],
       exclude: ["node_modules/", "tests/"],
     },
   },
