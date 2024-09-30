@@ -1,6 +1,6 @@
-import {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Box from "@mui/material/Box";
-import {Chip, Divider, FormControl, IconButton, Tooltip, Typography} from "@mui/material";
+import { Divider, IconButton, TextField, Typography} from "@mui/material";
 import {Trans} from "react-i18next";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -10,57 +10,30 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import Avatar from "@mui/material/Avatar";
-import stringAvatar from "@utils/stringAvatar";
 import Grid from "@mui/material/Grid";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import Select from "@mui/material/Select";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MenuItem from "@mui/material/MenuItem";
 import {CEDialog, CEDialogActions} from "@common/dialogs/CEDialog";
-import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import {styles} from "@styles";
-import {InputFieldUC} from "@common/fields/InputField";
 import {useForm} from "react-hook-form";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import {toast} from "react-toastify";
+import {ICustomError} from "@utils/CustomError";
+import toastError from "@utils/toastError";
+import {t} from "i18next";
+import {useServiceContext} from "@providers/ServiceProvider";
+import {useParams} from "react-router-dom";
+import {useQuery} from "@utils/useQuery";
 
 const SettingBox = (props: any) => {
-    const {title,items } = props
-
-    interface Column {
-        id: "displayName" | "email" | "remove";
-        label: string;
-        minWidth?: string;
-        align?: "right";
-        display?: string;
-        position: string;
-    }
+    const { title, items, deleteMember, queryData } = props
     const[openModal,setOpenModal] = useState(false)
 
 
     const onClose = () =>{
         setOpenModal(false)
     }
-
-    // const columns: readonly Column[] = [
-    //     { id: "displayName", label: "Name", minWidth: "20vw", position: "left" },
-    //     {
-    //         id: "email",
-    //         label: "Email",
-    //         minWidth: "20vw",
-    //         display: "none",
-    //         position: "center",
-    //     },
-    //     {
-    //         id: "remove",
-    //         label: "remove",
-    //         align: "right",
-    //         minWidth: "20vw",
-    //         position: "center",
-    //     },
-    // ];
 
     return (
         <Box
@@ -96,6 +69,7 @@ const SettingBox = (props: any) => {
                     <Button
                         variant="contained"
                         onClick={()=>setOpenModal(true)}
+                        aria-hidden
                         sx={{ ml: "auto", display: "flex", alignItems: "center" }}
                     >
                         <AddIcon
@@ -301,8 +275,7 @@ const SettingBox = (props: any) => {
                                                         <IconButton
                                                             sx={{ "&:hover": { color: "#d32f2f" } }}
                                                             size="small"
-                                                            disabled={!row.editable}
-                                                            onClick={() =>{}
+                                                            onClick={() =>{deleteMember(row.id)}
                                                                 // openRemoveModal(row.displayName, row.id)
                                                             }
                                                         >
@@ -317,29 +290,57 @@ const SettingBox = (props: any) => {
                     </Table>
                 </TableContainer>
             </Box>
-            <AddMemberModal open={openModal} type={"add"} close={onClose} />
+            <AddMemberModal query={queryData} open={openModal} close={onClose} />
         </Box>
     );
 };
 
 const AddMemberModal = (props: any) =>{
-    const {type,close, ...rest} = props
+    const {close,query, ...rest} = props
     const formMethods = useForm({ shouldUnregister: true });
+    const inputRef = useRef<HTMLInputElement>(null);
+    const { service } = useServiceContext();
+    const { assessmentKitId } = useParams();
+
+    const addMemberQueryData = useQuery({
+        service: (args, config) => service.addMemberToKitPermission(args, config),
+        runOnMount: false,
+    });
+    const onSubmit = async () => {
+        try {
+            const res = await addMemberQueryData.query({
+                assessmentKitId: assessmentKitId,
+                email: inputRef.current?.value,
+            });
+            res?.message && toast.success(res.message);
+            await query.query();
+            close()
+        } catch (e) {
+            const error = e as ICustomError;
+            close()
+            if (
+                error.response?.data &&
+                error.response?.data.hasOwnProperty("message")
+            ) {
+                if (Array.isArray(error.response?.data?.message)) {
+                    toastError(error.response?.data?.message[0]);
+                } else {
+                    toastError(error);
+                }
+            }
+        }
+    };
+
     return (
         <CEDialog
             {...rest}
+            fullScreen={false}
             closeDialog={close}
-            title={type === "add" ? (
-                        <>
-                            <PersonAddIcon sx={{ mr: 1 }} />
-                            <Trans i18nKey="addMember" />
-                        </>
-                    ) : (
-                        <>
-                            <PersonRemoveIcon sx={{ mr: 1 }} />
-                            <Trans i18nKey="removeMember" />
-                        </>
-                    )
+            title={
+            <>
+               <PersonAddIcon sx={{ mr: 1 }} />
+               <Trans i18nKey="addMember" />
+            </>
         }
         >
             <FormProviderWithForm
@@ -355,32 +356,38 @@ const AddMemberModal = (props: any) =>{
             />
           </Grid> */}
                     <Grid item xs={12}>
-                        <InputFieldUC
-                            // autoFocus={true}
-                            name="title"
-                            // defaultValue={defaultValues.title || ""}
-                            required={true}
-                            label={<Trans i18nKey="email" />}
-                            // isFocused={isFocused}
-                        />
+                        <AddMember inputRef={inputRef} queryData={query} />
                     </Grid>
                 </Grid>
                 <CEDialogActions
                     closeDialog={close}
-                    // loading={loading}
-                    type={type}
-                    // onSubmit={(...args) =>
-                    //     formMethods.handleSubmit((data) => onSubmit(data, ...args))
-                    // }
-                    onSubmit={()=>{}}
+                    loading={addMemberQueryData.loading}
+                    type={"submit"}
+                    onSubmit={formMethods.handleSubmit(onSubmit)}
                     submitButtonLabel={"add"}
-                    loading={false}
                 />
             </FormProviderWithForm>
         </CEDialog>
     )
 }
-
-
+const AddMember = (props: any) => {
+    const { inputRef } = props;
+return (
+    <Box
+        component="form"
+        sx={{ mb: 2, mt: 0 }}
+    >
+        <TextField
+            fullWidth
+            type={"email"}
+            size="small"
+            variant="outlined"
+            inputRef={inputRef}
+            placeholder={t("enterEmailOfTheUserYouWantToAdd") as string}
+            label={<Trans i18nKey="userEmail" />}
+        />
+    </Box>
+);
+};
 
 export default SettingBox;
