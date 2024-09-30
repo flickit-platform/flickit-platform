@@ -51,7 +51,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_COVERAGE_REPORT_PATH: $GITHUB_WORKSPACE/coverage-final.json  # Path to coverage file
 
   Frontend_Push_Latest_Image:
     if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
