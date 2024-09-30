@@ -26,7 +26,7 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@utils/useQuery";
 
 const SettingBox = (props: any) => {
-    const { title, query, data:{ items } } = props
+    const { title, query, data:{ items : members } } = props
     const[openModal,setOpenModal] = useState(false)
     const { service } = useServiceContext();
     const { assessmentKitId } = useParams();
@@ -213,11 +213,11 @@ const SettingBox = (props: any) => {
 
                         {/* Move the Divider outside the TableHead */}
                         <TableBody>
-                            {items.length > 0 &&
-                                items.map((row: any) => (
+                            {members.length > 0 &&
+                                members.map((member: any) => (
                                     <TableRow
                                         tabIndex={-1}
-                                        key={row.id}
+                                        key={member.id}
                                         sx={{display:"flex",justifyContent:"center"}}
                                     >
                                         <TableCell
@@ -250,7 +250,7 @@ const SettingBox = (props: any) => {
                                                             fontWeight: 500,
                                                         }}
                                                     >
-                                                        {row.name}
+                                                        {member.name}
                                                     </Typography>
                                                 </Box>
                                             </Box>
@@ -271,7 +271,7 @@ const SettingBox = (props: any) => {
                                                         wight: 300,
                                                     }}
                                                 >
-                                                    {row.email}
+                                                    {member.email}
                                                 </Typography>
                                             </Box>
                                             <Box
@@ -293,8 +293,7 @@ const SettingBox = (props: any) => {
                                                         <IconButton
                                                             sx={{ "&:hover": { color: "#d32f2f" } }}
                                                             size="small"
-                                                            onClick={() =>{deleteMember(row.id)}
-                                                                // openRemoveModal(row.displayName, row.id)
+                                                            onClick={() =>{deleteMember(member.id)}
                                                             }
                                                         >
                                                             <DeleteRoundedIcon />
