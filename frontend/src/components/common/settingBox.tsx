@@ -26,9 +26,28 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@utils/useQuery";
 
 const SettingBox = (props: any) => {
-    const { title, items, deleteMember, queryData } = props
+    const { title, items, query } = props
     const[openModal,setOpenModal] = useState(false)
+    const { service } = useServiceContext();
+    const { assessmentKitId } = useParams();
 
+    const deleteMemberToKitPermissionQueryData = useQuery({
+        service: (args, config) =>
+            service.deleteMemberToKitPermission(args, config),
+        runOnMount: false,
+    });
+    const deleteMember = async (id: any) => {
+        try {
+            await deleteMemberToKitPermissionQueryData.query({
+                assessmentKitId: assessmentKitId,
+                userId: id,
+            });
+            await query.query();
+        } catch (e) {
+            const err = e as ICustomError;
+            toastError(err);
+        }
+    };
 
     const onClose = () =>{
         setOpenModal(false)
@@ -289,7 +308,7 @@ const SettingBox = (props: any) => {
                     </Table>
                 </TableContainer>
             </Box>
-            <AddMemberModal query={queryData} open={openModal} close={onClose} />
+            <AddMemberModal query={query} open={openModal} close={onClose} />
         </Box>
     );
 };

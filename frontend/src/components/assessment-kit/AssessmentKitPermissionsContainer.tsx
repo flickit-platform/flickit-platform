@@ -66,25 +66,7 @@ const AssessmentKitPermisson = (props: any) => {
   const { data, query, info } = props;
   const { items } = data;
   const { id, title, expertGroup } = info;
-  const { service } = useServiceContext();
-  const { assessmentKitId } = useParams();
-  const deleteMemberToKitPermissionQueryData = useQuery({
-    service: (args, config) =>
-      service.deleteMemberToKitPermission(args, config),
-    runOnMount: false,
-  });
-  const deleteMember = async (id: any) => {
-    try {
-      await deleteMemberToKitPermissionQueryData.query({
-        assessmentKitId: assessmentKitId,
-        userId: id,
-      });
-      await query.query();
-    } catch (e) {
-      const err = e as ICustomError;
-      toastError(err);
-    }
-  };
+
   return (
       <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
       <Title
@@ -134,7 +116,7 @@ const AssessmentKitPermisson = (props: any) => {
               </Grid>
           </Grid>
       </Title>
-        <SettingBox title={"members"} items={items} queryData={query}  deleteMember={deleteMember} />
+        <SettingBox title={"members"} items={items} query={query}/>
     </Box>
   );
 };
