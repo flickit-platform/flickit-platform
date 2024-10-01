@@ -27,6 +27,7 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
+import { theme } from "@/config/theme";
 
 export const AssessmentInsight = () => {
   const { service } = useServiceContext();
@@ -97,8 +98,8 @@ export const AssessmentInsight = () => {
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000,
+                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                  60000,
                 ),
                 "yyyy/MM/dd HH:mm",
               ) +
@@ -251,7 +252,10 @@ const OnHoverRichEditor = (props: any) => {
               <IconButton
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "3px",
                   height: "36px",
                   marginBottom: "2px",
@@ -263,7 +267,10 @@ const OnHoverRichEditor = (props: any) => {
               <IconButton
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "4px",
                   height: "36px",
                   marginBottom: "2px",
@@ -292,6 +299,7 @@ const OnHoverRichEditor = (props: any) => {
             alignItems: "center",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
+              borderColor: editable ? theme.palette.primary.main : "unset"
             },
           }}
           onClick={() => setShow(!show)}
@@ -304,7 +312,10 @@ const OnHoverRichEditor = (props: any) => {
               title="Edit"
               edge="end"
               sx={{
-                background: "#1976d299",
+                background: theme.palette.primary.main,
+                "&:hover": {
+                  background: theme.palette.primary.dark,
+                },
                 borderRadius: "3px",
                 height: "36px",
               }}
