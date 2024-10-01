@@ -30,6 +30,7 @@ import { styles } from "@styles";
 import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
+import { theme } from "@/config/theme";
 
 export const AssessmentReportNarrator = ({
   isWritingAdvice,
@@ -126,8 +127,8 @@ export const AssessmentReportNarrator = ({
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000,
+                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                  60000,
                 ),
                 "yyyy/MM/dd HH:mm",
               ) +
@@ -234,7 +235,10 @@ const OnHoverRichEditor = (props: any) => {
               <IconButton
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "3px",
                   height: "36px",
                   marginBottom: "2px",
@@ -246,7 +250,10 @@ const OnHoverRichEditor = (props: any) => {
               <IconButton
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "4px",
                   height: "36px",
                   marginBottom: "2px",
@@ -275,6 +282,7 @@ const OnHoverRichEditor = (props: any) => {
             alignItems: "center",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
+              borderColor: editable ? theme.palette.primary.main : "unset"
             },
           }}
           onClick={() => {
@@ -296,7 +304,10 @@ const OnHoverRichEditor = (props: any) => {
               title="Edit"
               edge="end"
               sx={{
-                background: "#1976d299",
+                background: theme.palette.primary.main,
+                "&:hover": {
+                  background: theme.palette.primary.dark,
+                },
                 borderRadius: "3px",
                 height: "36px",
               }}

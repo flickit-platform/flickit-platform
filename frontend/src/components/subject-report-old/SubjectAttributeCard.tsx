@@ -259,60 +259,60 @@ const SUbjectAttributeCard = (props: any) => {
                   (attributesDataPolicy[id?.toString()]?.aiInsight &&
                     !attributesDataPolicy[id?.toString()]?.aiInsight
                       ?.isValid)) && (
-                  <Box sx={{ ...styles.centerV }} gap={2}>
-                    <Box
-                      sx={{
-                        zIndex: 1,
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        ml: { xs: 0.75, sm: 1.5, md: 2 },
-                      }}
-                    >
-                      <Typography
-                        variant="labelSmall"
+                    <Box sx={{ ...styles.centerV }} gap={2}>
+                      <Box
                         sx={{
-                          backgroundColor: "#d85e1e",
-                          color: "white",
-                          padding: "0.35rem 0.35rem",
-                          borderRadius: "4px",
-                          fontWeight: "bold",
+                          zIndex: 1,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          ml: { xs: 0.75, sm: 1.5, md: 2 },
                         }}
                       >
-                        <Trans i18nKey="Outdated" />
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        backgroundColor: "rgba(255, 249, 196, 0.31)",
-                        padding: 1,
-                        borderRadius: 2,
-                        maxWidth: "80%",
-                      }}
-                    >
-                      <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                      <Typography
-                        variant="titleMedium"
-                        fontWeight={400}
-                        textAlign="left"
+                        <Typography
+                          variant="labelSmall"
+                          sx={{
+                            backgroundColor: "#d85e1e",
+                            color: "white",
+                            padding: "0.35rem 0.35rem",
+                            borderRadius: "4px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Trans i18nKey="Outdated" />
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          backgroundColor: "rgba(255, 249, 196, 0.31)",
+                          padding: 1,
+                          borderRadius: 2,
+                          maxWidth: "80%",
+                        }}
                       >
-                        <Trans i18nKey="invalidInsight" />
-                      </Typography>
+                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                        <Typography
+                          variant="titleMedium"
+                          fontWeight={400}
+                          textAlign="left"
+                        >
+                          <Trans i18nKey="invalidInsight" />
+                        </Typography>
+                      </Box>
+                      {attributesDataPolicy[id?.toString()]?.editable && (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={() =>
+                            updateAttributeAndData(id, assessmentId, "", true)
+                          }
+                        >
+                          <Trans i18nKey="regenerate" />
+                        </Button>
+                      )}
                     </Box>
-                    {attributesDataPolicy[id?.toString()]?.editable && (
-                      <Button
-                        variant="contained"
-                        size="small"
-                        onClick={() =>
-                          updateAttributeAndData(id, assessmentId, "", true)
-                        }
-                      >
-                        <Trans i18nKey="regenerate" />
-                      </Button>
-                    )}
-                  </Box>
-                )}
+                  )}
               </Box>
             </Grid>
           </Grid>
@@ -605,9 +605,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 variant="h4"
                 fontWeight={"bold"}
                 sx={{
-                  borderLeft: `2px solid ${
-                    is_passed ? statusColor : "#808080"
-                  }`,
+                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
+                    }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -1061,7 +1060,10 @@ const OnHoverInput = (props: any) => {
                   title="Submit Edit"
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "3px",
                     height: "36px",
                     margin: "3px",
@@ -1074,7 +1076,10 @@ const OnHoverInput = (props: any) => {
                   title="Cancel Edit"
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "4px",
                     height: "36px",
                   }}
@@ -1105,6 +1110,7 @@ const OnHoverInput = (props: any) => {
             wordBreak: "break-word",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
+              borderColor: editable ? theme.palette.primary.main : "unset"
             },
           }}
           onClick={() => setShow(!show)}
@@ -1119,7 +1125,10 @@ const OnHoverInput = (props: any) => {
               title="Edit"
               edge="end"
               sx={{
-                background: "#1976d299",
+                background: theme.palette.primary.main,
+                "&:hover": {
+                  background: theme.palette.primary.dark,
+                },
                 borderRadius: "3px",
                 height: "36px",
               }}
