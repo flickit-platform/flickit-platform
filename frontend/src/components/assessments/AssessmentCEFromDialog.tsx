@@ -118,6 +118,32 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (openDialog) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+          formMethods.handleSubmit((data) =>
+              onSubmit(formMethods.getValues(), e)
+          )();
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        abortController.abort();
+      };
+    }
+  }, [openDialog, formMethods, abortController]);
+
+
   return (
     <CEDialog
       {...rest}
