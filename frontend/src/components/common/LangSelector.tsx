@@ -1,22 +1,35 @@
 import React from "react";
-import { Select, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
 
 const LanguageSelector = () => {
     const { i18n } = useTranslation();
 
-    const handleLanguageChange = (event: any) => {
-        const selectedLanguage = event.target.value;
-        i18n.changeLanguage(selectedLanguage).then(() => {
-            document.body.style.direction = selectedLanguage === "fa" ? "rtl" : "ltr"; 
-        });
+    const handleLanguageChange = (language: string) => {
+        i18n.changeLanguage(language);
+        window.location.reload();
     };
 
     return (
-        <Select value={i18n.language} onChange={handleLanguageChange}>
-            <MenuItem value="en">English</MenuItem>
-            <MenuItem value="fa">فارسی</MenuItem>
-        </Select>
+        <Box display="flex" justifyContent="center">
+            {i18n.language === 'fa' ? (
+                <Typography
+                    onClick={() => handleLanguageChange('en')}
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    color="primary"
+                >
+                    فا
+                </Typography>
+            ) : (
+                <Typography
+                    onClick={() => handleLanguageChange('fa')}
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    color="primary"
+                >
+                    EN
+                </Typography>
+            )}
+        </Box>
     );
 };
 

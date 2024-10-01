@@ -555,7 +555,6 @@ const Navbar = () => {
           >
             <img src={config.appLogoUrl} alt={"logo"} />
           </Typography>
-          <LanguageSelector />
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             <SpacesButton />
             <Button
@@ -610,6 +609,8 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
+          <LanguageSelector />
+
         </Toolbar>
       </AppBar>
       <Box component="nav">

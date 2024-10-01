@@ -75,7 +75,7 @@ const SpacesList = (props: ISpaceListProps) => {
               owner={item?.owner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
-              // setUserInfo={setUserInfo}
+            // setUserInfo={setUserInfo}
             />
           );
         })}
@@ -95,7 +95,7 @@ interface ISpaceCardProps {
 const SpaceCard = (props: ISpaceCardProps) => {
   const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
     props;
-  const [showTooltip,setShowTooltip] = useState<boolean>(false)
+  const [showTooltip, setShowTooltip] = useState<boolean>(false)
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
@@ -126,7 +126,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         // dispatch(authActions.setUserInfo(data));
         navigate(`/${spaceId}/assessments/1`);
       })
-      .catch((e) => {});
+      .catch((e) => { });
   };
   const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
@@ -140,6 +140,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         mb: 1,
         backgroundColor: "white",
       }}
+      justifyContent="space-between"
       data-cy="space-card"
     >
       <Box sx={{ ...styles.centerV }} alignSelf="stretch">
@@ -187,8 +188,8 @@ const SpaceCard = (props: ISpaceCardProps) => {
           />
         </Box>
       </Box>
-      <Box sx={{ display: "flex", ml: "auto" }}>
-        <Box ml="auto" sx={{ ...styles.centerV }}>
+      <Box sx={{ display: "flex" }}>
+        <Box sx={{ ...styles.centerV }} gap={4}>
           <Tooltip title={<Trans i18nKey={"membersCount"} />}>
             <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
               <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
@@ -196,7 +197,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
             </Box>
           </Tooltip>
           <Tooltip title={<Trans i18nKey={"assessmentsCount"} />}>
-            <Box sx={{ ...styles.centerV, opacity: 0.8, ml: 4 }}>
+            <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
               <DescriptionRoundedIcon
                 sx={{ mr: 0.5, opacity: 0.8 }}
                 fontSize="small"
@@ -231,11 +232,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
               </Box>
             </Tooltip>
             <Tooltip
-                open={showTooltip}
-                onMouseEnter={()=>setShowTooltip(true)}
-                onMouseLeave={()=>setShowTooltip(false)}
-                onClick={()=>setShowTooltip(false)}
-                title={<Trans i18nKey={"moreAction"} />}>
+              open={showTooltip}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onClick={() => setShowTooltip(false)}
+              title={<Trans i18nKey={"moreAction"} />}>
               <Box>
                 <Actions
                   isActiveSpace={isActiveSpace}
@@ -337,11 +338,11 @@ const Actions = (props: any) => {
           onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
-          !isOwner && {
-            icon: <ExitToAppRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="leaveSpace" />,
-            onClick: leaveSpace,
-          },
+        !isOwner && {
+          icon: <ExitToAppRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="leaveSpace" />,
+          onClick: leaveSpace,
+        },
       ]}
       setShowTooltip={setShowTooltip}
     />
