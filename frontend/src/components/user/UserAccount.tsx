@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import { useEffect, useState } from "react";
+import { theme } from "@/config/theme";
 
 const UserAccount = () => {
   const { dispatch } = useAuthContext();
@@ -75,7 +76,11 @@ const UserAccount = () => {
           toolbar={
             <>
               <IconButton
-                sx={{ ml: "auto", mb: 1.2, mr: 1.5 }}
+                sx={{
+                  ml: theme.direction === "rtl" ? 1.5 : "auto",
+                  mr: theme.direction !== "rtl" ? 1.5 : "auto",
+                  mb: 1.2
+                }}
                 onClick={openDialog}
                 color="primary"
                 size="small"

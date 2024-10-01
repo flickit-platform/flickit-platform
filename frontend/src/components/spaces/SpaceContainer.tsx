@@ -21,6 +21,7 @@ import { styles, animations } from "@styles";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useNavigate, useParams } from "react-router-dom";
+import { theme } from "@/config/theme";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
@@ -47,7 +48,7 @@ const SpaceContainer = () => {
   useEffect(() => {
     spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then(res => {
       const { size, total } = res
-      if(Math.ceil(total / size ) < pageNumber){
+      if (Math.ceil(total / size) < pageNumber) {
         return navigate(`*`);
       }
     });
@@ -55,9 +56,9 @@ const SpaceContainer = () => {
 
   const pageCount =
     !spacesQueryData.data ||
-    !spacesQueryData?.data?.total ||
-    !spacesQueryData?.data?.size ||
-    spacesQueryData.data?.size === 0
+      !spacesQueryData?.data?.total ||
+      !spacesQueryData?.data?.size ||
+      spacesQueryData.data?.size === 0
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
@@ -83,7 +84,7 @@ const SpaceContainer = () => {
             my: 3,
           }}
         >
-          <Box ml="auto">
+          <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"}>
             <ToolbarCreateItemBtn
               icon={<CreateNewFolderRoundedIcon />}
               onClick={dialogProps.openDialog}
@@ -189,20 +190,20 @@ const SpaceContainer = () => {
         }}
       />
       {!isEmpty && <Stack
-          spacing={2}
-          sx={{
-            mt: 3,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        spacing={2}
+        sx={{
+          mt: 3,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Pagination
-            variant="outlined"
-            color="primary"
-            count={pageCount}
-            onChange={handleChangePage}
-            page={pageNumber}
+          variant="outlined"
+          color="primary"
+          count={pageCount}
+          onChange={handleChangePage}
+          page={pageNumber}
         />
       </Stack>
       }

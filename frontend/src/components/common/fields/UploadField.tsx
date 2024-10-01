@@ -30,6 +30,7 @@ import getFieldError from "@utils/getFieldError";
 import { Trans } from "react-i18next";
 import getFileNameFromSrc from "@utils/getFileNameFromSrc";
 import { useServiceContext } from "@/providers/ServiceProvider";
+import { theme } from "@/config/theme";
 
 interface IUploadFieldProps {
   name: string;
@@ -384,15 +385,14 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${
-                    (
-                      (dropNewFile && dropNewFile[0]) ||
-                      acceptedFiles[0] ||
-                      file
-                    )?.size
-                      ? formatBytes((acceptedFiles[0] || file)?.size)
-                      : ""
-                  }`}
+                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${(
+                    (dropNewFile && dropNewFile[0]) ||
+                    acceptedFiles[0] ||
+                    file
+                  )?.size
+                    ? formatBytes((acceptedFiles[0] || file)?.size)
+                    : ""
+                    }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
@@ -415,12 +415,12 @@ const Uploader = (props: IUploadProps) => {
                         file
                       )?.size
                         ? formatBytes(
-                            (
-                              (dropNewFile && dropNewFile[0]) ||
-                              acceptedFiles[0] ||
-                              file
-                            )?.size
-                          )
+                          (
+                            (dropNewFile && dropNewFile[0]) ||
+                            acceptedFiles[0] ||
+                            file
+                          )?.size
+                        )
                         : null}
                     </>
                   }
@@ -443,11 +443,13 @@ const Uploader = (props: IUploadProps) => {
               </FormLabel>
               <Box
                 sx={{
-                  marginLeft: "auto",
                   px: 2,
                   ...styles.centerV,
                   color: (t) => t.palette.info.dark,
                 }}
+
+                ml={theme.direction === "rtl" ? "unset" : "auto"}
+                mr={theme.direction !== "rtl" ? "unset" : "auto"}
               >
                 <FileUploadRoundedIcon sx={{ mr: hideDropText ? 0 : 1 }} />
                 {!hideDropText && (

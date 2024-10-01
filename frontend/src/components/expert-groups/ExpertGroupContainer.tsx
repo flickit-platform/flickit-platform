@@ -60,6 +60,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import formatBytes from "@utils/formatBytes";
 import { error } from "console";
+import { theme } from "@/config/theme";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -272,14 +273,13 @@ const ExpertGroupContainer = () => {
                         {assessmentKitsCounts.filter(
                           (item: any) => item.published,
                         ) &&
-                          `${
-                            assessmentKitsCounts.filter(
-                              (item: any) => item.published,
-                            ).length
+                          `${assessmentKitsCounts.filter(
+                            (item: any) => item.published,
+                          ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
-                        <Box ml="auto">
+                        <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"}>
                           <IconButton
                             size="small"
                             color="primary"
@@ -321,10 +321,9 @@ const ExpertGroupContainer = () => {
                           {assessmentKitsCounts.filter(
                             (item: any) => !item.published,
                           ) &&
-                            `${
-                              assessmentKitsCounts.filter(
-                                (item: any) => !item.published,
-                              ).length
+                            `${assessmentKitsCounts.filter(
+                              (item: any) => !item.published,
+                            ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -653,7 +652,8 @@ const Invitees = (props: any) => {
           <Box
             sx={{
               ...styles.centerV,
-              ml: "auto",
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
             {openInvitees ? (
@@ -698,7 +698,10 @@ const Invitees = (props: any) => {
                     </Box>
                   </Box>
                 </Box>
-                <Box ml="auto" sx={{ ...styles.centerV }}>
+                <Box sx={{
+                  ...styles.centerV, ml: theme.direction === "rtl" ? "unset" : "auto",
+                  mr: theme.direction !== "rtl" ? "unset" : "auto",
+                }}>
                   <MemberActions
                     query={query}
                     inviteeQuery={inviteeQuery}
@@ -772,10 +775,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -803,7 +806,8 @@ const AddingNewMember = (props: any) => {
         <Box
           sx={{
             ...styles.centerV,
-            ml: "auto",
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
           }}
         >
           {openAddMembers ? (
@@ -888,7 +892,8 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
     <InputAdornment position="end">
       <LoadingButton
         sx={{
-          mr: "-10px",
+          ml: theme.direction === "rtl" ? "unset" : "-10px",
+          mr: theme.direction !== "rtl" ? "-10px" : "unset",
           minWidth: "10px",
           p: 0.5,
         }}
@@ -1038,12 +1043,12 @@ const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
   const { dialogProps } = props;
 
   return (
-      <>
-        <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
-          <Trans i18nKey="convertExcelToDsl" />
-        </Button>
-        <AssessmentKitCEFromDialog {...dialogProps} />
-      </>
+    <>
+      <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
+        <Trans i18nKey="convertExcelToDsl" />
+      </Button>
+      <AssessmentKitCEFromDialog {...dialogProps} />
+    </>
   )
 }
 const ExpertGroupMembersDetail = (props: any) => {
@@ -1236,7 +1241,11 @@ const ExpertGroupMembersDetail = (props: any) => {
                             </Box>
                             <Box ml={2}>{displayName}</Box>
                           </Box>
-                          <Box ml="auto" sx={{ ...styles.centerV }}>
+                          <Box sx={{
+                            ...styles.centerV,
+                            ml: theme.direction === "rtl" ? "unset" : "auto",
+                            mr: theme.direction !== "rtl" ? "unset" : "auto",
+                          }}>
                             <Box
                               sx={{
                                 ...styles.centerV,

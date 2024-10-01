@@ -33,6 +33,7 @@ import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { theme } from "@/config/theme";
 
 export const SpaceMembers = (props: any) => {
   const { editable } = props;
@@ -76,13 +77,13 @@ export const SpaceMembers = (props: any) => {
         .then(({ data }) => {
           // dispatch(authActions.setUserInfo(data));
         })
-        .catch((e) => {});
+        .catch((e) => { });
     }
     return () => {
       controller?.abort();
     };
   }, [data]);
-    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
@@ -309,7 +310,7 @@ export const SpaceMembers = (props: any) => {
                               </Box>
                               <Box ml={2}>{name}</Box>
                             </Box>
-                            <Box ml="auto" sx={{ ...styles.centerV }}>
+                            <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"} sx={{ ...styles.centerV }}>
                               <Box
                                 sx={{
                                   ...styles.centerV,
@@ -456,24 +457,24 @@ const Actions = (props: any) => {
       items={[
         isInvitees && isInvitationExpired && editable
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         isInvitees &&
-          editable && {
-            icon: <DeleteRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="cancelInvitation" />,
-            onClick: deleteItemInvite,
-          },
+        editable && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="cancelInvitation" />,
+          onClick: deleteItemInvite,
+        },
         !isInvitees &&
-          !isOwner &&
-          editable && {
-            icon: <DeleteRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="remove" />,
-            onClick: deleteItem,
-          },
+        !isOwner &&
+        editable && {
+          icon: <DeleteRoundedIcon fontSize="small" />,
+          text: <Trans i18nKey="remove" />,
+          onClick: deleteItem,
+        },
       ]}
     />
   );

@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { styles } from "@styles";
 import Typography from "@mui/material/Typography";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
+import { theme } from "@/config/theme";
 
 interface IAssessmentKitSectionAuthorInfo {
   data: any;
@@ -45,7 +46,10 @@ const AssessmentKitSectionAuthorInfo = (
           {data.assessmentkitInfos.authorInfos.description}
         </Box>
         <Box display="flex">
-          <Button sx={{ ml: "auto" }} size="small">
+          <Button sx={{
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }} size="small">
             <Trans i18nKey={"viewOtherAssessmentKitsFromThisAuthor"} />
           </Button>
         </Box>

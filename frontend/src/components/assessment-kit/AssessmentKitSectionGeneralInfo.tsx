@@ -35,6 +35,7 @@ import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
 import { theme } from "@/config/theme";
+import { IS_RTL } from "@/utils/getDirection";
 
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
@@ -310,8 +311,8 @@ const AssessmentKitSectionGeneralInfo = (
                         sx={{
                           height: "38px",
                           borderRadius: "4px",
-                          paddingLeft: "8px;",
-                          paddingRight: "12px;",
+                          paddingLeft: !IS_RTL ? "12px" : "0px",
+                          paddingRight: IS_RTL ? "12px" : "8px",
                           width: "100%",
                           display: "flex",
                           justifyContent: "space-between",
@@ -617,8 +618,8 @@ const OnHoverInput = (props: any) => {
             sx={{
               minHeight: "38px",
               borderRadius: "4px",
-              paddingLeft: "8px;",
-              paddingRight: "12px;",
+              paddingLeft: !IS_RTL ? "12px" : "0px",
+              paddingRight: IS_RTL ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
@@ -1017,8 +1018,8 @@ const OnHoverRichEditor = (props: any) => {
             sx={{
               // height: "38px",
               borderRadius: "4px",
-              paddingLeft: "8px;",
-              paddingRight: "12px;",
+              paddingLeft: !IS_RTL ? "12px" : "0px",
+              paddingRight: IS_RTL ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
@@ -1178,8 +1179,8 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
             sx={{
               height: "38px",
               borderRadius: "4px",
-              paddingLeft: "8px;",
-              paddingRight: "12px;",
+              paddingLeft: !IS_RTL ? "12px" : "0px",
+              paddingRight: IS_RTL ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",

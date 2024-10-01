@@ -31,6 +31,7 @@ import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
 import { theme } from "@/config/theme";
+import { IS_RTL } from "@/utils/getDirection";
 
 export const AssessmentReportNarrator = ({
   isWritingAdvice,
@@ -274,8 +275,8 @@ const OnHoverRichEditor = (props: any) => {
         <Box
           sx={{
             borderRadius: "4px",
-            paddingLeft: "8px;",
-            paddingRight: "12px;",
+            paddingLeft: !IS_RTL ? "12px" : "0px",
+            paddingRight: IS_RTL ? "12px" : "8px",
             width: "100%",
             display: "flex",
             justifyContent: "space-between",

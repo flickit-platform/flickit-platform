@@ -8,6 +8,7 @@ import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
 import { GoHome } from "react-icons/go";
 import { Trans } from "react-i18next";
+import { theme } from "@/config/theme";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
   sub?: JSX.Element | string;
@@ -186,7 +187,7 @@ const Title = (props: ITitle) => {
           </Typography>
         )}
       </Box>
-      <Box ml="auto" {...toolbarProps}>
+      <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"} {...toolbarProps}>
         {toolbar}
       </Box>
     </Box>

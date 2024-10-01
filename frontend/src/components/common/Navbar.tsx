@@ -44,7 +44,7 @@ import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
-import { secondaryFontFamily } from "@/config/theme";
+import { secondaryFontFamily, theme } from "@/config/theme";
 import LanguageSelector from "./LangSelector";
 
 const drawerWidth = 240;
@@ -587,7 +587,10 @@ const Navbar = () => {
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             {/* Other buttons */}
           </Box>
-          <Box ml="auto" sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{
+            display: "flex", alignItems: "center", ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}>
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}

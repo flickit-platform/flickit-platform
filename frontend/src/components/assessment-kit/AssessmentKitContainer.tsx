@@ -30,6 +30,7 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { ECustomErrorType } from "@/types";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
+import { theme } from "@/config/theme";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -45,7 +46,7 @@ const AssessmentKitContainer = () => {
   return assessmentKitQueryData.errorObject?.response?.data?.code ===
     ECustomErrorType.ACCESS_DENIED ||
     assessmentKitQueryData.errorObject?.response?.data?.code ===
-      ECustomErrorType.NOT_FOUND ? (
+    ECustomErrorType.NOT_FOUND ? (
     <ErrorNotFoundOrAccessDenied />
   ) : (
     <QueryData
@@ -183,7 +184,8 @@ const AssessmentKit = (props: any) => {
                       position: "relative",
                       display: "flex",
                       alignItems: "center",
-                      ml: "auto",
+                      ml: theme.direction === "rtl" ? "unset": "auto",
+                      mr: theme.direction !== "rtl" ? "unset": "auto",
                       textDecoration: "none",
                     }}
                     component={Link}

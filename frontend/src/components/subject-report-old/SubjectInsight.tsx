@@ -28,6 +28,7 @@ import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { theme } from "@/config/theme";
+import { IS_RTL } from "@/utils/getDirection";
 
 export const SubjectInsight = () => {
   const { service } = useServiceContext();
@@ -284,8 +285,8 @@ const OnHoverRichEditor = (props: any) => {
         <Box
           sx={{
             borderRadius: "4px",
-            paddingLeft: "8px;",
-            paddingRight: "12px;",
+            paddingLeft: !IS_RTL ? "12px" : "0px",
+            paddingRight: IS_RTL ? "12px" : "8px",
             width: "100%",
             display: "flex",
             justifyContent: "space-between",
