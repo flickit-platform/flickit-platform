@@ -9,11 +9,15 @@ import react from "@vitejs/plugin-react-swc";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), visualizer() as PluginOption, sentryVitePlugin({
-    org: "flickit",
-    project: "front-end-test",
-    url: "https://flickit.sentry.io/"
-  })],
+  plugins: [
+    react(),
+    visualizer() as PluginOption,
+    sentryVitePlugin({
+      org: "flickit",
+      project: "front-end-test",
+      url: "https://flickit.sentry.io/",
+    }),
+  ],
   resolve: {
     alias: [
       {
@@ -84,6 +88,10 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/test/setup-test.ts",
+    coverage: {
+      reporter: ["lcov", "json"],
+      exclude: ["node_modules/", "tests/"],
+    },
   },
   build: {
     rollupOptions: {
@@ -96,6 +104,6 @@ export default defineConfig({
       ],
     },
 
-    sourcemap: true
+    sourcemap: true,
   },
 });
