@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
+import { theme } from "@/config/theme";
 
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
@@ -271,7 +272,10 @@ const AssessmentKitSectionGeneralInfo = (
                             <IconButton
                               edge="end"
                               sx={{
-                                background: "#1976d299",
+                                background: theme.palette.primary.main,
+                                "&:hover": {
+                                  background: theme.palette.primary.dark,
+                                },
                                 borderRadius: "3px",
                                 height: "36px",
                                 marginBottom: "2px",
@@ -286,7 +290,10 @@ const AssessmentKitSectionGeneralInfo = (
                             <IconButton
                               edge="end"
                               sx={{
-                                background: "#1976d299",
+                                background: theme.palette.primary.main,
+                                "&:hover": {
+                                  background: theme.palette.primary.dark,
+                                },
                                 borderRadius: "4px",
                                 height: "36px",
                                 marginBottom: "2px",
@@ -311,6 +318,7 @@ const AssessmentKitSectionGeneralInfo = (
                           alignItems: "center",
                           "&:hover": {
                             border: editable ? "1px solid #1976d299" : "unset",
+                            borderColor: editable ? theme.palette.primary.main : "unset"
                           },
                         }}
                         onClick={() => setShow(!show)}
@@ -342,7 +350,10 @@ const AssessmentKitSectionGeneralInfo = (
                             title="Edit"
                             edge="end"
                             sx={{
-                              background: "#1976d299",
+                              background: theme.palette.primary.main,
+                              "&:hover": {
+                                background: theme.palette.primary.dark,
+                              },
                               borderRadius: "3px",
                               height: "36px",
                             }}
@@ -565,7 +576,10 @@ const OnHoverInput = (props: any) => {
                     title="Submit Edit"
                     edge="end"
                     sx={{
-                      background: "#1976d299",
+                      background: theme.palette.primary.main,
+                      "&:hover": {
+                        background: theme.palette.primary.dark,
+                      },
                       borderRadius: "3px",
                       height: "36px",
                       margin: "3px",
@@ -578,7 +592,10 @@ const OnHoverInput = (props: any) => {
                     title="Cancel Edit"
                     edge="end"
                     sx={{
-                      background: "#1976d299",
+                      background: theme.palette.primary.main,
+                      "&:hover": {
+                        background: theme.palette.primary.dark,
+                      },
                       borderRadius: "4px",
                       height: "36px",
                     }}
@@ -609,6 +626,7 @@ const OnHoverInput = (props: any) => {
               wordBreak: "break-word",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
+                borderColor: editable ? theme.palette.primary.main : "unset"
               },
             }}
             onClick={() => setShow(!show)}
@@ -623,7 +641,10 @@ const OnHoverInput = (props: any) => {
                 title="Edit"
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "3px",
                   height: "36px",
                 }}
@@ -668,7 +689,7 @@ const OnHoverStatus = (props: any) => {
       const res = await updateAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-    } catch (e) {}
+    } catch (e) { }
   };
   return (
     <Box>
@@ -774,7 +795,7 @@ const OnHoverVisibilityStatus = (props: any) => {
       const res = await updateAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-    } catch (e) {}
+    } catch (e) { }
   };
   return (
     <Box>
@@ -956,7 +977,10 @@ const OnHoverRichEditor = (props: any) => {
                 <IconButton
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "3px",
                     height: "36px",
                     marginBottom: "2px",
@@ -968,7 +992,10 @@ const OnHoverRichEditor = (props: any) => {
                 <IconButton
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "4px",
                     height: "36px",
                     marginBottom: "2px",
@@ -998,6 +1025,7 @@ const OnHoverRichEditor = (props: any) => {
               alignItems: "center",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
+                borderColor: editable ? theme.palette.primary.main : "unset"
               },
             }}
             onClick={() => setShow(!show)}
@@ -1014,7 +1042,10 @@ const OnHoverRichEditor = (props: any) => {
                 title="Edit"
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "3px",
                   height: "36px",
                 }}
@@ -1060,7 +1091,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
         handleCancel();
         infoQuery();
       }
-    } catch {}
+    } catch { }
   };
   const display = false;
 
@@ -1111,7 +1142,10 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                 <IconButton
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "3px",
                     height: "36px",
                     marginBottom: "2px",
@@ -1124,7 +1158,10 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                 <IconButton
                   edge="end"
                   sx={{
-                    background: "#1976d299",
+                    background: theme.palette.primary.main,
+                    "&:hover": {
+                      background: theme.palette.primary.dark,
+                    },
                     borderRadius: "4px",
                     height: "36px",
                     marginBottom: "2px",
@@ -1149,6 +1186,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
               alignItems: "center",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
+                borderColor: editable ? theme.palette.primary.main : "unset"
               },
             }}
             onClick={() => setShow(!show)}
@@ -1180,7 +1218,10 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                 title="Edit"
                 edge="end"
                 sx={{
-                  background: "#1976d299",
+                  background: theme.palette.primary.main,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                  },
                   borderRadius: "3px",
                   height: "36px",
                 }}
