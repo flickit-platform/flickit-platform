@@ -66,6 +66,38 @@ const AssessmentKitPermisson = (props: any) => {
   const { data, query, info } = props;
   const { id, title, expertGroup } = info;
 
+    interface Column {
+        id: "displayName" | "email" | "role";
+        label: string;
+        minWidth?: string;
+        align?: "right";
+        display?: string;
+        position: string;
+    }
+
+    const columns: readonly Column[] = [
+        {
+            id: "displayName",
+            label: "Name",
+            minWidth: "20vw",
+            position: "left"
+        },
+        {
+            id: "email",
+            label: "Email",
+            minWidth: "20vw",
+            display: "none",
+            position: "center",
+        },
+        {
+            id: "remove",
+            label: "Remove",
+            align: "right",
+            minWidth: "20vw",
+            position: "center",
+        },
+    ];
+
   return (
       <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
       <Title
@@ -115,7 +147,14 @@ const AssessmentKitPermisson = (props: any) => {
               </Grid>
           </Grid>
       </Title>
-        <SettingBox title={"members"} data={data} query={query}/>
+        <SettingBox
+            name={"EGPermision"}
+            title={"members"}
+            btnLabel={"addMember"}
+            data={data}
+            query={query}
+            columns={columns}
+        />
     </Box>
   );
 };
