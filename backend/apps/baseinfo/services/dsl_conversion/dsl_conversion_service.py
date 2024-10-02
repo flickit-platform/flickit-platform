@@ -127,57 +127,59 @@ class DSLConverterService:
         for _, row in questions_df.iterrows():
             question_code = row[constants.SHEET_QUESTIONS_CODE]
             questionnaire_name = row[constants.SHEET_QUESTIONS_QUESTIONARIES]
-            title = row[constants.SHEET_QUESTIONS_TITLE].replace('"', '\\"')
-            options_range_name = row[constants.SHEET_QUESTIONS_OPTIONS]
-            description = row[constants.SHEET_QUESTIONS_DESCRIPTION].replace('"', '\\"') if pd.notna(
-                row[constants.SHEET_QUESTIONS_DESCRIPTION]) else constants.DEFAULT_DESCRIPTION
-            may_not_be_applicable = row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE] == 1 if pd.notna(
-                row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE]) else False
-            advisable = row[constants.SHEET_QUESTIONS_ADVISABLE] == 0 if pd.notna(
-                row[constants.SHEET_QUESTIONS_ADVISABLE]) else True
+            # Check for title presence before proceeding
+            if pd.notna(row[constants.SHEET_QUESTIONS_TITLE]):
+                title = row[constants.SHEET_QUESTIONS_TITLE].replace('"', '\\"')
+                options_range_name = row[constants.SHEET_QUESTIONS_OPTIONS]
+                description = row[constants.SHEET_QUESTIONS_DESCRIPTION].replace('"', '\\"') if pd.notna(
+                    row[constants.SHEET_QUESTIONS_DESCRIPTION]) else constants.DEFAULT_DESCRIPTION
+                may_not_be_applicable = row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE] == 1 if pd.notna(
+                    row[constants.SHEET_QUESTIONS_MAY_NOT_BE_APPLICABLE]) else False
+                advisable = row[constants.SHEET_QUESTIONS_ADVISABLE] == 0 if pd.notna(
+                    row[constants.SHEET_QUESTIONS_ADVISABLE]) else True
 
-            # Filter options based on the option range name
-            options_df = answer_options_df[
-                answer_options_df[constants.SHEET_OPTIONS_RANGE_NAME] == options_range_name].dropna()
-            options = options_df[constants.SHEET_OPTIONS_TITLE].tolist()
-            option_values = options_df[constants.SHEET_OPTIONS_VALUE].tolist()
+                # Filter options based on the option range name
+                options_df = answer_options_df[
+                    answer_options_df[constants.SHEET_OPTIONS_RANGE_NAME] == options_range_name].dropna()
+                options = options_df[constants.SHEET_OPTIONS_TITLE].tolist()
+                option_values = options_df[constants.SHEET_OPTIONS_VALUE].tolist()
 
-            # Structure the options string
-            options_str = ', '.join([f'"{opt}"' for opt in options])
+                # Structure the options string
+                options_str = ', '.join([f'"{opt}"' for opt in options])
 
-            # Build the DSL for the question
-            question_dsl = (
-                f'question {question_code} {{\n'
-                f'    questionnaire: {questionnaire_name}\n'
-                f'    hint: "{description}"\n'
-                f'    title: "{title}"\n'
-                f'    options: {options_str}\n'
-            )
+                # Build the DSL for the question
+                question_dsl = (
+                    f'question {question_code} {{\n'
+                    f'    questionnaire: {questionnaire_name}\n'
+                    f'    hint: "{description}"\n'
+                    f'    title: "{title}"\n'
+                    f'    options: {options_str}\n'
+                )
 
-            # Add advisable directly after options if it's false
-            if advisable:
-                question_dsl += f'        advisable: false\n'
+                # Add advisable directly after options if it's false
+                if advisable:
+                    question_dsl += f'        advisable: false\n'
 
-            # Add the affects strings
-            affects_str_list: List[str] = []
-            for column in questions_df.columns[constants.SHEET_QUESTIONS_START_AFFECTS_COLUMN_INDEX:]:
-                if pd.notna(row[column]):
-                    affects_str_list.append(
-                        f'affects {column} on level {row[constants.SHEET_QUESTIONS_MATURITY]} with values [{", ".join(map(str, option_values))}] with weight {int(row[column])}'
-                    )
-            affects_str = '\n    '.join(affects_str_list)
-            question_dsl += f'    {affects_str}\n'
+                # Add the affects strings
+                affects_str_list: List[str] = []
+                for column in questions_df.columns[constants.SHEET_QUESTIONS_START_AFFECTS_COLUMN_INDEX:]:
+                    if pd.notna(row[column]):
+                        affects_str_list.append(
+                            f'affects {column} on level {row[constants.SHEET_QUESTIONS_MATURITY]} with values [{", ".join(map(str, option_values))}] with weight {int(row[column])}'
+                        )
+                affects_str = '\n    '.join(affects_str_list)
+                question_dsl += f'    {affects_str}\n'
 
-            # Add mayNotBeApplicable if applicable
-            if may_not_be_applicable:
-                question_dsl += f'    mayNotBeApplicable: true\n'
+                # Add mayNotBeApplicable if applicable
+                if may_not_be_applicable:
+                    question_dsl += f'    mayNotBeApplicable: true\n'
 
-            question_dsl += '}'
+                question_dsl += '}'
 
-            # Group questions by questionnaire
-            if questionnaire_name not in questions_by_questionnaire:
-                questions_by_questionnaire[questionnaire_name] = []
-            questions_by_questionnaire[questionnaire_name].append(question_dsl)
+                # Group questions by questionnaire
+                if questionnaire_name not in questions_by_questionnaire:
+                    questions_by_questionnaire[questionnaire_name] = []
+                questions_by_questionnaire[questionnaire_name].append(question_dsl)
 
         return questions_by_questionnaire
 
