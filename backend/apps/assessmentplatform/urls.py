@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/v1/assessment-kits/', include('baseinfo.url.url_assessment_kit_v1')),
     path('api/v2/assessment-kits/', include('baseinfo.url.url_assessment_kit_v2')),
     path('api/v1/assessment-kit-tags/', include('baseinfo.url.url_assessment_kit_tags_v1')),
+    path('api/v1/kit-versions/', include('baseinfo.url.url_kit_versions_v1')),
     path('api/v1/assessments/', include('assessment.url.url_assessment_v1')),
     path('api/v2/assessments/', include('assessment.url.url_assessment_v2')),
     path('api/v1/assessment-invites/', include('assessment.url.url_assessment_invites_v1')),
