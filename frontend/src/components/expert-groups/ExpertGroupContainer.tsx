@@ -927,7 +927,7 @@ const AssessmentKitsList = (props: any) => {
         size="small"
         toolbar={
           <Box sx={{ display: "flex", gap: "8px" }}>
-            <ExcelToDslButton dialogProps={excelToDslDialogProps} />
+            {hasAccess && <ExcelToDslButton dialogProps={excelToDslDialogProps} />}
             {hasAccess && (
               <CreateAssessmentKitButton
                 onSubmitForm={assessmentKitQuery.query}
