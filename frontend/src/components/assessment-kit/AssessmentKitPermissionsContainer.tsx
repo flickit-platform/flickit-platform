@@ -22,6 +22,7 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { theme } from "@/config/theme";
 
 const AssessmentKitPermissionsContainer = () => {
   const { service } = useServiceContext();
@@ -253,7 +254,8 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
     <InputAdornment position="end">
       <LoadingButton
         sx={{
-          mr: "-10px",
+          marginRight: theme.direction === "ltr" ? "-10px" : "unset",
+          marginLeft: theme.direction === "rtl" ? "-10px" : "unset",
           minWidth: "10px",
           p: 0.5,
         }}

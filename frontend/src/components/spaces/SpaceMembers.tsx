@@ -77,13 +77,13 @@ export const SpaceMembers = (props: any) => {
         .then(({ data }) => {
           // dispatch(authActions.setUserInfo(data));
         })
-        .catch((e) => { });
+        .catch((e) => {});
     }
     return () => {
       controller?.abort();
     };
   }, [data]);
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
@@ -150,7 +150,13 @@ export const SpaceMembers = (props: any) => {
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
-              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <PeopleOutlineRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                }}
+                fontSize="small"
+              />
               <Typography fontWeight={"bold"}>
                 {spaceMembersQueryData?.data?.items?.length}
               </Typography>
@@ -214,7 +220,12 @@ export const SpaceMembers = (props: any) => {
                             <Chip
                               label={<Trans i18nKey="owner" />}
                               size="small"
-                              sx={{ mr: 1.5 }}
+                              sx={{
+                                marginRight:
+                                  theme.direction === "ltr" ? 1.5 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 1.5 : "unset",
+                              }}
                             />
                           )}
                           {
@@ -310,18 +321,30 @@ export const SpaceMembers = (props: any) => {
                               </Box>
                               <Box ml={2}>{name}</Box>
                             </Box>
-                            <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"} sx={{ ...styles.centerV }}>
+                            <Box
+                              ml={theme.direction === "rtl" ? "unset" : "auto"}
+                              mr={theme.direction !== "rtl" ? "unset" : "auto"}
+                              sx={{ ...styles.centerV }}
+                            >
                               <Box
                                 sx={{
                                   ...styles.centerV,
                                   opacity: 0.8,
                                   px: 0.4,
-                                  mr: 2,
+                                  marginRight:
+                                    theme.direction === "ltr" ? 2 : "unset",
+                                  marginLeft:
+                                    theme.direction === "rtl" ? 2 : "unset",
                                 }}
                               >
                                 <EventBusyRoundedIcon
                                   fontSize="small"
-                                  sx={{ mr: 0.5 }}
+                                  sx={{
+                                    marginRight:
+                                      theme.direction === "ltr" ? 0.5 : "unset",
+                                    marginLeft:
+                                      theme.direction === "rtl" ? 0.5 : "unset",
+                                  }}
                                 />
                                 <Typography variant="body2">
                                   {formatDate(expirationDate)}
@@ -457,24 +480,24 @@ const Actions = (props: any) => {
       items={[
         isInvitees && isInvitationExpired && editable
           ? {
-            icon: <EmailRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="resendInvitation" />,
-            onClick: inviteMember,
-          }
+              icon: <EmailRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="resendInvitation" />,
+              onClick: inviteMember,
+            }
           : undefined,
         isInvitees &&
-        editable && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="cancelInvitation" />,
-          onClick: deleteItemInvite,
-        },
+          editable && {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="cancelInvitation" />,
+            onClick: deleteItemInvite,
+          },
         !isInvitees &&
-        !isOwner &&
-        editable && {
-          icon: <DeleteRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="remove" />,
-          onClick: deleteItem,
-        },
+          !isOwner &&
+          editable && {
+            icon: <DeleteRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="remove" />,
+            onClick: deleteItem,
+          },
       ]}
     />
   );

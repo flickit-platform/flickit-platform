@@ -26,7 +26,7 @@ import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -75,7 +75,7 @@ const SpacesList = (props: ISpaceListProps) => {
               owner={item?.owner}
               dialogProps={dialogProps}
               fetchSpaces={fetchSpaces}
-            // setUserInfo={setUserInfo}
+              // setUserInfo={setUserInfo}
             />
           );
         })}
@@ -93,9 +93,8 @@ interface ISpaceCardProps {
 }
 
 const SpaceCard = (props: ISpaceCardProps) => {
-  const { item, isActiveSpace, dialogProps, fetchSpaces, owner } =
-    props;
-  const [showTooltip, setShowTooltip] = useState<boolean>(false)
+  const { item, isActiveSpace, dialogProps, fetchSpaces, owner } = props;
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { service } = useServiceContext();
   const isOwner = owner?.isCurrentUserOwner;
   const navigate = useNavigate();
@@ -126,7 +125,7 @@ const SpaceCard = (props: ISpaceCardProps) => {
         // dispatch(authActions.setUserInfo(data));
         navigate(`/${spaceId}/assessments/1`);
       })
-      .catch((e) => { });
+      .catch((e) => {});
   };
   const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
@@ -192,14 +191,24 @@ const SpaceCard = (props: ISpaceCardProps) => {
         <Box sx={{ ...styles.centerV }} gap={4}>
           <Tooltip title={<Trans i18nKey={"membersCount"} />}>
             <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
-              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <PeopleOutlineRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                }}
+                fontSize="small"
+              />
               <Typography fontWeight={"bold"}>{membersCount}</Typography>
             </Box>
           </Tooltip>
           <Tooltip title={<Trans i18nKey={"assessmentsCount"} />}>
             <Box sx={{ ...styles.centerV, opacity: 0.8 }}>
               <DescriptionRoundedIcon
-                sx={{ mr: 0.5, opacity: 0.8 }}
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                  opacity: 0.8,
+                }}
                 fontSize="small"
               />
               <Typography fontWeight={"bold"}>{assessmentsCount}</Typography>
@@ -236,7 +245,8 @@ const SpaceCard = (props: ISpaceCardProps) => {
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               onClick={() => setShowTooltip(false)}
-              title={<Trans i18nKey={"moreAction"} />}>
+              title={<Trans i18nKey={"moreAction"} />}
+            >
               <Box>
                 <Actions
                   isActiveSpace={isActiveSpace}
@@ -267,7 +277,7 @@ const Actions = (props: any) => {
     setUserInfo,
     isOwner,
     is_default_space_for_current_user,
-    setShowTooltip
+    setShowTooltip,
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
@@ -338,11 +348,11 @@ const Actions = (props: any) => {
           onClick: deleteItem,
         },
         !is_default_space_for_current_user &&
-        !isOwner && {
-          icon: <ExitToAppRoundedIcon fontSize="small" />,
-          text: <Trans i18nKey="leaveSpace" />,
-          onClick: leaveSpace,
-        },
+          !isOwner && {
+            icon: <ExitToAppRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="leaveSpace" />,
+            onClick: leaveSpace,
+          },
       ]}
       setShowTooltip={setShowTooltip}
     />

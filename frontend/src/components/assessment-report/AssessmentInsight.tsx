@@ -28,7 +28,7 @@ import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { theme } from "@/config/theme";
-import { IS_RTL } from "@/utils/getDirection";
+import { t } from "i18next";
 
 export const AssessmentInsight = () => {
   const { service } = useServiceContext();
@@ -99,13 +99,13 @@ export const AssessmentInsight = () => {
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                  60000,
+                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                      60000,
                 ),
                 "yyyy/MM/dd HH:mm",
               ) +
                 " (" +
-                convertToRelativeTime(aboutSection?.creationTime) +
+                t(convertToRelativeTime(aboutSection?.creationTime)) +
                 ")"}
             </Typography>
           )}
@@ -149,7 +149,13 @@ export const AssessmentInsight = () => {
                     maxWidth: "100%",
                   }}
                 >
-                  <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                  <InfoOutlined
+                    color="primary"
+                    sx={{
+                      marginRight: theme.direction === "ltr" ? 1 : "unset",
+                      marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                    }}
+                  />
                   <Typography
                     variant="titleMedium"
                     fontWeight={400}
@@ -292,15 +298,15 @@ const OnHoverRichEditor = (props: any) => {
         <Box
           sx={{
             borderRadius: "4px",
-            paddingLeft: !IS_RTL ? "12px" : "0px",
-            paddingRight: IS_RTL ? "12px" : "8px",
+            paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+            paddingRight: theme.direction === "rtl" ? "12px" : "8px",
             width: "100%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
-              borderColor: editable ? theme.palette.primary.main : "unset"
+              borderColor: editable ? theme.palette.primary.main : "unset",
             },
           }}
           onClick={() => setShow(!show)}

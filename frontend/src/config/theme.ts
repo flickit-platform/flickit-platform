@@ -9,7 +9,6 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
-import { IS_RTL } from "@/utils/getDirection";
 import { transformOrigin } from "html2canvas/dist/types/css/property-descriptors/transform-origin";
 
 // export const primaryFontFamily =
@@ -368,10 +367,10 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         startIcon: {
-          marginRight: is_farsi ? '-2px !important' : '8px !important',
-          marginLeft: !is_farsi ? '-2px !important' : '8px !important',
-        }
-      }
+          marginRight: is_farsi ? "-2px !important" : "8px !important",
+          marginLeft: !is_farsi ? "-2px !important" : "8px !important",
+        },
+      },
     },
     MuiTypography: {
       defaultProps: {
@@ -417,18 +416,22 @@ export const theme = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          '&.MuiInputLabel-root': {
-            textAlign: 'right',
-            left: !is_farsi ? 'unset' : '0',
-            right: is_farsi ? '0' : 'unset',
-            transform: !is_farsi ? 'translate(16px, 9px) scale(1)' : 'translate(-6px, 9px) scale(1)',
-            '&.Mui-focused, &.MuiInputLabel-shrink': {
-              transform: !is_farsi ? 'translate(12px, -9px) scale(0.75)' : 'translate(-12px, -9px) scale(0.75)',
-              transformOrigin: !is_farsi ? "top left" : "top right"
-            }
+          "&.MuiInputLabel-root": {
+            textAlign: "right",
+            left: !is_farsi ? "unset" : "0",
+            right: is_farsi ? "0" : "unset",
+            transform: !is_farsi
+              ? "translate(16px, 9px) scale(1)"
+              : "translate(-6px, 9px) scale(1)",
+            "&.Mui-focused, &.MuiInputLabel-shrink": {
+              transform: !is_farsi
+                ? "translate(12px, -9px) scale(0.75)"
+                : "translate(-12px, -9px) scale(0.75)",
+              transformOrigin: !is_farsi ? "top left" : "top right",
+            },
           },
-        }
-      }
+        },
+      },
     },
 
     MuiOutlinedInput: {
@@ -436,9 +439,25 @@ export const theme = createTheme({
         notchedOutline: {
           textAlign: is_farsi ? "right" : "left",
           left: 0,
-          right: 0
-        }
-      }
+          right: 0,
+        },
+      },
+    },
+
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          textAlign: is_farsi ? "right" : "left",
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        avatar: {
+          marginRight: !is_farsi ? "16px" : "unset",
+          marginLeft: is_farsi ? "16px" : "unset",
+        },
+      },
     },
     //@ts-expect-error
     MuiTabPanel: {

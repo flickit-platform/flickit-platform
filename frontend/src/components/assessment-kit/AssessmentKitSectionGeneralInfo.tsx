@@ -35,7 +35,6 @@ import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
 import { theme } from "@/config/theme";
-import { IS_RTL } from "@/utils/getDirection";
 
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
@@ -280,7 +279,10 @@ const AssessmentKitSectionGeneralInfo = (
                                 borderRadius: "3px",
                                 height: "36px",
                                 marginBottom: "2px",
-                                marginRight: "3px",
+                                marginRight:
+                                  theme.direction === "ltr" ? "3px" : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? "3px" : "unset",
                               }}
                               onClick={formMethods.handleSubmit(onSubmit)}
                             >
@@ -311,15 +313,19 @@ const AssessmentKitSectionGeneralInfo = (
                         sx={{
                           height: "38px",
                           borderRadius: "4px",
-                          paddingLeft: !IS_RTL ? "12px" : "0px",
-                          paddingRight: IS_RTL ? "12px" : "8px",
+                          paddingLeft:
+                            theme.direction === "ltr" ? "12px" : "0px",
+                          paddingRight:
+                            theme.direction === "rtl" ? "12px" : "8px",
                           width: "100%",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
                           "&:hover": {
                             border: editable ? "1px solid #1976d299" : "unset",
-                            borderColor: editable ? theme.palette.primary.main : "unset"
+                            borderColor: editable
+                              ? theme.palette.primary.main
+                              : "unset",
                           },
                         }}
                         onClick={() => setShow(!show)}
@@ -618,8 +624,8 @@ const OnHoverInput = (props: any) => {
             sx={{
               minHeight: "38px",
               borderRadius: "4px",
-              paddingLeft: !IS_RTL ? "12px" : "0px",
-              paddingRight: IS_RTL ? "12px" : "8px",
+              paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+              paddingRight: theme.direction === "ltr" ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
@@ -627,7 +633,7 @@ const OnHoverInput = (props: any) => {
               wordBreak: "break-word",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
-                borderColor: editable ? theme.palette.primary.main : "unset"
+                borderColor: editable ? theme.palette.primary.main : "unset",
               },
             }}
             onClick={() => setShow(!show)}
@@ -690,7 +696,7 @@ const OnHoverStatus = (props: any) => {
       const res = await updateAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-    } catch (e) { }
+    } catch (e) {}
   };
   return (
     <Box>
@@ -796,7 +802,7 @@ const OnHoverVisibilityStatus = (props: any) => {
       const res = await updateAssessmentKitQuery.query();
       res.message && toast.success(res.message);
       await infoQuery();
-    } catch (e) { }
+    } catch (e) {}
   };
   return (
     <Box>
@@ -1018,15 +1024,15 @@ const OnHoverRichEditor = (props: any) => {
             sx={{
               // height: "38px",
               borderRadius: "4px",
-              paddingLeft: !IS_RTL ? "12px" : "0px",
-              paddingRight: IS_RTL ? "12px" : "8px",
+              paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+              paddingRight: theme.direction === "rtl" ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
-                borderColor: editable ? theme.palette.primary.main : "unset"
+                borderColor: editable ? theme.palette.primary.main : "unset",
               },
             }}
             onClick={() => setShow(!show)}
@@ -1092,7 +1098,7 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
         handleCancel();
         infoQuery();
       }
-    } catch { }
+    } catch {}
   };
   const display = false;
 
@@ -1150,7 +1156,8 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
                     borderRadius: "3px",
                     height: "36px",
                     marginBottom: "2px",
-                    marginRight: "3px",
+                    marginRight: theme.direction === "ltr" ? "3px" : "unset",
+                    marginLeft: theme.direction === "rtl" ? "3px" : "unset",
                   }}
                   onClick={formMethods.handleSubmit(onSubmit)}
                 >
@@ -1179,15 +1186,15 @@ const OnHoverAutocompleteAsyncField = (props: any) => {
             sx={{
               height: "38px",
               borderRadius: "4px",
-              paddingLeft: !IS_RTL ? "12px" : "0px",
-              paddingRight: IS_RTL ? "12px" : "8px",
+              paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+              paddingRight: theme.direction === "rtl" ? "12px" : "8px",
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               "&:hover": {
                 border: editable ? "1px solid #1976d299" : "unset",
-                borderColor: editable ? theme.palette.primary.main : "unset"
+                borderColor: editable ? theme.palette.primary.main : "unset",
               },
             }}
             onClick={() => setShow(!show)}

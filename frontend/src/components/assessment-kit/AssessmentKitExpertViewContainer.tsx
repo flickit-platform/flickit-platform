@@ -37,7 +37,7 @@ import setServerFieldErrors from "@utils/setServerFieldError";
 import { AssessmentKitDetailsType } from "@types";
 import convertToBytes from "@/utils/convertToBytes";
 import { useConfigContext } from "@/providers/ConfgProvider";
-import { primaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, theme } from "@/config/theme";
 
 const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
@@ -898,7 +898,13 @@ const AssessmentKitQuestionsList = (props: {
   );
 };
 const UpdateAssessmentKitDialog = (props: any) => {
-  const { onClose: closeDialog, setForceUpdate, setLoaded, loaded, ...rest } = props;
+  const {
+    onClose: closeDialog,
+    setForceUpdate,
+    setLoaded,
+    loaded,
+    ...rest
+  } = props;
 
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -1094,7 +1100,12 @@ const UpdateAssessmentKitDialog = (props: any) => {
       closeDialog={close}
       title={
         <>
-          <CloudUploadRoundedIcon sx={{ mr: 1 }} />
+          <CloudUploadRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {<Trans i18nKey="updateDSL" />}
         </>
       }
@@ -1132,7 +1143,8 @@ const SubjectQuestionList = (props: any) => {
             sx={{
               mt: 2,
               mb: 1,
-              pl: 2,
+              paddingLeft: theme.direction === "ltr" ? 2 : "unset",
+              paddingRight: theme.direction === "rtl" ? 2 : "unset",
               borderRadius: 2,
               background: "white",
               boxShadow: "none",
@@ -1279,7 +1291,10 @@ const SubjectQuestionList = (props: any) => {
                       variant="subtitle2"
                       sx={{
                         fontWeight: "bold",
-                        mr: "64px",
+                        marginRight:
+                          theme.direction === "ltr" ? "64px" : "unset",
+                        marginLeft:
+                          theme.direction === "rtl" ? "64px" : "unset",
                       }}
                     >
                       {item.index}.{item.title}
@@ -1356,7 +1371,8 @@ const QuestionnairesQuestionList = (props: any) => {
             sx={{
               mt: 2,
               mb: 1,
-              pl: 2,
+              paddingLeft: theme.direction === "ltr" ? 2 : "unset",
+              paddingRight: theme.direction === "rtl" ? 2 : "unset",
               borderRadius: 2,
               background: "white",
               boxShadow: "none",
@@ -1655,7 +1671,8 @@ const MaturityLevelsDetails = (props: any) => {
                   background: colorPallet[key],
                   borderRadius: "8px",
                   py: "4px",
-                  pl: "16px",
+                  paddingLeft: theme.direction === "ltr" ? 2 : "unset",
+                  paddingRight: theme.direction === "rtl" ? 2 : "unset",
                   margin: "16px",
                   width: { xs: "90%", sm: `${90 - 10 * key}%` },
                 }}

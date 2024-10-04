@@ -11,7 +11,6 @@ import { getMaturityLevelColors, styles } from "@styles";
 import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { Button, Divider } from "@mui/material";
 interface IAssessmentSubjectStatus {
   subjects: ISubjectInfo[];

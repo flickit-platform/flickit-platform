@@ -15,6 +15,7 @@ import toastError from "@utils/toastError";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { theme } from "@/config/theme";
 
 interface ICreateSpaceDialogProps extends DialogProps {
   onClose: () => void;
@@ -53,22 +54,25 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
       let createdSpaceId = 1;
       type === "update"
         ? (await service.updateSpace(
-          { spaceId, data },
-          { signal: abortController.signal }
-        )) && (await service.seenSpaceList({ spaceId }, {}))
+            { spaceId, data },
+            { signal: abortController.signal },
+          )) && (await service.seenSpaceList({ spaceId }, {}))
         : await service
-          .createSpace(data, { signal: abortController.signal })
-          .then((res) => {
-            createdSpaceId = res.data.id;
-          });
+            .createSpace(data, { signal: abortController.signal })
+            .then((res) => {
+              createdSpaceId = res.data.id;
+            });
       type !== "update" && navigate(`/${createdSpaceId}/assessments/1`);
       setLoading(false);
       toast.success(
         <Trans
-          i18nKey={type === "update"
-            ? "spaceUpdatedSuccessMessage" : "spaceCreatedSuccessMessage"}
+          i18nKey={
+            type === "update"
+              ? "spaceUpdatedSuccessMessage"
+              : "spaceCreatedSuccessMessage"
+          }
           values={{ title: data.title }}
-        />
+        />,
       );
       onSubmitForm();
       close();
@@ -86,7 +90,6 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     };
   }, []);
 
-
   useEffect(() => {
     if (openDialog) {
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,7 +99,7 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
             setIsFocused(true);
           }, 500);
           formMethods.handleSubmit((data) =>
-            onSubmit(formMethods.getValues(), e)
+            onSubmit(formMethods.getValues(), e),
           )();
         }
       };
@@ -110,14 +113,18 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
     }
   }, [openDialog, formMethods, abortController]);
 
-
   return (
     <CEDialog
       {...rest}
       closeDialog={close}
       title={
         <>
-          <CreateNewFolderRoundedIcon sx={{ mr: 1 }} />
+          <CreateNewFolderRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {type === "update" ? (
             <Trans i18nKey="updateSpace" />
           ) : (

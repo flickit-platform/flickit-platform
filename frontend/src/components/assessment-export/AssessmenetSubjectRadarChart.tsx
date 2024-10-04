@@ -12,7 +12,6 @@ import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
 import convertToAssessmentChartData from "@/utils/convertToAssessmentChartData";
 import { useTheme } from "@mui/material";
-import { IS_RTL } from "@/utils/getDirection";
 
 interface AssessmentSubjectRadarChartProps {
   loading: boolean;
@@ -89,7 +88,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
               </g>
             );
           }}
-          orientation={IS_RTL ? "inner" : "outer"}
+          orientation={theme.direction === "rtl" ? "inner" : "outer"}
         />
         <PolarRadiusAxis
           angle={90}

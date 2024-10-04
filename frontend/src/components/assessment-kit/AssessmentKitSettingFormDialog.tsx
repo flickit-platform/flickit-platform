@@ -18,6 +18,7 @@ import AutocompleteAsyncField, {
 import RichEditorField from "@common/fields/RichEditorField";
 import { t } from "i18next";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import { theme } from "@/config/theme";
 
 interface IfetchAssessmentKitData {
   about?: string;
@@ -103,7 +104,12 @@ const AssessmentKitSettingFormDialog = (
       closeDialog={close}
       title={
         <>
-          <SettingsRoundedIcon sx={{ mr: 1 }} />
+          <SettingsRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {<Trans i18nKey="assessmentKitSetting" />}
         </>
       }

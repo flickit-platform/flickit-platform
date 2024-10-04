@@ -395,7 +395,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             return (
               <Box
                 sx={{
-                  pl: "25%",
+                  paddingLeft: theme.direction === "ltr" ? "25%" : "unset",
+                  paddingRight: theme.direction === "rtl" ? "25%" : "unset",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "start",
@@ -747,7 +748,8 @@ const EvidanceDescription = ({
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "center",
-              pl: "30px",
+              paddingLeft: theme.direction === "ltr" ? "30%" : "unset",
+              paddingRight: theme.direction === "rtl" ? "30%" : "unset",
             }}
           >
             <img src={attachmentIcon} alt={"attachmentIcon"} />

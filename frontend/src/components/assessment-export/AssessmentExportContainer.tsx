@@ -536,9 +536,14 @@ const AssessmentExportContainer = () => {
                 sx={{
                   position: "absolute",
                   top: "5.5rem",
-                  right: "-1.75rem",
-                  transform: "rotate(45deg)",
-                  transformOrigin: "top right",
+                  right: theme.direction === "ltr" ? "-1.75rem" : "unset",
+                  left: theme.direction === "rtl" ? "-1.75rem" : "unset",
+                  transform:
+                    theme.direction === "ltr"
+                      ? "rotate(45deg)"
+                      : "rotate(-45deg)",
+                  transformOrigin:
+                    theme.direction === "ltr" ? "top right" : "top left",
                   backgroundColor: theme.palette.error.main,
                   color: "white",
                   padding: "0.5rem 2rem",
@@ -579,7 +584,10 @@ const AssessmentExportContainer = () => {
                     >
                       <TableChartRounded
                         fontSize="small"
-                        sx={{ marginRight: 1 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
                       />
                       <Trans i18nKey="tableOfContents" />
                     </Typography>
@@ -595,7 +603,11 @@ const AssessmentExportContainer = () => {
                       }}
                     >
                       <FiberManualRecordRounded
-                        sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                        sx={{
+                          fontSize: "0.5rem",
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
                       />
                       <Typography
                         variant="titleSmall"
@@ -611,7 +623,12 @@ const AssessmentExportContainer = () => {
                         <Trans i18nKey="assessmentMethodology" />
                       </Typography>
                     </Link>
-                    <Box display="flex" flexDirection="column" paddingLeft={2}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      paddingLeft={theme.direction === "ltr" ? 2 : "unset"}
+                      paddingRight={theme.direction === "rtl" ? 2 : "unset"}
+                    >
                       <Link
                         href="#assessment-focus"
                         sx={{
@@ -623,7 +640,12 @@ const AssessmentExportContainer = () => {
                         }}
                       >
                         <FiberManualRecordOutlined
-                          sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                          sx={{
+                            fontSize: "0.5rem",
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
                         />
 
                         <Typography
@@ -651,7 +673,12 @@ const AssessmentExportContainer = () => {
                         }}
                       >
                         <FiberManualRecordOutlined
-                          sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                          sx={{
+                            fontSize: "0.5rem",
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
                         />
 
                         <Typography
@@ -679,7 +706,12 @@ const AssessmentExportContainer = () => {
                         }}
                       >
                         <FiberManualRecordOutlined
-                          sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                          sx={{
+                            fontSize: "0.5rem",
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
                         />
                         <Typography
                           variant="titleSmall"
@@ -705,7 +737,11 @@ const AssessmentExportContainer = () => {
                       }}
                     >
                       <FiberManualRecordRounded
-                        sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                        sx={{
+                          fontSize: "0.5rem",
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
                       />
                       <Typography
                         variant="titleSmall"
@@ -732,7 +768,12 @@ const AssessmentExportContainer = () => {
                         }}
                       >
                         <FiberManualRecordRounded
-                          sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                          sx={{
+                            fontSize: "0.5rem",
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
                         />
                         <Typography
                           variant="titleSmall"
@@ -761,7 +802,11 @@ const AssessmentExportContainer = () => {
                       }}
                     >
                       <FiberManualRecordRounded
-                        sx={{ fontSize: "0.5rem", marginRight: 1 }}
+                        sx={{
+                          fontSize: "0.5rem",
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
                       />
                       <Typography
                         variant="titleSmall"
@@ -796,7 +841,11 @@ const AssessmentExportContainer = () => {
                   ></Typography>
                 </Grid>
 
-                <Box paddingLeft={3} maxWidth="100%">
+                <Box
+                  paddingLeft={theme.direction === "ltr" ? 3 : "unset"}
+                  paddingRight={theme.direction === "rtl" ? 3 : "unset"}
+                  maxWidth="100%"
+                >
                   <Typography
                     component="div"
                     mt={4}
@@ -995,7 +1044,11 @@ const AssessmentExportContainer = () => {
                       },
                     )}
                   </Box>
-                  <Box component="ol" sx={{ paddingLeft: 6 }}>
+                  <Box
+                    component="ol"
+                    paddingLeft={theme.direction === "ltr" ? 6 : "unset"}
+                    paddingRight={theme.direction === "rtl" ? 6 : "unset"}
+                  >
                     {assessment?.assessmentKit?.maturityLevels.map(
                       (level, index) => (
                         <Box
@@ -1003,7 +1056,10 @@ const AssessmentExportContainer = () => {
                           key={index}
                           sx={{ marginBottom: 1 }}
                         >
-                          <Typography variant="displaySmall">
+                          <Typography
+                            variant="displaySmall"
+                            sx={{ display: "flex" }}
+                          >
                             <strong>{level.title}: </strong>
                             {level.description}
                           </Typography>
@@ -1407,7 +1463,16 @@ const AssessmentExportContainer = () => {
                                   <Box display="flex" alignItems="center">
                                     <CircularProgress
                                       size={24}
-                                      sx={{ mr: 1 }}
+                                      sx={{
+                                        marginRight:
+                                          theme.direction === "ltr"
+                                            ? 1
+                                            : "unset",
+                                        marginLeft:
+                                          theme.direction === "rtl"
+                                            ? 1
+                                            : "unset",
+                                      }}
                                     />
                                     <Typography variant="displaySmall">
                                       <Trans i18nKey="generatingInsight" />
@@ -1484,7 +1549,16 @@ const AssessmentExportContainer = () => {
                                       >
                                         <InfoOutlined
                                           color="primary"
-                                          sx={{ marginRight: 1 }}
+                                          sx={{
+                                            marginRight:
+                                              theme.direction === "ltr"
+                                                ? 1
+                                                : "unset",
+                                            marginLeft:
+                                              theme.direction === "rtl"
+                                                ? 1
+                                                : "unset",
+                                          }}
                                         />
                                         <Typography
                                           variant="titleMedium"
@@ -1542,7 +1616,16 @@ const AssessmentExportContainer = () => {
                                     >
                                       <InfoOutlined
                                         color="primary"
-                                        sx={{ marginRight: 1 }}
+                                        sx={{
+                                          marginRight:
+                                            theme.direction === "ltr"
+                                              ? 1
+                                              : "unset",
+                                          marginLeft:
+                                            theme.direction === "rtl"
+                                              ? 1
+                                              : "unset",
+                                        }}
                                       />
                                       <Typography
                                         variant="titleMedium"

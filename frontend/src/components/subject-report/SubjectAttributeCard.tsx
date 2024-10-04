@@ -401,7 +401,8 @@ export const AttributeStatusBar = (props: any) => {
         sx={{
           position: "absolute",
           zIndex: 1,
-          left: "12px",
+          left: theme.direction === "ltr" ? "12px" : "unset",
+          right: theme.direction === "rtl" ? "12px" : "unset",
           opacity: 0.8,
           letterSpacing: { xs: ".09em", sm: ".15em" },
         }}
@@ -830,7 +831,19 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                           my: 1,
                                         }}
                                       >
-                                        <Box sx={{ width: "4%", mr: 2 }}>
+                                        <Box
+                                          sx={{
+                                            width: "4%",
+                                            marginRight:
+                                              theme.direction === "ltr"
+                                                ? 2
+                                                : "unset",
+                                            marginLeft:
+                                              theme.direction === "rtl"
+                                                ? 2
+                                                : "unset",
+                                          }}
+                                        >
                                           <Typography
                                             display="flex"
                                             variant="body1"
@@ -990,7 +1003,8 @@ export const MaturityLevelDetailsBar = (props: any) => {
         sx={{
           position: "absolute",
           zIndex: 1,
-          left: "12px",
+          left: theme.direction === "ltr" ? "12px" : "unset",
+          right: theme.direction === "rtl" ? "12px" : "unset",
           opacity: 0.8,
           letterSpacing: { xs: ".09em", sm: ".15em" },
           fontSize: ".75rem",

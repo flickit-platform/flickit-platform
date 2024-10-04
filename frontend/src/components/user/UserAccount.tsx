@@ -69,7 +69,11 @@ const UserAccount = () => {
           />
         </Box>
       </Box>
-      <Box ml={"130px"} mt={1}>
+      <Box
+        ml={theme.direction === "ltr" ? "130px" : "unset"}
+        mr={theme.direction === "rtl" ? "130px" : "unset"}
+        mt={1}
+      >
         <Title
           textTransform={"capitalize"}
           sub={<Box textTransform={"none"}>{userInfo?.email}</Box>}
@@ -79,7 +83,7 @@ const UserAccount = () => {
                 sx={{
                   ml: theme.direction === "rtl" ? 1.5 : "auto",
                   mr: theme.direction !== "rtl" ? 1.5 : "auto",
-                  mb: 1.2
+                  mb: 1.2,
                 }}
                 onClick={openDialog}
                 color="primary"

@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { Link, useLocation } from "react-router-dom";
 import QANumberIndicator from "@common/QANumberIndicator";
 import AlertBox from "@common/AlertBox";
+import { theme } from "@/config/theme";
 
 type TQuestionnairesNotCompleteAlertProps = {
   subjectName?: string;
@@ -53,7 +54,8 @@ const QuestionnairesNotCompleteAlert = (
                   a={a}
                   sx={{
                     ml: 1,
-                    pl: 1,
+                    paddingLeft: theme.direction === "ltr" ? 1 : "unset",
+                    paddingRight: theme.direction === "rtl" ? 1 : "unset",
                     color: "white",
                     borderLeft: "1px dashed #ffffff52",
                   }}

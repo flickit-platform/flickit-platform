@@ -21,7 +21,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import { ECustomErrorType, IAssessmentKitReportModel } from "@/types";
-import { primaryFontFamily } from "@/config/theme";
+import { primaryFontFamily, theme } from "@/config/theme";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 
 const QuestionsReview = () => {
@@ -382,7 +382,14 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         <Trans i18nKey={"yourConfidence"} />
                       </Typography>
                       <Box sx={{ display: "flex", mt: 1 }}>
-                        <Box sx={{ mr: 1, color: "#fff" }}>
+                        <Box
+                          sx={{
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                            color: "#fff",
+                          }}
+                        >
                           <Typography sx={{ display: "flex" }}>
                             <Typography variant="h6" fontWeight="bold">
                               {question.answer.confidenceLevel.title}

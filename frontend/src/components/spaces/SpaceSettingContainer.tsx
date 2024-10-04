@@ -22,6 +22,7 @@ import useDialog from "@utils/useDialog";
 import CreateSpaceDialog from "./CreateSpaceDialog";
 import { LoadingButton } from "@mui/lab";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import { theme } from "@/config/theme";
 
 const SpaceSettingContainer = () => {
   const { spaceId = "" } = useParams();
@@ -55,7 +56,14 @@ const SpaceSettingContainer = () => {
       >
         <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
           {loading ? (
-            <Skeleton variant="rounded" width="110px" sx={{ mr: 1 }} />
+            <Skeleton
+              variant="rounded"
+              width="110px"
+              sx={{
+                marginRight: theme.direction === "ltr" ? 1 : "unset",
+                marginLeft: theme.direction === "rtl" ? 1 : "unset",
+              }}
+            />
           ) : (
             title
           )}{" "}
@@ -108,7 +116,7 @@ function SpaceSettings(props: { editable: boolean }) {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>

@@ -96,7 +96,12 @@ const Title = (props: ITitle) => {
                   <ArrowBackRoundedIcon
                     fontSize="small"
                     color="inherit"
-                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
+                    sx={{
+                      opacity: 0.85,
+                      color: "gray",
+                      marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                      marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                    }}
                     {...backIconProps}
                   />
                 )}
@@ -187,7 +192,11 @@ const Title = (props: ITitle) => {
           </Typography>
         )}
       </Box>
-      <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"} {...toolbarProps}>
+      <Box
+        ml={theme.direction === "rtl" ? "unset" : "auto"}
+        mr={theme.direction !== "rtl" ? "unset" : "auto"}
+        {...toolbarProps}
+      >
         {toolbar}
       </Box>
     </Box>

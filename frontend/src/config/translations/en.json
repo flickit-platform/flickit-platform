@@ -209,6 +209,7 @@
   "dateCreated": "Date created",
   "lastModified": "Last modified",
   "thisAssessmentIsUsing": "This Assessment was conducted using the",
+  "thisAssessmentIsUsingSecondPart": "kit",
   "description": "Description",
   "createAssessmentKit": "New Assessment Kit",
   "updateAssessmentKit": "Update Assessment Kit",
@@ -514,7 +515,7 @@
   "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed.",
   "emptyAnswerHistoryTitle": "No answer has been recorded",
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
-  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across 4 levels.",
+  "maturityLevelsDescriptionLastSection": "This assessment kit evaluates the maturity of subjects and attributes across multiple levels.",
   "shortTitleInfo": "A very short title (a few characters) for addressing the product under assessment in reports.",
   "adviceGenerator": "Advice Generator",
   "noAdviceGeneratedYet": "No Advice Generated Yet",
@@ -522,5 +523,13 @@
   "defaultAdviceValue": "WRITE YOUR OWN ADVICES...",
   "disabledAdviceValue": "Advice AI narration is unavailable: AI is Disabled!",
   "generateAdviceViaAI": "Generate Advice Via AI",
-  "recommendations": "Recommendations"
+  "recommendations": "Recommendations",
+  "notificationDetails": "Notification Details",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "thisWeek": "This week",
+  "lastWeek": "Last week",
+  "thisMonth": "This month",
+  "lastMonth": "Last month",
+  "notificationEmptyState": "Nothing new to see here yet!"
 }

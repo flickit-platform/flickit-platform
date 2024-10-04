@@ -31,7 +31,6 @@ import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
 import { theme } from "@/config/theme";
-import { IS_RTL } from "@/utils/getDirection";
 
 export const AssessmentReportNarrator = ({
   isWritingAdvice,
@@ -128,13 +127,13 @@ export const AssessmentReportNarrator = ({
               {format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
-                  new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                  60000,
+                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                      60000,
                 ),
                 "yyyy/MM/dd HH:mm",
               ) +
                 " (" +
-                convertToRelativeTime(aboutSection?.creationTime) +
+                t(convertToRelativeTime(aboutSection?.creationTime)) +
                 ")"}
             </Typography>
           )}
@@ -153,7 +152,7 @@ const OnHoverRichEditor = (props: any) => {
     query,
     setEmptyState,
     setIsAIGenerated,
-    setAIGenerated
+    setAIGenerated,
   } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
@@ -190,8 +189,8 @@ const OnHoverRichEditor = (props: any) => {
       setEmptyState(false);
       onEditing(false);
       setShow(false);
-      setIsAIGenerated(false)
-      setAIGenerated(false)
+      setIsAIGenerated(false);
+      setAIGenerated(false);
     } catch (e) {
       const err = e as ICustomError;
       setError(err);
@@ -275,15 +274,15 @@ const OnHoverRichEditor = (props: any) => {
         <Box
           sx={{
             borderRadius: "4px",
-            paddingLeft: !IS_RTL ? "12px" : "0px",
-            paddingRight: IS_RTL ? "12px" : "8px",
+            paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+            paddingRight: theme.direction === "rtl" ? "12px" : "8px",
             width: "100%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
-              borderColor: editable ? theme.palette.primary.main : "unset"
+              borderColor: editable ? theme.palette.primary.main : "unset",
             },
           }}
           onClick={() => {

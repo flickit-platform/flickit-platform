@@ -166,7 +166,7 @@ const Uploader = (props: IUploadProps) => {
       setLimitGuide(
         t("maximumUploadFileSize", {
           maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
-        }) as string
+        }) as string,
       );
     }
     if (
@@ -362,7 +362,8 @@ const Uploader = (props: IUploadProps) => {
                     maxWidth: "40px",
                     maxHeight: "40px",
                     overflow: "hidden",
-                    mr: 1.5,
+                    marginRight: theme.direction === "ltr" ? 1.5 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 1.5 : "unset",
                     display: { xs: "none", sm: "inline-flex" },
                   }}
                 >
@@ -385,14 +386,15 @@ const Uploader = (props: IUploadProps) => {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${(
-                    (dropNewFile && dropNewFile[0]) ||
-                    acceptedFiles[0] ||
-                    file
-                  )?.size
-                    ? formatBytes((acceptedFiles[0] || file)?.size)
-                    : ""
-                    }`}
+                  title={`${((dropNewFile && dropNewFile[0]) || acceptedFiles[0] || file)?.name} - ${
+                    (
+                      (dropNewFile && dropNewFile[0]) ||
+                      acceptedFiles[0] ||
+                      file
+                    )?.size
+                      ? formatBytes((acceptedFiles[0] || file)?.size)
+                      : ""
+                  }`}
                   primaryTypographyProps={{
                     sx: { ...styles.ellipsis, width: "95%" },
                   }}
@@ -415,12 +417,12 @@ const Uploader = (props: IUploadProps) => {
                         file
                       )?.size
                         ? formatBytes(
-                          (
-                            (dropNewFile && dropNewFile[0]) ||
-                            acceptedFiles[0] ||
-                            file
-                          )?.size
-                        )
+                            (
+                              (dropNewFile && dropNewFile[0]) ||
+                              acceptedFiles[0] ||
+                              file
+                            )?.size,
+                          )
                         : null}
                     </>
                   }
@@ -447,7 +449,6 @@ const Uploader = (props: IUploadProps) => {
                   ...styles.centerV,
                   color: (t) => t.palette.info.dark,
                 }}
-
                 ml={theme.direction === "rtl" ? "unset" : "auto"}
                 mr={theme.direction !== "rtl" ? "unset" : "auto"}
               >

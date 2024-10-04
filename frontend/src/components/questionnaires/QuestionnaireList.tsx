@@ -11,6 +11,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { styles } from "@styles";
 import { useSearchParams } from "react-router-dom";
+import { theme } from "@/config/theme";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: any;
@@ -167,7 +168,8 @@ const FilterButton = (props: {
       color="inherit"
       sx={{
         backgroundColor: active ? "#ffffff3b" : undefined,
-        mr: 1,
+        marginRight: theme.direction === "ltr" ? 1 : "unset",
+        marginLeft: theme.direction === "rtl" ? 1 : "unset",
         "&:hover": {
           backgroundColor: active ? "#ffffff66" : "#ffffff11",
         },

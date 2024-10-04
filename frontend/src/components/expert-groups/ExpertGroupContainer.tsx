@@ -212,7 +212,9 @@ const ExpertGroupContainer = () => {
                         <InsertLinkRoundedIcon
                           fontSize="small"
                           sx={{
-                            mr: 1,
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
                             transform: "rotateZ(-45deg)",
                             opacity: 0.8,
                           }}
@@ -236,7 +238,11 @@ const ExpertGroupContainer = () => {
                     <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
                       <PeopleRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.8,
+                        }}
                       />
 
                       <Typography
@@ -261,7 +267,11 @@ const ExpertGroupContainer = () => {
                     >
                       <AssignmentRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.8,
+                        }}
                       />
 
                       <Typography
@@ -273,13 +283,17 @@ const ExpertGroupContainer = () => {
                         {assessmentKitsCounts.filter(
                           (item: any) => item.published,
                         ) &&
-                          `${assessmentKitsCounts.filter(
-                            (item: any) => item.published,
-                          ).length
+                          `${
+                            assessmentKitsCounts.filter(
+                              (item: any) => item.published,
+                            ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
-                        <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"}>
+                        <Box
+                          ml={theme.direction === "rtl" ? "unset" : "auto"}
+                          mr={theme.direction !== "rtl" ? "unset" : "auto"}
+                        >
                           <IconButton
                             size="small"
                             color="primary"
@@ -309,7 +323,12 @@ const ExpertGroupContainer = () => {
                       >
                         <AssignmentLateRoundedIcon
                           fontSize="small"
-                          sx={{ mr: 1, opacity: 0.8 }}
+                          sx={{
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                            opacity: 0.8,
+                          }}
                         />
 
                         <Typography
@@ -321,9 +340,10 @@ const ExpertGroupContainer = () => {
                           {assessmentKitsCounts.filter(
                             (item: any) => !item.published,
                           ) &&
-                            `${assessmentKitsCounts.filter(
-                              (item: any) => !item.published,
-                            ).length
+                            `${
+                              assessmentKitsCounts.filter(
+                                (item: any) => !item.published,
+                              ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -420,7 +440,10 @@ const AvatarComponent = (props: any) => {
       display="inline-block"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      sx={{ mr: 1 }}
+      sx={{
+        marginRight: theme.direction === "ltr" ? 1 : "unset",
+        marginLeft: theme.direction === "rtl" ? 1 : "unset",
+      }}
     >
       <Avatar
         sx={{
@@ -440,9 +463,11 @@ const AvatarComponent = (props: any) => {
           sx={{
             position: "absolute",
             top: "50%",
-            left: "50%",
+            left: theme.direction === "ltr" ? "50%" : "unset",
+            right: theme.direction === "rtl" ? "50%" : "unset",
             marginTop: "-12px",
-            marginLeft: "-12px",
+            marginLeft: theme.direction === "ltr" ? "-12px" : "unset",
+            marginRight: theme.direction === "rtl" ? "-12px" : "unset",
           }}
         />
       )}
@@ -690,7 +715,11 @@ const Invitees = (props: any) => {
                     <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
                       <EventBusyRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 0.7, opacity: 0.9 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.9,
+                        }}
                       />
                       <Typography variant="body2">
                         {formatDate(inviteExpirationDate)}
@@ -698,10 +727,13 @@ const Invitees = (props: any) => {
                     </Box>
                   </Box>
                 </Box>
-                <Box sx={{
-                  ...styles.centerV, ml: theme.direction === "rtl" ? "unset" : "auto",
-                  mr: theme.direction !== "rtl" ? "unset" : "auto",
-                }}>
+                <Box
+                  sx={{
+                    ...styles.centerV,
+                    ml: theme.direction === "rtl" ? "unset" : "auto",
+                    mr: theme.direction !== "rtl" ? "unset" : "auto",
+                  }}
+                >
                   <MemberActions
                     query={query}
                     inviteeQuery={inviteeQuery}
@@ -775,10 +807,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-            icon: <EmailRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="resendInvitation" />,
-            onClick: inviteMember,
-          }
+              icon: <EmailRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="resendInvitation" />,
+              onClick: inviteMember,
+            }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -1049,8 +1081,8 @@ const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
       </Button>
       <AssessmentKitCEFromDialog {...dialogProps} />
     </>
-  )
-}
+  );
+};
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
@@ -1241,22 +1273,32 @@ const ExpertGroupMembersDetail = (props: any) => {
                             </Box>
                             <Box ml={2}>{displayName}</Box>
                           </Box>
-                          <Box sx={{
-                            ...styles.centerV,
-                            ml: theme.direction === "rtl" ? "unset" : "auto",
-                            mr: theme.direction !== "rtl" ? "unset" : "auto",
-                          }}>
+                          <Box
+                            sx={{
+                              ...styles.centerV,
+                              ml: theme.direction === "rtl" ? "unset" : "auto",
+                              mr: theme.direction !== "rtl" ? "unset" : "auto",
+                            }}
+                          >
                             <Box
                               sx={{
                                 ...styles.centerV,
                                 opacity: 0.8,
                                 px: 0.4,
-                                mr: 2,
+                                marginRight:
+                                  theme.direction === "ltr" ? 2 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 2 : "unset",
                               }}
                             >
                               <EventBusyRoundedIcon
                                 fontSize="small"
-                                sx={{ mr: 0.5 }}
+                                sx={{
+                                  marginRight:
+                                    theme.direction === "ltr" ? 0.5 : "unset",
+                                  marginLeft:
+                                    theme.direction === "rtl" ? 0.5 : "unset",
+                                }}
                               />
                               <Typography variant="body2">
                                 {formatDate(inviteExpirationDate)}

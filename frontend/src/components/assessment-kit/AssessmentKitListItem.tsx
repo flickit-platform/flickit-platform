@@ -76,7 +76,8 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
 
         <Box
           sx={{
-            ...styles.centerV, color: "#525252",
+            ...styles.centerV,
+            color: "#525252",
             ml: theme.direction === "rtl" ? "unset" : "auto",
             mr: theme.direction !== "rtl" ? "unset" : "auto",
           }}
@@ -86,7 +87,12 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             <Chip
               label={<Trans i18nKey="private" />}
               size="small"
-              sx={{ mr: 1, background: "#7954B3", color: "#fff" }}
+              sx={{
+                marginRight: theme.direction === "ltr" ? 1 : "unset",
+                marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                background: "#7954B3",
+                color: "#fff",
+              }}
             />
           )}
           {is_active ? (

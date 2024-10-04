@@ -18,6 +18,7 @@ import { Collapse, IconButton, Typography } from "@mui/material";
 import languageDetector from "@/utils/languageDetector";
 import React, { useState } from "react";
 import { InfoRounded } from "@mui/icons-material";
+import { theme } from "@/config/theme";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
@@ -119,7 +120,11 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 <Chip
                   label={title}
                   size="small"
-                  sx={{ mr: 0.3, mb: 0.1 }}
+                  sx={{
+                    marginRight: theme.direction === "ltr" ? 0.3 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 0.3 : "unset",
+                    mb: 0.1,
+                  }}
                   key={id}
                 />
               );

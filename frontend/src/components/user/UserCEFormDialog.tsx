@@ -23,6 +23,7 @@ import Button from "@mui/material/Button";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import UploadField from "@common/fields/UploadField";
 import convertToBytes from "@/utils/convertToBytes";
+import { theme } from "@/config/theme";
 
 interface IUserCEFormDialogProps extends DialogProps {
   onClose: () => void;
@@ -90,7 +91,12 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <AccountBoxRoundedIcon sx={{ mr: 1 }} />
+          <AccountBoxRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           <Trans i18nKey="updateUser" />
         </>
       }

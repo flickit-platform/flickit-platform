@@ -202,7 +202,8 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                     textDecoration: "underline",
                     color: theme.palette.primary.main,
                     cursor: "pointer",
-                    paddingLeft: "4px",
+                    paddingLeft: theme.direction === "ltr" ? "4px" : "unset",
+                    paddingRight: theme.direction === "rtl" ? "4px" : "unset",
                   }}
                   aria-hidden={true}
                   onClick={downloadTemplate}
@@ -454,7 +455,12 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <NoteAddRoundedIcon sx={{ mr: 1 }} />
+          <NoteAddRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {type === "update" && <Trans i18nKey="updateAssessmentKit" />}
           {type === "create" && <Trans i18nKey="createAssessmentKit" />}
           {type === "convert" && <Trans i18nKey="convertExcelToDsl" />}

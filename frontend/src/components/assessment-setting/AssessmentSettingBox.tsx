@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import {
-  Chip, CircularProgress,
+  Chip,
+  CircularProgress,
   Divider,
   FormControl,
   IconButton,
@@ -451,10 +452,14 @@ export const AssessmentSettingMemberBox = (props: {
             mr: theme.direction !== "rtl" ? "unset" : "10%",
           }}
         >
-          <Typography sx={{
-            ml: theme.direction === "rtl" ? "unset" : "auto",
-            mr: theme.direction !== "rtl" ? "unset" : "auto",
-          }} color="#9DA7B3" variant="headlineMedium">
+          <Typography
+            sx={{
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
+            }}
+            color="#9DA7B3"
+            variant="headlineMedium"
+          >
             <Trans i18nKey={"grantedRoles"} />
           </Typography>
           <Button
@@ -464,7 +469,7 @@ export const AssessmentSettingMemberBox = (props: {
               ml: theme.direction === "rtl" ? "unset" : "auto",
               mr: theme.direction !== "rtl" ? "unset" : "auto",
               display: "flex",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <AddIcon
@@ -581,7 +586,10 @@ export const AssessmentSettingMemberBox = (props: {
                           {!row.editable && (
                             <Chip
                               sx={{
-                                mr: 1,
+                                marginRight:
+                                  theme.direction === "ltr" ? 1 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 1 : "unset",
                                 opacity: 0.7,
                                 color: "#9A003C",
                                 borderColor: "#9A003C",
@@ -645,7 +653,13 @@ export const AssessmentSettingMemberBox = (props: {
                                 <Trans i18nKey="spaceOwnerRoleIsNotEditable" />
                               }
                             >
-                              <SelectionRole row={row} listOfRoles={listOfRoles} MenuProps={MenuProps} setChangeData={setChangeData} assessmentId={assessmentId} />
+                              <SelectionRole
+                                row={row}
+                                listOfRoles={listOfRoles}
+                                MenuProps={MenuProps}
+                                setChangeData={setChangeData}
+                                assessmentId={assessmentId}
+                              />
                             </Tooltip>
                           </Grid>
                         </FormControl>
@@ -835,13 +849,13 @@ export const AssessmentSettingMemberBox = (props: {
                                         border: 0,
                                       },
                                       "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                      {
-                                        border: 0,
-                                      },
+                                        {
+                                          border: 0,
+                                        },
                                       ".MuiSvgIcon-root": {
                                         fill: row.editable
                                           ? "#2974B4 !important"
@@ -855,7 +869,7 @@ export const AssessmentSettingMemberBox = (props: {
                                     inputProps={{
                                       renderValue: () => row?.role?.title,
                                     }}
-                                  // disabled={!row.editable}
+                                    // disabled={!row.editable}
                                   >
                                     <Box
                                       sx={{
@@ -885,15 +899,15 @@ export const AssessmentSettingMemberBox = (props: {
                                               "&.MuiMenuItem-root:hover": {
                                                 ...(role.id === row.role.id
                                                   ? {
-                                                    backgroundColor:
-                                                      "#9CCAFF",
-                                                    color: "#004F83",
-                                                  }
+                                                      backgroundColor:
+                                                        "#9CCAFF",
+                                                      color: "#004F83",
+                                                    }
                                                   : {
-                                                    backgroundColor:
-                                                      "#EFEDF0",
-                                                    color: "#1B1B1E",
-                                                  }),
+                                                      backgroundColor:
+                                                        "#EFEDF0",
+                                                      color: "#1B1B1E",
+                                                    }),
                                               },
                                             }}
                                           >
@@ -912,11 +926,11 @@ export const AssessmentSettingMemberBox = (props: {
                                                   fontSize: "0.875rem",
                                                   ...(role.id === row.role.id
                                                     ? {
-                                                      color: "#004F83",
-                                                    }
+                                                        color: "#004F83",
+                                                      }
                                                     : {
-                                                      color: "#1B1B1E",
-                                                    }),
+                                                        color: "#1B1B1E",
+                                                      }),
                                                 }}
                                               >
                                                 {role.title}
@@ -937,7 +951,7 @@ export const AssessmentSettingMemberBox = (props: {
                                             </Box>
                                             {listOfRoles &&
                                               listOfRoles.length >
-                                              index + 1 && (
+                                                index + 1 && (
                                                 <Box
                                                   sx={{
                                                     height: "0.5px",
@@ -981,13 +995,12 @@ export const AssessmentSettingMemberBox = (props: {
           </>
         )}
       </Box>
-    </Box >
+    </Box>
   );
 };
 
 const SelectionRole = (props: any) => {
-
-  const { row, setChangeData, assessmentId, MenuProps, listOfRoles } = props
+  const { row, setChangeData, assessmentId, MenuProps, listOfRoles } = props;
   const { service } = useServiceContext();
 
   const handleChange = async (event: any) => {
@@ -1028,24 +1041,27 @@ const SelectionRole = (props: any) => {
         },
         border: editUserRole.loading
           ? "1px solid #2974b442"
-          : row.editable ? "1px solid #2974B4" : "1px solid #2974b442",
+          : row.editable
+            ? "1px solid #2974B4"
+            : "1px solid #2974b442",
         fontSize: "0.875rem",
         borderRadius: "0.5rem",
         "&.MuiOutlinedInput-notchedOutline": {
           border: 0,
         },
-        "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-        {
+        "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
           border: 0,
         },
         "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-        {
-          border: 0,
-        },
+          {
+            border: 0,
+          },
         ".MuiSvgIcon-root": {
           fill: editUserRole.loading
             ? "1px solid #2974b442"
-            : row.editable ? "1px solid #2974B4" : "1px solid #2974b442",
+            : row.editable
+              ? "1px solid #2974B4"
+              : "1px solid #2974b442",
         },
         "& .MuiSelect-select": {
           padding: "4px 5px",
@@ -1056,9 +1072,12 @@ const SelectionRole = (props: any) => {
       }}
       IconComponent={KeyboardArrowDownIcon}
       inputProps={{
-        renderValue: () => editUserRole.loading
-          ? <CircularProgress style={{ color: "#2974b442" }} size="1rem" />
-          : row?.role?.title
+        renderValue: () =>
+          editUserRole.loading ? (
+            <CircularProgress style={{ color: "#2974b442" }} size="1rem" />
+          ) : (
+            row?.role?.title
+          ),
       }}
       disabled={!row.editable}
     >
@@ -1075,90 +1094,83 @@ const SelectionRole = (props: any) => {
         </Typography>
       </Box>
       {listOfRoles &&
-        listOfRoles.map(
-          (role: any, index: number) => (
-            <MenuItem
-              style={{ display: "block" }}
-              key={role.title}
-              value={role}
-              sx={{
-                paddingY: "0px",
-                maxHeight: "200px",
-                ...(role.id === row.role.id && {
-                  backgroundColor: "#9CCAFF",
-                }),
-                "&.MuiMenuItem-root:hover": {
-                  ...(role.id === row.role.id
-                    ? {
-                      backgroundColor:
-                        "#9CCAFF",
+        listOfRoles.map((role: any, index: number) => (
+          <MenuItem
+            style={{ display: "block" }}
+            key={role.title}
+            value={role}
+            sx={{
+              paddingY: "0px",
+              maxHeight: "200px",
+              ...(role.id === row.role.id && {
+                backgroundColor: "#9CCAFF",
+              }),
+              "&.MuiMenuItem-root:hover": {
+                ...(role.id === row.role.id
+                  ? {
+                      backgroundColor: "#9CCAFF",
                       color: "#004F83",
                     }
-                    : {
-                      backgroundColor:
-                        "#EFEDF0",
+                  : {
+                      backgroundColor: "#EFEDF0",
                       color: "#1B1B1E",
                     }),
-                },
+              },
+            }}
+          >
+            <Box
+              sx={{
+                maxWidth: "240px",
+                color: "#000",
+                fontSize: "0.875rem",
+                lineHeight: "21px",
+                fontWeight: 500,
+                paddingY: "1rem",
               }}
             >
-              <Box
+              <Typography
                 sx={{
-                  maxWidth: "240px",
+                  fontSize: "0.875rem",
+                  ...(role.id === row.role.id
+                    ? {
+                        color: "#004F83",
+                      }
+                    : {
+                        color: "#1B1B1E",
+                      }),
+                }}
+              >
+                {role.title}
+              </Typography>
+
+              <div
+                style={{
                   color: "#000",
                   fontSize: "0.875rem",
                   lineHeight: "21px",
-                  fontWeight: 500,
-                  paddingY: "1rem",
+                  fontWeight: 300,
+                  whiteSpace: "break-spaces",
+                  paddingTop: "1rem",
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: "0.875rem",
-                    ...(role.id === row.role.id
-                      ? {
-                        color: "#004F83",
-                      }
-                      : {
-                        color: "#1B1B1E",
-                      }),
-                  }}
-                >
-                  {role.title}
-                </Typography>
-
-                <div
-                  style={{
-                    color: "#000",
-                    fontSize: "0.875rem",
-                    lineHeight: "21px",
-                    fontWeight: 300,
-                    whiteSpace: "break-spaces",
-                    paddingTop: "1rem",
-                  }}
-                >
-                  {role.description}
-                </div>
-              </Box>
-              {listOfRoles &&
-                listOfRoles.length >
-                index + 1 && (
-                  <Box
-                    sx={{
-                      height: "0.5px",
-                      width: "80%",
-                      backgroundColor: "#9DA7B3",
-                      mx: "auto",
-                    }}
-                  ></Box>
-                )}
-            </MenuItem>
-          )
-        )}
+                {role.description}
+              </div>
+            </Box>
+            {listOfRoles && listOfRoles.length > index + 1 && (
+              <Box
+                sx={{
+                  height: "0.5px",
+                  width: "80%",
+                  backgroundColor: "#9DA7B3",
+                  mx: "auto",
+                }}
+              ></Box>
+            )}
+          </MenuItem>
+        ))}
     </Select>
-  )
-}
-
+  );
+};
 
 const OnHoverInputTitleSetting = (props: any) => {
   const [show, setShow] = useState<boolean>(false);

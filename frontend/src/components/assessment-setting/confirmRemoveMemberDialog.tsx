@@ -13,6 +13,7 @@ import { Trans } from "react-i18next";
 import { DialogTitle } from "@mui/material";
 import { Warning } from "@mui/icons-material";
 import { styles } from "@styles";
+import { theme } from "@/config/theme";
 
 const ConfirmRemoveMemberDialog = (props: any) => {
   const {
@@ -36,7 +37,7 @@ const ConfirmRemoveMemberDialog = (props: any) => {
   const RemoveMembersInvitees = useQuery({
     service: (args = { invitedId: "" }, config) =>
       service.RemoveAssessmentMembersInvitees(args, config),
-      runOnMount: false
+    runOnMount: false,
   });
 
   const DeletePerson = async () => {
@@ -75,7 +76,12 @@ const ConfirmRemoveMemberDialog = (props: any) => {
     >
       <DialogTitle textTransform="uppercase" sx={{ ...styles.centerV }}>
         <>
-          <Warning sx={{ mr: 1 }} />
+          <Warning
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           <Trans i18nKey="warning" />
         </>
       </DialogTitle>

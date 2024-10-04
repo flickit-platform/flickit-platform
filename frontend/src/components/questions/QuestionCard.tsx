@@ -140,8 +140,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
         questionActions.setSelectedConfidenceLevel(
           answer?.confidenceLevel?.id
             ? answer?.confidenceLevel?.id
-            : (answer?.confidenceLevel ?? null)
-        )
+            : (answer?.confidenceLevel ?? null),
+        ),
       );
     }
   }, [title, answer?.confidenceLevel]);
@@ -280,7 +280,13 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     }}
                   >
                     {selcetedConfidenceLevel !== null ? (
-                      <Box sx={{ mr: 2, color: "#fff" }}>
+                      <Box
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 2 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 2 : "unset",
+                          color: "#fff",
+                        }}
+                      >
                         <Box
                           sx={{ display: "flex", fontSize: { xs: ".85rem" } }}
                         >
@@ -302,8 +308,8 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                     ) : (
                       <Box
                         sx={{
-                          mr: 2,
-                          // color: "#fff",
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset", // color: "#fff",
                           color: `${disabledConfidence ? "#fff" : "#d32f2f"}`,
                         }}
                       >
@@ -935,7 +941,7 @@ const AnswerHistoryItem = (props: any) => {
             "yyyy/MM/dd HH:mm",
           ) +
             " (" +
-            convertToRelativeTime(item.creationTime) +
+            t(convertToRelativeTime(item.creationTime)) +
             ")"}
         </Typography>
       </Grid>
@@ -1273,7 +1279,8 @@ const Evidence = (props: any) => {
                       color: theme.palette.primary.main,
                       position: "absolute",
                       bottom: "20px",
-                      left: "40px",
+                      left: theme.direction === "ltr" ? "40px" : "unset",
+                      right: theme.direction === "rtl" ? "40px" : "unset",
                     }}
                     data-cy="automatic-submit-check"
                     control={
@@ -1329,7 +1336,10 @@ const Evidence = (props: any) => {
                     >
                       <InfoOutlinedIcon
                         style={{ color: "#0A2342" }}
-                        sx={{ mr: 1 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
                       />
                       <Typography
                         sx={{
@@ -1746,7 +1756,12 @@ const CreateEvidenceAttachment = (props: any) => {
                   }}
                 >
                   <InfoOutlinedIcon
-                    sx={{ mr: 1, width: "15px", height: "15px" }}
+                    sx={{
+                      marginRight: theme.direction === "ltr" ? 1 : "unset",
+                      marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                      width: "15px",
+                      height: "15px",
+                    }}
                   />
                   <Trans i18nKey={"evidenceIsLimited"} />
                 </Typography>
@@ -1894,28 +1909,28 @@ const checkTypeUpload = (
       setTypeFile(
         dropZoneData[0].type
           ?.substring(dropZoneData[0].type.indexOf("/"))
-          ?.replace("/", "")
+          ?.replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "application/pdf") {
       setTypeFile(
         dropZoneData[0].type
           ?.substring(dropZoneData[0].type.indexOf("/"))
-          ?.replace("/", "")
+          ?.replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "application/zip") {
       setTypeFile(
         dropZoneData[0].type
           ?.substring(dropZoneData[0].type.indexOf("/"))
-          ?.replace("/", "")
+          ?.replace("/", ""),
       );
     }
     if (dropZoneData[0].type === "text/plain") {
       setTypeFile(
         dropZoneData[0].type
           ?.substring(dropZoneData[0].type.indexOf("/"))
-          ?.replace("/", "")
+          ?.replace("/", ""),
       );
     }
     if (
@@ -2197,10 +2212,12 @@ const CreateDropZone = (props: any) => {
               <InfoOutlinedIcon
                 style={{ color: "#0A2342", width: "15px", height: "15px" }}
                 sx={{
-                  mr: 1,
+                  marginRight: theme.direction === "ltr" ? 1 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
                   position: "absolute",
                   top: { xs: "65%", sm: "50%" },
-                  right: "15px",
+                  right: theme.direction === "ltr" ? "15px" : "unset",
+                  left: theme.direction === "rtl" ? "15px" : "unset",
                 }}
               />
             </Tooltip>
@@ -2410,7 +2427,8 @@ const EvidenceDetail = (props: any) => {
                           fontWeight: "bold",
                           position: "absolute",
                           top: 10,
-                          left: 15,
+                          left: theme.direction === "ltr" ? 15 : "unset",
+                          right: theme.direction === "rtl" ? 15 : "unset",
                           zIndex: 1,
                           color: evidenceBG.borderColor,
                           fontFamily: primaryFontFamily,
@@ -2468,7 +2486,11 @@ const EvidenceDetail = (props: any) => {
                       >
                         <InfoOutlinedIcon
                           style={{ color: "#0A2342" }}
-                          sx={{ mr: 1 }}
+                          sx={{
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
                         />
                         <Typography
                           sx={{
@@ -2715,7 +2737,14 @@ const EvidenceDetail = (props: any) => {
                             }}
                           >
                             <InfoOutlinedIcon
-                              sx={{ mr: 1, width: "15px", height: "15px" }}
+                              sx={{
+                                marginRight:
+                                  theme.direction === "ltr" ? 1 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 1 : "unset",
+                                width: "15px",
+                                height: "15px",
+                              }}
                             />
                             <Trans i18nKey={"evidenceIsLimited"} />
                           </Typography>
@@ -3224,7 +3253,8 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
                   sx={{
-                    mr: 1,
+                    marginRight: theme.direction === "ltr" ? 1 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 1 : "unset",
                     width: "12px",
                     height: "12px",
                     fontFamily: secondaryFontFamily,
@@ -3258,7 +3288,12 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               <Box sx={{ display: "flex", gap: "2px" }}>
                 <InfoOutlinedIcon
                   style={{ color: "#73808C" }}
-                  sx={{ mr: 1, width: "12px", height: "12px" }}
+                  sx={{
+                    marginRight: theme.direction === "ltr" ? 1 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                    width: "12px",
+                    height: "12px",
+                  }}
                 />
                 <Typography
                   sx={{
@@ -3416,7 +3451,12 @@ const QuestionGuide = (props: any) => {
                 color: "white",
               }}
             >
-              <InfoRoundedIcon sx={{ mr: "4px" }} />
+              <InfoRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                }}
+              />
               <Trans i18nKey="hint" />
             </Box>
           }

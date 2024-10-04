@@ -12,7 +12,6 @@ import { getMaturityLevelColors, styles } from "@styles";
 import { Link } from "react-router-dom";
 import formatDate from "@/utils/formatDate";
 import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { Avatar, Button, Chip, Divider, Grid, Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 interface IAssessmentReportKit {
@@ -100,7 +99,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
                 {assessmentKit.title}
               </Typography>
             </Box>{" "}
-            <Trans i18nKey="kit" />.
+            <Trans i18nKey="thisAssessmentIsUsingSecondPart" />.
           </Typography>
           <Box
             display="flex"
