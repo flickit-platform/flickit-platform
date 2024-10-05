@@ -14,3 +14,13 @@ class KitVersionSubjectApi(APIView):
     def post(self, request,kit_version_id):
         result = kit_versions_services.create_subject_kit_version(request,kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class KitVersionMaturityLevelsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_maturity_levels_with_kit_version(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
