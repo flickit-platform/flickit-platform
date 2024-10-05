@@ -27,6 +27,7 @@ import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
+import GTable from "@components/kit-designer/GTable";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -62,6 +63,19 @@ const SpacesList = (props: ISpaceListProps) => {
   // }, []);
 
   const { items = [] } = data || {};
+
+  return (
+      <GTable
+          title={"Maturity levels list"}
+          hasBtn={true}
+          labelBtn={"salam"}
+          infoIcon={true}
+          infoDescription={"desc1"}
+          headerData={["sa1","sa2"]}
+          bodyData={["test1","test2"]}
+          totalCount={35}
+      />
+  )
 
   return (
     <Box sx={{ overflowX: "auto", py: 1 }}>

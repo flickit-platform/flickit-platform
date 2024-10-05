@@ -42,6 +42,7 @@ declare module "@mui/material/styles" {
     bodySmall: React.CSSProperties;
     bodyMedium: React.CSSProperties;
     bodyLarge: React.CSSProperties;
+    bodyExtraLarge: React.CSSProperties;
     labelSmall: React.CSSProperties;
     labelMedium: React.CSSProperties;
     labelLarge: React.CSSProperties;
@@ -92,6 +93,7 @@ declare module "@mui/material/Typography" {
     bodySmall?: true;
     bodyMedium?: true;
     bodyLarge?: true;
+    bodyExtraLarge?: true;
     labelSmall?: true;
     labelMedium?: true;
     labelLarge?: true;
@@ -249,6 +251,13 @@ export const theme = createTheme({
       fontSize: "1rem",
       lineHeight: "1.5rem",
       letterSpacing: "0.5px",
+    },
+    bodyExtraLarge: {
+      fontFamily: primaryFontFamily,
+      fontWeight: 600,
+      fontSize: "1.375rem",
+      lineHeight: "1.75rem",
+      letterSpacing: "0",
     },
     labelSmall: {
       fontFamily: primaryFontFamily,
