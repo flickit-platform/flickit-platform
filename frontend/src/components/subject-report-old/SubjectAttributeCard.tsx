@@ -94,7 +94,8 @@ const SUbjectAttributeCard = (props: any) => {
           sx={{
             padding: "0 !important",
             alignItems: "flex-start",
-            mr: 2,
+            marginRight: theme.direction === "ltr" ? 2 : "unset",
+            marginLeft: theme.direction === "rtl" ? 2 : "unset",
             "&.Mui-focusVisible": {
               background: "#fff",
             },
@@ -241,7 +242,14 @@ const SUbjectAttributeCard = (props: any) => {
                           maxWidth: "80%",
                         }}
                       >
-                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
+                        <InfoOutlined
+                          color="primary"
+                          sx={{
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          }}
+                        />
                         <Typography
                           variant="titleMedium"
                           fontWeight={400}
@@ -259,60 +267,66 @@ const SUbjectAttributeCard = (props: any) => {
                   (attributesDataPolicy[id?.toString()]?.aiInsight &&
                     !attributesDataPolicy[id?.toString()]?.aiInsight
                       ?.isValid)) && (
-                    <Box sx={{ ...styles.centerV }} gap={2}>
-                      <Box
+                  <Box sx={{ ...styles.centerV }} gap={2}>
+                    <Box
+                      sx={{
+                        zIndex: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        ml: { xs: 0.75, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Typography
+                        variant="labelSmall"
                         sx={{
-                          zIndex: 1,
-                          display: "flex",
-                          justifyContent: "flex-start",
-                          ml: { xs: 0.75, sm: 1.5, md: 2 },
+                          backgroundColor: "#d85e1e",
+                          color: "white",
+                          padding: "0.35rem 0.35rem",
+                          borderRadius: "4px",
+                          fontWeight: "bold",
                         }}
                       >
-                        <Typography
-                          variant="labelSmall"
-                          sx={{
-                            backgroundColor: "#d85e1e",
-                            color: "white",
-                            padding: "0.35rem 0.35rem",
-                            borderRadius: "4px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          <Trans i18nKey="Outdated" />
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          backgroundColor: "rgba(255, 249, 196, 0.31)",
-                          padding: 1,
-                          borderRadius: 2,
-                          maxWidth: "80%",
-                        }}
-                      >
-                        <InfoOutlined color="primary" sx={{ marginRight: 1 }} />
-                        <Typography
-                          variant="titleMedium"
-                          fontWeight={400}
-                          textAlign="left"
-                        >
-                          <Trans i18nKey="invalidInsight" />
-                        </Typography>
-                      </Box>
-                      {attributesDataPolicy[id?.toString()]?.editable && (
-                        <Button
-                          variant="contained"
-                          size="small"
-                          onClick={() =>
-                            updateAttributeAndData(id, assessmentId, "", true)
-                          }
-                        >
-                          <Trans i18nKey="regenerate" />
-                        </Button>
-                      )}
+                        <Trans i18nKey="Outdated" />
+                      </Typography>
                     </Box>
-                  )}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        backgroundColor: "rgba(255, 249, 196, 0.31)",
+                        padding: 1,
+                        borderRadius: 2,
+                        maxWidth: "80%",
+                      }}
+                    >
+                      <InfoOutlined
+                        color="primary"
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                        }}
+                      />
+                      <Typography
+                        variant="titleMedium"
+                        fontWeight={400}
+                        textAlign="left"
+                      >
+                        <Trans i18nKey="invalidInsight" />
+                      </Typography>
+                    </Box>
+                    {attributesDataPolicy[id?.toString()]?.editable && (
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() =>
+                          updateAttributeAndData(id, assessmentId, "", true)
+                        }
+                      >
+                        <Trans i18nKey="regenerate" />
+                      </Button>
+                    )}
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
@@ -493,7 +507,8 @@ export const AttributeStatusBar = (props: any) => {
         sx={{
           position: "absolute",
           zIndex: 1,
-          left: "12px",
+          left: theme.direction === "ltr" ? "12px" : "unset",
+          right: theme.direction === "rtl" ? "12px" : "unset",
           opacity: 0.8,
         }}
         textTransform="uppercase"
@@ -605,8 +620,9 @@ const MaturityLevelDetailsContainer = (props: any) => {
                 variant="h4"
                 fontWeight={"bold"}
                 sx={{
-                  borderLeft: `2px solid ${is_passed ? statusColor : "#808080"
-                    }`,
+                  borderLeft: `2px solid ${
+                    is_passed ? statusColor : "#808080"
+                  }`,
                   pl: 1,
                   ml: { xs: -2, sm: 0 },
                   pr: { xs: 0, sm: 1 },
@@ -942,7 +958,8 @@ export const MaturityLevelDetailsBar = (props: any) => {
         sx={{
           position: "absolute",
           zIndex: 1,
-          left: "12px",
+          left: theme.direction === "ltr" ? "12px" : "unset",
+          right: theme.direction === "rtl" ? "12px" : "unset",
           opacity: 0.8,
           fontSize: { xs: "12px", sm: "16px" },
           color: theme.palette.getContrastText(color),
@@ -1101,8 +1118,8 @@ const OnHoverInput = (props: any) => {
           sx={{
             minHeight: "38px",
             borderRadius: "4px",
-            paddingLeft: "8px;",
-            paddingRight: "12px;",
+            paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+            paddingRight: theme.direction === "rtl" ? "12px" : "8px",
             width: "100%",
             display: "flex",
             justifyContent: "space-between",
@@ -1110,7 +1127,7 @@ const OnHoverInput = (props: any) => {
             wordBreak: "break-word",
             "&:hover": {
               border: editable ? "1px solid #1976d299" : "unset",
-              borderColor: editable ? theme.palette.primary.main : "unset"
+              borderColor: editable ? theme.palette.primary.main : "unset",
             },
           }}
           onClick={() => setShow(!show)}

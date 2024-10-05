@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { styles } from "@styles";
 import Typography from "@mui/material/Typography";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
+import { theme } from "@/config/theme";
 
 interface IAssessmentKitSectionAuthorInfo {
   data: any;
@@ -34,7 +35,13 @@ const AssessmentKitSectionAuthorInfo = (
               {data.assessmentkitInfos.authorInfos.name}
             </Typography>
             <Box sx={{ ...styles.centerV }}>
-              <Typography variant="subSmall" sx={{ mr: 1.5 }}>
+              <Typography
+                variant="subSmall"
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 1.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1.5 : "unset",
+                }}
+              >
                 2.4 likes
               </Typography>
               <Typography variant="subSmall">60 score</Typography>
@@ -45,7 +52,13 @@ const AssessmentKitSectionAuthorInfo = (
           {data.assessmentkitInfos.authorInfos.description}
         </Box>
         <Box display="flex">
-          <Button sx={{ ml: "auto" }} size="small">
+          <Button
+            sx={{
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
+            }}
+            size="small"
+          >
             <Trans i18nKey={"viewOtherAssessmentKitsFromThisAuthor"} />
           </Button>
         </Box>

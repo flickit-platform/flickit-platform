@@ -12,6 +12,7 @@ import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import formatDate from "@utils/formatDate";
+import { theme } from "@/config/theme";
 interface IAssessmentKitListItemProps {
   data: {
     id: TId;
@@ -74,15 +75,24 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
         </Box>
 
         <Box
-          ml="auto"
-          sx={{ ...styles.centerV, color: "#525252" }}
+          sx={{
+            ...styles.centerV,
+            color: "#525252",
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}
           alignSelf="stretch"
         >
           {isPrivate && (
             <Chip
               label={<Trans i18nKey="private" />}
               size="small"
-              sx={{ mr: 1, background: "#7954B3", color: "#fff" }}
+              sx={{
+                marginRight: theme.direction === "ltr" ? 1 : "unset",
+                marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                background: "#7954B3",
+                color: "#fff",
+              }}
             />
           )}
           {is_active ? (

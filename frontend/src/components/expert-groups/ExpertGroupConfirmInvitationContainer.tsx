@@ -12,6 +12,7 @@ import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
 import Title from "@common/Title";
 import ExpertGroupsItem from "./ExpertGroupsItem";
+import { theme } from "@/config/theme";
 
 const ExpertGroupConfirmInvitationContainer = () => {
   const { service } = useServiceContext();
@@ -71,7 +72,10 @@ const ExpertGroupConfirmInvitationContainer = () => {
             </Box>
             <Box>
               <LoadingButton
-                sx={{ mr: 1 }}
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 1 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                }}
                 loading={confirmInvitationQueryData.loading}
                 variant="contained"
                 onClick={confirmInvitation}

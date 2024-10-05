@@ -3,13 +3,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
+import { theme } from "@/config/theme";
 
 export const QuestionThumb = (props: any) => {
   const {
     questionsInfo,
     question = {},
     questionIndex,
-    onClose = () => {},
+    onClose = () => { },
     link,
     isSubmitting,
   } = props;
@@ -47,7 +48,10 @@ export const QuestionThumb = (props: any) => {
       )}
       <Box display="flex">
         <Button
-          sx={{ mt: 1, ml: "auto" }}
+          sx={{
+            mt: 1, ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}
           disabled={isSubmitting}
           onClick={(e: any) => {
             e.stopPropagation();
@@ -56,8 +60,8 @@ export const QuestionThumb = (props: any) => {
           }}
         >
           {question.answer ||
-          !permissions.answerQuestion ||
-          (question.answer && question.answer.isNotApplicable) ? (
+            !permissions.answerQuestion ||
+            (question.answer && question.answer.isNotApplicable) ? (
             <Trans i18nKey="edit" />
           ) : (
             <Trans i18nKey="submitAnAnswer" />

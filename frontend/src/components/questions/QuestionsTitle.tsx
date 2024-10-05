@@ -21,6 +21,7 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { theme } from "@/config/theme";
 
 const QuestionsTitle = (props: {
   data: IQuestionnaireModel;
@@ -66,7 +67,10 @@ const QuestionsTitle = (props: {
                 disabled={isSubmitting}
                 component={Link}
                 to={isReview ? "./../.." : "./.."}
-                sx={{ mr: 1 }}
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 1 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                }}
                 startIcon={<QuizRoundedIcon />}
               >
                 <Trans i18nKey="selectAnotherQuestionnaire" />
@@ -121,7 +125,11 @@ const QuestionsTitle = (props: {
           <>
             {assessmentStatus === EAssessmentStatus.DONE && (
               <AssignmentTurnedInRoundedIcon
-                sx={{ mr: 0.5, opacity: 0.6 }}
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                  opacity: 0.6,
+                }}
                 fontSize="large"
               />
             )}

@@ -30,11 +30,13 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 import { animations } from "@styles";
 import AssessmentTitle from "./AssessmentTitle";
+import { theme } from "@/config/theme";
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
   const { currentSpace } = useAuthContext();
   const { spaceId, page } = useParams();
   const navigate = useNavigate();
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const { fetchAssessments, ...rest } = useFetchAssessments();
   const { data, error, errorObject, size, total, loading } = rest;
   const isEmpty = data.length === 0;
@@ -78,7 +80,10 @@ const AssessmentContainer = () => {
             my: 3,
           }}
         >
-          <Box ml="auto">
+          <Box sx={{
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}>
             <ToolbarCreateItemBtn
               data-cy="create-assessment-btn"
               onClick={() =>
@@ -188,7 +193,7 @@ const AssessmentContainer = () => {
                 space={{ id: spaceId, title: currentSpace?.title }}
                 dialogProps={dialogProps}
               />
-              {pageCount > 1 && !isEmpty &&  (
+              {pageCount > 1 && !isEmpty && (
                 <Stack
                   spacing={2}
                   sx={{

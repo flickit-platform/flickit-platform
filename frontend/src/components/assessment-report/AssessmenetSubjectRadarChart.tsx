@@ -88,6 +88,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
               </g>
             );
           }}
+          orientation={theme.direction === "rtl" ? "inner" : "outer"}
         />
         <PolarRadiusAxis
           angle={90}

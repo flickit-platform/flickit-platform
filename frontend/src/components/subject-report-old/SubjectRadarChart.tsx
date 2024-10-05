@@ -12,6 +12,7 @@ import {
 import Skeleton from "@mui/material/Skeleton";
 import convertToSubjectChartData from "@utils/convertToSubjectChartData";
 import { t } from "i18next";
+import { theme } from "@/config/theme";
 
 const SubjectRadarChart = (props: any) => {
   const { loading, ...rest } = props;
@@ -60,6 +61,7 @@ const SubjectRadar = (props: any) => {
               </Text>
             );
           }}
+          orientation={theme.direction === "rtl" ? "inner" : "outer"}
         />
         <PolarRadiusAxis
           angle={90}

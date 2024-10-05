@@ -17,6 +17,7 @@ import RichEditorField from "@common/fields/RichEditorField";
 import UploadField from "@common/fields/UploadField";
 import convertToBytes from "@/utils/convertToBytes";
 import { useQuery } from "@utils/useQuery";
+import { theme } from "@/config/theme";
 
 interface IExpertGroupCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -91,7 +92,7 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       setLoading(false);
       onSubmitForm();
       close();
-      shouldView && navigate(`${data ? data.id : id}`)
+      shouldView && navigate(`${data ? data.id : id}`);
     } catch (e) {
       const err = e as ICustomError;
       setLoading(false);
@@ -106,7 +107,12 @@ const ExpertGroupCEFormDialog = (props: IExpertGroupCEFromDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <NoteAddRoundedIcon sx={{ mr: 1 }} />
+          <NoteAddRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {type === "update" ? (
             <Trans i18nKey="updateExpertGroup" />
           ) : (

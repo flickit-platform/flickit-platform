@@ -15,6 +15,7 @@ import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import ExpertGroupsList from "./ExpertGroupsList";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { theme } from "@/config/theme";
 
 const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
@@ -46,7 +47,7 @@ const ExpertGroupsContainer = () => {
       : Math.ceil(queryData.data?.total / queryData.data?.size);
 
   useDocumentTitle(t("expertGroups") as string);
-
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <Box>
       <Box
@@ -60,7 +61,10 @@ const ExpertGroupsContainer = () => {
         }}
       >
         <Box></Box>
-        <Box ml="auto">
+        <Box sx={{
+          ml: theme.direction === "rtl" ? "unset" : "auto",
+          mr: theme.direction !== "rtl" ? "unset" : "auto",
+        }}>
           {<CreateExpertGroupButton onSubmitForm={queryData.query} />}
         </Box>
       </Box>
@@ -112,12 +116,15 @@ const ExpertGroupsContainer = () => {
 const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
   const { onSubmitForm } = props;
   const dialogProps = useDialog();
-
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <>
       <Button
         variant="contained"
-        sx={{ ml: "auto" }}
+        sx={{
+          ml: theme.direction === "rtl" ? "unset" : "auto",
+          mr: theme.direction !== "rtl" ? "unset" : "auto",
+        }}
         size="small"
         onClick={dialogProps.openDialog}
       >

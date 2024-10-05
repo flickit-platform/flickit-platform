@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import convertToSubjectChartData from "@utils/convertToSubjectChartData";
+import { theme } from "@/config/theme";
 
 const SubjectBarChart = (props: any) => {
   const { loading, ...rest } = props;
@@ -38,8 +39,8 @@ const SubjectBar = (props: any) => {
         data={data}
         margin={{
           top: 20,
-          right: 30,
-          left: 20,
+          left: theme.direction === "ltr" ? 20 : 30,
+          right: theme.direction === "rtl" ? 20 : 30,
           bottom: 150,
         }}
       >
@@ -55,7 +56,12 @@ const SubjectBar = (props: any) => {
         <Tooltip />
         <Legend
           layout="horizontal"
-          wrapperStyle={{ position: "absolute", bottom: "8px", left: "0%" }}
+          wrapperStyle={{
+            position: "absolute",
+            bottom: "8px",
+            left: theme.direction === "ltr" ? "0%" : "unset",
+            right: theme.direction === "rtl" ? "0%" : "unset",
+          }}
         />
         <Bar
           dataKey="ml"

@@ -33,6 +33,7 @@ import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@/utils/useScreenResize";
 import { styles } from "@styles";
 import { NoteAddRounded, Settings } from "@mui/icons-material";
+import { theme } from "@/config/theme";
 
 export enum EUserInfo {
   "NAME" = "displayName",
@@ -225,7 +226,12 @@ const AddMemberDialog = (props: {
       <DialogTitle textTransform={"uppercase"} sx={{ ...styles.centerV }}>
         {" "}
         <>
-          <Settings sx={{ mr: 1 }} />
+          <Settings
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           <Trans i18nKey="assignRole" />
         </>
       </DialogTitle>
@@ -391,7 +397,13 @@ const AddMemberDialog = (props: {
               maxWidth: "100%",
             }}
           >
-            <InfoOutlinedIcon color="primary" sx={{ marginRight: 1 }} />
+            <InfoOutlinedIcon
+              color="primary"
+              sx={{
+                marginRight: theme.direction === "ltr" ? 1 : "unset",
+                marginLeft: theme.direction === "rtl" ? 1 : "unset",
+              }}
+            />
             <Typography variant="bodyLarge" textAlign="left">
               {addedEmailType === EUserType.EXISTED ? (
                 <Trans i18nKey={"emailExistedInApp"} />

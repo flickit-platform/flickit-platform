@@ -15,6 +15,7 @@ import usePopover from "@utils/usePopover";
 import Typography from "@mui/material/Typography";
 import { QuestionThumb } from "./QuestionThumb";
 import { QuestionPopover } from "./QuestionPopover";
+import { theme } from "@/config/theme";
 
 const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
   const { assessmentStatus, questionIndex, questionsInfo, isSubmitting } =
@@ -63,7 +64,12 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
         <Button
           size="small"
           disabled={!hasPreviousQuestion || isSubmitting}
-          sx={{ minWidth: 0, width: "56px", mr: "1px" }}
+          sx={{
+            minWidth: 0,
+            width: "56px",
+            marginRight: theme.direction === "ltr" ? "1px" : "unset",
+            marginLeft: theme.direction === "rtl" ? "1px" : "unset",
+          }}
           component={Link}
           to={`../${questionIndex - 1}`}
         >

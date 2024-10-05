@@ -33,6 +33,7 @@ import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { theme } from "@/config/theme";
 
 export const SpaceMembers = (props: any) => {
   const { editable } = props;
@@ -82,7 +83,7 @@ export const SpaceMembers = (props: any) => {
       controller?.abort();
     };
   }, [data]);
-
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box mt={1} p={3} sx={{ borderRadius: 1, background: "white" }}>
       <Box>
@@ -149,7 +150,13 @@ export const SpaceMembers = (props: any) => {
           }}
           toolbar={
             <Box sx={{ ...styles.centerV, opacity: 0.8, mb: "auto" }}>
-              <PeopleOutlineRoundedIcon sx={{ mr: 0.5 }} fontSize="small" />
+              <PeopleOutlineRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                }}
+                fontSize="small"
+              />
               <Typography fontWeight={"bold"}>
                 {spaceMembersQueryData?.data?.items?.length}
               </Typography>
@@ -204,12 +211,21 @@ export const SpaceMembers = (props: any) => {
                           </Box>
                           <Box ml={2}>{displayName}</Box>
                         </Box>
-                        <Box ml="auto" sx={{ ...styles.centerV }}>
+                        <Box
+                          ml={`${is_farsi ? 0 : "auto"}`}
+                          mr={`${is_farsi ? "auto" : 0}`}
+                          sx={{ ...styles.centerV }}
+                        >
                           {isOwner && (
                             <Chip
                               label={<Trans i18nKey="owner" />}
                               size="small"
-                              sx={{ mr: 1.5 }}
+                              sx={{
+                                marginRight:
+                                  theme.direction === "ltr" ? 1.5 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 1.5 : "unset",
+                              }}
                             />
                           )}
                           {
@@ -305,18 +321,30 @@ export const SpaceMembers = (props: any) => {
                               </Box>
                               <Box ml={2}>{name}</Box>
                             </Box>
-                            <Box ml="auto" sx={{ ...styles.centerV }}>
+                            <Box
+                              ml={theme.direction === "rtl" ? "unset" : "auto"}
+                              mr={theme.direction !== "rtl" ? "unset" : "auto"}
+                              sx={{ ...styles.centerV }}
+                            >
                               <Box
                                 sx={{
                                   ...styles.centerV,
                                   opacity: 0.8,
                                   px: 0.4,
-                                  mr: 2,
+                                  marginRight:
+                                    theme.direction === "ltr" ? 2 : "unset",
+                                  marginLeft:
+                                    theme.direction === "rtl" ? 2 : "unset",
                                 }}
                               >
                                 <EventBusyRoundedIcon
                                   fontSize="small"
-                                  sx={{ mr: 0.5 }}
+                                  sx={{
+                                    marginRight:
+                                      theme.direction === "ltr" ? 0.5 : "unset",
+                                    marginLeft:
+                                      theme.direction === "rtl" ? 0.5 : "unset",
+                                  }}
                                 />
                                 <Typography variant="body2">
                                   {formatDate(expirationDate)}
@@ -362,12 +390,10 @@ export const SpaceMembers = (props: any) => {
 
 const AddMemberButton = ({ loading }: { loading: boolean }) => {
   const isSmallScreen = useScreenResize("sm");
-
   return (
     <InputAdornment position="end">
       <LoadingButton
         sx={{
-          mr: "-10px",
           minWidth: "10px",
           p: isSmallScreen ? 0.5 : undefined,
         }}

@@ -66,6 +66,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId: id }, config) =>
       service.calculateMaturityLevel(args, config),

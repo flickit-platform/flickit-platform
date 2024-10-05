@@ -13,17 +13,17 @@ export const convertToRelativeTime = (dateString: any) => {
   const now = new Date();
 
   if (isSameDay(date, now)) {
-    return "Today";
+    return "today";
   } else if (isSameDay(date, subDays(now, 1))) {
-    return "Yesterday";
+    return "yesterday";
   } else if (isSameWeek(date, now)) {
-    return "This week";
+    return "thisWeek";
   } else if (isSameWeek(date, subWeeks(now, 1))) {
-    return "Last week";
+    return "lastWeek";
   } else if (isSameMonth(date, now)) {
-    return "This month";
+    return "thisMonth";
   } else if (isSameMonth(date, subMonths(now, 1))) {
-    return "Last month";
+    return "lastMonth";
   } else {
     return formatDistanceToNow(date);
   }

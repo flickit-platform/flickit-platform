@@ -37,7 +37,7 @@ const UserContainer = () => {
     setValue(newValue);
     navigate(`/user/${newValue}`);
   };
-
+    const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <Box m="auto">
       <Box>
@@ -54,7 +54,10 @@ const UserContainer = () => {
                     <Box sx={{ ...styles.centerV }}>
                       <AccountBoxRoundedIcon
                         fontSize="small"
-                        sx={{ mr: "8px" }}
+                        sx={{
+                          mr: `${is_farsi ? 0 : "8px"}`,
+                          ml: `${is_farsi ? "8px" : 0}`,
+                        }}
                       />
                       <Trans i18nKey="account" />
                     </Box>
@@ -64,7 +67,13 @@ const UserContainer = () => {
                 <Tab
                   label={
                     <Box sx={{ ...styles.centerV }}>
-                      <EngineeringIcon fontSize="small" sx={{ mr: "8px" }} />
+                      <EngineeringIcon
+                        fontSize="small"
+                        sx={{
+                          mr: `${is_farsi ? 0 : "8px"}`,
+                          ml: `${is_farsi ? "8px" : 0}`,
+                        }}
+                      />
                       <Trans i18nKey="expertGroups" />
                     </Box>
                   }

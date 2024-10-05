@@ -18,6 +18,7 @@ import { Collapse, IconButton, Typography } from "@mui/material";
 import languageDetector from "@/utils/languageDetector";
 import React, { useState } from "react";
 import { InfoRounded } from "@mui/icons-material";
+import { theme } from "@/config/theme";
 
 interface IQuestionnaireCardProps {
   data: IQuestionnairesInfo;
@@ -38,13 +39,15 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
     nextQuestion,
   } = data || {};
   const isSmallScreen = useScreenResize("sm");
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const [collapse, setCollapse] = useState<boolean>(false);
 
   return (
     <Paper sx={{ mt: 3 }} data-cy="questionnaire-card">
       <Box
         p="8px 6px"
-        pl={"12px"}
+        pl={is_farsi ? 0 : "12px"}
+        pr={is_farsi ? "12px" : 0}
         display="flex"
         flexDirection={"column"}
         height="100%"
@@ -100,7 +103,8 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
         <Box sx={{ ...styles.centerV }} pt={1} pb={2}>
           <QuestionnaireProgress
             position="relative"
-            left="-12px"
+            left={is_farsi ? 0 : "-12px"}
+            right={is_farsi ? "-12px" : 0}
             progress={progress}
             q={number_of_questions}
             a={number_of_answers}
@@ -116,7 +120,11 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                 <Chip
                   label={title}
                   size="small"
-                  sx={{ mr: 0.3, mb: 0.1 }}
+                  sx={{
+                    marginRight: theme.direction === "ltr" ? 0.3 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 0.3 : "unset",
+                    mb: 0.1,
+                  }}
                   key={id}
                 />
               );
@@ -186,7 +194,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/1`}
           text="edit"
-          icon={<ModeEditOutlineRoundedIcon fontSize="small" />}
+          icon={<ModeEditOutlineRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
         />
       )}
       {progress > 0 && (
@@ -194,14 +202,14 @@ const ActionButtons = (props: {
           to={`${id}/review`}
           text="review"
           state={{ name: "Questionnaires" }}
-          icon={<RemoveRedEyeRoundedIcon fontSize="small" />}
+          icon={<RemoveRedEyeRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
         />
       )}
       {progress < 100 && progress > 0 && (
         <ActionButton
           to={`${id}/${nextQuestion || number_of_answers + 1}`}
           text="continue"
-          icon={<PlayArrowRoundedIcon fontSize="small" />}
+          icon={<PlayArrowRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
@@ -209,7 +217,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/1`}
           text="start"
-          icon={<StartRoundedIcon fontSize="small" />}
+          icon={<StartRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}

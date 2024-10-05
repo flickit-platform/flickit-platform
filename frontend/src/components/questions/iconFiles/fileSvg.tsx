@@ -1,3 +1,5 @@
+import { theme } from "@/config/theme";
+
 export default function FileSvg({
   mainColor,
   evidenceId,
@@ -74,7 +76,8 @@ export default function FileSvg({
           style={{
             position: "absolute",
             top: "7px",
-            left: "7px",
+            left: theme.direction === "ltr" ? "7px" : "unset",
+            right: theme.direction === "rtl" ? "7px" : "unset",
             zIndex: 1,
             cursor: "pointer",
           }}
@@ -142,7 +145,8 @@ export default function FileSvg({
           position: "absolute",
           color: mainColor,
           top: "15px",
-          left: "3px",
+          left: theme.direction === "ltr" ? "3px" : "unset",
+          right: theme.direction === "rtl" ? "3px" : "unset",
           fontSize: "9px",
         }}
       >

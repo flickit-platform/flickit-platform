@@ -30,6 +30,7 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { ECustomErrorType } from "@/types";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
+import { theme } from "@/config/theme";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -162,7 +163,11 @@ const AssessmentKit = (props: any) => {
                       key={index}
                       label={tag.title}
                       size="small"
-                      sx={{ mr: 0.4, background: "white" }}
+                      sx={{
+                        marginRight: theme.direction === "ltr" ? 0.4 : "unset",
+                        marginLeft: theme.direction === "rtl" ? 0.4 : "unset",
+                        background: "white",
+                      }}
                     />
                   ))}
                 </Box>
@@ -183,7 +188,8 @@ const AssessmentKit = (props: any) => {
                       position: "relative",
                       display: "flex",
                       alignItems: "center",
-                      ml: "auto",
+                      ml: theme.direction === "rtl" ? "unset" : "auto",
+                      mr: theme.direction !== "rtl" ? "unset" : "auto",
                       textDecoration: "none",
                     }}
                     component={Link}
@@ -396,6 +402,7 @@ const AssessmentKit = (props: any) => {
                             my: 2,
                             textAlign: "justify",
                             textJustify: "inter-word",
+                            display: "flex",
                           }}
                         >
                           <Box
@@ -427,10 +434,22 @@ const AssessmentKit = (props: any) => {
                       component="li"
                       mb={2}
                       key={index}
-                      sx={{ fontSize: "1.2rem", listStyleType: "disc", ml: 4 }} // Adds bullet point styling
+                      sx={{
+                        fontSize: "1.2rem",
+                        listStyleType: "disc",
+                        ml: theme.direction === "ltr" ? 4 : "unset",
+                        mr: theme.direction === "rtl" ? 4 : "unset",
+                      }} // Adds bullet point styling
                     >
                       <b>{subject.title}</b>: {subject.description}
-                      <Typography fontWeight="bold" sx={{ ml: 2, mt: 2 }}>
+                      <Typography
+                        fontWeight="bold"
+                        sx={{
+                          ml: theme.direction === "ltr" ? 2 : "unset",
+                          mr: theme.direction === "rtl" ? 2 : "unset",
+                          mt: 2,
+                        }}
+                      >
                         <Trans i18nKey="relatedAttributes" />
                       </Typography>
                       {subject?.attributes &&
@@ -442,7 +461,10 @@ const AssessmentKit = (props: any) => {
                               "&:before": {
                                 content: '"•"',
                                 position: "absolute",
-                                left: "-1em",
+                                left:
+                                  theme.direction === "ltr" ? "-1em" : "unset",
+                                right:
+                                  theme.direction === "rtl" ? "-1em" : "unset",
                                 top: 0,
                               },
                             }}
@@ -455,6 +477,7 @@ const AssessmentKit = (props: any) => {
                                 my: 2,
                                 textAlign: "justify",
                                 textJustify: "inter-word",
+                                display: "flex",
                               }}
                             >
                               <Box
@@ -489,7 +512,12 @@ const AssessmentKit = (props: any) => {
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any, index: number) => {
                   return (
-                    <Box component="li" mb={2} key={index}>
+                    <Box
+                      component="li"
+                      mb={2}
+                      key={index}
+                      sx={{ display: "flex" }}
+                    >
                       <b>{questionnaire.title}</b>: {questionnaire.description}
                     </Box>
                   );

@@ -75,14 +75,14 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     if (inputRef.current && isFocused) {
       const inputValue = inputRef.current?.value;
       const isFarsi = firstCharDetector(inputValue);
-      inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
+      // inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
       inputRef.current.style.fontFamily = isFarsi
         ? "VazirMatn"
         : primaryFontFamily;
       // inputRef?.current?.focus();
     }
     if (inputRef.current && !isFocused) {
-      inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
+      // inputRef.current.style.direction = isFarsi ? "rtl" : "ltr";
       inputRef.current.style.fontFamily = isFarsi
         ? "VazirMatn"
         : primaryFontFamily;

@@ -60,6 +60,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import formatBytes from "@utils/formatBytes";
 import { error } from "console";
+import { theme } from "@/config/theme";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -211,7 +212,9 @@ const ExpertGroupContainer = () => {
                         <InsertLinkRoundedIcon
                           fontSize="small"
                           sx={{
-                            mr: 1,
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
                             transform: "rotateZ(-45deg)",
                             opacity: 0.8,
                           }}
@@ -235,7 +238,11 @@ const ExpertGroupContainer = () => {
                     <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
                       <PeopleRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.8,
+                        }}
                       />
 
                       <Typography
@@ -260,7 +267,11 @@ const ExpertGroupContainer = () => {
                     >
                       <AssignmentRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 1, opacity: 0.8 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.8,
+                        }}
                       />
 
                       <Typography
@@ -279,7 +290,10 @@ const ExpertGroupContainer = () => {
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
-                        <Box ml="auto">
+                        <Box
+                          ml={theme.direction === "rtl" ? "unset" : "auto"}
+                          mr={theme.direction !== "rtl" ? "unset" : "auto"}
+                        >
                           <IconButton
                             size="small"
                             color="primary"
@@ -309,7 +323,12 @@ const ExpertGroupContainer = () => {
                       >
                         <AssignmentLateRoundedIcon
                           fontSize="small"
-                          sx={{ mr: 1, opacity: 0.8 }}
+                          sx={{
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
+                            marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                            opacity: 0.8,
+                          }}
                         />
 
                         <Typography
@@ -421,7 +440,10 @@ const AvatarComponent = (props: any) => {
       display="inline-block"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      sx={{ mr: 1 }}
+      sx={{
+        marginRight: theme.direction === "ltr" ? 1 : "unset",
+        marginLeft: theme.direction === "rtl" ? 1 : "unset",
+      }}
     >
       <Avatar
         sx={{
@@ -441,9 +463,11 @@ const AvatarComponent = (props: any) => {
           sx={{
             position: "absolute",
             top: "50%",
-            left: "50%",
+            left: theme.direction === "ltr" ? "50%" : "unset",
+            right: theme.direction === "rtl" ? "50%" : "unset",
             marginTop: "-12px",
-            marginLeft: "-12px",
+            marginLeft: theme.direction === "ltr" ? "-12px" : "unset",
+            marginRight: theme.direction === "rtl" ? "-12px" : "unset",
           }}
         />
       )}
@@ -653,7 +677,8 @@ const Invitees = (props: any) => {
           <Box
             sx={{
               ...styles.centerV,
-              ml: "auto",
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
             {openInvitees ? (
@@ -690,7 +715,11 @@ const Invitees = (props: any) => {
                     <Box sx={{ ...styles.centerV, opacity: 0.85 }}>
                       <EventBusyRoundedIcon
                         fontSize="small"
-                        sx={{ mr: 0.7, opacity: 0.9 }}
+                        sx={{
+                          marginRight: theme.direction === "ltr" ? 1 : "unset",
+                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                          opacity: 0.9,
+                        }}
                       />
                       <Typography variant="body2">
                         {formatDate(inviteExpirationDate)}
@@ -698,7 +727,13 @@ const Invitees = (props: any) => {
                     </Box>
                   </Box>
                 </Box>
-                <Box ml="auto" sx={{ ...styles.centerV }}>
+                <Box
+                  sx={{
+                    ...styles.centerV,
+                    ml: theme.direction === "rtl" ? "unset" : "auto",
+                    mr: theme.direction !== "rtl" ? "unset" : "auto",
+                  }}
+                >
                   <MemberActions
                     query={query}
                     inviteeQuery={inviteeQuery}
@@ -803,7 +838,8 @@ const AddingNewMember = (props: any) => {
         <Box
           sx={{
             ...styles.centerV,
-            ml: "auto",
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
           }}
         >
           {openAddMembers ? (
@@ -888,7 +924,8 @@ const AddMemberButton = ({ loading }: { loading: boolean }) => {
     <InputAdornment position="end">
       <LoadingButton
         sx={{
-          mr: "-10px",
+          ml: theme.direction === "rtl" ? "unset" : "-10px",
+          mr: theme.direction !== "rtl" ? "-10px" : "unset",
           minWidth: "10px",
           p: 0.5,
         }}
@@ -1038,14 +1075,14 @@ const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
   const { dialogProps } = props;
 
   return (
-      <>
-        <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
-          <Trans i18nKey="convertExcelToDsl" />
-        </Button>
-        <AssessmentKitCEFromDialog {...dialogProps} />
-      </>
-  )
-}
+    <>
+      <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
+        <Trans i18nKey="convertExcelToDsl" />
+      </Button>
+      <AssessmentKitCEFromDialog {...dialogProps} />
+    </>
+  );
+};
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 
@@ -1236,18 +1273,32 @@ const ExpertGroupMembersDetail = (props: any) => {
                             </Box>
                             <Box ml={2}>{displayName}</Box>
                           </Box>
-                          <Box ml="auto" sx={{ ...styles.centerV }}>
+                          <Box
+                            sx={{
+                              ...styles.centerV,
+                              ml: theme.direction === "rtl" ? "unset" : "auto",
+                              mr: theme.direction !== "rtl" ? "unset" : "auto",
+                            }}
+                          >
                             <Box
                               sx={{
                                 ...styles.centerV,
                                 opacity: 0.8,
                                 px: 0.4,
-                                mr: 2,
+                                marginRight:
+                                  theme.direction === "ltr" ? 2 : "unset",
+                                marginLeft:
+                                  theme.direction === "rtl" ? 2 : "unset",
                               }}
                             >
                               <EventBusyRoundedIcon
                                 fontSize="small"
-                                sx={{ mr: 0.5 }}
+                                sx={{
+                                  marginRight:
+                                    theme.direction === "ltr" ? 0.5 : "unset",
+                                  marginLeft:
+                                    theme.direction === "rtl" ? 0.5 : "unset",
+                                }}
                               />
                               <Typography variant="body2">
                                 {formatDate(inviteExpirationDate)}

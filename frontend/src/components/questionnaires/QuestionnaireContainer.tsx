@@ -179,6 +179,7 @@ const QuestionnaireTitle = (props: any) => {
   const { pathInfo } = props;
   const { spaceId, assessmentId, page } = useParams();
   const { space, assessment } = pathInfo;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 
   const { config } = useConfigContext();
 

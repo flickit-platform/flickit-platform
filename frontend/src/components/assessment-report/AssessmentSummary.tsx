@@ -21,6 +21,7 @@ import useMenu from "@utils/useMenu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { calculateFontSize } from "@/utils/calculateFontSize";
 import { secondaryFontFamily } from "@/config/theme";
+import { t } from "i18next";
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
   expertGroup: IExpertGroup;
@@ -129,7 +130,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             {": "}
           </Typography>
           <Typography color="#243342" variant="titleMedium">
-            {convertToRelativeTime(creationTime)}
+            {t(convertToRelativeTime(creationTime))}
           </Typography>
         </Box>
         <Box
@@ -142,7 +143,7 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
             <Trans i18nKey="updated" />:
           </Typography>
           <Typography color="#243342" variant="titleMedium">
-            {convertToRelativeTime(lastModificationTime)}
+            {t(convertToRelativeTime(lastModificationTime))}
           </Typography>
         </Box>
       </Box>

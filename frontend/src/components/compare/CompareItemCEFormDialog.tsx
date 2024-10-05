@@ -22,6 +22,7 @@ import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import AlertBox from "@common/AlertBox";
 import { useState } from "react";
+import { theme } from "@/config/theme";
 
 interface ICompareItemCEFormDialog
   extends Omit<ICompareItemCEForm, "closeDialog"> {}
@@ -42,12 +43,22 @@ const CompareItemCEFormDialog = (props: ICompareItemCEFormDialog) => {
         <>
           {context?.type === "update" ? (
             <>
-              <BorderColorRoundedIcon sx={{ mr: 1 }} />
+              <BorderColorRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 1 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                }}
+              />
               <Trans i18nKey="changeSelectedAssessment" />
             </>
           ) : (
             <>
-              <AddBoxRoundedIcon sx={{ mr: 1 }} />
+              <AddBoxRoundedIcon
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 1 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                }}
+              />
               <Trans i18nKey="selectAssessment" />
             </>
           )}

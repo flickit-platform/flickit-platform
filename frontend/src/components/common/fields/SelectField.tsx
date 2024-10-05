@@ -13,6 +13,7 @@ import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 import ListItemButton from "@mui/material/ListItemButton";
 import { Trans } from "react-i18next";
 import { useEffect } from "react";
+import { theme } from "@/config/theme";
 
 const selectField = () => {
   return <div>selectField</div>;
@@ -106,7 +107,12 @@ export const SelectField = (props: ISelectField) => {
       <InputLabel
         required={required}
         id={`select_label_id_${name}`}
-        sx={{ backgroundColor: "white", pl: "4px", pr: "4px" }}
+        sx={{
+          backgroundColor: "white",
+          paddingLeft: theme.direction === "ltr" ? "4px" : "unset",
+          paddingRight: theme.direction === "rtl" ? "4px" : "unset",
+          pr: "4px",
+        }}
       >
         {label}
       </InputLabel>

@@ -51,6 +51,7 @@ const AppWithNovu = () => {
       applicationIdentifier={import.meta.env.VITE_NOVU_APPLICATION_IDENTIFIER}
       backendUrl={import.meta.env.VITE_NOVU_BACKEND_URL}
       socketUrl={import.meta.env.VITE_NOVU_SOCKET_URL}
+      i18n={theme.direction === "rtl" ? "fa" : "en"}
     >
       <App />
     </NovuProvider>

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import QANumberIndicator from "../QANumberIndicator";
 import { styles } from "@styles";
+import { secondaryFontFamily } from "@/config/theme";
 
 interface IQuestionnaireProgress extends BoxProps {
   progress: number;
@@ -32,6 +33,7 @@ const progressToColorMapColor: Record<number, string> = {
 
 const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
   const { progress = 0, q, a, isQuestionnaire, isSmallScreen, ...rest } = props;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box sx={{ ...styles.centerV }} flex="1" {...rest}>
       <Box flex={1}>
@@ -42,15 +44,17 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
           sx={{
             borderRadius: "0 8px 8px 0px",
             color: progress === 0 ? "gray" : undefined,
+            transform: `rotate(${is_farsi ? "180" : "0"}deg)`,
           }}
         />
       </Box>
-      <Box pl="8px" mr="-2px">
+      <Box pl={is_farsi ? 0 : "8px"} pr={is_farsi ? "8px" : 0} mr="-2px">
         {isQuestionnaire && isSmallScreen ? (
           <QANumberIndicator q={q} a={a} />
         ) : (
           <Typography
             fontWeight={"bold"}
+            fontFamily={is_farsi ? "Vazirmatn" : secondaryFontFamily}
             textTransform="uppercase"
             color={progressToColorMapColor[progress] || "#1976d2"}
           >

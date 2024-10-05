@@ -12,6 +12,7 @@ import Title from "@common/Title";
 import ThumbUpOffAltRoundedIcon from "@mui/icons-material/ThumbUpOffAltRounded";
 import { Trans } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
+import { theme } from "@/config/theme";
 
 const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
   const HEIGHT_TITLE: number = 12;
@@ -186,7 +187,11 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
             <Box component="span" color="black" textTransform="lowercase">
               <ThumbUpOffAltRoundedIcon
                 fontSize="inherit"
-                sx={{ mr: 0.5, pt: 0.2 }}
+                sx={{
+                  marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                  marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                  pt: 0.2,
+                }}
               />
               {data.likes || 0}
             </Box>
@@ -210,7 +215,13 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
               <Trans i18nKey="private" />
             </Box>
           </Box> */}
-        <Typography fontWeight={"bold"} sx={{ ml: "auto" }}>
+        <Typography
+          fontWeight={"bold"}
+          sx={{
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}
+        >
           {data.price || "FREE"}
         </Typography>
       </Box>

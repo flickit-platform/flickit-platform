@@ -18,6 +18,7 @@ import {
   useCompareContext,
   useCompareDispatch,
 } from "@providers/CompareProvider";
+import { theme } from "@/config/theme";
 
 interface IComparePartsItemProps {
   data: any;
@@ -144,8 +145,16 @@ const DeleteAssessmentIconBtn = (props: {
         position: "absolute",
         zIndex: 2,
         bottom: "10px",
-        left: index % 2 !== 0 ? undefined : "10px",
-        right: index % 2 !== 0 ? { xs: "none", md: "10px" } : undefined,
+        left:
+          (theme.direction === "ltr" && index % 2 !== 0) ||
+          (theme.direction === "rtl" && index % 2 !== 1)
+            ? undefined
+            : "10px",
+        right:
+          (theme.direction === "ltr" && index % 2 !== 0) ||
+          (theme.direction === "rtl" && index % 2 !== 1)
+            ? { xs: "none", md: "10px" }
+            : undefined,
       }}
     >
       <DeleteRoundedIcon />

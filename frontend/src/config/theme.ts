@@ -9,6 +9,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
+import { transformOrigin } from "html2canvas/dist/types/css/property-descriptors/transform-origin";
 
 // export const primaryFontFamily =
 //   '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
@@ -16,6 +17,7 @@ import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 const fontSize = ["12px", "14px", "14px", "16px", "16px"];
 export const primaryFontFamily = "NotoSans";
 export const secondaryFontFamily = "OpenSans";
+export const farsiFontFamily = "'Vazirmatn','Arial','sans-serif'";
 
 declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
@@ -131,8 +133,9 @@ const palette = createPalette({
   },
   warning: { main: "#CC7400", contrastText: "#fff", light: "#F4E7D7" },
 });
-
+const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 export const theme = createTheme({
+  direction: is_farsi ? "rtl" : "ltr",
   palette,
   breakpoints: {
     values: {
@@ -146,7 +149,7 @@ export const theme = createTheme({
   typography: {
     fontFamily: primaryFontFamily,
     subSmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
@@ -154,104 +157,104 @@ export const theme = createTheme({
       color: "GrayText",
     },
     subMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     subLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
       letterSpacing: "0.09em",
       color: "GrayText",
     },
     headlineSmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       fontSize: "1.5rem",
       lineHeight: "2rem",
       letterSpacing: "-3%",
     },
     headlineMedium: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2rem",
       lineHeight: "2.25rem",
       letterSpacing: "0",
     },
     headlineLarge: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2.5rem",
       lineHeight: "2.7rem",
       letterSpacing: "0",
     },
     displaySmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontSize: "1rem",
       fontWeight: "normal",
       letterSpacing: "0",
     },
     displayMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontSize: "1.75rem",
       fontWeight: "Bold",
       lineHeight: "2.25rem",
       letterSpacing: "0",
     },
     displayLarge: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontSize: "4rem",
       fontWeight: "bold",
       lineHeight: "5.75rem",
       letterSpacing: "0",
     },
     titleSmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 600,
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
       letterSpacing: ".1px",
     },
     titleMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 600,
       fontSize: "1rem",
       lineHeight: "1.5rem",
       letterSpacing: ".15px",
     },
     titleLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
       letterSpacing: "0",
     },
     bodySmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "normal",
       fontSize: "0.75rem",
       lineHeight: "1rem",
       letterSpacing: "0.4px",
     },
     bodyMedium: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 200,
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
       letterSpacing: "0.25px",
     },
     bodyLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "lighter",
       fontSize: "1rem",
       lineHeight: "1.5rem",
       letterSpacing: "0.5px",
     },
     labelSmall: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "lighter",
       fontSize: "0.6875rem",
       lineHeight: "0.75rem",
@@ -265,29 +268,29 @@ export const theme = createTheme({
       letterSpacing: "0.5px",
     },
     labelLarge: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "bold",
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
       letterSpacing: "0.1px",
     },
     button: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       letterSpacing: ".05em",
     },
     h3: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
     },
     h4: {
-      fontFamily: primaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       opacity: 0.9,
     },
     h5: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       opacity: 0.85,
     },
     h6: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       lineHeight: 1.6,
       opacity: 0.85,
     },
@@ -324,6 +327,7 @@ export const theme = createTheme({
         }
         body {
           background: #EDEFF1;
+          direction:${is_farsi ? "rtl" : "ltr"};
         }
         .nc-footer {
           display: none;
@@ -358,6 +362,14 @@ export const theme = createTheme({
     MuiButtonGroup: {
       defaultProps: {
         color: "primary",
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        startIcon: {
+          marginRight: is_farsi ? "-2px !important" : "8px !important",
+          marginLeft: !is_farsi ? "-2px !important" : "8px !important",
+        },
       },
     },
     MuiTypography: {
@@ -397,6 +409,53 @@ export const theme = createTheme({
           "&.Mui-selected": {
             color: palette.secondary.main,
           },
+        },
+      },
+    },
+
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          "&.MuiInputLabel-root": {
+            textAlign: "right",
+            left: !is_farsi ? "unset" : "0",
+            right: is_farsi ? "0" : "unset",
+            transform: !is_farsi
+              ? "translate(16px, 9px) scale(1)"
+              : "translate(-6px, 9px) scale(1)",
+            "&.Mui-focused, &.MuiInputLabel-shrink": {
+              transform: !is_farsi
+                ? "translate(12px, -9px) scale(0.75)"
+                : "translate(-12px, -9px) scale(0.75)",
+              transformOrigin: !is_farsi ? "top left" : "top right",
+            },
+          },
+        },
+      },
+    },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          textAlign: is_farsi ? "right" : "left",
+          left: 0,
+          right: 0,
+        },
+      },
+    },
+
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          textAlign: is_farsi ? "right" : "left",
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        avatar: {
+          marginRight: !is_farsi ? "16px" : "unset",
+          marginLeft: is_farsi ? "16px" : "unset",
         },
       },
     },

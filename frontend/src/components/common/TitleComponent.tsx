@@ -8,6 +8,7 @@ import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
 import { GoHome } from "react-icons/go";
 import { Trans } from "react-i18next";
+import { theme } from "@/config/theme";
 interface ITitle extends Omit<TypographyProps, "borderBottom"> {
   sup?: JSX.Element | string;
   sub?: JSX.Element | string;
@@ -95,7 +96,12 @@ const Title = (props: ITitle) => {
                   <ArrowBackRoundedIcon
                     fontSize="small"
                     color="inherit"
-                    sx={{ opacity: 0.85, color: "gray", mr: 0.5 }}
+                    sx={{
+                      opacity: 0.85,
+                      color: "gray",
+                      marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+                      marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+                    }}
                     {...backIconProps}
                   />
                 )}
@@ -186,7 +192,11 @@ const Title = (props: ITitle) => {
           </Typography>
         )}
       </Box>
-      <Box ml="auto" {...toolbarProps}>
+      <Box
+        ml={theme.direction === "rtl" ? "unset" : "auto"}
+        mr={theme.direction !== "rtl" ? "unset" : "auto"}
+        {...toolbarProps}
+      >
         {toolbar}
       </Box>
     </Box>

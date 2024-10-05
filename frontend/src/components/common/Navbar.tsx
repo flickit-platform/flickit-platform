@@ -44,7 +44,9 @@ import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
-import { secondaryFontFamily } from "@/config/theme";
+import { secondaryFontFamily, theme } from "@/config/theme";
+import LanguageSelector from "./LangSelector";
+import { t } from "i18next";
 
 const drawerWidth = 240;
 
@@ -55,7 +57,8 @@ const NotificationIndicator = ({ seen }: { seen: boolean }) => (
       height: "24px",
       backgroundColor: seen ? "#6C8093" : "#2D80D2",
       borderRadius: "2px",
-      marginRight: "8px",
+      marginRight: theme.direction === "ltr" ? 1 : "unset",
+      marginLeft: theme.direction === "rtl" ? 1 : "unset",
     }}
   />
 );
@@ -80,6 +83,7 @@ const NotificationItem = ({
         backgroundColor: message.seen ? "#ffffff" : "#F3F5F6",
         cursor: "pointer",
         position: "relative",
+        flexDirection: theme.direction === "rtl" ? "row-reverse" : "row", // Handle RTL/LTR
         "&:hover": {
           backgroundColor: "#f1f1f1",
         },
@@ -97,6 +101,7 @@ const NotificationItem = ({
           textOverflow: "ellipsis",
           display: "flex",
           alignItems: "center",
+          justifyContent: theme.direction === "rtl" ? "flex-end" : "flex-start",
         }}
       >
         <Typography
@@ -118,11 +123,12 @@ const NotificationItem = ({
         variant="labelSmall"
         sx={{
           color: "#3D4D5C",
-          marginLeft: "8px",
+          marginLeft: theme.direction === "rtl" ? "0" : "8px",
+          marginRight: theme.direction === "rtl" ? "8px" : "0",
           whiteSpace: "nowrap",
         }}
       >
-        {convertToRelativeTime(message.createdAt)}
+        {t(convertToRelativeTime(message.createdAt))}
       </Typography>
 
       {/* Arrow Icon */}
@@ -130,7 +136,9 @@ const NotificationItem = ({
         sx={{
           fontSize: "16px",
           color: "#2962FF",
-          marginLeft: "8px",
+          marginLeft: theme.direction === "rtl" ? "0" : "8px",
+          marginRight: theme.direction === "rtl" ? "8px" : "0",
+          transform: theme.direction === "rtl" ? "rotate(180deg)" : "none", // Rotate for RTL
         }}
       />
 
@@ -138,8 +146,9 @@ const NotificationItem = ({
       <Box
         sx={{
           position: "absolute",
-          top: "8px", // Adjust as needed
-          right: "8px", // Adjust as needed
+          top: "8px",
+          left: theme.direction === "rtl" ? "8px" : "unset",
+          right: theme.direction === "ltr" ? "8px" : "unset",
           width: "8px",
           height: "8px",
           backgroundColor: "#B8144B",
@@ -153,10 +162,11 @@ const NotificationItem = ({
 
 const NotificationCenterComponent = ({ setNotificationCount }: any) => {
   const [selectedMessage, setSelectedMessage] = useState<IMessage | null>(null);
-  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
+  const [notificationCount, setNotificationsCount] = useState(0);
 
   const handleUnseenCountChanged = (unseenCount: number) => {
     setNotificationCount(unseenCount);
+    setNotificationsCount(unseenCount);
   };
 
   const handleNotificationClick = (
@@ -205,7 +215,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                   }}
                 />{" "}
               </IconButton>
-              Notification Details
+              <Trans i18nKey="notificationDetails" />
             </Typography>
           </Box>
 
@@ -225,7 +235,8 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
               <Box
                 sx={{
                   position: "absolute",
-                  left: 8,
+                  left: theme.direction === "ltr" ? 8 : "unset",
+                  right: theme.direction === "rtl" ? 8 : "unset",
                   top: 8,
                   bottom: 0,
                   width: "4px",
@@ -296,18 +307,20 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     color: "#3D4D5C",
                   }}
                 >
-                  {convertToRelativeTime(selectedMessage.createdAt) +
-                    " (" +
-                    format(
-                      new Date(
-                        new Date(selectedMessage.createdAt).getTime() -
-                          new Date(
-                            selectedMessage.createdAt,
-                          ).getTimezoneOffset(),
-                      ),
-                      "yyyy/MM/dd HH:mm",
-                    ) +
-                    ") "}
+                  {t(
+                    convertToRelativeTime(selectedMessage.createdAt) +
+                      " (" +
+                      format(
+                        new Date(
+                          new Date(selectedMessage.createdAt).getTime() -
+                            new Date(
+                              selectedMessage.createdAt,
+                            ).getTimezoneOffset(),
+                        ),
+                        "yyyy/MM/dd HH:mm",
+                      ) +
+                      ") ",
+                  )}
                 </Typography>
               </Box>
             </Box>
@@ -315,6 +328,27 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
         </Box>
       ) : (
         <NotificationCenter
+          // header={({ setScreen, screen }) => (
+          //   <Box
+          //     display="flex"
+          //     justifyContent="space-between"
+          //     alignItems="center"
+          //     sx={{ padding: "16px", borderBottom: "1px solid #e0e0e0" }}
+          //   >
+          //     <Typography variant="h6">
+          //       <Trans i18nKey="notificationHeader" />
+          //     </Typography>
+          //     {notificationCount}
+
+          //     <Button
+          //       variant="outlined"
+          //       // onClick={handleMarkAllAsRead} // Action handler
+          //       // startIcon={<DoneAllIcon />}
+          //     >
+          //       <Trans i18nKey="markAllAsRead" />
+          //     </Button>
+          //   </Box>
+          // )}
           onUnseenCountChanged={(unseenCount: number) =>
             handleUnseenCountChanged(unseenCount)
           }
@@ -329,7 +363,7 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
             >
               <img src={NotificationEmptyState} alt={"No assesment here!"} />
               <Typography variant="bodyMedium" color="#2466A8">
-                Nothing new to see here yet!
+                <Trans i18nKey="notificationEmptyState" />
               </Typography>
             </Box>
           }
@@ -420,7 +454,12 @@ const Navbar = () => {
   const drawer = (
     <Box
       onClick={handleDrawerToggle}
-      sx={{ pl: 1, pr: 1, textAlign: "center" }}
+      sx={{
+        paddingLeft: theme.direction === "ltr" ? 2 : "unset",
+        paddingRight: theme.direction === "rtl" ? 2 : "unset",
+        pr: 1,
+        textAlign: "center",
+      }}
     >
       {/* Drawer content */}
       <Typography
@@ -470,7 +509,14 @@ const Navbar = () => {
                                     variant="caption"
                                     textTransform={"none"}
                                     sx={{
-                                      pl: 0.5,
+                                      paddingLeft:
+                                        theme.direction === "ltr"
+                                          ? 0.5
+                                          : "unset",
+                                      paddingRight:
+                                        theme.direction === "rtl"
+                                          ? 0.5
+                                          : "unset",
                                       ml: 0.5,
                                       lineHeight: "1",
                                       borderLeft: (t) =>
@@ -534,7 +580,11 @@ const Navbar = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+              display: { md: "none" },
+            }}
           >
             <MenuIcon />
           </IconButton>
@@ -564,7 +614,11 @@ const Navbar = () => {
                   sx={{ opacity: 0.8, fontSize: "1.125rem !important" }}
                 />
               }
-              sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+              sx={{
+                ...styles.activeNavbarLink,
+                marginRight: theme.direction === "ltr" ? 0.8 : 0.1,
+                marginLeft: theme.direction === "rtl" ? 0.8 : 0.1,
+              }}
               size="small"
             >
               <Trans i18nKey="compare" />
@@ -586,7 +640,14 @@ const Navbar = () => {
           <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
             {/* Other buttons */}
           </Box>
-          <Box ml="auto" sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
+            }}
+          >
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
@@ -608,6 +669,7 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
+          <LanguageSelector />
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -634,7 +696,13 @@ const Navbar = () => {
       {notificationCenterOpen && (
         <Box
           ref={notificationCenterRef}
-          sx={{ position: "fixed", top: 60, right: 20, zIndex: 1300 }}
+          sx={{
+            position: "fixed",
+            top: 60,
+            right: theme.direction === "ltr" ? 20 : "unset",
+            left: theme.direction === "rtl" ? 20 : "unset",
+            zIndex: 1300,
+          }}
         >
           <NotificationCenterComponent
             setNotificationCount={setNotificationCount}
@@ -682,8 +750,8 @@ const SpacesButton = () => {
         onClick={() => navigate("/spaces/1")}
         sx={{
           ...styles.activeNavbarLink,
-          ml: 0.1,
-          mr: 0.8,
+          marginRight: theme.direction === "ltr" ? 0.8 : 0.1,
+          marginLeft: theme.direction === "rtl" ? 0.8 : 0.1,
           "&:hover .MuiButton-endIcon > div": {
             borderLeftColor: "#8080802b",
           },
@@ -784,14 +852,23 @@ const AccountDropDownButton = ({ userInfo }: any) => {
           e.stopPropagation();
           handleClick(e);
         }}
-        sx={{ ...styles.activeNavbarLink, ml: 0.1, mr: 0.8 }}
+        sx={{
+          ...styles.activeNavbarLink,
+          marginRight: theme.direction === "ltr" ? 0.8 : 0.1,
+          marginLeft: theme.direction === "rtl" ? 0.8 : 0.1,
+        }}
         size="small"
         endIcon={
           open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />
         }
       >
         <Avatar
-          sx={{ width: 26, height: 26, mr: 1.3 }}
+          sx={{
+            width: 26,
+            height: 26,
+            marginRight: theme.direction === "ltr" ? 1.3 : "unset",
+            marginLeft: theme.direction === "rtl" ? 1.3 : "unset",
+          }}
           alt={userInfo.displayName}
           src={userInfo.pictureLink || ""}
         />

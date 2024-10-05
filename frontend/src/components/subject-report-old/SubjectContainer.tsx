@@ -32,6 +32,7 @@ import QueryBatchData from "@common/QueryBatchData";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { useConfigContext } from "@/providers/ConfgProvider";
+import { theme } from "@/config/theme";
 
 const SubjectContainer = () => {
   const {
@@ -509,7 +510,14 @@ const SubjectTitle = (props: {
           }}
         /> */}
         {loading ? (
-          <Skeleton width={"84px"} sx={{ mr: 0.5, display: "inline-block" }} />
+          <Skeleton
+            width={"84px"}
+            sx={{
+              marginRight: theme.direction === "ltr" ? 0.5 : "unset",
+              marginLeft: theme.direction === "rtl" ? 0.5 : "unset",
+              display: "inline-block",
+            }}
+          />
         ) : (
           title || ""
         )}{" "}

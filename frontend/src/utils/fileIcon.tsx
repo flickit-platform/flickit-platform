@@ -1,3 +1,5 @@
+import { theme } from "@/config/theme";
+
 export const FileIcon = (props: any) => {
   const {
     hover,
@@ -77,7 +79,13 @@ export const FileIcon = (props: any) => {
       {hover && (
         <div
           onClick={() => downloadFile(item)}
-          style={{ position: "absolute", top: "7px", left: "7px", zIndex: 1 }}
+          style={{
+            position: "absolute",
+            top: "7px",
+            left: theme.direction === "ltr" ? "7px" : "unset",
+            right: theme.direction === "rtl" ? "7px" : "unset",
+            zIndex: 1,
+          }}
         >
           <svg
             width="24"
@@ -142,7 +150,8 @@ export const FileIcon = (props: any) => {
             position: "absolute",
             color: mainColor,
             top: "15px",
-            left: "3px",
+            left: theme.direction === "ltr" ? "3px" : "unset",
+            right: theme.direction === "rtl" ? "3px" : "unset",
             fontSize: "9px",
           }}
         >

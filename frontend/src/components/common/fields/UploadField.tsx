@@ -30,6 +30,7 @@ import getFieldError from "@utils/getFieldError";
 import { Trans } from "react-i18next";
 import getFileNameFromSrc from "@utils/getFileNameFromSrc";
 import { useServiceContext } from "@/providers/ServiceProvider";
+import { theme } from "@/config/theme";
 
 interface IUploadFieldProps {
   name: string;
@@ -165,7 +166,7 @@ const Uploader = (props: IUploadProps) => {
       setLimitGuide(
         t("maximumUploadFileSize", {
           maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
-        }) as string
+        }) as string,
       );
     }
     if (
@@ -361,7 +362,8 @@ const Uploader = (props: IUploadProps) => {
                     maxWidth: "40px",
                     maxHeight: "40px",
                     overflow: "hidden",
-                    mr: 1.5,
+                    marginRight: theme.direction === "ltr" ? 1.5 : "unset",
+                    marginLeft: theme.direction === "rtl" ? 1.5 : "unset",
                     display: { xs: "none", sm: "inline-flex" },
                   }}
                 >
@@ -419,7 +421,7 @@ const Uploader = (props: IUploadProps) => {
                               (dropNewFile && dropNewFile[0]) ||
                               acceptedFiles[0] ||
                               file
-                            )?.size
+                            )?.size,
                           )
                         : null}
                     </>
@@ -443,11 +445,12 @@ const Uploader = (props: IUploadProps) => {
               </FormLabel>
               <Box
                 sx={{
-                  marginLeft: "auto",
                   px: 2,
                   ...styles.centerV,
                   color: (t) => t.palette.info.dark,
                 }}
+                ml={theme.direction === "rtl" ? "unset" : "auto"}
+                mr={theme.direction !== "rtl" ? "unset" : "auto"}
               >
                 <FileUploadRoundedIcon sx={{ mr: hideDropText ? 0 : 1 }} />
                 {!hideDropText && (

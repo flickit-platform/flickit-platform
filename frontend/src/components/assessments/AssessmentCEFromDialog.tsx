@@ -21,6 +21,7 @@ import AutocompleteAsyncField, {
 } from "@common/fields/AutocompleteAsyncField";
 import CheckmarkGif from "../common/success/Checkmark";
 import { Box, Button, Typography } from "@mui/material";
+import { theme } from "@/config/theme";
 
 interface IAssessmentCEFromDialogProps extends DialogProps {
   onClose: () => void;
@@ -70,32 +71,32 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     try {
       type === "update"
         ? await service.updateAssessment(
-          {
-            id: assessmentId,
-            data: {
-              title,
-              shortTitle,
-              colorId: color,
-            },
-          },
-          { signal: abortController.signal }
-        )
-        : await service
-          .createAssessment(
             {
+              id: assessmentId,
               data: {
-                spaceId: spaceId || space?.id,
-                assessmentKitId: assessment_kit?.id,
-                title: title,
-                shortTitle: shortTitle === "" ? null : shortTitle || null,
+                title,
+                shortTitle,
                 colorId: color,
               },
             },
             { signal: abortController.signal },
           )
-          .then((res: any) => {
-            setCreatedKitId(res.data?.id);
-          });
+        : await service
+            .createAssessment(
+              {
+                data: {
+                  spaceId: spaceId || space?.id,
+                  assessmentKitId: assessment_kit?.id,
+                  title: title,
+                  shortTitle: shortTitle === "" ? null : shortTitle || null,
+                  colorId: color,
+                },
+              },
+              { signal: abortController.signal },
+            )
+            .then((res: any) => {
+              setCreatedKitId(res.data?.id);
+            });
       setLoading(false);
       setSubmittedTitle(title);
       setIsSubmitted(true);
@@ -124,7 +125,12 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
       closeDialog={close}
       title={
         <>
-          <NoteAddRoundedIcon sx={{ mr: 1 }} />
+          <NoteAddRoundedIcon
+            sx={{
+              marginRight: theme.direction === "ltr" ? 1 : "unset",
+              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+            }}
+          />
           {type === "update" ? (
             <Trans i18nKey="updateAssessment" />
           ) : (
@@ -201,8 +207,9 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
             hideSubmitButton
           >
             <Link
-              to={`/${spaceId || data.space?.id
-                }/assessments/1/${createdKitId}/assessment-settings/`}
+              to={`/${
+                spaceId || data.space?.id
+              }/assessments/1/${createdKitId}/assessment-settings/`}
               style={{ textDecoration: "none" }}
             >
               <Button variant="contained">
