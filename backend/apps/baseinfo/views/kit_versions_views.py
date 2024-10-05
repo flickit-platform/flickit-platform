@@ -32,8 +32,8 @@ class KitVersionMaturityLevelApi(APIView):
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={200: ""})
-    def put(self, request, kit_version_id, maturity_leve_id):
-        result = kit_versions_services.update_maturity_level_with_kit_version(request, kit_version_id, maturity_leve_id)
+    def put(self, request, kit_version_id, maturity_level_id):
+        result = kit_versions_services.update_maturity_level_with_kit_version(request, kit_version_id, maturity_level_id)
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
