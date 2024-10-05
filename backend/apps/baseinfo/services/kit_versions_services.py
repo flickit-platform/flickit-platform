@@ -18,9 +18,9 @@ def create_maturity_levels_with_kit_version(request, kit_version_id):
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def update_maturity_level_with_kit_version(request, kit_version_id, maturity_leve_id):
+def update_maturity_level_with_kit_version(request, kit_version_id, maturity_level_id):
     response = requests.put(
-        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/maturity-levels/{maturity_leve_id}',
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/maturity-levels/{maturity_level_id}',
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
     if response.status_code == 200:
