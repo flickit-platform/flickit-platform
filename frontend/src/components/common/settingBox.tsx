@@ -32,12 +32,23 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuItem from "@mui/material/MenuItem";
 
 export default function SettingBox(props: any){
-    const {children, title, btnLabel, name, MenuProps , openAssessmentModal, setChangeData, listOfRoles, listOfUser , openRemoveModal, columns, query,
-         data:{ items : members }
+    const {
+        children,
+        title,
+        btnLabel,
+        name,
+        MenuProps,
+        openAssessmentModal,
+        setChangeData,
+        listOfRoles,
+        listOfUser,
+        openRemoveModal,
+        columns,
+        query,
+        hasBtn,
     } = props
 
     const {openEGModal ,setOpenEGModal, deleteEGMember, onCloseEGModal} = useEGPermision({query})
-
     return (
         <Box
             sx={{
@@ -67,10 +78,10 @@ export default function SettingBox(props: any){
                         gap: !btnLabel ? "10px" : "" ,
                     }}
                 >
-                    <Typography ml={btnLabel ? "auto" : "" } color="#9DA7B3" variant="headlineMedium">
+                    <Typography ml={hasBtn ? "auto" : "center" } color="#9DA7B3" variant="headlineMedium">
                         <Trans i18nKey={title} />
                     </Typography>
-                    {btnLabel &&
+                    {hasBtn &&
                     <Button
                         variant="contained"
                         onClick={()=>name === "assessmentSettingBox" ? openAssessmentModal() : setOpenEGModal(true)}
@@ -145,7 +156,7 @@ export default function SettingBox(props: any){
                                     <TableRow
                                         tabIndex={-1}
                                         key={row.id}
-                                        sx={{background: !row.editable ? "#ebe8e85c" : ""}}
+                                        sx={{background: !row.editable && name === "assessmentSettingBox" ? "#ebe8e85c" : ""}}
                                     >
                                         <TableCell
                                             sx={{
@@ -167,7 +178,7 @@ export default function SettingBox(props: any){
                                                         paddingLeft: {lg: "30%"},
                                                     }}
                                                 >
-                                                    <Avatar
+                                                    {name === "assessmentSettingBox" &&  <Avatar
                                                         {...stringAvatar(row.displayName.toUpperCase())}
                                                         src={row.pictureLink}
                                                         sx={{
@@ -175,7 +186,7 @@ export default function SettingBox(props: any){
                                                             height: 40,
                                                             display: {xs: "none", sm: "flex"},
                                                         }}
-                                                    />
+                                                    />}
                                                     <Typography
                                                         sx={{
                                                             textOverflow: "ellipsis",
@@ -186,9 +197,9 @@ export default function SettingBox(props: any){
                                                             fontWeight: 500,
                                                         }}
                                                     >
-                                                        {row.displayName}
+                                                        {row.displayName || row.name}
                                                     </Typography>
-                                                    {!row.editable && (
+                                                    {!row.editable && name === "assessmentSettingBox" && (
                                                         <Chip
                                                             sx={{
                                                                 mr: 1,
@@ -205,7 +216,7 @@ export default function SettingBox(props: any){
                                             </Box>
                                             <Box
                                                 sx={{
-                                                    display: {xs: "none", md: "flex"},
+                                                    display: name === "assessmentSettingBox" ? {xs: "none", md: "flex"} : "flex",
                                                     justifyContent: "center",
                                                     width: {xs: "5rem", md: "20vw"},
                                                 }}
@@ -226,13 +237,13 @@ export default function SettingBox(props: any){
                                             <Box
                                                 sx={{
                                                     display: "flex",
-                                                    justifyContent: "flex-end",
+                                                    justifyContent: name === "assessmentSettingBox" ? "flex-end" : "center",
                                                     alignItems: "center",
                                                     gap: {xs: "0px", md: ".7rem"},
-                                                    width: {xs: "10.1rem", md: "20vw"},
+                                                    width: name === "assessmentSettingBox" ? {xs: "10.1rem", md: "20vw"} : {xs: "5rem", md: "20vw"},
                                                 }}
                                             >
-                                                <FormControl
+                                                {(name === "assessmentSettingBox" || name === "assessmentSettingInviteBox") && <FormControl
                                                     sx={{
                                                         m: 1,
                                                         width: "100%",
@@ -261,10 +272,11 @@ export default function SettingBox(props: any){
                                                         </Tooltip>
                                                     </Grid>
                                                 </FormControl>
+                                                }
                                                 <Tooltip
-                                                    disableHoverListener={row.editable}
+                                                    disableHoverListener={row.editable && name === "assessmentSettingBox"}
                                                     title={
-                                                        <Trans i18nKey="spaceOwnerRoleIsNotEditable"/>
+                                                        name === "assessmentSettingBox" && <Trans i18nKey="spaceOwnerRoleIsNotEditable"/>
                                                     }
                                                 >
                                                     <Box
@@ -276,9 +288,12 @@ export default function SettingBox(props: any){
                                                         <IconButton
                                                             sx={{"&:hover": {color: "#d32f2f"}}}
                                                             size="small"
-                                                            disabled={!row.editable}
-                                                            onClick={() =>
-                                                                openRemoveModal(row.displayName, row.id)
+                                                            disabled={!row.editable && name === "assessmentSettingBox"}
+                                                            onClick={() => {
+                                                                name === "assessmentSettingBox" && openRemoveModal(row.displayName, row.id);
+                                                                name === "EGPermissionSettingBox" && deleteEGMember(row.id)
+                                                                name === "assessmentSettingInviteBox" && openRemoveModal(row.email, row.id, true)
+                                                            }
                                                             }
                                                         >
                                                             <DeleteRoundedIcon/>
@@ -292,12 +307,6 @@ export default function SettingBox(props: any){
                         </TableBody>
                     </Table>}
                 </TableContainer>
-
-
-                {/*todo*/}
-
-
-
             </Box>
             {openEGModal &&  <AddMemberModal query={query} open={openEGModal} close={onCloseEGModal} />}
         </Box>

@@ -63,11 +63,11 @@ const AssessmentKitPermissionsContainer = () => {
 };
 
 const AssessmentKitPermisson = (props: any) => {
-  const { data, query, info } = props;
+  const { data: {items}, query, info } = props;
   const { id, title, expertGroup } = info;
 
     interface Column {
-        id: "displayName" | "email" | "role";
+        id: "displayName" | "email" | "remove";
         label: string;
         minWidth?: string;
         align?: "right";
@@ -86,7 +86,6 @@ const AssessmentKitPermisson = (props: any) => {
             id: "email",
             label: "Email",
             minWidth: "20vw",
-            display: "none",
             position: "center",
         },
         {
@@ -148,10 +147,11 @@ const AssessmentKitPermisson = (props: any) => {
           </Grid>
       </Title>
         <SettingBox
-            name={"EGPermision"}
+            name={"EGPermissionSettingBox"}
             title={"members"}
+            hasBtn={true}
             btnLabel={"addMember"}
-            data={data}
+            listOfUser={items}
             query={query}
             columns={columns}
         />

@@ -413,6 +413,7 @@ export const AssessmentSettingMemberBox = (props: {
           setChangeData={setChangeData}
           listOfRoles={listOfRoles}
           listOfUser={listOfUser}
+          hasBtn={true}
           openRemoveModal={openRemoveModal}
           title={"grantedRoles"}
           columns={columns}
@@ -422,17 +423,17 @@ export const AssessmentSettingMemberBox = (props: {
 
         {inviteesMemberList?.data?.items?.length > 0 && (
           <>
-            <Divider sx={{ width: "100%", marginBlock: "24px" }} />
+            <Box sx={{ width: "100%", marginBlock: "32px" }} />
               <SettingBox
                   name={"assessmentSettingInviteBox"}
                   MenuProps={MenuProps}
                   setChangeData={setChangeData}
                   listOfRoles={listOfRoles}
-                  listOfUser={listOfUser}
+                  listOfUser={inviteesMemberList?.data?.items}
                   openRemoveModal={openRemoveModal}
+                  hasBtn={false}
                   title={"invitees"}
                   columns={inviteesColumns}
-                  openAssessmentModal={openModal}
               >
                   <Table stickyHeader aria-label="sticky table">
                       <TableHead
