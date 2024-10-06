@@ -91,7 +91,9 @@ export default function SettingBox(props: any){
                     </Typography>
                     { hasBtn && <Button
                         variant="contained"
-                        onClick={() => name === "assessmentSettingBox" ? openAssessmentModal() : setOpenEGModal(true)}
+                        onClick={() =>
+                            name === "assessmentSettingBox" ? openAssessmentModal() : name === "EGPermissionSettingBox" ? setOpenEGModal(true) : ()=>{}
+                    }
                         sx={{
                             ml: theme.direction === "rtl" ? "unset" : "auto",
                             mr: theme.direction !== "rtl" ? "unset" : "auto",
@@ -181,10 +183,10 @@ export default function SettingBox(props: any){
                                         >
 
 
-                                            { name == "assessmentSettingBox"  &&  <Box
+                                            { name == "assessmentSettingBox" || name == "EGPermissionSettingBox" &&  <Box
                                                 sx={{
                                                     display: "flex",
-                                                    justifyContent: name == "assessmentSettingBox" ? "flex-start" : "center",
+                                                    justifyContent: name == "assessmentSettingBox" || name == "EGPermissionSettingBox"  ? "flex-start" : "center",
                                                     minWidth: {
                                                         xs: "10rem",
                                                         sm: "14rem",
@@ -202,15 +204,15 @@ export default function SettingBox(props: any){
                                                         paddingLeft: {lg: "30%"},
                                                     }}
                                                 >
-                                                    <Avatar
-                                                        {...stringAvatar(row.displayName.toUpperCase())}
-                                                        src={row.pictureLink}
-                                                        sx={{
-                                                            width: 40,
-                                                            height: 40,
-                                                            display: {xs: "none", sm: "flex"},
-                                                        }}
-                                                    />
+                                                    {/*<Avatar*/}
+                                                    {/*    {...stringAvatar(row.displayName.toUpperCase())}*/}
+                                                    {/*    src={row.pictureLink}*/}
+                                                    {/*    sx={{*/}
+                                                    {/*        width: 40,*/}
+                                                    {/*        height: 40,*/}
+                                                    {/*        display: {xs: "none", sm: "flex"},*/}
+                                                    {/*    }}*/}
+                                                    {/*/>*/}
                                                     <Typography
                                                         sx={{
                                                             textOverflow: "ellipsis",
@@ -221,7 +223,7 @@ export default function SettingBox(props: any){
                                                             fontWeight: 500,
                                                         }}
                                                     >
-                                                        {row.displayName}
+                                                        {row.displayName || row.name}
                                                     </Typography>
                                                     {!row.editable && (
                                                         <Chip
@@ -246,7 +248,7 @@ export default function SettingBox(props: any){
                                             }
                                             <Box
                                                 sx={{
-                                                    display: name == "assessmentSettingBox" ? { xs: "none", md: "flex" } : "flex",
+                                                    display: name == "assessmentSettingBox" ||  name == "EGPermissionSettingBox" ? { xs: "none", md: "flex" } : "flex",
                                                     justifyContent: "center",
                                                     minWidth: {  xs: "10rem",
                                                         sm: "14rem",
@@ -279,44 +281,48 @@ export default function SettingBox(props: any){
                                                 <Box
                                                     sx={{
                                                         display: "flex",
-                                                        justifyContent: "flex-end",
+                                                        justifyContent: name == "EGPermissionSettingBox" ? "flex-start" : "flex-end",
                                                         alignItems: "center",
                                                         gap: { xs: "0px", md: ".7rem" },
                                                     }}
                                                 >
-                                                    <FormControl
-                                                        sx={{
-                                                            m: 1,
-                                                            width: "100%",
-                                                            textAlign: "center",
-                                                            padding: "6px, 12px, 6px, 12px",
-                                                            display: "inline-flex",
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                        }}
-                                                    >
-                                                        {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
-                                                        <Grid
-                                                            item
-                                                            lg={8}
-                                                            sx={{ minWidth: { xs: "100%", md: "160px" } }}
+                                                    {
+                                                        name !== "EGPermissionSettingBox" &&
+                                                        <FormControl
+                                                            sx={{
+                                                                m: 1,
+                                                                width: "100%",
+                                                                textAlign: "center",
+                                                                padding: "6px, 12px, 6px, 12px",
+                                                                display: "inline-flex",
+                                                                justifyContent: "center",
+                                                                alignItems: "center",
+                                                            }}
                                                         >
-                                                            <Tooltip
-                                                                disableHoverListener={name == "assessmentSettingBox" && row.editable}
-                                                                title={
-                                                                    name == "assessmentSettingBox" ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
-                                                                }
+                                                            {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
+                                                            <Grid
+                                                                item
+                                                                lg={8}
+                                                                sx={{ minWidth: { xs: "100%", md: "160px" } }}
                                                             >
-                                                                <SelectionRole
-                                                                    row={row}
-                                                                    listOfRoles={listOfRoles}
-                                                                    MenuProps={MenuProps}
-                                                                    setChangeData={setChangeData}
-                                                                    name={name}
-                                                                />
-                                                            </Tooltip>
-                                                        </Grid>
-                                                    </FormControl>
+                                                                <Tooltip
+                                                                    disableHoverListener={name == "assessmentSettingBox" && row.editable}
+                                                                    title={
+                                                                        name == "assessmentSettingBox" ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
+                                                                    }
+                                                                >
+                                                                    <SelectionRole
+                                                                        row={row}
+                                                                        listOfRoles={listOfRoles}
+                                                                        MenuProps={MenuProps}
+                                                                        setChangeData={setChangeData}
+                                                                        name={name}
+                                                                    />
+                                                                </Tooltip>
+                                                            </Grid>
+                                                        </FormControl>
+
+                                                    }
                                                     <Tooltip
                                                         disableHoverListener={name == "assessmentSettingBox" && row.editable}
                                                         title={
@@ -336,6 +342,7 @@ export default function SettingBox(props: any){
                                                                 onClick={() => {
                                                                     name == "assessmentSettingBox" && openRemoveModal(row.displayName, row.id)
                                                                     name == "assessmentSettingInviteBox" && openRemoveModal(row.email, row.id, true)
+                                                                    name == "EGPermissionSettingBox" && deleteEGMember(row.id)
                                                                   }
                                                                 }
                                                             >
@@ -344,153 +351,7 @@ export default function SettingBox(props: any){
                                                         </Box>
                                                     </Tooltip>
                                                 </Box>
-
-
-
-
                                             </Box>
-
-
-                                            {/*<Box sx={{ width: "18vw" }}>*/}
-                                            {/*    <Box*/}
-                                            {/*        sx={{*/}
-                                            {/*            display: "flex",*/}
-                                            {/*            justifyContent: { xs: "flex-start" },*/}
-                                            {/*            alignItems: "center",*/}
-                                            {/*            gap: ".5rem",*/}
-                                            {/*            paddingLeft: { lg: "30%" },*/}
-                                            {/*        }}*/}
-                                            {/*    >*/}
-                                            {/*        <Avatar*/}
-                                            {/*            {...stringAvatar(row.displayName.toUpperCase())}*/}
-                                            {/*            src={row.pictureLink}*/}
-                                            {/*            sx={{*/}
-                                            {/*                width: 40,*/}
-                                            {/*                height: 40,*/}
-                                            {/*                display: { xs: "none", sm: "flex" },*/}
-                                            {/*            }}*/}
-                                            {/*        />*/}
-                                            {/*        <Typography*/}
-                                            {/*            sx={{*/}
-                                            {/*                textOverflow: "ellipsis",*/}
-                                            {/*                overflow: "hidden",*/}
-                                            {/*                whiteSpace: "nowrap",*/}
-                                            {/*                fontSize: "0.875rem",*/}
-                                            {/*                color: "#1B1B1E",*/}
-                                            {/*                fontWeight: 500,*/}
-                                            {/*            }}*/}
-                                            {/*        >*/}
-                                            {/*            {row.displayName}*/}
-                                            {/*        </Typography>*/}
-                                            {/*        {!row.editable && (*/}
-                                            {/*            <Chip*/}
-                                            {/*                sx={{*/}
-                                            {/*                    marginRight:*/}
-                                            {/*                        theme.direction === "ltr" ? 1 : "unset",*/}
-                                            {/*                    marginLeft:*/}
-                                            {/*                        theme.direction === "rtl" ? 1 : "unset",*/}
-                                            {/*                    opacity: 0.7,*/}
-                                            {/*                    color: "#9A003C",*/}
-                                            {/*                    borderColor: "#9A003C",*/}
-                                            {/*                }}*/}
-                                            {/*                label={<Trans i18nKey={"owner"} />}*/}
-                                            {/*                size="small"*/}
-                                            {/*                variant="outlined"*/}
-                                            {/*            />*/}
-                                            {/*        )}*/}
-                                            {/*    </Box>*/}
-                                            {/*</Box>*/}
-
-
-
-                                            {/*<Box*/}
-                                            {/*    sx={{*/}
-                                            {/*        display: { xs: "none", md: "flex" },*/}
-                                            {/*        justifyContent: "center",*/}
-                                            {/*        width: { xs: "5rem", md: "20vw" },*/}
-                                            {/*    }}*/}
-                                            {/*>*/}
-                                            {/*    <Typography*/}
-                                            {/*        sx={{*/}
-                                            {/*            textOverflow: "ellipsis",*/}
-                                            {/*            overflow: "hidden",*/}
-                                            {/*            whiteSpace: "nowrap",*/}
-                                            {/*            color: "#1B1B1E",*/}
-                                            {/*            fontSize: "0.875",*/}
-                                            {/*            wight: 300,*/}
-                                            {/*        }}*/}
-                                            {/*    >*/}
-                                            {/*        {row.email}*/}
-                                            {/*    </Typography>*/}
-                                            {/*</Box>*/}
-
-
-                                            {/*<Box*/}
-                                            {/*    sx={{*/}
-                                            {/*        display: "flex",*/}
-                                            {/*        justifyContent: "flex-end",*/}
-                                            {/*        alignItems: "center",*/}
-                                            {/*        gap: { xs: "0px", md: ".7rem" },*/}
-                                            {/*        width: { xs: "10.1rem", md: "20vw" },*/}
-                                            {/*    }}*/}
-                                            {/*>*/}
-                                            {/*    <FormControl*/}
-                                            {/*        sx={{*/}
-                                            {/*            m: 1,*/}
-                                            {/*            width: "100%",*/}
-                                            {/*            textAlign: "center",*/}
-                                            {/*            padding: "6px, 12px, 6px, 12px",*/}
-                                            {/*            display: "inline-flex",*/}
-                                            {/*            justifyContent: "center",*/}
-                                            {/*            alignItems: "center",*/}
-                                            {/*        }}*/}
-                                            {/*    >*/}
-                                            {/*        /!*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*!/*/}
-                                            {/*        <Grid*/}
-                                            {/*            item*/}
-                                            {/*            lg={8}*/}
-                                            {/*            sx={{ minWidth: { xs: "100%", md: "160px" } }}*/}
-                                            {/*        >*/}
-                                            {/*            <Tooltip*/}
-                                            {/*                disableHoverListener={row.editable}*/}
-                                            {/*                title={*/}
-                                            {/*                    <Trans i18nKey="spaceOwnerRoleIsNotEditable" />*/}
-                                            {/*                }*/}
-                                            {/*            >*/}
-                                            {/*                <SelectionRole*/}
-                                            {/*                    row={row}*/}
-                                            {/*                    listOfRoles={listOfRoles}*/}
-                                            {/*                    MenuProps={MenuProps}*/}
-                                            {/*                    setChangeData={setChangeData}*/}
-                                            {/*                />*/}
-                                            {/*            </Tooltip>*/}
-                                            {/*        </Grid>*/}
-                                            {/*    </FormControl>*/}
-                                            {/*    <Tooltip*/}
-                                            {/*        disableHoverListener={row.editable}*/}
-                                            {/*        title={*/}
-                                            {/*            <Trans i18nKey="spaceOwnerRoleIsNotEditable" />*/}
-                                            {/*        }*/}
-                                            {/*    >*/}
-                                            {/*        <Box*/}
-                                            {/*            width="30%"*/}
-                                            {/*            display="flex"*/}
-                                            {/*            justifyContent="center"*/}
-                                            {/*            alignItems="center"*/}
-                                            {/*        >*/}
-                                            {/*            <IconButton*/}
-                                            {/*                sx={{ "&:hover": { color: "#d32f2f" } }}*/}
-                                            {/*                size="small"*/}
-                                            {/*                disabled={!row.editable}*/}
-                                            {/*                onClick={() =>*/}
-                                            {/*                    openRemoveModal(row.displayName, row.id)*/}
-                                            {/*                }*/}
-                                            {/*            >*/}
-                                            {/*                <DeleteRoundedIcon />*/}
-                                            {/*            </IconButton>*/}
-                                            {/*        </Box>*/}
-                                            {/*    </Tooltip>*/}
-                                            {/*</Box>*/}
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -498,8 +359,8 @@ export default function SettingBox(props: any){
                     </Table>
                 </TableContainer>
                 <Divider sx={{ width: "100%", marginBlock: "24px" }} />
-
             </Box>
+            {openEGModal &&  <AddMemberModal query={query} open={openEGModal} close={onCloseEGModal} />}
         </Box>
     );
 };
@@ -836,266 +697,3 @@ const AddMember = (props: any) => {
         </Box>
     );
 };
-
-
-
-// <Box
-//     sx={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "flex-start",
-//         px: { xs: "15px", sm: "51px" },
-//     }}
-//     gap={2}
-//     textAlign="center"
-//     height={"auto"}
-//     minHeight={"350px"}
-//     width={"100%"}
-//     bgcolor={"#FFF"}
-//     borderRadius={"40.53px"}
-//     py={"32px"}
-// >
-//     <Box height={"100%"} width={"100%"}>
-//         <Box
-//             sx={{
-//                 display: "flex",
-//                 justifyContent: !btnLabel ? { xs: "flex-start", sm: "center" } : "center",
-//                 alignItems: "center",
-//                 position: "relative",
-//                 width: btnLabel ? "90%" : "100%",
-//                 ml: btnLabel ? "10%" : "",
-//                 gap: !btnLabel ? "10px" : "" ,
-//             }}
-//         >
-//             <Typography ml={hasBtn ? "auto" : "center" } color="#9DA7B3" variant="headlineMedium">
-//                 <Trans i18nKey={title} />
-//             </Typography>
-//             {hasBtn &&
-//                 <Button
-//                     variant="contained"
-//                     onClick={()=>name === "assessmentSettingBox" ? openAssessmentModal() : setOpenEGModal(true)}
-//                     aria-hidden
-//                     sx={{ ml: "auto", display: "flex", alignItems: "center" }}
-//                 >
-//                     <AddIcon
-//                         sx={{ width: "1.125rem", height: "1.125rem" }}
-//                         fontSize="small"
-//                         style={{ color: "#EDFCFC" }}
-//                     />
-//                     <Trans i18nKey={btnLabel} />
-//                 </Button>}
-//         </Box>
-//         <Divider sx={{ width: "100%", marginTop: "24px" }} />
-//         <TableContainer
-//             sx={{
-//                 maxHeight: 840,
-//                 "&::-webkit-scrollbar": {
-//                     display: "none",
-//                 },
-//             }}
-//         >
-//             {children ? children : <Table stickyHeader aria-label="sticky table">
-//                 <TableHead
-//                     sx={{width: "100%", overflow: "hidden"}}
-//                     style={{
-//                         position: "sticky",
-//                         top: 0,
-//                         zIndex: 3,
-//                         backgroundColor: "#fff",
-//                     }}
-//                 >
-//                     <TableRow
-//                         tabIndex={-1}
-//                         sx={{
-//                             display: "inline",
-//                             justifyContent: "center",
-//                             width: "100%",
-//                         }}
-//                     >
-//                         {columns.map((column: any) => (
-//                             <TableCell
-//                                 key={column.id}
-//                                 align={column.align}
-//                                 sx={{
-//                                     minWidth: {
-//                                         xs: "8.1rem",
-//                                         sm: "12rem",
-//                                         md: column.minWidth,
-//                                     },
-//                                     textAlign: {xs: column.position, lg: "center"},
-//                                     display: {
-//                                         xs: column.display,
-//                                         md: "inline-block",
-//                                         color: "#9DA7B3",
-//                                         border: "none",
-//                                         fontSize: "1rem",
-//                                     },
-//                                 }}
-//                             >
-//                                 {column.label}
-//                             </TableCell>
-//                         ))}
-//                     </TableRow>
-//                 </TableHead>
-//
-//                 {/* Move the Divider outside the TableHead */}
-//                 <TableBody>
-//                     {listOfUser && listOfUser.length > 0 &&
-//                         listOfUser.map((row: any) => (
-//                             <TableRow
-//                                 tabIndex={-1}
-//                                 key={row.id}
-//                                 sx={{background: !row.editable && name === "assessmentSettingBox" ? "#ebe8e85c" : ""}}
-//                             >
-//                                 <TableCell
-//                                     sx={{
-//                                         display: "flex",
-//                                         justifyContent: "space-evenly",
-//                                         alignItems: "center",
-//                                         border: "none",
-//                                         gap: {xs: "0px", md: "1.3rem"},
-//                                         paddingX: {xs: "0px", md: "1rem"},
-//                                     }}
-//                                 >
-//                                     <Box sx={{width: "18vw"}}>
-//                                         <Box
-//                                             sx={{
-//                                                 display: "flex",
-//                                                 justifyContent: {xs: "flex-start"},
-//                                                 alignItems: "center",
-//                                                 gap: ".5rem",
-//                                                 paddingLeft: {lg: "30%"},
-//                                             }}
-//                                         >
-//                                             {name === "assessmentSettingBox" &&  <Avatar
-//                                                 {...stringAvatar(row.displayName.toUpperCase())}
-//                                                 src={row.pictureLink}
-//                                                 sx={{
-//                                                     width: 40,
-//                                                     height: 40,
-//                                                     display: {xs: "none", sm: "flex"},
-//                                                 }}
-//                                             />}
-//                                             <Typography
-//                                                 sx={{
-//                                                     textOverflow: "ellipsis",
-//                                                     overflow: "hidden",
-//                                                     whiteSpace: "nowrap",
-//                                                     fontSize: "0.875rem",
-//                                                     color: "#1B1B1E",
-//                                                     fontWeight: 500,
-//                                                 }}
-//                                             >
-//                                                 {row.displayName || row.name}
-//                                             </Typography>
-//                                             {!row.editable && name === "assessmentSettingBox" && (
-//                                                 <Chip
-//                                                     sx={{
-//                                                         mr: 1,
-//                                                         opacity: 0.7,
-//                                                         color: "#9A003C",
-//                                                         borderColor: "#9A003C",
-//                                                     }}
-//                                                     label={<Trans i18nKey={"owner"}/>}
-//                                                     size="small"
-//                                                     variant="outlined"
-//                                                 />
-//                                             )}
-//                                         </Box>
-//                                     </Box>
-//                                     <Box
-//                                         sx={{
-//                                             display: name === "assessmentSettingBox" ? {xs: "none", md: "flex"} : "flex",
-//                                             justifyContent: "center",
-//                                             width: {xs: "5rem", md: "20vw"},
-//                                         }}
-//                                     >
-//                                         <Typography
-//                                             sx={{
-//                                                 textOverflow: "ellipsis",
-//                                                 overflow: "hidden",
-//                                                 whiteSpace: "nowrap",
-//                                                 color: "#1B1B1E",
-//                                                 fontSize: "0.875",
-//                                                 wight: 300,
-//                                             }}
-//                                         >
-//                                             {row.email}
-//                                         </Typography>
-//                                     </Box>
-//                                     <Box
-//                                         sx={{
-//                                             display: "flex",
-//                                             justifyContent: name === "assessmentSettingBox" ? "flex-end" : "center",
-//                                             alignItems: "center",
-//                                             gap: {xs: "0px", md: ".7rem"},
-//                                             width: name === "assessmentSettingBox" ? {xs: "10.1rem", md: "20vw"} : {xs: "5rem", md: "20vw"},
-//                                         }}
-//                                     >
-//                                         {(name === "assessmentSettingBox" || name === "assessmentSettingInviteBox") && <FormControl
-//                                             sx={{
-//                                                 m: 1,
-//                                                 width: "100%",
-//                                                 textAlign: "center",
-//                                                 padding: "6px, 12px, 6px, 12px",
-//                                                 display: "inline-flex",
-//                                                 justifyContent: "center",
-//                                                 alignItems: "center",
-//                                             }}
-//                                         >
-//                                             {/*<Grid item lg={8} sx={{minWidth: {xs: "100%", md: "12vw", lg:"10vw", xl: "160px"}}} >*/}
-//                                             <Grid
-//                                                 item
-//                                                 lg={8}
-//                                                 sx={{minWidth: {xs: "100%", md: "160px"}}}
-//                                             >
-//                                                 <Tooltip
-//                                                     disableHoverListener={row.editable}
-//                                                     title={
-//                                                         <Trans i18nKey="spaceOwnerRoleIsNotEditable"/>
-//                                                     }
-//                                                 >
-//                                                     <SelectionRole row={row} listOfRoles={listOfRoles}
-//                                                                    MenuProps={MenuProps}
-//                                                                    setChangeData={setChangeData}/>
-//                                                 </Tooltip>
-//                                             </Grid>
-//                                         </FormControl>
-//                                         }
-//                                         <Tooltip
-//                                             disableHoverListener={row.editable && name === "assessmentSettingBox"}
-//                                             title={
-//                                                 name === "assessmentSettingBox" && <Trans i18nKey="spaceOwnerRoleIsNotEditable"/>
-//                                             }
-//                                         >
-//                                             <Box
-//                                                 width="30%"
-//                                                 display="flex"
-//                                                 justifyContent="center"
-//                                                 alignItems="center"
-//                                             >
-//                                                 <IconButton
-//                                                     sx={{"&:hover": {color: "#d32f2f"}}}
-//                                                     size="small"
-//                                                     disabled={!row.editable && name === "assessmentSettingBox"}
-//                                                     onClick={() => {
-//                                                         name === "assessmentSettingBox" && openRemoveModal(row.displayName, row.id);
-//                                                         name === "EGPermissionSettingBox" && deleteEGMember(row.id)
-//                                                         name === "assessmentSettingInviteBox" && openRemoveModal(row.email, row.id, true)
-//                                                     }
-//                                                     }
-//                                                 >
-//                                                     <DeleteRoundedIcon/>
-//                                                 </IconButton>
-//                                             </Box>
-//                                         </Tooltip>
-//                                     </Box>
-//                                 </TableCell>
-//                             </TableRow>
-//                         ))}
-//                 </TableBody>
-//             </Table>}
-//         </TableContainer>
-//     </Box>
-//     {openEGModal &&  <AddMemberModal query={query} open={openEGModal} close={onCloseEGModal} />}
-// </Box>
