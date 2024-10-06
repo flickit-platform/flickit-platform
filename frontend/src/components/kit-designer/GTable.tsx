@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody, Table, TableFooter, TablePagination, IconButton
+    TableBody, Table, TableFooter, TablePagination, IconButton, TextField, MenuItem, Select
 } from "@mui/material";
 import {Trans} from "react-i18next";
 import {theme} from "@config/theme";
@@ -25,20 +25,25 @@ const GTable = (props: any) => {
         infoDescription,
         hasBtn,
         labelBtn,
+        hasFilterBtn,
+        hasSelectBtn,
         ...rest
     } = props
 
     return (
-        <Box sx={{width:"100%"}}>
-            {title && <Box mb={"1.5rem"} height={"100%"} width={"100%"}>
+        <Box sx={{width:"100%",padding: "1rem", background: theme.palette.primary.contrastText}}>
+            {title && <Box mb={"1rem"} height={"100%"} width={"100%"}>
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                        flexDirection: hasSelectBtn ? "column": "row",
+                        justifyContent: hasSelectBtn ? "center" :  "space-between",
+                        alignItems: hasSelectBtn ? "space-between" : "center",
                         position: "relative",
                         width: "100%",
-
+                        height: hasSelectBtn ? "auto": "4rem",
+                        gap: hasSelectBtn ? "1.5rem" : "0",
+                        padding: "1rem"
                     }}
                 >
                     <Box sx={{display:"flex", alignItems:"center", gap:".5rem"}}>
@@ -49,15 +54,51 @@ const GTable = (props: any) => {
                             <InfoOutlinedIcon sx={{color:"#6C8093",fontSize:"16px", cursor:"pointer"}} />
                         </Tooltip>}
                     </Box>
-                    {hasBtn && <Button
-                        variant="contained"
-                        sx={{
-                            display: "flex", alignItems: "center",
-                            color: theme.palette.primary.contrastText,
-                        }}
-                    >
-                        <Trans i18nKey={labelBtn}/>
-                    </Button>}
+                    <Box sx={{display: "flex", justifyContent: "space-between", alignItems : "center"}}>
+                        <Box sx={{display: "flex",gap: "1rem"}}>
+                            {hasSelectBtn && <TextField
+                                // sx={{
+                                //     width: "18.75rem",
+                                //     '& .MuiOutlinedInput-input': {
+                                //         paddingY: 0
+                                //     }
+                                // }}
+                                // inputProps={{   height:"2.5rem",}}
+                                size={"small"}
+                                placeholder={"Titles, descriptions etc."}
+                                id="outlined-basic"
+                                label="Search"
+                                variant="outlined"
+                            />
+                            }
+                            {hasSelectBtn &&  <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={"age"}
+                                size={"small"}
+                                sx={{
+                                    width: "11.25rem",
+                                }}
+                                label="Age"
+                                onChange={()=>{}}
+                            >
+                                <MenuItem value={10}>Ten</MenuItem>
+                                <MenuItem value={20}>Twenty</MenuItem>
+                                <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>}
+                        </Box>
+                        {hasBtn && <Button
+                            variant="contained"
+                            sx={{
+                                display: "flex", alignItems: "center",
+                                width:"fit-content",
+                                height:"2rem",
+                                color: theme.palette.primary.contrastText,
+                            }}
+                        >
+                            <Trans i18nKey={labelBtn}/>
+                        </Button>}
+                    </Box>
                 </Box>
             </Box>
             }
@@ -67,7 +108,7 @@ const GTable = (props: any) => {
 };
 
 const ContentTable = (rest) =>{
-    const {headerData,bodyData, totalCount} = rest
+    const {headerData, bodyData, totalCount, hasPagination} = rest
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -78,7 +119,7 @@ const ContentTable = (rest) =>{
                     <TableRow>
                         {headerData.map(headerItem=> {
                             return(
-                                <TableCell>
+                                <TableCell sx={{...theme.typography.bodyMedium, color: "#6C8093",py:0}}>
                                     {headerItem}
                                 </TableCell>
                             )
@@ -97,7 +138,7 @@ const ContentTable = (rest) =>{
                         })}
                     </TableRow>
                 </TableBody>
-                <TableFooter>
+                {hasPagination &&  <TableFooter>
                     <TableRow>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
@@ -113,69 +154,11 @@ const ContentTable = (rest) =>{
                                     native: true,
                                 },
                             }}
-                            // onPageChange={handleChangePage}
-                            // onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
                         />
                     </TableRow>
-                </TableFooter>
+                </TableFooter>}
             </Table>
         </TableContainer>
     )
-}
-
-function TablePaginationActions(props) {
-    const { count, page, rowsPerPage, onPageChange } = props;
-
-    const handleFirstPageButtonClick = (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
-        onPageChange(event, 0);
-    };
-
-    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, page - 1);
-    };
-
-    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, page + 1);
-    };
-
-    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-
-    return (
-        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-            <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
-                aria-label="first page"
-            >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
-            <IconButton
-                onClick={handleBackButtonClick}
-                disabled={page === 0}
-                aria-label="previous page"
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-            </IconButton>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </IconButton>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-            >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-            </IconButton>
-        </Box>
-    );
 }
 export default GTable;
