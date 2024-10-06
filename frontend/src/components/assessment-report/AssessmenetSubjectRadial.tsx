@@ -1,13 +1,6 @@
 import React, { useMemo } from "react";
 import {
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadarChart,
   ResponsiveContainer,
-  Text,
-  Radar,
-  Legend,
   BarChart,
   Bar,
   CartesianGrid,
@@ -15,22 +8,13 @@ import {
   YAxis,
 } from "recharts";
 import Skeleton from "@mui/material/Skeleton";
-import { t } from "i18next";
-import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
-import convertToAssessmentChartData, {
-  convertToRadialChartData,
-} from "@/utils/convertToAssessmentChartData";
+import { convertToRadialChartData } from "@/utils/convertToAssessmentChartData";
 
 interface AssessmentSubjectRadialChartProps {
   loading: boolean;
   data: any[];
   maturityLevelsCount: number;
 }
-
-const style = {
-  right: 0,
-  lineHeight: "24px",
-};
 
 const AssessmentSubjectRadialChart: React.FC<
   AssessmentSubjectRadialChartProps
@@ -52,10 +36,7 @@ interface SubjectRadialProps {
   maturityLevelsCount: number;
 }
 
-const SubjectRadial: React.FC<SubjectRadialProps> = ({
-  data,
-  maturityLevelsCount,
-}) => {
+const SubjectRadial: React.FC<SubjectRadialProps> = ({ data }) => {
   const chartData = useMemo(() => convertToRadialChartData(data), [data]);
 
   return (

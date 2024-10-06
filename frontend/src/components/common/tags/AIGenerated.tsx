@@ -1,4 +1,5 @@
-import { Box, Chip } from "@mui/material";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { Trans } from "react-i18next";
 import { theme } from "@/config/theme";

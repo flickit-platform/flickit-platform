@@ -1,12 +1,7 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { ECustomErrorType } from "@types";
 import { ICustomError } from "@utils/CustomError";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
-
-interface IPermissionControl {
-  error: (ICustomError | undefined) | (ICustomError | undefined)[];
-  loading?: boolean;
-}
 
 const PermissionControl = (props: PropsWithChildren<any>) => {
   console.log(props);

@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Box,
-  Button,
-  Grid,
-  Typography,
-  Divider,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Trans } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
@@ -20,9 +18,8 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { Gauge } from "../common/charts/Gauge";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 import { getMaturityLevelColors, styles } from "@styles";
-import { ISubjectInfo, IMaturityLevel, TId, ISubjectReportModel } from "@types";
+import { ISubjectInfo, IMaturityLevel, TId } from "@types";
 import { ICustomError } from "@/utils/CustomError";
-import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
@@ -52,7 +49,6 @@ export const AssessmentSubjectAccordion = (
     maturityLevelCount,
     confidenceValue,
     id,
-    colorCode,
     attributes,
     description = "",
   } = props;
@@ -370,8 +366,7 @@ const SubjectStatus = (
     "title" | "maturity_level" | "maturityLevelCount"
   >,
 ) => {
-  const { title, maturity_level, maturityLevelCount } = props;
-  const colorPallet = getMaturityLevelColors(maturity_level?.index ?? 0);
+  const { maturity_level, maturityLevelCount } = props;
   const hasStats = maturity_level?.index ? true : false;
   const isMobileScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("md"),

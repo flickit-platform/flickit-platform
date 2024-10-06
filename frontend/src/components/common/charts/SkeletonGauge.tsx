@@ -1,8 +1,3 @@
-import React from "react";
-interface IDynamicGaugeSVGProps {
-  colorCode: string;
-  value: number;
-}
 const SkeletonGauge = () => {
   return (
     <svg

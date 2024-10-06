@@ -1,13 +1,8 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
-import React, {
-  ReactNode,
-  useState,
-  useRef,
-  useEffect,
-  ChangeEvent,
-} from "react";
+import { ReactNode, useState, useRef, useEffect, ChangeEvent } from "react";
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
@@ -106,7 +101,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     <TextField
       {...rest}
       {...register(name, { required, minLength, maxLength })}
-      data-testid={`input-${name}`} 
+      data-testid={`input-${name}`}
       type={showPassword ? "text" : type}
       fullWidth
       size="small"

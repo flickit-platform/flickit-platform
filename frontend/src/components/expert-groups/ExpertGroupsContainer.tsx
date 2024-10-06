@@ -1,4 +1,8 @@
-import { Box, Button, Grid, Pagination, Skeleton, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import { t } from "i18next";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -13,7 +17,6 @@ import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import QueryData from "@common/QueryData";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
 import ExpertGroupsList from "./ExpertGroupsList";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { theme } from "@/config/theme";
 
@@ -21,7 +24,6 @@ const ExpertGroupsContainer = () => {
   const { service } = useServiceContext();
   const { userInfo } = useAuthContext();
   const { id } = userInfo || {};
-  const { is_expert } = userInfo;
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 20;
 
@@ -47,7 +49,7 @@ const ExpertGroupsContainer = () => {
       : Math.ceil(queryData.data?.total / queryData.data?.size);
 
   useDocumentTitle(t("expertGroups") as string);
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
+  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box>
       <Box
@@ -61,10 +63,12 @@ const ExpertGroupsContainer = () => {
         }}
       >
         <Box></Box>
-        <Box sx={{
-          ml: theme.direction === "rtl" ? "unset" : "auto",
-          mr: theme.direction !== "rtl" ? "unset" : "auto",
-        }}>
+        <Box
+          sx={{
+            ml: theme.direction === "rtl" ? "unset" : "auto",
+            mr: theme.direction !== "rtl" ? "unset" : "auto",
+          }}
+        >
           {<CreateExpertGroupButton onSubmitForm={queryData.query} />}
         </Box>
       </Box>
@@ -116,7 +120,6 @@ const ExpertGroupsContainer = () => {
 const CreateExpertGroupButton = (props: { onSubmitForm: TQueryFunction }) => {
   const { onSubmitForm } = props;
   const dialogProps = useDialog();
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;;
   return (
     <>
       <Button

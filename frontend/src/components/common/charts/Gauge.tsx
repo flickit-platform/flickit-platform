@@ -1,11 +1,12 @@
-import { Box, Typography, BoxProps, Tooltip } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { lazy, Suspense } from "react";
 import { Trans } from "react-i18next";
 import { styles, getMaturityLevelColors } from "@styles";
 import SkeletonGauge from "@common/charts/SkeletonGauge";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import PermissionRequired from "@common/charts/permissionRequired";
-import { primaryFontFamily, secondaryFontFamily } from "@/config/theme";
+import { secondaryFontFamily } from "@/config/theme";
 interface IGaugeProps extends BoxProps {
   maturity_level_number: number;
   maturity_level_status: string;

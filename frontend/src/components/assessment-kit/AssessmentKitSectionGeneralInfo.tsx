@@ -57,18 +57,6 @@ const AssessmentKitSectionGeneralInfo = (
       service.fetchAssessmentKitStats(args, config),
     runOnMount: true,
   });
-  const publishQuery = useQuery({
-    service: (args = { id: assessmentKitId }, config) =>
-      service.publishAssessmentKit(args, config),
-    runOnMount: false,
-    toastError: true,
-  });
-  const unPublishQuery = useQuery({
-    service: (args = { id: assessmentKitId }, config) =>
-      service.unPublishAssessmentKit(args, config),
-    runOnMount: false,
-    toastError: true,
-  });
   // const publishAssessmentKit = async () => {
   //   try {
   //     const res = await publishQuery.query();
@@ -132,12 +120,10 @@ const AssessmentKitSectionGeneralInfo = (
         }
         render={([info, stats]) => {
           const {
-            id,
             title,
             summary,
             published,
             isPrivate,
-            price,
             about,
             tags,
             editable,
@@ -915,12 +901,10 @@ const OnHoverRichEditor = (props: any) => {
     setIsHovering(false);
   };
   const { data, title, infoQuery, editable } = props;
-  const [titleText, setTitleText] = useState<string>(data);
   const [hasError, setHasError] = useState<boolean>(false);
   const [error, setError] = useState<any>({});
   const handleCancel = () => {
     setShow(false);
-    setTitleText(data);
     setError({});
     setHasError(false);
   };
@@ -1044,183 +1028,6 @@ const OnHoverRichEditor = (props: any) => {
               fontWeight="700"
               dangerouslySetInnerHTML={{ __html: data }}
             />
-            {isHovering && (
-              <IconButton
-                title="Edit"
-                edge="end"
-                sx={{
-                  background: theme.palette.primary.main,
-                  "&:hover": {
-                    background: theme.palette.primary.dark,
-                  },
-                  borderRadius: "3px",
-                  height: "36px",
-                }}
-                onClick={() => setShow(!show)}
-              >
-                <EditRoundedIcon sx={{ color: "#fff" }} />
-              </IconButton>
-            )}
-          </Box>
-        )}
-      </Box>
-    </Box>
-  );
-};
-const OnHoverAutocompleteAsyncField = (props: any) => {
-  const abortController = useRef(new AbortController());
-  const [show, setShow] = useState<boolean>(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
-    editable && setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
-  const { data, title, infoQuery, editable } = props;
-  const [titleText, setTitleText] = useState<string>(data);
-  const handleCancel = () => {
-    setShow(false);
-    setTitleText(data);
-  };
-  const { assessmentKitId } = useParams();
-  const { service } = useServiceContext();
-  const formMethods = useForm({ shouldUnregister: true });
-  const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
-    event.preventDefault();
-    try {
-      const { data: res } = await service.updateAssessmentKitStats(
-        { assessmentKitId: assessmentKitId || "", data: { tags: data.about } },
-        { signal: abortController.current.signal },
-      );
-      if (res) {
-        handleCancel();
-        infoQuery();
-      }
-    } catch {}
-  };
-  const display = false;
-
-  return (
-    <Box>
-      <Box
-        my={1.5}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="body2" mr={4}>
-          {title}
-        </Typography>
-        {editable && show ? (
-          <FormProviderWithForm formMethods={formMethods}>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <AutocompleteAsyncField
-                {...useConnectAutocompleteField({
-                  service: (args, config) =>
-                    service.fetchAssessmentKitTags(args, config),
-                })}
-                name="tags"
-                multiple={true}
-                defaultValue={data}
-                searchOnType={false}
-                label={""}
-                sx={{ width: "100%" }}
-              />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <IconButton
-                  edge="end"
-                  sx={{
-                    background: theme.palette.primary.main,
-                    "&:hover": {
-                      background: theme.palette.primary.dark,
-                    },
-                    borderRadius: "3px",
-                    height: "36px",
-                    marginBottom: "2px",
-                    marginRight: theme.direction === "ltr" ? "3px" : "unset",
-                    marginLeft: theme.direction === "rtl" ? "3px" : "unset",
-                  }}
-                  onClick={formMethods.handleSubmit(onSubmit)}
-                >
-                  <CheckCircleOutlineRoundedIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  sx={{
-                    background: theme.palette.primary.main,
-                    "&:hover": {
-                      background: theme.palette.primary.dark,
-                    },
-                    borderRadius: "4px",
-                    height: "36px",
-                    marginBottom: "2px",
-                  }}
-                  onClick={handleCancel}
-                >
-                  <CancelRoundedIcon sx={{ color: "#fff" }} />
-                </IconButton>
-              </Box>
-            </Box>
-          </FormProviderWithForm>
-        ) : (
-          <Box
-            sx={{
-              height: "38px",
-              borderRadius: "4px",
-              paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
-              paddingRight: theme.direction === "rtl" ? "12px" : "8px",
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              "&:hover": {
-                border: editable ? "1px solid #1976d299" : "unset",
-                borderColor: editable ? theme.palette.primary.main : "unset",
-              },
-            }}
-            onClick={() => setShow(!show)}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-          >
-            <Box sx={{ display: "flex" }}>
-              {data.map((tag: any, index: number) => {
-                return (
-                  <Box
-                    sx={{
-                      background: "#00000014",
-                      fontSize: "0.875rem",
-                      borderRadius: "8px",
-                      fontWeight: "700",
-                    }}
-                    mr={1}
-                    px={1}
-                  >
-                    <Typography variant="body2" fontWeight="700">
-                      {tag.title}
-                    </Typography>
-                  </Box>
-                );
-              })}
-            </Box>
             {isHovering && (
               <IconButton
                 title="Edit"

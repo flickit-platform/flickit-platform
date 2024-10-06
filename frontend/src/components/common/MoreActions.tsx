@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,7 +27,7 @@ interface IMoreActionsProps {
     | undefined
     | false
   )[];
-    setShowTooltip?: (e :boolean)=> void
+  setShowTooltip?: (e: boolean) => void;
 }
 
 const MoreActions = (props: IMoreActionsProps) => {
@@ -41,7 +41,7 @@ const MoreActions = (props: IMoreActionsProps) => {
     items = [],
     hideInnerIconButton = false,
     fontSize = "inherit",
-    setShowTooltip
+    setShowTooltip,
   } = props;
 
   const menuItems = items.filter((item) => !!item) as {
@@ -60,7 +60,7 @@ const MoreActions = (props: IMoreActionsProps) => {
             e.preventDefault();
             e.stopPropagation();
             !loading && openMenu(e);
-            setShowTooltip?.(false)
+            setShowTooltip?.(false);
           }}
         >
           {loading ? (

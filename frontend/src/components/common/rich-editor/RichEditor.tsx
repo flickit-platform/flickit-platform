@@ -1,10 +1,10 @@
-import { Box, BoxProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import { useEditor, EditorContent, EditorOptions } from "@tiptap/react";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 import RichEditorMenuBar from "./RichEditorMenuBar";
 import Link from "@tiptap/extension-link";
-import { useRef, ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import firstCharDetector from "@/utils/firstCharDetector";
 import { primaryFontFamily } from "@/config/theme";

@@ -1,14 +1,10 @@
 import Box from "@mui/material/Box";
-import Title from "@common/Title";
-import { Trans } from "react-i18next";
 import SubjectAttributeCard from "./SubjectAttributeCard";
-import { Grid } from "@mui/material";
 import ErrorEmptyData from "../common/errors/ErrorEmptyData";
 
 export const SubjectAttributeList = (props: any) => {
   const { data } = props;
-  const { subject, attributes, maturityLevelsCount } = data;
-  const { title } = subject;
+  const { attributes, maturityLevelsCount } = data;
   const isEmpty = attributes.length === 0;
 
   return (

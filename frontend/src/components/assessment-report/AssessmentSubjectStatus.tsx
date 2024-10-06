@@ -1,17 +1,9 @@
 import Box from "@mui/material/Box";
-import { Trans } from "react-i18next";
-import {
-  AssessmentKitInfoType,
-  ExpertGroupDetails,
-  ISubjectInfo,
-  PathInfo,
-} from "@types";
+import { ISubjectInfo } from "@types";
 import Typography from "@mui/material/Typography";
-import { getMaturityLevelColors, styles } from "@styles";
-import { Link } from "react-router-dom";
-import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { Button, Divider } from "@mui/material";
+import { getMaturityLevelColors } from "@styles";
+import Divider from "@mui/material/Divider";
+
 interface IAssessmentSubjectStatus {
   subjects: ISubjectInfo[];
 }

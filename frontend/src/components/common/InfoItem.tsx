@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";

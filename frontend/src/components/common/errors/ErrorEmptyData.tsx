@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import HourglassEmptyRoundedIcon from "@mui/icons-material/HourglassEmptyRounded";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";

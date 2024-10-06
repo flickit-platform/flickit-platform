@@ -7,53 +7,37 @@ import { Trans } from "react-i18next";
 import { t } from "i18next";
 import { getMaturityLevelColors, styles } from "@styles";
 import {
-  AssessmentKitInfoType,
   ECustomErrorType,
-  IAssessmentKit,
-  IAssessmentKitInfo,
   IAssessmentResponse,
   IAttribute,
-  IMaturityLevel,
   ISubject,
-  ISubjectReport,
   PathInfo,
-  RolesType,
   TId,
 } from "@types";
-import {
-  Checkbox,
-  Chip,
-  CircularProgress,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Link,
-  Divider,
-} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AssessmentExportTitle from "./AssessmentExportTitle";
-import {
-  DownloadRounded,
-  FiberManualRecordOutlined,
-  FiberManualRecordRounded,
-  InfoOutlined,
-  TableChartRounded,
-} from "@mui/icons-material";
+import FiberManualRecordOutlined from "@mui/icons-material/FiberManualRecordOutlined";
+import FiberManualRecordRounded from "@mui/icons-material/FiberManualRecordRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import TableChartRounded from "@mui/icons-material/TableChartRounded";
 import AssessmentSubjectRadarChart from "./AssessmenetSubjectRadarChart";
 import AssessmentSubjectRadialChart from "./AssessmenetSubjectRadial";
 import { Gauge } from "../common/charts/Gauge";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import AssessmentReportPDF from "./AssessmentReportPDF";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AttributeStatusBarContainer } from "../subject-report-old/SubjectAttributeCard";
-import { AssessmentOverallStatus } from "../assessment-report/AssessmentOverallStatus";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
 import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
@@ -63,9 +47,7 @@ import html2canvas from "html2canvas";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
-import { FaClipboard } from "react-icons/fa";
 import { theme } from "@/config/theme";
-import { FaWandMagicSparkles } from "react-icons/fa6";
 import AIGenerated from "../common/tags/AIGenerated";
 
 const handleCopyAsImage = async (
