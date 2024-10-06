@@ -380,11 +380,17 @@ const AssessmentKit = (props: any) => {
                           fontWeight: "bold",
                           color: "#fff",
                           borderRadius:
-                            index === 0
+                            theme.direction === "ltr" && index === 0
                               ? "8px 0 0 8px"
-                              : index === maturityLevels?.length - 1
+                              : theme.direction === "ltr" &&
+                                  index === maturityLevels?.length - 1
                                 ? "0 8px 8px 0"
-                                : "0",
+                                : theme.direction === "rtl" &&
+                                    index === maturityLevels?.length - 1
+                                  ? "8px 0 0 8px"
+                                  : theme.direction === "rtl" && index === 0
+                                    ? "0 8px 8px 0"
+                                    : "0",
                         }}
                       >
                         {item.title}
