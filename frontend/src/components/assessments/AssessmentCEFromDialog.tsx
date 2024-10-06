@@ -33,6 +33,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedTitle, setSubmittedTitle] = useState("");
+  const [isFocused, setIsFocused] = useState(true);
   const [createdKitId, setCreatedKitId] = useState("");
   const [createdKitSpaceId, setCreatedKitSpaceId] = useState(undefined);
   const { service } = useServiceContext();
@@ -128,6 +129,10 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
     if (openDialog) {
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Enter") {
+          setIsFocused(false);
+          setTimeout(() => {
+            setIsFocused(true);
+          }, 500);
           formMethods.handleSubmit((data) =>
               onSubmit(formMethods.getValues(), e)
           )();
@@ -170,6 +175,7 @@ const AssessmentCEFromDialog = (props: IAssessmentCEFromDialogProps) => {
                 required={true}
                 label={<Trans i18nKey="title" />}
                 data-cy="title"
+                isFocused={isFocused}
               />
             </Grid>
             <Grid item xs={12} md={12}>
