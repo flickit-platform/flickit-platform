@@ -3,7 +3,6 @@ import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 
 interface IAssessmentReportTitle {
   data: any;
-  colorCode?: string;
 }
 
 const AssessmentTitle = (props: IAssessmentReportTitle) => {

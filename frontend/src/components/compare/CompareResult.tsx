@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
@@ -27,7 +27,6 @@ const CompareResult = (props: ICompareResultProps) => {
     setDocumentTitle(`${t("comparisonResultT")} `, config.appTitle);
   }, []);
 
-  
   return (
     <Box mt={4}>
       <Box sx={{ overflowX: "auto" }}>

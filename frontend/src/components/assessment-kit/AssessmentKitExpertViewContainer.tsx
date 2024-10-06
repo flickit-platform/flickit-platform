@@ -23,7 +23,6 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
-import { useAuthContext } from "@providers/AuthProvider";
 import languageDetector from "@utils/languageDetector";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
@@ -42,7 +41,6 @@ const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
   const dialogProps = useDialog();
-  const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
   const [update, setForceUpdate] = useState<boolean>(false);
   const { expertGroupId } = useParams();
@@ -691,7 +689,7 @@ const AssessmentKitQuestionsList = (props: {
               sx={{
                 "& .MuiTabs-indicator": {
                   backgroundColor: `${
-                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                    colorPallet[selectedTabIndex || 0]
                   } !important`,
                 },
               }}

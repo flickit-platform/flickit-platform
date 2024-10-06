@@ -6,7 +6,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
 
 const CompareTable = (props: {
-  base_infos?: ICompareResultBaseInfo[];
   data?: any;
   isSubject: boolean;
 }) => {

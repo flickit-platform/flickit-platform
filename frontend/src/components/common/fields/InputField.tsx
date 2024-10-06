@@ -6,7 +6,7 @@ import { ReactNode, useState, useRef, useEffect, ChangeEvent } from "react";
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import { primaryFontFamily, theme } from "@/config/theme";
+import { primaryFontFamily } from "@/config/theme";
 import { evidenceAttachmentInput } from "@utils/enumType";
 
 const InputField = () => {

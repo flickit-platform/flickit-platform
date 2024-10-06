@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ICustomError } from "@utils/CustomError";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
 import { ECustomErrorType } from "@types";
@@ -19,14 +19,12 @@ import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAcces
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { styles } from "@styles";
+import { styles, animations } from "@styles";
 import AssessmentCEFromDialog from "./AssessmentCEFromDialog";
 import IconButton from "@mui/material/IconButton";
-import { Link } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
-import { animations } from "@styles";
 import AssessmentTitle from "./AssessmentTitle";
 import { theme } from "@/config/theme";
 
@@ -78,10 +76,12 @@ const AssessmentContainer = () => {
             my: 3,
           }}
         >
-          <Box sx={{
-            ml: theme.direction === "rtl" ? "unset" : "auto",
-            mr: theme.direction !== "rtl" ? "unset" : "auto",
-          }}>
+          <Box
+            sx={{
+              ml: theme.direction === "rtl" ? "unset" : "auto",
+              mr: theme.direction !== "rtl" ? "unset" : "auto",
+            }}
+          >
             <ToolbarCreateItemBtn
               data-cy="create-assessment-btn"
               onClick={() =>
@@ -246,8 +246,11 @@ const useFetchAssessments = () => {
         { signal: abortController.current.signal },
       );
       if (res) {
-        const { size, total } = res
-        if(Math.ceil(total / size ) < parseInt(page ?? "1", 10) || isNaN(page as any)){
+        const { size, total } = res;
+        if (
+          Math.ceil(total / size) < parseInt(page ?? "1", 10) ||
+          isNaN(page as any)
+        ) {
           return navigate(`*`);
         }
         setData(res);
@@ -259,7 +262,7 @@ const useFetchAssessments = () => {
 
       setLoading(false);
     } catch (e) {
-      if (isNaN(page as any)){
+      if (isNaN(page as any)) {
         return navigate(`*`);
       }
       const err = e as ICustomError;

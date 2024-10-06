@@ -11,7 +11,7 @@ import EmptyAdvice from "@assets/svg/lampComment.svg";
 import StarsAdvice from "@assets/svg/Stars.svg";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import { ISubjectReportModel, TId } from "@types";
+import { ISubjectReportModel } from "@types";
 import { useServiceContext } from "@providers/ServiceProvider";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";

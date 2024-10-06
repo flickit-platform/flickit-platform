@@ -1,7 +1,6 @@
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useParams } from "react-router-dom";
 import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import { Trans } from "react-i18next";
 import { t } from "i18next";
@@ -42,7 +41,7 @@ import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAcc
 import setDocumentTitle from "@/utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import { toast } from "react-toastify";
@@ -1663,9 +1662,8 @@ const AssessmentExportContainer = () => {
                 </Box>
                 <Typography
                   dangerouslySetInnerHTML={{
-                    __html: adviceNarration
-                      ? adviceNarration
-                      : "There is no recommendation yet!",
+                    __html:
+                      adviceNarration || "There is no recommendation yet!",
                   }}
                 ></Typography>
               </>
