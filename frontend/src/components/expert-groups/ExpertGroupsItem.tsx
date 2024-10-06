@@ -1,14 +1,11 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Divider,
-  Link as MLink,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
@@ -20,12 +17,10 @@ import { useQuery } from "@utils/useQuery";
 import { Trans } from "react-i18next";
 import useDialog from "@utils/useDialog";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
-import { useAuthContext } from "@providers/AuthProvider";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import React, { useState } from "react";
 
 interface IExpertGroupsItemProps {
   data: any;
@@ -162,7 +157,6 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
 const Actions = (props: any) => {
   const { expertGroup, editable } = props;
   const { query: fetchExpertGroups } = useQueryDataContext();
-  const { userInfo } = useAuthContext();
   const { service } = useServiceContext();
   const { id } = expertGroup;
   const { query: fetchExpertGroup, loading } = useQuery({

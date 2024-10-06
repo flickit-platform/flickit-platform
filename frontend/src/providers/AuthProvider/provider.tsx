@@ -1,10 +1,4 @@
-import React, {
-  useReducer,
-  FC,
-  useContext,
-  Dispatch,
-  createContext,
-} from "react";
+import { useReducer, FC, useContext, Dispatch, createContext } from "react";
 import { IUserInfo } from "@types";
 import authReducer from "./reducer";
 

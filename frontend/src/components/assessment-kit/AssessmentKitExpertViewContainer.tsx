@@ -33,7 +33,6 @@ import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import { useForm } from "react-hook-form";
 import UploadField from "@common/fields/UploadField";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import setServerFieldErrors from "@utils/setServerFieldError";
 import { AssessmentKitDetailsType } from "@types";
 import convertToBytes from "@/utils/convertToBytes";
 import { useConfigContext } from "@/providers/ConfgProvider";
@@ -46,7 +45,6 @@ const AssessmentKitExpertViewContainer = () => {
   const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
   const [update, setForceUpdate] = useState<boolean>(false);
-  const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
   const [expertGroup, setExpertGroup] = useState<any>();
@@ -239,7 +237,6 @@ const AssessmentKitSubjects = (props: { details: any[]; update: boolean }) => {
   const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] =
     useState<any>();
   const [subjectId, setSubjectId] = useState<any>();
-  const dialogProps = useDialog();
   const { fetchAssessmentKitSubjectDetailsQuery } = useAssessmentKit();
   const { assessmentKitId } = useParams();
   const handleChange =
@@ -577,7 +574,6 @@ const AssessmentKitQuestionsList = (props: {
   isExpanded: boolean;
 }) => {
   const { attributeId, isExpanded } = props;
-  const questionsRef = {} as Record<string, boolean>;
   const {
     fetchAssessmentKitSubjectAttributesDetailsQuery,
     fetchMaturityLevelQuestionsQuery,
@@ -1115,7 +1111,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
   );
 };
 const SubjectQuestionList = (props: any) => {
-  const { questions, questions_count } = props;
+  const { questions } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const handleChange =
     (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {

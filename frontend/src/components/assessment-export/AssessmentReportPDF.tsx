@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import {
   Document,
   Page,
@@ -9,7 +9,6 @@ import {
 } from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
 import { IMaturityLevel, ISubject } from "@/types";
-import useScreenResize from "@/utils/useScreenResize";
 import { Trans } from "react-i18next";
 
 const styles = StyleSheet.create({

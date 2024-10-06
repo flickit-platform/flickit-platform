@@ -1,12 +1,6 @@
-import { useEffect, useState } from "react";
-import { Avatar, Box, CardHeader, Paper, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import {
-  useNavigate,
-  useLocation,
-  useSearchParams,
-  Link,
-} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
@@ -17,20 +11,11 @@ import Button from "@mui/material/Button";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
 const CompareResultContainer = () => {
-  const [searchParams] = useSearchParams();
   const location = useLocation();
   const { service } = useServiceContext();
   const compareResultQueryData = useQuery<ICompareResultModel>({
     service: (args, config) =>
       service.comparessessments({ data: location.search }, config),
-  });
-  const calculateMaturityLevelQuery = useQuery<any>({
-    service: (args, config) => service.calculateMaturityLevel(args, config),
-    runOnMount: false,
-  });
-  const calculateConfidenceLevelQuery = useQuery({
-    service: (args, config) => service.calculateConfidenceLevel(args, config),
-    runOnMount: false,
   });
 
   const navigate = useNavigate();
@@ -38,7 +23,6 @@ const CompareResultContainer = () => {
     <QueryData
       {...compareResultQueryData}
       render={(data) => {
-        const { assessments, subjects } = data;
         return (
           <Box>
             <Title

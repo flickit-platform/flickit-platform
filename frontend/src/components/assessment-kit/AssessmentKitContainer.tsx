@@ -1,17 +1,14 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  Grid,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { styles, getMaturityLevelColors } from "@styles";
 import Title from "@common/Title";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
-import AssessmentKitsListContainer from "./AssessmentKitsListContainer";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
@@ -22,10 +19,9 @@ import RichEditor from "@common/rich-editor/RichEditor";
 import AssessmentCEFromDialog from "../assessments/AssessmentCEFromDialog";
 import useDialog from "@utils/useDialog";
 import AlertBox from "@common/AlertBox";
-import { LoadingButton } from "@mui/lab";
+import LoadingButton from "@mui/lab/LoadingButton";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { t } from "i18next";
-import useDocumentTitle from "@utils/useDocumentTitle";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { ECustomErrorType } from "@/types";
@@ -65,7 +61,7 @@ const AssessmentKitContainer = () => {
 };
 
 const AssessmentKit = (props: any) => {
-  const { data, query } = props;
+  const { data } = props;
   const { assessmentKitId } = useParams();
 
   const {
@@ -73,7 +69,6 @@ const AssessmentKit = (props: any) => {
     summary = "",
     about = "",
     published,
-    isPrivate,
     creationTime,
     lastModificationTime,
     expertGroupId,

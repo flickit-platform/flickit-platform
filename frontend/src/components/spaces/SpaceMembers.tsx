@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Title from "@common/Title";
 import QueryData from "@common/QueryData";
@@ -15,7 +15,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { t } from "i18next";
 import { LoadingButton } from "@mui/lab";
-import { authActions, useAuthContext } from "@providers/AuthProvider";
+import { useAuthContext } from "@providers/AuthProvider";
 import { Chip, Skeleton, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import MoreActions from "@common/MoreActions";
@@ -27,7 +27,6 @@ import { IDialogProps, IMemberModel, TQueryProps } from "@types";
 import InviteMemberDialog from "@common/dialogs/InviteMemberDialog";
 import useDialog from "@utils/useDialog";
 import { ICustomError } from "@utils/CustomError";
-import getUserName from "@utils/getUserName";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import formatDate from "@utils/formatDate";
 import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
@@ -39,7 +38,7 @@ export const SpaceMembers = (props: any) => {
   const { editable } = props;
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
-  const { dispatch, userInfo } = useAuthContext();
+  const { userInfo } = useAuthContext();
   const userId = userInfo?.id;
   const user_id_ref = useRef<HTMLInputElement>(null);
   const spaceMembersQueryData = useQuery<IMemberModel>({

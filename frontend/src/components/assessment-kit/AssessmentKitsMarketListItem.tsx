@@ -1,11 +1,9 @@
-import {
-  Avatar,
-  Box,
-  CardHeader,
-  Chip,
-  Divider,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { styles } from "@styles";
 import Title from "@common/Title";

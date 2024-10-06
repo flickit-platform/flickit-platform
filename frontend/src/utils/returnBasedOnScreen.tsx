@@ -1,10 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import { Trans } from "react-i18next";
-import Paper from "@mui/material/Paper";
-import { ESystemStatus, ISubjectInfo, TStatus, IMaturityLevel } from "@types";
 
 export const getNumberBaseOnScreen = (
   xs: number,

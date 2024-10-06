@@ -1,17 +1,15 @@
-import useScreenResize from "@utils/useScreenResize";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import React from "react";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { Trans } from "react-i18next";
-import { DialogTitle } from "@mui/material";
-import { Warning } from "@mui/icons-material";
+import DialogTitle from "@mui/material/DialogTitle";
+import Warning from "@mui/icons-material/Warning";
 import { styles } from "@styles";
 import { theme } from "@/config/theme";
 
@@ -21,7 +19,6 @@ const ConfirmRemoveMemberDialog = (props: any) => {
     onCloseRemoveDialog,
     assessmentId,
     assessmentName,
-    fetchAssessmentsUserListRoles,
     setChangeData,
     inviteesMemberList,
   } = props;

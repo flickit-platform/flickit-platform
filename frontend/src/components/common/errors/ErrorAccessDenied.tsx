@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import Box from "@mui/material/Box";
 import LockPersonRoundedIcon from "@mui/icons-material/LockPersonRounded";
 import Typography from "@mui/material/Typography";

@@ -1,5 +1,5 @@
 import { Typography, Box, Chip } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -119,15 +119,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
 };
 
 const Actions = (props: any) => {
-  const {
-    assessment_kit,
-    fetchAssessmentKits,
-    dialogProps,
-    setUserInfo,
-    hasAccess,
-    is_member,
-    is_active,
-  } = props;
+  const { assessment_kit, fetchAssessmentKits, hasAccess } = props;
   const { id } = assessment_kit;
   const { service } = useServiceContext();
   const [editLoading, setEditLoading] = useState(false);

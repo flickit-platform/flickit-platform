@@ -1,22 +1,20 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  CircularProgress,
-  Collapse,
-  Divider,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Link as MLink,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import MLink from "@mui/material/Link";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
-import QueryData, { useQueryDataContext } from "@common/QueryData";
+import QueryData from "@common/QueryData";
 import Title from "@common/TitleComponent";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import { styles } from "@styles";
@@ -27,7 +25,6 @@ import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { t } from "i18next";
 import { IDialogProps, TQueryFunction } from "@types";
-import getUserName from "@utils/getUserName";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import AssessmentKitListItem from "../assessment-kit/AssessmentKitListItem";
@@ -35,7 +32,7 @@ import toastError from "@utils/toastError";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MinimizeRoundedIcon from "@mui/icons-material/MinimizeRounded";
 import LoadingButton from "@mui/lab/LoadingButton";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
 import AssessmentKitCEFromDialog from "../assessment-kit/AssessmentKitCEFromDialog";
@@ -52,14 +49,12 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import useDocumentTitle from "@utils/useDocumentTitle";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import ExpertGroupCEFormDialog from "./ExpertGroupCEFormDialog";
-import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import formatBytes from "@utils/formatBytes";
-import { error } from "console";
 import { theme } from "@/config/theme";
 
 const ExpertGroupContainer = () => {
@@ -100,14 +95,8 @@ const ExpertGroupContainer = () => {
           pictureLink,
           website,
           about = "",
-          number_of_members,
-          number_of_assessment_kits,
-          users = [],
           bio,
-          owner,
-
           editable,
-          assessment_kits = [],
         } = data || {};
         const is_member = expertGroupMembersQueryData.data?.items?.some(
           (res: any) => {
@@ -373,7 +362,6 @@ const ExpertGroupContainer = () => {
 const AvatarComponent = (props: any) => {
   const { title, picture, queryData, editable } = props;
   const [hover, setHover] = useState(false);
-  const [image, setImage] = useState("");
   const [profilePicture, setProfilePicture] = useState(picture);
   const [isLoading, setIsLoading] = useState(false);
   const { expertGroupId = "" } = useParams();
@@ -387,9 +375,6 @@ const AvatarComponent = (props: any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setImage(reader.result as any);
-      };
       reader.readAsDataURL(file);
       const maxSize = 2097152;
       if (file.size > maxSize) {
@@ -857,7 +842,7 @@ const AddingNewMember = (props: any) => {
 };
 
 const AddMember = (props: any) => {
-  const { queryData, inviteeQuery } = props;
+  const { inviteeQuery } = props;
   const { query } = inviteeQuery;
   const inputRef = useRef<HTMLInputElement>(null);
   const { service } = useServiceContext();
@@ -964,7 +949,9 @@ const AssessmentKitsList = (props: any) => {
         size="small"
         toolbar={
           <Box sx={{ display: "flex", gap: "8px" }}>
-            {hasAccess && <ExcelToDslButton dialogProps={excelToDslDialogProps} />}
+            {hasAccess && (
+              <ExcelToDslButton dialogProps={excelToDslDialogProps} />
+            )}
             {hasAccess && (
               <CreateAssessmentKitButton
                 onSubmitForm={assessmentKitQuery.query}

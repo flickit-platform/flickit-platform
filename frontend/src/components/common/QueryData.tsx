@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, useContext } from "react";
 import Box from "@mui/material/Box";
 import { styles } from "@styles";
 import { ECustomErrorType, TQueryFunction, TQueryProps } from "@types";

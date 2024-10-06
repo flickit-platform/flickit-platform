@@ -1,14 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Title from "@common/TitleComponent";
-import Box from "@mui/material/Box";
-import { Trans } from "react-i18next";
-import formatDate from "@utils/formatDate";
-import Typography from "@mui/material/Typography";
-import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { useConfigContext } from "@/providers/ConfgProvider";
@@ -19,11 +12,11 @@ interface IAssessmentReportTitle {
 }
 
 const AssessmentReportTitle = (props: IAssessmentReportTitle) => {
-  const { data, colorCode } = props;
+  const { data } = props;
   const {
-    assessment: { title, lastModificationTime, assessmentKit, space },
+    assessment: { title, space },
   } = data;
-  const { spaceId, page } = useParams();
+  const { page } = useParams();
   const { config } = useConfigContext();
 
   useEffect(() => {

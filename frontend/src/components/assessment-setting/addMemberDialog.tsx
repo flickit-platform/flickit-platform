@@ -1,28 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import {
-  DialogTitle,
-  FormControl,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import DialogTitle from "@mui/material/DialogTitle";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import { SelectHeight } from "@utils/selectHeight";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Box from "@mui/material/Box";
-import Tooltip from "@mui/material/Tooltip";
 import { Trans } from "react-i18next";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuItem from "@mui/material/MenuItem";
-import Avatar from "@mui/material/Avatar";
-import stringAvatar from "@utils/stringAvatar";
-import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import FormProviderWithForm from "../common/FormProviderWithForm";
@@ -32,7 +25,7 @@ import AutocompleteAsyncField, {
 import { LoadingButton } from "@mui/lab";
 import useScreenResize from "@/utils/useScreenResize";
 import { styles } from "@styles";
-import { NoteAddRounded, Settings } from "@mui/icons-material";
+import { Settings } from "@mui/icons-material";
 import { theme } from "@/config/theme";
 
 export enum EUserInfo {
@@ -60,14 +53,12 @@ const AddMemberDialog = (props: {
   const {
     expanded,
     onClose,
-    title,
     cancelText,
     confirmText,
     setChangeData,
     listOfRoles = [],
     listOfUser,
     assessmentId,
-    fetchAssessmentsUserListRoles,
   } = props;
 
   const [addedEmailType, setAddedEmailType] = useState<string>(
@@ -103,14 +94,6 @@ const AddMemberDialog = (props: {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChangeMember = (
-    event: SelectChangeEvent<typeof memberOfSpace>,
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    setMemberSelectedId(value);
-  };
   const handleChangeRole = (event: any) => {
     const {
       target: {
@@ -266,9 +249,6 @@ const AddMemberDialog = (props: {
             <FormProviderWithForm formMethods={formMethods}>
               <EmailField
                 memberOfSpace={memberOfSpace}
-                assessmentId={assessmentId}
-                roleSelected={roleSelected}
-                addedEmailType={addedEmailType}
                 setAddedEmailType={setAddedEmailType}
               />
             </FormProviderWithForm>
@@ -438,18 +418,11 @@ const AddMemberDialog = (props: {
 };
 const EmailField = ({
   memberOfSpace,
-  assessmentId,
-  roleSelected,
-  addedEmailType,
   setAddedEmailType,
 }: {
   memberOfSpace: any;
-  assessmentId: any;
-  roleSelected: any;
-  addedEmailType: any;
   setAddedEmailType: any;
 }) => {
-  const [inputValue, setInputValue] = useState(null);
   const { service } = useServiceContext();
   const { spaceId = "" } = useParams();
   const queryData = useConnectAutocompleteField({

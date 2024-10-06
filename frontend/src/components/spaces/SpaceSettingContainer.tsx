@@ -12,23 +12,18 @@ import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
-import { useAuthContext } from "@providers/AuthProvider";
-import ErrorAccessDenied from "@common/errors/ErrorAccessDenied";
 import { styles } from "@styles";
 import { ISpaceModel } from "@types";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import useDialog from "@utils/useDialog";
 import CreateSpaceDialog from "./CreateSpaceDialog";
-import { LoadingButton } from "@mui/lab";
+import LoadingButton from "@mui/lab/LoadingButton";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import { theme } from "@/config/theme";
 
 const SpaceSettingContainer = () => {
   const { spaceId = "" } = useParams();
   const { service } = useServiceContext();
-  const { userInfo } = useAuthContext();
-  const userId = userInfo?.id;
   const { loading, data, query } = useQuery<ISpaceModel>({
     service: (args, config) => service.fetchSpace({ spaceId }, config),
   });

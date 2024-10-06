@@ -1,14 +1,11 @@
 import Box from "@mui/material/Box";
-import {
-  Chip,
-  CircularProgress,
-  Divider,
-  FormControl,
-  IconButton,
-  SelectChangeEvent,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import React, { useEffect, useState } from "react";
@@ -319,7 +316,6 @@ export const AssessmentSettingMemberBox = (props: {
   const {
     listOfRoles = [],
     listOfUser,
-    fetchAssessmentsUserListRoles,
     setChangeData,
     openModal,
     openRemoveModal,
@@ -1188,7 +1184,6 @@ const OnHoverInputTitleSetting = (props: any) => {
     type,
     editable,
     infoQuery,
-    formMethods,
     color,
     AssessmentInfoQuery,
     displayEdit,

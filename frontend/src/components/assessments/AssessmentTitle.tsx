@@ -1,4 +1,3 @@
-import React from "react";
 import Title from "@common/TitleComponent";
 import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 
@@ -9,7 +8,7 @@ interface IAssessmentReportTitle {
 
 const AssessmentTitle = (props: IAssessmentReportTitle) => {
   const { data } = props;
-  const { title, id } = data;
+  const { title } = data;
 
   return (
     <Title

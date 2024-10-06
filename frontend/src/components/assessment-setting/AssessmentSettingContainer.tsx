@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -11,9 +11,7 @@ import {
   AssessmentSettingGeneralBox,
   AssessmentSettingMemberBox,
 } from "@components/assessment-setting/AssessmentSettingBox";
-
-import { Typography } from "@mui/material";
-
+import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AddMemberDialog from "@components/assessment-setting/addMemberDialog";

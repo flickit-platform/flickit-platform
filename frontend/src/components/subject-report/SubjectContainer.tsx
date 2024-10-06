@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import Hidden from "@mui/material/Hidden";
 import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -12,7 +10,6 @@ import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { SubjectAttributeList } from "./SubjectAttributeList";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
@@ -20,12 +17,7 @@ import { ISubjectReportModel } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
-import SupTitleBreadcrumb, {
-  useSupTitleBreadcrumb,
-} from "@common/SupTitleBreadcrumb";
-import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";

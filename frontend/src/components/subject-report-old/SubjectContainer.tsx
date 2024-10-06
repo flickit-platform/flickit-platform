@@ -12,7 +12,6 @@ import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import { SubjectAttributeList } from "./SubjectAttributeList";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
@@ -20,12 +19,7 @@ import { IPermissions, ISubjectReportModel, TId } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";
-import SupTitleBreadcrumb, {
-  useSupTitleBreadcrumb,
-} from "@common/SupTitleBreadcrumb";
-import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import { t } from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import QueryBatchData from "@common/QueryBatchData";
@@ -129,7 +123,6 @@ const SubjectContainer = () => {
       ...attributesDataObject,
     }));
   };
-  const [ignoreIds, setIgnoreIds] = useState<any>([]);
 
   const loadAllAttributesData = async () => {
     const newIgnoreIds: any[] = [];
@@ -255,14 +248,7 @@ const SubjectContainer = () => {
       loading={loading}
       loaded={loaded}
       render={([data = {}, subjectProgress = {}, pathInfo = {}]) => {
-        const {
-          attributes,
-          subject,
-          topStrengths,
-          topWeaknesses,
-          maturityLevelsCount,
-        } = data;
-        const { permissions }: { permissions: IPermissions } = data;
+        const { attributes, subject } = data;
         const { isConfidenceValid, isCalculateValid, title } = subject;
         const { answerCount, questionCount } = subjectProgress;
         const isComplete = questionCount === answerCount;

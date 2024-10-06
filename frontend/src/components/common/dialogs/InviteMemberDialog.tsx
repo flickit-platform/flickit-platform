@@ -1,13 +1,10 @@
 import LoadingButton from "@mui/lab/LoadingButton";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogProps,
-  DialogTitle,
-  Grid,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
 import { PropsWithChildren } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
