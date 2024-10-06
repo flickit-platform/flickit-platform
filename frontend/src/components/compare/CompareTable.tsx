@@ -1,14 +1,11 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { ICompareResultBaseInfo, ITotalProgress, TStatus } from "@types";
+import { ITotalProgress, TStatus } from "@types";
 import { getColorOfStatus, styles } from "@styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
 
-const CompareTable = (props: {
-  data?: any;
-  isSubject: boolean;
-}) => {
+const CompareTable = (props: { data?: any; isSubject: boolean }) => {
   const { data, isSubject } = props;
   return (
     <>

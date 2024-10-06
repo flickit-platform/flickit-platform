@@ -416,10 +416,8 @@ const AssessmentExportContainer = () => {
           subjects,
           assessmentPermissions: { manageable },
         } = (data as IAssessmentResponse) || {};
-        const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
-        const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
         const selectedNarration =

@@ -96,7 +96,6 @@ const AssessmentReportContainer = (props: any) => {
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
-        const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
         const totalProgress =
