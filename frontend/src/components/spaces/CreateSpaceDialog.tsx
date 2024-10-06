@@ -147,7 +147,7 @@ const CreateSpaceDialog = (props: ICreateSpaceDialogProps) => {
             <InputFieldUC
               // autoFocus={true}
               name="title"
-              defaultValue={""}
+              defaultValue={defaultValues.title || ""}
               required={true}
               label={<Trans i18nKey="title" />}
               isFocused={isFocused}
