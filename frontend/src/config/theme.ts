@@ -459,6 +459,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        action: {
+          marginLeft: !is_farsi ? "auto" : "-8px",
+          marginRight: is_farsi ? "auto" : "-8px",
+        },
+      },
+    },
     //@ts-expect-error
     MuiTabPanel: {
       styleOverrides: {

@@ -102,7 +102,7 @@ const Gauge = (props: IGaugeProps) => {
               color="black"
               fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "0.875rem" }}
             >
-              <Trans i18nKey="thisSystemIsIn" />
+              <Trans i18nKey="maturityGuidanceFirst" />
             </Typography>
           )}
           {confidence_text && (
@@ -152,7 +152,7 @@ const Gauge = (props: IGaugeProps) => {
               color="black"
               fontSize={{ xs: "1.35rem", sm: "1.35rem", md: "0.875rem" }}
             >
-              <Trans i18nKey="shape" />
+              <Trans i18nKey="maturityGuidanceSecond" />
             </Typography>
           )}
         </Box>
