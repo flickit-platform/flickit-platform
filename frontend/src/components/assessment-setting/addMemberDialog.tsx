@@ -48,7 +48,6 @@ const AddMemberDialog = (props: {
   confirmText: any;
   listOfRoles: any[];
   assessmentId: any;
-  fetchAssessmentsUserListRoles: any;
 }) => {
   const {
     expanded,

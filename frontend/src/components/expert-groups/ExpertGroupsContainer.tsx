@@ -49,7 +49,6 @@ const ExpertGroupsContainer = () => {
       : Math.ceil(queryData.data?.total / queryData.data?.size);
 
   useDocumentTitle(t("expertGroups") as string);
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box>
       <Box

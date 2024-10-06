@@ -304,7 +304,6 @@ export const AssessmentSettingGeneralBox = (props: {
 export const AssessmentSettingMemberBox = (props: {
   listOfRoles: any[];
   listOfUser: any[];
-  fetchAssessmentsUserListRoles: () => void;
   openModal: () => void;
   openRemoveModal: (id: string, name: string, invited?: boolean) => void;
   setChangeData?: any;

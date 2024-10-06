@@ -149,9 +149,6 @@ const AssessmentSettingContainer = () => {
                 <AssessmentSettingMemberBox
                   listOfRoles={listOfRoles}
                   listOfUser={listOfUser}
-                  fetchAssessmentsUserListRoles={
-                    fetchAssessmentsUserListRoles.query
-                  }
                   inviteesMemberList={inviteesMemberList}
                   openModal={handleClickOpen}
                   openRemoveModal={handleOpenRemoveModal}
@@ -166,9 +163,6 @@ const AssessmentSettingContainer = () => {
               listOfRoles={listOfRoles}
               listOfUser={listOfUser}
               assessmentId={assessmentId}
-              fetchAssessmentsUserListRoles={
-                fetchAssessmentsUserListRoles.query
-              }
               title={<Trans i18nKey={"assignRole"} />}
               cancelText={<Trans i18nKey={"cancel"} />}
               confirmText={<Trans i18nKey={"addToThisAssessment"} />}

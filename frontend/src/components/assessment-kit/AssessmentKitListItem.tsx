@@ -22,7 +22,6 @@ interface IAssessmentKitListItemProps {
     isPrivate?: boolean;
   };
   fetchAssessmentKits?: TQueryFunction;
-  fetchUnpublishedAssessmentKits?: TQueryFunction;
   link?: string;
   hasAccess?: boolean;
   is_member?: boolean;
@@ -54,7 +53,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           }}
           alignSelf="stretch"
           component={Link}
-          to={link || `${id}`}
+          to={link ?? `${id}`}
         >
           <Typography
             variant="h6"

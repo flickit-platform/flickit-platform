@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import { IExpertGroup, IAssessmentKitReportModel } from "@types";
+import { IAssessmentKitReportModel } from "@types";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import { Link } from "react-router-dom";
@@ -15,7 +15,6 @@ import { t } from "i18next";
 
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
-  expertGroup: IExpertGroup;
   data: any;
   progress: number;
   questionCount: number;

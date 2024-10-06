@@ -15,7 +15,7 @@ import { SubjectAttributeList } from "./SubjectAttributeList";
 import SubjectRadarChart from "./SubjectRadarChart";
 import SubjectBarChart from "./SubjectBarChart";
 import SubjectOverallInsight from "./SubjectOverallInsight";
-import { IPermissions, ISubjectReportModel, TId } from "@types";
+import { ISubjectReportModel, TId } from "@types";
 import hasStatus from "@utils/hasStatus";
 import QuestionnairesNotCompleteAlert from "../questionnaires/QuestionnairesNotCompleteAlert";
 import Button from "@mui/material/Button";

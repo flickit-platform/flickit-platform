@@ -2,8 +2,10 @@ import { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
-import { convertToAssessmentsChartData } from "@utils/convertToAttributesChartData";
-import { convertToAttributesChartData } from "@utils/convertToAttributesChartData";
+import {
+  convertToAttributesChartData,
+  convertToAssessmentsChartData,
+} from "@utils/convertToAttributesChartData";
 import CompareBarChart from "./CompareBarChart";
 
 const CompareResultSubjectAttributesBarChart = (props: {

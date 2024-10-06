@@ -96,7 +96,6 @@ const AssessmentReportContainer = (props: any) => {
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
-        const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
         const totalProgress =
@@ -169,7 +168,6 @@ const AssessmentReportContainer = (props: any) => {
                         <Trans i18nKey="general" />
                       </Typography>
                       <AssessmentSummary
-                        expertGroup={expertGroup}
                         assessmentKit={assessment}
                         data={data}
                         progress={totalProgress}
@@ -195,7 +193,6 @@ const AssessmentReportContainer = (props: any) => {
                       </Typography>
                       <AssessmentOverallStatus
                         status={status}
-                        subjects_info={subjects}
                         maturity_level={maturityLevel}
                         maturity_level_count={assessmentKit?.maturityLevelCount}
                         confidence_value={confidenceValue}
