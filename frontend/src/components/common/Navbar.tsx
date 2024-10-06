@@ -669,7 +669,9 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
-          <LanguageSelector />
+          {import.meta.env.VITE_MULTILINGUALITY === "on" && (
+            <LanguageSelector />
+          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -789,7 +791,13 @@ const SpacesButton = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{ sx: { left: "165px !important", minWidth: "260px" } }}
+        PaperProps={{
+          sx: {
+            left: theme.direction === "ltr" ? "165px !important" : "unset !important",
+            right: theme.direction === "rtl" ? "130px !important" : "unset",
+            minWidth: "260px",
+          },
+        }}
       >
         <QueryData
           {...spacesQueryData}

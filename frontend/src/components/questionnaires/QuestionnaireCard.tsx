@@ -81,8 +81,9 @@ const QuestionnaireCard = (props: IQuestionnaireCardProps) => {
                     p="0 8px"
                     display="inline-block"
                     sx={{
-                      float: "right",
-                      marginLeft: "auto",
+                      float: theme.direction === "ltr" ? "right" : "left",
+                      marginLeft: theme.direction === "ltr" ? "auto" : "unset",
+                      marginRight: theme.direction === "ltr" ? "unset" : "auto",
                       minWidth: "80px",
                     }}
                   >
