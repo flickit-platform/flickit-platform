@@ -258,7 +258,7 @@ const Uploader = (props: IUploadProps) => {
               maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
             }) as string,
           };
-        } else if(rejectedFiles.length == 1){
+        } else if(rejectedFiles.length == 1 && error[0]?.message){
           toastError(error.pop()?.message as string);
         } else {
           toastError(t("oneFileOnly") as string);
