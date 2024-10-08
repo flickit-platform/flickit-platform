@@ -203,7 +203,7 @@ const QuestionnaireTitle = (props: any) => {
       }
     >
       {/* <QuizRoundedIcon sx={{ mr: 1 }} /> */}
-      <Trans i18nKey="Questionnaires" />
+      <Trans i18nKey="questionnaires" />
     </Title>
   );
 };

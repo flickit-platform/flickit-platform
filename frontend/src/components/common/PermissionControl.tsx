@@ -37,7 +37,7 @@ const getHasViewPermission = (
       error.findIndex(
         (err) =>
           err?.code === ECustomErrorType.ACCESS_DENIED ||
-          err?.code === ECustomErrorType.NOT_FOUND,
+          err?.code === ECustomErrorType.NOT_FOUND || err?.status === 404,
       ) !== -1
     ) {
       return false;
