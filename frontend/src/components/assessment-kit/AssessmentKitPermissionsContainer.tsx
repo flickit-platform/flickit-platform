@@ -8,8 +8,6 @@ import {Trans} from "react-i18next";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import {t} from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
-import toastError from "@utils/toastError";
-import {ICustomError} from "@utils/CustomError";
 import {useConfigContext} from "@/providers/ConfgProvider";
 import SettingBox from "@common/settingBox";
 
@@ -85,14 +83,6 @@ const AssessmentKitPermisson = (props: any) => {
             position: "center",
         },
     ];
-
-    const {service} = useServiceContext();
-    const {assessmentKitId} = useParams();
-    const deleteMemberToKitPermissionQueryData = useQuery({
-        service: (args, config) =>
-            service.deleteMemberToKitPermission(args, config),
-        runOnMount: false,
-    });
 
     return (
         <Box>

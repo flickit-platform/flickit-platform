@@ -39,7 +39,7 @@ export default function SettingBox(props: any){
         MenuProps,
         openAssessmentModal,
         setChangeData,
-        listOfRoles,
+        listOfRoles = [],
         listOfUser,
         openRemoveModal,
         columns,
@@ -172,7 +172,7 @@ export default function SettingBox(props: any){
                                     <TableRow
                                         tabIndex={-1}
                                         key={row.id}
-                                        sx={{ background: !row.editable && (name == "assessmentSettingBox" ||  name == "EGPermissionSettingBox") ? "#ebe8e85c" : "" }}
+                                        sx={{ background: !row.editable  && (name == "assessmentSettingBox"  ||  name == "EGPermissionSettingBox")  ? "#ebe8e85c" : "" }}
                                     >
                                         <TableCell
                                             sx={{
@@ -184,10 +184,10 @@ export default function SettingBox(props: any){
                                                 paddingX: { xs: "0px", md: "1rem" },
                                             }}
                                         >
-                                            {( name == "assessmentSettingBox" || name == "EGPermissionSettingBox") &&  <Box
+                                            {( name == "assessmentSettingBox"  || name == "EGPermissionSettingBox" ) &&  <Box
                                                 sx={{
                                                     display: "flex",
-                                                    justifyContent: name == "assessmentSettingBox" || name == "EGPermissionSettingBox"  ? "flex-start" : "center",
+                                                    justifyContent: name == "assessmentSettingBox"  || name == "EGPermissionSettingBox"  ?  "flex-start" :  "center",
                                                     minWidth: {
                                                         xs: "10rem",
                                                         sm: "14rem",
@@ -211,7 +211,7 @@ export default function SettingBox(props: any){
                                                     }}
                                                 >
                                                     <Avatar
-                                                       {...stringAvatar(row?.displayName ? row?.displayName.toUpperCase() : row?.name.toUpperCase())}
+                                                       {...stringAvatar(row?.displayName  ? row?.displayName.toUpperCase() : row?.name.toUpperCase())}
                                                         src={row.pictureLink}
                                                         sx={{
                                                            width: 40,
@@ -235,9 +235,9 @@ export default function SettingBox(props: any){
                                                         <Chip
                                                             sx={{
                                                                 marginRight:
-                                                                    theme.direction === "ltr" ? 1 : "unset",
+                                                                    theme.direction === "ltr"  ? 1 : "unset",
                                                                 marginLeft:
-                                                                    theme.direction === "rtl" ? 1 : "unset",
+                                                                    theme.direction === "rtl"  ? 1 : "unset",
                                                                 opacity: 0.7,
                                                                 color: "#9A003C",
                                                                 borderColor: "#9A003C",
@@ -254,7 +254,7 @@ export default function SettingBox(props: any){
                                             }
                                             <Box
                                                 sx={{
-                                                    display: name == "assessmentSettingBox" ||  name == "EGPermissionSettingBox" ? { xs: "none", md: "flex" } : "flex",
+                                                    display: name == "assessmentSettingBox"  ||  name == "EGPermissionSettingBox"  ? { xs: "none", md: "flex" } : "flex",
                                                     justifyContent: "center",
                                                     minWidth: {  
                                                         xs: "10rem",
@@ -299,7 +299,7 @@ export default function SettingBox(props: any){
                                                 <Box
                                                     sx={{
                                                         display: "flex",
-                                                        justifyContent: name == "EGPermissionSettingBox" ? "flex-start" : "flex-end",
+                                                        justifyContent: name == "EGPermissionSettingBox"  ?  "flex-start" : "flex-end",
                                                         alignItems: "center",
                                                         gap: { xs: "0px", md: ".7rem" },
                                                     }}
@@ -500,8 +500,7 @@ const SelectionRole = (props: any)=>{
                     <Trans i18nKey={"chooseARole"} />
                 </Typography>
             </Box>
-            {listOfRoles &&
-                listOfRoles.map(
+            {listOfRoles?.map(
                     (role: any, index: number) => (
                         <MenuItem
                             style={{ display: "block" }}
@@ -566,8 +565,7 @@ const SelectionRole = (props: any)=>{
                                     {role.description}
                                 </div>
                             </Box>
-                            {listOfRoles &&
-                                listOfRoles.length >
+                            {listOfRoles?.length >
                                 index + 1 && (
                                     <Box
                                         sx={{
@@ -645,8 +643,7 @@ const AddMemberModal = (props: any) =>{
             const error = e as ICustomError;
             close()
             if (
-                error.response?.data &&
-                error.response?.data.hasOwnProperty("message")
+                error?.response?.data.hasOwnProperty("message")
             ) {
                 if (Array.isArray(error.response?.data?.message)) {
                     toastError(error.response?.data?.message[0]);
