@@ -247,12 +247,12 @@ const useFetchAssessments = () => {
       );
       if (res) {
         const { size, total } = res;
-        if (
-          Math.ceil(total / size) < parseInt(page ?? "1", 10) ||
-          isNaN(page as any)
-        ) {
-          return navigate(`*`);
-        }
+        // if (
+        //   Math.ceil(total / size) < parseInt(page ?? "1", 10) ||
+        //   isNaN(page as any)
+        // ) {
+        //   return navigate(`*`);
+        // }
         setData(res);
         setError(false);
       } else {
