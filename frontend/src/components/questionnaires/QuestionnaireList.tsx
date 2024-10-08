@@ -1,17 +1,11 @@
-import React, { useState } from "react";
 import { QuestionnaireCard } from "./QuestionnaireCard";
 import QueryData from "@common/QueryData";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import { TId, TQueryFunction } from "@types";
 import LoadingSkeletonOfQuestionnaires from "@common/loadings/LoadingSkeletonOfQuestionnaires";
 import Box from "@mui/material/Box";
 import QANumberIndicator from "@common/QANumberIndicator";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import { styles } from "@styles";
-import { useSearchParams } from "react-router-dom";
-import { theme } from "@/config/theme";
 
 interface IQuestionnaireListProps {
   questionnaireQueryData: any;
@@ -20,7 +14,6 @@ interface IQuestionnaireListProps {
 
 export const QuestionnaireList = (props: IQuestionnaireListProps) => {
   const { questionnaireQueryData, assessmentTotalProgress } = props;
-  const { query: fetchQuestionnaires } = questionnaireQueryData;
 
   return (
     <>
@@ -105,78 +98,3 @@ export const QuestionnaireList = (props: IQuestionnaireListProps) => {
   );
 };
 
-const FilterBySubject = (props: {
-  subjects: { id: TId; title: string }[];
-  fetchQuestionnaires: TQueryFunction;
-}) => {
-  const { subjects, fetchQuestionnaires } = props;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const subjectIdParam = searchParams.get("subject_pk");
-  const [activeFilterSubjectId, setActiveFilterSubjectId] =
-    useState(subjectIdParam);
-
-  const handleClick = (subjectId: TId) => {
-    if (activeFilterSubjectId == subjectId) {
-      fetchQuestionnaires({ subject_pk: null });
-      setSearchParams(
-        (searchParams) => {
-          searchParams.delete("subject_pk");
-          return searchParams;
-        },
-        { replace: true },
-      );
-      setActiveFilterSubjectId(null);
-    } else {
-      fetchQuestionnaires({ subject_pk: subjectId });
-      setSearchParams(
-        (searchParams) => {
-          searchParams.set("subject_pk", subjectId.toString());
-          return searchParams;
-        },
-        { replace: true },
-      );
-      setActiveFilterSubjectId(subjectId.toString());
-    }
-  };
-
-  return (
-    <Box height="100%" sx={{ ...styles.centerV, pl: 1 }}>
-      {subjects.map((subject: any) => {
-        return (
-          <FilterButton
-            key={subject.id}
-            subject={subject}
-            handleClick={handleClick}
-            active={activeFilterSubjectId == subject?.id}
-          />
-        );
-      })}
-    </Box>
-  );
-};
-
-const FilterButton = (props: {
-  subject: { id: TId; title: string };
-  handleClick: (subjectId: TId) => void;
-  active: boolean;
-}) => {
-  const { subject, handleClick, active } = props;
-  const { title, id } = subject;
-
-  return (
-    <Button
-      color="inherit"
-      sx={{
-        backgroundColor: active ? "#ffffff3b" : undefined,
-        marginRight: theme.direction === "ltr" ? 1 : "unset",
-        marginLeft: theme.direction === "rtl" ? 1 : "unset",
-        "&:hover": {
-          backgroundColor: active ? "#ffffff66" : "#ffffff11",
-        },
-      }}
-      onClick={() => handleClick(id)}
-    >
-      {title}
-    </Button>
-  );
-};

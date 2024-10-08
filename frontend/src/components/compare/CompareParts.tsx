@@ -1,31 +1,18 @@
-import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ComparePartItem from "./ComparePartItem";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { useServiceContext } from "@providers/ServiceProvider";
-import { useQuery } from "@utils/useQuery";
-import QueryData from "@common/QueryData";
-import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import {
   compareActions,
   useCompareContext,
   useCompareDispatch,
 } from "@providers/CompareProvider";
-import AlertTitle from "@mui/material/AlertTitle";
-import Chip from "@mui/material/Chip";
 import { styles } from "@styles";
 import AlertBox from "@common/AlertBox";
-import PermissionControl from "@common/PermissionControl";
 import forLoopComponent from "@utils/forLoopComponent";
-import { t } from "i18next";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 
 const CompareParts = () => {
   const { assessmentIds, assessment_kit, loading } = useCompareContext();
@@ -103,13 +90,8 @@ const CompareButton = (props: { disabled?: boolean }) => {
 const CompareSelectedAssessmentKitInfo = () => {
   const { assessment_kit, assessmentIds } = useCompareContext();
   const dispatch = useCompareDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const makeNewComparison = () => {
-    setSearchParams((searchParams) => {
-      searchParams.delete("assessment_id");
-      return searchParams;
-    });
     dispatch(compareActions.setAssessmentIds([]));
     dispatch(compareActions.setAssessmentKit([]));
   };

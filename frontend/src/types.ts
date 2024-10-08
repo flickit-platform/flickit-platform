@@ -501,7 +501,6 @@ export interface ICompareResultSubject {
 }
 
 export interface ICompareResultModel {
-  base_infos: TCompareResultBaseInfos;
   overall_insights: ICompareResultCompareItems[];
   subjects: ICompareResultSubject[];
 }

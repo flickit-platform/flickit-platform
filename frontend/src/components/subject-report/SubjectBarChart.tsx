@@ -1,6 +1,6 @@
 import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   Bar,
   XAxis,

@@ -1,39 +1,25 @@
-import Title from "@common/Title";
 import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
-import AdviceSlider from "../common/AdviceSlider";
 import Box from "@mui/material/Box";
-import {
-  Button,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton,
-  Pagination,
-  Skeleton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
+import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import EmptyAdvice from "@assets/svg/lampComment.svg";
-import Setting from "@assets/svg/setting.svg";
 import StarsAdvice from "@assets/svg/Stars.svg";
-import BetaSvg from "@assets/svg/beta.svg";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
-import { ISubjectReportModel, TId } from "@types";
+import { ISubjectReportModel } from "@types";
 import { useServiceContext } from "@providers/ServiceProvider";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
 import languageDetector from "@utils/languageDetector";
 import { LoadingButton } from "@mui/lab";
-import useScreenResize from "@utils/useScreenResize";
-import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
+import { primaryFontFamily } from "@/config/theme";
 import { styles } from "@/config/styles";
-import { InfoOutlined } from "@mui/icons-material";
 import { FaWandMagicSparkles } from "react-icons/fa6";
-import { AssessmentInsight } from "./AssessmentInsight";
 import { AssessmentReportNarrator } from "@components/assessment-report/assessmentReportNarrator";
 import AdviceDialog from "./AdviceDialog";
 import QueryBatchData from "../common/QueryBatchData";
@@ -126,12 +112,10 @@ const AssessmentAdviceContainer = (props: any) => {
       toastError(err);
     }
   };
-  const [subjectData, setsubjectData] = useState<any>([]);
   const [target, setTarget] = useState<any>([]);
   const [isFarsi, setIsFarsi] = useState<boolean>(false);
   const attributeColorPallet = ["#D81E5B", "#F9A03F", "#0A2342"];
   const attributeBGColorPallet = ["#FDF1F5", "#FEF5EB", "#EDF4FC"];
-  const fullScreen = useScreenResize("sm");
   const filteredMaturityLevels = useMemo(() => {
     const filteredData = assessment?.assessmentKit?.maturityLevels.sort(
       (elem1: any, elem2: any) => elem1.index - elem2.index,

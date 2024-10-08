@@ -2,23 +2,13 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import {
-  Avatar,
-  Button,
-  Chip,
-  Divider,
-  Grid,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import {
-  CancelRounded,
-  CheckCircleOutlineRounded,
-  EditRounded,
-  InfoOutlined,
-} from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import CancelRounded from "@mui/icons-material/CancelRounded";
+import CheckCircleOutlineRounded from "@mui/icons-material/CheckCircleOutlineRounded";
+import EditRounded from "@mui/icons-material/EditRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import FormProviderWithForm from "../common/FormProviderWithForm";
 import RichEditorField from "../common/fields/RichEditorField";
 import { ICustomError } from "@/utils/CustomError";

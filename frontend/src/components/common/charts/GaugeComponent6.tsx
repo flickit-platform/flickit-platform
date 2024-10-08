@@ -1,4 +1,3 @@
-import React from "react";
 import { IDynamicGaugeSVGProps } from "@/types";
 import "./style.css";
 

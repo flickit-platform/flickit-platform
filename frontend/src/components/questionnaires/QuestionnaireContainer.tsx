@@ -1,25 +1,16 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
-import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { QuestionnaireList } from "./QuestionnaireList";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
-import {
-  ECustomErrorType,
-  IAssessmentKitReportModel,
-  IQuestionnairesModel,
-} from "@types";
+import { IQuestionnairesModel } from "@types";
 import Title from "@common/TitleComponent";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
-import SupTitleBreadcrumb, {
-  useSupTitleBreadcrumb,
-} from "@common/SupTitleBreadcrumb";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import Button from "@mui/material/Button";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PermissionControl from "@common/PermissionControl";
@@ -177,9 +168,8 @@ const NotCompletedAlert = (props: {
 
 const QuestionnaireTitle = (props: any) => {
   const { pathInfo } = props;
-  const { spaceId, assessmentId, page } = useParams();
+  const { spaceId, page } = useParams();
   const { space, assessment } = pathInfo;
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 
   const { config } = useConfigContext();
 

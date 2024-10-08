@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Title from "@common/Title";
 import CompareParts from "./CompareParts";
-import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { CompareProvider } from "@providers/CompareProvider";
 
 const CompareContainer = () => {

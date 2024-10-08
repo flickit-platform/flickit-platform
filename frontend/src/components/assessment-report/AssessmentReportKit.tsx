@@ -1,18 +1,10 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import {
-  AssessmentKitInfoType,
-  ExpertGroupDetails,
-  IAssessmentKitReportModel,
-  ISubjectInfo,
-  PathInfo,
-} from "@types";
+import { IAssessmentKitReportModel } from "@types";
 import Typography from "@mui/material/Typography";
-import { getMaturityLevelColors, styles } from "@styles";
+import { styles } from "@styles";
 import { Link } from "react-router-dom";
-import formatDate from "@/utils/formatDate";
-import ColorfullProgress from "../common/progress/ColorfulProgress";
-import { Avatar, Button, Chip, Divider, Grid, Tooltip } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 import { useEffect, useRef, useState } from "react";
 interface IAssessmentReportKit {
   assessmentKit: IAssessmentKitReportModel;

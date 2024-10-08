@@ -1,4 +1,6 @@
-import { FormControl, FormHelperText, InputLabel } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";

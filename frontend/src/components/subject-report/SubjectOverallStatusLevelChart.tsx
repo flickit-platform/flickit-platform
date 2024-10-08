@@ -1,5 +1,4 @@
 import VerticalLevelChart from "@common/charts/VerticalLevelChart";
-import { Gauge } from "../common/charts/Gauge";
 
 const SubjectOverallStatusLevelChart = (props: any) => {
   const { data = {}, loading } = props;

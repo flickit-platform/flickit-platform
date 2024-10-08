@@ -12,12 +12,14 @@ import StartRoundedIcon from "@mui/icons-material/StartRounded";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import { IPermissions, IQuestionnairesInfo, ISubjectInfo, TId } from "@types";
+import { IPermissions, IQuestionnairesInfo, TId } from "@types";
 import Chip from "@mui/material/Chip";
-import { Collapse, IconButton, Typography } from "@mui/material";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import languageDetector from "@/utils/languageDetector";
-import React, { useState } from "react";
-import { InfoRounded } from "@mui/icons-material";
+import { useState } from "react";
+import InfoRounded from "@mui/icons-material/InfoRounded";
 import { theme } from "@/config/theme";
 
 interface IQuestionnaireCardProps {

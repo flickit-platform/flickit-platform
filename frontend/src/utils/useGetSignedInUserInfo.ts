@@ -25,7 +25,6 @@ const useGetSignedInUserInfo = (
     setError(false);
     dispatch(authActions.setUserInfoLoading(true));
     try {
-      let subscriberHash = "";
       const accessToken = keycloakService.getToken();
       const { data } = await service.getSignedInUser(undefined, {
         signal: abortController.current.signal,
@@ -67,8 +66,6 @@ const useGetSignedInUserInfo = (
         });
 
       dispatch(authActions.setUserInfoLoading(false));
-
-      console.log(userInfo);
 
       if (!isAuthenticatedUser) {
         dispatch(authActions.signIn());

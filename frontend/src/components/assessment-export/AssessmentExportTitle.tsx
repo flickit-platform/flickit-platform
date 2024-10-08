@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Title from "@common/TitleComponent";
 import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import { useParams } from "react-router-dom";

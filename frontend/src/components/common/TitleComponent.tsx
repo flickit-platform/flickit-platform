@@ -1,9 +1,9 @@
 import Typography, { TypographyProps } from "@mui/material/Typography";
-import { Avatar, Box, BoxProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import { Link as RLink, To } from "react-router-dom";
 import Link from "@mui/material/Link";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import { IconProps, SvgIconProps } from "@mui/material";
+import { SvgIconProps } from "@mui/material/SvgIcon";
 import AnchorRoundedIcon from "@mui/icons-material/AnchorRounded";
 import { styles } from "@styles";
 import { GoHome } from "react-icons/go";

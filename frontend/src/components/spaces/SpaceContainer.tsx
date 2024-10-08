@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -10,9 +10,10 @@ import CreateSpaceDialog from "./CreateSpaceDialog";
 import { SpacesList } from "./SpaceList";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
-import { Skeleton, Typography, Button } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
@@ -46,8 +47,8 @@ const SpaceContainer = () => {
   });
 
   useEffect(() => {
-    spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then(res => {
-      const { size, total } = res
+    spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then((res) => {
+      const { size, total } = res;
       if (Math.ceil(total / size) < pageNumber) {
         return navigate(`*`);
       }
@@ -56,9 +57,9 @@ const SpaceContainer = () => {
 
   const pageCount =
     !spacesQueryData.data ||
-      !spacesQueryData?.data?.total ||
-      !spacesQueryData?.data?.size ||
-      spacesQueryData.data?.size === 0
+    !spacesQueryData?.data?.total ||
+    !spacesQueryData?.data?.size ||
+    spacesQueryData.data?.size === 0
       ? 1
       : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
 
@@ -84,7 +85,10 @@ const SpaceContainer = () => {
             my: 3,
           }}
         >
-          <Box ml={theme.direction === "rtl" ? "unset" : "auto"} mr={theme.direction !== "rtl" ? "unset" : "auto"}>
+          <Box
+            ml={theme.direction === "rtl" ? "unset" : "auto"}
+            mr={theme.direction !== "rtl" ? "unset" : "auto"}
+          >
             <ToolbarCreateItemBtn
               icon={<CreateNewFolderRoundedIcon />}
               onClick={dialogProps.openDialog}
@@ -189,24 +193,25 @@ const SpaceContainer = () => {
           );
         }}
       />
-      {!isEmpty && <Stack
-        spacing={2}
-        sx={{
-          mt: 3,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Pagination
-          variant="outlined"
-          color="primary"
-          count={pageCount}
-          onChange={handleChangePage}
-          page={pageNumber}
-        />
-      </Stack>
-      }
+      {!isEmpty && (
+        <Stack
+          spacing={2}
+          sx={{
+            mt: 3,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Pagination
+            variant="outlined"
+            color="primary"
+            count={pageCount}
+            onChange={handleChangePage}
+            page={pageNumber}
+          />
+        </Stack>
+      )}
       <CreateSpaceDialog
         {...dialogProps}
         onSubmitForm={spacesQueryData.query}

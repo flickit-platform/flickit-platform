@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import LinearProgress, {
   LinearProgressProps,
 } from "@mui/material/LinearProgress";
@@ -33,7 +33,7 @@ const progressToColorMapColor: Record<number, string> = {
 
 const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
   const { progress = 0, q, a, isQuestionnaire, isSmallScreen, ...rest } = props;
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
+  const is_farsi = Boolean(localStorage.getItem("lang") === "fa");
   return (
     <Box sx={{ ...styles.centerV }} flex="1" {...rest}>
       <Box flex={1}>

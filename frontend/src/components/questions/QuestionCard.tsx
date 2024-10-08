@@ -35,24 +35,16 @@ import {
   TQuestionsInfo,
 } from "@types";
 import { Trans } from "react-i18next";
-import { LoadingButton, TabPanel } from "@mui/lab";
+import TabPanel from "@mui/lab/TabPanel";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useServiceContext } from "@providers/ServiceProvider";
-import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import { ICustomError } from "@utils/CustomError";
 import useDialog from "@utils/useDialog";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Collapse,
-  DialogTitle,
-  Divider,
-  FormControl,
-  Grid,
-  TextareaAutosize,
-  Tabs,
-} from "@mui/material";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import Collapse from "@mui/material/Collapse";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import { FormProvider, useForm } from "react-hook-form";
 import { styles } from "@styles";
 import Title from "@common/Title";
 import { InputFieldUC } from "@common/fields/InputField";
@@ -80,7 +72,6 @@ import TabList from "@mui/lab/TabList";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import useScreenResize from "@utils/useScreenResize";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -91,13 +82,12 @@ import PreAttachment from "@components/questions/iconFiles/preAttachments";
 import FileSvg from "@components/questions/iconFiles/fileSvg";
 import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
-import Dropzone, { useDropzone } from "react-dropzone";
+import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
 import { primaryFontFamily, secondaryFontFamily, theme } from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
@@ -119,7 +109,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
   const [confidenceLebels, setConfidenceLebels] = useState<any>([]);
   const { service } = useServiceContext();
   const { config } = useConfigContext();
-  const [activeTab, setActiveTab] = useState(0); // State to track the active tab
 
   useEffect(() => {
     return () => {
@@ -158,10 +147,6 @@ export const QuestionCard = (props: IQuestionCardProps) => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
-  };
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
   };
 
   return (
@@ -422,8 +407,7 @@ const AnswerTemplate = (props: {
   selcetedConfidenceLevel: any;
   confidenceLebels: any;
 }) => {
-  const { submitOnAnswerSelection, isSubmitting, evidences } =
-    useQuestionContext();
+  const { submitOnAnswerSelection, isSubmitting } = useQuestionContext();
   const {
     questionInfo,
     questionsInfo,
@@ -2279,7 +2263,6 @@ const EvidenceDetail = (props: any) => {
   const is_farsi = firstCharDetector(description);
   const [evidenceBG, setEvidenceBG] = useState<any>();
 
-  const formContext = useFormContext();
   const { service } = useServiceContext();
   const [isEditing, setIsEditing] = useState(false);
   const [attachments, setAttachments] = useState<any[]>([]);
@@ -3100,13 +3083,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
     createAttachment,
   } = props;
   const MAX_DESC_TEXT = 100;
-  const MIN_DESC_TEXT = 3;
   const MAX_SIZE = 2097152;
-  const fetchEvidenceAttachments = useQuery({
-    service: (args = { evidence_id: evidenceId }, config) =>
-      service.fetchEvidenceAttachments(args, config),
-    runOnMount: false,
-  });
 
   const { service } = useServiceContext();
   const abortController = useMemo(() => new AbortController(), [evidenceId]);
@@ -3388,7 +3365,6 @@ const EvidenceAttachmentsDialogs = (props: any) => {
 const DeleteDialog = (props: any) => {
   const { expanded, onClose, onConfirm, title, cancelText, confirmText } =
     props;
-  const fullScreen = useScreenResize("sm");
   return (
     <Dialog
       open={expanded}

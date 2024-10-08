@@ -10,7 +10,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import formatDate from "@utils/formatDate";
@@ -32,6 +31,7 @@ import { toast } from "react-toastify";
 import { t } from "i18next";
 import CompareRoundedIcon from "@mui/icons-material/CompareRounded";
 import { useQuery } from "@utils/useQuery";
+
 interface IAssessmentCardProps {
   item: IAssessment & { space: any } & { manageable?: boolean } & {
     viewable?: boolean;
@@ -55,7 +55,6 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const {
     maturityLevel,
     isCalculateValid,
-    isConfidenceValid,
     kit,
     id,
     lastModificationTime,
@@ -66,15 +65,9 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
   const { maturityLevelsCount } = kit;
   const location = useLocation();
   const { service } = useServiceContext();
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId: id }, config) =>
       service.calculateMaturityLevel(args, config),
-    runOnMount: false,
-  });
-  const calculateConfidenceLevelQuery = useQuery({
-    service: (args = { assessmentId: id }, config) =>
-      service.calculateConfidenceLevel(args, config),
     runOnMount: false,
   });
 
@@ -344,13 +337,6 @@ const Actions = (props: {
       toastError(err);
     }
   };
-  const openEditDialog = (e: any) => {
-    dialogProps.openDialog({
-      data: { ...item, space: item.space },
-      type: "update",
-    });
-  };
-
   const addToCompare = (e: any) => {
     navigate({
       pathname: "/compare",

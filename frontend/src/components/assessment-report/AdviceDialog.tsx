@@ -1,14 +1,11 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/material/Typography";
 import { LoadingButton } from "@mui/lab";
 import { Trans } from "react-i18next";
-import { FaWandMagicSparkles } from "react-icons/fa6";
 import { styles } from "@/config/styles";
 import Setting from "@assets/svg/setting.svg";
 import AdviceSlider from "../common/AdviceSlider";

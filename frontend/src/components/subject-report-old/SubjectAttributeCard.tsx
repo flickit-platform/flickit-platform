@@ -21,22 +21,17 @@ import { styled } from "@mui/material/styles";
 import emptyState from "@assets/svg/emptyState.svg";
 import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
-import firstCharDetector from "@/utils/firstCharDetector";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { toast } from "react-toastify";
-import {
-  Button,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-} from "@mui/material";
-import {
-  CancelRounded,
-  CheckCircleOutlineRounded,
-  EditRounded,
-  InfoOutlined,
-} from "@mui/icons-material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import CancelRounded from "@mui/icons-material/CancelRounded";
+import CheckCircleOutlineRounded from "@mui/icons-material/CheckCircleOutlineRounded";
+import EditRounded from "@mui/icons-material/EditRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { IPermissions } from "@/types";
 import AIGenerated from "../common/tags/AIGenerated";
 
@@ -926,7 +921,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
   );
 };
 export const MaturityLevelDetailsBar = (props: any) => {
-  const { score, is_passed, text, highestIndex } = props;
+  const { score, is_passed, text } = props;
   const width = `${score != null ? score : 100}%`;
   const bg_color = is_passed ? "#1769aa" : "#545252";
   const color = is_passed ? "#d1e6f8" : "#808080";

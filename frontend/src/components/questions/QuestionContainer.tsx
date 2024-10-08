@@ -1,8 +1,7 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Hidden from "@mui/material/Hidden";
 import Box from "@mui/material/Box";
 import {
   EAssessmentStatus,
@@ -17,7 +16,6 @@ import { Review } from "./QuestionsReview";
 import { TransitionGroup } from "react-transition-group";
 import useScreenResize from "@utils/useScreenResize";
 import { styles } from "@styles";
-import QuestionNextPrev from "./QuestionNextPrev";
 import { QuestionsProgress } from "./QuestionsProgress";
 import { ErrorNotFoundOrAccessDenied } from "@common/errors/ErrorNotFoundOrAccessDenied";
 

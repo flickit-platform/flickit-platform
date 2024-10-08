@@ -1,10 +1,9 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import CreateSpaceDialog from "./CreateSpaceDialog";
-import { ServiceProvider, useServiceContext } from "@providers/ServiceProvider";
+import { ServiceProvider } from "@providers/ServiceProvider";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
 
