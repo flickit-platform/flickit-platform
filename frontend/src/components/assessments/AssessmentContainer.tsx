@@ -264,9 +264,9 @@ const useFetchAssessments = () => {
 
       setLoading(false);
     } catch (e) {
-      if (isNaN(page as any)) {
-        return navigate(`*`);
-      }
+      // if (isNaN(page as any)) {
+      //   return navigate(`*`);
+      // }
       const err = e as ICustomError;
       toastError(err, { filterByStatus: [404] });
       setLoading(false);
