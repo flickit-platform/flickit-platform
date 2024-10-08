@@ -56,7 +56,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import formatBytes from "@utils/formatBytes";
 import { theme } from "@/config/theme";
-import MoreVert from "@mui/icons-material/MoreVert";
+import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
+import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -965,10 +966,11 @@ const AssessmentKitsList = (props: any) => {
             {hasAccess && (
               <>
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   size="small"
                   onClick={handleClick}
-                  endIcon={<MoreVert />}
+                  endIcon={open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
+
                 >
                   <Trans i18nKey="newAssessment" />
                 </Button>
@@ -982,13 +984,22 @@ const AssessmentKitsList = (props: any) => {
                     },
                   }}
                 >
-                  <MenuItem onClick={dialogProps.openDialog}>
+                  <MenuItem onClick={() => {
+                    handleClose();
+                    dialogProps.openDialog();
+                  }}>
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  <MenuItem onClick={dialogProps.openDialog}>
+                  <MenuItem onClick={() => {
+                    handleClose();
+                    dialogProps.openDialog();
+                  }}>
                     <Trans i18nKey="viaKitDesigner" />
                   </MenuItem>
-                  <MenuItem onClick={excelToDslDialogProps.openDialog}>
+                  <MenuItem onClick={() => {
+                    handleClose();
+                    excelToDslDialogProps.openDialog();
+                  }}>
                     <Trans i18nKey="convertExcelToDsl" />
                   </MenuItem>
                 </Menu>
