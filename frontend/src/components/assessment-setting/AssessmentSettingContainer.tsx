@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import QueryBatchData from "@common/QueryBatchData";
 import { useQuery } from "@utils/useQuery";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -11,9 +11,7 @@ import {
   AssessmentSettingGeneralBox,
   AssessmentSettingMemberBox,
 } from "@components/assessment-setting/AssessmentSettingBox";
-
-import { Typography } from "@mui/material";
-
+import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AddMemberDialog from "@components/assessment-setting/addMemberDialog";
@@ -151,9 +149,6 @@ const AssessmentSettingContainer = () => {
                 <AssessmentSettingMemberBox
                   listOfRoles={listOfRoles}
                   listOfUser={listOfUser}
-                  fetchAssessmentsUserListRoles={
-                    fetchAssessmentsUserListRoles.query
-                  }
                   inviteesMemberList={inviteesMemberList}
                   openModal={handleClickOpen}
                   openRemoveModal={handleOpenRemoveModal}
@@ -168,9 +163,6 @@ const AssessmentSettingContainer = () => {
               listOfRoles={listOfRoles}
               listOfUser={listOfUser}
               assessmentId={assessmentId}
-              fetchAssessmentsUserListRoles={
-                fetchAssessmentsUserListRoles.query
-              }
               title={<Trans i18nKey={"assignRole"} />}
               cancelText={<Trans i18nKey={"cancel"} />}
               confirmText={<Trans i18nKey={"addToThisAssessment"} />}

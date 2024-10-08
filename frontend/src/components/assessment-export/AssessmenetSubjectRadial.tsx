@@ -1,13 +1,6 @@
 import React, { useMemo } from "react";
 import {
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadarChart,
   ResponsiveContainer,
-  Text,
-  Radar,
-  Legend,
   BarChart,
   Bar,
   CartesianGrid,
@@ -15,11 +8,7 @@ import {
   YAxis,
 } from "recharts";
 import Skeleton from "@mui/material/Skeleton";
-import { t } from "i18next";
-import convertToSubjectChartData from "@/utils/convertToSubjectChartData";
-import convertToAssessmentChartData, {
-  convertToRadialChartData,
-} from "@/utils/convertToAssessmentChartData";
+import { convertToRadialChartData } from "@/utils/convertToAssessmentChartData";
 
 interface AssessmentSubjectRadialChartProps {
   loading: boolean;
@@ -34,7 +23,7 @@ const style = {
 
 const AssessmentSubjectRadialChart: React.FC<
   AssessmentSubjectRadialChartProps
-> = ({ loading, data, maturityLevelsCount }) => {
+> = ({ loading, data }) => {
   return loading ? (
     <Skeleton
       height={"620px"}
@@ -43,19 +32,15 @@ const AssessmentSubjectRadialChart: React.FC<
       sx={{ margin: "auto" }}
     />
   ) : (
-    <SubjectRadial data={data} maturityLevelsCount={maturityLevelsCount} />
+    <SubjectRadial data={data} />
   );
 };
 
 interface SubjectRadialProps {
   data: any[];
-  maturityLevelsCount: number;
 }
 
-const SubjectRadial: React.FC<SubjectRadialProps> = ({
-  data,
-  maturityLevelsCount,
-}) => {
+const SubjectRadial: React.FC<SubjectRadialProps> = ({ data }) => {
   const chartData = useMemo(() => convertToRadialChartData(data), [data]);
 
   return (

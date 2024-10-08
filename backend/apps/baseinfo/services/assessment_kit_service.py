@@ -106,3 +106,11 @@ def assessment_kit_search(request):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def create_assessment_kit(request):
+    response = requests.post(
+        ASSESSMENT_URL + 'assessment-core/api/assessment-kits',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

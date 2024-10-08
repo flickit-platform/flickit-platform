@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@utils/useQuery";
 import { AssessmentSubjectList } from "./AssessmentSubjectList";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -12,18 +12,14 @@ import AssessmentReportTitle from "./AssessmentReportTitle";
 import { IAssessmentReportModel, RolesType } from "@types";
 import AssessmentAdviceContainer from "./AssessmentAdviceContainer";
 import { AssessmentSummary } from "./AssessmentSummary";
-import { AssessmentSubjectStatus } from "./AssessmentSubjectStatus";
 import { AssessmentReportKit } from "./AssessmentReportKit";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
-import MoreActions from "@common/MoreActions";
 import SettingsIcon from "@mui/icons-material/Settings";
-import useMenu from "@/utils/useMenu";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import { secondaryFontFamily } from "@/config/theme";
 import BetaSvg from "@assets/svg/beta.svg";
-import { AssessmentReportNarrator } from "@components/assessment-report/assessmentReportNarrator";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -93,8 +89,6 @@ const AssessmentReportContainer = (props: any) => {
           status,
           assessment,
           subjects,
-          topStrengths,
-          topWeaknesses,
           assessmentPermissions: { manageable, exportable },
           permissions,
         } = data || {};
@@ -102,7 +96,6 @@ const AssessmentReportContainer = (props: any) => {
         const colorCode = assessment?.color?.code || "#101c32";
         const { assessmentKit, maturityLevel, confidenceValue } =
           assessment || {};
-        const { expertGroup } = assessmentKit || {};
         const { questionsCount, answersCount } = progress;
 
         const totalProgress =
@@ -175,7 +168,6 @@ const AssessmentReportContainer = (props: any) => {
                         <Trans i18nKey="general" />
                       </Typography>
                       <AssessmentSummary
-                        expertGroup={expertGroup}
                         assessmentKit={assessment}
                         data={data}
                         progress={totalProgress}
@@ -201,7 +193,6 @@ const AssessmentReportContainer = (props: any) => {
                       </Typography>
                       <AssessmentOverallStatus
                         status={status}
-                        subjects_info={subjects}
                         maturity_level={maturityLevel}
                         maturity_level_count={assessmentKit?.maturityLevelCount}
                         confidence_value={confidenceValue}
@@ -301,32 +292,6 @@ const AssessmentReportContainer = (props: any) => {
           </Box>
         );
       }}
-    />
-  );
-};
-
-const Actions = (props: { assessmentId: string; manageable: boolean }) => {
-  const { assessmentId, manageable } = props;
-  const navigate = useNavigate();
-  const { spaceId } = useParams();
-
-  const assessmentSetting = (e: any) => {
-    navigate({
-      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
-    });
-  };
-  return (
-    <MoreActions
-      {...useMenu()}
-      boxProps={{ py: "0.6rem" }}
-      fontSize="large"
-      items={[
-        manageable && {
-          icon: <SettingsIcon style={{ fontSize: "2rem" }} fontSize="large" />,
-          text: <Trans i18nKey="settings" />,
-          onClick: assessmentSetting,
-        },
-      ]}
     />
   );
 };

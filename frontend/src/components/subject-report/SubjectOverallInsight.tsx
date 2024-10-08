@@ -1,25 +1,14 @@
 import Box from "@mui/material/Box";
-import { Trans } from "react-i18next";
 import Grid from "@mui/material/Grid";
-import Skeleton from "@mui/material/Skeleton";
-import Title from "@common/Title";
 import Typography from "@mui/material/Typography";
-import SubjectOverallStatusLevelChart from "./SubjectOverallStatusLevelChart";
 import { Gauge } from "../common/charts/Gauge";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
-import { Divider } from "@mui/material";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import { getMaturityLevelColors } from "@/config/styles";
 import { t } from "i18next";
 
 const SubjectOverallInsight = ({ data }: any) => {
-  const {
-    attributes,
-    subject,
-    topStrengths,
-    topWeaknesses,
-    maturityLevelsCount,
-  } = data;
+  const { attributes, subject } = data;
   const { maturityLevel, confidenceValue } = subject;
   return (
     <Box

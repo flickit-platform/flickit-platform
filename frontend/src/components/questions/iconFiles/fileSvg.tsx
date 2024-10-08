@@ -5,7 +5,6 @@ export default function FileSvg({
   evidenceId,
   setEvidenceId,
   exp,
-  backgroundColor,
   hover,
   downloadFile,
   name,

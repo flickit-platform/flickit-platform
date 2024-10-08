@@ -51,9 +51,7 @@ const AssessmentKitSettingFormDialog = (
     ...rest
   } = props;
   const { type, data = {} } = context;
-  const { expertGroupId: fallbackExpertGroupId, assessmentKitId } = useParams();
-  const { id, expertGroupId = fallbackExpertGroupId } = data;
-  const defaultValues = type === "update" ? data : {};
+  const { assessmentKitId } = useParams();
   const formMethods = useForm({ shouldUnregister: true });
   const abortController = useMemo(() => new AbortController(), [rest.open]);
   const navigate = useNavigate();

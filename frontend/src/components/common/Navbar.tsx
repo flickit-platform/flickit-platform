@@ -4,7 +4,9 @@ import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { styles } from "@styles";
 import { authActions, useAuthContext } from "@providers/AuthProvider";
 import AppBar from "@mui/material/AppBar";
-import { Badge, Box, ListItemIcon } from "@mui/material";
+import Box from "@mui/material/Box";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Badge from "@mui/material/Badge";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
@@ -37,10 +39,10 @@ import {
   ButtonTypeEnum,
   IMessage,
   NotificationCenter,
-  NovuProvider,
 } from "@novu/notification-center";
 import { FaBell } from "react-icons/fa";
-import { ArrowBackIos, ArrowForwardIos, ArrowLeft } from "@mui/icons-material";
+import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
@@ -793,7 +795,10 @@ const SpacesButton = () => {
         onClose={handleClose}
         PaperProps={{
           sx: {
-            left: theme.direction === "ltr" ? "165px !important" : "unset !important",
+            left:
+              theme.direction === "ltr"
+                ? "165px !important"
+                : "unset !important",
             right: theme.direction === "rtl" ? "130px !important" : "unset",
             minWidth: "260px",
           },

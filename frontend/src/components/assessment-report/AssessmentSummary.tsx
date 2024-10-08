@@ -1,30 +1,20 @@
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
-import {
-  AssessmentKitInfoType,
-  ExpertGroupDetails,
-  IExpertGroup,
-  IAssessmentKitReportModel,
-  PathInfo,
-} from "@types";
+import { IAssessmentKitReportModel } from "@types";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import formatDate from "@/utils/formatDate";
+import { Link } from "react-router-dom";
 import ColorfullProgress, {
   ProgessBarTypes,
 } from "../common/progress/ColorfulProgress";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
-import { Button } from "@mui/material";
-import MoreActions from "@common/MoreActions";
-import useMenu from "@utils/useMenu";
-import SettingsIcon from "@mui/icons-material/Settings";
+import Button from "@mui/material/Button";
 import { calculateFontSize } from "@/utils/calculateFontSize";
 import { secondaryFontFamily } from "@/config/theme";
 import { t } from "i18next";
+
 interface IAssessmentSummaryProps {
   assessmentKit: IAssessmentKitReportModel;
-  expertGroup: IExpertGroup;
   data: any;
   progress: number;
   questionCount: number;
@@ -32,17 +22,9 @@ interface IAssessmentSummaryProps {
 }
 
 export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
+  const { assessmentKit, data, progress, questionCount, answerCount } = props;
   const {
-    assessmentKit,
-    expertGroup,
-    data,
-    progress,
-    questionCount,
-    answerCount,
-  } = props;
-  const {
-    assessment: { title, lastModificationTime, creationTime, id: assessmentId },
-    assessmentPermissions: { manageable },
+    assessment: { lastModificationTime, creationTime },
   } = data;
   return (
     <Box
@@ -148,30 +130,5 @@ export const AssessmentSummary = (props: IAssessmentSummaryProps) => {
         </Box>
       </Box>
     </Box>
-  );
-};
-
-const Actions = (props: { assessmentId: string; manageable: boolean }) => {
-  const { assessmentId, manageable } = props;
-  const navigate = useNavigate();
-  const { spaceId } = useParams();
-
-  const assessmentSetting = (e: any) => {
-    navigate({
-      pathname: `/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`,
-    });
-  };
-  return (
-    <MoreActions
-      {...useMenu()}
-      boxProps={{ position: "absolute", top: "10px", right: "10px", zIndex: 2 }}
-      items={[
-        manageable && {
-          icon: <SettingsIcon fontSize="small" />,
-          text: <Trans i18nKey="settings" />,
-          onClick: assessmentSetting,
-        },
-      ]}
-    />
   );
 };

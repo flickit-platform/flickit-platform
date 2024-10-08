@@ -4,21 +4,10 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import {
-  Avatar,
-  Button,
-  Chip,
-  Divider,
-  Grid,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import {
-  CancelRounded,
-  CheckCircleOutlineRounded,
-  EditRounded,
-  InfoOutlined,
-} from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import CancelRounded from "@mui/icons-material/CancelRounded";
+import CheckCircleOutlineRounded from "@mui/icons-material/CheckCircleOutlineRounded";
+import EditRounded from "@mui/icons-material/EditRounded";
 import FormProviderWithForm from "../common/FormProviderWithForm";
 import RichEditorField from "../common/fields/RichEditorField";
 import { ICustomError } from "@/utils/CustomError";
@@ -26,16 +15,12 @@ import { useForm } from "react-hook-form";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
-import { styles } from "@styles";
-import { LoadingButton } from "@mui/lab";
 import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
 import { theme } from "@/config/theme";
 
 export const AssessmentReportNarrator = ({
-  isWritingAdvice,
   setIsWritingAdvice,
-  fetchAdviceNarration,
   setEmptyState,
   setAIGenerated,
 }: any) => {
@@ -149,7 +134,6 @@ const OnHoverRichEditor = (props: any) => {
     editable,
     infoQuery,
     onEditing,
-    query,
     setEmptyState,
     setIsAIGenerated,
     setAIGenerated,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GreenCheckmark from "@/assets/img/greenCheckmark.gif";
 import GreenCheckmarkPng from "@/assets/img/greenCheckmark.png";
 

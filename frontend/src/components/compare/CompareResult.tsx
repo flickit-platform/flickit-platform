@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import Chip from "@mui/material/Chip";
 import MuiLink from "@mui/material/Link";
 import CompareTable from "./CompareTable";
 import AlertBox from "@common/AlertBox";
-import { ICompareResultModel, ISubjectReportModel } from "@types";
 import { getMinWithBaseOnNumberOfAssessments } from "./utils";
 import CompareResultAssessmentsSection from "./CompareResultAssessmentsSection";
-import CompareResultSubjectAttributesBarChart from "./CompareResultAttributesBarChart";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import Title from "@common/Title";
-import { useServiceContext } from "@providers/ServiceProvider";
-import { useQuery } from "@utils/useQuery";
-import QueryData from "../common/QueryData";
-import { Link, useSearchParams } from "react-router-dom";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Link } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import { useConfigContext } from "@/providers/ConfgProvider";
 interface ICompareResultProps {
@@ -25,7 +19,7 @@ interface ICompareResultProps {
 
 const CompareResult = (props: ICompareResultProps) => {
   const { data } = props;
-  const { subjects, assessments } = data;
+  const { assessments } = data;
 
   const { config } = useConfigContext();
 
@@ -33,12 +27,6 @@ const CompareResult = (props: ICompareResultProps) => {
     setDocumentTitle(`${t("comparisonResultT")} `, config.appTitle);
   }, []);
 
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [show, setShow] = useState<boolean>(false);
-  const handleSubjectClick = (subject: any) => {
-    setSelectedSubject(subject.id);
-    setShow(!show);
-  };
   return (
     <Box mt={4}>
       <Box sx={{ overflowX: "auto" }}>

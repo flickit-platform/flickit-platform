@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Chip,
-  CircularProgress,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { useState } from "react";
+import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import { authActions, useAuthContext } from "@providers/AuthProvider";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import useMenu from "@utils/useMenu";
@@ -26,7 +22,7 @@ import { TDialogProps } from "@utils/useDialog";
 import { ISpaceModel, ISpacesModel, TQueryFunction } from "@types";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { primaryFontFamily, secondaryFontFamily, theme } from "@/config/theme";
+import { secondaryFontFamily, theme } from "@/config/theme";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
@@ -36,10 +32,6 @@ interface ISpaceListProps {
 
 const SpacesList = (props: ISpaceListProps) => {
   const { dialogProps, data, fetchSpaces } = props;
-  const { service } = useServiceContext();
-  const { dispatch } = useAuthContext();
-  const { userInfo } = useAuthContext();
-  const { id: userId } = userInfo;
 
   // const setUserInfo = (signal: AbortSignal) => {
   //   // service
@@ -103,13 +95,11 @@ const SpaceCard = (props: ISpaceCardProps) => {
     runOnMount: false,
     toastError: true,
   });
-  const { dispatch } = useAuthContext();
   const {
     title,
     id: spaceId,
     membersCount = 0,
     assessmentsCount = 0,
-    lastModificationTime,
     is_default_space_for_current_user,
   } = item || {};
 
@@ -273,16 +263,12 @@ const Actions = (props: any) => {
     space,
     fetchSpaces,
     dialogProps,
-    isActiveSpace,
-    setUserInfo,
     isOwner,
     is_default_space_for_current_user,
     setShowTooltip,
   } = props;
   const { id: spaceId } = space;
   const { service } = useServiceContext();
-  const { userInfo } = useAuthContext();
-  const { default_space } = userInfo;
   const [editLoading, setEditLoading] = useState(false);
   const {
     query: deleteSpace,

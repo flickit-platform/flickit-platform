@@ -1,7 +1,5 @@
 import Box from "@mui/material/Box";
-import { Trans } from "react-i18next";
 import ErrorEmptyData from "@common/errors/ErrorEmptyData";
-import Title from "@common/Title";
 import { AssessmentSubjectAccordion } from "./AssessmentSubjectCard";
 import Grid from "@mui/material/Grid";
 import { ISubjectInfo } from "@types";

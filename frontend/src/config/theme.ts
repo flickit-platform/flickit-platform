@@ -1,16 +1,5 @@
 import createPalette from "@mui/material/styles/createPalette";
 import { createTheme } from "@mui/material";
-import "@fontsource/oswald/300.css";
-import "@fontsource/oswald/400.css";
-import "@fontsource/oswald/500.css";
-import "@fontsource/oswald/700.css";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
-import { transformOrigin } from "html2canvas/dist/types/css/property-descriptors/transform-origin";
-
 // export const primaryFontFamily =
 //   '"Roboto","Helvetica","Arial","sans-serif","Vazirmatn"';
 // export const primaryFontFamily = "Oswald, Roboto, Vazirmatn";

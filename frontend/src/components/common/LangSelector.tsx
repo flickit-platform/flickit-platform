@@ -1,6 +1,6 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const LanguageSelector = () => {
     const { i18n } = useTranslation();

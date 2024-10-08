@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState, useMemo } from "react";
+import { ReactNode, useEffect, useRef, useState, useMemo } from "react";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import throttle from "lodash/throttle";
 import TextField from "@mui/material/TextField";
@@ -18,7 +18,6 @@ import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { filter } from "lodash";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   IAutocompleteAsyncFieldBase,
@@ -53,8 +52,7 @@ const AutocompleteAsyncField = (
     searchable,
     ...rest
   } = props;
-  const { control, setValue } = useFormContext();
-  const { options } = rest;
+  const { control } = useFormContext();
   return (
     <Controller
       name={name}
@@ -142,15 +140,10 @@ const AutocompleteBaseField = (
   const { name, onChange, ref, value, ...restFields } = field;
   const {
     formState: { errors },
-    setValue,
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
   const { service } = useServiceContext();
-  const createSpaceQueryData = useQuery({
-    service: (args, config) => service.createSpace(args, config),
-    runOnMount: false,
-  });
 
   const [inputValue, setInputValue] = useState(
     () => getOptionLabel(defaultValue) || "",

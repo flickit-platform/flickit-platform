@@ -4,25 +4,14 @@ import { DialogProps } from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import { Trans } from "react-i18next";
 import { InputFieldUC } from "@common/fields/InputField";
-import { SelectFieldUC } from "@common/fields/SelectField";
 import { styles } from "@styles";
 import { useServiceContext } from "@providers/ServiceProvider";
 import setServerFieldErrors from "@utils/setServerFieldError";
-import useConnectSelectField from "@utils/useConnectSelectField";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
 import { ICustomError } from "@utils/CustomError";
-import { Link, useParams } from "react-router-dom";
 import toastError from "@utils/toastError";
 import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import AutocompleteAsyncField, {
-  useConnectAutocompleteField,
-} from "@common/fields/AutocompleteAsyncField";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import UploadField from "@common/fields/UploadField";
-import convertToBytes from "@/utils/convertToBytes";
 import { theme } from "@/config/theme";
 
 interface IUserCEFormDialogProps extends DialogProps {
@@ -67,7 +56,7 @@ const UserCEFormDialog = (props: IUserCEFormDialogProps) => {
       const tempData = { ...data };
       tempData.linkedin === "" && delete tempData.linkedin;
       tempData.bio === "" && delete tempData.bio;
-      const { data: res } = await service.updateUserInfo(
+      await service.updateUserInfo(
         {
           id,
           data: tempData,

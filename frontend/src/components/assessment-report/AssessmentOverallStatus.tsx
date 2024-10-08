@@ -1,18 +1,11 @@
 import Box from "@mui/material/Box";
-import { Trans } from "react-i18next";
-import Paper from "@mui/material/Paper";
-import { ESystemStatus, ISubjectInfo, TStatus, IMaturityLevel } from "@types";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import { styles } from "@styles";
+import { TStatus, IMaturityLevel } from "@types";
 import { Gauge } from "@common/charts/Gauge";
-import Title from "@common/Title";
 import { getNumberBaseOnScreen } from "@/utils/returnBasedOnScreen";
 import { t } from "i18next";
 
 interface IAssessmentOverallStatusProps {
   status?: TStatus;
-  subjects_info?: ISubjectInfo[];
   maturity_level: IMaturityLevel;
   maturity_level_count: number;
   confidence_value?: number;
@@ -21,13 +14,7 @@ interface IAssessmentOverallStatusProps {
 export const AssessmentOverallStatus = (
   props: IAssessmentOverallStatusProps,
 ) => {
-  const {
-    status,
-    subjects_info = [],
-    maturity_level,
-    maturity_level_count,
-    confidence_value,
-  } = props;
+  const { maturity_level, maturity_level_count, confidence_value } = props;
 
   return (
     <Box

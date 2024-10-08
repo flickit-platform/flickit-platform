@@ -4,6 +4,7 @@ from baseinfo.views import (assessmentkitviews, dsl_views, update_assessment_kit
                             importassessmentkitviews, assessment_kit_views)
 
 urlpatterns = [
+    path("", assessment_kit_views.AssessmentKitsApi.as_view()),
     path("excel-to-dsl/", dsl_views.DSLConversionApi.as_view(), name='convert-dsl'),
     path("excel-to-dsl/sample/", dsl_views.DSLConversionFileSampleApi.as_view(), name='Excel-file-sample'),
     path("options/search/", assessment_kit_views.AssessmentKitsSearchApi.as_view()),

@@ -23,7 +23,6 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import useDialog from "@utils/useDialog";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
-import { useAuthContext } from "@providers/AuthProvider";
 import languageDetector from "@utils/languageDetector";
 import toastError from "@utils/toastError";
 import { ICustomError } from "@utils/CustomError";
@@ -33,7 +32,6 @@ import { CEDialog, CEDialogActions } from "@common/dialogs/CEDialog";
 import { useForm } from "react-hook-form";
 import UploadField from "@common/fields/UploadField";
 import FormProviderWithForm from "@common/FormProviderWithForm";
-import setServerFieldErrors from "@utils/setServerFieldError";
 import { AssessmentKitDetailsType } from "@types";
 import convertToBytes from "@/utils/convertToBytes";
 import { useConfigContext } from "@/providers/ConfgProvider";
@@ -43,10 +41,8 @@ const AssessmentKitExpertViewContainer = () => {
   const { fetchAssessmentKitDetailsQuery, fetchAssessmentKitDownloadUrlQuery } =
     useAssessmentKit();
   const dialogProps = useDialog();
-  const { userInfo } = useAuthContext();
   const { config } = useConfigContext();
   const [update, setForceUpdate] = useState<boolean>(false);
-  const userId = userInfo.id;
   const { expertGroupId } = useParams();
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
   const [expertGroup, setExpertGroup] = useState<any>();
@@ -239,7 +235,6 @@ const AssessmentKitSubjects = (props: { details: any[]; update: boolean }) => {
   const [assessmentKitSubjectDetails, setAssessmentKitSubjectDetails] =
     useState<any>();
   const [subjectId, setSubjectId] = useState<any>();
-  const dialogProps = useDialog();
   const { fetchAssessmentKitSubjectDetailsQuery } = useAssessmentKit();
   const { assessmentKitId } = useParams();
   const handleChange =
@@ -577,7 +572,6 @@ const AssessmentKitQuestionsList = (props: {
   isExpanded: boolean;
 }) => {
   const { attributeId, isExpanded } = props;
-  const questionsRef = {} as Record<string, boolean>;
   const {
     fetchAssessmentKitSubjectAttributesDetailsQuery,
     fetchMaturityLevelQuestionsQuery,
@@ -695,7 +689,7 @@ const AssessmentKitQuestionsList = (props: {
               sx={{
                 "& .MuiTabs-indicator": {
                   backgroundColor: `${
-                    colorPallet[selectedTabIndex ? selectedTabIndex : 0]
+                    colorPallet[selectedTabIndex || 0]
                   } !important`,
                 },
               }}
@@ -1115,7 +1109,7 @@ const UpdateAssessmentKitDialog = (props: any) => {
   );
 };
 const SubjectQuestionList = (props: any) => {
-  const { questions, questions_count } = props;
+  const { questions } = props;
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const handleChange =
     (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {

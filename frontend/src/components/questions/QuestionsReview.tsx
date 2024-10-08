@@ -9,24 +9,19 @@ import { useQuestionContext } from "@/providers/QuestionProvider";
 import doneSvg from "@assets/svg/Done.svg";
 import noQuestionSvg from "@assets/svg/noQuestion.svg";
 import someQuestionSvg from "@assets/svg/someQuestion.svg";
-
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import Hidden from "@mui/material/Hidden";
 import languageDetector from "@utils/languageDetector";
 import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
-import QuizRoundedIcon from "@mui/icons-material/QuizRounded";
 import { useEffect, useMemo, useState } from "react";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
-import { ECustomErrorType, IAssessmentKitReportModel } from "@/types";
 import { primaryFontFamily, theme } from "@/config/theme";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
 
 const QuestionsReview = () => {
-  const { questionIndex, questionsInfo, assessmentStatus } =
-    useQuestionContext();
+  const { questionsInfo } = useQuestionContext();
   return (
     <Box width="100%">
       <Review questions={questionsInfo.questions} isReviewPage={true} />

@@ -1,11 +1,8 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import "./style.css";
-interface IDynamicGaugeSVGProps {
-  color: string;
-  value: number;
-}
 
 const LoadingGauge: React.FC = () => {
   return (

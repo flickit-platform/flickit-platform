@@ -1,6 +1,4 @@
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Title from "@common/Title";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
@@ -25,8 +23,9 @@ import RelatedEvidencesContainer, { evidenceType } from "./SubjectEvidences";
 import languageDetector from "@utils/languageDetector";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
 import ColorfulProgress from "../common/progress/ColorfulProgress";
-import { IconButton, useMediaQuery } from "@mui/material";
-import { Info, InfoOutlined, InfoRounded } from "@mui/icons-material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 const SUbjectAttributeCard = (props: any) => {
   const {
@@ -231,7 +230,6 @@ const AttributeSummary = (props: any) => {
     description,
   } = props;
   const colorPallet = getMaturityLevelColors(maturityLevelsCount);
-  const statusColor = colorPallet[maturityLevelsCount - 1];
   const isMobileScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("sm"),
   );
@@ -323,49 +321,8 @@ const AttributeSummary = (props: any) => {
   );
 };
 
-const AttributeStatusBarContainer = (props: any) => {
-  const { status, ml, cl, mn } = props;
-  const colorPallet = getMaturityLevelColors(mn);
-  const statusColor = colorPallet[ml - 1];
-  return (
-    <Box
-      display={"flex"}
-      sx={{
-        // ml: { xs: -1.5, sm: -3, md: -4 },
-        flexDirection: { xs: "column", sm: "row" },
-      }}
-    >
-      <Box display={"flex"} flex={1}>
-        <Box width="100%">
-          {ml && <AttributeStatusBar ml={ml} isMl={true} mn={mn} />}
-          {(cl == 0 || cl) && <AttributeStatusBar cl={cl} mn={mn} />}
-        </Box>
-      </Box>
-      <Box
-        sx={{ ...styles.centerV, pl: 2, pr: { xs: 0, sm: 2 } }}
-        minWidth={"245px"}
-      >
-        <Typography
-          variant="h4"
-          fontWeight={"bold"}
-          letterSpacing=".15em"
-          sx={{
-            borderLeft: `2px solid ${statusColor}`,
-            pl: 1,
-            ml: { xs: -2, sm: 0 },
-            pr: { xs: 0, sm: 1 },
-            color: statusColor,
-          }}
-        >
-          {status}
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
-
 export const AttributeStatusBar = (props: any) => {
-  const { ml, cl, isMl, isBasic, mn } = props;
+  const { ml, cl, isMl, mn } = props;
   const width = isMl
     ? ml
       ? `${(ml / mn) * 100}%`
@@ -426,7 +383,6 @@ const MaturityLevelDetailsContainer = (props: any) => {
     props;
   const { maturityLevel, score } = maturity_score;
   const colorPallet = getMaturityLevelColors(mn);
-  const statusColor = colorPallet[maturityLevel?.index - 1];
   const is_passed = maturityLevel?.index <= totalml;
   const { service } = useServiceContext();
   const { assessmentId } = useParams();
