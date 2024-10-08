@@ -37,9 +37,14 @@ const AssessmentContainer = () => {
   const { data, error, errorObject, size, total, loading } = rest;
   const isEmpty = data.length === 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    navigate(`/${spaceId}/assessments/${value}`);
+    if (Math.ceil(total / size) > Number(page) || Math.ceil(total / size) == Number(page)) {
+      navigate(`/${spaceId}/assessments/${value}`);
+    }
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
+  if (Math.ceil(total / size) < Number(page) && pageCount) {
+    navigate(`/${spaceId}/assessments/${pageCount}`);
+  }
   return error &&
     (errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
       errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND) ? (
