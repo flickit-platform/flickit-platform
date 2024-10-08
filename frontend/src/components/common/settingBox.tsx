@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Box from "@mui/material/Box";
 import {Chip, CircularProgress, Divider, FormControl, IconButton, TextField, Tooltip, Typography} from "@mui/material";
 import {Trans} from "react-i18next";
@@ -24,7 +24,6 @@ import {t} from "i18next";
 import {useServiceContext} from "@providers/ServiceProvider";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@utils/useQuery";
-import {SelectHeight} from "@utils/selectHeight";
 import Avatar from "@mui/material/Avatar";
 import stringAvatar from "@utils/stringAvatar";
 import Select from "@mui/material/Select";

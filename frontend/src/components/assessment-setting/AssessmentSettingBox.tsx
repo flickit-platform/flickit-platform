@@ -1,17 +1,11 @@
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
-import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { Trans } from "react-i18next";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import React, { useEffect, useState } from "react";
 import { styles } from "@styles";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import { useServiceContext } from "@providers/ServiceProvider";
@@ -23,20 +17,8 @@ import firstCharDetector from "@utils/firstCharDetector";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Grid from "@mui/material/Grid";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Avatar from "@mui/material/Avatar";
-import stringAvatar from "@utils/stringAvatar";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import formatDate from "@utils/formatDate";
 import { Link } from "react-router-dom";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectHeight } from "@utils/selectHeight";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
@@ -393,7 +375,6 @@ export const AssessmentSettingMemberBox = (props: {
             openAssessmentModal={openModal}
         />
         {inviteesMemberList?.data?.items?.length > 0 && (
-          <>
             <SettingBox
                 name={"assessmentSettingInviteBox"}
                 MenuProps={MenuProps}
@@ -405,7 +386,6 @@ export const AssessmentSettingMemberBox = (props: {
                 title={"invitees"}
                 columns={inviteesColumns}
             />
-          </>
         )}
       </>
   );

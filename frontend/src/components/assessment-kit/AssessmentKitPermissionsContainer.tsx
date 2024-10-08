@@ -1,25 +1,16 @@
-import { useRef } from "react";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import Title from "@common/Title";
 import {useServiceContext} from "@providers/ServiceProvider";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@utils/useQuery";
 import QueryBatchData from "@common/QueryBatchData";
 import {Trans} from "react-i18next";
-import {toast} from "react-toastify";
-import {LoadingButton} from "@mui/lab";
 import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import {t} from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import toastError from "@utils/toastError";
 import {ICustomError} from "@utils/CustomError";
 import {useConfigContext} from "@/providers/ConfgProvider";
-import {theme} from "@/config/theme";
 import SettingBox from "@common/settingBox";
 
 const AssessmentKitPermissionsContainer = () => {
@@ -102,18 +93,7 @@ const AssessmentKitPermisson = (props: any) => {
             service.deleteMemberToKitPermission(args, config),
         runOnMount: false,
     });
-    const deleteMember = async (id: any) => {
-        try {
-            await deleteMemberToKitPermissionQueryData.query({
-                assessmentKitId: assessmentKitId,
-                userId: id,
-            });
-            await query.query();
-        } catch (e) {
-            const err = e as ICustomError;
-            toastError(err);
-        }
-    };
+
     return (
         <Box>
             <Title
