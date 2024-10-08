@@ -46,14 +46,14 @@ const SpaceContainer = () => {
     toastError: true,
   });
 
-  useEffect(() => {
-    spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then((res) => {
-      const { size, total } = res;
-      if (Math.ceil(total / size) < pageNumber) {
-        return navigate(`*`);
-      }
-    });
-  }, [pageNumber]);
+  // useEffect(() => {
+  //   spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then((res) => {
+  //     const { size, total } = res;
+  //     if (Math.ceil(total / size) < pageNumber) {
+  //       return navigate(`*`);
+  //     }
+  //   });
+  // }, [pageNumber]);
 
   const pageCount =
     !spacesQueryData.data ||

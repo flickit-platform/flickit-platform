@@ -27,6 +27,7 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 import AssessmentTitle from "./AssessmentTitle";
 import { theme } from "@/config/theme";
+import PermissionControl from "../common/PermissionControl";
 
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
@@ -45,11 +46,7 @@ const AssessmentContainer = () => {
   if (Math.ceil(total / size) < Number(page) && pageCount) {
     navigate(`/${spaceId}/assessments/${pageCount}`);
   }
-  return error &&
-    (errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND) ? (
-    <ErrorNotFoundOrAccessDenied />
-  ) : (
+  return <PermissionControl error={[errorObject?.response]}>
     <Box display="flex" flexDirection="column" m="auto">
       <AssessmentTitle data={currentSpace} />
       <Title
@@ -224,7 +221,7 @@ const AssessmentContainer = () => {
         onSubmitForm={fetchAssessments}
       />
     </Box>
-  );
+  </PermissionControl>;
 };
 
 const useFetchAssessments = () => {
@@ -267,9 +264,9 @@ const useFetchAssessments = () => {
 
       setLoading(false);
     } catch (e) {
-      if (isNaN(page as any)) {
-        return navigate(`*`);
-      }
+      // if (isNaN(page as any)) {
+      //   return navigate(`*`);
+      // }
       const err = e as ICustomError;
       toastError(err, { filterByStatus: [404] });
       setLoading(false);
