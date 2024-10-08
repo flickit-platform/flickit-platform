@@ -1,4 +1,7 @@
-import { Typography, Box, Chip } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
@@ -13,6 +16,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { Link } from "react-router-dom";
 import formatDate from "@utils/formatDate";
 import { theme } from "@/config/theme";
+import { Tooltip } from "@mui/material";
 interface IAssessmentKitListItemProps {
   data: {
     id: TId;
@@ -26,10 +30,11 @@ interface IAssessmentKitListItemProps {
   hasAccess?: boolean;
   is_member?: boolean;
   is_active?: boolean;
+  draftVersionId?: TId
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
-  const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
+  const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active, draftVersionId } =
     props;
   const { id, title, lastModificationTime, isPrivate } = data || {};
   return (
@@ -79,6 +84,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             color: "#525252",
             ml: theme.direction === "rtl" ? "unset" : "auto",
             mr: theme.direction !== "rtl" ? "unset" : "auto",
+            gap: 1
           }}
           alignSelf="stretch"
         >
@@ -87,8 +93,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
               label={<Trans i18nKey="private" />}
               size="small"
               sx={{
-                marginRight: theme.direction === "ltr" ? 1 : "unset",
-                marginLeft: theme.direction === "rtl" ? 1 : "unset",
+
                 background: "#7954B3",
                 color: "#fff",
               }}
@@ -103,7 +108,13 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-
+          <Tooltip title={!draftVersionId && <Trans i18nKey="noDraftVersion" />}>
+            <div>
+              <Button variant="outlined" size="small" disabled={!draftVersionId}>
+                <Trans i18nKey="draft" />
+              </Button>
+            </div>
+          </Tooltip>
           <Actions
             assessment_kit={data}
             fetchAssessmentKits={fetchAssessmentKits}
@@ -193,7 +204,6 @@ const Actions = (props: any) => {
   return hasAccess ? (
     <MoreActions
       {...useMenu()}
-      boxProps={{ ml: 0.4 }}
       loading={
         deleteAssessmentKitQuery.loading ||
         // publishAssessmentKitQuery.loading ||
