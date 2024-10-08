@@ -211,6 +211,8 @@
   "thisAssessmentIsUsing": "This Assessment was conducted using the",
   "thisAssessmentIsUsingSecondPart": "kit",
   "description": "Description",
+  "viaDSL": "Via DSL",
+  "viaKitDesigner": "Via Kit Designer",
   "createAssessmentKit": "New Assessment Kit",
   "updateAssessmentKit": "Update Assessment Kit",
   "dsl": "DSL",

@@ -56,6 +56,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import formatBytes from "@utils/formatBytes";
 import { theme } from "@/config/theme";
+import MoreVert from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -272,10 +275,9 @@ const ExpertGroupContainer = () => {
                         {assessmentKitsCounts.filter(
                           (item: any) => item.published,
                         ) &&
-                          `${
-                            assessmentKitsCounts.filter(
-                              (item: any) => item.published,
-                            ).length
+                          `${assessmentKitsCounts.filter(
+                            (item: any) => item.published,
+                          ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
@@ -329,10 +331,9 @@ const ExpertGroupContainer = () => {
                           {assessmentKitsCounts.filter(
                             (item: any) => !item.published,
                           ) &&
-                            `${
-                              assessmentKitsCounts.filter(
-                                (item: any) => !item.published,
-                              ).length
+                            `${assessmentKitsCounts.filter(
+                              (item: any) => !item.published,
+                            ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -792,10 +793,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-              icon: <EmailRoundedIcon fontSize="small" />,
-              text: <Trans i18nKey="resendInvitation" />,
-              onClick: inviteMember,
-            }
+            icon: <EmailRoundedIcon fontSize="small" />,
+            text: <Trans i18nKey="resendInvitation" />,
+            onClick: inviteMember,
+          }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -941,6 +942,18 @@ const AssessmentKitsList = (props: any) => {
     service: (args = { id: expertGroupId }, config) =>
       service.fetchExpertGroupAssessmentKits(args, config),
   });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
 
   return (
     <>
@@ -950,18 +963,43 @@ const AssessmentKitsList = (props: any) => {
         toolbar={
           <Box sx={{ display: "flex", gap: "8px" }}>
             {hasAccess && (
-              <ExcelToDslButton dialogProps={excelToDslDialogProps} />
-            )}
-            {hasAccess && (
-              <CreateAssessmentKitButton
-                onSubmitForm={assessmentKitQuery.query}
-                dialogProps={dialogProps}
-              />
+              <>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleClick}
+                  endIcon={<MoreVert />}
+                >
+                  <Trans i18nKey="newAssessment" />
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  PaperProps={{
+                    style: {
+                      maxHeight: 48 * 4.5,
+                    },
+                  }}
+                >
+                  <MenuItem onClick={dialogProps.openDialog}>
+                    <Trans i18nKey="viaDSL" />
+                  </MenuItem>
+                  <MenuItem onClick={dialogProps.openDialog}>
+                    <Trans i18nKey="viaKitDesigner" />
+                  </MenuItem>
+                  <MenuItem onClick={excelToDslDialogProps.openDialog}>
+                    <Trans i18nKey="convertExcelToDsl" />
+                  </MenuItem>
+                </Menu>
+                <AssessmentKitCEFromDialog {...dialogProps} />
+                <AssessmentKitCEFromDialog {...excelToDslDialogProps} onSubmitForm={assessmentKitQuery.query} />
+              </>
             )}
           </Box>
         }
       >
-        <Trans i18nKey={"assessmentKits"} />
+        <Trans i18nKey="assessmentKits" />
       </Title>
       <Box mt={2}>
         <QueryData
@@ -1042,34 +1080,6 @@ const AssessmentKitsList = (props: any) => {
   );
 };
 
-const CreateAssessmentKitButton = (props: {
-  onSubmitForm: TQueryFunction;
-  dialogProps: IDialogProps;
-}) => {
-  const { onSubmitForm, dialogProps } = props;
-
-  return (
-    <>
-      <Button variant="contained" size="small" onClick={dialogProps.openDialog}>
-        <Trans i18nKey="createAssessmentKit" />
-      </Button>
-      <AssessmentKitCEFromDialog {...dialogProps} onSubmitForm={onSubmitForm} />
-    </>
-  );
-};
-
-const ExcelToDslButton = (props: { dialogProps: IDialogProps }) => {
-  const { dialogProps } = props;
-
-  return (
-    <>
-      <Button variant="outlined" size="small" onClick={dialogProps.openDialog}>
-        <Trans i18nKey="convertExcelToDsl" />
-      </Button>
-      <AssessmentKitCEFromDialog {...dialogProps} />
-    </>
-  );
-};
 const ExpertGroupMembersDetail = (props: any) => {
   const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
 

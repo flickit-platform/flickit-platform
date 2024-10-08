@@ -161,6 +161,8 @@
     "created": "ساخته شده",
     "description": "توضیحات",
     "createAssessmentKit": "ایجاد کیت ارزیابی",
+    "viaDSL": "با استفاده از dsl",
+    "viaKitDesigner": "با استفاده از سامانه",
     "updateAssessmentKit": "به‌روزرسانی کیت ارزیابی",
     "dsl": "DSL",
     "currentSpace": "فضای کاری فعلی",
