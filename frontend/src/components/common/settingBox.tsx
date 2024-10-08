@@ -47,7 +47,6 @@ export default function SettingBox(props: any){
         query,
         hasBtn,
     } = props
-
     const {openEGModal ,setOpenEGModal, deleteEGMember, onCloseEGModal} = useEGPermision({query})
     return (
         <Box
@@ -146,6 +145,11 @@ export default function SettingBox(props: any){
                                                 sm: "14rem",
                                                 md: column.minWidth,
                                             },
+                                            maxWidth: {
+                                                xs: "10rem",
+                                                sm: "14rem",
+                                                md: column.minWidth,
+                                            },
                                             textAlign: { xs: column.position, lg: "center" },
                                             display: {
                                                 xs: column.display,
@@ -169,7 +173,7 @@ export default function SettingBox(props: any){
                                     <TableRow
                                         tabIndex={-1}
                                         key={row.id}
-                                        sx={{ background: !row.editable && name == "assessmentSettingBox" ? "#ebe8e85c" : "" }}
+                                        sx={{ background: !row.editable && (name == "assessmentSettingBox" ||  name == "EGPermissionSettingBox") ? "#ebe8e85c" : "" }}
                                     >
                                         <TableCell
                                             sx={{
@@ -181,9 +185,7 @@ export default function SettingBox(props: any){
                                                 paddingX: { xs: "0px", md: "1rem" },
                                             }}
                                         >
-
-
-                                            { name == "assessmentSettingBox" || name == "EGPermissionSettingBox" &&  <Box
+                                            {( name == "assessmentSettingBox" || name == "EGPermissionSettingBox") &&  <Box
                                                 sx={{
                                                     display: "flex",
                                                     justifyContent: name == "assessmentSettingBox" || name == "EGPermissionSettingBox"  ? "flex-start" : "center",
@@ -191,6 +193,11 @@ export default function SettingBox(props: any){
                                                         xs: "10rem",
                                                         sm: "14rem",
                                                         md: "20vm"
+                                                    },
+                                                    width: {
+                                                        xs: "10rem",
+                                                        sm: "14rem",
+                                                        md: "20vw",
                                                     },
                                                 }}
                                             >
@@ -204,15 +211,15 @@ export default function SettingBox(props: any){
                                                         paddingLeft: {lg: "30%"},
                                                     }}
                                                 >
-                                                    {/*<Avatar*/}
-                                                    {/*    {...stringAvatar(row.displayName.toUpperCase())}*/}
-                                                    {/*    src={row.pictureLink}*/}
-                                                    {/*    sx={{*/}
-                                                    {/*        width: 40,*/}
-                                                    {/*        height: 40,*/}
-                                                    {/*        display: {xs: "none", sm: "flex"},*/}
-                                                    {/*    }}*/}
-                                                    {/*/>*/}
+                                                    <Avatar
+                                                       {...stringAvatar(row?.displayName ? row?.displayName.toUpperCase() : row?.name.toUpperCase())}
+                                                        src={row.pictureLink}
+                                                        sx={{
+                                                           width: 40,
+                                                           height: 40,
+                                                           display: {xs: "none", sm: "flex"},
+                                                        }}
+                                                    />
                                                     <Typography
                                                         sx={{
                                                             textOverflow: "ellipsis",
@@ -250,9 +257,15 @@ export default function SettingBox(props: any){
                                                 sx={{
                                                     display: name == "assessmentSettingBox" ||  name == "EGPermissionSettingBox" ? { xs: "none", md: "flex" } : "flex",
                                                     justifyContent: "center",
-                                                    minWidth: {  xs: "10rem",
+                                                    minWidth: {  
+                                                        xs: "10rem",
                                                         sm: "14rem",
                                                         md: "20vm"},
+                                                        width: {
+                                                            xs: "10rem",
+                                                            sm: "14rem",
+                                                            md: "20vw",
+                                                        },
 
                                                 }}
                                             >
@@ -273,9 +286,15 @@ export default function SettingBox(props: any){
                                                 sx={{
                                                     display:"flex",
                                                     justifyContent: "center",
-                                                    minWidth: {  xs: "10rem",
+                                                    minWidth: {  
+                                                        xs: "10rem",
                                                         sm: "14rem",
                                                         md: "20vm"},
+                                                        width: {
+                                                            xs: "10rem",
+                                                            sm: "14rem",
+                                                            md: "20vw",
+                                                        },
                                                 }}
                                             >
                                                 <Box
@@ -306,9 +325,9 @@ export default function SettingBox(props: any){
                                                                 sx={{ minWidth: { xs: "100%", md: "160px" } }}
                                                             >
                                                                 <Tooltip
-                                                                    disableHoverListener={name == "assessmentSettingBox" && row.editable}
+                                                                    disableHoverListener={(name == "assessmentSettingBox"  ||  name == "EGPermissionSettingBox") && row.editable}
                                                                     title={
-                                                                        name == "assessmentSettingBox" ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
+                                                                       ( name == "assessmentSettingBox" || name == "EGPermissionSettingBox") ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
                                                                     }
                                                                 >
                                                                     <SelectionRole
@@ -324,9 +343,9 @@ export default function SettingBox(props: any){
 
                                                     }
                                                     <Tooltip
-                                                        disableHoverListener={name == "assessmentSettingBox" && row.editable}
+                                                        disableHoverListener={(name == "assessmentSettingBox" || name == "EGPermissionSettingBox") && row.editable}
                                                         title={
-                                                            name == "assessmentSettingBox" ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
+                                                            (name == "assessmentSettingBox" || name == "EGPermissionSettingBox") ?  <Trans i18nKey="spaceOwnerRoleIsNotEditable" /> : ""
                                                         }
                                                     >
                                                         <Box
@@ -338,7 +357,7 @@ export default function SettingBox(props: any){
                                                             <IconButton
                                                                 sx={{ "&:hover": { color: "#d32f2f" } }}
                                                                 size="small"
-                                                                disabled={!row.editable && name == "assessmentSettingBox"}
+                                                                disabled={!row.editable && (name == "assessmentSettingBox" || name == "EGPermissionSettingBox")}
                                                                 onClick={() => {
                                                                     name == "assessmentSettingBox" && openRemoveModal(row.displayName, row.id)
                                                                     name == "assessmentSettingInviteBox" && openRemoveModal(row.email, row.id, true)
