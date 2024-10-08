@@ -472,6 +472,7 @@
   "subjectAccordionDetails": "You can find a detailed status of the {{subjects}} accross {{attributes}} attributes below.",
   "successCreatedAssessmentMessage": "This assessment is currently private.If you wish to make it visible to others, please visit the settings page.",
   "successCreatedAssessmentTitle": "{{title}} created successfully.",
+  "noDraftVersion": "There is no draft version",
   "addAttachment": "Add attachment",
   "attachmentCount": "Includes {{attachmentsCount}} attachments",
   "uploadAttachment": "Upload Attachment",
@@ -531,5 +532,6 @@
   "lastWeek": "Last week",
   "thisMonth": "This month",
   "lastMonth": "Last month",
-  "notificationEmptyState": "Nothing new to see here yet!"
+  "notificationEmptyState": "Nothing new to see here yet!",
+  "draft": "Draft"
 }
