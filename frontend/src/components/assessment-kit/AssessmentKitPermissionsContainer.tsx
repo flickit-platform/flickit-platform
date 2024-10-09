@@ -9,7 +9,7 @@ import SupTitleBreadcrumb from "@common/SupTitleBreadcrumb";
 import {t} from "i18next";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import {useConfigContext} from "@/providers/ConfgProvider";
-import SettingBox from "@common/settingBox";
+import MemberList from "@/components/assessment-kit/AssessmentKitMemberList";
 
 const AssessmentKitPermissionsContainer = () => {
     const {service} = useServiceContext();
@@ -118,8 +118,7 @@ const AssessmentKitPermisson = (props: any) => {
                     values={{assessmentKit: title}}
                 />
             </Title>
-            <SettingBox
-                name={"EGPermissionSettingBox"}
+            <MemberList
                 title={"members"}
                 hasBtn={true}
                 btnLabel={"addMember"}
