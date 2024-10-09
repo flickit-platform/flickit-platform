@@ -418,9 +418,21 @@ export const theme = createTheme({
                 : "translate(-12px, -9px) scale(0.75)",
               transformOrigin: !is_farsi ? "top left" : "top right",
             },
+            maxWidth: "fit-content",
           },
         },
       },
+    },
+
+    MuiSelect: {
+      styleOverrides: {
+        root : {
+          ".MuiSelect-icon":{
+            left: is_farsi ? "7px" : "unset",
+            right: is_farsi ? "unset" : "7px",
+          },
+        }
+      }
     },
 
     MuiOutlinedInput: {
