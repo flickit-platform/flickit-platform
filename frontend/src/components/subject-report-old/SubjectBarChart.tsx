@@ -84,7 +84,7 @@ const CustomAxisTick = (props: any) => {
         x={0}
         y={0}
         dy={16}
-        textAnchor="end"
+        textAnchor={theme.direction == "rtl" ? "start" : "end"}
         fill="#666"
         transform="rotate(-45)"
       >
