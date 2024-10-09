@@ -671,9 +671,7 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
-          {import.meta.env.VITE_MULTILINGUALITY == "on" && (
-            <LanguageSelector />
-          )}
+          <LanguageSelector />
         </Toolbar>
       </AppBar>
       <Box component="nav">
