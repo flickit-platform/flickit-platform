@@ -52,6 +52,12 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     openDialog,
     ...rest
   } = props;
+  useEffect(() => {
+    if (type === "draft") {
+      setActiveStep(1);
+      setButtonStep(1);
+    }
+  }, []);
   const { type, data = {} } = context;
   const { expertGroupId: fallbackExpertGroupId } = useParams();
   const { id, expertGroupId = fallbackExpertGroupId } = data;
@@ -62,10 +68,15 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const close = () => {
     setShowErrorLog(false);
     setSyntaxErrorObject(null);
-    setActiveStep(0);
+    if (type === "draft") {
+      setActiveStep(1);
+      setButtonStep(1);
+    } else {
+      setActiveStep(0);
+      setButtonStep(0);
+    }
     abortController.abort();
     closeDialog();
-    setButtonStep(0);
     setZippedData(null);
     setConvertData(null);
     setIsValid(false);
@@ -87,14 +98,17 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
 
   const onSubmit = async (data: any, event: any, shouldView?: boolean) => {
     event.preventDefault();
-    const { dsl_id, tags = [], ...restOfData } = data;
-    const formattedData = {
-      kitDslId: dsl_id.kitDslId,
+    const { tags = [], ...restOfData } = data;
+    let formattedData = {
       isPrivate: isPrivate,
       tagIds: tags.map((t: any) => t.id),
       expertGroupId: expertGroupId,
       ...restOfData,
     };
+    if (type !== "draft") {
+      formattedData = { ...formattedData, kitDslId: data?.dsl_id.kitDslId };
+      delete formattedData.dsl_id
+    }
     setLoading(true);
     try {
       const { data: res } =
@@ -103,13 +117,18 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
               { data: formattedData, assessmentKitId: id },
               { signal: abortController.signal },
             )
-          : await service.createAssessmentKit(
-              { data: formattedData },
-              { signal: abortController.signal },
-            );
+          : type === "create"
+            ? await service.createAssessmentKit(
+                { data: formattedData },
+                { signal: abortController.signal },
+              )
+            : await service.createAssessmentKitByApplication(
+                { data: formattedData },
+                { signal: abortController.signal },
+              );
       setLoading(false);
-      onSubmitForm();
       close();
+      onSubmitForm();
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
@@ -254,23 +273,25 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
               setConvertData={setConvertData}
             />
           ) : (
-            <UploadField
-              accept={{ "application/zip": [".zip"] }}
-              uploadService={(args: any, config: any) =>
-                service.uploadAssessmentKitDSLFile(args, config)
-              }
-              deleteService={(args: any, config: any) =>
-                service.deleteAssessmentKitDSL(args, config)
-              }
-              name="dsl_id"
-              param={expertGroupId}
-              required={true}
-              label={<Trans i18nKey="dsl" />}
-              setShowErrorLog={setShowErrorLog}
-              setSyntaxErrorObject={setSyntaxErrorObject}
-              setIsValid={setIsValid}
-              maxSize={convertToBytes(5, "MB")}
-            />
+            type !== "draft" && (
+              <UploadField
+                accept={{ "application/zip": [".zip"] }}
+                uploadService={(args: any, config: any) =>
+                  service.uploadAssessmentKitDSLFile(args, config)
+                }
+                deleteService={(args: any, config: any) =>
+                  service.deleteAssessmentKitDSL(args, config)
+                }
+                name="dsl_id"
+                param={expertGroupId}
+                required={true}
+                label={<Trans i18nKey="dsl" />}
+                setShowErrorLog={setShowErrorLog}
+                setSyntaxErrorObject={setSyntaxErrorObject}
+                setIsValid={setIsValid}
+                maxSize={convertToBytes(5, "MB")}
+              />
+            )
           )}
         </Grid>
         <Grid
@@ -346,7 +367,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
           closeDialog={close}
           loading={loading}
           type={type}
-          hasBackBtn={true}
+          hasBackBtn={type !== "draft"}
           onBack={handleBack}
           hasViewBtn={true}
           onSubmit={(...args) =>
@@ -462,6 +483,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
             }}
           />
           {type === "update" && <Trans i18nKey="updateAssessmentKit" />}
+          {type === "draft" && <Trans i18nKey="createDraft" />}
           {type === "create" && <Trans i18nKey="createAssessmentKit" />}
           {type === "convert" && <Trans i18nKey="convertExcelToDsl" />}
         </>

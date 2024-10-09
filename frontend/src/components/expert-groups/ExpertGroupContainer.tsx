@@ -24,7 +24,6 @@ import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { t } from "i18next";
-import { IDialogProps, TQueryFunction } from "@types";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import AssessmentKitListItem from "../assessment-kit/AssessmentKitListItem";
@@ -276,9 +275,10 @@ const ExpertGroupContainer = () => {
                         {assessmentKitsCounts.filter(
                           (item: any) => item.published,
                         ) &&
-                          `${assessmentKitsCounts.filter(
-                            (item: any) => item.published,
-                          ).length
+                          `${
+                            assessmentKitsCounts.filter(
+                              (item: any) => item.published,
+                            ).length
                           } ${t("publishedAssessmentKits").toLowerCase()}`}
                       </Typography>
                       {editable && (
@@ -332,9 +332,10 @@ const ExpertGroupContainer = () => {
                           {assessmentKitsCounts.filter(
                             (item: any) => !item.published,
                           ) &&
-                            `${assessmentKitsCounts.filter(
-                              (item: any) => !item.published,
-                            ).length
+                            `${
+                              assessmentKitsCounts.filter(
+                                (item: any) => !item.published,
+                              ).length
                             } ${t("unpublishedAssessmentKits").toLowerCase()}`}
                         </Typography>
                       </Box>
@@ -794,10 +795,10 @@ const MemberActions = (props: any) => {
       items={[
         isInvitationExpired
           ? {
-            icon: <EmailRoundedIcon fontSize="small" />,
-            text: <Trans i18nKey="resendInvitation" />,
-            onClick: inviteMember,
-          }
+              icon: <EmailRoundedIcon fontSize="small" />,
+              text: <Trans i18nKey="resendInvitation" />,
+              onClick: inviteMember,
+            }
           : undefined,
         {
           icon: <DeleteRoundedIcon fontSize="small" />,
@@ -938,6 +939,9 @@ const AssessmentKitsList = (props: any) => {
     excelToDslDialogProps,
   } = props;
   const { expertGroupId } = useParams();
+  const kitDesignerDialogProps = useDialog({
+    context: { type: "draft", data: { expertGroupId, dsl_id: 959 } },
+  });
   const { service } = useServiceContext();
   const assessmentKitQuery = useQuery({
     service: (args = { id: expertGroupId }, config) =>
@@ -954,8 +958,6 @@ const AssessmentKitsList = (props: any) => {
     setAnchorEl(null);
   };
 
-
-
   return (
     <>
       <Title
@@ -969,8 +971,13 @@ const AssessmentKitsList = (props: any) => {
                   variant="contained"
                   size="small"
                   onClick={handleClick}
-                  endIcon={open ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
-
+                  endIcon={
+                    open ? (
+                      <ArrowDropUpRoundedIcon />
+                    ) : (
+                      <ArrowDropDownRoundedIcon />
+                    )
+                  }
                 >
                   <Trans i18nKey="newAssessment" />
                 </Button>
@@ -984,27 +991,43 @@ const AssessmentKitsList = (props: any) => {
                     },
                   }}
                 >
-                  <MenuItem onClick={() => {
-                    handleClose();
-                    dialogProps.openDialog();
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      dialogProps.openDialog({
+                        context: { type: "create" },
+                      });
+                    }}
+                  >
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  <MenuItem onClick={() => {
-                    handleClose();
-                    dialogProps.openDialog();
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      kitDesignerDialogProps.openDialog({
+                        context: { type: "draft" },
+                      });
+                    }}
+                  >
                     <Trans i18nKey="viaKitDesigner" />
                   </MenuItem>
-                  <MenuItem onClick={() => {
-                    handleClose();
-                    excelToDslDialogProps.openDialog();
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      excelToDslDialogProps.openDialog({
+                        context: { type: "convert" },
+                      });
+                    }}
+                  >
                     <Trans i18nKey="convertExcelToDsl" />
                   </MenuItem>
                 </Menu>
                 <AssessmentKitCEFromDialog {...dialogProps} />
-                <AssessmentKitCEFromDialog {...excelToDslDialogProps} onSubmitForm={assessmentKitQuery.query} />
+                <AssessmentKitCEFromDialog {...kitDesignerDialogProps} />
+                <AssessmentKitCEFromDialog
+                  {...excelToDslDialogProps}
+                  onSubmitForm={assessmentKitQuery.query}
+                />
               </>
             )}
           </Box>
