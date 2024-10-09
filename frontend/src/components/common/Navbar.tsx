@@ -646,14 +646,12 @@ const Navbar = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap:".7rem",
+              gap: ".7rem",
               ml: theme.direction === "rtl" ? "unset" : "auto",
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-              {import.meta.env.VITE_MULTILINGUALITY === "on" && (
-                  <LanguageSelector />
-              )}
+            <LanguageSelector />
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
