@@ -426,11 +426,9 @@ export const theme = createTheme({
 
     MuiSelect: {
       styleOverrides: {
-        root : {
-          "& .MuiSelect-icon":{
+        icon: {
             left: is_farsi ? "7px" : "unset",
             right: is_farsi ? "unset" : "7px",
-          },
         }
       }
     },
