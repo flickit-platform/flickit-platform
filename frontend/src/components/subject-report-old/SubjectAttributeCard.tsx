@@ -113,11 +113,17 @@ const SUbjectAttributeCard = (props: any) => {
                 </Title>
               </Box>
 
-              <Box marginY={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+              <Box marginY={1} sx={{
+                  ml:theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                  mr:theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+              }}>
                 <Typography
                   variant="titleMedium"
                   fontWeight={400}
-                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                  sx={{
+                      ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                      mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+                }}
                 >
                   {description}
                 </Typography>
@@ -128,10 +134,16 @@ const SUbjectAttributeCard = (props: any) => {
                 cl={Math.ceil(confidenceValue)}
                 mn={maturity_levels_count}
               />
-              <Box mt={1} sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}>
+              <Box mt={1} sx={{
+                  ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                  mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+              }}>
                 <Typography
                   variant="titleMedium"
-                  sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                  sx={{
+                      ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                      mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+                  }}
                 >
                   <Trans i18nKey={"withConfidence"} />
                   <Typography
@@ -159,7 +171,10 @@ const SUbjectAttributeCard = (props: any) => {
               </Box>
               <Box
                 mt={1}
-                sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+                sx={{
+                    ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                    mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+                }}
                 onClick={(event) => {
                   event.stopPropagation();
                 }}
@@ -452,10 +467,12 @@ export const AttributeStatusBarContainer = (props: any) => {
         <Typography
           variant="headlineLarge"
           sx={{
-            borderLeft: `2px solid ${statusColor}`,
-            pl: 1,
-            ml: { xs: -2, sm: 0 },
-            pr: { xs: 0, sm: 1 },
+            borderLeft: theme.direction == "ltr" ? `2px solid ${statusColor}` : "unset",
+            borderRight: theme.direction == "rtl" ? `2px solid ${statusColor}` : "unset",
+            pl: theme.direction == "ltr" ? 1 : "unset",
+            pr: theme.direction == "rtl" ? 1 : "unset",
+            ml: theme.direction == "ltr" ? { xs: -2, sm: 0 } : "unset",
+            mr: theme.direction == "ltr" ? { xs: 0, sm: 1 } : "unset",
             color: statusColor,
           }}
         >
@@ -482,8 +499,10 @@ export const AttributeStatusBar = (props: any) => {
       sx={{
         my: 0.5,
         background: "gray",
-        borderTopRightRadius: "8px",
-        borderBottomRightRadius: "8px",
+        borderTopRightRadius: theme.direction == "rtl" ? "unset"  :  "8px",
+        borderTopLeftRadius: theme.direction == "ltr" ? "unset"  :  "8px",
+        borderBottomRightRadius: theme.direction == "rtl" ? "unset"  :  "8px",
+        borderBottomLeftRadius: theme.direction == "ltr" ? "unset"  :  "8px",
         position: "relative",
         color: "white",
         display: "flex",
@@ -495,8 +514,10 @@ export const AttributeStatusBar = (props: any) => {
         width={width}
         sx={{
           background: isMl ? "#6035A1" : "#3596A1",
-          borderTopRightRadius: "8px",
-          borderBottomRightRadius: "8px",
+          borderTopRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+          borderTopLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
+          borderBottomRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+          borderBottomLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
         }}
       ></Box>
       <Typography
@@ -513,7 +534,10 @@ export const AttributeStatusBar = (props: any) => {
         <Trans i18nKey={isMl ? "maturityLevel" : "confidenceLevel"} />
       </Typography>
       <Typography
-        sx={{ position: "absolute", zIndex: 1, right: "12px" }}
+        sx={{ position: "absolute", zIndex: 1,
+            right: theme.direction == "rtl" ? "unset" : "12px",
+            left: theme.direction == "ltr" ? "unset" : "12px"
+      }}
         variant="h6"
       >
         {isMl ? `${ml} / ${mn}` : `${cl !== null ? cl : "--"}%`}
