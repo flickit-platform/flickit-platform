@@ -103,7 +103,8 @@ const SUbjectAttributeCard = (props: any) => {
                 <Title
                   sx={{
                     opacity: 0.95,
-                    ml: { xs: 0.75, sm: 1.5, md: 2 },
+                    ml: theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                    mr: theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
                   }}
                 >
                   <Typography variant="titleLarge" fontWeight={600}>
