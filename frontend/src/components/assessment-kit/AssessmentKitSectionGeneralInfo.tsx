@@ -1,4 +1,5 @@
-import { Box, IconButton } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -57,20 +58,6 @@ const AssessmentKitSectionGeneralInfo = (
       service.fetchAssessmentKitStats(args, config),
     runOnMount: true,
   });
-  // const publishAssessmentKit = async () => {
-  //   try {
-  //     const res = await publishQuery.query();
-  //     res.message && toast.success(res.message);
-  //     query();
-  //   } catch (e) {}
-  // };
-  // const unPublishAssessmentKit = async () => {
-  //   try {
-  //     const res = await unPublishQuery.query();
-  //     res.message && toast.success(res.message);
-  //     query();
-  //   } catch (e) {}
-  // };
 
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
