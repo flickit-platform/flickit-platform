@@ -424,11 +424,22 @@ export const theme = createTheme({
       },
     },
 
+
     MuiSelect: {
       styleOverrides: {
         icon: {
             left: is_farsi ? "7px" : "unset",
             right: is_farsi ? "unset" : "7px",
+        }
+      }
+    },
+                                 
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          ".MuiChip-label": {
+            unicodeBidi : "plaintext"
+          }
         }
       }
     },

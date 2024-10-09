@@ -646,10 +646,12 @@ const Navbar = () => {
             sx={{
               display: "flex",
               alignItems: "center",
+              gap: ".7rem",
               ml: theme.direction === "rtl" ? "unset" : "auto",
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
+            <LanguageSelector />
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
@@ -671,9 +673,6 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
-          {import.meta.env.VITE_MULTILINGUALITY === "on" && (
-            <LanguageSelector />
-          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">
