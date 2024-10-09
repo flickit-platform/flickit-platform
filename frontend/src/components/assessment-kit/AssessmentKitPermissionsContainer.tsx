@@ -88,8 +88,8 @@ const AssessmentKitPermisson = (props: any) => {
         <Box>
             <Title
                 inPageLink="assessmentKitPermissons"
-                size="small"
-                sx={{mb:"20px"}}
+                size="large"
+                letterSpacing=".08em"
                 sup={
                     <SupTitleBreadcrumb
                         routes={[
