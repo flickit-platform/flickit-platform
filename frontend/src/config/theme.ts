@@ -423,6 +423,16 @@ export const theme = createTheme({
       },
     },
 
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          ".MuiChip-label": {
+            unicodeBidi : "plaintext"
+          }
+        }
+      }
+    },
+
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
