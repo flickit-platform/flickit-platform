@@ -412,11 +412,18 @@ const SUbjectAttributeCard = (props: any) => {
             variant="h6"
             mt={4}
             mb={2}
-            sx={{ ml: { xs: 0.75, sm: 1.5, md: 2 } }}
+            sx={{
+                ml: theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                mr: theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+
+          }}
           >
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
-          <Box sx={{ pr: { xs: 2, sm: 6 } }}>
+          <Box sx={{
+              pr: theme.direction == "rtl" ? "unset" : { xs: 2, sm: 6 } ,
+              pl: theme.direction == "ltr" ? "unset" : { xs: 2, sm: 6 } ,
+          }}>
             {maturityScores
               .map((item: any, index: number) => {
                 return (
@@ -670,7 +677,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   <>
                     <Typography variant="body2" display={"flex"}>
                       <Trans i18nKey="maxPossibleScore" />:
-                      <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                      <Typography variant="body2" fontWeight={"bold"}
+                            sx={{
+                                ml: theme.direction == "ltr" ? 2 : "unset",
+                                mr: theme.direction == "rtl" ? 2 : "unset"
+                             }}
+                         >
                         {maxPossibleScore}
                       </Typography>
                     </Typography>
@@ -680,7 +692,10 @@ const MaturityLevelDetailsContainer = (props: any) => {
                         variant="body2"
                         display={"flex"}
                         fontWeight={"bold"}
-                        ml={2}
+                        sx={{
+                            ml: theme.direction == "ltr" ? 2 : "unset",
+                            mr: theme.direction == "rtl" ? 2 : "unset"
+                        }}
                       >
                         {Math.ceil(gainedScore)}
                         <Typography
@@ -694,7 +709,12 @@ const MaturityLevelDetailsContainer = (props: any) => {
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
                       <Trans i18nKey="questionsCount" />:
-                      <Typography variant="body2" fontWeight={"bold"} ml={2}>
+                      <Typography variant="body2" fontWeight={"bold"}
+                                  sx={{
+                                      ml: theme.direction == "ltr" ? 2 : "unset",
+                                      mr: theme.direction == "rtl" ? 2 : "unset"
+                                  }}
+                      >
                         {questionsCount}
                       </Typography>
                     </Typography>
@@ -708,7 +728,10 @@ const MaturityLevelDetailsContainer = (props: any) => {
                             <Typography
                               variant="body2"
                               fontWeight={"bold"}
-                              sx={{ opacity: "0.8", ml: 1 }}
+                              sx={{ opacity: "0.8",
+                                  ml: theme.direction == "ltr" ? 1 : "unset",
+                                  mr: theme.direction == "rtl" ? 1 : "unset"
+                              }}
                             >
                               {title}
                             </Typography>
@@ -726,7 +749,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                 sx={{
                                   display: "flex",
                                   flexDirection: "column",
-                                  ml: { xs: 0, sm: 4 },
+                                  ml: theme.direction == "ltr" ? { xs: 0, sm: 4 } : "unset",
+                                  mr: theme.direction == "rtl" ? { xs: 0, sm: 4 } : "unset"
                                 }}
                               >
                                 <Box
@@ -957,8 +981,10 @@ export const MaturityLevelDetailsBar = (props: any) => {
       sx={{
         my: 0.5,
         background: color,
-        borderTopRightRadius: "8px",
-        borderBottomRightRadius: "8px",
+        borderTopRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+        borderBottomRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+        borderTopLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
+        borderBottomLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
         position: "relative",
         color: "white",
         display: "flex",
