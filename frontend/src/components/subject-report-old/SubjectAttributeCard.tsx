@@ -451,14 +451,15 @@ export const AttributeStatusBarContainer = (props: any) => {
         <Typography
           variant="headlineLarge"
           sx={{
-            borderLeft: `2px solid ${statusColor}`,
+            borderLeft: theme.direction == "ltr" ?  `2px solid ${statusColor}` : "unset",
+            borderRight: theme.direction == "rtl" ?  `2px solid ${statusColor}` : "unset",
             pl: 1,
             ml: { xs: -2, sm: 0 },
             pr: { xs: 0, sm: 1 },
             color: statusColor,
           }}
         >
-          {status}
+        <Trans i18nKey={`${status}`} />
         </Typography>
       </Box>
     </Box>
@@ -481,8 +482,10 @@ export const AttributeStatusBar = (props: any) => {
       sx={{
         my: 0.5,
         background: "gray",
-        borderTopRightRadius: "8px",
-        borderBottomRightRadius: "8px",
+        borderTopRightRadius: theme.direction != "rtl" ? "8px" : "unset",
+        borderTopLeftRadius: theme.direction != "ltr" ? "8px" : "unset",
+        borderBottomRightRadius:  theme.direction != "rtl" ? "8px" : "unset",
+        borderBottomLeftRadius: theme.direction != "ltr" ? "8px" : "unset",
         position: "relative",
         color: "white",
         display: "flex",
@@ -494,8 +497,10 @@ export const AttributeStatusBar = (props: any) => {
         width={width}
         sx={{
           background: isMl ? "#6035A1" : "#3596A1",
-          borderTopRightRadius: "8px",
-          borderBottomRightRadius: "8px",
+          borderTopRightRadius: theme.direction != "rtl" ? "8px" : "unset",
+          borderTopLeftRadius: theme.direction != "ltr" ? "8px" : "unset",
+          borderBottomRightRadius:  theme.direction != "rtl" ? "8px" : "unset",
+          borderBottomLeftRadius: theme.direction != "ltr" ? "8px" : "unset",
         }}
       ></Box>
       <Typography
@@ -512,7 +517,10 @@ export const AttributeStatusBar = (props: any) => {
         <Trans i18nKey={isMl ? "maturityLevel" : "confidenceLevel"} />
       </Typography>
       <Typography
-        sx={{ position: "absolute", zIndex: 1, right: "12px" }}
+        sx={{ position: "absolute", zIndex: 1,
+            right: theme.direction != "rtl" ? "12px" : "unset",
+            left: theme.direction != "ltr" ? "12px" : "unset",
+        }}
         variant="h6"
       >
         {isMl ? `${ml} / ${mn}` : `${cl !== null ? cl : "--"}%`}

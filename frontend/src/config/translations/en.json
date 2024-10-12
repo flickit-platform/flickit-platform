@@ -534,5 +534,6 @@
   "thisMonth": "This month",
   "lastMonth": "Last month",
   "notificationEmptyState": "Nothing new to see here yet!",
-  "draft": "Draft"
+  "draft": "Draft",
+  "noRecommendation": "There is no recommendation yet!\""
 }

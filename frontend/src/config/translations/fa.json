@@ -420,5 +420,8 @@
     "notificationDetails": "جزئیات اعلان",
     "notificationEmptyState": "اعلانی وجود ندارد!",
     "noDraftVersion": "ورژن پیش‌نویسی وجود ندارد.",
-    "draft": "پیش‌نویس"
+    "draft": "پیش‌نویس",
+    "questionnaire": "پرسشنامه",
+    "recommendations": "توصیه نامه",
+    "noRecommendation": "هنوز هیچ توصیه ای برای نمایش وجود ندارد!"
 }
