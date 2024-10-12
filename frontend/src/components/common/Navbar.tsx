@@ -309,20 +309,18 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     color: "#3D4D5C",
                   }}
                 >
-                  {t(
-                    convertToRelativeTime(selectedMessage.createdAt) +
-                      " (" +
-                      format(
-                        new Date(
-                          new Date(selectedMessage.createdAt).getTime() -
-                            new Date(
-                              selectedMessage.createdAt,
-                            ).getTimezoneOffset(),
-                        ),
-                        "yyyy/MM/dd HH:mm",
-                      ) +
-                      ") ",
-                  )}
+                  {t(convertToRelativeTime(selectedMessage.createdAt)) +
+                    " (" +
+                    format(
+                      new Date(
+                        new Date(selectedMessage.createdAt).getTime() -
+                          new Date(
+                            selectedMessage.createdAt,
+                          ).getTimezoneOffset(),
+                      ),
+                      "yyyy/MM/dd HH:mm",
+                    ) +
+                    ") "}
                 </Typography>
               </Box>
             </Box>

@@ -1022,7 +1022,10 @@ const AssessmentKitsList = (props: any) => {
                     <Trans i18nKey="convertExcelToDsl" />
                   </MenuItem>
                 </Menu>
-                <AssessmentKitCEFromDialog {...dialogProps} />
+                <AssessmentKitCEFromDialog
+                  {...dialogProps}
+                  onSubmitForm={assessmentKitQuery.query}
+                />
                 {/* <AssessmentKitCEFromDialog {...kitDesignerDialogProps} /> */}
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}

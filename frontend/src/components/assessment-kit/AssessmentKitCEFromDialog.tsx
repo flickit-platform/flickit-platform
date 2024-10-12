@@ -107,7 +107,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     };
     if (type !== "draft") {
       formattedData = { ...formattedData, kitDslId: data?.dsl_id.kitDslId };
-      delete formattedData.dsl_id
+      delete formattedData.dsl_id;
     }
     setLoading(true);
     try {
