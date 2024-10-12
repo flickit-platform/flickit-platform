@@ -9,4 +9,5 @@ urlpatterns = [
          kit_versions_views.KitVersionMaturityLevelApi.as_view()),
     path("<str:kit_version_id>/maturity-levels-change-order/",
          kit_versions_views.MaturityLevelsChangeOrderApi.as_view()),
+    path("<str:kit_version_id>/level-competences/",kit_versions_views.LevelCompetencesApi.as_view())
 ]

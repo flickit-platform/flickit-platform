@@ -53,3 +53,14 @@ def get_maturity_levels_with_kit_version(request, kit_version_id):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def create_level_competence(request, kit_version_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/level-competences',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
