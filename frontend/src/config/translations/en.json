@@ -215,6 +215,8 @@
   "createAssessmentKit": "New Assessment Kit",
   "updateAssessmentKit": "Update Assessment Kit",
   "createDraft": "Create Draft",
+  "skip": "Skip",
+  "prev": "Prev",
   "dsl": "DSL",
   "currentSpace": "Current space",
   "recentSpaces": "Recent spaces",
