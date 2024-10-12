@@ -67,3 +67,33 @@ class MaturityLevelsChangeOrderApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class LevelCompetencesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_level_competence(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class LevelCompetenceApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, level_competence_id):
+        result = kit_versions_services.update_level_competence(request, kit_version_id, level_competence_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, level_competence_id):
+        result = kit_versions_services.delete_level_competence(request, kit_version_id, level_competence_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

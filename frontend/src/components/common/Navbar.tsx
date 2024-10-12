@@ -649,7 +649,7 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            {/* <LanguageSelector /> */}
+            <LanguageSelector />
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
