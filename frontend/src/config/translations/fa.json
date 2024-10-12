@@ -431,5 +431,6 @@
     "Outdated": "منسوخ شده",
     "notificationEmptyState": "اعلانی وجود ندارد!",
     "noDraftVersion": "ورژن پیش‌نویسی وجود ندارد.",
-    "draft": "پیش‌نویس"
+    "draft": "پیش‌نویس",
+    "writeYourOwnAdvices...":"پیشنهاد خود را بنویسید ..."
 }
