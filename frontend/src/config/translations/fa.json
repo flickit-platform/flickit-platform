@@ -418,5 +418,7 @@
     "lastMonth": "ماه گذشته",
     "moreAction": "سایر عملیات",
     "notificationDetails": "جزئیات اعلان",
-    "notificationEmptyState": "Nothing new to see here yet!"
+    "notificationEmptyState": "اعلانی وجود ندارد!",
+    "noDraftVersion": "ورژن پیش‌نویسی وجود ندارد.",
+    "draft": "پیش‌نویس"
 }
