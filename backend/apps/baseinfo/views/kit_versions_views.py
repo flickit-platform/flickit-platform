@@ -91,3 +91,9 @@ class LevelCompetenceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, level_competence_id):
+        result = kit_versions_services.delete_level_competence(request, kit_version_id, level_competence_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

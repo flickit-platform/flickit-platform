@@ -74,3 +74,12 @@ def update_level_competence(request, kit_version_id, level_competence_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_level_competence(request, kit_version_id, level_competence_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/level-competences/{level_competence_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
