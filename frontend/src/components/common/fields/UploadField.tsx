@@ -250,16 +250,16 @@ const Uploader = (props: IUploadProps) => {
     multiple: false,
     onDropRejected(rejectedFiles, event) {
       if (rejectedFiles.length > 0) {
-        const error = rejectedFiles[0].errors.find(
-          (e) => e.code === "file-too-large",
-        );
-        if (error) {
+        const error = rejectedFiles[0].errors;
+        if (error.find((e) => e.code === "file-too-large")) {
           errors[fieldProps.name] = {
             type: "maxSize",
             message: t("maximumUploadFileSize", {
               maxSize: maxSize ? formatBytes(maxSize) : "2 MB",
             }) as string,
           };
+        } else if(rejectedFiles.length == 1 && error[0]?.message){
+          toastError(error.pop()?.message as string);
         } else {
           toastError(t("oneFileOnly") as string);
         }

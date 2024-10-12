@@ -1019,7 +1019,7 @@ export const MaturityLevelDetailsBar = (props: any) => {
           position: "absolute",
           zIndex: 1,
           right: theme.direction === "ltr" ? "12px" : "unset",
-          left: theme.direction === "ltr" ? "12px" : "unset",
+          left: theme.direction === "rtl" ? "12px" : "unset",
           color: theme.palette.getContrastText(color),
         }}
         variant="h6"

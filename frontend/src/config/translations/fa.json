@@ -24,6 +24,7 @@
     "assessments": "ارزیابی‌ها",
     "createAssessment": "ایجاد ارزیابی",
     "updateAssessment": "به‌روزرسانی ارزیابی",
+    "createDraft": "ساخت پیش‌نویس",
     "nothingToSeeHere": "هیچ چیز برای دیدن اینجا وجود ندارد - هنوز.",
     "tryCreatingNewAssessment": "در این فضای کاری هیچ ارزیابی وجود ندارد. تلاش کنید یکی ایجاد کنید.",
     "tryCreatingNewSpace": "شما دسترسی به فضاهای کاریی موجود را ندارید. تلاش کنید یکی ایجاد کنید یا درخواست دسترسی کنید.",
@@ -161,6 +162,9 @@
     "created": "ساخته شده",
     "description": "توضیحات",
     "createAssessmentKit": "ایجاد کیت ارزیابی",
+    "viaDSL": "با استفاده از dsl",
+    "viaKitDesigner": "با استفاده از سامانه",
+    "convertExcelToDsl": "تبدیل اکسل به dsl",
     "updateAssessmentKit": "به‌روزرسانی کیت ارزیابی",
     "ownerName": "مالک: ",
     "dsl": "DSL",
@@ -415,7 +419,6 @@
     "lastMonth": "ماه گذشته",
     "moreAction": "سایر عملیات",
     "notificationDetails": "جزئیات اعلان",
-    "notificationEmptyState": "Nothing new to see here yet!",
     "Great": "عالی",
     "Good": "خوب",
     "Moderate": "متوسط",
@@ -425,5 +428,8 @@
     "subjectBriefConclusion": "خلاصه ای از نتیجه گیری موضوع",
     "defaultInsightTemplate": "این بینش به طور خودکار از نتایج ارزیابی ایجاد شده است. در صورت نیاز می توانید آن را به روز کنید.",
     "note": "توجه",
-    "Outdated": "منسوخ شده"
+    "Outdated": "منسوخ شده",
+    "notificationEmptyState": "اعلانی وجود ندارد!",
+    "noDraftVersion": "ورژن پیش‌نویسی وجود ندارد.",
+    "draft": "پیش‌نویس"
 }

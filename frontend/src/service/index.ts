@@ -817,6 +817,13 @@ export const createService = (
       const { data } = args ?? {};
       return axios.post(`/api/v1/assessment-kits/create-by-dsl/`, data, config);
     },
+    createAssessmentKitByApplication(
+      args: { data: any },
+      config: AxiosRequestConfig<any> | undefined,
+    ) {
+      const { data } = args ?? {};
+      return axios.post(`/api/v1/assessment-kits/`, data, config);
+    },
     updateAssessmentKit(
       args: { assessmentKitId?: TId; data: any },
       config: AxiosRequestConfig<any> | undefined,
