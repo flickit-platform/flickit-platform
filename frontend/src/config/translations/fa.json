@@ -162,6 +162,7 @@
     "description": "توضیحات",
     "createAssessmentKit": "ایجاد کیت ارزیابی",
     "updateAssessmentKit": "به‌روزرسانی کیت ارزیابی",
+    "ownerName": "مالک: ",
     "dsl": "DSL",
     "currentSpace": "فضای کاری فعلی",
     "recentSpaces": "فضاهای کاری اخیر",
