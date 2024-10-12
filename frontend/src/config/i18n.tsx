@@ -11,8 +11,8 @@ export const resources = {
     translation: fa,
   },
 };
-const storedLanguage = "en";
-document.dir = "ltr";
+const storedLanguage = localStorage.getItem("lang") || "en";
+document.dir = storedLanguage === "fa" ? "rtl" : "ltr";
 i18n.use(initReactI18next).init({
   resources,
   lng: storedLanguage,

@@ -1001,7 +1001,7 @@ const AssessmentKitsList = (props: any) => {
                   >
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  {/* <MenuItem
+                  <MenuItem
                     onClick={() => {
                       handleClose();
                       kitDesignerDialogProps.openDialog({
@@ -1010,7 +1010,7 @@ const AssessmentKitsList = (props: any) => {
                     }}
                   >
                     <Trans i18nKey="viaKitDesigner" />
-                  </MenuItem> */}
+                  </MenuItem>
                   <MenuItem
                     onClick={() => {
                       handleClose();
@@ -1022,11 +1022,8 @@ const AssessmentKitsList = (props: any) => {
                     <Trans i18nKey="convertExcelToDsl" />
                   </MenuItem>
                 </Menu>
-                <AssessmentKitCEFromDialog
-                  {...dialogProps}
-                  onSubmitForm={assessmentKitQuery.query}
-                />
-                {/* <AssessmentKitCEFromDialog {...kitDesignerDialogProps} /> */}
+                <AssessmentKitCEFromDialog {...dialogProps} />
+                <AssessmentKitCEFromDialog {...kitDesignerDialogProps} />
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}
                   onSubmitForm={assessmentKitQuery.query}
