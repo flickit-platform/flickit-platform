@@ -24,19 +24,20 @@ interface IAssessmentKitListItemProps {
     lastModificationTime: string;
     is_active: boolean;
     isPrivate?: boolean;
+    draftVersionId?: TId;
   };
   fetchAssessmentKits?: TQueryFunction;
   link?: string;
   hasAccess?: boolean;
   is_member?: boolean;
   is_active?: boolean;
-  draftVersionId?: TId
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
-  const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active, draftVersionId } =
+  const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
     props;
-  const { id, title, lastModificationTime, isPrivate } = data || {};
+  const { id, title, lastModificationTime, isPrivate, draftVersionId } =
+    data || {};
   return (
     <Box
       sx={{
@@ -84,7 +85,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             color: "#525252",
             ml: theme.direction === "rtl" ? "unset" : "auto",
             mr: theme.direction !== "rtl" ? "unset" : "auto",
-            gap: 1
+            gap: 1,
           }}
           alignSelf="stretch"
         >
@@ -93,7 +94,6 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
               label={<Trans i18nKey="private" />}
               size="small"
               sx={{
-
                 background: "#7954B3",
                 color: "#fff",
               }}
@@ -108,9 +108,15 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
           ) : (
             <Chip label={<Trans i18nKey="unPublished" />} size="small" />
           )}
-          <Tooltip title={!draftVersionId && <Trans i18nKey="noDraftVersion" />}>
+          <Tooltip
+            title={!draftVersionId && <Trans i18nKey="noDraftVersion" />}
+          >
             <div>
-              <Button variant="outlined" size="small" disabled={!draftVersionId}>
+              <Button
+                variant="outlined"
+                size="small"
+                disabled={!draftVersionId}
+              >
                 <Trans i18nKey="draft" />
               </Button>
             </div>
