@@ -432,5 +432,22 @@
     "notificationEmptyState": "اعلانی وجود ندارد!",
     "noDraftVersion": "ورژن پیش‌نویسی وجود ندارد.",
     "draft": "پیش‌نویس",
-    "writeYourOwnAdvices...":"پیشنهاد خود را بنویسید ..."
+    "writeYourOwnAdvices...":"پیشنهاد خود را بنویسید ...",
+    "assessmentInsights": "گزارش ارزیابی",
+    "general": "عمومی",
+    "progressBarTitle": "{{numaratur}} از {{denominator}}",
+    "answeredQuestions": "سوال پاسخ داده شده :",
+    "completeNow": "اکنون کامل شود",
+    "seeQuestionaires": "دیدن سوالات",
+    "subjectReport": "گزارش موضوع",
+    "overallStatusDetails": "می‌توانید وضعیت‌های دقیق را در بین ویژگی‌های {{attributes}} در موضوعات کلیدی {{subjects}} بیابید.",
+    "subjectAccordionDetails": "می توانید وضعیت دقیق {{subjects}} را در میان ویژگی های {{attributes}} در زیر بیابید.",
+    "attribute": "ویژگی",
+    "status": "وضعیت",
+    "advice": "توصیه",
+    "noAdviceGeneratedYet": "هیچ توصیه‌ای هنوز ایجاد نشده است",
+    "theAdvisorService": "توصیه به پیشنهادهایی برای بهبود بر اساس نتایج ارزیابی و اهداف شما اشاره دارد. می توانید آن را خودتان بنویسید یا به طور خودکار با هوش مصنوعی تولید کنید.",
+    "writeYourOwnAdvices": "توصیه های خود را بنویسید",
+    "useAdviceGenerator": "استفاده از ایجاد کننده توصیه",
+    "checkMoreDetails": "جزئیات بیشتر"
 }
