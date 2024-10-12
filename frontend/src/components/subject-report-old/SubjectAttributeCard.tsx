@@ -166,7 +166,7 @@ const SUbjectAttributeCard = (props: any) => {
                     {" "}
                     {maturityLevel?.index}.{" "}
                   </Typography>
-                  <Trans i18nKey={"meaning"} /> {maturityLevel?.title}.
+                  <Trans i18nKey={"meaning"} /> <Trans i18nKey={`${maturityLevel?.title}`} />.
                 </Typography>
               </Box>
               <Box
@@ -256,8 +256,7 @@ const SUbjectAttributeCard = (props: any) => {
                         <InfoOutlined
                           color="primary"
                           sx={{
-                            marginRight:
-                              theme.direction === "ltr" ? 1 : "unset",
+                            marginRight: theme.direction === "ltr" ? 1 : "unset",
                             marginLeft: theme.direction === "rtl" ? 1 : "unset",
                           }}
                         />
@@ -483,7 +482,7 @@ export const AttributeStatusBarContainer = (props: any) => {
             color: statusColor,
           }}
         >
-          {status}
+         <Trans i18nKey={`${status}`} />
         </Typography>
       </Box>
     </Box>
@@ -656,7 +655,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   color: is_passed ? statusColor : "#808080",
                 }}
               >
-                {maturityLevel?.title}
+               <Trans  i18nKey={`${maturityLevel?.title}`} />
               </Typography>
             </Box>
           </Box>

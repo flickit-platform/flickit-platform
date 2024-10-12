@@ -511,7 +511,6 @@
   "dslReadyToDownload": "Your DSL is ready to download!",
   "dslDownloadGuide": "If you don’t have appropriate excel template, you can download it",
   "note": "Note",
-  "subjectBriefConclusion": "Subject brief conclusion",
   "defaultInsightTemplate": "This insight has been automatically generated from the assessment results. You're welcome to update it as needed.",
   "emptyAnswerHistoryTitle": "No answer has been recorded",
   "emptyAnswerHistoryDescription": "Here you can see if any assessor have been answered this question and what answer they choose.<br/> if you dont see any answer it means no assessor ever answered this question so far.",
@@ -531,5 +530,11 @@
   "lastWeek": "Last week",
   "thisMonth": "This month",
   "lastMonth": "Last month",
-  "notificationEmptyState": "Nothing new to see here yet!"
+  "notificationEmptyState": "Nothing new to see here yet!",
+  "Great": "Great",
+  "Good": "Good",
+  "Moderate": "Moderate",
+  "Weak": "Weak",
+  "Elementary": "Elementary",
+  "strengths": "strengths"
 }

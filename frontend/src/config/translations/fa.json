@@ -414,5 +414,15 @@
     "lastMonth": "ماه گذشته",
     "moreAction": "سایر عملیات",
     "notificationDetails": "جزئیات اعلان",
-    "notificationEmptyState": "Nothing new to see here yet!"
+    "notificationEmptyState": "Nothing new to see here yet!",
+    "Great": "عالی",
+    "Good": "خوب",
+    "Moderate": "متوسط",
+    "Weak": "ضعیف",
+    "Elementary": "مقدماتی",
+    "strengths": "نقاط قوت",
+    "subjectBriefConclusion": "خلاصه ای از نتیجه گیری موضوع",
+    "defaultInsightTemplate": "این بینش به طور خودکار از نتایج ارزیابی ایجاد شده است. در صورت نیاز می توانید آن را به روز کنید.",
+    "note": "توجه",
+    "Outdated": "منسوخ شده"
 }
