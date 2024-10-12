@@ -534,5 +534,11 @@
   "thisMonth": "This month",
   "lastMonth": "Last month",
   "notificationEmptyState": "Nothing new to see here yet!",
+  "Great": "Great",
+  "Good": "Good",
+  "Moderate": "Moderate",
+  "Weak": "Weak",
+  "Elementary": "Elementary",
+  "strengths": "strengths",
   "draft": "Draft"
 }

@@ -42,6 +42,7 @@ const QuestionnairesNotCompleteAlert = (
                 "&:hover": {
                   backgroundColor: "#ffffff55",
                 },
+                  unicodeBidi: "plaintext"
               }}
               component={Link}
               state={location}
@@ -53,11 +54,13 @@ const QuestionnairesNotCompleteAlert = (
                   q={q}
                   a={a}
                   sx={{
-                    ml: 1,
+                    ml: theme.direction === "ltr" ? 1 : "unset",
+                    mr: theme.direction === "rtl" ? 1 : "unset",
                     paddingLeft: theme.direction === "ltr" ? 1 : "unset",
                     paddingRight: theme.direction === "rtl" ? 1 : "unset",
                     color: "white",
-                    borderLeft: "1px dashed #ffffff52",
+                    borderLeft: theme.direction == "ltr" ? "1px dashed #ffffff52" : "unset",
+                    borderRight: theme.direction == "rtl" ? "1px dashed #ffffff52" : "unset",
                   }}
                 />
               )}

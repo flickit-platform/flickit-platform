@@ -58,7 +58,7 @@ const OverallInsightText = (props: any) => {
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
             <Typography component="span" variant="titleLarge">
-              {maturityLevel.title}.
+             <Trans i18nKey={`${maturityLevel.title}`} />.
             </Typography>
             <Box>
               <Typography variant="body2">

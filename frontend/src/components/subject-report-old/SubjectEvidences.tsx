@@ -312,7 +312,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       ...theme.typography.titleMedium,
                       color: "#2B333B",
                       width: { xs: "45%", sm: "30%" },
-                      textAlign: "left",
+                      textAlign: theme.direction == "rtl" ? "right" : "left",
                     }}
                   >
                     {detailItem}:
@@ -381,7 +381,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               ...theme.typography.titleMedium,
               color: "#2B333B",
               width: "30%",
-              textAlign: "left",
+              textAlign: theme.direction == "rtl" ? "right" : "left",
             }}
           >
             Attachments:
@@ -470,7 +470,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       ...theme.typography.titleMedium,
                       color: "#2B333B",
                       width: { xs: "45%", sm: "30%" },
-                      textAlign: "left",
+                      textAlign: theme.direction == "rtl" ? "right" : "left",
                     }}
                   >
                     {questionItem}:
@@ -627,7 +627,7 @@ const DetailExpend = (props: any) => {
           sx={{
             ...theme.typography.bodySmall,
             color: "#6C8093",
-            textAlign: "left",
+            textAlign: theme.direction == "rtl" ? "right" : "left",
             whiteSpace: "break-spaces",
             wordBreak: "break-word",
           }}
@@ -732,7 +732,7 @@ const EvidanceDescription = ({
               whiteSpace: "pre-wrap",
               textAlign: "justify",
               wordBreak: "break-word",
-              unicodeBidi: "plaintext",
+              unicodeBidi: theme.direction == "ltr" ? "plaintext" : "",
             }}
           >
             {item?.description}
