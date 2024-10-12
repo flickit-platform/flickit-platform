@@ -17,6 +17,7 @@ interface IRichEditorProps {
   field?: ControllerRenderProps<FieldValues, any>;
   content?: string;
   boxProps?: BoxProps;
+  checkLang?: boolean
 }
 
 const RichEditor = (props: IRichEditorProps) => {
@@ -28,8 +29,9 @@ const RichEditor = (props: IRichEditorProps) => {
     className,
     field,
     boxProps = {},
+    checkLang
   } = props;
-  const [isFarsi, setIsFarsi] = useState<boolean>(false);
+  const [isFarsi, setIsFarsi] = useState<any>(checkLang);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -95,7 +97,8 @@ const RichEditor = (props: IRichEditorProps) => {
           ? {
               ...(boxProps.sx || {}),
               direction: `${isFarsi ? "rtl" : "ltr"}`,
-              fontFamily: `  ${isFarsi ? "VazirMatn" : primaryFontFamily}`,
+              textAlign: `${isFarsi ? "right" : "left"}`,
+              fontFamily: `${isFarsi ? "VazirMatn" : primaryFontFamily}`,
               position: "relative",
               marginTop: "0px !important",
               width: "100%",
