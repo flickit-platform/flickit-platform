@@ -277,10 +277,10 @@ export const AssessmentSubjectAccordion = (
                 marginBottom="10px"
               >
                 <Typography variant="titleMedium" color="#73808C">
-                  Attribute
+                 <Trans i18nKey={"attribute"}/>
                 </Typography>
                 <Typography variant="titleMedium" color="#73808C">
-                  Status
+                 <Trans i18nKey={"status"}/>
                 </Typography>
               </Box>
               <Divider sx={{ width: "100%" }} />
@@ -316,7 +316,7 @@ export const AssessmentSubjectAccordion = (
                           }}
                           variant="titleMedium"
                         >
-                          {element.maturityLevel.title}
+                       <Trans i18nKey={`${element.maturityLevel.title}`} />
                         </Typography>
                         <ConfidenceLevel
                           inputNumber={element.confidenceValue}

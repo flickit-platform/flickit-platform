@@ -74,7 +74,7 @@ const ColorfulProgress = (props: ISubjectProgressProps) => {
             fontSize="1.25rem"
           >
             <Trans
-              i18nKey="progressBarTilte"
+              i18nKey="progressBarTitle"
               values={{ numaratur, denominator }}
             />
           </Typography>
