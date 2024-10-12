@@ -438,7 +438,7 @@
   "loadMore": "Load more",
   "answeredQuestions": "Answered questions: ",
   "completeNow": "Complete Now",
-  "progressBarTilte": "{{numaratur}} of {{denominator}}",
+  "progressBarTitle": "{{numaratur}} of {{denominator}}",
   "seeQuestionaires": "Questionaires",
   "updated": "Updated",
   "checkMoreDetails": "Check for more details",
