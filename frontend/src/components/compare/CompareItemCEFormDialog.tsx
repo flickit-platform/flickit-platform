@@ -183,7 +183,11 @@ const CompareItemCEForm = (props: ICompareItemCEForm) => {
                       >
                         {option.title}
                       </Title>
-                      <Box ml="auto" sx={{ ...styles.centerV }}>
+                      <Box
+                           sx={{ ...styles.centerV,
+                           ml: theme.direction == "rtl" ?  "unset" : "auto",
+                           mr: theme.direction == "rtl" ?  "auto" : "unset"
+                           }}>
                         <Chip label={option?.kit?.title} size="small" />
                       </Box>
                     </>

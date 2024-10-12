@@ -17,7 +17,7 @@ export const SubjectAttributeList = (props: any) => {
   const { title } = subject;
   return (
     <Box mt={15} id="attributes">
-      <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} inPageLink="attributes">
+      <Title sx={{ opacity: 0.8, fontSize: "1.7rem" }} titleProps={{ style:{unicodeBidi: "plaintext" }} } inPageLink="attributes">
         {title} <Trans i18nKey="attributes" />
       </Title>
       <Box mt={3}>
