@@ -54,6 +54,8 @@ const AssessmentKitScreen = lazy(
 const AssessmentKitPermissionsScreen = lazy(
   () => import("../screens/AssessmentKitPermissionsScreen"),
 );
+
+const KitDesignerScreen = lazy(() => import("../screens/KitDesignerScreen"))
 /**
  * How does it work?
  * We have two separate routes for users, for unauthorized users we have AuthRoutes and for authenticated users we use PrivateRoutes
@@ -150,6 +152,8 @@ const Routes = () => {
           {/* Compare routes */}
           <Route path="/compare" element={<CompareScreen />} />
           <Route path="/compare/result" element={<CompareResultScreen />} />
+
+          <Route path="/kit-designer" element={<KitDesignerScreen />} />
         </Route>
 
         {/* Any other routes results in 404 page */}

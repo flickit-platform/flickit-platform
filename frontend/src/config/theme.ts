@@ -387,17 +387,23 @@ export const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          padding: "4px 8px",
-          margin: "0px 4px",
-          borderRadius: "5px",
           minHeight: "40px",
           transition: "background-color .1s ease, color .1s ease",
-          "&:hover": {
-            backgroundColor: "#e1dede",
+          color: "rgba(0, 0, 0, 0.6)", // Default text color
+
+          // Adding hover state for background color and text color
+          '&:hover': {
+            backgroundColor: "#f0f0f0",
+            color: "#2466A8",
           },
-          "&.Mui-selected": {
-            color: palette.secondary.main,
+          '&.Mui-selected': {
+            color: "#2466A8", 
+            fontWeight: "bold", 
+            background: "rgba(36, 102, 168, 0.08)"
           },
+          '&.MuiTabs-indicator': {
+            backgroundColor: "#2466A8"
+          }
         },
       },
     },
@@ -428,17 +434,17 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         icon: {
-            left: is_farsi ? "7px" : "unset",
-            right: is_farsi ? "unset" : "7px",
+          left: is_farsi ? "7px" : "unset",
+          right: is_farsi ? "unset" : "7px",
         }
       }
     },
-                                 
+
     MuiChip: {
       styleOverrides: {
         root: {
           ".MuiChip-label": {
-            unicodeBidi : "plaintext"
+            unicodeBidi: "plaintext"
           }
         }
       }
