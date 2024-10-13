@@ -542,5 +542,10 @@
   "Weak": "Weak",
   "Elementary": "Elementary",
   "strengths": "strengths",
-  "draft": "Draft"
+  "draft": "Draft",
+  "completelyunsure": "Completely unsure",
+  "fairlyunsure": "Fairly unsure",
+  "somewhatunsure": "Somewhat unsure",
+  "fairlysure": "Fairly sure",
+  "completelysure": "Completely sure"
 }

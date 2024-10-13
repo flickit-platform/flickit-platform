@@ -42,9 +42,9 @@ const QuestionnaireProgress = (props: IQuestionnaireProgress) => {
           color={progressToColorMap[progress] || "primary"}
           variant="determinate"
           sx={{
-            borderRadius: "0 8px 8px 0px",
+            borderRadius: is_farsi ? "8px 0 0 8px" : "0 8px 8px 0px",
             color: progress === 0 ? "gray" : undefined,
-            transform: `rotate(${is_farsi ? "180" : "0"}deg)`,
+            // transform: `rotate(${is_farsi ? "180" : "0"}deg)`,
           }}
         />
       </Box>

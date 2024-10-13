@@ -286,7 +286,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
                           >
-                            {labels[selcetedConfidenceLevel - 1]?.title}
+                              <Trans i18nKey={`${labels[selcetedConfidenceLevel - 1]?.title}`.split(' ').join('').toLowerCase()} />
                           </Typography>
                         </Box>
                       </Box>

@@ -149,7 +149,9 @@ const QuestionsTitle = (props: {
                   display="inline-block"
                   variant="h5"
                   fontWeight={"bold"}
-                  sx={{ opacity: 0.6, ml: { xs: 0, sm: 1 } }}
+                  sx={{ opacity: 0.6, ml: theme.direction == "ltr" ? { xs: 0, sm: 1 } : "unset",
+                  mr: theme.direction == "rtl" ? { xs: 0, sm: 1 } : "unset"
+                  }}
                 >
                   {" "}
                   <Trans i18nKey="question" /> {questionIndex}/

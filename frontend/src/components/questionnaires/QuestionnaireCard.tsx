@@ -191,13 +191,14 @@ const ActionButtons = (props: {
   nextQuestion: number;
 }) => {
   const { id, progress, number_of_answers, nextQuestion, title } = props;
+  const is_farsi = localStorage.getItem("lang") === "fa"
   return (
     <Box display="flex">
       {progress === 100 && (
         <ActionButton
           to={`${id}/1`}
           text="edit"
-          icon={<ModeEditOutlineRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
+          icon={<ModeEditOutlineRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
         />
       )}
       {progress > 0 && (
@@ -205,14 +206,14 @@ const ActionButtons = (props: {
           to={`${id}/review`}
           text="review"
           state={{ name: "Questionnaires" }}
-          icon={<RemoveRedEyeRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
+          icon={<RemoveRedEyeRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
         />
       )}
       {progress < 100 && progress > 0 && (
         <ActionButton
           to={`${id}/${nextQuestion || number_of_answers + 1}`}
           text="continue"
-          icon={<PlayArrowRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
+          icon={<PlayArrowRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
@@ -220,7 +221,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/1`}
           text="start"
-          icon={<StartRoundedIcon sx={{ ml: 1 }} fontSize="small" />}
+          icon={<StartRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
