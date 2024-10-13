@@ -543,9 +543,9 @@
   "Elementary": "Elementary",
   "strengths": "strengths",
   "draft": "Draft",
-  "completelyunsure": "Completely unsure",
-  "fairlyunsure": "Fairly unsure",
-  "somewhatunsure": "Somewhat unsure",
-  "fairlysure": "Fairly sure",
-  "completelysure": "Completely sure"
+  "completelyUnsure": "Completely unsure",
+  "fairlyUnsure": "Fairly unsure",
+  "somewhatUnsure": "Somewhat unsure",
+  "fairlySure": "Fairly sure",
+  "completelySure": "Completely sure"
 }

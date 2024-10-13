@@ -453,9 +453,9 @@
     "writeYourOwnAdvices": "توصیه های خود را بنویسید",
     "useAdviceGenerator": "استفاده از ایجاد کننده توصیه",
     "checkMoreDetails": "جزئیات بیشتر",
-    "completelyunsure": "کاملا نامطمئن",
-    "fairlyunsure": "نسبتا مطمئن",
-    "somewhatunsure": "تا حدودی مطمئن",
-    "fairlysure": "نسبتا مطمئن",
-    "completelysure": "کاملا مطمئن"
+    "completelyUnsure": "کاملا نامطمئن",
+    "fairlyUnsure": "نسبتا مطمئن",
+    "somewhatUnsure": "تا حدودی مطمئن",
+    "fairlySure": "نسبتا مطمئن",
+    "completelySure": "کاملا مطمئن"
 }

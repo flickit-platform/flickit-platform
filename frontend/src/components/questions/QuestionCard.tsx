@@ -93,6 +93,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
 import { downloadFile } from "@utils/downloadFile";
 import CircularProgress from "@mui/material/CircularProgress";
+import {toCamelCase} from "@common/makeCamelcaseString";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -286,7 +287,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
                           >
-                              <Trans i18nKey={`${labels[selcetedConfidenceLevel - 1]?.title}`.split(' ').join('').toLowerCase()} />
+                              <Trans i18nKey={toCamelCase(`${labels[selcetedConfidenceLevel - 1]?.title}`)} />
                           </Typography>
                         </Box>
                       </Box>
