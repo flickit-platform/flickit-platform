@@ -457,5 +457,11 @@
     "fairlyUnsure": "نسبتا مطمئن",
     "somewhatUnsure": "تا حدودی مطمئن",
     "fairlySure": "نسبتا مطمئن",
-    "completelySure": "کاملا مطمئن"
+    "completelySure": "کاملا مطمئن",
+    "evidences": "شواهد",
+    "confidence": "اطمینان",
+    "evidencePlaceholder": "شواهد خود را در اینجا بنویسید و نظر دهید....",
+    "emptyAnswerHistoryTitle": "هیچ جوابی ثبت نشده‌است.",
+    "needsToAddAttachments": "اضافه کردن پیوست (بعد از ایجاد شاهد)",
+    "commentsWillNotBeShown": "نظرات در صفحه گزارش نشان داده نخواهد شد"
 }

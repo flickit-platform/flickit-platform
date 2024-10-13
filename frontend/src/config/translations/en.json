@@ -547,5 +547,7 @@
   "fairlyUnsure": "Fairly unsure",
   "somewhatUnsure": "Somewhat unsure",
   "fairlySure": "Fairly sure",
-  "completelySure": "Completely sure"
+  "completelySure": "Completely sure",
+  "confidence": "Confidence",
+  "evidencePlaceholder": "Write down your evidence and comment here...."
 }

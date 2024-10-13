@@ -354,7 +354,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={{ textTransform: "none", ...theme.typography.titleLarge }}
               label={
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Trans i18nKey="Evidences" />
+                  <Trans i18nKey="evidences" />
                 </Box>
               }
               value="evidences"
@@ -1188,7 +1188,10 @@ const Evidence = (props: any) => {
                           {value == null && (
                             <InfoOutlinedIcon
                               style={{ color: evidenceBG.borderColor }}
-                              sx={{ ml: 1 }}
+                              sx={{
+                                  ml: theme.direction == "ltr" ? 1 : 0,
+                                  mr: theme.direction == "rtl" ? 1 : 0,
+                              }}
                             />
                           )}
                         </Box>
@@ -1253,7 +1256,7 @@ const Evidence = (props: any) => {
                     name="evidence"
                     label={null}
                     required={true}
-                    placeholder="Write down your evidence and comment here...."
+                    placeholder={t(`evidencePlaceholder`)}
                     borderRadius={"12px"}
                     setValueCount={setValueCount}
                     hasCounter={true}
@@ -1310,7 +1313,8 @@ const Evidence = (props: any) => {
                       sx={{
                         position: "absolute",
                         bottom: "8px",
-                        right: "80px",
+                        right: theme.direction == "rtl" ? "unset" : "80px",
+                        left: theme.direction == "ltr" ? "unset" : "80px",
                         display: "flex",
                         alignItems: "center",
                         border: "1px solid #9DA7B3",
