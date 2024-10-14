@@ -1256,7 +1256,7 @@ const Evidence = (props: any) => {
                     name="evidence"
                     label={null}
                     required={true}
-                    placeholder={t(`evidencePlaceholder`)}
+                    placeholder={t(`evidencePlaceholder`) as string}
                     borderRadius={"12px"}
                     setValueCount={setValueCount}
                     hasCounter={true}
