@@ -149,9 +149,8 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
               ),
             }
           : {
-          // todo
               style: hasCounter
-                ? isFarsi || rtl
+                ? isFarsi
                   ? {
                       paddingLeft: 80,
                       minHeight: "110px",
