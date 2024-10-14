@@ -1,11 +1,11 @@
-export function toCamelCase(str) {
+export function toCamelCase(str:string) {
     return str
-        .split(/[\s-_]+/) // Corrected: Split by spaces, hyphens, or underscores
-        .map((word, index) => {
+        .split(/[\s-_]+/)
+        .map((word:string, index:number) => {
             if (index === 0) {
-                return word.toLowerCase(); // Keep the first word in lowercase
+                return word.toLowerCase();
             }
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(); // Capitalize the first letter of subsequent words
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
         })
-        .join(''); // Join the words together
+        .join('');
 }
