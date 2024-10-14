@@ -107,3 +107,13 @@ class LevelCompetenceApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class KitActiveApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.kit_active(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
