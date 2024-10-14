@@ -444,6 +444,15 @@ export const theme = createTheme({
       }
     },
 
+    MuiFormHelperText: {
+      styleOverrides: {
+        root :{
+          textAlign : is_farsi ? "right" : "left",
+        }
+      }
+    },
+
+
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {

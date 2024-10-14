@@ -110,13 +110,13 @@ const QuestionsTitle = (props: {
         }
       >
         {isReview ? (
-          <>
+          <div style={{display:"flex", flexDirection: theme.direction === "rtl" ? "row-reverse" : "row"}}>
             {questionnaire?.title}
             <div style={{ marginInline: 4 }}></div>
             <Title size="large">
               <Trans i18nKey="review" />
             </Title>
-          </>
+          </div>
         ) : (
           <>
             {assessmentStatus === EAssessmentStatus.DONE && (

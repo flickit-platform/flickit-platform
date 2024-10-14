@@ -25,6 +25,7 @@ interface IInputFieldUCProps extends Omit<OutlinedTextFieldProps, "variant"> {
   isFarsi?: boolean;
   isEditing?: boolean;
   valueCount?: string;
+  rtl?: boolean;
 }
 
 const InputFieldUC = (props: IInputFieldUCProps) => {
@@ -44,6 +45,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     isFarsi,
     isEditing,
     valueCount,
+    rtl,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -59,7 +61,6 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     maxLength,
   );
   useEffect(() => {
-    console.log(isFocused);
     if (isFocused && inputRef?.current) {
       inputRef?.current?.focus();
     } else {
@@ -89,7 +90,10 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     }
     if (type !== "password") {
       const isFarsi = firstCharDetector(event.target.value);
-      event.target.dir = isFarsi ? "rtl" : "ltr";
+      event.target.dir = event.target.value.length == 0 && rtl ? "rtl" :
+                         event.target.value.length == 0 && !rtl ? "ltr" :
+                         rtl && isFarsi ? "rtl"  : !rtl && isFarsi ? "rtl" : "ltr"
+
       event.target.style.fontFamily = isFarsi ? "VazirMatn" : primaryFontFamily;
     }
     if (type === "password" && inputRef.current) {
@@ -150,7 +154,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
             }
           : {
               style: hasCounter
-                ? isFarsi
+                ? isFarsi || rtl
                   ? {
                       paddingLeft: 80,
                       minHeight: "110px",

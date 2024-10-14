@@ -549,5 +549,9 @@
   "fairlySure": "Fairly sure",
   "completelySure": "Completely sure",
   "confidence": "Confidence",
-  "evidencePlaceholder": "Write down your evidence and comment here...."
+  "evidencePlaceholder": "Write down your evidence and comment here....",
+  "discard": "discard",
+  "addDescriptionToAttachment": "Add description for this specific attachment up to 100 characters",
+  "of": "of",
+  "chooseAnotherQuestionnaire": "Choose another questionnaire"
 }

@@ -14,11 +14,12 @@ import languageDetector from "@utils/languageDetector";
 import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import { primaryFontFamily, theme } from "@/config/theme";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
+import {toCamelCase} from "@common/makeCamelcaseString";
 
 const QuestionsReview = () => {
   const { questionsInfo } = useQuestionContext();
@@ -280,7 +281,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               sx={{ fontSize: "1rem" }}
               // sx={{borderRadius:"32px"}}
             >
-              <Trans i18nKey="Choose another questionnaire" />
+              <Trans i18nKey="chooseAnotherQuestionnaire" />
             </Button>
           </Box>
         </Box>
@@ -387,7 +388,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         >
                           <Typography sx={{ display: "flex" }}>
                             <Typography variant="h6" fontWeight="bold">
-                              {question.answer.confidenceLevel.title}
+                              <Trans i18nKey={toCamelCase(`${question.answer.confidenceLevel.title}`)} />
                             </Typography>
                           </Typography>
                         </Box>

@@ -1103,7 +1103,7 @@ const Evidence = (props: any) => {
     setDescription("");
     setCreateAttachment(false);
   };
-
+  const rtl = localStorage.getItem("lang") === "fa"
   return (
     <Box
       display={"flex"}
@@ -1141,7 +1141,7 @@ const Evidence = (props: any) => {
                     }}
                   >
                     {`${t("evidenceAttachmentType", {
-                      value: value ? value.toLowerCase() : "comment",
+                      value: value ? t(value.toLowerCase())  : t("comment")  ,
                     })}`}
                   </Typography>
                 </Box>
@@ -1240,6 +1240,7 @@ const Evidence = (props: any) => {
                     evidencesQueryData={evidencesQueryData}
                     evidenceJustCreatedId={evidenceJustCreatedId}
                     pallet={evidenceBG}
+                    rtl={rtl}
                   />
                 </Grid>
               ) : (
@@ -1261,14 +1262,15 @@ const Evidence = (props: any) => {
                     setValueCount={setValueCount}
                     hasCounter={true}
                     isFarsi={is_farsi}
+                    rtl={rtl}
                   />
                   <FormControlLabel
                     sx={{
                       color: theme.palette.primary.main,
                       position: "absolute",
                       bottom: "20px",
-                      left: theme.direction === "ltr" ? "40px" : "unset",
-                      right: theme.direction === "rtl" ? "40px" : "unset",
+                      left: theme.direction === "ltr" ? "20px" : "unset",
+                      right: theme.direction === "rtl" ? "20px" : "unset",
                     }}
                     data-cy="automatic-submit-check"
                     control={
@@ -1296,7 +1298,7 @@ const Evidence = (props: any) => {
                     }
                   />
                   <Typography
-                    style={is_farsi ? { left: 20 } : { right: 20 }}
+                    style={is_farsi || rtl ? { left: 10 } : { right: 10 }}
                     sx={{
                       position: "absolute",
                       top: 20,
@@ -1505,6 +1507,8 @@ const CreateEvidenceAttachment = (props: any) => {
     description,
     dropZoneData,
     attachmentData,
+    is_farsi,
+    rtl
   } = props;
   const { service } = useServiceContext();
   const [attachments, setAttachments] = useState([]);
@@ -1633,6 +1637,7 @@ const CreateEvidenceAttachment = (props: any) => {
             description={description}
             setError={setError}
             error={error}
+            rtl={rtl}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -1813,18 +1818,20 @@ const ControlBtn = (props: any) => {
 };
 
 const DescriptionBox = (props: any) => {
-  const { setDescription, description, setError, error } = props;
+  const { setDescription, description, setError, error, rtl } = props;
 
   const MAX_DESC_TEXT = 100;
-
+  let [isFarsi, setIsFarsi] = useState(false);
   const handelDescription = (e: any) => {
     if (e.target.value.length < MAX_DESC_TEXT) {
       setDescription(e.target.value);
+      setIsFarsi(languageDetector(e.target.value))
       setError(false);
     } else {
       setError(true);
     }
   };
+
   return (
     <TextField
       sx={{
@@ -1850,8 +1857,9 @@ const DescriptionBox = (props: any) => {
           },
         },
       }}
+      dir={rtl  && description.length == 0 ? "rtl" : !rtl && description.length == 0 ? "ltr" : rtl && isFarsi ? "rtl" : !rtl && isFarsi ? "rtl" : "ltr"}
       placeholder={
-        "Add description for this specific attachment up to 100 charachter"
+          t(`addDescriptionToAttachment`) as string
       }
       error={error}
       helperText={
@@ -2103,7 +2111,7 @@ const CreateDropZone = (props: any) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              position: "relative",
+
             }}
           >
             <Box
@@ -2114,6 +2122,7 @@ const CreateDropZone = (props: any) => {
                 width: "100%",
                 border: `.5px dashed ${pallet.borderColor}`,
                 borderRadius: "12px",
+                  position: "relative",
               }}
             >
               <div
@@ -2154,62 +2163,62 @@ const CreateDropZone = (props: any) => {
                     <Trans i18nKey={"locateIt"} />
                   </Typography>
                 </Typography>
+                  <Tooltip
+                      slotProps={{
+                          tooltip: {
+                              sx: {
+                                  color: "#6C8093",
+                                  backgroundColor: "#E2E5E9",
+                                  borderRadius: "8px",
+                              },
+                          },
+                      }}
+                      title={
+                          <Box
+                              sx={{
+                                  width: "auto",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "5px",
+                              }}
+                          >
+                              <Box sx={{ display: "flex", gap: "5px" }}>
+                                  <InfoOutlinedIcon
+                                      style={{
+                                          color: "#C7CCD1",
+                                          width: "15px",
+                                          height: "15px",
+                                      }}
+                                  />
+                                  <Trans i18nKey={"uploadAcceptableSize"} />
+                              </Box>
+                              <Box sx={{ display: "flex", gap: "5px" }}>
+                                  <InfoOutlinedIcon
+                                      style={{
+                                          color: "#C7CCD1",
+                                          width: "15px",
+                                          height: "15px",
+                                      }}
+                                  />
+                                  <Trans i18nKey={"uploadAcceptable"} />
+                              </Box>
+                          </Box>
+                      }
+                  >
+                      <InfoOutlinedIcon
+                          style={{ color: "#0A2342", width: "15px", height: "15px" }}
+                          sx={{
+                              marginRight: theme.direction === "ltr" ? 1 : "unset",
+                              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                              position: "absolute",
+                              top: { xs: "65%", sm: "50%" },
+                              right: theme.direction === "ltr" ? "15px" : "unset",
+                              left: theme.direction === "rtl" ? "15px" : "unset",
+                          }}
+                      />
+                  </Tooltip>
               </div>
             </Box>
-            <Tooltip
-              slotProps={{
-                tooltip: {
-                  sx: {
-                    color: "#6C8093",
-                    backgroundColor: "#E2E5E9",
-                    borderRadius: "8px",
-                  },
-                },
-              }}
-              title={
-                <Box
-                  sx={{
-                    width: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: "5px" }}>
-                    <InfoOutlinedIcon
-                      style={{
-                        color: "#C7CCD1",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    />
-                    <Trans i18nKey={"uploadAcceptableSize"} />
-                  </Box>
-                  <Box sx={{ display: "flex", gap: "5px" }}>
-                    <InfoOutlinedIcon
-                      style={{
-                        color: "#C7CCD1",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    />
-                    <Trans i18nKey={"uploadAcceptable"} />
-                  </Box>
-                </Box>
-              }
-            >
-              <InfoOutlinedIcon
-                style={{ color: "#0A2342", width: "15px", height: "15px" }}
-                sx={{
-                  marginRight: theme.direction === "ltr" ? 1 : "unset",
-                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
-                  position: "absolute",
-                  top: { xs: "65%", sm: "50%" },
-                  right: theme.direction === "ltr" ? "15px" : "unset",
-                  left: theme.direction === "rtl" ? "15px" : "unset",
-                }}
-              />
-            </Tooltip>
           </section>
         )
       }
@@ -2566,7 +2575,7 @@ const EvidenceDetail = (props: any) => {
                 // border: `1px solid ${evidenceBG?.borderColor}`,
                 background: evidenceBG?.background,
                 color: "#0A2342",
-                borderRadius: "0 24px 24px 24px ",
+                borderRadius: theme.direction == "ltr" ?  "0 24px 24px 24px " : "24px 0px 24px 24px ",
                 gap: "16px",
                 direction: `${is_farsi ? "rtl" : "ltr"}`,
                 textAlign: `${is_farsi ? "right" : "left"}`,
@@ -3219,7 +3228,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             >
               <Trans i18nKey={"uploadAttachment"} />
               <Typography sx={{ ...theme.typography.headlineSmall }}>
-                {expanded.count} of 5{" "}
+                {expanded.count} <Trans i18nKey={"of"} /> 5{" "}
               </Typography>
             </Typography>
             <Typography
@@ -3227,7 +3236,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 fontSize: "11px",
                 color: "#73808C",
                 maxWidth: "300px",
-                textAlign: "left",
+                textAlign: theme.direction == "rtl" ? "right" : "left",
                 mx: "auto",
               }}
             >
@@ -3325,7 +3334,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 },
               }}
               placeholder={
-                "Add description for this specific attachment up to 100 charachter"
+                t(`addDescriptionToAttachment`) as string
               }
               error={error}
               helperText={
