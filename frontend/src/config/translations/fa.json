@@ -498,6 +498,13 @@
     "allQuestionsInThisQuestionnaireHaveBeenAnswered": "به تمامی سوالات این پرسشنامه پاسخ داده شده است. برای داشتن بینش دقیق تر، می توانید پرسشنامه های دیگری را نیز تکمیل کنید.",
     "allQuestionsHaveBeenAnswered": "همه سوالات پاسخ داده شده است.",
     "noQuestionsHaveBeenAnswered": "هنوز هیچ سوالی پاسخ داده نشده است!",
-    "weHighlyRecommendAnsweringMoreQuestions": "برای اطلاعات دقیق تر و جامع تر، ما به شدت توصیه می کنیم به سوالات بیشتری پاسخ دهید."
+    "weHighlyRecommendAnsweringMoreQuestions": "برای اطلاعات دقیق تر و جامع تر، ما به شدت توصیه می کنیم به سوالات بیشتری پاسخ دهید.",
+    "evidenceDetails": "جزئیات شواهد",
+    "evidenceType": "توع شاهد",
+    "modified": "اصلاح شده",
+    "attachments": "شواهد",
+    "relatedQuestion": "سوالات مرتبط",
+    "questionnaire": "پرسشنامه",
+    "close": "بستن"
 }
 
