@@ -143,6 +143,8 @@
   "changeOrderHelper":"You can drag each item to change order (This order is descending)",
   "maturitylevels": "Maturity levels",
   "newMaturityLevel": "New Maturity Level",
+  "maturityLevelsListEmptyState": "Oops! No maturity level is defined.",
+  "maturityLevelsListEmptyStateDatailed": "No Maturity level at the moment? You can define new ones via this button!",
   "maturityLevelsKitDesignerDescrption":"Maturity levels are a structured way to assess and improve the development and capabilities of processes, systems, or organizations. Typically, these levels are part of a maturity model, which provides a framework for evaluating how well an entity is performing in a specific domain.<br/> In this section, in addition to defining the various maturity levels, you need to establish the relationship between these levels and the criteria for achieving each maturity level based on the preceding levels.",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",

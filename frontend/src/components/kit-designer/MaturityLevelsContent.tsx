@@ -105,7 +105,7 @@ const MaturityLevelsContent = () => {
             <QueryBatchData
                 queryBatchData={[maturityLevels, maturityLevelsCompetences]}
                 renderLoading={() => <LoadingSkeleton />}
-                render={([]) => {
+                render={([maturityLevelsData, maturityLevelsCompetencesData]) => {
                     return (
                         < >
                             <Box>
@@ -122,88 +122,107 @@ const MaturityLevelsContent = () => {
                                     <Typography variant="headlineSmall" fontWeight="bold">
                                         <Trans i18nKey="maturityLevelsList" />
                                     </Typography>
-                                    <Button variant="contained">
-                                        <Trans i18nKey="newMaturityLevel" />
-                                    </Button>
+                                    {maturityLevelsData?.items?.length ? (
+                                        <Button variant="contained">
+                                            <Trans i18nKey="newMaturityLevel" />
+                                        </Button>
+                                    ) : null}
                                 </Box>
-
-                                <Typography variant="bodyMedium" mt={1}>
+                                {maturityLevelsData?.items?.length ? (<Typography variant="bodyMedium" mt={1}>
                                     <Trans i18nKey="changeOrderHelper" />
                                 </Typography>
-                                <Divider orientation="horizontal" flexItem />
+                                ) : null}
 
-                                {items.map((item, index) => (
-                                    <Box
-                                        key={index}
-                                        mt={1.5}
-                                        p={1.5}
-                                        sx={{
-                                            backgroundColor: 'gray.100',
-                                            borderRadius: "8px",
-                                            border: '0.3px solid #73808c30',
-                                            display: 'flex',
-                                            alignItems: 'flex-start',
-                                            position: 'relative',
-                                        }}
-                                    >
-                                        <Box sx={{ ...styles.centerCVH, background: "#F3F5F6" }} borderRadius="0.5rem" mr={2} p={0.25}>
-                                            <Typography
-                                                variant="semiBoldLarge"
+                                <Divider orientation="horizontal" flexItem sx={{ mt: 1 }} />
+                                {maturityLevelsData?.items?.length ?
+                                    <>
+                                        {maturityLevelsData?.items?.map((item: any, index: number) => (
+                                            <Box
+                                                key={index}
+                                                mt={1.5}
+                                                p={1.5}
+                                                sx={{
+                                                    backgroundColor: 'gray.100',
+                                                    borderRadius: "8px",
+                                                    border: '0.3px solid #73808c30',
+                                                    display: 'flex',
+                                                    alignItems: 'flex-start',
+                                                    position: 'relative',
+                                                }}
                                             >
-                                                {item.index}
-                                            </Typography>
-                                            <Divider orientation="horizontal" flexItem sx={{ mx: 1 }} />
+                                                <Box sx={{ ...styles.centerCVH, background: "#F3F5F6" }} borderRadius="0.5rem" mr={2} p={0.25}>
+                                                    <Typography
+                                                        variant="semiBoldLarge"
+                                                    >
+                                                        {item.index}
+                                                    </Typography>
+                                                    <Divider orientation="horizontal" flexItem sx={{ mx: 1 }} />
 
-                                            <IconButton size="small">
-                                                <SwapVertRoundedIcon fontSize="small" />
-                                            </IconButton>
-                                        </Box>
+                                                    <IconButton size="small">
+                                                        <SwapVertRoundedIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Box>
 
-                                        <Box>
-                                            <Typography variant="h6">
-                                                {item.title}
-                                            </Typography>
-                                            <Typography variant="body2" mt={1}>
-                                                {item.description}
-                                            </Typography>
-                                        </Box>
+                                                <Box>
+                                                    <Typography variant="h6">
+                                                        {item.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" mt={1}>
+                                                        {item.description}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        ))}
+                                    </> :
+                                    <Box sx={{ ...styles.centerCVH }} minHeight="180px" gap={2}>
+                                        <Typography variant="headlineSmall" fontWeight="bold" color="rgba(61, 77, 92, 0.5)">
+                                            <Trans i18nKey="maturityLevelsListEmptyState" />
+                                        </Typography>
+                                        <Typography variant="bodyMedium">
+                                            <Trans i18nKey="maturityLevelsListEmptyStateDatailed" />
+                                        </Typography>
+                                        <Button variant="contained">
+                                            <Trans i18nKey="newMaturityLevel" />
+                                        </Button>
                                     </Box>
-                                ))}
+                                }
                             </Box>
-                            <Box mt={4}>
-                                <Typography variant="headlineSmall" fontWeight="bold">
-                                    <Trans i18nKey="maturityLevelsList" />
-                                </Typography>
-                                <Divider orientation="horizontal" flexItem sx={{ mt: 2 }} />
+                            {maturityLevelsData?.items?.length ? (
+                                <Box mt={4}>
+                                    <Typography variant="headlineSmall" fontWeight="bold">
+                                        <Trans i18nKey="maturityLevelsList" />
+                                    </Typography>
+                                    <Divider orientation="horizontal" flexItem sx={{ mt: 2 }} />
 
-                                <TableContainer>
-                                    <Table sx={{ minWidth: 650 }}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell></TableCell>
-                                                {data.map((row) => (
-                                                    <TableCell sx={{ textAlign: "center" }} key={row.id}><Typography variant="semiBoldMedium">{row.title}</Typography></TableCell>
-                                                ))}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {data.map((row) => (
-                                                <TableRow key={row.index} sx={{ backgroundColor: row.index % 2 === 0 ? '#ffffff' : '#2466a812' }}>
-                                                    <TableCell><Typography variant="semiBoldMedium">{row.title}</Typography></TableCell>
-                                                    {data.map((column, index) => {
-                                                        const competence = row.competences.find(c => c.maturityLevelId === column.id);
-                                                        return (
-                                                            <TableCell key={column.id} sx={{ textAlign: "center", border: '1px solid rgba(224, 224, 224, 1)', borderRight: index === data.length - 1 ? "none" : "1px solid rgba(224, 224, 224, 1)" }}>
-                                                                {competence ? row.index : '-'}
-                                                            </TableCell>
-                                                        );
-                                                    })}
+                                    <TableContainer>
+                                        <Table sx={{ minWidth: 650 }}>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell></TableCell>
+                                                    {data.map((row) => (
+                                                        <TableCell sx={{ textAlign: "center" }} key={row.id}><Typography variant="semiBoldMedium">{row.title}</Typography></TableCell>
+                                                    ))}
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Box>
+                                            </TableHead>
+                                            <TableBody>
+                                                {maturityLevelsCompetencesData?.items?.map((row: any) => (
+                                                    <TableRow key={row.index} sx={{ backgroundColor: row.index % 2 === 0 ? '#ffffff' : '#2466a812' }}>
+                                                        <TableCell><Typography variant="semiBoldMedium">{row.title}</Typography></TableCell>
+                                                        {data.map((column, index) => {
+                                                            const competence = row.competences.find((c: any) => c.maturityLevelId === column.id);
+                                                            return (
+                                                                <TableCell key={column.id} sx={{ textAlign: "center", border: '1px solid rgba(224, 224, 224, 1)', borderRight: index === data.length - 1 ? "none" : "1px solid rgba(224, 224, 224, 1)" }}>
+                                                                    {competence ? row.index : '-'}
+                                                                </TableCell>
+                                                            );
+                                                        })}
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
+                            ) : null}
 
                         </>
                     );
