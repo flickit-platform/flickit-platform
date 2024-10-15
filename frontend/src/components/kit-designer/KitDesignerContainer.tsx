@@ -6,7 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import KitDesignerTitle from "./KitDesignerContainerTitle";
 import { Trans } from "react-i18next";
-import MaturityLevelsContent from "./MaturityLevelsContent";
+import MaturityLevelsContent from "./maturityLevels/MaturityLevelsContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
