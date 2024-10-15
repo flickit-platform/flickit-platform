@@ -439,7 +439,11 @@ export const theme = createTheme({
         root: {
           ".MuiChip-label": {
             unicodeBidi : "plaintext"
-          }
+          },
+          ".MuiChip-deleteIcon": {
+            marginLeft: is_farsi ? "4px" : "-4px",
+            marginRight: is_farsi ? "-4px" : "4px",
+          },
         }
       }
     },
