@@ -542,7 +542,7 @@
   "lastMonth": "Last month",
   "notificationEmptyState": "Nothing new to see here yet!",
   "draft": "Draft",
-  "noRecommendation": "There is no recommendation yet!\"",
+  "noRecommendation": "There is no recommendation yet!",
   "Great": "Great",
   "Good": "Good",
   "Moderate": "Moderate",
@@ -560,4 +560,4 @@
   "addDescriptionToAttachment": "Add description for this specific attachment up to 100 characters",
   "of": "of",
   "chooseAnotherQuestionnaire": "Choose another questionnaire"
-
+}
