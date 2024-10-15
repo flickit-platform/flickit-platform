@@ -18,6 +18,8 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
 import { theme } from "@/config/theme";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
+import formatDate from "@utils/formatDate";
 
 export const AssessmentReportNarrator = ({
   setIsWritingAdvice,
@@ -109,17 +111,25 @@ export const AssessmentReportNarrator = ({
           />
           {aboutSection?.creationTime && (
             <Typography variant="bodyMedium" mx={1}>
-              {format(
-                new Date(
-                  new Date(aboutSection?.creationTime).getTime() -
-                    new Date(aboutSection?.creationTime).getTimezoneOffset() *
-                      60000,
-                ),
-                "yyyy/MM/dd HH:mm",
-              ) +
-                " (" +
-                t(convertToRelativeTime(aboutSection?.creationTime)) +
-                ")"}
+              {localStorage.getItem("lang") == "fa" ?
+                  convertMiladiToShamsi(formatDate(format(
+                      new Date(
+                          new Date(aboutSection?.creationTime).getTime() -
+                          new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                          60000,
+                      ),
+                      "yyyy/MM/dd HH:mm",
+                  ))) :
+                  formatDate(format(
+                      new Date(
+                          new Date(aboutSection?.creationTime).getTime() -
+                          new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                          60000,
+                      ),
+                      "yyyy/MM/dd HH:mm",
+                  ))+ " (" +
+                      t(convertToRelativeTime(aboutSection?.creationTime)) +
+                      ")" }
             </Typography>
           )}
         </>

@@ -93,6 +93,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
 import { downloadFile } from "@utils/downloadFile";
 import CircularProgress from "@mui/material/CircularProgress";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -2745,7 +2746,7 @@ const EvidenceDetail = (props: any) => {
                     fontFamily: primaryFontFamily,
                   }}
                 >
-                  {formatDate(lastModificationTime)}
+                    {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime) }
                 </Typography>
               </Box>
             </Box>
