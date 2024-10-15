@@ -1,4 +1,4 @@
-export function convertMiladiToShamsi(miladiDate) {
+export function convertMiladiToShamsi(miladiDate : any) {
     let [gy, gm, gd] = miladiDate.split('/').map(Number);
 
     let jy, jm, jd;
