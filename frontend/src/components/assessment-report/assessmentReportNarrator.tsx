@@ -67,9 +67,9 @@ export const AssessmentReportNarrator = ({
     <Box
       display="flex"
       flexDirection="column"
-      alignItems="left"
-      justifyContent="left"
-      textAlign="left"
+      alignItems="start"
+      justifyContent="start"
+      textAlign="start"
       maxHeight="100%"
       gap={0.5}
       py={2}
