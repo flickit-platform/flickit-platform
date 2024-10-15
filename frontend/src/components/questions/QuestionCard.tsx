@@ -1507,7 +1507,6 @@ const CreateEvidenceAttachment = (props: any) => {
     description,
     dropZoneData,
     attachmentData,
-    is_farsi,
     rtl
   } = props;
   const { service } = useServiceContext();
