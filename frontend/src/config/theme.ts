@@ -136,7 +136,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: primaryFontFamily,
+    fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
     subSmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
@@ -250,7 +250,7 @@ export const theme = createTheme({
       letterSpacing: "0.5px",
     },
     labelMedium: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: "1rem",

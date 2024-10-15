@@ -103,8 +103,14 @@ const SUbjectAttributeCard = (props: any) => {
                 <Title
                   sx={{
                     opacity: 0.95,
-                    ml: theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                    mr: theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
+                    ml:
+                      theme.direction == "ltr"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
+                    mr:
+                      theme.direction == "rtl"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
                   }}
                 >
                   <Typography variant="titleLarge" fontWeight={600}>
@@ -113,17 +119,32 @@ const SUbjectAttributeCard = (props: any) => {
                 </Title>
               </Box>
 
-              <Box marginY={1} sx={{
-                  ml:theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                  mr:theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset"
-              }}>
+              <Box
+                marginY={1}
+                sx={{
+                  ml:
+                    theme.direction == "ltr"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
+                  mr:
+                    theme.direction == "rtl"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
+                }}
+              >
                 <Typography
                   variant="titleMedium"
                   fontWeight={400}
                   sx={{
-                      ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                      mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
-                }}
+                    ml:
+                      theme.direction == "ltr"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
+                    mr:
+                      theme.direction == "rtl"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
+                  }}
                 >
                   {description}
                 </Typography>
@@ -134,18 +155,33 @@ const SUbjectAttributeCard = (props: any) => {
                 cl={Math.ceil(confidenceValue)}
                 mn={maturity_levels_count}
               />
-              <Box mt={1} sx={{
-                  ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                  mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
-              }}>
+              <Box
+                mt={1}
+                sx={{
+                  ml:
+                    theme.direction == "ltr"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
+                  mr:
+                    theme.direction == "rtl"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
+                }}
+              >
                 <Typography
                   variant="titleMedium"
                   sx={{
-                      ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                      mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+                    ml:
+                      theme.direction == "ltr"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
+                    mr:
+                      theme.direction == "rtl"
+                        ? { xs: 0.75, sm: 1.5, md: 2 }
+                        : "unset",
                   }}
                 >
-                  <Trans i18nKey={"withConfidence"} />
+                  <Trans i18nKey={"withConfidenceSubject"} />
                   <Typography
                     component="span"
                     variant="titleMedium"
@@ -156,7 +192,7 @@ const SUbjectAttributeCard = (props: any) => {
                   </Typography>
                   <Trans
                     i18nKey={"wasEstimate"}
-                    values={{ attribute: title }}
+                    values={{ title }}
                   />
                   <Typography
                     component="span"
@@ -164,16 +200,30 @@ const SUbjectAttributeCard = (props: any) => {
                     variant="titleMedium"
                   >
                     {" "}
-                    {maturityLevel?.index}.{" "}
+                    <Trans
+                      i18nKey={"divider"}
+                      values={{
+                        cl: Math.ceil(maturityLevel.index),
+                        clDivider: Math.ceil(maturity_levels_count),
+                      }}
+                    />{" "}
                   </Typography>
-                  <Trans i18nKey={"meaning"} /> <Trans i18nKey={`${maturityLevel?.title}`} />.
+                  <Trans i18nKey={"meaning"} />{" "}
+                  <Trans i18nKey={`${maturityLevel?.title}`} />
+                  <Trans i18nKey={"is"} />{" "}
                 </Typography>
               </Box>
               <Box
                 mt={1}
                 sx={{
-                    ml:theme.direction == "ltr" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                    mr:theme.direction == "rtl" ?  { xs: 0.75, sm: 1.5, md: 2 } : "unset"
+                  ml:
+                    theme.direction == "ltr"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
+                  mr:
+                    theme.direction == "rtl"
+                      ? { xs: 0.75, sm: 1.5, md: 2 }
+                      : "unset",
                 }}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -256,7 +306,8 @@ const SUbjectAttributeCard = (props: any) => {
                         <InfoOutlined
                           color="primary"
                           sx={{
-                            marginRight: theme.direction === "ltr" ? 1 : "unset",
+                            marginRight:
+                              theme.direction === "ltr" ? 1 : "unset",
                             marginLeft: theme.direction === "rtl" ? 1 : "unset",
                           }}
                         />
@@ -412,17 +463,24 @@ const SUbjectAttributeCard = (props: any) => {
             mt={4}
             mb={2}
             sx={{
-                ml: theme.direction == "ltr" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-                mr: theme.direction == "rtl" ? { xs: 0.75, sm: 1.5, md: 2 } : "unset",
-
-          }}
+              ml:
+                theme.direction == "ltr"
+                  ? { xs: 0.75, sm: 1.5, md: 2 }
+                  : "unset",
+              mr:
+                theme.direction == "rtl"
+                  ? { xs: 0.75, sm: 1.5, md: 2 }
+                  : "unset",
+            }}
           >
             <Trans i18nKey={"theAchivedScores"} />
           </Typography>
-          <Box sx={{
-              pr: theme.direction == "rtl" ? "unset" : { xs: 2, sm: 6 } ,
-              pl: theme.direction == "ltr" ? "unset" : { xs: 2, sm: 6 } ,
-          }}>
+          <Box
+            sx={{
+              pr: theme.direction == "rtl" ? "unset" : { xs: 2, sm: 6 },
+              pl: theme.direction == "ltr" ? "unset" : { xs: 2, sm: 6 },
+            }}
+          >
             {maturityScores
               .map((item: any, index: number) => {
                 return (
@@ -473,8 +531,10 @@ export const AttributeStatusBarContainer = (props: any) => {
         <Typography
           variant="headlineLarge"
           sx={{
-            borderLeft: theme.direction == "ltr" ? `2px solid ${statusColor}` : "unset",
-            borderRight: theme.direction == "rtl" ? `2px solid ${statusColor}` : "unset",
+            borderLeft:
+              theme.direction == "ltr" ? `2px solid ${statusColor}` : "unset",
+            borderRight:
+              theme.direction == "rtl" ? `2px solid ${statusColor}` : "unset",
             pl: theme.direction == "ltr" ? 1 : "unset",
             pr: theme.direction == "rtl" ? 1 : "unset",
             ml: theme.direction == "ltr" ? { xs: -2, sm: 0 } : "unset",
@@ -482,7 +542,7 @@ export const AttributeStatusBarContainer = (props: any) => {
             color: statusColor,
           }}
         >
-         <Trans i18nKey={`${status}`} />
+          <Trans i18nKey={`${status}`} />
         </Typography>
       </Box>
     </Box>
@@ -505,10 +565,10 @@ export const AttributeStatusBar = (props: any) => {
       sx={{
         my: 0.5,
         background: "gray",
-        borderTopRightRadius: theme.direction == "rtl" ? "unset"  :  "8px",
-        borderTopLeftRadius: theme.direction == "ltr" ? "unset"  :  "8px",
-        borderBottomRightRadius: theme.direction == "rtl" ? "unset"  :  "8px",
-        borderBottomLeftRadius: theme.direction == "ltr" ? "unset"  :  "8px",
+        borderTopRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+        borderTopLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
+        borderBottomRightRadius: theme.direction == "rtl" ? "unset" : "8px",
+        borderBottomLeftRadius: theme.direction == "ltr" ? "unset" : "8px",
         position: "relative",
         color: "white",
         display: "flex",
@@ -540,10 +600,12 @@ export const AttributeStatusBar = (props: any) => {
         <Trans i18nKey={isMl ? "maturityLevel" : "confidenceLevel"} />
       </Typography>
       <Typography
-        sx={{ position: "absolute", zIndex: 1,
-            right: theme.direction == "rtl" ? "unset" : "12px",
-            left: theme.direction == "ltr" ? "unset" : "12px"
-      }}
+        sx={{
+          position: "absolute",
+          zIndex: 1,
+          right: theme.direction == "rtl" ? "unset" : "12px",
+          left: theme.direction == "ltr" ? "unset" : "12px",
+        }}
         variant="h6"
       >
         {isMl ? `${ml} / ${mn}` : `${cl !== null ? cl : "--"}%`}
@@ -655,7 +717,7 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   color: is_passed ? statusColor : "#808080",
                 }}
               >
-               <Trans  i18nKey={`${maturityLevel?.title}`} />
+                <Trans i18nKey={`${maturityLevel?.title}`} />
               </Typography>
             </Box>
           </Box>
@@ -676,12 +738,14 @@ const MaturityLevelDetailsContainer = (props: any) => {
                   <>
                     <Typography variant="body2" display={"flex"}>
                       <Trans i18nKey="maxPossibleScore" />:
-                      <Typography variant="body2" fontWeight={"bold"}
-                            sx={{
-                                ml: theme.direction == "ltr" ? 2 : "unset",
-                                mr: theme.direction == "rtl" ? 2 : "unset"
-                             }}
-                         >
+                      <Typography
+                        variant="body2"
+                        fontWeight={"bold"}
+                        sx={{
+                          ml: theme.direction == "ltr" ? 2 : "unset",
+                          mr: theme.direction == "rtl" ? 2 : "unset",
+                        }}
+                      >
                         {maxPossibleScore}
                       </Typography>
                     </Typography>
@@ -692,8 +756,8 @@ const MaturityLevelDetailsContainer = (props: any) => {
                         display={"flex"}
                         fontWeight={"bold"}
                         sx={{
-                            ml: theme.direction == "ltr" ? 2 : "unset",
-                            mr: theme.direction == "rtl" ? 2 : "unset"
+                          ml: theme.direction == "ltr" ? 2 : "unset",
+                          mr: theme.direction == "rtl" ? 2 : "unset",
                         }}
                       >
                         {Math.ceil(gainedScore)}
@@ -708,11 +772,13 @@ const MaturityLevelDetailsContainer = (props: any) => {
                     </Typography>
                     <Typography mt={2} variant="body2" display={"flex"}>
                       <Trans i18nKey="questionsCount" />:
-                      <Typography variant="body2" fontWeight={"bold"}
-                                  sx={{
-                                      ml: theme.direction == "ltr" ? 2 : "unset",
-                                      mr: theme.direction == "rtl" ? 2 : "unset"
-                                  }}
+                      <Typography
+                        variant="body2"
+                        fontWeight={"bold"}
+                        sx={{
+                          ml: theme.direction == "ltr" ? 2 : "unset",
+                          mr: theme.direction == "rtl" ? 2 : "unset",
+                        }}
                       >
                         {questionsCount}
                       </Typography>
@@ -727,9 +793,10 @@ const MaturityLevelDetailsContainer = (props: any) => {
                             <Typography
                               variant="body2"
                               fontWeight={"bold"}
-                              sx={{ opacity: "0.8",
-                                  ml: theme.direction == "ltr" ? 1 : "unset",
-                                  mr: theme.direction == "rtl" ? 1 : "unset"
+                              sx={{
+                                opacity: "0.8",
+                                ml: theme.direction == "ltr" ? 1 : "unset",
+                                mr: theme.direction == "rtl" ? 1 : "unset",
                               }}
                             >
                               {title}
@@ -748,8 +815,14 @@ const MaturityLevelDetailsContainer = (props: any) => {
                                 sx={{
                                   display: "flex",
                                   flexDirection: "column",
-                                  ml: theme.direction == "ltr" ? { xs: 0, sm: 4 } : "unset",
-                                  mr: theme.direction == "rtl" ? { xs: 0, sm: 4 } : "unset"
+                                  ml:
+                                    theme.direction == "ltr"
+                                      ? { xs: 0, sm: 4 }
+                                      : "unset",
+                                  mr:
+                                    theme.direction == "rtl"
+                                      ? { xs: 0, sm: 4 }
+                                      : "unset",
                                 }}
                               >
                                 <Box
