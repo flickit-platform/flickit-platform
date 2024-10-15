@@ -37,7 +37,7 @@ const OverallInsightText = (props: any) => {
           <Skeleton height="60px" />
         ) : (
           <>
-            <Trans i18nKey="withConfidence" />{" "}
+            <Trans i18nKey="withConfidenceSubject" />{" "}
             <Typography
               component="span"
               variant="titleLarge"
@@ -45,21 +45,31 @@ const OverallInsightText = (props: any) => {
             >
               <Trans
                 i18nKey={"clOf"}
-                values={{ cl: Math.ceil(confidenceValue) }}
+                values={{
+                  cl: Math.ceil(confidenceValue),
+                  clDivider: 100,
+                }}
               />
             </Typography>{" "}
-            <Trans i18nKey="wasEstimateT" values={{ title }} />{" "}
+            <Trans i18nKey="wasEstimate" values={{ title }} />{" "}
             <Typography
               component="span"
               variant="titleLarge"
               sx={{ color: "#6035A1" }}
             >
-              {maturityLevel.index} of {maturityLevelsCount}
+              <Trans
+                i18nKey={"divider"}
+                values={{
+                  cl: Math.ceil(maturityLevel.index),
+                  clDivider: Math.ceil(maturityLevelsCount),
+                }}
+              />
             </Typography>{" "}
             <Trans i18nKey="meaning" values={{ title }} />{" "}
             <Typography component="span" variant="titleLarge">
-             <Trans i18nKey={`${maturityLevel.title}`} />.
+              <Trans i18nKey={`${maturityLevel.title}`} />
             </Typography>
+            <Trans i18nKey="is" />{" "}
             <Box>
               <Typography variant="body2">
                 <Trans
