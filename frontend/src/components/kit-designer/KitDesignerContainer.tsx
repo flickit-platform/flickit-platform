@@ -6,6 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import KitDesignerTitle from "./KitDesignerContainerTitle";
 import { Trans } from "react-i18next";
+import MaturityLevelsContent from "./MaturityLevelsContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -23,8 +24,8 @@ const KitDesignerContainer = () => {
             <Trans i18nKey="kitDesigner" />
           </Typography>
         </Grid>
-        <Grid container sm={12} xs={12} mt={2} sx={{ height: '100%' }}>
-          <Grid item sm={3} xs={12} sx={{ height: '100%' }}>
+        <Grid container sm={12} xs={12} mt={6}>
+          <Grid item sm={3} xs={12} sx={{ display: "flex", flexDirection: "column" }}>
             <Tabs
               textColor="primary"
               indicatorColor="primary"
@@ -36,8 +37,7 @@ const KitDesignerContainer = () => {
               sx={{
                 borderRight: 1,
                 borderColor: 'divider',
-                height: '100%',
-                minHeight: '400px',
+                flexGrow: 1,
                 backgroundColor: 'rgba(36, 102, 168, 0.04)',
                 padding: 0,
                 '& .MuiTabs-indicator': {
@@ -48,27 +48,32 @@ const KitDesignerContainer = () => {
               <Tab
                 sx={{
                   alignItems: "flex-start",
+                  textTransform: "none",
                 }}
-                label={<Trans i18nKey="maturityLevels" />} />
-              <Tab sx={{
+                label={<Typography variant="semiBoldLarge"><Trans i18nKey="maturityLevels" /></Typography>} />
+              <Tab disabled sx={{
                 alignItems: "flex-start",
+                textTransform: "none",
               }}
-                label={<Trans i18nKey="subjects" />} />
-              <Tab sx={{
+                label={<Typography variant="semiBoldLarge"><Trans i18nKey="subjects" /></Typography>} />
+              <Tab disabled sx={{
                 alignItems: "flex-start",
+                textTransform: "none",
               }}
-                label={<Trans i18nKey="attributes" />} />
-              <Tab sx={{
+                label={<Typography variant="semiBoldLarge"><Trans i18nKey="attributes" /></Typography>} />
+              <Tab disabled sx={{
                 alignItems: "flex-start",
+                textTransform: "none",
               }}
-                label={<Trans i18nKey="questionnaires" />} />
+                label={<Typography variant="semiBoldLarge"><Trans i18nKey="questionnaires" /></Typography>} />
+
               {/* Add more tabs as needed */}
             </Tabs>
           </Grid>
 
-          <Grid item sm={9} xs={12} sx={{ height: '100%' }}>
+          <Grid item sm={9} xs={12} sx={{ height: '100%', padding: 3, background: "white" }} >
             {selectedTab === 0 && (
-              <Typography><Trans i18nKey="maturityLevelsContent" /></Typography>
+              <MaturityLevelsContent />
             )}
             {selectedTab === 1 && (
               <Typography><Trans i18nKey="subjectsContent" /></Typography>

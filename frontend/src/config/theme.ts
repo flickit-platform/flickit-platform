@@ -39,6 +39,9 @@ declare module "@mui/material/styles" {
     subSmall: React.CSSProperties;
     subMedium: React.CSSProperties;
     subLarge: React.CSSProperties;
+    semiBoldXLarge: React.CSSProperties;
+    semiBoldLarge: React.CSSProperties;
+    semiBoldMedium: React.CSSProperties;
   }
 
   interface TypographyVariantsOptions {
@@ -60,6 +63,9 @@ declare module "@mui/material/styles" {
     subSmall?: React.CSSProperties;
     subMedium?: React.CSSProperties;
     subLarge?: React.CSSProperties;
+    semiBoldXLarge?: React.CSSProperties;
+    semiBoldLarge?: React.CSSProperties;
+    semiBoldMedium?: React.CSSProperties;
   }
 
   interface Palette {
@@ -89,6 +95,9 @@ declare module "@mui/material/Typography" {
     subSmall?: true;
     subMedium?: true;
     subLarge?: true;
+    semiBoldXLarge?: true;
+    semiBoldLarge?: true
+    semiBoldMedium?: true
   }
 }
 
@@ -263,6 +272,27 @@ export const theme = createTheme({
       lineHeight: "1.125rem",
       letterSpacing: "0.1px",
     },
+    semiBoldLarge: {
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
+      fontWeight: "600",
+      fontSize: "1rem",
+      lineHeight: "1.5rem",
+      letterSpacing: "0.15px",
+    },
+    semiBoldMedium:{
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
+      fontWeight: "600",
+      fontSize: "0.875rem",
+      lineHeight: "1.25rem",
+      letterSpacing: "0.1px",
+    },
+    semiBoldXLarge:{
+      fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
+      fontWeight: "600",
+      fontSize: "1.375rem",
+      lineHeight: "1.75rem",
+      letterSpacing: "0px",
+    },
     button: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       letterSpacing: ".05em",
@@ -397,8 +427,8 @@ export const theme = createTheme({
             color: "#2466A8",
           },
           '&.Mui-selected': {
-            color: "#2466A8", 
-            fontWeight: "bold", 
+            color: "#2466A8",
+            fontWeight: "bold",
             background: "rgba(36, 102, 168, 0.08)"
           },
           '&.MuiTabs-indicator': {
