@@ -2746,7 +2746,7 @@ const EvidenceDetail = (props: any) => {
                     fontFamily: primaryFontFamily,
                   }}
                 >
-                    {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime) }
+                    {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime)}
                 </Typography>
               </Box>
             </Box>

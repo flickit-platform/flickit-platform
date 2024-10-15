@@ -44,6 +44,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Tooltip from "@mui/material/Tooltip";
 import { Chip } from "@mui/material";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -192,7 +193,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(lastModificationTime)}
+                  {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime)}
               </Typography>
             </Box>
           </Grid>

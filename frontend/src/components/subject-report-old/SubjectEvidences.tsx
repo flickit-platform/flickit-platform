@@ -24,6 +24,7 @@ import arrowBtn from "@/assets/svg/arrow.svg";
 import attachmentIcon from "@/assets/svg/AttachmentIcon.svg";
 import { theme } from "@config/theme";
 import useScreenResize from "@/utils/useScreenResize";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 export enum evidenceType {
   positive = "POSITIVE",
@@ -358,7 +359,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                      {formatDate(evidence?.creationTime)}
+                        {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(evidence?.creationTime)) : formatDate(evidence?.creationTime)}
                     </Typography>
                   )}
                   {index == 4 && (
@@ -369,7 +370,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                      {formatDate(evidence?.lastModificationTime)}
+                        {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(evidence?.lastModificationTime)) : formatDate(evidence?.lastModificationTime)}
                     </Typography>
                   )}
                 </Box>
@@ -619,7 +620,7 @@ const DetailExpend = (props: any) => {
             textAlign: "left",
           }}
         >
-          BY {displayName} / {formatDate(creationTime)}
+          BY {displayName} / {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(creationTime)) : formatDate(creationTime)}
         </Typography>
       )}
       {expendedDetail && (

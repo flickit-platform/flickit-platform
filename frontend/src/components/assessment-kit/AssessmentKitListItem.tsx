@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import formatDate from "@utils/formatDate";
 import { theme } from "@/config/theme";
 import { Tooltip } from "@mui/material";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 interface IAssessmentKitListItemProps {
   data: {
     id: TId;
@@ -75,7 +76,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             {title}
           </Typography>
           <Typography color="GrayText" variant="body2">
-            <Trans i18nKey="lastUpdated" /> {formatDate(lastModificationTime)}
+            <Trans i18nKey="lastUpdated" /> {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime)}
           </Typography>
         </Box>
 

@@ -35,6 +35,7 @@ import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 
 import { AssessmentKitStatsType, AssessmentKitInfoType } from "@types";
 import { theme } from "@/config/theme";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
@@ -381,7 +382,7 @@ const AssessmentKitSectionGeneralInfo = (
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(creationTime),
+                          item: localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(creationTime)) : formatDate(creationTime) ,
                           title: t("creationDate"),
                         }}
                       />
@@ -392,7 +393,7 @@ const AssessmentKitSectionGeneralInfo = (
                       <InfoItem
                         bg="white"
                         info={{
-                          item: formatDate(lastModificationTime),
+                          item: localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime),
                           title: t("lastUpdated"),
                         }}
                       />

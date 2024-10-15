@@ -59,6 +59,7 @@ import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -710,7 +711,7 @@ const Invitees = (props: any) => {
                         }}
                       />
                       <Typography variant="body2">
-                        {formatDate(inviteExpirationDate)}
+                          {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(inviteExpirationDate)) : formatDate(inviteExpirationDate)}
                       </Typography>
                     </Box>
                   </Box>
@@ -1332,7 +1333,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 }}
                               />
                               <Typography variant="body2">
-                                {formatDate(inviteExpirationDate)}
+                                  {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(inviteExpirationDate)) : formatDate(inviteExpirationDate)}
                               </Typography>
                             </Box>
                             <MemberActions

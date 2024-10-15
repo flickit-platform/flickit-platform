@@ -33,6 +33,7 @@ import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import stringAvatar from "@utils/stringAvatar";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { theme } from "@/config/theme";
+import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 export const SpaceMembers = (props: any) => {
   const { editable } = props;
@@ -346,7 +347,7 @@ export const SpaceMembers = (props: any) => {
                                   }}
                                 />
                                 <Typography variant="body2">
-                                  {formatDate(expirationDate)}
+                                  {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(expirationDate)) : formatDate(expirationDate)}
                                 </Typography>
                               </Box>
                               {
