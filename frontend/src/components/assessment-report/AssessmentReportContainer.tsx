@@ -18,7 +18,6 @@ import { styles } from "@styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
-import { secondaryFontFamily } from "@/config/theme";
 import BetaSvg from "@assets/svg/beta.svg";
 import PermissionControl from "../common/PermissionControl";
 
@@ -51,13 +50,13 @@ const AssessmentReportContainer = (props: any) => {
     try {
       await calculateMaturityLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   const calculateConfidenceLevel = async () => {
     try {
       await calculateConfidenceLevelQuery.query();
       await queryData.query();
-    } catch (e) { }
+    } catch (e) {}
   };
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
@@ -77,9 +76,7 @@ const AssessmentReportContainer = (props: any) => {
     toastErrorOptions: { filterByStatus: [404] },
   });
   return (
-    <PermissionControl
-      error={[queryData.errorObject?.response]}
-    >
+    <PermissionControl error={[queryData.errorObject?.response]}>
       <QueryBatchData
         queryBatchData={[
           queryData,
@@ -166,7 +163,6 @@ const AssessmentReportContainer = (props: any) => {
                           color="#73808C"
                           marginX={4}
                           variant="titleMedium"
-                          fontFamily={secondaryFontFamily}
                         >
                           <Trans i18nKey="general" />
                         </Typography>
@@ -190,14 +186,15 @@ const AssessmentReportContainer = (props: any) => {
                           color="#73808C"
                           marginX={4}
                           variant="titleMedium"
-                          fontFamily={secondaryFontFamily}
                         >
                           <Trans i18nKey="overallStatus" />
                         </Typography>
                         <AssessmentOverallStatus
                           status={status}
                           maturity_level={maturityLevel}
-                          maturity_level_count={assessmentKit?.maturityLevelCount}
+                          maturity_level_count={
+                            assessmentKit?.maturityLevelCount
+                          }
                           confidence_value={confidenceValue}
                         />
                       </Box>
@@ -219,7 +216,6 @@ const AssessmentReportContainer = (props: any) => {
                       color="#73808C"
                       marginX={4}
                       variant="titleMedium"
-                      fontFamily={secondaryFontFamily}
                     >
                       <Trans i18nKey="insight" />
                     </Typography>
@@ -232,7 +228,6 @@ const AssessmentReportContainer = (props: any) => {
                       color="#73808C"
                       marginX={4}
                       variant="titleMedium"
-                      fontFamily={secondaryFontFamily}
                     >
                       <Trans i18nKey="assessmentKit" />
                     </Typography>
