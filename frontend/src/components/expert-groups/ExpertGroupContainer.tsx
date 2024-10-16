@@ -978,30 +978,55 @@ const AssessmentKitsList = (props: any) => {
                 >
                   <Trans i18nKey="convertExcelToDsl" />
                 </Button>
+
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={() =>
-                    dialogProps.openDialog({
-                      context: { type: "create" },
-                    })
+                  onClick={handleClick}
+                  endIcon={
+                    open ? (
+                      <ArrowDropUpRoundedIcon />
+                    ) : (
+                      <ArrowDropDownRoundedIcon />
+                    )
                   }
-                  // endIcon={
-                  //   open ? (
-                  //     <ArrowDropUpRoundedIcon />
-                  //   ) : (
-                  //     <ArrowDropDownRoundedIcon />
-                  //   )
-                  // }
                 >
                   <Trans i18nKey="createAssessmentKit" />
                 </Button>
 
-                <AssessmentKitCEFromDialog
-                  {...dialogProps}
-                  onSubmitForm={assessmentKitQuery.query}
-                />
-                {/* <AssessmentKitCEFromDialog {...kitDesignerDialogProps} /> */}
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  PaperProps={{
+                    style: {
+                      maxHeight: 48 * 4.5,
+                    },
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      dialogProps.openDialog({
+                        context: { type: "create" },
+                      });
+                    }}
+                  >
+                    <Trans i18nKey="viaDSL" />
+                  </MenuItem>
+                  {/* <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      kitDesignerDialogProps.openDialog({
+                        context: { type: "draft" },
+                      });
+                    }}
+                  >
+                    <Trans i18nKey="viaKitDesigner" />
+                  </MenuItem> */}
+                </Menu>
+                <AssessmentKitCEFromDialog {...dialogProps} />
+                <AssessmentKitCEFromDialog {...kitDesignerDialogProps} />
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}
                   onSubmitForm={assessmentKitQuery.query}

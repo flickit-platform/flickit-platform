@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import RichEditor from "../rich-editor/RichEditor";
+import languageDetector from "@utils/languageDetector";
 
 const RichEditorField = (props: any) => {
   const { name, rules = {}, defaultValue, required = false, ...rest } = props;
@@ -87,6 +88,7 @@ const RichEditorFieldBase = (props: any) => {
         }
         defaultValue={defaultValue}
         field={field}
+        checkLang={languageDetector(defaultValue)}
       />
       <FormHelperText>{errorMessage as string}</FormHelperText>
     </FormControl>

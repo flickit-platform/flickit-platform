@@ -779,7 +779,7 @@ const AssessmentExportContainer = () => {
                           subjects: subjects
                             ?.map((elem: ISubject, index: number) =>
                               index === subjects?.length - 1
-                                ? " and " + elem?.title
+                                ? t("and") + elem?.title
                                 : index === 0
                                   ? elem?.title
                                   : ", " + elem?.title,
@@ -796,21 +796,24 @@ const AssessmentExportContainer = () => {
                         }}
                       />
                     </Typography>{" "}
-                    {subjects?.map((subject: ISubject) => (
-                      <Typography
-                        variant="displaySmall"
-                        paragraph
-                        key={subject?.id}
-                      >
-                        <Trans
-                          i18nKey="assessmentFocusDescriptionSubject"
-                          values={{
-                            title: subject?.title,
-                            description: subject?.description,
-                          }}
-                        />
-                      </Typography>
-                    ))}
+                    {subjects?.map((subject: ISubject) => {
+                      if (subject?.description)
+                        return (
+                          <Typography
+                            variant="displaySmall"
+                            paragraph
+                            key={subject?.id}
+                          >
+                            <Trans
+                              i18nKey="assessmentFocusDescriptionSubject"
+                              values={{
+                                title: subject?.title,
+                                description: subject?.description,
+                              }}
+                            />
+                          </Typography>
+                        );
+                    })}
                     <Typography variant="displaySmall" paragraph>
                       <Trans i18nKey="assessmentFocusDescriptionLastSection" />
                     </Typography>
@@ -861,7 +864,10 @@ const AssessmentExportContainer = () => {
                                               "1px solid rgba(224, 224, 224, 1)",
                                           }}
                                         >
-                                          <Typography variant="titleMedium">
+                                          <Typography
+                                            sx={{ unicodeBidi: "plaintext" }}
+                                            variant="titleMedium"
+                                          >
                                             {subject?.title}{" "}
                                             <Trans i18nKey="attribute" />
                                           </Typography>
@@ -964,7 +970,7 @@ const AssessmentExportContainer = () => {
                                           : "0",
                               }}
                             >
-                              {item.title}
+                              <Trans i18nKey={`${item.title}`} />
                             </Box>
                           );
                         },
@@ -984,9 +990,12 @@ const AssessmentExportContainer = () => {
                           >
                             <Typography
                               variant="displaySmall"
-                              sx={{ display: "flex" }}
+                              sx={{ display: "flex", gap: 1 }}
                             >
-                              <strong>{level.title}: </strong>
+                              <strong>
+                                {" "}
+                                <Trans i18nKey={`${level.title}`} />:{" "}
+                              </strong>
                               {level.description}
                             </Typography>
                           </Box>
@@ -1115,9 +1124,13 @@ const AssessmentExportContainer = () => {
                     values={{
                       maturityLevelTitle: assessment?.maturityLevel?.title,
                       questionCentext:
-                        questionsCount === answersCount
-                          ? `all ${questionsCount} questions`
-                          : `${answersCount} out of ${questionsCount} questions`,
+                        questionsCount !== answersCount
+                          ? theme.direction == "rtl"
+                            ? ` همه‌ی ${questionsCount} سوال `
+                            : `all ${questionsCount} questions`
+                          : theme.direction == "rtl"
+                            ? `${answersCount} از ${questionsCount} سوال `
+                            : `${answersCount} out of ${questionsCount} questions`,
                       confidenceValue: Math?.ceil(confidenceValue ?? 0),
                     }}
                   />
@@ -1503,7 +1516,11 @@ const AssessmentExportContainer = () => {
                                           <Typography
                                             variant="titleMedium"
                                             fontWeight={400}
-                                            textAlign="left"
+                                            textAlign={
+                                              theme.direction == "rtl"
+                                                ? "right"
+                                                : "left"
+                                            }
                                           >
                                             <Trans i18nKey="invalidAIInsight" />
                                           </Typography>
@@ -1613,7 +1630,7 @@ const AssessmentExportContainer = () => {
                   <Typography
                     dangerouslySetInnerHTML={{
                       __html:
-                        adviceNarration || "There is no recommendation yet!",
+                        adviceNarration || (t("noRecommendation") as string),
                     }}
                   ></Typography>
                 </>

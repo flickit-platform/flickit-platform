@@ -42,7 +42,8 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
           sx={{
             ...styles.centerV,
             width: "calc(100% - 114px)",
-            ml: "57px",
+            ml: theme.direction == "ltr" ? "57px" : "unset",
+            mr: theme.direction == "rtl" ? "57px" : "unset",
           }}
           height="100%"
           justifyContent="space-evenly"

@@ -122,7 +122,7 @@ const palette = createPalette({
   },
   warning: { main: "#CC7400", contrastText: "#fff", light: "#F4E7D7" },
 });
-const is_farsi =  false;
+const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
 export const theme = createTheme({
   direction: is_farsi ? "rtl" : "ltr",
   palette,
@@ -136,7 +136,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: primaryFontFamily,
+    fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
     subSmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
@@ -250,7 +250,7 @@ export const theme = createTheme({
       letterSpacing: "0.5px",
     },
     labelMedium: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: "1rem",
@@ -418,17 +418,32 @@ export const theme = createTheme({
                 : "translate(-12px, -9px) scale(0.75)",
               transformOrigin: !is_farsi ? "top left" : "top right",
             },
+            maxWidth: "fit-content",
           },
         },
       },
     },
 
+
+    MuiSelect: {
+      styleOverrides: {
+        icon: {
+            left: is_farsi ? "7px" : "unset",
+            right: is_farsi ? "unset" : "7px",
+        }
+      }
+    },
+                                 
     MuiChip: {
       styleOverrides: {
         root: {
           ".MuiChip-label": {
             unicodeBidi : "plaintext"
-          }
+          },
+          ".MuiChip-deleteIcon": {
+            marginLeft: is_farsi ? "4px" : "-4px",
+            marginRight: is_farsi ? "-4px" : "4px",
+          },
         }
       }
     },

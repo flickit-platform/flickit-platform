@@ -488,7 +488,7 @@ const SubjectTitle = (props: {
         />
       }
     >
-      <Box sx={{ ...styles.centerV }}>
+      <Box sx={{ ...styles.centerV, unicodeBidi: "plaintext" }}>
         {/* <QueryStatsRoundedIcon
           sx={{
             mr: 1,
