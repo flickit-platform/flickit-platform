@@ -85,7 +85,7 @@ export const AssessmentSettingGeneralBox = (props: {
     >
       <Box height={"100%"} width={"100%"}>
         <Typography color="#9DA7B3" variant="headlineMedium">
-          <Trans i18nKey={`${"General"}`} />
+          <Trans i18nKey={`${"general"}`} />
         </Typography>
 
         <Divider
@@ -280,8 +280,8 @@ export const AssessmentSettingGeneralBox = (props: {
                       lineHeight={"normal"}
                     >
                       {index == 0 && displayName}
-                      {index == 1 && formatDate(creationTime)}
-                      {index == 2 && formatDate(lastModificationTime)}
+                      {index == 1 && (theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi"))}
+                      {index == 2 && (theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi"))}
                       {index == 3 && (
                         <Link
                           style={{ textDecoration: "none", color: "inherit" }}
@@ -349,17 +349,17 @@ export const AssessmentSettingMemberBox = (props: {
   });
 
   const columns: readonly Column[] = [
-    { id: "displayName", label: "Name", minWidth: "20vw", position: "left" },
+    { id: "displayName", label: "name", minWidth: "20vw", position: "left" },
     {
       id: "email",
-      label: "Email",
+      label: "email",
       minWidth: "20vw",
       display: "none",
       position: "center",
     },
     {
       id: "role",
-      label: "Role",
+      label: "role",
       align: "right",
       minWidth: "20vw",
       position: "center",
@@ -369,13 +369,13 @@ export const AssessmentSettingMemberBox = (props: {
   const inviteesColumns: readonly Column[] = [
     {
       id: "email",
-      label: "Email",
+      label: "email",
       minWidth: "30vw",
       position: "center",
     },
     {
       id: "role",
-      label: "Role",
+      label: "role",
       align: "right",
       minWidth: "30vw",
       position: "center",
@@ -522,7 +522,7 @@ export const AssessmentSettingMemberBox = (props: {
                       },
                     }}
                   >
-                    {column.label}
+                      <Trans i18nKey={`${column.label}`} />
                   </TableCell>
                 ))}
               </TableRow>
@@ -751,7 +751,7 @@ export const AssessmentSettingMemberBox = (props: {
                           },
                         }}
                       >
-                        {column.label}
+                       <Trans i18nKey={`${column.label}`} />
                       </TableCell>
                     ))}
                   </TableRow>

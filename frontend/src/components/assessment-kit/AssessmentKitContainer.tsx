@@ -241,7 +241,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(creationTime)}
+                    {theme.direction == "rtl" ?   formatDate(creationTime, "Shamsi") :  formatDate(creationTime, "Miladi")}
                 </Box>
               </Box>
               <Box
@@ -257,7 +257,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                  {formatDate(lastModificationTime)}
+                    {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
                 </Box>
               </Box>
             </Box>

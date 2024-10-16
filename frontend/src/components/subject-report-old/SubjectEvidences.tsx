@@ -358,7 +358,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                      {formatDate(evidence?.creationTime)}
+                        {theme.direction == "rtl" ? formatDate(evidence?.creationTime, "Shamsi") : formatDate(evidence?.creationTime, "Miladi")}
                     </Typography>
                   )}
                   {index == 4 && (
@@ -369,7 +369,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                      {formatDate(evidence?.lastModificationTime)}
+                        {theme.direction == "rtl" ? formatDate(evidence?.lastModificationTime, "Shamsi") : formatDate(evidence?.lastModificationTime, "Miladi")}
                     </Typography>
                   )}
                 </Box>
@@ -619,7 +619,7 @@ const DetailExpend = (props: any) => {
             textAlign: "left",
           }}
         >
-          BY {displayName} / {formatDate(creationTime)}
+          BY {displayName} / {theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi")}
         </Typography>
       )}
       {expendedDetail && (
