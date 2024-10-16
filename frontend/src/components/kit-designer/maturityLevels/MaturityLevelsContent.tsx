@@ -245,26 +245,28 @@ const MaturityLevelsContent = () => {
             );
           }}
         />
-        <Box mt={4}>
-          <Typography variant="headlineSmall" fontWeight="bold">
-            <Trans i18nKey="competences" />
-          </Typography>
-          <Divider sx={{ my: 1 }} />
-          {/* Separate Query for Maturity Level Competences */}
-          <QueryBatchData
-            queryBatchData={[maturityLevelsCompetences]}
-            renderLoading={() => <LoadingSkeleton height={200} />}
-            render={([maturityLevelsCompetencesData]) => {
-              return (
-                <CompetencesTable
-                  data={maturityLevelsCompetencesData?.items}
-                  maturityLevelsCompetences={maturityLevelsCompetences}
-                  kitVersionId={kitVersionId}
-                />
-              );
-            }}
-          />{" "}
-        </Box>
+        {maturityLevels.loaded && maturityLevels.data.items.length !== 0 ? (
+          <Box mt={4}>
+            <Typography variant="headlineSmall" fontWeight="bold">
+              <Trans i18nKey="competences" />
+            </Typography>
+            <Divider sx={{ my: 1 }} />
+            {/* Separate Query for Maturity Level Competences */}
+            <QueryBatchData
+              queryBatchData={[maturityLevelsCompetences]}
+              renderLoading={() => <LoadingSkeleton height={200} />}
+              render={([maturityLevelsCompetencesData]) => {
+                return (
+                  <CompetencesTable
+                    data={maturityLevelsCompetencesData?.items}
+                    maturityLevelsCompetences={maturityLevelsCompetences}
+                    kitVersionId={kitVersionId}
+                  />
+                );
+              }}
+            />{" "}
+          </Box>
+        ) : null}
       </Box>
     </PermissionControl>
   );
