@@ -968,6 +968,18 @@ const AssessmentKitsList = (props: any) => {
             {hasAccess && (
               <>
                 <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    excelToDslDialogProps.openDialog({
+                      context: { type: "convert" },
+                    });
+                  }}
+                >
+                  <Trans i18nKey="convertExcelToDsl" />
+                </Button>
+
+                <Button
                   variant="contained"
                   size="small"
                   onClick={handleClick}
@@ -979,8 +991,9 @@ const AssessmentKitsList = (props: any) => {
                     )
                   }
                 >
-                  <Trans i18nKey="newAssessment" />
+                  <Trans i18nKey="createAssessmentKit" />
                 </Button>
+
                 <Menu
                   anchorEl={anchorEl}
                   open={open}
@@ -1001,7 +1014,7 @@ const AssessmentKitsList = (props: any) => {
                   >
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     onClick={() => {
                       handleClose();
                       kitDesignerDialogProps.openDialog({
@@ -1010,17 +1023,7 @@ const AssessmentKitsList = (props: any) => {
                     }}
                   >
                     <Trans i18nKey="viaKitDesigner" />
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      excelToDslDialogProps.openDialog({
-                        context: { type: "convert" },
-                      });
-                    }}
-                  >
-                    <Trans i18nKey="convertExcelToDsl" />
-                  </MenuItem>
+                  </MenuItem> */}
                 </Menu>
                 <AssessmentKitCEFromDialog {...dialogProps} />
                 <AssessmentKitCEFromDialog

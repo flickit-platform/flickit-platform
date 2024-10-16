@@ -93,6 +93,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { evidenceAttachmentType } from "@utils/enumType";
 import { downloadFile } from "@utils/downloadFile";
 import CircularProgress from "@mui/material/CircularProgress";
+import {toCamelCase} from "@common/makeCamelcaseString";
 
 interface IQuestionCardProps {
   questionInfo: IQuestionInfo;
@@ -286,7 +287,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
                             fontWeight={900}
                             sx={{ borderBottom: "1px solid", mx: 1 }}
                           >
-                            {labels[selcetedConfidenceLevel - 1]?.title}
+                              <Trans i18nKey={toCamelCase(`${labels[selcetedConfidenceLevel - 1]?.title}`)} />
                           </Typography>
                         </Box>
                       </Box>
@@ -353,7 +354,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
               sx={{ textTransform: "none", ...theme.typography.titleLarge }}
               label={
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Trans i18nKey="Evidences" />
+                  <Trans i18nKey="evidences" />
                 </Box>
               }
               value="evidences"
@@ -661,9 +662,9 @@ const AnswerTemplate = (props: {
             is_farsi
               ? {
                   fontSize: "1.2rem",
-                  mr: "auto",
+                  mr: theme.direction === "rtl" ? "unset" : "auto",
                 }
-              : { fontSize: "1.2rem", ml: "auto" }
+              : { fontSize: "1.2rem", ml:theme.direction === "rtl" ?  "unset"  :  "auto"}
           }
           onClick={submitQuestion}
         >
@@ -1102,7 +1103,7 @@ const Evidence = (props: any) => {
     setDescription("");
     setCreateAttachment(false);
   };
-
+  const rtl = localStorage.getItem("lang") === "fa"
   return (
     <Box
       display={"flex"}
@@ -1140,7 +1141,7 @@ const Evidence = (props: any) => {
                     }}
                   >
                     {`${t("evidenceAttachmentType", {
-                      value: value ? value.toLowerCase() : "comment",
+                      value: value ? t(value.toLowerCase())  : t("comment")  ,
                     })}`}
                   </Typography>
                 </Box>
@@ -1187,7 +1188,10 @@ const Evidence = (props: any) => {
                           {value == null && (
                             <InfoOutlinedIcon
                               style={{ color: evidenceBG.borderColor }}
-                              sx={{ ml: 1 }}
+                              sx={{
+                                  ml: theme.direction == "ltr" ? 1 : 0,
+                                  mr: theme.direction == "rtl" ? 1 : 0,
+                              }}
                             />
                           )}
                         </Box>
@@ -1236,6 +1240,7 @@ const Evidence = (props: any) => {
                     evidencesQueryData={evidencesQueryData}
                     evidenceJustCreatedId={evidenceJustCreatedId}
                     pallet={evidenceBG}
+                    rtl={rtl}
                   />
                 </Grid>
               ) : (
@@ -1252,19 +1257,20 @@ const Evidence = (props: any) => {
                     name="evidence"
                     label={null}
                     required={true}
-                    placeholder="Write down your evidence and comment here...."
+                    placeholder={t(`evidencePlaceholder`) as string}
                     borderRadius={"12px"}
                     setValueCount={setValueCount}
                     hasCounter={true}
                     isFarsi={is_farsi}
+                    rtl={rtl}
                   />
                   <FormControlLabel
                     sx={{
                       color: theme.palette.primary.main,
                       position: "absolute",
                       bottom: "20px",
-                      left: theme.direction === "ltr" ? "40px" : "unset",
-                      right: theme.direction === "rtl" ? "40px" : "unset",
+                      left: theme.direction === "ltr" ? "20px" : "unset",
+                      right: theme.direction === "rtl" ? "20px" : "unset",
                     }}
                     data-cy="automatic-submit-check"
                     control={
@@ -1292,7 +1298,7 @@ const Evidence = (props: any) => {
                     }
                   />
                   <Typography
-                    style={is_farsi ? { left: 20 } : { right: 20 }}
+                    style={is_farsi || rtl ? { left: 10 } : { right: 10 }}
                     sx={{
                       position: "absolute",
                       top: 20,
@@ -1309,7 +1315,8 @@ const Evidence = (props: any) => {
                       sx={{
                         position: "absolute",
                         bottom: "8px",
-                        right: "80px",
+                        right: theme.direction == "rtl" ? "unset" : "80px",
+                        left: theme.direction == "ltr" ? "unset" : "80px",
                         display: "flex",
                         alignItems: "center",
                         border: "1px solid #9DA7B3",
@@ -1500,6 +1507,7 @@ const CreateEvidenceAttachment = (props: any) => {
     description,
     dropZoneData,
     attachmentData,
+    rtl
   } = props;
   const { service } = useServiceContext();
   const [attachments, setAttachments] = useState([]);
@@ -1628,6 +1636,7 @@ const CreateEvidenceAttachment = (props: any) => {
             description={description}
             setError={setError}
             error={error}
+            rtl={rtl}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -1808,18 +1817,20 @@ const ControlBtn = (props: any) => {
 };
 
 const DescriptionBox = (props: any) => {
-  const { setDescription, description, setError, error } = props;
+  const { setDescription, description, setError, error, rtl } = props;
 
   const MAX_DESC_TEXT = 100;
-
+  let [isFarsi, setIsFarsi] = useState(false);
   const handelDescription = (e: any) => {
     if (e.target.value.length < MAX_DESC_TEXT) {
       setDescription(e.target.value);
+      setIsFarsi(languageDetector(e.target.value))
       setError(false);
     } else {
       setError(true);
     }
   };
+
   return (
     <TextField
       sx={{
@@ -1845,8 +1856,9 @@ const DescriptionBox = (props: any) => {
           },
         },
       }}
+      dir={rtl  && description.length == 0 ? "rtl" : !rtl && description.length == 0 ? "ltr" : rtl && isFarsi ? "rtl" : !rtl && isFarsi ? "rtl" : "ltr"}
       placeholder={
-        "Add description for this specific attachment up to 100 charachter"
+          t(`addDescriptionToAttachment`) as string
       }
       error={error}
       helperText={
@@ -1986,7 +1998,7 @@ const CreateDropZone = (props: any) => {
               }}
               onClick={() => setDropZone(null)}
             >
-              Remove
+             <Trans i18nKey={"remove"} />
             </Button>
             {typeFile == "gif" && (
               <img
@@ -2098,7 +2110,7 @@ const CreateDropZone = (props: any) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              position: "relative",
+
             }}
           >
             <Box
@@ -2109,6 +2121,7 @@ const CreateDropZone = (props: any) => {
                 width: "100%",
                 border: `.5px dashed ${pallet.borderColor}`,
                 borderRadius: "12px",
+                  position: "relative",
               }}
             >
               <div
@@ -2149,62 +2162,62 @@ const CreateDropZone = (props: any) => {
                     <Trans i18nKey={"locateIt"} />
                   </Typography>
                 </Typography>
+                  <Tooltip
+                      slotProps={{
+                          tooltip: {
+                              sx: {
+                                  color: "#6C8093",
+                                  backgroundColor: "#E2E5E9",
+                                  borderRadius: "8px",
+                              },
+                          },
+                      }}
+                      title={
+                          <Box
+                              sx={{
+                                  width: "auto",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "5px",
+                              }}
+                          >
+                              <Box sx={{ display: "flex", gap: "5px" }}>
+                                  <InfoOutlinedIcon
+                                      style={{
+                                          color: "#C7CCD1",
+                                          width: "15px",
+                                          height: "15px",
+                                      }}
+                                  />
+                                  <Trans i18nKey={"uploadAcceptableSize"} />
+                              </Box>
+                              <Box sx={{ display: "flex", gap: "5px" }}>
+                                  <InfoOutlinedIcon
+                                      style={{
+                                          color: "#C7CCD1",
+                                          width: "15px",
+                                          height: "15px",
+                                      }}
+                                  />
+                                  <Trans i18nKey={"uploadAcceptable"} />
+                              </Box>
+                          </Box>
+                      }
+                  >
+                      <InfoOutlinedIcon
+                          style={{ color: "#0A2342", width: "15px", height: "15px" }}
+                          sx={{
+                              marginRight: theme.direction === "ltr" ? 1 : "unset",
+                              marginLeft: theme.direction === "rtl" ? 1 : "unset",
+                              position: "absolute",
+                              top: { xs: "65%", sm: "50%" },
+                              right: theme.direction === "ltr" ? "15px" : "unset",
+                              left: theme.direction === "rtl" ? "15px" : "unset",
+                          }}
+                      />
+                  </Tooltip>
               </div>
             </Box>
-            <Tooltip
-              slotProps={{
-                tooltip: {
-                  sx: {
-                    color: "#6C8093",
-                    backgroundColor: "#E2E5E9",
-                    borderRadius: "8px",
-                  },
-                },
-              }}
-              title={
-                <Box
-                  sx={{
-                    width: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: "5px" }}>
-                    <InfoOutlinedIcon
-                      style={{
-                        color: "#C7CCD1",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    />
-                    <Trans i18nKey={"uploadAcceptableSize"} />
-                  </Box>
-                  <Box sx={{ display: "flex", gap: "5px" }}>
-                    <InfoOutlinedIcon
-                      style={{
-                        color: "#C7CCD1",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    />
-                    <Trans i18nKey={"uploadAcceptable"} />
-                  </Box>
-                </Box>
-              }
-            >
-              <InfoOutlinedIcon
-                style={{ color: "#0A2342", width: "15px", height: "15px" }}
-                sx={{
-                  marginRight: theme.direction === "ltr" ? 1 : "unset",
-                  marginLeft: theme.direction === "rtl" ? 1 : "unset",
-                  position: "absolute",
-                  top: { xs: "65%", sm: "50%" },
-                  right: theme.direction === "ltr" ? "15px" : "unset",
-                  left: theme.direction === "rtl" ? "15px" : "unset",
-                }}
-              />
-            </Tooltip>
           </section>
         )
       }
@@ -2561,7 +2574,7 @@ const EvidenceDetail = (props: any) => {
                 // border: `1px solid ${evidenceBG?.borderColor}`,
                 background: evidenceBG?.background,
                 color: "#0A2342",
-                borderRadius: "0 24px 24px 24px ",
+                borderRadius: theme.direction == "ltr" ?  "0 24px 24px 24px " : "24px 0px 24px 24px ",
                 gap: "16px",
                 direction: `${is_farsi ? "rtl" : "ltr"}`,
                 textAlign: `${is_farsi ? "right" : "left"}`,
@@ -2922,7 +2935,7 @@ const MyDropzone = (props: any) => {
               }}
               onClick={() => setDropZone(null)}
             >
-              Remove
+              <Trans i18nKey={"remove"} />
             </Button>
             {typeFile == "gif" && (
               <img
@@ -3214,7 +3227,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
             >
               <Trans i18nKey={"uploadAttachment"} />
               <Typography sx={{ ...theme.typography.headlineSmall }}>
-                {expanded.count} of 5{" "}
+                {expanded.count} <Trans i18nKey={"of"} /> 5{" "}
               </Typography>
             </Typography>
             <Typography
@@ -3222,7 +3235,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 fontSize: "11px",
                 color: "#73808C",
                 maxWidth: "300px",
-                textAlign: "left",
+                textAlign: theme.direction == "rtl" ? "right" : "left",
                 mx: "auto",
               }}
             >
@@ -3320,7 +3333,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                 },
               }}
               placeholder={
-                "Add description for this specific attachment up to 100 charachter"
+                t(`addDescriptionToAttachment`) as string
               }
               error={error}
               helperText={

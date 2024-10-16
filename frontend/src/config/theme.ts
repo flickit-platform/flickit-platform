@@ -145,7 +145,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: primaryFontFamily,
+    fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
     subSmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
@@ -259,7 +259,7 @@ export const theme = createTheme({
       letterSpacing: "0.5px",
     },
     labelMedium: {
-      fontFamily: secondaryFontFamily,
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: "1rem",
@@ -474,11 +474,24 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           ".MuiChip-label": {
-            unicodeBidi: "plaintext"
-          }
+            unicodeBidi : "plaintext"
+          },
+          ".MuiChip-deleteIcon": {
+            marginLeft: is_farsi ? "4px" : "-4px",
+            marginRight: is_farsi ? "-4px" : "4px",
+          },
         }
       }
     },
+
+    MuiFormHelperText: {
+      styleOverrides: {
+        root :{
+          textAlign : is_farsi ? "right" : "left",
+        }
+      }
+    },
+
 
     MuiOutlinedInput: {
       styleOverrides: {

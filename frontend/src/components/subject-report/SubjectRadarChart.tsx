@@ -45,8 +45,8 @@ const SubjectRadar = (props: any) => {
             return (
               <Text
                 {...rest}
-                y={y + (y - cy) / 15}
-                x={x + (x - cx) / 15}
+                y={y + (y - cy) / (theme.direction === "rtl" ? 7 : 15)}
+                x={x + (x - cx) / (theme.direction === "rtl" ? 7 : 15)}
                 fontSize="1.25rem"
               >
                 {payload.value}
