@@ -60,6 +60,7 @@ const MaturityLevelsContent = () => {
   };
 
   const handleNewMaturityLevelClick = () => {
+    handleCancel()
     setShowNewMaturityLevelForm(true);
   };
 
@@ -126,6 +127,7 @@ const MaturityLevelsContent = () => {
       await service.deleteMaturityLevel({ kitVersionId, maturityLevelId });
       maturityLevels.query();
       maturityLevelsCompetences.query();
+      handleCancel()
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -142,6 +144,7 @@ const MaturityLevelsContent = () => {
       await service.changeMaturityLevelsOrder({ kitVersionId }, { orders });
       maturityLevels.query();
       maturityLevelsCompetences.query();
+      handleCancel()
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
