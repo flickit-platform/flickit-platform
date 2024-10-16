@@ -175,16 +175,10 @@
     "created": "ساخته‌شده",
     "description": "توضیحات",
     "createAssessmentKit": "ایجاد کیت ارزیابی",
-<<<<<<< HEAD
     "viaDSL": "با استفاده از dsl",
     "viaKitDesigner": "با استفاده از سامانه",
     "kitDesigner": "طراح کیت",
     "convertExcelToDsl": "تبدیل اکسل به dsl",
-=======
-    "viaDSL": "با استفاده از DSL",
-    "viaKitDesigner": "با استفاده از ویرایشگر کیت",
-    "convertExcelToDsl": "تبدیل اکسل به DSL",
->>>>>>> main
     "updateAssessmentKit": "به‌روزرسانی کیت ارزیابی",
     "ownerName": "مالک: ",
     "dsl": "DSL",
