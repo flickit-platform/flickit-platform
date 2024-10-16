@@ -16,6 +16,8 @@ import { Trans } from "react-i18next";
 import { useParams } from "react-router-dom";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
+import { debounce } from "lodash";
+import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
 
 const MaturityLevelsContent = () => {
   const { service } = useServiceContext();
@@ -60,7 +62,7 @@ const MaturityLevelsContent = () => {
   };
 
   const handleNewMaturityLevelClick = () => {
-    handleCancel()
+    handleCancel();
     setShowNewMaturityLevelForm(true);
   };
 
@@ -117,9 +119,36 @@ const MaturityLevelsContent = () => {
     });
   };
 
-  const handleEdit = (maturityLevel: any) => {
-    setNewMaturityLevel(maturityLevel);
-    setShowNewMaturityLevelForm(true);
+  const handleEdit = async (maturityLevel: any) => {
+    try {
+      const data = {
+        kitVersionId,
+        index: maturityLevel.index,
+        value: maturityLevel.value,
+        title: maturityLevel.title,
+        description: maturityLevel.description,
+      };
+      await service.updateMaturityLevel(
+        { kitVersionId, maturityLevelId: maturityLevel.id },
+        data,
+        undefined,
+      );
+
+      setShowNewMaturityLevelForm(false);
+      maturityLevels.query();
+      maturityLevelsCompetences.query();
+
+      setNewMaturityLevel({
+        title: "",
+        description: "",
+        index: maturityLevels.data?.items.length + 1 || 1,
+        value: maturityLevels.data?.items.length + 1 || 1,
+        id: null,
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
 
   const handleDelete = async (maturityLevelId: number) => {
@@ -127,14 +156,14 @@ const MaturityLevelsContent = () => {
       await service.deleteMaturityLevel({ kitVersionId, maturityLevelId });
       maturityLevels.query();
       maturityLevelsCompetences.query();
-      handleCancel()
+      handleCancel();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
   };
 
-  const handleReorder = async (newOrder: any[]) => {
+  const debouncedHandleReorder = debounce(async (newOrder: any[]) => {
     try {
       const orders = newOrder.map((item, idx) => ({
         id: item.id,
@@ -142,90 +171,101 @@ const MaturityLevelsContent = () => {
       }));
 
       await service.changeMaturityLevelsOrder({ kitVersionId }, { orders });
-      maturityLevels.query();
       maturityLevelsCompetences.query();
-      handleCancel()
+
+      handleCancel();
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
     }
-  };
+  }, 2000);
 
+  const handleReorder = (newOrder: any[]) => {
+    debouncedHandleReorder(newOrder);
+  };
   return (
     <PermissionControl scopes={["edit-assessment-kit"]}>
-      <QueryBatchData
-        queryBatchData={[maturityLevels, maturityLevelsCompetences]}
-        renderLoading={() => <LoadingSkeleton />}
-        render={([maturityLevelsData, maturityLevelsCompetencesData]) => {
-          return (
-            <Box width="100%">
-              <MaturityLevelsHeader
-                onNewMaturityLevelClick={handleNewMaturityLevelClick}
-                hasMaturityLevels={maturityLevelsData?.items?.length > 0}
-              />
+      <Box width="100%">
+        <MaturityLevelsHeader
+          onNewMaturityLevelClick={handleNewMaturityLevelClick}
+          hasMaturityLevels={
+            maturityLevels.loaded && maturityLevels.data.items.length !== 0
+          }
+        />
+        {maturityLevels.loaded && maturityLevels.data.items.length !== 0 ? (
+          <Typography variant="bodyMedium" mt={1}>
+            <Trans i18nKey="changeOrderHelper" />
+          </Typography>
+        ) : null}
+        <Divider sx={{ my: 1 }} />
 
-              {maturityLevelsData?.items?.length > 0 ? (
-                <Typography variant="bodyMedium" mt={1}>
-                  <Trans i18nKey="changeOrderHelper" />
-                </Typography>
-              ) : null}
+        <QueryBatchData
+          queryBatchData={[maturityLevels]}
+          renderLoading={() => <LoadingSkeletonKitCard />}
+          render={([maturityLevelsData]) => {
+            return (
+              <>
+                {maturityLevelsData?.items?.length > 0 ? (
+                  <>
+                    <Box maxHeight={500} overflow="auto">
+                      <MaturityLevelList
+                        maturityLevels={maturityLevelsData?.items}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        onReorder={handleReorder}
+                      />
+                    </Box>
 
-              <Divider sx={{ my: 1 }} />
-
-              {maturityLevelsData?.items?.length > 0 ? (
-                <>
-                  <Box maxHeight={500} overflow="auto">
-                    <MaturityLevelList
-                      maturityLevels={maturityLevelsData?.items}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      onReorder={handleReorder}
-                    />
-                  </Box>
-                  {showNewMaturityLevelForm && (
-                    <MaturityLevelForm
-                      newMaturityLevel={newMaturityLevel}
-                      handleInputChange={handleInputChange}
-                      handleSave={handleSave}
-                      handleCancel={handleCancel}
-                    />
-                  )}
-
-                  <Box mt={4}>
-                    <Typography variant="headlineSmall" fontWeight="bold">
-                      Competences
-                    </Typography>
-                    <Divider sx={{ my: 1 }} />
-
-                    <CompetencesTable
-                      data={maturityLevelsCompetencesData?.items}
-                      maturityLevelsCompetences={
-                        maturityLevelsCompetencesData?.items
-                      }
-                      kitVersionId={kitVersionId}
-                    />
-                  </Box>
-                </>
-              ) : (
-                <>
-                  {showNewMaturityLevelForm ? (
-                    <MaturityLevelForm
-                      newMaturityLevel={newMaturityLevel}
-                      handleInputChange={handleInputChange}
-                      handleSave={handleSave}
-                      handleCancel={handleCancel}
-                    />
-                  ) : (
-                    <EmptyState
-                      onNewMaturityLevelClick={handleNewMaturityLevelClick}
-                    />
-                  )}
-                </>
-              )}
-            </Box>
-          );
-        }}
-      />
+                    {showNewMaturityLevelForm && (
+                      <MaturityLevelForm
+                        newMaturityLevel={newMaturityLevel}
+                        handleInputChange={handleInputChange}
+                        handleSave={handleSave}
+                        handleCancel={handleCancel}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {showNewMaturityLevelForm ? (
+                      <MaturityLevelForm
+                        newMaturityLevel={newMaturityLevel}
+                        handleInputChange={handleInputChange}
+                        handleSave={handleSave}
+                        handleCancel={handleCancel}
+                      />
+                    ) : (
+                      <EmptyState
+                        onNewMaturityLevelClick={handleNewMaturityLevelClick}
+                      />
+                    )}
+                  </>
+                )}
+              </>
+            );
+          }}
+        />
+        <Box mt={4}>
+          <Typography variant="headlineSmall" fontWeight="bold">
+            <Trans i18nKey="competences" />
+          </Typography>
+          <Divider sx={{ my: 1 }} />
+          {/* Separate Query for Maturity Level Competences */}
+          <QueryBatchData
+            queryBatchData={[maturityLevelsCompetences]}
+            renderLoading={() => <LoadingSkeleton height={200} />}
+            render={([maturityLevelsCompetencesData]) => {
+              return (
+                <CompetencesTable
+                  data={maturityLevelsCompetencesData?.items}
+                  maturityLevelsCompetences={maturityLevelsCompetences}
+                  kitVersionId={kitVersionId}
+                />
+              );
+            }}
+          />{" "}
+        </Box>
+      </Box>
     </PermissionControl>
   );
 };

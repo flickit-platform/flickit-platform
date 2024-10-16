@@ -59,7 +59,6 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
     maxLength,
   );
   useEffect(() => {
-    console.log(isFocused);
     if (isFocused && inputRef?.current) {
       inputRef?.current?.focus();
     } else {

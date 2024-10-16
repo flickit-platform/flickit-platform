@@ -466,7 +466,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.put(
-        `/api/v1/kit-versions/${kitVersionId}/maturity-levels/${maturityLevelId}`,
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels/${maturityLevelId}/`,
         data,
         config,
       );
@@ -528,7 +528,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.put(
-        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}`,
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}/`,
         data,
         config,
       );
@@ -542,7 +542,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.delete(
-        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}`,
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}/`,
         config,
       );
     },

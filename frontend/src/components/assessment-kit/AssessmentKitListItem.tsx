@@ -117,7 +117,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
                 size="small"
                 disabled={!draftVersionId}
                 component={Link }
-                to={`/kit-designer/${draftVersionId}`}
+                to={`kit-designer/${draftVersionId}`}
               >
                 <Trans i18nKey="draft" />
               </Button>

@@ -129,7 +129,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       setLoading(false);
       close();
       onSubmitForm();
-      type ==="draft" && res?.kitId  && navigate(`/kit-designer/${res.kitId}`)
+      type ==="draft" && res?.kitId  && navigate(`kit-designer/${res.kitId}`)
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;

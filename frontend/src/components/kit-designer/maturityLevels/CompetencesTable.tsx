@@ -13,7 +13,7 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 
 interface CompetencesTableProps {
   data: Array<{ id: number; title: string; competences: any[] }>;
-  maturityLevelsCompetences: Array<any>;
+  maturityLevelsCompetences: any;
   kitVersionId: any;
 }
 
@@ -27,14 +27,20 @@ const CompetencesTable = ({
     rowIndex: number | null;
     colIndex: number | null;
     value: string;
-  }>({ rowIndex: null, colIndex: null, value: "" });
+    originalValue: string;
+  }>({ rowIndex: null, colIndex: null, value: "", originalValue: "" });
 
   const handleCellClick = (
     rowIndex: number,
     colIndex: number,
     currentValue: string,
   ) => {
-    setEditState({ rowIndex, colIndex, value: currentValue });
+    setEditState({
+      rowIndex,
+      colIndex,
+      value: currentValue,
+      originalValue: currentValue,
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,20 +50,56 @@ const CompetencesTable = ({
     }));
   };
 
-  const handleSave = async (rowId: number, colId: number) => {
+  const handleSave = async (
+    rowId: number,
+    colId: number,
+    competenceId?: number,
+  ) => {
     try {
+      const newValue = editState.value;
+      const originalValue = editState.originalValue;
+      const isNewValueEmpty = newValue === "" || newValue === "-";
+      const isOriginalValueEmpty =
+        originalValue === "" || originalValue === "-";
+
       const data = {
-        kitVersionId,
+        kitVersionId: Number(kitVersionId),
         affectedLevelId: rowId,
         effectiveLevelId: colId,
-        value: Number(editState.value),
+        value: isNewValueEmpty ? null : Number(newValue),
       };
-      await service.addCompetencyToMaturityLevel(
-        { kitVersionId: kitVersionId },
-        data,
-        undefined,
-      );
-      setEditState({ rowIndex: null, colIndex: null, value: "" });
+
+      if (isOriginalValueEmpty && !isNewValueEmpty) {
+        await service.addCompetencyToMaturityLevel(
+          { kitVersionId: kitVersionId },
+          data,
+          undefined,
+        );
+      } else if (!isOriginalValueEmpty && isNewValueEmpty && competenceId) {
+        await service.deleteCompetencyOfMaturityLevel({
+          kitVersionId: kitVersionId,
+          levelCompetenceId: competenceId,
+        });
+      } else if (
+        !isOriginalValueEmpty &&
+        !isNewValueEmpty &&
+        newValue !== originalValue &&
+        competenceId
+      ) {
+        await service.updateCompetencyOfMaturityLevel(
+          { kitVersionId: kitVersionId, levelCompetenceId: competenceId },
+          data,
+          undefined,
+        );
+      }
+
+      setEditState({
+        rowIndex: null,
+        colIndex: null,
+        value: "",
+        originalValue: "",
+      });
+      maturityLevelsCompetences.query(); // Refresh data
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -78,7 +120,7 @@ const CompetencesTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {maturityLevelsCompetences?.map((row: any, rowIndex: number) => (
+          {data?.map((row: any, rowIndex: number) => (
             <TableRow
               key={row.index}
               sx={{
@@ -118,9 +160,12 @@ const CompetencesTable = ({
                         type="number"
                         value={editState.value}
                         onChange={handleChange}
-                        onBlur={() => handleSave(row.id, column.id)}
+                        onBlur={() =>
+                          handleSave(row.id, column.id, competence?.id)
+                        }
                         onKeyDown={(e) => {
-                          if (e.key === "Enter") handleSave(row.id, column.id);
+                          if (e.key === "Enter")
+                            handleSave(row.id, column.id, competence?.id);
                         }}
                         size="small"
                         sx={{

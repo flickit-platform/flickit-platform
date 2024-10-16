@@ -153,7 +153,7 @@ const Routes = () => {
           <Route path="/compare" element={<CompareScreen />} />
           <Route path="/compare/result" element={<CompareResultScreen />} />
 
-          <Route path="/kit-designer/:kitVersionId" element={<KitDesignerScreen />} />
+          <Route path="/user/:accountTab/:expertGroupId/kit-designer/:kitVersionId" element={<KitDesignerScreen />} />
         </Route>
 
         {/* Any other routes results in 404 page */}

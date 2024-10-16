@@ -4,21 +4,20 @@ import SupTitleBreadcrumb from "@/components/common/SupTitleBreadcrumb";
 import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { useConfigContext } from "@/providers/ConfgProvider";
-
+import { useParams } from "react-router-dom";
 
 const KitDesignerTitle = () => {
   const { config } = useConfigContext();
+  const { expertGroupId } = useParams();
 
   useEffect(() => {
-    setDocumentTitle(
-      `${t("kitDesigner")}`,
-      config.appTitle,
-    );
+    setDocumentTitle(`${t("kitDesigner")}`, config.appTitle);
   }, []);
 
   return (
     <Title
-      backLink="/"
+      backLink={"/"}
+      size="large"
       wrapperProps={{
         sx: {
           flexDirection: { xs: "column", md: "row" },
@@ -29,13 +28,20 @@ const KitDesignerTitle = () => {
         <SupTitleBreadcrumb
           routes={[
             {
-              title: `${t("kitDesigner")}`,
+              title: t("expertGroups") as string,
+              to: `/user/expert-groups`,
             },
+            // {
+            //   // title: expertGroup?.title,
+            //   to: `/user/expert-groups/${expertGroupId}`,
+            // },
+
+            { title: `${t("kitDesigner")}` },
           ]}
           displayChip
         />
       }
-    > </Title>
+    ></Title>
   );
 };
 

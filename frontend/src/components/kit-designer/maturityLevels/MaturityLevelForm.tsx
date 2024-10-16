@@ -46,6 +46,7 @@ const MaturityLevelForm = ({
       p={0.25}
     >
       <TextField
+        required
         id="new-maturity"
         type="number"
         name="value"
@@ -67,6 +68,7 @@ const MaturityLevelForm = ({
 
     <Box width="100%" mx={1}>
       <TextField
+        required
         label={<Trans i18nKey="title" />}
         name="title"
         value={newMaturityLevel.title}
@@ -89,6 +91,7 @@ const MaturityLevelForm = ({
       <TextField
         label={<Trans i18nKey="description" />}
         name="description"
+        required
         value={newMaturityLevel.description}
         onChange={handleInputChange}
         fullWidth
@@ -97,7 +100,7 @@ const MaturityLevelForm = ({
         minRows={2}
         maxRows={3}
         sx={{
-          mt: 0,
+          mt: 1,
           fontSize: 14,
           "& .MuiInputBase-root": {
             fontSize: 14,
