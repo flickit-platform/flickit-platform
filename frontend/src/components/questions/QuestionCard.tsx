@@ -662,9 +662,9 @@ const AnswerTemplate = (props: {
             is_farsi
               ? {
                   fontSize: "1.2rem",
-                  mr: "auto",
+                  mr: theme.direction === "rtl" ? "unset" : "auto",
                 }
-              : { fontSize: "1.2rem", ml: "auto" }
+              : { fontSize: "1.2rem", ml:theme.direction === "rtl" ?  "unset"  :  "auto"}
           }
           onClick={submitQuestion}
         >
@@ -1998,7 +1998,7 @@ const CreateDropZone = (props: any) => {
               }}
               onClick={() => setDropZone(null)}
             >
-              Remove
+             <Trans i18nKey={"remove"} />
             </Button>
             {typeFile == "gif" && (
               <img
@@ -2935,7 +2935,7 @@ const MyDropzone = (props: any) => {
               }}
               onClick={() => setDropZone(null)}
             >
-              Remove
+              <Trans i18nKey={"remove"} />
             </Button>
             {typeFile == "gif" && (
               <img

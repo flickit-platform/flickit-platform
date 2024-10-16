@@ -308,7 +308,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   overflow: "hidden",
                   mb: 2,
                   borderRadius: "8px",
-                  direction: `${is_farsi ? "rtl" : "ltr"}`,
+                  direction: `${theme.direction == "rtl" ? "rtl" : "ltr"}`,
                 }}
                 elevation={3}
               >
@@ -420,8 +420,8 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       variant="contained"
                       sx={{
                         mt: 0.2,
-                        ml: `${is_farsi ? "0" : "auto"}`,
-                        mr: `${is_farsi ? "auto" : "0"}`,
+                        ml: `${theme.direction == "rtl" ? "0" : "auto"}`,
+                        mr: `${theme.direction == "rtl" ? "auto" : "0"}`,
                       }}
                       onClick={(e) => {
                         e.stopPropagation();

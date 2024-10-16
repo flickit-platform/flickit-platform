@@ -507,7 +507,7 @@
   "evidenceDetails": "Evidence Details",
   "needsToAddAttachments": "Needs to add attachments (after being created)",
   "createEvidence": "Create evidence",
-  "evidenceAttachmentType": "New {{value}} evidence (Attachments)",
+  "evidenceAttachmentType": "New {{value}} Evidence (Attachments)",
   "finish": "Finish",
   "atLeastCharacter": "at least 3 character",
   "warning": "Warning",
@@ -562,5 +562,7 @@
   "chooseAnotherQuestionnaire": "Choose another questionnaire",
   "evidenceType": "Evidence type",
   "modified": "Modified",
-  "attachments": "Attachments"
+  "attachments": "Attachments",
+  "negative": "Negative",
+  "positive": "Positive"
 }
