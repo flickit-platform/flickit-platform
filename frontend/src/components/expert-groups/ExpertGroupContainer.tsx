@@ -1026,7 +1026,10 @@ const AssessmentKitsList = (props: any) => {
                   </MenuItem> */}
                 </Menu>
                 <AssessmentKitCEFromDialog {...dialogProps} />
-                <AssessmentKitCEFromDialog {...kitDesignerDialogProps} />
+                <AssessmentKitCEFromDialog
+                  {...kitDesignerDialogProps}
+                  onSubmitForm={assessmentKitQuery.query}
+                />
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}
                   onSubmitForm={assessmentKitQuery.query}

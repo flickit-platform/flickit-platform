@@ -67,7 +67,7 @@ const SubjectContainer = () => {
             m="auto"
             pb={3}
             sx={{
-              px: { xl: 30, lg: 18, xs: 2, sm: 3 },
+              px: { xl: 30, lg: 12, xs: 2, sm: 3 },
             }}
             gap="1.5rem"
           >
