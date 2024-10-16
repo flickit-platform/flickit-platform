@@ -447,7 +447,7 @@ export const createService = (
       );
     },
     postMaturityLevel(
-      { kitVersionId }: { kitVersionId: TId },
+      { kitVersionId }: { kitVersionId: any },
       data: any,
       config?: AxiosRequestConfig<any>,
     ) {
@@ -501,7 +501,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.put(
-        `/api/v1/kit-versions/${kitVersionId}/maturity-levels-change-order`,
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels-change-order/`,
         data,
         config,
       );
@@ -513,7 +513,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.post(
-        `/api/v1/kit-versions/${kitVersionId}/level-competences`,
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/`,
         data,
         config,
       );

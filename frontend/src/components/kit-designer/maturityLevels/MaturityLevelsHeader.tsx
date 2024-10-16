@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
+import Link from "@mui/material/Link";
 
 interface MaturityLevelsHeaderProps {
   onNewMaturityLevelClick: () => void;
@@ -13,7 +14,7 @@ const MaturityLevelsHeader = ({
   hasMaturityLevels,
 }: MaturityLevelsHeaderProps) => (
   <>
-    <Box>
+    <div id="maturity-header">
       <Typography variant="headlineSmall" fontWeight="bold">
         <Trans i18nKey="maturityLevels" />
       </Typography>
@@ -21,15 +22,31 @@ const MaturityLevelsHeader = ({
       <Typography variant="bodyMedium">
         <Trans i18nKey="maturityLevelsKitDesignerDescrption" />
       </Typography>
-    </Box>
-    <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+    </div>
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      mt={4}
+    >
       <Typography variant="headlineSmall" fontWeight="bold">
         <Trans i18nKey="maturityLevelsList" />
       </Typography>
       {hasMaturityLevels ? (
-        <Button variant="contained" onClick={onNewMaturityLevelClick}>
-          <Trans i18nKey="newMaturityLevel" />
-        </Button>
+        <Link
+          href="#new-maturity"
+          sx={{
+            textDecoration: "none",
+            opacity: 0.9,
+            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Button variant="contained" onClick={onNewMaturityLevelClick}>
+            <Trans i18nKey="newMaturityLevel" />
+          </Button>
+        </Link>
       ) : null}
     </Box>{" "}
   </>

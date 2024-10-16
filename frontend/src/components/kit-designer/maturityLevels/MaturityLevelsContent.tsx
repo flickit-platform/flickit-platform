@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
@@ -14,10 +14,12 @@ import CompetencesTable from "./CompetencesTable";
 import EmptyState from "./EmptyState";
 import { Trans } from "react-i18next";
 import { useParams } from "react-router-dom";
+import toastError from "@/utils/toastError";
+import { ICustomError } from "@/utils/CustomError";
 
 const MaturityLevelsContent = () => {
   const { service } = useServiceContext();
-  const { kitVersionId } = useParams();
+  const { kitVersionId = "" } = useParams();
   const maturityLevels = useQuery({
     service: (args = { kitVersionId }, config) =>
       service.getMaturityLevels(args, config),
@@ -32,14 +34,28 @@ const MaturityLevelsContent = () => {
   const [newMaturityLevel, setNewMaturityLevel] = useState({
     title: "",
     description: "",
-    index: 2,
+    index: 1,
+    value: 1,
+    id: null,
   });
+
+  useEffect(() => {
+    if (maturityLevels.data?.items?.length) {
+      setNewMaturityLevel((prev) => ({
+        ...prev,
+        index: maturityLevels.data.items.length + 1,
+        value: maturityLevels.data.items.length + 1,
+        id: null,
+      }));
+    }
+  }, [maturityLevels.data]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const parsedValue = name === "value" ? parseInt(value) || 1 : value;
     setNewMaturityLevel((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: parsedValue,
     }));
   };
 
@@ -52,14 +68,40 @@ const MaturityLevelsContent = () => {
       const data = {
         kitVersionId,
         index: newMaturityLevel.index,
-        value: newMaturityLevel.index,
+        value: newMaturityLevel.value,
         title: newMaturityLevel.title,
         description: newMaturityLevel.description,
       };
-      await service.postMaturityLevel({ kitVersionId: 501 }, data, undefined);
+      if (newMaturityLevel.id) {
+        await service.updateMaturityLevel(
+          { kitVersionId, maturityLevelId: newMaturityLevel.id },
+          data,
+          undefined,
+        );
+      } else {
+        await service.postMaturityLevel(
+          { kitVersionId: kitVersionId },
+          data,
+          undefined,
+        );
+      }
+
+      // Reset form and re-fetch data after saving
       setShowNewMaturityLevelForm(false);
-    } catch (error) {
-      console.error("Failed to save new maturity level", error);
+      maturityLevels.query();
+      maturityLevelsCompetences.query();
+
+      // Reset the form values
+      setNewMaturityLevel({
+        title: "",
+        description: "",
+        index: maturityLevels.data?.items.length + 1 || 1,
+        value: maturityLevels.data?.items.length + 1 || 1,
+        id: null,
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
     }
   };
 
@@ -68,8 +110,42 @@ const MaturityLevelsContent = () => {
     setNewMaturityLevel({
       title: "",
       description: "",
-      index: maturityLevels.data?.length + 1 || 0,
+      index: maturityLevels.data.items.length + 1 || 1,
+      value: maturityLevels.data.items.length + 1 || 1,
+      id: null,
     });
+  };
+
+  const handleEdit = (maturityLevel: any) => {
+    setNewMaturityLevel(maturityLevel);
+    setShowNewMaturityLevelForm(true);
+  };
+
+  const handleDelete = async (maturityLevelId: number) => {
+    try {
+      await service.deleteMaturityLevel({ kitVersionId, maturityLevelId });
+      maturityLevels.query();
+      maturityLevelsCompetences.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const handleReorder = async (newOrder: any[]) => {
+    try {
+      const orders = newOrder.map((item, idx) => ({
+        id: item.id,
+        index: idx + 1,
+      }));
+
+      await service.changeMaturityLevelsOrder({ kitVersionId }, { orders });
+      maturityLevels.query();
+      maturityLevelsCompetences.query();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
 
   return (
@@ -95,11 +171,14 @@ const MaturityLevelsContent = () => {
 
               {maturityLevelsData?.items?.length > 0 ? (
                 <>
-                  <MaturityLevelList
-                    maturityLevels={maturityLevelsData?.items}
-                  />
-
-                  {/* Form rendered at the end of the MaturityLevelList */}
+                  <Box maxHeight={500} overflow="auto">
+                    <MaturityLevelList
+                      maturityLevels={maturityLevelsData?.items}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onReorder={handleReorder}
+                    />
+                  </Box>
                   {showNewMaturityLevelForm && (
                     <MaturityLevelForm
                       newMaturityLevel={newMaturityLevel}
@@ -113,19 +192,32 @@ const MaturityLevelsContent = () => {
                     <Typography variant="headlineSmall" fontWeight="bold">
                       Competences
                     </Typography>
+                    <Divider sx={{ my: 1 }} />
 
                     <CompetencesTable
                       data={maturityLevelsCompetencesData?.items}
                       maturityLevelsCompetences={
                         maturityLevelsCompetencesData?.items
                       }
+                      kitVersionId={kitVersionId}
                     />
                   </Box>
                 </>
               ) : (
-                <EmptyState
-                  onNewMaturityLevelClick={handleNewMaturityLevelClick}
-                />
+                <>
+                  {showNewMaturityLevelForm ? (
+                    <MaturityLevelForm
+                      newMaturityLevel={newMaturityLevel}
+                      handleInputChange={handleInputChange}
+                      handleSave={handleSave}
+                      handleCancel={handleCancel}
+                    />
+                  ) : (
+                    <EmptyState
+                      onNewMaturityLevelClick={handleNewMaturityLevelClick}
+                    />
+                  )}
+                </>
               )}
             </Box>
           );

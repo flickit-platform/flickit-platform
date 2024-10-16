@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
+import Link from "@mui/material/Link";
 import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -13,6 +14,7 @@ interface MaturityLevelFormProps {
     title: string;
     description: string;
     index: number;
+    value: number;
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSave: () => void;
@@ -44,8 +46,10 @@ const MaturityLevelForm = ({
       p={0.25}
     >
       <TextField
+        id="new-maturity"
         type="number"
-        value={newMaturityLevel.index}
+        name="value"
+        value={newMaturityLevel.value}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
@@ -59,12 +63,6 @@ const MaturityLevelForm = ({
           },
         }}
       />
-
-      <Divider orientation="horizontal" flexItem sx={{ mx: 1 }} />
-
-      <IconButton size="small">
-        <SwapVertRoundedIcon fontSize="small" />
-      </IconButton>
     </Box>
 
     <Box width="100%" mx={1}>
@@ -114,12 +112,24 @@ const MaturityLevelForm = ({
 
     {/* Check and Close Buttons */}
     <Box display="flex" alignItems="center">
-      <IconButton size="small" color="primary" onClick={handleSave}>
-        <CheckIcon />
-      </IconButton>
-      <IconButton size="small" color="secondary" onClick={handleCancel}>
-        <CloseIcon />
-      </IconButton>
+      <Link
+        href="#maturity-header"
+        sx={{
+          textDecoration: "none",
+          opacity: 0.9,
+          fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        <IconButton size="small" color="primary" onClick={handleSave}>
+          <CheckIcon />
+        </IconButton>
+        <IconButton size="small" color="secondary" onClick={handleCancel}>
+          <CloseIcon />
+        </IconButton>
+      </Link>
     </Box>
   </Box>
 );
