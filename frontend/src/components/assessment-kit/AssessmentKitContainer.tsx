@@ -27,7 +27,6 @@ import { useConfigContext } from "@/providers/ConfgProvider";
 import { ECustomErrorType } from "@/types";
 import { ErrorNotFoundOrAccessDenied } from "../common/errors/ErrorNotFoundOrAccessDenied";
 import { theme } from "@/config/theme";
-import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 const AssessmentKitContainer = () => {
   const { service } = useServiceContext();
@@ -242,7 +241,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                    {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(creationTime)) : formatDate(creationTime)}
+                    {theme.direction == "rtl" ?   formatDate(creationTime, "Shamsi") :  formatDate(creationTime, "Miladi")}
                 </Box>
               </Box>
               <Box
@@ -258,7 +257,7 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                    {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime) }
+                    {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
                 </Box>
               </Box>
             </Box>

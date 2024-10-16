@@ -42,7 +42,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { theme } from "@config/theme";
-import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 export const AssessmentSettingGeneralBox = (props: {
   AssessmentInfo: any;
@@ -281,8 +280,8 @@ export const AssessmentSettingGeneralBox = (props: {
                       lineHeight={"normal"}
                     >
                       {index == 0 && displayName}
-                      {index == 1 && (localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(creationTime)) : formatDate(creationTime))}
-                      {index == 2 && (localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(lastModificationTime)) : formatDate(lastModificationTime))}
+                      {index == 1 && (theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi"))}
+                      {index == 2 && (theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi"))}
                       {index == 3 && (
                         <Link
                           style={{ textDecoration: "none", color: "inherit" }}

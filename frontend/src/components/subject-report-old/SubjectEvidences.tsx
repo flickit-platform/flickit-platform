@@ -24,7 +24,6 @@ import arrowBtn from "@/assets/svg/arrow.svg";
 import attachmentIcon from "@/assets/svg/AttachmentIcon.svg";
 import { theme } from "@config/theme";
 import useScreenResize from "@/utils/useScreenResize";
-import {convertMiladiToShamsi} from "@utils/gregorianToJalali";
 
 export enum evidenceType {
   positive = "POSITIVE",
@@ -359,7 +358,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                        {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(evidence?.creationTime)) : formatDate(evidence?.creationTime)}
+                        {theme.direction == "rtl" ? formatDate(evidence?.creationTime, "Shamsi") : formatDate(evidence?.creationTime, "Miladi")}
                     </Typography>
                   )}
                   {index == 4 && (
@@ -370,7 +369,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                        {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(evidence?.lastModificationTime)) : formatDate(evidence?.lastModificationTime)}
+                        {theme.direction == "rtl" ? formatDate(evidence?.lastModificationTime, "Shamsi") : formatDate(evidence?.lastModificationTime, "Miladi")}
                     </Typography>
                   )}
                 </Box>
@@ -620,7 +619,7 @@ const DetailExpend = (props: any) => {
             textAlign: "left",
           }}
         >
-          BY {displayName} / {localStorage.getItem("lang") == "fa" ? convertMiladiToShamsi(formatDate(creationTime)) : formatDate(creationTime)}
+          BY {displayName} / {theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi")}
         </Typography>
       )}
       {expendedDetail && (
