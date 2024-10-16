@@ -968,60 +968,35 @@ const AssessmentKitsList = (props: any) => {
             {hasAccess && (
               <>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   size="small"
-                  onClick={handleClick}
-                  endIcon={
-                    open ? (
-                      <ArrowDropUpRoundedIcon />
-                    ) : (
-                      <ArrowDropDownRoundedIcon />
-                    )
-                  }
-                >
-                  <Trans i18nKey="newAssessment" />
-                </Button>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  PaperProps={{
-                    style: {
-                      maxHeight: 48 * 4.5,
-                    },
+                  onClick={() => {
+                    excelToDslDialogProps.openDialog({
+                      context: { type: "convert" },
+                    });
                   }}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      dialogProps.openDialog({
-                        context: { type: "create" },
-                      });
-                    }}
-                  >
-                    <Trans i18nKey="viaDSL" />
-                  </MenuItem>
-                  {/* <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      kitDesignerDialogProps.openDialog({
-                        context: { type: "draft" },
-                      });
-                    }}
-                  >
-                    <Trans i18nKey="viaKitDesigner" />
-                  </MenuItem> */}
-                  <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      excelToDslDialogProps.openDialog({
-                        context: { type: "convert" },
-                      });
-                    }}
-                  >
-                    <Trans i18nKey="convertExcelToDsl" />
-                  </MenuItem>
-                </Menu>
+                  <Trans i18nKey="convertExcelToDsl" />
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() =>
+                    dialogProps.openDialog({
+                      context: { type: "create" },
+                    })
+                  }
+                  // endIcon={
+                  //   open ? (
+                  //     <ArrowDropUpRoundedIcon />
+                  //   ) : (
+                  //     <ArrowDropDownRoundedIcon />
+                  //   )
+                  // }
+                >
+                  <Trans i18nKey="createAssessmentKit" />
+                </Button>
+
                 <AssessmentKitCEFromDialog
                   {...dialogProps}
                   onSubmitForm={assessmentKitQuery.query}
