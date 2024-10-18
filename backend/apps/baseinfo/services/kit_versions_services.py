@@ -61,7 +61,7 @@ def create_level_competence(request, kit_version_id):
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
 
-    if response.status_code == 200:
+    if response.status_code == 201:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 

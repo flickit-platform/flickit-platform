@@ -396,14 +396,14 @@ const AssessmentKit = (props: any) => {
                 <Box component="ul" mt={3}>
                   {maturityLevels.map((item: any) => {
                     return (
-                      <Box sx={{ ml: 4 }} component="li">
+                      <Box sx={{ ml: 4, mt: 1 }} component="li">
                         <Typography
                           variant="body2"
                           sx={{
                             my: 2,
-                            textAlign: "justify",
+                            textAlign: "start",
                             textJustify: "inter-word",
-                            display: "flex",
+                            display: "inline",
                           }}
                         >
                           <Box
@@ -436,6 +436,7 @@ const AssessmentKit = (props: any) => {
                       mb={2}
                       key={index}
                       sx={{
+                        mt: 1,
                         fontSize: "1.2rem",
                         listStyleType: "disc",
                         ml: theme.direction === "ltr" ? 4 : "unset",
@@ -457,6 +458,7 @@ const AssessmentKit = (props: any) => {
                         subject?.attributes?.map((att: any, index: number) => (
                           <Box
                             sx={{
+                              mt: 1,
                               ml: 4,
                               position: "relative",
                               "&:before": {
@@ -476,9 +478,9 @@ const AssessmentKit = (props: any) => {
                               variant="body2"
                               sx={{
                                 my: 2,
-                                textAlign: "justify",
+                                textAlign: "start",
                                 textJustify: "inter-word",
-                                display: "flex",
+                                display: "inline",
                               }}
                             >
                               <Box
@@ -513,13 +515,24 @@ const AssessmentKit = (props: any) => {
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any, index: number) => {
                   return (
-                    <Box
-                      component="li"
-                      mb={2}
-                      key={index}
-                      sx={{ display: "flex" }}
-                    >
-                      <b>{questionnaire.title}</b>: {questionnaire.description}
+                    <Box sx={{ ml: 4, mt: 2 }} component="li">
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          my: 2,
+                          textAlign: "start",
+                          textJustify: "inter-word",
+                          display: "inline",
+                        }}
+                      >
+                        <Box component="span" fontSize="1rem" fontWeight="bold">
+                          {questionnaire.title}
+                        </Box>
+                        :{" "}
+                        <Box component="span" fontSize="1rem">
+                          {questionnaire.description}
+                        </Box>
+                      </Typography>
                     </Box>
                   );
                 })}

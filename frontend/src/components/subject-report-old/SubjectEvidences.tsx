@@ -216,13 +216,13 @@ const EvidenceAttachmentsDialogs = (props: any) => {
   const { service } = useServiceContext();
 
   const detailItems = [
-    "Description",
-    "Evidence type",
-    "Creator",
-    "Created",
-    "Modified",
+    "description",
+    "evidenceType",
+    "creator",
+    "created",
+    "modified",
   ];
-  const questionItems = ["Questionnaire", "Question", "Options", "Confidence"];
+  const questionItems = ["questionnaire", "question", "options", "confidence"];
 
   const evidenceLoadQuery = useQuery({
     service: (args = { evidenceID: evidenceDialog.id }, config) =>
@@ -292,7 +292,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
           <Typography
             sx={{ ...theme.typography.headlineSmall, color: "#2B333B" }}
           >
-            Evidence
+            <Trans i18nKey={"evidence"}/>
           </Typography>
           <Box
             sx={{ width: "100%", background: "#C7CCD1", height: "0.5px" }}
@@ -315,7 +315,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       textAlign: theme.direction == "rtl" ? "right" : "left",
                     }}
                   >
-                    {detailItem}:
+                  <Trans i18nKey={`${detailItem}`} />:
                   </Typography>
                   {index == 0 && (
                     <Typography
@@ -384,7 +384,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
               textAlign: theme.direction == "rtl" ? "right" : "left",
             }}
           >
-            Attachments:
+         <Trans i18nKey={`attachments`} />:
           </Typography>
           {evidenceAttachment.map((item, index) => {
             const { name, exp } = linkInfo(item);
@@ -473,7 +473,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       textAlign: theme.direction == "rtl" ? "right" : "left",
                     }}
                   >
-                    {questionItem}:
+                    <Trans i18nKey={`${questionItem}`} />:
                   </Typography>
                   {index == 0 && (
                     <Box

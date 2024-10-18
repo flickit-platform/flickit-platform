@@ -182,6 +182,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   margin: "0 auto",
+                  width: "100%"
                 }}
                 data-cy="assessment-card-title"
               >
