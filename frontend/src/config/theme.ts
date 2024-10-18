@@ -423,13 +423,13 @@ export const theme = createTheme({
 
           // Adding hover state for background color and text color
           '&:hover': {
-            backgroundColor: "#f0f0f0",
-            color: "#2466A8",
+            // backgroundColor: "#f0f0f0",
+            // color: "#2466A8",
           },
           '&.Mui-selected': {
-            color: "#2466A8",
+            color: palette.secondary.main,
             fontWeight: "bold",
-            background: "rgba(36, 102, 168, 0.08)"
+            // background: "rgba(36, 102, 168, 0.08)"
           },
           '&.MuiTabs-indicator': {
             backgroundColor: "#2466A8"
