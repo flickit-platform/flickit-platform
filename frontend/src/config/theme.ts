@@ -427,6 +427,10 @@ export const theme = createTheme({
 
     MuiSelect: {
       styleOverrides: {
+        select: {
+          paddingRight: is_farsi ? "unset !important"  : "24px !important",
+          paddingLeft: is_farsi ? "24px !important" : "unset !important",
+        },
         icon: {
             left: is_farsi ? "7px" : "unset",
             right: is_farsi ? "unset" : "7px",
@@ -467,6 +471,22 @@ export const theme = createTheme({
       },
     },
 
+    MuiIconButton:{
+      styleOverrides:{
+        root:{
+          marginRight: is_farsi ? "unset" : "-12px",
+          marginLeft: is_farsi ? "-12px" : "unset",
+        },
+     }
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          marginRight:is_farsi? "8px" : "unset",
+          marginLeft: is_farsi ? "unset" : "8px"
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         root: {
