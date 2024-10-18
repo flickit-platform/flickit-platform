@@ -1014,7 +1014,7 @@ const AssessmentKitsList = (props: any) => {
                   >
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  {/* <MenuItem
+                  <MenuItem
                     onClick={() => {
                       handleClose();
                       kitDesignerDialogProps.openDialog({
@@ -1023,7 +1023,7 @@ const AssessmentKitsList = (props: any) => {
                     }}
                   >
                     <Trans i18nKey="viaKitDesigner" />
-                  </MenuItem> */}
+                  </MenuItem>
                 </Menu>
                 <AssessmentKitCEFromDialog {...dialogProps} />
                 <AssessmentKitCEFromDialog
