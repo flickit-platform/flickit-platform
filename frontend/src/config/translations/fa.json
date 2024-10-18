@@ -1,5 +1,6 @@
 {
-
+    "shortTitleInfo": "عنوان بسیار کوتاه (چند کاراکتر) برای پرداختن به محصول مورد ارزیابی در گزارش ها.",
+    "role": "نقش",
     "requiredFieldError": "این فیلد الزامی است.",
     "minLengthFieldError": "لطفا حداقل {{length}} کاراکتر وارد کنید.",
     "signOutOfYourAccount": "از حساب کاربری خود خارج شوید.",

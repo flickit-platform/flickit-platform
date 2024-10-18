@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
@@ -162,7 +162,7 @@ export default function MemberList(props: any) {
                       },
                     }}
                   >
-                    {column.label}
+                      <Trans i18nKey={`${column.label}`} />
                   </TableCell>
                 ))}
               </TableRow>

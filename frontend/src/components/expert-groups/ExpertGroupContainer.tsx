@@ -710,7 +710,7 @@ const Invitees = (props: any) => {
                         }}
                       />
                       <Typography variant="body2">
-                        {formatDate(inviteExpirationDate)}
+                          {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
                       </Typography>
                     </Box>
                   </Box>
@@ -1338,7 +1338,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 }}
                               />
                               <Typography variant="body2">
-                                {formatDate(inviteExpirationDate)}
+                                  {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
                               </Typography>
                             </Box>
                             <MemberActions

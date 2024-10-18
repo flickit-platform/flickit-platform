@@ -556,6 +556,8 @@
   "Weak": "Weak",
   "Elementary": "Elementary",
   "strengths": "strengths",
+  "draft": "Draft",
+  "role": "Role",
   "completelyUnsure": "Completely unsure",
   "fairlyUnsure": "Fairly unsure",
   "somewhatUnsure": "Somewhat unsure",

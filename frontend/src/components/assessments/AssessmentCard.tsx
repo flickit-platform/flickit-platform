@@ -44,6 +44,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Tooltip from "@mui/material/Tooltip";
 import { Chip } from "@mui/material";
 import ConfidenceLevel from "@/utils/confidenceLevel/confidenceLevel";
+import {theme} from "@config/theme";
 
 const AssessmentCard = (props: IAssessmentCardProps) => {
   const [calculateResault, setCalculateResault] = useState<any>();
@@ -193,7 +194,7 @@ const AssessmentCard = (props: IAssessmentCardProps) => {
                 sx={{ padding: "1px 4px", textAlign: "center" }}
               >
                 <Trans i18nKey="lastUpdated" />{" "}
-                {formatDate(lastModificationTime)}
+                  {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
               </Typography>
             </Box>
           </Grid>
