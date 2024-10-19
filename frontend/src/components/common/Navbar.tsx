@@ -770,7 +770,8 @@ const SpacesButton = () => {
           <Box
             sx={{
               minWidth: "8px",
-              ml: 0.6,
+              ml: theme.direction === "rtl" ? "unset" : 0.6,
+              mr: theme.direction === "rtl" ? 0.6 : "unset",
               px: 0.2,
               borderLeft: "1px solid #80808000",
               transition: "border .1s ease",
