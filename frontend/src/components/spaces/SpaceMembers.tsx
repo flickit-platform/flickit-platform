@@ -208,7 +208,12 @@ export const SpaceMembers = (props: any) => {
                               sx={{ width: 34, height: 34 }}
                             ></Avatar>
                           </Box>
-                          <Box ml={2}>{displayName}</Box>
+                          <Box
+                          style={{
+                            marginRight: theme.direction == "rtl" ? "1rem" : "unset",
+                            marginLeft: theme.direction == "rtl" ? "unset" : "1rem"
+                          }}
+                          >{displayName}</Box>
                         </Box>
                         <Box
                           ml={`${is_farsi ? 0 : "auto"}`}
