@@ -298,7 +298,7 @@ const Uploader = (props: IUploadProps) => {
           {file || loading ? (
             <List
               dense={true}
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", direction: "ltr" }}
               onClick={(e: any) => {
                 loading && e.stopPropagation();
               }}
@@ -362,8 +362,7 @@ const Uploader = (props: IUploadProps) => {
                     maxWidth: "40px",
                     maxHeight: "40px",
                     overflow: "hidden",
-                    marginRight: theme.direction === "ltr" ? 1.5 : "unset",
-                    marginLeft: theme.direction === "rtl" ? 1.5 : "unset",
+                    mx: 1.5 ,
                     display: { xs: "none", sm: "inline-flex" },
                   }}
                 >
@@ -434,7 +433,8 @@ const Uploader = (props: IUploadProps) => {
               <FormLabel
                 sx={{
                   ...styles.centerV,
-                  pl: 2,
+                  pl: theme.direction == "ltr" ? 2 : "unset",
+                  pr: theme.direction == "rtl" ? 2 : "unset",
                   height: "40px",
                   fontSize: "1rem",
                   cursor: "pointer",
