@@ -47,11 +47,13 @@ const AssessmentKitExpertViewContainer = () => {
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
   const [expertGroup, setExpertGroup] = useState<any>();
   const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
+  const [hasActiveVersion, setHasActiveVersion] = useState<any>(false);
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
 
   const AssessmentKitDetails = async () => {
-    const data: AssessmentKitDetailsType =
-      await fetchAssessmentKitDetailsQuery.query();
+    const data: AssessmentKitDetailsType = hasActiveVersion
+      ? await fetchAssessmentKitDetailsQuery.query()
+      : undefined;
     setDetails(data);
   };
   const handleDownload = async () => {
@@ -73,7 +75,7 @@ const AssessmentKitExpertViewContainer = () => {
     if (!loaded) {
       AssessmentKitDetails();
     }
-  }, [loaded, update]);
+  }, [loaded, update, hasActiveVersion]);
   useEffect(() => {
     setDocumentTitle(
       `${t("assessmentKit")}: ${assessmentKitTitle || ""}`,
@@ -148,6 +150,7 @@ const AssessmentKitExpertViewContainer = () => {
           <AssessmentKitSectionGeneralInfo
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
+            setHasActiveVersion={setHasActiveVersion}
           />
           <UpdateAssessmentKitDialog
             setForceUpdate={setForceUpdate}

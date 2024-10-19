@@ -17,7 +17,7 @@ import toastError from "@utils/toastError";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import { useForm } from "react-hook-form";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
@@ -40,11 +40,12 @@ import { theme } from "@/config/theme";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
+  setHasActiveVersion: any
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo,
 ) => {
-  const { setExpertGroup, setAssessmentKitTitle } = props;
+  const { setExpertGroup, setAssessmentKitTitle,setHasActiveVersion } = props;
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -56,8 +57,13 @@ const AssessmentKitSectionGeneralInfo = (
   const fetchAssessmentKitStatsQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.fetchAssessmentKitStats(args, config),
-    runOnMount: true,
+    runOnMount: false,
   });
+  useEffect(() => {
+    if (fetchAssessmentKitInfoQuery?.data?.hasActiveVersion) {
+      fetchAssessmentKitStatsQuery.query();
+    }
+  }, [fetchAssessmentKitInfoQuery.data]);
 
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
@@ -114,6 +120,7 @@ const AssessmentKitSectionGeneralInfo = (
             about,
             tags,
             editable,
+            hasActiveVersion
           } = info as AssessmentKitInfoType;
           const {
             creationTime,
@@ -129,6 +136,7 @@ const AssessmentKitSectionGeneralInfo = (
           } = stats as AssessmentKitStatsType;
           setExpertGroup(expertGroup);
           setAssessmentKitTitle(title);
+          setHasActiveVersion(hasActiveVersion)
           return (
             <Grid container spacing={4}>
               <Grid item xs={12} md={7}>
@@ -368,7 +376,10 @@ const AssessmentKitSectionGeneralInfo = (
                       <InfoItem
                         bg="white"
                         info={{
-                          item: theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi"),
+                          item:
+                            theme.direction == "rtl"
+                              ? formatDate(creationTime, "Shamsi")
+                              : formatDate(creationTime, "Miladi"),
                           title: t("creationDate"),
                         }}
                       />
@@ -379,7 +390,10 @@ const AssessmentKitSectionGeneralInfo = (
                       <InfoItem
                         bg="white"
                         info={{
-                          item: theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi"),
+                          item:
+                            theme.direction == "rtl"
+                              ? formatDate(lastModificationTime, "Shamsi")
+                              : formatDate(lastModificationTime, "Miladi"),
                           title: t("lastUpdated"),
                         }}
                       />
