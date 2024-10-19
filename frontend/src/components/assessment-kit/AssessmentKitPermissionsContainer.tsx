@@ -64,20 +64,20 @@ const AssessmentKitPermisson = (props: any) => {
     const columns: readonly Column[] = [
         {
             id: "displayName",
-            label: "Name",
+            label: "name",
             minWidth: "20vw",
             position: "left"
         },
         {
             id: "email",
-            label: "Email",
+            label: "email",
             display: "none",
             minWidth: "20vw",
             position: "center",
         },
         {
             id: "remove",
-            label: "Remove",
+            label: "remove",
             align: "right",
             minWidth: "20vw",
             position: "center",

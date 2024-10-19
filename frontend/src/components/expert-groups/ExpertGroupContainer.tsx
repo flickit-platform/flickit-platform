@@ -710,7 +710,7 @@ const Invitees = (props: any) => {
                         }}
                       />
                       <Typography variant="body2">
-                        {formatDate(inviteExpirationDate)}
+                          {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
                       </Typography>
                     </Box>
                   </Box>
@@ -1014,7 +1014,7 @@ const AssessmentKitsList = (props: any) => {
                   >
                     <Trans i18nKey="viaDSL" />
                   </MenuItem>
-                  {/* <MenuItem
+                  <MenuItem
                     onClick={() => {
                       handleClose();
                       kitDesignerDialogProps.openDialog({
@@ -1023,10 +1023,13 @@ const AssessmentKitsList = (props: any) => {
                     }}
                   >
                     <Trans i18nKey="viaKitDesigner" />
-                  </MenuItem> */}
+                  </MenuItem>
                 </Menu>
                 <AssessmentKitCEFromDialog {...dialogProps} />
-                <AssessmentKitCEFromDialog {...kitDesignerDialogProps} />
+                <AssessmentKitCEFromDialog
+                  {...kitDesignerDialogProps}
+                  onSubmitForm={assessmentKitQuery.query}
+                />
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}
                   onSubmitForm={assessmentKitQuery.query}
@@ -1335,7 +1338,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 }}
                               />
                               <Typography variant="body2">
-                                {formatDate(inviteExpirationDate)}
+                                  {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
                               </Typography>
                             </Box>
                             <MemberActions
