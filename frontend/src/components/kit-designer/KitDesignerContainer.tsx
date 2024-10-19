@@ -7,6 +7,7 @@ import Tab from "@mui/material/Tab";
 import KitDesignerTitle from "./KitDesignerContainerTitle";
 import { Trans } from "react-i18next";
 import MaturityLevelsContent from "./maturityLevels/MaturityLevelsContent";
+import PublishContent from "./publish/PublishContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -25,7 +26,12 @@ const KitDesignerContainer = () => {
           </Typography>
         </Grid>
         <Grid container sm={12} xs={12} mt={6}>
-          <Grid item sm={3} xs={12} sx={{ display: "flex", flexDirection: "column" }}>
+          <Grid
+            item
+            sm={3}
+            xs={12}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
             <Tabs
               textColor="primary"
               indicatorColor="primary"
@@ -36,12 +42,25 @@ const KitDesignerContainer = () => {
               aria-label="Vertical tabs"
               sx={{
                 borderRight: 1,
-                borderColor: 'divider',
+                borderColor: "divider",
                 flexGrow: 1,
-                backgroundColor: 'rgba(36, 102, 168, 0.04)',
+                backgroundColor: "rgba(36, 102, 168, 0.04)",
                 padding: 0,
-                '& .MuiTabs-indicator': {
-                  backgroundColor: 'primary.main',
+                color: "rgba(0, 0, 0, 0.6)", // Default text color
+
+                // Adding hover state for background color and text color
+                "&:hover": {
+                  // backgroundColor: "#f0f0f0",
+                  // color: "#2466A8",
+                },
+                "& .Mui-selected": {
+                  color: "#2466A8 !important",
+                  fontWeight: "bold",
+                  // background: "rgba(36, 102, 168, 0.08)"
+                },
+
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "primary.main",
                 },
               }}
             >
@@ -50,43 +69,87 @@ const KitDesignerContainer = () => {
                   alignItems: "flex-start",
                   textTransform: "none",
                 }}
-                label={<Typography variant="semiBoldLarge"><Trans i18nKey="maturityLevels" /></Typography>} />
-              <Tab disabled sx={{
-                alignItems: "flex-start",
-                textTransform: "none",
-              }}
-                label={<Typography variant="semiBoldLarge"><Trans i18nKey="subjects" /></Typography>} />
-              <Tab disabled sx={{
-                alignItems: "flex-start",
-                textTransform: "none",
-              }}
-                label={<Typography variant="semiBoldLarge"><Trans i18nKey="attributes" /></Typography>} />
-              <Tab disabled sx={{
-                alignItems: "flex-start",
-                textTransform: "none",
-              }}
-                label={<Typography variant="semiBoldLarge"><Trans i18nKey="questionnaires" /></Typography>} />
-
-              {/* Add more tabs as needed */}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="maturityLevels" />
+                  </Typography>
+                }
+              />
+              <Tab
+                disabled
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="subjects" />
+                  </Typography>
+                }
+              />
+              <Tab
+                disabled
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="attributes" />
+                  </Typography>
+                }
+              />
+              <Tab
+                disabled
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="questionnaires" />
+                  </Typography>
+                }
+              />
+              <Tab
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="publish" />
+                  </Typography>
+                }
+              />
             </Tabs>
           </Grid>
 
-          <Grid item sm={9} xs={12} sx={{ height: '100%', padding: 3, background: "white" }} >
-            {selectedTab === 0 && (
-              <MaturityLevelsContent />
-            )}
+          <Grid
+            item
+            sm={9}
+            xs={12}
+            sx={{ height: "100%", padding: 3, background: "white" }}
+          >
+            {selectedTab === 0 && <MaturityLevelsContent />}
             {selectedTab === 1 && (
-              <Typography><Trans i18nKey="subjectsContent" /></Typography>
+              <Typography>
+                <Trans i18nKey="subjectsContent" />
+              </Typography>
             )}
             {selectedTab === 2 && (
-              <Typography><Trans i18nKey="attributesContent" /></Typography>
+              <Typography>
+                <Trans i18nKey="attributesContent" />
+              </Typography>
             )}
             {selectedTab === 3 && (
-              <Typography><Trans i18nKey="questionnairesContent" /></Typography>
+              <Typography>
+                <Trans i18nKey="questionnairesContent" />
+              </Typography>
             )}
+            {selectedTab === 4 && <PublishContent />}
           </Grid>
         </Grid>
-
       </Grid>
     </Box>
   );

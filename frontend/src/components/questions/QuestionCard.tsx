@@ -2758,7 +2758,7 @@ const EvidenceDetail = (props: any) => {
                     fontFamily: primaryFontFamily,
                   }}
                 >
-                  {formatDate(lastModificationTime)}
+                    {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
                 </Typography>
               </Box>
             </Box>

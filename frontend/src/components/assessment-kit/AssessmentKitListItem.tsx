@@ -75,7 +75,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             {title}
           </Typography>
           <Typography color="GrayText" variant="body2">
-            <Trans i18nKey="lastUpdated" /> {formatDate(lastModificationTime)}
+            <Trans i18nKey="lastUpdated" /> {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
           </Typography>
         </Box>
 

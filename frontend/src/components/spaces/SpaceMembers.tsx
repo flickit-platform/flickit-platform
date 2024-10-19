@@ -351,7 +351,7 @@ export const SpaceMembers = (props: any) => {
                                   }}
                                 />
                                 <Typography variant="body2">
-                                  {formatDate(expirationDate)}
+                                  {theme.direction == "rtl" ? formatDate(expirationDate, "Shamsi") : formatDate(expirationDate, "Miladi")}
                                 </Typography>
                               </Box>
                               {
