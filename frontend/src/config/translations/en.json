@@ -573,5 +573,7 @@
   "modified": "Modified",
   "attachments": "Attachments",
   "negative": "Negative",
-  "positive": "Positive"
+  "positive": "Positive",
+  "publish": "Publish",
+  "publishDescription": "In this section, the final tasks related to the release and usage of the kit are performed. If any parts of the kit have issues, they will be reported here. Additionally, the settings for kit accessibility are also located in this section. If you need to save or use different versions of your kit, you can utilize the version control section as well."
 }
