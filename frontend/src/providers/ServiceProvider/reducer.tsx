@@ -4,9 +4,8 @@ const serviceReducer = (
   prevState: any,
   action: { type: SERVICE_ACTIONS_TYPE; payload: any },
 ) => {
-  switch (action.type) {
-    default:
-      return prevState;
+  if (action.type) {
+    return prevState;
   }
 };
 

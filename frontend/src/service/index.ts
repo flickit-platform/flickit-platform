@@ -446,6 +446,116 @@ export const createService = (
         config,
       );
     },
+    postMaturityLevel(
+      { kitVersionId }: { kitVersionId: any },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels/`,
+        data,
+        config,
+      );
+    },
+    updateMaturityLevel(
+      {
+        kitVersionId,
+        maturityLevelId,
+      }: { kitVersionId: TId; maturityLevelId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels/${maturityLevelId}/`,
+        data,
+        config,
+      );
+    },
+
+    deleteMaturityLevel(
+      {
+        kitVersionId,
+        maturityLevelId,
+      }: { kitVersionId: TId; maturityLevelId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels/${maturityLevelId}`,
+        config,
+      );
+    },
+
+    getMaturityLevels(
+      { kitVersionId }: { kitVersionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels`,
+        config,
+      );
+    },
+
+    changeMaturityLevelsOrder(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/maturity-levels-change-order/`,
+        data,
+        config,
+      );
+    },
+
+    addCompetencyToMaturityLevel(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/`,
+        data,
+        config,
+      );
+    },
+
+    updateCompetencyOfMaturityLevel(
+      {
+        kitVersionId,
+        levelCompetenceId,
+      }: { kitVersionId: TId; levelCompetenceId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}/`,
+        data,
+        config,
+      );
+    },
+
+    deleteCompetencyOfMaturityLevel(
+      {
+        kitVersionId,
+        levelCompetenceId,
+      }: { kitVersionId: TId; levelCompetenceId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/level-competences/${levelCompetenceId}/`,
+        config,
+      );
+    },
+
+    getMaturityLevelsCompetences(
+      { kitVersionId }: { kitVersionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/level-competences`,
+        config,
+      );
+    },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined,
@@ -816,6 +926,13 @@ export const createService = (
     ) {
       const { data } = args ?? {};
       return axios.post(`/api/v1/assessment-kits/create-by-dsl/`, data, config);
+    },
+    createAssessmentKitByApplication(
+      args: { data: any },
+      config: AxiosRequestConfig<any> | undefined,
+    ) {
+      const { data } = args ?? {};
+      return axios.post(`/api/v1/assessment-kits/`, data, config);
     },
     updateAssessmentKit(
       args: { assessmentKitId?: TId; data: any },

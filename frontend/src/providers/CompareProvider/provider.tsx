@@ -2,7 +2,6 @@ import React, { useReducer, FC, useContext, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { IAssessmentKit, TId } from "@types";
 import compareReducer from "./reducer";
-import { useQuery } from "@/utils/useQuery";
 import { useServiceContext } from "../ServiceProvider";
 import { COMPARE_ACTIONS_TYPE } from "./actions";
 

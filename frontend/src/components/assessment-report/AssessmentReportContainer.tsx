@@ -18,8 +18,8 @@ import { styles } from "@styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
-import { secondaryFontFamily } from "@/config/theme";
 import BetaSvg from "@assets/svg/beta.svg";
+import PermissionControl from "../common/PermissionControl";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -28,7 +28,6 @@ const AssessmentReportContainer = (props: any) => {
     service: (args, config) =>
       service.fetchAssessment({ assessmentId }, config),
     toastError: false,
-    toastErrorOptions: { filterByStatus: [404] },
   });
   const calculateMaturityLevelQuery = useQuery({
     service: (args = { assessmentId }, config) =>
@@ -77,129 +76,130 @@ const AssessmentReportContainer = (props: any) => {
     toastErrorOptions: { filterByStatus: [404] },
   });
   return (
-    <QueryBatchData
-      queryBatchData={[
-        queryData,
-        assessmentTotalProgress,
-        fetchAssessmentsRoles,
-      ]}
-      renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
-      render={([data = {}, progress, roles]) => {
-        const {
-          status,
-          assessment,
-          subjects,
-          assessmentPermissions: { manageable, exportable },
-          permissions,
-        } = data || {};
+    <PermissionControl error={[queryData.errorObject?.response]}>
+      <QueryBatchData
+        queryBatchData={[
+          queryData,
+          assessmentTotalProgress,
+          fetchAssessmentsRoles,
+        ]}
+        renderLoading={() => <LoadingSkeletonOfAssessmentReport />}
+        render={([data = {}, progress, roles]) => {
+          const {
+            status,
+            assessment,
+            subjects,
+            assessmentPermissions: { manageable, exportable },
+            permissions,
+          } = data || {};
 
-        const colorCode = assessment?.color?.code || "#101c32";
-        const { assessmentKit, maturityLevel, confidenceValue } =
-          assessment || {};
-        const { questionsCount, answersCount } = progress;
+          const colorCode = assessment?.color?.code || "#101c32";
+          const { assessmentKit, maturityLevel, confidenceValue } =
+            assessment || {};
+          const { questionsCount, answersCount } = progress;
 
-        const totalProgress =
-          ((answersCount || 0) / (questionsCount || 1)) * 100;
-        const totalAttributesLength = subjects.reduce(
-          (sum: any, subject: any) => {
-            return sum + (subject.attributes?.length || 0);
-          },
-          0,
-        );
+          const totalProgress =
+            ((answersCount || 0) / (questionsCount || 1)) * 100;
+          const totalAttributesLength = subjects.reduce(
+            (sum: any, subject: any) => {
+              return sum + (subject.attributes?.length || 0);
+            },
+            0,
+          );
 
-        return (
-          <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 18, xs: 2, sm: 3 } }}>
-            <AssessmentReportTitle data={data} colorCode={colorCode} />
-            <Grid container spacing={1} columns={12} mt={0}>
-              <Grid item sm={12} xs={12}>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography
-                    color="primary"
-                    textAlign="left"
-                    variant="headlineLarge"
-                  >
-                    <Trans i18nKey="assessmentInsights" />
-                  </Typography>
-                  <Box sx={{ py: "0.6rem", display: "flex" }}>
-                    <Tooltip title={<Trans i18nKey={"assessmentDocument"} />}>
-                      <Box>
-                        <IconButton
-                          data-cy="more-action-btn"
-                          disabled={!exportable}
-                          component={exportable ? Link : "div"}
-                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
-                        >
-                          <ArticleRounded
-                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
-                          />
-                        </IconButton>
-                      </Box>
-                    </Tooltip>
-                    <Tooltip title={<Trans i18nKey={"assessmentSettings"} />}>
-                      <Box>
-                        <IconButton
-                          data-cy="more-action-btn"
-                          disabled={!manageable}
-                          component={manageable ? Link : "div"}
-                          to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
-                        >
-                          <SettingsIcon
-                            sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
-                          />
-                        </IconButton>
-                      </Box>
-                    </Tooltip>
+          return (
+            <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 12, xs: 2, sm: 3 } }}>
+              <AssessmentReportTitle data={data} colorCode={colorCode} />
+              <Grid container spacing={1} columns={12} mt={0}>
+                <Grid item sm={12} xs={12}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography
+                      color="primary"
+                      textAlign="left"
+                      variant="headlineLarge"
+                    >
+                      <Trans i18nKey="assessmentInsights" />
+                    </Typography>
+                    <Box sx={{ py: "0.6rem", display: "flex" }}>
+                      <Tooltip title={<Trans i18nKey={"assessmentDocument"} />}>
+                        <Box>
+                          <IconButton
+                            data-cy="more-action-btn"
+                            disabled={!exportable}
+                            component={exportable ? Link : "div"}
+                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-document/`}
+                          >
+                            <ArticleRounded
+                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>
+                      <Tooltip title={<Trans i18nKey={"assessmentSettings"} />}>
+                        <Box>
+                          <IconButton
+                            data-cy="more-action-btn"
+                            disabled={!manageable}
+                            component={manageable ? Link : "div"}
+                            to={`/${spaceId}/assessments/1/${assessmentId}/assessment-settings/`}
+                          >
+                            <SettingsIcon
+                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>
+                    </Box>
                   </Box>
-                </Box>
-                <Grid container alignItems="stretch" spacing={2} mt={1}>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      gap={1}
-                      height="100%"
-                    >
-                      <Typography
-                        color="#73808C"
-                        marginX={4}
-                        variant="titleMedium"
-                        fontFamily={secondaryFontFamily}
+                  <Grid container alignItems="stretch" spacing={2} mt={1}>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        gap={1}
+                        height="100%"
                       >
-                        <Trans i18nKey="general" />
-                      </Typography>
-                      <AssessmentSummary
-                        assessmentKit={assessment}
-                        data={data}
-                        progress={totalProgress}
-                        questionCount={questionsCount}
-                        answerCount={answersCount}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      gap={1}
-                      height="100%"
-                    >
-                      <Typography
-                        color="#73808C"
-                        marginX={4}
-                        variant="titleMedium"
-                        fontFamily={secondaryFontFamily}
+                        <Typography
+                          color="#73808C"
+                          marginX={4}
+                          variant="titleMedium"
+                        >
+                          <Trans i18nKey="general" />
+                        </Typography>
+                        <AssessmentSummary
+                          assessmentKit={assessment}
+                          data={data}
+                          progress={totalProgress}
+                          questionCount={questionsCount}
+                          answerCount={answersCount}
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        gap={1}
+                        height="100%"
                       >
-                        <Trans i18nKey="overallStatus" />
-                      </Typography>
-                      <AssessmentOverallStatus
-                        status={status}
-                        maturity_level={maturityLevel}
-                        maturity_level_count={assessmentKit?.maturityLevelCount}
-                        confidence_value={confidenceValue}
-                      />
-                    </Box>
-                  </Grid>
-                  {/* <Grid item lg={4} md={12} sm={12} xs={12}>
+                        <Typography
+                          color="#73808C"
+                          marginX={4}
+                          variant="titleMedium"
+                        >
+                          <Trans i18nKey="overallStatus" />
+                        </Typography>
+                        <AssessmentOverallStatus
+                          status={status}
+                          maturity_level={maturityLevel}
+                          maturity_level_count={
+                            assessmentKit?.maturityLevelCount
+                          }
+                          confidence_value={confidenceValue}
+                        />
+                      </Box>
+                    </Grid>
+                    {/* <Grid item lg={4} md={12} sm={12} xs={12}>
                     <Box display="flex" flexDirection="column" gap={1}>
                       <Typography color="#73808C" marginX={4}>
                         <Trans i18nKey="subjectStatus" />
@@ -207,92 +207,91 @@ const AssessmentReportContainer = (props: any) => {
                       <AssessmentSubjectStatus subjects={subjects} />
                     </Box>
                   </Grid> */}
+                  </Grid>
+                </Grid>
+
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Box display="flex" flexDirection="column" gap={1}>
+                    <Typography
+                      color="#73808C"
+                      marginX={4}
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="insight" />
+                    </Typography>
+                    <AssessmentInsight />
+                  </Box>
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Box display="flex" flexDirection="column" gap={1}>
+                    <Typography
+                      color="#73808C"
+                      marginX={4}
+                      variant="titleMedium"
+                    >
+                      <Trans i18nKey="assessmentKit" />
+                    </Typography>
+                    <AssessmentReportKit assessmentKit={assessmentKit} />
+                  </Box>
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Box
+                    sx={{ ...styles.centerCV }}
+                    alignItems="flex-start"
+                    marginTop={6}
+                  >
+                    <Typography color="#73808C" variant="h5">
+                      <Trans i18nKey="subjectReport" />
+                    </Typography>
+                    <Typography variant="titleMedium" fontWeight={400}>
+                      <Trans
+                        i18nKey="overallStatusDetails"
+                        values={{
+                          attributes: totalAttributesLength,
+                          subjects: subjects?.length,
+                        }}
+                      />
+                    </Typography>
+                    <Divider sx={{ width: "100%", marginTop: 2 }} />
+                  </Box>
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
+                  <AssessmentSubjectList
+                    maturityLevelCount={assessmentKit?.maturityLevelCount ?? 5}
+                    subjects={subjects}
+                    colorCode={colorCode}
+                  />
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Box sx={{ ...styles.centerCV }} marginTop={6} gap={2}>
+                    <Typography
+                      color="#73808C"
+                      variant="h5"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <Trans i18nKey="advice" />
+                      <Box sx={{ ml: 1, mt: 1 }}>
+                        <img src={BetaSvg} alt="beta" width={34} />
+                      </Box>
+                    </Typography>
+
+                    <Divider sx={{ width: "100%" }} />
+                  </Box>
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12} id="advices" mt={2}>
+                  <AssessmentAdviceContainer
+                    subjects={subjects}
+                    assessment={assessment}
+                    permissions={permissions}
+                  />
                 </Grid>
               </Grid>
-
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography
-                    color="#73808C"
-                    marginX={4}
-                    variant="titleMedium"
-                    fontFamily={secondaryFontFamily}
-                  >
-                    <Trans i18nKey="insight" />
-                  </Typography>
-                  <AssessmentInsight />
-                </Box>
-              </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Box display="flex" flexDirection="column" gap={1}>
-                  <Typography
-                    color="#73808C"
-                    marginX={4}
-                    variant="titleMedium"
-                    fontFamily={secondaryFontFamily}
-                  >
-                    <Trans i18nKey="assessmentKit" />
-                  </Typography>
-                  <AssessmentReportKit assessmentKit={assessmentKit} />
-                </Box>
-              </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Box
-                  sx={{ ...styles.centerCV }}
-                  alignItems="flex-start"
-                  marginTop={6}
-                >
-                  <Typography color="#73808C" variant="h5">
-                    <Trans i18nKey="subjectReport" />
-                  </Typography>
-                  <Typography variant="titleMedium" fontWeight={400}>
-                    <Trans
-                      i18nKey="overallStatusDetails"
-                      values={{
-                        attributes: totalAttributesLength,
-                        subjects: subjects?.length,
-                      }}
-                    />
-                  </Typography>
-                  <Divider sx={{ width: "100%", marginTop: 2 }} />
-                </Box>
-              </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12} id="subjects">
-                <AssessmentSubjectList
-                  maturityLevelCount={assessmentKit?.maturityLevelCount ?? 5}
-                  subjects={subjects}
-                  colorCode={colorCode}
-                />
-              </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Box sx={{ ...styles.centerCV }} marginTop={6} gap={2}>
-                  <Typography
-                    color="#73808C"
-                    variant="h5"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Trans i18nKey="advice" />
-                    <Box sx={{ ml: 1, mt: 1 }}>
-                      <img src={BetaSvg} alt="beta" width={34} />
-                    </Box>
-                  </Typography>
-
-                  <Divider sx={{ width: "100%" }} />
-                </Box>
-              </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12} id="advices" mt={2}>
-                <AssessmentAdviceContainer
-                  subjects={subjects}
-                  assessment={assessment}
-                  permissions={permissions}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        );
-      }}
-    />
+            </Box>
+          );
+        }}
+      />
+    </PermissionControl>
   );
 };
 

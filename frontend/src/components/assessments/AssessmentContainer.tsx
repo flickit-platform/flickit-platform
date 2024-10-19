@@ -27,6 +27,7 @@ import Stack from "@mui/material/Stack";
 import { useAuthContext } from "@providers/AuthProvider";
 import AssessmentTitle from "./AssessmentTitle";
 import { theme } from "@/config/theme";
+import PermissionControl from "../common/PermissionControl";
 
 const AssessmentContainer = () => {
   const dialogProps = useDialog();
@@ -37,14 +38,15 @@ const AssessmentContainer = () => {
   const { data, error, errorObject, size, total, loading } = rest;
   const isEmpty = data.length === 0;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    navigate(`/${spaceId}/assessments/${value}`);
+    if (Math.ceil(total / size) > Number(page) || Math.ceil(total / size) == Number(page)) {
+      navigate(`/${spaceId}/assessments/${value}`);
+    }
   };
   const pageCount = size === 0 ? 1 : Math.ceil(total / size);
-  return error &&
-    (errorObject?.response?.data?.code === ECustomErrorType.ACCESS_DENIED ||
-      errorObject?.response?.data?.code === ECustomErrorType.NOT_FOUND) ? (
-    <ErrorNotFoundOrAccessDenied />
-  ) : (
+  if (Math.ceil(total / size) < Number(page) && pageCount) {
+    navigate(`/${spaceId}/assessments/${pageCount}`);
+  }
+  return <PermissionControl error={[errorObject?.response]}>
     <Box display="flex" flexDirection="column" m="auto">
       <AssessmentTitle data={currentSpace} />
       <Title
@@ -219,7 +221,7 @@ const AssessmentContainer = () => {
         onSubmitForm={fetchAssessments}
       />
     </Box>
-  );
+  </PermissionControl>;
 };
 
 const useFetchAssessments = () => {
@@ -247,12 +249,12 @@ const useFetchAssessments = () => {
       );
       if (res) {
         const { size, total } = res;
-        if (
-          Math.ceil(total / size) < parseInt(page ?? "1", 10) ||
-          isNaN(page as any)
-        ) {
-          return navigate(`*`);
-        }
+        // if (
+        //   Math.ceil(total / size) < parseInt(page ?? "1", 10) ||
+        //   isNaN(page as any)
+        // ) {
+        //   return navigate(`*`);
+        // }
         setData(res);
         setError(false);
       } else {
@@ -262,9 +264,9 @@ const useFetchAssessments = () => {
 
       setLoading(false);
     } catch (e) {
-      if (isNaN(page as any)) {
-        return navigate(`*`);
-      }
+      // if (isNaN(page as any)) {
+      //   return navigate(`*`);
+      // }
       const err = e as ICustomError;
       toastError(err, { filterByStatus: [404] });
       setLoading(false);

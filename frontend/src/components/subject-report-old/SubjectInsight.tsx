@@ -19,6 +19,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { theme } from "@/config/theme";
 import { t } from "i18next";
+import languageDetector from "@utils/languageDetector";
 
 export const SubjectInsight = () => {
   const { service } = useServiceContext();
@@ -221,6 +222,8 @@ const OnHoverRichEditor = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              direction: languageDetector(data) ? "rtl" : "ltr",
+              textAlign: languageDetector(data) ? "right" : "left",
             }}
           >
             <RichEditorField
@@ -285,6 +288,8 @@ const OnHoverRichEditor = (props: any) => {
             paddingRight: theme.direction === "ltr" ? "12px" : "8px",
             width: "100%",
             display: "flex",
+            direction: languageDetector(data) ? "rtl" : "ltr",
+            textAlign: languageDetector(data) ? "right" : "left",
             justifyContent: "space-between",
             alignItems: "center",
             "&:hover": {

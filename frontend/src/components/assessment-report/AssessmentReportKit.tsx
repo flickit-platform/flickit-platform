@@ -136,7 +136,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               variant="titleSmall"
               fontWeight={500}
               width="100%"
-              textAlign="left"
+              textAlign="start"
               sx={{
                 whiteSpace: "pre-wrap",
                 overflow: isExpanded ? "visible" : "hidden",
@@ -165,7 +165,7 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
               variant="titleMedium"
               fontWeight={400}
               width="100%"
-              textAlign="left"
+              textAlign="start"
               sx={{
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",

@@ -14,11 +14,12 @@ import languageDetector from "@utils/languageDetector";
 import Rating from "@mui/material/Rating";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import { primaryFontFamily, theme } from "@/config/theme";
 import { useQuestionnaire } from "../questionnaires/QuestionnaireContainer";
+import {toCamelCase} from "@common/makeCamelcaseString";
 
 const QuestionsReview = () => {
   const { questionsInfo } = useQuestionContext();
@@ -280,7 +281,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
               sx={{ fontSize: "1rem" }}
               // sx={{borderRadius:"32px"}}
             >
-              <Trans i18nKey="Choose another questionnaire" />
+              <Trans i18nKey="chooseAnotherQuestionnaire" />
             </Button>
           </Box>
         </Box>
@@ -307,7 +308,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                   overflow: "hidden",
                   mb: 2,
                   borderRadius: "8px",
-                  direction: `${is_farsi ? "rtl" : "ltr"}`,
+                  direction: `${theme.direction == "rtl" ? "rtl" : "ltr"}`,
                 }}
                 elevation={3}
               >
@@ -387,7 +388,7 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                         >
                           <Typography sx={{ display: "flex" }}>
                             <Typography variant="h6" fontWeight="bold">
-                              {question.answer.confidenceLevel.title}
+                              <Trans i18nKey={toCamelCase(`${question.answer.confidenceLevel.title}`)} />
                             </Typography>
                           </Typography>
                         </Box>
@@ -419,8 +420,8 @@ export const Review = ({ questions = [], isReviewPage }: any) => {
                       variant="contained"
                       sx={{
                         mt: 0.2,
-                        ml: `${is_farsi ? "0" : "auto"}`,
-                        mr: `${is_farsi ? "auto" : "0"}`,
+                        ml: `${theme.direction == "rtl" ? "0" : "auto"}`,
+                        mr: `${theme.direction == "rtl" ? "auto" : "0"}`,
                       }}
                       onClick={(e) => {
                         e.stopPropagation();

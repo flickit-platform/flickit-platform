@@ -46,7 +46,7 @@ import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import NotificationEmptyState from "@/assets/svg/notificationEmptyState.svg";
 import { format } from "date-fns";
-import { secondaryFontFamily, theme } from "@/config/theme";
+import { farsiFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 import LanguageSelector from "./LangSelector";
 import { t } from "i18next";
 
@@ -207,7 +207,10 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                 fontWeight: 700,
                 lineHeight: "24px",
                 textAlign: "left",
-                fontFamily: secondaryFontFamily,
+                fontFamily:
+                  theme.direction === "rtl"
+                    ? farsiFontFamily
+                    : secondaryFontFamily,
               }}
             >
               <IconButton onClick={handleBackClick}>
@@ -309,20 +312,18 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     color: "#3D4D5C",
                   }}
                 >
-                  {t(
-                    convertToRelativeTime(selectedMessage.createdAt) +
-                      " (" +
-                      format(
-                        new Date(
-                          new Date(selectedMessage.createdAt).getTime() -
-                            new Date(
-                              selectedMessage.createdAt,
-                            ).getTimezoneOffset(),
-                        ),
-                        "yyyy/MM/dd HH:mm",
-                      ) +
-                      ") ",
-                  )}
+                  {t(convertToRelativeTime(selectedMessage.createdAt)) +
+                    " (" +
+                    format(
+                      new Date(
+                        new Date(selectedMessage.createdAt).getTime() -
+                          new Date(
+                            selectedMessage.createdAt,
+                          ).getTimezoneOffset(),
+                      ),
+                      "yyyy/MM/dd HH:mm",
+                    ) +
+                    ") "}
                 </Typography>
               </Box>
             </Box>
@@ -646,10 +647,12 @@ const Navbar = () => {
             sx={{
               display: "flex",
               alignItems: "center",
+              gap: ".7rem",
               ml: theme.direction === "rtl" ? "unset" : "auto",
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
+            <LanguageSelector />
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
@@ -671,9 +674,6 @@ const Navbar = () => {
 
             <AccountDropDownButton userInfo={userInfo} />
           </Box>
-          {import.meta.env.VITE_MULTILINGUALITY === "on" && (
-            <LanguageSelector />
-          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">
