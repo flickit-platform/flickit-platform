@@ -1137,7 +1137,7 @@ const AssessmentExportContainer = () => {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} lg={6} xl={6}>
-                    <Tooltip title={"copy"}>
+                    <Tooltip title={<Trans i18nKey={"copy"} />} >
                       <IconButton
                         size="small"
                         onClick={() => handleCopyClick("globalChart")}
@@ -1183,7 +1183,7 @@ const AssessmentExportContainer = () => {
                     flexDirection="column"
                     alignItems="flex-end"
                   >
-                    <Tooltip title={"copy"}>
+                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                       <IconButton
                         size="small"
                         onClick={() => handleCopyClick("gauge")}
@@ -1277,7 +1277,7 @@ const AssessmentExportContainer = () => {
                           />
                         )}
                       </Box>
-                      <Tooltip title={"copy"}>
+                      <Tooltip title={<Trans i18nKey={"copy"} />}>
                         <IconButton
                           size="small"
                           onClick={() =>
@@ -1378,7 +1378,7 @@ const AssessmentExportContainer = () => {
                                         document
                                       />
                                     </Box>
-                                    <Tooltip title={"copy"}>
+                                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                                       <IconButton
                                         size="small"
                                         onClick={() =>
