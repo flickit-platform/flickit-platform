@@ -556,6 +556,20 @@ export const createService = (
         config,
       );
     },
+
+    activateKit(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/activate/`,
+        data,
+        config,
+      );
+    },
+
+    
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined,
