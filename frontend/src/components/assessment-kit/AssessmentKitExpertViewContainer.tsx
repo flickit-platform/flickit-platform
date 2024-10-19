@@ -85,67 +85,64 @@ const AssessmentKitExpertViewContainer = () => {
   return (
     <Box>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-        {expertGroup && (
-          <Title
-            backLink={"/"}
-            size="large"
-            wrapperProps={{
-              sx: {
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: { xs: "flex-start", md: "flex-end" },
-              },
-            }}
-            sup={
-              <SupTitleBreadcrumb
-                routes={[
-                  {
-                    title: t("expertGroups") as string,
-                    to: `/user/expert-groups`,
-                  },
-                  {
-                    title: expertGroup?.title,
-                    to: `/user/expert-groups/${expertGroupId}`,
-                  },
-                  {
-                    title: assessmentKitTitle,
-                    to: `/user/expert-groups`,
-                  },
-                ]}
-                displayChip
-              />
-            }
-            toolbar={
-              <Box>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ ml: 2 }}
-                  onClick={() => {
-                    dialogProps.openDialog({});
-                  }}
-                >
-                  <Typography mr={1} variant="button">
-                    <Trans i18nKey="updateDSL" />
-                  </Typography>
-                  <CloudUploadRoundedIcon />
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ ml: 2 }}
-                  onClick={handleDownload}
-                >
-                  <Typography mr={1} variant="button">
-                    <Trans i18nKey="downloadDSL" />
-                  </Typography>
-                  <CloudDownloadRoundedIcon />
-                </Button>
-              </Box>
-            }
-          >
-            {assessmentKitTitle}
-          </Title>
-        )}
+        <Title
+          backLink={"/"}
+          size="large"
+          wrapperProps={{
+            sx: {
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: { xs: "flex-start", md: "flex-end" },
+            },
+          }}
+          sup={
+            <SupTitleBreadcrumb
+              routes={[
+                {
+                  title: t("expertGroups") as string,
+                  to: `/user/expert-groups`,
+                },
+                // {
+                //   title: expertGroup?.title,
+                //   to: `/user/expert-groups/${expertGroupId}`,
+                // },
+                {
+                  title: assessmentKitTitle,
+                },
+              ]}
+              displayChip
+            />
+          }
+          toolbar={
+            <Box>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={() => {
+                  dialogProps.openDialog({});
+                }}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="updateDSL" />
+                </Typography>
+                <CloudUploadRoundedIcon />
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={handleDownload}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="downloadDSL" />
+                </Typography>
+                <CloudDownloadRoundedIcon />
+              </Button>
+            </Box>
+          }
+        >
+          {assessmentKitTitle}
+        </Title>
         <Box mt={3}>
           <AssessmentKitSectionGeneralInfo
             setExpertGroup={setExpertGroup}
