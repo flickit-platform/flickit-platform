@@ -297,7 +297,7 @@ const AssessmentKit = (props: any) => {
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}>FREE</Typography>
+                  <Typography fontWeight={"bold"}><Trans i18nKey={"free"} /></Typography>
                 </Box>
                 <Box
                   sx={{ ...styles.centerV, justifyContent: "space-between" }}
@@ -410,11 +410,12 @@ const AssessmentKit = (props: any) => {
                             component="span"
                             fontSize="1rem"
                             fontWeight="bold"
+                            sx={{unicodeBidi:"plaintext"}}
                           >
                             {item.title}
                           </Box>
                           :{" "}
-                          <Box component="span" fontSize="1rem">
+                          <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
                             {item.description}
                           </Box>
                         </Typography>
@@ -487,11 +488,12 @@ const AssessmentKit = (props: any) => {
                                 component="span"
                                 fontSize="1rem"
                                 fontWeight="bold"
+                                sx={{unicodeBidi:"plaintext"}}
                               >
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box component="span" fontSize="1rem">
+                              <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
                                 {att.description}
                               </Box>
                             </Typography>
@@ -525,11 +527,11 @@ const AssessmentKit = (props: any) => {
                           display: "inline",
                         }}
                       >
-                        <Box component="span" fontSize="1rem" fontWeight="bold">
+                        <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem" fontWeight="bold">
                           {questionnaire.title}
                         </Box>
                         :{" "}
-                        <Box component="span" fontSize="1rem">
+                        <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
                           {questionnaire.description}
                         </Box>
                       </Typography>

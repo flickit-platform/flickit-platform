@@ -197,7 +197,7 @@ const AssessmentKitSectionGeneralInfo = (
                       <Trans i18nKey="price" />
                     </Typography>
                     <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
-                      FREE
+                      <Trans i18nKey={"free"} />
                     </Typography>
                   </Box>
                   {/* <OnHoverAutocompleteAsyncField
