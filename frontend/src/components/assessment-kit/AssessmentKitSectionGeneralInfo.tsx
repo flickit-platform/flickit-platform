@@ -175,18 +175,13 @@ const AssessmentKitSectionGeneralInfo = (
                     mr={4}
                     sx={{ minWidth: "64px !important" }}
                   >
-                    <Typography
-                      variant="body2"
-                      mr={4}
-                      sx={{ minWidth: "64px !important" }}
-                    >
-                      <Trans i18nKey="price" />
-                    </Typography>
-                    <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
-                      <Trans i18nKey={"free"} />
-                    </Typography>
-                  </Box>
-                  {/* <OnHoverAutocompleteAsyncField
+                    <Trans i18nKey="price" />
+                  </Typography>
+                  <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
+                    <Trans i18nKey={"free"} />
+                  </Typography>
+                </Box>
+                {/* <OnHoverAutocompleteAsyncField
                     data={tags}
                     title={<Trans i18nKey="tags" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
