@@ -18,6 +18,7 @@ import ErrorDataLoading from "../errors/ErrorDataLoading";
 import { styles } from "@styles";
 import { TQueryProps } from "@types";
 import LoadingButton from "@mui/lab/LoadingButton";
+import {theme} from "@config/theme";
 
 type TUnionAutocompleteAndAutocompleteAsyncFieldBase = Omit<
   IAutocompleteAsyncFieldBase,
@@ -350,6 +351,14 @@ const AutocompleteBaseField = (
             errorObject?.response?.data.message ||
             helperText
           }
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& .MuiAutocomplete-endAdornment': {
+                left: theme.direction == "rtl" ? "9px" : "unset",
+                right: theme.direction == "ltr" ? "9px" : "unset"
+              },
+            },
+          }}
           name={name}
           onBlur={handleBlur}
         />
