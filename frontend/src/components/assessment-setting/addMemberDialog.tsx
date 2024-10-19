@@ -241,7 +241,7 @@ const AddMemberDialog = (props: {
           width="100%"
           mt={1}
         >
-          <Typography>
+          <Typography sx={{whiteSpace:"noWrap"}}>
             <Trans i18nKey={"add"} />
           </Typography>
           <Box width="50%">
