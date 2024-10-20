@@ -49,6 +49,7 @@ import { format } from "date-fns";
 import { farsiFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 import LanguageSelector from "./LangSelector";
 import { t } from "i18next";
+import { MULTILINGUALITY } from "@/config/constants";
 
 const drawerWidth = 240;
 
@@ -420,6 +421,7 @@ const Navbar = () => {
     if (spaceId) {
       fetchSpaceInfo();
     }
+    console.log(MULTILINGUALITY)
   }, [spaceId]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -652,7 +654,7 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            {import.meta.env.VITE_MULTILINGUALITY === "on" &&
+            {MULTILINGUALITY &&
               <LanguageSelector />
             }
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
