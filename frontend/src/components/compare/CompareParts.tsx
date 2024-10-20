@@ -13,6 +13,7 @@ import { styles } from "@styles";
 import AlertBox from "@common/AlertBox";
 import forLoopComponent from "@utils/forLoopComponent";
 import Skeleton from "@mui/material/Skeleton";
+import {theme} from "@config/theme";
 
 const CompareParts = () => {
   const { assessmentIds, assessment_kit, loading } = useCompareContext();
@@ -77,7 +78,7 @@ const CompareButton = (props: { disabled?: boolean }) => {
         variant="contained"
         size="large"
         disabled={disabled}
-        sx={{ ...styles.compareButton }}
+        sx={{ ...styles.compareButton,...theme.typography.labelLarge }}
         onClick={handleClick}
       >
         <Trans i18nKey="compare" />

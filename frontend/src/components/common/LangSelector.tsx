@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import {theme} from "@config/theme";
 
 const LanguageSelector = () => {
     const { i18n } = useTranslation();
@@ -15,7 +16,7 @@ const LanguageSelector = () => {
             {i18n.language === 'fa' ? (
                 <Typography
                     onClick={() => handleLanguageChange('en')}
-                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    sx={{cursor: "pointer", fontWeight: "bold", ...theme.typography.titleMedium }}
                     color="primary"
                 >
                     فا
@@ -23,7 +24,7 @@ const LanguageSelector = () => {
             ) : (
                 <Typography
                     onClick={() => handleLanguageChange('fa')}
-                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    sx={{cursor: "pointer", fontWeight: "bold", ...theme.typography.titleMedium }}
                     color="primary"
                 >
                     EN

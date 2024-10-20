@@ -3,6 +3,7 @@ import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import Box from "@mui/material/Box";
+import {theme} from "@config/theme";
 
 interface IInfoItems {
   renderMap?: Record<string, (...args: any) => JSX.Element>;
@@ -87,7 +88,8 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
           display: "flex",
           justifyContent: "start",
           flexWrap: "wrap",
-          ml: 4,
+          ml: theme.direction == "ltr" ? 4 : "unset",
+          mr: theme.direction == "rtl" ? 4 : "unset",
         }}
       >
         {items.map(

@@ -122,7 +122,7 @@ const AssessmentKitExpertViewContainer = () => {
                     dialogProps.openDialog({});
                   }}
                 >
-                  <Typography mr={1} variant="button">
+                  <Typography mx={1} variant="button">
                     <Trans i18nKey="updateDSL" />
                   </Typography>
                   <CloudUploadRoundedIcon />
@@ -133,7 +133,7 @@ const AssessmentKitExpertViewContainer = () => {
                   sx={{ ml: 2 }}
                   onClick={handleDownload}
                 >
-                  <Typography mr={1} variant="button">
+                  <Typography mx={1} variant="button">
                     <Trans i18nKey="downloadDSL" />
                   </Typography>
                   <CloudDownloadRoundedIcon />

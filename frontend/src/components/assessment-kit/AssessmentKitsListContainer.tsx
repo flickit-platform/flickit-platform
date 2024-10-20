@@ -13,6 +13,7 @@ import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import { Trans } from "react-i18next";
+import {theme} from "@config/theme";
 const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
   const [value, setValue] = useState("public");
@@ -34,7 +35,7 @@ const AssessmentKitsListContainer = () => {
           <TabList onChange={handleTabChange}>
             <Tab
               label={
-                <Box sx={{ ...styles.centerV }}>
+                <Box sx={{ ...styles.centerV,...theme.typography.titleSmall }}>
                   <Trans i18nKey="public" />
                 </Box>
               }
@@ -42,7 +43,7 @@ const AssessmentKitsListContainer = () => {
             />
             <Tab
               label={
-                <Box sx={{ ...styles.centerV }}>
+                <Box sx={{ ...styles.centerV, ...theme.typography.titleSmall }}>
                   <Trans i18nKey="private" />
                 </Box>
               }
