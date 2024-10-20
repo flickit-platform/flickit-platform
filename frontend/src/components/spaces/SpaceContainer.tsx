@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -32,7 +32,7 @@ const SpaceContainer = () => {
   const PAGESIZE: number = 10;
 
   const pageNumber = Number(page);
-
+  const [pageCount,setCountPage] = useState<any>()
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number,
@@ -43,10 +43,8 @@ const SpaceContainer = () => {
   const spacesQueryData = useQuery<ISpacesModel>({
     service: (args = { size: PAGESIZE, page: pageNumber }, config) =>
       service.fetchSpaces(args, config),
-    toastError: true,
+      toastError: true,
   });
-
-  const pageCount = Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size) ?? 1;
 
   useEffect(() => {
     if(isNaN(pageNumber)){
@@ -55,7 +53,7 @@ const SpaceContainer = () => {
     if(pageCount < pageNumber){
         spacesQueryData.query({ size: PAGESIZE, page: pageCount })
         navigate(`/spaces/${pageCount}`);
-    }else {
+    } else {
        spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
     }
 
@@ -183,6 +181,8 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
+          const { total,size } = data
+          setCountPage(Math.ceil(total / size ))
           return (
             <SpacesList
               dialogProps={dialogProps}
