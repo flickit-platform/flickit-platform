@@ -46,15 +46,19 @@ const SpaceContainer = () => {
     toastError: true,
   });
 
-  const pageCount = Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
+  const pageCount = Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size) ?? 1;
 
   useEffect(() => {
+    if(isNaN(pageNumber)){
+      return navigate(`*`);
+    }
     if(pageCount < pageNumber){
         spacesQueryData.query({ size: PAGESIZE, page: pageCount })
         navigate(`/spaces/${pageCount}`);
     }else {
-        spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
+       spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
     }
+
   }, [pageNumber,pageCount]);
 
 
