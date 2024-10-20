@@ -422,6 +422,7 @@ const Navbar = () => {
       fetchSpaceInfo();
     }
     console.log(MULTILINGUALITY)
+    console.log(MULTILINGUALITY)
   }, [spaceId]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -654,7 +655,7 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            {MULTILINGUALITY == "true" ?
+            {MULTILINGUALITY.toString() == "true" ?
               <LanguageSelector /> : ""
             }
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
