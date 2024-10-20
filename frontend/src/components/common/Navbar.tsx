@@ -317,9 +317,9 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     format(
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
-                          new Date(
-                            selectedMessage.createdAt,
-                          ).getTimezoneOffset(),
+                        new Date(
+                          selectedMessage.createdAt,
+                        ).getTimezoneOffset(),
                       ),
                       "yyyy/MM/dd HH:mm",
                     ) +
@@ -414,7 +414,7 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (spaceId) {
@@ -652,7 +652,9 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            <LanguageSelector />
+            {import.meta.env.VITE_MULTILINGUALITY === "on" &&
+              <LanguageSelector />
+            }
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
