@@ -654,8 +654,8 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            {MULTILINGUALITY &&
-              <LanguageSelector />
+            {MULTILINGUALITY == "true" ?
+              <LanguageSelector /> : ""
             }
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
