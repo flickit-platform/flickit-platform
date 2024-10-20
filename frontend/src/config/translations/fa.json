@@ -508,7 +508,7 @@
     "noQuestionsHaveBeenAnswered": "هنوز هیچ سوالی پاسخ داده نشده است!",
     "weHighlyRecommendAnsweringMoreQuestions": "برای اطلاعات دقیق تر و جامع تر، ما به شدت توصیه می کنیم به سوالات بیشتری پاسخ دهید.",
     "evidenceDetails": "جزئیات شواهد",
-    "evidenceType": "توع شاهد",
+    "evidenceType": "نوع شاهد",
     "modified": "اصلاح شده",
     "attachments": "شواهد",
     "relatedQuestion": "سوالات مرتبط",
@@ -523,6 +523,7 @@
     "nice": "عالی!",
     "hmmm": "همممم!",
     "goodJob": "خوب انجام دادی!",
-    "copy": "کپی"
+    "copy": "کپی",
+    "showMoreDetails": "اطلاعات بیشتر"
 }
 
