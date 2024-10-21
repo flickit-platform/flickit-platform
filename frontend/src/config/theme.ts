@@ -291,7 +291,7 @@ export const theme = createTheme({
       fontWeight: "600",
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
-      letterSpacing: is_farsi ? "0px" : "0px",
+      letterSpacing: "0px",
     },
     button: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
