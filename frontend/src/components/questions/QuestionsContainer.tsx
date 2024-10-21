@@ -132,7 +132,7 @@ export const useQuestions = () => {
               permissions: permissions,
             }),
           );
-          console.log("Initial questions loaded:", items);
+          // console.log("Initial questions loaded:", items);
         }
       } catch (e) {
         console.error("Failed to load initial questions", e);
